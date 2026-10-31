@@ -1,0 +1,4232 @@
+{
+  "run": {
+    "id": 41171985244,
+    "name": "build",
+    "node_id": "WFR_kwLOTxi8As8AAAAJlgqjXA",
+    "head_branch": "main",
+    "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+    "path": ".github/workflows/build.yml",
+    "display_title": "build",
+    "run_number": 89,
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "workflow_id": 329569956,
+    "check_suite_id": 111606787637,
+    "check_suite_node_id": "CS_kwDOTxi8As8AAAAZ_EhuNQ",
+    "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+    "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244",
+    "pull_requests": [],
+    "created_at": "2026-10-31T05:17:21Z",
+    "updated_at": "2026-10-31T05:48:45Z",
+    "actor": {
+      "login": "yangheng95",
+      "id": 51735130,
+      "node_id": "MDQ6VXNlcjUxNzM1MTMw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51735130?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/yangheng95",
+      "html_url": "https://github.com/yangheng95",
+      "followers_url": "https://api.github.com/users/yangheng95/followers",
+      "following_url": "https://api.github.com/users/yangheng95/following{/other_user}",
+      "gists_url": "https://api.github.com/users/yangheng95/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/yangheng95/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/yangheng95/subscriptions",
+      "organizations_url": "https://api.github.com/users/yangheng95/orgs",
+      "repos_url": "https://api.github.com/users/yangheng95/repos",
+      "events_url": "https://api.github.com/users/yangheng95/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/yangheng95/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "run_attempt": 1,
+    "referenced_workflows": [
+      {
+        "path": "yangheng95/opencorvus/.github/workflows/package-overlay.yml@916a9f2554a62bdac7d5277031b6510be3acc3ca",
+        "sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+        "ref": "refs/heads/main"
+      }
+    ],
+    "run_started_at": "2026-10-31T05:17:21Z",
+    "triggering_actor": {
+      "login": "yangheng95",
+      "id": 51735130,
+      "node_id": "MDQ6VXNlcjUxNzM1MTMw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51735130?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/yangheng95",
+      "html_url": "https://github.com/yangheng95",
+      "followers_url": "https://api.github.com/users/yangheng95/followers",
+      "following_url": "https://api.github.com/users/yangheng95/following{/other_user}",
+      "gists_url": "https://api.github.com/users/yangheng95/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/yangheng95/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/yangheng95/subscriptions",
+      "organizations_url": "https://api.github.com/users/yangheng95/orgs",
+      "repos_url": "https://api.github.com/users/yangheng95/repos",
+      "events_url": "https://api.github.com/users/yangheng95/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/yangheng95/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "jobs_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244/jobs",
+    "logs_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244/logs",
+    "check_suite_url": "https://api.github.com/repos/yangheng95/opencorvus/check-suites/111606787637",
+    "artifacts_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244/artifacts",
+    "cancel_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244/cancel",
+    "rerun_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244/rerun",
+    "previous_attempt_url": null,
+    "workflow_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/workflows/329569956",
+    "head_commit": {
+      "id": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "tree_id": "82954cb292f569e3f65579575fbff385e89dc4c3",
+      "message": "docs(release): include qualified idle runtime controls in 0.1.40",
+      "timestamp": "2026-10-31T05:14:48Z",
+      "author": {
+        "name": "Heng Yang",
+        "email": "yangheng2021@gmail.com"
+      },
+      "committer": {
+        "name": "Heng Yang",
+        "email": "yangheng2021@gmail.com"
+      }
+    },
+    "repository": {
+      "id": 1327021058,
+      "node_id": "R_kgDOTxi8Ag",
+      "name": "opencorvus",
+      "full_name": "yangheng95/opencorvus",
+      "private": false,
+      "owner": {
+        "login": "yangheng95",
+        "id": 51735130,
+        "node_id": "MDQ6VXNlcjUxNzM1MTMw",
+        "avatar_url": "https://avatars.githubusercontent.com/u/51735130?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/yangheng95",
+        "html_url": "https://github.com/yangheng95",
+        "followers_url": "https://api.github.com/users/yangheng95/followers",
+        "following_url": "https://api.github.com/users/yangheng95/following{/other_user}",
+        "gists_url": "https://api.github.com/users/yangheng95/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/yangheng95/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/yangheng95/subscriptions",
+        "organizations_url": "https://api.github.com/users/yangheng95/orgs",
+        "repos_url": "https://api.github.com/users/yangheng95/repos",
+        "events_url": "https://api.github.com/users/yangheng95/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/yangheng95/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/yangheng95/opencorvus",
+      "description": "DIY your own agent team harness for long-horizon agent work",
+      "fork": false,
+      "url": "https://api.github.com/repos/yangheng95/opencorvus",
+      "forks_url": "https://api.github.com/repos/yangheng95/opencorvus/forks",
+      "keys_url": "https://api.github.com/repos/yangheng95/opencorvus/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/yangheng95/opencorvus/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/yangheng95/opencorvus/teams",
+      "hooks_url": "https://api.github.com/repos/yangheng95/opencorvus/hooks",
+      "issue_events_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/yangheng95/opencorvus/events",
+      "assignees_url": "https://api.github.com/repos/yangheng95/opencorvus/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/yangheng95/opencorvus/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/yangheng95/opencorvus/tags",
+      "blobs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/yangheng95/opencorvus/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/yangheng95/opencorvus/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/yangheng95/opencorvus/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/yangheng95/opencorvus/languages",
+      "stargazers_url": "https://api.github.com/repos/yangheng95/opencorvus/stargazers",
+      "contributors_url": "https://api.github.com/repos/yangheng95/opencorvus/contributors",
+      "subscribers_url": "https://api.github.com/repos/yangheng95/opencorvus/subscribers",
+      "subscription_url": "https://api.github.com/repos/yangheng95/opencorvus/subscription",
+      "commits_url": "https://api.github.com/repos/yangheng95/opencorvus/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/yangheng95/opencorvus/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/yangheng95/opencorvus/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/yangheng95/opencorvus/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/yangheng95/opencorvus/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/yangheng95/opencorvus/merges",
+      "archive_url": "https://api.github.com/repos/yangheng95/opencorvus/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/yangheng95/opencorvus/downloads",
+      "issues_url": "https://api.github.com/repos/yangheng95/opencorvus/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/yangheng95/opencorvus/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/yangheng95/opencorvus/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/yangheng95/opencorvus/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/yangheng95/opencorvus/labels{/name}",
+      "releases_url": "https://api.github.com/repos/yangheng95/opencorvus/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/yangheng95/opencorvus/deployments"
+    },
+    "head_repository": {
+      "id": 1327021058,
+      "node_id": "R_kgDOTxi8Ag",
+      "name": "opencorvus",
+      "full_name": "yangheng95/opencorvus",
+      "private": false,
+      "owner": {
+        "login": "yangheng95",
+        "id": 51735130,
+        "node_id": "MDQ6VXNlcjUxNzM1MTMw",
+        "avatar_url": "https://avatars.githubusercontent.com/u/51735130?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/yangheng95",
+        "html_url": "https://github.com/yangheng95",
+        "followers_url": "https://api.github.com/users/yangheng95/followers",
+        "following_url": "https://api.github.com/users/yangheng95/following{/other_user}",
+        "gists_url": "https://api.github.com/users/yangheng95/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/yangheng95/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/yangheng95/subscriptions",
+        "organizations_url": "https://api.github.com/users/yangheng95/orgs",
+        "repos_url": "https://api.github.com/users/yangheng95/repos",
+        "events_url": "https://api.github.com/users/yangheng95/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/yangheng95/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/yangheng95/opencorvus",
+      "description": "DIY your own agent team harness for long-horizon agent work",
+      "fork": false,
+      "url": "https://api.github.com/repos/yangheng95/opencorvus",
+      "forks_url": "https://api.github.com/repos/yangheng95/opencorvus/forks",
+      "keys_url": "https://api.github.com/repos/yangheng95/opencorvus/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/yangheng95/opencorvus/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/yangheng95/opencorvus/teams",
+      "hooks_url": "https://api.github.com/repos/yangheng95/opencorvus/hooks",
+      "issue_events_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/yangheng95/opencorvus/events",
+      "assignees_url": "https://api.github.com/repos/yangheng95/opencorvus/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/yangheng95/opencorvus/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/yangheng95/opencorvus/tags",
+      "blobs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/yangheng95/opencorvus/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/yangheng95/opencorvus/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/yangheng95/opencorvus/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/yangheng95/opencorvus/languages",
+      "stargazers_url": "https://api.github.com/repos/yangheng95/opencorvus/stargazers",
+      "contributors_url": "https://api.github.com/repos/yangheng95/opencorvus/contributors",
+      "subscribers_url": "https://api.github.com/repos/yangheng95/opencorvus/subscribers",
+      "subscription_url": "https://api.github.com/repos/yangheng95/opencorvus/subscription",
+      "commits_url": "https://api.github.com/repos/yangheng95/opencorvus/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/yangheng95/opencorvus/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/yangheng95/opencorvus/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/yangheng95/opencorvus/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/yangheng95/opencorvus/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/yangheng95/opencorvus/merges",
+      "archive_url": "https://api.github.com/repos/yangheng95/opencorvus/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/yangheng95/opencorvus/downloads",
+      "issues_url": "https://api.github.com/repos/yangheng95/opencorvus/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/yangheng95/opencorvus/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/yangheng95/opencorvus/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/yangheng95/opencorvus/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/yangheng95/opencorvus/labels{/name}",
+      "releases_url": "https://api.github.com/repos/yangheng95/opencorvus/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/yangheng95/opencorvus/deployments"
+    }
+  },
+  "jobs": [
+    {
+      "id": 124451708179,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-eZdEw",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124451708179",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124451708179",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:17:22Z",
+      "started_at": "2026-10-31T05:17:24Z",
+      "completed_at": "2026-10-31T05:19:58Z",
+      "name": "prepare",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:17:25Z",
+          "completed_at": "2026-10-31T05:17:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:17:26Z",
+          "completed_at": "2026-10-31T05:18:38Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:18:38Z",
+          "completed_at": "2026-10-31T05:18:58Z"
+        },
+        {
+          "name": "Resolve release version",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:18:58Z",
+          "completed_at": "2026-10-31T05:18:58Z"
+        },
+        {
+          "name": "Verify version alignment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:18:58Z",
+          "completed_at": "2026-10-31T05:18:58Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:18:58Z",
+          "completed_at": "2026-10-31T05:18:58Z"
+        },
+        {
+          "name": "Verify written release notes",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:18:58Z",
+          "completed_at": "2026-10-31T05:18:58Z"
+        },
+        {
+          "name": "Verify immutable release identity",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:18:58Z",
+          "completed_at": "2026-10-31T05:18:59Z"
+        },
+        {
+          "name": "Verify frozen dependency graph",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:18:59Z",
+          "completed_at": "2026-10-31T05:19:00Z"
+        },
+        {
+          "name": "Build generated Software Development Kit",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:19:00Z",
+          "completed_at": "2026-10-31T05:19:12Z"
+        },
+        {
+          "name": "Verify Ubuntu policy through sudo",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:19:12Z",
+          "completed_at": "2026-10-31T05:19:13Z"
+        },
+        {
+          "name": "Verify generated repository fixed point",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T05:19:13Z",
+          "completed_at": "2026-10-31T05:19:49Z"
+        },
+        {
+          "name": "Verify publication budget before claiming identity",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:19:49Z",
+          "completed_at": "2026-10-31T05:19:50Z"
+        },
+        {
+          "name": "Claim immutable release identity",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:19:50Z",
+          "completed_at": "2026-10-31T05:19:51Z"
+        },
+        {
+          "name": "Claim draft publication owner",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-31T05:19:51Z",
+          "completed_at": "2026-10-31T05:19:54Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29,
+          "started_at": "2026-10-31T05:19:54Z",
+          "completed_at": "2026-10-31T05:19:55Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-31T05:19:55Z",
+          "completed_at": "2026-10-31T05:19:55Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-31T05:19:55Z",
+          "completed_at": "2026-10-31T05:19:55Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124451708179",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029858,
+      "runner_name": "GitHub Actions 1000029858",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124451708269,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-eZdbQ",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124451708269",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124451708269",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:17:22Z",
+      "started_at": "2026-10-31T05:17:24Z",
+      "completed_at": "2026-10-31T05:48:44Z",
+      "name": "release deadline",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:17:25Z",
+          "completed_at": "2026-10-31T05:17:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:17:26Z",
+          "completed_at": "2026-10-31T05:17:36Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:17:36Z",
+          "completed_at": "2026-10-31T05:17:55Z"
+        },
+        {
+          "name": "Enforce the original whole-release deadline",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:17:55Z",
+          "completed_at": "2026-10-31T05:48:40Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:48:40Z",
+          "completed_at": "2026-10-31T05:48:41Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:48:41Z",
+          "completed_at": "2026-10-31T05:48:41Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:48:41Z",
+          "completed_at": "2026-10-31T05:48:41Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124451708269",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029859,
+      "runner_name": "GitHub Actions 1000029859",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124452246229,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-e6S1Q",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124452246229",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124452246229",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:19:58Z",
+      "started_at": "2026-10-31T05:20:02Z",
+      "completed_at": "2026-10-31T05:26:01Z",
+      "name": "cli (linux-arm64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:20:02Z",
+          "completed_at": "2026-10-31T05:20:03Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:20:03Z",
+          "completed_at": "2026-10-31T05:20:11Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:20:11Z",
+          "completed_at": "2026-10-31T05:20:31Z"
+        },
+        {
+          "name": "Verify version alignment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:20:31Z",
+          "completed_at": "2026-10-31T05:20:31Z"
+        },
+        {
+          "name": "Install Linux CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:20:31Z",
+          "completed_at": "2026-10-31T05:20:51Z"
+        },
+        {
+          "name": "Install macOS CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-31T05:20:51Z",
+          "completed_at": "2026-10-31T05:20:51Z"
+        },
+        {
+          "name": "Install Windows CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-10-31T05:20:51Z",
+          "completed_at": "2026-10-31T05:20:51Z"
+        },
+        {
+          "name": "Setup Rust for the Windows process supervisor",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-10-31T05:20:51Z",
+          "completed_at": "2026-10-31T05:20:51Z"
+        },
+        {
+          "name": "Cache the Windows process supervisor build",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-31T05:20:51Z",
+          "completed_at": "2026-10-31T05:20:51Z"
+        },
+        {
+          "name": "Install Office preview renderer browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:20:51Z",
+          "completed_at": "2026-10-31T05:21:10Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:21:10Z",
+          "completed_at": "2026-10-31T05:21:10Z"
+        },
+        {
+          "name": "Package CLI archives",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T05:21:10Z",
+          "completed_at": "2026-10-31T05:23:53Z"
+        },
+        {
+          "name": "Verify packaged Work Artifact lifecycle",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:23:53Z",
+          "completed_at": "2026-10-31T05:25:54Z"
+        },
+        {
+          "name": "Upload CLI artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:25:54Z",
+          "completed_at": "2026-10-31T05:25:58Z"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-31T05:25:58Z",
+          "completed_at": "2026-10-31T05:25:58Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29,
+          "started_at": "2026-10-31T05:25:58Z",
+          "completed_at": "2026-10-31T05:25:59Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-31T05:25:59Z",
+          "completed_at": "2026-10-31T05:26:00Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-31T05:26:00Z",
+          "completed_at": "2026-10-31T05:26:00Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124452246229",
+      "labels": [
+        "ubuntu-24.04-arm"
+      ],
+      "runner_id": 1000029868,
+      "runner_name": "GitHub Actions 1000029868",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124452246258,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-e6S8g",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124452246258",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124452246258",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:19:58Z",
+      "started_at": "2026-10-31T05:20:01Z",
+      "completed_at": "2026-10-31T05:40:09Z",
+      "name": "cli (darwin-x64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:20:02Z",
+          "completed_at": "2026-10-31T05:20:07Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:20:07Z",
+          "completed_at": "2026-10-31T05:20:26Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:20:26Z",
+          "completed_at": "2026-10-31T05:22:52Z"
+        },
+        {
+          "name": "Verify version alignment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:22:52Z",
+          "completed_at": "2026-10-31T05:22:53Z"
+        },
+        {
+          "name": "Install Linux CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 5,
+          "started_at": "2026-10-31T05:22:53Z",
+          "completed_at": "2026-10-31T05:22:53Z"
+        },
+        {
+          "name": "Install macOS CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:22:53Z",
+          "completed_at": "2026-10-31T05:23:04Z"
+        },
+        {
+          "name": "Install Windows CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-10-31T05:23:04Z",
+          "completed_at": "2026-10-31T05:23:04Z"
+        },
+        {
+          "name": "Setup Rust for the Windows process supervisor",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-10-31T05:23:04Z",
+          "completed_at": "2026-10-31T05:23:04Z"
+        },
+        {
+          "name": "Cache the Windows process supervisor build",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-31T05:23:04Z",
+          "completed_at": "2026-10-31T05:23:04Z"
+        },
+        {
+          "name": "Install Office preview renderer browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:23:04Z",
+          "completed_at": "2026-10-31T05:23:28Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:23:28Z",
+          "completed_at": "2026-10-31T05:23:28Z"
+        },
+        {
+          "name": "Package CLI archives",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T05:23:28Z",
+          "completed_at": "2026-10-31T05:33:43Z"
+        },
+        {
+          "name": "Verify packaged Work Artifact lifecycle",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:33:43Z",
+          "completed_at": "2026-10-31T05:39:42Z"
+        },
+        {
+          "name": "Upload CLI artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:39:42Z",
+          "completed_at": "2026-10-31T05:40:02Z"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-31T05:40:02Z",
+          "completed_at": "2026-10-31T05:40:02Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29,
+          "started_at": "2026-10-31T05:40:02Z",
+          "completed_at": "2026-10-31T05:40:04Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-31T05:40:04Z",
+          "completed_at": "2026-10-31T05:40:05Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-31T05:40:05Z",
+          "completed_at": "2026-10-31T05:40:07Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124452246258",
+      "labels": [
+        "macos-15-intel"
+      ],
+      "runner_id": 1000029870,
+      "runner_name": "GitHub Actions 1000029870",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124452246275,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-e6TAw",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124452246275",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124452246275",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:19:58Z",
+      "started_at": "2026-10-31T05:20:00Z",
+      "completed_at": "2026-10-31T05:30:24Z",
+      "name": "cli (linux-x64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:20:01Z",
+          "completed_at": "2026-10-31T05:20:02Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:20:02Z",
+          "completed_at": "2026-10-31T05:20:11Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:20:11Z",
+          "completed_at": "2026-10-31T05:20:33Z"
+        },
+        {
+          "name": "Verify version alignment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:20:33Z",
+          "completed_at": "2026-10-31T05:20:33Z"
+        },
+        {
+          "name": "Install Linux CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:20:33Z",
+          "completed_at": "2026-10-31T05:20:50Z"
+        },
+        {
+          "name": "Install macOS CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-31T05:20:50Z",
+          "completed_at": "2026-10-31T05:20:50Z"
+        },
+        {
+          "name": "Install Windows CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-10-31T05:20:50Z",
+          "completed_at": "2026-10-31T05:20:50Z"
+        },
+        {
+          "name": "Setup Rust for the Windows process supervisor",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-10-31T05:20:50Z",
+          "completed_at": "2026-10-31T05:20:50Z"
+        },
+        {
+          "name": "Cache the Windows process supervisor build",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-31T05:20:50Z",
+          "completed_at": "2026-10-31T05:20:50Z"
+        },
+        {
+          "name": "Install Office preview renderer browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:20:50Z",
+          "completed_at": "2026-10-31T05:21:08Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:21:08Z",
+          "completed_at": "2026-10-31T05:21:09Z"
+        },
+        {
+          "name": "Package CLI archives",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T05:21:09Z",
+          "completed_at": "2026-10-31T05:25:49Z"
+        },
+        {
+          "name": "Verify packaged Work Artifact lifecycle",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:25:49Z",
+          "completed_at": "2026-10-31T05:30:11Z"
+        },
+        {
+          "name": "Upload CLI artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:30:11Z",
+          "completed_at": "2026-10-31T05:30:21Z"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-31T05:30:21Z",
+          "completed_at": "2026-10-31T05:30:21Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29,
+          "started_at": "2026-10-31T05:30:21Z",
+          "completed_at": "2026-10-31T05:30:22Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-31T05:30:22Z",
+          "completed_at": "2026-10-31T05:30:22Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-31T05:30:22Z",
+          "completed_at": "2026-10-31T05:30:22Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124452246275",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029869,
+      "runner_name": "GitHub Actions 1000029869",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124452246283,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-e6TCw",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124452246283",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124452246283",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:19:58Z",
+      "started_at": "2026-10-31T05:20:00Z",
+      "completed_at": "2026-10-31T05:28:50Z",
+      "name": "cli (darwin-arm64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:20:00Z",
+          "completed_at": "2026-10-31T05:20:02Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:20:02Z",
+          "completed_at": "2026-10-31T05:20:13Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:20:13Z",
+          "completed_at": "2026-10-31T05:21:00Z"
+        },
+        {
+          "name": "Verify version alignment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:21:00Z",
+          "completed_at": "2026-10-31T05:21:00Z"
+        },
+        {
+          "name": "Install Linux CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 5,
+          "started_at": "2026-10-31T05:21:00Z",
+          "completed_at": "2026-10-31T05:21:00Z"
+        },
+        {
+          "name": "Install macOS CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:21:00Z",
+          "completed_at": "2026-10-31T05:21:11Z"
+        },
+        {
+          "name": "Install Windows CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-10-31T05:21:11Z",
+          "completed_at": "2026-10-31T05:21:11Z"
+        },
+        {
+          "name": "Setup Rust for the Windows process supervisor",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-10-31T05:21:11Z",
+          "completed_at": "2026-10-31T05:21:11Z"
+        },
+        {
+          "name": "Cache the Windows process supervisor build",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-31T05:21:11Z",
+          "completed_at": "2026-10-31T05:21:11Z"
+        },
+        {
+          "name": "Install Office preview renderer browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:21:11Z",
+          "completed_at": "2026-10-31T05:21:24Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:21:24Z",
+          "completed_at": "2026-10-31T05:21:24Z"
+        },
+        {
+          "name": "Package CLI archives",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T05:21:24Z",
+          "completed_at": "2026-10-31T05:26:19Z"
+        },
+        {
+          "name": "Verify packaged Work Artifact lifecycle",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:26:19Z",
+          "completed_at": "2026-10-31T05:28:38Z"
+        },
+        {
+          "name": "Upload CLI artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:28:38Z",
+          "completed_at": "2026-10-31T05:28:44Z"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-31T05:28:44Z",
+          "completed_at": "2026-10-31T05:28:45Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29,
+          "started_at": "2026-10-31T05:28:45Z",
+          "completed_at": "2026-10-31T05:28:45Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-31T05:28:45Z",
+          "completed_at": "2026-10-31T05:28:46Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-31T05:28:46Z",
+          "completed_at": "2026-10-31T05:28:48Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124452246283",
+      "labels": [
+        "macos-latest"
+      ],
+      "runner_id": 1000029871,
+      "runner_name": "GitHub Actions 1000029871",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124452246304,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-e6TIA",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124452246304",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124452246304",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:19:58Z",
+      "started_at": "2026-10-31T05:20:00Z",
+      "completed_at": "2026-10-31T05:38:37Z",
+      "name": "cli (windows-x64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:20:01Z",
+          "completed_at": "2026-10-31T05:20:02Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:20:02Z",
+          "completed_at": "2026-10-31T05:20:21Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:20:21Z",
+          "completed_at": "2026-10-31T05:22:35Z"
+        },
+        {
+          "name": "Verify version alignment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:22:35Z",
+          "completed_at": "2026-10-31T05:22:35Z"
+        },
+        {
+          "name": "Install Linux CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 5,
+          "started_at": "2026-10-31T05:22:35Z",
+          "completed_at": "2026-10-31T05:22:35Z"
+        },
+        {
+          "name": "Install macOS CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-31T05:22:35Z",
+          "completed_at": "2026-10-31T05:22:35Z"
+        },
+        {
+          "name": "Install Windows CLI runtime dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:22:35Z",
+          "completed_at": "2026-10-31T05:22:37Z"
+        },
+        {
+          "name": "Setup Rust for the Windows process supervisor",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:22:37Z",
+          "completed_at": "2026-10-31T05:22:44Z"
+        },
+        {
+          "name": "Cache the Windows process supervisor build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:22:44Z",
+          "completed_at": "2026-10-31T05:22:47Z"
+        },
+        {
+          "name": "Install Office preview renderer browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:22:47Z",
+          "completed_at": "2026-10-31T05:26:38Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:26:38Z",
+          "completed_at": "2026-10-31T05:26:39Z"
+        },
+        {
+          "name": "Package CLI archives",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T05:26:39Z",
+          "completed_at": "2026-10-31T05:33:17Z"
+        },
+        {
+          "name": "Verify packaged Work Artifact lifecycle",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:33:17Z",
+          "completed_at": "2026-10-31T05:38:18Z"
+        },
+        {
+          "name": "Upload CLI artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:38:18Z",
+          "completed_at": "2026-10-31T05:38:29Z"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-31T05:38:29Z",
+          "completed_at": "2026-10-31T05:38:29Z"
+        },
+        {
+          "name": "Post Cache the Windows process supervisor build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 28,
+          "started_at": "2026-10-31T05:38:29Z",
+          "completed_at": "2026-10-31T05:38:33Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29,
+          "started_at": "2026-10-31T05:38:33Z",
+          "completed_at": "2026-10-31T05:38:33Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-31T05:38:33Z",
+          "completed_at": "2026-10-31T05:38:36Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-31T05:38:36Z",
+          "completed_at": "2026-10-31T05:38:36Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124452246304",
+      "labels": [
+        "windows-latest"
+      ],
+      "runner_id": 1000029873,
+      "runner_name": "GitHub Actions 1000029873",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124452246369,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-e6TYQ",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124452246369",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124452246369",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:19:58Z",
+      "started_at": "2026-10-31T05:20:07Z",
+      "completed_at": "2026-10-31T05:28:23Z",
+      "name": "overlay (linux-arm64) / compile (linux-arm64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:20:07Z",
+          "completed_at": "2026-10-31T05:20:08Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:20:08Z",
+          "completed_at": "2026-10-31T05:20:17Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:20:17Z",
+          "completed_at": "2026-10-31T05:20:40Z"
+        },
+        {
+          "name": "Verify version alignment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:20:40Z",
+          "completed_at": "2026-10-31T05:20:40Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-overlay-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:20:40Z",
+          "completed_at": "2026-10-31T05:21:36Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:21:36Z",
+          "completed_at": "2026-10-31T05:21:38Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:21:38Z",
+          "completed_at": "2026-10-31T05:21:46Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:21:46Z",
+          "completed_at": "2026-10-31T05:21:46Z"
+        },
+        {
+          "name": "Compile Linux installer input",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:21:46Z",
+          "completed_at": "2026-10-31T05:28:10Z"
+        },
+        {
+          "name": "Retain compiled Linux input",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:28:10Z",
+          "completed_at": "2026-10-31T05:28:12Z"
+        },
+        {
+          "name": "Package GUI installers",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11,
+          "started_at": "2026-10-31T05:28:12Z",
+          "completed_at": "2026-10-31T05:28:12Z"
+        },
+        {
+          "name": "Select overlay transfer files",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12,
+          "started_at": "2026-10-31T05:28:12Z",
+          "completed_at": "2026-10-31T05:28:12Z"
+        },
+        {
+          "name": "Upload overlay artifact",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 13,
+          "started_at": "2026-10-31T05:28:12Z",
+          "completed_at": "2026-10-31T05:28:12Z"
+        },
+        {
+          "name": "Collect failed macOS installer diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 14,
+          "started_at": "2026-10-31T05:28:12Z",
+          "completed_at": "2026-10-31T05:28:12Z"
+        },
+        {
+          "name": "Retain failed installer diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-31T05:28:12Z",
+          "completed_at": "2026-10-31T05:28:12Z"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 16,
+          "started_at": "2026-10-31T05:28:12Z",
+          "completed_at": "2026-10-31T05:28:12Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-31T05:28:12Z",
+          "completed_at": "2026-10-31T05:28:20Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-31T05:28:20Z",
+          "completed_at": "2026-10-31T05:28:21Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32,
+          "started_at": "2026-10-31T05:28:21Z",
+          "completed_at": "2026-10-31T05:28:21Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33,
+          "started_at": "2026-10-31T05:28:21Z",
+          "completed_at": "2026-10-31T05:28:21Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124452246369",
+      "labels": [
+        "ubuntu-24.04-arm"
+      ],
+      "runner_id": 1000029872,
+      "runner_name": "GitHub Actions 1000029872",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124452246415,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-e6Tjw",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124452246415",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124452246415",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:19:58Z",
+      "started_at": "2026-10-31T05:20:25Z",
+      "completed_at": "2026-10-31T05:29:13Z",
+      "name": "overlay (linux-x64) / compile (linux-x64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:20:26Z",
+          "completed_at": "2026-10-31T05:20:27Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:20:27Z",
+          "completed_at": "2026-10-31T05:20:36Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:20:36Z",
+          "completed_at": "2026-10-31T05:20:53Z"
+        },
+        {
+          "name": "Verify version alignment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:20:53Z",
+          "completed_at": "2026-10-31T05:20:53Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-overlay-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:20:53Z",
+          "completed_at": "2026-10-31T05:21:44Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:21:44Z",
+          "completed_at": "2026-10-31T05:21:45Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:21:45Z",
+          "completed_at": "2026-10-31T05:21:56Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:21:56Z",
+          "completed_at": "2026-10-31T05:21:56Z"
+        },
+        {
+          "name": "Compile Linux installer input",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:21:56Z",
+          "completed_at": "2026-10-31T05:28:58Z"
+        },
+        {
+          "name": "Retain compiled Linux input",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:28:58Z",
+          "completed_at": "2026-10-31T05:29:01Z"
+        },
+        {
+          "name": "Package GUI installers",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11,
+          "started_at": "2026-10-31T05:29:01Z",
+          "completed_at": "2026-10-31T05:29:01Z"
+        },
+        {
+          "name": "Select overlay transfer files",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12,
+          "started_at": "2026-10-31T05:29:01Z",
+          "completed_at": "2026-10-31T05:29:01Z"
+        },
+        {
+          "name": "Upload overlay artifact",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 13,
+          "started_at": "2026-10-31T05:29:01Z",
+          "completed_at": "2026-10-31T05:29:01Z"
+        },
+        {
+          "name": "Collect failed macOS installer diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 14,
+          "started_at": "2026-10-31T05:29:01Z",
+          "completed_at": "2026-10-31T05:29:01Z"
+        },
+        {
+          "name": "Retain failed installer diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-31T05:29:01Z",
+          "completed_at": "2026-10-31T05:29:01Z"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 16,
+          "started_at": "2026-10-31T05:29:01Z",
+          "completed_at": "2026-10-31T05:29:01Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-31T05:29:01Z",
+          "completed_at": "2026-10-31T05:29:11Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-31T05:29:11Z",
+          "completed_at": "2026-10-31T05:29:11Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32,
+          "started_at": "2026-10-31T05:29:11Z",
+          "completed_at": "2026-10-31T05:29:12Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33,
+          "started_at": "2026-10-31T05:29:12Z",
+          "completed_at": "2026-10-31T05:29:12Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124452246415",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029876,
+      "runner_name": "GitHub Actions 1000029876",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124452246464,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-e6TwA",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124452246464",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124452246464",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:19:58Z",
+      "started_at": "2026-10-31T05:20:04Z",
+      "completed_at": "2026-10-31T05:34:27Z",
+      "name": "overlay (darwin-x64) / compile (darwin-x64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:20:04Z",
+          "completed_at": "2026-10-31T05:20:08Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:20:08Z",
+          "completed_at": "2026-10-31T05:20:21Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:20:21Z",
+          "completed_at": "2026-10-31T05:22:27Z"
+        },
+        {
+          "name": "Verify version alignment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:22:27Z",
+          "completed_at": "2026-10-31T05:22:27Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-overlay-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:22:27Z",
+          "completed_at": "2026-10-31T05:22:45Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:22:45Z",
+          "completed_at": "2026-10-31T05:23:13Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:23:13Z",
+          "completed_at": "2026-10-31T05:24:11Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:24:11Z",
+          "completed_at": "2026-10-31T05:24:12Z"
+        },
+        {
+          "name": "Compile Linux installer input",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-31T05:24:12Z",
+          "completed_at": "2026-10-31T05:24:12Z"
+        },
+        {
+          "name": "Retain compiled Linux input",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 10,
+          "started_at": "2026-10-31T05:24:12Z",
+          "completed_at": "2026-10-31T05:24:12Z"
+        },
+        {
+          "name": "Package GUI installers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:24:12Z",
+          "completed_at": "2026-10-31T05:34:14Z"
+        },
+        {
+          "name": "Select overlay transfer files",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T05:34:14Z",
+          "completed_at": "2026-10-31T05:34:15Z"
+        },
+        {
+          "name": "Upload overlay artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:34:15Z",
+          "completed_at": "2026-10-31T05:34:23Z"
+        },
+        {
+          "name": "Collect failed macOS installer diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 14,
+          "started_at": "2026-10-31T05:34:23Z",
+          "completed_at": "2026-10-31T05:34:23Z"
+        },
+        {
+          "name": "Retain failed installer diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-31T05:34:23Z",
+          "completed_at": "2026-10-31T05:34:23Z"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 16,
+          "started_at": "2026-10-31T05:34:23Z",
+          "completed_at": "2026-10-31T05:34:23Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-31T05:34:23Z",
+          "completed_at": "2026-10-31T05:34:24Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-31T05:34:24Z",
+          "completed_at": "2026-10-31T05:34:24Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32,
+          "started_at": "2026-10-31T05:34:24Z",
+          "completed_at": "2026-10-31T05:34:25Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33,
+          "started_at": "2026-10-31T05:34:25Z",
+          "completed_at": "2026-10-31T05:34:25Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124452246464",
+      "labels": [
+        "macos-15-intel"
+      ],
+      "runner_id": 1000029875,
+      "runner_name": "GitHub Actions 1000029875",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124452246465,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-e6TwQ",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124452246465",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124452246465",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:19:58Z",
+      "started_at": "2026-10-31T05:22:52Z",
+      "completed_at": "2026-10-31T05:31:49Z",
+      "name": "overlay (darwin-arm64) / compile (darwin-arm64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:22:52Z",
+          "completed_at": "2026-10-31T05:22:54Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:22:54Z",
+          "completed_at": "2026-10-31T05:23:04Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:23:04Z",
+          "completed_at": "2026-10-31T05:23:40Z"
+        },
+        {
+          "name": "Verify version alignment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:23:40Z",
+          "completed_at": "2026-10-31T05:23:40Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-overlay-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:23:40Z",
+          "completed_at": "2026-10-31T05:23:50Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:23:50Z",
+          "completed_at": "2026-10-31T05:23:51Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:23:51Z",
+          "completed_at": "2026-10-31T05:24:01Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:24:01Z",
+          "completed_at": "2026-10-31T05:24:01Z"
+        },
+        {
+          "name": "Compile Linux installer input",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-31T05:24:01Z",
+          "completed_at": "2026-10-31T05:24:01Z"
+        },
+        {
+          "name": "Retain compiled Linux input",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 10,
+          "started_at": "2026-10-31T05:24:01Z",
+          "completed_at": "2026-10-31T05:24:01Z"
+        },
+        {
+          "name": "Package GUI installers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:24:01Z",
+          "completed_at": "2026-10-31T05:31:07Z"
+        },
+        {
+          "name": "Select overlay transfer files",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T05:31:07Z",
+          "completed_at": "2026-10-31T05:31:07Z"
+        },
+        {
+          "name": "Upload overlay artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:31:07Z",
+          "completed_at": "2026-10-31T05:31:13Z"
+        },
+        {
+          "name": "Collect failed macOS installer diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 14,
+          "started_at": "2026-10-31T05:31:13Z",
+          "completed_at": "2026-10-31T05:31:13Z"
+        },
+        {
+          "name": "Retain failed installer diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-31T05:31:13Z",
+          "completed_at": "2026-10-31T05:31:13Z"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 16,
+          "started_at": "2026-10-31T05:31:13Z",
+          "completed_at": "2026-10-31T05:31:13Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-31T05:31:13Z",
+          "completed_at": "2026-10-31T05:31:40Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-31T05:31:40Z",
+          "completed_at": "2026-10-31T05:31:41Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32,
+          "started_at": "2026-10-31T05:31:41Z",
+          "completed_at": "2026-10-31T05:31:43Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33,
+          "started_at": "2026-10-31T05:31:43Z",
+          "completed_at": "2026-10-31T05:31:46Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124452246465",
+      "labels": [
+        "macos-latest"
+      ],
+      "runner_id": 1000029881,
+      "runner_name": "GitHub Actions 1000029881",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124452246486,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-e6T1g",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124452246486",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124452246486",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:19:58Z",
+      "started_at": "2026-10-31T05:20:00Z",
+      "completed_at": "2026-10-31T05:34:24Z",
+      "name": "overlay (windows-x64) / compile (windows-x64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:20:00Z",
+          "completed_at": "2026-10-31T05:20:02Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:20:02Z",
+          "completed_at": "2026-10-31T05:20:19Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:20:19Z",
+          "completed_at": "2026-10-31T05:22:14Z"
+        },
+        {
+          "name": "Verify version alignment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:22:14Z",
+          "completed_at": "2026-10-31T05:22:14Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-overlay-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:22:14Z",
+          "completed_at": "2026-10-31T05:22:15Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:22:15Z",
+          "completed_at": "2026-10-31T05:22:21Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:22:21Z",
+          "completed_at": "2026-10-31T05:22:38Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:22:38Z",
+          "completed_at": "2026-10-31T05:22:38Z"
+        },
+        {
+          "name": "Compile Linux installer input",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-31T05:22:38Z",
+          "completed_at": "2026-10-31T05:22:38Z"
+        },
+        {
+          "name": "Retain compiled Linux input",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 10,
+          "started_at": "2026-10-31T05:22:38Z",
+          "completed_at": "2026-10-31T05:22:38Z"
+        },
+        {
+          "name": "Package GUI installers",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:22:38Z",
+          "completed_at": "2026-10-31T05:33:41Z"
+        },
+        {
+          "name": "Select overlay transfer files",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T05:33:41Z",
+          "completed_at": "2026-10-31T05:33:41Z"
+        },
+        {
+          "name": "Upload overlay artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:33:41Z",
+          "completed_at": "2026-10-31T05:33:44Z"
+        },
+        {
+          "name": "Collect failed macOS installer diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 14,
+          "started_at": "2026-10-31T05:33:44Z",
+          "completed_at": "2026-10-31T05:33:44Z"
+        },
+        {
+          "name": "Retain failed installer diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15,
+          "started_at": "2026-10-31T05:33:44Z",
+          "completed_at": "2026-10-31T05:33:44Z"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 16,
+          "started_at": "2026-10-31T05:33:44Z",
+          "completed_at": "2026-10-31T05:33:44Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 30,
+          "started_at": "2026-10-31T05:33:44Z",
+          "completed_at": "2026-10-31T05:34:19Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 31,
+          "started_at": "2026-10-31T05:34:19Z",
+          "completed_at": "2026-10-31T05:34:20Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 32,
+          "started_at": "2026-10-31T05:34:20Z",
+          "completed_at": "2026-10-31T05:34:23Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 33,
+          "started_at": "2026-10-31T05:34:23Z",
+          "completed_at": "2026-10-31T05:34:23Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124452246486",
+      "labels": [
+        "windows-latest"
+      ],
+      "runner_id": 1000029874,
+      "runner_name": "GitHub Actions 1000029874",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124453918122,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-ggVqg",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124453918122",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124453918122",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:28:23Z",
+      "started_at": "2026-10-31T05:28:27Z",
+      "completed_at": "2026-10-31T05:34:42Z",
+      "name": "overlay (linux-arm64) / rpm (linux-arm64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:28:27Z",
+          "completed_at": "2026-10-31T05:28:29Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:28:29Z",
+          "completed_at": "2026-10-31T05:28:37Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:28:37Z",
+          "completed_at": "2026-10-31T05:29:01Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-overlay-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:29:01Z",
+          "completed_at": "2026-10-31T05:29:57Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:29:57Z",
+          "completed_at": "2026-10-31T05:29:58Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:29:58Z",
+          "completed_at": "2026-10-31T05:29:58Z"
+        },
+        {
+          "name": "Resolve RPM tool cache identity",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:29:58Z",
+          "completed_at": "2026-10-31T05:29:58Z"
+        },
+        {
+          "name": "Run actions/cache/restore@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:29:58Z",
+          "completed_at": "2026-10-31T05:29:58Z"
+        },
+        {
+          "name": "Install RPM package verifier",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:29:58Z",
+          "completed_at": "2026-10-31T05:30:08Z"
+        },
+        {
+          "name": "Verify native RPM checker contract",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:30:08Z",
+          "completed_at": "2026-10-31T05:30:09Z"
+        },
+        {
+          "name": "Prepare corrected RPM bundler",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:30:09Z",
+          "completed_at": "2026-10-31T05:34:13Z"
+        },
+        {
+          "name": "Run actions/cache/save@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T05:34:13Z",
+          "completed_at": "2026-10-31T05:34:14Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:34:14Z",
+          "completed_at": "2026-10-31T05:34:17Z"
+        },
+        {
+          "name": "Restore compiled installer input",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:34:17Z",
+          "completed_at": "2026-10-31T05:34:17Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-31T05:34:17Z",
+          "completed_at": "2026-10-31T05:34:17Z"
+        },
+        {
+          "name": "Bundle one Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-31T05:34:17Z",
+          "completed_at": "2026-10-31T05:34:33Z"
+        },
+        {
+          "name": "Verify RPM payload and isolated file installation",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-31T05:34:33Z",
+          "completed_at": "2026-10-31T05:34:38Z"
+        },
+        {
+          "name": "Retain failed RPM for diagnosis",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-31T05:34:38Z",
+          "completed_at": "2026-10-31T05:34:38Z"
+        },
+        {
+          "name": "Retain completed Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T05:34:38Z",
+          "completed_at": "2026-10-31T05:34:40Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-31T05:34:40Z",
+          "completed_at": "2026-10-31T05:34:41Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-31T05:34:41Z",
+          "completed_at": "2026-10-31T05:34:41Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-31T05:34:41Z",
+          "completed_at": "2026-10-31T05:34:41Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124453918122",
+      "labels": [
+        "ubuntu-24.04-arm"
+      ],
+      "runner_id": 1000029886,
+      "runner_name": "GitHub Actions 1000029886",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124453918123,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-ggVqw",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124453918123",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124453918123",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:28:23Z",
+      "started_at": "2026-10-31T05:28:26Z",
+      "completed_at": "2026-10-31T05:31:26Z",
+      "name": "overlay (linux-arm64) / appimage (linux-arm64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:28:27Z",
+          "completed_at": "2026-10-31T05:28:28Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:28:28Z",
+          "completed_at": "2026-10-31T05:28:37Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:28:37Z",
+          "completed_at": "2026-10-31T05:28:54Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-overlay-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:28:54Z",
+          "completed_at": "2026-10-31T05:29:25Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:29:25Z",
+          "completed_at": "2026-10-31T05:29:25Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:29:25Z",
+          "completed_at": "2026-10-31T05:29:26Z"
+        },
+        {
+          "name": "Resolve RPM tool cache identity",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-10-31T05:29:26Z",
+          "completed_at": "2026-10-31T05:29:26Z"
+        },
+        {
+          "name": "Run actions/cache/restore@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-10-31T05:29:26Z",
+          "completed_at": "2026-10-31T05:29:26Z"
+        },
+        {
+          "name": "Install RPM package verifier",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-31T05:29:26Z",
+          "completed_at": "2026-10-31T05:29:26Z"
+        },
+        {
+          "name": "Verify native RPM checker contract",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 10,
+          "started_at": "2026-10-31T05:29:26Z",
+          "completed_at": "2026-10-31T05:29:26Z"
+        },
+        {
+          "name": "Prepare corrected RPM bundler",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11,
+          "started_at": "2026-10-31T05:29:26Z",
+          "completed_at": "2026-10-31T05:29:26Z"
+        },
+        {
+          "name": "Run actions/cache/save@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12,
+          "started_at": "2026-10-31T05:29:26Z",
+          "completed_at": "2026-10-31T05:29:26Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:29:26Z",
+          "completed_at": "2026-10-31T05:29:28Z"
+        },
+        {
+          "name": "Restore compiled installer input",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:29:28Z",
+          "completed_at": "2026-10-31T05:29:28Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-31T05:29:28Z",
+          "completed_at": "2026-10-31T05:29:29Z"
+        },
+        {
+          "name": "Bundle one Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-31T05:29:29Z",
+          "completed_at": "2026-10-31T05:31:22Z"
+        },
+        {
+          "name": "Verify RPM payload and isolated file installation",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 17,
+          "started_at": "2026-10-31T05:31:22Z",
+          "completed_at": "2026-10-31T05:31:22Z"
+        },
+        {
+          "name": "Retain failed RPM for diagnosis",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-31T05:31:22Z",
+          "completed_at": "2026-10-31T05:31:22Z"
+        },
+        {
+          "name": "Retain completed Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T05:31:22Z",
+          "completed_at": "2026-10-31T05:31:24Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-31T05:31:24Z",
+          "completed_at": "2026-10-31T05:31:24Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-31T05:31:24Z",
+          "completed_at": "2026-10-31T05:31:24Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-31T05:31:24Z",
+          "completed_at": "2026-10-31T05:31:24Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124453918123",
+      "labels": [
+        "ubuntu-24.04-arm"
+      ],
+      "runner_id": 1000029885,
+      "runner_name": "GitHub Actions 1000029885",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124453918148,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-ggVxA",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124453918148",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124453918148",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:28:23Z",
+      "started_at": "2026-10-31T05:28:27Z",
+      "completed_at": "2026-10-31T05:30:29Z",
+      "name": "overlay (linux-arm64) / deb (linux-arm64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:28:28Z",
+          "completed_at": "2026-10-31T05:28:29Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:28:29Z",
+          "completed_at": "2026-10-31T05:28:38Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:28:38Z",
+          "completed_at": "2026-10-31T05:28:57Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-overlay-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:28:57Z",
+          "completed_at": "2026-10-31T05:30:03Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:30:03Z",
+          "completed_at": "2026-10-31T05:30:03Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:30:03Z",
+          "completed_at": "2026-10-31T05:30:04Z"
+        },
+        {
+          "name": "Resolve RPM tool cache identity",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-10-31T05:30:04Z",
+          "completed_at": "2026-10-31T05:30:04Z"
+        },
+        {
+          "name": "Run actions/cache/restore@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-10-31T05:30:04Z",
+          "completed_at": "2026-10-31T05:30:04Z"
+        },
+        {
+          "name": "Install RPM package verifier",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-31T05:30:04Z",
+          "completed_at": "2026-10-31T05:30:04Z"
+        },
+        {
+          "name": "Verify native RPM checker contract",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 10,
+          "started_at": "2026-10-31T05:30:04Z",
+          "completed_at": "2026-10-31T05:30:04Z"
+        },
+        {
+          "name": "Prepare corrected RPM bundler",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11,
+          "started_at": "2026-10-31T05:30:04Z",
+          "completed_at": "2026-10-31T05:30:04Z"
+        },
+        {
+          "name": "Run actions/cache/save@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12,
+          "started_at": "2026-10-31T05:30:04Z",
+          "completed_at": "2026-10-31T05:30:04Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:30:04Z",
+          "completed_at": "2026-10-31T05:30:09Z"
+        },
+        {
+          "name": "Restore compiled installer input",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:30:09Z",
+          "completed_at": "2026-10-31T05:30:09Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-31T05:30:09Z",
+          "completed_at": "2026-10-31T05:30:09Z"
+        },
+        {
+          "name": "Bundle one Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-31T05:30:09Z",
+          "completed_at": "2026-10-31T05:30:24Z"
+        },
+        {
+          "name": "Verify RPM payload and isolated file installation",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 17,
+          "started_at": "2026-10-31T05:30:24Z",
+          "completed_at": "2026-10-31T05:30:24Z"
+        },
+        {
+          "name": "Retain failed RPM for diagnosis",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-31T05:30:24Z",
+          "completed_at": "2026-10-31T05:30:24Z"
+        },
+        {
+          "name": "Retain completed Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T05:30:24Z",
+          "completed_at": "2026-10-31T05:30:27Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-31T05:30:27Z",
+          "completed_at": "2026-10-31T05:30:27Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-31T05:30:27Z",
+          "completed_at": "2026-10-31T05:30:27Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-31T05:30:27Z",
+          "completed_at": "2026-10-31T05:30:27Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124453918148",
+      "labels": [
+        "ubuntu-24.04-arm"
+      ],
+      "runner_id": 1000029887,
+      "runner_name": "GitHub Actions 1000029887",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124454078492,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-gqIHA",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124454078492",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124454078492",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:29:13Z",
+      "started_at": "2026-10-31T05:29:22Z",
+      "completed_at": "2026-10-31T05:32:11Z",
+      "name": "overlay (linux-x64) / appimage (linux-x64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:29:23Z",
+          "completed_at": "2026-10-31T05:29:24Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:29:24Z",
+          "completed_at": "2026-10-31T05:29:28Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:29:28Z",
+          "completed_at": "2026-10-31T05:29:46Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-overlay-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:29:46Z",
+          "completed_at": "2026-10-31T05:30:15Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:30:15Z",
+          "completed_at": "2026-10-31T05:30:16Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:30:16Z",
+          "completed_at": "2026-10-31T05:30:16Z"
+        },
+        {
+          "name": "Resolve RPM tool cache identity",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-10-31T05:30:16Z",
+          "completed_at": "2026-10-31T05:30:16Z"
+        },
+        {
+          "name": "Run actions/cache/restore@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-10-31T05:30:16Z",
+          "completed_at": "2026-10-31T05:30:16Z"
+        },
+        {
+          "name": "Install RPM package verifier",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-31T05:30:16Z",
+          "completed_at": "2026-10-31T05:30:16Z"
+        },
+        {
+          "name": "Verify native RPM checker contract",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 10,
+          "started_at": "2026-10-31T05:30:16Z",
+          "completed_at": "2026-10-31T05:30:16Z"
+        },
+        {
+          "name": "Prepare corrected RPM bundler",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11,
+          "started_at": "2026-10-31T05:30:16Z",
+          "completed_at": "2026-10-31T05:30:16Z"
+        },
+        {
+          "name": "Run actions/cache/save@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12,
+          "started_at": "2026-10-31T05:30:16Z",
+          "completed_at": "2026-10-31T05:30:16Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:30:16Z",
+          "completed_at": "2026-10-31T05:30:20Z"
+        },
+        {
+          "name": "Restore compiled installer input",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:30:20Z",
+          "completed_at": "2026-10-31T05:30:20Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-31T05:30:20Z",
+          "completed_at": "2026-10-31T05:30:20Z"
+        },
+        {
+          "name": "Bundle one Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-31T05:30:20Z",
+          "completed_at": "2026-10-31T05:32:06Z"
+        },
+        {
+          "name": "Verify RPM payload and isolated file installation",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 17,
+          "started_at": "2026-10-31T05:32:06Z",
+          "completed_at": "2026-10-31T05:32:06Z"
+        },
+        {
+          "name": "Retain failed RPM for diagnosis",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-31T05:32:06Z",
+          "completed_at": "2026-10-31T05:32:06Z"
+        },
+        {
+          "name": "Retain completed Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T05:32:06Z",
+          "completed_at": "2026-10-31T05:32:09Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-31T05:32:09Z",
+          "completed_at": "2026-10-31T05:32:09Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-31T05:32:09Z",
+          "completed_at": "2026-10-31T05:32:10Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-31T05:32:10Z",
+          "completed_at": "2026-10-31T05:32:10Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124454078492",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029892,
+      "runner_name": "GitHub Actions 1000029892",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124454078509,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-gqILQ",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124454078509",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124454078509",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:29:13Z",
+      "started_at": "2026-10-31T05:29:15Z",
+      "completed_at": "2026-10-31T05:31:05Z",
+      "name": "overlay (linux-x64) / deb (linux-x64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:29:16Z",
+          "completed_at": "2026-10-31T05:29:18Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:29:18Z",
+          "completed_at": "2026-10-31T05:29:29Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:29:29Z",
+          "completed_at": "2026-10-31T05:29:49Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-overlay-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:29:49Z",
+          "completed_at": "2026-10-31T05:30:33Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:30:33Z",
+          "completed_at": "2026-10-31T05:30:34Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:30:34Z",
+          "completed_at": "2026-10-31T05:30:34Z"
+        },
+        {
+          "name": "Resolve RPM tool cache identity",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-10-31T05:30:34Z",
+          "completed_at": "2026-10-31T05:30:34Z"
+        },
+        {
+          "name": "Run actions/cache/restore@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-10-31T05:30:34Z",
+          "completed_at": "2026-10-31T05:30:34Z"
+        },
+        {
+          "name": "Install RPM package verifier",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9,
+          "started_at": "2026-10-31T05:30:34Z",
+          "completed_at": "2026-10-31T05:30:34Z"
+        },
+        {
+          "name": "Verify native RPM checker contract",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 10,
+          "started_at": "2026-10-31T05:30:34Z",
+          "completed_at": "2026-10-31T05:30:34Z"
+        },
+        {
+          "name": "Prepare corrected RPM bundler",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11,
+          "started_at": "2026-10-31T05:30:34Z",
+          "completed_at": "2026-10-31T05:30:34Z"
+        },
+        {
+          "name": "Run actions/cache/save@v6",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12,
+          "started_at": "2026-10-31T05:30:34Z",
+          "completed_at": "2026-10-31T05:30:34Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:30:34Z",
+          "completed_at": "2026-10-31T05:30:40Z"
+        },
+        {
+          "name": "Restore compiled installer input",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:30:40Z",
+          "completed_at": "2026-10-31T05:30:40Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-31T05:30:40Z",
+          "completed_at": "2026-10-31T05:30:41Z"
+        },
+        {
+          "name": "Bundle one Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-31T05:30:41Z",
+          "completed_at": "2026-10-31T05:30:58Z"
+        },
+        {
+          "name": "Verify RPM payload and isolated file installation",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 17,
+          "started_at": "2026-10-31T05:30:58Z",
+          "completed_at": "2026-10-31T05:30:58Z"
+        },
+        {
+          "name": "Retain failed RPM for diagnosis",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-31T05:30:58Z",
+          "completed_at": "2026-10-31T05:30:58Z"
+        },
+        {
+          "name": "Retain completed Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T05:30:58Z",
+          "completed_at": "2026-10-31T05:31:02Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-31T05:31:02Z",
+          "completed_at": "2026-10-31T05:31:03Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-31T05:31:03Z",
+          "completed_at": "2026-10-31T05:31:03Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-31T05:31:03Z",
+          "completed_at": "2026-10-31T05:31:03Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124454078509",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029891,
+      "runner_name": "GitHub Actions 1000029891",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124454078545,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-gqIUQ",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124454078545",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124454078545",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:29:13Z",
+      "started_at": "2026-10-31T05:30:24Z",
+      "completed_at": "2026-10-31T05:36:50Z",
+      "name": "overlay (linux-x64) / rpm (linux-x64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:30:25Z",
+          "completed_at": "2026-10-31T05:30:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:30:26Z",
+          "completed_at": "2026-10-31T05:30:35Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:30:35Z",
+          "completed_at": "2026-10-31T05:30:52Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-overlay-runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:30:52Z",
+          "completed_at": "2026-10-31T05:31:33Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:31:33Z",
+          "completed_at": "2026-10-31T05:31:34Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:31:34Z",
+          "completed_at": "2026-10-31T05:31:34Z"
+        },
+        {
+          "name": "Resolve RPM tool cache identity",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:31:34Z",
+          "completed_at": "2026-10-31T05:31:34Z"
+        },
+        {
+          "name": "Run actions/cache/restore@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:31:34Z",
+          "completed_at": "2026-10-31T05:31:34Z"
+        },
+        {
+          "name": "Install RPM package verifier",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:31:34Z",
+          "completed_at": "2026-10-31T05:31:39Z"
+        },
+        {
+          "name": "Verify native RPM checker contract",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:31:39Z",
+          "completed_at": "2026-10-31T05:31:39Z"
+        },
+        {
+          "name": "Prepare corrected RPM bundler",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:31:39Z",
+          "completed_at": "2026-10-31T05:36:21Z"
+        },
+        {
+          "name": "Run actions/cache/save@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T05:36:21Z",
+          "completed_at": "2026-10-31T05:36:21Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T05:36:21Z",
+          "completed_at": "2026-10-31T05:36:24Z"
+        },
+        {
+          "name": "Restore compiled installer input",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T05:36:24Z",
+          "completed_at": "2026-10-31T05:36:24Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-31T05:36:24Z",
+          "completed_at": "2026-10-31T05:36:24Z"
+        },
+        {
+          "name": "Bundle one Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-31T05:36:24Z",
+          "completed_at": "2026-10-31T05:36:42Z"
+        },
+        {
+          "name": "Verify RPM payload and isolated file installation",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-31T05:36:42Z",
+          "completed_at": "2026-10-31T05:36:47Z"
+        },
+        {
+          "name": "Retain failed RPM for diagnosis",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18,
+          "started_at": "2026-10-31T05:36:47Z",
+          "completed_at": "2026-10-31T05:36:47Z"
+        },
+        {
+          "name": "Retain completed Linux format",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T05:36:47Z",
+          "completed_at": "2026-10-31T05:36:49Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 37,
+          "started_at": "2026-10-31T05:36:49Z",
+          "completed_at": "2026-10-31T05:36:49Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 38,
+          "started_at": "2026-10-31T05:36:49Z",
+          "completed_at": "2026-10-31T05:36:49Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-10-31T05:36:49Z",
+          "completed_at": "2026-10-31T05:36:49Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124454078545",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029893,
+      "runner_name": "GitHub Actions 1000029893",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124454600207,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-hJ-Dw",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124454600207",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124454600207",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-10-31T05:31:50Z",
+      "started_at": "2026-10-31T05:31:50Z",
+      "completed_at": "2026-10-31T05:31:49Z",
+      "name": "overlay (darwin-arm64) / ${{ matrix.kind }} (${{ inputs.platform }})",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124454600207",
+      "labels": [
+        "macos-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 124454600324,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-hJ-hA",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124454600324",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124454600324",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-10-31T05:31:50Z",
+      "started_at": "2026-10-31T05:31:50Z",
+      "completed_at": "2026-10-31T05:31:50Z",
+      "name": "overlay (darwin-arm64) / validate installers (${{ inputs.platform }})",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124454600324",
+      "labels": [
+        "macos-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 124455107119,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-ho6Lw",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124455107119",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124455107119",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-10-31T05:34:24Z",
+      "started_at": "2026-10-31T05:34:24Z",
+      "completed_at": "2026-10-31T05:34:24Z",
+      "name": "overlay (windows-x64) / ${{ matrix.kind }} (${{ inputs.platform }})",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124455107119",
+      "labels": [
+        "windows-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 124455107438,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-ho7bg",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124455107438",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124455107438",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-10-31T05:34:25Z",
+      "started_at": "2026-10-31T05:34:25Z",
+      "completed_at": "2026-10-31T05:34:24Z",
+      "name": "overlay (windows-x64) / validate installers (${{ inputs.platform }})",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124455107438",
+      "labels": [
+        "windows-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 124455117280,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-hph4A",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124455117280",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124455117280",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-10-31T05:34:27Z",
+      "started_at": "2026-10-31T05:34:27Z",
+      "completed_at": "2026-10-31T05:34:27Z",
+      "name": "overlay (darwin-x64) / ${{ matrix.kind }} (${{ inputs.platform }})",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124455117280",
+      "labels": [
+        "macos-15-intel"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 124455117431,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-hpidw",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124455117431",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124455117431",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-10-31T05:34:27Z",
+      "started_at": "2026-10-31T05:34:27Z",
+      "completed_at": "2026-10-31T05:34:27Z",
+      "name": "overlay (darwin-x64) / validate installers (${{ inputs.platform }})",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124455117431",
+      "labels": [
+        "macos-15-intel"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 124455166212,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-hshBA",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124455166212",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124455166212",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:34:42Z",
+      "started_at": "2026-10-31T05:34:46Z",
+      "completed_at": "2026-10-31T05:35:42Z",
+      "name": "overlay (linux-arm64) / validate installers (linux-arm64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:34:47Z",
+          "completed_at": "2026-10-31T05:34:48Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:34:48Z",
+          "completed_at": "2026-10-31T05:34:58Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:34:58Z",
+          "completed_at": "2026-10-31T05:35:18Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:35:18Z",
+          "completed_at": "2026-10-31T05:35:22Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:35:22Z",
+          "completed_at": "2026-10-31T05:35:30Z"
+        },
+        {
+          "name": "Assemble and validate complete installer row",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:35:30Z",
+          "completed_at": "2026-10-31T05:35:34Z"
+        },
+        {
+          "name": "Select overlay transfer files",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:35:34Z",
+          "completed_at": "2026-10-31T05:35:34Z"
+        },
+        {
+          "name": "Upload overlay artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:35:34Z",
+          "completed_at": "2026-10-31T05:35:40Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-31T05:35:40Z",
+          "completed_at": "2026-10-31T05:35:40Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-31T05:35:40Z",
+          "completed_at": "2026-10-31T05:35:40Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-31T05:35:40Z",
+          "completed_at": "2026-10-31T05:35:40Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124455166212",
+      "labels": [
+        "ubuntu-24.04-arm"
+      ],
+      "runner_id": 1000029903,
+      "runner_name": "GitHub Actions 1000029903",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124455595822,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-iGvLg",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124455595822",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124455595822",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:36:51Z",
+      "started_at": "2026-10-31T05:36:52Z",
+      "completed_at": "2026-10-31T05:37:47Z",
+      "name": "overlay (linux-x64) / validate installers (linux-x64)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:36:53Z",
+          "completed_at": "2026-10-31T05:36:54Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:36:54Z",
+          "completed_at": "2026-10-31T05:37:03Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:37:03Z",
+          "completed_at": "2026-10-31T05:37:23Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:37:23Z",
+          "completed_at": "2026-10-31T05:37:27Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:37:27Z",
+          "completed_at": "2026-10-31T05:37:33Z"
+        },
+        {
+          "name": "Assemble and validate complete installer row",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:37:33Z",
+          "completed_at": "2026-10-31T05:37:38Z"
+        },
+        {
+          "name": "Select overlay transfer files",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:37:38Z",
+          "completed_at": "2026-10-31T05:37:39Z"
+        },
+        {
+          "name": "Upload overlay artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:37:39Z",
+          "completed_at": "2026-10-31T05:37:44Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-10-31T05:37:44Z",
+          "completed_at": "2026-10-31T05:37:44Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-10-31T05:37:44Z",
+          "completed_at": "2026-10-31T05:37:45Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-31T05:37:45Z",
+          "completed_at": "2026-10-31T05:37:45Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124455595822",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029904,
+      "runner_name": "GitHub Actions 1000029904",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124456216547,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-isn4w",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124456216547",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124456216547",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:40:09Z",
+      "started_at": "2026-10-31T05:40:11Z",
+      "completed_at": "2026-10-31T05:41:37Z",
+      "name": "publish release assets",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:40:11Z",
+          "completed_at": "2026-10-31T05:40:12Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:40:12Z",
+          "completed_at": "2026-10-31T05:40:20Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:40:20Z",
+          "completed_at": "2026-10-31T05:40:36Z"
+        },
+        {
+          "name": "Run actions/download-artifact@v8",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:40:36Z",
+          "completed_at": "2026-10-31T05:41:00Z"
+        },
+        {
+          "name": "Verify upload release identity",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:41:00Z",
+          "completed_at": "2026-10-31T05:41:00Z"
+        },
+        {
+          "name": "Verify draft publication owner",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:41:00Z",
+          "completed_at": "2026-10-31T05:41:01Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:41:01Z",
+          "completed_at": "2026-10-31T05:41:01Z"
+        },
+        {
+          "name": "Upload release assets to GitHub Release",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:41:01Z",
+          "completed_at": "2026-10-31T05:41:35Z"
+        },
+        {
+          "name": "Report matrix completeness",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:41:35Z",
+          "completed_at": "2026-10-31T05:41:35Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-10-31T05:41:35Z",
+          "completed_at": "2026-10-31T05:41:35Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-31T05:41:35Z",
+          "completed_at": "2026-10-31T05:41:36Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T05:41:36Z",
+          "completed_at": "2026-10-31T05:41:36Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124456216547",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029910,
+      "runner_name": "GitHub Actions 1000029910",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124456499498,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-i95Kg",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124456499498",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124456499498",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:41:37Z",
+      "started_at": "2026-10-31T05:41:39Z",
+      "completed_at": "2026-10-31T05:48:32Z",
+      "name": "publish release",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:41:39Z",
+          "completed_at": "2026-10-31T05:41:40Z"
+        },
+        {
+          "name": "Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:41:40Z",
+          "completed_at": "2026-10-31T05:41:49Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:41:49Z",
+          "completed_at": "2026-10-31T05:42:09Z"
+        },
+        {
+          "name": "Verify public release identity",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:42:09Z",
+          "completed_at": "2026-10-31T05:42:10Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:42:10Z",
+          "completed_at": "2026-10-31T05:42:11Z"
+        },
+        {
+          "name": "Settle public release",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:42:11Z",
+          "completed_at": "2026-10-31T05:42:14Z"
+        },
+        {
+          "name": "Download immutable update manifest",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:42:14Z",
+          "completed_at": "2026-10-31T05:42:14Z"
+        },
+        {
+          "name": "Settle monotonic desktop update channel",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:42:14Z",
+          "completed_at": "2026-10-31T05:42:19Z"
+        },
+        {
+          "name": "Dispatch public download page deployment",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:42:19Z",
+          "completed_at": "2026-10-31T05:42:21Z"
+        },
+        {
+          "name": "Await exact website deployment result",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:42:21Z",
+          "completed_at": "2026-10-31T05:48:29Z"
+        },
+        {
+          "name": "Cancel owned website work if release is cancelled",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11,
+          "started_at": "2026-10-31T05:48:29Z",
+          "completed_at": "2026-10-31T05:48:29Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-31T05:48:29Z",
+          "completed_at": "2026-10-31T05:48:29Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-31T05:48:29Z",
+          "completed_at": "2026-10-31T05:48:30Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-31T05:48:30Z",
+          "completed_at": "2026-10-31T05:48:30Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124456499498",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029911,
+      "runner_name": "GitHub Actions 1000029911",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124457800276,
+      "run_id": 41171985244,
+      "workflow_name": "build",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41171985244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-kNSVA",
+      "head_sha": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124457800276",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244/job/124457800276",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:48:32Z",
+      "started_at": "2026-10-31T05:48:34Z",
+      "completed_at": "2026-10-31T05:48:37Z",
+      "name": "release result",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:48:35Z",
+          "completed_at": "2026-10-31T05:48:35Z"
+        },
+        {
+          "name": "Require the complete native and website result",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:48:35Z",
+          "completed_at": "2026-10-31T05:48:35Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:48:35Z",
+          "completed_at": "2026-10-31T05:48:35Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124457800276",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029920,
+      "runner_name": "GitHub Actions 1000029920",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

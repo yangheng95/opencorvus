@@ -1,0 +1,53 @@
+{
+  "verifiedAt": "2026-10-31T05:50:14.950Z",
+  "version": "0.1.40",
+  "source": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+  "native": {
+    "id": 41171985244,
+    "url": "https://github.com/yangheng95/opencorvus/actions/runs/41171985244",
+    "createdAt": "2026-10-31T05:17:21Z",
+    "completedUpdatedAt": "2026-10-31T05:48:45Z",
+    "conclusion": "success",
+    "elapsedSeconds": 1884,
+    "originalBudgetSeconds": 2400,
+    "originalDeadline": "2026-10-31T05:57:21.000Z",
+    "jobs": {
+      "success": 23,
+      "skipped": 6
+    }
+  },
+  "website": {
+    "id": 41173655464,
+    "eventHead": "24c0132396519498432bd9f07780c1509d58140f",
+    "immutableCheckout": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+    "createdAt": "2026-10-31T05:42:21Z",
+    "completedUpdatedAt": "2026-10-31T05:48:29Z",
+    "conclusion": "success",
+    "sourceResolverJob": 124456643045,
+    "deploymentJob": 124457464966,
+    "resolver": [
+      "2026-10-31T05:42:52.8616652Z   SOURCE_SHA: 916a9f2554a62bdac7d5277031b6510be3acc3ca",
+      "2026-10-31T05:42:52.8617110Z   RELEASE_RUN_ID: 41171985244",
+      "2026-10-31T05:42:53.8704150Z Resolved immutable website source 916a9f2554a62bdac7d5277031b6510be3acc3ca"
+    ],
+    "publication": [
+      "2026-10-31T05:42:21.4888007Z Website workflow: https://github.com/yangheng95/opencorvus/actions/runs/41173655464",
+      "2026-10-31T05:48:29.6396599Z Website run 41173655464 completed successfully within the release budget"
+    ]
+  },
+  "nativeIntel": {
+    "job": 124452246464,
+    "proof": [
+      "2026-10-31T05:20:25.1770520Z Cache hit for: macOS-bun-c2c3b00f7c538c3af418443739f57be33eb6e243ea2c3f5b00331743f238092a",
+      "2026-10-31T05:22:02.5690470Z Cache restored from key: macOS-bun-c2c3b00f7c538c3af418443739f57be33eb6e243ea2c3f5b00331743f238092a",
+      "2026-10-31T05:23:30.7980210Z Cache hit for: v0-rust-build-Darwin-x64-825c9b43-e83e704d",
+      "2026-10-31T05:27:51.0368920Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+      "2026-10-31T05:33:06.2249710Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 4m 54s"
+    ]
+  },
+  "deployment": [
+    "2026-10-31T05:47:58.4903492Z {\"publicationID\":22,\"publication\":{\"id\":22,\"catalogSha256\":\"effaa9c26ab3a5f177b663113900e97e4c6d967f9027f7fa69d16c35ebf4b16b\",\"total\":122,\"embeddedAlreadyAvailable\":5,\"bundledMarketImportable\":117,\"activatedAt\":\"2026-10-31T05:47:58.241Z\"}}"
+  ],
+  "acceptance": "Five native GUI and five CLI hosts; six Linux installer formats and two complete installed rows; 29 public assets, five updater platforms and 18 website entries; supplemental actual public Windows CLI bundled notes reviewed manually",
+  "limitations": "Three-platform focused backend CI only; no claim that all 789 backend files passed. No real Provider request performed or instrumented. macOS ad hoc signing remains without Apple notarization."
+}

@@ -1,0 +1,13 @@
+{
+  "runID": "41170158381",
+  "source": "68f34e36a153c80701134a37b3d1c34f766e20c7",
+  "conclusion": "success",
+  "proof": [
+    "2026-10-31T04:54:43.5483420Z     v0-rust-build-Darwin-x64-825c9b43-e83e704d",
+    "2026-10-31T04:58:45.5096480Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "2026-10-31T05:10:49.7706400Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 11m 33s",
+    "2026-10-31T05:11:54.8800390Z     v0-rust-build-Darwin-x64-825c9b43-e83e704d",
+    "2026-10-31T05:12:43.3088700Z ... Saving cache ..."
+  ],
+  "scope": "Intel dependency preflight only; official40 builds from its own source"
+}

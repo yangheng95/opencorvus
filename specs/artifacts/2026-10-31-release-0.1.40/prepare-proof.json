@@ -1,0 +1,14 @@
+{
+  "version": "0.1.40",
+  "source": "916a9f2554a62bdac7d5277031b6510be3acc3ca",
+  "runID": "41171985244",
+  "jobID": 124451708179,
+  "log": [
+    "2026-10-31T05:19:13.6054066Z (pass) the real GitHub Linux sudo caller exposes the effective IPv4 APT policy [34.18ms]",
+    "2026-10-31T05:19:13.6310916Z  13 pass",
+    "2026-10-31T05:19:13.6311532Z  0 fail",
+    "2026-10-31T05:19:13.6311915Z  13 expect() calls",
+    "2026-10-31T05:19:51.3351699Z Release identity v0.1.40 was claimed by 916a9f2554a62bdac7d5277031b6510be3acc3ca",
+    "2026-10-31T05:19:54.8734741Z Release identity v0.1.40 publication was claimed by run 41171985244 at 916a9f2554a62bdac7d5277031b6510be3acc3ca"
+  ]
+}
