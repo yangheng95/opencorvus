@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [编码项目文件引用](2026-10-31-encoded-project-file-references.md)：URI组件解码、实际文件名、行范围与字面百分号。
+
 - [模型原文来源链接导航](2026-10-31-source-citation-navigation.md)：复用自然消息、跨项目同名原件及新标签生命周期。
 
 - [项目配置事件权威](2026-10-31-project-config-event-authority.md)：实际协议红灯、58正向用例、SDK生成及十次真实流式请求。

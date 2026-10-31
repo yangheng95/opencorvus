@@ -1,0 +1,283 @@
+{
+  "purpose": "Preserve URI-encoded Project filenames and relative document images through one component decode",
+  "productionChanges": {
+    "files": 2,
+    "behavior": "decodeURIComponent at the existing local path boundaries; original URL classification, location parsing, delegation and exact filesystem lookup retained"
+  },
+  "beforeUI": {
+    "event": "Actual model-link and document-image activation produced these visible GET failures",
+    "file": {
+      "requestedPath": "复核 %231 %26 plan%2B.txt",
+      "status": 404,
+      "errorName": "FileNotFoundError",
+      "requestID": "a5b6d031-0d16-4365-8278-9a9a26c614ec"
+    },
+    "image": {
+      "requestedPath": "图 %231 %26 plan%2B.png",
+      "status": 404,
+      "errorName": "FileNotFoundError",
+      "requestID": "10d03158-ee26-4cfd-b18f-34c039a7c6c9"
+    },
+    "link": {
+      "endLine": null,
+      "line": null,
+      "path": "复核 %231 %26 plan%2B.txt"
+    },
+    "originalSourceOpened": true,
+    "literalPercentControlOpened": true
+  },
+  "afterUI": {
+    "link": {
+      "endLine": null,
+      "line": null,
+      "path": "复核 #1 & plan+.txt"
+    },
+    "sameOriginalModelLinkOpened": true,
+    "documentImageVisible": true,
+    "lineRange": {
+      "path": "复核 #1 & plan+.txt",
+      "startLine": 2,
+      "endLine": 3,
+      "selectedInActualEditor": true
+    },
+    "literalPercentName": "百分号%23.txt",
+    "literalPercentControlOpened": true,
+    "locales": [
+      "en-US",
+      "zh-CN"
+    ],
+    "browserWarningsAndErrors": 0
+  },
+  "fileContracts": {
+    "before": {
+      "phase": "before",
+      "correct": [
+        {
+          "name": "overview.md",
+          "status": 200,
+          "requestID": "c5f13d34-b622-4b19-97b1-09c0ba40fc5c",
+          "bytes": 325,
+          "type": "text",
+          "encoding": "utf8",
+          "mime": null,
+          "exactOriginalBytes": true
+        },
+        {
+          "name": "图 #1 & plan+.png",
+          "status": 200,
+          "requestID": "616674d6-f5ba-41af-9541-2013df8f60df",
+          "bytes": 86030,
+          "type": "text",
+          "encoding": "base64",
+          "mime": "image/png",
+          "exactOriginalBytes": true
+        },
+        {
+          "name": "复核 #1 & plan+.txt",
+          "status": 200,
+          "requestID": "6f6fd5f6-7324-40b0-b1a3-5d89693cf12a",
+          "bytes": 48,
+          "type": "text",
+          "encoding": "utf8",
+          "mime": null,
+          "exactOriginalBytes": true
+        },
+        {
+          "name": "百分号%23.txt",
+          "status": 200,
+          "requestID": "2caf2780-a9d1-4e61-8aaa-8213e4a4cec5",
+          "bytes": 42,
+          "type": "text",
+          "encoding": "utf8",
+          "mime": null,
+          "exactOriginalBytes": true
+        }
+      ],
+      "errors": [
+        {
+          "requestedPath": "复核 %231 %26 plan%2B.txt",
+          "status": 404,
+          "requestID": "12dd9dea-3654-426e-9324-11aac1da7755",
+          "body": {
+            "name": "FileNotFoundError",
+            "data": {
+              "path": "复核 %231 %26 plan%2B.txt",
+              "message": "File entry not found: 复核 %231 %26 plan%2B.txt"
+            }
+          }
+        },
+        {
+          "requestedPath": "图 %231 %26 plan%2B.png",
+          "status": 404,
+          "requestID": "7c02faeb-0093-4f96-9e65-00be94d7f559",
+          "body": {
+            "name": "FileNotFoundError",
+            "data": {
+              "path": "图 %231 %26 plan%2B.png",
+              "message": "File entry not found: 图 %231 %26 plan%2B.png"
+            }
+          }
+        }
+      ]
+    },
+    "after": {
+      "phase": "after",
+      "correct": [
+        {
+          "name": "overview.md",
+          "status": 200,
+          "requestID": "9844af53-91ce-45b5-a86f-feb8c68f5128",
+          "bytes": 325,
+          "type": "text",
+          "encoding": "utf8",
+          "mime": null,
+          "exactOriginalBytes": true
+        },
+        {
+          "name": "图 #1 & plan+.png",
+          "status": 200,
+          "requestID": "8c84c4e5-de07-4c55-a05e-71e148f8ed2c",
+          "bytes": 86030,
+          "type": "text",
+          "encoding": "base64",
+          "mime": "image/png",
+          "exactOriginalBytes": true
+        },
+        {
+          "name": "复核 #1 & plan+.txt",
+          "status": 200,
+          "requestID": "f644bb62-a770-4ffb-88ab-acf0fddf5a03",
+          "bytes": 48,
+          "type": "text",
+          "encoding": "utf8",
+          "mime": null,
+          "exactOriginalBytes": true
+        },
+        {
+          "name": "百分号%23.txt",
+          "status": 200,
+          "requestID": "1a21e132-82b1-4812-bcfc-938b370dbe74",
+          "bytes": 42,
+          "type": "text",
+          "encoding": "utf8",
+          "mime": null,
+          "exactOriginalBytes": true
+        }
+      ],
+      "errors": []
+    }
+  },
+  "naturalMessages": {
+    "count": 6,
+    "tools": [
+      {
+        "tool": "read",
+        "status": "completed"
+      },
+      {
+        "tool": "read",
+        "status": "completed"
+      }
+    ],
+    "originalSnapshotAndSelectionPreserved": true
+  },
+  "requests": {
+    "before": 6,
+    "after": 0,
+    "cumulative": 1158,
+    "unusedAllowanceRetired": 2,
+    "model": "gpt-6.1-sol",
+    "allStreaming200ReaderEOF": true
+  },
+  "checks": [
+    {
+      "label": "types-final",
+      "exitCode": 0
+    },
+    {
+      "label": "ui-build-final",
+      "exitCode": 0
+    },
+    {
+      "label": "i18n-final",
+      "exitCode": 0
+    },
+    {
+      "label": "docs-final",
+      "exitCode": 0
+    }
+  ],
+  "manuallyViewedScreenshots": 12,
+  "format": "JPEG",
+  "data": {
+    "at": "2026-10-31T15:01:57.282Z",
+    "phase": "after",
+    "schema": 9,
+    "tables": 92,
+    "originals": 227960,
+    "current": 227962,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease",
+        "old": 46696,
+        "now": 46697
+      },
+      {
+        "table": "engine_control_activation_lease_grant",
+        "old": 46754,
+        "now": 46755
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "capacity": [],
+    "attachments": 123,
+    "protectedProjects": 13,
+    "trackedFiles": 28,
+    "workspaceFiles": 13,
+    "additionalProtectedFiles": 39,
+    "requests": 0,
+    "cumulativeRequests": 1158,
+    "reserveMs": 2329326,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-BYRLiwcz.js"
+  },
+  "businessCounts": {
+    "sessions": 100,
+    "tasks": 8,
+    "providerUsage": 773
+  },
+  "physicalIdentityReceipt": {
+    "target": "runtime_process",
+    "ownerPID": 25404,
+    "exactPhysicalBirthMatches": true,
+    "preservedAsHistory": true
+  },
+  "native": {
+    "before": {
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "reserveMs": 3105872,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    "after": {
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "reserveMs": 2329326,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  }
+}

@@ -334,6 +334,11 @@ keeps the resource location available without changing its identity.
 Body-reference click delegation also retains the exact already parsed path
 attribute, including whitespace decoded from an authored Markdown destination.
 Empty-attribute validation does not supply a trimmed replacement resource.
+After URL/resource classification, local Markdown file destinations and document-relative
+image paths decode URI components exactly once. Encoded filename characters such as
+`%23`, `%26` and `%2B` become literal `#`, `&` and `+`; `%2523` retains a literal `%23`.
+Authored line/range suffixes are parsed before decoding the filename, and the file API
+continues to receive the exact filesystem path without additional URI decoding.
 
 Ordinary project-file keys and absolute containment share the server-path lexical
 normalizer with project-directory identity. Dot segments reduce against the

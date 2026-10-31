@@ -174,7 +174,7 @@ export function FileEditorPane() {
     if (!document || !loaded) return
     return {
       read: async (reference, signal) => {
-        const path = resolveDocumentFilePath(decodeURI(reference), document)
+        const path = resolveDocumentFilePath(decodeURIComponent(reference), document)
         const image = await readFileContent({
           directory: document.directory,
           path,

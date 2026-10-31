@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [编码项目文件引用](2026-10-31-encoded-project-file-references/README.md)：可见输入、自然消息与真实文件/图片路径验收。
+
 - [模型原文来源链接导航](2026-10-31-source-citation-navigation/README.md)：真实点击、原文新标签与来源只读体验。
 
 - [项目配置事件权威](2026-10-31-project-config-event-authority/README.md)：十三实图、真实事件校验与原件/数据保全回执。

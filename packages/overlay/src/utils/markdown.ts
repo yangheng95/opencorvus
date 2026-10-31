@@ -314,7 +314,7 @@ function markdownProjectFileReference(raw: string): FileReference | null {
   if (/[?#]/.test(value)) return null
   let decoded: string
   try {
-    decoded = decodeURI(value)
+    decoded = decodeURIComponent(value)
   } catch {
     return null
   }

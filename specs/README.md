@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [编码项目文件引用](records/2026-10/2026-10-31-encoded-project-file-references.md)：真实文件名保留字符、正文链接及文档相对图片。
+
 - [模型原文来源链接导航](records/2026-10/2026-10-31-source-citation-navigation.md)：正文原件链接与结构化Sources的实际导航身份。
 
 - [项目配置事件权威](records/2026-10/2026-10-31-project-config-event-authority.md)：独立Project公开事件、附件草稿及Sources真实闭环。
