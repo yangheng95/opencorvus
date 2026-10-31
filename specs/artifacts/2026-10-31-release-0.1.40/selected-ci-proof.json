@@ -1,0 +1,32 @@
+{
+  "runID": "41170743740",
+  "source": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+  "conclusion": "success",
+  "scope": "Two focused backend files through the original three-platform checker; not full789-file CI",
+  "platforms": [
+    {
+      "platform": "linux",
+      "jobID": "124449036424",
+      "log": [
+        "2026-10-31T05:06:55.3506877Z opencorvus:test: [1/2] DONE test/server/config-candidate-status.test.ts exit=0 duration=5.33s",
+        "2026-10-31T05:06:59.6606997Z opencorvus:test: [2/2] DONE test/dependency-patch-contract.test.ts exit=0 duration=4.31s"
+      ]
+    },
+    {
+      "platform": "macos",
+      "jobID": "124449036404",
+      "log": [
+        "2026-10-31T05:08:13.4076110Z opencorvus:test: [1/2] DONE test/server/config-candidate-status.test.ts exit=0 duration=9.43s",
+        "2026-10-31T05:08:17.9098800Z opencorvus:test: [2/2] DONE test/dependency-patch-contract.test.ts exit=0 duration=4.50s"
+      ]
+    },
+    {
+      "platform": "windows",
+      "jobID": "124449036415",
+      "log": [
+        "2026-10-31T05:09:31.8670158Z opencorvus:test: [1/2] DONE test/server/config-candidate-status.test.ts exit=0 duration=15.56s",
+        "2026-10-31T05:09:36.7281453Z opencorvus:test: [2/2] DONE test/dependency-patch-contract.test.ts exit=0 duration=4.86s"
+      ]
+    }
+  ]
+}

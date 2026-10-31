@@ -1,0 +1,1111 @@
+{
+  "run": {
+    "id": 41170743740,
+    "name": "CI — selected unit tests",
+    "node_id": "WFR_kwLOTxi8As8AAAAJlfexvA",
+    "head_branch": "main",
+    "head_sha": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+    "path": ".github/workflows/test.yml",
+    "display_title": "CI — selected unit tests",
+    "run_number": 2303,
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "workflow_id": 329569772,
+    "check_suite_id": 111603596301,
+    "check_suite_node_id": "CS_kwDOTxi8As8AAAAZ_Be8DQ",
+    "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740",
+    "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41170743740",
+    "pull_requests": [],
+    "created_at": "2026-10-31T04:59:23Z",
+    "updated_at": "2026-10-31T05:09:46Z",
+    "actor": {
+      "login": "yangheng95",
+      "id": 51735130,
+      "node_id": "MDQ6VXNlcjUxNzM1MTMw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51735130?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/yangheng95",
+      "html_url": "https://github.com/yangheng95",
+      "followers_url": "https://api.github.com/users/yangheng95/followers",
+      "following_url": "https://api.github.com/users/yangheng95/following{/other_user}",
+      "gists_url": "https://api.github.com/users/yangheng95/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/yangheng95/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/yangheng95/subscriptions",
+      "organizations_url": "https://api.github.com/users/yangheng95/orgs",
+      "repos_url": "https://api.github.com/users/yangheng95/repos",
+      "events_url": "https://api.github.com/users/yangheng95/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/yangheng95/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "run_attempt": 1,
+    "referenced_workflows": [],
+    "run_started_at": "2026-10-31T04:59:23Z",
+    "triggering_actor": {
+      "login": "yangheng95",
+      "id": 51735130,
+      "node_id": "MDQ6VXNlcjUxNzM1MTMw",
+      "avatar_url": "https://avatars.githubusercontent.com/u/51735130?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/yangheng95",
+      "html_url": "https://github.com/yangheng95",
+      "followers_url": "https://api.github.com/users/yangheng95/followers",
+      "following_url": "https://api.github.com/users/yangheng95/following{/other_user}",
+      "gists_url": "https://api.github.com/users/yangheng95/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/yangheng95/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/yangheng95/subscriptions",
+      "organizations_url": "https://api.github.com/users/yangheng95/orgs",
+      "repos_url": "https://api.github.com/users/yangheng95/repos",
+      "events_url": "https://api.github.com/users/yangheng95/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/yangheng95/received_events",
+      "type": "User",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "jobs_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740/jobs",
+    "logs_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740/logs",
+    "check_suite_url": "https://api.github.com/repos/yangheng95/opencorvus/check-suites/111603596301",
+    "artifacts_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740/artifacts",
+    "cancel_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740/cancel",
+    "rerun_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740/rerun",
+    "previous_attempt_url": null,
+    "workflow_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/workflows/329569772",
+    "head_commit": {
+      "id": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+      "tree_id": "ab3d41bae3b14a679b11951f4abaf0330b7e29e6",
+      "message": "release: prepare 0.1.40 and qualify audited dependency consumers",
+      "timestamp": "2026-10-31T04:56:21Z",
+      "author": {
+        "name": "Heng Yang",
+        "email": "yangheng2021@gmail.com"
+      },
+      "committer": {
+        "name": "Heng Yang",
+        "email": "yangheng2021@gmail.com"
+      }
+    },
+    "repository": {
+      "id": 1327021058,
+      "node_id": "R_kgDOTxi8Ag",
+      "name": "opencorvus",
+      "full_name": "yangheng95/opencorvus",
+      "private": false,
+      "owner": {
+        "login": "yangheng95",
+        "id": 51735130,
+        "node_id": "MDQ6VXNlcjUxNzM1MTMw",
+        "avatar_url": "https://avatars.githubusercontent.com/u/51735130?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/yangheng95",
+        "html_url": "https://github.com/yangheng95",
+        "followers_url": "https://api.github.com/users/yangheng95/followers",
+        "following_url": "https://api.github.com/users/yangheng95/following{/other_user}",
+        "gists_url": "https://api.github.com/users/yangheng95/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/yangheng95/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/yangheng95/subscriptions",
+        "organizations_url": "https://api.github.com/users/yangheng95/orgs",
+        "repos_url": "https://api.github.com/users/yangheng95/repos",
+        "events_url": "https://api.github.com/users/yangheng95/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/yangheng95/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/yangheng95/opencorvus",
+      "description": "DIY your own agent team harness for long-horizon agent work",
+      "fork": false,
+      "url": "https://api.github.com/repos/yangheng95/opencorvus",
+      "forks_url": "https://api.github.com/repos/yangheng95/opencorvus/forks",
+      "keys_url": "https://api.github.com/repos/yangheng95/opencorvus/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/yangheng95/opencorvus/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/yangheng95/opencorvus/teams",
+      "hooks_url": "https://api.github.com/repos/yangheng95/opencorvus/hooks",
+      "issue_events_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/yangheng95/opencorvus/events",
+      "assignees_url": "https://api.github.com/repos/yangheng95/opencorvus/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/yangheng95/opencorvus/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/yangheng95/opencorvus/tags",
+      "blobs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/yangheng95/opencorvus/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/yangheng95/opencorvus/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/yangheng95/opencorvus/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/yangheng95/opencorvus/languages",
+      "stargazers_url": "https://api.github.com/repos/yangheng95/opencorvus/stargazers",
+      "contributors_url": "https://api.github.com/repos/yangheng95/opencorvus/contributors",
+      "subscribers_url": "https://api.github.com/repos/yangheng95/opencorvus/subscribers",
+      "subscription_url": "https://api.github.com/repos/yangheng95/opencorvus/subscription",
+      "commits_url": "https://api.github.com/repos/yangheng95/opencorvus/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/yangheng95/opencorvus/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/yangheng95/opencorvus/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/yangheng95/opencorvus/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/yangheng95/opencorvus/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/yangheng95/opencorvus/merges",
+      "archive_url": "https://api.github.com/repos/yangheng95/opencorvus/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/yangheng95/opencorvus/downloads",
+      "issues_url": "https://api.github.com/repos/yangheng95/opencorvus/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/yangheng95/opencorvus/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/yangheng95/opencorvus/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/yangheng95/opencorvus/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/yangheng95/opencorvus/labels{/name}",
+      "releases_url": "https://api.github.com/repos/yangheng95/opencorvus/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/yangheng95/opencorvus/deployments"
+    },
+    "head_repository": {
+      "id": 1327021058,
+      "node_id": "R_kgDOTxi8Ag",
+      "name": "opencorvus",
+      "full_name": "yangheng95/opencorvus",
+      "private": false,
+      "owner": {
+        "login": "yangheng95",
+        "id": 51735130,
+        "node_id": "MDQ6VXNlcjUxNzM1MTMw",
+        "avatar_url": "https://avatars.githubusercontent.com/u/51735130?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/yangheng95",
+        "html_url": "https://github.com/yangheng95",
+        "followers_url": "https://api.github.com/users/yangheng95/followers",
+        "following_url": "https://api.github.com/users/yangheng95/following{/other_user}",
+        "gists_url": "https://api.github.com/users/yangheng95/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/yangheng95/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/yangheng95/subscriptions",
+        "organizations_url": "https://api.github.com/users/yangheng95/orgs",
+        "repos_url": "https://api.github.com/users/yangheng95/repos",
+        "events_url": "https://api.github.com/users/yangheng95/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/yangheng95/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/yangheng95/opencorvus",
+      "description": "DIY your own agent team harness for long-horizon agent work",
+      "fork": false,
+      "url": "https://api.github.com/repos/yangheng95/opencorvus",
+      "forks_url": "https://api.github.com/repos/yangheng95/opencorvus/forks",
+      "keys_url": "https://api.github.com/repos/yangheng95/opencorvus/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/yangheng95/opencorvus/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/yangheng95/opencorvus/teams",
+      "hooks_url": "https://api.github.com/repos/yangheng95/opencorvus/hooks",
+      "issue_events_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/yangheng95/opencorvus/events",
+      "assignees_url": "https://api.github.com/repos/yangheng95/opencorvus/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/yangheng95/opencorvus/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/yangheng95/opencorvus/tags",
+      "blobs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/yangheng95/opencorvus/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/yangheng95/opencorvus/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/yangheng95/opencorvus/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/yangheng95/opencorvus/languages",
+      "stargazers_url": "https://api.github.com/repos/yangheng95/opencorvus/stargazers",
+      "contributors_url": "https://api.github.com/repos/yangheng95/opencorvus/contributors",
+      "subscribers_url": "https://api.github.com/repos/yangheng95/opencorvus/subscribers",
+      "subscription_url": "https://api.github.com/repos/yangheng95/opencorvus/subscription",
+      "commits_url": "https://api.github.com/repos/yangheng95/opencorvus/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/yangheng95/opencorvus/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/yangheng95/opencorvus/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/yangheng95/opencorvus/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/yangheng95/opencorvus/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/yangheng95/opencorvus/merges",
+      "archive_url": "https://api.github.com/repos/yangheng95/opencorvus/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/yangheng95/opencorvus/downloads",
+      "issues_url": "https://api.github.com/repos/yangheng95/opencorvus/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/yangheng95/opencorvus/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/yangheng95/opencorvus/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/yangheng95/opencorvus/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/yangheng95/opencorvus/labels{/name}",
+      "releases_url": "https://api.github.com/repos/yangheng95/opencorvus/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/yangheng95/opencorvus/deployments"
+    }
+  },
+  "jobs": [
+    {
+      "id": 124447984141,
+      "run_id": 41170743740,
+      "workflow_name": "CI — selected unit tests",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-a2KDQ",
+      "head_sha": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124447984141",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41170743740/job/124447984141",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T04:59:25Z",
+      "started_at": "2026-10-31T04:59:26Z",
+      "completed_at": "2026-10-31T05:00:24Z",
+      "name": "changes",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T04:59:27Z",
+          "completed_at": "2026-10-31T04:59:27Z"
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T04:59:27Z",
+          "completed_at": "2026-10-31T05:00:04Z"
+        },
+        {
+          "name": "Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:00:04Z",
+          "completed_at": "2026-10-31T05:00:22Z"
+        },
+        {
+          "name": "Classify exact change range",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:00:22Z",
+          "completed_at": "2026-10-31T05:00:22Z"
+        },
+        {
+          "name": "Post Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:00:22Z",
+          "completed_at": "2026-10-31T05:00:23Z"
+        },
+        {
+          "name": "Post Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:00:23Z",
+          "completed_at": "2026-10-31T05:00:23Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:00:23Z",
+          "completed_at": "2026-10-31T05:00:23Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124447984141",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029805,
+      "runner_name": "GitHub Actions 1000029805",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124447985275,
+      "run_id": 41170743740,
+      "workflow_name": "CI — selected unit tests",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-a2Oew",
+      "head_sha": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124447985275",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41170743740/job/124447985275",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-10-31T04:59:25Z",
+      "started_at": "2026-10-31T04:59:25Z",
+      "completed_at": "2026-10-31T04:59:25Z",
+      "name": "dependency review",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124447985275",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 124448182608,
+      "run_id": 41170743740,
+      "workflow_name": "CI — selected unit tests",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-bCRUA",
+      "head_sha": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124448182608",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41170743740/job/124448182608",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:00:24Z",
+      "started_at": "2026-10-31T05:00:26Z",
+      "completed_at": "2026-10-31T05:01:53Z",
+      "name": "dependency audit",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:00:26Z",
+          "completed_at": "2026-10-31T05:00:27Z"
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:00:27Z",
+          "completed_at": "2026-10-31T05:01:28Z"
+        },
+        {
+          "name": "Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:01:28Z",
+          "completed_at": "2026-10-31T05:01:51Z"
+        },
+        {
+          "name": "Audit locked dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:01:51Z",
+          "completed_at": "2026-10-31T05:01:51Z"
+        },
+        {
+          "name": "Post Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:01:51Z",
+          "completed_at": "2026-10-31T05:01:51Z"
+        },
+        {
+          "name": "Post Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:01:51Z",
+          "completed_at": "2026-10-31T05:01:52Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:01:52Z",
+          "completed_at": "2026-10-31T05:01:52Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124448182608",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029812,
+      "runner_name": "GitHub Actions 1000029812",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124448182669,
+      "run_id": 41170743740,
+      "workflow_name": "CI — selected unit tests",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-bCRjQ",
+      "head_sha": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124448182669",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41170743740/job/124448182669",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:00:24Z",
+      "started_at": "2026-10-31T05:00:26Z",
+      "completed_at": "2026-10-31T05:04:26Z",
+      "name": "verify",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:00:26Z",
+          "completed_at": "2026-10-31T05:00:27Z"
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:00:27Z",
+          "completed_at": "2026-10-31T05:01:04Z"
+        },
+        {
+          "name": "Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:01:04Z",
+          "completed_at": "2026-10-31T05:01:43Z"
+        },
+        {
+          "name": "Scan tracked sources for credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:01:43Z",
+          "completed_at": "2026-10-31T05:02:05Z"
+        },
+        {
+          "name": "Verify documentation",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:02:05Z",
+          "completed_at": "2026-10-31T05:02:07Z"
+        },
+        {
+          "name": "Verify versions and generated fixed point",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:02:07Z",
+          "completed_at": "2026-10-31T05:02:43Z"
+        },
+        {
+          "name": "Run typecheck",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:02:43Z",
+          "completed_at": "2026-10-31T05:03:49Z"
+        },
+        {
+          "name": "Verify CI and release workflow contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:03:49Z",
+          "completed_at": "2026-10-31T05:03:50Z"
+        },
+        {
+          "name": "Install critical build runtime dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:03:50Z",
+          "completed_at": "2026-10-31T05:04:01Z"
+        },
+        {
+          "name": "Run critical builds",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:04:01Z",
+          "completed_at": "2026-10-31T05:04:24Z"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11,
+          "started_at": "2026-10-31T05:04:24Z",
+          "completed_at": "2026-10-31T05:04:24Z"
+        },
+        {
+          "name": "Post Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-31T05:04:24Z",
+          "completed_at": "2026-10-31T05:04:25Z"
+        },
+        {
+          "name": "Post Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-31T05:04:25Z",
+          "completed_at": "2026-10-31T05:04:25Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-31T05:04:25Z",
+          "completed_at": "2026-10-31T05:04:25Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124448182669",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029813,
+      "runner_name": "GitHub Actions 1000029813",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124449036404,
+      "run_id": 41170743740,
+      "workflow_name": "CI — selected unit tests",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-b2YdA",
+      "head_sha": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124449036404",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41170743740/job/124449036404",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:04:26Z",
+      "started_at": "2026-10-31T05:04:29Z",
+      "completed_at": "2026-10-31T05:08:24Z",
+      "name": "selected unit (macos)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:04:29Z",
+          "completed_at": "2026-10-31T05:04:30Z"
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:04:30Z",
+          "completed_at": "2026-10-31T05:06:00Z"
+        },
+        {
+          "name": "Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:06:00Z",
+          "completed_at": "2026-10-31T05:07:23Z"
+        },
+        {
+          "name": "Configure git identity",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:07:23Z",
+          "completed_at": "2026-10-31T05:07:23Z"
+        },
+        {
+          "name": "Install Linux test runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 5,
+          "started_at": "2026-10-31T05:07:23Z",
+          "completed_at": "2026-10-31T05:07:23Z"
+        },
+        {
+          "name": "Install macOS test runtime dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T05:07:23Z",
+          "completed_at": "2026-10-31T05:07:35Z"
+        },
+        {
+          "name": "Setup Windows Python test runtime",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-10-31T05:07:35Z",
+          "completed_at": "2026-10-31T05:07:35Z"
+        },
+        {
+          "name": "Install Windows test runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-10-31T05:07:35Z",
+          "completed_at": "2026-10-31T05:07:35Z"
+        },
+        {
+          "name": "Run utility filesystem tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:07:35Z",
+          "completed_at": "2026-10-31T05:07:39Z"
+        },
+        {
+          "name": "Run unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:07:39Z",
+          "completed_at": "2026-10-31T05:08:18Z"
+        },
+        {
+          "name": "Post Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T05:08:18Z",
+          "completed_at": "2026-10-31T05:08:18Z"
+        },
+        {
+          "name": "Post Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-31T05:08:18Z",
+          "completed_at": "2026-10-31T05:08:19Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-31T05:08:19Z",
+          "completed_at": "2026-10-31T05:08:22Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124449036404",
+      "labels": [
+        "macos-latest"
+      ],
+      "runner_id": 1000029828,
+      "runner_name": "GitHub Actions 1000029828",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124449036415,
+      "run_id": 41170743740,
+      "workflow_name": "CI — selected unit tests",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-b2Yfw",
+      "head_sha": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124449036415",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41170743740/job/124449036415",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:04:26Z",
+      "started_at": "2026-10-31T05:04:28Z",
+      "completed_at": "2026-10-31T05:09:41Z",
+      "name": "selected unit (windows)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:04:29Z",
+          "completed_at": "2026-10-31T05:04:30Z"
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:04:30Z",
+          "completed_at": "2026-10-31T05:06:00Z"
+        },
+        {
+          "name": "Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:06:00Z",
+          "completed_at": "2026-10-31T05:08:10Z"
+        },
+        {
+          "name": "Configure git identity",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:08:10Z",
+          "completed_at": "2026-10-31T05:08:10Z"
+        },
+        {
+          "name": "Install Linux test runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 5,
+          "started_at": "2026-10-31T05:08:10Z",
+          "completed_at": "2026-10-31T05:08:10Z"
+        },
+        {
+          "name": "Install macOS test runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-31T05:08:10Z",
+          "completed_at": "2026-10-31T05:08:10Z"
+        },
+        {
+          "name": "Setup Windows Python test runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T05:08:10Z",
+          "completed_at": "2026-10-31T05:08:10Z"
+        },
+        {
+          "name": "Install Windows test runtime dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T05:08:10Z",
+          "completed_at": "2026-10-31T05:08:42Z"
+        },
+        {
+          "name": "Run utility filesystem tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:08:42Z",
+          "completed_at": "2026-10-31T05:08:54Z"
+        },
+        {
+          "name": "Run unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:08:54Z",
+          "completed_at": "2026-10-31T05:09:37Z"
+        },
+        {
+          "name": "Post Setup Windows Python test runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-10-31T05:09:37Z",
+          "completed_at": "2026-10-31T05:09:37Z"
+        },
+        {
+          "name": "Post Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T05:09:37Z",
+          "completed_at": "2026-10-31T05:09:37Z"
+        },
+        {
+          "name": "Post Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-31T05:09:37Z",
+          "completed_at": "2026-10-31T05:09:40Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-31T05:09:40Z",
+          "completed_at": "2026-10-31T05:09:40Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124449036415",
+      "labels": [
+        "windows-latest"
+      ],
+      "runner_id": 1000029826,
+      "runner_name": "GitHub Actions 1000029826",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124449036424,
+      "run_id": 41170743740,
+      "workflow_name": "CI — selected unit tests",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-b2YiA",
+      "head_sha": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124449036424",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41170743740/job/124449036424",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:04:26Z",
+      "started_at": "2026-10-31T05:04:28Z",
+      "completed_at": "2026-10-31T05:07:02Z",
+      "name": "selected unit (linux)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:04:29Z",
+          "completed_at": "2026-10-31T05:04:30Z"
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:04:30Z",
+          "completed_at": "2026-10-31T05:05:37Z"
+        },
+        {
+          "name": "Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:05:37Z",
+          "completed_at": "2026-10-31T05:06:10Z"
+        },
+        {
+          "name": "Configure git identity",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:06:10Z",
+          "completed_at": "2026-10-31T05:06:10Z"
+        },
+        {
+          "name": "Install Linux test runtime dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:06:10Z",
+          "completed_at": "2026-10-31T05:06:29Z"
+        },
+        {
+          "name": "Install macOS test runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-31T05:06:29Z",
+          "completed_at": "2026-10-31T05:06:29Z"
+        },
+        {
+          "name": "Setup Windows Python test runtime",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-10-31T05:06:29Z",
+          "completed_at": "2026-10-31T05:06:29Z"
+        },
+        {
+          "name": "Install Windows test runtime dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-10-31T05:06:29Z",
+          "completed_at": "2026-10-31T05:06:29Z"
+        },
+        {
+          "name": "Run utility filesystem tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:06:29Z",
+          "completed_at": "2026-10-31T05:06:31Z"
+        },
+        {
+          "name": "Run unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:06:31Z",
+          "completed_at": "2026-10-31T05:06:59Z"
+        },
+        {
+          "name": "Post Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T05:06:59Z",
+          "completed_at": "2026-10-31T05:07:00Z"
+        },
+        {
+          "name": "Post Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-31T05:07:00Z",
+          "completed_at": "2026-10-31T05:07:00Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-31T05:07:00Z",
+          "completed_at": "2026-10-31T05:07:00Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124449036424",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029827,
+      "runner_name": "GitHub Actions 1000029827",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124449036575,
+      "run_id": 41170743740,
+      "workflow_name": "CI — selected unit tests",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-b2ZHw",
+      "head_sha": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124449036575",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41170743740/job/124449036575",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:04:26Z",
+      "started_at": "2026-10-31T05:04:28Z",
+      "completed_at": "2026-10-31T05:07:33Z",
+      "name": "service tests",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:04:29Z",
+          "completed_at": "2026-10-31T05:04:29Z"
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:04:29Z",
+          "completed_at": "2026-10-31T05:05:35Z"
+        },
+        {
+          "name": "Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:05:35Z",
+          "completed_at": "2026-10-31T05:06:13Z"
+        },
+        {
+          "name": "Run channel runtime tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T05:06:13Z",
+          "completed_at": "2026-10-31T05:06:16Z"
+        },
+        {
+          "name": "Run overlay unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T05:06:16Z",
+          "completed_at": "2026-10-31T05:07:30Z"
+        },
+        {
+          "name": "Post Setup Bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T05:07:30Z",
+          "completed_at": "2026-10-31T05:07:30Z"
+        },
+        {
+          "name": "Post Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T05:07:30Z",
+          "completed_at": "2026-10-31T05:07:30Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T05:07:30Z",
+          "completed_at": "2026-10-31T05:07:30Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124449036575",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029829,
+      "runner_name": "GitHub Actions 1000029829",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 124450134210,
+      "run_id": 41170743740,
+      "workflow_name": "CI — selected unit tests",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/41170743740",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAc-c5Ywg",
+      "head_sha": "4d7bc4de07506b1b4bb846b6f144f1e4a0a2dbb3",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/124450134210",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/41170743740/job/124450134210",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-31T05:09:41Z",
+      "started_at": "2026-10-31T05:09:43Z",
+      "completed_at": "2026-10-31T05:09:45Z",
+      "name": "Selected CI passed",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T05:09:44Z",
+          "completed_at": "2026-10-31T05:09:44Z"
+        },
+        {
+          "name": "Verify applicable checks passed",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T05:09:44Z",
+          "completed_at": "2026-10-31T05:09:44Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T05:09:44Z",
+          "completed_at": "2026-10-31T05:09:44Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/124450134210",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000029849,
+      "runner_name": "GitHub Actions 1000029849",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

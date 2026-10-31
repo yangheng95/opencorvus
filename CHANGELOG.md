@@ -19,6 +19,7 @@
 
 - Review 可直接打开当前文件，保留审阅状态与来源上下文；来源查找和原消息定位沿同一阅读操作保存落点。
 - 持续目标预算和校验反馈更清楚，指南与当前首页入口一致；归档暂停与完成状态分别说明。
+- 待机对话可从菜单明确停止后台运行并保留历史；匿名项目转换受运行保护阻止时，显示可操作的停止指引。
 
 #### 修复
 
@@ -46,6 +47,7 @@
 
 - Open current files directly from Review while retaining review state and source context. Source searches and original-Message navigation retain their landing through the same reading operation.
 - Clarify continuous-goal budgets and validation feedback, align the guide with the current Home entry, and distinguish archive pauses from completion.
+- Explicitly stop an idle conversation's background runtime from its menu while retaining history, and show actionable stop guidance when runtime ownership protects anonymous-Project conversion.
 
 #### Fixed
 
