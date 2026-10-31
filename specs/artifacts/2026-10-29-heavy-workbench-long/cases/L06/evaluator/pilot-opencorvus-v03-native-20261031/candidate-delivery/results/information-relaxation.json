@@ -1,0 +1,13 @@
+{
+  "method": "perfect-information continuous linear relaxation",
+  "status": 0,
+  "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+  "seconds": 0.05192450000140525,
+  "objective_float": 46727.84821428571,
+  "native_dual_bound_float": null,
+  "native_gap_float": null,
+  "variables": 4096,
+  "constraints": 2440,
+  "nodes": 128,
+  "limits": "Floating-point solver diagnostics; not an exact rational optimality certificate."
+}

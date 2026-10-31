@@ -33,3 +33,6 @@ H01按实际信息/提前承诺解释决策而不强迫动作翻转；H02精确�
 
 
 首fresh候选已自然交付并用同25public/原source做私有全链。真实候选以outputs子目录、JSON source-map、PowerShell重现与4独立PNG交付；公共合同未限定作者平铺及Python/operations.png命名。原checker M05/M12误拒保原结果/source，当前唯一assignment/2由明确--layout定位原文件且闭合绑定，grade仍从同closed原对象/布局重算，不改候选内容/阈值/17叶或原作者100与weak95。布局槽为policy、programme、report、weekly_ledger、commitments、summary、receivables、source_map、reproduce、requirements、figures(相对路径列表)，严格在原交付根内；它只是owner位置清单，不是候选改稿或评分配置。新candidate布局与原flat布局实际prepare均12Mpass；候选内容独评/正式分数见独立pilot记录，不用自报替代。
+
+
+最新成对真实验收：[OC完整交付/独评/真正100](../pilot-opencorvus-v03-native-20261031/README.md)与[first fresh Codex真正100](../pilot-codex-v03-native-20261031/README.md)均同25public及同17rubric/allcritical。已触发另升0.4，本0.3合同/质量及原成绩只读，不重复本版solver/native/独审；不证明小时或统计成熟。

@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-31T07:05:43.892514+00:00",
+  "source": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evidence\\provider-audit\\provider-20036-79a86413-24ce-4902-a051-280febdebfa3-813.json",
+  "request_count": 203,
+  "actual_models": [
+    "gpt-6.1-sol"
+  ],
+  "all_requests_streaming": true,
+  "response_status_counts": {
+    "200": 203
+  },
+  "preflight": "included; not all requests are candidate work",
+  "scope": "actual native request audit; no prompt/headers/credentials or model-resource causal comparison"
+}

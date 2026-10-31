@@ -1,0 +1,6 @@
+{
+  "purpose": "deliberate forged state rejection",
+  "exit": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\project\\actor\\actor.py\", line 75, in <module>\n    main()\n    ~~~~^^\n  File \"D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\project\\actor\\actor.py\", line 32, in main\n    raise ValueError(\"packet disagrees with authoritative committed prefix\")\nValueError: packet disagrees with authoritative committed prefix\n"
+}

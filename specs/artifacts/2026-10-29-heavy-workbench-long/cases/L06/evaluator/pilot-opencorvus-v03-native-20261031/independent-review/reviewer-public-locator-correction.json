@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-31T07:10:54.505896+00:00",
+  "prior_tool_exit": 1,
+  "prior_check_false": "actual_public25_no_extras_and_private_exact",
+  "root_cause": "Reviewer assumed sibling X/public. This occurrence keeps original inputs at X/project/public; sibling is absent. Other18checks had already passed.",
+  "actual_original_root": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\project\\public",
+  "checks": {
+    "actual_project_public25": true,
+    "same25_closed_public_bytes": true,
+    "same_original_workspace_public25": true
+  },
+  "scope": "only read/bind25original public files, no repeated math/native/solver/grader; initial script/false receipt preserved; not candidate failure"
+}

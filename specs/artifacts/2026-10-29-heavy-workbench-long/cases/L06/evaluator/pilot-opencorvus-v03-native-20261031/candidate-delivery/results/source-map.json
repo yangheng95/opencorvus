@@ -1,0 +1,72 @@
+{
+  "authority": "All 25 frozen public files; historical draft wording does not weaken the contract.",
+  "source_files": [
+    "public/OPERATIONS.md",
+    "public/OUTPUTS.md",
+    "public/TASK.md",
+    "public/exercise-tools/qualification/current-source/check_l06.py",
+    "public/exercise-tools/qualification/current-source/l06_input.py",
+    "public/exercise-tools/qualification/current-source/l06_packet.py",
+    "public/exercise-tools/qualification/current-source/l06_physics.py",
+    "public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+    "public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+    "public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+    "public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+    "public/exercise.py",
+    "public/inputs/bom.csv",
+    "public/inputs/demand.csv",
+    "public/inputs/facility.json",
+    "public/inputs/plant_capacity.csv",
+    "public/inputs/plants.csv",
+    "public/inputs/products.csv",
+    "public/inputs/raw_materials.csv",
+    "public/inputs/routes.csv",
+    "public/inputs/scenarios.csv",
+    "public/inputs/supplier_capacity.csv",
+    "public/inputs/supplier_quotes.csv",
+    "public/inputs/supplier_terms.csv",
+    "public/tree-contract.json"
+  ],
+  "indices": {
+    "raw": [
+      "R0",
+      "R1",
+      "R2",
+      "R3"
+    ],
+    "product": [
+      "P0",
+      "P1",
+      "P2",
+      "P3"
+    ],
+    "plant": [
+      "F0",
+      "F1"
+    ],
+    "supplier": [
+      "A",
+      "B",
+      "C"
+    ]
+  },
+  "mapping": {
+    "policy.json": "tools/solve.py: shared complete event-prefix nodes; supplier_terms and supplier_quotes determine pack units, freight and lead; demand/capacity tables determine current events.",
+    "actor": "actor/actor.py: reads public support using explicit raw indices; reconstructs original committed prefix with public packet/replay; compares all consistent support actions. Never selects a future path.",
+    "weekly-ledger.csv": "Actual exercise/run-001/journals.json replay using public tree_business.advance; integer minor units. Peaks are BEFORE consumption/dispatch, holding is AFTER fulfilment.",
+    "commitment-policy.csv": "Every executed action coordinate including zeros; lot counts (not units), truck supplier ID and empty item, production plant/product IDs.",
+    "receivables.json": "Original demand sales prices at absolute due week t+4; week16..19 assets excluded from week15 spendable cash and operating cost.",
+    "summary.json": "Exact Fraction-weighted public replay; components keyed purchase_cost/freight_cost/production_cost/holding_cost. Solver floats appear only in explicitly labeled provenance.",
+    "figures": "Direct plot of delivered integer weekly ledger and exact component sums; no fabricated illustrative observations.",
+    "exercise": "Unmodified public/exercise.py executes this actor; actual commands/PIDs/SQLite exports, commit73/restart, original receipt and row reversal are retained."
+  },
+  "equations": {
+    "units_ordered": "lot[a,m] * pack[a,m]",
+    "raw": "old_raw + all_due_arrivals + lead0 - BOM * made",
+    "finished": "old_finished + made - demand",
+    "cost": "purchase + freight + production + end-stock holding",
+    "cash": "old_cash + historical_receipts - current_cost",
+    "expected": "sum(path_cost * probability_numerator / 8)"
+  },
+  "preservation": "public is read-only; no private sources; no ineffective checksum acceptance. Request-ID digest identifies an idempotency payload, not correctness."
+}

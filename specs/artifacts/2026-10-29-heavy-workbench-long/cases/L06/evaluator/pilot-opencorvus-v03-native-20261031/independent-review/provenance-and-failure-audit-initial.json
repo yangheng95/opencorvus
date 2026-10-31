@@ -1,0 +1,292 @@
+{
+  "at": "2026-10-31T07:10:23.262147+00:00",
+  "method": "read-only immutable ZIP members/source/native identities and owned copied SQLite; no actor/solver/LP/test/grader execution",
+  "checks": {
+    "assignment_layout2_bound": true,
+    "actual_existing_inside_layout_paths": true,
+    "frozen_17_scoring_leaves_same": true,
+    "native_sealed-project_capsule": true,
+    "native_controller-source_capsule": true,
+    "native_public_capsule": true,
+    "complete_actual_programme_delivered": true,
+    "every_actual_declared_argv_and_native_identity": true,
+    "reviewed_closed_objects_same_original_workspace": true,
+    "actual_delivered_selfcontained_source_archive_bytes": true,
+    "forged_packet_original_trace_preserved": true,
+    "own_review_checker_failure_preserved": true,
+    "own_review_auxiliary_correction_disclosed": true,
+    "failure_records_in_original_review_archive": true,
+    "candidate_original_and_internal_review_SQL_not_just_selfPASS": true,
+    "original_optimizer_status_scope": true,
+    "original_continuous_relaxation_scope": true,
+    "declared_scientific_environment_actual_metadata": true,
+    "actual_public25_no_extras_and_private_exact": false
+  },
+  "actual_private_native_identities": [
+    {
+      "path": "T03",
+      "controller_exit": 73,
+      "worker_pid": 25792,
+      "declared_argv_and_native_identity": true
+    },
+    {
+      "path": "T03",
+      "controller_exit": 0,
+      "worker_pid": 6704,
+      "declared_argv_and_native_identity": true
+    },
+    {
+      "path": "T07",
+      "controller_exit": 0,
+      "worker_pid": 18000,
+      "declared_argv_and_native_identity": true
+    },
+    {
+      "path": "T04",
+      "controller_exit": 0,
+      "worker_pid": 4112,
+      "declared_argv_and_native_identity": true
+    },
+    {
+      "path": "T00",
+      "controller_exit": 0,
+      "worker_pid": 4756,
+      "declared_argv_and_native_identity": true
+    },
+    {
+      "path": "T01",
+      "controller_exit": 0,
+      "worker_pid": 9984,
+      "declared_argv_and_native_identity": true
+    },
+    {
+      "path": "T06",
+      "controller_exit": 0,
+      "worker_pid": 9660,
+      "declared_argv_and_native_identity": true
+    },
+    {
+      "path": "T05",
+      "controller_exit": 0,
+      "worker_pid": 18652,
+      "declared_argv_and_native_identity": true
+    },
+    {
+      "path": "T02",
+      "controller_exit": 0,
+      "worker_pid": 15124,
+      "declared_argv_and_native_identity": true
+    }
+  ],
+  "original_workspace_bytes": {
+    "REPORT.md": true,
+    "HANDOFF.md": true,
+    "requirements-lock.txt": true,
+    "requirements.txt": true,
+    "policy.json": true,
+    "results/source-map.json": true,
+    "results/summary.json": true,
+    "results/receivables.json": true,
+    "figures/cash-and-storage.png": true,
+    "figures/cost-comparison.png": true,
+    "actor/actor.py": true,
+    "actor/policy.json": true,
+    "actor/submission.json": true,
+    "tools/common.py": true,
+    "tools/deliver.py": true,
+    "tools/package.py": true,
+    "tools/solve.py": true,
+    "tools/test_actor.py": true,
+    "tools/verify.py": true
+  },
+  "source_archive_members": {
+    "actor/actor.py": true,
+    "actor/policy.json": true,
+    "actor/submission.json": true,
+    "figures/cash-and-storage.png": true,
+    "figures/cost-comparison.png": true,
+    "HANDOFF.md": true,
+    "policy.json": true,
+    "public/exercise-tools/qualification/current-source/check_l06.py": true,
+    "public/exercise-tools/qualification/current-source/l06_input.py": true,
+    "public/exercise-tools/qualification/current-source/l06_packet.py": true,
+    "public/exercise-tools/qualification/current-source/l06_physics.py": true,
+    "public/exercise-tools/upgrade-v0.3/run_native_whole.py": true,
+    "public/exercise-tools/upgrade-v0.3/source/check_tree.py": true,
+    "public/exercise-tools/upgrade-v0.3/source/execute_policy.py": true,
+    "public/exercise-tools/upgrade-v0.3/source/tree_business.py": true,
+    "public/exercise.py": true,
+    "public/inputs/bom.csv": true,
+    "public/inputs/demand.csv": true,
+    "public/inputs/facility.json": true,
+    "public/inputs/plant_capacity.csv": true,
+    "public/inputs/plants.csv": true,
+    "public/inputs/products.csv": true,
+    "public/inputs/raw_materials.csv": true,
+    "public/inputs/routes.csv": true,
+    "public/inputs/scenarios.csv": true,
+    "public/inputs/supplier_capacity.csv": true,
+    "public/inputs/supplier_quotes.csv": true,
+    "public/inputs/supplier_terms.csv": true,
+    "public/OPERATIONS.md": true,
+    "public/OUTPUTS.md": true,
+    "public/TASK.md": true,
+    "public/tree-contract.json": true,
+    "REPORT.md": true,
+    "REPORT.pdf": true,
+    "requirements-lock.txt": true,
+    "requirements.txt": true,
+    "results/canonical-alternative.json": true,
+    "results/canonical-audit.json": true,
+    "results/commitment-policy.csv": true,
+    "results/information-relaxation.json": true,
+    "results/negative-packet-diagnostic.json": true,
+    "results/optimization.json": true,
+    "results/policy-audit.json": true,
+    "results/receivables.json": true,
+    "results/self-check.json": true,
+    "results/source-map.json": true,
+    "results/summary.json": true,
+    "results/weekly-ledger.csv": true,
+    "tools/common.py": true,
+    "tools/deliver.py": true,
+    "tools/package.py": true,
+    "tools/solve.py": true,
+    "tools/test_actor.py": true,
+    "tools/verify.py": true
+  },
+  "candidate_own_failure_records": {
+    "forged_packet": {
+      "purpose": "deliberate forged state rejection",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\project\\actor\\actor.py\", line 75, in <module>\n    main()\n    ~~~~^^\n  File \"D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\project\\actor\\actor.py\", line 32, in main\n    raise ValueError(\"packet disagrees with authoritative committed prefix\")\nValueError: packet disagrees with authoritative committed prefix\n"
+    },
+    "checker_attempts": [
+      {
+        "attempt": 1,
+        "command": "C:/Python314/python.exe -B review/verify_independent.py",
+        "exit": 1,
+        "failure": "assert export[state] == final",
+        "cause": "Tester recurrence retained consumed historical queue entries; public l06_physics.py line45 explicitly clears the consumed week.",
+        "correction": "Clear only already-consumed arrivals/receipts in the independent recurrence. No product files or expected monetary values changed. Full business checks precede and remain separate from state-representation comparison."
+      }
+    ],
+    "auxiliary_correction": [
+      {
+        "path": "exercise/run-001/control-ae409a32d57c/journal.sqlite3-wal",
+        "bytes": 0,
+        "reason": "Created by reviewer read-only SQLite observation; absent from initial git status"
+      },
+      {
+        "path": "exercise/run-001/control-ae409a32d57c/journal.sqlite3-shm",
+        "bytes": 32768,
+        "reason": "Created by reviewer read-only SQLite observation; absent from initial git status"
+      }
+    ]
+  },
+  "existing_original_and_internal_review_SQL": [
+    {
+      "existing_run": "exercise/run-001",
+      "path": "T05",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "exercise/run-001",
+      "path": "T01",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "exercise/run-001",
+      "path": "T04",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "exercise/run-001",
+      "path": "T00",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "exercise/run-001",
+      "path": "T07",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "exercise/run-001",
+      "path": "T06",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "exercise/run-001",
+      "path": "T03",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "exercise/run-001",
+      "path": "T02",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "review/native-001",
+      "path": "T02",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "review/native-001",
+      "path": "T00",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "review/native-001",
+      "path": "T07",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "review/native-001",
+      "path": "T04",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "review/native-001",
+      "path": "T05",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "review/native-001",
+      "path": "T03",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "review/native-001",
+      "path": "T01",
+      "full_SQL_state_against_our_math": true
+    },
+    {
+      "existing_run": "review/native-001",
+      "path": "T06",
+      "full_SQL_state_against_our_math": true
+    }
+  ],
+  "scientific_lock_actual_metadata": {
+    "charset-normalizer": "3.5.2",
+    "contourpy": "1.4.0",
+    "cycler": "0.12.1",
+    "fonttools": "4.68.0",
+    "kiwisolver": "1.5.1",
+    "matplotlib": "3.11.2",
+    "numpy": "2.5.4",
+    "packaging": "26.3",
+    "pillow": "13.0.0",
+    "pyparsing": "3.3.3",
+    "python-dateutil": "3.0.0",
+    "reportlab": "5.1.0",
+    "scipy": "1.18.1",
+    "six": "1.17.0",
+    "tzdata": "2026.6"
+  },
+  "evidence_limits": {
+    "first_review_failure_evidence_limit": "Local checker-attempts is a retained structured report of exit1; the initial raw Host tool part cited in review/REPORT was not fetched via Task/service. We independently prove current queues from raw/SQL, and do not substitute this internal Accepted verdict for our own fiveH."
+  },
+  "model_comparison": "owner reports actual streaming gpt-6.1-sol; no causal speed/cost ranking against any unknown model",
+  "scope": "this candidate fiveH science/content only; internal review Accepted is not adopted as external authority"
+}

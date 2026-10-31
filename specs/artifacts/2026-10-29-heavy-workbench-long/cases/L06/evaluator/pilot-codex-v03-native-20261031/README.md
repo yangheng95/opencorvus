@@ -12,6 +12,6 @@
 
 候选初导入产生5个public __pycache__及默认pip/MPL缓存未测范围例外原文保留；原25public源/表未改。不宣称严格历史写范围或同用户OS隔离，不能删例外，也不把普通字节缓存当未知的私有答案读取。
 
-这是新0.3一个候选good；OC同输入新Task仍在进行，未评分/尚未两good触发0.4。旧0.2两100、作者100/weak95不改。Codex实际model/usage/精确全活动归因未知，comparablefalse，不作费用/速度因果排名，不认证有效小时、真人统计成熟。L01整题仍在本机原pending训练；全目标未达、心跳ACTIVE。
+本版OC同输入新Task现已自然交付/真实私有整链/一次内容独评/真正grader100，见[成对整题结果](../pilot-opencorvus-v03-native-20261031/README.md)。0.3两新系统good已触发另升0.4，旧合同与此原成绩只读。旧0.2两100、作者100/weak95不改。Codex实际model/usage/精确全活动归因未知，comparablefalse，不作费用/速度因果排名，不认证有效小时、真人统计成熟。L01整题仍在本机原pending训练；全目标未达、心跳ACTIVE。
 
 原SVG导出、原solver.log和原审查diff含其工具自然空格，原字节完整保在originals.zip及外部full-workspace，仅不重复铺为Git文本；实际4PNG/源/数值可读投影保留。没有为通过空格/换行检查而改原候选或原日志。

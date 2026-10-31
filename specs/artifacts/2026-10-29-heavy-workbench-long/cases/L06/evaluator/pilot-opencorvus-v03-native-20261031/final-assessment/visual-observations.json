@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-31T07:07:36.057787+00:00",
+  "viewer": "main agent actual view_image",
+  "images": [
+    {
+      "path": "project/figures/cash-and-storage.png",
+      "observed": "All eight labelled paths, cash floor -9000 and terminal zero marker, raw stage 240 and finished stage100 limit; 0..15 week axis and minor-unit/volume labels readable; overlap explicitly handled in original report."
+    },
+    {
+      "path": "project/figures/cost-comparison.png",
+      "observed": "Stacked expected components, all eight path costs vs actual canonical spot, numerical PI continuous expected-cost line and nondeployable PI/fractional-pack annotation readable; figure does not label numerical solver optimum as exact causal certificate."
+    }
+  ],
+  "scope": "Actual visual inspection of original candidate exports, no edited or regenerated figures; scientific/raw numeric binding remains independent review."
+}

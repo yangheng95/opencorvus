@@ -1,0 +1,20 @@
+{
+  "format": "l06-delivery-layout/1",
+  "paths": {
+    "policy": "policy.json",
+    "programme": "actor",
+    "report": "REPORT.md",
+    "weekly_ledger": "results/weekly-ledger.csv",
+    "commitments": "results/commitment-policy.csv",
+    "summary": "results/summary.json",
+    "receivables": "results/receivables.json",
+    "source_map": "results/source-map.json",
+    "reproduce": "HANDOFF.md",
+    "requirements": "requirements-lock.txt",
+    "figures": [
+      "figures/cash-and-storage.png",
+      "figures/cost-comparison.png"
+    ]
+  },
+  "provenance": "Owner locator for the original natural native Task delivery; HANDOFF contains the actual public-exercise/rebuild commands. No delivery bytes or wrapper changed."
+}

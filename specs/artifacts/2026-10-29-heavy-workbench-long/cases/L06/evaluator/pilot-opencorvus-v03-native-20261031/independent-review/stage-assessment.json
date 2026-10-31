@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-31T07:13:29.466481+00:00",
+  "assignment_id": "l06-whole-fcfd7bffdb9e4b97b27a99389fc365d0",
+  "case_version": "L06/0.3.0-dev",
+  "reviewer": "/root/benchmark_review",
+  "scope": "this OpenCorvus candidate frozen fiveH actual content/science only",
+  "H": {
+    "H01": "verified_pass",
+    "H02": "verified_pass",
+    "H03": "verified_pass",
+    "H04": "verified_pass",
+    "H05": "verified_pass"
+  },
+  "substantive_content_or_binding_blockers_observed": [],
+  "initial_review_preserved": true,
+  "candidate_internal_review_not_adopted_as_external_authority": true,
+  "reviewer_public_locator_first_failure_preserved_and_corrected": true,
+  "initial_internal_checker_raw_Host_part_independently_fetched": false,
+  "new_candidate_native_cold_solver_LP_grader_runs": 0,
+  "standard_library_readonly_audit_only": true,
+  "machine_findings_authored": false,
+  "aggregate_authored": false,
+  "root_actual_grade_pending": true,
+  "model_fact_source": "owner final native stream records gpt-6.1-sol, not used for causal comparison",
+  "maturity_professional_hours_or_ten_case_completion_certified": false
+}

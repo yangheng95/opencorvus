@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "scope": "independent integer arithmetic from public facts, policy/CSV/native journal/SQLite reconciliation; not independent Task acceptance",
+  "path_week_rows": 128,
+  "all_action_coordinates": 2944,
+  "information_nodes": 60,
+  "expected_cost_exact": "197049/4",
+  "minimum_cash": -3298,
+  "checks": [
+    "packs/MOQ/capacity/lead/terminal pipeline",
+    "BOM/routes/shared hours",
+    "both stage peaks",
+    "fulfilment/end holdings",
+    "original absolute dues/credit/terminal cash",
+    "zero finished terminal",
+    "complete-history causality",
+    "all CSV coordinates",
+    "all SQLite records and unchanged recovery prefix"
+  ]
+}

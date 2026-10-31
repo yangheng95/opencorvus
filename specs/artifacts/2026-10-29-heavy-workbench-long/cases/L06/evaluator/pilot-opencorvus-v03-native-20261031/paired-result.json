@@ -1,0 +1,71 @@
+{
+  "pair_id": "L06-v03-native-paired-20261031",
+  "case_version": "L06/0.3.0-dev",
+  "public_git_commit": "24c0132396519498432bd9f07780c1509d58140f",
+  "phase": "paired_completed_upgrade_required",
+  "active_evaluation": null,
+  "observed_assignment_at": "2026-10-31T13:35:35.010284+08:00",
+  "codex": {
+    "agent": "/root/codex_l06_v03_fresh",
+    "fork": "none",
+    "model_override": null,
+    "actual_model": "unknown/not exposed",
+    "usage": "unknown/not exposed",
+    "source_root": "D:/opencorvus-benchmark-runs/l06-v03-codex-fresh-native-20261031",
+    "score": 100,
+    "effective_candidate_hours_certified": false,
+    "handover_observed_at": "2026-10-31T14:00:56.908557+08:00",
+    "evaluation_root": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation",
+    "workspace_seal": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\complete-workspace.zip",
+    "private_run": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run",
+    "assignment": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment",
+    "actual_grade": {
+      "total": 100,
+      "all_critical_pass": true,
+      "good": true,
+      "subject_role": "candidate",
+      "assignment_id": "l06-whole-6390f5de880e45bd95a82c327fbdaec6",
+      "file": "D:/opencorvus-benchmark-runs/l06-v03-codex-fresh-native-20261031/evaluation/final-grade.json",
+      "native_exit": 0
+    }
+  },
+  "opencorvus": {
+    "phase": "graded_completed",
+    "root": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031",
+    "launcher_pid": 20036,
+    "launch_receipt": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\launch\\owner-started.json",
+    "score": 100,
+    "server_url": "http://127.0.0.1:53962/",
+    "inspect_launcher_pid": 5804,
+    "preflight_verified": {
+      "sessionID": "ses_h0nk4wmcVA7zcbVKzncx",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "task_id": "tsk_g00VZbZlio005blDCIl3",
+    "status_observation": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\observations\\20261031T0701Z-task-status.json",
+    "last_lifecycle": "completed",
+    "workspace_seal": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\complete-workspace.zip",
+    "private_run": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\private-run",
+    "server_cleanup": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evidence\\server-result.json",
+    "evaluation_root": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation",
+    "actual_grade": {
+      "total": 100,
+      "good": true,
+      "all_critical_pass": true,
+      "native_exit": 0,
+      "assignment_id": "l06-whole-fcfd7bffdb9e4b97b27a99389fc365d0",
+      "file": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\final-grade.json"
+    },
+    "independent_review": "D:/opencorvus-benchmark-runs/l06-v03-opencorvus-independent-review-20261031/review.json",
+    "no_active_task_or_server": true
+  },
+  "comparable_model_resources": false,
+  "limits": "same immutable25public files only; no evaluator/reference/weights/old answer/credentials/parent history shared; no score before natural handover/full workspace seal/source-only actual private run+independent review+grader",
+  "original_v02_pair": "read-only historical double100 remains unchanged",
+  "observed_at": "2026-10-31T07:15:34.335003+00:00",
+  "upgrade_required": true,
+  "required_next_version": "L06/0.4.0-dev"
+}

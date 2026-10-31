@@ -1,0 +1,249 @@
+{
+  "at": "2026-10-31T07:08:37.366724+00:00",
+  "method": "fresh independent standard-library raw CSV/Fraction recurrence; original SQLite copied with WAL/SHM before opening; no author/candidate imports or execution",
+  "failures": [],
+  "expected_cost_exact": "197049/4",
+  "components_exact": {
+    "purchase_cost": "292949/8",
+    "freight_cost": "12615/2",
+    "production_cost": "5802",
+    "holding_cost": "4273/8"
+  },
+  "canonical_spot_exact": "70640",
+  "canonical_components": {
+    "purchase_cost": "63534",
+    "freight_cost": "900",
+    "production_cost": "6169",
+    "holding_cost": "37"
+  },
+  "saving_exact": "85511/4",
+  "information_nodes": 60,
+  "private_wire_weeks": 128,
+  "paths": {
+    "T00": {
+      "cost": 48518,
+      "minimum_cash": -3298,
+      "final_cash": 35832,
+      "final_receivable": 24150,
+      "max_raw": 239,
+      "max_finished": 81
+    },
+    "T01": {
+      "cost": 49081,
+      "minimum_cash": -3298,
+      "final_cash": 35269,
+      "final_receivable": 25230,
+      "max_raw": 236,
+      "max_finished": 87
+    },
+    "T02": {
+      "cost": 48408,
+      "minimum_cash": -3298,
+      "final_cash": 37022,
+      "final_receivable": 24150,
+      "max_raw": 232,
+      "max_finished": 81
+    },
+    "T03": {
+      "cost": 49590,
+      "minimum_cash": -3298,
+      "final_cash": 35840,
+      "final_receivable": 25230,
+      "max_raw": 232,
+      "max_finished": 81
+    },
+    "T04": {
+      "cost": 48044,
+      "minimum_cash": -3298,
+      "final_cash": 37386,
+      "final_receivable": 24150,
+      "max_raw": 224,
+      "max_finished": 84
+    },
+    "T05": {
+      "cost": 49490,
+      "minimum_cash": -3298,
+      "final_cash": 35940,
+      "final_receivable": 25230,
+      "max_raw": 229,
+      "max_finished": 84
+    },
+    "T06": {
+      "cost": 49867,
+      "minimum_cash": -3298,
+      "final_cash": 36643,
+      "final_receivable": 24150,
+      "max_raw": 211,
+      "max_finished": 84
+    },
+    "T07": {
+      "cost": 51100,
+      "minimum_cash": -3298,
+      "final_cash": 35410,
+      "final_receivable": 25230,
+      "max_raw": 211,
+      "max_finished": 84
+    }
+  },
+  "analytic_lower_bound_exact": "39714",
+  "analytic_paths": [
+    {
+      "path": "T00",
+      "product_total": [
+        165,
+        100,
+        80,
+        67
+      ],
+      "raw_consumption": [
+        410,
+        432,
+        260,
+        214
+      ],
+      "purchase_lower": 33492,
+      "production_lower": 5706,
+      "cost_lower": 39198
+    },
+    {
+      "path": "T01",
+      "product_total": [
+        169,
+        100,
+        76,
+        71
+      ],
+      "raw_consumption": [
+        414,
+        440,
+        252,
+        218
+      ],
+      "purchase_lower": 33772,
+      "production_lower": 5770,
+      "cost_lower": 39542
+    },
+    {
+      "path": "T02",
+      "product_total": [
+        169,
+        100,
+        76,
+        71
+      ],
+      "raw_consumption": [
+        414,
+        440,
+        252,
+        218
+      ],
+      "purchase_lower": 33772,
+      "production_lower": 5770,
+      "cost_lower": 39542
+    },
+    {
+      "path": "T03",
+      "product_total": [
+        173,
+        100,
+        72,
+        75
+      ],
+      "raw_consumption": [
+        418,
+        448,
+        244,
+        222
+      ],
+      "purchase_lower": 34052,
+      "production_lower": 5834,
+      "cost_lower": 39886
+    },
+    {
+      "path": "T04",
+      "product_total": [
+        169,
+        100,
+        76,
+        71
+      ],
+      "raw_consumption": [
+        414,
+        440,
+        252,
+        218
+      ],
+      "purchase_lower": 33772,
+      "production_lower": 5770,
+      "cost_lower": 39542
+    },
+    {
+      "path": "T05",
+      "product_total": [
+        173,
+        100,
+        72,
+        75
+      ],
+      "raw_consumption": [
+        418,
+        448,
+        244,
+        222
+      ],
+      "purchase_lower": 34052,
+      "production_lower": 5834,
+      "cost_lower": 39886
+    },
+    {
+      "path": "T06",
+      "product_total": [
+        173,
+        100,
+        72,
+        75
+      ],
+      "raw_consumption": [
+        418,
+        448,
+        244,
+        222
+      ],
+      "purchase_lower": 34052,
+      "production_lower": 5834,
+      "cost_lower": 39886
+    },
+    {
+      "path": "T07",
+      "product_total": [
+        177,
+        100,
+        68,
+        79
+      ],
+      "raw_consumption": [
+        422,
+        456,
+        236,
+        226
+      ],
+      "purchase_lower": 34332,
+      "production_lower": 5898,
+      "cost_lower": 40230
+    }
+  ],
+  "read_only_database_copies": {
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\assignment\\closed\\run\\episode-3b61ef313f5e\\journal.sqlite3": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-independent-review-20261031\\sql-read-copies\\evaluation\\assignment\\closed\\run\\episode-3b61ef313f5e\\journal.sqlite3",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\assignment\\closed\\run\\episode-3b61ef313f5e\\after-commit-original.sqlite3": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-independent-review-20261031\\sql-read-copies\\evaluation\\assignment\\closed\\run\\episode-3b61ef313f5e\\after-commit-original.sqlite3",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\assignment\\closed\\run\\episode-d527032580a1\\journal.sqlite3": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-independent-review-20261031\\sql-read-copies\\evaluation\\assignment\\closed\\run\\episode-d527032580a1\\journal.sqlite3",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\assignment\\closed\\run\\episode-e1da050a41fd\\journal.sqlite3": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-independent-review-20261031\\sql-read-copies\\evaluation\\assignment\\closed\\run\\episode-e1da050a41fd\\journal.sqlite3",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\assignment\\closed\\run\\episode-37a59c6f6031\\journal.sqlite3": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-independent-review-20261031\\sql-read-copies\\evaluation\\assignment\\closed\\run\\episode-37a59c6f6031\\journal.sqlite3",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\assignment\\closed\\run\\episode-23d589f26657\\journal.sqlite3": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-independent-review-20261031\\sql-read-copies\\evaluation\\assignment\\closed\\run\\episode-23d589f26657\\journal.sqlite3",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\assignment\\closed\\run\\episode-4474f24691c9\\journal.sqlite3": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-independent-review-20261031\\sql-read-copies\\evaluation\\assignment\\closed\\run\\episode-4474f24691c9\\journal.sqlite3",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\assignment\\closed\\run\\episode-4c4e2e8e4dbc\\journal.sqlite3": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-independent-review-20261031\\sql-read-copies\\evaluation\\assignment\\closed\\run\\episode-4c4e2e8e4dbc\\journal.sqlite3",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\assignment\\closed\\run\\episode-7b5b34594779\\journal.sqlite3": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-independent-review-20261031\\sql-read-copies\\evaluation\\assignment\\closed\\run\\episode-7b5b34594779\\journal.sqlite3",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\assignment\\closed\\run\\control-90007d47b40e\\journal.sqlite3": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-independent-review-20261031\\sql-read-copies\\evaluation\\assignment\\closed\\run\\control-90007d47b40e\\journal.sqlite3"
+  },
+  "private_native_owner_seconds": 6.615925699999934,
+  "scope": "original candidate scientific/content support only, no new actor/LP/solver/grader/task or other project reads"
+}

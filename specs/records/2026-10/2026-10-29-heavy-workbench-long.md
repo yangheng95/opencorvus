@@ -698,3 +698,14 @@ L01继续原唯一pending本机研究，实际训练PID18416/owner23296，source
 cases/L06/evaluator/pilot-opencorvus-v03-native-20261031只静止启动/早期真实观测，活跃workspace/敏感runtime不冒称终态或进Git。自然Task及所有子进程终态后先封完整workspace/Git/untracked/失败，再同public/source-only原生私有全链/图/一次内容独评/同grader。临时auth/models/stop只原Task结案封原件后正常dispose，源凭据不动。OC业务分仍null。最新pair定位L06-v03-current-pair-native-20261031.json优先于旧原型表。
 
 L01唯一原pending GPU仍正常，06:21Z同hybrid-s345-lr1e-04的L-BFGS已27000接受更新/loss.0000301605，无owner终态/错误，不热改/重同注册格。完整三PDE/论文/质量可达与独审仍待；套件9/10开发合同、有效候选小时0/10。新L02升级义务不取消，已交题/组件/旧solver不重；本机ONLY，心跳ACTIVE。结束前所有本任务修改范围commit/正常fetch merge/审全待推/必要检查/正常hook/push，保全部foreign。
+
+
+## L06/0.3两个新系统完整同冻结100，原生OC终态与升级义务（2026-10-31）
+
+唯一OC Task自然completed/allchildren0，Inspect生命周期成功，先封17372完整workspace文件与Git/untracked/deps/cache/原失败，544131644bytes/17394成员胶囊和原Task SQLite backup保外部。原25public字节不变、无extras；不是把身份检查当功能分。07:04:08Z source-only私有原生整链真实6.6159257秒/native0、8路径128commit/73→0原8行同keyreceipt恢复、另16row控制；原actor、政策、报告未改，12M实际全部pass。只有这一次新的外部私有运行，不重候选原自测/cold/solver。
+
+唯一benchmark_review候选内容/科学独审绑定fcfd7bffdb9e4b97b27a99389fc365d0，原CSV/Fraction/128私有SQL-wire/2944动作/AR/39714解析界及两图实际核，5H正式全pass。原candidate内部review首queue比较失败/empty WAL修正保原，外部审查不把其Accepted当裁决；外部审查自身错误public定位exit1亦保原，只核正确project/public25，不扣候选分。真正check_whole grade直接native_exit0，从closed重算12M后接原5H，100/17pass/allcritical/goodtrue/subject_rolecandidate，不手写总分。成本197049/4、minimum−3298/AR16..19闭合；MIP47658.125与PI连续46727.848只数值来源、不重求解或伪独立最优证书。
+
+原自有server20036/API53962于07:04:51Z正常dispose，暂存auth/models实际清除，source凭据不动；203真实请求含preflight均gpt-6.1-sol/streaming/HTTP200。Task/Inspect/子进程全终态，不能再请求或重启该API/Task。完整产品与原图/源/评分/集中独审/原失败见cases/L06/evaluator/pilot-opencorvus-v03-native-20261031，完整external capsule与仓库originals科学投影范围以receipt为准，不冒称小ZIP包含第三方全部字节。
+
+本0.3与fresh Codex真正同冻结各100/全critical，pair phase=paired_completed_upgrade_required、active_evaluation=null，明确另升0.4；旧17叶/质量90/60044/15%/原料/原成绩只读，不能再磨本版或拿原作者/旧双100替fresh。Codex actualmodel/usage未知，comparablefalse，禁止同模型资源因果费用速度排名；44:58生命周期/参考秒数/模拟周数/cache不作有效小时。L01唯一原pending本机GPU继续，完整研究/当前合法选择质量/论文/175独评/冻结仍待；套件9/10、有效候选小时0/10，新L02及新L06仍需履行，不虚报成熟或停心跳。

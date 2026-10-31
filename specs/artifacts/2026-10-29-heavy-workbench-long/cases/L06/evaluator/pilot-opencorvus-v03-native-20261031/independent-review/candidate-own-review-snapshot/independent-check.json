@@ -1,0 +1,209 @@
+{
+  "status": "passed",
+  "primary_revision": "575a7ad",
+  "expected_cost_exact": "197049/4",
+  "alternative_exact": "70640",
+  "saving_exact": "85511/4",
+  "information_nodes": 60,
+  "weekly_rows": 128,
+  "action_coordinates": 2944,
+  "zero_coordinates": 1438,
+  "components_exact": {
+    "purchase_cost": "292949/8",
+    "freight_cost": "12615/2",
+    "production_cost": "5802",
+    "holding_cost": "4273/8"
+  },
+  "minimum_cash": -3298,
+  "analytic_lower_bound": "39714",
+  "receivables": {
+    "T00": {
+      "final_cash": 35832,
+      "minimum_cash": -3298,
+      "final_receivable": 24150,
+      "due_after_horizon": {
+        "16": 5850,
+        "17": 6350,
+        "18": 6100,
+        "19": 5850
+      }
+    },
+    "T01": {
+      "final_cash": 35269,
+      "minimum_cash": -3298,
+      "final_receivable": 25230,
+      "due_after_horizon": {
+        "16": 6120,
+        "17": 6620,
+        "18": 6370,
+        "19": 6120
+      }
+    },
+    "T02": {
+      "final_cash": 37022,
+      "minimum_cash": -3298,
+      "final_receivable": 24150,
+      "due_after_horizon": {
+        "16": 5850,
+        "17": 6350,
+        "18": 6100,
+        "19": 5850
+      }
+    },
+    "T03": {
+      "final_cash": 35840,
+      "minimum_cash": -3298,
+      "final_receivable": 25230,
+      "due_after_horizon": {
+        "16": 6120,
+        "17": 6620,
+        "18": 6370,
+        "19": 6120
+      }
+    },
+    "T04": {
+      "final_cash": 37386,
+      "minimum_cash": -3298,
+      "final_receivable": 24150,
+      "due_after_horizon": {
+        "16": 5850,
+        "17": 6350,
+        "18": 6100,
+        "19": 5850
+      }
+    },
+    "T05": {
+      "final_cash": 35940,
+      "minimum_cash": -3298,
+      "final_receivable": 25230,
+      "due_after_horizon": {
+        "16": 6120,
+        "17": 6620,
+        "18": 6370,
+        "19": 6120
+      }
+    },
+    "T06": {
+      "final_cash": 36643,
+      "minimum_cash": -3298,
+      "final_receivable": 24150,
+      "due_after_horizon": {
+        "16": 5850,
+        "17": 6350,
+        "18": 6100,
+        "19": 5850
+      }
+    },
+    "T07": {
+      "final_cash": 35410,
+      "minimum_cash": -3298,
+      "final_receivable": 25230,
+      "due_after_horizon": {
+        "16": 6120,
+        "17": 6620,
+        "18": 6370,
+        "19": 6120
+      }
+    }
+  },
+  "execution_checks": [
+    {
+      "directory": "exercise\\run-001\\episode-762259639ec9",
+      "path": "T05",
+      "committed_rows": 16,
+      "original_prefix_preserved": true
+    },
+    {
+      "directory": "exercise\\run-001\\episode-89dc67f6e39b",
+      "path": "T01",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "exercise\\run-001\\episode-8760f4112e11",
+      "path": "T04",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "exercise\\run-001\\episode-0493b4640fab",
+      "path": "T00",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "exercise\\run-001\\episode-86b8b0e6525e",
+      "path": "T07",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "exercise\\run-001\\episode-b26c5d753221",
+      "path": "T06",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "exercise\\run-001\\episode-4547d230a075",
+      "path": "T03",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "exercise\\run-001\\episode-2aee34ff38ce",
+      "path": "T02",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "review\\native-001\\episode-30f07a73769e",
+      "path": "T02",
+      "committed_rows": 16,
+      "original_prefix_preserved": true
+    },
+    {
+      "directory": "review\\native-001\\episode-075d24e207f1",
+      "path": "T00",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "review\\native-001\\episode-970576583b5d",
+      "path": "T07",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "review\\native-001\\episode-07ee7b7255dd",
+      "path": "T04",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "review\\native-001\\episode-d5ea1d583be8",
+      "path": "T05",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "review\\native-001\\episode-904a0c4351af",
+      "path": "T03",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "review\\native-001\\episode-6873c1dd29ad",
+      "path": "T01",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    },
+    {
+      "directory": "review\\native-001\\episode-e27e96e04943",
+      "path": "T06",
+      "committed_rows": 16,
+      "original_prefix_preserved": false
+    }
+  ],
+  "actor_probe_count": 9,
+  "method": "Independent original indexed CSV parser and integer recurrence; no producer/public physics imported."
+}

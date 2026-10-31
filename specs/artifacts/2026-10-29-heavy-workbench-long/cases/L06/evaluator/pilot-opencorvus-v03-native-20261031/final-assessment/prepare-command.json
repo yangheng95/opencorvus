@@ -1,0 +1,26 @@
+{
+  "started_at": "2026-10-31T07:04:08.656858+00:00",
+  "finished_at": "2026-10-31T07:04:21.172195+00:00",
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\check_whole.py",
+    "prepare",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\private-run",
+    "--delivery",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\project",
+    "--layout",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\delivery-layout.json",
+    "--role",
+    "candidate",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\assignment"
+  ],
+  "native_exit": 0,
+  "stdout": "{\"assignment_id\": \"l06-whole-fcfd7bffdb9e4b97b27a99389fc365d0\", \"machine\": {\"M01\": \"verified_pass\", \"M02\": \"verified_pass\", \"M03\": \"verified_pass\", \"M04\": \"verified_pass\", \"M05\": \"verified_pass\", \"M06\": \"verified_pass\", \"M07\": \"verified_pass\", \"M08\": \"verified_pass\", \"M09\": \"verified_pass\", \"M10\": \"verified_pass\", \"M11\": \"verified_pass\", \"M12\": \"verified_pass\"}, \"total\": null}\n",
+  "stderr": "",
+  "scope": "post-seal controlled evaluation; not candidate effective hours"
+}

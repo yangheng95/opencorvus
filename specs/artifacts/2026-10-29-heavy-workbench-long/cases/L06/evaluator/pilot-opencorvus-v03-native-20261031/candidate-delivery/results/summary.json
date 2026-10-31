@@ -1,0 +1,92 @@
+{
+  "expected_cost_exact": "197049/4",
+  "alternative_exact": 70640,
+  "saving_exact": "85511/4",
+  "saving_fraction_exact": "85511/282560",
+  "quality_maximum_exact": 60044,
+  "components_exact": {
+    "purchase_cost": "292949/8",
+    "freight_cost": "12615/2",
+    "production_cost": 5802,
+    "holding_cost": "4273/8"
+  },
+  "minimum_cash": -3298,
+  "information_nodes": 60,
+  "full_path_count": 8,
+  "probabilities_exact": {
+    "T00": "1/8",
+    "T01": "1/8",
+    "T02": "1/8",
+    "T03": "1/8",
+    "T04": "1/8",
+    "T05": "1/8",
+    "T06": "1/8",
+    "T07": "1/8"
+  },
+  "exact_analytic_lower_bound": 39714,
+  "native_execution_provenance": {
+    "status": "native_whole_completed",
+    "at": "2026-10-31T06:22:38.708958+00:00",
+    "native_exit": 0,
+    "seconds": 6.149218799999289,
+    "paths": 8,
+    "actual_commits": 128,
+    "control_commits": 16,
+    "worker_processes": 10,
+    "actual_controller_exits": [
+      73,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "original_receipt_recovered": true,
+    "row_order_control": "control-ae409a32d57c",
+    "control_path_after_terminal": "T02",
+    "private_order_after_terminal": [
+      "T05",
+      "T01",
+      "T04",
+      "T00",
+      "T07",
+      "T06",
+      "T03",
+      "T02"
+    ],
+    "whole_case_review": "pending",
+    "score": null,
+    "limits": "native dataflow and one controlled process-loss proof, no OS security/power-loss certificate or candidate hours"
+  },
+  "optimization_provenance": {
+    "method": "causal integer shared-prefix model",
+    "status": 1,
+    "message": "Time limit reached. (HiGHS Status 13: Time limit reached)",
+    "seconds": 120.02255070000137,
+    "objective_float": 49262.25,
+    "native_dual_bound_float": 47658.125,
+    "native_gap_float": 0.03256296657176641,
+    "variables": 1920,
+    "constraints": 1148,
+    "nodes": 60,
+    "limits": "Floating-point solver diagnostics; not an exact rational optimality certificate."
+  },
+  "information_relaxation_provenance": {
+    "method": "perfect-information continuous linear relaxation",
+    "status": 0,
+    "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)",
+    "seconds": 0.05192450000140525,
+    "objective_float": 46727.84821428571,
+    "native_dual_bound_float": null,
+    "native_gap_float": null,
+    "variables": 4096,
+    "constraints": 2440,
+    "nodes": 128,
+    "limits": "Floating-point solver diagnostics; not an exact rational optimality certificate."
+  },
+  "limits": "Finite public support and one controlled receipt-loss recovery only. Not global optimality, independent acceptance, real-world finance approval, OS confinement or power-loss certification."
+}

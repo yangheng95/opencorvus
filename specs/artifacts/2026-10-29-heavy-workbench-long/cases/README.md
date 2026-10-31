@@ -48,3 +48,6 @@ L06/0.3最终开发交付：[整题成品与真实评分](L06/evaluator/upgrade-
 
 
 L06/0.3最新：[fresh Codex已真正同冻结100/17pass/allcritical](L06/evaluator/pilot-codex-v03-native-20261031/README.md)，[新OC同25public原生Task正在执行](L06/evaluator/pilot-opencorvus-v03-native-20261031/README.md)，尚无OC业务分/两good或小时结论。L01同原pending研究仍在本机运行，不重已完成格/组件资格。
+
+
+最新L06/0.3成对已完成：[fresh Codex及OC原生整题均真正100/allcritical](L06/evaluator/pilot-opencorvus-v03-native-20261031/README.md)，触发另升0.4，旧0.3只读。L01原pending本机研究尚在执行，开发合同仍9/10，有效小时0/10；不重复旧矩阵/资格/整审。

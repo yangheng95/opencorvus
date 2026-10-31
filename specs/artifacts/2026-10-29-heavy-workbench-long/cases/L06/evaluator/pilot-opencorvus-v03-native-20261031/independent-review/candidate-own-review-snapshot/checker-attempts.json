@@ -1,0 +1,10 @@
+[
+  {
+    "attempt": 1,
+    "command": "C:/Python314/python.exe -B review/verify_independent.py",
+    "exit": 1,
+    "failure": "assert export[state] == final",
+    "cause": "Tester recurrence retained consumed historical queue entries; public l06_physics.py line45 explicitly clears the consumed week.",
+    "correction": "Clear only already-consumed arrivals/receipts in the independent recurrence. No product files or expected monetary values changed. Full business checks precede and remain separate from state-representation comparison."
+  }
+]

@@ -1,0 +1,51 @@
+{
+  "at": "2026-10-31T07:02:30.587652+00:00",
+  "task_id": "tsk_g00VZbZlio005blDCIl3",
+  "task_lifecycle": "completed",
+  "status_source": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\observations\\20261031T0701Z-task-status.json",
+  "inspect_launcher_5804_observed_terminal": true,
+  "project_child_processes_observed": 0,
+  "workspace_files": 17372,
+  "workspace_bytes": 736006216,
+  "git": {
+    "status": {
+      "argv": [
+        "git",
+        "status",
+        "--porcelain=v1",
+        "--untracked-files=all"
+      ],
+      "native_exit": 0,
+      "stderr": ""
+    },
+    "history": {
+      "argv": [
+        "git",
+        "log",
+        "--format=%H %s"
+      ],
+      "native_exit": 0,
+      "stderr": ""
+    },
+    "diff": {
+      "argv": [
+        "git",
+        "diff",
+        "--binary"
+      ],
+      "native_exit": 0,
+      "stderr": ""
+    },
+    "head": {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "native_exit": 0,
+      "stderr": ""
+    }
+  },
+  "score": null,
+  "scope": "all original workspace/Git/untracked/dependencies/caches and genuine failures first; no programme/report edits"
+}

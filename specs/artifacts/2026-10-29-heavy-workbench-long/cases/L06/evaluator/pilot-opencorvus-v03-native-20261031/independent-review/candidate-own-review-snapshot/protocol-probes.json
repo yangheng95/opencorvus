@@ -1,0 +1,36 @@
+[
+  {
+    "name": "original complete payload replay",
+    "observed": "identical original receipt and rows"
+  },
+  {
+    "name": "conflicting old request ID",
+    "code": "idempotency_payload_conflict"
+  },
+  {
+    "name": "completed week under new ID",
+    "code": "observation_not_supported"
+  },
+  {
+    "name": "boolean quantity",
+    "code": "decision_integer"
+  },
+  {
+    "name": "extra coordinate",
+    "code": "decision_shape"
+  },
+  {
+    "name": "neutral infeasibility diagnostic",
+    "code": "plant_capacity",
+    "week": 8,
+    "detail": {
+      "actual": 100006,
+      "required": 24
+    }
+  },
+  {
+    "name": "valid but different committed policy prefix",
+    "exit": 1,
+    "stderr": "Traceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\project\\review\\source-only\\actor\\actor.py\", line 75, in <module>\n    main()\n    ~~~~^^\n  File \"D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\project\\review\\source-only\\actor\\actor.py\", line 50, in main\n    raise ValueError(\"committed action differs from installed policy\")\nValueError: committed action differs from installed policy\n"
+  }
+]

@@ -1,0 +1,13 @@
+{
+  "method": "causal integer shared-prefix model",
+  "status": 1,
+  "message": "Time limit reached. (HiGHS Status 13: Time limit reached)",
+  "seconds": 120.02255070000137,
+  "objective_float": 49262.25,
+  "native_dual_bound_float": 47658.125,
+  "native_gap_float": 0.03256296657176641,
+  "variables": 1920,
+  "constraints": 1148,
+  "nodes": 60,
+  "limits": "Floating-point solver diagnostics; not an exact rational optimality certificate."
+}
