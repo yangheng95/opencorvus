@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Notebook 与演示媒体导出引用](records/2026-11/2026-11-01-artifact-media-reference-export.md)：特殊文件名、纯文本描述与真实导出交付。
+
 - [Unicode 来源定位实测](records/2026-11/2026-11-01-unicode-source-navigation.md)：中文、emoji、字节顺序标记及混合换行的真实 Sources 定位。
 
 - [当前 Sources 显示复核](records/2026-10/2026-10-31-current-source-display-review.md)：中文摘录语义、八来源展开、真实复制粘贴与原件定位。

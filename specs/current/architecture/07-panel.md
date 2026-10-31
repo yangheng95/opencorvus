@@ -2015,6 +2015,11 @@ read the mounted editor state. MCP App actions read the current real Tool
 result; returned resources use the existing Host download protocol and App
 requests retain confirmation. Opening keeps the same mounted renderer and MCP
 authority. A source/data export does not replace a requested PDF or Word file.
+Notebook media links and Presentation image references preserve plain-text
+labels through CommonMark escaping. Their companion filenames use one URI
+component encoding inside angle-bracket destinations, including literal `%`,
+fragment delimiters and unpaired parentheses. Authored Markdown, code, notes
+and the original downloadable media retain their existing content and names.
 For native Office delivery cards, `InteractiveArtifactRecord.downloads` is a
 read projection of the exact producing display Part's completed Tool outcome.
 The declared source identity selects its canonical attachment within the same

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Notebook 与演示媒体导出引用](2026-11-01-artifact-media-reference-export/README.md)：实际产物、七张人工复核截图及修复前后的原始下载文件。
+
 - [Unicode 来源定位实测](2026-11-01-unicode-source-navigation/README.md)：三份真实字节输入、十张光标实图、原模型搜索及零请求重启复验。
 
 - [当前 Sources 显示复核](2026-10-31-current-source-display-review/README.md)：八条原始来源、实际粘贴、摘录中英及原件定位实图。

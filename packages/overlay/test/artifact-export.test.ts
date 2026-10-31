@@ -3,6 +3,78 @@ import { artifactCSV, artifactExports, artifactFilename, plainTerminalOutput } f
 import type { InteractiveArtifactPayload } from "../src/services/interactive-artifact"
 
 const base = { schemaVersion: "1" as const, title: "Acceptance" }
+
+const mediaSource = {
+  sha: "ad8d51e8c73773e89c4cfd92de5ac53ea04604410d4a2bae3173c9ede7a87d25",
+  url: "/attachment/project/ad8d51e8c73773e89c4cfd92de5ac53ea04604410d4a2bae3173c9ede7a87d25.png",
+  mime: "image/png",
+  size: 10627,
+}
+const mediaReferences = [
+  {
+    filename: "图 #1 (& plan+.png",
+    alt: "图 ] #1 &copy; *原文*",
+    reference: "[图 \\] \\#1 \\&copy\\; \\*原文\\*](<%E5%9B%BE%20%231%20(%26%20plan%2B.png>)",
+  },
+  { filename: "photo #1.png", alt: "Photo", reference: "[Photo](<photo%20%231.png>)" },
+  { filename: "literal%23.png", alt: "Original [23]", reference: "[Original \\[23\\]](<literal%2523.png>)" },
+  { filename: "view(1).png", alt: "View", reference: "[View](<view(1).png>)" },
+  { filename: "plain.png", alt: "line1\n\nline2", reference: "[line1&#10;&#10;line2](<plain.png>)" },
+]
+
+test.each(mediaReferences)(
+  "Notebook media export preserves $filename and its plain label",
+  ({ filename, alt, reference }) => {
+    const files = artifactExports({
+      ...base,
+      renderer: "notebook@1",
+      cells: [
+        {
+          kind: "code",
+          language: "plaintext",
+          source: "display only",
+          outputs: [{ kind: "media", source: { ...mediaSource, filename }, alt }],
+        },
+      ],
+    })
+    const file = files[0]!
+    const notebook = JSON.parse("text" in file ? file.text : "")
+    expect({ media: notebook.cells[0].outputs, downloads: files.slice(1) }).toEqual({
+      media: [{ output_type: "display_data", metadata: {}, data: { "text/markdown": reference } }],
+      downloads: [{ filename, mime: mediaSource.mime, url: mediaSource.url }],
+    })
+  },
+)
+
+test.each(mediaReferences)(
+  "Presentation media export preserves $filename and its plain label",
+  ({ filename, alt, reference }) => {
+    expect(
+      artifactExports({
+        ...base,
+        renderer: "presentation@1",
+        aspectRatio: "16:9",
+        slides: [
+          {
+            id: "slide1",
+            title: "Slide",
+            markdown: "Authored body",
+            notes: "Original notes",
+            image: { ...mediaSource, filename },
+            imageAlt: alt,
+          },
+        ],
+      }),
+    ).toEqual([
+      {
+        filename: "Acceptance.md",
+        mime: "text/markdown",
+        text: `# Slide\n\nAuthored body\n\n!${reference}\n\nOriginal notes`,
+      },
+      { filename, mime: mediaSource.mime, url: mediaSource.url },
+    ])
+  },
+)
 test("documents and edited code export their actual text and useful filenames", () => {
   expect(artifactExports({ ...base, renderer: "document@1", markdown: "# Delivery\n\nReady" })).toEqual([
     { filename: "Acceptance.md", mime: "text/markdown", text: "# Delivery\n\nReady" },

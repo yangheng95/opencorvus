@@ -7,6 +7,13 @@ export function artifactFilename(name: string): string {
   return (name.split(/[\\/]/).at(-1)?.trim() || "artifact").replace(/[<>:"|?*\u0000-\u001f]/g, "_")
 }
 
+function markdownMediaReference(label: string, filename: string): string {
+  const text = label
+    .replace(/[\u0021-\u002f\u003a-\u0040\u005b-\u0060\u007b-\u007e]/g, "\\$&")
+    .replace(/[\t\n\r]/g, (character) => `&#${character.charCodeAt(0)};`)
+  return `[${text}](<${encodeURIComponent(artifactFilename(filename))}>)`
+}
+
 export function artifactCSV(rows: unknown[][]): string {
   return rows
     .map((row) =>
@@ -137,7 +144,10 @@ function rendererExports(payload: InteractiveArtifactPayload): ArtifactExport[] 
                           : output.kind === "markdown"
                             ? { "text/markdown": output.markdown }
                             : {
-                                "text/markdown": `[${output.alt}](${encodeURI(artifactFilename(output.source.filename || output.source.url))})`,
+                                "text/markdown": markdownMediaReference(
+                                  output.alt,
+                                  output.source.filename || output.source.url,
+                                ),
                               },
                     })),
                   },
@@ -168,7 +178,7 @@ function rendererExports(payload: InteractiveArtifactPayload): ArtifactExport[] 
           payload.slides
             .map(
               (slide) =>
-                `# ${slide.title}\n\n${slide.markdown}${slide.image ? `\n\n![${slide.imageAlt}](${encodeURI(artifactFilename(slide.image.filename || slide.image.url))})` : ""}${slide.notes ? `\n\n${slide.notes}` : ""}`,
+                `# ${slide.title}\n\n${slide.markdown}${slide.image ? `\n\n!${markdownMediaReference(slide.imageAlt!, slide.image.filename || slide.image.url)}` : ""}${slide.notes ? `\n\n${slide.notes}` : ""}`,
             )
             .join("\n\n---\n\n"),
           "text/markdown",
