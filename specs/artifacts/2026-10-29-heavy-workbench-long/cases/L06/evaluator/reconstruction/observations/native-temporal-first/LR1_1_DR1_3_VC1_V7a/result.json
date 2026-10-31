@@ -1,0 +1,29 @@
+{
+  "instance": "LR1_1_DR1_3_VC1_V7a",
+  "original_member": "Group1_MPS_files/LR1_1_DR1_3_VC1_V7a_t45.mps",
+  "method": "temporal-relax-and-fix-first",
+  "solution_produced": false,
+  "original_problem_objective": null,
+  "stage_results": [
+    {
+      "index": 0,
+      "at": "2026-10-31T11:16:34.311600+00:00",
+      "integer_frontier": 15,
+      "commit_before": 10,
+      "prior_committed_variables": 0,
+      "temporarily_relaxed_variables": 4577,
+      "solver_limit_seconds": 15,
+      "original_horizon_periods": 45,
+      "objective_scope": "conditional and possibly fractional; not an original-MILP feasible objective",
+      "global_original_milp_bound": null,
+      "finished_at": "2026-10-31T11:16:49.004445+00:00",
+      "status": "timelimit",
+      "solver_seconds": 15.0,
+      "nodes": 4,
+      "outcome": "no_solution_for_this_conditional_stage"
+    }
+  ],
+  "score": null,
+  "benchmark_qualification": "not_established",
+  "stopped_reason": "no_solution_for_this_conditional_stage"
+}

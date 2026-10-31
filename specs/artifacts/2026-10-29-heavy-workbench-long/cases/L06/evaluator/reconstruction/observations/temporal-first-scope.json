@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-31T11:21:38.233404+00:00",
+  "scope": "one preregistered autonomous-method negative result; no candidate score or successful reference",
+  "source": "temporal-first-source.zip",
+  "actually_executed_frontiers": [
+    15
+  ],
+  "registered_but_unexecuted_frontiers": [
+    25,
+    35,
+    45
+  ],
+  "source_input": "original MPS archive only",
+  "third_party_models_and_vectors": "external only; no redistribution license inferred",
+  "observer_error": "read-only sparse-row inspection initially raised KeyError for empty cumBadSlack_0; raw tool transcript retained, corrected observation uses empty row; mathematical verifier already handles it",
+  "known_limit": "this method did not reach commit or final integer-plan branches; published-route controls are not substitutes"
+}

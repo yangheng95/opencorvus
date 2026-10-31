@@ -37,3 +37,11 @@ D:/new-own-mirplib-env/Scripts/python.exe -B complete_published_routes.py --orig
 ```
 
 后续仍须自主路线算法、从原运营数据到原模型的语义核对、完整研究方案/质量轨迹与实际图/报告/移交、真实错误programme/一次整题审查及合法fresh对照。原已发表路线只是控制；不能将其补全结果当新作者100，不能自动创建0.5或启动candidate。
+
+## 首个自主方法尚未产出可行计划
+
+[时间分解程序](run_temporal_routes.py)在首次计算前登记四个前沿15/25/35/45、每段15秒，只读原MPS，保留全45期物理约束、暂放松远期整数并拟逐步提交早期决定。没有读取官方MST或控制向量。
+
+[真实原生运行](observations/native-temporal-first.terminal.json)11:16:33→11:17:19Z自然exit0，内部44.9243957秒。三例均在首个15前沿没有找到条件可行解，25/35/45从未执行，全部`solution_produced=false`、原可行目标null；[完整研究末态](observations/native-temporal-first/execution-terminal.json)保实际分支与计数。没有加时、调窗口重跑或加载已发表路线补成功。
+
+这是自主方法的真实失败记录，尚不是可复现完整参考、资格通过或模型得分。提交决定、后续前沿与完整算法成功路径尚无本次执行证据；原已发表路线控制不替代它。接下来需实质算法与完整任务工作，不能循环改变窗口或换题编号冒进展。

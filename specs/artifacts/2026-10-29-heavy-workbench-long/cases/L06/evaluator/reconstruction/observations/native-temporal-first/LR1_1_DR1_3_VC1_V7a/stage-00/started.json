@@ -1,0 +1,12 @@
+{
+  "index": 0,
+  "at": "2026-10-31T11:16:34.311600+00:00",
+  "integer_frontier": 15,
+  "commit_before": 10,
+  "prior_committed_variables": 0,
+  "temporarily_relaxed_variables": 4577,
+  "solver_limit_seconds": 15,
+  "original_horizon_periods": 45,
+  "objective_scope": "conditional and possibly fractional; not an original-MILP feasible objective",
+  "global_original_milp_bound": null
+}
