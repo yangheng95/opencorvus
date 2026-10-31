@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-31T12:44:27.229364+00:00",
+  "launcher_pid": 17428,
+  "argv": [
+    "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\source\\run_class_pair_study.py",
+    "--closed-plan",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\inputs\\LR1_DR03_VC03_V16a",
+    "--strategy",
+    "global",
+    "--method-wall-seconds",
+    "120",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "at": "2026-10-31T12:38:55.179664+00:00",
+  "actual_python_pid": 2468,
+  "free_classes": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "fixed_integer_arc_count": 0,
+  "free_integer_arc_count": 6645,
+  "supplied_incumbent_stored": true,
+  "supplied_original_objective": 162058.53609443828,
+  "original_initial_check": {
+    "object": "original linear model, not a re-created or relaxed planning model",
+    "feasible": true,
+    "objective_consistent": true,
+    "variables_recomputed": 7370,
+    "integer_variables_recomputed": 6645,
+    "constraints_recomputed": 2520,
+    "max_row_violation": 5.684341886080802e-14,
+    "max_bound_violation": 5.684341886080802e-14,
+    "max_integrality_violation": 0.0,
+    "reported_objective": 162058.53609443828,
+    "independent_objective": 162058.53609443826,
+    "objective_absolute_error": 2.9103830456733704e-11,
+    "violations": [],
+    "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+  },
+  "wall_allowance_remaining_after_setup": 119.73775129999922,
+  "arm_wall_at_native_start": 0.26227210000070045,
+  "scope": "Unchanged original rows/objective; only declared other-class integer bounds fixed"
+}

@@ -97,3 +97,24 @@ python -B plot_quality_axis.py --run D:/new-own-mirplib-run/group2-quality --out
 原站当前记录三例120期可行成本33809/36659/82837，远低于本轮原计划55730.69/162058.54/201932.05；[来源记录](observations/operational/group2-published-table-operational-context.json)与[原表数值](observations/operational/group2-published-scalar-context-rows.json)明确它们是舍入网页事实，未将其冒本机独立最优证书或新通过线。现有合法解仍有明显改进空间，文件齐全不代表经济质量高。
 
 当前仍缺更强研究方法/有依据的质量锚点、正式质量标尺和整题正错程序/一次集中独审与fresh测量；本轮运营交付不计作合格重型题数或有效候选小时。
+
+## 整类时间网流的实际方法对照
+
+[首次成对研究报告与实际曲线](method-study/README.md)已完整执行。同一原可行起点、同一预登记120秒名义方法wall，两例分别将全模型热搜索和一次整类对串行pass比较；单线程/seed0/原模型/成熟算法保留。原单类例没有再跑一个结构重复的“类对对照”。
+
+| 原实例 | 全模型热搜索成本 / 实际秒 | 整类对成本 / 实际秒 |
+| --- | --- | --- |
+| LR1_DR02_VC05_V8a | 114048.99020035022 / 120.2398 | 41950.612252912506 / 90.4147 |
+| LR1_DR03_VC03_V16a | 182399.0062253472 / 119.7144 | 159303.84020757372 / 120.7171 |
+
+五类的10段条件最优后自然提前结束，三类的3段均time-limit；条件最优和条件界不能冒原模型全局最优/界。46个实际原生改进事件与四终值均核原约束/整数/目标，四份新运营计划/账也真实导出；完整向量/16CSV保外部，[原件范围](observations/class-pair-study-first/scope.json)列每项。没有重复旧冷基线或组件资格，没有按结果换预算/排序或新建候选。
+
+这证明此轮方法对照有实际经济作用；两个公开实例、单次受控研究还不能证明未知输入泛化、无污染、统计区分度或有效小时。正式质量标尺/完整新题正错programme和一次整审仍待，不能按这些数值倒填新的100分线。
+
+当前运营导出CLI已改为显式原MPS、完整向量、真实目标声明和计算作用域，不再要求作者baseline目录/文件名。历史交付中旧命令只对应其已封源码版本，不保当前fallback。当前命令为：
+
+```powershell
+python -B export_operational_plan.py --original-mps <original.mps> --values <actual-values.json> --reported-objective <genuine-native-quote> --computation-status <actual-status> --computation-scope original_model --raw-archive <Group2_data_format_only_files.zip> --instance <original-name> --out <new-output>
+```
+
+类对pass使用`--computation-scope conditional_pass`且不传原全局界；真正没有目标声明时省略该声明，一致性保持null。原数学reader仍唯一，不重算期望自比。四臂原生→原向量/真实声明→运营账→实际报告/图的本轮全链有记录，但没有冒同一源码的新cold或整题独审。

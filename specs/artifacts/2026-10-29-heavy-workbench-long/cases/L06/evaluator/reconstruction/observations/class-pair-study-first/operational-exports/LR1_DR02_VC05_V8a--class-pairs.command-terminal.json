@@ -1,0 +1,32 @@
+{
+  "started_at": "2026-10-31T12:47:08.112029+00:00",
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\native-operations-reconstruction-20261031\\Scripts\\python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\export-report-source\\export_operational_plan.py",
+    "--original-mps",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\inputs\\LR1_DR02_VC05_V8a\\LR1_DR02_VC05_V8a_t120.mps",
+    "--values",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\final-values.json",
+    "--raw-archive",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-group2-inputs\\Group2_data_format_only_files.zip",
+    "--instance",
+    "LR1_DR02_VC05_V8a",
+    "--computation-status",
+    "class_pair_pass_complete",
+    "--computation-scope",
+    "conditional_pass",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs",
+    "--reported-objective",
+    "41950.6122529133"
+  ],
+  "objective_claim_source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\independent-original-model-check.json",
+  "objective_claim_field": "reported_objective, actual model.getSolObjVal supplied by the native run",
+  "launcher_pid": 3832,
+  "finished_at": "2026-10-31T12:47:08.418622+00:00",
+  "native_exit": 0
+}

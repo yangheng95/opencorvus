@@ -1,0 +1,107 @@
+[
+  {
+    "at": "2026-10-31T12:43:06.059296+00:00",
+    "status": "timelimit",
+    "optimization_executed": true,
+    "free_classes": [
+      1,
+      2
+    ],
+    "fixed_integer_arc_count": 1778,
+    "initial_original_objective": 201932.05230586205,
+    "final_original_objective": 159303.8402075737,
+    "solver_seconds": 40.0,
+    "actual_wall_seconds": 39.500122999997984,
+    "arm_wall_at_terminal": 39.64138919999823,
+    "actual_best_events": 12,
+    "native_bound": 151097.0577563109,
+    "bound_scope": "conditional class-pair subproblem only",
+    "optimal_status_scope": "conditional only",
+    "original_check": {
+      "object": "original linear model, not a re-created or relaxed planning model",
+      "feasible": true,
+      "objective_consistent": true,
+      "variables_recomputed": 6300,
+      "integer_variables_recomputed": 5334,
+      "constraints_recomputed": 2400,
+      "max_row_violation": 5.684341886080802e-14,
+      "max_bound_violation": 3.664020653833433e-14,
+      "max_integrality_violation": 3.664020653833433e-14,
+      "reported_objective": 159303.8402075736,
+      "independent_objective": 159303.8402075737,
+      "objective_absolute_error": 8.731149137020111e-11,
+      "violations": [],
+      "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+    }
+  },
+  {
+    "at": "2026-10-31T12:43:47.057325+00:00",
+    "status": "timelimit",
+    "optimization_executed": true,
+    "free_classes": [
+      0,
+      2
+    ],
+    "fixed_integer_arc_count": 1778,
+    "initial_original_objective": 159303.84020757372,
+    "final_original_objective": 159303.8402075737,
+    "solver_seconds": 41.0,
+    "actual_wall_seconds": 40.97548420000385,
+    "arm_wall_at_terminal": 80.63941199999681,
+    "actual_best_events": 0,
+    "native_bound": 76643.98793803528,
+    "bound_scope": "conditional class-pair subproblem only",
+    "optimal_status_scope": "conditional only",
+    "original_check": {
+      "object": "original linear model, not a re-created or relaxed planning model",
+      "feasible": true,
+      "objective_consistent": true,
+      "variables_recomputed": 6300,
+      "integer_variables_recomputed": 5334,
+      "constraints_recomputed": 2400,
+      "max_row_violation": 5.684341886080802e-14,
+      "max_bound_violation": 3.664020653833433e-14,
+      "max_integrality_violation": 3.664020653833433e-14,
+      "reported_objective": 159303.84020757442,
+      "independent_objective": 159303.8402075737,
+      "objective_absolute_error": 7.275957614183426e-10,
+      "violations": [],
+      "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+    }
+  },
+  {
+    "at": "2026-10-31T12:44:27.062042+00:00",
+    "status": "timelimit",
+    "optimization_executed": true,
+    "free_classes": [
+      0,
+      1
+    ],
+    "fixed_integer_arc_count": 1778,
+    "initial_original_objective": 159303.84020757372,
+    "final_original_objective": 159303.84020757372,
+    "solver_seconds": 40.0,
+    "actual_wall_seconds": 39.98279979999643,
+    "arm_wall_at_terminal": 120.64412599999923,
+    "actual_best_events": 0,
+    "native_bound": 75977.69118632143,
+    "bound_scope": "conditional class-pair subproblem only",
+    "optimal_status_scope": "conditional only",
+    "original_check": {
+      "object": "original linear model, not a re-created or relaxed planning model",
+      "feasible": true,
+      "objective_consistent": true,
+      "variables_recomputed": 6300,
+      "integer_variables_recomputed": 5334,
+      "constraints_recomputed": 2400,
+      "max_row_violation": 0.0,
+      "max_bound_violation": 7.275957614183426e-12,
+      "max_integrality_violation": 0.0,
+      "reported_objective": 159303.84020757372,
+      "independent_objective": 159303.84020757372,
+      "objective_absolute_error": 0.0,
+      "violations": [],
+      "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+    }
+  }
+]

@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-31T12:41:29.551306+00:00",
+  "status": "optimal",
+  "optimization_executed": true,
+  "free_classes": [
+    0,
+    4
+  ],
+  "fixed_integer_arc_count": 3987,
+  "initial_original_objective": 53992.91376396976,
+  "final_original_objective": 52087.924589184724,
+  "solver_seconds": 7.0,
+  "actual_wall_seconds": 7.618660799998906,
+  "arm_wall_at_terminal": 34.06960000000254,
+  "actual_best_events": 7,
+  "native_bound": 52087.92458918516,
+  "bound_scope": "conditional class-pair subproblem only",
+  "optimal_status_scope": "conditional only",
+  "original_check": {
+    "object": "original linear model, not a re-created or relaxed planning model",
+    "feasible": true,
+    "objective_consistent": true,
+    "variables_recomputed": 7370,
+    "integer_variables_recomputed": 6645,
+    "constraints_recomputed": 2520,
+    "max_row_violation": 7.105427357601002e-15,
+    "max_bound_violation": 7.105427357601002e-15,
+    "max_integrality_violation": 0.0,
+    "reported_objective": 52087.92458918516,
+    "independent_objective": 52087.924589184724,
+    "objective_absolute_error": 4.3655745685100555e-10,
+    "violations": [],
+    "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+  }
+}

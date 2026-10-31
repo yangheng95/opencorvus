@@ -1,0 +1,30 @@
+{
+  "periods": 120,
+  "capacities": {
+    "0": 300.0,
+    "2": 200.0,
+    "1": 250.0
+  },
+  "unused_capacity_time_ratio": {
+    "0": 0.11061946902654868,
+    "2": 0.18809980806142035,
+    "1": 0.11070780399274047
+  },
+  "class_pairs": [
+    [
+      1,
+      2
+    ],
+    [
+      0,
+      2
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "ranking_scope": "Initial-flow terminal unused capacity-time proxy, not a proven causal economic loss",
+  "projection": "Full original variable-to-class map retained externally; this record projects actual order/capacity facts only",
+  "integer_arc_count": 5334
+}

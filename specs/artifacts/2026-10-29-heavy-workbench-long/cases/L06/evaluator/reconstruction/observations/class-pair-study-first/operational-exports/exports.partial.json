@@ -1,0 +1,26 @@
+[
+  {
+    "instance": "LR1_DR02_VC05_V8a",
+    "strategy": "global",
+    "directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global",
+    "objective_claim_source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global\\independent-original-model-check.json"
+  },
+  {
+    "instance": "LR1_DR02_VC05_V8a",
+    "strategy": "class-pairs",
+    "directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs",
+    "objective_claim_source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\independent-original-model-check.json"
+  },
+  {
+    "instance": "LR1_DR03_VC03_V16a",
+    "strategy": "class-pairs",
+    "directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs",
+    "objective_claim_source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\independent-original-model-check.json"
+  },
+  {
+    "instance": "LR1_DR03_VC03_V16a",
+    "strategy": "global",
+    "directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global",
+    "objective_claim_source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global\\independent-original-model-check.json"
+  }
+]

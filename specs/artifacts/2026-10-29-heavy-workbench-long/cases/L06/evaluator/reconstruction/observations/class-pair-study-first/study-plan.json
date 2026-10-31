@@ -1,0 +1,29 @@
+{
+  "registered_at": "2026-10-31T12:38:54.032836+00:00",
+  "method_wall_seconds_per_arm": 120,
+  "thread_limit": 1,
+  "seed": 0,
+  "feastol": 1e-08,
+  "scope": "One counterbalanced original-model warm-start method comparison, no new candidate, cold baseline rerun or qualification",
+  "arms": [
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "global"
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "class-pairs"
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "class-pairs"
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "global"
+    }
+  ],
+  "pair_order": "all unordered class pairs once; initial unused capacity-time ratio sum descending, class ids break ties",
+  "input_scope": "Only original MPS and this research prior actual final vector/native result; same extracted input per paired arm; no published route solution",
+  "conditional_bound_scope": "not original-model lower bounds"
+}

@@ -1,0 +1,992 @@
+{
+  "at": "2026-10-31T12:49:14.659490+00:00",
+  "copied_originals": [
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\active-arm.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/active-arm.json",
+      "bytes": 138
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs.started.json",
+      "bytes": 756
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs.stdout.txt",
+      "bytes": 290190
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs.terminal.json",
+      "bytes": 831
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global.started.json",
+      "bytes": 745
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global.stdout.txt",
+      "bytes": 7538
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global.terminal.json",
+      "bytes": 820
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs.started.json",
+      "bytes": 757
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs.stdout.txt",
+      "bytes": 35696
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs.terminal.json",
+      "bytes": 832
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global.started.json",
+      "bytes": 748
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global.stdout.txt",
+      "bytes": 6806
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global.terminal.json",
+      "bytes": 823
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-export.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-export.started.json",
+      "bytes": 810
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-export.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-export.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-export.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-export.stdout.txt",
+      "bytes": 53
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-export.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-export.terminal.json",
+      "bytes": 867
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\owner-results.partial.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/owner-results.partial.json",
+      "bytes": 26213
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\owner-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/owner-started.json",
+      "bytes": 127
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\owner-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/owner-terminal.json",
+      "bytes": 27675
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\paired-report.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/paired-report.started.json",
+      "bytes": 818
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\paired-report.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/paired-report.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\paired-report.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/paired-report.stdout.txt",
+      "bytes": 164
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\paired-report.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/paired-report.terminal.json",
+      "bytes": 875
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\pre-execution-source.zip",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/pre-execution-source.zip",
+      "bytes": 104054
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\pre-export-report-source.zip",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/pre-export-report-source.zip",
+      "bytes": 111149
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\study-plan.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/study-plan.json",
+      "bytes": 1006
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/execution-started.json",
+      "bytes": 1046
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/execution-terminal.json",
+      "bytes": 15270
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/independent-original-model-check.json",
+      "bytes": 641
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\initial-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/initial-original-model-check.json",
+      "bytes": 680
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stages.partial.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stages.partial.json",
+      "bytes": 13806
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-00\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-00/actual-best-events.jsonl",
+      "bytes": 1274
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-00\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-00/independent-original-model-check.json",
+      "bytes": 696
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-00\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-00/result.json",
+      "bytes": 1328
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-00\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-00/solver-native.log",
+      "bytes": 15428
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-00\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-00/started.json",
+      "bytes": 1237
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-01\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-01/actual-best-events.jsonl",
+      "bytes": 1287
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-01\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-01/independent-original-model-check.json",
+      "bytes": 698
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-01\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-01/result.json",
+      "bytes": 1327
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-01\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-01/solver-native.log",
+      "bytes": 25375
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-01\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-01/started.json",
+      "bytes": 1233
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-02\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-02/actual-best-events.jsonl",
+      "bytes": 423
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-02\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-02/independent-original-model-check.json",
+      "bytes": 696
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-02\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-02/result.json",
+      "bytes": 1326
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-02\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-02/solver-native.log",
+      "bytes": 25110
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-02\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-02/started.json",
+      "bytes": 1231
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-03\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-03/actual-best-events.jsonl",
+      "bytes": 1214
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-03\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-03/independent-original-model-check.json",
+      "bytes": 660
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-03\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-03/result.json",
+      "bytes": 1291
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-03\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-03/solver-native.log",
+      "bytes": 30498
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-03\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-03/started.json",
+      "bytes": 1252
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-04\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-04/actual-best-events.jsonl",
+      "bytes": 442
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-04\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-04/independent-original-model-check.json",
+      "bytes": 698
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-04\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-04/result.json",
+      "bytes": 1329
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-04\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-04/solver-native.log",
+      "bytes": 29053
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-04\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-04/started.json",
+      "bytes": 1213
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-05\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-05/actual-best-events.jsonl",
+      "bytes": 2153
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-05\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-05/independent-original-model-check.json",
+      "bytes": 696
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-05\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-05/result.json",
+      "bytes": 1326
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-05\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-05/solver-native.log",
+      "bytes": 44205
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-05\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-05/started.json",
+      "bytes": 1252
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-06\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-06/actual-best-events.jsonl",
+      "bytes": 3039
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-06\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-06/independent-original-model-check.json",
+      "bytes": 679
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-06\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-06/result.json",
+      "bytes": 1309
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-06\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-06/solver-native.log",
+      "bytes": 28140
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-06\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-06/started.json",
+      "bytes": 1251
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-07\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-07/actual-best-events.jsonl",
+      "bytes": 1325
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-07\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-07/independent-original-model-check.json",
+      "bytes": 679
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-07\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-07/result.json",
+      "bytes": 1311
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-07\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-07/solver-native.log",
+      "bytes": 36233
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-07\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-07/started.json",
+      "bytes": 1216
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-08\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-08/actual-best-events.jsonl",
+      "bytes": 847
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-08\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-08/independent-original-model-check.json",
+      "bytes": 641
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-08\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-08/result.json",
+      "bytes": 1271
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-08\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-08/solver-native.log",
+      "bytes": 9220
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-08\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-08/started.json",
+      "bytes": 1214
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-09\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-09/actual-best-events.jsonl",
+      "bytes": 810
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-09\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-09/independent-original-model-check.json",
+      "bytes": 641
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-09\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-09/result.json",
+      "bytes": 1273
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-09\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-09/solver-native.log",
+      "bytes": 49026
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs\\stage-09\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--class-pairs/stage-09/started.json",
+      "bytes": 1179
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global/execution-started.json",
+      "bytes": 1035
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global/execution-terminal.json",
+      "bytes": 2303
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global/independent-original-model-check.json",
+      "bytes": 663
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global\\initial-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global/initial-original-model-check.json",
+      "bytes": 680
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global\\stages.partial.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global/stages.partial.json",
+      "bytes": 1439
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global\\stage-00\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global/stage-00/actual-best-events.jsonl",
+      "bytes": 826
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global\\stage-00\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global/stage-00/independent-original-model-check.json",
+      "bytes": 663
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global\\stage-00\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global/stage-00/result.json",
+      "bytes": 1357
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global\\stage-00\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global/stage-00/solver-native.log",
+      "bytes": 7388
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global\\stage-00\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR02_VC05_V8a--global/stage-00/started.json",
+      "bytes": 1257
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/execution-started.json",
+      "bytes": 1048
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/execution-terminal.json",
+      "bytes": 5147
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/independent-original-model-check.json",
+      "bytes": 643
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\initial-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/initial-original-model-check.json",
+      "bytes": 679
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stages.partial.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stages.partial.json",
+      "bytes": 4155
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-00\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-00/actual-best-events.jsonl",
+      "bytes": 5140
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-00\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-00/independent-original-model-check.json",
+      "bytes": 695
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-00\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-00/result.json",
+      "bytes": 1330
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-00\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-00/solver-native.log",
+      "bytes": 15234
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-00\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-00/started.json",
+      "bytes": 1216
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-01\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-01/independent-original-model-check.json",
+      "bytes": 696
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-01\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-01/result.json",
+      "bytes": 1329
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-01\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-01/solver-native.log",
+      "bytes": 10600
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-01\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-01/started.json",
+      "bytes": 1252
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-02\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-02/independent-original-model-check.json",
+      "bytes": 643
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-02\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-02/result.json",
+      "bytes": 1278
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-02\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-02/solver-native.log",
+      "bytes": 9927
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs\\stage-02\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--class-pairs/stage-02/started.json",
+      "bytes": 1251
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global/execution-started.json",
+      "bytes": 1038
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global/execution-terminal.json",
+      "bytes": 2242
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global/independent-original-model-check.json",
+      "bytes": 643
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global\\initial-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global/initial-original-model-check.json",
+      "bytes": 679
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global\\stages.partial.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global/stages.partial.json",
+      "bytes": 1398
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global\\stage-00\\actual-best-events.jsonl",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global/stage-00/actual-best-events.jsonl",
+      "bytes": 809
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global\\stage-00\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global/stage-00/independent-original-model-check.json",
+      "bytes": 643
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global\\stage-00\\result.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global/stage-00/result.json",
+      "bytes": 1320
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global\\stage-00\\solver-native.log",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global/stage-00/solver-native.log",
+      "bytes": 6650
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global\\stage-00\\started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/LR1_DR03_VC03_V16a--global/stage-00/started.json",
+      "bytes": 1223
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/execution-started.json",
+      "bytes": 718
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/execution-terminal.json",
+      "bytes": 128
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\exports.partial.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/exports.partial.json",
+      "bytes": 1777
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs.command-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--class-pairs.command-started.json",
+      "bytes": 1575
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs.command-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--class-pairs.command-terminal.json",
+      "bytes": 1675
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--class-pairs.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--class-pairs.stdout.txt",
+      "bytes": 119
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global.command-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--global.command-started.json",
+      "bytes": 1603
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global.command-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--global.command-terminal.json",
+      "bytes": 1703
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--global.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--global.stdout.txt",
+      "bytes": 119
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs.command-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--class-pairs.command-started.json",
+      "bytes": 1583
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs.command-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--class-pairs.command-terminal.json",
+      "bytes": 1684
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--class-pairs.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--class-pairs.stdout.txt",
+      "bytes": 121
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global.command-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--global.command-started.json",
+      "bytes": 1608
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global.command-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--global.command-terminal.json",
+      "bytes": 1708
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--global.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--global.stdout.txt",
+      "bytes": 120
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\operations-index.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/operations-index.json",
+      "bytes": 1961
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--class-pairs/execution-started.json",
+      "bytes": 1250
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--class-pairs/execution-terminal.json",
+      "bytes": 235
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--class-pairs/independent-original-model-check.json",
+      "bytes": 641
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs\\operational-closure.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--class-pairs/operational-closure.json",
+      "bytes": 2864
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--global/execution-started.json",
+      "bytes": 1283
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--global/execution-terminal.json",
+      "bytes": 235
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--global/independent-original-model-check.json",
+      "bytes": 663
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global\\operational-closure.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR02_VC05_V8a--global/operational-closure.json",
+      "bytes": 2881
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--class-pairs/execution-started.json",
+      "bytes": 1256
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--class-pairs/execution-terminal.json",
+      "bytes": 236
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--class-pairs/independent-original-model-check.json",
+      "bytes": 643
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs\\operational-closure.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--class-pairs/operational-closure.json",
+      "bytes": 2866
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--global/execution-started.json",
+      "bytes": 1286
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--global/execution-terminal.json",
+      "bytes": 235
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--global/independent-original-model-check.json",
+      "bytes": 643
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global\\operational-closure.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/operational-exports/LR1_DR03_VC03_V16a--global/operational-closure.json",
+      "bytes": 2860
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\report\\README.md",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/method-study/README.md",
+      "bytes": 4207
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\report\\actual-method-comparison.png",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/method-study/actual-method-comparison.png",
+      "bytes": 102256
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\report\\report-data.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/method-study/report-data.json",
+      "bytes": 47963
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\asokan-author-manuscript-receipt.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/class-pair-study-first/asokan-author-manuscript-receipt.json",
+      "bytes": 275
+    }
+  ],
+  "external_retained": {
+    "study_root": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first",
+    "items": [
+      "paired-starts.zip and extracted full MPS/input values/native results",
+      "all original/full/intermediate/fixed vectors",
+      "full integer variable-to-class maps",
+      "all16 new operational CSVs and full report fonts/cache",
+      "author PDF/text local cache"
+    ]
+  },
+  "external_csvs": [
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "global",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global\\anonymous-vessel-paths.csv",
+      "bytes": 6596,
+      "rows": 99
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "global",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global\\class-arc-plan.csv",
+      "bytes": 9134,
+      "rows": 99
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "global",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global\\economic-components.csv",
+      "bytes": 263,
+      "rows": 8
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "global",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--global\\port-period-ledger.csv",
+      "bytes": 38335,
+      "rows": 360
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "class-pairs",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs\\anonymous-vessel-paths.csv",
+      "bytes": 8730,
+      "rows": 133
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "class-pairs",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs\\class-arc-plan.csv",
+      "bytes": 11519,
+      "rows": 133
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "class-pairs",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs\\economic-components.csv",
+      "bytes": 263,
+      "rows": 8
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "class-pairs",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR02_VC05_V8a--class-pairs\\port-period-ledger.csv",
+      "bytes": 37781,
+      "rows": 360
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "class-pairs",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs\\anonymous-vessel-paths.csv",
+      "bytes": 13183,
+      "rows": 201
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "class-pairs",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs\\class-arc-plan.csv",
+      "bytes": 16681,
+      "rows": 201
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "class-pairs",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs\\economic-components.csv",
+      "bytes": 261,
+      "rows": 8
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "class-pairs",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--class-pairs\\port-period-ledger.csv",
+      "bytes": 51325,
+      "rows": 480
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "global",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global\\anonymous-vessel-paths.csv",
+      "bytes": 18633,
+      "rows": 287
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "global",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global\\class-arc-plan.csv",
+      "bytes": 22110,
+      "rows": 286
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "global",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global\\economic-components.csv",
+      "bytes": 260,
+      "rows": 8
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "global",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\operational-exports\\LR1_DR03_VC03_V16a--global\\port-period-ledger.csv",
+      "bytes": 51029,
+      "rows": 480
+    }
+  ],
+  "scope": "Original two-instance paired method study; not old cold reruns, candidates, component qualification or whole-case independent review",
+  "study_complete": true,
+  "whole_benchmark_complete": false,
+  "benchmark_score": null,
+  "active_native": null,
+  "actual_result_summary": [
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "global",
+      "initial_original_cost": 162058.53609443826,
+      "final_original_cost": 114048.99020035022,
+      "actual_method_wall_seconds": 120.239805600002,
+      "stages_registered": 1,
+      "stages_finished": 1
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "strategy": "class-pairs",
+      "initial_original_cost": 162058.53609443826,
+      "final_original_cost": 41950.612252912506,
+      "actual_method_wall_seconds": 90.4147140999994,
+      "stages_registered": 10,
+      "stages_finished": 10
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "class-pairs",
+      "initial_original_cost": 201932.05230586205,
+      "final_original_cost": 159303.84020757372,
+      "actual_method_wall_seconds": 120.71711689999938,
+      "stages_registered": 3,
+      "stages_finished": 3
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "strategy": "global",
+      "initial_original_cost": 201932.05230586205,
+      "final_original_cost": 182399.0062253472,
+      "actual_method_wall_seconds": 119.71435589999601,
+      "stages_registered": 1,
+      "stages_finished": 1
+    }
+  ]
+}

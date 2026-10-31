@@ -106,13 +106,11 @@ def save_csv(path, rows):
 
 
 def export(args):
-    root = args.closed_plan.resolve()
-    mps = root / f"{args.instance}_t120.mps"
-    values = json.loads((root / "final-values.json").read_text(encoding="utf-8"))
-    native = json.loads((root / "result.json").read_text(encoding="utf-8"))
-    check = verify(mps, values, native["primal_bound"])
+    mps = args.original_mps.resolve()
+    values = json.loads(args.values.read_text(encoding="utf-8"))
+    check = verify(mps, values, args.reported_objective)
     write(args.out / "independent-original-model-check.json", check)
-    if not check["feasible"] or not check["objective_consistent"]:
+    if not check["feasible"] or check["objective_consistent"] is False:
         raise ValueError("closed_plan_fails_original_mathematical_model")
     row_types, coefficients, rhs, bounds, integers, objective = read_original_model(mps)
     objective_coefficients = dict(coefficients[objective])
@@ -289,8 +287,10 @@ def export(args):
               "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
               "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
               "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
-              "native_solver_status": native["status"], "native_solver_bound": native["dual_bound"],
-              "optimality_proven": native["status"] == "optimal", "benchmark_score": None,
+              "computation_status": args.computation_status, "computation_scope": args.computation_scope,
+              "original_model_bound": args.original_model_bound,
+              "solver_reports_original_optimal": args.computation_scope == "original_model" and args.computation_status == "optimal",
+              "benchmark_score": None,
               "whole_benchmark_qualified": False, "original_check": check}
     write(args.out / "operational-closure.json", result)
     return result
@@ -298,11 +298,18 @@ def export(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--closed-plan", type=Path, required=True)
+    parser.add_argument("--original-mps", type=Path, required=True)
+    parser.add_argument("--values", type=Path, required=True)
+    parser.add_argument("--reported-objective", type=float)
+    parser.add_argument("--computation-status", required=True)
+    parser.add_argument("--computation-scope", choices=["original_model", "conditional_pass"], required=True)
+    parser.add_argument("--original-model-bound", type=float)
     parser.add_argument("--raw-archive", type=Path, required=True)
     parser.add_argument("--instance", required=True)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
+    if args.computation_scope == "conditional_pass" and args.original_model_bound is not None:
+        raise ValueError("conditional_bound_is_not_original_model_bound")
     args.out.mkdir(parents=True, exist_ok=False)
     write(args.out / "execution-started.json", {"at": now(), "actual_python_pid": os.getpid(),
           "argv": sys.argv, "source": "closed original solver plan and unmodified original raw/MPS", "optimization": False})

@@ -1,0 +1,74 @@
+{
+  "at": "2026-10-31T12:47:08.400606+00:00",
+  "instance": "LR1_DR02_VC05_V8a",
+  "original_model_periods": 120,
+  "raw_metadata_periods": 360,
+  "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+  "ports": 3,
+  "classes": 5,
+  "anonymous_paths": 8,
+  "positive_original_arc_rows": 133,
+  "path_arc_units": 133,
+  "port_period_rows": 360,
+  "max_inventory_residual": 0.0,
+  "original_cost": 41950.612252912506,
+  "economic_components": [
+    {
+      "component": "empty_return",
+      "original_objective_contribution": 16486.353923445466
+    },
+    {
+      "component": "initial_source",
+      "original_objective_contribution": 396.0
+    },
+    {
+      "component": "loaded_voyage",
+      "original_objective_contribution": 20582.552890980533
+    },
+    {
+      "component": "lost_production",
+      "original_objective_contribution": 1110.3152236316878
+    },
+    {
+      "component": "original_objective_constant",
+      "original_objective_contribution": 0.0
+    },
+    {
+      "component": "stockout",
+      "original_objective_contribution": 3376.180214854816
+    },
+    {
+      "component": "terminal_exit",
+      "original_objective_contribution": -0.79
+    },
+    {
+      "component": "waiting",
+      "original_objective_contribution": 0.0
+    }
+  ],
+  "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+  "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+  "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+  "computation_status": "class_pair_pass_complete",
+  "computation_scope": "conditional_pass",
+  "original_model_bound": null,
+  "solver_reports_original_optimal": false,
+  "benchmark_score": null,
+  "whole_benchmark_qualified": false,
+  "original_check": {
+    "object": "original linear model, not a re-created or relaxed planning model",
+    "feasible": true,
+    "objective_consistent": true,
+    "variables_recomputed": 7370,
+    "integer_variables_recomputed": 6645,
+    "constraints_recomputed": 2520,
+    "max_row_violation": 0.0,
+    "max_bound_violation": 0.0,
+    "max_integrality_violation": 0.0,
+    "reported_objective": 41950.6122529133,
+    "independent_objective": 41950.612252912506,
+    "objective_absolute_error": 7.930793799459934e-10,
+    "violations": [],
+    "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+  }
+}
