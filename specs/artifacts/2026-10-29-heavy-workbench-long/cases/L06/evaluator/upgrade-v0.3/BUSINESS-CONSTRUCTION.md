@@ -73,3 +73,19 @@ online单独验证真实源只获当前完整prefix/权威状态、原动作只�
 本批一次修：完整公开terminal/现需spot算法/70640及60044/全部状态packet与CSV/summary精确wire；runner必须消费明确交付programme/argv，实际controller/checker从事前封副本执行，声明policy单独绑定，不重造actor；Fraction数值等值比较且核所有摘要财务量、真实逐路径cash/AR/due表入交付；权威registered-facts独立保原业务规范，原SQL meta须与当次public完整事实一致，设施漂移不当候选成绩；grade从closed原对象重算M再接严格五H，prepared M不是事实来源。
 
 保初native与初评分/真实probe。修复触及真实programme消费和controller执行来源，主方仅一次必要最终8路径真实整题复验，沿用原policy不重solver；使用合法另名actor入口及不同稳定request前缀以实际证明不硬造table_actor，动作/资金/原始数据/成本和阈值不变。原唯一独立cold不再重跑。之后独审只核本批相关源/原反例/金额等值/新AR表与新原对象，集中结案；不再组件资格或新完整独审。
+
+## 首个fresh真实交付的输出定位阻断（冻结公共合同不变）
+
+全新候选自然交付后先封完整9368文件/385012753bytes workspace与public(含其如实披露的5个bytecode缓存)。原25public源/原表逐字节仍同原不可变public ZIP，cache例外保留，不把身份核验当功能成绩。候选源、原失败、wheel/venv、无Git事实全部封后才私有执行，不改候选programme/报告/池/阈值。
+
+新真实交付把公开指定的CSV/summary/AR放outputs，source-map用JSON、reproduction用PowerShell、实际图是4独立PNG；公共合同没有限定根目录、source-map.md、reproduce.py或operations.png。原private checker却硬编码作者平铺/文件名与Python，因此M05/M12会把合法定位/语言判缺交。已全仓搜索check_whole prepare/grade消费者，仅本题当前README与历史原件；公共OUTPUTS明确允许等价表达和任意正确语言。这个是评价器格式偏置，不能把作者结构/新wrapper塞入候选来遮盖。
+
+本批限本题private工具：单一显式--layout owner定位JSON，列原交付中真实的相对policy/programme/report/两CSV/summary/AR/source_map/reproduce/requirements/figures；prepare闭合其原字节和布局，grade按同closed布局重算，不新增内容、不改原programme/报告、不靠名字判正确。当前私有assignment协议升/2明确布局来源，不保旧协议fallback；旧作者100/weak95及原source/capsule/初新候选评分不覆。M01-M12/H01-H05、100/90/critical、原raw与60044不变，public25文件不动。必要验收只实际新候选同一次私有run的重prepare和原作者flat的机器正向定位；不重native/solver/整题作者独审。候选内容只一次独评，真实图/独立数字及原件在新candidate专用assessment，不能用作者旧稿。无生产调度/共享路径/API/UI或L01活跃源影响。
+
+## 同一冻结public的OC原生对照启动方案
+
+首fresh Codex已自然交付并封全workspace，真正私有8路径/原receipt恢复与row控制已0；当前只等待同17叶候选内容独评/实际grade。后续OC对照复用现有serve_heavy_workbench.ts与Inspect opencorvus_benchmark/nativeTask，不造路由/隐藏消息/队列或新组件资格；从同Git24c013239原25public复制到全新own project，既有base/code/gpt-6.1-sol全流式。Codex实际model/usage未知，仍comparablefalse，不作费用速度因果排名。
+
+已读注册parser/serve/Inspect task+活动期限实现、stageDiagnosticProvider/real-provider-audit；现有launcher仅原生进程、独立home/DB/随机新port。旧退休API不访问、不重启。凭据仅从已授权本机authSource由既有staging成对复制auth/models；模型catalog完整源存在且OAuth未过期（仅打印有效性/时间，未输出凭据）。实际usable/投影/actual request model须由现有preflight真实流式进一步确认，ready后才由Inspect发唯一新Task。没有用户总token/墙钟额度，registration total_model_tokens=null，3600秒只无真实活动的观察期限，Inspect超时不撤有效Task。遇启动设施错误保原源/收据，不能当候选成绩。
+
+不触用户服务/窗口、Docker/WSL、旧Task或L01活跃源；公共源只读和允许依赖/own环境规则同Codex。Task自然终态且子进程终态后封全workspace/Git/untracked/失败，再同冻结原生private/source-only/真实图/独评/同grader。auth/models只临时own runtime，停服务须在其Task结案封原件后按原正常dispose清理，源凭据不动。所有消息仍真实参与者可见；模型/preflight/Inspect生命周期不是业务分或有效小时。只新增本题启动材料和脚本调用，不改共享生产实现。

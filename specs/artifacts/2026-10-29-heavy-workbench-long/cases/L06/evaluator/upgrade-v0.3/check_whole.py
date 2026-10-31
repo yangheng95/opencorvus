@@ -41,6 +41,15 @@ def prepare(a):
     a.out.mkdir(parents=True,exist_ok=False)
     closed=a.out/'closed';closed.mkdir();shutil.copytree(a.run,closed/'run');shutil.copytree(a.delivery,closed/'delivery')
     run=closed/'run';delivery=closed/'delivery';public=run/'public';policy=None
+    layout=read(a.layout);slots={'policy','programme','report','weekly_ledger','commitments','summary','receivables','source_map','reproduce','requirements','figures'}
+    facility(type(layout) is dict and layout.get('format')=='l06-delivery-layout/1' and type(layout.get('paths')) is dict and set(layout['paths'])==slots,'facility_delivery_layout')
+    def locate(value):
+        facility(type(value) is str and value and '\\' not in value,'facility_delivery_layout_path')
+        path=Path(value);facility(not path.is_absolute() and '..' not in path.parts,'facility_delivery_layout_path')
+        target=(delivery/path).resolve();facility(target.is_relative_to(delivery.resolve()),'facility_delivery_layout_scope');return target
+    paths={k:locate(v) for k,v in layout['paths'].items() if k!='figures'}
+    facility(type(layout['paths']['figures']) is list and len(layout['paths']['figures'])>0,'facility_delivery_layout_figures')
+    figures=[locate(v) for v in layout['paths']['figures']];write(a.out/'delivery-layout.json',layout)
     rubric=read(HERE/'rubric.draft.json');shutil.copy2(HERE/'rubric.draft.json',a.out/'rubric.json')
     leaves={v['id']:{'id':v['id'],'status':'unassessed','evidence':[],'reason':'independent content review pending'} for v in rubric['leaves']}
     def check(key,fn):
@@ -65,9 +74,9 @@ def prepare(a):
     with sqlite3.connect('file:'+(run/control_capture['row_order_control']/'journal.sqlite3').as_posix()+'?mode=ro',uri=True) as con:control_meta=con.execute('SELECT public_facts_json FROM meta').fetchall()
     facility(len(control_meta)==1 and canonical(json.loads(control_meta[0][0]))==canonical({'contract':control_contract,'data':control_data}),'facility_control_public_meta_drift')
     try:
-        policy=read(delivery/'policy.json')
+        policy=read(paths['policy'])
         audit=audit_policy(data,policy);logical=assess(data,policy)
-        leaves['M01'].update(status='verified_pass',evidence=['closed/delivery/policy.json: complete strict policy tensors and raw identity'],reason='policy decoded')
+        leaves['M01'].update(status='verified_pass',evidence=[str(paths['policy'].relative_to(closed))+': complete strict policy tensors and raw identity'],reason='policy decoded')
     except (BusinessError,PlanError,InputError,KeyError,TypeError,ValueError,OSError) as e:
         leaves['M01'].update(status='verified_fail',evidence=[str(e)],reason='candidate_policy_invalid')
     if audit is not None:
@@ -83,12 +92,12 @@ def prepare(a):
         fields={'purchase':'purchase_cost','freight':'freight_cost','production':'production_cost','holding':'holding_cost','cost':'cost','receipts':'receipts','cash':'cash','raw_peak':'raw_stage_peak_volume','finished_peak':'product_stage_peak_volume'}
         for s in data['scenarios']:
             for v in audit['paths'][s['id']]['weeks']:expected[(s['id'],v['week'])]=v
-        with (delivery/'weekly-ledger.csv').open(newline='',encoding='utf-8') as f:actual=list(csv.DictReader(f))
+        with paths['weekly_ledger'].open(newline='',encoding='utf-8') as f:actual=list(csv.DictReader(f))
         require(len(actual)==len(expected),'weekly_ledger_coverage');seen=set()
         for v in actual:
             key=(v['path'],int(v['week']));require(key in expected and key not in seen,'weekly_ledger_identity');seen.add(key)
             for out,raw in fields.items():require(exact(v[out])==exact(expected[key][raw]),'weekly_ledger_value:'+out+':'+str(key))
-        summary=read(delivery/'summary.json');total=Fraction(audit['expected_cost_exact']['numerator'],audit['expected_cost_exact']['denominator'])
+        summary=read(paths['summary']);total=Fraction(audit['expected_cost_exact']['numerator'],audit['expected_cost_exact']['denominator'])
         require(exact(summary['expected_cost_exact'])==total,'report_expected_cost')
         components={key:Fraction() for key in ('purchase_cost','freight_cost','production_cost','holding_cost')}
         for s in data['scenarios']:
@@ -99,7 +108,7 @@ def prepare(a):
         _,base=contingency(data);alternative=Fraction(base['expected_cost_exact']['numerator'],base['expected_cost_exact']['denominator'])
         require(exact(summary['alternative_exact'])==alternative and exact(summary['saving_exact'])==alternative-total,'report_alternative_saving')
         require(exact(summary['minimum_cash'])==min(v['minimum_cash_minor'] for v in audit['paths'].values()),'report_minimum_cash')
-        finance=read(delivery/'receivables.json');require(type(finance) is dict and set(finance)=={v['id'] for v in data['scenarios']},'receivables_coverage')
+        finance=read(paths['receivables']);require(type(finance) is dict and set(finance)=={v['id'] for v in data['scenarios']},'receivables_coverage')
         for s in data['scenarios']:
             state,weeks=replay(data,journals_for_finance(s['id']))
             expected_finance={'final_cash':state['cash'],'minimum_cash':min(v['cash'] for v in weeks),'final_receivable':sum(state['receipts_by_week'][data['weeks']:]),'due_after_horizon':{str(t):amount for t,amount in enumerate(state['receipts_by_week']) if t>=data['weeks'] and amount}}
@@ -115,7 +124,7 @@ def prepare(a):
                     for m,raw in enumerate(data['raw_materials']):expected_actions[(s['id'],t,'order_lots',supplier['id'],raw)]=act['order_lots'][k][m]
                 for k,plant in enumerate(data['plants']):
                     for j,product in enumerate(data['products']):expected_actions[(s['id'],t,'production',plant,product)]=act['production'][k][j]
-        with (delivery/'commitment-policy.csv').open(newline='',encoding='utf-8') as f:actual=list(csv.DictReader(f))
+        with paths['commitments'].open(newline='',encoding='utf-8') as f:actual=list(csv.DictReader(f))
         require(len(actual)==len(expected_actions),'commitment_coverage');seen=set()
         for v in actual:
             key=(v['path'],int(v['week']),v['kind'],v['entity'],v['item']);require(key in expected_actions and key not in seen and exact(v['quantity'])==expected_actions[key],'commitment_value');seen.add(key)
@@ -142,7 +151,7 @@ def prepare(a):
     def source():
         count=bind_archive(run/'sealed-project',run/'pre-execution-project.zip');bind_archive(run/'public',run/'public-originals.zip');bind_archive(run/'controller-source',run/'pre-execution-controller-source.zip')
         actual_files={p.relative_to(run/'sealed-project').as_posix():p for p in (run/'sealed-project').rglob('*') if p.is_file()}
-        delivered_files={p.relative_to(delivery/'programme').as_posix():p for p in (delivery/'programme').rglob('*') if p.is_file()}
+        delivered_files={p.relative_to(paths['programme']).as_posix():p for p in paths['programme'].rglob('*') if p.is_file()}
         require(set(actual_files)==set(delivered_files),'complete_delivery_programme_identity')
         for name,f in actual_files.items():require(delivered_files[name].read_bytes()==f.read_bytes(),'delivery_programme_identity:'+name)
         require(canonical(policy)==canonical(read(run/'declared-policy.json')),'delivery_policy_execution_binding')
@@ -204,23 +213,25 @@ def prepare(a):
         return 'same sealed deterministic actor on a separately permuted CSV input, full16 actual commits; this is row-order invariance, not arbitrary business perturbation certification'
     check('M11',control)
     def delivery_files():
-        for name in ('REPORT.md','summary.json','receivables.json','operations.png','weekly-ledger.csv','commitment-policy.csv','policy.json','source-map.md','reproduce.py','requirements.txt'):
-            require((delivery/name).is_file() and (delivery/name).stat().st_size>0,'delivery_file:'+name)
-        require((delivery/'operations.png').read_bytes()[:8]==b'\x89PNG\r\n\x1a\n','actual_png_format')
+        for name,path in paths.items():
+            if name=='programme':require(path.is_dir(),'delivery_programme_directory')
+            else:require(path.is_file() and path.stat().st_size>0,'delivery_file:'+name)
+        for path in figures:require(path.is_file() and path.stat().st_size>0,'delivery_figure:'+str(path.relative_to(delivery)))
         return 'complete source/report/ledger/figure/reproduction deliverables present; usability and rendered content judged independently'
     check('M12',delivery_files)
     assignment=getattr(a,'assignment_id',None) or 'l06-whole-'+uuid.uuid4().hex
-    result={'format':'l06-whole-assignment/1','assignment_id':assignment,'case_version':rubric['case_version'],'subject_role':a.role,'created_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'original_run':str(Path(getattr(a,'origin_run',a.run)).resolve()),'leaves':leaves,'fixed_denominator':100,'total':None,'good':False if any(v['status']=='verified_fail' for v in leaves.values()) else None,'scope':'whole native source-bound machine evaluation; independent H review and dev freeze still required'}
+    result={'format':'l06-whole-assignment/2','assignment_id':assignment,'case_version':rubric['case_version'],'subject_role':a.role,'created_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'original_run':str(Path(getattr(a,'origin_run',a.run)).resolve()),'delivery_layout':layout,'leaves':leaves,'fixed_denominator':100,'total':None,'good':False if any(v['status']=='verified_fail' for v in leaves.values()) else None,'scope':'whole native source-bound machine evaluation; independent H review and dev freeze still required'}
     write(a.out/'assignment.json',result);write(a.out/'review-template.json',{'format':'l06-independent-content-review/1','assignment_id':assignment,'case_version':rubric['case_version'],'leaves':[{'id':'H0'+str(i),'status':'unassessed','evidence':[],'reason':''} for i in range(1,6)]})
     print(json.dumps({'assignment_id':assignment,'machine':{k:v['status'] for k,v in leaves.items() if k.startswith('M')},'total':None}));return 0
 
 def grade(a):
     prepared=read(a.assignment/'assignment.json');rubric=read(a.assignment/'rubric.json');review=read(a.review)
+    facility(prepared.get('format')=='l06-whole-assignment/2' and canonical(read(a.assignment/'delivery-layout.json'))==canonical(prepared.get('delivery_layout')),'facility_assignment_layout_binding')
     facility(review.get('format')=='l06-independent-content-review/1' and review.get('assignment_id')==prepared['assignment_id'] and review.get('case_version')==prepared['case_version'],'facility_review_binding')
     values=review.get('leaves');facility(type(values) is list and len(values)==5 and all(type(v) is dict for v in values) and {v.get('id') for v in values}=={'H01','H02','H03','H04','H05'},'facility_review_leaf_set')
     facility(rubric['case_version']==read(HERE/'rubric.draft.json')['case_version'] and rubric['leaves']==read(HERE/'rubric.draft.json')['leaves'],'facility_current_contract_binding')
     fresh=a.out.parent/(a.out.stem+'-machine-recomputed')
-    prepare(argparse.Namespace(run=a.assignment/'closed/run',delivery=a.assignment/'closed/delivery',out=fresh,role=prepared['subject_role'],origin_run=Path(prepared['original_run']),assignment_id=prepared['assignment_id']))
+    prepare(argparse.Namespace(run=a.assignment/'closed/run',delivery=a.assignment/'closed/delivery',layout=a.assignment/'delivery-layout.json',out=fresh,role=prepared['subject_role'],origin_run=Path(prepared['original_run']),assignment_id=prepared['assignment_id']))
     leaves=read(fresh/'assignment.json')['leaves']
     for v in values:
         facility(v.get('status') in ('verified_pass','verified_fail','unassessed','blocked_by_dependency') and type(v.get('evidence')) is list and len(v['evidence'])>0 and all(type(s) is str and s.strip() for s in v['evidence']) and type(v.get('reason')) is str and v['reason'].strip(),'facility_review_record')
@@ -228,12 +239,12 @@ def grade(a):
     complete=all(v['status'] in ('verified_pass','verified_fail') for v in leaves.values());allcritical=all(leaves[v['id']]['status']=='verified_pass' for v in rubric['leaves'] if v['critical'])
     points=sum(v['weight'] for v in rubric['leaves'] if leaves[v['id']]['status']=='verified_pass');frozen=read(HERE/'rubric.draft.json')['status']=='development_frozen'
     total=points if complete and frozen else None;good=points>=90 and allcritical if total is not None else False if any(v['status']=='verified_fail' for v in leaves.values()) else None
-    result={**prepared,'leaves':leaves,'reviewed_points':points if complete else None,'total':total,'good':good,'all_critical_pass':allcritical,'review_complete':complete,'development_frozen':frozen,'scope':'actual whole-case author/error control grade; no LLM candidate or useful-hour/maturity certification'}
+    result={**prepared,'leaves':leaves,'reviewed_points':points if complete else None,'total':total,'good':good,'all_critical_pass':allcritical,'review_complete':complete,'development_frozen':frozen,'scope':'actual source-bound whole-case grade of the declared subject_role; no effective-hour or maturity certification'}
     write(a.out,result);print(json.dumps({k:result[k] for k in ('assignment_id','reviewed_points','total','good','all_critical_pass','review_complete','development_frozen')}));return 0 if good is True else 2 if good is False else 4
 
 def main():
     p=argparse.ArgumentParser();sub=p.add_subparsers(dest='command',required=True)
-    q=sub.add_parser('prepare');q.add_argument('--run',type=Path,required=True);q.add_argument('--delivery',type=Path,required=True);q.add_argument('--role',choices=['author_reference','error_programme','candidate'],required=True);q.add_argument('--out',type=Path,required=True)
+    q=sub.add_parser('prepare');q.add_argument('--run',type=Path,required=True);q.add_argument('--delivery',type=Path,required=True);q.add_argument('--layout',type=Path,required=True);q.add_argument('--role',choices=['author_reference','error_programme','candidate'],required=True);q.add_argument('--out',type=Path,required=True)
     q=sub.add_parser('grade');q.add_argument('--assignment',type=Path,required=True);q.add_argument('--review',type=Path,required=True);q.add_argument('--out',type=Path,required=True)
     a=p.parse_args()
     try:return prepare(a) if a.command=='prepare' else grade(a)

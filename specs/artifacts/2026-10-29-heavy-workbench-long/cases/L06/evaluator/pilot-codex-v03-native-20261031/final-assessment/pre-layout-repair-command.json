@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\check_whole.py",
+    "prepare",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run",
+    "--delivery",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\submission",
+    "--role",
+    "candidate",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\pre-layout-repair-assessment"
+  ],
+  "native_exit": 0,
+  "stdout": "{\"assignment_id\": \"l06-whole-49c22195d8c74d558d3fcd5626a38cb9\", \"machine\": {\"M01\": \"verified_pass\", \"M02\": \"verified_pass\", \"M03\": \"verified_pass\", \"M04\": \"verified_pass\", \"M05\": \"verified_fail\", \"M06\": \"verified_pass\", \"M07\": \"verified_pass\", \"M08\": \"verified_pass\", \"M09\": \"verified_pass\", \"M10\": \"verified_pass\", \"M11\": \"verified_pass\", \"M12\": \"verified_fail\"}, \"total\": null}\n",
+  "stderr": ""
+}

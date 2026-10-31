@@ -1,0 +1,402 @@
+[
+  {
+    "path": "T00",
+    "suppliers": {
+      "A": {
+        "trucks": 12,
+        "raw_units": [
+          70,
+          320,
+          50,
+          90
+        ],
+        "purchase_cost": 16990
+      },
+      "B": {
+        "trucks": 12,
+        "raw_units": [
+          300,
+          70,
+          190,
+          100
+        ],
+        "purchase_cost": 17250
+      },
+      "C": {
+        "trucks": 3,
+        "raw_units": [
+          10,
+          2,
+          2,
+          4
+        ],
+        "purchase_cost": 916
+      }
+    },
+    "minimum_cash_week": 3,
+    "maximum_raw_peak_week": 12,
+    "maximum_product_peak_week": 14,
+    "final_raw": [
+      0,
+      0,
+      2,
+      0
+    ],
+    "final_finished": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "path": "T01",
+    "suppliers": {
+      "A": {
+        "trucks": 12,
+        "raw_units": [
+          30,
+          320,
+          20,
+          75
+        ],
+        "purchase_cost": 14550
+      },
+      "B": {
+        "trucks": 14,
+        "raw_units": [
+          350,
+          80,
+          210,
+          120
+        ],
+        "purchase_cost": 19910
+      },
+      "C": {
+        "trucks": 4,
+        "raw_units": [
+          6,
+          1,
+          2,
+          3
+        ],
+        "purchase_cost": 616
+      }
+    },
+    "minimum_cash_week": 3,
+    "maximum_raw_peak_week": 12,
+    "maximum_product_peak_week": 14,
+    "final_raw": [
+      2,
+      1,
+      0,
+      0
+    ],
+    "final_finished": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "path": "T02",
+    "suppliers": {
+      "A": {
+        "trucks": 13,
+        "raw_units": [
+          25,
+          300,
+          20,
+          90
+        ],
+        "purchase_cost": 14385
+      },
+      "B": {
+        "trucks": 14,
+        "raw_units": [
+          360,
+          100,
+          210,
+          100
+        ],
+        "purchase_cost": 19970
+      },
+      "C": {
+        "trucks": 2,
+        "raw_units": [
+          0,
+          0,
+          2,
+          8
+        ],
+        "purchase_cost": 616
+      }
+    },
+    "minimum_cash_week": 3,
+    "maximum_raw_peak_week": 8,
+    "maximum_product_peak_week": 9,
+    "final_raw": [
+      1,
+      0,
+      0,
+      0
+    ],
+    "final_finished": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "path": "T03",
+    "suppliers": {
+      "A": {
+        "trucks": 14,
+        "raw_units": [
+          25,
+          270,
+          15,
+          95
+        ],
+        "purchase_cost": 13485
+      },
+      "B": {
+        "trucks": 14,
+        "raw_units": [
+          360,
+          100,
+          210,
+          100
+        ],
+        "purchase_cost": 19970
+      },
+      "C": {
+        "trucks": 3,
+        "raw_units": [
+          3,
+          38,
+          2,
+          8
+        ],
+        "purchase_cost": 2841
+      }
+    },
+    "minimum_cash_week": 3,
+    "maximum_raw_peak_week": 8,
+    "maximum_product_peak_week": 14,
+    "final_raw": [
+      0,
+      0,
+      3,
+      1
+    ],
+    "final_finished": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "path": "T04",
+    "suppliers": {
+      "A": {
+        "trucks": 14,
+        "raw_units": [
+          45,
+          270,
+          40,
+          115
+        ],
+        "purchase_cost": 15485
+      },
+      "B": {
+        "trucks": 13,
+        "raw_units": [
+          340,
+          110,
+          180,
+          80
+        ],
+        "purchase_cost": 18320
+      },
+      "C": {
+        "trucks": 4,
+        "raw_units": [
+          1,
+          20,
+          12,
+          3
+        ],
+        "purchase_cost": 1916
+      }
+    },
+    "minimum_cash_week": 3,
+    "maximum_raw_peak_week": 13,
+    "maximum_product_peak_week": 13,
+    "final_raw": [
+      2,
+      0,
+      0,
+      0
+    ],
+    "final_finished": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "path": "T05",
+    "suppliers": {
+      "A": {
+        "trucks": 15,
+        "raw_units": [
+          30,
+          280,
+          15,
+          115
+        ],
+        "purchase_cost": 14730
+      },
+      "B": {
+        "trucks": 14,
+        "raw_units": [
+          360,
+          110,
+          200,
+          90
+        ],
+        "purchase_cost": 19640
+      },
+      "C": {
+        "trucks": 3,
+        "raw_units": [
+          1,
+          20,
+          11,
+          1
+        ],
+        "purchase_cost": 1738
+      }
+    },
+    "minimum_cash_week": 3,
+    "maximum_raw_peak_week": 12,
+    "maximum_product_peak_week": 6,
+    "final_raw": [
+      3,
+      2,
+      2,
+      4
+    ],
+    "final_finished": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "path": "T06",
+    "suppliers": {
+      "A": {
+        "trucks": 14,
+        "raw_units": [
+          40,
+          185,
+          20,
+          140
+        ],
+        "purchase_cost": 13080
+      },
+      "B": {
+        "trucks": 14,
+        "raw_units": [
+          330,
+          160,
+          190,
+          60
+        ],
+        "purchase_cost": 19090
+      },
+      "C": {
+        "trucks": 5,
+        "raw_units": [
+          18,
+          63,
+          14,
+          3
+        ],
+        "purchase_cost": 5142
+      }
+    },
+    "minimum_cash_week": 3,
+    "maximum_raw_peak_week": 4,
+    "maximum_product_peak_week": 6,
+    "final_raw": [
+      0,
+      0,
+      0,
+      1
+    ],
+    "final_finished": [
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  {
+    "path": "T07",
+    "suppliers": {
+      "A": {
+        "trucks": 15,
+        "raw_units": [
+          25,
+          165,
+          25,
+          135
+        ],
+        "purchase_cost": 12005
+      },
+      "B": {
+        "trucks": 14,
+        "raw_units": [
+          350,
+          150,
+          180,
+          70
+        ],
+        "purchase_cost": 19360
+      },
+      "C": {
+        "trucks": 5,
+        "raw_units": [
+          17,
+          101,
+          11,
+          1
+        ],
+        "purchase_cost": 6913
+      }
+    },
+    "minimum_cash_week": 3,
+    "maximum_raw_peak_week": 4,
+    "maximum_product_peak_week": 6,
+    "final_raw": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "final_finished": [
+      0,
+      0,
+      0,
+      0
+    ]
+  }
+]

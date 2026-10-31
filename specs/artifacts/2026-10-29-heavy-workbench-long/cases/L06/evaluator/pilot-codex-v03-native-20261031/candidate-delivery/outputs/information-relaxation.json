@@ -1,0 +1,154 @@
+{
+  "format": "l06-explicit-optimistic-relaxation/1",
+  "method": "perfect information plus unlimited cheapest-source and cheapest-route continuous acquisition; zero freight and holding; all lead/capacity/storage/credit constraints removed",
+  "exact_expected_lower_bound": 39714,
+  "candidate_minus_lower_bound_exact": "69737/8",
+  "paths": [
+    {
+      "path": "T00",
+      "product_total": [
+        165,
+        100,
+        80,
+        67
+      ],
+      "raw_consumption": [
+        410,
+        432,
+        260,
+        214
+      ],
+      "purchase_lower": 33492,
+      "production_lower": 5706,
+      "cost_lower": 39198
+    },
+    {
+      "path": "T01",
+      "product_total": [
+        169,
+        100,
+        76,
+        71
+      ],
+      "raw_consumption": [
+        414,
+        440,
+        252,
+        218
+      ],
+      "purchase_lower": 33772,
+      "production_lower": 5770,
+      "cost_lower": 39542
+    },
+    {
+      "path": "T02",
+      "product_total": [
+        169,
+        100,
+        76,
+        71
+      ],
+      "raw_consumption": [
+        414,
+        440,
+        252,
+        218
+      ],
+      "purchase_lower": 33772,
+      "production_lower": 5770,
+      "cost_lower": 39542
+    },
+    {
+      "path": "T03",
+      "product_total": [
+        173,
+        100,
+        72,
+        75
+      ],
+      "raw_consumption": [
+        418,
+        448,
+        244,
+        222
+      ],
+      "purchase_lower": 34052,
+      "production_lower": 5834,
+      "cost_lower": 39886
+    },
+    {
+      "path": "T04",
+      "product_total": [
+        169,
+        100,
+        76,
+        71
+      ],
+      "raw_consumption": [
+        414,
+        440,
+        252,
+        218
+      ],
+      "purchase_lower": 33772,
+      "production_lower": 5770,
+      "cost_lower": 39542
+    },
+    {
+      "path": "T05",
+      "product_total": [
+        173,
+        100,
+        72,
+        75
+      ],
+      "raw_consumption": [
+        418,
+        448,
+        244,
+        222
+      ],
+      "purchase_lower": 34052,
+      "production_lower": 5834,
+      "cost_lower": 39886
+    },
+    {
+      "path": "T06",
+      "product_total": [
+        173,
+        100,
+        72,
+        75
+      ],
+      "raw_consumption": [
+        418,
+        448,
+        244,
+        222
+      ],
+      "purchase_lower": 34052,
+      "production_lower": 5834,
+      "cost_lower": 39886
+    },
+    {
+      "path": "T07",
+      "product_total": [
+        177,
+        100,
+        68,
+        79
+      ],
+      "raw_consumption": [
+        422,
+        456,
+        236,
+        226
+      ],
+      "purchase_lower": 34332,
+      "production_lower": 5898,
+      "cost_lower": 40230
+    }
+  ],
+  "proof": "Terminal finished=0 fixes total production to demand minus initial finished. Raw balance and nonnegative terminal raw imply total bought >= consumption minus initial raw for each raw. Every purchased unit costs >= the minimum quoted unit price, and every produced unit costs >= the cheapest allowed route. Freight and holding are nonnegative. Summing these inequalities pathwise and weighting by public rational probabilities gives this exact lower bound. It is intentionally optimistic and need not be implementable.",
+  "claim": "Exact rational analytical lower bound, not a claim the executable candidate or this relaxed bound is the causal optimum."
+}

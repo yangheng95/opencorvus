@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-31T06:15:14.903723+00:00",
+  "method": "GET",
+  "path": "/task",
+  "observed_status": 404,
+  "classification": "own read-only observer used a nonexistent list route; not Task or product scheduling failure",
+  "correction": "read actual own runtime engine_task.id via readonly SQLite, then existing GET/task/{id}/status; no candidate or runtime restarted"
+}

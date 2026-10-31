@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-31T06:00:56.908557+00:00",
+  "original25_source_and_raw_bytes_retained": true,
+  "extra_public_files": [
+    "exercise-tools/upgrade-v0.3/source/__pycache__/tree_business.cpython-314.pyc",
+    "exercise-tools/qualification/current-source/__pycache__/check_l06.cpython-314.pyc",
+    "exercise-tools/qualification/current-source/__pycache__/l06_input.cpython-314.pyc",
+    "exercise-tools/qualification/current-source/__pycache__/l06_packet.cpython-314.pyc",
+    "exercise-tools/qualification/current-source/__pycache__/l06_physics.cpython-314.pyc"
+  ],
+  "candidate_disclosure": "initial public __pycache__ and unmeasured default pip/Matplotlib caches, no claimed OS confinement",
+  "meaning": "immutable original input identity and scope observation, not functional correctness or quality"
+}

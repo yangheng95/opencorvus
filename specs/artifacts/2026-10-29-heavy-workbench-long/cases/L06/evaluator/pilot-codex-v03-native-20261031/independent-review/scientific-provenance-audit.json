@@ -1,0 +1,285 @@
+{
+  "at": "2026-10-31T06:08:29.475732+00:00",
+  "method": "standard-library read-only CSV/Fraction/SQLite/ZIP audit; no candidate/author imports, execution, solve or grader call",
+  "checks": {
+    "analytical_lower_bound_exact39714": true,
+    "all_AR_due_exact": true,
+    "all2944_commitment_coordinates": true,
+    "canonical_spot_independent70640": true,
+    "actual_spot_SQL_all8": true,
+    "actual_spot_expected_quality_rejection_preserved": true,
+    "actual_private_capsule_identity": true,
+    "actual_private_declared_argv_from_sealed_source": true,
+    "actual_private16_row_control_exact": true,
+    "public_module_copy_identity": true,
+    "current_closed_original_source_bytes": true,
+    "all_locked_wheels_present_exact_versions": true,
+    "original_native_optimization_numeric_scope": true,
+    "layout_binding_and_original_paths": true
+  },
+  "failures": [],
+  "exact_analytical_lower_bound": "39714",
+  "analytical_per_path": [
+    {
+      "path": "T00",
+      "product_total": [
+        165,
+        100,
+        80,
+        67
+      ],
+      "raw_consumption": [
+        410,
+        432,
+        260,
+        214
+      ],
+      "purchase_lower": 33492,
+      "production_lower": 5706,
+      "cost_lower": 39198
+    },
+    {
+      "path": "T01",
+      "product_total": [
+        169,
+        100,
+        76,
+        71
+      ],
+      "raw_consumption": [
+        414,
+        440,
+        252,
+        218
+      ],
+      "purchase_lower": 33772,
+      "production_lower": 5770,
+      "cost_lower": 39542
+    },
+    {
+      "path": "T02",
+      "product_total": [
+        169,
+        100,
+        76,
+        71
+      ],
+      "raw_consumption": [
+        414,
+        440,
+        252,
+        218
+      ],
+      "purchase_lower": 33772,
+      "production_lower": 5770,
+      "cost_lower": 39542
+    },
+    {
+      "path": "T03",
+      "product_total": [
+        173,
+        100,
+        72,
+        75
+      ],
+      "raw_consumption": [
+        418,
+        448,
+        244,
+        222
+      ],
+      "purchase_lower": 34052,
+      "production_lower": 5834,
+      "cost_lower": 39886
+    },
+    {
+      "path": "T04",
+      "product_total": [
+        169,
+        100,
+        76,
+        71
+      ],
+      "raw_consumption": [
+        414,
+        440,
+        252,
+        218
+      ],
+      "purchase_lower": 33772,
+      "production_lower": 5770,
+      "cost_lower": 39542
+    },
+    {
+      "path": "T05",
+      "product_total": [
+        173,
+        100,
+        72,
+        75
+      ],
+      "raw_consumption": [
+        418,
+        448,
+        244,
+        222
+      ],
+      "purchase_lower": 34052,
+      "production_lower": 5834,
+      "cost_lower": 39886
+    },
+    {
+      "path": "T06",
+      "product_total": [
+        173,
+        100,
+        72,
+        75
+      ],
+      "raw_consumption": [
+        418,
+        448,
+        244,
+        222
+      ],
+      "purchase_lower": 34052,
+      "production_lower": 5834,
+      "cost_lower": 39886
+    },
+    {
+      "path": "T07",
+      "product_total": [
+        177,
+        100,
+        68,
+        79
+      ],
+      "raw_consumption": [
+        422,
+        456,
+        236,
+        226
+      ],
+      "purchase_lower": 34332,
+      "production_lower": 5898,
+      "cost_lower": 40230
+    }
+  ],
+  "candidate_minus_analytical_exact": "69737/8",
+  "native_search_bound_numerical": "95251/2",
+  "candidate_minus_native_numerical_exact": "6445/8",
+  "receivables": {
+    "T00": true,
+    "T01": true,
+    "T02": true,
+    "T03": true,
+    "T04": true,
+    "T05": true,
+    "T06": true,
+    "T07": true
+  },
+  "spot_sql": [
+    {
+      "path": "T01",
+      "complete_business_actual": true
+    },
+    {
+      "path": "T06",
+      "complete_business_actual": true
+    },
+    {
+      "path": "T05",
+      "complete_business_actual": true
+    },
+    {
+      "path": "T04",
+      "complete_business_actual": true
+    },
+    {
+      "path": "T07",
+      "complete_business_actual": true
+    },
+    {
+      "path": "T02",
+      "complete_business_actual": true
+    },
+    {
+      "path": "T00",
+      "complete_business_actual": true
+    },
+    {
+      "path": "T03",
+      "complete_business_actual": true
+    }
+  ],
+  "layout_checks": {
+    "assignment_format2": true,
+    "embedded_layout_exact": true,
+    "all_resolve_inside_original_delivery": true,
+    "original_delivered_bytes_capsule": true,
+    "machine_leaf_ids_weights_same_frozen": true
+  },
+  "native_capsules": {
+    "sealed-project": true,
+    "controller-source": true,
+    "public": true
+  },
+  "permitted_public_modules": {
+    "check_l06.py": true,
+    "l06_input.py": true,
+    "l06_packet.py": true,
+    "l06_physics.py": true,
+    "tree_business.py": true
+  },
+  "declared_lock_wheel_checks": {
+    "absl-py": true,
+    "contourpy": true,
+    "cycler": true,
+    "fonttools": true,
+    "immutabledict": true,
+    "kiwisolver": true,
+    "matplotlib": true,
+    "numpy": true,
+    "ortools": true,
+    "packaging": true,
+    "pandas": true,
+    "pillow": true,
+    "protobuf": true,
+    "pyparsing": true,
+    "python-dateutil": true,
+    "six": true,
+    "typing-extensions": true,
+    "tzdata": true
+  },
+  "captured_original_source_members": {
+    "REPORT.md": true,
+    "HANDOFF.md": true,
+    "README.md": true,
+    "source-map.json": true,
+    "reproduce.ps1": true,
+    "requirements-lock.txt": true,
+    "policy.json": true,
+    "source/check_contracts.py": true,
+    "source/common.py": true,
+    "source/deliver.py": true,
+    "source/figures.py": true,
+    "source/optimize.py": true,
+    "source/package_spot.py": true,
+    "source/recover_demo.py": true,
+    "source/report.py": true,
+    "source/run_comparison.py": true,
+    "source/source_map.py": true,
+    "source/verify_evidence.py": true,
+    "programme/actor.py": true,
+    "programme/check_l06.py": true,
+    "programme/l06_input.py": true,
+    "programme/l06_packet.py": true,
+    "programme/l06_physics.py": true,
+    "programme/policy.json": true,
+    "programme/submission.json": true,
+    "programme/tree_business.py": true
+  },
+  "optimization_status": "FEASIBLE",
+  "private_native_seconds": 10.16785549999986,
+  "scope": "five substantive H review support; no candidate rerun, no replayed search proof/exact optimum, no OS/professional/hour/maturity certification"
+}

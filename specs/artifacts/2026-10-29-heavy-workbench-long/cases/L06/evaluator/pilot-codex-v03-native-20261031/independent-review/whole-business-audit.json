@@ -1,0 +1,322 @@
+{
+  "at": "2026-10-31T06:07:10.227889+00:00",
+  "method": "independent raw CSV exact int/Fraction recurrence and actual original SQLite+full wire; no author math imports",
+  "failures": [],
+  "expected_cost_exact": "387449/8",
+  "components_exact": {
+    "purchase_cost": "144459/4",
+    "freight_cost": "5940",
+    "production_cost": "5802",
+    "holding_cost": "4595/8"
+  },
+  "paths": {
+    "T00": {
+      "cost": 46733,
+      "mincash": -3116,
+      "finalcash": 37617,
+      "AR": 24150,
+      "maxraw": 232,
+      "maxFG": 76
+    },
+    "T01": {
+      "cost": 47235,
+      "mincash": -3116,
+      "finalcash": 37115,
+      "AR": 25230,
+      "maxraw": 231,
+      "maxFG": 75
+    },
+    "T02": {
+      "cost": 47107,
+      "mincash": -3116,
+      "finalcash": 38323,
+      "AR": 24150,
+      "maxraw": 228,
+      "maxFG": 73
+    },
+    "T03": {
+      "cost": 48750,
+      "mincash": -3116,
+      "finalcash": 36680,
+      "AR": 25230,
+      "maxraw": 228,
+      "maxFG": 75
+    },
+    "T04": {
+      "cost": 47996,
+      "mincash": -3116,
+      "finalcash": 37434,
+      "AR": 24150,
+      "maxraw": 239,
+      "maxFG": 81
+    },
+    "T05": {
+      "cost": 48806,
+      "mincash": -3116,
+      "finalcash": 36624,
+      "AR": 25230,
+      "maxraw": 233,
+      "maxFG": 75
+    },
+    "T06": {
+      "cost": 49799,
+      "mincash": -3116,
+      "finalcash": 36711,
+      "AR": 24150,
+      "maxraw": 223,
+      "maxFG": 75
+    },
+    "T07": {
+      "cost": 51023,
+      "mincash": -3116,
+      "finalcash": 35487,
+      "AR": 25230,
+      "maxraw": 223,
+      "maxFG": 75
+    }
+  },
+  "information_nodes": 60,
+  "actual_wire_weeks": 128,
+  "actual_worker_identities": [
+    {
+      "pid": 13860,
+      "exit": 0,
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-u",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/actor.py",
+        "--public",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\public",
+        "--policy",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/policy.json"
+      ],
+      "environment": {
+        "SystemRoot": "C:\\WINDOWS",
+        "WINDIR": "C:\\WINDOWS",
+        "PATH": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\.codex\\tmp\\arg0-windows\\codex-arg0CGlWLs;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\libheif\\libheif\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\jxrlib\\jxrlib\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\override;C:\\Python314\\Scripts\\;C:\\Python314\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin\\x64;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NetSarang\\Xftp 8\\;C:\\Program Files (x86)\\NetSarang\\Xshell 8\\;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Program Files\\Tailscale\\;C:\\Program Files\\Bandizip\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.3.0\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\GitHub CLI\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\PowerShell\\7\\;C:\\Users\\hengu\\AppData\\Local\\hermes\\node;C:\\Users\\hengu\\AppData\\Local\\hermes\\bin;C:\\Users\\hengu\\.cargo\\bin;C:\\Users\\hengu\\texlive\\2025\\bin\\windows;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\hengu\\.local\\bin\\;C:\\Users\\hengu\\.bun\\bin;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\Users\\hengu\\AppData\\Roaming\\npm;C:\\Users\\hengu\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\git\\cmd;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\57159798136552f4;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae",
+        "TEMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-08570a75005a\\before-loss\\worker",
+        "TMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-08570a75005a\\before-loss\\worker",
+        "PYTHONPATH": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project",
+        "PYTHONNOUSERSITE": "1",
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "controller_exit": 73
+    },
+    {
+      "pid": 21392,
+      "exit": 0,
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-u",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/actor.py",
+        "--public",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\public",
+        "--policy",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/policy.json"
+      ],
+      "environment": {
+        "SystemRoot": "C:\\WINDOWS",
+        "WINDIR": "C:\\WINDOWS",
+        "PATH": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\.codex\\tmp\\arg0-windows\\codex-arg0CGlWLs;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\libheif\\libheif\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\jxrlib\\jxrlib\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\override;C:\\Python314\\Scripts\\;C:\\Python314\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin\\x64;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NetSarang\\Xftp 8\\;C:\\Program Files (x86)\\NetSarang\\Xshell 8\\;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Program Files\\Tailscale\\;C:\\Program Files\\Bandizip\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.3.0\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\GitHub CLI\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\PowerShell\\7\\;C:\\Users\\hengu\\AppData\\Local\\hermes\\node;C:\\Users\\hengu\\AppData\\Local\\hermes\\bin;C:\\Users\\hengu\\.cargo\\bin;C:\\Users\\hengu\\texlive\\2025\\bin\\windows;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\hengu\\.local\\bin\\;C:\\Users\\hengu\\.bun\\bin;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\Users\\hengu\\AppData\\Roaming\\npm;C:\\Users\\hengu\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\git\\cmd;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\57159798136552f4;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae",
+        "TEMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-08570a75005a\\completed\\worker",
+        "TMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-08570a75005a\\completed\\worker",
+        "PYTHONPATH": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project",
+        "PYTHONNOUSERSITE": "1",
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "controller_exit": 0
+    },
+    {
+      "pid": 13104,
+      "exit": 0,
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-u",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/actor.py",
+        "--public",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\public",
+        "--policy",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/policy.json"
+      ],
+      "environment": {
+        "SystemRoot": "C:\\WINDOWS",
+        "WINDIR": "C:\\WINDOWS",
+        "PATH": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\.codex\\tmp\\arg0-windows\\codex-arg0CGlWLs;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\libheif\\libheif\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\jxrlib\\jxrlib\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\override;C:\\Python314\\Scripts\\;C:\\Python314\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin\\x64;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NetSarang\\Xftp 8\\;C:\\Program Files (x86)\\NetSarang\\Xshell 8\\;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Program Files\\Tailscale\\;C:\\Program Files\\Bandizip\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.3.0\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\GitHub CLI\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\PowerShell\\7\\;C:\\Users\\hengu\\AppData\\Local\\hermes\\node;C:\\Users\\hengu\\AppData\\Local\\hermes\\bin;C:\\Users\\hengu\\.cargo\\bin;C:\\Users\\hengu\\texlive\\2025\\bin\\windows;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\hengu\\.local\\bin\\;C:\\Users\\hengu\\.bun\\bin;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\Users\\hengu\\AppData\\Roaming\\npm;C:\\Users\\hengu\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\git\\cmd;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\57159798136552f4;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae",
+        "TEMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-877c94121c82\\completed\\worker",
+        "TMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-877c94121c82\\completed\\worker",
+        "PYTHONPATH": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project",
+        "PYTHONNOUSERSITE": "1",
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "controller_exit": 0
+    },
+    {
+      "pid": 16452,
+      "exit": 0,
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-u",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/actor.py",
+        "--public",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\public",
+        "--policy",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/policy.json"
+      ],
+      "environment": {
+        "SystemRoot": "C:\\WINDOWS",
+        "WINDIR": "C:\\WINDOWS",
+        "PATH": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\.codex\\tmp\\arg0-windows\\codex-arg0CGlWLs;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\libheif\\libheif\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\jxrlib\\jxrlib\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\override;C:\\Python314\\Scripts\\;C:\\Python314\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin\\x64;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NetSarang\\Xftp 8\\;C:\\Program Files (x86)\\NetSarang\\Xshell 8\\;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Program Files\\Tailscale\\;C:\\Program Files\\Bandizip\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.3.0\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\GitHub CLI\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\PowerShell\\7\\;C:\\Users\\hengu\\AppData\\Local\\hermes\\node;C:\\Users\\hengu\\AppData\\Local\\hermes\\bin;C:\\Users\\hengu\\.cargo\\bin;C:\\Users\\hengu\\texlive\\2025\\bin\\windows;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\hengu\\.local\\bin\\;C:\\Users\\hengu\\.bun\\bin;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\Users\\hengu\\AppData\\Roaming\\npm;C:\\Users\\hengu\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\git\\cmd;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\57159798136552f4;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae",
+        "TEMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-6e3f9aabf67d\\completed\\worker",
+        "TMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-6e3f9aabf67d\\completed\\worker",
+        "PYTHONPATH": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project",
+        "PYTHONNOUSERSITE": "1",
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "controller_exit": 0
+    },
+    {
+      "pid": 11144,
+      "exit": 0,
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-u",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/actor.py",
+        "--public",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\public",
+        "--policy",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/policy.json"
+      ],
+      "environment": {
+        "SystemRoot": "C:\\WINDOWS",
+        "WINDIR": "C:\\WINDOWS",
+        "PATH": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\.codex\\tmp\\arg0-windows\\codex-arg0CGlWLs;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\libheif\\libheif\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\jxrlib\\jxrlib\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\override;C:\\Python314\\Scripts\\;C:\\Python314\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin\\x64;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NetSarang\\Xftp 8\\;C:\\Program Files (x86)\\NetSarang\\Xshell 8\\;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Program Files\\Tailscale\\;C:\\Program Files\\Bandizip\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.3.0\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\GitHub CLI\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\PowerShell\\7\\;C:\\Users\\hengu\\AppData\\Local\\hermes\\node;C:\\Users\\hengu\\AppData\\Local\\hermes\\bin;C:\\Users\\hengu\\.cargo\\bin;C:\\Users\\hengu\\texlive\\2025\\bin\\windows;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\hengu\\.local\\bin\\;C:\\Users\\hengu\\.bun\\bin;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\Users\\hengu\\AppData\\Roaming\\npm;C:\\Users\\hengu\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\git\\cmd;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\57159798136552f4;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae",
+        "TEMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-ee9f915d39c9\\completed\\worker",
+        "TMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-ee9f915d39c9\\completed\\worker",
+        "PYTHONPATH": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project",
+        "PYTHONNOUSERSITE": "1",
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "controller_exit": 0
+    },
+    {
+      "pid": 16236,
+      "exit": 0,
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-u",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/actor.py",
+        "--public",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\public",
+        "--policy",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/policy.json"
+      ],
+      "environment": {
+        "SystemRoot": "C:\\WINDOWS",
+        "WINDIR": "C:\\WINDOWS",
+        "PATH": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\.codex\\tmp\\arg0-windows\\codex-arg0CGlWLs;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\libheif\\libheif\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\jxrlib\\jxrlib\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\override;C:\\Python314\\Scripts\\;C:\\Python314\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin\\x64;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NetSarang\\Xftp 8\\;C:\\Program Files (x86)\\NetSarang\\Xshell 8\\;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Program Files\\Tailscale\\;C:\\Program Files\\Bandizip\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.3.0\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\GitHub CLI\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\PowerShell\\7\\;C:\\Users\\hengu\\AppData\\Local\\hermes\\node;C:\\Users\\hengu\\AppData\\Local\\hermes\\bin;C:\\Users\\hengu\\.cargo\\bin;C:\\Users\\hengu\\texlive\\2025\\bin\\windows;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\hengu\\.local\\bin\\;C:\\Users\\hengu\\.bun\\bin;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\Users\\hengu\\AppData\\Roaming\\npm;C:\\Users\\hengu\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\git\\cmd;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\57159798136552f4;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae",
+        "TEMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-7cacf9891f91\\completed\\worker",
+        "TMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-7cacf9891f91\\completed\\worker",
+        "PYTHONPATH": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project",
+        "PYTHONNOUSERSITE": "1",
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "controller_exit": 0
+    },
+    {
+      "pid": 24364,
+      "exit": 0,
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-u",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/actor.py",
+        "--public",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\public",
+        "--policy",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/policy.json"
+      ],
+      "environment": {
+        "SystemRoot": "C:\\WINDOWS",
+        "WINDIR": "C:\\WINDOWS",
+        "PATH": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\.codex\\tmp\\arg0-windows\\codex-arg0CGlWLs;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\libheif\\libheif\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\jxrlib\\jxrlib\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\override;C:\\Python314\\Scripts\\;C:\\Python314\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin\\x64;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NetSarang\\Xftp 8\\;C:\\Program Files (x86)\\NetSarang\\Xshell 8\\;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Program Files\\Tailscale\\;C:\\Program Files\\Bandizip\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.3.0\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\GitHub CLI\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\PowerShell\\7\\;C:\\Users\\hengu\\AppData\\Local\\hermes\\node;C:\\Users\\hengu\\AppData\\Local\\hermes\\bin;C:\\Users\\hengu\\.cargo\\bin;C:\\Users\\hengu\\texlive\\2025\\bin\\windows;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\hengu\\.local\\bin\\;C:\\Users\\hengu\\.bun\\bin;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\Users\\hengu\\AppData\\Roaming\\npm;C:\\Users\\hengu\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\git\\cmd;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\57159798136552f4;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae",
+        "TEMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-d367a5d24930\\completed\\worker",
+        "TMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-d367a5d24930\\completed\\worker",
+        "PYTHONPATH": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project",
+        "PYTHONNOUSERSITE": "1",
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "controller_exit": 0
+    },
+    {
+      "pid": 25156,
+      "exit": 0,
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-u",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/actor.py",
+        "--public",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\public",
+        "--policy",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/policy.json"
+      ],
+      "environment": {
+        "SystemRoot": "C:\\WINDOWS",
+        "WINDIR": "C:\\WINDOWS",
+        "PATH": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\.codex\\tmp\\arg0-windows\\codex-arg0CGlWLs;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\libheif\\libheif\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\jxrlib\\jxrlib\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\override;C:\\Python314\\Scripts\\;C:\\Python314\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin\\x64;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NetSarang\\Xftp 8\\;C:\\Program Files (x86)\\NetSarang\\Xshell 8\\;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Program Files\\Tailscale\\;C:\\Program Files\\Bandizip\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.3.0\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\GitHub CLI\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\PowerShell\\7\\;C:\\Users\\hengu\\AppData\\Local\\hermes\\node;C:\\Users\\hengu\\AppData\\Local\\hermes\\bin;C:\\Users\\hengu\\.cargo\\bin;C:\\Users\\hengu\\texlive\\2025\\bin\\windows;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\hengu\\.local\\bin\\;C:\\Users\\hengu\\.bun\\bin;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\Users\\hengu\\AppData\\Roaming\\npm;C:\\Users\\hengu\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\git\\cmd;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\57159798136552f4;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae",
+        "TEMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-5f5b4640d1fd\\completed\\worker",
+        "TMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-5f5b4640d1fd\\completed\\worker",
+        "PYTHONPATH": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project",
+        "PYTHONNOUSERSITE": "1",
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "controller_exit": 0
+    },
+    {
+      "pid": 14500,
+      "exit": 0,
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-u",
+        "-B",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/actor.py",
+        "--public",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\public",
+        "--policy",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project/policy.json"
+      ],
+      "environment": {
+        "SystemRoot": "C:\\WINDOWS",
+        "WINDIR": "C:\\WINDOWS",
+        "PATH": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\.codex\\tmp\\arg0-windows\\codex-arg0CGlWLs;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\libheif\\libheif\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\jxrlib\\jxrlib\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\poppler\\Library\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\override;C:\\Python314\\Scripts\\;C:\\Python314\\;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin\\x64;C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v13.0\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\WINDOWS\\system32;C:\\WINDOWS;C:\\WINDOWS\\System32\\Wbem;C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\;C:\\WINDOWS\\System32\\OpenSSH\\;C:\\Program Files\\Git\\cmd;C:\\Program Files (x86)\\NetSarang\\Xftp 8\\;C:\\Program Files (x86)\\NetSarang\\Xshell 8\\;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;c:\\Users\\hengu\\AppData\\Local\\Programs\\cursor\\resources\\app\\bin;C:\\Program Files\\Tailscale\\;C:\\Program Files\\Bandizip\\;C:\\Program Files\\dotnet\\;C:\\Program Files\\NVIDIA Corporation\\NVIDIA App\\NvDLISR;C:\\Program Files (x86)\\NVIDIA Corporation\\PhysX\\Common;C:\\Program Files\\NVIDIA Corporation\\Nsight Compute 2025.3.0\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\GitHub CLI\\;C:\\Program Files\\nodejs\\;C:\\Program Files\\Docker\\Docker\\resources\\bin;C:\\Program Files\\PowerShell\\7\\;C:\\Users\\hengu\\AppData\\Local\\hermes\\node;C:\\Users\\hengu\\AppData\\Local\\hermes\\bin;C:\\Users\\hengu\\.cargo\\bin;C:\\Users\\hengu\\texlive\\2025\\bin\\windows;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin;C:\\Users\\hengu\\.local\\bin\\;C:\\Users\\hengu\\.bun\\bin;C:\\Users\\hengu\\AppData\\Local\\Microsoft\\WinGet\\Links;C:\\Users\\hengu\\AppData\\Roaming\\npm;C:\\Users\\hengu\\AppData\\Local\\Programs\\Cua\\cua-driver\\bin;C:\\Users\\hengu\\AppData\\Local\\Programs\\Microsoft VS Code\\bin\\copilot-shim;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\bin\\fallback;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin;C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\git\\cmd;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\57159798136552f4;C:\\Users\\hengu\\AppData\\Local\\OpenAI\\Codex\\bin\\22cfb1d302613eae",
+        "TEMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-582881e5fc2c\\completed\\worker",
+        "TMP": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\episode-582881e5fc2c\\completed\\worker",
+        "PYTHONPATH": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\sealed-project",
+        "PYTHONNOUSERSITE": "1",
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONDONTWRITEBYTECODE": "1"
+      },
+      "controller_exit": 0
+    }
+  ],
+  "activity": {
+    "positive_lead1": 109,
+    "positive_lead2": 109,
+    "positive_lead0": 29
+  },
+  "scope": "all8 fixed raw paths, all128 physical weeks/current packets/SQL rows and exact ledger; not optimization proof/OS confinement/hour maturity"
+}

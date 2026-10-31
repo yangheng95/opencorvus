@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\check_whole.py",
+    "prepare",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\native-whole-reviewed",
+    "--delivery",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\reference-delivery-final",
+    "--layout",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\reference-layout.json",
+    "--role",
+    "author_reference",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\original-flat-layout-assessment"
+  ],
+  "native_exit": 0,
+  "stdout": "{\"assignment_id\": \"l06-whole-8d2ac13df905446c9218e2e6196760d4\", \"machine\": {\"M01\": \"verified_pass\", \"M02\": \"verified_pass\", \"M03\": \"verified_pass\", \"M04\": \"verified_pass\", \"M05\": \"verified_pass\", \"M06\": \"verified_pass\", \"M07\": \"verified_pass\", \"M08\": \"verified_pass\", \"M09\": \"verified_pass\", \"M10\": \"verified_pass\", \"M11\": \"verified_pass\", \"M12\": \"verified_pass\"}, \"total\": null}\n",
+  "stderr": "",
+  "scope": "only necessary original-flat positive layout regression; original100/95 scores not changed, no native/solver replay"
+}

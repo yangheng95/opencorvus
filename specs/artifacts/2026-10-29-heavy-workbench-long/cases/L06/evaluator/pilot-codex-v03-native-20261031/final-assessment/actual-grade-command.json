@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-10-31T06:12:23.343034+00:00",
+  "finished_at": "2026-10-31T06:12:31.237884+00:00",
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\check_whole.py",
+    "grade",
+    "--assignment",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment",
+    "--review",
+    "D:/opencorvus-benchmark-runs/l06-v03-codex-fresh-independent-review-20261031/review.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\final-grade.json"
+  ],
+  "native_exit": 0,
+  "stdout": "{\"assignment_id\": \"l06-whole-6390f5de880e45bd95a82c327fbdaec6\", \"machine\": {\"M01\": \"verified_pass\", \"M02\": \"verified_pass\", \"M03\": \"verified_pass\", \"M04\": \"verified_pass\", \"M05\": \"verified_pass\", \"M06\": \"verified_pass\", \"M07\": \"verified_pass\", \"M08\": \"verified_pass\", \"M09\": \"verified_pass\", \"M10\": \"verified_pass\", \"M11\": \"verified_pass\", \"M12\": \"verified_pass\"}, \"total\": null}\n{\"assignment_id\": \"l06-whole-6390f5de880e45bd95a82c327fbdaec6\", \"reviewed_points\": 100, \"total\": 100, \"good\": true, \"all_critical_pass\": true, \"review_complete\": true, \"development_frozen\": true}\n",
+  "stderr": "",
+  "scope": "actual candidate grade, frozen same17rubric/quality, machine recomputed from original closed objects; evaluator time excluded from candidate hours"
+}

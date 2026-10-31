@@ -1,0 +1,25 @@
+{
+  "started_at": "2026-10-31T06:02:08.152568+00:00",
+  "finished_at": "2026-10-31T06:02:18.589939+00:00",
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\run_native_whole.py",
+    "--public",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\frozen-public",
+    "--project",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\submission\\programme",
+    "--policy",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\submission\\policy.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run",
+    "--python",
+    "C:/Python314/python.exe"
+  ],
+  "native_exit": 0,
+  "stdout": "{\n  \"status\": \"native_whole_completed\",\n  \"at\": \"2026-10-31T06:02:18.568364+00:00\",\n  \"native_exit\": 0,\n  \"seconds\": 10.16785549999986,\n  \"paths\": 8,\n  \"actual_commits\": 128,\n  \"control_commits\": 16,\n  \"worker_processes\": 10,\n  \"actual_controller_exits\": [\n    73,\n    0,\n    0,\n    0,\n    0,\n    0,\n    0,\n    0,\n    0,\n    0\n  ],\n  \"original_receipt_recovered\": true,\n  \"row_order_control\": \"control-39784188f23c\",\n  \"control_path_after_terminal\": \"T02\",\n  \"private_order_after_terminal\": [\n    \"T07\",\n    \"T06\",\n    \"T05\",\n    \"T01\",\n    \"T03\",\n    \"T00\",\n    \"T02\",\n    \"T04\"\n  ],\n  \"whole_case_review\": \"pending\",\n  \"score\": null,\n  \"limits\": \"native dataflow and one controlled process-loss proof, no OS security/power-loss certificate or candidate hours\"\n}\n\n",
+  "stderr": "",
+  "scope": "fresh candidate frozen-source-only private whole run; evaluator cost is not candidate hours"
+}

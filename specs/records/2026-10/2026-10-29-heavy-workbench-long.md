@@ -682,3 +682,19 @@ L06/0.3从原唯一120秒可行政策接真实本机stdio/SQLite。原actor只�
 cases/L06/evaluator/upgrade-v0.3/whole-case-tests有完整可读产品/自含复建/公开exercise/原solver12文件、账与AR/图/实际评分/原初审和修后结案，originals.zip封完整静止外部main/weak/错误/SQL/wire/source/审查，单独receipt列成员及仅第三方plot-deps排除。原唯一120秒搜索/旧L06基线/旧两100不重复，旧public/rubric/FREEZE未改。
 
 L01继续原唯一pending本机研究，实际训练PID18416/owner23296，source已封不热改；最新真实terminal/progress在local-transition/publication-end-observation.json（同repo native-continuation投影）。本轮启动证据2,461,550bytes ZIP不包含仍活跃全训练输出、不冒称自然终态。三PDE合法选择质量/完整论文/175独评及冻结仍待。新L06尚未fresh比较，L02另版义务仍未完成。套件9/10开发合同、有效候选小时0/10，真人统计成熟未认证。定时任务ACTIVE，本机ONLY，不再Docker/旧GPU/已完成格或组件资格重启。
+
+## L06/0.3首fresh候选真实100；新OC原生Task活动（2026-10-31）
+
+/root/codex_l06_v03_fresh fork-none/无override/禁再委托，仅同Git24c013239的25public与声明runtime，已自然交付；先封完整9368候选文件/385012753bytes、actual public、venv/wheels与全部失败到170572680bytes/9398成员complete-workspace.zip，无Git事实不补造。5public bytecode与未测默认pip/MPL cache写范围例外如实保，原25源/原表仍同原不可变输入。身份核验不当功能分，不宣称OS/严格历史写隔离。
+
+封原件后真正冻结source-only私有8路径于06:02:18Z native0/10.1678555秒，128commit/真实73→0同key原receipt恢复/另16row控制。实际12M基本正确，但原checker作者平铺/硬编码source-map.md、reproduce.py、operations.png误拒合法outputs子目录/JSON/PowerShell/4PNG，使M05/M12fail/totalnull；原source和初结果全部保。实施前影响/调用面和公共等价表达依据在BUSINESS-CONSTRUCTION；仅private evaluator改为单一--layout与assignment/2闭合布局、grade从同原closed布局重算，不补写候选内容、不改public/17叶/权重/critical/90/60044。新candidate与原authorflat定位实际prepare均12Mpass，不重native/solver/作者整题审查。
+
+一次候选内容/科学独评绑定6390f5de880e45bd95a82c327fbdaec6，独立原CSV/Fraction/128私有SQL/wire/2944动作/AR/实际spot及checkpoint恢复/39714解析下界都核，4新PNG主方与独审实际view。47625.5只数值搜索界，不伪独立最优证书。原5H正式全pass不手写聚合；真正check_whole grade从closed重算12M后接同review，直接native_exit0/100/17pass/allcritical/goodtrue/subject_rolecandidate。原作者100/weak95与旧0.2两100完全不改。
+
+安全可读产品/原grade/原定位误拒/源/实际图/独评在cases/L06/evaluator/pilot-codex-v03-native-20261031，4,036,488bytes/1131成员originals保科学/源/原native与评价；完整170MB外部ZIP还保第三方venv/wheels/cache，receipt明确排除重复投影而不删原件。Codex actualmodel/usage/精确全活动归因未暴露，comparablefalse，不作因果速度费用排名/有效小时认证。只是新0.3一个LLM good，尚未两系统good触发0.4。
+
+新OC同25public已真实本机启动，复用原serve_heavy_workbench.ts+Inspect/nativeTask/code/base，全流式，无新路由/隐藏消息/队列。自有root l06-v03-opencorvus-native-20261031/server20036/API53962/Inspect启动器5804；auth/models完整成对暂存，实际usable/projected/actual request gpt-6.1-sol/streamingtrue(HTTP200)。唯一Task tsk_g00VZbZlio005blDCIl3真实started06:13:21.582Z，实际SQL budget=null，无用户总token/墙钟，3600秒只真实活动刷新观察期，Inspect超时不撤Task。06:24Z原生developer streaming/orchestrator idle等待，项目已实际代码/venv/policy/results，正常活动。旧退休API不请求。只读observer误GET/task列表404原件保，随后从own SQL读真实ID+已声明GET/task/{id}/status，不重启服务或候选，不当生产共享调度异常。
+
+cases/L06/evaluator/pilot-opencorvus-v03-native-20261031只静止启动/早期真实观测，活跃workspace/敏感runtime不冒称终态或进Git。自然Task及所有子进程终态后先封完整workspace/Git/untracked/失败，再同public/source-only原生私有全链/图/一次内容独评/同grader。临时auth/models/stop只原Task结案封原件后正常dispose，源凭据不动。OC业务分仍null。最新pair定位L06-v03-current-pair-native-20261031.json优先于旧原型表。
+
+L01唯一原pending GPU仍正常，06:21Z同hybrid-s345-lr1e-04的L-BFGS已27000接受更新/loss.0000301605，无owner终态/错误，不热改/重同注册格。完整三PDE/论文/质量可达与独审仍待；套件9/10开发合同、有效候选小时0/10。新L02升级义务不取消，已交题/组件/旧solver不重；本机ONLY，心跳ACTIVE。结束前所有本任务修改范围commit/正常fetch merge/审全待推/必要检查/正常hook/push，保全部foreign。

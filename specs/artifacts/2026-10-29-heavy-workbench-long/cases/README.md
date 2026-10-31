@@ -45,3 +45,6 @@ L01整题checker已由同一薄reader接真实native/trace/质量与原子锚点
 
 
 L06/0.3最终开发交付：[整题成品与真实评分](L06/evaluator/upgrade-v0.3/whole-case-tests/README.md)。全部六实质整审阻断集中修并必要复核，原初评/反例保留；当前不再组件资格或重复整审。L01本机原pending研究尚在执行，套件依然9/10、有效候选小时0/10。
+
+
+L06/0.3最新：[fresh Codex已真正同冻结100/17pass/allcritical](L06/evaluator/pilot-codex-v03-native-20261031/README.md)，[新OC同25public原生Task正在执行](L06/evaluator/pilot-opencorvus-v03-native-20261031/README.md)，尚无OC业务分/两good或小时结论。L01同原pending研究仍在本机运行，不重已完成格/组件资格。

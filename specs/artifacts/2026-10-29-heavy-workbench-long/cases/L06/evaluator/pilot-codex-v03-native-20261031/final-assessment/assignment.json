@@ -1,0 +1,162 @@
+{
+  "format": "l06-whole-assignment/2",
+  "assignment_id": "l06-whole-6390f5de880e45bd95a82c327fbdaec6",
+  "case_version": "L06/0.3.0-dev",
+  "subject_role": "candidate",
+  "created_at": "2026-10-31T06:03:55.311570+00:00",
+  "original_run": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run",
+  "delivery_layout": {
+    "format": "l06-delivery-layout/1",
+    "paths": {
+      "policy": "policy.json",
+      "programme": "programme",
+      "report": "REPORT.md",
+      "weekly_ledger": "outputs/weekly-ledger.csv",
+      "commitments": "outputs/commitment-policy.csv",
+      "summary": "outputs/summary.json",
+      "receivables": "outputs/receivables.json",
+      "source_map": "source-map.json",
+      "reproduce": "reproduce.ps1",
+      "requirements": "requirements-lock.txt",
+      "figures": [
+        "figures/01-cost-comparison.png",
+        "figures/02-cash-and-credit.png",
+        "figures/03-warehouse-peaks.png",
+        "figures/04-receivables-and-bounds.png"
+      ]
+    },
+    "provenance": "owner locator for original naturally delivered paths; no candidate file/bytes or content changed"
+  },
+  "leaves": {
+    "M01": {
+      "id": "M01",
+      "status": "verified_pass",
+      "evidence": [
+        "delivery\\policy.json: complete strict policy tensors and raw identity"
+      ],
+      "reason": "policy decoded"
+    },
+    "M02": {
+      "id": "M02",
+      "status": "verified_pass",
+      "evidence": [
+        "[]"
+      ],
+      "reason": "independent business/information/quality computation"
+    },
+    "M03": {
+      "id": "M03",
+      "status": "verified_pass",
+      "evidence": [
+        "[]"
+      ],
+      "reason": "independent business/information/quality computation"
+    },
+    "M04": {
+      "id": "M04",
+      "status": "verified_pass",
+      "evidence": [
+        "{\"expected\":\"387449/8\",\"quality_maximum\":\"60044\"}"
+      ],
+      "reason": "independent business/information/quality computation"
+    },
+    "M05": {
+      "id": "M05",
+      "status": "verified_pass",
+      "evidence": [
+        "128 weekly rows, all action coordinates and exact probability-weighted components independently closed"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M06": {
+      "id": "M06",
+      "status": "verified_pass",
+      "evidence": [
+        "actual SQLite event/action/receipt/state/cash/queues agree with independent full replay for every path"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M07": {
+      "id": "M07",
+      "status": "verified_pass",
+      "evidence": [
+        "8 original programme members bound to the executed and delivered object; source correctness additionally reviewed"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M08": {
+      "id": "M08",
+      "status": "verified_pass",
+      "evidence": [
+        "complete actual current packets, responses and stored commitments agree; original argv/env/source reviewed for native dataflow only"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M09": {
+      "id": "M09",
+      "status": "verified_pass",
+      "evidence": [
+        "actual SQLite commit at week7, controller73, original key/receipt and next_week8 resumed in a new process"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M10": {
+      "id": "M10",
+      "status": "verified_pass",
+      "evidence": [
+        "original row/key/event/action/receipt values retained across the real restart"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M11": {
+      "id": "M11",
+      "status": "verified_pass",
+      "evidence": [
+        "same sealed deterministic actor on a separately permuted CSV input, full16 actual commits; this is row-order invariance, not arbitrary business perturbation certification"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M12": {
+      "id": "M12",
+      "status": "verified_pass",
+      "evidence": [
+        "complete source/report/ledger/figure/reproduction deliverables present; usability and rendered content judged independently"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "H01": {
+      "id": "H01",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent content review pending"
+    },
+    "H02": {
+      "id": "H02",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent content review pending"
+    },
+    "H03": {
+      "id": "H03",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent content review pending"
+    },
+    "H04": {
+      "id": "H04",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent content review pending"
+    },
+    "H05": {
+      "id": "H05",
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "independent content review pending"
+    }
+  },
+  "fixed_denominator": 100,
+  "total": null,
+  "good": null,
+  "scope": "whole native source-bound machine evaluation; independent H review and dev freeze still required"
+}

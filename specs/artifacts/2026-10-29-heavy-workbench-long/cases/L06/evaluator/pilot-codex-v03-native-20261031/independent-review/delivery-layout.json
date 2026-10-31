@@ -1,0 +1,22 @@
+{
+  "format": "l06-delivery-layout/1",
+  "paths": {
+    "policy": "policy.json",
+    "programme": "programme",
+    "report": "REPORT.md",
+    "weekly_ledger": "outputs/weekly-ledger.csv",
+    "commitments": "outputs/commitment-policy.csv",
+    "summary": "outputs/summary.json",
+    "receivables": "outputs/receivables.json",
+    "source_map": "source-map.json",
+    "reproduce": "reproduce.ps1",
+    "requirements": "requirements-lock.txt",
+    "figures": [
+      "figures/01-cost-comparison.png",
+      "figures/02-cash-and-credit.png",
+      "figures/03-warehouse-peaks.png",
+      "figures/04-receivables-and-bounds.png"
+    ]
+  },
+  "provenance": "owner locator for original naturally delivered paths; no candidate file/bytes or content changed"
+}

@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-31T06:11:16.731716+00:00",
+  "pid": 20036,
+  "argv": [
+    "C:/Users/hengu/.bun/bin/bun.exe",
+    "run",
+    "D:\\myhexin-local\\opencorvus\\script\\benchmark\\serve_heavy_workbench.ts",
+    "--registration",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\registration.json",
+    "--auth-source",
+    "C:/Users/hengu/AppData/Local/opencorvus/data/auth.json"
+  ],
+  "source_git_head": "3db3260211c21efb77d235633e6cf7368ce076a1",
+  "window": "hidden",
+  "scope": "owned native server/preflight only; no candidate Task until actual paired provider readiness",
+  "credential_contents_logged": false,
+  "only_same25public": "Git24c013239 public-inputs.zip",
+  "budget": {
+    "total_model_tokens": null,
+    "wall_clock": null
+  },
+  "actual_model": "pending preflight"
+}

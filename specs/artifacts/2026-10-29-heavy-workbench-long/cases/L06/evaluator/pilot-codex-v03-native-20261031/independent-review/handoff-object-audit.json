@@ -1,0 +1,33 @@
+{
+  "at": "2026-10-31T06:10:13.965955+00:00",
+  "method": "read-only existing native checkpoints/receipts/stdin identities and final source diff; no candidate execution",
+  "checks": {
+    "original_checkpoint8": true,
+    "original_SQL_prefix_preserved": true,
+    "completed16_SQL_rows": true,
+    "actual_same_key_receipt": true,
+    "actual_worker_pid_argv_native0": true,
+    "actual_state_independent_T05": true,
+    "handoff_declared_results_match": true,
+    "all_week3_minimum_cash": true,
+    "T04_week13_raw_and_FG_peaks": true
+  },
+  "fixture_path": "T05",
+  "actual_recovery_controller_argv": [
+    "C:\\Python314\\python.exe",
+    "-u",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\public\\exercise-tools\\upgrade-v0.3\\source\\execute_policy.py",
+    "--project",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\submission\\programme",
+    "--public",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\public",
+    "--db",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\submission\\evidence\\handoff-recovery-01\\journal.sqlite3",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\submission\\evidence\\handoff-recovery-01\\resumed",
+    "--python",
+    "C:\\Python314\\python.exe"
+  ],
+  "scope": "candidate existing additional handoff demo, separate from evaluator private73cut; source flags not assumed as proof without SQL/terminal corroboration"
+}

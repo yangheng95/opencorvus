@@ -1,0 +1,200 @@
+{
+  "format": "l06-source-map/1",
+  "input_scope": "provided public directory only; copied originals are retained by actual public exercise",
+  "indexed_arrays": {
+    "raw_materials": [
+      "R0",
+      "R1",
+      "R2",
+      "R3"
+    ],
+    "products": [
+      "P0",
+      "P1",
+      "P2",
+      "P3"
+    ],
+    "plants": [
+      "F0",
+      "F1"
+    ]
+  },
+  "supplier_order": [
+    "A",
+    "B",
+    "C"
+  ],
+  "path_order": [
+    "T00",
+    "T01",
+    "T02",
+    "T03",
+    "T04",
+    "T05",
+    "T06",
+    "T07"
+  ],
+  "sources": {
+    "bom.csv": {
+      "rows": 16,
+      "columns": [
+        "product_id",
+        "raw_id",
+        "units"
+      ],
+      "identity_rule": "explicit index columns for array identity; otherwise complete business-key join; physical CSV row order unused"
+    },
+    "demand.csv": {
+      "rows": 512,
+      "columns": [
+        "scenario_id",
+        "week",
+        "product_id",
+        "units"
+      ],
+      "identity_rule": "explicit index columns for array identity; otherwise complete business-key join; physical CSV row order unused"
+    },
+    "plant_capacity.csv": {
+      "rows": 256,
+      "columns": [
+        "scenario_id",
+        "week",
+        "plant_id",
+        "hours"
+      ],
+      "identity_rule": "explicit index columns for array identity; otherwise complete business-key join; physical CSV row order unused"
+    },
+    "plants.csv": {
+      "rows": 2,
+      "columns": [
+        "plant_index",
+        "plant_id"
+      ],
+      "identity_rule": "explicit index columns for array identity; otherwise complete business-key join; physical CSV row order unused"
+    },
+    "products.csv": {
+      "rows": 4,
+      "columns": [
+        "product_index",
+        "product_id",
+        "volume",
+        "holding_minor",
+        "initial_units",
+        "hours",
+        "sales_price_minor"
+      ],
+      "identity_rule": "explicit index columns for array identity; otherwise complete business-key join; physical CSV row order unused"
+    },
+    "raw_materials.csv": {
+      "rows": 4,
+      "columns": [
+        "raw_index",
+        "raw_id",
+        "volume",
+        "holding_minor",
+        "initial_units"
+      ],
+      "identity_rule": "explicit index columns for array identity; otherwise complete business-key join; physical CSV row order unused"
+    },
+    "routes.csv": {
+      "rows": 8,
+      "columns": [
+        "plant_id",
+        "product_id",
+        "allowed",
+        "production_cost_minor"
+      ],
+      "identity_rule": "explicit index columns for array identity; otherwise complete business-key join; physical CSV row order unused"
+    },
+    "scenarios.csv": {
+      "rows": 8,
+      "columns": [
+        "scenario_index",
+        "scenario_id",
+        "probability_numerator"
+      ],
+      "identity_rule": "explicit index columns for array identity; otherwise complete business-key join; physical CSV row order unused"
+    },
+    "supplier_capacity.csv": {
+      "rows": 384,
+      "columns": [
+        "scenario_id",
+        "week",
+        "supplier_id",
+        "volume"
+      ],
+      "identity_rule": "explicit index columns for array identity; otherwise complete business-key join; physical CSV row order unused"
+    },
+    "supplier_quotes.csv": {
+      "rows": 12,
+      "columns": [
+        "supplier_id",
+        "raw_id",
+        "pack_units",
+        "unit_price_minor"
+      ],
+      "identity_rule": "explicit index columns for array identity; otherwise complete business-key join; physical CSV row order unused"
+    },
+    "supplier_terms.csv": {
+      "rows": 3,
+      "columns": [
+        "supplier_index",
+        "supplier_id",
+        "lead_weeks",
+        "freight_minor",
+        "minimum_volume"
+      ],
+      "identity_rule": "explicit index columns for array identity; otherwise complete business-key join; physical CSV row order unused"
+    }
+  },
+  "facility": "inputs/facility.json sets horizon, capacities, initial cash, credit and lag; tree-contract.json sets information semantics; OPERATIONS.md sets terminal rules",
+  "normalized_complete_values": "outputs/normalized-input.json",
+  "relations": {
+    "order_units": "order_lots[node,s,m] * supplier_quotes[supplier_id,raw_id].pack_units",
+    "purchase": "sum(order_units * supplier_quotes.unit_price_minor), charged at order week",
+    "freight": "sum(truck_on * supplier_terms.freight_minor), including any empty on truck",
+    "due_arrival": "order week + supplier_terms.lead_weeks, unaffected by later capacity announcements",
+    "supplier_volume": "sum(order_units * raw_materials.volume), between minimum_volume*truck and current supplier_capacity.volume*truck",
+    "production": "production[node,plant,product] restricted by routes.allowed; shared sum(count*products.hours)<=plant_capacity.hours",
+    "BOM_consumption": "sum(made[product]*bom[product_id,raw_id].units)",
+    "raw_peak": "sum((prior raw + historical due arrivals + lead0 purchases)*raw_materials.volume), before consumption",
+    "finished_peak": "sum((prior finished + made)*products.volume), before current delivery",
+    "holding": "end-week raw * raw holding + end-week finished * product holding, no salvage",
+    "sales_receivable": "sum(current demand.units*products.sales_price_minor), due at original delivery week + facility.receipt_lag_weeks",
+    "cash": "prior cash + original due historical receipts - current purchase - freight - production - holding",
+    "cost": "sum purchase/freight/production/holding, excludes receipts and terminal receivables",
+    "expected": "sum(path cost * scenarios.probability_numerator/facility.probability_denominator)"
+  },
+  "source_code": {
+    "programme/actor.py": "current packet validation, committed exact replay, history-index selection and logical request identity; spot current-needs action",
+    "programme/l06_packet.py": "unchanged public CSV explicit-index and complete-key parser",
+    "programme/l06_input.py": "unchanged public schema/strict integer input contracts",
+    "programme/l06_physics.py": "unchanged public single weekly recurrence",
+    "programme/check_l06.py": "unchanged public physical tensor audit",
+    "programme/tree_business.py": "unchanged public full event history, causality audit, committed replay and receipts",
+    "source/optimize.py": "CP-SAT history-node extensive form, fixed optimization seed; no actual selected future input",
+    "source/deliver.py": "exact ledgers, receivables, rational components and independent analytical relaxation",
+    "source/check_contracts.py": "focused positive business/protocol/error checks and actual invalid stdio attempt",
+    "source/verify_evidence.py": "cross-check deliverables against actual native journals and receipts",
+    "source/figures.py": "actual figures from generated exact ledgers",
+    "source/report.py": "readable business/report generation",
+    "source/recover_demo.py": "read-only checkpoint backup and actual native remaining-week restore demonstration",
+    "source/run_comparison.py": "retains original canonical wrapper failure and verifies explicit business-valid quality-rejection contract",
+    "source/package_spot.py": "generated compact capsule using the same actor source in spot mode",
+    "reproduce.ps1": "tested complete Windows operator reproduction command with fresh evidence folders"
+  },
+  "copied_public_code_provenance": "All five public business modules were copied without source edits from public/exercise-tools; these contain no candidate/reference solver. Runtime imports project copies and reads only supplied public facts. Native controller evidence retains separately copied original sources.",
+  "outputs": {
+    "policy.json": "full-path expansion of the one shared-node solution; action tensors use strict JSON integers",
+    "programme/policy.json": "deployment copy of the same declared policy, checked by action equality against root and native journal",
+    "outputs/information-nodes.json": "complete histories, probability masses and actions; 60 nodes",
+    "outputs/commitment-policy.csv": "128 path/week grids x (3 trucks + 12 orders + 8 production) = 2944 rows, including zeros",
+    "outputs/weekly-ledger.csv": "128 path/week rows, exact public recurrence checked against actual journal",
+    "outputs/detailed-ledger.json": "raw/finished states, arrivals, made, consumption, hours, supplier volumes and full terminal queues",
+    "outputs/summary.json": "exact rational expected figures plus truthful native/optimization provenance",
+    "outputs/receivables.json": "all paths; original absolute due weeks16..19; receivables excluded from current cash",
+    "outputs/information-relaxation.json": "exact independently justified optimistic material/production lower bound",
+    "evidence/native-policy-01/": "actual policy source/argv/current stdin-output/native PID/commit73/restart/journal/checker",
+    "evidence/native-spot-01/": "actual spot execution, then expected quality-stage rejection retained in owner-error.json"
+  }
+}

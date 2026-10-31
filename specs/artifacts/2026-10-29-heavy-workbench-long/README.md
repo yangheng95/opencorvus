@@ -40,3 +40,6 @@
 
 
 最新L06/0.3已按一次整题审查集中修六阻断并只冻结metadata：[完整可读交付、原件与实际评分](cases/L06/evaluator/upgrade-v0.3/whole-case-tests/README.md)。真正grader从closed对象重算，参考100，虚假保证弱报告95/H05criticalfail；不是LLM成绩或小时。旧0.2和L02两100只读，新L02升级仍待。
+
+
+新L06/0.3：[首fresh Codex同冻结真实100](cases/L06/evaluator/pilot-codex-v03-native-20261031/README.md)，全原件先封后私有实跑/独评/实际grade；[同输入OC原生新Task](cases/L06/evaluator/pilot-opencorvus-v03-native-20261031/README.md)已开始，分仍null。两系统判定和小时未达，旧线不改，L01原pending继续。

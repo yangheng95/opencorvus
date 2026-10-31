@@ -1,0 +1,16 @@
+{
+  "format": "l06-optimization-provenance/1",
+  "status": "FEASIBLE",
+  "seed": 41031,
+  "workers": 8,
+  "time_limit_seconds": 120.0,
+  "wall_seconds": 120.09809410000001,
+  "nodes": 60,
+  "perfect_information": false,
+  "weighted_objective": 387449.0,
+  "native_weighted_best_bound": 381004.0,
+  "probability_denominator": 8,
+  "response_stats": "CpSolverResponse summary:\nstatus: FEASIBLE\nobjective: 387449\nbest_bound: 381004\nintegers: 1669\nbooleans: 1177\nconflicts: 0\nbranches: 1333\npropagations: 156\ninteger_propagations: 23436\nrestarts: 0\nlp_iterations: 0\nwalltime: 120.098\nusertime: 120.098\ndeterministic_time: 231.462\ngap_integral: 2141.89\nsolution_fingerprint: 0xd08b98751faef012\n",
+  "method": "OR-Tools CP-SAT extensive form; one variable set per complete event history",
+  "claim": "native solver numerical bound/status only; no independent rational optimality certificate"
+}

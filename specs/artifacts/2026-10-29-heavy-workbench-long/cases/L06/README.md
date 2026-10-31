@@ -31,3 +31,6 @@ S1独立实施已完成：[最终审查](evaluator/upgrade-v0.3/qualification/we
 
 
 最新另版已落：[L06/0.3.0-dev完整多阶段整题](evaluator/upgrade-v0.3/README.md)已真实本机执行/原receipt恢复/完整交付/同checker错误programme/一次集中整审开发冻，参考100/虚假保证95但关键失败。旧0.2真实双100及其public/rubric/FREEZE只读保留，未改旧线；新0.3仍须fresh比较/有效小时证据。
+
+
+新0.3首个[fresh Codex真实私有100](evaluator/pilot-codex-v03-native-20261031/README.md)已闭合，原交付格式偏置仅修private定位，不改候选/公共质量；[同输入OC原生Task](evaluator/pilot-opencorvus-v03-native-20261031/README.md)已真实活动、业务分未出，不能拿Inspect完成或作者分替它。还未两good触发0.4，小时未认证。

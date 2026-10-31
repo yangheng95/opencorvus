@@ -1,0 +1,28 @@
+{
+  "at": "2026-10-31T06:11:26.081607+00:00",
+  "assignment_id": "l06-whole-6390f5de880e45bd95a82c327fbdaec6",
+  "case_version": "L06/0.3.0-dev",
+  "scope": "fresh-candidate five frozen content/science leaves only",
+  "reviewer": "/root/benchmark_review",
+  "H": {
+    "H01": "verified_pass",
+    "H02": "verified_pass",
+    "H03": "verified_pass",
+    "H04": "verified_pass",
+    "H05": "verified_pass"
+  },
+  "all_five_content_review_complete": true,
+  "content_blockers_observed": [],
+  "current_layout_binding_blocker_observed": false,
+  "scope_exception_public_bytecode_and_unmeasured_cache_writes_preserved": true,
+  "all_historical_write_scope_perfectly_compliant_claim": false,
+  "model_usage_known": false,
+  "independent_actor_runs": 0,
+  "independent_solver_runs": 0,
+  "independent_grader_runs": 0,
+  "standard_library_readonly_audit": true,
+  "machine_findings_authored": false,
+  "aggregate_authored": false,
+  "professional_human_statistical_maturity_or_hours_certified": false,
+  "root_actual_grade_pending": true
+}

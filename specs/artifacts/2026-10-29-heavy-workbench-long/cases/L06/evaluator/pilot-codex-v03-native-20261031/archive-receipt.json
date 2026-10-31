@@ -1,0 +1,4558 @@
+{
+  "at": "2026-10-31T06:20:42.511757+00:00",
+  "safe_archive": "originals.zip",
+  "safe_archive_bytes": 4036488,
+  "safe_archive_members": 1131,
+  "members": [
+    {
+      "member": "candidate/actor.py",
+      "bytes": 261
+    },
+    {
+      "member": "candidate/evidence/contracts-01/invalid-packet-input.jsonl",
+      "bytes": 1027
+    },
+    {
+      "member": "candidate/evidence/contracts-01/invalid-packet-stderr.txt",
+      "bytes": 93
+    },
+    {
+      "member": "candidate/evidence/contracts-01/invalid-packet-stdout.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/contracts-01/results.json",
+      "bytes": 3036
+    },
+    {
+      "member": "candidate/evidence/delivery-cross-check.json",
+      "bytes": 1281
+    },
+    {
+      "member": "candidate/evidence/final-delivery-check.json",
+      "bytes": 3545
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/actual-command.json",
+      "bytes": 975
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/recovery-result.json",
+      "bytes": 565
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/resumed/active.json",
+      "bytes": 4165
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/resumed/journal-export.json",
+      "bytes": 35616
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/resumed/resume-receipt.json",
+      "bytes": 283
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/resumed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/resumed/visible-exchange.jsonl",
+      "bytes": 69946
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/resumed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-recovery-01/resumed/worker-terminal.json",
+      "bytes": 558
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/contracts/invalid-packet-input.jsonl",
+      "bytes": 1027
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/contracts/invalid-packet-stderr.txt",
+      "bytes": 93
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/contracts/invalid-packet-stdout.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/contracts/results.json",
+      "bytes": 3116
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/contracts-command.log",
+      "bytes": 61
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/actual-checker-command.json",
+      "bytes": 2208
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/actual-commands.json",
+      "bytes": 12854
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/control-ed5a038c7ef4/completed/active.json",
+      "bytes": 4487
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/control-ed5a038c7ef4/completed/journal-export.json",
+      "bytes": 35601
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/control-ed5a038c7ef4/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/control-ed5a038c7ef4/completed/visible-exchange.jsonl",
+      "bytes": 98865
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/control-ed5a038c7ef4/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/control-ed5a038c7ef4/completed/worker-terminal.json",
+      "bytes": 721
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/control-ed5a038c7ef4/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/controller-source/business-core/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/controller-source/business-core/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/controller-source/business-core/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/controller-source/business-core/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/controller-source/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/controller-source/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/controller-source/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/controller-source/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/controller-source/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/declared-policy.json",
+      "bytes": 72530
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-03bf8e402fe9/completed/active.json",
+      "bytes": 4479
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-03bf8e402fe9/completed/journal-export.json",
+      "bytes": 35616
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-03bf8e402fe9/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-03bf8e402fe9/completed/visible-exchange.jsonl",
+      "bytes": 98891
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-03bf8e402fe9/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-03bf8e402fe9/completed/worker-terminal.json",
+      "bytes": 712
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-03bf8e402fe9/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-03bf8e402fe9/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-03bf8e402fe9/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/after-commit-original.json",
+      "bytes": 4979
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/after-commit-original.sqlite3",
+      "bytes": 28672
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/before-loss/active.json",
+      "bytes": 4485
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/before-loss/crash-after-commit.json",
+      "bytes": 509
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/before-loss/visible-exchange.jsonl",
+      "bytes": 28941
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/before-loss/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/before-loss/worker-terminal.json",
+      "bytes": 712
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/completed/active.json",
+      "bytes": 4477
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/completed/journal-export.json",
+      "bytes": 35601
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/completed/resume-receipt.json",
+      "bytes": 283
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/completed/visible-exchange.jsonl",
+      "bytes": 69924
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/completed/worker-terminal.json",
+      "bytes": 712
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/journal.sqlite3",
+      "bytes": 4096
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-29d3142f7355/journal.sqlite3-wal",
+      "bytes": 193672
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-2ee4d6b563d9/completed/active.json",
+      "bytes": 4479
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-2ee4d6b563d9/completed/journal-export.json",
+      "bytes": 35609
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-2ee4d6b563d9/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-2ee4d6b563d9/completed/visible-exchange.jsonl",
+      "bytes": 98900
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-2ee4d6b563d9/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-2ee4d6b563d9/completed/worker-terminal.json",
+      "bytes": 712
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-2ee4d6b563d9/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-2ee4d6b563d9/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-2ee4d6b563d9/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-304af4d816de/completed/active.json",
+      "bytes": 4479
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-304af4d816de/completed/journal-export.json",
+      "bytes": 35595
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-304af4d816de/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-304af4d816de/completed/visible-exchange.jsonl",
+      "bytes": 98846
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-304af4d816de/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-304af4d816de/completed/worker-terminal.json",
+      "bytes": 712
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-304af4d816de/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-304af4d816de/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-304af4d816de/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-4216ba47120b/completed/active.json",
+      "bytes": 4479
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-4216ba47120b/completed/journal-export.json",
+      "bytes": 35610
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-4216ba47120b/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-4216ba47120b/completed/visible-exchange.jsonl",
+      "bytes": 98880
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-4216ba47120b/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-4216ba47120b/completed/worker-terminal.json",
+      "bytes": 712
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-4216ba47120b/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-4216ba47120b/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-4216ba47120b/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-576e7d7320b2/completed/active.json",
+      "bytes": 4479
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-576e7d7320b2/completed/journal-export.json",
+      "bytes": 35620
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-576e7d7320b2/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-576e7d7320b2/completed/visible-exchange.jsonl",
+      "bytes": 98910
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-576e7d7320b2/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-576e7d7320b2/completed/worker-terminal.json",
+      "bytes": 712
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-576e7d7320b2/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-576e7d7320b2/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-576e7d7320b2/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-92690e522698/completed/active.json",
+      "bytes": 4478
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-92690e522698/completed/journal-export.json",
+      "bytes": 35607
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-92690e522698/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-92690e522698/completed/visible-exchange.jsonl",
+      "bytes": 98869
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-92690e522698/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-92690e522698/completed/worker-terminal.json",
+      "bytes": 711
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-92690e522698/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-92690e522698/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-92690e522698/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-d4ff36157338/completed/active.json",
+      "bytes": 4479
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-d4ff36157338/completed/journal-export.json",
+      "bytes": 35607
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-d4ff36157338/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-d4ff36157338/completed/visible-exchange.jsonl",
+      "bytes": 98863
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-d4ff36157338/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-d4ff36157338/completed/worker-terminal.json",
+      "bytes": 712
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-d4ff36157338/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-d4ff36157338/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episode-d4ff36157338/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/episodes.json",
+      "bytes": 13687
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/journals.json",
+      "bytes": 164818
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/logical-and-journal-assessment.json",
+      "bytes": 151612
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/owner-started.json",
+      "bytes": 1055
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/owner-terminal.json",
+      "bytes": 803
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/pre-execution-controller-source.zip",
+      "bytes": 31475
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/pre-execution-project.zip",
+      "bytes": 106267
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/qualification/current-source/__pycache__/check_l06.cpython-314.pyc",
+      "bytes": 12135
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/qualification/current-source/__pycache__/l06_input.cpython-314.pyc",
+      "bytes": 11713
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/qualification/current-source/__pycache__/l06_packet.cpython-314.pyc",
+      "bytes": 20205
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/qualification/current-source/__pycache__/l06_physics.cpython-314.pyc",
+      "bytes": 15132
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/qualification/current-source/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/qualification/current-source/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/qualification/current-source/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/qualification/current-source/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/upgrade-v0.3/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/exercise.py",
+      "bytes": 529
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/bom.csv",
+      "bytes": 152
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/demand.csv",
+      "bytes": 5986
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/facility.json",
+      "bytes": 259
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/plant_capacity.csv",
+      "bytes": 3200
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/plants.csv",
+      "bytes": 31
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/products.csv",
+      "bytes": 152
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/raw_materials.csv",
+      "bytes": 100
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/routes.csv",
+      "bytes": 138
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/scenarios.csv",
+      "bytes": 113
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/supplier_capacity.csv",
+      "bytes": 4532
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/supplier_quotes.csv",
+      "bytes": 171
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/inputs/supplier_terms.csv",
+      "bytes": 104
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/OPERATIONS.md",
+      "bytes": 3382
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/OUTPUTS.md",
+      "bytes": 5994
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/TASK.md",
+      "bytes": 3928
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public/tree-contract.json",
+      "bytes": 1156
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/public-originals.zip",
+      "bytes": 77076
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/qualification/current-source/__pycache__/check_l06.cpython-314.pyc",
+      "bytes": 12135
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_input.cpython-314.pyc",
+      "bytes": 11713
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_packet.cpython-314.pyc",
+      "bytes": 20205
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_physics.cpython-314.pyc",
+      "bytes": 15132
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/qualification/current-source/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/qualification/current-source/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/qualification/current-source/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/qualification/current-source/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/upgrade-v0.3/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/exercise.py",
+      "bytes": 529
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/bom.csv",
+      "bytes": 169
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/demand.csv",
+      "bytes": 6499
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/facility.json",
+      "bytes": 259
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/plant_capacity.csv",
+      "bytes": 3457
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/plants.csv",
+      "bytes": 34
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/products.csv",
+      "bytes": 157
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/raw_materials.csv",
+      "bytes": 105
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/routes.csv",
+      "bytes": 147
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/scenarios.csv",
+      "bytes": 122
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/supplier_capacity.csv",
+      "bytes": 4917
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/supplier_quotes.csv",
+      "bytes": 184
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/inputs/supplier_terms.csv",
+      "bytes": 108
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/OPERATIONS.md",
+      "bytes": 3382
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/OUTPUTS.md",
+      "bytes": 5994
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/TASK.md",
+      "bytes": 3928
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/row-order-public/tree-contract.json",
+      "bytes": 1156
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/__pycache__/actor.cpython-314.pyc",
+      "bytes": 11487
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/__pycache__/check_l06.cpython-312.pyc",
+      "bytes": 11110
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/__pycache__/check_l06.cpython-314.pyc",
+      "bytes": 12105
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/__pycache__/l06_input.cpython-312.pyc",
+      "bytes": 11001
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/__pycache__/l06_input.cpython-314.pyc",
+      "bytes": 11683
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/__pycache__/l06_packet.cpython-312.pyc",
+      "bytes": 18478
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/__pycache__/l06_packet.cpython-314.pyc",
+      "bytes": 20175
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/__pycache__/l06_physics.cpython-312.pyc",
+      "bytes": 13716
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/__pycache__/l06_physics.cpython-314.pyc",
+      "bytes": 15102
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/__pycache__/tree_business.cpython-312.pyc",
+      "bytes": 16215
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18159
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/actor.py",
+      "bytes": 5412
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/policy.json",
+      "bytes": 72530
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/submission.json",
+      "bytes": 146
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy/sealed-project/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-policy-command.log",
+      "bytes": 805
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/actual-checker-command.json",
+      "bytes": 2196
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/actual-commands.json",
+      "bytes": 12752
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/comparison-wrapper-command.json",
+      "bytes": 1388
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/control-47b24527b37d/completed/active.json",
+      "bytes": 4328
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/control-47b24527b37d/completed/journal-export.json",
+      "bytes": 35633
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/control-47b24527b37d/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/control-47b24527b37d/completed/visible-exchange.jsonl",
+      "bytes": 99121
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/control-47b24527b37d/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/control-47b24527b37d/completed/worker-terminal.json",
+      "bytes": 569
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/control-47b24527b37d/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/controller-source/business-core/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/controller-source/business-core/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/controller-source/business-core/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/controller-source/business-core/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/controller-source/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/controller-source/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/controller-source/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/controller-source/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/controller-source/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/declared-policy.json",
+      "bytes": 73006
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/after-commit-original.json",
+      "bytes": 5009
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/after-commit-original.sqlite3",
+      "bytes": 28672
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/before-loss/active.json",
+      "bytes": 4325
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/before-loss/crash-after-commit.json",
+      "bytes": 509
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/before-loss/visible-exchange.jsonl",
+      "bytes": 28956
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/before-loss/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/before-loss/worker-terminal.json",
+      "bytes": 560
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/completed/active.json",
+      "bytes": 4319
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/completed/journal-export.json",
+      "bytes": 35633
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/completed/resume-receipt.json",
+      "bytes": 283
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/completed/visible-exchange.jsonl",
+      "bytes": 70165
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/completed/worker-terminal.json",
+      "bytes": 560
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/journal.sqlite3",
+      "bytes": 4096
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-05a462ee1440/journal.sqlite3-wal",
+      "bytes": 193672
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-088f4b6bba45/completed/active.json",
+      "bytes": 4318
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-088f4b6bba45/completed/journal-export.json",
+      "bytes": 35627
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-088f4b6bba45/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-088f4b6bba45/completed/visible-exchange.jsonl",
+      "bytes": 99086
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-088f4b6bba45/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-088f4b6bba45/completed/worker-terminal.json",
+      "bytes": 560
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-088f4b6bba45/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-088f4b6bba45/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-088f4b6bba45/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-1bcdbf76a289/completed/active.json",
+      "bytes": 4318
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-1bcdbf76a289/completed/journal-export.json",
+      "bytes": 35633
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-1bcdbf76a289/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-1bcdbf76a289/completed/visible-exchange.jsonl",
+      "bytes": 99121
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-1bcdbf76a289/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-1bcdbf76a289/completed/worker-terminal.json",
+      "bytes": 559
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-1bcdbf76a289/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-1bcdbf76a289/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-1bcdbf76a289/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-80ea090ec39b/completed/active.json",
+      "bytes": 4319
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-80ea090ec39b/completed/journal-export.json",
+      "bytes": 35627
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-80ea090ec39b/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-80ea090ec39b/completed/visible-exchange.jsonl",
+      "bytes": 99086
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-80ea090ec39b/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-80ea090ec39b/completed/worker-terminal.json",
+      "bytes": 560
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-80ea090ec39b/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-80ea090ec39b/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-80ea090ec39b/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-a60f949ba85b/completed/active.json",
+      "bytes": 4318
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-a60f949ba85b/completed/journal-export.json",
+      "bytes": 35633
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-a60f949ba85b/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-a60f949ba85b/completed/visible-exchange.jsonl",
+      "bytes": 99121
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-a60f949ba85b/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-a60f949ba85b/completed/worker-terminal.json",
+      "bytes": 560
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-a60f949ba85b/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-a60f949ba85b/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-a60f949ba85b/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-c41036cc603c/completed/active.json",
+      "bytes": 4319
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-c41036cc603c/completed/journal-export.json",
+      "bytes": 35633
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-c41036cc603c/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-c41036cc603c/completed/visible-exchange.jsonl",
+      "bytes": 99121
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-c41036cc603c/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-c41036cc603c/completed/worker-terminal.json",
+      "bytes": 560
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-c41036cc603c/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-c41036cc603c/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-c41036cc603c/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-cbd91b86bc8b/completed/active.json",
+      "bytes": 4318
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-cbd91b86bc8b/completed/journal-export.json",
+      "bytes": 35627
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-cbd91b86bc8b/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-cbd91b86bc8b/completed/visible-exchange.jsonl",
+      "bytes": 99086
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-cbd91b86bc8b/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-cbd91b86bc8b/completed/worker-terminal.json",
+      "bytes": 559
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-cbd91b86bc8b/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-cbd91b86bc8b/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-cbd91b86bc8b/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-e7b87b008552/completed/active.json",
+      "bytes": 4319
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-e7b87b008552/completed/journal-export.json",
+      "bytes": 35627
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-e7b87b008552/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-e7b87b008552/completed/visible-exchange.jsonl",
+      "bytes": 99086
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-e7b87b008552/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-e7b87b008552/completed/worker-terminal.json",
+      "bytes": 560
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-e7b87b008552/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-e7b87b008552/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episode-e7b87b008552/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/episodes.json",
+      "bytes": 13595
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/journals.json",
+      "bytes": 165273
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/logical-and-journal-assessment.json",
+      "bytes": 151329
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/owner-error.json",
+      "bytes": 14898
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/owner-started.json",
+      "bytes": 1105
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/pre-execution-controller-source.zip",
+      "bytes": 31475
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/pre-execution-project.zip",
+      "bytes": 17536
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/qualification/current-source/__pycache__/check_l06.cpython-314.pyc",
+      "bytes": 12135
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/qualification/current-source/__pycache__/l06_input.cpython-314.pyc",
+      "bytes": 11713
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/qualification/current-source/__pycache__/l06_packet.cpython-314.pyc",
+      "bytes": 20205
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/qualification/current-source/__pycache__/l06_physics.cpython-314.pyc",
+      "bytes": 15132
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/qualification/current-source/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/qualification/current-source/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/qualification/current-source/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/qualification/current-source/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/upgrade-v0.3/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/exercise.py",
+      "bytes": 529
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/bom.csv",
+      "bytes": 152
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/demand.csv",
+      "bytes": 5986
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/facility.json",
+      "bytes": 259
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/plant_capacity.csv",
+      "bytes": 3200
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/plants.csv",
+      "bytes": 31
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/products.csv",
+      "bytes": 152
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/raw_materials.csv",
+      "bytes": 100
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/routes.csv",
+      "bytes": 138
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/scenarios.csv",
+      "bytes": 113
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/supplier_capacity.csv",
+      "bytes": 4532
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/supplier_quotes.csv",
+      "bytes": 171
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/inputs/supplier_terms.csv",
+      "bytes": 104
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/OPERATIONS.md",
+      "bytes": 3382
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/OUTPUTS.md",
+      "bytes": 5994
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/TASK.md",
+      "bytes": 3928
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public/tree-contract.json",
+      "bytes": 1156
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/public-originals.zip",
+      "bytes": 77076
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/qualification/current-source/__pycache__/check_l06.cpython-314.pyc",
+      "bytes": 12135
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_input.cpython-314.pyc",
+      "bytes": 11713
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_packet.cpython-314.pyc",
+      "bytes": 20205
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_physics.cpython-314.pyc",
+      "bytes": 15132
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/qualification/current-source/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/qualification/current-source/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/qualification/current-source/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/qualification/current-source/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/upgrade-v0.3/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/exercise.py",
+      "bytes": 529
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/bom.csv",
+      "bytes": 169
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/demand.csv",
+      "bytes": 6499
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/facility.json",
+      "bytes": 259
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/plant_capacity.csv",
+      "bytes": 3457
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/plants.csv",
+      "bytes": 34
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/products.csv",
+      "bytes": 157
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/raw_materials.csv",
+      "bytes": 105
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/routes.csv",
+      "bytes": 147
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/scenarios.csv",
+      "bytes": 122
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/supplier_capacity.csv",
+      "bytes": 4917
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/supplier_quotes.csv",
+      "bytes": 184
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/inputs/supplier_terms.csv",
+      "bytes": 108
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/OPERATIONS.md",
+      "bytes": 3382
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/OUTPUTS.md",
+      "bytes": 5994
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/TASK.md",
+      "bytes": 3928
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/row-order-public/tree-contract.json",
+      "bytes": 1156
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/sealed-project/actor.py",
+      "bytes": 5412
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/sealed-project/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/sealed-project/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/sealed-project/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/sealed-project/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/sealed-project/policy.json",
+      "bytes": 73006
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/sealed-project/submission.json",
+      "bytes": 191
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot/sealed-project/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/native-spot-command.log",
+      "bytes": 290
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/spot-programme/actor.py",
+      "bytes": 5412
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/spot-programme/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/spot-programme/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/spot-programme/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/spot-programme/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/spot-programme/policy.json",
+      "bytes": 73006
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/spot-programme/submission.json",
+      "bytes": 191
+    },
+    {
+      "member": "candidate/evidence/handoff-script-01/spot-programme/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/local-issues.json",
+      "bytes": 2523
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/actual-checker-command.json",
+      "bytes": 2128
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/actual-commands.json",
+      "bytes": 12053
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/control-ffd735eb6cd1/completed/active.json",
+      "bytes": 4377
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/control-ffd735eb6cd1/completed/journal-export.json",
+      "bytes": 35595
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/control-ffd735eb6cd1/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/control-ffd735eb6cd1/completed/visible-exchange.jsonl",
+      "bytes": 98846
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/control-ffd735eb6cd1/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/control-ffd735eb6cd1/completed/worker-terminal.json",
+      "bytes": 674
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/control-ffd735eb6cd1/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/controller-source/business-core/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/controller-source/business-core/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/controller-source/business-core/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/controller-source/business-core/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/controller-source/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/controller-source/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/controller-source/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/controller-source/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/controller-source/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/declared-policy.json",
+      "bytes": 72530
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-0a4237179f59/completed/active.json",
+      "bytes": 4367
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-0a4237179f59/completed/journal-export.json",
+      "bytes": 35607
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-0a4237179f59/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-0a4237179f59/completed/visible-exchange.jsonl",
+      "bytes": 98863
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-0a4237179f59/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-0a4237179f59/completed/worker-terminal.json",
+      "bytes": 664
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-0a4237179f59/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-0a4237179f59/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-0a4237179f59/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/after-commit-original.json",
+      "bytes": 4981
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/after-commit-original.sqlite3",
+      "bytes": 28672
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/after-commit-original.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/after-commit-original.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/before-loss/active.json",
+      "bytes": 4373
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/before-loss/crash-after-commit.json",
+      "bytes": 509
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/before-loss/visible-exchange.jsonl",
+      "bytes": 28945
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/before-loss/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/before-loss/worker-terminal.json",
+      "bytes": 664
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/completed/active.json",
+      "bytes": 4367
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/completed/journal-export.json",
+      "bytes": 35616
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/completed/resume-receipt.json",
+      "bytes": 283
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/completed/visible-exchange.jsonl",
+      "bytes": 69946
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/completed/worker-terminal.json",
+      "bytes": 664
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/journal.sqlite3",
+      "bytes": 4096
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-14f5630305df/journal.sqlite3-wal",
+      "bytes": 193672
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-2d88b421b956/completed/active.json",
+      "bytes": 4366
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-2d88b421b956/completed/journal-export.json",
+      "bytes": 35601
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-2d88b421b956/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-2d88b421b956/completed/visible-exchange.jsonl",
+      "bytes": 98865
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-2d88b421b956/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-2d88b421b956/completed/worker-terminal.json",
+      "bytes": 664
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-2d88b421b956/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-2d88b421b956/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-2d88b421b956/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-591203fec2de/completed/active.json",
+      "bytes": 4367
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-591203fec2de/completed/journal-export.json",
+      "bytes": 35609
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-591203fec2de/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-591203fec2de/completed/visible-exchange.jsonl",
+      "bytes": 98900
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-591203fec2de/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-591203fec2de/completed/worker-terminal.json",
+      "bytes": 664
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-591203fec2de/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-591203fec2de/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-591203fec2de/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-757fdd351c30/completed/active.json",
+      "bytes": 4367
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-757fdd351c30/completed/journal-export.json",
+      "bytes": 35607
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-757fdd351c30/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-757fdd351c30/completed/visible-exchange.jsonl",
+      "bytes": 98869
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-757fdd351c30/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-757fdd351c30/completed/worker-terminal.json",
+      "bytes": 664
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-757fdd351c30/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-757fdd351c30/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-757fdd351c30/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-9d10d85835a7/completed/active.json",
+      "bytes": 4367
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-9d10d85835a7/completed/journal-export.json",
+      "bytes": 35595
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-9d10d85835a7/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-9d10d85835a7/completed/visible-exchange.jsonl",
+      "bytes": 98846
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-9d10d85835a7/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-9d10d85835a7/completed/worker-terminal.json",
+      "bytes": 664
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-9d10d85835a7/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-9d10d85835a7/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-9d10d85835a7/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-cd2d1ecfbad8/completed/active.json",
+      "bytes": 4366
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-cd2d1ecfbad8/completed/journal-export.json",
+      "bytes": 35620
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-cd2d1ecfbad8/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-cd2d1ecfbad8/completed/visible-exchange.jsonl",
+      "bytes": 98910
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-cd2d1ecfbad8/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-cd2d1ecfbad8/completed/worker-terminal.json",
+      "bytes": 663
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-cd2d1ecfbad8/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-cd2d1ecfbad8/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-cd2d1ecfbad8/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-ef36ad341831/completed/active.json",
+      "bytes": 4367
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-ef36ad341831/completed/journal-export.json",
+      "bytes": 35610
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-ef36ad341831/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-ef36ad341831/completed/visible-exchange.jsonl",
+      "bytes": 98880
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-ef36ad341831/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-ef36ad341831/completed/worker-terminal.json",
+      "bytes": 664
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-ef36ad341831/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-ef36ad341831/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episode-ef36ad341831/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/episodes.json",
+      "bytes": 12966
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/journals.json",
+      "bytes": 164818
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/logical-and-journal-assessment.json",
+      "bytes": 151612
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/owner-started.json",
+      "bytes": 1039
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/owner-terminal.json",
+      "bytes": 802
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/pre-execution-controller-source.zip",
+      "bytes": 31475
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/pre-execution-project.zip",
+      "bytes": 106267
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/qualification/current-source/__pycache__/check_l06.cpython-314.pyc",
+      "bytes": 12135
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/qualification/current-source/__pycache__/l06_input.cpython-314.pyc",
+      "bytes": 11713
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/qualification/current-source/__pycache__/l06_packet.cpython-314.pyc",
+      "bytes": 20205
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/qualification/current-source/__pycache__/l06_physics.cpython-314.pyc",
+      "bytes": 15132
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/qualification/current-source/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/qualification/current-source/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/qualification/current-source/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/qualification/current-source/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/upgrade-v0.3/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/exercise.py",
+      "bytes": 529
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/bom.csv",
+      "bytes": 152
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/demand.csv",
+      "bytes": 5986
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/facility.json",
+      "bytes": 259
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/plant_capacity.csv",
+      "bytes": 3200
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/plants.csv",
+      "bytes": 31
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/products.csv",
+      "bytes": 152
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/raw_materials.csv",
+      "bytes": 100
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/routes.csv",
+      "bytes": 138
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/scenarios.csv",
+      "bytes": 113
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/supplier_capacity.csv",
+      "bytes": 4532
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/supplier_quotes.csv",
+      "bytes": 171
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/inputs/supplier_terms.csv",
+      "bytes": 104
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/OPERATIONS.md",
+      "bytes": 3382
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/OUTPUTS.md",
+      "bytes": 5994
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/TASK.md",
+      "bytes": 3928
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public/tree-contract.json",
+      "bytes": 1156
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/public-originals.zip",
+      "bytes": 77076
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/qualification/current-source/__pycache__/check_l06.cpython-314.pyc",
+      "bytes": 12135
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_input.cpython-314.pyc",
+      "bytes": 11713
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_packet.cpython-314.pyc",
+      "bytes": 20205
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_physics.cpython-314.pyc",
+      "bytes": 15132
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/qualification/current-source/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/qualification/current-source/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/qualification/current-source/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/qualification/current-source/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/upgrade-v0.3/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/exercise.py",
+      "bytes": 529
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/bom.csv",
+      "bytes": 169
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/demand.csv",
+      "bytes": 6499
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/facility.json",
+      "bytes": 259
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/plant_capacity.csv",
+      "bytes": 3457
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/plants.csv",
+      "bytes": 34
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/products.csv",
+      "bytes": 157
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/raw_materials.csv",
+      "bytes": 105
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/routes.csv",
+      "bytes": 147
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/scenarios.csv",
+      "bytes": 122
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/supplier_capacity.csv",
+      "bytes": 4917
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/supplier_quotes.csv",
+      "bytes": 184
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/inputs/supplier_terms.csv",
+      "bytes": 108
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/OPERATIONS.md",
+      "bytes": 3382
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/OUTPUTS.md",
+      "bytes": 5994
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/TASK.md",
+      "bytes": 3928
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/row-order-public/tree-contract.json",
+      "bytes": 1156
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/__pycache__/actor.cpython-314.pyc",
+      "bytes": 11487
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/__pycache__/check_l06.cpython-312.pyc",
+      "bytes": 11110
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/__pycache__/check_l06.cpython-314.pyc",
+      "bytes": 12105
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/__pycache__/l06_input.cpython-312.pyc",
+      "bytes": 11001
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/__pycache__/l06_input.cpython-314.pyc",
+      "bytes": 11683
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/__pycache__/l06_packet.cpython-312.pyc",
+      "bytes": 18478
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/__pycache__/l06_packet.cpython-314.pyc",
+      "bytes": 20175
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/__pycache__/l06_physics.cpython-312.pyc",
+      "bytes": 13716
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/__pycache__/l06_physics.cpython-314.pyc",
+      "bytes": 15102
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/__pycache__/tree_business.cpython-312.pyc",
+      "bytes": 16215
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18159
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/actor.py",
+      "bytes": 5412
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/policy.json",
+      "bytes": 72530
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/submission.json",
+      "bytes": 146
+    },
+    {
+      "member": "candidate/evidence/native-policy-01/sealed-project/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/actual-checker-command.json",
+      "bytes": 2116
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/actual-commands.json",
+      "bytes": 11954
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/control-df5f3a102d33/completed/active.json",
+      "bytes": 4232
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/control-df5f3a102d33/completed/journal-export.json",
+      "bytes": 35633
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/control-df5f3a102d33/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/control-df5f3a102d33/completed/visible-exchange.jsonl",
+      "bytes": 99121
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/control-df5f3a102d33/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/control-df5f3a102d33/completed/worker-terminal.json",
+      "bytes": 538
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/control-df5f3a102d33/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/controller-source/business-core/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/controller-source/business-core/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/controller-source/business-core/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/controller-source/business-core/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/controller-source/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/controller-source/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/controller-source/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/controller-source/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/controller-source/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/declared-policy.json",
+      "bytes": 73006
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-11632c8a1c0e/completed/active.json",
+      "bytes": 4222
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-11632c8a1c0e/completed/journal-export.json",
+      "bytes": 35627
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-11632c8a1c0e/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-11632c8a1c0e/completed/visible-exchange.jsonl",
+      "bytes": 99086
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-11632c8a1c0e/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-11632c8a1c0e/completed/worker-terminal.json",
+      "bytes": 527
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-11632c8a1c0e/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-11632c8a1c0e/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-11632c8a1c0e/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-1d6494e17b4d/completed/active.json",
+      "bytes": 4223
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-1d6494e17b4d/completed/journal-export.json",
+      "bytes": 35627
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-1d6494e17b4d/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-1d6494e17b4d/completed/visible-exchange.jsonl",
+      "bytes": 99086
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-1d6494e17b4d/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-1d6494e17b4d/completed/worker-terminal.json",
+      "bytes": 528
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-1d6494e17b4d/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-1d6494e17b4d/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-1d6494e17b4d/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-22db6ff82a9a/completed/active.json",
+      "bytes": 4222
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-22db6ff82a9a/completed/journal-export.json",
+      "bytes": 35633
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-22db6ff82a9a/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-22db6ff82a9a/completed/visible-exchange.jsonl",
+      "bytes": 99121
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-22db6ff82a9a/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-22db6ff82a9a/completed/worker-terminal.json",
+      "bytes": 528
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-22db6ff82a9a/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-22db6ff82a9a/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-22db6ff82a9a/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/after-commit-original.json",
+      "bytes": 5006
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/after-commit-original.sqlite3",
+      "bytes": 28672
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/before-loss/active.json",
+      "bytes": 4228
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/before-loss/crash-after-commit.json",
+      "bytes": 509
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/before-loss/visible-exchange.jsonl",
+      "bytes": 28944
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/before-loss/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/before-loss/worker-terminal.json",
+      "bytes": 527
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/completed/active.json",
+      "bytes": 4223
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/completed/journal-export.json",
+      "bytes": 35627
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/completed/resume-receipt.json",
+      "bytes": 283
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/completed/visible-exchange.jsonl",
+      "bytes": 70142
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/completed/worker-terminal.json",
+      "bytes": 528
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/journal.sqlite3",
+      "bytes": 4096
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-317c8503678e/journal.sqlite3-wal",
+      "bytes": 193672
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4b60f35035dc/completed/active.json",
+      "bytes": 4223
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4b60f35035dc/completed/journal-export.json",
+      "bytes": 35627
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4b60f35035dc/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4b60f35035dc/completed/visible-exchange.jsonl",
+      "bytes": 99086
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4b60f35035dc/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4b60f35035dc/completed/worker-terminal.json",
+      "bytes": 528
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4b60f35035dc/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4b60f35035dc/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4b60f35035dc/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4fc4d8fb8c82/completed/active.json",
+      "bytes": 4222
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4fc4d8fb8c82/completed/journal-export.json",
+      "bytes": 35633
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4fc4d8fb8c82/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4fc4d8fb8c82/completed/visible-exchange.jsonl",
+      "bytes": 99121
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4fc4d8fb8c82/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4fc4d8fb8c82/completed/worker-terminal.json",
+      "bytes": 527
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4fc4d8fb8c82/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4fc4d8fb8c82/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-4fc4d8fb8c82/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-d77d1818d063/completed/active.json",
+      "bytes": 4223
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-d77d1818d063/completed/journal-export.json",
+      "bytes": 35633
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-d77d1818d063/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-d77d1818d063/completed/visible-exchange.jsonl",
+      "bytes": 99121
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-d77d1818d063/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-d77d1818d063/completed/worker-terminal.json",
+      "bytes": 528
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-d77d1818d063/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-d77d1818d063/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-d77d1818d063/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-f1bcbb4758db/completed/active.json",
+      "bytes": 4222
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-f1bcbb4758db/completed/journal-export.json",
+      "bytes": 35633
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-f1bcbb4758db/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-f1bcbb4758db/completed/visible-exchange.jsonl",
+      "bytes": 99121
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-f1bcbb4758db/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-f1bcbb4758db/completed/worker-terminal.json",
+      "bytes": 527
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-f1bcbb4758db/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-f1bcbb4758db/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episode-f1bcbb4758db/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/episodes.json",
+      "bytes": 12878
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/journals.json",
+      "bytes": 165273
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/logical-and-journal-assessment.json",
+      "bytes": 151329
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/owner-error.json",
+      "bytes": 14181
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/owner-started.json",
+      "bytes": 1069
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/pre-execution-controller-source.zip",
+      "bytes": 31475
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/pre-execution-project.zip",
+      "bytes": 17536
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/qualification/current-source/__pycache__/check_l06.cpython-314.pyc",
+      "bytes": 12135
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/qualification/current-source/__pycache__/l06_input.cpython-314.pyc",
+      "bytes": 11713
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/qualification/current-source/__pycache__/l06_packet.cpython-314.pyc",
+      "bytes": 20205
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/qualification/current-source/__pycache__/l06_physics.cpython-314.pyc",
+      "bytes": 15132
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/qualification/current-source/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/qualification/current-source/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/qualification/current-source/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/qualification/current-source/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/upgrade-v0.3/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/exercise.py",
+      "bytes": 529
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/bom.csv",
+      "bytes": 152
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/demand.csv",
+      "bytes": 5986
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/facility.json",
+      "bytes": 259
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/plant_capacity.csv",
+      "bytes": 3200
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/plants.csv",
+      "bytes": 31
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/products.csv",
+      "bytes": 152
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/raw_materials.csv",
+      "bytes": 100
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/routes.csv",
+      "bytes": 138
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/scenarios.csv",
+      "bytes": 113
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/supplier_capacity.csv",
+      "bytes": 4532
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/supplier_quotes.csv",
+      "bytes": 171
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/inputs/supplier_terms.csv",
+      "bytes": 104
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/OPERATIONS.md",
+      "bytes": 3382
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/OUTPUTS.md",
+      "bytes": 5994
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/TASK.md",
+      "bytes": 3928
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public/tree-contract.json",
+      "bytes": 1156
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/public-originals.zip",
+      "bytes": 77076
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/qualification/current-source/__pycache__/check_l06.cpython-314.pyc",
+      "bytes": 12135
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_input.cpython-314.pyc",
+      "bytes": 11713
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_packet.cpython-314.pyc",
+      "bytes": 20205
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/qualification/current-source/__pycache__/l06_physics.cpython-314.pyc",
+      "bytes": 15132
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/qualification/current-source/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/qualification/current-source/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/qualification/current-source/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/qualification/current-source/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/upgrade-v0.3/source/__pycache__/tree_business.cpython-314.pyc",
+      "bytes": 18180
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/exercise.py",
+      "bytes": 529
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/bom.csv",
+      "bytes": 169
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/demand.csv",
+      "bytes": 6499
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/facility.json",
+      "bytes": 259
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/plant_capacity.csv",
+      "bytes": 3457
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/plants.csv",
+      "bytes": 34
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/products.csv",
+      "bytes": 157
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/raw_materials.csv",
+      "bytes": 105
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/routes.csv",
+      "bytes": 147
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/scenarios.csv",
+      "bytes": 122
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/supplier_capacity.csv",
+      "bytes": 4917
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/supplier_quotes.csv",
+      "bytes": 184
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/inputs/supplier_terms.csv",
+      "bytes": 108
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/OPERATIONS.md",
+      "bytes": 3382
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/OUTPUTS.md",
+      "bytes": 5994
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/TASK.md",
+      "bytes": 3928
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/row-order-public/tree-contract.json",
+      "bytes": 1156
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/sealed-project/actor.py",
+      "bytes": 5412
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/sealed-project/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/sealed-project/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/sealed-project/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/sealed-project/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/sealed-project/policy.json",
+      "bytes": 73006
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/sealed-project/submission.json",
+      "bytes": 191
+    },
+    {
+      "member": "candidate/evidence/native-spot-01/sealed-project/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/evidence/root-entry-smoke.json",
+      "bytes": 745
+    },
+    {
+      "member": "candidate/evidence/runtime.json",
+      "bytes": 544
+    },
+    {
+      "member": "candidate/evidence/source-syntax-check.json",
+      "bytes": 637
+    },
+    {
+      "member": "candidate/figures/01-cost-comparison.png",
+      "bytes": 104187
+    },
+    {
+      "member": "candidate/figures/01-cost-comparison.svg",
+      "bytes": 84976
+    },
+    {
+      "member": "candidate/figures/02-cash-and-credit.png",
+      "bytes": 184633
+    },
+    {
+      "member": "candidate/figures/02-cash-and-credit.svg",
+      "bytes": 111880
+    },
+    {
+      "member": "candidate/figures/03-warehouse-peaks.png",
+      "bytes": 237982
+    },
+    {
+      "member": "candidate/figures/03-warehouse-peaks.svg",
+      "bytes": 119540
+    },
+    {
+      "member": "candidate/figures/04-receivables-and-bounds.png",
+      "bytes": 95978
+    },
+    {
+      "member": "candidate/figures/04-receivables-and-bounds.svg",
+      "bytes": 79605
+    },
+    {
+      "member": "candidate/HANDOFF.md",
+      "bytes": 12314
+    },
+    {
+      "member": "candidate/outputs/baseline-audit.json",
+      "bytes": 136459
+    },
+    {
+      "member": "candidate/outputs/baseline-policy.json",
+      "bytes": 73006
+    },
+    {
+      "member": "candidate/outputs/baseline-weekly-ledger.csv",
+      "bytes": 5549
+    },
+    {
+      "member": "candidate/outputs/commitment-policy.csv",
+      "bytes": 73201
+    },
+    {
+      "member": "candidate/outputs/detailed-ledger.json",
+      "bytes": 135385
+    },
+    {
+      "member": "candidate/outputs/information-nodes.json",
+      "bytes": 235525
+    },
+    {
+      "member": "candidate/outputs/information-relaxation.json",
+      "bytes": 3514
+    },
+    {
+      "member": "candidate/outputs/normalized-input.json",
+      "bytes": 29304
+    },
+    {
+      "member": "candidate/outputs/operations-profile.json",
+      "bytes": 6549
+    },
+    {
+      "member": "candidate/outputs/path-summary.csv",
+      "bytes": 520
+    },
+    {
+      "member": "candidate/outputs/policy-audit.json",
+      "bytes": 136740
+    },
+    {
+      "member": "candidate/outputs/receivables.json",
+      "bytes": 1717
+    },
+    {
+      "member": "candidate/outputs/solve-causal-01/audit.json",
+      "bytes": 136740
+    },
+    {
+      "member": "candidate/outputs/solve-causal-01/model.pbtxt",
+      "bytes": 517966
+    },
+    {
+      "member": "candidate/outputs/solve-causal-01/optimization.json",
+      "bytes": 921
+    },
+    {
+      "member": "candidate/outputs/solve-causal-01/policy.json",
+      "bytes": 72530
+    },
+    {
+      "member": "candidate/outputs/solve-causal-01/solver.log",
+      "bytes": 63725
+    },
+    {
+      "member": "candidate/outputs/spot-programme/actor.py",
+      "bytes": 5412
+    },
+    {
+      "member": "candidate/outputs/spot-programme/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/outputs/spot-programme/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/outputs/spot-programme/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/outputs/spot-programme/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/outputs/spot-programme/policy.json",
+      "bytes": 73006
+    },
+    {
+      "member": "candidate/outputs/spot-programme/submission.json",
+      "bytes": 191
+    },
+    {
+      "member": "candidate/outputs/spot-programme/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/outputs/summary.json",
+      "bytes": 2477
+    },
+    {
+      "member": "candidate/outputs/weekly-ledger.csv",
+      "bytes": 5790
+    },
+    {
+      "member": "candidate/policy.json",
+      "bytes": 72530
+    },
+    {
+      "member": "candidate/programme/actor.py",
+      "bytes": 5412
+    },
+    {
+      "member": "candidate/programme/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "candidate/programme/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "candidate/programme/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "candidate/programme/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "candidate/programme/policy.json",
+      "bytes": 72530
+    },
+    {
+      "member": "candidate/programme/submission.json",
+      "bytes": 146
+    },
+    {
+      "member": "candidate/programme/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "candidate/programme-source.zip",
+      "bytes": 17851
+    },
+    {
+      "member": "candidate/README.md",
+      "bytes": 3528
+    },
+    {
+      "member": "candidate/REPORT.md",
+      "bytes": 14479
+    },
+    {
+      "member": "candidate/reproduce.ps1",
+      "bytes": 2378
+    },
+    {
+      "member": "candidate/requirements-lock.txt",
+      "bytes": 328
+    },
+    {
+      "member": "candidate/source/check_contracts.py",
+      "bytes": 4935
+    },
+    {
+      "member": "candidate/source/common.py",
+      "bytes": 445
+    },
+    {
+      "member": "candidate/source/deliver.py",
+      "bytes": 7908
+    },
+    {
+      "member": "candidate/source/figures.py",
+      "bytes": 6545
+    },
+    {
+      "member": "candidate/source/optimize.py",
+      "bytes": 7964
+    },
+    {
+      "member": "candidate/source/package_spot.py",
+      "bytes": 699
+    },
+    {
+      "member": "candidate/source/recover_demo.py",
+      "bytes": 2998
+    },
+    {
+      "member": "candidate/source/report.py",
+      "bytes": 15412
+    },
+    {
+      "member": "candidate/source/run_comparison.py",
+      "bytes": 1365
+    },
+    {
+      "member": "candidate/source/source_map.py",
+      "bytes": 7969
+    },
+    {
+      "member": "candidate/source/verify_evidence.py",
+      "bytes": 5284
+    },
+    {
+      "member": "candidate/source-map.json",
+      "bytes": 9184
+    },
+    {
+      "member": "candidate/specs/plan.md",
+      "bytes": 3697
+    },
+    {
+      "member": "candidate/specs/README.md",
+      "bytes": 327
+    },
+    {
+      "member": "candidate/specs/records/2026-10/delivery.md",
+      "bytes": 4107
+    },
+    {
+      "member": "candidate/submission.json",
+      "bytes": 146
+    },
+    {
+      "member": "evaluation/actual-grade-command.json",
+      "bytes": 1573
+    },
+    {
+      "member": "evaluation/assignment/assignment.json",
+      "bytes": 5310
+    },
+    {
+      "member": "evaluation/assignment/delivery-layout.json",
+      "bytes": 775
+    },
+    {
+      "member": "evaluation/assignment/policy-assessment.json",
+      "bytes": 150745
+    },
+    {
+      "member": "evaluation/assignment/review-template.json",
+      "bytes": 721
+    },
+    {
+      "member": "evaluation/assignment/rubric.json",
+      "bytes": 4305
+    },
+    {
+      "member": "evaluation/delivery-layout.json",
+      "bytes": 775
+    },
+    {
+      "member": "evaluation/final-grade-machine-recomputed/assignment.json",
+      "bytes": 5310
+    },
+    {
+      "member": "evaluation/final-grade-machine-recomputed/delivery-layout.json",
+      "bytes": 775
+    },
+    {
+      "member": "evaluation/final-grade-machine-recomputed/policy-assessment.json",
+      "bytes": 150745
+    },
+    {
+      "member": "evaluation/final-grade-machine-recomputed/review-template.json",
+      "bytes": 721
+    },
+    {
+      "member": "evaluation/final-grade-machine-recomputed/rubric.json",
+      "bytes": 4305
+    },
+    {
+      "member": "evaluation/final-grade.json",
+      "bytes": 14621
+    },
+    {
+      "member": "evaluation/frozen-public/exercise-tools/qualification/current-source/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "evaluation/frozen-public/exercise-tools/qualification/current-source/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "evaluation/frozen-public/exercise-tools/qualification/current-source/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "evaluation/frozen-public/exercise-tools/qualification/current-source/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "evaluation/frozen-public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "evaluation/frozen-public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "evaluation/frozen-public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "evaluation/frozen-public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "evaluation/frozen-public/exercise.py",
+      "bytes": 529
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/bom.csv",
+      "bytes": 152
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/demand.csv",
+      "bytes": 5986
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/facility.json",
+      "bytes": 259
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/plant_capacity.csv",
+      "bytes": 3200
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/plants.csv",
+      "bytes": 31
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/products.csv",
+      "bytes": 152
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/raw_materials.csv",
+      "bytes": 100
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/routes.csv",
+      "bytes": 138
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/scenarios.csv",
+      "bytes": 113
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/supplier_capacity.csv",
+      "bytes": 4532
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/supplier_quotes.csv",
+      "bytes": 171
+    },
+    {
+      "member": "evaluation/frozen-public/inputs/supplier_terms.csv",
+      "bytes": 104
+    },
+    {
+      "member": "evaluation/frozen-public/OPERATIONS.md",
+      "bytes": 3382
+    },
+    {
+      "member": "evaluation/frozen-public/OUTPUTS.md",
+      "bytes": 5994
+    },
+    {
+      "member": "evaluation/frozen-public/TASK.md",
+      "bytes": 3928
+    },
+    {
+      "member": "evaluation/frozen-public/tree-contract.json",
+      "bytes": 1156
+    },
+    {
+      "member": "evaluation/handover-observed.json",
+      "bytes": 405
+    },
+    {
+      "member": "evaluation/original-flat-layout-assessment/assignment.json",
+      "bytes": 4996
+    },
+    {
+      "member": "evaluation/original-flat-layout-assessment/delivery-layout.json",
+      "bytes": 472
+    },
+    {
+      "member": "evaluation/original-flat-layout-assessment/policy-assessment.json",
+      "bytes": 150877
+    },
+    {
+      "member": "evaluation/original-flat-layout-assessment/review-template.json",
+      "bytes": 721
+    },
+    {
+      "member": "evaluation/original-flat-layout-assessment/rubric.json",
+      "bytes": 4305
+    },
+    {
+      "member": "evaluation/original-flat-layout-command.json",
+      "bytes": 1388
+    },
+    {
+      "member": "evaluation/pre-layout-repair-assessment/assignment.json",
+      "bytes": 4477
+    },
+    {
+      "member": "evaluation/pre-layout-repair-assessment/policy-assessment.json",
+      "bytes": 150745
+    },
+    {
+      "member": "evaluation/pre-layout-repair-assessment/review-template.json",
+      "bytes": 721
+    },
+    {
+      "member": "evaluation/pre-layout-repair-assessment/rubric.json",
+      "bytes": 4305
+    },
+    {
+      "member": "evaluation/pre-layout-repair-command.json",
+      "bytes": 1124
+    },
+    {
+      "member": "evaluation/pre-layout-repair-source.zip",
+      "bytes": 14582
+    },
+    {
+      "member": "evaluation/prepare-command.json",
+      "bytes": 1339
+    },
+    {
+      "member": "evaluation/prepare-mapped-candidate.py",
+      "bytes": 949
+    },
+    {
+      "member": "evaluation/private-run/actual-checker-command.json",
+      "bytes": 2053
+    },
+    {
+      "member": "evaluation/private-run/actual-commands.json",
+      "bytes": 11304
+    },
+    {
+      "member": "evaluation/private-run/control-39784188f23c/completed/active.json",
+      "bytes": 4272
+    },
+    {
+      "member": "evaluation/private-run/control-39784188f23c/completed/journal-export.json",
+      "bytes": 35601
+    },
+    {
+      "member": "evaluation/private-run/control-39784188f23c/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "evaluation/private-run/control-39784188f23c/completed/visible-exchange.jsonl",
+      "bytes": 98865
+    },
+    {
+      "member": "evaluation/private-run/control-39784188f23c/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/control-39784188f23c/completed/worker-terminal.json",
+      "bytes": 629
+    },
+    {
+      "member": "evaluation/private-run/control-39784188f23c/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/l06_bound_certificate.py",
+      "bytes": 2993
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/l06_delivery.py",
+      "bytes": 10191
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/l06_grade.py",
+      "bytes": 10860
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/l06_integer.py",
+      "bytes": 8122
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/l06_numeric.py",
+      "bytes": 17510
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/l06_plan.py",
+      "bytes": 1303
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/qualify_business_checks.py",
+      "bytes": 2537
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/qualify_delivery.py",
+      "bytes": 6512
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/qualify_full_business_checks.py",
+      "bytes": 5580
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/qualify_grading.py",
+      "bytes": 10603
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/qualify_l06.py",
+      "bytes": 14225
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/qualify_numeric.py",
+      "bytes": 16306
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/qualify_packet.py",
+      "bytes": 3825
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/qualify_relaxation_checks.py",
+      "bytes": 5333
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/README-reference.md",
+      "bytes": 1215
+    },
+    {
+      "member": "evaluation/private-run/controller-source/business-core/reproduce.py",
+      "bytes": 19896
+    },
+    {
+      "member": "evaluation/private-run/controller-source/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "evaluation/private-run/controller-source/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "evaluation/private-run/controller-source/source/error_policy.py",
+      "bytes": 1471
+    },
+    {
+      "member": "evaluation/private-run/controller-source/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "evaluation/private-run/controller-source/source/report_policy.py",
+      "bytes": 11981
+    },
+    {
+      "member": "evaluation/private-run/controller-source/source/solve_policy.py",
+      "bytes": 3442
+    },
+    {
+      "member": "evaluation/private-run/controller-source/source/table_actor.py",
+      "bytes": 1253
+    },
+    {
+      "member": "evaluation/private-run/controller-source/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "evaluation/private-run/declared-policy.json",
+      "bytes": 72530
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/after-commit-original.json",
+      "bytes": 4981
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/after-commit-original.sqlite3",
+      "bytes": 28672
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/before-loss/active.json",
+      "bytes": 4268
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/before-loss/crash-after-commit.json",
+      "bytes": 509
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/before-loss/visible-exchange.jsonl",
+      "bytes": 28945
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/before-loss/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/before-loss/worker-terminal.json",
+      "bytes": 619
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/completed/active.json",
+      "bytes": 4261
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/completed/journal-export.json",
+      "bytes": 35620
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/completed/resume-receipt.json",
+      "bytes": 283
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/completed/visible-exchange.jsonl",
+      "bytes": 69965
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/completed/worker-terminal.json",
+      "bytes": 619
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/journal.sqlite3",
+      "bytes": 4096
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-08570a75005a/journal.sqlite3-wal",
+      "bytes": 193672
+    },
+    {
+      "member": "evaluation/private-run/episode-582881e5fc2c/completed/active.json",
+      "bytes": 4262
+    },
+    {
+      "member": "evaluation/private-run/episode-582881e5fc2c/completed/journal-export.json",
+      "bytes": 35610
+    },
+    {
+      "member": "evaluation/private-run/episode-582881e5fc2c/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "evaluation/private-run/episode-582881e5fc2c/completed/visible-exchange.jsonl",
+      "bytes": 98880
+    },
+    {
+      "member": "evaluation/private-run/episode-582881e5fc2c/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-582881e5fc2c/completed/worker-terminal.json",
+      "bytes": 619
+    },
+    {
+      "member": "evaluation/private-run/episode-582881e5fc2c/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-582881e5fc2c/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-582881e5fc2c/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-5f5b4640d1fd/completed/active.json",
+      "bytes": 4262
+    },
+    {
+      "member": "evaluation/private-run/episode-5f5b4640d1fd/completed/journal-export.json",
+      "bytes": 35601
+    },
+    {
+      "member": "evaluation/private-run/episode-5f5b4640d1fd/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "evaluation/private-run/episode-5f5b4640d1fd/completed/visible-exchange.jsonl",
+      "bytes": 98865
+    },
+    {
+      "member": "evaluation/private-run/episode-5f5b4640d1fd/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-5f5b4640d1fd/completed/worker-terminal.json",
+      "bytes": 619
+    },
+    {
+      "member": "evaluation/private-run/episode-5f5b4640d1fd/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-5f5b4640d1fd/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-5f5b4640d1fd/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-6e3f9aabf67d/completed/active.json",
+      "bytes": 4261
+    },
+    {
+      "member": "evaluation/private-run/episode-6e3f9aabf67d/completed/journal-export.json",
+      "bytes": 35616
+    },
+    {
+      "member": "evaluation/private-run/episode-6e3f9aabf67d/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "evaluation/private-run/episode-6e3f9aabf67d/completed/visible-exchange.jsonl",
+      "bytes": 98891
+    },
+    {
+      "member": "evaluation/private-run/episode-6e3f9aabf67d/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-6e3f9aabf67d/completed/worker-terminal.json",
+      "bytes": 619
+    },
+    {
+      "member": "evaluation/private-run/episode-6e3f9aabf67d/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-6e3f9aabf67d/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-6e3f9aabf67d/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-7cacf9891f91/completed/active.json",
+      "bytes": 4261
+    },
+    {
+      "member": "evaluation/private-run/episode-7cacf9891f91/completed/journal-export.json",
+      "bytes": 35607
+    },
+    {
+      "member": "evaluation/private-run/episode-7cacf9891f91/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "evaluation/private-run/episode-7cacf9891f91/completed/visible-exchange.jsonl",
+      "bytes": 98869
+    },
+    {
+      "member": "evaluation/private-run/episode-7cacf9891f91/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-7cacf9891f91/completed/worker-terminal.json",
+      "bytes": 619
+    },
+    {
+      "member": "evaluation/private-run/episode-7cacf9891f91/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-7cacf9891f91/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-7cacf9891f91/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-877c94121c82/completed/active.json",
+      "bytes": 4262
+    },
+    {
+      "member": "evaluation/private-run/episode-877c94121c82/completed/journal-export.json",
+      "bytes": 35609
+    },
+    {
+      "member": "evaluation/private-run/episode-877c94121c82/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "evaluation/private-run/episode-877c94121c82/completed/visible-exchange.jsonl",
+      "bytes": 98900
+    },
+    {
+      "member": "evaluation/private-run/episode-877c94121c82/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-877c94121c82/completed/worker-terminal.json",
+      "bytes": 619
+    },
+    {
+      "member": "evaluation/private-run/episode-877c94121c82/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-877c94121c82/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-877c94121c82/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-d367a5d24930/completed/active.json",
+      "bytes": 4261
+    },
+    {
+      "member": "evaluation/private-run/episode-d367a5d24930/completed/journal-export.json",
+      "bytes": 35595
+    },
+    {
+      "member": "evaluation/private-run/episode-d367a5d24930/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "evaluation/private-run/episode-d367a5d24930/completed/visible-exchange.jsonl",
+      "bytes": 98846
+    },
+    {
+      "member": "evaluation/private-run/episode-d367a5d24930/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-d367a5d24930/completed/worker-terminal.json",
+      "bytes": 619
+    },
+    {
+      "member": "evaluation/private-run/episode-d367a5d24930/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-d367a5d24930/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-d367a5d24930/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-ee9f915d39c9/completed/active.json",
+      "bytes": 4262
+    },
+    {
+      "member": "evaluation/private-run/episode-ee9f915d39c9/completed/journal-export.json",
+      "bytes": 35607
+    },
+    {
+      "member": "evaluation/private-run/episode-ee9f915d39c9/completed/terminal.json",
+      "bytes": 1706
+    },
+    {
+      "member": "evaluation/private-run/episode-ee9f915d39c9/completed/visible-exchange.jsonl",
+      "bytes": 98863
+    },
+    {
+      "member": "evaluation/private-run/episode-ee9f915d39c9/completed/worker-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episode-ee9f915d39c9/completed/worker-terminal.json",
+      "bytes": 619
+    },
+    {
+      "member": "evaluation/private-run/episode-ee9f915d39c9/journal.sqlite3",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-ee9f915d39c9/journal.sqlite3-shm",
+      "bytes": 32768
+    },
+    {
+      "member": "evaluation/private-run/episode-ee9f915d39c9/journal.sqlite3-wal",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/private-run/episodes.json",
+      "bytes": 12292
+    },
+    {
+      "member": "evaluation/private-run/journals.json",
+      "bytes": 164818
+    },
+    {
+      "member": "evaluation/private-run/logical-and-journal-assessment.json",
+      "bytes": 151612
+    },
+    {
+      "member": "evaluation/private-run/owner-started.json",
+      "bytes": 1053
+    },
+    {
+      "member": "evaluation/private-run/owner-terminal.json",
+      "bytes": 802
+    },
+    {
+      "member": "evaluation/private-run/pre-execution-controller-source.zip",
+      "bytes": 77250
+    },
+    {
+      "member": "evaluation/private-run/pre-execution-project.zip",
+      "bytes": 17851
+    },
+    {
+      "member": "evaluation/private-run/public/exercise-tools/qualification/current-source/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "evaluation/private-run/public/exercise-tools/qualification/current-source/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "evaluation/private-run/public/exercise-tools/qualification/current-source/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "evaluation/private-run/public/exercise-tools/qualification/current-source/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "evaluation/private-run/public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "evaluation/private-run/public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "evaluation/private-run/public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "evaluation/private-run/public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "evaluation/private-run/public/exercise.py",
+      "bytes": 529
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/bom.csv",
+      "bytes": 152
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/demand.csv",
+      "bytes": 5986
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/facility.json",
+      "bytes": 259
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/plant_capacity.csv",
+      "bytes": 3200
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/plants.csv",
+      "bytes": 31
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/products.csv",
+      "bytes": 152
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/raw_materials.csv",
+      "bytes": 100
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/routes.csv",
+      "bytes": 138
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/scenarios.csv",
+      "bytes": 113
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/supplier_capacity.csv",
+      "bytes": 4532
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/supplier_quotes.csv",
+      "bytes": 171
+    },
+    {
+      "member": "evaluation/private-run/public/inputs/supplier_terms.csv",
+      "bytes": 104
+    },
+    {
+      "member": "evaluation/private-run/public/OPERATIONS.md",
+      "bytes": 3382
+    },
+    {
+      "member": "evaluation/private-run/public/OUTPUTS.md",
+      "bytes": 5994
+    },
+    {
+      "member": "evaluation/private-run/public/TASK.md",
+      "bytes": 3928
+    },
+    {
+      "member": "evaluation/private-run/public/tree-contract.json",
+      "bytes": 1156
+    },
+    {
+      "member": "evaluation/private-run/public-originals.zip",
+      "bytes": 34710
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/exercise-tools/qualification/current-source/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/exercise-tools/qualification/current-source/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/exercise-tools/qualification/current-source/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/exercise-tools/qualification/current-source/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/exercise-tools/upgrade-v0.3/run_native_whole.py",
+      "bytes": 8961
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/exercise-tools/upgrade-v0.3/source/check_tree.py",
+      "bytes": 3509
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/exercise-tools/upgrade-v0.3/source/execute_policy.py",
+      "bytes": 7242
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/exercise-tools/upgrade-v0.3/source/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/exercise.py",
+      "bytes": 529
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/bom.csv",
+      "bytes": 169
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/demand.csv",
+      "bytes": 6499
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/facility.json",
+      "bytes": 259
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/plant_capacity.csv",
+      "bytes": 3457
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/plants.csv",
+      "bytes": 34
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/products.csv",
+      "bytes": 157
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/raw_materials.csv",
+      "bytes": 105
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/routes.csv",
+      "bytes": 147
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/scenarios.csv",
+      "bytes": 122
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/supplier_capacity.csv",
+      "bytes": 4917
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/supplier_quotes.csv",
+      "bytes": 184
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/inputs/supplier_terms.csv",
+      "bytes": 108
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/OPERATIONS.md",
+      "bytes": 3382
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/OUTPUTS.md",
+      "bytes": 5994
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/TASK.md",
+      "bytes": 3928
+    },
+    {
+      "member": "evaluation/private-run/row-order-public/tree-contract.json",
+      "bytes": 1156
+    },
+    {
+      "member": "evaluation/private-run/sealed-project/actor.py",
+      "bytes": 5412
+    },
+    {
+      "member": "evaluation/private-run/sealed-project/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "evaluation/private-run/sealed-project/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "evaluation/private-run/sealed-project/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "evaluation/private-run/sealed-project/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "evaluation/private-run/sealed-project/policy.json",
+      "bytes": 72530
+    },
+    {
+      "member": "evaluation/private-run/sealed-project/submission.json",
+      "bytes": 146
+    },
+    {
+      "member": "evaluation/private-run/sealed-project/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "evaluation/private-run-command.json",
+      "bytes": 1885
+    },
+    {
+      "member": "evaluation/public-scope-observation.json",
+      "bytes": 824
+    },
+    {
+      "member": "evaluation/reference-layout.json",
+      "bytes": 472
+    },
+    {
+      "member": "evaluation/seal-stderr.txt",
+      "bytes": 0
+    },
+    {
+      "member": "evaluation/seal-stdout.txt",
+      "bytes": 51
+    },
+    {
+      "member": "evaluation/seal-workspace.py",
+      "bytes": 967
+    },
+    {
+      "member": "evaluation/workspace-seal-started.json",
+      "bytes": 258
+    },
+    {
+      "member": "evaluation/workspace-seal-terminal.json",
+      "bytes": 1286153
+    },
+    {
+      "member": "independent-review/actual-layout-check_whole.py",
+      "bytes": 25770
+    },
+    {
+      "member": "independent-review/assignment.json",
+      "bytes": 5310
+    },
+    {
+      "member": "independent-review/audit_candidate_raw_sql.py",
+      "bytes": 11772
+    },
+    {
+      "member": "independent-review/audit_handoff_layout.py",
+      "bytes": 3173
+    },
+    {
+      "member": "independent-review/audit_science_and_sources.py",
+      "bytes": 11300
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/HANDOFF.md",
+      "bytes": 12314
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/programme/actor.py",
+      "bytes": 5412
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/programme/check_l06.py",
+      "bytes": 7235
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/programme/l06_input.py",
+      "bytes": 7095
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/programme/l06_packet.py",
+      "bytes": 9611
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/programme/l06_physics.py",
+      "bytes": 7777
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/programme/policy.json",
+      "bytes": 72530
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/programme/submission.json",
+      "bytes": 146
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/programme/tree_business.py",
+      "bytes": 9489
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/README.md",
+      "bytes": 3528
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/REPORT.md",
+      "bytes": 14479
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/reproduce.ps1",
+      "bytes": 2378
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/requirements-lock.txt",
+      "bytes": 328
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source/check_contracts.py",
+      "bytes": 4935
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source/common.py",
+      "bytes": 445
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source/deliver.py",
+      "bytes": 7908
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source/figures.py",
+      "bytes": 6545
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source/optimize.py",
+      "bytes": 7964
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source/package_spot.py",
+      "bytes": 699
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source/recover_demo.py",
+      "bytes": 2998
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source/report.py",
+      "bytes": 15412
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source/run_comparison.py",
+      "bytes": 1365
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source/source_map.py",
+      "bytes": 7969
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source/verify_evidence.py",
+      "bytes": 5284
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/source-map.json",
+      "bytes": 9184
+    },
+    {
+      "member": "independent-review/candidate-text-snapshot/submission.json",
+      "bytes": 146
+    },
+    {
+      "member": "independent-review/delivery-layout.json",
+      "bytes": 775
+    },
+    {
+      "member": "independent-review/evaluation-records/delivery-layout.json",
+      "bytes": 775
+    },
+    {
+      "member": "independent-review/evaluation-records/prepare-command.json",
+      "bytes": 1339
+    },
+    {
+      "member": "independent-review/evaluation-records/private-run-command.json",
+      "bytes": 1885
+    },
+    {
+      "member": "independent-review/evaluation-records/public-scope-observation.json",
+      "bytes": 824
+    },
+    {
+      "member": "independent-review/git-status-end.txt",
+      "bytes": 12538
+    },
+    {
+      "member": "independent-review/git-status-start.txt",
+      "bytes": 12538
+    },
+    {
+      "member": "independent-review/handoff-object-audit.json",
+      "bytes": 1547
+    },
+    {
+      "member": "independent-review/independent-recurrence.json",
+      "bytes": 414912
+    },
+    {
+      "member": "independent-review/initial-review.json",
+      "bytes": 10668
+    },
+    {
+      "member": "independent-review/INITIAL-SEAL.json",
+      "bytes": 320
+    },
+    {
+      "member": "independent-review/layout-implementation-delta.diff",
+      "bytes": 14591
+    },
+    {
+      "member": "independent-review/REVIEW-INITIAL.md",
+      "bytes": 5853
+    },
+    {
+      "member": "independent-review/review-template.json",
+      "bytes": 721
+    },
+    {
+      "member": "independent-review/review.json",
+      "bytes": 10668
+    },
+    {
+      "member": "independent-review/REVIEW.md",
+      "bytes": 5853
+    },
+    {
+      "member": "independent-review/rubric.json",
+      "bytes": 4305
+    },
+    {
+      "member": "independent-review/save_original_review.py",
+      "bytes": 14619
+    },
+    {
+      "member": "independent-review/scientific-provenance-audit.json",
+      "bytes": 6595
+    },
+    {
+      "member": "independent-review/snapshot_and_prepare_audit.py",
+      "bytes": 2694
+    },
+    {
+      "member": "independent-review/stage-assessment.json",
+      "bytes": 1060
+    },
+    {
+      "member": "independent-review/visual-observations.json",
+      "bytes": 987
+    },
+    {
+      "member": "independent-review/whole-business-audit.json",
+      "bytes": 38616
+    },
+    {
+      "member": "independent-review/workspace-capsule-member-index.json",
+      "bytes": 1662
+    },
+    {
+      "member": "original-public/public-inputs.zip",
+      "bytes": 34710
+    },
+    {
+      "member": "original-public/public-preparation.json",
+      "bytes": 774
+    }
+  ],
+  "complete_original_workspace": {
+    "path": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\complete-workspace.zip",
+    "bytes": 170572680,
+    "sha256": "e8bfa54eaf52673eb2234e19b87beb751c40db25b69545b4a00993ba5ec46cee",
+    "identity_scope": "entire already closed immutable original evidence archive, not source correctness/quality"
+  },
+  "complete_original_bytes": 385012753,
+  "complete_original_files": 9368,
+  "git_repository_supplied": false,
+  "excluded_from_safe_duplicate_only": [
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\submission\\.venv",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\submission\\.cache",
+    "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\submission\\dependencies\\wheels",
+    "duplicate evaluation closed inputs (identical originals remain in complete original archive and external closed assignments)"
+  ],
+  "all_originals_retained": true,
+  "scope_exception": "5public bytecode cache files + unmeasured default tool caches preserved/disclosed, original25inputs unchanged",
+  "limits": "actual Codex model/usage/precise full activity attribution unavailable; comparablefalse, useful hours not certified",
+  "plain_projection_archived_only": [
+    "candidate-delivery/figures/01-cost-comparison.svg",
+    "candidate-delivery/figures/02-cash-and-credit.svg",
+    "candidate-delivery/figures/03-warehouse-peaks.svg",
+    "candidate-delivery/figures/04-receivables-and-bounds.svg",
+    "candidate-delivery/outputs/solve-causal-01/solver.log",
+    "independent-review/layout-implementation-delta.diff"
+  ]
+}

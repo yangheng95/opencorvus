@@ -19,7 +19,7 @@
 ## 原子评分及实际命令
 
 ```powershell
-python check_whole.py prepare --run <closed-native-run> --delivery <complete-delivery> --role author_reference --out <new-assignment>
+python check_whole.py prepare --run <closed-native-run> --delivery <complete-delivery> --layout <original-delivery-layout.json> --role author_reference --out <new-assignment>
 python check_whole.py grade --assignment <same-assignment> --review <bound-H-review.json> --out <new-grade.json>
 ```
 
@@ -30,3 +30,6 @@ M01严格policy覆盖/形状；M02逐路径物理；M03所有完整事件前缀�
 H01按实际信息/提前承诺解释决策而不强迫动作翻转；H02精确账/信用/应收/界及不确定性；H03可操作同键恢复/冲突保留/信用升级；H04实际查看图/单位/路径/账绑定；H05有限合成范围/真实失败、无假现实批准保证。每H须具体evidence/reason，严格assignment/case_version绑定。原PowerShell wrapper0/1按实际记录，不伪称单独捕获直接grader码。
 
 此一次非盲熟悉AI整审只准开发metadata冻，不认证fresh区分度、职业真人/统计成熟或有效小时。新0.3仍须必要fresh真实比较，两good另版；L01原pending本机研究继续、L02另版义务未取消。套件9/10开发合同，有效候选小时0/10，心跳ACTIVE。
+
+
+首fresh候选已自然交付并用同25public/原source做私有全链。真实候选以outputs子目录、JSON source-map、PowerShell重现与4独立PNG交付；公共合同未限定作者平铺及Python/operations.png命名。原checker M05/M12误拒保原结果/source，当前唯一assignment/2由明确--layout定位原文件且闭合绑定，grade仍从同closed原对象/布局重算，不改候选内容/阈值/17叶或原作者100与weak95。布局槽为policy、programme、report、weekly_ledger、commitments、summary、receivables、source_map、reproduce、requirements、figures(相对路径列表)，严格在原交付根内；它只是owner位置清单，不是候选改稿或评分配置。新candidate布局与原flat布局实际prepare均12Mpass；候选内容独评/正式分数见独立pilot记录，不用自报替代。

@@ -60,7 +60,7 @@
 
 - [批准后的代码提交验收](records/2026-10/2026-10-30-approved-code-workflow.md)：完整真实改码、测试、批准和范围Git提交的当前版本验收。
 
-- [L02发布时间输入资格](records/2026-10/2026-10-30-heavy-workbench-l02-qualification.md)：旧真实双100触发另版；[最新长程Recall](records/2026-10/2026-10-29-heavy-workbench-long.md)记录L01本机原pending与L06/0.3整题开发冻结/真实评分。
+- [L02发布时间输入资格](records/2026-10/2026-10-30-heavy-workbench-l02-qualification.md)：旧双100升级仍待；[最新长程Recall](records/2026-10/2026-10-29-heavy-workbench-long.md)保L01本机原pending、L06/0.3 fresh真实100与同输入OC原生Task。
 - [L05跨系统副作用资格](records/2026-10/2026-10-30-heavy-workbench-l05-qualification.md)：完整旧事故/真实在途/持久计划中断续接/双sender/服务重启/monitor/移交整审开发冻，参考100、伪保证94关键失败，非模型成绩。
 
 - [Mission 创建选择旅程](records/2026-10/2026-10-30-mission-selection-journey.md)：真实搜索、保留选择、类型切换及取消状态调查。

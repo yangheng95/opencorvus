@@ -1,0 +1,211 @@
+{
+  "format": "l06-whole-assignment/2",
+  "assignment_id": "l06-whole-6390f5de880e45bd95a82c327fbdaec6",
+  "case_version": "L06/0.3.0-dev",
+  "subject_role": "candidate",
+  "created_at": "2026-10-31T06:03:55.311570+00:00",
+  "original_run": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run",
+  "delivery_layout": {
+    "format": "l06-delivery-layout/1",
+    "paths": {
+      "policy": "policy.json",
+      "programme": "programme",
+      "report": "REPORT.md",
+      "weekly_ledger": "outputs/weekly-ledger.csv",
+      "commitments": "outputs/commitment-policy.csv",
+      "summary": "outputs/summary.json",
+      "receivables": "outputs/receivables.json",
+      "source_map": "source-map.json",
+      "reproduce": "reproduce.ps1",
+      "requirements": "requirements-lock.txt",
+      "figures": [
+        "figures/01-cost-comparison.png",
+        "figures/02-cash-and-credit.png",
+        "figures/03-warehouse-peaks.png",
+        "figures/04-receivables-and-bounds.png"
+      ]
+    },
+    "provenance": "owner locator for original naturally delivered paths; no candidate file/bytes or content changed"
+  },
+  "leaves": {
+    "M01": {
+      "id": "M01",
+      "status": "verified_pass",
+      "evidence": [
+        "delivery\\policy.json: complete strict policy tensors and raw identity"
+      ],
+      "reason": "policy decoded"
+    },
+    "M02": {
+      "id": "M02",
+      "status": "verified_pass",
+      "evidence": [
+        "[]"
+      ],
+      "reason": "independent business/information/quality computation"
+    },
+    "M03": {
+      "id": "M03",
+      "status": "verified_pass",
+      "evidence": [
+        "[]"
+      ],
+      "reason": "independent business/information/quality computation"
+    },
+    "M04": {
+      "id": "M04",
+      "status": "verified_pass",
+      "evidence": [
+        "{\"expected\":\"387449/8\",\"quality_maximum\":\"60044\"}"
+      ],
+      "reason": "independent business/information/quality computation"
+    },
+    "M05": {
+      "id": "M05",
+      "status": "verified_pass",
+      "evidence": [
+        "128 weekly rows, all action coordinates and exact probability-weighted components independently closed"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M06": {
+      "id": "M06",
+      "status": "verified_pass",
+      "evidence": [
+        "actual SQLite event/action/receipt/state/cash/queues agree with independent full replay for every path"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M07": {
+      "id": "M07",
+      "status": "verified_pass",
+      "evidence": [
+        "8 original programme members bound to the executed and delivered object; source correctness additionally reviewed"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M08": {
+      "id": "M08",
+      "status": "verified_pass",
+      "evidence": [
+        "complete actual current packets, responses and stored commitments agree; original argv/env/source reviewed for native dataflow only"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M09": {
+      "id": "M09",
+      "status": "verified_pass",
+      "evidence": [
+        "actual SQLite commit at week7, controller73, original key/receipt and next_week8 resumed in a new process"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M10": {
+      "id": "M10",
+      "status": "verified_pass",
+      "evidence": [
+        "original row/key/event/action/receipt values retained across the real restart"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M11": {
+      "id": "M11",
+      "status": "verified_pass",
+      "evidence": [
+        "same sealed deterministic actor on a separately permuted CSV input, full16 actual commits; this is row-order invariance, not arbitrary business perturbation certification"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M12": {
+      "id": "M12",
+      "status": "verified_pass",
+      "evidence": [
+        "complete source/report/ledger/figure/reproduction deliverables present; usability and rendered content judged independently"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "H01": {
+      "id": "H01",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\REPORT.md#Complete policy and causal execution",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\source\\optimize.py",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\programme\\actor.py",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\outputs\\information-nodes.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\outputs\\information-relaxation.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-independent-review-20261031\\whole-business-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-independent-review-20261031\\scientific-provenance-audit.json"
+      ],
+      "reason": "The delivered study explains complete-event perfect recall,60history nodes, irreversible lead1/2 orders and current lead0 recourse; model shares actions by full public history and actor validates the actual committed prefix. Independent raw recurrence confirms all128 private events/actions/receipts and all equal-information actions. Canonical spot is actually executed and independently70640; the separate relaxed39714 lower bound is justified by original material balance/cheapest allowed routes/nonnegative waived costs, with implementability and unknown information value/causal optimum clearly distinguished. No action-flip or author trajectory requirement is imposed."
+    },
+    "H02": {
+      "id": "H02",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\REPORT.md#Financial and physical results",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\outputs\\summary.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\outputs\\receivables.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\outputs\\weekly-ledger.csv",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\outputs\\solve-causal-01\\solver.log",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\outputs\\solve-causal-01\\optimization.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-independent-review-20261031\\whole-business-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-independent-review-20261031\\scientific-provenance-audit.json"
+      ],
+      "reason": "Independent exact arithmetic confirms expected387449/8, purchase144459/4+freight5940+production5802+holding4595/8, saving177671/8 over70640, minimum cash\u22123116 atweek3, and due16..19 AR24150/25230. The report correctly compares extra early credit to the spot alternative, identifies239/240 raw peak risk and keeps late AR separate from settled cash. Original CP-SAT log is FEASIBLE with weighted objective387449/bound381004; report calls47625.5 a numerical native search bound, not a rational certificate or exact optimum, and separately proves the loose39714 analytical relaxation. No solver was rerun or exact global optimum certified by this review."
+    },
+    "H03": {
+      "id": "H03",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\HANDOFF.md",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\reproduce.ps1",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\source-map.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\programme\\submission.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\requirements-lock.txt",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\dependencies\\wheels",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\evidence\\handoff-recovery-01\\actual-command.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\evidence\\handoff-recovery-01\\recovery-result.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\run\\episodes.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-independent-review-20261031\\handoff-object-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-independent-review-20261031\\scientific-provenance-audit.json"
+      ],
+      "reason": "Handoff supplies exact native/std-library deployment, fresh output ownership, optional offline wheel/venv/optimizer/render commands, and coherent SQLite backup/same-key receipt recovery. It warns against main-DB-only copying while WAL is live, rekeying accepted weeks, editing commitments or unsupported midstream spot fallback; it names supplier/storage/credit/delayed-receipt stop/replan/authorized-finance decisions. I independently read the existing additional copied checkpoint8\u219216 SQL/receipt/native0 identities and the private evaluator73\u21920 prefix; actual final state agrees with raw recurrence. All pinned optional packages have retained matching wheel metadata. I ran no new candidate/solver/reproduction process; this is a read-audit of actual existing handoff evidence."
+    },
+    "H04": {
+      "id": "H04",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\figures\\01-cost-comparison.png",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\figures\\02-cash-and-credit.png",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\figures\\03-warehouse-peaks.png",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\figures\\04-receivables-and-bounds.png",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\REPORT.md",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-independent-review-20261031\\whole-business-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-independent-review-20261031\\scientific-provenance-audit.json"
+      ],
+      "reason": "All4actual PNGs were opened with view_image in this review. Cost components/path comparisons, candidate versus spot settled cash, both pre-consumption/predispatch warehouse peaks, terminal AR/cash and the analytically proved versus numerical bound are legible with declared units/path/week legends. Credit\u22129000/intermediate versus terminal0 and capacities240/100 are visible. I verified the plotted totals/extrema against independent raw arithmetic; the finite-support narrow raw margin and absence of reality-wide/agent-hour claims are explicit."
+    },
+    "H05": {
+      "id": "H05",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\REPORT.md#Real recovery and source evidence",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\REPORT.md#Operational handoff and limitations",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\HANDOFF.md#Evidence limits and retained issues",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\evidence\\local-issues.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\delivery\\evidence\\native-spot-01\\owner-error.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\public-scope-observation.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\assignment\\closed\\run\\owner-terminal.json"
+      ],
+      "reason": "The actual candidate retains and explains canonical spot wrapper1/checker2 after successful business execution, local source-map syntax failure, initial public __pycache__ creation and unmeasured default pip/Matplotlib caches. It explicitly admits the public read-only scope was not perfectly preserved and does not claim OS confinement or erase that exception. Original25 public source/table bytes remain bound, separately from those extra files. It limits its claims to finite support, deterministic replay and one controlled commit-loss; it disclaims exact optimum, real financing/supplier approval, arbitrary/power failures, evaluator score and useful-hour certification. Truthful disclosure supports this frozen H05; it is not a declaration that every historical authorization constraint was perfectly met."
+    }
+  },
+  "fixed_denominator": 100,
+  "total": 100,
+  "good": true,
+  "scope": "actual source-bound whole-case grade of the declared subject_role; no effective-hour or maturity certification",
+  "reviewed_points": 100,
+  "all_critical_pass": true,
+  "review_complete": true,
+  "development_frozen": true
+}
