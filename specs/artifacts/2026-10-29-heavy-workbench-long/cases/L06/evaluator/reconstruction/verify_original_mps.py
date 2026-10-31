@@ -4,6 +4,10 @@ import math
 from pathlib import Path
 
 
+def numerical_tolerance(reference):
+    return 1e-6 + 1e-9 * abs(reference)
+
+
 def read_original_model(path: Path, *, numeric_type=float):
     section = ""
     row_types, coefficients, rhs, bounds, integers = {}, {}, {}, {}, set()
@@ -87,7 +91,13 @@ def read_original_model(path: Path, *, numeric_type=float):
 
 
 def verify(path: Path, values: dict, reported_objective: float | None):
-    row_types, coefficients, rhs, bounds, integers, objective = read_original_model(path)
+    return verify_linear_model(read_original_model(path), values, reported_objective)
+
+
+def verify_linear_model(parsed_model, values: dict, reported_objective: float | None):
+    row_types, coefficients, rhs, bounds, integers, objective = parsed_model
+    if not isinstance(values, dict):
+        raise ValueError("solution_variable_value_object")
     if set(values) != set(bounds):
         raise ValueError("solution_original_variable_identity")
     if any(type(x) not in {int, float} or not math.isfinite(x) for x in values.values()):
@@ -120,13 +130,13 @@ def verify(path: Path, values: dict, reported_objective: float | None):
             activity - target if kind == "L" else target - activity, 0.0
         )
         max_row_violation = max(max_row_violation, violation)
-        tolerance = 1e-6 + 1e-9 * abs(target)
+        tolerance = numerical_tolerance(target)
         if violation > tolerance:
             violations.append({"kind": "row", "row": row, "type": kind,
                                "activity": activity, "rhs": target, "violation": violation})
     independently_computed = math.fsum(values[v] * a for v, a in coefficients.get(objective, [])) - rhs.get(objective, 0.0)
     objective_error = None if reported_objective is None else abs(independently_computed - reported_objective)
-    objective_pass = None if objective_error is None else objective_error <= 1e-6 + 1e-9 * abs(independently_computed)
+    objective_pass = None if objective_error is None else objective_error <= numerical_tolerance(independently_computed)
     return {
         "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
         "feasible": not violations,

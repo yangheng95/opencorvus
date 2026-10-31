@@ -1,0 +1,85 @@
+{
+  "at": "2026-10-31T14:20:04.321323+00:00",
+  "model": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\model\\maritime-integration-001_t120.mps",
+  "raw_archive": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\input\\maritime-integration-001.raw.zip",
+  "instance": "maritime-integration-001",
+  "delivery": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run",
+  "layout": {
+    "values": "method/final-values.json",
+    "reported_objective": {
+      "file": "method/independent-original-model-check.json",
+      "key": "reported_objective"
+    },
+    "arcs": "operating/class-arc-plan.csv",
+    "paths": "operating/anonymous-vessel-paths.csv",
+    "ledger": "operating/port-period-ledger.csv",
+    "costs": "operating/economic-components.csv"
+  },
+  "mathematical_check": {
+    "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+    "feasible": true,
+    "objective_consistent": true,
+    "variables_recomputed": 6476,
+    "integer_variables_recomputed": 5753,
+    "constraints_recomputed": 2520,
+    "max_row_violation": 5.684341886080802e-14,
+    "max_bound_violation": 2.2737367544323206e-13,
+    "max_integrality_violation": 1.4210854715201989e-15,
+    "reported_objective": 71414.89206295769,
+    "independent_objective": 71414.89206295804,
+    "objective_absolute_error": 3.4924596548080444e-10,
+    "violations": [],
+    "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+  },
+  "engineering_status": "numeric_delivery_valid_science_unreviewed",
+  "operating_check": {
+    "status": "valid",
+    "counts": {
+      "arcs": 167,
+      "ledger": 360,
+      "costs": 8,
+      "path_coverage": {
+        "paths": 8,
+        "arc_units": 167
+      }
+    },
+    "max_inventory_residual": 2.842170943040401e-14
+  },
+  "economic_measurement": {
+    "submitted_numerical_cost": 71414.89206295804,
+    "verified_integer_optimum_interval": [
+      "35727170755838407714988747754583/1000000000000000000000000000",
+      "142829784125916071/2000000000000"
+    ],
+    "certified_bound_gap": 0.49972380096378216,
+    "submitted_gap_to_lower_bound": 0.4997238009637822,
+    "submitted_cost_minus_verified_reference": 4.5e-12,
+    "submitted_ratio_to_verified_reference": 1.0,
+    "reference_policy": "Exact feasible reference upper bound; a better submission keeps its raw lower cost/ratio, with no saturation at an author score",
+    "scope": "Submitted values use declared numerical feasibility tolerances; only the separate bound witnesses establish the exact optimum interval",
+    "total_score": null,
+    "heavy_benchmark_qualified": false
+  },
+  "scientific_review": "unreviewed",
+  "total_score": null,
+  "heavy_benchmark_qualified": false,
+  "subject_role": "author_reference",
+  "bound_checks": {
+    "lower": {
+      "verified": true,
+      "exact_lower_bound": "35727170755838407714988747754583/1000000000000000000000000000",
+      "lower_bound_float": 35727.17075583841,
+      "rows_verified": 2520,
+      "variables_verified": 6476,
+      "scope": "Weak-duality bound for full declared model, including all variable bounds; not an integer optimality claim"
+    },
+    "upper": {
+      "verified": true,
+      "exact_upper_bound": "142829784125916071/2000000000000",
+      "upper_bound_float": 71414.89206295804,
+      "variables_verified": 6476,
+      "constraints_verified": 2520,
+      "scope": "Full rational feasible integer plan; upper bound, not global optimum"
+    }
+  }
+}

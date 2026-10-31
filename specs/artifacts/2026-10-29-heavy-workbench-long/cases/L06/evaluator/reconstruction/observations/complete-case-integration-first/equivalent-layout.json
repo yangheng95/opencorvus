@@ -1,0 +1,11 @@
+{
+  "values": "values.json",
+  "reported_objective": {
+    "file": "native-claim.json",
+    "key": "reported_objective"
+  },
+  "arcs": "class-arc-plan.csv",
+  "paths": "anonymous-vessel-paths.csv",
+  "ledger": "port-period-ledger.csv",
+  "costs": "economic-components.csv"
+}

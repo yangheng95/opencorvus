@@ -1,0 +1,169 @@
+{
+  "format": "maritime-numeric-output-contract/1",
+  "tables": {
+    "arcs": {
+      "required_columns": [
+        "original_variable",
+        "vessel_class",
+        "kind",
+        "from_port",
+        "from_time_index",
+        "to_port",
+        "to_time_index",
+        "vessel_count",
+        "class_capacity",
+        "original_cost_per_vessel",
+        "cost_contribution",
+        "inventory_service_port",
+        "inventory_service_time_index",
+        "signed_inventory_effect"
+      ],
+      "types": {
+        "original_variable": "string",
+        "vessel_class": "integer",
+        "kind": "string",
+        "from_port": "integer",
+        "from_time_index": "integer",
+        "to_port": "integer",
+        "to_time_index": "integer",
+        "vessel_count": "integer",
+        "class_capacity": "finite_real",
+        "original_cost_per_vessel": "finite_real",
+        "cost_contribution": "finite_real",
+        "inventory_service_port": "empty_string_or_integer",
+        "inventory_service_time_index": "empty_string_or_integer",
+        "signed_inventory_effect": "finite_real"
+      }
+    },
+    "paths": {
+      "required_columns": [
+        "anonymous_path_id",
+        "step",
+        "original_variable",
+        "vessel_class",
+        "kind",
+        "from_port",
+        "from_time_index",
+        "to_port",
+        "to_time_index"
+      ],
+      "types": {
+        "anonymous_path_id": "string",
+        "step": "integer",
+        "original_variable": "string",
+        "vessel_class": "integer",
+        "kind": "string",
+        "from_port": "integer",
+        "from_time_index": "integer",
+        "to_port": "integer",
+        "to_time_index": "integer"
+      }
+    },
+    "ledger": {
+      "required_columns": [
+        "port",
+        "port_name",
+        "role",
+        "time_index",
+        "stock_before",
+        "signed_production_consumption",
+        "signed_vessel_service_inventory_effect",
+        "alpha_loss_or_shortfall",
+        "signed_alpha_effect",
+        "stock_after",
+        "inventory_residual",
+        "berths_used",
+        "berths_available",
+        "original_alpha_unit_penalty",
+        "alpha_cost"
+      ],
+      "types": {
+        "port": "integer",
+        "port_name": "string",
+        "role": "string",
+        "time_index": "integer",
+        "stock_before": "finite_real",
+        "signed_production_consumption": "finite_real",
+        "signed_vessel_service_inventory_effect": "finite_real",
+        "alpha_loss_or_shortfall": "finite_real",
+        "signed_alpha_effect": "finite_real",
+        "stock_after": "finite_real",
+        "inventory_residual": "finite_real",
+        "berths_used": "finite_real",
+        "berths_available": "finite_real",
+        "original_alpha_unit_penalty": "finite_real",
+        "alpha_cost": "finite_real"
+      }
+    },
+    "costs": {
+      "required_columns": [
+        "component",
+        "original_objective_contribution"
+      ],
+      "types": {
+        "component": "string",
+        "original_objective_contribution": "finite_real"
+      }
+    }
+  },
+  "row_order": "free",
+  "extra_columns": "allowed",
+  "path_decomposition": "any valid complete class-flow decomposition",
+  "claims": "Actual numerical declarations, not expected reference values",
+  "kind_enum": [
+    "initial_source",
+    "waiting",
+    "loaded_voyage",
+    "empty_return",
+    "terminal_exit"
+  ],
+  "role_enum": [
+    "Loading",
+    "Discharge"
+  ],
+  "component_enum": [
+    "initial_source",
+    "waiting",
+    "loaded_voyage",
+    "empty_return",
+    "terminal_exit",
+    "lost_production",
+    "stockout",
+    "original_objective_constant"
+  ],
+  "integer_encoding": "Exact integer value; any decimal spelling of it is accepted",
+  "time_domain": "MPS model periods0..T-1; source-1 and exitT",
+  "non_service_fields": {
+    "kinds": [
+      "initial_source",
+      "waiting"
+    ],
+    "inventory_service_port": "",
+    "inventory_service_time_index": "",
+    "signed_inventory_effect": 0
+  },
+  "path_steps": "Unique consecutive integers within each arbitrary path ID, independent of starting origin",
+  "economic_coverage": "All nonzero components once; permitted zero components optional or explicit0 within tolerance",
+  "numerical_tolerances": {
+    "domain_and_integrality_absolute": 1e-06,
+    "row": "1e-6+1e-9*abs(rhs)",
+    "objective_and_ordinary_operating": "1e-6+1e-9*abs(expected)",
+    "inventory_residual": "1e-6+1e-9*abs(original balance row rhs)"
+  },
+  "keys": {
+    "arcs": [
+      "original_variable"
+    ],
+    "paths": [
+      "anonymous_path_id",
+      "step"
+    ],
+    "ledger": [
+      "port",
+      "time_index"
+    ],
+    "costs": [
+      "component"
+    ]
+  }
+}

@@ -1006,3 +1006,37 @@ Recall：用户要完整重型任务的实质质量，不再接受工程文件�
 - 本次只读原最终grade/原private事实并汇总CODEX-COMPARISON-RESULTS.md/.json：L02/0.2两100/good；L06/0.3两100/17pass/allcritical，但实际期望成本Codex387449/8=48431.125、OC197049/4=49262.25，差831.125（Codex相对OC低约1.68714%）；原60044验收线掩盖差异，不改旧分。L06/0.4两100且三个原实际精确期望成本完全一致（300834939/4000000、11287373277/128000000、90125954529/1280000000），不能谎称已有质量区分。
 - 没有新的有效重型Codex比较；Codex底层model/usage/精确活动归因unknown，不能作同模型费用速度因果排行。作者参考/本轮4数字交付和2错误programme不是fresh成绩；其余原工程库存和L01原作者矩阵也不是Codex对照。十题/小时未达，不问重复确认或绕用户先前停止新candidate/机械0.5的纠偏。
 - 暂存工具首次git apply --cached返回128，旧helper压住了其stderr，精确原因未知、不能凭标题叫共享调度或断言index锁；保stage.stderr原件。只对剩余自有索引行原patch重试实际0，两前索引行本已暂存，foreign顺序/内容不改。给自有helper补错误stderr保存再继续范围暂存；没有重任何科学计算/候选/生产服务。
+
+### 为有效Codex对照收敛完整可评任务：实施前Recall（2026-10-31）
+
+- 最新用户要求直接Codex比较，禁止继续作者方法/证书/曲线活动代替模型结果。本轮只做阻止下一次合法对照的完整交付缺口：目前public任务仍散在draft，参考入口把两开发seed写死，科学材料/数值正错/重现命令没有一个可审查的整题包；此状态不能合法新candidate，也不能拿作者研究数值充对照。
+- 边界：不发机械0.5、不增加/调作者算法/预算/窗口/排序，不重任何已完原模型/开发seed/成对实验/组件/独审。沿当前Group2完整模型和已验证成熟cold+整类对原方法，收敛一个输入参数化参考入口及完整public任务/输出/运行合同。公开MPS本身作为完整数学事实，不向candidate提供私有grader/参考方法或既有路线/成本/本Recall。raw和原模型PDF说明运营语义，未知输入时同一raw+MPS完整给programme，不造隐藏规则。
+- 已查当前run_constructed_input_study、run_original_baseline/run_instance、run_class_pair_study、export/evaluate、assess与bound函数、全部public草稿/原子锚点/真实正错和当前原运行。真实数学/运营/方法实现均复用；新入口仅把现有调用接成单一source-only完整交付，不引入通用框架/新策略。L01不改源/进程，生产/UI/Provider/凭据/数据库不适用。
+- 完整任务主质量为同输入真实经济成本P（可比时参照比P/U不裁100），科学结论逐层锚点另审；未建立有效小时或成熟统计。Programme接口显式给定raw/MPS/instance和输出；公料包含三个原开发实例完整MPS/raw/PDF及声明runtime，private完整输入同构且全部参数可见，未来新pool/初始seed不得据结果筛选。当前两个披露验证seed不充private。
+- 唯一必要新真实验收是此完整入口首次source-only冷执行，不是新作者研究：事前固定五类来源LR1_DR02_VC05_V8a、label=maritime-integration-001、seed20261102、120期，同一已公开8%需求recipe、原cold60秒/原classpair名义120秒；先封全部源码/完整原argv。只执行这一新输入，不调预算/挑seed/重复旧对象。这个整题集成输入只用于原入口闭合，后续不称candidate private heldout。原有LP见证/运营计算/数字checker作为本次整题交付依赖各走一次；不独立继续优化/证明实验。失败保原对象，按真实根因只接未完成依赖。
+- 完整源运行应产新真实向量/原日志/全部真实改进事件/运营四表/原目标声明/可核质量/实际图/报告与移交，再进入同一数字checker。图只为本次必需交付，不新做科学曲线研究。过去科学比较报告/失败以原来源引用，不能把它们说成本次冷实验重新产生。
+- 完整public/真实参考/原子锚点/同checker真错误programme都就绪后，才复用已授权benchmark_review做本实质新完整问题的第一次集中整题审查，禁止再委托或重复旧审查/组件。review如有实质阻断集中修，只有必要受影响复验。就绪之后才可原授权必要fresh Codex/OC同public，当前不新candidate。此工作只为下一次直接对照，不宣称题已足够重或十题完成。
+
+### 完整可评任务收敛与首整审：真实末态（2026-10-31）
+
+- 完整public任务/模型语义/OUTPUTS/native runtime/CSV schema现有实际包：三原完整MPS、对应原raw/PDF+五份合同，共约3.94MB；10文件只是材料清单，不当资格。包中没有grader、作者路线/成本、旧候选或本Recall。第三方数据只在外部本机包，不在repo重新许可。Programme可用任意语言/布局，MPS给全数学truth，未来输入无隐藏未来信息。180秒只是最终programme名义数值配置，非agent总预算/最低时长；具体argv预算flag可选但同一profile必须声明。
+- 新入口run_reference_case.py只接现有mature cold+未改类对、现有运营/精确见证/数字评估和必需报告写出；不是新优化策略/证书研究。唯一首source-only集成14:18:01.057→14:20:06.877Z实际native0；source封pre-execution-source.zip。maritime-integration-001/seed20261102从原raw生成新120期输入，冷P156117.4485721524→final71414.89206295804；method61.3646508秒/10条件stage自然早完，未等预算/重已完对象。四实际CSV、8匿名路径/360港期账、真实原生向量/计数/日志、精确[L,U]约[35727.17075583841,71414.89206295804]、same numeric checker0、实际PNG与报告/HANDOFF均闭合。这个集成样本是开发对象，不未来private heldout，不是模型成绩或数小时资格。
+- 图实际view_image：全8路径/起始与退出服务标记/成本分解清楚，模型period不当工作时长；未重此前科学图/paired/solver。旧研究报告保各自真实来源，不把它们伪造成本次重新执行。原完整向量、raw/MPS/PDF、CSV/dual和公开输入包继续外部保，repo逐成员scope和源/末态/报告/图投影明确。
+- COMPLETE-CASE.md是完整新问题索引：public任务/完整原料、全链参考、既有因果方法研究和失败、same-checker真错误programme、数字与科学原子锚点、source-only手交齐。公开schema/资源边界与科学效度是否足够，交原已授权唯一/root/benchmark_review做本实质新问题第一次集中整题审查，禁止再委托/新solver或cold/组件。assignment_id=l06-maritime-whole-4875d8f2459b4a02b3bc27907b5fcc62；精确whole-review-material.zip、review-request.json和public-contract-closure.json保当前审查对象，不能偷改后称原版已审。
+- 当前review已running、未给pilot批准。初报只读确认两类公开契约阻断：源网站还含incumbent入口，public需明确可查通用方法文档vs禁取具体旧解；schema仅列列名而private有step起点/kind/component字面要求，需集中闭合公开wire语义/接收等价路径。等待完整批次后只修必要合同/验收，不重整体科学实验、不把审查活动当新模型结果。无newcandidate/private pool/OC或Codex Task启动。
+
+### 唯一整审两组阻断集中修复：实施前分析（2026-10-31）
+
+- 首审14:39:16Z已封，pilotfalse/heavyfalse；数学/运营/精确L/U独立复算无实质错误。根因不是优化器，而是任务合同未公开完wire/资源边界与private过度限定合法编码。B01原官网在源页还列Incumbents，Task允许查方法却未隔离实例旧解；B02 schema只有列名，私有step必须0起且kind/component字面、非服务空值、精确tol及static/dynamic路径根没公开。实际同8路径/同原向量仅step+1就被拒，证据在independent-whole-numeric.json。不能扣合法programme分或倒改旧grade。
+- 本批只闭合两组：public定义允许generic方法/文档/成熟solver、禁止另取具体旧解/参考向量/旧任务/私有材料；明确来源URL是provenance，不授权下载实例答案。公开全部canonical技术枚举、空值/域/tol/路径根/cwd/argv语义。step接受任意整数起点唯一连续；费用合法零项可省/显式0，非零全完整唯一，不固绑作者零行。额外说明列仍允许。
+- 同一库存方程原MPS行容差1e-6+1e-9|rhs|，export residual对0却只1e-6，是同约束跨路径不一致；将同一数值tolerance集中在现有MPS模块，模型行/目标、运营普通值与库存残差显式reference-scale同规则。仅受影响检查语义，原方法/向量/目标/科学线不变，不重solver/reference/LP。此前float原native不是在修后源跑的，保pre-execution源和首审材料、修后源另封，不能冒新cold。
+- 只将原审查等价step+1表示（并省原零费用项）进入修后同checker做一次必要正向复验；原数学向量、raw/MPS、原P、非零运营事实不改，不执行新programme/优化/导出/曲线。原拒绝和首次source观察误把Recall复制视作执行文件缺失等原件保。仍同一整题审查结案，不再新审查/委托，不以修字段或检查数当模型结果。完整public与current source以修后不可变快照交原reviewer做必要闭合后才考虑fresh。
+
+- B02调用失败语义一并闭合：当前assess把trusted raw/MPS与candidate CSV放同一OSError捕获，存在设施错误误归交付错误的控制流；根因是阶段边界未区分。只拆现有reader的已解析模型验值函数供同一assess重用，先核trusted模型/raw路径和引用证书，设施失败P仍null/native3；再核candidate layout/vector/objective/CSV，具名交付错native4。不改数学模型或容差数值，不静默fallback，不新框架/数据源；必要一次原等价真实交付复验覆盖当前完整assess。此控制流按审查B02的公开分类要求修，未知程序故障仍保原错误，不伪候选0。
+
+### 完整新问题首整审正式结案：可进入实际对照pilot（2026-10-31）
+
+- 原/root/benchmark_review同assignment4875..初整审14:39:16Z只两组公开契约阻断；14:56:02Z同整审集中修后闭合remaining_blockers=[]/pilot_ready_for_fresh_comparison=true，heavyfalse/候选结果空/无aggregate。初审REVIEW/review.json、原step+1实际拒绝和首source identity观察误计Recall（后纠正13执行源同）全保，不覆写原失败。
+- B01限定supplied问题事实+generic方法/文档/成熟solver，源URL不授权额外incumbent/旧实例向量/参考/私有数据，自己开发结果可用于研究设计但assigned执行重新计算。B02公开所有types/enums/空值/键/覆盖/tol/cwd/static与out命名空间；路径step任意整数起点连续唯一，合法零费用省/显式0；整数ID按值接受不强打印形式。共享numerical_tolerance消除同库存行跨路径尺度不一致；trusted model/raw/reference设施错误native3，交付声明/表错4，P/总分不伪填。
+- 原真实same vector/MPS/raw/nativeP只step+1并省waiting/constant两个exact0费用项，一次equivalent-command实际修后CLI/native0；完整数值质量及P/L/U与原相同，未重任何优化/LP/cert生成/参考/图。复核者只读该原件和修后源、独立确认仅这些表示改变；没有再跑counter或重评S。冷源保持v1，当前consumer/public另封v2，不冒修后新cold。
+- PILOT-FREEZE仅批准完整可评问题用于下一次fresh Codex/OC；不是数小时/专家/统计成熟、不是第十题合格或新100。只有实际同public/同未知输入/同数值profile先登记后开跑；当前private pool尚未生成，无新candidate。后续只推进这一实际对照，不追加作者研究/检查器/组件来代替模型结果。此前not-ready静态表是历史，最新final/locator优先，不重开旧审查。

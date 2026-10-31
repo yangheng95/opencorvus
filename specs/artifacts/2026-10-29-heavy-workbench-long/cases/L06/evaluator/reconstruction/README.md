@@ -182,3 +182,9 @@ python -B report_constructed_input_study.py --run <closed-new-owned-study-dir> -
 current exporter只把既有运营计算提取为单一evaluate，原CLI仍负责写同四表；本次checker复用该计算，未再运行旧导出命令。新增Fraction数值类型只在同一MPS parser中，float原路径保持；实际两原生LP证书、精确上下见证和完整正错交付都经当前实现。报告实际渲染并view_image，不重旧科学图。
 
 [原件投影范围](observations/economic-measurement-first/scope.json)明确完整有理证书/向量/CSV继续外部保存，repo源胶囊、原native命令日志、上下界核验事实、四正向/two错误真实assessment和新报告图可读。当前正式未知输入任务、完整参考科学移交/锚点校准、一次集中整题独审与后来fresh/有效小时仍缺；不启动新candidate、0.5或重复资格审查。
+
+## 下一次实际模型对照的完整任务入口
+
+[完整case索引与首全链参考](COMPLETE-CASE.md)已把public原料/任务/运行输出合同、原科学研究、same-checker真实错误、实际source-only集成/图与handoff收敛在一起。新输入参数化入口首native0，未新建作者算法或重复旧实验；原授权benchmark_review正在做本实质新问题的第一次集中整题审查，目前未批准fresh。公开资源边界和CSV等价表示初报有阻断，待集中修；原100和旧case只读，尚无新Codex结果或重型资格。
+
+首完整整审已最终结案：[原两阻断与同assignment集中闭合](whole-case-review/REVIEW-FINAL.md)，当前[完整pilot合同](PILOT-FREEZE.json)允许在预先登记同输入/数值配置后做原授权必要fresh对照。原source-only冷源v1与修后consumer/public分开，原等价格式误拒保留，仅一次受影响正向复验0；未重优化/LP/cold。此前“正在审/尚未批准”是历史阶段，不据此重开审查。尚无新候选成绩，重型/小时/统计资格仍未成立。

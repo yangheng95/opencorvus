@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "-c",
+    "import sys;from pathlib import Path;from make_rate_validation_input import make;from build_group2_model import build;import json;recipe=make(Path(sys.argv[1]),'LR1_DR02_VC05_V8a','maritime-integration-001',20261102,120,Path(sys.argv[2])/'input');print(json.dumps(build(Path(recipe['raw_archive']),'maritime-integration-001',120,Path(sys.argv[2])/'model')))",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-group2-inputs\\Group2_data_format_only_files.zip",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first"
+  ],
+  "native_exit": 0,
+  "finished_at": "2026-10-31T14:18:01.056922+00:00"
+}

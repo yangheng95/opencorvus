@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\contract-repair-source\\assess_operating_delivery.py",
+    "--model",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\model\\maritime-integration-001_t120.mps",
+    "--raw-archive",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\input\\maritime-integration-001.raw.zip",
+    "--instance",
+    "maritime-integration-001",
+    "--delivery",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\equivalent-delivery",
+    "--layout",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\equivalent-layout.json",
+    "--lower-certificate",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run\\bounds\\lower-certificate.json",
+    "--upper-values",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run\\bounds\\upper-values.json",
+    "--role",
+    "author_reference",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\equivalent-assessment.json"
+  ],
+  "started_at": "2026-10-31T14:47:19.874545+00:00",
+  "finished_at": "2026-10-31T14:47:20.861075+00:00",
+  "native_exit": 0,
+  "scope": "One affected positive semantic revalidation of the same actual complete plan: path steps+1 and omission of two exact-zero cost rows; original vector/raw/MPS/P/native outcomes unchanged; no solver/export/native-reference/certificate-generator rerun"
+}

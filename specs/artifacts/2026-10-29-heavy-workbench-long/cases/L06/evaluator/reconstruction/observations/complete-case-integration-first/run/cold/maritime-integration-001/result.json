@@ -1,0 +1,31 @@
+{
+  "instance": "maritime-integration-001",
+  "original_member": "maritime-integration-001_t120.mps",
+  "finished_at": "2026-10-31T14:19:01.004529+00:00",
+  "status": "timelimit",
+  "solver_seconds": 60.0,
+  "whole_read_and_solve_wall_seconds": 59.58607860000484,
+  "solutions_reported": 3,
+  "incumbent_events_saved": 2,
+  "primal_bound": 156117.44857215276,
+  "dual_bound": 35928.15299101919,
+  "relative_gap_reported": 3.345267863092678,
+  "nodes": 196,
+  "parameters": {
+    "parallel/maxnthreads": 1,
+    "limits/time": 60.0,
+    "randomization/randomseedshift": 0,
+    "numerics/feastol": 1e-08
+  },
+  "independent_validation": {
+    "feasible": true,
+    "objective_consistent": true,
+    "independent_objective": 156117.4485721524,
+    "constraints_recomputed": 2520,
+    "variables_recomputed": 6476,
+    "max_row_violation": 2.842170943040401e-14,
+    "max_integrality_violation": 0.0
+  },
+  "score": null,
+  "benchmark_qualification": "not_established"
+}

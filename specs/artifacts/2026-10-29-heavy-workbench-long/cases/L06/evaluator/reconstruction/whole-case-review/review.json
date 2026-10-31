@@ -1,0 +1,170 @@
+{
+  "format": "l06-maritime-whole-review/1",
+  "assignment_id": "l06-maritime-whole-4875d8f2459b4a02b3bc27907b5fcc62",
+  "reviewer": "/root/benchmark_review",
+  "reviewed_at": "2026-10-31T14:39:16.441247+00:00",
+  "scope": "First concentrated whole-case integration review; no new candidate and no optimization/LP/cold/certificate programme executed.",
+  "material_blockers": [
+    {
+      "id": "B01",
+      "priority": "P1",
+      "title": "Close the instance-answer resource boundary before fresh work",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-maritime-whole-independent-review-20261031\\public-closure-snapshot\\public\\TASK.md#Input sources",
+        "https://mirplib.scl.gatech.edu/index.php/instances (successful primary page read, Download: Group2_Incumbents)",
+        "Official primary webpage also reports instance-specific objectives/bounds; no incumbent archive or vector was downloaded/read by this reviewer."
+      ],
+      "finding": "Current Task allows method literature and links the data source, while that same page directly offers incumbent downloads. It does not explicitly distinguish generic method/documentation/dependency access from retrieving instance solution vectors/MST/hints, private reference/costs/old projects. Two fresh agents could reasonably take different resource scopes; source-only evaluator inputs later do not erase such research-phase exposure.",
+      "repair": "Publish one identical closed-resource policy: supplied10 files plus declared generic runtime/dependencies are instance facts; generic algorithm/library documentation and cited methodological literature remain allowed; retrieving/importing old instance solution vectors, incumbent/hint/cache artifacts, private checker/reference/other candidates or external solving/answer services is outside this comparison. State treatment of candidate-produced development artifacts versus per-assigned-instance vectors explicitly, with the final programme recomputing assigned facts under the declared profile. Preserve unavoidable/preexisting exposure disclosures rather than claiming pristine OS/pretraining isolation. Mature generic optimizers remain permitted. Capture this public text before either fresh start."
+    },
+    {
+      "id": "B02",
+      "priority": "P1",
+      "title": "Complete the public output and programme ABI to match actual consumer",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-maritime-whole-independent-review-20261031\\public-closure-snapshot\\public\\OUTPUTS.md",
+        "D:\\opencorvus-benchmark-runs\\l06-maritime-whole-independent-review-20261031\\public-closure-snapshot\\public\\outputs.schema.json",
+        "D:\\opencorvus-benchmark-runs\\l06-maritime-whole-independent-review-20261031\\whole-snapshot\\current-source\\assess_operating_delivery.py:table/paths",
+        "D:\\opencorvus-benchmark-runs\\l06-maritime-whole-independent-review-20261031\\whole-snapshot\\current-source\\export_operational_plan.py:evaluate/positive-arc service and cost records",
+        "D:\\opencorvus-benchmark-runs\\l06-maritime-whole-independent-review-20261031\\independent-whole-numeric.json#/path_encoding_probe"
+      ],
+      "finding": "Schema lists column names but not all enforced values/units/empty conventions and row rules. Private paths requires step0..n-1 and exact initial_source/terminal_exit strings; table compares exact kind/role/component strings and exact row sets. Same original8 paths/vector, with only step numbers+1 in memory, actually fails delivery_path_contiguous_steps; no new route/optimization was produced. Nonservice service-port/time must be empty string with effect0, conditional zero-cost component rows and objective/operating absolute-relative tolerances also remain implicit. Descriptor mixes source/dependency/handoff paths with per-assigned-output paths without an explicit cwd/project-versus-out namespace.",
+      "repair": "Publish a compact complete wire contract: scalar types, identifiers/time conventions, every kind/role/component literal or normalization rule, non-applicable fields, row keys/full coverage/zero components and all numerical tolerances (objective/operating1e-6+1e-9*abs(expected), plus numeric row/domain rules and any stricter residual rule). Either accept contiguous step numbering independently of base or declare zero base before the candidates. Explicitly bind submission.json location, programme cwd/argv/path placeholders, static source/report/dependency roots versus per-input layout/output root; do not add candidate wrappers or rewrite report bytes after seeing an answer. Define per-input no-feasible/incomplete/invalid-output versus evaluator/model/reference facility outcome, keep P null for invalid outputs. This is contract closure on existing primitives, not a new execution platform."
+    }
+  ],
+  "numerical_findings": {
+    "N01": {
+      "status": "supported_on_actual_reference",
+      "basis": "Independent full finite MPS parser checked6476 variable identities,5753 integer domains and2520 rows; numerical residuals within stated row tolerance. Exact upper vector separately checked every domain/row/integer.",
+      "sources": [
+        "independent-whole-numeric.json"
+      ]
+    },
+    "N02": {
+      "status": "supported_on_actual_reference",
+      "basis": "Full original objective including alpha/source/terminal/offset gives71414.89206295804; native claim differs only3.5e-10. The actual omit-alpha producer0 was rejected by same checker4, not accepted as a cheaper plan.",
+      "sources": [
+        "independent-whole-numeric.json",
+        "source-study-control-audit.json"
+      ]
+    },
+    "N03": {
+      "status": "supported_on_actual_reference",
+      "basis": "Independent raw original fleet/initial inventory/class capacity/coordinate cost, return multiplier, travel/wait times, terminal reward and all167 positive arcs reconcile. Raw/MPS/published PDF use MPS as authority; no added zero-alpha restriction.",
+      "sources": [
+        "raw-positive-arc-audit.json",
+        "independent-whole-numeric.json",
+        "Group2-model-extracted.txt"
+      ]
+    },
+    "N04": {
+      "status": "actual_reference_supported_contract_incomplete",
+      "basis": "All167 positive original arcs and numeric economic/service fields covered. Exact kind/empty/enum public rules need B02 closure for a fresh arbitrary implementation.",
+      "sources": [
+        "independent-whole-numeric.json",
+        "whole-snapshot/current-source/assess_operating_delivery.py"
+      ]
+    },
+    "N05": {
+      "status": "supported_on_actual_reference",
+      "basis": "Independent raw physical and economic recurrence checks360 unique port-periods, inventory, alpha, full terminal service, berth and capacity. No normalization to reference route. Shared private operating helper is not used as independent physical oracle.",
+      "sources": [
+        "independent-whole-numeric.json",
+        "raw-positive-arc-audit.json"
+      ]
+    },
+    "N06": {
+      "status": "actual_reference_supported_contract_incomplete",
+      "basis": "All8 anonymous source-to-exit paths, class/port/time continuity and original positive-arc multiset167units reconcile. Same paths numbered1-based rejected by undocumented step0 rule: B02.",
+      "sources": [
+        "independent-whole-numeric.json"
+      ]
+    },
+    "N07": {
+      "status": "supported_on_actual_reference",
+      "basis": "Loaded19511.6501870569 + return15953.6078966173 + lost production12468.6699184510 + stockout23085.7940608329 + source396 + terminal-.83 (+zero waiting/constant) closes original P. Exit service is not future demand delivery; actual wrong exit-service programme producer0/checker4 caught omitted220-unit service.",
+      "sources": [
+        "independent-whole-numeric.json",
+        "source-study-control-audit.json"
+      ]
+    },
+    "N08": {
+      "status": "scope_supported_science_not_auto_pass",
+      "basis": "Reviewed native terminal/10conditional stages, numerical versus rational witnesses and full versus neighborhood bounds. Scientific status stays unreviewed in numeric checker, totalnull; no automatic100. This does not alone certify source-based scientific judgment or compare agents.",
+      "sources": [
+        "source-study-control-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run\\method\\execution-terminal.json",
+        "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run\\numeric-assessment.json"
+      ]
+    }
+  },
+  "scientific_findings": {
+    "S01": {
+      "observed_level": "middle_plus; some mechanism-level evidence, no population superiority",
+      "basis": "Actual prior-registered counterbalanced warm-start comparisons use same initial costs, two original models,120 nominalwall/one thread/seed0. Both class-pair results lower, with actual measured overrun and full failed earlier attempts preserved. Static source verifies only nonreleased integer class arcs fixed and all original continuous variables free. Declared adaptation is not a reproduction of individual-ship paper. Two public cases do not isolate every route mechanism or establish fresh-system/hardware causality.",
+      "sources": [
+        "source-study-control-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-maritime-whole-independent-review-20261031\\whole-snapshot\\current-source\\run_class_pair_study.py"
+      ]
+    },
+    "S02": {
+      "observed_level": "middle; bounded method-intervention evidence",
+      "basis": "Actual components show trading somewhat higher travel for lower alpha penalties; original exit/cargo/berth/stock semantics independently reconciled. Method arm is a real intervention, but no independent port/route ablation identifies each component as an isolated cause; unused-capacity ranking correctly says proxy, not causal proof. No demand for invented causal precision.",
+      "sources": [
+        "independent-whole-numeric.json",
+        "source-study-control-audit.json"
+      ]
+    },
+    "S03": {
+      "observed_level": "high for the stated finite-model uncertainty evidence",
+      "basis": "Independent exact rational L=35727170755838407714988747754583/1e27 and exact integer feasible U=142829784125916071/2000000000000 bound the original integer optimum. Signs/column residuals/boxes and every upper row/domain checked independently. Remaining bounded gap approximately49.97238%, not measured true regret. Original floating P is separate from exact upper witness. Conditional optimal statuses/website rounded objectives are never substituted.",
+      "sources": [
+        "independent-whole-numeric.json"
+      ]
+    },
+    "S04": {
+      "observed_level": "middle; unknown-input level not yet achieved",
+      "basis": "Seed20261102 and declared sinusoidal recipe were registered for this one integration; assigned full raw/MPS actually consumed. It and earlier development/validation inputs are disclosed and cannot become private heldouts. Future two-input pool is ungenerated, so no unseen generalization/statistics established. This is a prelaunch registration requirement, not a demand to rerun old optimization.",
+      "sources": [
+        "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\registration.json",
+        "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\input-preparation.json",
+        "D:\\opencorvus-benchmark-runs\\l06-maritime-whole-independent-review-20261031\\public-closure-snapshot\\public\\TASK.md"
+      ]
+    },
+    "S05": {
+      "observed_level": "middle_plus, current contract blockers prevent launch approval",
+      "basis": "One actual complete source-only assigned-input integration/native0 produced vector/logs/four CSVs/witnesses/report/real PNG; source/dependency handoff closes its executable chain. Historical studies preserve original dates/source and were not silently reenacted by this run. Current independent math/source/visual audit supports that delivery; B01/B02 must be closed before fresh programme exchange. No further optimizer/LP/cold is required merely to resolve these two public-text boundaries.",
+      "sources": [
+        "source-study-control-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\native-terminal.json",
+        "D:\\opencorvus-benchmark-runs\\l06-maritime-whole-independent-review-20261031\\whole-snapshot\\complete-reference\\HANDOFF.md"
+      ]
+    }
+  },
+  "pilot_ready_for_fresh_comparison": false,
+  "heavy_benchmark_qualified": false,
+  "aggregate_score": null,
+  "positive_findings": {
+    "numeric_reference_valid": true,
+    "P": 71414.89206295804,
+    "L_exact": "35727170755838407714988747754583/1000000000000000000000000000",
+    "U_exact": "142829784125916071/2000000000000",
+    "bounded_remaining_uncertainty": 0.49972380096378216,
+    "reference_is_not_integer_optimum": true,
+    "engineering_pass_not_quality_maximum": true
+  },
+  "prelaunch_registration_required": [
+    "After closed public contract, fix private pool parent identities/count/seed/period/phase recipe and both systems actual identical assigned input objects; no result-conditioned selection or relabelling disclosedintegration.",
+    "Fix argv/cwd/output namespace/profile before accepting first source. Nominal180/one solver thread is not agent total budget; record setup, useful numerical allocation, early finish and indivisible overruns, and define resource-profile mismatch rather than quietly treating different allocations as equal.",
+    "Freeze programme/source/dependency identities before assigned-input execution; compare only actual valid P per input and explicitly reviewed S evidence. No retrospective threshold or100 aggregation."
+  ],
+  "not_established": [
+    "hours of effective candidate work",
+    "fresh Codex/OC discrimination",
+    "professional human calibration",
+    "population/statistical generalization",
+    "ten-heavy-case completion",
+    "closed-resource/OS/pretraining contamination immunity"
+  ],
+  "disclosure": "Single non-blind AI reviewer familiar with prior L06 work. This first maritime review reads current exact snapshots and actual sources, raw/MPS/vectors/logs/CSV/plots. Source identity and document or check counts are not mathematical/difficulty proof."
+}

@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-31T14:35:14.048763+00:00",
+  "positive_arcs": 167,
+  "raw_travel_matrix_cells": 45,
+  "initial_inventories": [
+    {
+      "port": 0,
+      "raw": 276.0,
+      "actual": 276.0
+    },
+    {
+      "port": 1,
+      "raw": 168.0,
+      "actual": 168.0
+    },
+    {
+      "port": 2,
+      "raw": 180.0,
+      "actual": 180.0
+    }
+  ],
+  "failures": [],
+  "scope": "Independent raw geometry/cost, return multiplier, source fee, terminal reward, travel times/wait and capacity checks over all positive actual arcs; no new solutions."
+}

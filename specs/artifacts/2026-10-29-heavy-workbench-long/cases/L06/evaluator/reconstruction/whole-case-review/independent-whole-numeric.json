@@ -1,0 +1,1918 @@
+{
+  "at": "2026-10-31T14:31:26.510435+00:00",
+  "method": "Independent standard-library section MPS/Fraction parser, raw text semantics, ledger and flow reconstruction. No author checker or optimizer used as mathematical oracle. Private paths helper used ONLY for equivalent encoding diagnosis, not business facts.",
+  "model": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\model\\maritime-integration-001_t120.mps",
+  "variables": 6476,
+  "integer_variables": 5753,
+  "constraints": 2520,
+  "P": 71414.89206295804,
+  "L_exact": "35727170755838407714988747754583/1000000000000000000000000000",
+  "U_exact": "142829784125916071/2000000000000",
+  "P_minus_U": -3.272883636488141e-12,
+  "P_over_U": 1.0,
+  "bounded_uncertainty_to_L": 0.49972380096378216,
+  "all_numeric_checks_pass": true,
+  "failed_checks": [],
+  "accounting": {
+    "loaded_voyage": 19511.650187056894,
+    "waiting": 0.0,
+    "empty_return": 15953.607896617268,
+    "terminal_exit": -0.8300000000000001,
+    "initial_source": 396.0,
+    "lost_production": 12468.669918450967,
+    "stockout": 23085.794060832908,
+    "original_objective_constant": -0.0
+  },
+  "max_inventory_residual": 2.2737367544323206e-13,
+  "path_encoding_probe": {
+    "baseline_actual_paths_accepted": {
+      "paths": 8,
+      "arc_units": 167
+    },
+    "same_numeric_plan_same_paths_step_base1": {
+      "accepted": false,
+      "code": "delivery_path_contiguous_steps:class2-path1"
+    },
+    "scope": "in-memory equivalent numbering only; no new plan, optimizer, export or native programme"
+  },
+  "checks": [
+    {
+      "check": "full finite vector identity",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "all numeric MPS constraints/domains/integrality",
+      "pass": true,
+      "detail": {
+        "max_row_residual": 7.368683772161604e-14,
+        "violations": []
+      }
+    },
+    {
+      "check": "full objective including offset",
+      "pass": true,
+      "detail": {
+        "computed": 71414.89206295804,
+        "claimed": 71414.89206295769
+      }
+    },
+    {
+      "check": "exact certificate row coverage",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "exact lower row signs and box correction",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "exact integer feasible upper witness",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "check": "independent exact L/U same original result",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw fleet/initial source multiset",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "all positive arc identities and numeric rows",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "360 unique port-period cells",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 0)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 1)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 2)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 3)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 4)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 5)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 6)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 7)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 8)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 9)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 10)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 11)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 12)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 13)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 14)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 15)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 16)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 17)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 18)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 19)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 20)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 21)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 22)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 23)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 24)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 25)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 26)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 27)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 28)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 29)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 30)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 31)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 32)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 33)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 34)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 35)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 36)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 37)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 38)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 39)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 40)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 41)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 42)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 43)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 44)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 45)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 46)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 47)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 48)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 49)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 50)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 51)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 52)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 53)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 54)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 55)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 56)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 57)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 58)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 59)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 60)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 61)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 62)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 63)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 64)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 65)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 66)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 67)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 68)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 69)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 70)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 71)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 72)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 73)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 74)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 75)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 76)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 77)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 78)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 79)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 80)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 81)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 82)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 83)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 84)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 85)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 86)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 87)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 88)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 89)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 90)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 91)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 92)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 93)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 94)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 95)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 96)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 97)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 98)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 99)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 100)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 101)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 102)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 103)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 104)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 105)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 106)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 107)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 108)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 109)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 110)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 111)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 112)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 113)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 114)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 115)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 116)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 117)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 118)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (0, 119)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 0)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 1)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 2)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 3)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 4)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 5)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 6)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 7)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 8)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 9)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 10)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 11)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 12)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 13)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 14)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 15)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 16)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 17)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 18)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 19)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 20)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 21)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 22)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 23)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 24)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 25)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 26)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 27)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 28)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 29)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 30)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 31)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 32)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 33)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 34)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 35)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 36)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 37)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 38)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 39)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 40)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 41)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 42)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 43)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 44)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 45)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 46)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 47)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 48)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 49)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 50)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 51)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 52)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 53)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 54)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 55)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 56)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 57)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 58)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 59)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 60)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 61)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 62)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 63)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 64)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 65)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 66)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 67)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 68)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 69)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 70)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 71)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 72)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 73)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 74)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 75)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 76)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 77)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 78)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 79)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 80)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 81)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 82)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 83)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 84)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 85)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 86)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 87)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 88)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 89)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 90)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 91)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 92)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 93)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 94)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 95)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 96)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 97)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 98)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 99)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 100)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 101)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 102)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 103)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 104)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 105)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 106)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 107)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 108)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 109)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 110)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 111)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 112)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 113)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 114)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 115)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 116)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 117)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 118)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (1, 119)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 0)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 1)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 2)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 3)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 4)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 5)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 6)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 7)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 8)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 9)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 10)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 11)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 12)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 13)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 14)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 15)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 16)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 17)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 18)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 19)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 20)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 21)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 22)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 23)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 24)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 25)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 26)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 27)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 28)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 29)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 30)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 31)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 32)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 33)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 34)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 35)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 36)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 37)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 38)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 39)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 40)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 41)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 42)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 43)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 44)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 45)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 46)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 47)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 48)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 49)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 50)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 51)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 52)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 53)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 54)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 55)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 56)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 57)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 58)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 59)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 60)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 61)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 62)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 63)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 64)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 65)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 66)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 67)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 68)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 69)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 70)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 71)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 72)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 73)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 74)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 75)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 76)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 77)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 78)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 79)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 80)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 81)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 82)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 83)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 84)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 85)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 86)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 87)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 88)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 89)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 90)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 91)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 92)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 93)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 94)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 95)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 96)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 97)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 98)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 99)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 100)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 101)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 102)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 103)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 104)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 105)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 106)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 107)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 108)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 109)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 110)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 111)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 112)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 113)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 114)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 115)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 116)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 117)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 118)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "raw derived ledger (2, 119)",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "independent complete economic decomposition",
+      "pass": true,
+      "detail": {
+        "loaded_voyage": 19511.650187056894,
+        "waiting": 0.0,
+        "empty_return": 15953.607896617268,
+        "terminal_exit": -0.8300000000000001,
+        "initial_source": 396.0,
+        "lost_production": 12468.669918450967,
+        "stockout": 23085.794060832908,
+        "original_objective_constant": -0.0
+      }
+    },
+    {
+      "check": "anonymous full path decomposition",
+      "pass": true,
+      "detail": {
+        "paths": 8,
+        "arc_units": 167
+      }
+    }
+  ]
+}

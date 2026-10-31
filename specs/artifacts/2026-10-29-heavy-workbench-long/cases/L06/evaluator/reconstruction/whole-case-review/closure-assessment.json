@@ -1,0 +1,113 @@
+{
+  "at": "2026-10-31T14:54:55.896703+00:00",
+  "checks": [
+    {
+      "check": "Same assignment correction request",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual original equivalent producer values unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Exactly original paths, only step+1",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Only waiting and constant exact-zero rows omitted",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual correct repaired native checker command result",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Same numeric P and exact L/U; no value reoptimization",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual executed repaired source bound assess_operating_delivery.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual executed repaired source bound export_operational_plan.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual executed repaired source bound verify_original_mps.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual executed repaired source bound verify_economic_bounds.py",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Final public byte identity TASK.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Final public byte identity OUTPUTS.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Final public byte identity MODEL.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Final public byte identity RUNTIME.md",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Final public byte identity outputs.schema.json",
+      "pass": true,
+      "detail": null
+    }
+  ],
+  "all_pass": true,
+  "actual_evidence_command": {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\contract-repair-source\\assess_operating_delivery.py",
+      "--model",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\model\\maritime-integration-001_t120.mps",
+      "--raw-archive",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\input\\maritime-integration-001.raw.zip",
+      "--instance",
+      "maritime-integration-001",
+      "--delivery",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\equivalent-delivery",
+      "--layout",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\equivalent-layout.json",
+      "--lower-certificate",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run\\bounds\\lower-certificate.json",
+      "--upper-values",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run\\bounds\\upper-values.json",
+      "--role",
+      "author_reference",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\equivalent-assessment.json"
+    ],
+    "started_at": "2026-10-31T14:47:19.874545+00:00",
+    "finished_at": "2026-10-31T14:47:20.861075+00:00",
+    "native_exit": 0,
+    "scope": "One affected positive semantic revalidation of the same actual complete plan: path steps+1 and omission of two exact-zero cost rows; original vector/raw/MPS/P/native outcomes unchanged; no solver/export/native-reference/certificate-generator rerun"
+  },
+  "scope": "Read actual affected native checker receipt/source/current public and unchanged raw/plan/table objects only. No repeat checker/counter execution, solve/LP/cold/native programme or scientific rerating."
+}

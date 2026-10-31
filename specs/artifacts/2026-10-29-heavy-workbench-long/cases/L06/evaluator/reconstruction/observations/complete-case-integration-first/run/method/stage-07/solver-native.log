@@ -1,0 +1,72 @@
+original problem has 6476 variables (3594 bin, 2159 int, 723 cont) and 2520 constraints
+1/1 feasible solution given by solution candidate storage, new primal bound 7.300081e+04
+
+presolving:
+(round 1, fast)       4451 del vars, 1262 del conss, 0 add conss, 1641 chg bounds, 0 chg sides, 0 chg coeffs, 0 upgd conss, 9 impls, 330 clqs, 0 implints
+(round 2, fast)       4650 del vars, 1381 del conss, 0 add conss, 1806 chg bounds, 324 chg sides, 0 chg coeffs, 0 upgd conss, 9 impls, 481 clqs, 0 implints
+(round 3, fast)       4862 del vars, 1540 del conss, 0 add conss, 1920 chg bounds, 328 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 487 clqs, 0 implints
+(round 4, fast)       4970 del vars, 1591 del conss, 0 add conss, 2030 chg bounds, 332 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 472 clqs, 0 implints
+(round 5, fast)       5056 del vars, 1633 del conss, 0 add conss, 2115 chg bounds, 334 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 470 clqs, 0 implints
+(round 6, fast)       5141 del vars, 1666 del conss, 0 add conss, 2166 chg bounds, 335 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 450 clqs, 0 implints
+(round 7, fast)       5213 del vars, 1702 del conss, 0 add conss, 2199 chg bounds, 339 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 445 clqs, 0 implints
+(round 8, fast)       5246 del vars, 1722 del conss, 0 add conss, 2236 chg bounds, 340 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 435 clqs, 0 implints
+(round 9, fast)       5261 del vars, 1730 del conss, 0 add conss, 2258 chg bounds, 341 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 440 clqs, 0 implints
+(round 10, fast)       5271 del vars, 1732 del conss, 0 add conss, 2278 chg bounds, 342 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 445 clqs, 0 implints
+(round 11, fast)       5282 del vars, 1737 del conss, 0 add conss, 2292 chg bounds, 343 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 446 clqs, 0 implints
+(round 12, fast)       5294 del vars, 1743 del conss, 0 add conss, 2307 chg bounds, 344 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 447 clqs, 0 implints
+(round 13, fast)       5302 del vars, 1748 del conss, 0 add conss, 2318 chg bounds, 345 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 449 clqs, 0 implints
+(round 14, fast)       5313 del vars, 1753 del conss, 0 add conss, 2331 chg bounds, 345 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 451 clqs, 0 implints
+(round 15, fast)       5325 del vars, 1760 del conss, 0 add conss, 2342 chg bounds, 345 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 454 clqs, 0 implints
+(round 16, fast)       5327 del vars, 1764 del conss, 0 add conss, 2342 chg bounds, 345 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 456 clqs, 0 implints
+(round 17, exhaustive) 5327 del vars, 1765 del conss, 0 add conss, 2346 chg bounds, 346 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 456 clqs, 0 implints
+(round 18, exhaustive) 5327 del vars, 1766 del conss, 0 add conss, 2348 chg bounds, 346 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 456 clqs, 0 implints
+(round 19, fast)       5328 del vars, 1766 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 456 clqs, 0 implints
+(round 20, fast)       5328 del vars, 1767 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 456 clqs, 0 implints
+(round 21, fast)       5329 del vars, 1767 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 0 upgd conss, 11 impls, 456 clqs, 0 implints
+(round 22, exhaustive) 5329 del vars, 1767 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 433 upgd conss, 11 impls, 456 clqs, 0 implints
+(round 23, medium)     5496 del vars, 1991 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 433 upgd conss, 11 impls, 376 clqs, 0 implints
+(round 24, medium)     5497 del vars, 1992 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 433 upgd conss, 11 impls, 443 clqs, 0 implints
+(round 25, exhaustive) 5497 del vars, 2002 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 433 upgd conss, 11 impls, 444 clqs, 0 implints
+(round 26, exhaustive) 5497 del vars, 2002 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 490 upgd conss, 11 impls, 444 clqs, 0 implints
+(round 27, medium)     5542 del vars, 2056 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 490 upgd conss, 11 impls, 376 clqs, 0 implints
+(round 28, exhaustive) 5542 del vars, 2059 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 490 upgd conss, 11 impls, 393 clqs, 0 implints
+(round 29, exhaustive) 5542 del vars, 2059 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 499 upgd conss, 11 impls, 393 clqs, 0 implints
+(round 30, medium)     5550 del vars, 2069 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 499 upgd conss, 11 impls, 384 clqs, 0 implints
+(round 31, exhaustive) 5550 del vars, 2073 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 499 upgd conss, 11 impls, 390 clqs, 0 implints
+(round 32, exhaustive) 5550 del vars, 2073 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 501 upgd conss, 11 impls, 390 clqs, 0 implints
+(round 33, medium)     5551 del vars, 2074 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 501 upgd conss, 11 impls, 389 clqs, 0 implints
+(round 34, medium)     5552 del vars, 2075 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 501 upgd conss, 11 impls, 387 clqs, 0 implints
+(round 35, exhaustive) 5552 del vars, 2083 del conss, 0 add conss, 2349 chg bounds, 346 chg sides, 0 chg coeffs, 501 upgd conss, 11 impls, 387 clqs, 0 implints
+   (0.0s) probing cycle finished: starting next cycle
+   (0.0s) symmetry computation started: requiring (bin +, int +, cont +), (fixed: bin -, int -, cont -)
+   (0.0s) no symmetry present (symcode time: 0.00)
+presolving (36 rounds: 36 fast, 17 medium, 11 exhaustive):
+ 5552 deleted vars, 2083 deleted constraints, 0 added constraints, 2349 tightened bounds, 0 added holes, 346 changed sides, 0 changed coefficients
+ 10152 implications, 18208 cliques, 0 implied integral variables (0 bin, 0 int, 0 cont)
+presolved problem has 961 variables (794 bin, 0 int, 167 cont) and 505 constraints
+    185 constraints of type <setppc>
+    320 constraints of type <linear>
+Presolving Time: 0.00
+transformed 1/1 original solutions to the transformed problem space
+
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+  0.0s|     1 |     0 |  1669 |     - |    35M |   0 | 961 | 543 | 505 |   0 |  0 |  38 |   0 | 6.917582e+04 | 7.300081e+04 |   5.53%| unknown
+  0.0s|     1 |     0 |  1669 |     - |    35M |   0 | 961 | 544 | 474 |   0 |  0 |  39 |   0 | 6.917582e+04 | 7.300081e+04 |   5.53%| unknown
+  0.0s|     1 |     0 |  1691 |     - |    36M |   0 | 961 | 511 | 488 |  15 |  1 |  39 |   0 | 6.917584e+04 | 7.300081e+04 |   5.53%| unknown
+  0.0s|     1 |     0 |  1723 |     - |    36M |   0 | 961 | 512 | 497 |  24 |  2 |  41 |   0 | 6.917584e+04 | 7.300081e+04 |   5.53%| unknown
+  0.0s|     1 |     0 |  1762 |     - |    36M |   0 | 961 | 512 | 505 |  32 |  3 |  41 |   0 | 6.921186e+04 | 7.300081e+04 |   5.47%| unknown
+  0.0s|     1 |     0 |  1892 |     - |    37M |   0 | 961 | 513 | 511 |  38 |  4 |  42 |   0 | 7.288409e+04 | 7.300081e+04 |   0.16%| unknown
+  0.0s|     1 |     0 |  1892 |     - |    37M |   0 | 961 | 513 | 492 |  38 |  4 |  42 |   0 | 7.288409e+04 | 7.300081e+04 |   0.16%| unknown
+  0.0s|     1 |     0 |  1912 |     - |    37M |   0 | 961 | 491 | 497 |  47 |  5 |  42 |   0 | 7.296344e+04 | 7.300081e+04 |   0.05%| unknown
+  0.0s|     1 |     0 |  1930 |     - |    37M |   0 | 961 | 486 | 502 |  52 |  6 |  42 |   0 | 7.296344e+04 | 7.300081e+04 |   0.05%| unknown
+  0.0s|     1 |     0 |  1936 |     - |    37M |   0 | 961 | 486 | 505 |  55 |  7 |  42 |   0 | 7.296344e+04 | 7.300081e+04 |   0.05%| unknown
+  0.0s|     1 |     0 |  1963 |     - |    38M |   0 | 961 | 486 | 507 |  57 |  8 |  42 |   0 | 7.296344e+04 | 7.300081e+04 |   0.05%| unknown
+r 0.0s|     1 |     0 |  1963 |     - |shifting|   0 | 961 | 486 | 507 |  57 |  8 |  42 |   0 | 7.296344e+04 | 7.296344e+04 |   0.00%| unknown
+  0.0s|     1 |     0 |  1963 |     - |    38M |   0 | 961 | 486 | 507 |  57 |  8 |  42 |   0 | 7.296344e+04 | 7.296344e+04 |   0.00%| unknown
+
+SCIP Status        : problem is solved [optimal solution found]
+Solving Time (sec) : 0.00
+Solving Nodes      : 1
+Primal Bound       : +7.29634436888688e+04 (3 solutions)
+Dual Bound         : +7.29634436888688e+04
+Gap                : 0.00 %

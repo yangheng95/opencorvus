@@ -9,7 +9,7 @@ import math
 from pathlib import Path
 
 from export_operational_plan import evaluate, close
-from verify_original_mps import verify
+from verify_original_mps import read_original_model, verify_linear_model, numerical_tolerance
 from verify_economic_bounds import lower_bound, exact_plan, economic_measurement
 
 
@@ -33,12 +33,22 @@ def integer(text):
     return int(value)
 
 
-def cell(actual, expected, contract):
+INTEGER_COLUMNS = {"vessel_class", "from_port", "from_time_index", "to_port", "to_time_index",
+                   "vessel_count", "inventory_service_port", "inventory_service_time_index", "port", "time_index"}
+COST_COMPONENTS = {"initial_source", "waiting", "loaded_voyage", "empty_return", "terminal_exit",
+                   "lost_production", "stockout", "original_objective_constant"}
+
+
+def cell(actual, expected, contract, *, integral=False, reference_scale=None):
+    if integral and expected != "":
+        if integer(actual) != expected:
+            raise ValueError("delivery_integer_cell:" + contract)
+        return
     if type(expected) in {int, float}:
         value = float(actual)
         if not math.isfinite(value):
             raise ValueError("delivery_finite_numeric_cell:" + contract)
-        close(value, expected, "delivery_numeric_cell:" + contract)
+        close(value, expected, "delivery_numeric_cell:" + contract, reference_scale=reference_scale)
     elif actual != str(expected):
         raise ValueError("delivery_semantic_cell:" + contract)
 
@@ -71,7 +81,25 @@ def table(actual, expected, fields, numerical_keys=False):
         if not set(target).issubset(source):
             raise ValueError("delivery_required_semantic_columns:" + repr(fields))
         for column, expected_value in target.items():
-            cell(source[column], expected_value, str(k) + ":" + column)
+            scale = target["signed_production_consumption"] if column == "inventory_residual" else None
+            cell(source[column], expected_value, str(k) + ":" + column,
+                 integral=column in INTEGER_COLUMNS, reference_scale=scale)
+    return len(actual)
+
+
+def cost_table(actual, expected):
+    wanted = {row["component"]: row["original_objective_contribution"] for row in expected}
+    seen = set()
+    for row in actual:
+        if not {"component", "original_objective_contribution"}.issubset(row):
+            raise ValueError("delivery_economic_columns")
+        key = row["component"]
+        if key not in COST_COMPONENTS or key in seen:
+            raise ValueError("delivery_unique_economic_component")
+        seen.add(key)
+        cell(row["original_objective_contribution"], wanted.get(key, 0.0), "cost:" + key)
+    if any(key not in seen and abs(value) > numerical_tolerance(value) for key, value in wanted.items()):
+        raise ValueError("delivery_complete_nonzero_economic_components")
     return len(actual)
 
 
@@ -86,14 +114,15 @@ def paths(actual, arc_rows, fleet):
         if arc is None:
             raise ValueError("delivery_path_positive_declared_arc")
         for name in fields:
-            cell(row[name], arc[name], "path:" + name)
+            cell(row[name], arc[name], "path:" + name, integral=name != "kind")
         groups[row["anonymous_path_id"]].append(row)
         used[row["original_variable"]] += 1
     if len(groups) != fleet or "" in groups:
         raise ValueError("delivery_path_fleet_coverage")
     for name, group in groups.items():
         group.sort(key=lambda row: integer(row["step"]))
-        if [integer(row["step"]) for row in group] != list(range(len(group))):
+        steps = [integer(row["step"]) for row in group]
+        if steps != list(range(steps[0], steps[0] + len(group))):
             raise ValueError("delivery_path_contiguous_steps:" + name)
         if group[0]["kind"] != "initial_source" or group[-1]["kind"] != "terminal_exit":
             raise ValueError("delivery_path_source_to_exit:" + name)
@@ -107,25 +136,40 @@ def paths(actual, arc_rows, fleet):
 
 
 def assess(a):
-    layout = read(a.layout)
-    if set(layout) != {"values", "reported_objective", "arcs", "paths", "ledger", "costs"}:
-        raise ValueError("delivery_layout_semantic_slots")
-    values_path = file_in(a.delivery, layout["values"])
-    declaration = layout["reported_objective"]
-    if not isinstance(declaration, dict) or set(declaration) != {"file", "key"}:
-        raise ValueError("objective_declaration_file_and_explicit_key")
-    objective = read(file_in(a.delivery, declaration["file"]))
-    if declaration["key"] is not None:
-        if not isinstance(declaration["key"], str):
-            raise ValueError("objective_declaration_json_key")
-        objective = objective[declaration["key"]]
-    check = verify(a.model, read(values_path), objective)
     result = {"at": datetime.datetime.now(datetime.timezone.utc).isoformat(), "model": str(a.model),
               "raw_archive": str(a.raw_archive), "instance": a.instance, "delivery": str(a.delivery),
-              "layout": layout, "mathematical_check": check, "engineering_status": "pending",
+              "layout": None, "mathematical_check": None, "engineering_status": "pending",
               "operating_check": None, "economic_measurement": None,
               "scientific_review": "unreviewed", "total_score": None,
               "heavy_benchmark_qualified": False, "subject_role": a.role}
+    try:
+        parsed = read_original_model(a.model)
+        if not a.raw_archive.is_file():
+            raise ValueError("assigned_raw_archive_unavailable")
+        lo = lower_bound(a.model, read(a.lower_certificate))
+        hi = exact_plan(a.model, read(a.upper_values))
+    except (ValueError, KeyError, TypeError, OSError) as error:
+        result.update(engineering_status="facility_invalid", error="assigned_model_or_reference:"+str(error))
+        return result
+    try:
+        layout = read(a.layout)
+        if set(layout) != {"values", "reported_objective", "arcs", "paths", "ledger", "costs"}:
+            raise ValueError("delivery_layout_semantic_slots")
+        result["layout"] = layout
+        values_path = file_in(a.delivery, layout["values"])
+        declaration = layout["reported_objective"]
+        if not isinstance(declaration, dict) or set(declaration) != {"file", "key"}:
+            raise ValueError("objective_declaration_file_and_explicit_key")
+        objective = read(file_in(a.delivery, declaration["file"]))
+        if declaration["key"] is not None:
+            if not isinstance(declaration["key"], str):
+                raise ValueError("objective_declaration_json_key")
+            objective = objective[declaration["key"]]
+        check = verify_linear_model(parsed, read(values_path), objective)
+        result["mathematical_check"] = check
+    except (ValueError, KeyError, TypeError, OSError) as error:
+        result.update(engineering_status="invalid_delivery", error="numeric_delivery_declaration:"+str(error))
+        return result
     if not check["feasible"] or check["objective_consistent"] is not True:
         result.update(engineering_status="invalid_delivery", error="submitted_model_or_objective_contract")
         return result
@@ -134,17 +178,19 @@ def assess(a):
     a.computation_status, a.computation_scope, a.original_model_bound = "declared_closed_delivery", "original_model", None
     try:
         closure, expected = evaluate(a)
+    except (ValueError, KeyError, TypeError, OSError) as error:
+        result.update(engineering_status="facility_invalid", error="assigned_raw_model_interpretation:"+str(error))
+        return result
+    try:
         counts = {"arcs": table(rows(file_in(a.delivery, layout["arcs"])), expected["arcs"], ["original_variable"]),
                   "ledger": table(rows(file_in(a.delivery, layout["ledger"])), expected["ledger"], ["port", "time_index"], True),
-                  "costs": table(rows(file_in(a.delivery, layout["costs"])), expected["costs"], ["component"])}
+                  "costs": cost_table(rows(file_in(a.delivery, layout["costs"])), expected["costs"])}
         counts["path_coverage"] = paths(rows(file_in(a.delivery, layout["paths"])), expected["arcs"], closure["anonymous_paths"])
         result["operating_check"] = {"status": "valid", "counts": counts,
                                      "max_inventory_residual": closure["max_inventory_residual"]}
     except (ValueError, KeyError, OSError) as error:
         result.update(engineering_status="invalid_delivery", error="operating_delivery:" + str(error))
         return result
-    lo = lower_bound(a.model, read(a.lower_certificate))
-    hi = exact_plan(a.model, read(a.upper_values))
     result.update(engineering_status="numeric_delivery_valid_science_unreviewed",
                   bound_checks={"lower": lo, "upper": hi},
                   economic_measurement=economic_measurement(check["independent_objective"], lo, hi))
@@ -161,7 +207,7 @@ def main():
     result = assess(a)
     a.out.write_text(json.dumps(result, indent=2, allow_nan=False)+'\n', encoding="utf-8")
     print(json.dumps({k: result[k] for k in ["engineering_status", "total_score", "error"] if k in result}), flush=True)
-    raise SystemExit(0 if result["engineering_status"] == "numeric_delivery_valid_science_unreviewed" else 4)
+    raise SystemExit(0 if result["engineering_status"] == "numeric_delivery_valid_science_unreviewed" else 3 if result["engineering_status"] == "facility_invalid" else 4)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,738 @@
+{
+  "at": "2026-10-31T14:24:03.050261+00:00",
+  "external_root": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first",
+  "included": [
+    {
+      "path": "input-preparation.json",
+      "bytes": 868
+    },
+    {
+      "path": "input-preparation.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "input-preparation.stdout.txt",
+      "bytes": 1110
+    },
+    {
+      "path": "native-started.json",
+      "bytes": 1048
+    },
+    {
+      "path": "native-terminal.json",
+      "bytes": 1123
+    },
+    {
+      "path": "native.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "native.stdout.txt",
+      "bytes": 20440
+    },
+    {
+      "path": "pre-execution-source.zip",
+      "bytes": 140844
+    },
+    {
+      "path": "public-preparation.json",
+      "bytes": 1312
+    },
+    {
+      "path": "registration.json",
+      "bytes": 500
+    },
+    {
+      "path": "review-public-contract.zip",
+      "bytes": 11531
+    },
+    {
+      "path": "run/bounds/result.json",
+      "bytes": 1265
+    },
+    {
+      "path": "run/case-facts.json",
+      "bytes": 22318
+    },
+    {
+      "path": "run/cold/maritime-integration-001/incumbent-events.jsonl",
+      "bytes": 949
+    },
+    {
+      "path": "run/cold/maritime-integration-001/independent-original-model-check.json",
+      "bytes": 681
+    },
+    {
+      "path": "run/cold/maritime-integration-001/result.json",
+      "bytes": 997
+    },
+    {
+      "path": "run/cold/maritime-integration-001/solver-native.log",
+      "bytes": 5718
+    },
+    {
+      "path": "run/cold/maritime-integration-001/started.json",
+      "bytes": 467
+    },
+    {
+      "path": "run/delivery-layout.json",
+      "bytes": 366
+    },
+    {
+      "path": "run/method/execution-started.json",
+      "bytes": 1064
+    },
+    {
+      "path": "run/method/execution-terminal.json",
+      "bytes": 15595
+    },
+    {
+      "path": "run/method/independent-original-model-check.json",
+      "bytes": 718
+    },
+    {
+      "path": "run/method/initial-original-model-check.json",
+      "bytes": 681
+    },
+    {
+      "path": "run/method/stage-00/actual-best-events.jsonl",
+      "bytes": 425
+    },
+    {
+      "path": "run/method/stage-00/independent-original-model-check.json",
+      "bytes": 700
+    },
+    {
+      "path": "run/method/stage-00/result.json",
+      "bytes": 1332
+    },
+    {
+      "path": "run/method/stage-00/solver-native.log",
+      "bytes": 18975
+    },
+    {
+      "path": "run/method/stage-00/started.json",
+      "bytes": 1235
+    },
+    {
+      "path": "run/method/stage-01/independent-original-model-check.json",
+      "bytes": 720
+    },
+    {
+      "path": "run/method/stage-01/result.json",
+      "bytes": 1350
+    },
+    {
+      "path": "run/method/stage-01/solver-native.log",
+      "bytes": 20685
+    },
+    {
+      "path": "run/method/stage-01/started.json",
+      "bytes": 1254
+    },
+    {
+      "path": "run/method/stage-02/actual-best-events.jsonl",
+      "bytes": 1279
+    },
+    {
+      "path": "run/method/stage-02/independent-original-model-check.json",
+      "bytes": 699
+    },
+    {
+      "path": "run/method/stage-02/result.json",
+      "bytes": 1333
+    },
+    {
+      "path": "run/method/stage-02/solver-native.log",
+      "bytes": 18655
+    },
+    {
+      "path": "run/method/stage-02/started.json",
+      "bytes": 1276
+    },
+    {
+      "path": "run/method/stage-03/actual-best-events.jsonl",
+      "bytes": 442
+    },
+    {
+      "path": "run/method/stage-03/independent-original-model-check.json",
+      "bytes": 718
+    },
+    {
+      "path": "run/method/stage-03/result.json",
+      "bytes": 1349
+    },
+    {
+      "path": "run/method/stage-03/solver-native.log",
+      "bytes": 9645
+    },
+    {
+      "path": "run/method/stage-03/started.json",
+      "bytes": 1254
+    },
+    {
+      "path": "run/method/stage-04/actual-best-events.jsonl",
+      "bytes": 439
+    },
+    {
+      "path": "run/method/stage-04/independent-original-model-check.json",
+      "bytes": 697
+    },
+    {
+      "path": "run/method/stage-04/result.json",
+      "bytes": 1327
+    },
+    {
+      "path": "run/method/stage-04/solver-native.log",
+      "bytes": 39519
+    },
+    {
+      "path": "run/method/stage-04/started.json",
+      "bytes": 1272
+    },
+    {
+      "path": "run/method/stage-05/actual-best-events.jsonl",
+      "bytes": 1283
+    },
+    {
+      "path": "run/method/stage-05/independent-original-model-check.json",
+      "bytes": 715
+    },
+    {
+      "path": "run/method/stage-05/result.json",
+      "bytes": 1344
+    },
+    {
+      "path": "run/method/stage-05/solver-native.log",
+      "bytes": 36380
+    },
+    {
+      "path": "run/method/stage-05/started.json",
+      "bytes": 1250
+    },
+    {
+      "path": "run/method/stage-06/actual-best-events.jsonl",
+      "bytes": 440
+    },
+    {
+      "path": "run/method/stage-06/independent-original-model-check.json",
+      "bytes": 716
+    },
+    {
+      "path": "run/method/stage-06/result.json",
+      "bytes": 1344
+    },
+    {
+      "path": "run/method/stage-06/solver-native.log",
+      "bytes": 16144
+    },
+    {
+      "path": "run/method/stage-06/started.json",
+      "bytes": 1251
+    },
+    {
+      "path": "run/method/stage-07/actual-best-events.jsonl",
+      "bytes": 437
+    },
+    {
+      "path": "run/method/stage-07/independent-original-model-check.json",
+      "bytes": 714
+    },
+    {
+      "path": "run/method/stage-07/result.json",
+      "bytes": 1341
+    },
+    {
+      "path": "run/method/stage-07/solver-native.log",
+      "bytes": 8802
+    },
+    {
+      "path": "run/method/stage-07/started.json",
+      "bytes": 1270
+    },
+    {
+      "path": "run/method/stage-08/actual-best-events.jsonl",
+      "bytes": 440
+    },
+    {
+      "path": "run/method/stage-08/independent-original-model-check.json",
+      "bytes": 715
+    },
+    {
+      "path": "run/method/stage-08/result.json",
+      "bytes": 1344
+    },
+    {
+      "path": "run/method/stage-08/solver-native.log",
+      "bytes": 8946
+    },
+    {
+      "path": "run/method/stage-08/started.json",
+      "bytes": 1270
+    },
+    {
+      "path": "run/method/stage-09/actual-best-events.jsonl",
+      "bytes": 1765
+    },
+    {
+      "path": "run/method/stage-09/independent-original-model-check.json",
+      "bytes": 718
+    },
+    {
+      "path": "run/method/stage-09/result.json",
+      "bytes": 1346
+    },
+    {
+      "path": "run/method/stage-09/solver-native.log",
+      "bytes": 41899
+    },
+    {
+      "path": "run/method/stage-09/started.json",
+      "bytes": 1252
+    },
+    {
+      "path": "run/method/stages.partial.json",
+      "bytes": 14125
+    },
+    {
+      "path": "run/method-command.started.json",
+      "bytes": 786
+    },
+    {
+      "path": "run/method-command.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "run/method-command.stdout.txt",
+      "bytes": 218076
+    },
+    {
+      "path": "run/method-command.terminal.json",
+      "bytes": 861
+    },
+    {
+      "path": "run/numeric-assessment.json",
+      "bytes": 3769
+    },
+    {
+      "path": "run/operating/independent-original-model-check.json",
+      "bytes": 718
+    },
+    {
+      "path": "run/operating/operational-closure.json",
+      "bytes": 2965
+    },
+    {
+      "path": "run/owner-started.json",
+      "bytes": 1192
+    },
+    {
+      "path": "run/owner-terminal.json",
+      "bytes": 380
+    },
+    {
+      "path": "run/report-command.started.json",
+      "bytes": 666
+    },
+    {
+      "path": "run/report-command.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "run/report-command.stdout.txt",
+      "bytes": 0
+    },
+    {
+      "path": "run/report-command.terminal.json",
+      "bytes": 741
+    },
+    {
+      "path": "visual-review.json",
+      "bytes": 417
+    },
+    {
+      "path": "public-contract-closure.json",
+      "bytes": 1255
+    },
+    {
+      "path": "review-request.json",
+      "bytes": 1252
+    },
+    {
+      "path": "pre-concentrated-contract-repair.zip",
+      "bytes": 24664
+    },
+    {
+      "path": "contract-repair-source.zip",
+      "bytes": 139325
+    },
+    {
+      "path": "concentrated-repair-closure.json",
+      "bytes": 3435
+    },
+    {
+      "path": "equivalent-command.json",
+      "bytes": 1887
+    },
+    {
+      "path": "equivalent.stdout.txt",
+      "bytes": 90
+    },
+    {
+      "path": "equivalent.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "equivalent-layout.json",
+      "bytes": 286
+    },
+    {
+      "path": "equivalent-assessment.json",
+      "bytes": 3705
+    }
+  ],
+  "retained_externally": [
+    {
+      "path": "input/maritime-integration-001.raw.zip",
+      "bytes": 3357
+    },
+    {
+      "path": "input/recipe.json",
+      "bytes": 4977
+    },
+    {
+      "path": "model/construction.json",
+      "bytes": 1556
+    },
+    {
+      "path": "model/maritime-integration-001_t120.mps",
+      "bytes": 2452607
+    },
+    {
+      "path": "public-package/inputs/development-raw.zip",
+      "bytes": 8428
+    },
+    {
+      "path": "public-package/inputs/Group2_MIP_Model.pdf",
+      "bytes": 204421
+    },
+    {
+      "path": "public-package/inputs/LR1_DR02_VC01_V6a_t120.mps",
+      "bytes": 463301
+    },
+    {
+      "path": "public-package/inputs/LR1_DR02_VC05_V8a_t120.mps",
+      "bytes": 1762645
+    },
+    {
+      "path": "public-package/inputs/LR1_DR03_VC03_V16a_t120.mps",
+      "bytes": 1488687
+    },
+    {
+      "path": "public-package/MODEL.md",
+      "bytes": 2240
+    },
+    {
+      "path": "public-package/OUTPUTS.md",
+      "bytes": 3316
+    },
+    {
+      "path": "public-package/outputs.schema.json",
+      "bytes": 1640
+    },
+    {
+      "path": "public-package/RUNTIME.md",
+      "bytes": 1632
+    },
+    {
+      "path": "public-package/TASK.md",
+      "bytes": 4000
+    },
+    {
+      "path": "run/bounds/lower-certificate.json",
+      "bytes": 161900
+    },
+    {
+      "path": "run/bounds/upper-values.json",
+      "bytes": 222446
+    },
+    {
+      "path": "run/cold/maritime-integration-001/final-values.json",
+      "bytes": 222494
+    },
+    {
+      "path": "run/cold/maritime-integration-001/incumbent-0000.json.gz",
+      "bytes": 45740
+    },
+    {
+      "path": "run/cold/maritime-integration-001/incumbent-0001.json.gz",
+      "bytes": 46424
+    },
+    {
+      "path": "run/cold/maritime-integration-001/maritime-integration-001_t120.mps",
+      "bytes": 2452607
+    },
+    {
+      "path": "run/method/final-values.json",
+      "bytes": 224103
+    },
+    {
+      "path": "run/method/original-class-structure.json",
+      "bytes": 200836
+    },
+    {
+      "path": "run/method/stage-00/final-values.json",
+      "bytes": 223206
+    },
+    {
+      "path": "run/method/stage-00/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run/method/stage-00/incumbent-0000.json.gz",
+      "bytes": 46589
+    },
+    {
+      "path": "run/method/stage-01/final-values.json",
+      "bytes": 225187
+    },
+    {
+      "path": "run/method/stage-01/fixed-original-integer-values.json",
+      "bytes": 113077
+    },
+    {
+      "path": "run/method/stage-02/final-values.json",
+      "bytes": 222646
+    },
+    {
+      "path": "run/method/stage-02/fixed-original-integer-values.json",
+      "bytes": 113077
+    },
+    {
+      "path": "run/method/stage-02/incumbent-0000.json.gz",
+      "bytes": 48038
+    },
+    {
+      "path": "run/method/stage-02/incumbent-0001.json.gz",
+      "bytes": 46499
+    },
+    {
+      "path": "run/method/stage-02/incumbent-0002.json.gz",
+      "bytes": 46520
+    },
+    {
+      "path": "run/method/stage-03/final-values.json",
+      "bytes": 226729
+    },
+    {
+      "path": "run/method/stage-03/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run/method/stage-03/incumbent-0000.json.gz",
+      "bytes": 47552
+    },
+    {
+      "path": "run/method/stage-04/final-values.json",
+      "bytes": 222794
+    },
+    {
+      "path": "run/method/stage-04/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run/method/stage-04/incumbent-0000.json.gz",
+      "bytes": 46643
+    },
+    {
+      "path": "run/method/stage-05/final-values.json",
+      "bytes": 223264
+    },
+    {
+      "path": "run/method/stage-05/fixed-original-integer-values.json",
+      "bytes": 113077
+    },
+    {
+      "path": "run/method/stage-05/incumbent-0000.json.gz",
+      "bytes": 46614
+    },
+    {
+      "path": "run/method/stage-05/incumbent-0001.json.gz",
+      "bytes": 46614
+    },
+    {
+      "path": "run/method/stage-05/incumbent-0002.json.gz",
+      "bytes": 46760
+    },
+    {
+      "path": "run/method/stage-06/final-values.json",
+      "bytes": 224988
+    },
+    {
+      "path": "run/method/stage-06/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run/method/stage-06/incumbent-0000.json.gz",
+      "bytes": 47000
+    },
+    {
+      "path": "run/method/stage-07/final-values.json",
+      "bytes": 226878
+    },
+    {
+      "path": "run/method/stage-07/fixed-original-integer-values.json",
+      "bytes": 113141
+    },
+    {
+      "path": "run/method/stage-07/incumbent-0000.json.gz",
+      "bytes": 47650
+    },
+    {
+      "path": "run/method/stage-08/final-values.json",
+      "bytes": 226919
+    },
+    {
+      "path": "run/method/stage-08/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run/method/stage-08/incumbent-0000.json.gz",
+      "bytes": 48135
+    },
+    {
+      "path": "run/method/stage-09/final-values.json",
+      "bytes": 224103
+    },
+    {
+      "path": "run/method/stage-09/fixed-original-integer-values.json",
+      "bytes": 113109
+    },
+    {
+      "path": "run/method/stage-09/incumbent-0000.json.gz",
+      "bytes": 47778
+    },
+    {
+      "path": "run/method/stage-09/incumbent-0001.json.gz",
+      "bytes": 46861
+    },
+    {
+      "path": "run/method/stage-09/incumbent-0002.json.gz",
+      "bytes": 46827
+    },
+    {
+      "path": "run/method/stage-09/incumbent-0003.json.gz",
+      "bytes": 46876
+    },
+    {
+      "path": "run/operating/anonymous-vessel-paths.csv",
+      "bytes": 10808
+    },
+    {
+      "path": "run/operating/class-arc-plan.csv",
+      "bytes": 13682
+    },
+    {
+      "path": "run/operating/economic-components.csv",
+      "bytes": 263
+    },
+    {
+      "path": "run/operating/port-period-ledger.csv",
+      "bytes": 40200
+    },
+    {
+      "path": "run/report/actual-reference-operations.png",
+      "bytes": 101227
+    },
+    {
+      "path": "run/report/HANDOFF.md",
+      "bytes": 1058
+    },
+    {
+      "path": "run/report/mpl-config/fontlist-v3.11.0.json",
+      "bytes": 150115
+    },
+    {
+      "path": "run/report/README.md",
+      "bytes": 1823
+    },
+    {
+      "path": "source/assess_operating_delivery.py",
+      "bytes": 8371
+    },
+    {
+      "path": "source/build_group2_model.py",
+      "bytes": 7433
+    },
+    {
+      "path": "source/construct_economic_bounds.py",
+      "bytes": 6087
+    },
+    {
+      "path": "source/export_operational_plan.py",
+      "bytes": 18189
+    },
+    {
+      "path": "source/make_rate_validation_input.py",
+      "bytes": 4727
+    },
+    {
+      "path": "source/plot-requirements.txt",
+      "bytes": 32
+    },
+    {
+      "path": "source/render_reference_case.py",
+      "bytes": 5721
+    },
+    {
+      "path": "source/requirements.txt",
+      "bytes": 49
+    },
+    {
+      "path": "source/run_class_pair_study.py",
+      "bytes": 13739
+    },
+    {
+      "path": "source/run_original_baseline.py",
+      "bytes": 7356
+    },
+    {
+      "path": "source/run_reference_case.py",
+      "bytes": 5546
+    },
+    {
+      "path": "source/verify_economic_bounds.py",
+      "bytes": 4736
+    },
+    {
+      "path": "source/verify_original_mps.py",
+      "bytes": 7314
+    },
+    {
+      "path": "equivalent-delivery/anonymous-vessel-paths.csv",
+      "bytes": 10815
+    },
+    {
+      "path": "equivalent-delivery/class-arc-plan.csv",
+      "bytes": 13682
+    },
+    {
+      "path": "equivalent-delivery/economic-components.csv",
+      "bytes": 217
+    },
+    {
+      "path": "equivalent-delivery/native-claim.json",
+      "bytes": 718
+    },
+    {
+      "path": "equivalent-delivery/port-period-ledger.csv",
+      "bytes": 40200
+    },
+    {
+      "path": "equivalent-delivery/values.json",
+      "bytes": 224103
+    }
+  ],
+  "scope": "One necessary complete reference integration, not another optimization-method study. Original input/raw/PDF/MPS, full primal/dual/fixed values, operating CSVs and public input pack stay external; repository contains current public documents, executed source archive, actual commands/logs/assessments, report and figure. No model grade.",
+  "total_score": null
+}

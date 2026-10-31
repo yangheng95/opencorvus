@@ -1,0 +1,56 @@
+{
+  "at": "2026-10-31T14:20:25.960455+00:00",
+  "development_instances": [
+    "LR1_DR02_VC01_V6a",
+    "LR1_DR02_VC05_V8a",
+    "LR1_DR03_VC03_V16a"
+  ],
+  "source_urls": [
+    "https://mirplib.scl.gatech.edu/index.php/instances",
+    "https://mirplib.scl.gatech.edu/sites/default/files/Group2_MIP_Model.pdf"
+  ],
+  "inputs_scope": "Complete selected original models/raw/PDF; not private solver outputs or reference routes",
+  "public_contract_status": "whole-case review pending; no new candidate started",
+  "members": [
+    {
+      "path": "inputs/development-raw.zip",
+      "bytes": 8428
+    },
+    {
+      "path": "inputs/Group2_MIP_Model.pdf",
+      "bytes": 204421
+    },
+    {
+      "path": "inputs/LR1_DR02_VC01_V6a_t120.mps",
+      "bytes": 463301
+    },
+    {
+      "path": "inputs/LR1_DR02_VC05_V8a_t120.mps",
+      "bytes": 1762645
+    },
+    {
+      "path": "inputs/LR1_DR03_VC03_V16a_t120.mps",
+      "bytes": 1488687
+    },
+    {
+      "path": "MODEL.md",
+      "bytes": 2240
+    },
+    {
+      "path": "OUTPUTS.md",
+      "bytes": 3131
+    },
+    {
+      "path": "outputs.schema.json",
+      "bytes": 1640
+    },
+    {
+      "path": "RUNTIME.md",
+      "bytes": 1632
+    },
+    {
+      "path": "TASK.md",
+      "bytes": 3979
+    }
+  ]
+}

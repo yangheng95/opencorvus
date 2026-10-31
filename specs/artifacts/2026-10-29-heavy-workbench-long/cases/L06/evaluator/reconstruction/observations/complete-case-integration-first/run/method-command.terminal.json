@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\native-operations-reconstruction-20261031\\Scripts\\python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\source\\run_class_pair_study.py",
+    "--closed-plan",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run\\cold\\maritime-integration-001",
+    "--strategy",
+    "class-pairs",
+    "--method-wall-seconds",
+    "120",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run\\method"
+  ],
+  "started_at": "2026-10-31T14:19:01.098178+00:00",
+  "launcher_pid": 29064,
+  "finished_at": "2026-10-31T14:20:02.994026+00:00",
+  "native_exit": 0
+}

@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-31T14:39:16.441247+00:00",
+  "items": [
+    {
+      "kind": "reviewer_encoding_failure",
+      "fact": "Bundled pypdf successfully extracted3 pages/wrote UTF8 file, then printing ligature U+FB01 through cp1252 raised UnicodeEncodeError. Existing extracted text reread using -Xutf8; no new mathematical or reference run."
+    },
+    {
+      "kind": "locator_errors",
+      "fact": "Guessed bounds/verification.json, report/source-map.json and method-study/assessment.json did not exist. Actual bounds/result.json, report/HANDOFF+README and method-study/report-data.json located and read. No missing-artifact candidate failure inferred."
+    },
+    {
+      "kind": "reviewer_overbroad_source_identity_assertion",
+      "fact": "Initial all14 ZIP members in runtime source check false because Recall.md is archive-only. All13 actual executable/dependency files match; initial false/source diff/correction retained, not turned into identity gate on documentation placement."
+    }
+  ]
+}

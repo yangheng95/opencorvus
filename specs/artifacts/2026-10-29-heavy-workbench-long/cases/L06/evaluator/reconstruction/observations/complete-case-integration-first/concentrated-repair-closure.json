@@ -1,0 +1,85 @@
+{
+  "at": "2026-10-31T14:47:20.861075+00:00",
+  "assignment_id": "l06-maritime-whole-4875d8f2459b4a02b3bc27907b5fcc62",
+  "repaired_groups": [
+    "B01",
+    "B02"
+  ],
+  "repaired_snapshot": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\contract-repair-source.zip",
+  "public_package": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\public-package",
+  "members": [
+    {
+      "path": "inputs/development-raw.zip",
+      "bytes": 8428
+    },
+    {
+      "path": "inputs/Group2_MIP_Model.pdf",
+      "bytes": 204421
+    },
+    {
+      "path": "inputs/LR1_DR02_VC01_V6a_t120.mps",
+      "bytes": 463301
+    },
+    {
+      "path": "inputs/LR1_DR02_VC05_V8a_t120.mps",
+      "bytes": 1762645
+    },
+    {
+      "path": "inputs/LR1_DR03_VC03_V16a_t120.mps",
+      "bytes": 1488687
+    },
+    {
+      "path": "MODEL.md",
+      "bytes": 2319
+    },
+    {
+      "path": "OUTPUTS.md",
+      "bytes": 7031
+    },
+    {
+      "path": "outputs.schema.json",
+      "bytes": 4866
+    },
+    {
+      "path": "RUNTIME.md",
+      "bytes": 1632
+    },
+    {
+      "path": "TASK.md",
+      "bytes": 5191
+    }
+  ],
+  "original_cold_source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\pre-execution-source.zip",
+  "affected_semantic_run": {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\contract-repair-source\\assess_operating_delivery.py",
+      "--model",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\model\\maritime-integration-001_t120.mps",
+      "--raw-archive",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\input\\maritime-integration-001.raw.zip",
+      "--instance",
+      "maritime-integration-001",
+      "--delivery",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\equivalent-delivery",
+      "--layout",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\equivalent-layout.json",
+      "--lower-certificate",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run\\bounds\\lower-certificate.json",
+      "--upper-values",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run\\bounds\\upper-values.json",
+      "--role",
+      "author_reference",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\equivalent-assessment.json"
+    ],
+    "started_at": "2026-10-31T14:47:19.874545+00:00",
+    "finished_at": "2026-10-31T14:47:20.861075+00:00",
+    "native_exit": 0,
+    "scope": "One affected positive semantic revalidation of the same actual complete plan: path steps+1 and omission of two exact-zero cost rows; original vector/raw/MPS/P/native outcomes unchanged; no solver/export/native-reference/certificate-generator rerun"
+  },
+  "candidate_started": false
+}

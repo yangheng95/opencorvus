@@ -1,0 +1,346 @@
+{
+  "at": "2026-10-31T14:34:25.933832+00:00",
+  "checks": [
+    {
+      "check": "Actual executable/dependency source matches pre-execution archive; Recall remains archive member",
+      "pass": true,
+      "detail": {
+        "unchanged_executable_and_dependency_members": 13,
+        "archive_only_metadata": "implementation-before-execution-recall.md",
+        "observation": "First all-members-in-source assertion was too broad. No executable/dependency differs; this is not an execution failure and not a source-identity gate on document layout."
+      }
+    },
+    {
+      "check": "Actual closed public ten-file inventory identity",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual paired arm source/native/registered budget LR1_DR02_VC05_V8aglobal",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual paired arm source/native/registered budget LR1_DR02_VC05_V8aclass-pairs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Same paired feasible initial objective LR1_DR02_VC05_V8a",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual paired arm source/native/registered budget LR1_DR03_VC03_V16aglobal",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual paired arm source/native/registered budget LR1_DR03_VC03_V16aclass-pairs",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Same paired feasible initial objective LR1_DR03_VC03_V16a",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual same-checker known programme native_rate_validation_vc05-cold",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual same-checker known programme native_rate_validation_vc05-class-pair",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual same-checker known programme native_rate_validation_vc03-cold",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual same-checker known programme native_rate_validation_vc03-class-pair",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual same-checker known programme assess-wrong-omit-alpha-cost",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "check": "Actual same-checker known programme assess-wrong-omit-exit-service",
+      "pass": true,
+      "detail": null
+    }
+  ],
+  "failed_checks": [],
+  "paired_study_registration": {
+    "plan": {
+      "registered_at": "2026-10-31T12:38:54.032836+00:00",
+      "method_wall_seconds_per_arm": 120,
+      "thread_limit": 1,
+      "seed": 0,
+      "feastol": 1e-08,
+      "scope": "One counterbalanced original-model warm-start method comparison, no new candidate, cold baseline rerun or qualification",
+      "arms": [
+        {
+          "instance": "LR1_DR02_VC05_V8a",
+          "strategy": "global"
+        },
+        {
+          "instance": "LR1_DR02_VC05_V8a",
+          "strategy": "class-pairs"
+        },
+        {
+          "instance": "LR1_DR03_VC03_V16a",
+          "strategy": "class-pairs"
+        },
+        {
+          "instance": "LR1_DR03_VC03_V16a",
+          "strategy": "global"
+        }
+      ],
+      "pair_order": "all unordered class pairs once; initial unused capacity-time ratio sum descending, class ids break ties",
+      "input_scope": "Only original MPS and this research prior actual final vector/native result; same extracted input per paired arm; no published route solution",
+      "conditional_bound_scope": "not original-model lower bounds"
+    },
+    "owner": {
+      "at": "2026-10-31T12:38:54.630373+00:00",
+      "scope": "sequential four-arm declared method study, no automatic retry"
+    }
+  },
+  "actual_paired_arms": [
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "arms": [
+        {
+          "strategy": "global",
+          "cost": 114048.99020035022,
+          "initial": 162058.53609443826,
+          "wall": 120.239805600002,
+          "overrun": 0.23980560000200057,
+          "source_argv": [
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\source\\run_class_pair_study.py",
+            "--closed-plan",
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\inputs\\LR1_DR02_VC05_V8a",
+            "--strategy",
+            "global",
+            "--method-wall-seconds",
+            "120",
+            "--out",
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--global"
+          ],
+          "native_exit": 0,
+          "final_variables": 7370,
+          "conditional_scope": "Every fixed-class bound is conditional, not a full-model lower bound"
+        },
+        {
+          "strategy": "class-pairs",
+          "cost": 41950.612252912506,
+          "initial": 162058.53609443826,
+          "wall": 90.4147140999994,
+          "overrun": 0,
+          "source_argv": [
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\source\\run_class_pair_study.py",
+            "--closed-plan",
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\inputs\\LR1_DR02_VC05_V8a",
+            "--strategy",
+            "class-pairs",
+            "--method-wall-seconds",
+            "120",
+            "--out",
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR02_VC05_V8a--class-pairs"
+          ],
+          "native_exit": 0,
+          "final_variables": 7370,
+          "conditional_scope": "Every fixed-class bound is conditional, not a full-model lower bound"
+        }
+      ]
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "arms": [
+        {
+          "strategy": "global",
+          "cost": 182399.0062253472,
+          "initial": 201932.05230586205,
+          "wall": 119.71435589999601,
+          "overrun": 0,
+          "source_argv": [
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\source\\run_class_pair_study.py",
+            "--closed-plan",
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\inputs\\LR1_DR03_VC03_V16a",
+            "--strategy",
+            "global",
+            "--method-wall-seconds",
+            "120",
+            "--out",
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--global"
+          ],
+          "native_exit": 0,
+          "final_variables": 6300,
+          "conditional_scope": "Every fixed-class bound is conditional, not a full-model lower bound"
+        },
+        {
+          "strategy": "class-pairs",
+          "cost": 159303.84020757372,
+          "initial": 201932.05230586205,
+          "wall": 120.71711689999938,
+          "overrun": 0.7171168999993824,
+          "source_argv": [
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\source\\run_class_pair_study.py",
+            "--closed-plan",
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\inputs\\LR1_DR03_VC03_V16a",
+            "--strategy",
+            "class-pairs",
+            "--method-wall-seconds",
+            "120",
+            "--out",
+            "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\class-pair-study-first\\LR1_DR03_VC03_V16a--class-pairs"
+          ],
+          "native_exit": 0,
+          "final_variables": 6300,
+          "conditional_scope": "Every fixed-class bound is conditional, not a full-model lower bound"
+        }
+      ]
+    }
+  ],
+  "actual_same_checker_controls": [
+    {
+      "name": "native_rate_validation_vc05-cold",
+      "native_exit": 0,
+      "status": "numeric_delivery_valid_science_unreviewed",
+      "error": null,
+      "P": 161747.706104694,
+      "scientific_review": "unreviewed",
+      "total_score": null
+    },
+    {
+      "name": "native_rate_validation_vc05-class-pair",
+      "native_exit": 0,
+      "status": "numeric_delivery_valid_science_unreviewed",
+      "error": null,
+      "P": 51776.886727669065,
+      "scientific_review": "unreviewed",
+      "total_score": null
+    },
+    {
+      "name": "native_rate_validation_vc03-cold",
+      "native_exit": 0,
+      "status": "numeric_delivery_valid_science_unreviewed",
+      "error": null,
+      "P": 300629.6129055649,
+      "scientific_review": "unreviewed",
+      "total_score": null
+    },
+    {
+      "name": "native_rate_validation_vc03-class-pair",
+      "native_exit": 0,
+      "status": "numeric_delivery_valid_science_unreviewed",
+      "error": null,
+      "P": 161633.73254488615,
+      "scientific_review": "unreviewed",
+      "total_score": null
+    },
+    {
+      "name": "write-wrong-omit-alpha-cost",
+      "native_exit": 0
+    },
+    {
+      "name": "assess-wrong-omit-alpha-cost",
+      "native_exit": 4,
+      "status": "invalid_delivery",
+      "error": "submitted_model_or_objective_contract",
+      "P": 51776.886727669065,
+      "scientific_review": "unreviewed",
+      "total_score": null
+    },
+    {
+      "name": "write-wrong-omit-exit-service",
+      "native_exit": 0
+    },
+    {
+      "name": "assess-wrong-omit-exit-service",
+      "native_exit": 4,
+      "status": "invalid_delivery",
+      "error": "operating_delivery:delivery_numeric_cell:(0, 105):signed_vessel_service_inventory_effect:actual=6.915286121511599e-10,expected=-219.99999999930847",
+      "P": 51776.886727669065,
+      "scientific_review": "unreviewed",
+      "total_score": null
+    }
+  ],
+  "public_contract_observations": {
+    "missing_public_step_base": true,
+    "schema_only_columns": {
+      "format": "maritime-numeric-output-contract/1",
+      "tables": {
+        "arcs": {
+          "required_columns": [
+            "original_variable",
+            "vessel_class",
+            "kind",
+            "from_port",
+            "from_time_index",
+            "to_port",
+            "to_time_index",
+            "vessel_count",
+            "class_capacity",
+            "original_cost_per_vessel",
+            "cost_contribution",
+            "inventory_service_port",
+            "inventory_service_time_index",
+            "signed_inventory_effect"
+          ]
+        },
+        "paths": {
+          "required_columns": [
+            "anonymous_path_id",
+            "step",
+            "original_variable",
+            "vessel_class",
+            "kind",
+            "from_port",
+            "from_time_index",
+            "to_port",
+            "to_time_index"
+          ]
+        },
+        "ledger": {
+          "required_columns": [
+            "port",
+            "port_name",
+            "role",
+            "time_index",
+            "stock_before",
+            "signed_production_consumption",
+            "signed_vessel_service_inventory_effect",
+            "alpha_loss_or_shortfall",
+            "signed_alpha_effect",
+            "stock_after",
+            "inventory_residual",
+            "berths_used",
+            "berths_available",
+            "original_alpha_unit_penalty",
+            "alpha_cost"
+          ]
+        },
+        "costs": {
+          "required_columns": [
+            "component",
+            "original_objective_contribution"
+          ]
+        }
+      },
+      "row_order": "free",
+      "extra_columns": "allowed",
+      "path_decomposition": "any valid complete class-flow decomposition",
+      "claims": "Actual numerical declarations, not expected reference values"
+    },
+    "submission_declaration": "OUTPUTS says all paths relative actual output; example contains source/reproduce/dependencies as well as per-run numeric/report locators, with no explicit cwd/project namespace."
+  },
+  "scope": "Read original closed source/JSON/native/execution receipts only; no scientific or optimization process repeated. Source identity is not mathematical correctness.",
+  "reviewer_correction": "See source-identity-observation.json and original preserved first observation; only archive-only Recall was missing from runtime source directory."
+}

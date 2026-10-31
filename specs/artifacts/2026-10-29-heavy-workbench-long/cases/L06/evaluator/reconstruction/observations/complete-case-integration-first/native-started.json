@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\source\\run_reference_case.py",
+    "--model",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\model\\maritime-integration-001_t120.mps",
+    "--raw-archive",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\input\\maritime-integration-001.raw.zip",
+    "--instance",
+    "maritime-integration-001",
+    "--report-python",
+    "D:/opencorvus-benchmark-runs/l06-v04-full-case-20261031/report-environment/venv/Scripts/python.exe",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\run"
+  ],
+  "started_at": "2026-10-31T14:18:01.057265+00:00",
+  "launcher_pid": 17108
+}

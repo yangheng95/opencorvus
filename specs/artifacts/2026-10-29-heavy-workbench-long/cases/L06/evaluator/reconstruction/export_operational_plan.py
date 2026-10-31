@@ -12,7 +12,7 @@ import sys
 import traceback
 import zipfile
 
-from verify_original_mps import read_original_model, verify
+from verify_original_mps import read_original_model, verify, numerical_tolerance
 
 
 ARC = re.compile(r"x_\((-?\d+),(-?\d+)\),\((-?\d+),(-?\d+)\),(\d+),Term")
@@ -27,8 +27,8 @@ def write(path, value):
     path.write_text(json.dumps(value, indent=2, allow_nan=False) + "\n", encoding="utf-8")
 
 
-def close(actual, expected, contract):
-    if abs(actual - expected) > 1e-6 + 1e-9 * abs(expected):
+def close(actual, expected, contract, *, reference_scale=None):
+    if abs(actual - expected) > numerical_tolerance(expected if reference_scale is None else reference_scale):
         raise ValueError(f"{contract}:actual={actual!r},expected={expected!r}")
 
 
@@ -217,7 +217,7 @@ def evaluate(args):
             close(alpha_cost, number(metadata, "spotMarketPricePerUnit")
                   * number(metadata, "spotMarketDiscountFactor") ** t, "raw_original_alpha_penalty")
             residual = values[after] - (values[before] + sign * rates[t] + cargo - sign * values[alpha])
-            close(residual, 0, "operational_inventory_closure")
+            close(residual, 0, "operational_inventory_closure", reference_scale=rhs.get(row, 0))
             service = math.fsum(values[v] for v in berth_terms)
             if service > number(port, "numBerths") + 1e-6:
                 raise ValueError("operational_berth_capacity")

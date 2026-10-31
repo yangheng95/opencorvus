@@ -1,0 +1,48 @@
+{
+  "at": "2026-10-31T14:24:37.390690+00:00",
+  "status": "current public contract clarification after first preparation; no candidate has started",
+  "previous": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\complete-case-integration-first\\public-preparation.json",
+  "members": [
+    {
+      "path": "inputs/development-raw.zip",
+      "bytes": 8428
+    },
+    {
+      "path": "inputs/Group2_MIP_Model.pdf",
+      "bytes": 204421
+    },
+    {
+      "path": "inputs/LR1_DR02_VC01_V6a_t120.mps",
+      "bytes": 463301
+    },
+    {
+      "path": "inputs/LR1_DR02_VC05_V8a_t120.mps",
+      "bytes": 1762645
+    },
+    {
+      "path": "inputs/LR1_DR03_VC03_V16a_t120.mps",
+      "bytes": 1488687
+    },
+    {
+      "path": "MODEL.md",
+      "bytes": 2240
+    },
+    {
+      "path": "OUTPUTS.md",
+      "bytes": 3316
+    },
+    {
+      "path": "outputs.schema.json",
+      "bytes": 1640
+    },
+    {
+      "path": "RUNTIME.md",
+      "bytes": 1632
+    },
+    {
+      "path": "TASK.md",
+      "bytes": 4000
+    }
+  ],
+  "scope": "Full original development raw/MPS/PDF unchanged; current public docs and optional command placeholder semantics captured in review-public-contract.zip"
+}

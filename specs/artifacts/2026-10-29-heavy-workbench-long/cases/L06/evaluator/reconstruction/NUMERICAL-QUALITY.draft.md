@@ -81,3 +81,7 @@ GLOP用于线性放松提议，不关闭原整数优化的成熟算法；两个�
 四份原正确数字交付第一次经过该完整数字checker而未重求解/导出，均valid但保不同成本。两个真实错误报告programme分别漏计alpha费用、保正确数学值却漏terminal_exit库存服务，原生producer0、同checker4与精确错误均保[实际命令](observations/economic-measurement-first/numeric-native-commands.json)。这些拒绝证实相应错误合同，不替代优化难度、科学审查或模型区分度。
 
 正式未知输入任务、完整参考科学移交与原子锚点校准、一次集中整题独审和后来合法fresh/有效小时仍待。当前不启动candidate、机械升版、重复独审或资格测试。所有原合同和分数不改，目标未达保持ACTIVE。
+
+## 集中整审后的同一合同澄清
+
+资源范围、canonical wire枚举/空值/类型、static submission与每run out/cwd边界以public/TASK.md、OUTPUTS.md与outputs.schema.json完整文字为准。step允许任意整数起点连续唯一；成本合法零项可省/显式0，非零仍全完整唯一。MPS行与运营库存残差使用相同rhs尺度的单一numerical_tolerance；普通值与目标以expected尺度。候选声明/表错为invalid_delivery，trusted输入/raw/MPS/参考设施错为facility_invalid，均不填伪造P/总分。首审误拒等价1-based表示保留，修后只必要原等价对象正向复验，不重参考/LP/优化；冷执行原源与修后解释器明确分开。

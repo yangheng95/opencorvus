@@ -1,0 +1,30 @@
+{
+  "format": "maritime-comparison-pilot-freeze/1",
+  "case_id": "L06/maritime-research-pilot",
+  "frozen_at": "2026-10-31T14:58:48.035173+00:00",
+  "purpose": "A complete evaluable task for actual fresh Codex/OC comparison, not qualified heavy-benchmark maturity",
+  "public_documents": [
+    "public/TASK.md",
+    "public/MODEL.md",
+    "public/OUTPUTS.md",
+    "public/RUNTIME.md",
+    "public/outputs.schema.json"
+  ],
+  "development_inputs": "Three original selected complete MPS, selected raw and model PDF in the external prepared public package; source URLs and members retained",
+  "quality": "Primary per-assigned-input actual economic P among valid outputs; scientific evidence separately reviewed. No100-point saturation or aggregate capability ranking.",
+  "numerical_profile": {
+    "optimization_seconds_nominal": 180,
+    "solver_threads": 1,
+    "indivisible_overruns": "record, do not hide",
+    "agent_total_limit": null,
+    "minimum_agent_duration": null
+  },
+  "public_resource_scope": "supplied problem files+generic documentation/methods/runtime; no instance answer vectors/private reference/evaluator/other candidates",
+  "review_assignment_id": "l06-maritime-whole-4875d8f2459b4a02b3bc27907b5fcc62",
+  "review_final": "whole-case-review/review-final.json",
+  "pilot_ready_for_fresh_comparison": true,
+  "heavy_benchmark_qualified": false,
+  "candidate_results": null,
+  "private_pool_prelaunch_registration_required": true,
+  "original_contract_scores": "unchanged; old0.4engineering100notnewperformance scores"
+}

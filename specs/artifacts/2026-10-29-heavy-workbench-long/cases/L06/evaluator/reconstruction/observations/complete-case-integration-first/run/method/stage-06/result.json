@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-31T14:19:56.344416+00:00",
+  "status": "optimal",
+  "optimization_executed": true,
+  "free_classes": [
+    1,
+    4
+  ],
+  "fixed_integer_arc_count": 3452,
+  "initial_original_objective": 74469.00195840238,
+  "final_original_objective": 73000.81379145918,
+  "solver_seconds": 7.0,
+  "actual_wall_seconds": 7.432124099999783,
+  "arm_wall_at_terminal": 54.94680650000373,
+  "actual_best_events": 1,
+  "native_bound": 73000.8137914592,
+  "bound_scope": "conditional class-pair subproblem only",
+  "optimal_status_scope": "conditional only",
+  "original_check": {
+    "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+    "feasible": true,
+    "objective_consistent": true,
+    "variables_recomputed": 6476,
+    "integer_variables_recomputed": 5753,
+    "constraints_recomputed": 2520,
+    "max_row_violation": 2.842170943040401e-14,
+    "max_bound_violation": 5.684341886080802e-14,
+    "max_integrality_violation": 2.220446049250313e-16,
+    "reported_objective": 73000.81379145931,
+    "independent_objective": 73000.81379145918,
+    "objective_absolute_error": 1.3096723705530167e-10,
+    "violations": [],
+    "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+  }
+}
