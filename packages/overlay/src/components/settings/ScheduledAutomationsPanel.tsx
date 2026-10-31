@@ -2,6 +2,7 @@ import { Feedback } from "../ui/Feedback"
 import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { activeSessionID, rootTaskSessionID } from "../../store/board"
 import { ApiError } from "../../services/api"
+import { formatErrorDetails } from "../../utils/error-details"
 import {
   automationTimeZoneOptions,
   automationRecurrenceDefaults,
@@ -48,7 +49,7 @@ import { TextField } from "../ui/TextField"
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./layout"
 
 type SelectOption<T extends string> = { value: T; label: string }
-type AutomationError = { message: string; retry?: () => void; source?: "list-load" }
+type AutomationError = { messageKey: string; details?: string; retry?: () => void; source?: "list-load" }
 type AutomationModelOption = ConnectedModelOption & { defaultModel?: boolean; retained?: boolean }
 type AutomationFilter = "all" | "active" | "paused"
 type AutomationScopeFilter = "all" | AutomationScope
@@ -59,7 +60,7 @@ type AutomationRunState = {
   automationID: string
   status: "idle" | "loading" | "ready" | "error"
   items: AutomationRunView[]
-  error?: string
+  error?: AutomationError
 }
 
 interface AutomationSuggestion {
@@ -177,17 +178,18 @@ function outcomeTone(outcome: AutomationRunView["outcome"]): BadgeTone {
   return "accent"
 }
 
-function errorText(error: unknown): string {
-  if (
-    error instanceof ApiError &&
-    error.status === 409 &&
-    error.body &&
-    typeof error.body === "object" &&
-    (error.body as { name?: unknown }).name === "AutomationRevisionConflictError"
-  ) {
-    return t("automations.error.revision_conflict")
+function automationFailure(error: unknown, operationKey: string): AutomationError {
+  const name = error instanceof ApiError && error.body && typeof error.body === "object"
+    ? (error.body as { name?: unknown }).name
+    : undefined
+  return {
+    messageKey: name === "AutomationRevisionConflictError"
+      ? "automations.error.revision_conflict"
+      : name === "InvalidAutomationRecurrenceError"
+        ? "automations.error.recurrence_invalid"
+        : operationKey,
+    details: formatErrorDetails(error),
   }
-  return error instanceof Error ? error.message : String(error)
 }
 
 export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPanelProps) {
@@ -236,6 +238,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   let listElement: HTMLElement | undefined
   let detailBackButton: HTMLButtonElement | undefined
   let formNameInput: HTMLInputElement | undefined
+  let errorFeedbackElement: HTMLDivElement | undefined
   const selected = createMemo(() => automations().find((automation) => automation.id === selectedID()) ?? null)
   const selectedRunState = createMemo(() => {
     const state = runState()
@@ -274,6 +277,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       const target = resolveTarget()
       if (target?.isConnected) target.focus()
     })
+  }
+  function showFormError(problem: AutomationError): void {
+    setError(problem)
+    focusAfterRender(() => errorFeedbackElement)
   }
   function focusListReturn(): void {
     focusAfterRender(() => {
@@ -404,7 +411,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     } catch (cause) {
       if (!request.signal.aborted) {
         setError({
-          message: errorText(cause),
+          ...automationFailure(cause, "automations.error.list_load_failed"),
           retry: () => void load(preferredID),
           source: "list-load",
         })
@@ -436,7 +443,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       if (!request.signal.aborted) setRunState({ automationID, status: "ready", items: history })
     } catch (cause) {
       if (!request.signal.aborted) {
-        setRunState({ automationID, status: "error", items: currentItems, error: errorText(cause) })
+        setRunState({ automationID, status: "error", items: currentItems, error: automationFailure(cause, "automations.error.history_load_failed") })
       }
     }
   }
@@ -538,11 +545,11 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setError(null)
     const current = editTarget()
     if (current && !automations().some((item) => item.id === current.id)) {
-      setError({ message: t("automations.error.edit_target_missing") })
+      showFormError({ messageKey: "automations.error.edit_target_missing" })
       return
     }
     if (!current && !creating()) {
-      setError({ message: t("automations.error.edit_target_missing") })
+      showFormError({ messageKey: "automations.error.edit_target_missing" })
       return
     }
     const form = {
@@ -564,11 +571,11 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       reasoningEffort: reasoningEffort().trim(),
     }
     if (form.scope === "session" && !form.sessionID) {
-      setError({ message: t("automations.error.session_required") })
+      showFormError({ messageKey: "automations.error.session_required" })
       return
     }
     if (form.scope === "project" && form.projectDirectories.length === 0) {
-      setError({ message: t("automations.error.project_required") })
+      showFormError({ messageKey: "automations.error.project_required" })
       return
     }
 
@@ -578,7 +585,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
         ? automationRecurrenceUpdate(current.recurrence, form.recurrence)
         : buildAutomationRecurrence(form.recurrence)
     } catch (cause) {
-      setError({ message: errorText(cause) })
+      showFormError(automationFailure(cause, "automations.error.recurrence_invalid"))
       return
     }
 
@@ -622,13 +629,12 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       await loadRuns(preferredID)
       focusAfterRender(() => detailBackButton)
     } catch (cause) {
-      setError({
-        message:
+      showFormError(automationFailure(cause,
           current && cause instanceof ApiError && cause.status === 404 &&
           cause.path === `/global/automations/${encodeURIComponent(current.id)}`
-            ? t("automations.error.edit_target_missing")
-            : errorText(cause),
-      })
+            ? "automations.error.edit_target_missing"
+            : "automations.error.save_failed",
+      ))
     } finally {
       if (mutationOwner() === owner) setMutationOwner(null)
     }
@@ -644,7 +650,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       await load(id)
       await loadRuns(id)
     } catch (cause) {
-      setError({ message: errorText(cause) })
+      setError(automationFailure(cause, operation === "run" ? "automations.error.run_failed" : "automations.error.status_failed"))
     } finally {
       if (mutationOwner() === owner) setMutationOwner(null)
     }
@@ -677,7 +683,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       await load()
       if (removingSelected || removingFocusedRow) focusListReturn()
     } catch (cause) {
-      setError({ message: errorText(cause) })
+      setError(automationFailure(cause, "automations.error.delete_failed"))
     } finally {
       if (mutationOwner() === owner) setMutationOwner(null)
     }
@@ -689,16 +695,18 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     const [projectResult, providerResult] = await Promise.allSettled([loadDiscoveredProjects(), loadProviderInfo()])
     if (projectResult.status === "fulfilled") setProjects(projectResult.value.projects)
     await automationLoad
-    const messages = [
-      ...(projectResult.status === "rejected" ? [errorText(projectResult.reason)] : []),
+    const details = [
+      ...(projectResult.status === "rejected" ? [formatErrorDetails(projectResult.reason)] : []),
       ...(providerResult.status === "rejected"
-        ? [errorText(providerResult.reason)]
+        ? [formatErrorDetails(providerResult.reason)]
         : providerResult.value.map((issue) => issue.message)),
     ]
-    if (messages.length > 0) {
-      const listLoadFailed = error()?.source === "list-load"
+    if (details.length > 0) {
+      const previous = error()
+      const listLoadFailed = previous?.source === "list-load"
       setError({
-        message: [...(listLoadFailed ? [error()!.message] : []), ...messages].join("; "),
+        messageKey: listLoadFailed ? previous.messageKey : "automations.error.setup_failed",
+        details: [...(listLoadFailed && previous.details ? [previous.details] : []), ...details].join("\n\n"),
         retry: () => void initializeHost(),
         source: listLoadFailed ? "list-load" : undefined,
       })
@@ -711,7 +719,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       closeConfigDialog()
     } catch (cause) {
       if (cause instanceof DOMException && cause.name === "AbortError") return
-      setError({ message: errorText(cause) })
+      setError(automationFailure(cause, "automations.error.session_open_failed"))
     }
   }
 
@@ -777,7 +785,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
           <Show when={!initialLoadError() ? error() : null}>
             {(problem) => (
               <Feedback
+                ref={errorFeedbackElement}
+                tabIndex={-1}
                 tone="error"
+                details={problem().details}
                 actions={
                   <Show when={problem().retry}>
                     {(retry) => (
@@ -796,7 +807,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                   </Show>
                 }
               >
-                {problem().message}
+                {t(problem().messageKey)}
               </Feedback>
             )}
           </Show>
@@ -805,6 +816,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
             fallback={
               <Feedback
                 tone="error"
+                details={initialLoadError()?.details}
                 actions={
                   <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => initialLoadError()?.retry?.()}>
                     <Icon name="refresh" />
@@ -812,7 +824,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                   </Button>
                 }
               >
-                {initialLoadError()?.message}
+                {t(initialLoadError()!.messageKey)}
               </Feedback>
             }
           >
@@ -1120,8 +1132,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                               when={selectedRunState().status === "error"}
                               fallback={<p class="automations-muted" role="status">{t("common.loading")}</p>}
                             >
-                              <Feedback
+                              <Show when={selectedRunState().error}>
+                              {(problem) => <Feedback
                                 tone="error"
+                                details={problem().details}
                                 actions={
                                   <Button
                                     type="button"
@@ -1135,8 +1149,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                                   </Button>
                                 }
                               >
-                                {selectedRunState().error}
-                              </Feedback>
+                                {t(problem().messageKey)}
+                              </Feedback>}
+                              </Show>
                             </Show>
                           }
                         >

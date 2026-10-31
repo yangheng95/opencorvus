@@ -1,0 +1,215 @@
+{
+  "at": "2026-10-31T07:19:16.013Z",
+  "scope": "Desktop scheduled automation calendar validation, input recovery and versioned authoring",
+  "screenshotsManuallyViewed": 18,
+  "uiAutomationTestsRun": 0,
+  "scopes": [
+    {
+      "phase": "before",
+      "port": 38447,
+      "uiEntry": "main-BmcG3UaU.js",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 216584,
+      "finalRows": 216589,
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 75,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "originalEmptyCaseFiles": 22,
+      "protected828Files": 3,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 1118,
+      "retirementReserveMs": 2919312,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "automation": {
+        "phase": "before",
+        "definitions": [
+          {
+            "id": "atm_g0VZbnE1Q00Wu8yLLXCw",
+            "definitionID": "atm_g0VZbnE1Q00Wu8yLLXCw",
+            "revision": 1,
+            "name": "计划任务校验829 BEFORE",
+            "status": "active",
+            "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=2"
+          },
+          {
+            "id": "atm_g0VZbnFE000KcfcICrae",
+            "definitionID": "atm_g0VZbnE1Q00Wu8yLLXCw",
+            "revision": 2,
+            "name": "计划任务校验829 BEFORE",
+            "status": "paused",
+            "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=2"
+          }
+        ],
+        "futureFires": [
+          {
+            "revision": "atm_g0VZbnE1Q00Wu8yLLXCw",
+            "dueAt": 4071258000000,
+            "origin": "scheduled"
+          }
+        ],
+        "runtimeActivations": 1,
+        "observedRunRows": 0,
+        "observedAttemptRows": 0
+      }
+    },
+    {
+      "phase": "after",
+      "port": 38448,
+      "uiEntry": "main-DXSogkYB.js",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 216589,
+      "finalRows": 216595,
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 75,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "originalEmptyCaseFiles": 22,
+      "protected828Files": 3,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 1118,
+      "retirementReserveMs": 2560702,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "automation": {
+        "phase": "after",
+        "definitions": [
+          {
+            "id": "atm_g0VZboe6y00FK8q15iOs",
+            "definitionID": "atm_g0VZboe6y00FK8q15iOs",
+            "revision": 1,
+            "name": "计划任务校验829 AFTER",
+            "status": "active",
+            "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=2"
+          },
+          {
+            "id": "atm_g0VZboeD500oT5atZuZi",
+            "definitionID": "atm_g0VZboe6y00FK8q15iOs",
+            "revision": 2,
+            "name": "计划任务校验829 AFTER",
+            "status": "paused",
+            "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=2"
+          },
+          {
+            "id": "atm_g0VZboxyU00d049pWTGX",
+            "definitionID": "atm_g0VZboe6y00FK8q15iOs",
+            "revision": 3,
+            "name": "计划任务校验829 AFTER EDITED",
+            "status": "paused",
+            "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=3"
+          }
+        ],
+        "futureFires": [
+          {
+            "revision": "atm_g0VZboe6y00FK8q15iOs",
+            "dueAt": 4071258000000,
+            "origin": "scheduled"
+          }
+        ],
+        "runtimeActivations": 1,
+        "observedRunRows": 0,
+        "observedAttemptRows": 0
+      }
+    }
+  ],
+  "checks": [
+    {
+      "label": "types",
+      "exitCode": 0,
+      "startedAt": "2026-10-31T07:06:14.457Z",
+      "finishedAt": "2026-10-31T07:06:40.694Z"
+    },
+    {
+      "label": "ui-build-final",
+      "exitCode": 0,
+      "startedAt": "2026-10-31T07:06:14.500Z",
+      "finishedAt": "2026-10-31T07:07:23.406Z"
+    },
+    {
+      "label": "language",
+      "exitCode": 0,
+      "startedAt": "2026-10-31T07:06:14.480Z",
+      "finishedAt": "2026-10-31T07:06:16.748Z"
+    },
+    {
+      "label": "docs-final",
+      "exitCode": 0,
+      "startedAt": "2026-10-31T07:18:03.652Z",
+      "finishedAt": "2026-10-31T07:18:11.796Z"
+    },
+    {
+      "label": "docs-delivery",
+      "exitCode": 0,
+      "startedAt": "2026-10-31T07:20:19.534Z",
+      "finishedAt": "2026-10-31T07:20:27.739Z"
+    }
+  ],
+  "writerChecks": [
+    {
+      "label": "before-rule",
+      "status": 400,
+      "name": "InvalidAutomationRecurrenceError",
+      "submittedCalendarReturned": true,
+      "originalDefinitionsPreserved": true
+    },
+    {
+      "label": "after-rule",
+      "status": 400,
+      "name": "InvalidAutomationRecurrenceError",
+      "submittedCalendarReturned": true,
+      "originalDefinitionsPreserved": true
+    }
+  ],
+  "finalDefinition": {
+    "id": "atm_g0VZboe6y00FK8q15iOs",
+    "revisionId": "atm_g0VZboxyU00d049pWTGX",
+    "status": "paused",
+    "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=3",
+    "originalBeforeDefinitionPreserved": true,
+    "cancelledOriginalRevision": "atm_g0VZboeD500oT5atZuZi",
+    "history": []
+  },
+  "manualAcceptance": [
+    "English and Chinese local anchored-calendar validation summaries",
+    "English and Chinese typed server recurrence rejection summaries",
+    "Existing Details retains complete local Error and HTTP 400 response",
+    "Form failure transfers reading focus to summary and retains entered fields",
+    "Correct 2099 recurrence saves and pauses",
+    "Invalid edit retains input; Cancel preserves original complete definition",
+    "Reopen restores saved fields; corrected edit updates same ID to revision 3 and retains paused status"
+  ],
+  "limits": [
+    "Desktop only",
+    "Other shared panel failure summaries reviewed in code; not represented as fresh end-to-end failure injection",
+    "No manual or scheduled model execution in this batch"
+  ]
+}

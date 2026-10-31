@@ -1160,6 +1160,17 @@ status changes and deletion submit that exact version to the conditional public
 writer. Revision conflicts retain authored input and explain an explicit fresh
 read; the panel does not retry against a newer head. Automation public shapes
 derive from the canonical generated SDK operation types.
+Scheduled failures retain one presentation record with a message key and the
+original diagnostic details. Summaries use the current interface language;
+Feedback's existing Details disclosure preserves the complete original error.
+The public InvalidAutomationRecurrenceError identity selects the calendar
+correction summary; local calendar construction failures use that same summary
+from their known operation. Other failures identify their actual operation,
+without interpreting diagnostic prose or changing writer admission.
+Authoring failures focus the current Feedback after render, preserving the
+entered fields and existing edit snapshot. Background list reads do not acquire
+that form focus. Initialization keeps all original project/model diagnostics
+in Details while retaining list-load failure identity when applicable.
 Explicit return to the list starts its existing foreground read; row selection
 and deletion stay unavailable while that read is in progress. The form's list
 back button consumes the same owner, so reopening follows the latest definition.

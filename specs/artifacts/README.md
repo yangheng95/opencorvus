@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [计划任务校验与修正](2026-10-31-scheduled-validation-journey/README.md)：真实错误反馈、完整输入和保存回读证据。
+
 - [文件改名与草稿归属](2026-10-31-file-rename-draft-journey/README.md)：实际页面、磁盘内容和完整原数据保护。
 
 - [持续目标长度边界](2026-10-31-goal-objective-length/README.md)：真实页面、校验反馈与数据保护回读。

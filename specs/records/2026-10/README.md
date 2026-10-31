@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [计划任务校验与修正](2026-10-31-scheduled-validation-journey.md)：本地校验、规范拒绝与远期暂停定义。
+
 - [文件改名与草稿归属](2026-10-31-file-rename-draft-journey.md)：保存、取消、文件及父目录重命名实页调查。
 
 - [持续目标长度边界](2026-10-31-goal-objective-length.md)：超长草稿的表单和创建事实调查。

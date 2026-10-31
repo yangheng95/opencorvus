@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [计划任务校验与修正](records/2026-10/2026-10-31-scheduled-validation-journey.md)：自定义日历错误、输入保留与修正保存实页调查。
+
 - [文件改名与草稿归属](records/2026-10/2026-10-31-file-rename-draft-journey.md)：文件及父目录改名、未保存决定与真实路径回读。
 
 - [持续目标长度边界](records/2026-10/2026-10-31-goal-objective-length.md)：长草稿输入、真实校验与创建副作用复核。
