@@ -10,7 +10,7 @@ import { useDisclosure } from "../../solid/disclosure"
 import { Button } from "../ui/Button"
 import { Icon } from "../ui/Icon"
 import { DropdownMenu } from "../ui/DropdownMenu"
-import { fullscreenPortalMount } from "../../utils/fullscreen"
+import { topLayerPortalMount } from "../../utils/top-layer"
 
 export function ArtifactActions(props: {
   files: () => ArtifactExport[]
@@ -177,7 +177,7 @@ export function ArtifactActions(props: {
           <span>{t("artifact.actions.download")}</span>
           <Icon name="chevron-down" size="compact" />
         </DropdownMenu.Trigger>
-        <DropdownMenu.Portal mount={fullscreenPortalMount(trigger)}>
+        <DropdownMenu.Portal mount={topLayerPortalMount(trigger)}>
           <DropdownMenu.Content class="msg-artifact__download-menu">
             <For each={files()}>
               {(file) => (

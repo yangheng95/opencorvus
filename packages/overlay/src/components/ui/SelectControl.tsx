@@ -3,7 +3,7 @@ import { Show, type JSX } from "solid-js"
 import { Icon } from "./Icon"
 import { Tooltip } from "./Tooltip"
 import { useTextFieldControlProps } from "./TextField"
-import { fullscreenPortalMount } from "../../utils/fullscreen"
+import { topLayerPortalMount } from "../../utils/top-layer"
 
 type SelectDataAttributes = Record<string, string | undefined>
 export type SelectControlVariant = "control" | "composer"
@@ -94,7 +94,7 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
               <Tooltip.Trigger as="span" class="oc-select-option-copy">
                 {optionCopy()}
               </Tooltip.Trigger>
-              <Tooltip.Portal mount={fullscreenPortalMount(trigger)}>
+              <Tooltip.Portal mount={topLayerPortalMount(trigger)}>
                 <Tooltip.Content class="oc-select-option-tooltip">{tooltipCopy()}</Tooltip.Content>
               </Tooltip.Portal>
             </Tooltip.Root>
@@ -153,7 +153,7 @@ export function SelectControl<T extends object>(props: SelectControlProps<T>): J
         aria-invalid={invalid() ? "true" : undefined}
         aria-errormessage={invalid() ? errorMessageID() : undefined}
       />
-      <Select.Portal mount={fullscreenPortalMount(trigger)}>
+      <Select.Portal mount={topLayerPortalMount(trigger)}>
         <Select.Content class="oc-select-content" data-variant={variant()}>
           <Select.Listbox class="oc-select-listbox" data-variant={variant()} />
         </Select.Content>

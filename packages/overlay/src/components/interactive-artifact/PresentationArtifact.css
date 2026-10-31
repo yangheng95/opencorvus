@@ -121,7 +121,7 @@
   color: var(--accent) !important;
 }
 
-.msg-artifact:fullscreen .msg-artifact-presentation {
+.msg-artifact[data-artifact-workspace]:popover-open .msg-artifact-presentation {
   width: 100%;
   max-width: none;
   height: calc(100vh - calc(64px * var(--ui-scale)));

@@ -20,7 +20,7 @@ import { hasWorkspaceSelection, beginWorkspaceSelection } from "../services/work
 import { t } from "./i18n"
 import { iconHtml } from "./icon-html"
 import { escapeHtml } from "./markdown"
-import { isFullscreenViewportVisible, observeFullscreenViewport } from "./fullscreen"
+import { isReadingViewportVisible, observeReadingViewport } from "./top-layer"
 
 // ── Auto-scroll ──
 
@@ -122,7 +122,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   }
 
   function pauseCoveredViewport(beforeRequest = false): boolean {
-    if (isFullscreenViewportVisible(el)) return false
+    if (isReadingViewportVisible(el)) return false
     if (!fullscreenReturnPending) {
       fullscreenReturnPending = true
       if (beforeRequest) {
@@ -420,7 +420,7 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
   el.addEventListener("scroll", onScroll, { passive: true })
   window.addEventListener("pointerup", clearPointerScrollIntent)
   window.addEventListener("pointercancel", clearPointerScrollIntent)
-  const stopObservingFullscreen = observeFullscreenViewport(el, (beforeRequest) => {
+  const stopObservingFullscreen = observeReadingViewport(el, (beforeRequest) => {
     if (beforeRequest) pauseCoveredViewport(true)
     scheduleFollowScroll()
   })
@@ -435,9 +435,9 @@ export function setupAutoScroll(el: HTMLElement, opts: AutoScrollOptions): AutoS
 
   return {
     readingPosition: () => ({ top: restoreTop ?? el.scrollTop, following: opts.isTracking() }),
-    hasScrollInput: () => isFullscreenViewportVisible(el) && (pointerScrollIntent || Boolean(inputIntent && performance.now() <= inputIntent.expiresAt)),
+    hasScrollInput: () => isReadingViewportVisible(el) && (pointerScrollIntent || Boolean(inputIntent && performance.now() <= inputIntent.expiresAt)),
     hasViewportResize: () => el.clientWidth !== viewportWidth || el.clientHeight !== viewportHeight,
-    canCaptureReading: () => !disposed && !fullscreenReturnPending && isFullscreenViewportVisible(el),
+    canCaptureReading: () => !disposed && !fullscreenReturnPending && isReadingViewportVisible(el),
     cleanup: () => {
       disposed = true
       stopObservingFullscreen()

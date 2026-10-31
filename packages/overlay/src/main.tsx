@@ -35,6 +35,7 @@ import {
 import { WorkLedger } from "./components/WorkLedger"
 import type { ProjectActionPresentation } from "./components/ProjectLedgerGroup"
 import { projectDirectoryKey } from "./utils/project-directory"
+import { closeArtifactWorkspace } from "./utils/top-layer"
 import { replaceWorkspaceLocation, type ClientWorkspaceLocation } from "./services/workspace-location"
 import type { ApiAuthority } from "./services/api"
 import { MissionBoard } from "./components/MissionBoard"
@@ -1914,8 +1915,9 @@ async function openRenderedFileLink(element: HTMLElement, open: () => Promise<vo
   const authority = captureApiAuthority()
   const epoch = boardStore.selectEpoch
   const reveal = fileEditorRevealRevision()
-  // The file workbench and its draft dialog live outside an artifact's
-  // fullscreen subtree. Finish leaving it before admitting that navigation.
+  // Return to the conversation before opening its file workbench or draft dialog.
+  const workspace = element.closest<HTMLElement>("[data-artifact-workspace]:popover-open")
+  if (workspace) closeArtifactWorkspace(workspace)
   if (document.fullscreenElement?.contains(element)) await document.exitFullscreen()
   assertApiAuthorityCurrent(authority)
   if (!ownsWorkspaceSelection(epoch) || fileEditorRevealRevision() !== reveal) return

@@ -692,7 +692,7 @@
 }
 
 .dialog-overlay.image-preview-dialog__overlay {
-  background: color-mix(in srgb, var(--surface-inset) 96%, transparent);
+  background: var(--ui-scrim);
 }
 
 .msg-image-trigger[data-image-failed="true"] .md-img,
@@ -722,38 +722,28 @@
   overflow: auto;
 }
 
-.dialog.dialog-fullscreen .dialog-form.image-preview-dialog__form {
+.dialog .dialog-form.image-preview-dialog__form {
+  width: min(calc(1120px * var(--ui-scale)), calc(100% - calc(64px * var(--ui-scale))));
+  height: min(calc(760px * var(--ui-scale)), calc(var(--ui-overlay-shell-height) - calc(96px * var(--ui-scale))));
+  max-width: none;
+  max-height: calc(var(--ui-overlay-shell-height) - calc(96px * var(--ui-scale)));
   padding: 0;
   gap: 0;
   overflow: hidden;
-  background: transparent;
-  border: 0;
-  box-shadow: none;
+  background: var(--dialog-bg);
 }
 
 .dialog .image-preview-dialog__form > .image-preview-dialog__header {
-  position: absolute;
-  inset: calc(18px * var(--ui-scale)) calc(18px * var(--ui-scale)) auto auto;
+  position: relative;
+  inset: auto;
   z-index: 3;
   min-height: calc(48px * var(--ui-scale));
   margin: 0;
-  padding: 0;
+  padding: var(--ui-gap-md) var(--ui-gap-xl);
   background: transparent;
-  border: 0;
+  border-bottom: var(--oc-border-width) solid var(--border);
   box-shadow: none;
-  pointer-events: none;
-}
-
-.dialog .image-preview-dialog__form .dialog-title {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  flex: 0 0 auto;
 }
 
 .dialog .image-preview-dialog__form .dialog-header-actions {
@@ -761,10 +751,10 @@
   flex-wrap: nowrap;
   gap: var(--ui-gap-xs);
   padding: var(--ui-gap-xs);
-  border: var(--ui-focused-popup-border);
+  border: 0;
   border-radius: var(--oc-radius-large);
   background: var(--dialog-bg);
-  box-shadow: var(--ui-focused-popup-shadow);
+  box-shadow: none;
   pointer-events: auto;
 }
 
@@ -824,7 +814,7 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
-  padding: calc(76px * var(--ui-scale)) calc(40px * var(--ui-scale)) calc(96px * var(--ui-scale));
+  padding: var(--ui-gap-3xl) var(--ui-gap-4xl) calc(88px * var(--ui-scale));
   background: transparent;
   cursor: grab;
   scrollbar-gutter: stable both-edges;
@@ -1615,57 +1605,74 @@ button.msg-source-chip .msg-source-chip__filename {
   color: var(--text-soft);
 }
 
-.msg-artifact:fullscreen {
+.msg-artifact[data-artifact-workspace]:popover-open {
   display: grid;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  border: 0;
-  border-radius: 0;
+  position: fixed;
+  inset: 0;
+  width: min(calc(1120px * var(--ui-scale)), calc(100vw - calc(64px * var(--ui-scale))));
+  height: min(calc(780px * var(--ui-scale)), calc(100dvh - calc(96px * var(--ui-scale))));
+  max-width: none;
+  max-height: none;
+  margin: auto;
+  padding: 0;
+  border: var(--ui-focused-popup-border);
+  border-radius: var(--oc-radius-large);
   background: var(--surface);
-  box-shadow: none;
+  box-shadow: var(--ui-focused-popup-shadow);
   grid-template-rows: auto minmax(0, 1fr);
 }
 
-.msg-artifact:fullscreen .msg-artifact__header {
-  min-height: calc(64px * var(--ui-scale));
-  padding-inline: var(--ui-gap-3xl);
+.msg-artifact[data-artifact-workspace]:popover-open::backdrop {
+  background: var(--ui-scrim);
 }
 
-.msg-artifact:fullscreen .msg-artifact__body {
+.msg-artifact-slot {
+  --artifact-inline-height: 0px;
+}
+
+.msg-artifact-slot:has(> [data-artifact-workspace]:popover-open) {
+  height: var(--artifact-inline-height);
+}
+
+.msg-artifact[data-artifact-workspace]:popover-open .msg-artifact__header {
+  min-height: calc(48px * var(--ui-scale));
+  padding-inline: var(--ui-gap-xl);
+}
+
+.msg-artifact[data-artifact-workspace]:popover-open .msg-artifact__body {
   height: 100%;
   min-height: 0;
   overflow: auto;
 }
 
-.msg-artifact:fullscreen[data-artifact-renderer="Table"] .msg-artifact__body,
-.msg-artifact:fullscreen[data-artifact-renderer="Code"] .msg-artifact__body,
-.msg-artifact:fullscreen[data-artifact-renderer="Diff"] .msg-artifact__body,
-.msg-artifact:fullscreen[data-artifact-renderer="Terminal"] .msg-artifact__body,
-.msg-artifact:fullscreen[data-artifact-renderer="Timeline"] .msg-artifact__body,
-.msg-artifact:fullscreen[data-artifact-renderer="Network"] .msg-artifact__body,
-.msg-artifact:fullscreen[data-artifact-renderer="Tree"] .msg-artifact__body {
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Table"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Code"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Diff"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Terminal"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Timeline"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Network"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Tree"] .msg-artifact__body {
   display: grid;
   overflow: hidden;
 }
 
-.msg-artifact:fullscreen[data-artifact-renderer="Table"] .msg-artifact__body,
-.msg-artifact:fullscreen[data-artifact-renderer="Code"] .msg-artifact__body,
-.msg-artifact:fullscreen[data-artifact-renderer="Diff"] .msg-artifact__body,
-.msg-artifact:fullscreen[data-artifact-renderer="Network"] .msg-artifact__body,
-.msg-artifact:fullscreen[data-artifact-renderer="Tree"] .msg-artifact__body {
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Table"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Code"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Diff"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Network"] .msg-artifact__body,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Tree"] .msg-artifact__body {
   grid-template-rows: auto minmax(0, 1fr);
 }
 
-.msg-artifact:fullscreen[data-artifact-renderer="Table"] .msg-artifact__body {
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Table"] .msg-artifact__body {
   grid-template-rows: auto minmax(0, 1fr) auto;
 }
 
-.msg-artifact:fullscreen[data-artifact-renderer="Terminal"] .msg-artifact__body {
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Terminal"] .msg-artifact__body {
   grid-template-rows: auto auto minmax(0, 1fr);
 }
 
-.msg-artifact:fullscreen[data-artifact-renderer="Timeline"] .msg-artifact__body {
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Timeline"] .msg-artifact__body {
   grid-template-rows: auto minmax(0, 1fr) auto;
 }
 
@@ -2162,46 +2169,46 @@ button.msg-source-chip .msg-source-chip__filename {
   color: var(--bad);
 }
 
-.msg-artifact:fullscreen[data-artifact-renderer="Document"] .msg-artifact-document,
-.msg-artifact:fullscreen[data-artifact-renderer="Notebook"] .msg-artifact-notebook,
-.msg-artifact:fullscreen[data-artifact-renderer="Tree"] .msg-artifact-tree {
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Document"] .msg-artifact-document,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Notebook"] .msg-artifact-notebook,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Tree"] .msg-artifact-tree {
   height: 100%;
   max-height: none;
 }
 
-.msg-artifact:fullscreen[data-artifact-renderer="Table"] .msg-artifact-table__scroll,
-.msg-artifact:fullscreen[data-artifact-renderer="Code"] .msg-artifact-code,
-.msg-artifact:fullscreen[data-artifact-renderer="Diff"] .msg-artifact-diff {
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Table"] .msg-artifact-table__scroll,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Code"] .msg-artifact-code,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Diff"] .msg-artifact-diff {
   min-height: 0;
   max-height: none;
 }
 
-.msg-artifact:fullscreen[data-artifact-renderer="Diagram"] .msg-artifact-diagram,
-.msg-artifact:fullscreen[data-artifact-renderer="Chart"] .msg-artifact-chart--vega,
-.msg-artifact:fullscreen[data-artifact-renderer="Candlestick"] .msg-artifact-chart,
-.msg-artifact:fullscreen[data-artifact-renderer="Map"] .msg-artifact-map,
-.msg-artifact:fullscreen[data-artifact-renderer="Map"] .msg-artifact-map-shell,
-.msg-artifact:fullscreen[data-artifact-renderer="Spreadsheet"] .msg-artifact-spreadsheet-workspace,
-.msg-artifact:fullscreen[data-artifact-renderer="Timeline"] .msg-artifact-timeline,
-.msg-artifact:fullscreen[data-artifact-renderer="Network"] .msg-artifact-network,
-.msg-artifact:fullscreen[data-artifact-renderer="Terminal"] .msg-artifact-terminal,
-.msg-artifact:fullscreen[data-artifact-renderer="3D model"] .msg-artifact-model3d-host {
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Diagram"] .msg-artifact-diagram,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Chart"] .msg-artifact-chart--vega,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Candlestick"] .msg-artifact-chart,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Map"] .msg-artifact-map,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Map"] .msg-artifact-map-shell,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Spreadsheet"] .msg-artifact-spreadsheet-workspace,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Timeline"] .msg-artifact-timeline,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Network"] .msg-artifact-network,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Terminal"] .msg-artifact-terminal,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="3D model"] .msg-artifact-model3d-host {
   width: 100%;
   height: 100% !important;
   min-height: 0;
   max-height: none;
 }
 
-.msg-artifact:fullscreen[data-artifact-renderer="Diagram"] .msg-artifact-diagram svg {
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Diagram"] .msg-artifact-diagram svg {
   width: 100%;
   max-width: none !important;
   height: 100%;
   max-height: 100%;
 }
 
-.msg-artifact:fullscreen[data-artifact-renderer="File"] .msg-artifact-file__pdf-preview,
-.msg-artifact:fullscreen[data-artifact-renderer="File"] .msg-artifact-pdf,
-.msg-artifact:fullscreen[data-artifact-renderer="File"] .msg-artifact-code {
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="File"] .msg-artifact-file__pdf-preview,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="File"] .msg-artifact-pdf,
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="File"] .msg-artifact-code {
   height: 100%;
   min-height: 0;
   max-height: none;
@@ -2246,7 +2253,7 @@ button.msg-source-chip .msg-source-chip__filename {
   line-height: var(--ui-line-height-normal);
 }
 
-.msg-artifact:fullscreen[data-artifact-renderer="Spreadsheet"] .msg-artifact-spreadsheet {
+.msg-artifact[data-artifact-workspace]:popover-open[data-artifact-renderer="Spreadsheet"] .msg-artifact-spreadsheet {
   flex: 1;
   height: auto;
   min-height: 0;
@@ -2577,20 +2584,7 @@ button.msg-source-chip .msg-source-chip__filename {
   color: var(--text);
 }
 
-.msg-artifact--mcp-fullscreen:fullscreen {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  border-radius: 0;
-  background: var(--surface);
-  box-shadow: var(--shadow-lg);
-}
-
-.msg-artifact--mcp-fullscreen:fullscreen .msg-artifact__body {
-  height: calc(100% - calc(42px * var(--ui-scale)));
-}
-
-.msg-artifact--mcp-fullscreen:fullscreen .msg-artifact-app {
+.msg-artifact--mcp-fullscreen:popover-open .msg-artifact-app {
   height: 100%;
 }
 

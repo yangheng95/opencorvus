@@ -1,5 +1,9 @@
 # 2026-11 Records
 
+- [应用内普通预览窗](2026-11-01-in-app-preview-dialogs.md)：普通窗口、图片/Office/表格实测与浮层归属。
+
+- [原生Office预览输入复核](2026-11-01-native-office-card-review.md)：851原始页面及用户范围修正后的结清。
+
 - [当前工作表导出文件身份](2026-11-01-live-spreadsheet-export-identity.md)：真实电子表格产物、当前编辑状态与下载身份。
 
 - [交付承诺与验证范围](2026-11-01-delivery-verification-scope.md)：共享验证原则、完成判断和独立消费者真实验收。

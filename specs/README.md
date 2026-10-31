@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [应用内普通预览窗](records/2026-11/2026-11-01-in-app-preview-dialogs.md)：默认展开、图片弹窗、稳定编辑器与实际窗口连续性修复。
+
+- [原生Office预览输入复核](records/2026-11/2026-11-01-native-office-card-review.md)：真实历史交付与默认全屏问题的原始页面证据。
+
 - [当前工作表导出文件身份](records/2026-11/2026-11-01-live-spreadsheet-export-identity.md)：当前编辑内容的真实CSV出口与共享命名收敛。
 
 - [交付承诺与验证范围](records/2026-11/2026-11-01-delivery-verification-scope.md)：共享验证选择、完成判断及跨格式真实程序验收。

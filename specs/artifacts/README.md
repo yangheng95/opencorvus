@@ -1,5 +1,9 @@
 # Artifact entry points
 
+- [应用内普通预览窗](2026-11-01-in-app-preview-dialogs/README.md)：21张实图、原件/当前编辑下载和数据保全。
+
+- [原生Office预览输入复核](2026-11-01-native-office-card-review/README.md)：11张原图与默认全屏修复的前置证据。
+
 - [当前工作表导出文件身份](2026-11-01-live-spreadsheet-export-identity/README.md)：原加载失败、真实单元格编辑、两CSV、十二张实图与媒体回看。
 
 - [交付承诺与验证范围](2026-11-01-delivery-verification-scope/README.md)：相同两题前后真实执行、80次流式请求、13项独立消费者检查和完成判断原件。

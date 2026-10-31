@@ -28,7 +28,7 @@ import { getHostTransport } from "../../services/host-transport-runtime"
 import { promptSessionMessage } from "../../services/chat"
 import { appliedColorScheme, observeAppliedTheme } from "../../services/theme"
 import { AppLog } from "../../utils/log"
-import { requestNativeFullscreen } from "../../utils/fullscreen"
+import { closeArtifactWorkspace, openArtifactWorkspace } from "../../utils/top-layer"
 import { getLocale, t } from "../../utils/i18n"
 import { OVERLAY_VERSION } from "../../utils/version"
 import { Button } from "../ui/Button"
@@ -217,9 +217,7 @@ function McpAppInstance(props: McpAppArtifactProps & { authority: ApiAuthority }
   }
 
   const leaveTopLayer = async () => {
-    if (document.fullscreenElement === shell) await document.exitFullscreen()
-    if (shell.matches(":popover-open")) shell.hidePopover()
-    shell.removeAttribute("popover")
+    closeArtifactWorkspace(shell)
   }
 
   const applyDisplayMode = async (requested: McpUiDisplayMode): Promise<McpUiDisplayMode> => {
@@ -228,15 +226,14 @@ function McpAppInstance(props: McpAppArtifactProps & { authority: ApiAuthority }
     const mode = DISPLAY_MODES.includes(requested) && supported.includes(requested) ? requested : "inline"
     try {
       if (mode === "fullscreen") {
-        if (shell.matches(":popover-open")) shell.hidePopover()
-        shell.removeAttribute("popover")
-        await requestNativeFullscreen(shell)
+        await leaveTopLayer()
+        openArtifactWorkspace(shell)
         if (!owns() || teardownPromise) {
           await leaveTopLayer()
           return "inline"
         }
       } else if (mode === "pip") {
-        if (document.fullscreenElement === shell) await document.exitFullscreen()
+        await leaveTopLayer()
         assertCurrent()
         setDisplayMode("pip")
         shell.setAttribute("popover", "manual")
@@ -598,16 +595,14 @@ function McpAppInstance(props: McpAppArtifactProps & { authority: ApiAuthority }
 
     const syncTopLayer = () => {
       if (!owns()) return
-      if (document.fullscreenElement !== shell && !shell.matches(":popover-open") && displayMode() !== "inline") {
-        shell.removeAttribute("popover")
+      if (!shell.matches(":popover-open") && displayMode() !== "inline") {
+        closeArtifactWorkspace(shell)
         setDisplayMode("inline")
       }
     }
-    document.addEventListener("fullscreenchange", syncTopLayer)
     shell.addEventListener("toggle", syncTopLayer)
     onCleanup(() => {
       disposed = true
-      document.removeEventListener("fullscreenchange", syncTopLayer)
       shell.removeEventListener("toggle", syncTopLayer)
       void leaveTopLayer()
       stopThemeObserver?.()

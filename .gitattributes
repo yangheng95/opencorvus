@@ -2,6 +2,7 @@
 * text=auto eol=lf
 
 specs/artifacts/2026-11-01-live-spreadsheet-export-identity/after/*.csv -text whitespace=cr-at-eol
+specs/artifacts/2026-11-01-in-app-preview-dialogs/after/*.csv -text whitespace=cr-at-eol
 
 # Binary files
 *.ico binary

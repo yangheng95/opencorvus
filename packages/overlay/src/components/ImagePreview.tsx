@@ -31,6 +31,7 @@ import { ContextMenu } from "./ui/ContextMenu"
 import { Icon } from "./ui/Icon"
 import { Feedback } from "./ui/Feedback"
 import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
+import { closeArtifactWorkspace } from "../utils/top-layer"
 
 const SCALE_STEP = 0.25
 const COPY_FEEDBACK_DURATION_MS = 2400
@@ -180,6 +181,12 @@ export function PreviewableImage(props: {
 }
 
 export function ImagePreviewHost() {
+  createEffect(() => {
+    if (!imagePreviewState().open) return
+    for (const workspace of document.querySelectorAll<HTMLElement>("[data-artifact-workspace]:popover-open")) {
+      closeArtifactWorkspace(workspace)
+    }
+  })
   const [resource] = createResource(
     () => {
       const state = imagePreviewState()
@@ -584,7 +591,7 @@ export function ImagePreviewHost() {
       open={imagePreviewState().open}
       title={imagePreviewState().alt || t("image_preview.title")}
       onClose={closeImagePreview}
-      fullscreen
+      wider
       draggable={false}
       headerActions={
         <>

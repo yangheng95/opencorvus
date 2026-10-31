@@ -2366,20 +2366,20 @@ input intent instead of consuming it as a return to the bottom. Programmatic
 echoes and content-layout rebasing keep their existing discrimination. An
 ordinary return to the bottom re-arms follow mode.
 
-ArtifactFrame and MCP App native fullscreen requests notify this same controller
-before invoking the browser API, since the browser resizes before announcing its
-fullscreen element. An actual pending request covers that transition; the native
-fullscreen element determines visibility thereafter. A fullscreen ancestor of
-the scrollport remains visible; background ancestor and sibling scrollports
-retain their existing restore position and follow state without adopting the
-temporary layout or fullscreen content's input and focus.
+ArtifactFrame and MCP App in-app expansion notify this same controller before
+showing the original element as a page-owned popover. The application window and
+browser viewport retain their size. The actual open workspace owns its reading
+input; covered ancestor and sibling scrollports retain their existing restore
+position and follow state. Native media fullscreen remains observable when the
+user explicitly invokes the media control.
 
-On return, the same scroll writer waits for the native document viewport to
+On return from explicit media fullscreen, the same scroll writer waits for the native document viewport to
 return to its pre-request dimensions, then restores the retained position after
 stable layout, accepting the available end when fullscreen interaction shortened
 the content. The existing ResizeObserver observes the document root as well as
 the scrollport; a temporarily stable full-height viewport cannot settle a return
-against its temporary scroll limit. Fresh visible input can take over a changed
+against its temporary scroll limit. In-app expansion retains the inline card's
+height and restores the existing reader after the popover closes. Fresh visible input can take over a changed
 viewport. Following readers return to the bottom. Native focus restoration cannot
 cancel this return; fresh visible reading input can take over. Main, selected
 Agent and Side Chat capture their existing source-owned reading records only
@@ -2739,9 +2739,11 @@ local radius fallback or another paint owner at the Workbench boundary.
 
 The single `ImagePreviewHost` remains the modal media viewer for Markdown,
 message attachments, Composer attachments, browser evidence, and Screenshot
-Browser images. It specializes the shared Kobalte-backed Dialog with the
-extra-large modal radius, clipped immersive canvas, detached filename and
-view-control surfaces, and an independent close action. Zoom, width fit,
+Browser images. It specializes the shared Kobalte-backed Dialog as a
+bounded ordinary window with visible filename, surrounding application context,
+image canvas, view controls, and an independent close action. Opening an image
+from an expanded artifact first returns that artifact to its existing inline
+node. Zoom, width fit,
 whole-image fit, original size, copy, pan, and modified-wheel zoom remain
 behaviors of that one host; consumers cannot introduce another lightbox or
 parallel image source.
@@ -3493,7 +3495,7 @@ Editable spreadsheets show a current-language note before editing: changes live
 only in the current view, and edited sheets must be downloaded before leaving or
 collapsing it. CSV exports preserve cell values rather than workbook formulas or
 formatting. A local column layout gives the note its natural height and the same
-mounted workbook the remaining fullscreen space. This guidance does not add a
+mounted workbook the remaining expanded-window space. This guidance does not add a
 durable draft, a dirty-state owner or a navigation prompt.
 The installed Univer locale packages own sheet-tab, Sidebar and notification
 accessibility names. Their four mounted components redraw from the same locale
@@ -3522,7 +3524,7 @@ owned by their existing state and services.
 Protection rule cards use the existing Univer dark hover surface, and their
 Edit/Delete regions use its existing dark operation surface. Rule descriptions
 use the same theme’s dark foreground variant. The mounted list and ThemeService
-supply these variants in ordinary and fullscreen views while retaining the
+supply these variants in inline and expanded views while retaining the
 existing rule identity, actions, locale and range drawing. No Host colour
 override or separate theme state supplies the protection card.
 Design Dialog close names consume the existing ConfigContext locale projection.
@@ -3545,7 +3547,7 @@ Menu keyboard activation uses the shared Kobalte scroll primitive. When root
 overflow is locked, each completed scroll step continues from the current scroll
 ancestor’s parent, so traversal advances toward the root. The dependency patch
 keeps the existing inclusive getScrollParent contract and normal native scrolling;
-fullscreen uses the same trigger, portal and mounted artifact renderer.
+in-app expansion uses the same trigger, portal and mounted artifact renderer.
 
 The nineteen model-publishable renderers have one canonical payload validator.
 The search-native Provider Tool projection factors their shared
@@ -3589,13 +3591,15 @@ Shared Tree branch descriptions accompany their existing disclosure title, so a
 collapsed branch retains its kind/description. The same native disclosure owns
 expansion; leaf values and original node labels remain unchanged.
 
-`ArtifactFrame` is the only native artifact work surface. It presents the same
-mounted renderer in compact Conversation form and, when supported, through the
-browser Fullscreen API; it never creates a second renderer tree or copies the
-payload into a modal. MCP Apps keep their protocol-owned display modes and do
-not receive this native control. Delegated Markdown file links leave their owning
-fullscreen subtree before opening the existing file workbench or its draft
-decision dialog. The native transition uses the current connection, workspace
+`ArtifactFrame` is the shared artifact work surface. Its Expand action presents
+the same mounted renderer in a centered, bounded in-app window through the
+platform auto-popover primitive, with outside-click/Escape dismissal and the
+existing Close action. It retains inline geometry and local editor state;
+there is no second renderer tree, payload copy or browser fullscreen request.
+MCP Apps retain protocol-owned displayMode values; their fullscreen projection
+uses this same in-app workspace, and pip retains its existing manual popover.
+Delegated Markdown file links close their owning workspace before opening the
+existing file workbench or its draft decision dialog. The transition uses the current connection, workspace
 selection and file reveal revision to retire a stale click. Both codespan and
 authored file-link destinations retain their exact existing path/range and editor
 policy; no second renderer or file-navigation owner handles this transition.
@@ -3612,7 +3616,7 @@ public range-settled event, including the first explicit payload viewport with
 automatic resize polling disabled. Its scoped Moment date constructor and selected
 event details follow the current product language; language updates use the same
 mounted instance and retain its current viewport and selection. Authored event
-timestamps retain their existing local-time display contract. Diagram's fullscreen
+timestamps retain their existing local-time display contract. Diagram's expanded
 SVG relinquishes Mermaid's compact intrinsic width cap while retaining the original
 mounted viewBox and graph.
 This keeps data semantics in the durable payload while making visual
@@ -3622,7 +3626,7 @@ styling.
 Presentation uses Reveal.js embedded mode with the official theme contract
 mapped to OpenCorvus semantic tokens. The declared aspect ratio owns compact
 stage geometry, keyboard navigation belongs only to a focused deck, and a
-container observer calls Reveal `layout()` after pane or fullscreen resizing.
+container observer calls Reveal `layout()` after pane or workspace resizing.
 Render-backed PowerPoint slides contain the exact OfficeCLI image without a
 second semantic overlay. Canonical attachments referenced by a durable
 `interactive_artifact.payload` are part of AttachmentStore's live-reference
@@ -3636,7 +3640,7 @@ expressions under the native `script-src 'self'` Content Security Policy (CSP)
 without dynamic JavaScript evaluation or an `unsafe-eval` exception. The same
 policy loads the mature Vega Embed and Vega Tooltip styles as one build-time
 local stylesheet and disables both libraries' runtime style injection.
-Chart and Dashboard also share one native View lifecycle. Pane/fullscreen size
+Chart and Dashboard also share one native View lifecycle. Pane/workspace size
 changes and visibility updates resize the mounted View through its public API.
 Theme or product-language changes rebuild presentation, transferring the same
 View's native signal state and arrays belonging to explicitly declared compiled
@@ -3646,10 +3650,9 @@ The current container size is applied after state restoration settles. Vega
 export controls use the current product language. Dashboard's default filter
 label and numeric metrics follow that language; authored labels, strings, units,
 and published metric values retain their payload identity.
-Select and artifact-download portals use their actual trigger's fullscreen
-ownership. The existing Kobalte patch makes Floating UI clip a fullscreen-owned
-floating element to that native fullscreen root, preserving ordinary clipping
-and the library's placement/collision behavior elsewhere.
+Select and artifact-download portals use their trigger's actual popover owner,
+including the current workspace or MCP pip; explicit native media fullscreen
+keeps its own ownership. Floating UI retains its placement/collision behavior.
 
 Maps carry inline GeoJSON and never accept model-selected styles, tiles, scripts,
 or network data. The Overlay's single basemap configuration supplies the
@@ -3672,7 +3675,9 @@ Spreadsheet edits are renderer-local and do not mutate the durable workbook.
 Each Univer workbench owns one stable floating-content container. Its existing
 configuration supplies that container to context menus and their submenus,
 dialogs, dropdowns, popovers and tooltips. The owner attaches it to the containing
-fullscreen element while active and to its document body otherwise, preserving
+open popover while active, its containing explicit media fullscreen when applicable,
+and its document body otherwise. The same container observes native toggle and
+fullscreenchange and removes both listeners on disposal, preserving
 the workbook and disposing the container with that workbench. Tooltip geometry
 uses fixed viewport coordinates. Context-menu lifetime follows the actual open
 state and anchor; child portal pointer/wheel events belong to their React menu
