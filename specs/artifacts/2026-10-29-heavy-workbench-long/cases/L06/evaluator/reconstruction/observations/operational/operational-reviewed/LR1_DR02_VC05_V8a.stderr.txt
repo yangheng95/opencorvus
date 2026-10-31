@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "D:\opencorvus-benchmark-runs\l06-substantive-reconstruction-20261031\operational-source-fee-repair\export_operational_plan.py", line 317, in <module>
+    main()
+    ~~~~^^
+  File "D:\opencorvus-benchmark-runs\l06-substantive-reconstruction-20261031\operational-source-fee-repair\export_operational_plan.py", line 306, in main
+    result = export(args)
+  File "D:\opencorvus-benchmark-runs\l06-substantive-reconstruction-20261031\operational-source-fee-repair\export_operational_plan.py", line 116, in export
+    metadata, ports, classes, vessels, travel = raw_data(archive, args.instance)
+                                                ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\opencorvus-benchmark-runs\l06-substantive-reconstruction-20261031\operational-source-fee-repair\export_operational_plan.py", line 91, in raw_data
+    raise ValueError("raw_travel_matrix_coverage")
+ValueError: raw_travel_matrix_coverage

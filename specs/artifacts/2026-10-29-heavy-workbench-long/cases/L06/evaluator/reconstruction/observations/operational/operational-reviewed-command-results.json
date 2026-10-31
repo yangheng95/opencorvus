@@ -1,0 +1,46 @@
+[
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-u",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-source-fee-repair\\export_operational_plan.py",
+      "--closed-plan",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC01_V6a",
+      "--raw-archive",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-group2-inputs\\Group2_data_format_only_files.zip",
+      "--instance",
+      "LR1_DR02_VC01_V6a",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a"
+    ],
+    "started_at": "2026-10-31T12:18:10.020353+00:00",
+    "launcher_pid": 21484,
+    "finished_at": "2026-10-31T12:18:10.388929+00:00",
+    "native_exit": 0
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-u",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-source-fee-repair\\export_operational_plan.py",
+      "--closed-plan",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC05_V8a",
+      "--raw-archive",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-group2-inputs\\Group2_data_format_only_files.zip",
+      "--instance",
+      "LR1_DR02_VC05_V8a",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC05_V8a"
+    ],
+    "started_at": "2026-10-31T12:18:10.403530+00:00",
+    "launcher_pid": 24628,
+    "finished_at": "2026-10-31T12:18:10.852393+00:00",
+    "native_exit": 1
+  }
+]

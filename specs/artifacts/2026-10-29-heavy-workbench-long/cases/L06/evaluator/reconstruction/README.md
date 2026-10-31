@@ -83,3 +83,17 @@ python -B plot_quality_axis.py --run D:/new-own-mirplib-run/group2-quality --out
 ```
 
 原始输入ZIP/全部原矩阵和解向量继续保外部；本目录只保自写源、原生日志/质量事件及重算/图，范围见[本轮原件清单](observations/constructive-and-quality-scope.json)。缺少的仍是完整新任务/公开质量合同、强弱正确方法锚点、全链科学研究与移交、同checker错误programme、一次集中整题独审及后来合法fresh实测；禁止机械0.5和当前启动candidate。
+
+## 运营计划、经济账与实际移交
+
+[完整任务与输出合同草稿](TASK.reconstruction.draft.md)已明确科学研究目标和未冻结范围。[三份实际运营交付](operational-delivery/README.md)与[真实原生命令移交](operational-delivery/HANDOFF.md)来自已闭合的原计划，没有重新求解。30条匿名路径完整分解562个原弧单位，1200行港口账闭合，最大库存残差2.842170943040401e-14；原数学行/界/整数/目标与raw船队、初始库存/容量、航时、前120期生产消费、泊位和成本来源均已实际核对。
+
+原初始source弧要支付目的港费，原人工sink退出弧也参与本港装卸/泊位和终点调整；三例实际费用分解及匿名路径图没有把它们省略或伪造现实未来航程。同类流的一种路径分解不等于原船名的唯一未来分配。raw元数据360期与原MPS120期边界明确。
+
+这些核对支持已列字段与原模型/当前计划一致，尚未独立重建raw到MPS的完整生成器和全部允许弧集合；没有将未核生成规则作为另一份隐藏评分标准。
+
+首导出器source费用误设0、第二例原多类航时文件误读两项设施失败及原源/全部命令保[原件范围](observations/operational/scope.json)。港费修后首例成功，单一格式解析修后仅执行第二/第三例，未重已成功首例或任何solver；两个成功源版本据实记录，不冒同一源码的全新cold或独立整审。全部运营CSV/完整原向量保外部，仓库交付报告/图/源/原检查与范围清单。
+
+原站当前记录三例120期可行成本33809/36659/82837，远低于本轮原计划55730.69/162058.54/201932.05；[来源记录](observations/operational/group2-published-table-operational-context.json)与[原表数值](observations/operational/group2-published-scalar-context-rows.json)明确它们是舍入网页事实，未将其冒本机独立最优证书或新通过线。现有合法解仍有明显改进空间，文件齐全不代表经济质量高。
+
+当前仍缺更强研究方法/有依据的质量锚点、正式质量标尺和整题正错程序/一次集中独审与fresh测量；本轮运营交付不计作合格重型题数或有效候选小时。

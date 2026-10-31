@@ -1,0 +1,19 @@
+{
+  "started_at": "2026-10-31T12:21:57.036091+00:00",
+  "finished_at": "2026-10-31T12:21:59.467797+00:00",
+  "native_exit": 0,
+  "argv": [
+    "D:/opencorvus-benchmark-runs/l06-v04-full-case-20261031/report-environment/venv/Scripts/python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report-source\\report_operational_study.py",
+    "--index",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-study-index.json",
+    "--published-context",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-published-scalar-context-rows.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report"
+  ]
+}

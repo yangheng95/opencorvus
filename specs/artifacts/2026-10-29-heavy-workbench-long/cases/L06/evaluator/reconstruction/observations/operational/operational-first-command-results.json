@@ -1,0 +1,24 @@
+[
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-u",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first-source\\export_operational_plan.py",
+      "--closed-plan",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC01_V6a",
+      "--raw-archive",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-group2-inputs\\Group2_data_format_only_files.zip",
+      "--instance",
+      "LR1_DR02_VC01_V6a",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first\\LR1_DR02_VC01_V6a"
+    ],
+    "started_at": "2026-10-31T12:17:34.959226+00:00",
+    "launcher_pid": 30276,
+    "finished_at": "2026-10-31T12:17:35.153514+00:00",
+    "native_exit": 1
+  }
+]

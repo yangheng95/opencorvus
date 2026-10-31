@@ -1,0 +1,273 @@
+{
+  "at": "2026-10-31T12:21:59.349516+00:00",
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report-source\\report_operational_study.py",
+    "--index",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-study-index.json",
+    "--published-context",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-published-scalar-context-rows.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report"
+  ],
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\report-environment\\venv\\Scripts\\python.exe",
+  "packages": {
+    "matplotlib": "3.11.2",
+    "numpy": "2.5.4"
+  },
+  "data": [
+    {
+      "instance": "LR1_DR02_VC01_V6a",
+      "closure": {
+        "at": "2026-10-31T12:18:10.361099+00:00",
+        "instance": "LR1_DR02_VC01_V6a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 1,
+        "anonymous_paths": 6,
+        "positive_original_arc_rows": 131,
+        "path_arc_units": 133,
+        "port_period_rows": 360,
+        "max_inventory_residual": 2.842170943040401e-14,
+        "original_cost": 55730.689596818054,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 14708.657971334662
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 334.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 17550.612241418
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 16026.994973744484
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 7110.944410320903
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -0.52
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "native_solver_status": "timelimit",
+        "native_solver_bound": 32031.272148783784,
+        "optimality_proven": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "original linear model, not a re-created or relaxed planning model",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 2058,
+          "integer_variables_recomputed": 1333,
+          "constraints_recomputed": 1080,
+          "max_row_violation": 2.842170943040401e-14,
+          "max_bound_violation": 1.4210854715202004e-13,
+          "max_integrality_violation": 1.1155520951433574e-13,
+          "reported_objective": 55730.68959681736,
+          "independent_objective": 55730.689596818054,
+          "objective_absolute_error": 6.912159733474255e-10,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "actual_export_directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a",
+      "execution_source": "operational-source-fee-repair.zip",
+      "published_context": {
+        "published_cost": 33809.0,
+        "published_bound": 33809.0
+      },
+      "excess_over_published_feasible_cost_ratio": 0.6483980477629641,
+      "published_comparison_scope": "Rounded webpage context only, not an exact optimum, new quality threshold or benchmark score"
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "closure": {
+        "at": "2026-10-31T12:18:41.164973+00:00",
+        "instance": "LR1_DR02_VC05_V8a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 5,
+        "anonymous_paths": 8,
+        "positive_original_arc_rows": 131,
+        "path_arc_units": 131,
+        "port_period_rows": 360,
+        "max_inventory_residual": 0.0,
+        "original_cost": 162058.53609443826,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 14197.622904161857
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 396.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 18359.1385961826
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 63119.14741689092
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 65988.45717720287
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -1.83
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "native_solver_status": "timelimit",
+        "native_solver_bound": 35918.905468874844,
+        "optimality_proven": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "original linear model, not a re-created or relaxed planning model",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 7370,
+          "integer_variables_recomputed": 6645,
+          "constraints_recomputed": 2520,
+          "max_row_violation": 5.684341886080802e-14,
+          "max_bound_violation": 5.684341886080802e-14,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 162058.53609443968,
+          "independent_objective": 162058.53609443826,
+          "objective_absolute_error": 1.4260876923799515e-09,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "actual_export_directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a",
+      "execution_source": "operational-multiclass-source.zip",
+      "published_context": {
+        "published_cost": 36659.0,
+        "published_bound": 36088.0
+      },
+      "excess_over_published_feasible_cost_ratio": 3.4207025858435376,
+      "published_comparison_scope": "Rounded webpage context only, not an exact optimum, new quality threshold or benchmark score"
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "closure": {
+        "at": "2026-10-31T12:18:41.465909+00:00",
+        "instance": "LR1_DR03_VC03_V16a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 4,
+        "classes": 3,
+        "anonymous_paths": 16,
+        "positive_original_arc_rows": 296,
+        "path_arc_units": 298,
+        "port_period_rows": 480,
+        "max_inventory_residual": 0.0,
+        "original_cost": 201932.05230586205,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 30571.963655370997
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 565.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 36582.62671442702
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 81258.34395741341
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 52956.45797865062
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -2.34
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "native_solver_status": "timelimit",
+        "native_solver_bound": 71454.3854662436,
+        "optimality_proven": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "original linear model, not a re-created or relaxed planning model",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 6300,
+          "integer_variables_recomputed": 5334,
+          "constraints_recomputed": 2400,
+          "max_row_violation": 2.842170943040401e-14,
+          "max_bound_violation": 2.842170943040401e-14,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 201932.0523058637,
+          "independent_objective": 201932.05230586205,
+          "objective_absolute_error": 1.6589183360338211e-09,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "actual_export_directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a",
+      "execution_source": "operational-multiclass-source.zip",
+      "published_context": {
+        "published_cost": 82837.0,
+        "published_bound": 71635.0
+      },
+      "excess_over_published_feasible_cost_ratio": 1.4377035902538968,
+      "published_comparison_scope": "Rounded webpage context only, not an exact optimum, new quality threshold or benchmark score"
+    }
+  ],
+  "scope": "Actual closed operational export report, not solver execution, grade or benchmark qualification"
+}

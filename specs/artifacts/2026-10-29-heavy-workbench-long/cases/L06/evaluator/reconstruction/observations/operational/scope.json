@@ -1,0 +1,542 @@
+{
+  "at": "2026-10-31T12:23:39.271939+00:00",
+  "scope": "Actual operational research delivery and complete task draft, not a new frozen benchmark or score",
+  "copied_originals": [
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first-source.zip",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-first-source.zip",
+      "bytes": 100632
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-source-fee-repair.zip",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-source-fee-repair.zip",
+      "bytes": 101056
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-source.zip",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-source.zip",
+      "bytes": 101429
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report-source.zip",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-report-source.zip",
+      "bytes": 101953
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first-command-results.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-first-command-results.json",
+      "bytes": 923
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed-command-results.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed-command-results.json",
+      "bytes": 1857
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-command-results.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-command-results.json",
+      "bytes": 1881
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-study-index.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-study-index.json",
+      "bytes": 994
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-published-table-operational-context.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/group2-published-table-operational-context.json",
+      "bytes": 351
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\group2-published-scalar-context-rows.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/group2-published-scalar-context-rows.json",
+      "bytes": 674
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-report.started.json",
+      "bytes": 770
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-report.terminal.json",
+      "bytes": 827
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-report.stdout.txt",
+      "bytes": 164
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-report.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first\\LR1_DR02_VC01_V6a.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-first/LR1_DR02_VC01_V6a.started.json",
+      "bytes": 798
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first\\LR1_DR02_VC01_V6a.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-first/LR1_DR02_VC01_V6a.stderr.txt",
+      "bytes": 958
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first\\LR1_DR02_VC01_V6a.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-first/LR1_DR02_VC01_V6a.stdout.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first\\LR1_DR02_VC01_V6a.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-first/LR1_DR02_VC01_V6a.terminal.json",
+      "bytes": 873
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first\\LR1_DR02_VC01_V6a\\execution-error.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-first/LR1_DR02_VC01_V6a/execution-error.json",
+      "bytes": 947
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first\\LR1_DR02_VC01_V6a\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-first/LR1_DR02_VC01_V6a/execution-started.json",
+      "bytes": 819
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first\\LR1_DR02_VC01_V6a\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-first/LR1_DR02_VC01_V6a/independent-original-model-check.json",
+      "bytes": 698
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC01_V6a.started.json",
+      "bytes": 806
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC01_V6a.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC01_V6a.stdout.txt",
+      "bytes": 119
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC01_V6a.terminal.json",
+      "bytes": 881
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC05_V8a.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC05_V8a.started.json",
+      "bytes": 806
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC05_V8a.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC05_V8a.stderr.txt",
+      "bytes": 972
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC05_V8a.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC05_V8a.stdout.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC05_V8a.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC05_V8a.terminal.json",
+      "bytes": 881
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC01_V6a/execution-started.json",
+      "bytes": 827
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC01_V6a/execution-terminal.json",
+      "bytes": 235
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC01_V6a/independent-original-model-check.json",
+      "bytes": 698
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a\\operational-closure.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC01_V6a/operational-closure.json",
+      "bytes": 2878
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC05_V8a\\execution-error.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC05_V8a/execution-error.json",
+      "bytes": 946
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC05_V8a\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC05_V8a/execution-started.json",
+      "bytes": 827
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC05_V8a\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-reviewed/LR1_DR02_VC05_V8a/independent-original-model-check.json",
+      "bytes": 680
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR02_VC05_V8a.started.json",
+      "bytes": 816
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR02_VC05_V8a.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR02_VC05_V8a.stdout.txt",
+      "bytes": 119
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR02_VC05_V8a.terminal.json",
+      "bytes": 891
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a.started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR03_VC03_V16a.started.json",
+      "bytes": 820
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a.stderr.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR03_VC03_V16a.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a.stdout.txt",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR03_VC03_V16a.stdout.txt",
+      "bytes": 121
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a.terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR03_VC03_V16a.terminal.json",
+      "bytes": 895
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR02_VC05_V8a/execution-started.json",
+      "bytes": 837
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR02_VC05_V8a/execution-terminal.json",
+      "bytes": 235
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR02_VC05_V8a/independent-original-model-check.json",
+      "bytes": 680
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a\\operational-closure.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR02_VC05_V8a/operational-closure.json",
+      "bytes": 2842
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a\\execution-started.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR03_VC03_V16a/execution-started.json",
+      "bytes": 841
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a\\execution-terminal.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR03_VC03_V16a/execution-terminal.json",
+      "bytes": 236
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a\\independent-original-model-check.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR03_VC03_V16a/independent-original-model-check.json",
+      "bytes": 679
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a\\operational-closure.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/observations/operational/operational-multiclass-reviewed/LR1_DR03_VC03_V16a/operational-closure.json",
+      "bytes": 2842
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report\\operational-study.md",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/operational-delivery/README.md",
+      "bytes": 3468
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report\\handoff.md",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/operational-delivery/HANDOFF.md",
+      "bytes": 1780
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report\\actual-operational-paths.png",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/operational-delivery/actual-operational-paths.png",
+      "bytes": 148431
+    },
+    {
+      "source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-report\\report-data.json",
+      "repository": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/operational-delivery/report-data.json",
+      "bytes": 12689
+    }
+  ],
+  "external_csvs": [
+    {
+      "instance": "LR1_DR02_VC01_V6a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a\\anonymous-vessel-paths.csv",
+      "bytes": 8695,
+      "data_rows": 133,
+      "columns": [
+        "anonymous_path_id",
+        "step",
+        "original_variable",
+        "vessel_class",
+        "kind",
+        "from_port",
+        "from_time_index",
+        "to_port",
+        "to_time_index"
+      ]
+    },
+    {
+      "instance": "LR1_DR02_VC01_V6a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a\\class-arc-plan.csv",
+      "bytes": 10862,
+      "data_rows": 131,
+      "columns": [
+        "original_variable",
+        "vessel_class",
+        "kind",
+        "from_port",
+        "from_time_index",
+        "to_port",
+        "to_time_index",
+        "vessel_count",
+        "class_capacity",
+        "original_cost_per_vessel",
+        "cost_contribution",
+        "inventory_service_port",
+        "inventory_service_time_index",
+        "signed_inventory_effect"
+      ]
+    },
+    {
+      "instance": "LR1_DR02_VC01_V6a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a\\economic-components.csv",
+      "bytes": 260,
+      "data_rows": 8,
+      "columns": [
+        "component",
+        "original_objective_contribution"
+      ]
+    },
+    {
+      "instance": "LR1_DR02_VC01_V6a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a\\port-period-ledger.csv",
+      "bytes": 45163,
+      "data_rows": 360,
+      "columns": [
+        "port",
+        "port_name",
+        "role",
+        "time_index",
+        "stock_before",
+        "signed_production_consumption",
+        "signed_vessel_service_inventory_effect",
+        "alpha_loss_or_shortfall",
+        "signed_alpha_effect",
+        "stock_after",
+        "inventory_residual",
+        "berths_used",
+        "berths_available",
+        "original_alpha_unit_penalty",
+        "alpha_cost"
+      ]
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a\\anonymous-vessel-paths.csv",
+      "bytes": 8576,
+      "data_rows": 131,
+      "columns": [
+        "anonymous_path_id",
+        "step",
+        "original_variable",
+        "vessel_class",
+        "kind",
+        "from_port",
+        "from_time_index",
+        "to_port",
+        "to_time_index"
+      ]
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a\\class-arc-plan.csv",
+      "bytes": 11040,
+      "data_rows": 131,
+      "columns": [
+        "original_variable",
+        "vessel_class",
+        "kind",
+        "from_port",
+        "from_time_index",
+        "to_port",
+        "to_time_index",
+        "vessel_count",
+        "class_capacity",
+        "original_cost_per_vessel",
+        "cost_contribution",
+        "inventory_service_port",
+        "inventory_service_time_index",
+        "signed_inventory_effect"
+      ]
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a\\economic-components.csv",
+      "bytes": 260,
+      "data_rows": 8,
+      "columns": [
+        "component",
+        "original_objective_contribution"
+      ]
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a\\port-period-ledger.csv",
+      "bytes": 38420,
+      "data_rows": 360,
+      "columns": [
+        "port",
+        "port_name",
+        "role",
+        "time_index",
+        "stock_before",
+        "signed_production_consumption",
+        "signed_vessel_service_inventory_effect",
+        "alpha_loss_or_shortfall",
+        "signed_alpha_effect",
+        "stock_after",
+        "inventory_residual",
+        "berths_used",
+        "berths_available",
+        "original_alpha_unit_penalty",
+        "alpha_cost"
+      ]
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a\\anonymous-vessel-paths.csv",
+      "bytes": 19277,
+      "data_rows": 298,
+      "columns": [
+        "anonymous_path_id",
+        "step",
+        "original_variable",
+        "vessel_class",
+        "kind",
+        "from_port",
+        "from_time_index",
+        "to_port",
+        "to_time_index"
+      ]
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a\\class-arc-plan.csv",
+      "bytes": 22507,
+      "data_rows": 296,
+      "columns": [
+        "original_variable",
+        "vessel_class",
+        "kind",
+        "from_port",
+        "from_time_index",
+        "to_port",
+        "to_time_index",
+        "vessel_count",
+        "class_capacity",
+        "original_cost_per_vessel",
+        "cost_contribution",
+        "inventory_service_port",
+        "inventory_service_time_index",
+        "signed_inventory_effect"
+      ]
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a\\economic-components.csv",
+      "bytes": 261,
+      "data_rows": 8,
+      "columns": [
+        "component",
+        "original_objective_contribution"
+      ]
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a\\port-period-ledger.csv",
+      "bytes": 51116,
+      "data_rows": 480,
+      "columns": [
+        "port",
+        "port_name",
+        "role",
+        "time_index",
+        "stock_before",
+        "signed_production_consumption",
+        "signed_vessel_service_inventory_effect",
+        "alpha_loss_or_shortfall",
+        "signed_alpha_effect",
+        "stock_after",
+        "inventory_residual",
+        "berths_used",
+        "berths_available",
+        "original_alpha_unit_penalty",
+        "alpha_cost"
+      ]
+    }
+  ],
+  "external_originals_retained": [
+    "All original data-only/MPS/PDF/HTML resources and full plan/intermediate values",
+    "All full operational CSVs at listed paths",
+    "Third-party environments/wheels/cache"
+  ],
+  "actual_success_sources": [
+    {
+      "instance": "LR1_DR02_VC01_V6a",
+      "directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a",
+      "execution_source": "operational-source-fee-repair.zip"
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a",
+      "execution_source": "operational-multiclass-source.zip"
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a",
+      "execution_source": "operational-multiclass-source.zip"
+    }
+  ],
+  "actual_failures": [
+    "Initial exporter source fee mistaken as zero; original mathematical check passed, exporter failed",
+    "Five-class raw travel table was mistakenly parsed as first class only; first successfully exported case retained, affected second and unexecuted third executed under explicit parser revision"
+  ],
+  "verification": "Original mathematical reader plus raw/MPS semantic reconciliation, positive source/path/stock/economic output checks; full source-only cold rebuild and independent whole-case review not performed",
+  "new_optimization": false,
+  "new_candidate": false,
+  "independent_whole_review": false,
+  "benchmark_frozen": false,
+  "benchmark_score": null,
+  "unmet": [
+    "Stronger researched method and meaningful correct quality anchors",
+    "Prospective calibrated economic/scientific quality contract",
+    "Full new task wrong-programme evidence and one concentrated whole-case independent review",
+    "Later legitimate fresh discrimination and effective-hours evidence"
+  ]
+}

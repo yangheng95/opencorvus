@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-31T12:18:10.275067+00:00",
+  "actual_python_pid": 21484,
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-source-fee-repair\\export_operational_plan.py",
+    "--closed-plan",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-group2-quality-first\\LR1_DR02_VC01_V6a",
+    "--raw-archive",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-group2-inputs\\Group2_data_format_only_files.zip",
+    "--instance",
+    "LR1_DR02_VC01_V6a",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a"
+  ],
+  "source": "closed original solver plan and unmodified original raw/MPS",
+  "optimization": false
+}

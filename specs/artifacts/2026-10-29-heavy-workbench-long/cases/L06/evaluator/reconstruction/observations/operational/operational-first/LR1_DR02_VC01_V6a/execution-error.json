@@ -1,0 +1,6 @@
+{
+  "at": "2026-10-31T12:17:35.138699+00:00",
+  "type": "ValueError",
+  "error": "source_cost:actual=71.0,expected=0",
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first-source\\export_operational_plan.py\", line 305, in main\n    result = export(args)\n  File \"D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first-source\\export_operational_plan.py\", line 148, in export\n    close(objective_coefficients.get(variable, 0), 0, \"source_cost\")\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-first-source\\export_operational_plan.py\", line 32, in close\n    raise ValueError(f\"{contract}:actual={actual!r},expected={expected!r}\")\nValueError: source_cost:actual=71.0,expected=0\n"
+}

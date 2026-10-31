@@ -1,0 +1,21 @@
+{
+  "at": "2026-10-31T12:19:20.369803+00:00",
+  "exports": [
+    {
+      "instance": "LR1_DR02_VC01_V6a",
+      "directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-reviewed\\LR1_DR02_VC01_V6a",
+      "execution_source": "operational-source-fee-repair.zip"
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR02_VC05_V8a",
+      "execution_source": "operational-multiclass-source.zip"
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "directory": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\operational-multiclass-reviewed\\LR1_DR03_VC03_V16a",
+      "execution_source": "operational-multiclass-source.zip"
+    }
+  ],
+  "scope": "Actual successfully exported closed plans. No new optimization, candidate, whole-case independent review or benchmark score."
+}
