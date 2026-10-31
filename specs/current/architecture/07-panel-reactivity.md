@@ -58,6 +58,13 @@ Tooltip and original-file navigation, with an explicit saved-excerpt dialog that
 reads the same Source snippet and uses its existing clipboard owner. Closing the
 controlled dialog returns focus through the shared Dialog contract. Location formatting and identity are shared
 by source presentation, copy and search; no fresh file or web fetch builds search.
+File Source captions occupy one line. Their existing display path is divided at
+its final directory separator, preserving a trailing separator with that last
+segment. Flex layout gives that segment priority and ellipsizes the earlier
+prefix; the original characters remain in order. This is presentation only:
+the full location continues to own the Tooltip, accessible name, copy action,
+search context and file navigation. Filename and range retain separate display
+space, while web/document details retain their existing wrapping.
 The member navigation owner retains its first landing Promise until settlement;
 subsequent transcript revisions update the displayed content while that same
 operation completes. Rejection settles the original request under its owner.

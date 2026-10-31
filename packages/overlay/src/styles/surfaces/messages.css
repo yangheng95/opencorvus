@@ -1215,6 +1215,30 @@ button.msg-source-chip .msg-source-chip__detail,
   white-space: pre-wrap;
 }
 
+button.msg-source-chip .msg-source-chip__file-location {
+  display: flex;
+  align-self: stretch;
+  min-width: 0;
+  max-width: 100%;
+  white-space: pre;
+}
+
+.msg-source-chip__path-prefix {
+  flex: 1 1 0;
+  min-width: 1ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+
+.msg-source-chip__path-tail {
+  flex: 0 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+
 .msg-source-chip__file-title {
   display: flex;
   align-items: baseline;

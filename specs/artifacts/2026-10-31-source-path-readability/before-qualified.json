@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-31T05:15:25.956Z",
+  "phase": "before",
+  "schema": 9,
+  "tables": 92,
+  "originals": 215866,
+  "current": 215868,
+  "changes": [
+    {
+      "table": "engine_control_activation_lease",
+      "old": 44251,
+      "now": 44252
+    },
+    {
+      "table": "engine_control_activation_lease_grant",
+      "old": 44309,
+      "now": 44310
+    }
+  ],
+  "allOriginalBusinessRowsPreserved": true,
+  "attachments": 75,
+  "protectedProjects": 13,
+  "trackedFiles": 28,
+  "workspaceFiles": 13,
+  "additionalProtectedFiles": 39,
+  "requests": 0,
+  "cumulativeRequests": 1118,
+  "reserveMs": 3361638,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "uiEntry": "main-D8vP1FAa.js"
+}

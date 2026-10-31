@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件来源路径阅读](2026-10-31-source-path-readability/README.md)：真实桌面截图、来源和完整数据回读证据。
+
 - [空闲对话后台活动停止](2026-10-31-idle-background-stop/README.md)：实页菜单、确认、转换与数据保护证据。
 
 - [2026-10-31-release-0.1.40](2026-10-31-release-0.1.40/README.md)：原生及官网发布、依赖和配置合同修复、失败候选与公网回读。

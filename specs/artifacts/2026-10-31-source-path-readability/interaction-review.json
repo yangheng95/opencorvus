@@ -1,0 +1,93 @@
+{
+  "at": "2026-10-31T05:23:21.715Z",
+  "desktop": {
+    "width": 1280,
+    "height": 720,
+    "language": "en-US",
+    "rightDockWidth": 380
+  },
+  "method": "Real native development server /ui, actual browser interaction and personally reviewed screenshots; no UI automation tests",
+  "manualReview": {
+    "before": [
+      "01-before-wide.png",
+      "02-before-narrow.png"
+    ],
+    "after": [
+      "03-after-wide.png",
+      "04-after-narrow-file.png",
+      "06-after-keyboard-tooltip.png",
+      "07-after-readme-open.png",
+      "08-after-copy-location.png",
+      "11-after-range-group.png",
+      "12-after-saved-excerpt.png",
+      "13-after-range-file-open.png",
+      "14-after-source-search.png",
+      "15-after-search-landed.png",
+      "16-after-web-source.png",
+      "17-after-web-excerpt.png",
+      "18-after-attachments.png",
+      "19-after-attachment-open.png",
+      "20-after-final-file.png"
+    ],
+    "longPathDirectorySingleLine": true,
+    "nearestDirectoryVisible": "资料/",
+    "completeOriginalPathTooltip": true,
+    "originalReadmeAndChineseFileOpened": true,
+    "copyOriginalPath": true,
+    "browserClipboardOriginalEmpty": true,
+    "browserClipboardRestoredEmptyText": true,
+    "existingEightRangesExpanded": true,
+    "savedExcerptRead": "test_invoice.py:17:34",
+    "fileLine17Selected": true,
+    "sourceSearchResultSelected": true,
+    "twoSavedWebSourcesRead": true,
+    "webExcerptExpanded": true,
+    "attachmentOriginalReadmeOpened": true
+  },
+  "dataReadback": {
+    "taskMessages": 68,
+    "missionMessages": 80,
+    "chatMessages": 3,
+    "workMessages": 8,
+    "completeWorkGoal": {
+      "tokens": 148493,
+      "turns": 3
+    },
+    "reportMessages": 12,
+    "reportGoal": {
+      "tokens": 380471,
+      "turns": 1
+    },
+    "preflight823Messages": 2,
+    "goal823Messages": 9,
+    "goal823": {
+      "tokens": 242063,
+      "turns": 1
+    },
+    "promoted824Messages": 6,
+    "promoted824SourceBytes": [
+      94,
+      90
+    ],
+    "stopped825Messages": [
+      2,
+      4
+    ],
+    "webMessages": 4,
+    "webSources": 2,
+    "fileMessages": 3,
+    "fileSources": 8,
+    "attachmentMessages": 4,
+    "attachmentReadmeBytes": 176,
+    "allFullOriginalResponsesPreserved": true
+  },
+  "notExercised": [
+    "No genuine custom-title or unusual-whitespace path record in the selected histories; those unchanged contracts were reviewed in code, not claimed as real UI coverage",
+    "No tablet/mobile acceptance; desktop scope only"
+  ],
+  "toolCorrections": [
+    "Baseline initial tab opened before native readiness, so a fresh tab was created after explicit readiness; no service restart or deadline change",
+    "Clipboard API rejects empty item arrays; original empty browser clipboard restored as empty text after ownership check",
+    "Private readback labels now require explicit strings and use a separate output namespace; original observations retained and after readbacks rerun"
+  ]
+}

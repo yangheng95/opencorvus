@@ -233,6 +233,13 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
   const detail = () => sourceDetail(props.source)
   const whitespacePath = () => sourceWhitespacePath(props.source)
   const fileCaption = () => props.omitDirectoryCaption ? "" : sourceFileCaption(props.source).text
+  const fileCaptionParts = () => {
+    const text = fileCaption()
+    const normalized = pathWithForwardSeparators(text, props.source.path || sourceDirectory())
+    const end = normalized.endsWith("/") ? normalized.length - 2 : normalized.length - 1
+    const separator = normalized.lastIndexOf("/", end)
+    return { prefix: text.slice(0, separator + 1), tail: text.slice(separator + 1) }
+  }
   const icon = () => sourceIcon(props.source)
   const location = () => {
     if (props.source.type !== "source-url" || !props.source.url) return ""
@@ -292,7 +299,12 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
                 </Show>
               </span>
               <Show when={fileCaption()}>
-                <span class="msg-source-chip__detail">{fileCaption()}</span>
+                <span class="msg-source-chip__detail msg-source-chip__file-location">
+                  <Show when={fileCaptionParts().prefix}>
+                    {(prefix) => <span class="msg-source-chip__path-prefix">{prefix()}</span>}
+                  </Show>
+                  <span class="msg-source-chip__path-tail">{fileCaptionParts().tail}</span>
+                </span>
               </Show>
             </span>
           </Tooltip.Trigger>
