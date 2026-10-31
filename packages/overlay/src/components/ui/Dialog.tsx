@@ -23,12 +23,21 @@ function clampOffset(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max)
 }
 
-function dialogOpeningFocusTarget(active: HTMLElement): HTMLElement {
+const dialogFocusOwners = new WeakMap<HTMLElement, () => HTMLElement | undefined | null>()
+
+export function dialogOpeningFocusTarget(active: HTMLElement): HTMLElement {
   let target = active
   const visited = new Set<Element>()
-  let menu = target.closest('[role="menu"]')
-  while (menu && !visited.has(menu)) {
-    visited.add(menu)
+  while (!visited.has(target)) {
+    visited.add(target)
+    const closingDialog = target.closest<HTMLElement>('[role="dialog"]')
+    const inherited = closingDialog && dialogFocusOwners.get(closingDialog)?.()
+    if (inherited) {
+      target = inherited
+      continue
+    }
+    const menu = target.closest('[role="menu"]')
+    if (!menu) break
     const controller = (menu.getAttribute("aria-labelledby") || "")
       .split(/\s+/)
       .map((id) => target.ownerDocument.getElementById(id))
@@ -37,7 +46,6 @@ function dialogOpeningFocusTarget(active: HTMLElement): HTMLElement {
       )
     if (!controller) break
     target = controller
-    menu = target.closest('[role="menu"]')
   }
   return target
 }
@@ -313,6 +321,9 @@ export function Dialog(rawProps: DialogProps) {
           aria-modal={local.modal ? "true" : undefined}
           ref={(el) => {
             dialogRef = el
+            dialogFocusOwners.set(el, () => !local.open && local.modal
+              ? local.returnFocusTarget ? local.returnFocusTarget() : focusReturnTarget
+              : undefined)
             if (typeof local.ref === "function") local.ref(el)
           }}
           onOpenAutoFocus={handleOpenAutoFocus}

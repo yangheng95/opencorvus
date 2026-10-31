@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件改名与草稿归属](2026-10-31-file-rename-draft-journey/README.md)：实际页面、磁盘内容和完整原数据保护。
+
 - [持续目标长度边界](2026-10-31-goal-objective-length/README.md)：真实页面、校验反馈与数据保护回读。
 
 - [文件来源路径阅读](2026-10-31-source-path-readability/README.md)：真实桌面截图、来源和完整数据回读证据。

@@ -3267,6 +3267,18 @@ The File decision's programmatic Dialog restores the initiating visible control
 on cancellation through the primitive close-autofocus hook. It uses the existing
 file resource and connection authority to retire stale focus intent; accepted
 leave decisions hand focus to their destination instead.
+ContextMenu registers its actual Trigger and Content elements in one local
+primitive context and exposes their `aria-controls` / `aria-labelledby`
+relationship. Programmatic dialogs launched from a menu item use that existing
+relationship to return to the surviving trigger after the menu unmounts.
+Kobalte continues to own menu focus and dismissal; the element registration does
+not introduce a second focus owner or add tab stops to noninteractive triggers.
+When another decision opens while a modal Dialog is closing, the shared opener
+resolver follows that closing Dialog's existing return-focus owner. The Content
+element registers a getter for the same owner; it does not store a second focus
+snapshot. Open dialogs remain focus boundaries. File's dirty-draft decision
+uses this resolver before recording its existing target/authority-bound intent,
+so cancelling a chained rename decision returns to the surviving Explorer row.
 After actual removal, the existing Dock reflow frame restores focus to the
 canonical selected visible tab, or to Add tool when the collection is empty.
 Opening a tool from the empty chooser captures that initiating button before

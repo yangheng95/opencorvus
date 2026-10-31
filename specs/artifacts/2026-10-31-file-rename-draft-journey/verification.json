@@ -1,0 +1,325 @@
+{
+  "at": "2026-10-31T06:46:19.895Z",
+  "scope": "Desktop real file rename, parent rename, unsaved draft and focus ownership",
+  "screenshotsManuallyViewed": 18,
+  "uiAutomationTestsRun": 0,
+  "scopes": [
+    {
+      "phase": "before",
+      "port": 38444,
+      "uiEntry": "main-DREqu_ht.js",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 215948,
+      "finalRows": 216130,
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 75,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 1118,
+      "retirementReserveMs": 2453529,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "filePublications": 6,
+      "deliveryReceipts": 36,
+      "receiptOutcomes": [
+        "succeeded"
+      ],
+      "events": [
+        {
+          "file": "notes-828-before/draft.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-before/renamed.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-before/draft.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-before/draft.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-before",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-before/draft.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "port": 38445,
+      "uiEntry": "main-wMCDdv6g.js",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 216130,
+      "finalRows": 216252,
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 75,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 1118,
+      "retirementReserveMs": 2073537,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "filePublications": 4,
+      "deliveryReceipts": 24,
+      "receiptOutcomes": [
+        "succeeded"
+      ],
+      "events": [
+        {
+          "file": "notes-828-after/draft.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after/draft.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after/draft.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        }
+      ]
+    },
+    {
+      "phase": "after2",
+      "port": 38446,
+      "uiEntry": "main-BmcG3UaU.js",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 216252,
+      "finalRows": 216584,
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 75,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "cumulativeRequests": 1118,
+      "retirementReserveMs": 1748817,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "filePublications": 11,
+      "deliveryReceipts": 66,
+      "receiptOutcomes": [
+        "succeeded"
+      ],
+      "events": [
+        {
+          "file": "notes-828-after2-moved/renamed.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after2/renamed.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after2/draft.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after2",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after2-moved",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after2/draft.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after2/draft.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after2/draft.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after2",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after2/renamed.txt",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        },
+        {
+          "file": "notes-828-after2-moved/RENAMED.TXT",
+          "receipts": 6,
+          "outcomes": [
+            "succeeded"
+          ]
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "label": "types-final2",
+      "exitCode": 0,
+      "startedAt": "2026-10-31T06:37:30.354Z",
+      "finishedAt": "2026-10-31T06:37:59.186Z"
+    },
+    {
+      "label": "ui-build-final2",
+      "exitCode": 0,
+      "startedAt": "2026-10-31T06:37:40.561Z",
+      "finishedAt": "2026-10-31T06:39:02.870Z"
+    },
+    {
+      "label": "docs",
+      "exitCode": 0,
+      "startedAt": "2026-10-31T06:34:28.616Z",
+      "finishedAt": "2026-10-31T06:34:37.274Z"
+    },
+    {
+      "label": "docs-final",
+      "exitCode": 0,
+      "startedAt": "2026-10-31T06:47:01.581Z",
+      "finishedAt": "2026-10-31T06:47:10.680Z"
+    }
+  ],
+  "originalEmptyCaseFiles": 22,
+  "finalQaFiles": [
+    {
+      "path": "notes-828-before/renamed.txt",
+      "bytes": 107
+    },
+    {
+      "path": "notes-828-after/draft.txt",
+      "bytes": 107
+    },
+    {
+      "path": "notes-828-after2-moved/RENAMED.TXT",
+      "bytes": 128
+    }
+  ],
+  "manualAcceptance": [
+    "Direct rename Cancel returns original tree row",
+    "Chained dirty-file rename Cancel returns original tree row and retains D; disk A 77 bytes",
+    "Dirty parent rename Cancel returns original parent; disk D 107 bytes",
+    "Save-and-rename follows renamed.txt with D 107 bytes",
+    "Save-and-parent-rename follows moved directory with E 128 bytes",
+    "Windows case-only rename exposes actual RENAMED.TXT entry and E",
+    "Open earlier D then reopen final E",
+    "Search-result rename Cancel returns original search row with visible keyboard focus"
+  ],
+  "limits": [
+    "Desktop only",
+    "Other shared Dialog consumers reviewed in code; not represented as fresh end-to-end acceptance",
+    "First candidate fixed direct Cancel only; final candidate required for chained decision"
+  ]
+}

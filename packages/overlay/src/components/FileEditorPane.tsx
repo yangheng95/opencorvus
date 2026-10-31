@@ -28,7 +28,7 @@ const CodeEditor = lazy(async () => ({ default: (await import("./ui/CodeEditor")
 const PdfPreview = lazy(async () => ({ default: (await import("./PdfPreview")).PdfPreview }))
 import { Button } from "./ui/Button"
 import { Badge } from "./ui/Badge"
-import { Dialog } from "./ui/Dialog"
+import { Dialog, dialogOpeningFocusTarget } from "./ui/Dialog"
 import { Feedback } from "./ui/Feedback"
 import { PreviewableImage } from "./ImagePreview"
 import { TextDiffView } from "./DiffView"
@@ -418,7 +418,7 @@ export function FileEditorPane() {
     decisionRevision = draftRevision
     const focused = document.activeElement
     leaveFocus = focused instanceof HTMLElement
-      ? { element: focused, targetIdentity: activeTargetIdentity, authority: captureApiAuthority() }
+      ? { element: dialogOpeningFocusTarget(focused), targetIdentity: activeTargetIdentity, authority: captureApiAuthority() }
       : undefined
     setLeaveReason(reason)
     setLeaveDialogOpen(true)

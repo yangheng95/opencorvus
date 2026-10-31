@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [文件改名与草稿归属](2026-10-31-file-rename-draft-journey.md)：保存、取消、文件及父目录重命名实页调查。
+
 - [持续目标长度边界](2026-10-31-goal-objective-length.md)：超长草稿的表单和创建事实调查。
 
 - [文件来源路径阅读](2026-10-31-source-path-readability.md)：保留原路径的单行目录与实际文件阅读。
