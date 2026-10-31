@@ -19,7 +19,7 @@ import { DropdownMenu } from "./ui/DropdownMenu"
 import { Popover } from "./ui/Popover"
 import { settingsStore } from "../store/settings"
 import { Slider } from "./ui/Slider"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { nativeMessage } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { messageStore, setChatAttachments } from "../store/messages"
@@ -594,6 +594,13 @@ export function ChatComposer(props: ChatComposerProps) {
   // The message store is the single source for staged attachments. Every
   // manual file/folder/image add, remove and clear operation uses it.
   const attachments = () => messageStore.chatAttachments as ChatAttachment[]
+  const attachmentDisplayLabel = (attachment: ChatAttachment, position: number) =>
+    attachments().filter((entry) => entry.filename === attachment.filename).length > 1
+      ? t("chat.attachment.duplicate_label", {
+          position: new Intl.NumberFormat(localeTag()).format(position + 1),
+          name: attachment.filename,
+        })
+      : attachment.filename
   const setAttachments = (next: ChatAttachment[] | ((prev: ChatAttachment[]) => ChatAttachment[])) => {
     const nextValue =
       typeof next === "function" ? (next as (prev: ChatAttachment[]) => ChatAttachment[])(attachments()) : next
@@ -1576,7 +1583,12 @@ export function ChatComposer(props: ChatComposerProps) {
         <div class="chat-attachments" id="chatAttachments">
           <For each={attachments()}>
             {(att, index) => (
-              <div class="chat-attachment-item" title={att.filename}>
+              <div
+                class="chat-attachment-item"
+                role="group"
+                title={attachmentDisplayLabel(att, index())}
+                aria-label={attachmentDisplayLabel(att, index())}
+              >
                 <Show
                   when={att.kind === "file" && !att.mime.startsWith("image/")}
                   fallback={
@@ -1586,11 +1598,11 @@ export function ChatComposer(props: ChatComposerProps) {
                           <Icon name="folder-open" size="medium" />
                         </span>
                       </Show>
-                      <span class="chat-attachment-name">{att.filename || "file"}</span>
+                      <span class="chat-attachment-name">{attachmentDisplayLabel(att, index())}</span>
                     </>
                   }
                 >
-                  <ComposerAttachmentPreview attachment={att} />
+                  <ComposerAttachmentPreview attachment={att} displayLabel={attachmentDisplayLabel(att, index())} />
                 </Show>
                 <Button
                   variant="ghost"
@@ -1599,7 +1611,7 @@ export function ChatComposer(props: ChatComposerProps) {
                   type="button"
                   data-ui="chat-attachment-remove"
                   data-chrome="icon-action"
-                  aria-label={t("chat.attachment.remove", { name: att.filename })}
+                  aria-label={t("chat.attachment.remove", { name: attachmentDisplayLabel(att, index()) })}
                   onClick={(event) => removeAttachment(index(), event.currentTarget)}
                 >
                   <Icon name="close" size="compact" />

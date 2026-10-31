@@ -9,7 +9,7 @@ import { OriginalFileDownload } from "./OriginalFileDownload"
 import { Button } from "./ui/Button"
 import { Dialog } from "./ui/Dialog"
 
-export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentReference }) {
+export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentReference; displayLabel: string }) {
   let trigger: HTMLButtonElement | undefined
   const [open, setOpen] = createSignal(false)
   const [context, setContext] = createSignal<{ authority: ApiAuthority; selection: number }>()
@@ -32,22 +32,22 @@ export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentR
         size="sm"
         tone="neutral"
         data-ui="composer-attachment-preview"
-        title={t("chat.attachment.preview", { name: props.attachment.filename })}
-        aria-label={t("chat.attachment.preview", { name: props.attachment.filename })}
+        title={t("chat.attachment.preview", { name: props.displayLabel })}
+        aria-label={t("chat.attachment.preview", { name: props.displayLabel })}
         onClick={() => {
           setContext({ authority: captureApiAuthority(), selection: boardStore.selectEpoch })
           setOpen(true)
         }}
       >
         <span class="chat-attachment-icon">{props.attachment.filename.split(".").pop()?.toUpperCase() || "FILE"}</span>
-        <span class="chat-attachment-name">{props.attachment.filename}</span>
+        <span class="chat-attachment-name">{props.displayLabel}</span>
       </Button>
       <Dialog
         open={open()}
         wide
         class="composer-attachment-dialog"
         formClass="composer-attachment-dialog__frame"
-        title={props.attachment.filename}
+        title={props.displayLabel}
         returnFocusTarget={() => (current() ? (trigger ?? null) : null)}
         onClose={() => setOpen(false)}
         footer={
@@ -71,7 +71,7 @@ export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentR
               <ResourceTextPreview
                 url={props.attachment.url}
                 filename={props.attachment.filename}
-                label={props.attachment.filename}
+                label={props.displayLabel}
                 authority={context()?.authority}
               />
             </Show>

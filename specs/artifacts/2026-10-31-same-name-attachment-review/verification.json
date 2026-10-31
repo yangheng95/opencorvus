@@ -1,0 +1,259 @@
+{
+  "at": "2026-10-31T09:15:11.507Z",
+  "scope": "Pending same-name attachment display labels; real reading of original files",
+  "singleAgent": true,
+  "schemaChanged": false,
+  "checks": {
+    "types-reviewed": {
+      "exitCode": 0
+    },
+    "ui-build-reviewed": {
+      "exitCode": 0
+    },
+    "i18n-reviewed": {
+      "exitCode": 0
+    },
+    "old-histories": {
+      "exitCode": 0
+    },
+    "old-extra": {
+      "exitCode": 0
+    },
+    "old-sources": {
+      "exitCode": 0
+    },
+    "old-readme": {
+      "exitCode": 0
+    },
+    "old-report": {
+      "exitCode": 0
+    },
+    "old-824": {
+      "exitCode": 0
+    },
+    "old-825": {
+      "exitCode": 0
+    },
+    "old-empty": {
+      "exitCode": 0
+    },
+    "old-protection": {
+      "exitCode": 0
+    },
+    "docs-final": {
+      "exitCode": 0,
+      "operations": 352,
+      "groups": 26
+    }
+  },
+  "scopes": [
+    {
+      "phase": "before",
+      "uiEntry": "main-BeU9pWqt.js",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 216605,
+      "currentRows": 217196,
+      "allOriginalBusinessRowsPreserved": true,
+      "mutableCapacitySlots": [
+        {
+          "slot": 0,
+          "changedFields": [
+            "expires_at",
+            "lease_id",
+            "owner_id",
+            "time_acquired"
+          ],
+          "currentRuntimeOwner": true,
+          "releasedByPhysicalCompletion": true
+        },
+        {
+          "slot": 1,
+          "changedFields": [
+            "expires_at",
+            "lease_id",
+            "owner_id",
+            "time_acquired"
+          ],
+          "currentRuntimeOwner": true,
+          "releasedByPhysicalCompletion": true
+        }
+      ],
+      "protectedAttachments": 75,
+      "protectedGitProjects": 13,
+      "trackedFiles": 28,
+      "requests": 2,
+      "cumulativeRequests": 1120,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 3766088
+    },
+    {
+      "phase": "after",
+      "uiEntry": "main-Cjs5Jyw6.js",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 217196,
+      "currentRows": 218548,
+      "allOriginalBusinessRowsPreserved": true,
+      "mutableCapacitySlots": [
+        {
+          "slot": 0,
+          "changedFields": [
+            "expires_at",
+            "lease_id",
+            "owner_id",
+            "time_acquired"
+          ],
+          "currentRuntimeOwner": true,
+          "releasedByPhysicalCompletion": true
+        },
+        {
+          "slot": 1,
+          "changedFields": [
+            "expires_at",
+            "lease_id",
+            "owner_id",
+            "time_acquired"
+          ],
+          "currentRuntimeOwner": true,
+          "releasedByPhysicalCompletion": true
+        }
+      ],
+      "protectedAttachments": 75,
+      "protectedGitProjects": 13,
+      "trackedFiles": 28,
+      "requests": 4,
+      "cumulativeRequests": 1124,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 2902655
+    }
+  ],
+  "actualCase": {
+    "at": "2026-10-31T09:12:28.904Z",
+    "messages": 4,
+    "originalNames": [
+      "notes.txt",
+      "notes.txt"
+    ],
+    "checks": [
+      {
+        "filename": "notes.txt",
+        "bytes": 52,
+        "marker": "CHECKPOINT_833_BRAVO",
+        "count": "COUNT=29",
+        "toolPartID": "prt_g0VZcILO900Ykd4Sz5pj",
+        "sourceID": "prt_g0VZcILcJ00o4G75Xi6U"
+      },
+      {
+        "filename": "notes.txt",
+        "bytes": 52,
+        "marker": "CHECKPOINT_833_ALPHA",
+        "count": "COUNT=17",
+        "toolPartID": "prt_g0VZcIMVR00GEXbEKVwS",
+        "sourceID": "prt_g0VZcIMkP00gQD7BDGk7"
+      }
+    ],
+    "originalDownloadedBytes": 52,
+    "originalDownloadName": "notes.txt",
+    "beforeCaseMessages": 2,
+    "requests": 4,
+    "model": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "totalBatchRequests": 6,
+  "batchRequestLimit": 8,
+  "cumulativeRequests": 1124,
+  "remainingAllowanceRetired": 2,
+  "manualVisualReview": {
+    "screenshots": [
+      "01-before-visible-preflight.png",
+      "02-before-identical-labels-en.png",
+      "03-before-first-original-en.png",
+      "04-before-second-original-en.png",
+      "05-before-identical-labels-zh.png",
+      "06-after-idle-stop-confirm-en.png",
+      "07-after-distinct-labels-en.png",
+      "08-after-first-original-en.png",
+      "09-after-second-original-en.png",
+      "10-after-distinct-labels-zh.png",
+      "11-after-removal-unique-zh.png",
+      "12-after-readded-first-bravo-zh.png",
+      "13-after-readded-second-alpha-zh.png",
+      "14-after-real-model-and-sources-zh.png",
+      "15-after-source-bravo-zh.png",
+      "16-after-source-alpha-zh.png"
+    ],
+    "allPersonallyViewed": true,
+    "uiAutomatedTestsRun": false
+  },
+  "limits": [
+    "Historical file parts and Sources keep their original filenames; this iteration verifies their actual original bytes and navigation",
+    "Native Tauri, duplicate images and folder selection were not exercised",
+    "The earlier idle-stop conversion flow is preserved by exact public readback; this iteration manually opens and cancels the idle-stop confirmation"
+  ],
+  "preparationRepair": "Six files in the complete before-case namespace: capability catalog plus two text originals, each with metadata. A four-file expectation failed before service startup; the partial owned copy was verified and preparation resumed. The missing launcher attempt exited 64; the actual native candidate exited 0."
+}

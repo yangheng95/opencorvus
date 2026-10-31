@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [同名附件的核对与发送身份](2026-10-31-same-name-attachment-review.md)：同名附件的展示歧义与原始身份验证。
+
 - [版本日志阅读与返回焦点](2026-10-31-release-reading-focus.md)：关于、版本历史与阅读焦点的当前体验。
 
 - [设置项名称的页面发现](2026-10-31-settings-control-discovery.md)：双语页面发现、命令面板和编辑保留调查。

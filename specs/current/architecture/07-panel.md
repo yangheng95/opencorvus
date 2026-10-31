@@ -282,8 +282,12 @@ complete document and keyboard navigation.
 Image chips keep their existing full-image preview and folders remain references.
 Review is read-only and retains the original draft and attachment list. The
 dialog retires with its selection/API authority or attachment row, and closes
-back to its current visible trigger. Removal controls include the exact filename
-in their localized accessible names.
+back to its current visible trigger. Attachment groups, visible labels, review
+titles and localized removal names share one display label. Exact duplicate
+filenames receive a localized position prefix derived from the current attachment
+list; unique names retain the original filename. Removal recomputes these labels
+from that same list. Display positions do not rename stored attachments, original
+downloads or submitted file parts, and do not claim file-picker selection order.
 Keyboard removal keeps focus on the next surviving removal action (or the
 previous one when removing the tail); an empty strip returns to its composer.
 This handoff retains the current selection, API authority and draft scope, and

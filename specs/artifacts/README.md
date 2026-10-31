@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [同名附件的核对与发送身份](2026-10-31-same-name-attachment-review/README.md)：真实文件选择、双语核对和模型读取证据。
+
 - [版本日志阅读与返回焦点](2026-10-31-release-reading-focus/README.md)：真实历史阅读、焦点归属及双语桌面截图。
 
 - [设置项名称的页面发现](2026-10-31-settings-control-discovery/README.md)：当前搜索复现、修正及桌面交互截图。
