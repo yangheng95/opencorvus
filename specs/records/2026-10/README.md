@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [批量附件上限反馈](2026-10-31-attachment-limit-feedback.md)：单待完成请求真实复现、即时提示和双语10/9/10恢复。
+
 - [音视频附件入口与辨识](2026-10-31-media-attachment-identification.md)：八流式请求、双图Sources、四播放器和零请求最终复核。
 
 - [项目转换读取交接](2026-10-31-project-conversion-handoff.md)：复现并修复转换期间Goal及目录项旧目录重读。

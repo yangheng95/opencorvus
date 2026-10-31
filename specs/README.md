@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [批量附件上限反馈](records/2026-10/2026-10-31-attachment-limit-feedback.md)：同步接纳反馈、旧上传与新草稿归属及实际容量恢复。
+
 - [音视频附件入口与辨识](records/2026-10/2026-10-31-media-attachment-identification.md)：真实六附件选择、同名播放器可见名与原件下载。
 
 - [项目转换读取交接](records/2026-10/2026-10-31-project-conversion-handoff.md)：旧目录请求竞态、当前工作区生命周期与真实转换验收。

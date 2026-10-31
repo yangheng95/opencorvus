@@ -1,0 +1,463 @@
+{
+  "at": "2026-10-31T12:30:48.559Z",
+  "scope": "Attachment limit feedback at input acceptance",
+  "manualUI": {
+    "screenshots": 17,
+    "personallyReviewed": true,
+    "uiAutomatedTests": 0,
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "baselineOnePendingRequestInterruptedNewDraft": true,
+    "candidateImmediateLimitInOriginalInput": true,
+    "candidateNewDraftContinuesAfterOriginalUpload": true,
+    "capacitySequence": [
+      10,
+      9,
+      10
+    ],
+    "replacementOriginalOpened": "qa839-11.txt",
+    "firstDiagnosticSixConnectionInterferenceRecorded": true
+  },
+  "checks": [
+    {
+      "label": "types-final",
+      "code": 0
+    },
+    {
+      "label": "ui-build-final",
+      "code": 0
+    }
+  ],
+  "qualifications": [
+    {
+      "at": "2026-10-31T12:23:19.769Z",
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 223422,
+      "current": 223427,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 45776,
+          "now": 45777
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 45834,
+          "now": 45835
+        },
+        {
+          "table": "memory_chunk",
+          "old": 53,
+          "now": 54
+        },
+        {
+          "table": "memory_file",
+          "old": 53,
+          "now": 54
+        },
+        {
+          "table": "project",
+          "old": 53,
+          "now": 54
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [],
+      "attachments": 109,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1142,
+      "reserveMs": 3316867,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BulfLqRd.js"
+    },
+    {
+      "at": "2026-10-31T12:29:07.528Z",
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 223427,
+      "current": 223432,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 45777,
+          "now": 45778
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 45835,
+          "now": 45836
+        },
+        {
+          "table": "memory_chunk",
+          "old": 54,
+          "now": 55
+        },
+        {
+          "table": "memory_file",
+          "old": 54,
+          "now": 55
+        },
+        {
+          "table": "project",
+          "old": 54,
+          "now": 55
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [],
+      "attachments": 109,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1142,
+      "reserveMs": 2931487,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-B83RQA9C.js"
+    }
+  ],
+  "inputs": [
+    {
+      "phase": "before",
+      "counts": {
+        "sessions": 97,
+        "originalSessions": 97,
+        "tasks": 8,
+        "originalTasks": 8,
+        "usage": 757,
+        "originalUsage": 757
+      },
+      "originals": [
+        {
+          "filename": "qa839-06.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-08.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-04.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-10.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-02.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-07.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-05.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-09.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-03.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-01.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        }
+      ],
+      "uploads": 20,
+      "statusCodes": [
+        200
+      ],
+      "holds": [
+        {
+          "batch": "cross-view",
+          "filename": "qa839-01.txt"
+        },
+        {
+          "batch": "cross-view",
+          "filename": "qa839-02.txt"
+        },
+        {
+          "batch": "cross-view",
+          "filename": "qa839-03.txt"
+        },
+        {
+          "batch": "cross-view",
+          "filename": "qa839-04.txt"
+        },
+        {
+          "batch": "cross-view",
+          "filename": "qa839-05.txt"
+        },
+        {
+          "batch": "cross-view",
+          "filename": "qa839-06.txt"
+        },
+        {
+          "batch": "single-view",
+          "filename": "qa839-10.txt"
+        }
+      ],
+      "releases": [
+        {
+          "batch": "cross-view",
+          "filename": "qa839-01.txt",
+          "waitMs": 52151
+        },
+        {
+          "batch": "cross-view",
+          "filename": "qa839-02.txt",
+          "waitMs": 52155
+        },
+        {
+          "batch": "cross-view",
+          "filename": "qa839-03.txt",
+          "waitMs": 52156
+        },
+        {
+          "batch": "cross-view",
+          "filename": "qa839-04.txt",
+          "waitMs": 52157
+        },
+        {
+          "batch": "cross-view",
+          "filename": "qa839-05.txt",
+          "waitMs": 52158
+        },
+        {
+          "batch": "cross-view",
+          "filename": "qa839-06.txt",
+          "waitMs": 52159
+        },
+        {
+          "batch": "single-view",
+          "filename": "qa839-10.txt",
+          "waitMs": 12240
+        }
+      ],
+      "requests": 0
+    },
+    {
+      "phase": "after",
+      "counts": {
+        "sessions": 97,
+        "originalSessions": 97,
+        "tasks": 8,
+        "originalTasks": 8,
+        "usage": 757,
+        "originalUsage": 757
+      },
+      "originals": [
+        {
+          "filename": "qa839-06.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-08.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-04.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-10.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-02.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-07.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-05.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-09.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-11.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-03.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        },
+        {
+          "filename": "qa839-01.txt",
+          "bytes": 32,
+          "mime": "text/plain",
+          "actualCanonical200": true,
+          "originalBytesMatched": true
+        }
+      ],
+      "uploads": 31,
+      "statusCodes": [
+        200
+      ],
+      "holds": [
+        {
+          "batch": "global-limit",
+          "filename": "qa839-01.txt"
+        },
+        {
+          "batch": "single-view",
+          "filename": "qa839-10.txt"
+        }
+      ],
+      "releases": [
+        {
+          "batch": "global-limit",
+          "filename": "qa839-01.txt",
+          "waitMs": 15589
+        },
+        {
+          "batch": "single-view",
+          "filename": "qa839-10.txt",
+          "waitMs": 15899
+        }
+      ],
+      "requests": 0
+    }
+  ],
+  "previousMediaReadback": {
+    "at": "2026-10-31T12:28:43.016Z",
+    "actualUploads": 31,
+    "uploadStatusCodes": [
+      200
+    ],
+    "preservedMediaHistoryMessages": 6,
+    "preservedMediaOriginals": [
+      {
+        "filename": "capture.png",
+        "mime": "image/png",
+        "bytes": 86030,
+        "originalMatched": true
+      },
+      {
+        "filename": "clip.mp4",
+        "mime": "video/mp4",
+        "bytes": 2257,
+        "originalMatched": true
+      },
+      {
+        "filename": "clip.wav",
+        "mime": "audio/wav",
+        "bytes": 88278,
+        "originalMatched": true
+      },
+      {
+        "filename": "clip.wav",
+        "mime": "audio/wav",
+        "bytes": 88278,
+        "originalMatched": true
+      },
+      {
+        "filename": "clip.mp4",
+        "mime": "video/mp4",
+        "bytes": 2257,
+        "originalMatched": true
+      },
+      {
+        "filename": "capture.png",
+        "mime": "image/png",
+        "bytes": 84429,
+        "originalMatched": true
+      }
+    ],
+    "requests": 0
+  },
+  "limitations": [
+    "Draft uploads are volatile and were not published as model messages.",
+    "Native window occlusion timing and native folder picker are outside this browser qualification.",
+    "No new model, Goal, Task or existing Task/Mission cancellation was performed."
+  ]
+}

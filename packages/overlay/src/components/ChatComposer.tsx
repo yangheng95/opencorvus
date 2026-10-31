@@ -995,8 +995,6 @@ export function ChatComposer(props: ChatComposerProps) {
   async function addFiles(files: readonly File[]): Promise<void> {
     const capacity = composerAttachmentCapacity(attachments(), "file")
     const accepted = files.slice(0, capacity)
-    // Start every transient clipboard read before any Project activation or upload can suspend the batch.
-    await Promise.all(accepted.map((file) => addAttachment(file)))
     if (files.length > accepted.length) {
       showComposerMessage(
         "attachment-file-limit",
@@ -1007,6 +1005,8 @@ export function ChatComposer(props: ChatComposerProps) {
         },
       )
     }
+    // Start every transient clipboard read before any Project activation or upload can suspend the batch.
+    await Promise.all(accepted.map((file) => addAttachment(file)))
   }
 
   async function addFolder(): Promise<void> {

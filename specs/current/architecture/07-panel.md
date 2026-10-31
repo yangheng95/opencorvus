@@ -848,6 +848,9 @@ single live collection. Completion removes only its own token. Receipt and
 operation validation keep late input bound to the Project that accepted it.
 Current failures retain their own error feedback even when allocation rejects;
 actual workspace navigation expires old input effects.
+Batch capacity feedback is presented when the input is accepted, before awaiting
+its parallel uploads. The already-known file limit belongs to that input rather
+than to the workspace selected when its final upload happens to complete.
 The shared workspace runtime departure clears the existing volatile attachment
 list alongside conversation replay and projection. Global New Chat, project
 switches and project close follow this same owner. Same-project intent changes
