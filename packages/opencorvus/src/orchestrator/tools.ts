@@ -3032,7 +3032,7 @@ export function createOrchestratorTools(input: {
         `Exact action fields: ${MANAGE_TASK_ACTION_NAMES.map(
           (action) => `${action}(${MANAGE_TASK_ACTION_FIELDS[action].join(", ")})`,
         ).join("; ")}. Do not copy non-null fields from another action. ` +
-        "Task completion is decided only through complete_task from current Task-level acceptance evidence. " +
+        "Task completion is decided only through complete_task from current Task-level acceptance evidence. Apply the shared verification discipline to the promised scope before accepting; this tool records your decision rather than certifying business correctness or full input-contract support. " +
         "complete_task parks the current Turn. If successor input was accepted before its completion transaction, the Task stays active and the original queue handles that input before a later completion. Deliver any requested conversational answer naturally before this call; its summary and worker evidence do not generate or replace that reply. " +
         "This replaces separate visible Task-lifecycle and Delivery Slice contract tools such as complete_task, fail_task, cancel_task, add_goal, modify_goal, and delete_goal.",
       inputSchema: ManageTaskInputSchema,

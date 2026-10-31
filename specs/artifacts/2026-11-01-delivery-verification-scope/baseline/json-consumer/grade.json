@@ -1,0 +1,188 @@
+{
+  "case": "json",
+  "passed": true,
+  "results": [
+    {
+      "name": "development",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\json\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\input development.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\result development.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "/service/port": 8080,
+        "/service/name": "api"
+      },
+      "expected": {
+        "/service/port": 8080,
+        "/service/name": "api"
+      },
+      "passed": true
+    },
+    {
+      "name": "escaped-members",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\json\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\input escaped-members.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\result escaped-members.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "/a~1b/~0key": 1,
+        "/~01": "literal",
+        "//": true
+      },
+      "expected": {
+        "/a~1b/~0key": 1,
+        "/~01": "literal",
+        "//": true
+      },
+      "passed": true
+    },
+    {
+      "name": "array-and-types",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\json\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\input array-and-types.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\result array-and-types.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "/0": null,
+        "/1": false,
+        "/2": 0,
+        "/3": "0",
+        "/4/items/0": 1,
+        "/4/items/1": 2
+      },
+      "expected": {
+        "/0": null,
+        "/1": false,
+        "/2": 0,
+        "/3": "0",
+        "/4/items/0": 1,
+        "/4/items/1": 2
+      },
+      "passed": true
+    },
+    {
+      "name": "empty-containers",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\json\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\input empty-containers.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\result empty-containers.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "/a": {},
+        "/b": [],
+        "/c/0": {},
+        "/c/1": []
+      },
+      "expected": {
+        "/a": {},
+        "/b": [],
+        "/c/0": {},
+        "/c/1": []
+      },
+      "passed": true
+    },
+    {
+      "name": "root-scalar",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\json\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\input root-scalar.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\result root-scalar.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "": "text\n中文"
+      },
+      "expected": {
+        "": "text\n中文"
+      },
+      "passed": true
+    },
+    {
+      "name": "root-empty",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\json\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\input root-empty.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\result root-empty.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "": {}
+      },
+      "expected": {
+        "": {}
+      },
+      "passed": true
+    },
+    {
+      "name": "combined",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\json\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\input combined.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6\\result combined.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-jd5k2rk6",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "/组~1~0/0/": [],
+        "/组~1~0/1/0": true,
+        "/组~1~0/1/1/x~1y~0z": "行\n值",
+        "/n": -12.5
+      },
+      "expected": {
+        "/组~1~0/0/": [],
+        "/组~1~0/1/0": true,
+        "/组~1~0/1/1/x~1y~0z": "行\n值",
+        "/n": -12.5
+      },
+      "passed": true
+    }
+  ]
+}

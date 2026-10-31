@@ -1,0 +1,236 @@
+{
+  "case": "csv",
+  "passed": true,
+  "results": [
+    {
+      "name": "development",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\csv\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\input development.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\result development.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": [
+          {
+            "customer": "Ada",
+            "amount": "2.00"
+          },
+          {
+            "customer": "Bo",
+            "amount": "2.00"
+          }
+        ]
+      },
+      "expected": {
+        "totals": [
+          {
+            "customer": "Ada",
+            "amount": "2.00"
+          },
+          {
+            "customer": "Bo",
+            "amount": "2.00"
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "quoted-records",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\csv\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\input quoted-records.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\result quoted-records.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": [
+          {
+            "customer": "A \"Team\"",
+            "amount": "2.20"
+          },
+          {
+            "customer": "Li, Mei",
+            "amount": "1.10"
+          },
+          {
+            "customer": "two\nlines",
+            "amount": "3.30"
+          }
+        ]
+      },
+      "expected": {
+        "totals": [
+          {
+            "customer": "A \"Team\"",
+            "amount": "2.20"
+          },
+          {
+            "customer": "Li, Mei",
+            "amount": "1.10"
+          },
+          {
+            "customer": "two\nlines",
+            "amount": "3.30"
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "named-columns",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\csv\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\input named-columns.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\result named-columns.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": [
+          {
+            "customer": "Zoë",
+            "amount": "2.00"
+          },
+          {
+            "customer": "中文",
+            "amount": "0.00"
+          }
+        ]
+      },
+      "expected": {
+        "totals": [
+          {
+            "customer": "Zoë",
+            "amount": "2.00"
+          },
+          {
+            "customer": "中文",
+            "amount": "0.00"
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "empty",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\csv\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\input empty.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\result empty.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": []
+      },
+      "expected": {
+        "totals": []
+      },
+      "passed": true
+    },
+    {
+      "name": "exact-money",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\csv\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\input exact-money.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\result exact-money.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": [
+          {
+            "customer": "Ledger",
+            "amount": "10000000000000000.00"
+          },
+          {
+            "customer": "Small",
+            "amount": "0.01"
+          }
+        ]
+      },
+      "expected": {
+        "totals": [
+          {
+            "customer": "Ledger",
+            "amount": "10000000000000000.00"
+          },
+          {
+            "customer": "Small",
+            "amount": "0.01"
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "combined",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\opencorvus-delivery-scope-4vm5R3\\csv\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\input combined.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap\\result combined.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-OFqDnD\\runner-17032-XONvQn\\runtime-root\\tmp\\oc-final-consumer-wgmlrxap",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": [
+          {
+            "customer": " A,\"组\"\nZ ",
+            "amount": "10.00"
+          },
+          {
+            "customer": "é",
+            "amount": "0.00"
+          }
+        ]
+      },
+      "expected": {
+        "totals": [
+          {
+            "customer": " A,\"组\"\nZ ",
+            "amount": "10.00"
+          },
+          {
+            "customer": "é",
+            "amount": "0.00"
+          }
+        ]
+      },
+      "passed": true
+    }
+  ]
+}

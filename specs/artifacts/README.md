@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [交付承诺与验证范围](2026-11-01-delivery-verification-scope/README.md)：相同两题前后真实执行、80次流式请求、13项独立消费者检查和完成判断原件。
+
 - [产物导出同名文件身份](2026-11-01-artifact-export-filename-identity/README.md)：两份同名原图、八张实图、原下载及修复后不同名称的字节映射。
 
 - [Notebook 与演示媒体导出引用](2026-11-01-artifact-media-reference-export/README.md)：实际产物、七张人工复核截图及修复前后的原始下载文件。

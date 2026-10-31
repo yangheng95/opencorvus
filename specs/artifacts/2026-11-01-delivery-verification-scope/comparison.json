@@ -1,0 +1,18 @@
+{
+  "same_operator_prompts": true,
+  "fixed_case_counts": {
+    "csv": 6,
+    "json": 7
+  },
+  "baseline": {
+    "requests": 38,
+    "passed": true
+  },
+  "after": {
+    "requests": 42,
+    "passed": true
+  },
+  "total_requests": 80,
+  "request_limit": 120,
+  "exact_archived_programs": true
+}

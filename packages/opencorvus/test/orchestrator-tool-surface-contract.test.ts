@@ -151,6 +151,31 @@ test("builds every scheduler-projectable built-in Tool an expert-squad manifest 
   })
 })
 
+test("exposes scope-based completion judgment on the actual public management Tool", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const { tools } = await orchestratorToolSurface(
+        "Completion verification scope",
+        sendSchedulerMessage,
+        "manage_task",
+      )
+      const management = tools.manage_task as {
+        description: string
+        inputSchema: { options: Array<{ shape: { action: { value: string }; summary?: { description?: string } } }> }
+      }
+      expect(management.description).toContain(
+        "Apply the shared verification discipline to the promised scope before accepting",
+      )
+      const completion = management.inputSchema.options.find((option) => option.shape.action.value === "complete_task")
+      expect(completion?.shape.summary?.description).toContain(
+        "supported input scope to independent correctness evidence and actual final-deliverable consumption",
+      )
+    },
+  })
+})
+
 test("retains Core origin on exact Task readers and executes persisted context in Ask mode", async () => {
   await using project = await memoryProject()
   await Instance.provide({

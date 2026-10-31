@@ -73,4 +73,17 @@ describe("shared execution verification contract", () => {
     )
     expect(VERIFICATION_DISCIPLINE).toContain("distinguish a removed invalid check from a passed check")
   })
+
+  test("defines promise-derived input coverage, independent correctness and final consumption", () => {
+    for (const clause of [
+      "Choose verification from the promised capability.",
+      "development-sample correctness, supported-input correctness, and final-deliverable execution",
+      "exercise reasonable legal variations beyond the development examples",
+      "Establish expected results independently of the implementation under test",
+      "actually consume the final submitted entry point and its outputs in the intended runtime",
+      "Make completion claims match verification coverage.",
+      "executing directly, delegating, reviewing, and accepting work",
+    ])
+      expect(VERIFICATION_DISCIPLINE).toContain(clause)
+  })
 })

@@ -1,0 +1,236 @@
+{
+  "case": "csv",
+  "passed": true,
+  "results": [
+    {
+      "name": "development",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "D:\\myhexin-local\\delivery-scope-baseline-20261101\\csv-delivered\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\input development.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\result development.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": [
+          {
+            "customer": "Ada",
+            "amount": "2.00"
+          },
+          {
+            "customer": "Bo",
+            "amount": "2.00"
+          }
+        ]
+      },
+      "expected": {
+        "totals": [
+          {
+            "customer": "Ada",
+            "amount": "2.00"
+          },
+          {
+            "customer": "Bo",
+            "amount": "2.00"
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "quoted-records",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "D:\\myhexin-local\\delivery-scope-baseline-20261101\\csv-delivered\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\input quoted-records.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\result quoted-records.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": [
+          {
+            "customer": "A \"Team\"",
+            "amount": "2.20"
+          },
+          {
+            "customer": "Li, Mei",
+            "amount": "1.10"
+          },
+          {
+            "customer": "two\nlines",
+            "amount": "3.30"
+          }
+        ]
+      },
+      "expected": {
+        "totals": [
+          {
+            "customer": "A \"Team\"",
+            "amount": "2.20"
+          },
+          {
+            "customer": "Li, Mei",
+            "amount": "1.10"
+          },
+          {
+            "customer": "two\nlines",
+            "amount": "3.30"
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "named-columns",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "D:\\myhexin-local\\delivery-scope-baseline-20261101\\csv-delivered\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\input named-columns.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\result named-columns.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": [
+          {
+            "customer": "Zoë",
+            "amount": "2.00"
+          },
+          {
+            "customer": "中文",
+            "amount": "0.00"
+          }
+        ]
+      },
+      "expected": {
+        "totals": [
+          {
+            "customer": "Zoë",
+            "amount": "2.00"
+          },
+          {
+            "customer": "中文",
+            "amount": "0.00"
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "empty",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "D:\\myhexin-local\\delivery-scope-baseline-20261101\\csv-delivered\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\input empty.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\result empty.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": []
+      },
+      "expected": {
+        "totals": []
+      },
+      "passed": true
+    },
+    {
+      "name": "exact-money",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "D:\\myhexin-local\\delivery-scope-baseline-20261101\\csv-delivered\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\input exact-money.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\result exact-money.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": [
+          {
+            "customer": "Ledger",
+            "amount": "10000000000000000.00"
+          },
+          {
+            "customer": "Small",
+            "amount": "0.01"
+          }
+        ]
+      },
+      "expected": {
+        "totals": [
+          {
+            "customer": "Ledger",
+            "amount": "10000000000000000.00"
+          },
+          {
+            "customer": "Small",
+            "amount": "0.01"
+          }
+        ]
+      },
+      "passed": true
+    },
+    {
+      "name": "combined",
+      "argv": [
+        "C:\\Python314\\python.exe",
+        "-I",
+        "D:\\myhexin-local\\delivery-scope-baseline-20261101\\csv-delivered\\deliverable.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\input combined.csv",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5\\result combined.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-final-consumer-ub1ojay5",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "totals": [
+          {
+            "customer": " A,\"组\"\nZ ",
+            "amount": "10.00"
+          },
+          {
+            "customer": "é",
+            "amount": "0.00"
+          }
+        ]
+      },
+      "expected": {
+        "totals": [
+          {
+            "customer": " A,\"组\"\nZ ",
+            "amount": "10.00"
+          },
+          {
+            "customer": "é",
+            "amount": "0.00"
+          }
+        ]
+      },
+      "passed": true
+    }
+  ]
+}
