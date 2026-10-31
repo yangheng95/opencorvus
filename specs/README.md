@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Unicode 来源定位实测](records/2026-11/2026-11-01-unicode-source-navigation.md)：中文、emoji、字节顺序标记及混合换行的真实 Sources 定位。
+
 - [当前 Sources 显示复核](records/2026-10/2026-10-31-current-source-display-review.md)：中文摘录语义、八来源展开、真实复制粘贴与原件定位。
 
 - [编码项目文件引用](records/2026-10/2026-10-31-encoded-project-file-references.md)：真实文件名保留字符、正文链接及文档相对图片。

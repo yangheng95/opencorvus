@@ -1,0 +1,391 @@
+{
+  "purpose": "Verify actual Unicode source columns, editor caret positions and persisted replay",
+  "productionChanges": 0,
+  "productPublication": "3f9b95872c7d8aea475a641d984a0ad0d109ed66; subsequent e98dbe558 changes only specs",
+  "actualModel": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "newRequests": 5,
+    "maximumRequests": 8,
+    "unusedRetired": 3,
+    "allStreamed200EOF": true,
+    "cumulativeRequests": 1163
+  },
+  "actualTool": {
+    "name": "search_code",
+    "completedCalls": 1,
+    "input": {
+      "pattern": "NEEDLE_847_",
+      "include": "*.md"
+    },
+    "naturalMessages": 5,
+    "sourceCount": 3
+  },
+  "contracts": {
+    "before": {
+      "at": "2026-10-31T16:17:06.920Z",
+      "phase": "before",
+      "messages": 5,
+      "selectionPreserved": true,
+      "naturalSourceContract": true,
+      "checked": [
+        {
+          "name": "中文定位.md",
+          "line": 2,
+          "column": 6,
+          "suffix": "NEEDLE_847_ALPHA 尾文",
+          "bytes": 45,
+          "rawSourceSnippet": true,
+          "toolPartBinding": true,
+          "contentStatus": 200
+        },
+        {
+          "name": "字节序标记.md",
+          "line": 1,
+          "column": 5,
+          "suffix": "NEEDLE_847_BETA 终",
+          "bytes": 30,
+          "rawSourceSnippet": true,
+          "toolPartBinding": true,
+          "contentStatus": 200
+        },
+        {
+          "name": "混合换行.md",
+          "line": 3,
+          "column": 5,
+          "suffix": "NEEDLE_847_GAMMA 完",
+          "bytes": 48,
+          "rawSourceSnippet": true,
+          "toolPartBinding": true,
+          "contentStatus": 200
+        }
+      ],
+      "requests": 5,
+      "streamedModel": "gpt-6.1-sol"
+    },
+    "replay": {
+      "at": "2026-10-31T16:19:30.293Z",
+      "phase": "after",
+      "messages": 5,
+      "selectionPreserved": true,
+      "naturalSourceContract": true,
+      "checked": [
+        {
+          "name": "中文定位.md",
+          "line": 2,
+          "column": 6,
+          "suffix": "NEEDLE_847_ALPHA 尾文",
+          "bytes": 45,
+          "rawSourceSnippet": true,
+          "toolPartBinding": true,
+          "contentStatus": 200
+        },
+        {
+          "name": "字节序标记.md",
+          "line": 1,
+          "column": 5,
+          "suffix": "NEEDLE_847_BETA 终",
+          "bytes": 30,
+          "rawSourceSnippet": true,
+          "toolPartBinding": true,
+          "contentStatus": 200
+        },
+        {
+          "name": "混合换行.md",
+          "line": 3,
+          "column": 5,
+          "suffix": "NEEDLE_847_GAMMA 完",
+          "bytes": 48,
+          "rawSourceSnippet": true,
+          "toolPartBinding": true,
+          "contentStatus": 200
+        }
+      ],
+      "requests": 0,
+      "streamedModel": "gpt-6.1-sol"
+    }
+  },
+  "manualUI": {
+    "method": "Click actual Source; Shift+End at the revealed editor caret, copy, and native paste into an unsent owned composer; clear draft immediately",
+    "baseline": "All three suffixes exactly match original markers after multilingual prefixes",
+    "replay": "All three suffixes remain exact in Chinese after independent server restart; zero new model requests",
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "screenshots": [
+      "01-real-sol-preflight.jpg",
+      "02-real-search-three-sources.jpg",
+      "03-chinese-emoji-caret-suffix.jpg",
+      "04-bom-caret-suffix.jpg",
+      "05-mixed-newline-caret-suffix.jpg",
+      "06-bom-original-zh.jpg",
+      "07-original-excerpt-zh.jpg",
+      "08-restarted-chinese-caret-zh.jpg",
+      "09-restarted-bom-caret-zh.jpg",
+      "10-restarted-mixed-caret-zh.jpg"
+    ],
+    "personallyViewed": true,
+    "uiAutomationTests": 0
+  },
+  "focusedBackend": {
+    "file": "test/tool/search-code-bounded-execution.test.ts",
+    "pattern": "publishes the displayed character column",
+    "runner": "Project run-tests.ts with isolated uc runtime",
+    "pass": 8,
+    "filtered": 27,
+    "fail": 0,
+    "exitCode": 0,
+    "realRipgrepAndFilesystem": true
+  },
+  "isolation": {
+    "before": {
+      "at": "2026-10-31T16:17:48.526Z",
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 227966,
+      "current": 229430,
+      "changes": [
+        {
+          "table": "bus_publication_delivery",
+          "old": 44526,
+          "now": 44822
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "old": 44526,
+          "now": 44822
+        },
+        {
+          "table": "bus_publication_outbox",
+          "old": 5847,
+          "now": 5886
+        },
+        {
+          "table": "bus_publication_owner",
+          "old": 5847,
+          "now": 5886
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "old": 17541,
+          "now": 17658
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "old": 46699,
+          "now": 46996
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 46757,
+          "now": 47054
+        },
+        {
+          "table": "event_occurrence",
+          "old": 5649,
+          "now": 5688
+        },
+        {
+          "table": "memory_chunk",
+          "old": 58,
+          "now": 59
+        },
+        {
+          "table": "memory_file",
+          "old": 58,
+          "now": 59
+        },
+        {
+          "table": "message",
+          "old": 748,
+          "now": 753
+        },
+        {
+          "table": "part",
+          "old": 2131,
+          "now": 2144
+        },
+        {
+          "table": "project",
+          "old": 58,
+          "now": 59
+        },
+        {
+          "table": "protocol_event",
+          "old": 2223,
+          "now": 2232
+        },
+        {
+          "table": "provider_activity_outcome",
+          "old": 748,
+          "now": 751
+        },
+        {
+          "table": "provider_activity_request",
+          "old": 748,
+          "now": 751
+        },
+        {
+          "table": "provider_usage_event",
+          "old": 773,
+          "now": 778
+        },
+        {
+          "table": "session",
+          "old": 100,
+          "now": 101
+        },
+        {
+          "table": "tool_part_outcome",
+          "old": 597,
+          "now": 598
+        },
+        {
+          "table": "tool_part_request",
+          "old": 597,
+          "now": 598
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [
+        {
+          "slot": 0,
+          "fields": [
+            "expires_at",
+            "lease_id",
+            "owner_id",
+            "time_acquired"
+          ],
+          "currentRuntimeOwner": true,
+          "releasedByPhysicalFinish": true
+        },
+        {
+          "slot": 1,
+          "fields": [
+            "expires_at",
+            "lease_id",
+            "owner_id",
+            "time_acquired"
+          ],
+          "currentRuntimeOwner": true,
+          "releasedByPhysicalFinish": true
+        }
+      ],
+      "attachments": 123,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 5,
+      "cumulativeRequests": 1163,
+      "reserveMs": 3073765,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BYRLiwcz.js",
+      "counts": {
+        "session": 101,
+        "engine_task": 8,
+        "provider_usage_event": 778
+      },
+      "exactPhysicalIdentity": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "unusedAllowanceRetired": 3,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    "after": {
+      "at": "2026-10-31T16:20:57.796Z",
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 229430,
+      "current": 229432,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 46996,
+          "now": 46997
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 47054,
+          "now": 47055
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [],
+      "attachments": 125,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1163,
+      "reserveMs": 2876960,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BYRLiwcz.js",
+      "counts": {
+        "session": 101,
+        "engine_task": 8,
+        "provider_usage_event": 778
+      },
+      "exactPhysicalIdentity": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "unusedAllowanceRetired": 0,
+      "requestOutcomes": []
+    }
+  },
+  "scopeLimits": "These three real UI scenarios and eight backend contracts do not prove all Unicode sequences or all product workflows; no new positioning defect found"
+}

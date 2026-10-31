@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Unicode 来源定位实测](2026-11-01-unicode-source-navigation/README.md)：三份真实字节输入、十张光标实图、原模型搜索及零请求重启复验。
+
 - [当前 Sources 显示复核](2026-10-31-current-source-display-review/README.md)：八条原始来源、实际粘贴、摘录中英及原件定位实图。
 
 - [编码项目文件引用](2026-10-31-encoded-project-file-references/README.md)：可见输入、自然消息与真实文件/图片路径验收。
