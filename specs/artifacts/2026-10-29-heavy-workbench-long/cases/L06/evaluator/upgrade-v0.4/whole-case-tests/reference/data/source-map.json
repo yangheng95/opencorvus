@@ -1,0 +1,23 @@
+{
+  "raw": [
+    "profile.json",
+    "weeks.csv",
+    "suppliers.csv",
+    "latent-law.csv",
+    "opening-receivables.csv"
+  ],
+  "stage_rows": "one original actual SQLite commit; same prefix/wire/receipt reconciled by public audit.py",
+  "probability": "product of exact predictive laboratory likelihoods from all observed paid lots; all terminal mass=1",
+  "belief": "full original paid-inspection prefix, class odds multiplier17/3 or3/17, unchanged within-equivalence-class prior ratio",
+  "cost": "actual normal+certified+production+laboratory+holding+disposal; AR not revenue-in-cash",
+  "cash": "cash_after may include deterministic next-week roll; closing_cash removes only that new roll; minimum_cash includes every actual payment",
+  "optimality": "first original full-horizon Fraction Bellman policies plus separate complete physical-primitive certificate; no selected class/next result used",
+  "information": "advance class is known before week0 only in the comparison; future lot outcomes remain unknown; no-inspection changes physical material too",
+  "native": "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\native-whole-first",
+  "no_certifications": [
+    "real financial/procurement approval",
+    "OS/side-channel or power-loss security",
+    "professional/statistical maturity",
+    "useful candidate hours"
+  ]
+}

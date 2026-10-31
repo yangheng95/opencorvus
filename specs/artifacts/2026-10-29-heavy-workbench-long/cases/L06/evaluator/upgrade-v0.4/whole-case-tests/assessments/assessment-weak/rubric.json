@@ -1,0 +1,111 @@
+{
+  "format": "l06-inspection-rubric/1",
+  "case_version": "L06/0.4.0-dev",
+  "fixed_denominator": 100,
+  "pass_score": 90,
+  "quality_pre_registered": "each101/100 of same-information optimum and all positive-support constraints; no points compensate critical failures",
+  "leaves": [
+    {
+      "id": "M01",
+      "weight": 5,
+      "critical": true,
+      "requirement": "Every positive-probability endogenous policy branch and exact probability mass closed"
+    },
+    {
+      "id": "M02",
+      "weight": 8,
+      "critical": true,
+      "requirement": "All actual material, laboratory, ordering and demand constraints hold on every path"
+    },
+    {
+      "id": "M03",
+      "weight": 8,
+      "critical": true,
+      "requirement": "Beliefs use the complete actual selected-test likelihoods and retain alias ratios"
+    },
+    {
+      "id": "M04",
+      "weight": 10,
+      "critical": true,
+      "requirement": "Each actual input policy within registered101/100 of same-information optimum"
+    },
+    {
+      "id": "M05",
+      "weight": 6,
+      "critical": true,
+      "requirement": "Claimed complete logical-path ledger, components, cash and absolute AR equal actual records"
+    },
+    {
+      "id": "M06",
+      "weight": 8,
+      "critical": true,
+      "requirement": "Actual settled cash and original queues/receipts respected on every path"
+    },
+    {
+      "id": "M07",
+      "weight": 5,
+      "critical": true,
+      "requirement": "Frozen actor/public/controller objects are the actual executed and delivered sources"
+    },
+    {
+      "id": "M08",
+      "weight": 5,
+      "critical": true,
+      "requirement": "Complete real worker/controller/SQLite and packet-response chain"
+    },
+    {
+      "id": "M09",
+      "weight": 5,
+      "critical": true,
+      "requirement": "Normal-order commit acknowledgement loss resumes original key/payload/receipt"
+    },
+    {
+      "id": "M10",
+      "weight": 5,
+      "critical": true,
+      "requirement": "Paid-laboratory commit loss returns original observation without resampling"
+    },
+    {
+      "id": "M11",
+      "weight": 5,
+      "critical": true,
+      "requirement": "Same actual actor on declared semantic row-order control"
+    },
+    {
+      "id": "M12",
+      "weight": 5,
+      "critical": true,
+      "requirement": "Complete original source, actual report/figures/dependencies and self-contained handoff"
+    },
+    {
+      "id": "H01",
+      "weight": 5,
+      "critical": true,
+      "requirement": "Explain endogenous information, selection and observational equivalence without hidden-class certainty"
+    },
+    {
+      "id": "H02",
+      "weight": 5,
+      "critical": true,
+      "requirement": "Justify value/feasibility certificate, exact class-information bound and regret distinctions"
+    },
+    {
+      "id": "H03",
+      "weight": 5,
+      "critical": true,
+      "requirement": "Usable original-key operator recovery and credit/unsupported-fact continuation"
+    },
+    {
+      "id": "H04",
+      "weight": 5,
+      "critical": false,
+      "requirement": "Actually viewed readable figures bind raw probability/cost/cash/material and uncertainty"
+    },
+    {
+      "id": "H05",
+      "weight": 5,
+      "critical": true,
+      "requirement": "Truthful finite scope, all failures, identifiability and certification claims"
+    }
+  ]
+}

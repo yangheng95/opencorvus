@@ -1,0 +1,23 @@
+{
+  "started_at": "2026-10-31T08:03:33.046567+00:00",
+  "finished_at": "2026-10-31T08:03:39.616521+00:00",
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\report-environment\\venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\weak-delivery\\source\\report.py",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\native-whole-first",
+    "--studies",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\author-project\\work",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\weak-delivery",
+    "--claim",
+    "false-certainty"
+  ],
+  "native_exit": 0,
+  "stdout": "{\"native_data_rows\": 3152, \"instances\": {\"base\": \"300834939/4000000\", \"cash-tight\": \"11287373277/128000000\", \"shifted-prior\": \"90125954529/1280000000\"}, \"figures\": 3, \"claim_mode\": \"false-certainty\", \"score\": null}\n",
+  "stderr": "",
+  "scope": "actual false-certainty report programme on the same original correct source/native data; no new native/solver"
+}

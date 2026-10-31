@@ -1,0 +1,18 @@
+{
+  "format": "l06-inspection-layout/1",
+  "paths": {
+    "programme": ".",
+    "report": "REPORT.md",
+    "ledger": "data/stage-ledger.csv",
+    "summary": "data/summary.json",
+    "source_map": "data/source-map.json",
+    "reproduce": "reproduce.ps1",
+    "requirements": "requirements-lock.txt",
+    "figures": [
+      "figures/cost-and-information.png",
+      "figures/cash-and-material.png",
+      "figures/belief-and-decisions.png"
+    ]
+  },
+  "scope": "original complete source paths; no author filename or language is imposed on other deliveries"
+}

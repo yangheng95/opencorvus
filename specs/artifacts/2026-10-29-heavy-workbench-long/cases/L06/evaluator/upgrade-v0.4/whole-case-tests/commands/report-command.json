@@ -1,0 +1,20 @@
+{
+  "started_at": "2026-10-31T07:51:02.739096+00:00",
+  "finished_at": "2026-10-31T07:51:09.408528+00:00",
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\report-environment\\venv\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.4\\reference-source\\report.py",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\native-whole-first",
+    "--studies",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\author-project\\work",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery"
+  ],
+  "native_exit": 0,
+  "stdout": "{\"native_data_rows\": 3152, \"instances\": {\"base\": \"300834939/4000000\", \"cash-tight\": \"11287373277/128000000\", \"shifted-prior\": \"90125954529/1280000000\"}, \"figures\": 3, \"claim_mode\": \"bounded\", \"score\": null}\n",
+  "stderr": ""
+}

@@ -709,3 +709,17 @@ L01唯一原pending GPU仍正常，06:21Z同hybrid-s345-lr1e-04的L-BFGS已27000
 原自有server20036/API53962于07:04:51Z正常dispose，暂存auth/models实际清除，source凭据不动；203真实请求含preflight均gpt-6.1-sol/streaming/HTTP200。Task/Inspect/子进程全终态，不能再请求或重启该API/Task。完整产品与原图/源/评分/集中独审/原失败见cases/L06/evaluator/pilot-opencorvus-v03-native-20261031，完整external capsule与仓库originals科学投影范围以receipt为准，不冒称小ZIP包含第三方全部字节。
 
 本0.3与fresh Codex真正同冻结各100/全critical，pair phase=paired_completed_upgrade_required、active_evaluation=null，明确另升0.4；旧17叶/质量90/60044/15%/原料/原成绩只读，不能再磨本版或拿原作者/旧双100替fresh。Codex actualmodel/usage未知，comparablefalse，禁止同模型资源因果费用速度排名；44:58生命周期/参考秒数/模拟周数/cache不作有效小时。L01唯一原pending本机GPU继续，完整研究/当前合法选择质量/论文/175独评/冻结仍待；套件9/10、有效候选小时0/10，新L02及新L06仍需履行，不虚报成熟或停心跳。
+
+## L06/0.4主动验货完整整题与一次独审结案Recall（2026-10-31）
+
+0.3新OC与fresh Codex同冻结双100触发另版，本轮仅新增cases/L06/evaluator/upgrade-v0.4，未动旧public/权重/质量/分数，也未改生产路由/Task/Mission/Session/UI。实施前BUILD-PLAN已登记完整8周/三输入/实物与现金逐阶段/两真实commit丢ACK/内生付费观测/别名不可识别及每输入101/100同信息最优；非加大旧树或故意耗时。全部本机stdlivPython3.14、独立report3.12venv；无Docker/WSL/UI/新GPU或L01热改。
+
+首次完整三个Fraction根base300834939/4000000、cash-tight11287373277/128000000、shifted90125954529/1280000000，各不到1秒；按public真实advance完整核原stored政策Bellman证书37.1349805秒，class-known比较仍未知未来批结果，不能把禁验货的材料损失当纯信息价值。真实source-only actor native0/90.9964303秒，三输入197观测终史/3152SQLstage与两controller73→新process原order/lab-result键payloadreceipt续接，另16行序控制。workerEOF0在每次cut前，非kill/掉电；所选未来只parent stdin/内存，未认证同用户OS侧信道。三实际PNG主方与独审已view。
+
+完整主报告/账/概率/后验/现金/绝对AR与自含源封后，一次集中benchmark_review独立CSV/Fraction/原SQL/wire/科学与图实核，唯一自含source-only新完整cold168.5232507秒自然0，新随机episode仍按paid observation path接受跨执行原导出。主H全pass，弱H01/H05fail。仅B01 JSON true冒充ARdue整数误过、B02真实无包lab错误归blocked两项；初源/实际误过/真实错误先封，集中修strict AR类型与partial lab advance，只原反例和主/弱/IID closed复核，不重native/cold/DP。最终无实质阻断，FREEZE只开发metadata，17ID/100/90/critical/raw/101/100不改。
+
+真正grade直接native0/4，从closed重新12M加绑定5H：参考100/allcritical/goodtrue；真实数字图正确但假识别与无限现实保证弱90/H01+H05criticalfail/goodfalse。四真实错误actor具名后验/物料/信用/原键失败；额外真实seq0无包验货具名M02fail；完整IID-class错模型2768阶段物理/后验/恢复正确但三个实际成本均超原1%，只有M04fail，未全内容评总分null。原prepare重叠输入导致递归工具失败和全部初结果保留，不扣作候选分，不扩为产品调度异常。
+
+完整产品/全source/真实命令/原错误/独审初终评/唯一cold保whole-case-tests，originals46,839,470bytes/5626members，逐成员/外部保留范围明确。第三方report环境/cache、重复closed副本、递归自复制临时树不谎称全在小ZIP。没有fresh0.4成绩，不把作者/错误programme或秒数/分支/阶段当模型小时；全套仍9/10、有效候选小时0/10，真人/统计成熟未认证。
+
+L01原唯一owner23296/实际训练18416继续：08:33Z只读观察reaction纯L-BFGS已于08:24:19Z41000/loss1.27270296e-6自然转原hybrid，08:32:35Z其LBFGS4000/loss3.25040151e-6，stage终态/新error均无、stderr0。loss不替独立final1%解质量；没有重同格、恢复旧Paused、热改source或持续监听。L01完整论文/合法质量可达/175独评与冻结仍待；新L02升级义务仍保。定时ACTIVE，只原生Windows；已完成旧候选/API53962/56591/59471不重启、不请求。结束本任务范围commit/正常fetch merge/审全部待推/必要检查与完整hook/push，foreign全部保留。

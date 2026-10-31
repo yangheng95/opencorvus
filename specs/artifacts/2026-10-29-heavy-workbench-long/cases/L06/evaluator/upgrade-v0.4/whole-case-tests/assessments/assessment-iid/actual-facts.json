@@ -1,0 +1,4048 @@
+{
+  "instances": {
+    "base": {
+      "expected_cost_exact": "1194683/12800",
+      "components_exact": {
+        "certified": "9423043/160000",
+        "disposal": "0",
+        "holding": "788997/320000",
+        "laboratory": "798999/160000",
+        "normal": "2396997/160000",
+        "production": "12"
+      },
+      "minimum_cash": -15,
+      "minimum_final_cash": 1,
+      "maximum_raw_peak": 3,
+      "terminal_histories": 50,
+      "decision_histories": 257,
+      "probability_mass_exact": "1",
+      "receivables_by_path": {
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        }
+      }
+    },
+    "cash-tight": {
+      "expected_cost_exact": "1208591527/12800000",
+      "components_exact": {
+        "certified": "503683673/8000000",
+        "disposal": "0",
+        "holding": "150292251/64000000",
+        "laboratory": "273799/64000",
+        "normal": "821397/64000",
+        "production": "12"
+      },
+      "minimum_cash": -15,
+      "minimum_final_cash": 1,
+      "maximum_raw_peak": 3,
+      "terminal_histories": 35,
+      "decision_histories": 182,
+      "probability_mass_exact": "1",
+      "receivables_by_path": {
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        }
+      }
+    },
+    "shifted-prior": {
+      "expected_cost_exact": "4888983507/64000000",
+      "components_exact": {
+        "certified": "298239401/8000000",
+        "disposal": "30497889/64000000",
+        "holding": "20241733/6400000",
+        "laboratory": "37553827/6400000",
+        "normal": "112661481/6400000",
+        "production": "12"
+      },
+      "minimum_cash": -15,
+      "minimum_final_cash": 1,
+      "maximum_raw_peak": 3,
+      "terminal_histories": 88,
+      "decision_histories": 295,
+      "probability_mass_exact": "1",
+      "receivables_by_path": {
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:reject|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:reject|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        }
+      }
+    }
+  },
+  "episodes": {
+    "episode-960ac18647787b05": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 109,
+      "components": {
+        "certified": 71,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -7,
+      "final_cash": 27,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-414fb59b30535552": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 73,
+      "components": {
+        "certified": 36,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 63,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-c187544c9975a9d2": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 110,
+      "components": {
+        "certified": 73,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -8,
+      "final_cash": 26,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-5a5d6aa5e1734609": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 92,
+      "components": {
+        "certified": 55,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 44,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-601884598918f38b": {
+      "path": "w1:A:reject|w2:A:reject|w5:A:good|w6:A:reject",
+      "probability": "7599/160000",
+      "cost": 117,
+      "components": {
+        "certified": 87,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 4,
+        "normal": 12,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 19,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-0e7571d9993d36fc": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 89,
+      "components": {
+        "certified": 52,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 47,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-62d3c2d90ae85e56": {
+      "path": "w1:A:reject|w2:A:reject|w5:A:reject|w6:A:good",
+      "probability": "7599/160000",
+      "cost": 119,
+      "components": {
+        "certified": 90,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 4,
+        "normal": 12,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 17,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-ea6d31eacdab402b": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 90,
+      "components": {
+        "certified": 54,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 46,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-61b89967d0154204": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 74,
+      "components": {
+        "certified": 35,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 62,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-aa673c659e73a5a2": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 94,
+      "components": {
+        "certified": 58,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 42,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-bc432982e88c9c3b": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 71,
+      "components": {
+        "certified": 32,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 65,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-c0a896860d00a167": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 105,
+      "components": {
+        "certified": 68,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 31,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-96eade906bb4d8bb": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good",
+      "probability": "2131851/64000000",
+      "cost": 55,
+      "components": {
+        "certified": 16,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 81,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-590b14a044e47f3c": {
+      "path": "w1:A:reject|w2:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "41801/160000",
+      "cost": 135,
+      "components": {
+        "certified": 106,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 4,
+        "normal": 12,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 1,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-9a9353fa0ca79473": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 108,
+      "components": {
+        "certified": 70,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 28,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-45a9b0b806b89671": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 112,
+      "components": {
+        "certified": 76,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -8,
+      "final_cash": 24,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-82724f12a6de12c8": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 88,
+      "components": {
+        "certified": 52,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 48,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-189fee90d3dcb15a": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 71,
+      "components": {
+        "certified": 33,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 65,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-896a95f22c90519c": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "2131851/64000000",
+      "cost": 59,
+      "components": {
+        "certified": 19,
+        "disposal": 0,
+        "holding": 4,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 77,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-f901458f292ba6c8": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 92,
+      "components": {
+        "certified": 54,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 44,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-135193444992a491": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 70,
+      "components": {
+        "certified": 33,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 66,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-1176263ee4713dc9": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 87,
+      "components": {
+        "certified": 48,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 49,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-fc167875d03a019d": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 77,
+      "components": {
+        "certified": 39,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 59,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-95d7d3e9e38ef661": {
+      "path": "w1:A:reject|w2:A:reject|w5:A:good|w6:A:good",
+      "probability": "2601/160000",
+      "cost": 102,
+      "components": {
+        "certified": 71,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 4,
+        "normal": 12,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 34,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-e9f67b74ab6e23ce": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 95,
+      "components": {
+        "certified": 57,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -8,
+      "final_cash": 41,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-62ff57274d423b99": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "2131851/64000000",
+      "cost": 128,
+      "components": {
+        "certified": 92,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -8,
+      "final_cash": 8,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-7bcfda645eeb517e": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 73,
+      "components": {
+        "certified": 35,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 63,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-49729cc668ce72b9": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:good",
+      "probability": "2131851/64000000",
+      "cost": 55,
+      "components": {
+        "certified": 17,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 81,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-a6648a5b09f7e782": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 95,
+      "components": {
+        "certified": 58,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 41,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-222dddcbf0461f93": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 93,
+      "components": {
+        "certified": 55,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 43,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-430305de523b5f56": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 106,
+      "components": {
+        "certified": 70,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 30,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-7b66eac930f987ba": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 72,
+      "components": {
+        "certified": 33,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 64,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-7e44a8464e10867a": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 110,
+      "components": {
+        "certified": 74,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 26,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-e34b5650f0fcc3ce": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:good",
+      "probability": "12597/320000",
+      "cost": 69,
+      "components": {
+        "certified": 32,
+        "disposal": 0,
+        "holding": 5,
+        "laboratory": 5,
+        "normal": 15,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 67,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-4820831eda91d58c": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 78,
+      "components": {
+        "certified": 39,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 58,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-94f66bbeaeef14a1": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "2131851/64000000",
+      "cost": 127,
+      "components": {
+        "certified": 90,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -7,
+      "final_cash": 9,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-fc7ce734a9925566": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 92,
+      "components": {
+        "certified": 54,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 44,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-023e776d6257baba": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 111,
+      "components": {
+        "certified": 74,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 25,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-1fe99433449dae3f": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:good",
+      "probability": "14201/64000",
+      "cost": 53,
+      "components": {
+        "certified": 16,
+        "disposal": 0,
+        "holding": 5,
+        "laboratory": 5,
+        "normal": 15,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 83,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-3928f9cfb75dfc42": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 76,
+      "components": {
+        "certified": 38,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 60,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-009cf28a56ecaa48": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 111,
+      "components": {
+        "certified": 74,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -7,
+      "final_cash": 25,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-54dbc561bf0ce4cf": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 90,
+      "components": {
+        "certified": 51,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 46,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-2c047b95575008c4": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good",
+      "probability": "2131851/64000000",
+      "cost": 56,
+      "components": {
+        "certified": 17,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 80,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-9fc6c0ad3d5188e4": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 88,
+      "components": {
+        "certified": 51,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 48,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-742db10a7a8d1e74": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 94,
+      "components": {
+        "certified": 55,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -7,
+      "final_cash": 42,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-514a6311d02358bb": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 72,
+      "components": {
+        "certified": 36,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 64,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-819ac83cb0f49cb7": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 71,
+      "components": {
+        "certified": 32,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 65,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-7424adcae1b1a225": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 87,
+      "components": {
+        "certified": 49,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 49,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-5c7ff9fe64261cb5": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 89,
+      "components": {
+        "certified": 52,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 47,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-426a96920dc6f734": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 75,
+      "components": {
+        "certified": 35,
+        "disposal": 0,
+        "holding": 4,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 61,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-88522311d0c8a24e": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 111,
+      "components": {
+        "certified": 74,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 21,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-f022fbd7ae85d445": {
+      "path": "w1:A:reject|w5:A:reject|w6:A:good",
+      "probability": "51/800",
+      "cost": 115,
+      "components": {
+        "certified": 90,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 3,
+        "normal": 9,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 17,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-73775f8ea52a03a4": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 106,
+      "components": {
+        "certified": 70,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 26,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-941f552dba75010b": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 112,
+      "components": {
+        "certified": 76,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -12,
+      "final_cash": 20,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-1728ec0c8a837f71": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 77,
+      "components": {
+        "certified": 39,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 55,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-2b794d6feba7d857": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 90,
+      "components": {
+        "certified": 54,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 42,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-80d891c08953f5fc": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "2131851/64000000",
+      "cost": 128,
+      "components": {
+        "certified": 92,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -12,
+      "final_cash": 4,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-ce427ef3093e9949": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good",
+      "probability": "2131851/64000000",
+      "cost": 55,
+      "components": {
+        "certified": 16,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 77,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-99c4b9b13dd54831": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 73,
+      "components": {
+        "certified": 36,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 59,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-5492ec16fcaf44a3": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 94,
+      "components": {
+        "certified": 58,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 38,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-8fa5a9588ca0631d": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "2131851/64000000",
+      "cost": 59,
+      "components": {
+        "certified": 19,
+        "disposal": 0,
+        "holding": 4,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 73,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-d0c68db3c32a2b5b": {
+      "path": "w1:A:reject|w5:A:good|w6:A:reject",
+      "probability": "51/800",
+      "cost": 113,
+      "components": {
+        "certified": 87,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 3,
+        "normal": 9,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 19,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-974a6cac3fb9564b": {
+      "path": "w1:A:reject|w5:A:good|w6:A:good",
+      "probability": "51/800",
+      "cost": 98,
+      "components": {
+        "certified": 71,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 3,
+        "normal": 9,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 34,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-56fa945b5e50af87": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 88,
+      "components": {
+        "certified": 52,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 44,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-eb6fce20d5271ed9": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 70,
+      "components": {
+        "certified": 33,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 62,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-5efe2d9ce6cbad16": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 110,
+      "components": {
+        "certified": 73,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -12,
+      "final_cash": 22,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-9ea471b16123ebd9": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:good",
+      "probability": "14201/64000",
+      "cost": 53,
+      "components": {
+        "certified": 16,
+        "disposal": 0,
+        "holding": 5,
+        "laboratory": 5,
+        "normal": 15,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 79,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-1b1d47d8c54b61a7": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 95,
+      "components": {
+        "certified": 58,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 37,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-cb4e1b4e91fdb7e7": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good",
+      "probability": "2131851/64000000",
+      "cost": 56,
+      "components": {
+        "certified": 17,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 76,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-9aad710fde7acb8c": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 72,
+      "components": {
+        "certified": 36,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 60,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-99c798c817bf21e2": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 71,
+      "components": {
+        "certified": 33,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 61,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-be97c06bfe9596ca": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 92,
+      "components": {
+        "certified": 54,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 40,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-39a8a5f8b21e4223": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 71,
+      "components": {
+        "certified": 32,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 61,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-97b9e43f3e2adb3e": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 73,
+      "components": {
+        "certified": 35,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 59,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-1e0ab45de11072ab": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 92,
+      "components": {
+        "certified": 55,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 40,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-5b29626606f80df2": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 78,
+      "components": {
+        "certified": 39,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 54,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-bffb76ae974627f0": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:good",
+      "probability": "2131851/64000000",
+      "cost": 55,
+      "components": {
+        "certified": 17,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 77,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-19c49be2e5339229": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 93,
+      "components": {
+        "certified": 55,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 39,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-24bf980ecd1e17b2": {
+      "path": "w1:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "247/800",
+      "cost": 131,
+      "components": {
+        "certified": 106,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 3,
+        "normal": 9,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 1,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-d611c9af5d22ae0c": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 88,
+      "components": {
+        "certified": 51,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 44,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-35e4ff0a66697568": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 74,
+      "components": {
+        "certified": 35,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 58,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-a3aa098f9006f3d2": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject",
+      "probability": "132651/64000000",
+      "cost": 89,
+      "components": {
+        "certified": 52,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 43,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-8904112e9de0fd07": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good",
+      "probability": "387549/64000000",
+      "cost": 76,
+      "components": {
+        "certified": 38,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 56,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-c6fd94f023c01380": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 95,
+      "components": {
+        "certified": 57,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -12,
+      "final_cash": 37,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-73e0485ff4467f1c": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "387549/64000000",
+      "cost": 110,
+      "components": {
+        "certified": 74,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 2,
+      "final_cash": 22,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-01b280c171109fe1": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 92,
+      "components": {
+        "certified": 52,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 44,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-0c05c13f11398cd8": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 94,
+      "components": {
+        "certified": 54,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 42,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-1def85345bb010b1": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 91,
+      "components": {
+        "certified": 49,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 45,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-ddcdabf4d2aa2343": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "36224943/2560000000",
+      "cost": 132,
+      "components": {
+        "certified": 92,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -8,
+      "final_cash": 4,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-78ffa4ef7a5d57bf": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:good",
+      "probability": "19203183/2560000000",
+      "cost": 68,
+      "components": {
+        "certified": 25,
+        "disposal": 1,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 68,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-1a471e87f2e0f236": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "3195711/64000000",
+      "cost": 59,
+      "components": {
+        "certified": 19,
+        "disposal": 0,
+        "holding": 4,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 77,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-8650263949980814": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good",
+      "probability": "1724463/2560000000",
+      "cost": 107,
+      "components": {
+        "certified": 65,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -8,
+      "final_cash": 29,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-ad27d242905211a7": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "3581577/2560000000",
+      "cost": 75,
+      "components": {
+        "certified": 32,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 61,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-1e14b8e9484ad32b": {
+      "path": "w1:A:reject|w2:A:reject|w5:A:good|w6:A:reject|w7:A:good",
+      "probability": "33813/6400000",
+      "cost": 114,
+      "components": {
+        "certified": 79,
+        "disposal": 1,
+        "holding": 2,
+        "laboratory": 5,
+        "normal": 15,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 22,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-bbb14e6e9e2c0cc1": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "1724463/2560000000",
+      "cost": 107,
+      "components": {
+        "certified": 66,
+        "disposal": 1,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 29,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-0f7dba74c52dfa3c": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 94,
+      "components": {
+        "certified": 51,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 42,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-5dcc84df9bfa9b6b": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 98,
+      "components": {
+        "certified": 58,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 38,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-e4d9d966c7d6fbd2": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "3581577/2560000000",
+      "cost": 77,
+      "components": {
+        "certified": 36,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 59,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-85c58c77a8e096ca": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "19203183/2560000000",
+      "cost": 69,
+      "components": {
+        "certified": 28,
+        "disposal": 1,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 67,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-2743d3b5e06cb175": {
+      "path": "w1:A:reject|w2:A:reject|w5:A:good|w6:A:reject|w7:A:reject",
+      "probability": "127347/6400000",
+      "cost": 121,
+      "components": {
+        "certified": 87,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 5,
+        "normal": 15,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 15,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-63bd0331c46992e2": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 93,
+      "components": {
+        "certified": 52,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 43,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-df9de2a1682811cc": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 91,
+      "components": {
+        "certified": 50,
+        "disposal": 1,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 45,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-02f98182752d17a8": {
+      "path": "w1:A:reject|w2:A:reject|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "33813/6400000",
+      "cost": 116,
+      "components": {
+        "certified": 82,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 5,
+        "normal": 15,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 20,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-64c7f162966a41de": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "19203183/2560000000",
+      "cost": 70,
+      "components": {
+        "certified": 28,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 66,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-3c61f2628915f60e": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject",
+      "probability": "3581577/2560000000",
+      "cost": 75,
+      "components": {
+        "certified": 33,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 61,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-586ce06b1cd2b74b": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 90,
+      "components": {
+        "certified": 47,
+        "disposal": 1,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 46,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-29ae2ee1d9ee67fc": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good",
+      "probability": "19203183/2560000000",
+      "cost": 71,
+      "components": {
+        "certified": 27,
+        "disposal": 1,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 65,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-bcf7dd06058d7116": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 85,
+      "components": {
+        "certified": 44,
+        "disposal": 1,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 51,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-6fcd3b04de36e37a": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 89,
+      "components": {
+        "certified": 47,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 47,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-26b7b187456f4ca5": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "19203183/2560000000",
+      "cost": 68,
+      "components": {
+        "certified": 24,
+        "disposal": 1,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 68,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-5354cff008743de0": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "3581577/2560000000",
+      "cost": 80,
+      "components": {
+        "certified": 38,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 56,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-9a902d9a68ad463b": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "19203183/2560000000",
+      "cost": 59,
+      "components": {
+        "certified": 16,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 77,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-96cfc9ba733ee77f": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 95,
+      "components": {
+        "certified": 57,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -8,
+      "final_cash": 41,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-2bb4e011f9327679": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject",
+      "probability": "6494697/2560000000",
+      "cost": 114,
+      "components": {
+        "certified": 73,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -8,
+      "final_cash": 22,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-8877cd3941048d23": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "132651/64000000",
+      "cost": 94,
+      "components": {
+        "certified": 55,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -7,
+      "final_cash": 42,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-494d3a0e0e4195c7": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 93,
+      "components": {
+        "certified": 52,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 43,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-c9f05b7308e33080": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "1724463/2560000000",
+      "cost": 103,
+      "components": {
+        "certified": 62,
+        "disposal": 1,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 33,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-43359ad99437371b": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "19203183/2560000000",
+      "cost": 73,
+      "components": {
+        "certified": 30,
+        "disposal": 1,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 63,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-109e9f4b59658507": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "1724463/2560000000",
+      "cost": 105,
+      "components": {
+        "certified": 62,
+        "disposal": 1,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 31,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-dffdc09ddc8c5c0c": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "569619/64000000",
+      "cost": 78,
+      "components": {
+        "certified": 39,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 58,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-5b324383d64b28ff": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "6494697/2560000000",
+      "cost": 124,
+      "components": {
+        "certified": 82,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -7,
+      "final_cash": 12,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-e37229bd62c637fb": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "6494697/2560000000",
+      "cost": 115,
+      "components": {
+        "certified": 74,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -7,
+      "final_cash": 21,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-f530546cd9bc4c57": {
+      "path": "w1:A:reject|w2:A:reject|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "127347/6400000",
+      "cost": 123,
+      "components": {
+        "certified": 90,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 5,
+        "normal": 15,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 13,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-ef8ca6387a69f76e": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:good|w7:A:good",
+      "probability": "18103359/64000000",
+      "cost": 50,
+      "components": {
+        "certified": 8,
+        "disposal": 1,
+        "holding": 5,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 86,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-47873d390daf0e89": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "6494697/2560000000",
+      "cost": 114,
+      "components": {
+        "certified": 74,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 22,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-25ff8bcb335aba0a": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "3581577/2560000000",
+      "cost": 76,
+      "components": {
+        "certified": 36,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 60,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-36760b27bf99f194": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good",
+      "probability": "569619/64000000",
+      "cost": 72,
+      "components": {
+        "certified": 33,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 64,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-1051b5355bc5e484": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 96,
+      "components": {
+        "certified": 54,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 40,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-e7b307df8d76b17c": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 86,
+      "components": {
+        "certified": 44,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 50,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-793895e74cce9404": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 92,
+      "components": {
+        "certified": 50,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 44,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-c0a0e030de7ecb91": {
+      "path": "w1:A:reject|w2:A:reject|w5:A:reject|w6:A:reject",
+      "probability": "20941/160000",
+      "cost": 135,
+      "components": {
+        "certified": 106,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 4,
+        "normal": 12,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 1,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-3abcb441253c8d73": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "6494697/2560000000",
+      "cost": 110,
+      "components": {
+        "certified": 70,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 26,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-213a6b47ac1a784d": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "569619/64000000",
+      "cost": 77,
+      "components": {
+        "certified": 39,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 59,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-4292320121327ef5": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject",
+      "probability": "3581577/2560000000",
+      "cost": 74,
+      "components": {
+        "certified": 33,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 62,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-f0dee46ae71efaa2": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 92,
+      "components": {
+        "certified": 51,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 44,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-b90a5abf07afa9ce": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 85,
+      "components": {
+        "certified": 43,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 51,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-08a76d55814651a3": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "6494697/2560000000",
+      "cost": 125,
+      "components": {
+        "certified": 84,
+        "disposal": 1,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -8,
+      "final_cash": 11,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-3be05a95a4b1c10e": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good",
+      "probability": "569619/64000000",
+      "cost": 75,
+      "components": {
+        "certified": 35,
+        "disposal": 0,
+        "holding": 4,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 61,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-5f1c559dd76cfc08": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:good|w7:A:reject",
+      "probability": "3195711/64000000",
+      "cost": 57,
+      "components": {
+        "certified": 16,
+        "disposal": 0,
+        "holding": 5,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 79,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-17684bcf0c5809c3": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "1724463/2560000000",
+      "cost": 102,
+      "components": {
+        "certified": 60,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 34,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-d64d4b0eb8563ea2": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 99,
+      "components": {
+        "certified": 58,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 37,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-432002737664309f": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "6494697/2560000000",
+      "cost": 115,
+      "components": {
+        "certified": 74,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 21,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-766d733e56cf3526": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "36224943/2560000000",
+      "cost": 131,
+      "components": {
+        "certified": 90,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -7,
+      "final_cash": 5,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-b14e5f69f4d0389f": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 87,
+      "components": {
+        "certified": 46,
+        "disposal": 1,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 49,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-73335d9fda11efbb": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:good|w5:A:good|w6:A:good",
+      "probability": "569619/64000000",
+      "cost": 73,
+      "components": {
+        "certified": 35,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 63,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-c2714e9b08393f27": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:good",
+      "probability": "3195711/64000000",
+      "cost": 55,
+      "components": {
+        "certified": 17,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 81,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-5a940a1f160269f7": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:good|w7:A:reject",
+      "probability": "569619/64000000",
+      "cost": 73,
+      "components": {
+        "certified": 32,
+        "disposal": 0,
+        "holding": 5,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 63,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-6b6875153895e308": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "6494697/2560000000",
+      "cost": 109,
+      "components": {
+        "certified": 68,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 27,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-dfda0fa849a4128e": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "108625257/2560000000",
+      "cost": 52,
+      "components": {
+        "certified": 8,
+        "disposal": 1,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 84,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-9c99fab0e5a3caa3": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject",
+      "probability": "3581577/2560000000",
+      "cost": 78,
+      "components": {
+        "certified": 35,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 58,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-62189ef1dc37f17c": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "1724463/2560000000",
+      "cost": 109,
+      "components": {
+        "certified": 68,
+        "disposal": 1,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -8,
+      "final_cash": 27,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-b2089acb6da254fb": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "3581577/2560000000",
+      "cost": 75,
+      "components": {
+        "certified": 32,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 61,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-8bb46b4fcd14ae33": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:good|w7:A:good",
+      "probability": "3195711/64000000",
+      "cost": 66,
+      "components": {
+        "certified": 24,
+        "disposal": 1,
+        "holding": 5,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 70,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-94cc2f88dcb0e0f8": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 84,
+      "components": {
+        "certified": 41,
+        "disposal": 1,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 52,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-d5636f41dd87932d": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 87,
+      "components": {
+        "certified": 43,
+        "disposal": 1,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 49,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-02574dd9473493a6": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "1724463/2560000000",
+      "cost": 108,
+      "components": {
+        "certified": 66,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 28,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-4ebcd0e211cdce8f": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject",
+      "probability": "6494697/2560000000",
+      "cost": 113,
+      "components": {
+        "certified": 71,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -7,
+      "final_cash": 23,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-94d48a0196b9175c": {
+      "path": "w1:A:good|w2:A:reject|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "6494697/2560000000",
+      "cost": 116,
+      "components": {
+        "certified": 76,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -8,
+      "final_cash": 20,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-d5d90309b573c90c": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good",
+      "probability": "1724463/2560000000",
+      "cost": 106,
+      "components": {
+        "certified": 63,
+        "disposal": 1,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -7,
+      "final_cash": 30,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-bf1a751769c2ad8a": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "19203183/2560000000",
+      "cost": 68,
+      "components": {
+        "certified": 24,
+        "disposal": 1,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 68,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-c3185303314a6a29": {
+      "path": "w1:A:reject|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "1724463/2560000000",
+      "cost": 108,
+      "components": {
+        "certified": 66,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -7,
+      "final_cash": 28,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-51393992d0d3b938": {
+      "path": "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 89,
+      "components": {
+        "certified": 46,
+        "disposal": 1,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 47,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-9a9c75bd47cdb408": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 96,
+      "components": {
+        "certified": 54,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 40,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-bc26d5114499818a": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 97,
+      "components": {
+        "certified": 55,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 39,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-3763b7f1622bb703": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good",
+      "probability": "3195711/64000000",
+      "cost": 56,
+      "components": {
+        "certified": 17,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 6,
+        "normal": 18,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 80,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-4feb1bae25b902ff": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 96,
+      "components": {
+        "certified": 55,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 40,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-a3cff073c25dadf8": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 89,
+      "components": {
+        "certified": 46,
+        "disposal": 1,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 47,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-48452e50f27485fb": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "6494697/2560000000",
+      "cost": 112,
+      "components": {
+        "certified": 70,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 24,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-f9b3ce9877371327": {
+      "path": "w1:A:reject|w2:A:reject|w5:A:good|w6:A:good",
+      "probability": "2601/160000",
+      "cost": 102,
+      "components": {
+        "certified": 71,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 4,
+        "normal": 12,
+        "production": 12
+      },
+      "minimum_cash": -15,
+      "final_cash": 34,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-713d23a86427726d": {
+      "path": "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject|w7:A:good",
+      "probability": "19203183/2560000000",
+      "cost": 67,
+      "components": {
+        "certified": 25,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 69,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-0d6480666489b097": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject",
+      "probability": "1724463/2560000000",
+      "cost": 91,
+      "components": {
+        "certified": 48,
+        "disposal": 0,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 45,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-3d0737e6813a8779": {
+      "path": "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 86,
+      "components": {
+        "certified": 44,
+        "disposal": 1,
+        "holding": 1,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": 6,
+      "final_cash": 50,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    },
+    "episode-162eae94edb098c4": {
+      "path": "w1:A:reject|w2:A:good|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good",
+      "probability": "3581577/2560000000",
+      "cost": 84,
+      "components": {
+        "certified": 40,
+        "disposal": 1,
+        "holding": 3,
+        "laboratory": 7,
+        "normal": 21,
+        "production": 12
+      },
+      "minimum_cash": -6,
+      "final_cash": 52,
+      "receivables": {
+        "8": 24,
+        "9": 12
+      }
+    }
+  },
+  "controller_cuts": {
+    "order": 1,
+    "laboratory": 1
+  },
+  "row_order_control_rows": 16,
+  "limits": "exact full positive-support/source/controlled process-loss; no OS/power-loss/useful-hour certification"
+}

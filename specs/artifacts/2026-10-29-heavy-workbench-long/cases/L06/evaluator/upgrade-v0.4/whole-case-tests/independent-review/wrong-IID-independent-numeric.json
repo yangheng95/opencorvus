@@ -1,0 +1,119 @@
+{
+  "observed_at": "2026-10-31T08:23:09.326197+00:00",
+  "scope": "Read-only independent raw CSV/Fraction/SQL full wrong-IID outcome support; no actor/planner run",
+  "independent_failures": [],
+  "instances": {
+    "base": {
+      "expected_cost_exact": "1194683/12800",
+      "components_exact": {
+        "certified": "9423043/160000",
+        "disposal": "0",
+        "holding": "788997/320000",
+        "laboratory": "798999/160000",
+        "normal": "2396997/160000",
+        "production": "12"
+      },
+      "minimum_cash": -15,
+      "minimum_final_cash": 1,
+      "maximum_raw_peak": 3,
+      "terminal_histories": 50,
+      "decision_histories": 257,
+      "probability_mass_exact": "1"
+    },
+    "cash-tight": {
+      "expected_cost_exact": "1208591527/12800000",
+      "components_exact": {
+        "certified": "503683673/8000000",
+        "disposal": "0",
+        "holding": "150292251/64000000",
+        "laboratory": "273799/64000",
+        "normal": "821397/64000",
+        "production": "12"
+      },
+      "minimum_cash": -15,
+      "minimum_final_cash": 1,
+      "maximum_raw_peak": 3,
+      "terminal_histories": 35,
+      "decision_histories": 182,
+      "probability_mass_exact": "1"
+    },
+    "shifted-prior": {
+      "expected_cost_exact": "4888983507/64000000",
+      "components_exact": {
+        "certified": "298239401/8000000",
+        "disposal": "30497889/64000000",
+        "holding": "20241733/6400000",
+        "laboratory": "37553827/6400000",
+        "normal": "112661481/6400000",
+        "production": "12"
+      },
+      "minimum_cash": -15,
+      "minimum_final_cash": 1,
+      "maximum_raw_peak": 3,
+      "terminal_histories": 88,
+      "decision_histories": 295,
+      "probability_mass_exact": "1"
+    }
+  },
+  "quality_failure": {
+    "base": {
+      "actual_expected": "1194683/12800",
+      "registered_optimum": "300834939/4000000",
+      "ratio": "746676875/601669878",
+      "above_101_percent": true
+    },
+    "cash-tight": {
+      "actual_expected": "1208591527/12800000",
+      "registered_optimum": "11287373277/128000000",
+      "ratio": "12085915270/11287373277",
+      "above_101_percent": true
+    },
+    "shifted-prior": {
+      "actual_expected": "4888983507/64000000",
+      "registered_optimum": "90125954529/1280000000",
+      "ratio": "32593223380/30041984843",
+      "above_101_percent": true
+    }
+  },
+  "actual_stages": 2768,
+  "wire_lines": 2770,
+  "actual_wrong_controls": {
+    "prior-belief": {
+      "M03": {
+        "status": "verified_fail",
+        "evidence": [
+          "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\error-assessments\\prior-belief\\closed\\run\\discovery-base\\wire.jsonl"
+        ],
+        "reason": "bayesian_original_observations"
+      }
+    },
+    "expected-stock": {
+      "M02": {
+        "status": "verified_fail",
+        "evidence": [
+          "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\error-assessments\\expected-stock\\closed\\run\\discovery-base\\wire.jsonl"
+        ],
+        "reason": "complete_current_demand"
+      }
+    },
+    "ar-credit": {
+      "M06": {
+        "status": "verified_fail",
+        "evidence": [
+          "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\error-assessments\\ar-credit\\closed\\run\\discovery-base\\wire.jsonl"
+        ],
+        "reason": "settled_cash_floor"
+      }
+    },
+    "random-key": {
+      "M09": {
+        "status": "verified_fail",
+        "evidence": [
+          "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\error-assessments\\random-key\\closed\\run\\episode-3dc532377e816d0c\\cut-laboratory\\failure.json",
+          "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\error-assessments\\random-key\\closed\\run\\episode-3dc532377e816d0c\\cut-laboratory\\worker\\wire.jsonl"
+        ],
+        "reason": "original_request_identity_after_process_loss; actual new-process response key differs from existing original SQL row"
+      }
+    }
+  }
+}

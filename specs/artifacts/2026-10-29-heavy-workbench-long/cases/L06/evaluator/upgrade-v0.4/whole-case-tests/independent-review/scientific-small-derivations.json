@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-31T08:26:23.448957+00:00",
+  "advance_class_arithmetic": [
+    {
+      "instance": "base",
+      "weighted_class_known_exact": "79935238629/1280000000",
+      "published_bound_same": true,
+      "difference_exact": "16331941851/1280000000",
+      "published_difference_same": true,
+      "proof_scope": "Inspected exact class-conditioned planner recurrence; unknown future lot outcomes remain two positive branches. No separate second planner/certificate executed by reviewer beyond authorized complete rebuild."
+    },
+    {
+      "instance": "cash-tight",
+      "weighted_class_known_exact": "170951494509/2560000000",
+      "published_bound_same": true,
+      "difference_exact": "54795971031/2560000000",
+      "published_difference_same": true,
+      "proof_scope": "Inspected exact class-conditioned planner recurrence; unknown future lot outcomes remain two positive branches. No separate second planner/certificate executed by reviewer beyond authorized complete rebuild."
+    },
+    {
+      "instance": "shifted-prior",
+      "weighted_class_known_exact": "155861214969/2560000000",
+      "published_bound_same": true,
+      "difference_exact": "24390694089/2560000000",
+      "published_difference_same": true,
+      "proof_scope": "Inspected exact class-conditioned planner recurrence; unknown future lot outcomes remain two positive branches. No separate second planner/certificate executed by reviewer beyond authorized complete rebuild."
+    }
+  ],
+  "first_paid_A_good_base": {
+    "A1": "17/80",
+    "A2": "51/80",
+    "B1": "9/80",
+    "B2": "3/80"
+  },
+  "weak_actual_unheaded_final_certification": {
+    "file": "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\weak-delivery\\REPORT.md",
+    "line": 31,
+    "text": "The delivered policy is hereby certified to identify the exact A1/A2/B1/B2 hidden label with certainty after its first paid observation and to guarantee correct finances under every real-world network and power failure."
+  },
+  "clarification": "Initial evidence fragment #False-certainty certification is a descriptive locator for this unheaded final paragraph, not an actual Markdown heading; final review uses exact line."
+}

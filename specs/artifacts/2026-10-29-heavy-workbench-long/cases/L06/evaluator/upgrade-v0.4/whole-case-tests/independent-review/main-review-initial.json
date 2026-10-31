@@ -1,0 +1,69 @@
+{
+  "format": "l06-inspection-content-review/1",
+  "assignment_id": "l06-inspection-3d181980ae724480aa07d91e12a3b97a",
+  "case_version": "L06/0.4.0-dev",
+  "reviewer": "/root/benchmark_review",
+  "reviewed_at": "2026-10-31T08:25:27.983381+00:00",
+  "disclosure": "Independent single AI-agent review, non-blind and familiar with earlier author work and prior L06 candidate results. This is whole-case development/source/math/content review, not professional human certification, statistical calibration, fresh-candidate discrimination or effective-hour validation.",
+  "leaves": [
+    {
+      "id": "H01",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\REPORT.md#Information, attainable target and observational equivalence",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\HANDOFF.md#Scientific boundary",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\whole-raw-SQL-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\independent-logical-stage-values.json"
+      ],
+      "reason": "Purchasing/retaining/testing determines what is observed; no skipped or unbought lot is used as a sample. Conditional Bayesian likelihood uses every actually paid observation once. Exact alias likelihoods imply A1/A2 and B1/B2 posterior ratios stay at their prior ratios under every adaptive policy, and positive finite likelihoods preclude finite class certainty. Independently checked raw likelihoods and every actual response posterior. For base after a first A-good result, posterior is 17/80,51/80,9/80,3/80, not a point label."
+    },
+    {
+      "id": "H02",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\REPORT.md#Information, attainable target and observational equivalence",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\source\\planner.py",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\source\\verify_policy_bound.py",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\cold-rebuild\\bellman-certificate.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\whole-raw-SQL-audit.json"
+      ],
+      "reason": "Week/phase, good material, both quarantine slots, settled cash and exact likelihood-ratio quotient are sufficient under these lead1/mandatory-sales facts. Inspected finite Bellman action enumeration, both positive lab outcomes, terminal disposal/nonnegative cash and omission-as-infeasible induction. One source-only rebuild actually regenerated the policies and full public-physics certificate, without importing an old plan. Raw SQL independently yields the three registered roots. Class-known comparison integrates unknown lot outcomes; its difference is advance class information value, distinct from regret and a no-testing physical ablation. No requirement to copy a particular action or tie."
+    },
+    {
+      "id": "H03",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\HANDOFF.md#Rebuild the full study and actual execution",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\HANDOFF.md#Original-key order and laboratory recovery",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\reproduce.ps1",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\cold-owner-terminal.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\whole-raw-SQL-audit.json"
+      ],
+      "reason": "Self-contained source.zip rebuild actually ran to native0 in 168.5232507s, creating fresh plans/certificate/native/report. Handoff names original packet/key/payload/receipt, preserves journal/WAL/SHM and both cut prefixes, and forbids resampling, backup rollback or spending due8/9 AR. Actual original/new SQL shows two genuine controller73 cuts and original receipts recovered by new processes, with workers EOF0. Credit/unsupported law/conflicting or corrupt prefix retain evidence and stop for separately authorized continuation; no blanket recovery guarantee."
+    },
+    {
+      "id": "H04",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\figures\\cost-and-information.png",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\figures\\cash-and-material.png",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\figures\\belief-and-decisions.png",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\visual-observations.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\whole-raw-SQL-audit.json"
+      ],
+      "reason": "Actually opened all three main PNGs and weak counterparts, plus the newly rebuilt belief/decision PNG. Axes/units, instance labels, exact-versus-plotting distinction and positive-support range/weighted median are readable. Cost/information comparison is explicitly class-information, stage cash has -15 and terminal0 limits, material peak compares cap4, and entropy separates the irreducible alias floor from class uncertainty. Independently reconciled raw probabilities/components/cash/material behind figures. Plot arithmetic is explanatory, not the numerical oracle."
+    },
+    {
+      "id": "H05",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\REPORT.md#Actual operational chain and finance",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\REPORT.md#Figures, operator handoff and limits",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\HANDOFF.md#Scientific boundary",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\source-native-binding.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\whole-raw-SQL-audit.json"
+      ],
+      "reason": "Report correctly restricts evidence to the finite synthetic law and two controlled controller-loss boundaries; does not claim worker kill, physical power-loss, arbitrary-failure or OS/side-channel isolation. It distinguishes author reference from LLM result/useful hours, exact rational finite-model proof from numerical status or real-market approval, and preserves original sources/receipts/failures. Aliases remain unidentifiable; no professional/statistical/ten-case maturity claim. Actual originals and fresh rebuild support these restricted statements."
+    }
+  ]
+}

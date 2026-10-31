@@ -1,0 +1,26 @@
+{
+  "format": "l06-inspection-development-freeze/1",
+  "case": "L06",
+  "case_version": "L06/0.4.0-dev",
+  "frozen_at": "2026-10-31T08:35:04.640677+00:00",
+  "development_frozen": true,
+  "status": "development_frozen",
+  "public": "public",
+  "rubric": "rubric.draft.json",
+  "leaf_count": 17,
+  "fixed_denominator": 100,
+  "minimum_score": 90,
+  "all_critical_required": true,
+  "quality_ratio_exact": "101/100",
+  "same_information_optima": {
+    "base": "300834939/4000000",
+    "cash-tight": "11287373277/128000000",
+    "shifted-prior": "90125954529/1280000000"
+  },
+  "native_root": "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\native-whole-first",
+  "whole_case_review": "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\REVIEW-FINAL.md",
+  "main_assignment": "l06-inspection-3d181980ae724480aa07d91e12a3b97a",
+  "weak_assignment": "l06-inspection-acb4769758c1489e828ad363e1d3fd63",
+  "scope": "complete finite synthetic author/source/native/scientific/content development contract only; no fresh difficulty/useful-hours/professional-human/statistical certification",
+  "unchanged": "original public/raw/17 IDs/weights/critical/100/90/101/100/executed objects; old0.3 remains read-only"
+}

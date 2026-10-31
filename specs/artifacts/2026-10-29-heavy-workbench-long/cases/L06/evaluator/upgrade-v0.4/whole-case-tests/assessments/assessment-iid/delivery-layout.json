@@ -1,0 +1,16 @@
+{
+  "format": "l06-inspection-layout/1",
+  "paths": {
+    "programme": "programme",
+    "report": "REPORT.md",
+    "ledger": "data/stage-ledger.csv",
+    "summary": "data/summary.json",
+    "source_map": "data/source-map.json",
+    "reproduce": "reproduce.ps1",
+    "requirements": "requirements-lock.txt",
+    "figures": [
+      "figures/quality-gap.png"
+    ]
+  },
+  "scope": "original complete source paths; no author filename or language is imposed on other deliveries"
+}

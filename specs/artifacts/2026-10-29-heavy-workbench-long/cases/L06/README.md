@@ -37,3 +37,7 @@ S1独立实施已完成：[最终审查](evaluator/upgrade-v0.3/qualification/we
 
 
 最新L06/0.3：[两个新系统同冻结整题各100/全critical](evaluator/pilot-opencorvus-v03-native-20261031/README.md)，已触发另升0.4；唯一OC Task/服务已正常终态清理，不再请求旧API或重本版矩阵。
+
+## 最新L06/0.4完整交付
+
+0.3双100后已完成[另版主动验货完整case](evaluator/upgrade-v0.4/README.md)：采购/实际验货选择内生信息，真实库存/已收现金/原order及结果receipt恢复耦合，且别名在任何自适应实验下不可识别。三个完整输入、事前各1%同信息最优质量、实际全链/三图/同checker真错误programme/17原子叶与一次集中整审均闭合，仅metadata开发冻；参考100，假识别/现实保证弱90但H01/H05关键失败。完整IID错误策略物理/后验/恢复正确而实际超原质量界，仅M04fail。作者结果不是模型成绩/有效小时，fresh0.4待同公开输入真实比较；不再重0.3或本参考矩阵/冷跑。

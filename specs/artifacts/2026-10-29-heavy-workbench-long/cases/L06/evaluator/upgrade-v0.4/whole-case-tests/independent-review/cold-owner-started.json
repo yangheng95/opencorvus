@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "C:/Program Files/PowerShell/7/pwsh.exe",
+    "-NoProfile",
+    "-File",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\source-only\\reproduce.ps1",
+    "-Out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\cold-rebuild",
+    "-Python",
+    "C:/Python314/python.exe",
+    "-ReportPython",
+    "D:/opencorvus-benchmark-runs/l06-v04-full-case-20261031/report-environment/venv/Scripts/python.exe"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\source-only",
+  "started_at": "2026-10-31T08:09:41.686223+00:00",
+  "owned_script_pid": 16828,
+  "cache_environment": {
+    "MPLCONFIGDIR": "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\matplotlib-cache",
+    "XDG_CACHE_HOME": "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\cache",
+    "TEMP": "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\temp",
+    "TMP": "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\temp",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "scope": "one authorized complete new0.4 self-contained study/native/report rebuild only; no old solver, Provider, Docker/WSL or L01 action"
+}

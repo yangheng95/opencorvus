@@ -1,0 +1,296 @@
+{
+  "format": "l06-inspection-registered/1",
+  "case_version": "L06/0.4.0-dev",
+  "quality_ratio_exact": "101/100",
+  "facts": {
+    "base": {
+      "format": "l06-inspection-input/1",
+      "id": "base",
+      "weeks": 8,
+      "raw_capacity": 4,
+      "pack_good_units": 2,
+      "initial_cash": 18,
+      "cash_floor": -15,
+      "production_cost": 1,
+      "revenue": 12,
+      "lab_fee": 1,
+      "holding": 1,
+      "terminal_good_disposal": 1,
+      "terminal_pack_disposal": 1,
+      "sales_receipt_lag": 2,
+      "calendar": {
+        "0": {
+          "demand": 1,
+          "certified_unit_cost": 8
+        },
+        "1": {
+          "demand": 2,
+          "certified_unit_cost": 8
+        },
+        "2": {
+          "demand": 1,
+          "certified_unit_cost": 9
+        },
+        "3": {
+          "demand": 2,
+          "certified_unit_cost": 9
+        },
+        "4": {
+          "demand": 2,
+          "certified_unit_cost": 11
+        },
+        "5": {
+          "demand": 1,
+          "certified_unit_cost": 11
+        },
+        "6": {
+          "demand": 2,
+          "certified_unit_cost": 8
+        },
+        "7": {
+          "demand": 1,
+          "certified_unit_cost": 8
+        }
+      },
+      "suppliers": {
+        "A": {
+          "pack_cost": 3,
+          "lead": 1,
+          "quarantine_pack_limit": 1
+        },
+        "B": {
+          "pack_cost": 4,
+          "lead": 1,
+          "quarantine_pack_limit": 1
+        }
+      },
+      "modes": {
+        "A1": {
+          "prior": "1/8",
+          "A": "17/20",
+          "B": "3/20"
+        },
+        "A2": {
+          "prior": "3/8",
+          "A": "17/20",
+          "B": "3/20"
+        },
+        "B1": {
+          "prior": "3/8",
+          "A": "3/20",
+          "B": "17/20"
+        },
+        "B2": {
+          "prior": "1/8",
+          "A": "3/20",
+          "B": "17/20"
+        }
+      },
+      "opening": [
+        {
+          "receipt_id": "prior-completed-job",
+          "amount": 10,
+          "due_week": 1
+        }
+      ]
+    },
+    "cash-tight": {
+      "format": "l06-inspection-input/1",
+      "id": "cash-tight",
+      "weeks": 8,
+      "raw_capacity": 4,
+      "pack_good_units": 2,
+      "initial_cash": 14,
+      "cash_floor": -15,
+      "production_cost": 1,
+      "revenue": 12,
+      "lab_fee": 1,
+      "holding": 1,
+      "terminal_good_disposal": 1,
+      "terminal_pack_disposal": 1,
+      "sales_receipt_lag": 2,
+      "calendar": {
+        "0": {
+          "demand": 1,
+          "certified_unit_cost": 8
+        },
+        "1": {
+          "demand": 2,
+          "certified_unit_cost": 8
+        },
+        "2": {
+          "demand": 1,
+          "certified_unit_cost": 9
+        },
+        "3": {
+          "demand": 2,
+          "certified_unit_cost": 9
+        },
+        "4": {
+          "demand": 2,
+          "certified_unit_cost": 11
+        },
+        "5": {
+          "demand": 1,
+          "certified_unit_cost": 11
+        },
+        "6": {
+          "demand": 2,
+          "certified_unit_cost": 8
+        },
+        "7": {
+          "demand": 1,
+          "certified_unit_cost": 8
+        }
+      },
+      "suppliers": {
+        "A": {
+          "pack_cost": 3,
+          "lead": 1,
+          "quarantine_pack_limit": 1
+        },
+        "B": {
+          "pack_cost": 4,
+          "lead": 1,
+          "quarantine_pack_limit": 1
+        }
+      },
+      "modes": {
+        "A1": {
+          "prior": "1/8",
+          "A": "17/20",
+          "B": "3/20"
+        },
+        "A2": {
+          "prior": "3/8",
+          "A": "17/20",
+          "B": "3/20"
+        },
+        "B1": {
+          "prior": "3/8",
+          "A": "3/20",
+          "B": "17/20"
+        },
+        "B2": {
+          "prior": "1/8",
+          "A": "3/20",
+          "B": "17/20"
+        }
+      },
+      "opening": [
+        {
+          "receipt_id": "prior-completed-job",
+          "amount": 10,
+          "due_week": 1
+        }
+      ]
+    },
+    "shifted-prior": {
+      "format": "l06-inspection-input/1",
+      "id": "shifted-prior",
+      "weeks": 8,
+      "raw_capacity": 4,
+      "pack_good_units": 2,
+      "initial_cash": 18,
+      "cash_floor": -15,
+      "production_cost": 1,
+      "revenue": 12,
+      "lab_fee": 1,
+      "holding": 1,
+      "terminal_good_disposal": 1,
+      "terminal_pack_disposal": 1,
+      "sales_receipt_lag": 2,
+      "calendar": {
+        "0": {
+          "demand": 1,
+          "certified_unit_cost": 8
+        },
+        "1": {
+          "demand": 2,
+          "certified_unit_cost": 8
+        },
+        "2": {
+          "demand": 1,
+          "certified_unit_cost": 9
+        },
+        "3": {
+          "demand": 2,
+          "certified_unit_cost": 9
+        },
+        "4": {
+          "demand": 2,
+          "certified_unit_cost": 11
+        },
+        "5": {
+          "demand": 1,
+          "certified_unit_cost": 11
+        },
+        "6": {
+          "demand": 2,
+          "certified_unit_cost": 8
+        },
+        "7": {
+          "demand": 1,
+          "certified_unit_cost": 8
+        }
+      },
+      "suppliers": {
+        "A": {
+          "pack_cost": 3,
+          "lead": 1,
+          "quarantine_pack_limit": 1
+        },
+        "B": {
+          "pack_cost": 4,
+          "lead": 1,
+          "quarantine_pack_limit": 1
+        }
+      },
+      "modes": {
+        "A1": {
+          "prior": "3/16",
+          "A": "17/20",
+          "B": "3/20"
+        },
+        "A2": {
+          "prior": "9/16",
+          "A": "17/20",
+          "B": "3/20"
+        },
+        "B1": {
+          "prior": "3/16",
+          "A": "3/20",
+          "B": "17/20"
+        },
+        "B2": {
+          "prior": "1/16",
+          "A": "3/20",
+          "B": "17/20"
+        }
+      },
+      "opening": [
+        {
+          "receipt_id": "prior-completed-job",
+          "amount": 10,
+          "due_week": 1
+        }
+      ]
+    }
+  },
+  "optima": {
+    "base": "300834939/4000000",
+    "cash-tight": "11287373277/128000000",
+    "shifted-prior": "90125954529/1280000000"
+  },
+  "class_bounds": {
+    "base": "79935238629/1280000000",
+    "cash-tight": "170951494509/2560000000",
+    "shifted-prior": "155861214969/2560000000"
+  },
+  "sources": {
+    "before_first_execution": "author-study/pre-execution-source.zip",
+    "actual_first_science": "author-project/work/*/science.json",
+    "independent_physical_Bellman_check": "bellman-certificate.json",
+    "actual_source_tree_execution": "native-whole-first/owner-terminal.json"
+  }
+}

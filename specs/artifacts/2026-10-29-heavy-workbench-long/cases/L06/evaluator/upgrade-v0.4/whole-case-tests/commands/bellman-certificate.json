@@ -1,0 +1,39 @@
+{
+  "results": [
+    {
+      "instance": "base",
+      "verified_optimum_exact": "300834939/4000000",
+      "checked": {
+        "lab": 23281,
+        "ops": 35045,
+        "admissible_actions": 178642
+      },
+      "proof": "For each state every physical/legal action and both positive-probability laboratory results are covered. Terminal0 and all cash floors use the public primitive. Stored action attains the minimum; missing cells are proved infeasible. Backward horizon induction proves the root bound and attainability. No unique policy/tie requirement.",
+      "sufficient_state": "All past sales were mandatory; absolute future AR is fixed by week. Current material/quarantine/cash and exact posterior quotient retain all future constraints. Under mirrored17/20 and3/20 likelihoods the complete sample history enters class odds through k; within-class label ratios remain prior ratios."
+    },
+    {
+      "instance": "cash-tight",
+      "verified_optimum_exact": "11287373277/128000000",
+      "checked": {
+        "lab": 21258,
+        "ops": 32127,
+        "admissible_actions": 160692
+      },
+      "proof": "For each state every physical/legal action and both positive-probability laboratory results are covered. Terminal0 and all cash floors use the public primitive. Stored action attains the minimum; missing cells are proved infeasible. Backward horizon induction proves the root bound and attainability. No unique policy/tie requirement.",
+      "sufficient_state": "All past sales were mandatory; absolute future AR is fixed by week. Current material/quarantine/cash and exact posterior quotient retain all future constraints. Under mirrored17/20 and3/20 likelihoods the complete sample history enters class odds through k; within-class label ratios remain prior ratios."
+    },
+    {
+      "instance": "shifted-prior",
+      "verified_optimum_exact": "90125954529/1280000000",
+      "checked": {
+        "lab": 23281,
+        "ops": 35045,
+        "admissible_actions": 178642
+      },
+      "proof": "For each state every physical/legal action and both positive-probability laboratory results are covered. Terminal0 and all cash floors use the public primitive. Stored action attains the minimum; missing cells are proved infeasible. Backward horizon induction proves the root bound and attainability. No unique policy/tie requirement.",
+      "sufficient_state": "All past sales were mandatory; absolute future AR is fixed by week. Current material/quarantine/cash and exact posterior quotient retain all future constraints. Under mirrored17/20 and3/20 likelihoods the complete sample history enters class odds through k; within-class label ratios remain prior ratios."
+    }
+  ],
+  "seconds": 37.134980499999074,
+  "scope": "one complete bound certificate check of original stored policy; no planner/actor/native/candidate-hours repetition"
+}

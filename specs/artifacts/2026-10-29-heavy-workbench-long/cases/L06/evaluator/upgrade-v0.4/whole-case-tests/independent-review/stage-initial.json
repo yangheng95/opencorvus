@@ -1,0 +1,43 @@
+{
+  "case_version": "L06/0.4.0-dev",
+  "reviewed_at": "2026-10-31T08:25:27.983381+00:00",
+  "scope": "Complete case and two original five-H content assignments. One actual self-contained rebuild; original raw/Fraction/SQL/plot/certificate/source audit. No aggregate written.",
+  "case_freeze_allowed": false,
+  "blocking": [
+    {
+      "id": "B01",
+      "leaf": "M05",
+      "fact": "JSON true accepted for receivables due_week=1",
+      "evidence": "whole-checker-observations/boolean-original-AR-due-command.json"
+    },
+    {
+      "id": "B02",
+      "leaf": "M02/M06",
+      "fact": "Known invalid laboratory action in captured partial wire remains blocked; synthetic mapping control, not a new native bad programme",
+      "evidence": "whole-checker-observations/partial-invalid-laboratory-command.json"
+    }
+  ],
+  "whole_business_failures": [],
+  "main_H": {
+    "H01": "verified_pass",
+    "H02": "verified_pass",
+    "H03": "verified_pass",
+    "H04": "verified_pass",
+    "H05": "verified_pass"
+  },
+  "weak_H": {
+    "H01": "verified_fail",
+    "H02": "verified_pass",
+    "H03": "verified_pass",
+    "H04": "verified_pass",
+    "H05": "verified_fail"
+  },
+  "disclosure": "Independent single AI-agent review, non-blind and familiar with earlier author work and prior L06 candidate results. This is whole-case development/source/math/content review, not professional human certification, statistical calibration, fresh-candidate discrimination or effective-hour validation.",
+  "not_established": [
+    "fresh candidate difficulty/discrimination",
+    "effective hours",
+    "professional human/statistical maturity",
+    "complete ten-case delivery"
+  ],
+  "next": "Concentrated two-fix repair and affected original-object verification only. No second cold/planner/solver."
+}

@@ -1,0 +1,26 @@
+{
+  "case": "original-boolean-AR",
+  "started_at": "2026-10-31T08:29:13.669754+00:00",
+  "finished_at": "2026-10-31T08:29:20.138852+00:00",
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.4\\check_whole.py",
+    "prepare",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\native-whole-first",
+    "--delivery",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-whole-case-independent-review-20261031\\whole-checker-observations\\bool-AR-delivery",
+    "--layout",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\assessment-main\\delivery-layout.json",
+    "--role",
+    "author_reference",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\concentrated-fix-checks\\bool-AR-assignment"
+  ],
+  "native_exit": 0,
+  "stdout": "{\"M\":{\"M01\":\"verified_pass\",\"M02\":\"verified_pass\",\"M03\":\"verified_pass\",\"M04\":\"verified_pass\",\"M05\":\"verified_fail\",\"M06\":\"verified_pass\",\"M07\":\"verified_pass\",\"M08\":\"verified_pass\",\"M09\":\"verified_pass\",\"M10\":\"verified_pass\",\"M11\":\"verified_pass\",\"M12\":\"verified_pass\"},\"assignment_id\":\"l06-inspection-579b87942a58429e985d0414ceddc654\",\"total\":null}\n",
+  "stderr": ""
+}

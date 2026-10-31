@@ -1,0 +1,57 @@
+{
+  "case_version": "L06/0.4.0-dev",
+  "reviewed_at": "2026-10-31T08:34:35.441736+00:00",
+  "reviewer": "/root/benchmark_review",
+  "scope": "One concentrated complete-case review plus the two identified blocker repairs. Initial observations/ratings/source/probes and sole cold retained.",
+  "remaining_substantive_blockers": [],
+  "B01": {
+    "status": "closed",
+    "observed_before": "Boolean due_week=true accepted as integer1 by M05",
+    "observed_after": "Same unchanged captured run + same mutated export now M05 verified_fail; normal original main/weak M05 pass",
+    "evidence": [
+      "repair-closure/original-boolean-AR-command.json",
+      "repair-closure/checker.diff",
+      "repair-closure/closure-assessment.json"
+    ]
+  },
+  "B02": {
+    "status": "closed",
+    "observed_before": "Observed invalid laboratory test A with zero pack classified blocked; first reviewer probe synthetic, then main captured an actual bad programme native1 with exact same failure",
+    "observed_after": "Same actual bad native/wire now M02 verified_fail/available_quarantine_pack; unexecuted leaves still blocked",
+    "evidence": [
+      "repair-closure/real-early-inspection-command.json",
+      "repair-closure/main-original-records/real-lab-actual-command.json",
+      "repair-closure/main-original-records/real-lab-initial-prepare-command.json",
+      "repair-closure/main-original-records/real-lab-original-wire.jsonl"
+    ]
+  },
+  "allows_metadata_development_freeze": true,
+  "allowed_changes": [
+    "FREEZE.json development_frozen=true with explicit restricted scope",
+    "README/status prose for the already reviewed development case"
+  ],
+  "unchanged_required": [
+    "L06/0.4.0-dev identity",
+    "all public facts/physical and information law",
+    "registered exact same-information optima and 101/100 ratio",
+    "17 IDs and weights/critical/100 denominator/90 good rule",
+    "actual actor/controller/native/report/figures and original assignment objects"
+  ],
+  "main_assignment_id": "l06-inspection-3d181980ae724480aa07d91e12a3b97a",
+  "weak_assignment_id": "l06-inspection-acb4769758c1489e828ad363e1d3fd63",
+  "formal_reviews": [
+    "main-review.json",
+    "weak-review.json"
+  ],
+  "original_content_decisions_unchanged": true,
+  "aggregate": "not computed or handwritten by reviewer; root must run actual grader",
+  "actual_rebuild_seconds": 168.5232507,
+  "limitations": [
+    "Non-blind single AI-agent familiar with author/earlier L06 work, not professional human review",
+    "One actual source-only rebuild and finite simulated support are not measured useful candidate hours",
+    "Real wrong-IID quality failure and wrong hard-constraint/control failures do not demonstrate fresh LLM difficulty/discrimination",
+    "No arbitrary failure, physical power-loss, OS/filesystem/memory/side-channel security or real financial approval certification",
+    "No statistical-maturity or complete-ten-heavy-case approval"
+  ],
+  "new_native_actor_solver_after_initial_review": false
+}

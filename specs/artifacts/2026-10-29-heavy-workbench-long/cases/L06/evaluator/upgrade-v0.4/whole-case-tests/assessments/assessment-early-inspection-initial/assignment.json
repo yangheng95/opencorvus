@@ -1,0 +1,117 @@
+{
+  "format": "l06-inspection-assignment/1",
+  "assignment_id": "l06-inspection-53eb15eafac84741b1fe9cf7166aae25",
+  "case_version": "L06/0.4.0-dev",
+  "subject_role": "error_programme",
+  "created_at": "2026-10-31T08:24:16.704318+00:00",
+  "original_run": "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\wrong-early-inspection\\run",
+  "delivery_layout": {
+    "format": "l06-inspection-layout/1",
+    "paths": {
+      "programme": ".",
+      "report": "REPORT.md",
+      "ledger": "data/stage-ledger.csv",
+      "summary": "data/summary.json",
+      "source_map": "data/source-map.json",
+      "reproduce": "reproduce.ps1",
+      "requirements": "requirements-lock.txt",
+      "figures": [
+        "figures/cost-and-information.png",
+        "figures/cash-and-material.png",
+        "figures/belief-and-decisions.png"
+      ]
+    },
+    "scope": "original complete source paths; no author filename or language is imposed on other deliveries"
+  },
+  "leaves": {
+    "M01": {
+      "status": "blocked",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "M02": {
+      "status": "blocked",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "M03": {
+      "status": "blocked",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "M04": {
+      "status": "blocked",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "M05": {
+      "status": "blocked",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "M06": {
+      "status": "blocked",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "M07": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\assessment-early-inspection-initial\\closed\\run"
+      ],
+      "reason": "Actual immutable captured programme/controller/public and delivered programme bytes bound; identity alone is not the physical or optimality proof"
+    },
+    "M08": {
+      "status": "blocked",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "M09": {
+      "status": "blocked",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "M10": {
+      "status": "blocked",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "M11": {
+      "status": "blocked",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "M12": {
+      "status": "blocked",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "H01": {
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "H02": {
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "H03": {
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "H04": {
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "H05": {
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    }
+  },
+  "total": null,
+  "fixed_denominator": 100
+}

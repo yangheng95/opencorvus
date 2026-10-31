@@ -1,0 +1,26 @@
+{
+  "started_at": "2026-10-31T08:09:01.346878+00:00",
+  "finished_at": "2026-10-31T08:09:01.503744+00:00",
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/upgrade-v0.4/check_whole.py",
+    "prepare",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\wrong-programmes\\prior-belief\\run",
+    "--delivery",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\wrong-programmes\\prior-belief",
+    "--layout",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\wrong-programmes\\prior-belief\\layout.json",
+    "--role",
+    "error_programme",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\wrong-programmes\\prior-belief\\assessment"
+  ],
+  "native_exit": 3,
+  "stdout": "{\"code\":\"assignment_output_overlaps_input\",\"status\":\"facility_invalid\",\"total\":null}\n",
+  "stderr": "",
+  "scope": "original failing input now maps to explicit facility error before source copying; no programme/native repetition"
+}

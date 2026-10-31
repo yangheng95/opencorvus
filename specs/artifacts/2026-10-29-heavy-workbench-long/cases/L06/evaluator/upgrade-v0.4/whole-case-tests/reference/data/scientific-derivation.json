@@ -1,0 +1,128 @@
+{
+  "base": {
+    "instance": "base",
+    "bayes_optimum_exact": "300834939/4000000",
+    "laboratory_states": 23281,
+    "operations_states": 35045,
+    "elapsed_seconds": 0.7803367999986222,
+    "quality_ratio_pre_registered": "101/100",
+    "known_class_information_bound": {
+      "exact": "79935238629/1280000000",
+      "parts": [
+        {
+          "members": [
+            "B1",
+            "B2"
+          ],
+          "prior_mass": "1/2",
+          "optimum_if_class_known": "41972250459/640000000"
+        },
+        {
+          "members": [
+            "A1",
+            "A2"
+          ],
+          "prior_mass": "1/2",
+          "optimum_if_class_known": "3796298817/64000000"
+        }
+      ],
+      "value_of_advance_class_information_exact": "16331941851/1280000000",
+      "scope": "class revealed before week0; future batch results still unobserved, not a deployable Bayes policy"
+    },
+    "equivalence_classes": [
+      [
+        "B1",
+        "B2"
+      ],
+      [
+        "A1",
+        "A2"
+      ]
+    ],
+    "scope": "complete eight-week exact prospective law, no candidate hours or maturity"
+  },
+  "cash-tight": {
+    "instance": "cash-tight",
+    "bayes_optimum_exact": "11287373277/128000000",
+    "laboratory_states": 21258,
+    "operations_states": 32127,
+    "elapsed_seconds": 0.7172664999998233,
+    "quality_ratio_pre_registered": "101/100",
+    "known_class_information_bound": {
+      "exact": "170951494509/2560000000",
+      "parts": [
+        {
+          "members": [
+            "B1",
+            "B2"
+          ],
+          "prior_mass": "1/2",
+          "optimum_if_class_known": "2249806017/32000000"
+        },
+        {
+          "members": [
+            "A1",
+            "A2"
+          ],
+          "prior_mass": "1/2",
+          "optimum_if_class_known": "80959253829/1280000000"
+        }
+      ],
+      "value_of_advance_class_information_exact": "54795971031/2560000000",
+      "scope": "class revealed before week0; future batch results still unobserved, not a deployable Bayes policy"
+    },
+    "equivalence_classes": [
+      [
+        "B1",
+        "B2"
+      ],
+      [
+        "A1",
+        "A2"
+      ]
+    ],
+    "scope": "complete eight-week exact prospective law, no candidate hours or maturity"
+  },
+  "shifted-prior": {
+    "instance": "shifted-prior",
+    "bayes_optimum_exact": "90125954529/1280000000",
+    "laboratory_states": 23281,
+    "operations_states": 35045,
+    "elapsed_seconds": 0.7829509999992297,
+    "quality_ratio_pre_registered": "101/100",
+    "known_class_information_bound": {
+      "exact": "155861214969/2560000000",
+      "parts": [
+        {
+          "members": [
+            "B1",
+            "B2"
+          ],
+          "prior_mass": "1/4",
+          "optimum_if_class_known": "41972250459/640000000"
+        },
+        {
+          "members": [
+            "A1",
+            "A2"
+          ],
+          "prior_mass": "3/4",
+          "optimum_if_class_known": "3796298817/64000000"
+        }
+      ],
+      "value_of_advance_class_information_exact": "24390694089/2560000000",
+      "scope": "class revealed before week0; future batch results still unobserved, not a deployable Bayes policy"
+    },
+    "equivalence_classes": [
+      [
+        "B1",
+        "B2"
+      ],
+      [
+        "A1",
+        "A2"
+      ]
+    ],
+    "scope": "complete eight-week exact prospective law, no candidate hours or maturity"
+  }
+}

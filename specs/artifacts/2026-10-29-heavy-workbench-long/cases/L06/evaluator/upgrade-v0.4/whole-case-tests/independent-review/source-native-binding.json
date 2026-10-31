@@ -1,0 +1,88 @@
+{
+  "checks": [
+    {
+      "check": "pre-execution-project.zip -> D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\native-whole-first\\sealed-project",
+      "pass": true,
+      "details": [
+        "actor.py",
+        "plans/base.json",
+        "plans/cash-tight.json",
+        "plans/shifted-prior.json",
+        "submission.json"
+      ]
+    },
+    {
+      "check": "pre-execution-project.zip -> D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\reference-delivery-final\\programme",
+      "pass": true,
+      "details": [
+        "actor.py",
+        "plans/base.json",
+        "plans/cash-tight.json",
+        "plans/shifted-prior.json",
+        "submission.json"
+      ]
+    },
+    {
+      "check": "pre-execution-controller.zip -> D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\native-whole-first\\controller-source",
+      "pass": true,
+      "details": [
+        "exercise.py",
+        "model.py"
+      ]
+    },
+    {
+      "check": "public-originals.zip -> D:\\opencorvus-benchmark-runs\\l06-v04-full-case-20261031\\native-whole-first\\public",
+      "pass": true,
+      "details": [
+        "exercise.py",
+        "instances/base/latent-law.csv",
+        "instances/base/opening-receivables.csv",
+        "instances/base/profile.json",
+        "instances/base/suppliers.csv",
+        "instances/base/weeks.csv",
+        "instances/cash-tight/latent-law.csv",
+        "instances/cash-tight/opening-receivables.csv",
+        "instances/cash-tight/profile.json",
+        "instances/cash-tight/suppliers.csv",
+        "instances/cash-tight/weeks.csv",
+        "instances/shifted-prior/latent-law.csv",
+        "instances/shifted-prior/opening-receivables.csv",
+        "instances/shifted-prior/profile.json",
+        "instances/shifted-prior/suppliers.csv",
+        "instances/shifted-prior/weeks.csv",
+        "model.py",
+        "OPERATIONS.md",
+        "OUTPUTS.md",
+        "TASK.md"
+      ]
+    },
+    {
+      "check": "delivered source archive equals actual delivered original files",
+      "pass": true,
+      "details": {
+        "member_count": 44,
+        "different": []
+      }
+    },
+    {
+      "check": "all controller argv actual sealed project/read public/no selected future argv",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "controller exits actual2x73/198x0",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "worker starts all source declared argv no hidden outcome argv",
+      "pass": true,
+      "details": {
+        "count": 199,
+        "scope": "argv/record and inspected Actor constructor dataflow; no OS sandbox certification"
+      }
+    }
+  ],
+  "all_pass": true,
+  "scope": "Exact immutable resource/object byte identity only; behavioral correctness proved separately by raw CSV/Fraction/SQL audit. No hash gate."
+}
