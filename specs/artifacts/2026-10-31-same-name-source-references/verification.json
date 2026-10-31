@@ -1,0 +1,263 @@
+{
+  "at": "2026-10-31T09:40:28.023Z",
+  "scope": "Same-name attachment Source reference captions across original message/tool groups",
+  "singleAgent": true,
+  "checks": {
+    "types-reviewed": {
+      "exitCode": 0
+    },
+    "ui-build-reviewed": {
+      "exitCode": 0
+    },
+    "i18n-reviewed": {
+      "exitCode": 0
+    },
+    "before-cases-repair": {
+      "exitCode": 0
+    },
+    "before-histories": {
+      "exitCode": 0
+    },
+    "before-extra": {
+      "exitCode": 0
+    },
+    "before-sources": {
+      "exitCode": 0
+    },
+    "before-readme": {
+      "exitCode": 0
+    },
+    "before-report": {
+      "exitCode": 0
+    },
+    "before-824": {
+      "exitCode": 0
+    },
+    "before-825": {
+      "exitCode": 0
+    },
+    "before-empty": {
+      "exitCode": 0
+    },
+    "before-protection": {
+      "exitCode": 0
+    },
+    "after-cases": {
+      "exitCode": 0
+    },
+    "after-histories": {
+      "exitCode": 0
+    },
+    "after-extra": {
+      "exitCode": 0
+    },
+    "after-sources": {
+      "exitCode": 0
+    },
+    "after-readme": {
+      "exitCode": 0
+    },
+    "after-report": {
+      "exitCode": 0
+    },
+    "after-824": {
+      "exitCode": 0
+    },
+    "after-825": {
+      "exitCode": 0
+    },
+    "after-empty": {
+      "exitCode": 0
+    },
+    "after-protection": {
+      "exitCode": 0
+    },
+    "docs-final": {
+      "exitCode": 0,
+      "operations": 352,
+      "groups": 26
+    }
+  },
+  "scopes": [
+    {
+      "at": "2026-10-31T09:28:18.579Z",
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 218548,
+      "current": 218550,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 44804,
+          "now": 44805
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 44862,
+          "now": 44863
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 81,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1124,
+      "reserveMs": 3461103,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-Cjs5Jyw6.js",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    },
+    {
+      "at": "2026-10-31T09:37:44.371Z",
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 218550,
+      "current": 218552,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 44805,
+          "now": 44806
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 44863,
+          "now": 44864
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 81,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1124,
+      "reserveMs": 2895272,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CB_Qh88y.js",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    }
+  ],
+  "existingRealCases": [
+    {
+      "at": "2026-10-31T09:27:16.638Z",
+      "phase": "before",
+      "results": [
+        {
+          "key": "before",
+          "messages": 2,
+          "checks": []
+        },
+        {
+          "key": "after",
+          "messages": 4,
+          "checks": [
+            {
+              "sourceId": "37f2e78f4517403b64b92b80a128cd0396002b21b4d146797f442c4816280b74",
+              "toolPartID": "prt_g0VZcILO900Ykd4Sz5pj",
+              "bytes": 52,
+              "firstLine": "CHECKPOINT_833_BRAVO"
+            },
+            {
+              "sourceId": "1f31ff3466024c9fec93183438ec52aba87f1b77b16c7aa61df5e7a19c72d5a1",
+              "toolPartID": "prt_g0VZcIMVR00GEXbEKVwS",
+              "bytes": 52,
+              "firstLine": "CHECKPOINT_833_ALPHA"
+            }
+          ]
+        }
+      ],
+      "requests": 0,
+      "cumulativeRequests": 1124
+    },
+    {
+      "at": "2026-10-31T09:37:22.561Z",
+      "phase": "after",
+      "results": [
+        {
+          "key": "before",
+          "messages": 2,
+          "checks": []
+        },
+        {
+          "key": "after",
+          "messages": 4,
+          "checks": [
+            {
+              "sourceId": "37f2e78f4517403b64b92b80a128cd0396002b21b4d146797f442c4816280b74",
+              "toolPartID": "prt_g0VZcILO900Ykd4Sz5pj",
+              "bytes": 52,
+              "firstLine": "CHECKPOINT_833_BRAVO"
+            },
+            {
+              "sourceId": "1f31ff3466024c9fec93183438ec52aba87f1b77b16c7aa61df5e7a19c72d5a1",
+              "toolPartID": "prt_g0VZcIMVR00GEXbEKVwS",
+              "bytes": 52,
+              "firstLine": "CHECKPOINT_833_ALPHA"
+            }
+          ]
+        }
+      ],
+      "requests": 0,
+      "cumulativeRequests": 1124
+    }
+  ],
+  "manualVisualReview": {
+    "screenshots": [
+      "01-before-identical-sources-en.png",
+      "02-before-source-bravo-en.png",
+      "03-before-source-alpha-en.png",
+      "04-after-distinct-source-references-en.png",
+      "05-after-reference-one-bravo-en.png",
+      "06-after-reference-one-real-paste-en.png",
+      "07-after-reference-two-real-paste-en.png",
+      "08-after-distinct-source-references-zh.png",
+      "09-after-reference-one-bravo-zh.png",
+      "10-after-reference-two-alpha-zh.png",
+      "11-after-ordinary-file-source-group-zh.png",
+      "12-after-ordinary-file-sources-expanded-zh.png",
+      "13-after-web-source-history-zh.png",
+      "14-after-reopened-conversation-zh.png"
+    ],
+    "allPersonallyViewed": true
+  },
+  "manualClipboardReview": {
+    "method": "Actual Copy completion feedback then Ctrl+V into an unsent composer draft; manually inspected, then cleared",
+    "englishReferenceOne": "Original BRAVO path ending bd5fa4b62644c9162bad229a3fc7b4dfdd456d2f1d2a3377284cd062ca189faf.txt",
+    "englishReferenceTwo": "Original ALPHA path ending c05e851f21127444ef0e90a5d906209fa1d9c9c7465b59a5908f6c4b48480c72.txt",
+    "chineseReferenceOne": "Original BRAVO path; complete feedback and actual paste observed",
+    "toolClipboardRead": "Returned an earlier ALPHA path; not used as the product clipboard acceptance result"
+  },
+  "newModelRequests": 0,
+  "cumulativeRequests": 1124,
+  "preservedUsageEvents": 739,
+  "uiAutomatedTestsRun": false,
+  "limits": [
+    "Existing real GPT-6.1 Sol records were reopened; no new streamed reply or repeated-path model scenario was generated",
+    "Original historical user file-part labels were not redesigned",
+    "Native Tauri was not exercised"
+  ],
+  "toolRepair": "Original Source HTTP checker repeated the query string; fixed and original real readback rerun passed. Retired private serve inputs retain a previous preflight placeholder; actual launch/audit and ledger establish zero new requests."
+}

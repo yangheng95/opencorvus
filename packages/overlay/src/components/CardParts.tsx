@@ -25,7 +25,7 @@ import { partitionCardMessageRuns } from "../utils/card-message-run"
 import { DelegatedContextDisclosure } from "./DelegatedContextDisclosure"
 import { ConversationTurnArtifactSummary } from "./ConversationTurnArtifactSummary"
 import { SourceParts } from "./SourceParts"
-import { isConversationSourcePart } from "../utils/conversation-source"
+import { isConversationSourcePart, type ConversationSourcePart } from "../utils/conversation-source"
 import { InlineToolPart } from "./InlineToolPart"
 import { AssistantMessageFailure } from "./AssistantMessageFailure"
 
@@ -150,6 +150,7 @@ function RenderableCardPart(props: {
  * execution run behind its own disclosure without introducing a second tool renderer. */
 interface PartCollectionProps {
   parts: any[]
+  contextSources: ConversationSourcePart[]
   depth: number
   streaming?: boolean
   streamingTextPart?: any
@@ -197,7 +198,7 @@ function CitationAwareBodyParts(props: PartCollectionProps) {
             </Index>
           }
         >
-          <SourceParts sources={sourceParts(run().parts)} />
+          <SourceParts sources={sourceParts(run().parts)} contextSources={props.contextSources} />
         </Show>
       )}
     </Index>
@@ -404,11 +405,12 @@ function DelegatedContextParts(props: PartCollectionProps & { messageID: string 
 
 /** Render a card without splitting transcript ownership. Context delegation
  * changes only the default disclosure state of the matching message runs. */
-export function CardParts(props: PartCollectionProps & {
+export function CardParts(props: Omit<PartCollectionProps, "contextSources"> & {
   collapsedContextMessageIDs?: string[]
   messageFailures?: CardNode["messageFailures"]
 }) {
   const displayParts = createMemo(() => props.parts.filter((part) => !isNoActionDecisionToolPart(part)))
+  const contextSources = createMemo(() => sourceParts(displayParts()))
   const runs = createMemo(() =>
     partitionCardMessageRuns(
       displayParts(),
@@ -423,10 +425,11 @@ export function CardParts(props: PartCollectionProps & {
         <section class="card-message-run" data-message-id={run().messageID || undefined}>
           <Show
             when={run().collapsedContext}
-            fallback={<PartCollection {...props} parts={run().parts} streamingTextPart={streamingTextPart()} />}
+            fallback={<PartCollection {...props} contextSources={contextSources()} parts={run().parts} streamingTextPart={streamingTextPart()} />}
           >
             <DelegatedContextParts
               {...props}
+              contextSources={contextSources()}
               parts={run().parts}
               streamingTextPart={streamingTextPart()}
               messageID={run().messageID}

@@ -1697,6 +1697,14 @@ Child conversation message dividers retain the shared transcript margin and use
 the medium spacing token for their inner top inset. This keeps independent
 Source-bearing messages distinct without repeating a large blank band; the
 Source count and grouping remain attached to their actual chronological run.
+Each CardParts rendering supplies its complete original Source context before
+partitioning message and execution runs. Attachment sources with the same visible
+label but distinct original paths receive localized reference captions in their
+first-occurrence order within that card. Repeated references to the same path
+reuse that caption. Visible captions, open/copy names, tooltips and saved-excerpt
+actions share this derived context; original source labels, locations, ranges,
+opening targets and copied bytes retain their published values. Reference
+numbers do not imply attachment-upload order or a conversation-wide index.
 Native Markdown tables share one intrinsic-width policy within a bounded local
 horizontal scroll surface. Headers keep Chinese, Japanese and Korean (CJK) character sequences together to
 provide their intrinsic column width, while body cells retain normal wrapping.

@@ -192,10 +192,11 @@ function sourceProviderLabel(provider: string | undefined): string {
   return provider || ""
 }
 
-function SourceTooltipContent(props: { source: ConversationSourcePart }) {
+function SourceTooltipContent(props: { source: ConversationSourcePart; attachmentCaption: string }) {
   return (
     <Tooltip.Content class="msg-source-tooltip" data-ui="message-source-tooltip" data-source-type={props.source.type}>
       <strong>{sourceLabel(props.source)}</strong>
+      <Show when={props.attachmentCaption}>{(caption) => <span>{caption()}</span>}</Show>
       <Show when={sourceDetail(props.source) !== sourceLabel(props.source)}>
         <span>{sourceDetail(props.source)}</span>
       </Show>
@@ -217,7 +218,7 @@ function SourceTooltipContent(props: { source: ConversationSourcePart }) {
   )
 }
 
-function SourceChip(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean }) {
+function SourceChip(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean; attachmentCaption: string }) {
   const label = () => sourceLabel(props.source)
   const fileTitle = () => sourceFileTitle(props.source) || label()
   const fileRange = () => {
@@ -232,7 +233,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
   }
   const detail = () => sourceDetail(props.source)
   const whitespacePath = () => sourceWhitespacePath(props.source)
-  const fileCaption = () => props.omitDirectoryCaption ? "" : sourceFileCaption(props.source).text
+  const fileCaption = () => props.omitDirectoryCaption ? "" : props.attachmentCaption || sourceFileCaption(props.source).text
   const fileCaptionParts = () => {
     const text = fileCaption()
     const normalized = pathWithForwardSeparators(text, props.source.path || sourceDirectory())
@@ -284,7 +285,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
               pauseAutoScrollForReading(event.currentTarget)
               void openSourceFile(props.source)
             }}
-            aria-label={`${t("chat.source_open_file")}: ${[detail(), whitespacePath() && t("chat.source_whitespace_details", { path: whitespacePath() })].filter(Boolean).join(" · ")}`}
+            aria-label={`${t("chat.source_open_file")}: ${[detail(), props.attachmentCaption, whitespacePath() && t("chat.source_whitespace_details", { path: whitespacePath() })].filter(Boolean).join(" · ")}`}
           >
             <Show when={props.showIndex}>
               <span class="msg-source-chip__index">{props.index + 1}</span>
@@ -325,7 +326,7 @@ function SourceChip(props: { source: ConversationSourcePart; index: number; show
         </Match>
       </Switch>
       <Tooltip.Portal>
-        <SourceTooltipContent source={props.source} />
+        <SourceTooltipContent source={props.source} attachmentCaption={props.attachmentCaption} />
       </Tooltip.Portal>
     </Tooltip.Root>
   )
@@ -398,16 +399,17 @@ function SourceExcerptBody(props: { source: ConversationSourcePart }) {
   )
 }
 
-function SourceEntry(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean }) {
+function SourceEntry(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean; attachmentCaption: string }) {
   const [fileExcerptOpen, setFileExcerptOpen] = createSignal(false)
   const expandableExcerpt = () => props.source.type !== "source-file" && Boolean(props.source.snippet)
   const excerptKey = () => conversationSourceExcerptKey(props.source)
   const expanded = () => cardExpanded(excerptKey(), false)
-  const excerptLabel = () => `${t("chat.source_excerpt")}: ${sourceLabel(props.source)}`
+  const displayLabel = () => [sourceLabel(props.source), props.attachmentCaption].filter(Boolean).join(" · ")
+  const excerptLabel = () => `${t("chat.source_excerpt")}: ${displayLabel()}`
   const location = () => sourceLocation(props.source)
   const excerptClipboard = createClipboardCopy({
     text: () => props.source.snippet || "",
-    label: () => t("chat.source_copy_excerpt_label", { source: sourceLabel(props.source) }),
+    label: () => t("chat.source_copy_excerpt_label", { source: displayLabel() }),
     diagnosticID: "source-excerpt",
   })
   const clipboard = createClipboardCopy({
@@ -417,6 +419,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
         props.source.type === "source-file" && props.source.origin !== "attachment"
           ? sourceDetail(props.source)
           : sourceLabel(props.source),
+        props.attachmentCaption,
         sourceWhitespacePath(props.source) && t("chat.source_whitespace_details", { path: sourceWhitespacePath(props.source) }),
       ].filter(Boolean).join(" · "),
     }),
@@ -452,7 +455,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
         data-source-identity={sourceIdentity(props.source)}
         data-source-message-id={props.source.messageID}
       >
-        <SourceChip source={props.source} index={props.index} showIndex={props.showIndex} omitDirectoryCaption={props.omitDirectoryCaption} />
+        <SourceChip source={props.source} index={props.index} showIndex={props.showIndex} omitDirectoryCaption={props.omitDirectoryCaption} attachmentCaption={props.attachmentCaption} />
         <Show when={props.source.type === "source-file" && props.source.snippet}>
           <Button
             type="button"
@@ -460,8 +463,8 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
             variant="ghost"
             size="icon"
             tone="neutral"
-            title={t("chat.source_open_excerpt", { source: sourceLabel(props.source) })}
-            aria-label={t("chat.source_open_excerpt", { source: sourceLabel(props.source) })}
+            title={t("chat.source_open_excerpt", { source: displayLabel() })}
+            aria-label={t("chat.source_open_excerpt", { source: displayLabel() })}
             onClick={(event) => {
               event.stopPropagation()
               pauseAutoScrollForReading(event.currentTarget)
@@ -473,7 +476,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
           <Dialog
             open={fileExcerptOpen()}
             onClose={() => setFileExcerptOpen(false)}
-            title={t("chat.source_saved_excerpt_title", { source: sourceLabel(props.source) })}
+            title={t("chat.source_saved_excerpt_title", { source: displayLabel() })}
             footer={
               <>
                 <ExcerptCopyButton />
@@ -548,9 +551,20 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
   )
 }
 
-export function SourceParts(props: { sources: ConversationSourcePart[] }) {
+export function SourceParts(props: { sources: ConversationSourcePart[]; contextSources: ConversationSourcePart[] }) {
   let group!: HTMLDivElement
   let trigger!: HTMLElement
+  const attachmentCaption = (source: ConversationSourcePart) => {
+    if (source.type !== "source-file" || source.origin !== "attachment" || !source.path) return ""
+    const paths = [...new Set(props.contextSources
+      .filter((entry) => entry.type === "source-file" && entry.origin === "attachment" && sourceLabel(entry) === sourceLabel(source))
+      .map((entry) => entry.path)
+      .filter((path): path is string => Boolean(path)))]
+    if (paths.length < 2) return ""
+    return t("chat.source_attachment_reference", {
+      number: new Intl.NumberFormat(localeTag()).format(paths.indexOf(source.path) + 1),
+    })
+  }
   const locations = () => props.sources.map(sourceLocation).filter(Boolean)
   const clipboard = createClipboardCopy({
     text: () => locations().join("\n"),
@@ -573,7 +587,7 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
     <div ref={group} class="msg-sources" role="group" aria-label={t("chat.sources")} data-ui="message-sources"
       data-source-group-key={key()} data-source-ids={JSON.stringify(props.sources.map(source => source.sourceId))}>
       <Key each={props.sources.slice(0, 1)} by={sourceIdentity}>
-        {(source) => <SourceEntry source={source()} index={0} showIndex={props.sources.length > 1} omitDirectoryCaption={false} />}
+        {(source) => <SourceEntry source={source()} index={0} showIndex={props.sources.length > 1} omitDirectoryCaption={false} attachmentCaption={attachmentCaption(source())} />}
       </Key>
       <Show when={props.sources.length > 1}>
         <Disclosure.Root
@@ -600,6 +614,7 @@ export function SourceParts(props: { sources: ConversationSourcePart[] }) {
                     index={index() + 1}
                     showIndex
                     omitDirectoryCaption={repeatsFileDirectory(source(), props.sources[index()])}
+                    attachmentCaption={attachmentCaption(source())}
                   />
                 )}
               </Key>

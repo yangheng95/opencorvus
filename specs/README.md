@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [同名附件来源的引用辨识](records/2026-10/2026-10-31-same-name-source-references.md)：跨消息小组的同名来源语境与原件引用验收。
+
 - [同名附件的核对与发送身份](records/2026-10/2026-10-31-same-name-attachment-review.md)：同名原件辨识、预览与真实模型发送完整流程。
 
 - [版本日志阅读与返回焦点](records/2026-10/2026-10-31-release-reading-focus.md)：日志历史/详情键盘阅读、筛选及返回位置实页调查。

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [同名附件来源的引用辨识](2026-10-31-same-name-source-references.md)：同一回复卡片内不同原件的来源引用编号。
+
 - [同名附件的核对与发送身份](2026-10-31-same-name-attachment-review.md)：同名附件的展示歧义与原始身份验证。
 
 - [版本日志阅读与返回焦点](2026-10-31-release-reading-focus.md)：关于、版本历史与阅读焦点的当前体验。
