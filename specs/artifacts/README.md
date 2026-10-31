@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [项目转换读取交接](2026-10-31-project-conversion-handoff/README.md)：十三实图、当前请求、原始数据和物理结清。
+
 - [当前空闲停止与转换复核](2026-10-31-idle-stop-current-review/README.md)：七张实页截图和当前请求、数据、物理结清回执。
 
 - [历史附件的辨识与原始下载](2026-10-31-history-attachment-identification/README.md)：同名历史附件、双语预览与实际原始下载。

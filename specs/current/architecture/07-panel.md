@@ -2837,6 +2837,13 @@ UI action. It selects the existing manualWorkspacePathEntry path dialog on
 browser hosts and the native picker on supported desktop hosts. Conversion names
 the destination parent separately from the new project folder; each dialog keeps
 the initiating project action's existing opening guard and return-focus target.
+Converting the selected Project enters the existing selection-loading lifetime
+before the directory mutation starts. Selected-item and Goal readers retire
+while the directory moves; a rejected conversion restores that same selection's
+readers. Only the admitted selection epoch and API authority can settle this
+handoff, so a later navigation keeps ownership. Directory selection publishes
+its settings, directory epoch and API directory context in one reactive batch;
+catalog readers therefore observe the same destination as the visible workspace.
 Model readiness
 comes from the canonical composer model projection even when the popover is
 closed. Per-project explicit launch intent restores from Overlay preferences;

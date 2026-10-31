@@ -42,9 +42,9 @@ export const [boardStore, setBoardStore] = createStore({
    *  departure or explicit supersession. Ready reselection and cancellation
    *  retain it; async phases capture it before awaiting. */
   selectEpoch: 0 as number,
-  /** True between selectTask() entry and its async load chain completing
-   *  (applyDirectory + hydrateTaskConversation + startSSE). Drives the top-of-
-   *  pane progress bar so cross-project task switches feel non-blocking. */
+  /** The current selection's loading lifetime, including a directory move.
+   *  Suspends selected readers and drives the shared conversation progress bar.
+   *  Only the owning selection epoch can settle its asynchronous handoff. */
   taskSwitching: false,
   /** Last failed task hydrate. The selected task remains visible so the
    *  conversation surface can explain the failure and retry the same load. */

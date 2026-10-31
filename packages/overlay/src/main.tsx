@@ -34,6 +34,7 @@ import {
 } from "@opencorvus-ai/transport-protocol"
 import { WorkLedger } from "./components/WorkLedger"
 import type { ProjectActionPresentation } from "./components/ProjectLedgerGroup"
+import { projectDirectoryKey } from "./utils/project-directory"
 import { replaceWorkspaceLocation, type ClientWorkspaceLocation } from "./services/workspace-location"
 import type { ApiAuthority } from "./services/api"
 import { MissionBoard } from "./components/MissionBoard"
@@ -1081,28 +1082,39 @@ async function promoteWorkLedgerAnonymousProject(directory: string, presentation
   const admission = await requestWorkspaceSelection()
   if (admission.kind === "unchanged") return
   assertApiAuthorityCurrent(authority)
-  const result = await promoteAnonymousProject(source, destinationParent, name, authority)
-  if (!isApiAuthorityCurrent(authority)) return
-  await applyDirectory(result.directory, {
-    save: true,
-    restoreWorkspace: false,
-    selectionEpoch: admission.epoch,
-    authority,
-  })
-  if (!isApiAuthorityCurrent(authority)) return
-  setMissionSharedRefreshToken((value) => value + 1)
-  if (result.cleanupPending) {
-    reportWarning({
-      id: `project:promote:${result.project.id}:cleanup`,
-      title: t("project.promote_anonymous_success_title"),
-      message: t("project.promote_anonymous_cleanup_pending"),
+  assertUserNavigationCurrent(admission.epoch)
+  const owns = () => isApiAuthorityCurrent(authority) && ownsWorkspaceSelection(admission.epoch)
+  const selectedDirectory = boardStore.selectedSource?.directory || activeDirectory()
+  const switching = projectDirectoryKey(selectedDirectory) === projectDirectoryKey(source)
+  // Retire the selected reader before its directory can move. Failed promotion
+  // restores the same view through the existing selection-loading lifetime.
+  if (switching) setBoardStore("taskSwitching", true)
+  try {
+    const result = await promoteAnonymousProject(source, destinationParent, name, authority)
+    if (!owns()) return
+    const applied = await applyDirectory(result.directory, {
+      save: true,
+      restoreWorkspace: false,
+      selectionEpoch: admission.epoch,
+      authority,
     })
-  } else {
-    reportSuccess({
-      id: `project:promote:${result.project.id}`,
-      title: t("project.promote_anonymous_success_title"),
-      message: t("project.promote_anonymous_success", { directory: result.directory }),
-    })
+    if (!applied || !owns()) return
+    setMissionSharedRefreshToken((value) => value + 1)
+    if (result.cleanupPending) {
+      reportWarning({
+        id: `project:promote:${result.project.id}:cleanup`,
+        title: t("project.promote_anonymous_success_title"),
+        message: t("project.promote_anonymous_cleanup_pending"),
+      })
+    } else {
+      reportSuccess({
+        id: `project:promote:${result.project.id}`,
+        title: t("project.promote_anonymous_success_title"),
+        message: t("project.promote_anonymous_success", { directory: result.directory }),
+      })
+    }
+  } finally {
+    if (switching && owns()) setBoardStore("taskSwitching", false)
   }
 }
 

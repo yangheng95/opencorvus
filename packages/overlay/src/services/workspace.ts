@@ -1049,19 +1049,19 @@ export async function applyDirectory(next: string, options: ApplyDirectoryOption
 
   console.log("[applyDir] switching", { from: curDir, to: next, save })
 
-  stopSSE()
-  if (options.preserveSelection !== true) {
-    clearSelectedWorkItem()
-  }
-  setSettingsStore("directoryEpoch", (n: number) => n + 1)
-  setSettingsStore("directory", next)
-  if (save !== null) setSettingsStore("savedDirectory", save)
+  batch(() => {
+    stopSSE()
+    if (options.preserveSelection !== true) {
+      clearSelectedWorkItem()
+    }
+    setSettingsStore("directoryEpoch", (n: number) => n + 1)
+    setSettingsStore("directory", next)
+    if (save !== null) setSettingsStore("savedDirectory", save)
 
-  // Sync the API client's directory context immediately so all subsequent
-  // API calls (checkConnection, reloadProjectScope, etc.) target the new
-  // directory on the backend.
-  configureApi({ directory: next })
-  setBoardStore("pendingTasks", [])
+    // Reactive readers must observe the directory and its API context together.
+    configureApi({ directory: next })
+    setBoardStore("pendingTasks", [])
+  })
 
   // The preference offers initialization on an explicit directory opening;
   // browsing alone never authorizes a repository identity mutation.
