@@ -1,0 +1,94 @@
+{
+  "at": "2026-10-31T08:43:49.971987+00:00",
+  "original_public_commit": "35ba746e559fb65b58f9a4c7b4ba80dd21c073ac",
+  "files": [
+    {
+      "path": "OPERATIONS.md",
+      "bytes": 3880
+    },
+    {
+      "path": "OUTPUTS.md",
+      "bytes": 7763
+    },
+    {
+      "path": "TASK.md",
+      "bytes": 3109
+    },
+    {
+      "path": "audit.py",
+      "bytes": 10093
+    },
+    {
+      "path": "exercise.py",
+      "bytes": 16175
+    },
+    {
+      "path": "instances/base/latent-law.csv",
+      "bytes": 146
+    },
+    {
+      "path": "instances/base/opening-receivables.csv",
+      "bytes": 52
+    },
+    {
+      "path": "instances/base/profile.json",
+      "bytes": 320
+    },
+    {
+      "path": "instances/base/suppliers.csv",
+      "bytes": 62
+    },
+    {
+      "path": "instances/base/weeks.csv",
+      "bytes": 82
+    },
+    {
+      "path": "instances/cash-tight/latent-law.csv",
+      "bytes": 146
+    },
+    {
+      "path": "instances/cash-tight/opening-receivables.csv",
+      "bytes": 52
+    },
+    {
+      "path": "instances/cash-tight/profile.json",
+      "bytes": 326
+    },
+    {
+      "path": "instances/cash-tight/suppliers.csv",
+      "bytes": 62
+    },
+    {
+      "path": "instances/cash-tight/weeks.csv",
+      "bytes": 82
+    },
+    {
+      "path": "instances/shifted-prior/latent-law.csv",
+      "bytes": 150
+    },
+    {
+      "path": "instances/shifted-prior/opening-receivables.csv",
+      "bytes": 52
+    },
+    {
+      "path": "instances/shifted-prior/profile.json",
+      "bytes": 329
+    },
+    {
+      "path": "instances/shifted-prior/suppliers.csv",
+      "bytes": 62
+    },
+    {
+      "path": "instances/shifted-prior/weeks.csv",
+      "bytes": 82
+    },
+    {
+      "path": "model.py",
+      "bytes": 7448
+    }
+  ],
+  "write_scope": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission",
+  "same_public_as_codex": "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031",
+  "case": "L06/0.4.0-dev",
+  "scope": "immutable public input preparation only; no candidate executed/scored yet"
+}

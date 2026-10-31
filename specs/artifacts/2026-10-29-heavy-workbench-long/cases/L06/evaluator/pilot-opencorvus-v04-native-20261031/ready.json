@@ -1,0 +1,24 @@
+{
+  "url": "http://127.0.0.1:58512/",
+  "pid": 3568,
+  "registration": {
+    "benchmark": "HeavyWorkBench-Long/0.4.0-dev",
+    "case": "L06",
+    "model": "openai/gpt-6.1-sol",
+    "inactivitySeconds": 3600,
+    "tokenBudgetScope": "task-session-lineage",
+    "budget": {
+      "total_model_tokens": null
+    },
+    "runRoot": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031",
+    "project": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project",
+    "caseVersion": "L06/0.4.0-dev"
+  },
+  "preflight": {
+    "sessionID": "ses_hT9wID9AIvDENyuDvdwS",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  }
+}

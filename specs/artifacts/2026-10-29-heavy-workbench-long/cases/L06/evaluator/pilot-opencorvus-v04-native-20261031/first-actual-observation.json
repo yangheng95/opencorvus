@@ -1,0 +1,24 @@
+{
+  "at": "2026-10-31T08:45:21.025478+00:00",
+  "url": "http://127.0.0.1:58512/task/tsk_g00VZcBwhb00fHHP9RSj/status",
+  "http_status": 200,
+  "task_id": "tsk_g00VZcBwhb00fHHP9RSj",
+  "preflight": {
+    "sessionID": "ses_hT9wID9AIvDENyuDvdwS",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "actual_requests": 7,
+  "actual_request_models": [
+    "gpt-6.1-sol"
+  ],
+  "all_streaming": true,
+  "all_http200": true,
+  "actual_task_budget": null,
+  "actual_first_task_created_ms": 1793436300255,
+  "server_pid": 3568,
+  "scope": "read-only own Task ID status and actual provider source-reader metadata; no business score/useful hour",
+  "status_file": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\observations\\task-status-first.json"
+}

@@ -723,3 +723,20 @@ L01唯一原pending GPU仍正常，06:21Z同hybrid-s345-lr1e-04的L-BFGS已27000
 完整产品/全source/真实命令/原错误/独审初终评/唯一cold保whole-case-tests，originals46,839,470bytes/5626members，逐成员/外部保留范围明确。第三方report环境/cache、重复closed副本、递归自复制临时树不谎称全在小ZIP。没有fresh0.4成绩，不把作者/错误programme或秒数/分支/阶段当模型小时；全套仍9/10、有效候选小时0/10，真人/统计成熟未认证。
 
 L01原唯一owner23296/实际训练18416继续：08:33Z只读观察reaction纯L-BFGS已于08:24:19Z41000/loss1.27270296e-6自然转原hybrid，08:32:35Z其LBFGS4000/loss3.25040151e-6，stage终态/新error均无、stderr0。loss不替独立final1%解质量；没有重同格、恢复旧Paused、热改source或持续监听。L01完整论文/合法质量可达/175独评与冻结仍待；新L02升级义务仍保。定时ACTIVE，只原生Windows；已完成旧候选/API53962/56591/59471不重启、不请求。结束本任务范围commit/正常fetch merge/审全部待推/必要检查与完整hook/push，foreign全部保留。
+
+## L06/0.4同冻结原生OC对照启动前Recall与范围（2026-10-31）
+
+0.4完整整题测试/一次整审开发冻已正常推35ba746e5，原参考100/错误programme90关键失败不是候选成绩；全新Codex仅21public已自然活动，尚未开始OC0.4。用户要求两系统真实整题对照且旧0.3双good触发新版，这里只填当前缺少的新OC，不重已完成Task/矩阵/独审。当前未观察到生产调度/队列/恢复异常；不是产品修复，Task/Mission/Session实现和LLM协议无变更。原L01唯一GPU矩阵后台保留、不热改/取消/重同ID；OC与Codex资源归因不完整，不作同模型速度/费用因果排名。
+
+实施复用已交serve_heavy_workbench.ts、parseHeavyWorkbenchRegistration、stageDiagnosticProvider与Inspect nativeTask/current code-base全流式路径，只新增独立runRoot/project/随机port/登记dataset和首执行前输入胶囊。已查原0.3启动argv、server代码和registration解析；现schema支持0.4元数据，无需兼容层或新共享代码。候选只给同已推35ba的21public和声明本机运行时，不提供私有evaluator/rubric/weights/参考/旧答案/其它项目/心跳/凭据。21原public先封/声明只读，所有候选写项目自有目录；同用户原生不是OS文件/内存隔离认证。
+
+凭据仅由现成stage primitive从用户已授权源成对暂存auth与models，启动Task前必须真实usable/projected/actual request gpt-6.1-sol且streaming/HTTP200；只记录安全元数据，不向prompt/log/spec/commit输出内容。source credential不改。正常现成dispose只在Task/全子进程终态且全workspace/Git/untracked/失败封完后清暂存；启动失败保原错误对象按真实根因接，不重已完成旧API53962/56591/59471。预算null，无用户总token/墙钟或最低时长；Inspect3600只真实活动刷新观察期、不撤有效Task。自然交付后封完整原件，再同冻结source-only原生私有全链/实际图/唯一候选内容独评/真实grader；生命周期/自报不当分。
+
+
+## L06/0.4两个新候选已各自原生活动（2026-10-31）
+
+新OC先真成对暂存/usable/projected/actual gpt-6.1-sol streaming，再仅创建唯一Task tsk_g00VZcBwhb00fHHP9RSj（实际SQLite budget=null），自有server3568/API58512，Inspect11108为venv启动器而非模型PID。首次7实际请求HTTP200/全同模型/全streaming；只复用既有nativeTask/code/base，不增加LLM路由/隐藏消息或队列。两新候选同Git35ba的21public，定时从唯一L06-v04-current-pair-native-20261031.json接，不再启动第二份。0.4内容私有分仍null，未重复作者native/solver/cold或审查。
+
+本轮fresh Codex真实遇到公开exercise的row-order写自有副本PermissionError：shutil.copytree保留输入只读文件属性。全部197原前段/两恢复已实际完成，原失败保native-run-01；候选自有runner仅写行序副本前设stat.S_IWRITE，原public不改，已开始有效第二轮，主方不打断/重开。它是复制元数据/工作副本权限的设施缺陷，不是策略错误或生产调度异常；不按报错标题评分。未来私有source-only执行从原21public字节新建自有工作副本，默认可写输出属性，原不可变候选public保持只读；不改模型/合同/源码/质量，不再重组件资格。原失败、修复diff和真正退出/后续完成各自保留。评分仍依赖自然完整交付后的真实私有执行、一次内容独评与同grader，不用候选自审冒第三方独审。
+
+静止OC启动材料见cases/L06/evaluator/pilot-opencorvus-v04-native-20261031，活跃workspace/runtime/凭据不宣称已封终态。L01原hybrid仍有效后台，禁止热改/另开矩阵；新候选均无用户总预算/最低时长，真实model与活动归因限制保留。全目标仍未达、ACTIVE。

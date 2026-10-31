@@ -46,3 +46,6 @@
 
 
 最新真实结果：[L06/0.3两个新系统同冻结各100/全关键项](cases/L06/evaluator/pilot-opencorvus-v03-native-20261031/README.md)，新OC完整交付/原生私有整链/原图/一次内容独评/真正grader已封；触发另升0.4，不把双100称难度成熟。L01原pending本机继续、完整十题/新L02/L06及有效小时仍未达。
+
+
+最新0.4：[同21public的新OC原生Task](cases/L06/evaluator/pilot-opencorvus-v04-native-20261031/README.md)已启动，fresh Codex也自然活动；均无业务分，完整交付后才私有整链/一次内容独评/同grader。只读属性复制导致的真实行序设施失败保原，不作策略分；不重已完成作者参考/冷跑/独审。
