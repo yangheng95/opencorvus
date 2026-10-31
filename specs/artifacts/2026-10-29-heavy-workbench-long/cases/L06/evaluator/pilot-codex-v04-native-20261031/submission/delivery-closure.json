@@ -1,0 +1,67 @@
+{
+  "format": "l06-source-delivery-closure/1",
+  "status": "passed",
+  "exact_sealed_source_comparisons": [
+    {
+      "run": "native-run-01",
+      "file": "actor.py",
+      "sealed_source_equal": true
+    },
+    {
+      "run": "native-run-01",
+      "file": "policies\\base.json",
+      "sealed_source_equal": true
+    },
+    {
+      "run": "native-run-01",
+      "file": "policies\\cash-tight.json",
+      "sealed_source_equal": true
+    },
+    {
+      "run": "native-run-01",
+      "file": "policies\\shifted-prior.json",
+      "sealed_source_equal": true
+    },
+    {
+      "run": "native-run-01",
+      "file": "submission.json",
+      "sealed_source_equal": true
+    },
+    {
+      "run": "native-run-02",
+      "file": "actor.py",
+      "sealed_source_equal": true
+    },
+    {
+      "run": "native-run-02",
+      "file": "policies\\base.json",
+      "sealed_source_equal": true
+    },
+    {
+      "run": "native-run-02",
+      "file": "policies\\cash-tight.json",
+      "sealed_source_equal": true
+    },
+    {
+      "run": "native-run-02",
+      "file": "policies\\shifted-prior.json",
+      "sealed_source_equal": true
+    },
+    {
+      "run": "native-run-02",
+      "file": "submission.json",
+      "sealed_source_equal": true
+    }
+  ],
+  "public_original_bytes_equal_to_both_retained_copies": true,
+  "owned_runner_difference": "only retained row-order CSV writable-permission addition",
+  "actual_ledger_rows": 3152,
+  "exact_terminal_paths": 197,
+  "conditional_prefix_terminal_probabilities": "independently reconciled products",
+  "within_class_ratios": "exact A1:A2=1:3 and B1:B2=3:1 at every stage",
+  "original_native_failure_records": [
+    "native-run-01\\owner-error.json"
+  ],
+  "archive_scope": "source, declared programme, public originals, derivation certificates, machine exports, figures and handoff; actual native traces and local plotting dependencies/caches remain in full submission",
+  "external_author_review": "after candidate natural terminal, outside this candidate self-certification"
+}

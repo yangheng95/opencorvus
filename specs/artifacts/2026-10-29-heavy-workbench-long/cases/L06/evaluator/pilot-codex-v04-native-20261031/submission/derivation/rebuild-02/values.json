@@ -1,0 +1,128 @@
+{
+  "base": {
+    "same-information": {
+      "value_exact": "300834939/4000000",
+      "states": 58191,
+      "feasible_states": 55979,
+      "seconds": 1.3121810000011465,
+      "initial_action": {
+        "test": null
+      },
+      "policy_states": 251,
+      "terminal_histories": 67
+    },
+    "class-A": {
+      "value_exact": "3796298817/64000000",
+      "states": 7844,
+      "feasible_states": 7549,
+      "seconds": 0.1543392000021413,
+      "initial_action": {
+        "test": null
+      }
+    },
+    "class-B": {
+      "value_exact": "41972250459/640000000",
+      "states": 7844,
+      "feasible_states": 7549,
+      "seconds": 0.15162010000130977,
+      "initial_action": {
+        "test": null
+      }
+    },
+    "no-inspection": {
+      "value_exact": "118",
+      "states": 556,
+      "feasible_states": 514,
+      "seconds": 0.006266100001084851,
+      "initial_action": {
+        "test": null
+      }
+    },
+    "advance-information-bound-exact": "79935238629/1280000000",
+    "intrinsic-information-value-exact": "16331941851/1280000000"
+  },
+  "cash-tight": {
+    "same-information": {
+      "value_exact": "11287373277/128000000",
+      "states": 53243,
+      "feasible_states": 50964,
+      "seconds": 1.1029171999980463,
+      "initial_action": {
+        "test": null
+      },
+      "policy_states": 188,
+      "terminal_histories": 49
+    },
+    "class-A": {
+      "value_exact": "80959253829/1280000000",
+      "states": 7182,
+      "feasible_states": 6838,
+      "seconds": 0.13898759999938193,
+      "initial_action": {
+        "test": null
+      }
+    },
+    "class-B": {
+      "value_exact": "2249806017/32000000",
+      "states": 7182,
+      "feasible_states": 6838,
+      "seconds": 0.1395483999986027,
+      "initial_action": {
+        "test": null
+      }
+    },
+    "no-inspection": {
+      "value_exact": "119",
+      "states": 420,
+      "feasible_states": 354,
+      "seconds": 0.00439889999688603,
+      "initial_action": {
+        "test": null
+      }
+    },
+    "advance-information-bound-exact": "170951494509/2560000000",
+    "intrinsic-information-value-exact": "54795971031/2560000000"
+  },
+  "shifted-prior": {
+    "same-information": {
+      "value_exact": "90125954529/1280000000",
+      "states": 58191,
+      "feasible_states": 55979,
+      "seconds": 1.3218167999984871,
+      "initial_action": {
+        "test": null
+      },
+      "policy_states": 260,
+      "terminal_histories": 81
+    },
+    "class-A": {
+      "value_exact": "3796298817/64000000",
+      "states": 7844,
+      "feasible_states": 7549,
+      "seconds": 0.14525809999759076,
+      "initial_action": {
+        "test": null
+      }
+    },
+    "class-B": {
+      "value_exact": "41972250459/640000000",
+      "states": 7844,
+      "feasible_states": 7549,
+      "seconds": 0.18995490000088466,
+      "initial_action": {
+        "test": null
+      }
+    },
+    "no-inspection": {
+      "value_exact": "118",
+      "states": 556,
+      "feasible_states": 514,
+      "seconds": 0.005290299999614945,
+      "initial_action": {
+        "test": null
+      }
+    },
+    "advance-information-bound-exact": "155861214969/2560000000",
+    "intrinsic-information-value-exact": "24390694089/2560000000"
+  }
+}

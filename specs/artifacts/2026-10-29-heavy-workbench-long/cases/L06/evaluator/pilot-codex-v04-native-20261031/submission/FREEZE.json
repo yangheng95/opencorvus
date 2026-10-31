@@ -1,0 +1,342 @@
+{
+  "format": "l06-development-freeze/1",
+  "at": "2026-10-31T08:52:49.178876+00:00",
+  "source_frozen": true,
+  "archive": "source-archive.zip",
+  "original_actor_entry": "programme/actor.py",
+  "declaration": "programme/submission.json",
+  "source_members": [
+    {
+      "path": "delivery-closure.json",
+      "bytes": 2096
+    },
+    {
+      "path": "DEPENDENCIES.txt",
+      "bytes": 474
+    },
+    {
+      "path": "derivation/build-01/certificates/base-class-A.jsonl.gz",
+      "bytes": 24067
+    },
+    {
+      "path": "derivation/build-01/certificates/base-class-B.jsonl.gz",
+      "bytes": 24001
+    },
+    {
+      "path": "derivation/build-01/certificates/base-no-inspection.jsonl.gz",
+      "bytes": 2036
+    },
+    {
+      "path": "derivation/build-01/certificates/base-same-information.jsonl.gz",
+      "bytes": 184048
+    },
+    {
+      "path": "derivation/build-01/certificates/cash-tight-class-A.jsonl.gz",
+      "bytes": 21942
+    },
+    {
+      "path": "derivation/build-01/certificates/cash-tight-class-B.jsonl.gz",
+      "bytes": 21860
+    },
+    {
+      "path": "derivation/build-01/certificates/cash-tight-no-inspection.jsonl.gz",
+      "bytes": 1655
+    },
+    {
+      "path": "derivation/build-01/certificates/cash-tight-same-information.jsonl.gz",
+      "bytes": 169283
+    },
+    {
+      "path": "derivation/build-01/certificates/shifted-prior-class-A.jsonl.gz",
+      "bytes": 24076
+    },
+    {
+      "path": "derivation/build-01/certificates/shifted-prior-class-B.jsonl.gz",
+      "bytes": 24010
+    },
+    {
+      "path": "derivation/build-01/certificates/shifted-prior-no-inspection.jsonl.gz",
+      "bytes": 2045
+    },
+    {
+      "path": "derivation/build-01/certificates/shifted-prior-same-information.jsonl.gz",
+      "bytes": 185901
+    },
+    {
+      "path": "derivation/build-01/policies/base.json",
+      "bytes": 19370
+    },
+    {
+      "path": "derivation/build-01/policies/cash-tight.json",
+      "bytes": 14735
+    },
+    {
+      "path": "derivation/build-01/policies/shifted-prior.json",
+      "bytes": 20453
+    },
+    {
+      "path": "derivation/build-01/values.json",
+      "bytes": 3346
+    },
+    {
+      "path": "derivation/independent-bellman-review.json",
+      "bytes": 3373
+    },
+    {
+      "path": "derivation/rebuild-reconciliation.json",
+      "bytes": 600
+    },
+    {
+      "path": "episodes.json",
+      "bytes": 89688
+    },
+    {
+      "path": "execution-index.json",
+      "bytes": 1903
+    },
+    {
+      "path": "figures/cash-material.pdf",
+      "bytes": 38584
+    },
+    {
+      "path": "figures/cash-material.png",
+      "bytes": 899325
+    },
+    {
+      "path": "figures/cash-material.svg",
+      "bytes": 443913
+    },
+    {
+      "path": "figures/cost-information.pdf",
+      "bytes": 21476
+    },
+    {
+      "path": "figures/cost-information.png",
+      "bytes": 114564
+    },
+    {
+      "path": "figures/cost-information.svg",
+      "bytes": 84560
+    },
+    {
+      "path": "figures/policy-decisions.pdf",
+      "bytes": 58904
+    },
+    {
+      "path": "figures/policy-decisions.png",
+      "bytes": 256237
+    },
+    {
+      "path": "figures/policy-decisions.svg",
+      "bytes": 244437
+    },
+    {
+      "path": "HANDOFF.md",
+      "bytes": 7636
+    },
+    {
+      "path": "native-run-02/public/audit.py",
+      "bytes": 10093
+    },
+    {
+      "path": "native-run-02/public/exercise.py",
+      "bytes": 16175
+    },
+    {
+      "path": "native-run-02/public/instances/base/latent-law.csv",
+      "bytes": 146
+    },
+    {
+      "path": "native-run-02/public/instances/base/opening-receivables.csv",
+      "bytes": 52
+    },
+    {
+      "path": "native-run-02/public/instances/base/profile.json",
+      "bytes": 320
+    },
+    {
+      "path": "native-run-02/public/instances/base/suppliers.csv",
+      "bytes": 62
+    },
+    {
+      "path": "native-run-02/public/instances/base/weeks.csv",
+      "bytes": 82
+    },
+    {
+      "path": "native-run-02/public/instances/cash-tight/latent-law.csv",
+      "bytes": 146
+    },
+    {
+      "path": "native-run-02/public/instances/cash-tight/opening-receivables.csv",
+      "bytes": 52
+    },
+    {
+      "path": "native-run-02/public/instances/cash-tight/profile.json",
+      "bytes": 326
+    },
+    {
+      "path": "native-run-02/public/instances/cash-tight/suppliers.csv",
+      "bytes": 62
+    },
+    {
+      "path": "native-run-02/public/instances/cash-tight/weeks.csv",
+      "bytes": 82
+    },
+    {
+      "path": "native-run-02/public/instances/shifted-prior/latent-law.csv",
+      "bytes": 150
+    },
+    {
+      "path": "native-run-02/public/instances/shifted-prior/opening-receivables.csv",
+      "bytes": 52
+    },
+    {
+      "path": "native-run-02/public/instances/shifted-prior/profile.json",
+      "bytes": 329
+    },
+    {
+      "path": "native-run-02/public/instances/shifted-prior/suppliers.csv",
+      "bytes": 62
+    },
+    {
+      "path": "native-run-02/public/instances/shifted-prior/weeks.csv",
+      "bytes": 82
+    },
+    {
+      "path": "native-run-02/public/model.py",
+      "bytes": 7448
+    },
+    {
+      "path": "native-run-02/public/OPERATIONS.md",
+      "bytes": 3880
+    },
+    {
+      "path": "native-run-02/public/OUTPUTS.md",
+      "bytes": 7763
+    },
+    {
+      "path": "native-run-02/public/TASK.md",
+      "bytes": 3109
+    },
+    {
+      "path": "plot-dependency-versions.json",
+      "bytes": 299
+    },
+    {
+      "path": "programme/actor.py",
+      "bytes": 2900
+    },
+    {
+      "path": "programme/policies/base.json",
+      "bytes": 19370
+    },
+    {
+      "path": "programme/policies/cash-tight.json",
+      "bytes": 14735
+    },
+    {
+      "path": "programme/policies/shifted-prior.json",
+      "bytes": 20453
+    },
+    {
+      "path": "programme/submission.json",
+      "bytes": 195
+    },
+    {
+      "path": "README.md",
+      "bytes": 1080
+    },
+    {
+      "path": "recovery-index.json",
+      "bytes": 3200
+    },
+    {
+      "path": "REPORT.md",
+      "bytes": 16542
+    },
+    {
+      "path": "REPRODUCE.ps1",
+      "bytes": 1935
+    },
+    {
+      "path": "requirements-plot.txt",
+      "bytes": 210
+    },
+    {
+      "path": "REVIEW-INDEX.md",
+      "bytes": 4726
+    },
+    {
+      "path": "runner/exercise.py",
+      "bytes": 16542
+    },
+    {
+      "path": "runner/model.py",
+      "bytes": 7448
+    },
+    {
+      "path": "runner/prepare_runner.py",
+      "bytes": 903
+    },
+    {
+      "path": "runner/readonly-copy-fix.diff",
+      "bytes": 819
+    },
+    {
+      "path": "source/bellman.py",
+      "bytes": 5219
+    },
+    {
+      "path": "source/check_actor.py",
+      "bytes": 3553
+    },
+    {
+      "path": "source/close_delivery.py",
+      "bytes": 5997
+    },
+    {
+      "path": "source/export.py",
+      "bytes": 3727
+    },
+    {
+      "path": "source/figures.py",
+      "bytes": 6797
+    },
+    {
+      "path": "source/rebuild.py",
+      "bytes": 2324
+    },
+    {
+      "path": "source/report.py",
+      "bytes": 19938
+    },
+    {
+      "path": "source/resume.py",
+      "bytes": 1817
+    },
+    {
+      "path": "source/verify_bellman.py",
+      "bytes": 4848
+    },
+    {
+      "path": "specs/plan.md",
+      "bytes": 4301
+    },
+    {
+      "path": "specs/README.md",
+      "bytes": 404
+    },
+    {
+      "path": "stage-ledger.csv",
+      "bytes": 1922256
+    },
+    {
+      "path": "summary.json",
+      "bytes": 29798
+    }
+  ],
+  "source_identity_verification": "full byte equality against each pre-execution sealed programme; not a policy-quality digest",
+  "correctness_evidence": "exact rational Bellman certificates, independent transition verifier, native branch execution and original audit",
+  "independent_author_whole_case_review": "external post-terminal process; not claimed by candidate",
+  "score_claim": null
+}

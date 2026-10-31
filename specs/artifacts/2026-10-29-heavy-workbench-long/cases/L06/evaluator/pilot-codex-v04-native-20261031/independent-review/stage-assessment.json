@@ -1,0 +1,34 @@
+{
+  "case_version": "L06/0.4.0-dev",
+  "assignment_id": "l06-inspection-72f574ca6fdc466d816410dda95e8b3e",
+  "subject": "fresh Codex candidate content/science only",
+  "reviewed_at": "2026-10-31T09:02:56.450840+00:00",
+  "content_review_complete": true,
+  "five_H": {
+    "H01": "verified_pass",
+    "H02": "verified_pass",
+    "H03": "verified_pass",
+    "H04": "verified_pass",
+    "H05": "verified_pass"
+  },
+  "substantive_content_blockers": [],
+  "aggregate": "not handwritten; root runs actual frozen grader",
+  "no_new_actor_native_DP_solver": true,
+  "actual_private_execution_read": "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\private-run",
+  "independent_numeric_evidence": "independent-numeric-audit.json",
+  "source_science_identity": "source-science-binding-audit.json",
+  "actual_visual_evidence": "visual-observations.json",
+  "nonblocking_observation": "DEPENDENCIES blanket stdlib plotting wording contradicted by correctly supplied full plot dependency declarations/environment; noted without manufacturing missing dependency.",
+  "reviewer_corrections": [
+    "No-inspection demand-only120 is feasible, not optimal; exact supplied no-inspection paths118/119/118 independently evaluated. First false receipt preserved.",
+    "Reviewer path literal SyntaxWarning preserved; no candidate failure."
+  ],
+  "disclosure": "Single independent AI-agent content review, non-blind and familiar with earlier author/candidate L06 work. This candidate was read and rated from its own frozen objects. Not professional human/statistical certification; actual model/usage unknown, no causal time/cost comparison. No actor/native/cold/planner/DP/solver or certificate verifier was re-executed.",
+  "unknown_or_not_certified": [
+    "actual candidate model/usage identity",
+    "effective hours or difficulty/discrimination",
+    "professional human/statistical maturity",
+    "arbitrary-failure/power-loss/OS security",
+    "complete ten-case goal"
+  ]
+}

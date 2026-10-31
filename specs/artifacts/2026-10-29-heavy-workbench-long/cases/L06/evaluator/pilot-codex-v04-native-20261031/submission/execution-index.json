@@ -1,0 +1,46 @@
+{
+  "format": "l06-owned-execution-index/1",
+  "observed_by": "native tool completions plus original owner/controller/worker records",
+  "runs": [
+    {
+      "directory": "native-run-01",
+      "owner_pid": 19732,
+      "argv": [
+        "D:/opencorvus-benchmark-runs/l06-v04-codex-fresh-native-20261031/public/exercise.py",
+        "--project",
+        "D:/opencorvus-benchmark-runs/l06-v04-codex-fresh-native-20261031/submission/programme",
+        "--public",
+        "D:/opencorvus-benchmark-runs/l06-v04-codex-fresh-native-20261031/public",
+        "--out",
+        "D:/opencorvus-benchmark-runs/l06-v04-codex-fresh-native-20261031/submission/native-run-01",
+        "--python",
+        "C:/Python314/python.exe"
+      ],
+      "actual_native_exit": 1,
+      "state": "facility failure after 197 completed episodes and before row-order completion",
+      "error_original": "native-run-01/owner-error.json",
+      "log_original": "logs/native-run-01.txt"
+    },
+    {
+      "directory": "native-run-02",
+      "owner_pid": 4208,
+      "argv": [
+        "runner/exercise.py",
+        "--project",
+        "D:/opencorvus-benchmark-runs/l06-v04-codex-fresh-native-20261031/submission/programme",
+        "--public",
+        "D:/opencorvus-benchmark-runs/l06-v04-codex-fresh-native-20261031/public",
+        "--out",
+        "D:/opencorvus-benchmark-runs/l06-v04-codex-fresh-native-20261031/submission/native-run-02",
+        "--python",
+        "C:/Python314/python.exe"
+      ],
+      "actual_native_exit": 0,
+      "state": "complete native closure including all branches, both original-receipt recoveries, and row-order control",
+      "terminal_original": "native-run-02/owner-terminal.json",
+      "seconds": 100.17873669999972
+    }
+  ],
+  "source_runner_difference": "runner/readonly-copy-fix.diff",
+  "source_actor_unchanged_between_runs": true
+}

@@ -1,0 +1,26 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.4\\check_whole.py",
+    "prepare",
+    "--run",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\private-run",
+    "--delivery",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\submission",
+    "--layout",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\delivery-layout.json",
+    "--role",
+    "candidate",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\assessment"
+  ],
+  "started_at": "2026-10-31T08:57:07.726439+00:00",
+  "finished_at": "2026-10-31T08:57:23.595325+00:00",
+  "native_exit": 0,
+  "stdout": "{\"M\":{\"M01\":\"verified_pass\",\"M02\":\"verified_pass\",\"M03\":\"verified_pass\",\"M04\":\"verified_pass\",\"M05\":\"verified_pass\",\"M06\":\"verified_pass\",\"M07\":\"verified_pass\",\"M08\":\"verified_pass\",\"M09\":\"verified_pass\",\"M10\":\"verified_pass\",\"M11\":\"verified_pass\",\"M12\":\"verified_pass\"},\"assignment_id\":\"l06-inspection-72f574ca6fdc466d816410dda95e8b3e\",\"total\":null}\n",
+  "stderr": "",
+  "scope": "first whole-case prepare from actual sealed candidate source/private native/original delivery, no hand-written M decisions"
+}

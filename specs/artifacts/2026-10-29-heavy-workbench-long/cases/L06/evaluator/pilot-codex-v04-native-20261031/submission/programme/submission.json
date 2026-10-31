@@ -1,0 +1,4 @@
+{
+  "format": "l06-inspection-submission/1",
+  "argv": ["{python}", "-B", "-u", "{project}/actor.py", "--public", "{public}", "--instance", "{instance}", "--policy-dir", "{project}/policies"]
+}

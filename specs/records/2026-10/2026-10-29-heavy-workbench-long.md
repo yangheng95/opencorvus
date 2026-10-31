@@ -740,3 +740,14 @@ L01原唯一owner23296/实际训练18416继续：08:33Z只读观察reaction纯L-
 本轮fresh Codex真实遇到公开exercise的row-order写自有副本PermissionError：shutil.copytree保留输入只读文件属性。全部197原前段/两恢复已实际完成，原失败保native-run-01；候选自有runner仅写行序副本前设stat.S_IWRITE，原public不改，已开始有效第二轮，主方不打断/重开。它是复制元数据/工作副本权限的设施缺陷，不是策略错误或生产调度异常；不按报错标题评分。未来私有source-only执行从原21public字节新建自有工作副本，默认可写输出属性，原不可变候选public保持只读；不改模型/合同/源码/质量，不再重组件资格。原失败、修复diff和真正退出/后续完成各自保留。评分仍依赖自然完整交付后的真实私有执行、一次内容独评与同grader，不用候选自审冒第三方独审。
 
 静止OC启动材料见cases/L06/evaluator/pilot-opencorvus-v04-native-20261031，活跃workspace/runtime/凭据不宣称已封终态。L01原hybrid仍有效后台，禁止热改/另开矩阵；新候选均无用户总预算/最低时长，真实model与活动归因限制保留。全目标仍未达、ACTIVE。
+
+
+## L06/0.4首fresh Codex自然交付与真正同冻结100（2026-10-31）
+
+/root/codex_l06_v04_fresh已自然completed/自有子进程终态，先封全部6363原workspace文件与source/public/依赖cache/两轮真实native和设施失败，complete-workspace.zip78,896,976bytes，原21public逐字节同输入无extras、无Git/upstream如实记，不补造提交。actualmodel/usage/精确完整活动归因未暴露unknown，comparablefalse；候选中间消息“产品就绪”未冒充最终封存，自审/代码证书亦未冒独立作者审查。
+
+封后唯一外部私有源码执行08:55:19→08:56:54Z直接native0，实际owner6528、wrapper95.51436秒；只同21原public字节的新建工作副本/原programme、全新输出，无旧结果/参考/未来文件。新建工作副本默认可写属性解决原readonly copytree设施问题，不改任何public/code/科学目标/动作。真实197终史3152stage/两controller73后新进程原order和lab-result键payloadreceipt续接+16row控制完整；workerEOF0不冒kill/掉电，same-user不授OS隔离。prepare直接0/12Mpass，assignment72f574ca6fdc466d816410dda95e8b3e；REVIEW-INDEX.md/DEPENDENCIES.txt/REPRODUCE.ps1和三PNG均按原布局定位，未补写候选wrapper/换报告或改阈值。
+
+唯一候选内容独评09:02:56Z封存，独立raw CSV/Fraction、3152privateSQL+3154wire/197support/绝对AR/两原receipt及rowcontrol重建、源码充分状态/12已保存Bellman证书/信息比较和3实际PNG全核；五H全pass。未再native/DP/solver/cold/证书器或作者整审。非阻断DEPENDENCIES笼统绘图stdlib表述但完整requirements/环境/正确HANDOFF已给，不伪扣成缺依赖；独评自身最初即时采购120误作无验货最优的原错误保，按已有政策carry后独立算118/119/118纠正，不扣候选。真正grade从closed重算12M接绑定5H，直接native_exit0/total100/17pass/allcritical/goodtrue/subject_rolecandidate；不是自报/作者分或手写聚合。
+
+完整可读产品/全部源/实际三图/原评分/唯一独评及错误在cases/L06/evaluator/pilot-codex-v04-native-20261031；originals.zip16,176,552bytes/5245members保独特科学/native/原失败/修复/private/grade/review，逐成员及78MB完整workspace外部第三方cache/Git事实范围以receipt为准，不谎称小ZIP含全部第三方字节。当前仅0.4一个新系统good，OC原Task tsk_g00VZcBwhb00fHHP9RSj于09:03:46Z仍running/active/1running，分null；不提前触发0.5或重候选/旧0.3。L01原唯一GPU矩阵继续，无新终态证据不启动整审/重格。套件9/10、有效候选小时0/10、职业统计成熟未认证；L02另版义务保。只本机、定时ACTIVE，所有本任务修改范围commit/正常fetch merge/审全待推/必要检查及完整hook后push，foreign全保。

@@ -1,0 +1,12 @@
+--- public/exercise.py
++++ submission/runner/exercise.py
+@@ -160,6 +160,9 @@
+         for p in (reordered/'instances/base').glob('*.csv'):
+             import csv
+             with p.open(encoding='utf-8',newline='') as f:rows=list(csv.reader(f))
++            # Windows copytree preserves the input read-only bit; only the owned reordered copy is changed.
++            import stat
++            p.chmod(p.stat().st_mode | stat.S_IWRITE)
+             with p.open('w',encoding='utf-8',newline='') as f:csv.writer(f).writerows(rows[:1]+list(reversed(rows[1:])))
+         # The actor sees this supplied public copy through the ordinary placeholders.
+         other=load(reordered/'instances/base');require(canonical(jsonable(other))==canonical(jsonable(load(public/'instances/base'))),'row_order_same_business')

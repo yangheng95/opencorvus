@@ -1,0 +1,25 @@
+{
+  "started_at": "2026-10-31T08:55:19.313610+00:00",
+  "finished_at": "2026-10-31T08:56:54.827970+00:00",
+  "native_exit": 0,
+  "actual_native_owner_pid": 6528,
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-u",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\public-inputs\\exercise.py",
+    "--project",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\source-project",
+    "--public",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\public-inputs",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\private-run",
+    "--python",
+    "C:/Python314/python.exe"
+  ],
+  "stdout": "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\private-stdout.txt",
+  "stderr": "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\private-stderr.txt",
+  "scope": "first actual private source-only execution after complete original workspace capsule; no policy/optimizer/report changes"
+}

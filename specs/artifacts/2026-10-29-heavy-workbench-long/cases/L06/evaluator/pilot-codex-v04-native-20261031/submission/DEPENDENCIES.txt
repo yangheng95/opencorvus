@@ -1,0 +1,5 @@
+Online runtime: native CPython 3.14.2, Python standard library only.
+Offline solver, certificate checker, reconciliation and PNG/SVG figure generator: Python standard library only.
+Original actor entry point: programme/actor.py via programme/submission.json.
+No optimizer, network, reference, credentials, compiler or model service is used.
+Public model.py is loaded by its supplied --public path. All original public source/tables are retained in each native run capsule.

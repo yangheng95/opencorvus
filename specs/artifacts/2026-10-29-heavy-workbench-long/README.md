@@ -49,3 +49,6 @@
 
 
 最新0.4：[同21public的新OC原生Task](cases/L06/evaluator/pilot-opencorvus-v04-native-20261031/README.md)已启动，fresh Codex也自然活动；均无业务分，完整交付后才私有整链/一次内容独评/同grader。只读属性复制导致的真实行序设施失败保原，不作策略分；不重已完成作者参考/冷跑/独审。
+
+
+最新0.4：[首fresh Codex真正同冻结100/17pass/allcritical](cases/L06/evaluator/pilot-codex-v04-native-20261031/README.md)，完整自然原件先封后私有全链/实际图/唯一候选内容独评/真正grade；原readonly设施失败和修复分开保。OC本版原Task仍活动、业务分null，尚未两good；旧线和1%事前质量不改，L01原矩阵继续、小时未认证。

@@ -1,0 +1,21 @@
+{
+  "status": "passed",
+  "checks": {
+    "base": {
+      "complete_rebuilt_policy": "equal",
+      "initial_value_exact": "300834939/4000000",
+      "policy_states": 251
+    },
+    "cash-tight": {
+      "complete_rebuilt_policy": "equal",
+      "initial_value_exact": "11287373277/128000000",
+      "policy_states": 188
+    },
+    "shifted-prior": {
+      "complete_rebuilt_policy": "equal",
+      "initial_value_exact": "90125954529/1280000000",
+      "policy_states": 260
+    }
+  },
+  "comparison": "parsed full policy content and exact rational values, not source digests"
+}

@@ -1,0 +1,17 @@
+{
+  "format": "l06-inspection-layout/1",
+  "paths": {
+    "programme": "programme",
+    "report": "REPORT.md",
+    "ledger": "stage-ledger.csv",
+    "summary": "summary.json",
+    "source_map": "REVIEW-INDEX.md",
+    "reproduce": "REPRODUCE.ps1",
+    "requirements": "DEPENDENCIES.txt",
+    "figures": [
+      "figures/policy-decisions.png",
+      "figures/cost-information.png",
+      "figures/cash-material.png"
+    ]
+  }
+}

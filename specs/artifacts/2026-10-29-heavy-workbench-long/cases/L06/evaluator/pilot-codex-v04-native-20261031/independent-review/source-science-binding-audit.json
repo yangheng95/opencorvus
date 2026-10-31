@@ -1,0 +1,229 @@
+{
+  "observed_at": "2026-10-31T09:00:34.918875+00:00",
+  "checks": [
+    {
+      "check": "actual project capsule",
+      "pass": true,
+      "details": {
+        "member_count": 5,
+        "differences": []
+      }
+    },
+    {
+      "check": "delivered programme",
+      "pass": true,
+      "details": {
+        "member_count": 5,
+        "differences": []
+      }
+    },
+    {
+      "check": "actual controller capsule",
+      "pass": true,
+      "details": {
+        "member_count": 2,
+        "differences": []
+      }
+    },
+    {
+      "check": "actual public capsule",
+      "pass": true,
+      "details": {
+        "member_count": 21,
+        "differences": []
+      }
+    },
+    {
+      "check": "source archive original members",
+      "pass": true,
+      "details": {
+        "member_count": 83,
+        "differences": []
+      }
+    },
+    {
+      "check": "Actual private command exits",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Row-reordered raw same semantic facts",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "row-control actual 16 SQL commits",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "row-control complete original packet/action/receipt business same",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root base-class-A",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root base-class-B",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root base-no-inspection",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root base-same-information",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root cash-tight-class-A",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root cash-tight-class-B",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root cash-tight-no-inspection",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root cash-tight-same-information",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root shifted-prior-class-A",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root shifted-prior-class-B",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root shifted-prior-no-inspection",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate count/root shifted-prior-same-information",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "No-inspection selected certificate policy independently evaluated base",
+      "pass": true,
+      "details": "Followed 16 stored actions with own raw physical/cash recurrence; not a new planner, DP, actor or solver run."
+    },
+    {
+      "check": "Class advance weighted bound arithmetic base",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "No-inspection selected certificate policy independently evaluated cash-tight",
+      "pass": true,
+      "details": "Followed 16 stored actions with own raw physical/cash recurrence; not a new planner, DP, actor or solver run."
+    },
+    {
+      "check": "Class advance weighted bound arithmetic cash-tight",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "No-inspection selected certificate policy independently evaluated shifted-prior",
+      "pass": true,
+      "details": "Followed 16 stored actions with own raw physical/cash recurrence; not a new planner, DP, actor or solver run."
+    },
+    {
+      "check": "Class advance weighted bound arithmetic shifted-prior",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Original readonly failure preserved",
+      "pass": true,
+      "details": {
+        "at": "2026-10-31T08:44:21.360659+00:00",
+        "code": "PermissionError",
+        "error": "[Errno 13] Permission denied: 'D:\\\\opencorvus-benchmark-runs\\\\l06-v04-codex-fresh-native-20261031\\\\submission\\\\native-run-01\\\\row-order-public\\\\instances\\\\base\\\\latent-law.csv'",
+        "traceback": "Traceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\public\\exercise.py\", line 163, in main\n    with p.open('w',encoding='utf-8',newline='') as f:csv.writer(f).writerows(rows[:1]+list(reversed(rows[1:])))\n         ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 771, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nPermissionError: [Errno 13] Permission denied: 'D:\\\\opencorvus-benchmark-runs\\\\l06-v04-codex-fresh-native-20261031\\\\submission\\\\native-run-01\\\\row-order-public\\\\instances\\\\base\\\\latent-law.csv'\n",
+        "score": null,
+        "action": "preserve original partial source/wires/native failures; no automatic retry"
+      }
+    }
+  ],
+  "all_pass": true,
+  "additional_math_failures": [],
+  "class_and_no_inspection_arithmetic": {
+    "base": {
+      "class_prior": "1/2",
+      "advance_class_bound": "79935238629/1280000000",
+      "intrinsic_information_value": "16331941851/1280000000",
+      "no_inspection_cash_final": 16,
+      "no_inspection_min_cash": -5,
+      "naive_demand_only_feasible_cost_exact": 120,
+      "corrected_selected_no_inspection_cost_exact": 118
+    },
+    "cash-tight": {
+      "class_prior": "1/2",
+      "advance_class_bound": "170951494509/2560000000",
+      "intrinsic_information_value": "54795971031/2560000000",
+      "no_inspection_cash_final": 12,
+      "no_inspection_min_cash": -9,
+      "naive_demand_only_feasible_cost_exact": 120,
+      "corrected_selected_no_inspection_cost_exact": 119
+    },
+    "shifted-prior": {
+      "class_prior": "3/4",
+      "advance_class_bound": "155861214969/2560000000",
+      "intrinsic_information_value": "24390694089/2560000000",
+      "no_inspection_cash_final": 16,
+      "no_inspection_min_cash": -5,
+      "naive_demand_only_feasible_cost_exact": 120,
+      "corrected_selected_no_inspection_cost_exact": 118
+    }
+  },
+  "certificate_scope": "Read actual stored objects and independently inspect mathematical implementation/acyclic proof; no solver/DP/certificate verifier re-executed. The verifier is candidate-authored independent method, not a second external reviewer.",
+  "reviewer_tool_observation": "First audit source displayed SyntaxWarning for Windows \\l literal; computation returned complete failures=[]/exit0. Preserved first executed bytes and normalized only reviewer path spelling, no candidate change or native rerun.",
+  "reviewer_assumption_correction": {
+    "initial_receipt": "source-science-binding-first-assumption.json",
+    "initial_claim": "No-inspection optimum equals buying current demand every week (120).",
+    "correction": "This only provides a feasible policy/upper bound. Certified units can be bought earlier at a lower price and carried, so candidate 118/119 may be optimal. Followed its stored deterministic no-inspection actions under independent original raw physics; all16 steps feasible and cost118/119/118. Static finite Bellman proof checked separately, no lower bound inferred from this evaluation alone.",
+    "candidate_failure": false
+  },
+  "no_inspection_corrected": {
+    "base": {
+      "cost": 118,
+      "expected_certificate_value": "118",
+      "feasible": true,
+      "cost_matches": true,
+      "reason": "No-testing can still buy extra certified material in cheaper weeks and carry it at holding cost. A demand-only per-week purchase is feasible but need not be optimal."
+    },
+    "cash-tight": {
+      "cost": 119,
+      "expected_certificate_value": "119",
+      "feasible": true,
+      "cost_matches": true,
+      "reason": "No-testing can still buy extra certified material in cheaper weeks and carry it at holding cost. A demand-only per-week purchase is feasible but need not be optimal."
+    },
+    "shifted-prior": {
+      "cost": 118,
+      "expected_certificate_value": "118",
+      "feasible": true,
+      "cost_matches": true,
+      "reason": "No-testing can still buy extra certified material in cheaper weeks and carry it at holding cost. A demand-only per-week purchase is feasible but need not be optimal."
+    }
+  }
+}

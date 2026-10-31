@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-31T08:55:19.216347+00:00",
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-u",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\public-inputs\\exercise.py",
+    "--project",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\source-project",
+    "--public",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\public-inputs",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\private-run",
+    "--python",
+    "C:/Python314/python.exe"
+  ],
+  "source_programme": "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\submission\\programme",
+  "only_inputs": "exact21 original public bytes + original delivered source-only programme, new native outputs; no old weights/results/reference/evaluator/credential/future files",
+  "readonly_copy_attribute_resolution": "immutable original public files unchanged; newly written working input files have default writable attributes, so public row-order copy can be written without changing any source/table bytes",
+  "scope": "same frozen private native exercise; finite controlled process/dataflow only, no OS/network or arbitrary-failure isolation certification"
+}

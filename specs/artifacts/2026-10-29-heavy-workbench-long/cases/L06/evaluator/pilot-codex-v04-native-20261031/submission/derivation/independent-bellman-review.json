@@ -1,0 +1,94 @@
+{
+  "format": "l06-independent-bellman-review/1",
+  "method": "independent action enumeration and public model.advance; exact rational Bellman minimum at every stored state, all feasible candidate successors closed; planner module not imported",
+  "certificates": {
+    "base-class-A": {
+      "states_exactly_verified": 7844,
+      "feasible_states": 7549,
+      "valid_alternative_actions": 25497,
+      "original_model_outcome_edges": 28321,
+      "root_value_exact": "3796298817/64000000"
+    },
+    "base-class-B": {
+      "states_exactly_verified": 7844,
+      "feasible_states": 7549,
+      "valid_alternative_actions": 25497,
+      "original_model_outcome_edges": 28321,
+      "root_value_exact": "41972250459/640000000"
+    },
+    "base-no-inspection": {
+      "states_exactly_verified": 556,
+      "feasible_states": 514,
+      "valid_alternative_actions": 1104,
+      "original_model_outcome_edges": 1104,
+      "root_value_exact": "118"
+    },
+    "base-same-information": {
+      "states_exactly_verified": 58191,
+      "feasible_states": 55979,
+      "valid_alternative_actions": 182834,
+      "original_model_outcome_edges": 202582,
+      "root_value_exact": "300834939/4000000"
+    },
+    "cash-tight-class-A": {
+      "states_exactly_verified": 7182,
+      "feasible_states": 6838,
+      "valid_alternative_actions": 23015,
+      "original_model_outcome_edges": 25591,
+      "root_value_exact": "80959253829/1280000000"
+    },
+    "cash-tight-class-B": {
+      "states_exactly_verified": 7182,
+      "feasible_states": 6838,
+      "valid_alternative_actions": 23015,
+      "original_model_outcome_edges": 25591,
+      "root_value_exact": "2249806017/32000000"
+    },
+    "cash-tight-no-inspection": {
+      "states_exactly_verified": 420,
+      "feasible_states": 354,
+      "valid_alternative_actions": 719,
+      "original_model_outcome_edges": 719,
+      "root_value_exact": "119"
+    },
+    "cash-tight-same-information": {
+      "states_exactly_verified": 53243,
+      "feasible_states": 50964,
+      "valid_alternative_actions": 164960,
+      "original_model_outcome_edges": 182990,
+      "root_value_exact": "11287373277/128000000"
+    },
+    "shifted-prior-class-A": {
+      "states_exactly_verified": 7844,
+      "feasible_states": 7549,
+      "valid_alternative_actions": 25497,
+      "original_model_outcome_edges": 28321,
+      "root_value_exact": "3796298817/64000000"
+    },
+    "shifted-prior-class-B": {
+      "states_exactly_verified": 7844,
+      "feasible_states": 7549,
+      "valid_alternative_actions": 25497,
+      "original_model_outcome_edges": 28321,
+      "root_value_exact": "41972250459/640000000"
+    },
+    "shifted-prior-no-inspection": {
+      "states_exactly_verified": 556,
+      "feasible_states": 514,
+      "valid_alternative_actions": 1104,
+      "original_model_outcome_edges": 1104,
+      "root_value_exact": "118"
+    },
+    "shifted-prior-same-information": {
+      "states_exactly_verified": 58191,
+      "feasible_states": 55979,
+      "valid_alternative_actions": 182834,
+      "original_model_outcome_edges": 202582,
+      "root_value_exact": "90125954529/1280000000"
+    }
+  },
+  "valid_alternative_actions": 681573,
+  "original_model_outcome_edges": 755547,
+  "seconds": 81.61540500000046,
+  "status": "passed"
+}

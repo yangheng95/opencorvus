@@ -1,0 +1,111 @@
+{
+  "order": {
+    "episode": "episode-cf58727020dcc37f",
+    "committed_seq": 1,
+    "original_key": "l06-0eb84b9bbd4c20455db51677bac77181c76e1194ac7e7142663f70793ec60eeb",
+    "observation": null,
+    "cut_controller_pid": 28088,
+    "resume_controller_pid": 28844,
+    "cut_worker_pid": 25928,
+    "resume_worker_pid": 1688,
+    "controller_actual_exit": 73,
+    "worker_exit_before_cut": 0,
+    "original_receipt": {
+      "action": {
+        "certified_units": 1,
+        "order": "A"
+      },
+      "observation": null,
+      "phase": "operations",
+      "post_state": {
+        "cash": 16,
+        "costs": {
+          "certified": 8,
+          "disposal": 0,
+          "holding": 0,
+          "laboratory": 0,
+          "normal": 3,
+          "production": 1
+        },
+        "cumulative_cost": 12,
+        "good": 0,
+        "incoming": [],
+        "minimum_cash": 6,
+        "phase": "laboratory",
+        "quarantine": {
+          "A": 1,
+          "B": 0
+        },
+        "receivables": [
+          {
+            "amount": 12,
+            "due_week": 2,
+            "receipt_id": "sale-week-0"
+          }
+        ],
+        "terminal": false,
+        "week": 1
+      },
+      "request_id": "l06-0eb84b9bbd4c20455db51677bac77181c76e1194ac7e7142663f70793ec60eeb",
+      "seq": 1,
+      "week": 0
+    },
+    "next_seq": 2,
+    "original_cut_record": "native-run-02\\episode-cf58727020dcc37f\\cut-order\\crash-after-commit.json",
+    "original_replay_record": "native-run-02\\episode-cf58727020dcc37f\\cut-laboratory\\resume-receipt.json"
+  },
+  "laboratory": {
+    "episode": "episode-cf58727020dcc37f",
+    "committed_seq": 2,
+    "original_key": "l06-76c8e20dc01b37aadff5c5a8eed09c7b813756344c7e9cd941a56e2647382fd6",
+    "observation": "good",
+    "cut_controller_pid": 28844,
+    "resume_controller_pid": 5152,
+    "cut_worker_pid": 1688,
+    "resume_worker_pid": 6096,
+    "controller_actual_exit": 73,
+    "worker_exit_before_cut": 0,
+    "original_receipt": {
+      "action": {
+        "test": "A"
+      },
+      "observation": "good",
+      "phase": "laboratory",
+      "post_state": {
+        "cash": 15,
+        "costs": {
+          "certified": 8,
+          "disposal": 0,
+          "holding": 0,
+          "laboratory": 1,
+          "normal": 3,
+          "production": 1
+        },
+        "cumulative_cost": 13,
+        "good": 2,
+        "incoming": [],
+        "minimum_cash": 6,
+        "phase": "operations",
+        "quarantine": {
+          "A": 0,
+          "B": 0
+        },
+        "receivables": [
+          {
+            "amount": 12,
+            "due_week": 2,
+            "receipt_id": "sale-week-0"
+          }
+        ],
+        "terminal": false,
+        "week": 1
+      },
+      "request_id": "l06-76c8e20dc01b37aadff5c5a8eed09c7b813756344c7e9cd941a56e2647382fd6",
+      "seq": 2,
+      "week": 1
+    },
+    "next_seq": 3,
+    "original_cut_record": "native-run-02\\episode-cf58727020dcc37f\\cut-laboratory\\crash-after-commit.json",
+    "original_replay_record": "native-run-02\\episode-cf58727020dcc37f\\completed\\resume-receipt.json"
+  }
+}
