@@ -72,3 +72,5 @@
 独立权重检查只能证明离散公开网格上的这些量。数值实现的1e-10/1e-9一致容差与物理解质量阈值分开；当前后者仍pending。结构/端点检查返回`artifact_contract_checked`仅表示注册覆盖、声明计数、文件/权重合同、配对及选优的检查，不认证逐尝试日志内容、训练来源、科学结论、恢复、完整复训或论文。`study_complete/solution_reproduced`必须经相应实际执行与独立审查后另行判断。
 
 当前逐行字段和前置依赖按[TRACE-CONTRACT.draft.md](TRACE-CONTRACT.draft.md)明确；无更新的梯度终态检查不伪算attempt，shared prefix须提供完整可验证逻辑轨迹。科学结果与固定分母聚合按[OUTCOMES.draft.md](OUTCOMES.draft.md)，未评/未执行不再混称已失败或已有0分；原权重100/19+5及单final选择不变。
+
+当前用户指定原生本机执行；载体、混合环境及闭合收据合同见[LOCAL-EXECUTION.md](LOCAL-EXECUTION.md)。原科学注册与质量要求不变。

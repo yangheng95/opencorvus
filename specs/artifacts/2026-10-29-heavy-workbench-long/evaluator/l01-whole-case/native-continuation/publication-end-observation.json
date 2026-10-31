@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-31T05:29:13.035097+00:00",
+  "known_terminal_records": [
+    {
+      "id": "convection-adam-s345-lr1e-04",
+      "status": "max_updates",
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      }
+    },
+    {
+      "id": "convection-lbfgs-s345-lrnone",
+      "status": "max_updates",
+      "phases": {
+        "lbfgs": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      }
+    }
+  ],
+  "latest_progress": [
+    {
+      "path": "runs/convection-adam-s345-lr1e-04/adam/progress.json",
+      "at": "2026-10-31T05:24:40.574235+00:00",
+      "accepted": 41000,
+      "phase": "adam",
+      "loss": 0.002506791107580026
+    },
+    {
+      "path": "runs/convection-hybrid-s345-lr1e-04/lbfgs/progress.json",
+      "at": "2026-10-31T05:29:01.787689+00:00",
+      "accepted": 2000,
+      "phase": "lbfgs",
+      "loss": 0.0034860892412230176
+    }
+  ],
+  "native_owner_terminal_exists": false,
+  "scope": "single end-of-delivery read-only observation; not full study or quality score"
+}

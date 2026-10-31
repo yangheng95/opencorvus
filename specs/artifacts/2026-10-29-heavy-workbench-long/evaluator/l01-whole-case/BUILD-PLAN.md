@@ -74,3 +74,11 @@ prepare写绑定原capsule/合同语义的assignment和真实metrics/trace事实
 必要验收只对原首段一次元数据关闭+原artifact验收，再对原41000真实trace/权重进入整题prepare；通过后显式继续原尚未执行格，绝不重首格/旧矩阵。这个阻断没有改变1%科学底线，最终科学成功仍待全合法选择及独审。
 
 实际修复启动又遇Docker npipe服务不存在，create exit1、零容器/零优化，原收据保publication-repair/create.json，不重启用户Docker/WSL。元数据发布仅需已有NumPy，故唯一finalize_manifest放在study_publication.py并提供显式CPU CLI，训练producer与此CLI共用；不是第二协议/fallback。builder必须一并封当前唯一pinn_submission_check作为selection primitive依赖，避免新增未声明模块。Docker恢复前不声称remaining或L06在线容器已运行。
+
+## 最新人类指令：本机执行，停止依赖Docker
+
+用户明确“别用docker了，本机搞”，覆盖旧运行载体及环境检查顺序。数学/19+5配置/方法/更新上限/1%目标/选择/权重不改；原首段Linux/CUDA41000步结果原样保留，不重新训练。剩余格改Windows本机独立venv：已确认RTX5090/driver610.88，选现有Python3.12运行时，仅项目外部自有运行根安装原Torch2.7.1/CUDA12.8、NumPy1.26.4及原研究依赖，不改全局Python/驱动/系统服务。安装/实际CUDA可用是必要依赖准备，不冒充组件实验或候选有效小时。
+
+全仓当前调用面：run_study/finish_study使用sys.executable启动恢复子进程、Path写文件，本已支持Windows；平台相关点为原case checker/native_context只读Docker inspect以及外部owner命令。修改只在case执行/证据封存层：本机owner记录真实PID/argv/开始终态/退出/源和完整输出；checker采用一个显式version2 native执行收据，旧closed capsule通过保留全部原始事实的显式version1→2投影导入，不保自动双读fallback、不把历史容器据改称Windows执行。旧原件只读。
+
+新的Windows阶段明确与原Linux阶段不同环境；原seed345已保存的初始化合法复用，其余初始化/实际库/设备如实记录，不按非凸精确轨迹验收。保原first closed source、发布修订和新native source的版本边界，不声称整份参考从同一OS单次冷跑。新native owner只执行--continue-study的未运行格，不能重首段。输出全部自然终态/实际图和质量可达齐后才一次整题独审；未完成不算第十题。新的Python原输出、typed failure、单层独评和固定分母合同保持，不重旧组件资格。

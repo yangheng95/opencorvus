@@ -28,3 +28,6 @@
 
 
 S1独立实施已完成：[最终审查](evaluator/upgrade-v0.3/qualification/weekly-physics/independent-review/REVIEW.md)无剩余局部阻断。独立发现qualify_delivery将1/3转float却期待精确通过的真实P2，现以未约分精确JSON数修复，原1/3和真正有限0.5分别实际CLI复核；原失败/源/初评保留。周内kernel/旧collector仍等价；完整0.3权威信息/online/未来leaf诊断隔离、新树/界/rubric尚待，不能拿S1当新版冻结。
+
+
+最新另版已落：[L06/0.3.0-dev完整多阶段整题](evaluator/upgrade-v0.3/README.md)已真实本机执行/原receipt恢复/完整交付/同checker错误programme/一次集中整审开发冻，参考100/虚假保证95但关键失败。旧0.2真实双100及其public/rubric/FREEZE只读保留，未改旧线；新0.3仍须fresh比较/有效小时证据。

@@ -1,0 +1,5 @@
+# Optional search-source reproduction, not used by online replay or actual report.
+# OR-Tools9.15 requires NumPy>=2.0.2; do not merge with the report environment.
+ortools==9.15.6755
+numpy==2.3.5
+scipy==1.15.3

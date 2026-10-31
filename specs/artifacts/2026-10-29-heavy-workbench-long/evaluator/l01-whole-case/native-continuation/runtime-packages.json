@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\native-science-l01-20261031\\Scripts\\python.exe",
+    "-m",
+    "pip",
+    "freeze"
+  ],
+  "exit_code": 0,
+  "stdout": "chardet==7.7.0\ncontourpy==1.3.3\ncycler==0.12.1\nfilelock==4.2.4\nfonttools==4.68.0\nfsspec==2026.9.0\nJinja2==3.1.6\nkiwisolver==1.5.1\nMarkupSafe==3.0.3\nmatplotlib==3.10.3\nmpmath==1.3.0\nnetworkx==3.7\nnumpy==1.26.4\npackaging==26.3\npillow==13.0.0\npyparsing==3.3.3\npypdf==5.5.0\npython-dateutil==3.0.0\nreportlab==4.4.0\nscipy==1.15.3\nsetuptools==78.1.0\nsix==1.17.0\nsympy==1.14.0\ntorch==2.7.1+cu128\ntyping_extensions==4.16.0\ntzdata==2026.6\n",
+  "stderr": ""
+}

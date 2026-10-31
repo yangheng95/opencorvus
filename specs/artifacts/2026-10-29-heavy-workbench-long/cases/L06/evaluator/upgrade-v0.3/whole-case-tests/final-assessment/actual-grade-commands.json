@@ -1,0 +1,56 @@
+[
+  {
+    "actual_argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\check_whole.py",
+      "grade",
+      "--assignment",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed",
+      "--review",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\main-review-final.json",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\final-assessment\\reference-grade.json"
+    ],
+    "observed_powershell_wrapper_exit": 0,
+    "direct_grader_exit_not_separately_captured": true,
+    "actual_output": {
+      "assignment_id": "l06-whole-1526381fb1484c62854411169807060d",
+      "total": 100,
+      "good": true,
+      "all_critical_pass": true,
+      "review_complete": true,
+      "development_frozen": true
+    },
+    "machine_facts_recomputed": "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\final-assessment\\reference-grade-machine-recomputed"
+  },
+  {
+    "actual_argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\check_whole.py",
+      "grade",
+      "--assignment",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-weak-closed",
+      "--review",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\weak-review-final.json",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\final-assessment\\weak-grade.json"
+    ],
+    "observed_powershell_wrapper_exit": 1,
+    "direct_grader_exit_not_separately_captured": true,
+    "actual_output": {
+      "assignment_id": "l06-whole-0701427c8a8f4837980f057ed957353c",
+      "total": 95,
+      "good": false,
+      "all_critical_pass": false,
+      "review_complete": true,
+      "development_frozen": true
+    },
+    "machine_facts_recomputed": "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\final-assessment\\weak-grade-machine-recomputed"
+  }
+]

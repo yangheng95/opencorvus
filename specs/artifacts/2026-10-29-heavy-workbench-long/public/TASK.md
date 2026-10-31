@@ -76,3 +76,5 @@ Nyström合同：在CUDA上以float64和单独`torch.Generator(device="cuda").ma
 没有总模型token或总墙钟截断。环境准备、有效模型/工具工作、有效训练/复训和无活动等待分别记录；重叠时间不相加。不要等待凑时长，完成即交付；单次训练耗时长时保存真实进度与可复核状态，不能用心跳文字冒充工作。没有完成的配置如实报告，最终分数以实际执行与交付证据为准。
 
 当前整题机读澄清见[TRACE-CONTRACT.draft.md](TRACE-CONTRACT.draft.md)和[OUTCOMES.draft.md](OUTCOMES.draft.md)。quality-policy.draft.json把已先行登记的1%/独立物理目标写成公开机器字段，仍待原注册优化合同可达及一次整题独审，未冻结/未发布分数。固定原19+5、输入/损失/初始化/方法/选择与权重不因本澄清变化；结构容量对照不入原合法选择。
+
+当前用户指定原生本机执行；载体、混合环境及闭合收据合同见[LOCAL-EXECUTION.md](LOCAL-EXECUTION.md)。原科学注册与质量要求不变。

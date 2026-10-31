@@ -1,0 +1,46 @@
+{
+  "at": "2026-10-31T05:25:52.585703+00:00",
+  "case": "L06/0.3.0-dev",
+  "reviewer": "/root/benchmark_review",
+  "allow_development_metadata_freeze": true,
+  "remaining_substantive_blockers": [],
+  "main_assignment_id": "l06-whole-1526381fb1484c62854411169807060d",
+  "weak_assignment_id": "l06-whole-0701427c8a8f4837980f057ed957353c",
+  "main_H": {
+    "H01": "verified_pass",
+    "H02": "verified_pass",
+    "H03": "verified_pass",
+    "H04": "verified_pass",
+    "H05": "verified_pass"
+  },
+  "weak_H": {
+    "H01": "verified_pass",
+    "H02": "verified_pass",
+    "H03": "verified_pass",
+    "H04": "verified_pass",
+    "H05": "verified_fail"
+  },
+  "permitted_metadata_status": "development_frozen",
+  "immutable_rules": [
+    "case identity",
+    "raw business facts",
+    "17leaf IDs",
+    "fixed denominator100",
+    "weights",
+    "critical flags",
+    "good minimum90",
+    "quality maximum60044/15percent improvement",
+    "existing original runs/initial reviews/old0.2 scores"
+  ],
+  "reviewer_native_whole_runs": 1,
+  "reviewer_new_solver_runs": 0,
+  "reviewer_new_Docker_WSL_Provider_GPU_UI_actions": 0,
+  "postrepair_native_independently_read_not_reexecuted": true,
+  "initial_H02_failure_preserved_new_evidence_reverses_only_final_H02": true,
+  "dependency_resolution_not_new_search": true,
+  "aggregate_authored": false,
+  "fresh_candidate_discrimination_certified": false,
+  "effective_hours_certified": false,
+  "professional_human_or_statistical_maturity_certified": false,
+  "ten_case_completion_certified": false
+}

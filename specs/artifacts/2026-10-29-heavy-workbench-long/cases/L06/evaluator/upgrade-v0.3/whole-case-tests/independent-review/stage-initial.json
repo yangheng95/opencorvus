@@ -1,0 +1,23 @@
+{
+  "at": "2026-10-31T05:16:14.968282+00:00",
+  "complete_business_reference_observed": true,
+  "allow_development_freeze": false,
+  "blockers": [
+    "public_business_wire",
+    "submission_execution_binding",
+    "exact_format",
+    "financial_claims_and_AR",
+    "raw_and_SQL_authority",
+    "grade_machine_recomputation"
+  ],
+  "native_runs_by_reviewer": 1,
+  "solver_runs_by_reviewer": 0,
+  "main_initial_human_failures": [
+    "H02"
+  ],
+  "weak_initial_human_failures": [
+    "H02",
+    "H05"
+  ],
+  "no_aggregate_written": true
+}

@@ -1,7 +1,7 @@
 """Author construction of explicit new multi-stage raw materials, not a grader."""
 from pathlib import Path
 from copy import deepcopy
-import argparse,json,itertools,sys
+import argparse,json,itertools,sys,shutil,subprocess
 
 HERE=Path(__file__).resolve().parent
 CORE=HERE.parent/'qualification/current-source';sys.path.insert(0,str(CORE));sys.path.insert(0,str(HERE/'source'))
@@ -24,26 +24,14 @@ def main():
             s['plant_capacity_hours'].append([24,34 if bit else 31])
         paths.append(s)
     data['scenarios']=paths;write_packet(data,a.out/'inputs')
-    contract={'format':'l06-tree-contract/1','case_version':'L06/0.3.0-draft','weeks':16,
-        'observation':'complete_current_event_and_perfect_recall','reveal_weeks':[4,8,12],
-        'probabilities':'positive integer numerators / facility denominator; full public support, actual future private',
-        'state':'post_week; original committed event/action prefix authoritative; derived state recomputed',
-        'timing':'historical arrivals/receipts then current event, new orders/lead0, production/fulfilment, stage peaks/holding/cash',
-        'checkpoint':'l06-committed-journal/1; schema1 SQLite is host-owned, actor may use any internal persistence',
-        'quality_design':'before any policy solve: improve expected cost at least15% over legal spot contingency; additional registered feasible reference tolerance to be frozen after full construction',
-        'limits':'synthetic finite business; no real procurement, OS side-channel, arbitrary failure or financial certification'}
-    (a.out/'tree-contract.json').write_text(json.dumps(contract,indent=2)+'\n')
+    # Publication metadata and public wire prose have one current source.
+    contract=json.loads((HERE/'public-draft/tree-contract.json').read_text(encoding='utf-8'))
+    (a.out/'tree-contract.json').write_text(json.dumps(contract,indent=2)+'\n',encoding='utf-8')
     baseline,audit=contingency(data)
     # This author-side witness must never be included in candidate public input.
     (a.out.parent/(a.out.name+'-contingency-policy.json')).write_text(json.dumps(baseline,indent=2)+'\n')
     (a.out.parent/(a.out.name+'-contingency-audit.json')).write_text(json.dumps(audit,indent=2)+'\n')
-    (a.out/'OPERATIONS.md').write_text('''# Four-product operations desk: staged commitments
-
-Original synthetic business, no real supplier/customer. Static catalogue/BOM/route/pack/freight/lead/holding/sales terms inherit the declared L06 manufacturing model. This is a new instance, not the old0.2 input or lower bound. Eight equally probable joint paths combine three later announcements at weeks4,8,12. The tree is public support; the actual selected future is private to execution.
-
-The spot supplier can serve a conservative current-needs alternative but is costly. Forward suppliers offer lower unit prices, integer packs, dispatch minimums and lead1/2. Supply announcements never revoke already placed orders. Production routes share real work hours; warehouse limits apply before consumption/dispatch. All current demand must be fulfilled. Historical cash arrives only after the declared lag; late receivables remain assets and cannot be spent early. Completed-week actions and receipts cannot be edited on restart.
-
-Compare a lawful full-observation-history policy, an executable costly alternative and a clearly labelled information relaxation. An action may stay unchanged after news. Neither a path label nor a solver status proves causality, physical feasibility, quality or approval. Preserve failures and give practical operator recovery/credit advice. All money/volume/hour units are the raw table integer units; not real currency commitments.
-''',encoding='utf-8')
+    for name in ('TASK.md','OUTPUTS.md','OPERATIONS.md'):shutil.copy2(HERE/'public-draft'/name,a.out/name)
+    subprocess.run([sys.executable,'-B',str(HERE/'build_public_runtime.py'),'--public',str(a.out)],check=True)
     print(json.dumps({'raw_paths':len(paths),'weeks':16,'contingency_cost':audit['expected_cost_exact'],'all_business_and_information_valid':audit['policy_valid']}))
 if __name__=='__main__':main()

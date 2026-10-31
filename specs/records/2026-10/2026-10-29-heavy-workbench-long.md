@@ -654,3 +654,31 @@ L02当前版本对这两个系统未拉开区分度，不能拿两100说难度�
 同check_tree实际CLI核8路径/60信息节点和128逻辑journal，4个真实error_policy进程均进入同checker：拼接两个物理可行方案的前瞻政策business=true但information=false；超供应/bool数量/改历史具名失败，合法spot质量fail。逻辑journal/replay不是实际actor或SQLite中断证明。主方新CPU报告/两CSV/实际四panel图已view，精确purchase73437/2+freight11595/2+production46481/8+holding993闭合；local --target绘图库不改宿主全局依赖，不重预测/solver。721272bytes/63成员construction-evidence原件区分原求解源与后来checker/report源。
 
 L06新execute_policy/table_actor是固定public/source挂载+stdin当前packet/实际SQLitecommit的源码，任意语言argv；当前Docker不可用，尚未实跑其在线隔离/进程中断/恢复、完整输入控制/机器+人评grader与集中整审。public-draft/rubric.draft不冻结、不发布新分数。L01全研究和L06新版仍未完成，套件9/10、有效候选小时0/10；不以这些中间结果代替第十题或新版本。后续环境可用先继续原L01pending及L06真在线闭环，完整成品齐后各一次集中独审；不重任何旧资格/原solver/已完成41k。L02另升级义务同样未取消，旧两100/政策只读。
+
+## 最新人类本机指令与真实整题接续Recall（2026-10-31）
+
+用户先恢复定时任务，再明确“别用docker了，本机搞”。本轮之后完全不查询/启动/恢复Docker，原已完成容器原件只读保留；不操作Docker/WSL/用户窗口或UI自动化。定时任务benchmark已ACTIVE且改为本机ONLY当前流程，旧环境等待文案撤掉，不把暂停或等待算候选小时。
+
+先保存旧源码/合同到l01-full-case-20261031/local-transition，再修改L01完整执行capture为l01-controlled-execution/2唯一当前格式，历史首段通过显式migrate_native_capture.py投影metadata-only收据，原1.38GB完整capsule仍保外部。新run_native_reference.py只调用本机真实CUDA进程--continue-study，原41000已完成纯L-BFGS不重，科学profile/数据/初始化复用/方法/选优/质量不改。独立venv安装PyTorch2.7.1+cu128/NumPy1.26.4等成功，RTX5090实际CUDA平方求和13；仅运行时可用验证，不新增PINN组件资格。Python3.12.14/Windows与旧Linux3.11环境差异明示。
+
+2026-10-31T05:06:46Z原pending正式续跑。启动器owner14828→真实owner23296，启动器训练16256→实际训练18416，真实CIM关系另封native-runtime-process-lineage.json，不把venv redirector说成实际训练解释器。source/public/owner首更新前封pre-execution-source.zip，实际progress已有7000 Adam非零更新/167.63秒；不能热改该源或另开矩阵。唯一L01-current-reference locator/author-study active及native-remaining-registered-cells原owner/native末态优先，长训练定时看结果、不持续监听。原五旧Paused仅最后已知，禁Docker查询不能伪称本轮状态。L01整体论文/质量可达/175独评/冻结仍待，14质量失败不能被方法分补。
+
+L06/0.3从原唯一120秒可行政策接真实本机stdio/SQLite。原actor只获当前完整history/state/public-support，所选未来仅parent stdin/内存；native同用户不声称OS文件/内存/网络隔离。新schema2原先无已执行native用户DB，不涉及L04/L05数据迁移。首native-whole-run6.516秒8路径/128commit+16控制保留，但主方自审三阻断集中修：公开路径顺序和固定控制T07、误比较request_id格式、缺controller事前副本。修后native-whole-final05:08:27Z实际5.5132287秒全0，唯一第一路径week7真正commit后controller73；worker此前EOF自然0，不能冒称被杀或物理掉电。原8行/原keyreceipt恢复next_week8后完整16周；另私有选择T01的CSV行序控制16实际commit。actor/controller/public事前封完整源，private order仅终态后公开。120秒solver/41k/任何旧组件资格均未重复。
+
+整题check_whole.py已从闭合原run/source/public/delivery的原raw和SQL/wire独算12M、固定75+25=100/90+allcritical；五H需绑定assignment_id/case_version，未冻/未评总分null，knownfail不能补分。作者reference-delivery与真实report_policy --claim-mode false-guarantee弱报告均实际prepare12Mpass，主方实际view新图清晰。弱报告数字图/actor真实，虚假现实无限保证是内容错误programme，不是新LLM。四个原实际error_policy输出只读复用入wholeprepare，前瞻物理pass/信息fail、bool形状fail，改policy未执行的依赖blocked，未评总分null，保旧初评。
+
+唯一/root/benchmark_review正一次集中整题独审；独立原CSV/Fraction/128周/128SQL-wire核期望394553/8、mincash−5622、期末AR偶24150/奇25230、60信息节点一致，非导入作者oracle。唯一原自含reproduce完整cold已实际0/内部7.7722853秒、wrapper8.2973556秒/128+16commit/73→0，原件另封，不重复cold。独审已指出公开终期规则/完整wire说明、runner要消费任意programme、等价Fraction组件误拒和minimum_cash未绑定；主方另发现grade信任preparedM可编辑。全部等待独审完整清单集中修，仅受影响原对象/程序必要复验，不增加组件审查或旧solver。当前L06新0.3未冻结、不发布新分数。所有原失败/初评/源和旧正确事实保留。
+
+套件仍9/10完整开发合同，有效候选小时资格0/10，职业真人/统计成熟未知。L02已触发另版义务仍保留，旧0.2两100/旧API退休不改。其它已交整题不重矩阵/冷跑。结束前本任务范围commit/正常fetch merge/审全部待推/完整hook及必要验证/push，保foreign overlay/删图视频/索引/Bun。
+
+## L06/0.3整题最终闭合Recall（2026-10-31T05:27Z），L01本机继续
+
+唯一集中整题审查原六阻断/初H02fail/weakH05fail与源和真实反例均保。一次集中修已闭合公开terminal/目标/全wire、通用programme实际消费/封存controller实际执行、Fraction数值等值与财务声明、原raw注册/全部实际SQLmeta设施绑定、grade从closed重算M而不信preparedM。实际每路径cash/mincash/AR/due16..19入公开交付，期望394553/8、minimum−5622、AR偶24150/奇25230与独立CSV/SQL一致。额外查到原combined requirements NP1.26.4与ORtools9.15依赖冲突，保旧文本，明确在线stdlib/报告原环境/可选搜索NP2.3.5分属不同能力，实际pip dry-run resolver exit0，未安装/求解或改活跃L01环境。
+
+因实际程序入口和controller来源改变，主方唯一必要最终native-whole-reviewed于05:18:37Z完成/内部8.4243214秒，真正消费另名decision_agent.py/stable-ticket-*和当前声明argv，不再硬造table_actor。完整8路径128commit/一cut73后原8行/receipt恢复、另16行序控制，原5.513与6.516初版全保。controller/checker实际从pre-exec封副本启动。唯一独立cold仍是初自含helper7.7722853秒/wrapper8.2973556秒，不说其读过后来generic修复；修后独审只原对象/反例/AR/源绑定/新图/依赖复核，没有再cold或solver。
+
+独审05:27前最终无剩余实质阻断，允许仅L06/0.3.0-dev开发metadata/README冻；FREEZE已落，17ID/100权重/critical/90、原raw、事前15%与60044不变。真正check_whole grade对两个closed原对象重新计算12M，再接最终绑定5H：参考100/17pass/allcritical/goodtrue；weak95/仅H05criticalfail/goodfalse。这是作者/错误programme开发控制，不是LLM分。原PowerShell wrapper0/1如实记录，直接grader返回码未单独捕获不伪报。其它错误policy未全评总分null，保未执行的依赖。
+
+cases/L06/evaluator/upgrade-v0.3/whole-case-tests有完整可读产品/自含复建/公开exercise/原solver12文件、账与AR/图/实际评分/原初审和修后结案，originals.zip封完整静止外部main/weak/错误/SQL/wire/source/审查，单独receipt列成员及仅第三方plot-deps排除。原唯一120秒搜索/旧L06基线/旧两100不重复，旧public/rubric/FREEZE未改。
+
+L01继续原唯一pending本机研究，实际训练PID18416/owner23296，source已封不热改；最新真实terminal/progress在local-transition/publication-end-observation.json（同repo native-continuation投影）。本轮启动证据2,461,550bytes ZIP不包含仍活跃全训练输出、不冒称自然终态。三PDE合法选择质量/完整论文/175独评及冻结仍待。新L06尚未fresh比较，L02另版义务仍未完成。套件9/10开发合同、有效候选小时0/10，真人统计成熟未认证。定时任务ACTIVE，本机ONLY，不再Docker/旧GPU/已完成格或组件资格重启。

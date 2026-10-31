@@ -1,0 +1,58 @@
+{
+  "expected_cost_exact": "394553/8",
+  "alternative_exact": "70640",
+  "saving_exact": "170567/8",
+  "components_exact": {
+    "purchase_cost": "73437/2",
+    "freight_cost": "11595/2",
+    "production_cost": "46481/8",
+    "holding_cost": "993"
+  },
+  "minimum_cash": -5622,
+  "information_nodes": 60,
+  "full_path_count": 8,
+  "native_bound": 47594.75,
+  "native_status": "FEASIBLE",
+  "native_seconds": 120.02392900316045,
+  "quality_15percent": true,
+  "online_native_recovery": {
+    "status": "native_whole_completed",
+    "at": "2026-10-31T05:18:37.115100+00:00",
+    "native_exit": 0,
+    "seconds": 8.424321400000736,
+    "paths": 8,
+    "actual_commits": 128,
+    "control_commits": 16,
+    "worker_processes": 10,
+    "actual_controller_exits": [
+      73,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "original_receipt_recovered": true,
+    "row_order_control": "control-d6a207c74980",
+    "control_path_after_terminal": "T07",
+    "private_order_after_terminal": [
+      "T05",
+      "T04",
+      "T06",
+      "T03",
+      "T00",
+      "T01",
+      "T07",
+      "T02"
+    ],
+    "whole_case_review": "pending",
+    "score": null,
+    "limits": "native dataflow and one controlled process-loss proof, no OS security/power-loss certificate or candidate hours"
+  },
+  "claim_mode": "bounded",
+  "candidate_score": null
+}

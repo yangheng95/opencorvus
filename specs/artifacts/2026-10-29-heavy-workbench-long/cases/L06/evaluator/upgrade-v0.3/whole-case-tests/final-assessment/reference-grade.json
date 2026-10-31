@@ -1,0 +1,177 @@
+{
+  "format": "l06-whole-assignment/1",
+  "assignment_id": "l06-whole-1526381fb1484c62854411169807060d",
+  "case_version": "L06/0.3.0-dev",
+  "subject_role": "author_reference",
+  "created_at": "2026-10-31T05:23:59.846821+00:00",
+  "original_run": "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\native-whole-reviewed",
+  "leaves": {
+    "M01": {
+      "id": "M01",
+      "status": "verified_pass",
+      "evidence": [
+        "closed/delivery/policy.json: complete strict policy tensors and raw identity"
+      ],
+      "reason": "policy decoded"
+    },
+    "M02": {
+      "id": "M02",
+      "status": "verified_pass",
+      "evidence": [
+        "[]"
+      ],
+      "reason": "independent business/information/quality computation"
+    },
+    "M03": {
+      "id": "M03",
+      "status": "verified_pass",
+      "evidence": [
+        "[]"
+      ],
+      "reason": "independent business/information/quality computation"
+    },
+    "M04": {
+      "id": "M04",
+      "status": "verified_pass",
+      "evidence": [
+        "{\"expected\":\"394553/8\",\"quality_maximum\":\"60044\"}"
+      ],
+      "reason": "independent business/information/quality computation"
+    },
+    "M05": {
+      "id": "M05",
+      "status": "verified_pass",
+      "evidence": [
+        "128 weekly rows, all action coordinates and exact probability-weighted components independently closed"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M06": {
+      "id": "M06",
+      "status": "verified_pass",
+      "evidence": [
+        "actual SQLite event/action/receipt/state/cash/queues agree with independent full replay for every path"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M07": {
+      "id": "M07",
+      "status": "verified_pass",
+      "evidence": [
+        "8 original programme members bound to the executed and delivered object; source correctness additionally reviewed"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M08": {
+      "id": "M08",
+      "status": "verified_pass",
+      "evidence": [
+        "complete actual current packets, responses and stored commitments agree; original argv/env/source reviewed for native dataflow only"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M09": {
+      "id": "M09",
+      "status": "verified_pass",
+      "evidence": [
+        "actual SQLite commit at week7, controller73, original key/receipt and next_week8 resumed in a new process"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M10": {
+      "id": "M10",
+      "status": "verified_pass",
+      "evidence": [
+        "original row/key/event/action/receipt values retained across the real restart"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M11": {
+      "id": "M11",
+      "status": "verified_pass",
+      "evidence": [
+        "same sealed deterministic actor on a separately permuted CSV input, full16 actual commits; this is row-order invariance, not arbitrary business perturbation certification"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "M12": {
+      "id": "M12",
+      "status": "verified_pass",
+      "evidence": [
+        "complete source/report/ledger/figure/reproduction deliverables present; usability and rendered content judged independently"
+      ],
+      "reason": "actual closed-object contract passed"
+    },
+    "H01": {
+      "id": "H01",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\REPORT.md",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\commitment-policy.csv",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\public\\OPERATIONS.md",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\whole-business-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\baseline-independent-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\final-object-audit.json"
+      ],
+      "reason": "Original complete raw support/history and irreversible lead1/2 commitments are explained with the actual lawful spot alternative70640 and expected394553/8. Report labels FEASIBLE/native bound and unknown perfect-information value; no reference action flip/trajectory is imposed. All128 actual repaired SQL/wire actions independently agree with the original raw recurrence and60 complete information histories."
+    },
+    "H02": {
+      "id": "H02",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\REPORT.md",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\receivables.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\summary.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\weekly-ledger.csv",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\final-object-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\repaired-probes\\assessment.json"
+      ],
+      "reason": "The repaired actual report now states minimum settled cash\u22125622 versus intermediate\u22129000 and terminal>=0, and explicitly identifies receivables.json. Every path final/minimum cash and due16..19 AR independently closes against original fulfilled sales at lag4: even paths24150, odd25230; actual AR is never spent early. Expected cost/component/saving70640\u2212394553/8 exact, and native bound is not an optimum or rational certificate. Complete JSON is accepted without duplicating values in prose. This reverses initial H02 only because new actual financial delivery is present."
+    },
+    "H03": {
+      "id": "H03",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\source-map.md",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\reproduce.py",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\public\\exercise.py",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\programme\\submission.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\requirements.txt",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\requirements-report.txt",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\requirements-solver.txt",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\run\\actual-commands.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\final-object-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\final-closure-identity.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\cold-owner-terminal.json"
+      ],
+      "reason": "Final self-contained reproduce invokes public exercise with the supplied programme/argv; actual final native run executes decision_agent.py/stable-ticket-* from the sealed project and captured controller source, preserving73\u21920 original key/receipt. Handoff identifies stop-before-commit, preserve SQLite/WAL, same-key receipt, future-only replan and approved credit escalation. Standard-library replay is separated from actual rendering dependencies and optional resolver-valid search dependencies. My sole earlier clean cold validates the original reference handoff; the final helper was actually executed by the main owner and independently read-audited here, not falsely claimed as a second reviewer cold."
+    },
+    "H04": {
+      "id": "H04",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\operations.png",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\whole-business-audit.json",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-independent-review-20261031\\final-object-audit.json"
+      ],
+      "reason": "Actually opened this final assignment operations.png: cash/cost/raw-before-consumption/FG-before-dispatch four panels, all8path legend, money/volume units, operational weeks and credit/capacity limits are readable. Curves match independently recomputed original ledger; selected source/name/key change does not change physical action values. Same correct figure does not excuse a false statement in the weak report."
+    },
+    "H05": {
+      "id": "H05",
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\delivery\\REPORT.md",
+        "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\assessment-reference-closed\\closed\\run\\owner-terminal.json"
+      ],
+      "reason": "Final report preserves finite synthetic scope, truthful native FEASIBLE/search bound and unknown optimality/information value, controlled controller73 loss after worker natural EOF, row-order-only control and same-user OS nonconfinement. Original failed programmes and reviewer findings remain preserved. It makes no real financial/procurement certification, arbitrary-failure, fresh-LLM or effective-hour claim."
+    }
+  },
+  "fixed_denominator": 100,
+  "total": 100,
+  "good": true,
+  "scope": "actual whole-case author/error control grade; no LLM candidate or useful-hour/maturity certification",
+  "reviewed_points": 100,
+  "all_critical_pass": true,
+  "review_complete": true,
+  "development_frozen": true
+}

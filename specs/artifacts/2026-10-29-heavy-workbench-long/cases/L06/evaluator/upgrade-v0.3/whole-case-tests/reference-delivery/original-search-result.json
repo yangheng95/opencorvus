@@ -1,0 +1,16 @@
+{
+  "status": "author_policy_constructed",
+  "seconds": 120.74722163612023,
+  "expected_cost_exact": {
+    "numerator": 394553,
+    "denominator": 8
+  },
+  "contingency_cost_exact": {
+    "numerator": 70640,
+    "denominator": 1
+  },
+  "pre_registered_15percent_improvement": true,
+  "nonanticipativity_equalities": 1564,
+  "native_bound_scope": "native integer-search bound; not independently replayed search proof or rational dual certificate",
+  "limits": "one finite-tree reference, not a candidate, exact optimum, freeze or effective candidate hours"
+}

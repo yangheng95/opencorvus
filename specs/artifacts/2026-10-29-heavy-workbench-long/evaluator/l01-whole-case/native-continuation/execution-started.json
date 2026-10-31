@@ -1,0 +1,36 @@
+{
+  "format": "l01-controlled-execution/2",
+  "execution_id": "native-5d7352cd889f49dfa42c4c4025b3846b",
+  "backend": "windows-native",
+  "pid": 16256,
+  "pid_scope": "native Windows process",
+  "owner_pid": 23296,
+  "project_root": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project",
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\native-science-l01-20261031\\Scripts\\python.exe",
+    "-u",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\run_study.py",
+    "--inputs",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results",
+    "--device",
+    "cuda",
+    "--continue-study"
+  ],
+  "started_at": "2026-10-31T05:06:46.942899+00:00",
+  "finished_at": null,
+  "state": {
+    "status": "running",
+    "exit_code": null
+  },
+  "scope": "native local source-only continuation, first original Linux cell retained; no OS/network confinement claim",
+  "runtime_limits": {
+    "OMP_NUM_THREADS": "4",
+    "MKL_NUM_THREADS": "4",
+    "OPENBLAS_NUM_THREADS": "4",
+    "CUDA_VISIBLE_DEVICES": "0",
+    "PYTHONNOUSERSITE": "1"
+  }
+}

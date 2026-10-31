@@ -91,20 +91,19 @@ def authorities(profile,rubric,policy):
     delivery={v['id'] for v in leaves if v['group']=='R' and v['id'] not in {q['id'] for q in quality}}
     ensure(type(outcomes.get('study_delivery_ids')) is list and set(outcomes['study_delivery_ids'])==delivery,'facility_delivery_contract')
     ensure(len(review_anchors(leaves,profile))==len(leaves),'facility_anchor_coverage')
-    semantic={'profile':{k:profile[k] for k in ('benchmark','case','base_configurations','continuations','selection','solution_selection')},'leaves':[{k:v[k] for k in ('id','group','weight','critical','requirement')} for v in sorted(leaves,key=lambda v:v['id'])],'quality_targets':targets,'outcome_contract':outcomes,'anchor_contract_version':ANCHOR_VERSION}
+    semantic={'profile':{k:profile[k] for k in ('benchmark','case','base_configurations','continuations','selection','solution_selection')},'leaves':[{k:v[k] for k in ('id','group','weight','critical','requirement')} for v in sorted(leaves,key=lambda v:v['id'])],'quality_targets':targets,'outcome_contract':outcomes,'anchor_contract_version':ANCHOR_VERSION,'native_capture_format':'l01-controlled-execution/2'}
     json_value(semantic)
     return leaves,quality,semantic
 
 def native_context(folder):
-    captured=load(folder/'inspect.json');ensure(type(captured.get('exit_code')) is int and captured['exit_code']==0,'facility_native_capture')
-    values=json.loads(captured['stdout']);ensure(type(values) is list and len(values)==1,'facility_native_inspect_shape')
-    inspect=values[0];state=inspect['State']
-    ensure(state.get('Running') is False and state.get('Paused') is False and state.get('Status')=='exited' and type(state.get('ExitCode')) is int,'facility_native_not_terminal')
-    ensure(type(state.get('StartedAt')) is str and not state['StartedAt'].startswith('0001-') and type(state.get('FinishedAt')) is str and not state['FinishedAt'].startswith('0001-'),'facility_native_unstarted')
-    source_mount=[m for m in inspect['Mounts'] if m['Destination']=='/project'];ensure(len(source_mount)==1 and source_mount[0]['RW'] is False,'facility_source_mount')
-    ensure(inspect['HostConfig']['NetworkMode']=='none','facility_network_contract')
-    cmd=inspect['Config']['Cmd'];ensure(type(cmd) is list and all(type(v) is str for v in cmd),'facility_native_command')
-    return inspect,source_mount[0]['Source']
+    native=load(folder/'execution.json');ensure(native.get('format')=='l01-controlled-execution/2','facility_native_capture_version')
+    ensure(native.get('backend') in ('windows-native','historical-container') and type(native.get('execution_id')) is str and native['execution_id'],'facility_native_identity')
+    ensure(type(native.get('pid')) is int and native['pid']>0 and type(native.get('project_root')) is str and native['project_root'],'facility_native_identity')
+    state=native['state'];ensure(state.get('status')=='exited' and type(state.get('exit_code')) is int,'facility_native_not_terminal')
+    ensure(all(type(native.get(k)) is str and native[k] and not native[k].startswith('0001-') for k in ('started_at','finished_at')),'facility_native_unstarted')
+    cmd=native['argv'];ensure(type(cmd) is list and cmd and all(type(v) is str for v in cmd),'facility_native_command')
+    if native['backend']=='historical-container':ensure(type(native.get('original_capture')) is dict,'facility_historical_capture_binding')
+    return native,native['project_root']
 
 def trace_facts(root,record,spec):
     trace_path=reader.artifact(root,record['trace'],'actual attempt trace')
@@ -195,14 +194,14 @@ def collect(a,out):
     ensure(not output.resolve().is_relative_to(input_root) and not input_root.is_relative_to(output.resolve()),'facility_output_input_overlap')
     ensure(not output.exists(),'facility_source_contains_prior_output')
     try:
-        inspect,source_location=native_context(native);state=inspect['State'];cmd=inspect['Config']['Cmd']
+        inspect,source_location=native_context(native);state=inspect['state'];cmd=inspect['argv']
         if a.scope=='full':ensure(not any(v=='--only' or v.startswith('--only=') for v in cmd),'facility_partial_execution_requested_as_full')
-        previous=[];seen={inspect['Id']}
+        previous=[];seen={inspect['execution_id']}
         for i,capsule in enumerate(a.previous_execution):
             folder=out/f'previous-native-{i}';folder.mkdir();copy_members(capsule,folder,exclude_prefix='results/')
             old,location=native_context(folder)
-            ensure(location.lower().replace('\\','/')==source_location.lower().replace('\\','/') and old['Id'] not in seen,'facility_execution_segment_binding');seen.add(old['Id'])
-            previous.append({'cid':old['Id'],'exit_code':old['State']['ExitCode'],'started_at':old['State']['StartedAt'],'finished_at':old['State']['FinishedAt'],'cmd':old['Config']['Cmd']})
+            ensure(location.lower().replace('\\','/')==source_location.lower().replace('\\','/') and old['execution_id'] not in seen,'facility_execution_segment_binding');seen.add(old['execution_id'])
+            previous.append({'execution_id':old['execution_id'],'backend':old['backend'],'pid':old['pid'],'exit_code':old['state']['exit_code'],'started_at':old['started_at'],'finished_at':old['finished_at'],'cmd':old['argv']})
         if '--continue-study' in cmd:ensure(previous,'facility_missing_execution_segment')
         captured_profile=load(root/a.input_root/'profile.json')
         ensure(json_value({k:captured_profile[k] for k in semantic['profile']})==json_value(semantic['profile']),'facility_input_registration_drift')
@@ -217,7 +216,7 @@ def collect(a,out):
     # Only now overlay terminal outputs, after authoritative source inputs were checked.
     output.mkdir(parents=True,exist_ok=False);copy_members(a.execution,output,'results/',opaque=opaque)
     save(out/'opaque-original-members.json',opaque)
-    facts={'native':{'cid':inspect['Id'],'exit_code':state['ExitCode'],'started_at':state['StartedAt'],'finished_at':state['FinishedAt'],'cmd':cmd,'scope':a.scope},'previous_native':previous,'artifact':None,'trace':{},'quality':{},'prerequisites':{},'source_training_attestation':'requires the single independent whole-case review; self traces alone do not attest optimization'}
+    facts={'native':{'execution_id':inspect['execution_id'],'backend':inspect['backend'],'pid':inspect['pid'],'exit_code':state['exit_code'],'started_at':inspect['started_at'],'finished_at':inspect['finished_at'],'cmd':cmd,'scope':a.scope},'previous_native':previous,'artifact':None,'trace':{},'quality':{},'prerequisites':{},'source_training_attestation':'requires the single independent whole-case review; self traces alone do not attest optimization'}
     prerequisites=facts['prerequisites'];base=profile['base_configurations'];continuations=profile['continuations'];specs={s['id']:s for s in base+continuations}
     def gate(key,state,detail):prerequisites[key]={'status':state,'detail':detail}
     try:
@@ -239,7 +238,7 @@ def collect(a,out):
             except (TraceContract,reader.ContractError,OSError) as e:
                 all_traces=False;facts['trace'][key]={'status':'verified_fail','error':str(e)}
                 gate('L01-B-'+key+'-terminal-state-and-counts','verified_fail',str(e))
-        gate('L01-E-full-clean-retraining','verified_fail' if state['ExitCode']!=0 or not all_traces else 'ready_for_review' if all_terminal and a.scope=='full' else 'blocked','original native, full registry and trace consistency; actual algorithms require independent source review')
+        gate('L01-E-full-clean-retraining','verified_fail' if state['exit_code']!=0 or not all_traces else 'ready_for_review' if all_terminal and a.scope=='full' else 'blocked','original native, full registry and trace consistency; actual algorithms require independent source review')
         for leaf in quality:
             problem=leaf['id'].split('-')[2];candidates=[s['id'] for s in base if s['problem']==problem and s['seed']==profile['solution_selection']['seed']]
             if problem=='convection':candidates += [s['id'] for s in continuations]

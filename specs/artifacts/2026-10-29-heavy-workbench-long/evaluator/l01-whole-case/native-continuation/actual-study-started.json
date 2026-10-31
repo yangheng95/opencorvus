@@ -1,0 +1,24 @@
+{
+  "started_at": "2026-10-31T05:06:50.360341+00:00",
+  "pid": 18416,
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\run_study.py",
+    "--inputs",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results",
+    "--device",
+    "cuda",
+    "--continue-study"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project",
+  "device": "cuda",
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "torch": "2.7.1+cu128",
+  "numpy": "1.26.4",
+  "cuda": "12.8",
+  "gpu": "NVIDIA GeForce RTX 5090",
+  "host": "Windows-11-10.0.26200-SP0",
+  "container_pid_namespace": null,
+  "scope": "author source-only execution, not candidate score"
+}

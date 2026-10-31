@@ -1,0 +1,13 @@
+{
+  "format": "l06-online-submission/2",
+  "argv": [
+    "{python}",
+    "-u",
+    "-B",
+    "{project}/decision_agent.py",
+    "--public",
+    "{public}",
+    "--policy",
+    "{project}/policy.json"
+  ]
+}

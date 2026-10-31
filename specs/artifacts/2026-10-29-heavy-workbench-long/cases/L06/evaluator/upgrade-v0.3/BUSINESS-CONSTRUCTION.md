@@ -49,3 +49,27 @@ S1全仓消费者核查另发现qualify_delivery.py是早期一次性目录布�
 材料采用16周4原料4产品3供应商2工厂、三个后续揭示时点的8条有限联合路径，含真实lead1/2订单、lead0应急、合单包装/MOQ、共享工时、两段峰值仓容和延迟回款。这是新原材料构造，原静态目录/商业语义继承来源明确，时变需求/供应容量组合和现金等新事实独立登记，不能套旧参考界。先构造一个可执行高成本政策，在全部路径同信息合法并满足业务；再至多一个有明确120秒内部上限的CPU参考求解，假设是完整非前瞻模型可以找到更低成本可行政策并给出可核native界。120秒只此作者代表验证参数，不是用户总额度/候选限制，若unknown或无可行解原样保留，不通过重复短solver冒充进展。质量线必须另登记/论证，不从旧L或未完成求解推分。
 
 online单独验证真实源只获当前完整prefix/权威状态、原动作只追加、commit后进程退出与原receipt续接，过去动作更改/自报库存/前瞻政策/错回款/漏峰值及可行高成本控制进入同一checker。不会把表策略或不保存优化器状态判错；原实际业务state由完整journal唯一重建，SQLite只是事实持久化。新报告解释信息/成本/资金风险，并保留真实算法/数值失败。完整源执行/所有路径/真实图/完整错误programme与原子评分齐后才一次整题独审；本计划和任何中间模块不宣布完整0.3、十题或有效小时。
+
+## 用户指定本机执行的整题接续
+
+“别用docker了，本机搞”覆盖旧容器载体；不再查询/启动/恢复Docker。原120秒政策求解已完成且原件保留，不重求解。当前source/execute_policy尚未实际native运行，先保存其原设计源码；改为本机真实Popen stdio worker、独立工作目录/收窄环境及真实SQLite commit后os._exit73/同键恢复。唯一当前入口只本机，不保Docker fallback。public运行合同同步改Windows/本机声明，任意正确语言的argv不变。
+
+数据流根因/影响面：原Docker挂载为source/public提供路径边界；本机同一用户不能声称OS文件系统/进程内存隔离。新控制父进程只在内存持有当前所选未来事件，不把chosen leaf放worker argv/env、源/工作目录名、packet或错误出口；argv从submission逐项映射公开/project/public根，固定模型支持树仍全部可读。范围是实际输入/状态/承诺的因果合同、源码审查和有限同prefix回放，不宣传OS侧信道安全。原private_path持久字段/parent --path-id若进入实际启动参数会泄露真实未来，当前本机设计改用父控制输入的事件序列与事后路径关联，未来事件不写worker可读文件。
+
+整题实际一次8条路径，其中一条在week7真实commit后退出73，原DB恢复余下周，合计128个真实业务commit不重整条路径；另做一次公开CSV行序控制的完整16周代表。保实际输入输出/native/SQLite/原receipt/全部源码，动作与原因果政策/周内递推一致并接同整题checker。此前logical错误programme和120秒数据复用原件，不重复组件数值。整题正错闭环及完整报告/固定分母grader齐后一次集中benchmark_review，禁止再委托。
+
+首native全链已实际6.516秒/控制73后9个0/128commit+16控制，原件保native-whole-run。主方整题自审发现该初稿沿公开场景顺序执行、控制也固定T07，未落实此前“私有排列”要求；同时row控制误比较与业务无关的request_id，且host-controller源码没有首执行前副本。集中修为本机SystemRandom私有顺序/独立私有控制路径，只在全部终态后发布关联，控制比较完整业务事件/动作/收据数值而不强迫ID格式；首执行前同时封actor/controller源。旧成功不改写为最终资格，修后只需一次必要整题全链，不重solver/逻辑错误programme/组件资格。真实SQLite schema2此前无native持久DB，旧未执行schema1代码只作历史；没有已交付持久数据迁移对象，L04/L05用户库不涉及。
+
+## 整题checker与唯一集中审查接续
+
+完整check_whole.py只此case，prepare复制闭合source/public/native/delivery后独算12M，五H严格assignment绑定并只能评H。固定100/90+allcritical，未知/未冻totalnull。实际5.5132287秒修后native全链与作者/弱报告两个prepare均12Mpass；主方实际view新图清晰。报告由真实report_policy CLI生成，weak只增加现实无限保证，主体真实数据/actor保持，不能冒充不同执行。四个已有实际error_policy输出只读复用，形状/信息/物理具名失败，改policy未执行和依赖阻断保留，不造whole-score。
+
+一次集中/root/benchmark_review已收到两个闭合assignment/完整原料/源/native/CSV/图/rubric，禁止再委托/Docker/Provider/操作L01/新solver或组件测试；允许必要的一次自含reproduce完整native独立冷链。审核前后原对象和原评级不覆盖，实质阻断集中修且仅必要复验。当前还未给新0.3冻结或候选小时。
+
+## 唯一集中整审六阻断的集中修复方案
+
+独审原初评级和六阻断已封REVIEW-INITIAL/main-review-initial/weak-review-initial/INITIAL-SEAL，原业务/信息/原SQL全部独算正确；不是降低目标或换policy的理由。直接触发/根因和影响面：公开笼统terminal及wire无法独立实现；runner硬造table_actor/submission且controller仅封副本却执行canonical路径；M05用Fraction字符串比较造成等值误拒/少核最低现金；公开交付漏逐路径AR到期表；raw/public ZIP自己一起漂移但SQL meta没有绑定权威原事实；grade信任可编辑prepared M。全部限新0.3public/本题runner/report/grader/交付，旧0.2、生产Task/Mission/Session、用户DB、UI/凭据与L01活跃源不涉及。
+
+本批一次修：完整公开terminal/现需spot算法/70640及60044/全部状态packet与CSV/summary精确wire；runner必须消费明确交付programme/argv，实际controller/checker从事前封副本执行，声明policy单独绑定，不重造actor；Fraction数值等值比较且核所有摘要财务量、真实逐路径cash/AR/due表入交付；权威registered-facts独立保原业务规范，原SQL meta须与当次public完整事实一致，设施漂移不当候选成绩；grade从closed原对象重算M再接严格五H，prepared M不是事实来源。
+
+保初native与初评分/真实probe。修复触及真实programme消费和controller执行来源，主方仅一次必要最终8路径真实整题复验，沿用原policy不重solver；使用合法另名actor入口及不同稳定request前缀以实际证明不硬造table_actor，动作/资金/原始数据/成本和阈值不变。原唯一独立cold不再重跑。之后独审只核本批相关源/原反例/金额等值/新AR表与新原对象，集中结案；不再组件资格或新完整独审。

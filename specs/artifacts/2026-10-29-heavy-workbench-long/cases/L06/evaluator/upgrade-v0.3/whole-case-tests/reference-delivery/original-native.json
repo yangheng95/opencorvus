@@ -1,0 +1,37 @@
+{
+  "format": "l06-native-cpsat-integer/1",
+  "solver": "OR-Tools CP-SAT",
+  "solver_version": "9.15.6755",
+  "objective_name": "expected_operating_cost_minor",
+  "status": "FEASIBLE",
+  "native_status_code": 2,
+  "termination": "feasible_limited",
+  "seconds": 120.02392900316045,
+  "has_feasible_incumbent": true,
+  "objective": 49319.125,
+  "dual_bound": 47594.75,
+  "native_best_bound_scaled": 380758.0,
+  "objective_denominator": 8,
+  "variables": 3968,
+  "constraints": 3996,
+  "warm_start": {
+    "business_feasible": true,
+    "business_expected_cost_minor": 70640.0,
+    "model_objective_exact": "70640",
+    "variables_projected": 3968
+  },
+  "improving_incumbents": 118,
+  "solver_options": {
+    "relative_gap_limit": 0.01,
+    "num_search_workers": 4,
+    "random_seed": 20261031,
+    "requested_max_time_in_seconds": 120.0,
+    "native_max_time_in_seconds": 120.0
+  },
+  "native_time_policy": "explicit local solver diagnostic",
+  "native_branches": 150308,
+  "native_conflicts": 3385,
+  "bound_scope": "native integer-search bound; not independently replayed search proof or rational dual certificate",
+  "objective_exact": "394553/8",
+  "solver_gap_scaled_by_primal": 0.03496361705524986
+}

@@ -1,6 +1,6 @@
 {
   "format": "l06-tree-contract/1",
-  "case_version": "L06/0.3.0-draft",
+  "case_version": "L06/0.3.0-dev",
   "weeks": 16,
   "observation": "complete_current_event_and_perfect_recall",
   "reveal_weeks": [
@@ -11,7 +11,8 @@
   "probabilities": "positive integer numerators / facility denominator; full public support, actual future private",
   "state": "post_week; original committed event/action prefix authoritative; derived state recomputed",
   "timing": "historical arrivals/receipts then current event, new orders/lead0, production/fulfilment, stage peaks/holding/cash",
-  "checkpoint": "l06-committed-journal/1; schema1 SQLite is host-owned, actor may use any internal persistence",
-  "quality_design": "before any policy solve: improve expected cost at least15% over legal spot contingency; additional registered feasible reference tolerance to be frozen after full construction",
-  "limits": "synthetic finite business; no real procurement, OS side-channel, arbitrary failure or financial certification"
+  "checkpoint": "l06-committed-journal/1; first native SQLite format2, no prior executed native DB; actor internal persistence method-neutral",
+  "quality_design": "pre-solve declared15percent improvement over canonical lawful spot; this finite instance quality maximum is60044, no old bound or extra reference-relative tolerance",
+  "limits": "synthetic finite business; no real procurement, OS side-channel, arbitrary failure or financial certification",
+  "execution": "Windows native child processes; current-data stdin and narrowed environment; same-user OS filesystem/memory confinement not certified"
 }

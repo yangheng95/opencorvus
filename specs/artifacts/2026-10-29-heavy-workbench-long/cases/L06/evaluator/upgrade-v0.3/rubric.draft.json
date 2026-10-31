@@ -1,7 +1,7 @@
 {
   "case": "L06",
-  "case_version": "L06/0.3.0-draft",
-  "status": "construction_not_frozen_not_fully_executed",
+  "case_version": "L06/0.3.0-dev",
+  "status": "development_frozen",
   "fixed_denominator": 100,
   "good_rule": {
     "minimum_score": 90,
@@ -129,5 +129,5 @@
       "unresolved": "unassessed"
     }
   ],
-  "limits": "Draft intended whole-case contract; native online/perturbations/full grader/review not yet implemented/validated; no candidate or reference score"
+  "limits": "Actual complete native/reference/weak programmes and one concentrated independent review; six blockers repaired before metadata freeze, no fresh candidate/hours certification"
 }
