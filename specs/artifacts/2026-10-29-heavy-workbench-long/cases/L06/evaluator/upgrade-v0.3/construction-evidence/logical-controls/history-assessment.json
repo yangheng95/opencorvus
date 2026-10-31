@@ -1,0 +1,694 @@
+{
+  "status": "logical_policy_checked",
+  "business_feasible": false,
+  "information_legal": false,
+  "quality_target_pass": false,
+  "expected_cost_exact": null,
+  "registered_contingency_cost": "70640",
+  "pre_registered_quality_maximum": "60044",
+  "journal_replay_complete": null,
+  "journal_records": [],
+  "audit": {
+    "format": "l06-tree-policy-audit/1",
+    "business_feasible": false,
+    "information_legal": false,
+    "policy_valid": false,
+    "information_nodes": 60,
+    "information_violations": [
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T01"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T02"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T03"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T04"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T05"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T06"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T07"
+        ]
+      }
+    ],
+    "physical_violations": [
+      {
+        "code": "raw_availability",
+        "where": "T00.week0",
+        "actual": [
+          -1,
+          14,
+          0,
+          1
+        ],
+        "required": "all >=0 after BOM consumption",
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week0",
+        "actual": [
+          1,
+          15,
+          0,
+          1
+        ],
+        "required": [
+          -1,
+          14,
+          0,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week0",
+        "actual": [
+          1,
+          0,
+          2,
+          2
+        ],
+        "required": [
+          2,
+          0,
+          2,
+          2
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week1",
+        "actual": [
+          5,
+          31,
+          5,
+          5
+        ],
+        "required": [
+          3,
+          30,
+          5,
+          5
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week1",
+        "actual": [
+          0,
+          2,
+          0,
+          0
+        ],
+        "required": [
+          1,
+          2,
+          0,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week2",
+        "actual": [
+          10,
+          35,
+          7,
+          0
+        ],
+        "required": [
+          8,
+          34,
+          7,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week2",
+        "actual": [
+          0,
+          3,
+          0,
+          1
+        ],
+        "required": [
+          1,
+          3,
+          0,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "raw_availability",
+        "where": "T00.week3",
+        "actual": [
+          -1,
+          41,
+          0,
+          1
+        ],
+        "required": "all >=0 after BOM consumption",
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week3",
+        "actual": [
+          1,
+          42,
+          0,
+          1
+        ],
+        "required": [
+          -1,
+          41,
+          0,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week3",
+        "actual": [
+          2,
+          4,
+          0,
+          3
+        ],
+        "required": [
+          3,
+          4,
+          0,
+          3
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week4",
+        "actual": [
+          5,
+          57,
+          6,
+          13
+        ],
+        "required": [
+          3,
+          56,
+          6,
+          13
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week4",
+        "actual": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "required": [
+          2,
+          0,
+          1,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week5",
+        "actual": [
+          16,
+          25,
+          8,
+          0
+        ],
+        "required": [
+          14,
+          24,
+          8,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week5",
+        "actual": [
+          3,
+          2,
+          1,
+          0
+        ],
+        "required": [
+          4,
+          2,
+          1,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week6",
+        "actual": [
+          16,
+          33,
+          13,
+          1
+        ],
+        "required": [
+          14,
+          32,
+          13,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week6",
+        "actual": [
+          1,
+          2,
+          0,
+          1
+        ],
+        "required": [
+          2,
+          2,
+          0,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week7",
+        "actual": [
+          16,
+          35,
+          3,
+          0
+        ],
+        "required": [
+          14,
+          34,
+          3,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week7",
+        "actual": [
+          2,
+          4,
+          1,
+          2
+        ],
+        "required": [
+          3,
+          4,
+          1,
+          2
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week8",
+        "actual": [
+          22,
+          43,
+          8,
+          0
+        ],
+        "required": [
+          20,
+          42,
+          8,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week8",
+        "actual": [
+          1,
+          1,
+          2,
+          4
+        ],
+        "required": [
+          2,
+          1,
+          2,
+          4
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week9",
+        "actual": [
+          19,
+          28,
+          6,
+          1
+        ],
+        "required": [
+          17,
+          27,
+          6,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week9",
+        "actual": [
+          1,
+          1,
+          0,
+          3
+        ],
+        "required": [
+          2,
+          1,
+          0,
+          3
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week10",
+        "actual": [
+          21,
+          30,
+          4,
+          1
+        ],
+        "required": [
+          19,
+          29,
+          4,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week10",
+        "actual": [
+          0,
+          0,
+          3,
+          5
+        ],
+        "required": [
+          1,
+          0,
+          3,
+          5
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week11",
+        "actual": [
+          15,
+          33,
+          0,
+          4
+        ],
+        "required": [
+          13,
+          32,
+          0,
+          4
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week11",
+        "actual": [
+          2,
+          4,
+          0,
+          6
+        ],
+        "required": [
+          3,
+          4,
+          0,
+          6
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week12",
+        "actual": [
+          9,
+          54,
+          13,
+          0
+        ],
+        "required": [
+          7,
+          53,
+          13,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week12",
+        "actual": [
+          0,
+          0,
+          5,
+          4
+        ],
+        "required": [
+          1,
+          0,
+          5,
+          4
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week13",
+        "actual": [
+          37,
+          16,
+          0,
+          8
+        ],
+        "required": [
+          35,
+          15,
+          0,
+          8
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week13",
+        "actual": [
+          0,
+          7,
+          0,
+          0
+        ],
+        "required": [
+          1,
+          7,
+          0,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "raw_availability",
+        "where": "T00.week14",
+        "actual": [
+          -1,
+          3,
+          1,
+          3
+        ],
+        "required": "all >=0 after BOM consumption",
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week14",
+        "actual": [
+          1,
+          4,
+          1,
+          3
+        ],
+        "required": [
+          -1,
+          3,
+          1,
+          3
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week14",
+        "actual": [
+          8,
+          0,
+          5,
+          0
+        ],
+        "required": [
+          9,
+          0,
+          5,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week15",
+        "actual": [
+          2,
+          1,
+          0,
+          0
+        ],
+        "required": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "declared_finished",
+        "where": "T00.week15",
+        "actual": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "required": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "terminal_finished",
+        "where": "T00",
+        "actual": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "required": "all zero",
+        "context": {}
+      }
+    ],
+    "expected_cost_exact": null,
+    "paths": null,
+    "constraint_checks": {
+      "common_commitment": 24,
+      "shipment_binary": 384,
+      "supplier_capacity": 384,
+      "shipment_minimum": 384,
+      "terminal_pipeline": 384,
+      "product_assignment": 1024,
+      "plant_capacity": 256,
+      "raw_storage_peak": 128,
+      "product_storage_peak": 128,
+      "raw_availability": 128,
+      "fulfilment": 128,
+      "declared_raw": 128,
+      "declared_finished": 128,
+      "cash_intermediate": 120,
+      "cash_terminal": 8,
+      "terminal_finished": 8
+    }
+  },
+  "native_execution_attestation": "unassessed; JSON journal is not proof of the isolated actor/native/recovery; original evidence and whole-case review required",
+  "total": null,
+  "good": null,
+  "limits": "not frozen or fully reviewed; no candidate score or effective-hour certification"
+}

@@ -1,0 +1,192 @@
+[
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\source\\check_tree.py",
+      "--public",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\public",
+      "--policy",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\results\\reference\\policy.json",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\reference-assessment.json",
+      "--journals",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\logical-journals.json"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"status\": \"logical_policy_checked\", \"business_feasible\": true, \"information_legal\": true, \"quality_target_pass\": true, \"expected_cost_exact\": \"394553/8\", \"registered_contingency_cost\": \"70640\", \"pre_registered_quality_maximum\": \"60044\", \"journal_replay_complete\": true, \"journal_records\": [{\"path\": \"T00\", \"commits\": 16, \"final_cash\": 36240, \"cost\": 48110}, {\"path\": \"T01\", \"commits\": 16, \"final_cash\": 35918, \"cost\": 48432}, {\"path\": \"T02\", \"commits\": 16, \"final_cash\": 36636, \"cost\": 48794}, {\"path\": \"T03\", \"commits\": 16, \"final_cash\": 35736, \"cost\": 49694}, {\"path\": \"T04\", \"commits\": 16, \"final_cash\": 36797, \"cost\": 48633}, {\"path\": \"T05\", \"commits\": 16, \"final_cash\": 36338, \"cost\": 49092}, {\"path\": \"T06\", \"commits\": 16, \"final_cash\": 36259, \"cost\": 50251}, {\"path\": \"T07\", \"commits\": 16, \"final_cash\": 34963, \"cost\": 51547}], \"native_execution_attestation\": \"unassessed; JSON journal is not proof of the isolated actor/native/recovery; original evidence and whole-case review required\", \"total\": null, \"good\": null, \"limits\": \"not frozen or fully reviewed; no candidate score or effective-hour certification\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\source\\check_tree.py",
+      "--public",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\public",
+      "--policy",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\results\\reference\\contingency-policy.json",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\contingency-assessment.json"
+    ],
+    "exit_code": 2,
+    "stdout": "{\"status\": \"logical_policy_checked\", \"business_feasible\": true, \"information_legal\": true, \"quality_target_pass\": false, \"expected_cost_exact\": \"70640\", \"registered_contingency_cost\": \"70640\", \"pre_registered_quality_maximum\": \"60044\", \"journal_replay_complete\": null, \"journal_records\": [], \"native_execution_attestation\": \"unassessed; JSON journal is not proof of the isolated actor/native/recovery; original evidence and whole-case review required\", \"total\": null, \"good\": null, \"limits\": \"not frozen or fully reviewed; no candidate score or effective-hour certification\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\source\\error_policy.py",
+      "--policy",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\results\\reference\\policy.json",
+      "--contingency",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\results\\reference\\contingency-policy.json",
+      "--mode",
+      "anticipate",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\anticipate-policy.json"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"actual_programme\": \"anticipate\", \"output\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-v03-whole-case-20261031\\\\logical-whole-controls\\\\anticipate-policy.json\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\source\\check_tree.py",
+      "--public",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\public",
+      "--policy",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\anticipate-policy.json",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\anticipate-assessment.json"
+    ],
+    "exit_code": 2,
+    "stdout": "{\"status\": \"logical_policy_checked\", \"business_feasible\": true, \"information_legal\": false, \"quality_target_pass\": false, \"expected_cost_exact\": null, \"registered_contingency_cost\": \"70640\", \"pre_registered_quality_maximum\": \"60044\", \"journal_replay_complete\": null, \"journal_records\": [], \"native_execution_attestation\": \"unassessed; JSON journal is not proof of the isolated actor/native/recovery; original evidence and whole-case review required\", \"total\": null, \"good\": null, \"limits\": \"not frozen or fully reviewed; no candidate score or effective-hour certification\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\source\\error_policy.py",
+      "--policy",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\results\\reference\\policy.json",
+      "--contingency",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\results\\reference\\contingency-policy.json",
+      "--mode",
+      "overship",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\overship-policy.json"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"actual_programme\": \"overship\", \"output\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-v03-whole-case-20261031\\\\logical-whole-controls\\\\overship-policy.json\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\source\\check_tree.py",
+      "--public",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\public",
+      "--policy",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\overship-policy.json",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\overship-assessment.json"
+    ],
+    "exit_code": 2,
+    "stdout": "{\"status\": \"logical_policy_checked\", \"business_feasible\": false, \"information_legal\": false, \"quality_target_pass\": false, \"expected_cost_exact\": null, \"registered_contingency_cost\": \"70640\", \"pre_registered_quality_maximum\": \"60044\", \"journal_replay_complete\": null, \"journal_records\": [], \"native_execution_attestation\": \"unassessed; JSON journal is not proof of the isolated actor/native/recovery; original evidence and whole-case review required\", \"total\": null, \"good\": null, \"limits\": \"not frozen or fully reviewed; no candidate score or effective-hour certification\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\source\\error_policy.py",
+      "--policy",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\results\\reference\\policy.json",
+      "--contingency",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\results\\reference\\contingency-policy.json",
+      "--mode",
+      "boolean",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\boolean-policy.json"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"actual_programme\": \"boolean\", \"output\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-v03-whole-case-20261031\\\\logical-whole-controls\\\\boolean-policy.json\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\source\\check_tree.py",
+      "--public",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\public",
+      "--policy",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\boolean-policy.json",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\boolean-assessment.json"
+    ],
+    "exit_code": 2,
+    "stdout": "{\"status\": \"logical_policy_invalid\", \"error\": \"decision_integer\", \"total\": null, \"good\": false, \"where\": null}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\source\\error_policy.py",
+      "--policy",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\results\\reference\\policy.json",
+      "--contingency",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\results\\reference\\contingency-policy.json",
+      "--mode",
+      "history",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\history-policy.json"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"actual_programme\": \"history\", \"output\": \"D:\\\\opencorvus-benchmark-runs\\\\l06-v03-whole-case-20261031\\\\logical-whole-controls\\\\history-policy.json\"}\n",
+    "stderr": ""
+  },
+  {
+    "argv": [
+      "C:/Python314/python.exe",
+      "-X",
+      "utf8",
+      "-B",
+      "specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.3\\source\\check_tree.py",
+      "--public",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\public",
+      "--policy",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\history-policy.json",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-v03-whole-case-20261031\\logical-whole-controls\\history-assessment.json"
+    ],
+    "exit_code": 2,
+    "stdout": "{\"status\": \"logical_policy_checked\", \"business_feasible\": false, \"information_legal\": false, \"quality_target_pass\": false, \"expected_cost_exact\": null, \"registered_contingency_cost\": \"70640\", \"pre_registered_quality_maximum\": \"60044\", \"journal_replay_complete\": null, \"journal_records\": [], \"native_execution_attestation\": \"unassessed; JSON journal is not proof of the isolated actor/native/recovery; original evidence and whole-case review required\", \"total\": null, \"good\": null, \"limits\": \"not frozen or fully reviewed; no candidate score or effective-hour certification\"}\n",
+    "stderr": ""
+  }
+]

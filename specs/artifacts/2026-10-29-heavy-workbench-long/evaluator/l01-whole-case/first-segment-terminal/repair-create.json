@@ -1,0 +1,32 @@
+{
+  "argv": [
+    "docker",
+    "create",
+    "--name",
+    "oc-l01-publication-repair-20261031-a",
+    "--network",
+    "none",
+    "--cpus",
+    "1",
+    "--mount",
+    "type=bind,source=D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project,target=/project,readonly",
+    "--mount",
+    "type=bind,source=D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work,target=/project/work",
+    "sha256:366454c0a7b7f023131af29ec68696859c8d39f1a1b2a3a61e32c35ff03ae9dc",
+    "python",
+    "-u",
+    "-B",
+    "/project/run_study.py",
+    "--inputs",
+    "/project/inputs",
+    "--output",
+    "/project/work/results",
+    "--device",
+    "cpu",
+    "--close-segment"
+  ],
+  "exit_code": 1,
+  "stdout": "",
+  "stderr": "failed to connect to the docker API at npipe:////./pipe/dockerDesktopLinuxEngine; check if the path is correct and if the daemon is running: open //./pipe/dockerDesktopLinuxEngine: The system cannot find the file specified.\n",
+  "seconds": 0.17177350000019942
+}

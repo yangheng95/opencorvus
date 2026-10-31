@@ -1,0 +1,8850 @@
+{
+  "T00": [
+    {
+      "request_id": "operation-0",
+      "week": 0,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            5,
+            3,
+            3,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-0",
+        "committed_week": 0,
+        "next_week": 1,
+        "cost_minor": 4226,
+        "cash_minor": 7774
+      }
+    },
+    {
+      "request_id": "operation-1",
+      "week": 1,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            29,
+            4,
+            11
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-1",
+        "committed_week": 1,
+        "next_week": 2,
+        "cost_minor": 5931,
+        "cash_minor": 1843
+      }
+    },
+    {
+      "request_id": "operation-2",
+      "week": 2,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-2",
+        "committed_week": 2,
+        "next_week": 3,
+        "cost_minor": 3701,
+        "cash_minor": -1858
+      }
+    },
+    {
+      "request_id": "operation-3",
+      "week": 3,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            4
+          ],
+          [
+            4,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            2,
+            5,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-3",
+        "committed_week": 3,
+        "next_week": 4,
+        "cost_minor": 3764,
+        "cash_minor": -5622
+      }
+    },
+    {
+      "request_id": "operation-4",
+      "week": 4,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            1
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-4",
+        "committed_week": 4,
+        "next_week": 5,
+        "cost_minor": 1831,
+        "cash_minor": -1603
+      }
+    },
+    {
+      "request_id": "operation-5",
+      "week": 5,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            3
+          ],
+          [
+            3,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-5",
+        "committed_week": 5,
+        "next_week": 6,
+        "cost_minor": 3498,
+        "cash_minor": 949
+      }
+    },
+    {
+      "request_id": "operation-6",
+      "week": 6,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            3
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            8,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-6",
+        "committed_week": 6,
+        "next_week": 7,
+        "cost_minor": 3780,
+        "cash_minor": 3269
+      }
+    },
+    {
+      "request_id": "operation-7",
+      "week": 7,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-7",
+        "committed_week": 7,
+        "next_week": 8,
+        "cost_minor": 3670,
+        "cash_minor": 5749
+      }
+    },
+    {
+      "request_id": "operation-8",
+      "week": 8,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          1,
+          0
+        ],
+        "production": [
+          [
+            9,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            3,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-8",
+        "committed_week": 8,
+        "next_week": 9,
+        "cost_minor": 2168,
+        "cash_minor": 9631
+      }
+    },
+    {
+      "request_id": "operation-9",
+      "week": 9,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            4
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            3
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-9",
+        "committed_week": 9,
+        "next_week": 10,
+        "cost_minor": 3527,
+        "cash_minor": 11954
+      }
+    },
+    {
+      "request_id": "operation-10",
+      "week": 10,
+      "event": {
+        "demand": [
+          11,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            3
+          ],
+          [
+            2,
+            0,
+            3,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            8,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-10",
+        "committed_week": 10,
+        "next_week": 11,
+        "cost_minor": 3748,
+        "cash_minor": 14306
+      }
+    },
+    {
+      "request_id": "operation-11",
+      "week": 11,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            1,
+            0
+          ],
+          [
+            5,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            2,
+            2,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-11",
+        "committed_week": 11,
+        "next_week": 12,
+        "cost_minor": 3674,
+        "cash_minor": 16682
+      }
+    },
+    {
+      "request_id": "operation-12",
+      "week": 12,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          1,
+          0
+        ],
+        "production": [
+          [
+            8,
+            0,
+            10,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-12",
+        "committed_week": 12,
+        "next_week": 13,
+        "cost_minor": 2056,
+        "cash_minor": 20776
+      }
+    },
+    {
+      "request_id": "operation-13",
+      "week": 13,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            13,
+            0,
+            1
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-13",
+        "committed_week": 13,
+        "next_week": 14,
+        "cost_minor": 429,
+        "cash_minor": 26197
+      }
+    },
+    {
+      "request_id": "operation-14",
+      "week": 14,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            1,
+            3,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            3
+          ]
+        ],
+        "truck_on": [
+          1,
+          0,
+          1
+        ],
+        "production": [
+          [
+            18,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            0,
+            4,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-14",
+        "committed_week": 14,
+        "next_week": 15,
+        "cost_minor": 1924,
+        "cash_minor": 30573
+      }
+    },
+    {
+      "request_id": "operation-15",
+      "week": 15,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          0
+        ],
+        "production": [
+          [
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-15",
+        "committed_week": 15,
+        "next_week": 16,
+        "cost_minor": 183,
+        "cash_minor": 36240
+      }
+    }
+  ],
+  "T01": [
+    {
+      "request_id": "operation-0",
+      "week": 0,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            5,
+            3,
+            3,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-0",
+        "committed_week": 0,
+        "next_week": 1,
+        "cost_minor": 4226,
+        "cash_minor": 7774
+      }
+    },
+    {
+      "request_id": "operation-1",
+      "week": 1,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            29,
+            4,
+            11
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-1",
+        "committed_week": 1,
+        "next_week": 2,
+        "cost_minor": 5931,
+        "cash_minor": 1843
+      }
+    },
+    {
+      "request_id": "operation-2",
+      "week": 2,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-2",
+        "committed_week": 2,
+        "next_week": 3,
+        "cost_minor": 3701,
+        "cash_minor": -1858
+      }
+    },
+    {
+      "request_id": "operation-3",
+      "week": 3,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            4
+          ],
+          [
+            4,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            2,
+            5,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-3",
+        "committed_week": 3,
+        "next_week": 4,
+        "cost_minor": 3764,
+        "cash_minor": -5622
+      }
+    },
+    {
+      "request_id": "operation-4",
+      "week": 4,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            1
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-4",
+        "committed_week": 4,
+        "next_week": 5,
+        "cost_minor": 1831,
+        "cash_minor": -1603
+      }
+    },
+    {
+      "request_id": "operation-5",
+      "week": 5,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            3
+          ],
+          [
+            3,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-5",
+        "committed_week": 5,
+        "next_week": 6,
+        "cost_minor": 3498,
+        "cash_minor": 949
+      }
+    },
+    {
+      "request_id": "operation-6",
+      "week": 6,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            3
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            8,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-6",
+        "committed_week": 6,
+        "next_week": 7,
+        "cost_minor": 3780,
+        "cash_minor": 3269
+      }
+    },
+    {
+      "request_id": "operation-7",
+      "week": 7,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-7",
+        "committed_week": 7,
+        "next_week": 8,
+        "cost_minor": 3670,
+        "cash_minor": 5749
+      }
+    },
+    {
+      "request_id": "operation-8",
+      "week": 8,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          1,
+          0
+        ],
+        "production": [
+          [
+            9,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            3,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-8",
+        "committed_week": 8,
+        "next_week": 9,
+        "cost_minor": 2168,
+        "cash_minor": 9631
+      }
+    },
+    {
+      "request_id": "operation-9",
+      "week": 9,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            4
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            3
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-9",
+        "committed_week": 9,
+        "next_week": 10,
+        "cost_minor": 3527,
+        "cash_minor": 11954
+      }
+    },
+    {
+      "request_id": "operation-10",
+      "week": 10,
+      "event": {
+        "demand": [
+          11,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            3
+          ],
+          [
+            2,
+            0,
+            3,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            8,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-10",
+        "committed_week": 10,
+        "next_week": 11,
+        "cost_minor": 3748,
+        "cash_minor": 14306
+      }
+    },
+    {
+      "request_id": "operation-11",
+      "week": 11,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            1,
+            0
+          ],
+          [
+            5,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            2,
+            2,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-11",
+        "committed_week": 11,
+        "next_week": 12,
+        "cost_minor": 3674,
+        "cash_minor": 16682
+      }
+    },
+    {
+      "request_id": "operation-12",
+      "week": 12,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          1,
+          0
+        ],
+        "production": [
+          [
+            13,
+            0,
+            9,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-12",
+        "committed_week": 12,
+        "next_week": 13,
+        "cost_minor": 1929,
+        "cash_minor": 20903
+      }
+    },
+    {
+      "request_id": "operation-13",
+      "week": 13,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          6
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          1,
+          0
+        ],
+        "production": [
+          [
+            8,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            3
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-13",
+        "committed_week": 13,
+        "next_week": 14,
+        "cost_minor": 1979,
+        "cash_minor": 24774
+      }
+    },
+    {
+      "request_id": "operation-14",
+      "week": 14,
+      "event": {
+        "demand": [
+          11,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-14",
+        "committed_week": 14,
+        "next_week": 15,
+        "cost_minor": 367,
+        "cash_minor": 30707
+      }
+    },
+    {
+      "request_id": "operation-15",
+      "week": 15,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            2
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          1
+        ],
+        "production": [
+          [
+            11,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-15",
+        "committed_week": 15,
+        "next_week": 16,
+        "cost_minor": 639,
+        "cash_minor": 35918
+      }
+    }
+  ],
+  "T02": [
+    {
+      "request_id": "operation-0",
+      "week": 0,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            5,
+            3,
+            3,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-0",
+        "committed_week": 0,
+        "next_week": 1,
+        "cost_minor": 4226,
+        "cash_minor": 7774
+      }
+    },
+    {
+      "request_id": "operation-1",
+      "week": 1,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            29,
+            4,
+            11
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-1",
+        "committed_week": 1,
+        "next_week": 2,
+        "cost_minor": 5931,
+        "cash_minor": 1843
+      }
+    },
+    {
+      "request_id": "operation-2",
+      "week": 2,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-2",
+        "committed_week": 2,
+        "next_week": 3,
+        "cost_minor": 3701,
+        "cash_minor": -1858
+      }
+    },
+    {
+      "request_id": "operation-3",
+      "week": 3,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            4
+          ],
+          [
+            4,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            2,
+            5,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-3",
+        "committed_week": 3,
+        "next_week": 4,
+        "cost_minor": 3764,
+        "cash_minor": -5622
+      }
+    },
+    {
+      "request_id": "operation-4",
+      "week": 4,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            1
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-4",
+        "committed_week": 4,
+        "next_week": 5,
+        "cost_minor": 1831,
+        "cash_minor": -1603
+      }
+    },
+    {
+      "request_id": "operation-5",
+      "week": 5,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            3
+          ],
+          [
+            3,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-5",
+        "committed_week": 5,
+        "next_week": 6,
+        "cost_minor": 3498,
+        "cash_minor": 949
+      }
+    },
+    {
+      "request_id": "operation-6",
+      "week": 6,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            3
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            8,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-6",
+        "committed_week": 6,
+        "next_week": 7,
+        "cost_minor": 3780,
+        "cash_minor": 3269
+      }
+    },
+    {
+      "request_id": "operation-7",
+      "week": 7,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-7",
+        "committed_week": 7,
+        "next_week": 8,
+        "cost_minor": 3670,
+        "cash_minor": 5749
+      }
+    },
+    {
+      "request_id": "operation-8",
+      "week": 8,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          6
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            3,
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-8",
+        "committed_week": 8,
+        "next_week": 9,
+        "cost_minor": 2596,
+        "cash_minor": 9203
+      }
+    },
+    {
+      "request_id": "operation-9",
+      "week": 9,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            2,
+            0,
+            1
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            9,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-9",
+        "committed_week": 9,
+        "next_week": 10,
+        "cost_minor": 2875,
+        "cash_minor": 12178
+      }
+    },
+    {
+      "request_id": "operation-10",
+      "week": 10,
+      "event": {
+        "demand": [
+          12,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            2,
+            0,
+            1
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-10",
+        "committed_week": 10,
+        "next_week": 11,
+        "cost_minor": 2800,
+        "cash_minor": 15478
+      }
+    },
+    {
+      "request_id": "operation-11",
+      "week": 11,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-11",
+        "committed_week": 11,
+        "next_week": 12,
+        "cost_minor": 2895,
+        "cash_minor": 18633
+      }
+    },
+    {
+      "request_id": "operation-12",
+      "week": 12,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            2
+          ],
+          [
+            1,
+            2,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-12",
+        "committed_week": 12,
+        "next_week": 13,
+        "cost_minor": 3280,
+        "cash_minor": 21773
+      }
+    },
+    {
+      "request_id": "operation-13",
+      "week": 13,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            2,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          0,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-13",
+        "committed_week": 13,
+        "next_week": 14,
+        "cost_minor": 1370,
+        "cash_minor": 26523
+      }
+    },
+    {
+      "request_id": "operation-14",
+      "week": 14,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            3,
+            4,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          0,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            3
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-14",
+        "committed_week": 14,
+        "next_week": 15,
+        "cost_minor": 1909,
+        "cash_minor": 31184
+      }
+    },
+    {
+      "request_id": "operation-15",
+      "week": 15,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            2
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          1
+        ],
+        "production": [
+          [
+            10,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-15",
+        "committed_week": 15,
+        "next_week": 16,
+        "cost_minor": 668,
+        "cash_minor": 36636
+      }
+    }
+  ],
+  "T03": [
+    {
+      "request_id": "operation-0",
+      "week": 0,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            5,
+            3,
+            3,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-0",
+        "committed_week": 0,
+        "next_week": 1,
+        "cost_minor": 4226,
+        "cash_minor": 7774
+      }
+    },
+    {
+      "request_id": "operation-1",
+      "week": 1,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            29,
+            4,
+            11
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-1",
+        "committed_week": 1,
+        "next_week": 2,
+        "cost_minor": 5931,
+        "cash_minor": 1843
+      }
+    },
+    {
+      "request_id": "operation-2",
+      "week": 2,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-2",
+        "committed_week": 2,
+        "next_week": 3,
+        "cost_minor": 3701,
+        "cash_minor": -1858
+      }
+    },
+    {
+      "request_id": "operation-3",
+      "week": 3,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            4
+          ],
+          [
+            4,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            2,
+            5,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-3",
+        "committed_week": 3,
+        "next_week": 4,
+        "cost_minor": 3764,
+        "cash_minor": -5622
+      }
+    },
+    {
+      "request_id": "operation-4",
+      "week": 4,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            1
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-4",
+        "committed_week": 4,
+        "next_week": 5,
+        "cost_minor": 1831,
+        "cash_minor": -1603
+      }
+    },
+    {
+      "request_id": "operation-5",
+      "week": 5,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            3
+          ],
+          [
+            3,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-5",
+        "committed_week": 5,
+        "next_week": 6,
+        "cost_minor": 3498,
+        "cash_minor": 949
+      }
+    },
+    {
+      "request_id": "operation-6",
+      "week": 6,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            3
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            8,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-6",
+        "committed_week": 6,
+        "next_week": 7,
+        "cost_minor": 3780,
+        "cash_minor": 3269
+      }
+    },
+    {
+      "request_id": "operation-7",
+      "week": 7,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-7",
+        "committed_week": 7,
+        "next_week": 8,
+        "cost_minor": 3670,
+        "cash_minor": 5749
+      }
+    },
+    {
+      "request_id": "operation-8",
+      "week": 8,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          6
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            3,
+            0,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-8",
+        "committed_week": 8,
+        "next_week": 9,
+        "cost_minor": 2596,
+        "cash_minor": 9203
+      }
+    },
+    {
+      "request_id": "operation-9",
+      "week": 9,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            2,
+            0,
+            1
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            9,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-9",
+        "committed_week": 9,
+        "next_week": 10,
+        "cost_minor": 2875,
+        "cash_minor": 12178
+      }
+    },
+    {
+      "request_id": "operation-10",
+      "week": 10,
+      "event": {
+        "demand": [
+          12,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            2,
+            0,
+            1
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-10",
+        "committed_week": 10,
+        "next_week": 11,
+        "cost_minor": 2800,
+        "cash_minor": 15478
+      }
+    },
+    {
+      "request_id": "operation-11",
+      "week": 11,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-11",
+        "committed_week": 11,
+        "next_week": 12,
+        "cost_minor": 2895,
+        "cash_minor": 18633
+      }
+    },
+    {
+      "request_id": "operation-12",
+      "week": 12,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            2,
+            0,
+            1
+          ],
+          [
+            1,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            14,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-12",
+        "committed_week": 12,
+        "next_week": 13,
+        "cost_minor": 2449,
+        "cash_minor": 22604
+      }
+    },
+    {
+      "request_id": "operation-13",
+      "week": 13,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          6
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            1,
+            20,
+            5,
+            1
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            12,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-13",
+        "committed_week": 13,
+        "next_week": 14,
+        "cost_minor": 4259,
+        "cash_minor": 24465
+      }
+    },
+    {
+      "request_id": "operation-14",
+      "week": 14,
+      "event": {
+        "demand": [
+          11,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            1,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          0,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-14",
+        "committed_week": 14,
+        "next_week": 15,
+        "cost_minor": 1109,
+        "cash_minor": 29926
+      }
+    },
+    {
+      "request_id": "operation-15",
+      "week": 15,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          0
+        ],
+        "production": [
+          [
+            9,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-15",
+        "committed_week": 15,
+        "next_week": 16,
+        "cost_minor": 310,
+        "cash_minor": 35736
+      }
+    }
+  ],
+  "T04": [
+    {
+      "request_id": "operation-0",
+      "week": 0,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            5,
+            3,
+            3,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-0",
+        "committed_week": 0,
+        "next_week": 1,
+        "cost_minor": 4226,
+        "cash_minor": 7774
+      }
+    },
+    {
+      "request_id": "operation-1",
+      "week": 1,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            29,
+            4,
+            11
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-1",
+        "committed_week": 1,
+        "next_week": 2,
+        "cost_minor": 5931,
+        "cash_minor": 1843
+      }
+    },
+    {
+      "request_id": "operation-2",
+      "week": 2,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-2",
+        "committed_week": 2,
+        "next_week": 3,
+        "cost_minor": 3701,
+        "cash_minor": -1858
+      }
+    },
+    {
+      "request_id": "operation-3",
+      "week": 3,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            4
+          ],
+          [
+            4,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            2,
+            5,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-3",
+        "committed_week": 3,
+        "next_week": 4,
+        "cost_minor": 3764,
+        "cash_minor": -5622
+      }
+    },
+    {
+      "request_id": "operation-4",
+      "week": 4,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-4",
+        "committed_week": 4,
+        "next_week": 5,
+        "cost_minor": 2760,
+        "cash_minor": -2532
+      }
+    },
+    {
+      "request_id": "operation-5",
+      "week": 5,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-5",
+        "committed_week": 5,
+        "next_week": 6,
+        "cost_minor": 2925,
+        "cash_minor": 593
+      }
+    },
+    {
+      "request_id": "operation-6",
+      "week": 6,
+      "event": {
+        "demand": [
+          11,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            1
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-6",
+        "committed_week": 6,
+        "next_week": 7,
+        "cost_minor": 2541,
+        "cash_minor": 4152
+      }
+    },
+    {
+      "request_id": "operation-7",
+      "week": 7,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-7",
+        "committed_week": 7,
+        "next_week": 8,
+        "cost_minor": 2857,
+        "cash_minor": 7445
+      }
+    },
+    {
+      "request_id": "operation-8",
+      "week": 8,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            3
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-8",
+        "committed_week": 8,
+        "next_week": 9,
+        "cost_minor": 3505,
+        "cash_minor": 10260
+      }
+    },
+    {
+      "request_id": "operation-9",
+      "week": 9,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            1,
+            4
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-9",
+        "committed_week": 9,
+        "next_week": 10,
+        "cost_minor": 3725,
+        "cash_minor": 12655
+      }
+    },
+    {
+      "request_id": "operation-10",
+      "week": 10,
+      "event": {
+        "demand": [
+          11,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            1
+          ],
+          [
+            2,
+            0,
+            1,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-10",
+        "committed_week": 10,
+        "next_week": 11,
+        "cost_minor": 3438,
+        "cash_minor": 15587
+      }
+    },
+    {
+      "request_id": "operation-11",
+      "week": 11,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            0,
+            1
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            9,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-11",
+        "committed_week": 11,
+        "next_week": 12,
+        "cost_minor": 3715,
+        "cash_minor": 18192
+      }
+    },
+    {
+      "request_id": "operation-12",
+      "week": 12,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          0
+        ],
+        "production": [
+          [
+            12,
+            4,
+            4,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-12",
+        "committed_week": 12,
+        "next_week": 13,
+        "cost_minor": 538,
+        "cash_minor": 23804
+      }
+    },
+    {
+      "request_id": "operation-13",
+      "week": 13,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            4,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          0,
+          0
+        ],
+        "production": [
+          [
+            18,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-13",
+        "committed_week": 13,
+        "next_week": 14,
+        "cost_minor": 2190,
+        "cash_minor": 27464
+      }
+    },
+    {
+      "request_id": "operation-14",
+      "week": 14,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            5,
+            3,
+            1,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            0,
+            2
+          ]
+        ],
+        "truck_on": [
+          1,
+          0,
+          1
+        ],
+        "production": [
+          [
+            1,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-14",
+        "committed_week": 14,
+        "next_week": 15,
+        "cost_minor": 2469,
+        "cash_minor": 31295
+      }
+    },
+    {
+      "request_id": "operation-15",
+      "week": 15,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-15",
+        "committed_week": 15,
+        "next_week": 16,
+        "cost_minor": 348,
+        "cash_minor": 36797
+      }
+    }
+  ],
+  "T05": [
+    {
+      "request_id": "operation-0",
+      "week": 0,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            5,
+            3,
+            3,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-0",
+        "committed_week": 0,
+        "next_week": 1,
+        "cost_minor": 4226,
+        "cash_minor": 7774
+      }
+    },
+    {
+      "request_id": "operation-1",
+      "week": 1,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            29,
+            4,
+            11
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-1",
+        "committed_week": 1,
+        "next_week": 2,
+        "cost_minor": 5931,
+        "cash_minor": 1843
+      }
+    },
+    {
+      "request_id": "operation-2",
+      "week": 2,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-2",
+        "committed_week": 2,
+        "next_week": 3,
+        "cost_minor": 3701,
+        "cash_minor": -1858
+      }
+    },
+    {
+      "request_id": "operation-3",
+      "week": 3,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            4
+          ],
+          [
+            4,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            2,
+            5,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-3",
+        "committed_week": 3,
+        "next_week": 4,
+        "cost_minor": 3764,
+        "cash_minor": -5622
+      }
+    },
+    {
+      "request_id": "operation-4",
+      "week": 4,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-4",
+        "committed_week": 4,
+        "next_week": 5,
+        "cost_minor": 2760,
+        "cash_minor": -2532
+      }
+    },
+    {
+      "request_id": "operation-5",
+      "week": 5,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-5",
+        "committed_week": 5,
+        "next_week": 6,
+        "cost_minor": 2925,
+        "cash_minor": 593
+      }
+    },
+    {
+      "request_id": "operation-6",
+      "week": 6,
+      "event": {
+        "demand": [
+          11,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            1
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-6",
+        "committed_week": 6,
+        "next_week": 7,
+        "cost_minor": 2541,
+        "cash_minor": 4152
+      }
+    },
+    {
+      "request_id": "operation-7",
+      "week": 7,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-7",
+        "committed_week": 7,
+        "next_week": 8,
+        "cost_minor": 2857,
+        "cash_minor": 7445
+      }
+    },
+    {
+      "request_id": "operation-8",
+      "week": 8,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            3
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-8",
+        "committed_week": 8,
+        "next_week": 9,
+        "cost_minor": 3505,
+        "cash_minor": 10260
+      }
+    },
+    {
+      "request_id": "operation-9",
+      "week": 9,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            1,
+            4
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-9",
+        "committed_week": 9,
+        "next_week": 10,
+        "cost_minor": 3725,
+        "cash_minor": 12655
+      }
+    },
+    {
+      "request_id": "operation-10",
+      "week": 10,
+      "event": {
+        "demand": [
+          11,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            1
+          ],
+          [
+            2,
+            0,
+            1,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-10",
+        "committed_week": 10,
+        "next_week": 11,
+        "cost_minor": 3438,
+        "cash_minor": 15587
+      }
+    },
+    {
+      "request_id": "operation-11",
+      "week": 11,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            0,
+            1
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            9,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-11",
+        "committed_week": 11,
+        "next_week": 12,
+        "cost_minor": 3715,
+        "cash_minor": 18192
+      }
+    },
+    {
+      "request_id": "operation-12",
+      "week": 12,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            2,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            1,
+            7,
+            0
+          ],
+          [
+            0,
+            3,
+            0,
+            9
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-12",
+        "committed_week": 12,
+        "next_week": 13,
+        "cost_minor": 1977,
+        "cash_minor": 22365
+      }
+    },
+    {
+      "request_id": "operation-13",
+      "week": 13,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          6
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          1,
+          0
+        ],
+        "production": [
+          [
+            18,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-13",
+        "committed_week": 13,
+        "next_week": 14,
+        "cost_minor": 2081,
+        "cash_minor": 26134
+      }
+    },
+    {
+      "request_id": "operation-14",
+      "week": 14,
+      "event": {
+        "demand": [
+          11,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            5,
+            5,
+            1
+          ]
+        ],
+        "truck_on": [
+          1,
+          0,
+          1
+        ],
+        "production": [
+          [
+            7,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-14",
+        "committed_week": 14,
+        "next_week": 15,
+        "cost_minor": 1636,
+        "cash_minor": 30798
+      }
+    },
+    {
+      "request_id": "operation-15",
+      "week": 15,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          0
+        ],
+        "production": [
+          [
+            9,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-15",
+        "committed_week": 15,
+        "next_week": 16,
+        "cost_minor": 310,
+        "cash_minor": 36338
+      }
+    }
+  ],
+  "T06": [
+    {
+      "request_id": "operation-0",
+      "week": 0,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            5,
+            3,
+            3,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-0",
+        "committed_week": 0,
+        "next_week": 1,
+        "cost_minor": 4226,
+        "cash_minor": 7774
+      }
+    },
+    {
+      "request_id": "operation-1",
+      "week": 1,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            29,
+            4,
+            11
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-1",
+        "committed_week": 1,
+        "next_week": 2,
+        "cost_minor": 5931,
+        "cash_minor": 1843
+      }
+    },
+    {
+      "request_id": "operation-2",
+      "week": 2,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-2",
+        "committed_week": 2,
+        "next_week": 3,
+        "cost_minor": 3701,
+        "cash_minor": -1858
+      }
+    },
+    {
+      "request_id": "operation-3",
+      "week": 3,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            4
+          ],
+          [
+            4,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            2,
+            5,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-3",
+        "committed_week": 3,
+        "next_week": 4,
+        "cost_minor": 3764,
+        "cash_minor": -5622
+      }
+    },
+    {
+      "request_id": "operation-4",
+      "week": 4,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-4",
+        "committed_week": 4,
+        "next_week": 5,
+        "cost_minor": 2760,
+        "cash_minor": -2532
+      }
+    },
+    {
+      "request_id": "operation-5",
+      "week": 5,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-5",
+        "committed_week": 5,
+        "next_week": 6,
+        "cost_minor": 2925,
+        "cash_minor": 593
+      }
+    },
+    {
+      "request_id": "operation-6",
+      "week": 6,
+      "event": {
+        "demand": [
+          11,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            1
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-6",
+        "committed_week": 6,
+        "next_week": 7,
+        "cost_minor": 2541,
+        "cash_minor": 4152
+      }
+    },
+    {
+      "request_id": "operation-7",
+      "week": 7,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-7",
+        "committed_week": 7,
+        "next_week": 8,
+        "cost_minor": 2857,
+        "cash_minor": 7445
+      }
+    },
+    {
+      "request_id": "operation-8",
+      "week": 8,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          6
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            1,
+            1,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-8",
+        "committed_week": 8,
+        "next_week": 9,
+        "cost_minor": 2683,
+        "cash_minor": 11082
+      }
+    },
+    {
+      "request_id": "operation-9",
+      "week": 9,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            2,
+            2,
+            0
+          ],
+          [
+            3,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            40,
+            11,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            11,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-9",
+        "committed_week": 9,
+        "next_week": 10,
+        "cost_minor": 5517,
+        "cash_minor": 11685
+      }
+    },
+    {
+      "request_id": "operation-10",
+      "week": 10,
+      "event": {
+        "demand": [
+          12,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-10",
+        "committed_week": 10,
+        "next_week": 11,
+        "cost_minor": 2754,
+        "cash_minor": 15301
+      }
+    },
+    {
+      "request_id": "operation-11",
+      "week": 11,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            1,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-11",
+        "committed_week": 11,
+        "next_week": 12,
+        "cost_minor": 2895,
+        "cash_minor": 18726
+      }
+    },
+    {
+      "request_id": "operation-12",
+      "week": 12,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            3
+          ],
+          [
+            2,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-12",
+        "committed_week": 12,
+        "next_week": 13,
+        "cost_minor": 3370,
+        "cash_minor": 21776
+      }
+    },
+    {
+      "request_id": "operation-13",
+      "week": 13,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            5,
+            0,
+            2
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-13",
+        "committed_week": 13,
+        "next_week": 14,
+        "cost_minor": 3454,
+        "cash_minor": 24442
+      }
+    },
+    {
+      "request_id": "operation-14",
+      "week": 14,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            2,
+            0,
+            0,
+            1
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          1
+        ],
+        "production": [
+          [
+            7,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            3
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-14",
+        "committed_week": 14,
+        "next_week": 15,
+        "cost_minor": 567,
+        "cash_minor": 30445
+      }
+    },
+    {
+      "request_id": "operation-15",
+      "week": 15,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-15",
+        "committed_week": 15,
+        "next_week": 16,
+        "cost_minor": 306,
+        "cash_minor": 36259
+      }
+    }
+  ],
+  "T07": [
+    {
+      "request_id": "operation-0",
+      "week": 0,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            5,
+            3,
+            3,
+            0
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-0",
+        "committed_week": 0,
+        "next_week": 1,
+        "cost_minor": 4226,
+        "cash_minor": 7774
+      }
+    },
+    {
+      "request_id": "operation-1",
+      "week": 1,
+      "event": {
+        "demand": [
+          11,
+          6,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            7,
+            0,
+            0
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            2,
+            29,
+            4,
+            11
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            2
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-1",
+        "committed_week": 1,
+        "next_week": 2,
+        "cost_minor": 5931,
+        "cash_minor": 1843
+      }
+    },
+    {
+      "request_id": "operation-2",
+      "week": 2,
+      "event": {
+        "demand": [
+          10,
+          7,
+          5,
+          4
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            6,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            8,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-2",
+        "committed_week": 2,
+        "next_week": 3,
+        "cost_minor": 3701,
+        "cash_minor": -1858
+      }
+    },
+    {
+      "request_id": "operation-3",
+      "week": 3,
+      "event": {
+        "demand": [
+          10,
+          6,
+          5,
+          5
+        ],
+        "supplier_capacity_volume": [
+          80,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          31
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            4,
+            0,
+            4
+          ],
+          [
+            4,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            2,
+            5,
+            0
+          ],
+          [
+            0,
+            5,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-3",
+        "committed_week": 3,
+        "next_week": 4,
+        "cost_minor": 3764,
+        "cash_minor": -5622
+      }
+    },
+    {
+      "request_id": "operation-4",
+      "week": 4,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            7
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-4",
+        "committed_week": 4,
+        "next_week": 5,
+        "cost_minor": 2760,
+        "cash_minor": -2532
+      }
+    },
+    {
+      "request_id": "operation-5",
+      "week": 5,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            3,
+            0,
+            2,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-5",
+        "committed_week": 5,
+        "next_week": 6,
+        "cost_minor": 2925,
+        "cash_minor": 593
+      }
+    },
+    {
+      "request_id": "operation-6",
+      "week": 6,
+      "event": {
+        "demand": [
+          11,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            1
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-6",
+        "committed_week": 6,
+        "next_week": 7,
+        "cost_minor": 2541,
+        "cash_minor": 4152
+      }
+    },
+    {
+      "request_id": "operation-7",
+      "week": 7,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-7",
+        "committed_week": 7,
+        "next_week": 8,
+        "cost_minor": 2857,
+        "cash_minor": 7445
+      }
+    },
+    {
+      "request_id": "operation-8",
+      "week": 8,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          6
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            1,
+            1,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            10,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-8",
+        "committed_week": 8,
+        "next_week": 9,
+        "cost_minor": 2683,
+        "cash_minor": 11082
+      }
+    },
+    {
+      "request_id": "operation-9",
+      "week": 9,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            2,
+            2,
+            0
+          ],
+          [
+            3,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            40,
+            11,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            11,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            5
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-9",
+        "committed_week": 9,
+        "next_week": 10,
+        "cost_minor": 5517,
+        "cash_minor": 11685
+      }
+    },
+    {
+      "request_id": "operation-10",
+      "week": 10,
+      "event": {
+        "demand": [
+          12,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            12,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-10",
+        "committed_week": 10,
+        "next_week": 11,
+        "cost_minor": 2754,
+        "cash_minor": 15301
+      }
+    },
+    {
+      "request_id": "operation-11",
+      "week": 11,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            1,
+            0,
+            2
+          ],
+          [
+            3,
+            1,
+            2,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-11",
+        "committed_week": 11,
+        "next_week": 12,
+        "cost_minor": 2895,
+        "cash_minor": 18726
+      }
+    },
+    {
+      "request_id": "operation-12",
+      "week": 12,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            2,
+            2,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          0
+        ],
+        "production": [
+          [
+            11,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            3
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-12",
+        "committed_week": 12,
+        "next_week": 13,
+        "cost_minor": 2622,
+        "cash_minor": 22524
+      }
+    },
+    {
+      "request_id": "operation-13",
+      "week": 13,
+      "event": {
+        "demand": [
+          12,
+          6,
+          4,
+          6
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            2,
+            1,
+            1,
+            1
+          ],
+          [
+            5,
+            33,
+            1,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          1,
+          1
+        ],
+        "production": [
+          [
+            12,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-13",
+        "committed_week": 13,
+        "next_week": 14,
+        "cost_minor": 4995,
+        "cash_minor": 23649
+      }
+    },
+    {
+      "request_id": "operation-14",
+      "week": 14,
+      "event": {
+        "demand": [
+          11,
+          7,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          1,
+          0,
+          0
+        ],
+        "production": [
+          [
+            13,
+            0,
+            2,
+            0
+          ],
+          [
+            0,
+            7,
+            0,
+            6
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-14",
+        "committed_week": 14,
+        "next_week": 15,
+        "cost_minor": 1070,
+        "cash_minor": 29149
+      }
+    },
+    {
+      "request_id": "operation-15",
+      "week": 15,
+      "event": {
+        "demand": [
+          11,
+          6,
+          4,
+          5
+        ],
+        "supplier_capacity_volume": [
+          30,
+          75,
+          140
+        ],
+        "plant_capacity_hours": [
+          24,
+          34
+        ]
+      },
+      "action": {
+        "order_lots": [
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        "truck_on": [
+          0,
+          0,
+          0
+        ],
+        "production": [
+          [
+            9,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            6,
+            0,
+            4
+          ]
+        ]
+      },
+      "receipt": {
+        "request_id": "operation-15",
+        "committed_week": 15,
+        "next_week": 16,
+        "cost_minor": 306,
+        "cash_minor": 34963
+      }
+    }
+  ]
+}

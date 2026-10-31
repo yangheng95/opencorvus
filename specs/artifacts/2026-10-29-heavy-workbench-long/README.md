@@ -31,6 +31,8 @@
 
 旧reaction已选择性续跑至自然0/AutoRemove，其余五旧昂贵资格任务仍Paused；唯一新L01作者GPU组按原封存源继续，不恢复全部旧GPU/solver或重复已结束矩阵凑量。L04/L05完整开发已交，当前直接补L01及已触发L02/L06新版本缺口；全目标未达，心跳继续。
 
+最新真实末态优先：L01首段已自然0但原发布元数据错误阻断后段，修复仅对原输出关闭、未重训；Docker Linux引擎当前不可用，L01后段和L06在线执行待恢复环境。旧五任务当前不能inspect，上一Paused快照不当本轮实测。[首段原结果](evaluator/l01-whole-case/first-segment-terminal/REPORT.md)与[L06新完整有限树建设](cases/L06/evaluator/upgrade-v0.3/README.md)不代替整题冻结/候选小时。
+
 最新L01：[完整研究源与真实科学结果](evaluator/l01-whole-case/README.md)已接首份19+5实际矩阵；原reaction完整训练仍3.5651%误差，结构对照的同架构可达不能替代旧优化轨迹。当前仍9/10，未冻L01、不报小时。动态入口与原失败见最新Recall，不重复启动原矩阵。
 
 最新整题checker已接真实闭合native/逐步计数/14同final质量与175独评锚点；真实更新却报0的错误programme被同入口拒绝。完整正向研究/可达/独审/冻结仍待，[原错误与接受边界](evaluator/l01-whole-case/checker-construction/REPORT.md)不冒充第十题成品。

@@ -9,6 +9,7 @@ import numpy as np
 import torch
 import study_engine as engine
 from pinn_numeric_check import load_network,metrics,canonical_data
+from study_publication import finalize_manifest
 
 PROJECT=Path(__file__).resolve().parent
 def rel(p):return Path(p).resolve().relative_to(PROJECT).as_posix()
@@ -17,6 +18,7 @@ def numerical(p,problem):return metrics(problem,load_network(p),canonical_data(p
 def blank(s):
     phases={'adam':['adam'],'lbfgs':['lbfgs'],'hybrid':['adam','lbfgs'],'gd':['gd'],'nncg':['nncg']}[s['method']]
     return {'config_id':s['id'],'status':'incomplete','reason':'not executed','parent_id':None,'phases':{p:{'attempts':0,'accepted_updates':0} for p in phases},'costs':{k:0 for k in ('closure_calls','gradient_calls','hvp_calls','lbfgs_native_iterations')},'checkpoints':{'initial':None,'switch':None,'final':None},'trace':None,'receipt':None}
+
 def trace_join(destination,parts):
     with Path(destination).open('w',encoding='utf-8') as target:
         for source,through,shared in parts:
@@ -158,11 +160,7 @@ def main():
             parts=[(Path(a.resume).parent/'attempts.jsonl',resuming['attempt'],rel(a.resume))] if resuming else []
             parts.append((folder/s['method']/'attempts.jsonl',None,None))
             finish(s,None,folder,[result],oracle,parent['id'],initial,None,parts)
-        for problem in manifest['solution_checkpoints']:
-            candidates=[s['id'] for s in profile['base_configurations'] if s['problem']==problem and s['seed']==345]
-            if problem=='convection':candidates += [s['id'] for s in profile['continuations']]
-            ids=[i for i in candidates if i in observations and observations[i]['status'] in profile['solution_selection']['eligible_terminal_states']]
-            manifest['solution_checkpoints'][problem]=min(ids,key=lambda i:(observations[i]['metrics']['total_loss'],i)) if ids else None
+        finalize_manifest(profile,manifest,observations)
         publish()
         from finish_study import finish_study
         finish_study(PROJECT,inputs,out,profile,manifest,observations,parent,a.device,not a.only)

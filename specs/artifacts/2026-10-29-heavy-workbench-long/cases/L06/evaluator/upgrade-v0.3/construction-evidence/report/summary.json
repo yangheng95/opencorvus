@@ -1,0 +1,20 @@
+{
+  "expected_cost_exact": "394553/8",
+  "alternative_exact": "70640",
+  "saving_exact": "170567/8",
+  "components_exact": {
+    "purchase_cost": "73437/2",
+    "freight_cost": "11595/2",
+    "production_cost": "46481/8",
+    "holding_cost": "993"
+  },
+  "minimum_cash": -5622,
+  "information_nodes": 60,
+  "full_path_count": 8,
+  "native_bound": 47594.75,
+  "native_status": "FEASIBLE",
+  "native_seconds": 120.02392900316045,
+  "quality_15percent": true,
+  "online_native_recovery": "not yet performed; Docker unavailable",
+  "candidate_score": null
+}

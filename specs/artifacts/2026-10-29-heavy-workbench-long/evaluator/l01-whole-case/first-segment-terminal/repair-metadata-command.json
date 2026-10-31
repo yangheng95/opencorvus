@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\study_publication.py",
+    "--root",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project",
+    "--inputs",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results"
+  ],
+  "exit_code": 0,
+  "stdout": "{\"publication_closed\": true, \"original_executed_records\": 1, \"continuation_parent\": null}\n",
+  "stderr": ""
+}

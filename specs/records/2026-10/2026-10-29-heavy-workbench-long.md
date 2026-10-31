@@ -638,3 +638,19 @@ L02当前版本对这两个系统未拉开区分度，不能拿两100说难度�
 只读已封reaction NNCG真实200步trace过当前collector，真实writer的5错误输出按attempt/bool cost/PCG精确残差/Armijo/终态继续具名拒绝；没有重200训练。合成研究pass/解fail的算术包仅协议控制，不当175独评/参考/候选分；原坏越权包保留并具名设施错误。上述是完整case必需的一部分，不叫第十题完成或成熟。未开始新独审，待完整原研究/论文图和可达证据齐后才一次集中整审。
 
 22:01:28.957500Z原author owner54408仍在同一first-registered-cell/CID314b41…，真实attempt/accepted28000、loss.0019921，原41000上限不改；真实持续更新不是卡住/空等。唯一locator与active.json优先于这里旧计数；原段自然0/artifact检查后由原owner自动继续remaining，不另开矩阵/热改源/恢复其他GPU。当前仍9/10开发合同、有效候选小时0/10；缺完整矩阵/当前选择质量可达、整题正向验收/实际研究独评/冻结与后续fresh测试。L02/L06两good升级义务不取消，旧线只读。只余原五旧任务Paused，reaction已自然终态AutoRemove，禁止按旧六表重启。
+
+## 最新真实末态Recall：L01首段完成，发布修复后待环境；L06整份有限树建设
+
+旧active表已失效。原L01first-registered-cell于2026-10-30T22:30:30.733Z已native0/5438.9232315秒，真实41000接受更新、closure83632/gradient165632/nativeiterations41000；原完整1,384,525,016byte capsule先封后清理，不能重启。原owner54408于22:30:31Z因artifact dependency_state停止，remaining未启动。根因是--only跳过续训循环而blank未把无合格父项的5续训声明dependency_incomplete；原reader正确拒绝。独立训练/结果没有失败在该工具上，更不是生产Task/Mission/Session调度异常：直接Python/Docker作者脚本无产品调度/LLM入口调用，共享生产路径不涉及。
+
+实施前分析在原BUILD-PLAN追加，修复唯一study_publication.finalize_manifest给完整producer与显式CPU元数据CLI共用，选择复用同pinn_submission_check.select_minimum，builder同步封该依赖。修后只更新5未执行依赖status/reason；原完成记录/权重/trace/计数/selected ID完全同一。真实CPU关闭0/原artifact0、原41000完整trace collector通过；不是原41k重训或全矩阵成功。原稿/source/native/owner-error和修后source另封、停止后项目明确源码修订，不热补PID/不假说同字节。未来显式continue_author_after_publication.py只原--continue-study，首格不重，必须先看新locator/active/目录防重复。
+
+科学结果如实保留：该纯L-BFGS训练loss.00178967648/L2RE.61167510099、评价残差.01224562383、初值.00705396798/周期.11080691626，远未达事前科学目标；其它合法格未运行，不能当最终全选择或按现误差宽线。原两PNG主方实际view，解场后段衰减/误差明显，reaction/wave未执行已标明。first-segment-terminal含完整可读报告/原末态/修复、27,194,761bytes/90成员数值投影ZIP；43个opaque .pt逐成员列receipt并完整保外部原capsule，不能说大型state都进Git。
+
+本轮首次修复容器create真实exit1：Docker Linux engine npipe不存在；随后docker info亦同失败。没有重启Docker/WSL/用户进程、没有新的GPU或恢复旧任务；原五Paused只保最后已知快照，当前无法inspect，不能伪称本轮五真Paused。元数据仅需NumPy已用现有host执行。显式remaining环境检查实际exit3/docker_engine_unavailable，未创建remaining目录/容器或重矩阵。唯一L01 locator现phase=first_segment_terminal_publication_repaired_environment_blocked；旧owner-error不删，active.json已标无活跃CID和真实阻断。
+
+在等待原L01训练期间，主方直接建设已触发的L06/0.3整份业务：新16周/8联合路径/4原料4产品3供应商2厂、4/8/12周逐次当前事件揭示、全部可见history与不可撤commit、同唯一raw decoder/物理kernel/线性模型加1564前缀等式。新原料/public/source首求解前封，唯一120秒CPU/netnone/source-only CP-SAT9.15.6755自然0/FEASIBLE，3968变量3996行/118改善，完整因果可行期望394553/8=49319.125，合法spot70640，达到求解前15%改善目标；native界47594.75非独立证明/精确最优，不套旧L47380、不重求解。原闭合source/raw/model/result/log/inspect/exit已封后精确清理CIDb2e618…。
+
+同check_tree实际CLI核8路径/60信息节点和128逻辑journal，4个真实error_policy进程均进入同checker：拼接两个物理可行方案的前瞻政策business=true但information=false；超供应/bool数量/改历史具名失败，合法spot质量fail。逻辑journal/replay不是实际actor或SQLite中断证明。主方新CPU报告/两CSV/实际四panel图已view，精确purchase73437/2+freight11595/2+production46481/8+holding993闭合；local --target绘图库不改宿主全局依赖，不重预测/solver。721272bytes/63成员construction-evidence原件区分原求解源与后来checker/report源。
+
+L06新execute_policy/table_actor是固定public/source挂载+stdin当前packet/实际SQLitecommit的源码，任意语言argv；当前Docker不可用，尚未实跑其在线隔离/进程中断/恢复、完整输入控制/机器+人评grader与集中整审。public-draft/rubric.draft不冻结、不发布新分数。L01全研究和L06新版仍未完成，套件9/10、有效候选小时0/10；不以这些中间结果代替第十题或新版本。后续环境可用先继续原L01pending及L06真在线闭环，完整成品齐后各一次集中独审；不重任何旧资格/原solver/已完成41k。L02另升级义务同样未取消，旧两100/政策只读。

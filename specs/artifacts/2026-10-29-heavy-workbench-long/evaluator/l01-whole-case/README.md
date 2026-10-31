@@ -4,7 +4,9 @@
 
 [本轮真实结果](first-scientific-results/README.md)包括已有权重重算、原reaction自然终态、真实新NNCG移植、实际同架构结构控制和两张已view_image的图。结构控制证明容量，却不属于旧Xavier优化器轨迹，不能加入旧合法选择、冒充已解决固定优化合同或候选分。
 
-唯一新正式作者研究在D:/opencorvus-benchmark-runs/l01-full-case-20261031/author-project/work/results；动态入口D:/opencorvus-benchmark-runs/L01-current-reference-20261031.json和author-study/active.json优先于本文旧计数。首注册纯L-BFGS自然段完成才由同一已封源--continue-study执行其余原格，首格不重跑；当前仍在实际训练。来源为首私有更新前pre-execution-source.zip，不热改source/工作PID。仅一个新GPU组；原reaction已AutoRemove自然0，其余五旧任务暂停。
+唯一新正式作者研究在D:/opencorvus-benchmark-runs/l01-full-case-20261031/author-project/work/results；动态入口D:/opencorvus-benchmark-runs/L01-current-reference-20261031.json和author-study/active.json优先于本文旧计数。首注册纯L-BFGS已真实41000步自然0，[原末态、失败及修复](first-segment-terminal/REPORT.md)保留：原producer漏标5续训依赖，原owner因此停止remaining。唯一publication函数修后对原输出显式CPU关闭，原artifact0/41000真实trace过，权重/计数/目标不变；该单格L2RE61.17%不达科学目标。
+
+当前Docker Linux引擎npipe不可用，remaining尚未启动；没有重启Docker/WSL/用户进程。原首段pre-execution-source.zip不改；停止后修后source另封amended-source-final.zip，后续仅原--continue-study执行未执行格，不重首格，明确源修订而不说热补/逐字同源。显式接续入口continue_author_after_publication.py先查环境，当前实际exit3/docker_engine_unavailable。原五旧任务最近已知Paused，当前daemon不可用无法重新inspect，不能把旧快照当当前实测。
 
 整题入口现在是[check_l01.py](check_l01.py)，唯一原子审查锚点是[review_anchors.py](review_anchors.py)。它从已封source/native原件重建，用现有唯一NumPy/selection reader核最终权重、逐attempt/closure计数和同一选定final的14质量；175项研究判断交一次集中整题独评。机器已观察失败不能被独评覆盖，未执行的依赖保留blocked，固定100分母，未冻/未评总分null。未知设施不当候选0。
 

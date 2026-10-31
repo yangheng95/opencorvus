@@ -1,0 +1,141 @@
+{
+  "status": "logical_policy_checked",
+  "business_feasible": true,
+  "information_legal": false,
+  "quality_target_pass": false,
+  "expected_cost_exact": null,
+  "registered_contingency_cost": "70640",
+  "pre_registered_quality_maximum": "60044",
+  "journal_replay_complete": null,
+  "journal_records": [],
+  "audit": {
+    "format": "l06-tree-policy-audit/1",
+    "business_feasible": true,
+    "information_legal": false,
+    "policy_valid": false,
+    "information_nodes": 60,
+    "information_violations": [
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T07"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 1,
+        "paths": [
+          "T00",
+          "T07"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 2,
+        "paths": [
+          "T00",
+          "T07"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 3,
+        "paths": [
+          "T00",
+          "T07"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 4,
+        "paths": [
+          "T04",
+          "T07"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 5,
+        "paths": [
+          "T04",
+          "T07"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 6,
+        "paths": [
+          "T04",
+          "T07"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 7,
+        "paths": [
+          "T04",
+          "T07"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 8,
+        "paths": [
+          "T06",
+          "T07"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 9,
+        "paths": [
+          "T06",
+          "T07"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 10,
+        "paths": [
+          "T06",
+          "T07"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 11,
+        "paths": [
+          "T06",
+          "T07"
+        ]
+      }
+    ],
+    "physical_violations": [],
+    "expected_cost_exact": null,
+    "paths": null,
+    "constraint_checks": {
+      "common_commitment": 24,
+      "shipment_binary": 384,
+      "supplier_capacity": 384,
+      "shipment_minimum": 384,
+      "terminal_pipeline": 384,
+      "product_assignment": 1024,
+      "plant_capacity": 256,
+      "raw_storage_peak": 128,
+      "product_storage_peak": 128,
+      "raw_availability": 128,
+      "fulfilment": 128,
+      "declared_raw": 112,
+      "declared_finished": 112,
+      "cash_intermediate": 120,
+      "cash_terminal": 8,
+      "terminal_finished": 8
+    }
+  },
+  "native_execution_attestation": "unassessed; JSON journal is not proof of the isolated actor/native/recovery; original evidence and whole-case review required",
+  "total": null,
+  "good": null,
+  "limits": "not frozen or fully reviewed; no candidate score or effective-hour certification"
+}

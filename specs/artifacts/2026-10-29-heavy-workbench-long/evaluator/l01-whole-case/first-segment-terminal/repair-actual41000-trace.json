@@ -1,0 +1,72 @@
+{
+  "status": "verified",
+  "line_count": 41000,
+  "phases": {
+    "lbfgs": {
+      "attempts": 41000,
+      "accepted_updates": 41000,
+      "terminal_checks": 0,
+      "zero_or_failed_attempts": 0,
+      "plateau_count": 0
+    }
+  },
+  "last_rows": {
+    "lbfgs": {
+      "phase": "lbfgs",
+      "attempt": 41000,
+      "accepted_before": 40999,
+      "loss_before": 0.001789762503045189,
+      "gradient_inf_before": 0.006764537607423099,
+      "at": "2026-10-30T22:29:30.338340+00:00",
+      "native_iterations": 41000,
+      "native_t": 1.0,
+      "native_directional_derivative": -1.1403184487725339e-07,
+      "closures": [
+        {
+          "trial": 0,
+          "loss": 0.001789762503045189,
+          "alpha": 0.0,
+          "delta_inf": 0.0,
+          "gradient_dot_direction": -1.1403184487725339e-07,
+          "direction_consistency_inf": 0.0
+        },
+        {
+          "trial": 1,
+          "loss": 0.0017896764824236282,
+          "alpha": 0.9999999999999308,
+          "delta_inf": 0.001436472990013371,
+          "gradient_dot_direction": -5.7817272440772124e-08,
+          "direction_consistency_inf": 4.360661137736699e-16
+        }
+      ],
+      "gradient_inf_after": 0.002400016605082711,
+      "accepted_after": 41000,
+      "loss_after": 0.0017896764824236282,
+      "step_inf": 0.001436472990013371,
+      "plateau": 0,
+      "status": "max_updates",
+      "costs_total": {
+        "closure_calls": 83632,
+        "gradient_calls": 165632,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 41000,
+        "loss_calls": 206632
+      },
+      "costs_increment": {
+        "closure_calls": 2,
+        "gradient_calls": 4,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 1,
+        "loss_calls": 5
+      },
+      "elapsed_seconds": 5428.646476821974
+    }
+  },
+  "costs": {
+    "closure_calls": 83632,
+    "gradient_calls": 165632,
+    "hvp_calls": 0,
+    "lbfgs_native_iterations": 41000
+  },
+  "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+}

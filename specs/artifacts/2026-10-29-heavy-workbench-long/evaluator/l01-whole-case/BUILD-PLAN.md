@@ -64,3 +64,13 @@ assess_existing.py本轮6.5秒完成7个真实既有导出与6个实际常数网
 prepare写绑定原capsule/合同语义的assignment和真实metrics/trace事实，grade重新由原capsule计算并接精确175独评；未知/未评总分null、分母100不变。study_complete是完整真实协议/研究交付，solution_reproduced要求14质量及来源资格；任一PDE失败不可补分。原draft状态继续阻止分数发布，只有完整可达/整题校准/一层独审后FREEZE才允许正式分数；不因写了checker宣布第十题。当前原要求“两独评”按用户明确只授权一层独评收敛，不再额外委托。实际正错programme在原真实运行可封末态后进入同一个checker，不造全矩阵执行成绩；活跃矩阵不重跑。
 
 整题合同澄清只替换未冻rubric的unknown=0/两独评旧文字为四状态、固定分母和用户授权的一次整题独评；189ID/权重/critical/80线、原24配置/输入/方法/选择完全不变。14threshold仍null，新的公开quality-policy.draft只序列化先行目标并明确不证明原优化器可达，不提前冻结。原TASK/OUTPUTS/profile/rubric先封pre-checker-draft-contract.zip。新文案未被当前已封训练项目读取，不冒称当前source用过后增文案；它与实际既有trace字段一致，不热改source或PID。
+
+## 原首段自然完成后的真实交付阻断修复
+
+首convection纯L-BFGS真实41000更新自然native0，原owner于22:30:31Z被dependency_state阻断，后段没有启动。直接触发是run_study.blank把尚无合格父项的5续训写incomplete；--only又跳过续训循环，因此未执行该循环中的dependency_incomplete赋值。唯一reader正确拒绝，与数值训练/生产调度/恢复无关。全仓搜索blank/continuation_parent/dependency_state/--continue-study确认当前producer末段publish为单源根因，旧数值测试夹具本已正确区分状态，不能放宽checker以接受错误交付。
+
+修复在同一个producer增加唯一finalize_manifest，按当前独立终态train-loss观测更新选择及尚未执行续训的父依赖状态；完整执行和显式--close-segment共同调用，不新增第二reader/旧格式fallback。close只接受原naturally terminal segment，先保原manifest再发布派生元数据，绝不调用优化器/改已完成权重、计数、目标、配置或删失败。实际原source/native ZIP与owner-error保留；停止后的项目只改此producer为具名源修订，另封新source及差异，后续剩余段明确执行修后版本，不假称与首段逐字同源或热补PID。
+
+必要验收只对原首段一次元数据关闭+原artifact验收，再对原41000真实trace/权重进入整题prepare；通过后显式继续原尚未执行格，绝不重首格/旧矩阵。这个阻断没有改变1%科学底线，最终科学成功仍待全合法选择及独审。
+
+实际修复启动又遇Docker npipe服务不存在，create exit1、零容器/零优化，原收据保publication-repair/create.json，不重启用户Docker/WSL。元数据发布仅需已有NumPy，故唯一finalize_manifest放在study_publication.py并提供显式CPU CLI，训练producer与此CLI共用；不是第二协议/fallback。builder必须一并封当前唯一pinn_submission_check作为selection primitive依赖，避免新增未声明模块。Docker恢复前不声称remaining或L06在线容器已运行。

@@ -3,3 +3,5 @@
 唯一公开合同在[根任务](../../public/TASK.md)，本目录不复制第二public或评分协议。[当前完整研究源/真实科学记录](../../evaluator/l01-whole-case/README.md)与[Recall](../../../../records/2026-10/2026-10-29-heavy-workbench-long.md)记录正在实际执行的首份完整作者矩阵。
 
 原reaction41000更新自然完成仍3.5651%误差，新200步NNCG移植仍3.3074%，不改1%目标。结构控制三PDE同架构误差.0235%/.0525%/.2390%证明容量，但不属于旧Xavier优化轨迹，不给旧方法/候选分。整题checker已接原native/逐步轨迹/14同final质量与175独评锚点，真实更新却报0的错误programme已被同入口拒绝；完整矩阵、当前选择合同可达、整题正向验收/整审/冻结仍待。套件仍9/10，有效小时0/10。
+
+最新正式首段纯L-BFGS已41000步自然0/L2RE61.17%；原发布依赖状态错误已修并对原完整trace/原artifact核验，无重训练。Docker当前不可用，后段尚未启动；[原末态和明确源修订](../../evaluator/l01-whole-case/first-segment-terminal/REPORT.md)保留，不能按旧running表重开矩阵。

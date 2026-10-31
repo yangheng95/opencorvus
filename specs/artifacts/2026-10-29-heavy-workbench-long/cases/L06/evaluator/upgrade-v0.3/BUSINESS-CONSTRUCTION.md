@@ -39,3 +39,13 @@ S1先增l06_physics纯周内核并使旧inspect_plan调用，shape/common信息�
 S1全仓消费者核查另发现qualify_delivery.py是早期一次性目录布局：四个work/v2硬编码输入在当前source目录均实际不存在，而current numeric/grading包装源清单也需加入新physics依赖。该脚本不是业务根因，也没拿它失败掩盖新交付。按当前工具合同修为显式reference-input/reference-plan/expected-cost-exact和闭式credit-input/credit-plan参数；保原历史执行脚本/argv，当前不保旧隐式路径fallback。仅必要地跑此真实派生CLI工具以证明新显式输入和源依赖闭合，不重整数搜索/旧矩阵/LLM，相关错误响应仍为具名输出合同。
 
 后续online还须约束诊断出口：现共享kernel的scenario_id只是旧离线错误定位前缀，旧整树输出可列公共叶；新episode必须传中性公开定位，不把私有实际chosen leaf放入where/异常/收据而让故意非法动作成为未来oracle。节点可由合法history推断与直接泄漏所选未来须区分，不能靠屏蔽所有叶字符串的关键字门替代真实数据流隔离。
+
+## 整份0.3业务实施Recall（2026-10-30，非新组件资格）
+
+目前L01原作者矩阵owner54408持续训练，不能重启/热改；L06旧两100和退休API/旧L47380只读。本轮在此期间补完整多阶段题包，不增加通用runner/消息/调度能力，不重复S1/信息toy或原solver。已重读当前l06_packet/read_packet、唯一l06_physics、qualify_l06/build_model、l06_integer/solve_integer和原CSV；原线性模型只含共同K周，故新模型应在同一物理线性模型上增加由完整事件前缀推导的非前瞻等式，不另抄物理方程。
+
+实施对象为新0.3目录：原始商业/排产说明和11CSV、公开支持树/合同、唯一tree_business权威事件前缀/重放/动作验证、一次完整源参考、真实在线固定packet/pipe执行与SQLite不可撤承诺/同键恢复、全账/报告/实际图、同checker正错programme和原子rubric。旧0.2公开/冻结/权重/分数完全不变。新物理事实仍由唯一raw decoder读取，normalized不是候选权威；公开支持路径可全部读，实际路径只留在父进程内，actor只挂固定public/source/output并由stdin取得当前history/state，错误出口使用中性week定位。
+
+材料采用16周4原料4产品3供应商2工厂、三个后续揭示时点的8条有限联合路径，含真实lead1/2订单、lead0应急、合单包装/MOQ、共享工时、两段峰值仓容和延迟回款。这是新原材料构造，原静态目录/商业语义继承来源明确，时变需求/供应容量组合和现金等新事实独立登记，不能套旧参考界。先构造一个可执行高成本政策，在全部路径同信息合法并满足业务；再至多一个有明确120秒内部上限的CPU参考求解，假设是完整非前瞻模型可以找到更低成本可行政策并给出可核native界。120秒只此作者代表验证参数，不是用户总额度/候选限制，若unknown或无可行解原样保留，不通过重复短solver冒充进展。质量线必须另登记/论证，不从旧L或未完成求解推分。
+
+online单独验证真实源只获当前完整prefix/权威状态、原动作只追加、commit后进程退出与原receipt续接，过去动作更改/自报库存/前瞻政策/错回款/漏峰值及可行高成本控制进入同一checker。不会把表策略或不保存优化器状态判错；原实际业务state由完整journal唯一重建，SQLite只是事实持久化。新报告解释信息/成本/资金风险，并保留真实算法/数值失败。完整源执行/所有路径/真实图/完整错误programme与原子评分齐后才一次整题独审；本计划和任何中间模块不宣布完整0.3、十题或有效小时。

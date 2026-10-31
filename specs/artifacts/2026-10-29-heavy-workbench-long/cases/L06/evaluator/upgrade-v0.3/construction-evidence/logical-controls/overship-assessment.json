@@ -1,0 +1,653 @@
+{
+  "status": "logical_policy_checked",
+  "business_feasible": false,
+  "information_legal": false,
+  "quality_target_pass": false,
+  "expected_cost_exact": null,
+  "registered_contingency_cost": "70640",
+  "pre_registered_quality_maximum": "60044",
+  "journal_replay_complete": null,
+  "journal_records": [],
+  "audit": {
+    "format": "l06-tree-policy-audit/1",
+    "business_feasible": false,
+    "information_legal": false,
+    "policy_valid": false,
+    "information_nodes": 60,
+    "information_violations": [
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T01"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T02"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T03"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T04"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T05"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T06"
+        ]
+      },
+      {
+        "code": "nonanticipativity_violation",
+        "week": 0,
+        "paths": [
+          "T00",
+          "T07"
+        ]
+      }
+    ],
+    "physical_violations": [
+      {
+        "code": "supplier_capacity",
+        "where": "T00.week0.C",
+        "actual": 1008,
+        "required": 140,
+        "context": {}
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week0",
+        "actual": 1178,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week0",
+        "actual": [
+          1,
+          15,
+          0,
+          1
+        ],
+        "required": [
+          1001,
+          15,
+          0,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week0",
+        "actual": -38226,
+        "required": -9000,
+        "context": {
+          "week": 0,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week1",
+        "actual": 1189,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week1",
+        "actual": [
+          5,
+          31,
+          5,
+          5
+        ],
+        "required": [
+          1005,
+          31,
+          5,
+          5
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week1",
+        "actual": -45157,
+        "required": -9000,
+        "context": {
+          "week": 1,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week2",
+        "actual": 1222,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week2",
+        "actual": [
+          10,
+          35,
+          7,
+          0
+        ],
+        "required": [
+          1010,
+          35,
+          7,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week2",
+        "actual": -49858,
+        "required": -9000,
+        "context": {
+          "week": 2,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week3",
+        "actual": 1237,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week3",
+        "actual": [
+          1,
+          42,
+          0,
+          1
+        ],
+        "required": [
+          1001,
+          42,
+          0,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week3",
+        "actual": -54622,
+        "required": -9000,
+        "context": {
+          "week": 3,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week4",
+        "actual": 1237,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week4",
+        "actual": [
+          5,
+          57,
+          6,
+          13
+        ],
+        "required": [
+          1005,
+          57,
+          6,
+          13
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week4",
+        "actual": -51603,
+        "required": -9000,
+        "context": {
+          "week": 4,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week5",
+        "actual": 1211,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week5",
+        "actual": [
+          16,
+          25,
+          8,
+          0
+        ],
+        "required": [
+          1016,
+          25,
+          8,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week5",
+        "actual": -50051,
+        "required": -9000,
+        "context": {
+          "week": 5,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week6",
+        "actual": 1214,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week6",
+        "actual": [
+          16,
+          33,
+          13,
+          1
+        ],
+        "required": [
+          1016,
+          33,
+          13,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week6",
+        "actual": -48731,
+        "required": -9000,
+        "context": {
+          "week": 6,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week7",
+        "actual": 1237,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week7",
+        "actual": [
+          16,
+          35,
+          3,
+          0
+        ],
+        "required": [
+          1016,
+          35,
+          3,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week7",
+        "actual": -47251,
+        "required": -9000,
+        "context": {
+          "week": 7,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week8",
+        "actual": 1239,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week8",
+        "actual": [
+          22,
+          43,
+          8,
+          0
+        ],
+        "required": [
+          1022,
+          43,
+          8,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week8",
+        "actual": -44369,
+        "required": -9000,
+        "context": {
+          "week": 8,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week9",
+        "actual": 1186,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week9",
+        "actual": [
+          19,
+          28,
+          6,
+          1
+        ],
+        "required": [
+          1019,
+          28,
+          6,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week9",
+        "actual": -43046,
+        "required": -9000,
+        "context": {
+          "week": 9,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week10",
+        "actual": 1233,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week10",
+        "actual": [
+          21,
+          30,
+          4,
+          1
+        ],
+        "required": [
+          1021,
+          30,
+          4,
+          1
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week10",
+        "actual": -41694,
+        "required": -9000,
+        "context": {
+          "week": 10,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week11",
+        "actual": 1227,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week11",
+        "actual": [
+          15,
+          33,
+          0,
+          4
+        ],
+        "required": [
+          1015,
+          33,
+          0,
+          4
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week11",
+        "actual": -40318,
+        "required": -9000,
+        "context": {
+          "week": 11,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week12",
+        "actual": 1234,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week12",
+        "actual": [
+          9,
+          54,
+          13,
+          0
+        ],
+        "required": [
+          1009,
+          54,
+          13,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week12",
+        "actual": -37224,
+        "required": -9000,
+        "context": {
+          "week": 12,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week13",
+        "actual": 1200,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week13",
+        "actual": [
+          37,
+          16,
+          0,
+          8
+        ],
+        "required": [
+          1037,
+          16,
+          0,
+          8
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week13",
+        "actual": -32803,
+        "required": -9000,
+        "context": {
+          "week": 13,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week14",
+        "actual": 1162,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week14",
+        "actual": [
+          1,
+          4,
+          1,
+          3
+        ],
+        "required": [
+          1001,
+          4,
+          1,
+          3
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week14",
+        "actual": -29427,
+        "required": -9000,
+        "context": {
+          "week": 14,
+          "terminal": false
+        }
+      },
+      {
+        "code": "raw_storage_peak",
+        "where": "T00.week15",
+        "actual": 1066,
+        "required": 240,
+        "context": {}
+      },
+      {
+        "code": "declared_raw",
+        "where": "T00.week15",
+        "actual": [
+          2,
+          1,
+          0,
+          0
+        ],
+        "required": [
+          1002,
+          1,
+          0,
+          0
+        ],
+        "context": {}
+      },
+      {
+        "code": "cash_limit",
+        "where": "T00.week15",
+        "actual": -24760,
+        "required": 0,
+        "context": {
+          "week": 15,
+          "terminal": true
+        }
+      }
+    ],
+    "expected_cost_exact": null,
+    "paths": null,
+    "constraint_checks": {
+      "common_commitment": 24,
+      "shipment_binary": 384,
+      "supplier_capacity": 384,
+      "shipment_minimum": 384,
+      "terminal_pipeline": 384,
+      "product_assignment": 1024,
+      "plant_capacity": 256,
+      "raw_storage_peak": 128,
+      "product_storage_peak": 128,
+      "raw_availability": 128,
+      "fulfilment": 128,
+      "declared_raw": 128,
+      "declared_finished": 128,
+      "cash_intermediate": 120,
+      "cash_terminal": 8,
+      "terminal_finished": 8
+    }
+  },
+  "native_execution_attestation": "unassessed; JSON journal is not proof of the isolated actor/native/recovery; original evidence and whole-case review required",
+  "total": null,
+  "good": null,
+  "limits": "not frozen or fully reviewed; no candidate score or effective-hour certification"
+}

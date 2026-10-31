@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\script\\benchmark\\pinn_submission_check.py",
+    "--root",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project",
+    "--manifest",
+    "work/results/manifest.json",
+    "--profile",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs\\profile.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\publication-repair\\artifact-assessment.json"
+  ],
+  "exit_code": 0,
+  "stdout": "{\"format\": \"heavy-pinn-artifact-check/1\", \"artifact_contract_checked\": true, \"training_attestation\": \"not_performed; requires controlled full clean retraining and independent source/trace review\", \"study_complete\": \"unassessed\", \"solution_reproduced\": \"unassessed\", \"registered_runs\": 24, \"continuation_parent\": null, \"solution_checkpoints\": {\"convection\": \"convection-lbfgs-s345-lrnone\", \"reaction\": null, \"wave\": null}, \"observations\": {\"convection-adam-s345-lr1e-04\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-lbfgs-s345-lrnone\": {\"status\": \"max_updates\", \"metrics\": {\"problem\": \"convection\", \"residual_points\": 10000, \"constraint_count\": 358, \"evaluation_points\": 8385, \"residual_loss\": 3.983937762679793e-05, \"constraint_loss\": 0.0017498371047968662, \"total_loss\": 0.0017896764824236642, \"residual_rmse\": 0.00892629571847112, \"evaluation_residual_loss\": 7.497765147076947e-05, \"evaluation_residual_rmse\": 0.012245623828190173, \"constraint_families\": {\"initial_value\": {\"count\": 257, \"loss\": 2.487923216493481e-05, \"rmse\": 0.007053967984749407}, \"periodic_value\": {\"count\": 101, \"loss\": 0.006139086345058315, \"rmse\": 0.11080691625578536}}, \"l2re\": 0.6116751009888883, \"parameter_count\": 20601}}, \"convection-hybrid-s345-lr1e-04\": {\"status\": \"incomplete\", \"metrics\": null}, \"reaction-adam-s345-lr1e-03\": {\"status\": \"incomplete\", \"metrics\": null}, \"reaction-lbfgs-s345-lrnone\": {\"status\": \"incomplete\", \"metrics\": null}, \"reaction-hybrid-s345-lr1e-03\": {\"status\": \"incomplete\", \"metrics\": null}, \"wave-adam-s345-lr1e-03\": {\"status\": \"incomplete\", \"metrics\": null}, \"wave-lbfgs-s345-lrnone\": {\"status\": \"incomplete\", \"metrics\": null}, \"wave-hybrid-s345-lr1e-03\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-adam-s456-lr1e-04\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-lbfgs-s456-lrnone\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-hybrid-s456-lr1e-04\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-adam-s567-lr1e-04\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-lbfgs-s567-lrnone\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-hybrid-s567-lr1e-04\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-adam-s345-lr1e-03\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-hybrid-s345-lr1e-03\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-adam-s345-lr1e-02\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-hybrid-s345-lr1e-02\": {\"status\": \"incomplete\", \"metrics\": null}, \"convection-gd-continuation-0.0001\": {\"status\": \"dependency_incomplete\", \"metrics\": null}, \"convection-gd-continuation-0.001\": {\"status\": \"dependency_incomplete\", \"metrics\": null}, \"convection-nncg-continuation-0.01\": {\"status\": \"dependency_incomplete\", \"metrics\": null}, \"convection-nncg-continuation-0.1\": {\"status\": \"dependency_incomplete\", \"metrics\": null}, \"convection-nncg-continuation-1.0\": {\"status\": \"dependency_incomplete\", \"metrics\": null}}}\n",
+  "stderr": ""
+}

@@ -1,0 +1,7 @@
+{
+  "at": "2026-10-30T22:30:31.332059+00:00",
+  "type": "RuntimeError",
+  "error": "first-registered-cell artifact contract incomplete; no automatic new matrix",
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author_study_owner.py\", line 32, in <module>\n    if assessment['exit_code']!=0:raise RuntimeError(f'{stage} artifact contract incomplete; no automatic new matrix')\n                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: first-registered-cell artifact contract incomplete; no automatic new matrix\n",
+  "action": "preserve original source/results/capsules; no restart/new matrix/changed threshold"
+}

@@ -1,0 +1,17 @@
+{
+  "format": "l06-tree-contract/1",
+  "case_version": "L06/0.3.0-draft",
+  "weeks": 16,
+  "observation": "complete_current_event_and_perfect_recall",
+  "reveal_weeks": [
+    4,
+    8,
+    12
+  ],
+  "probabilities": "positive integer numerators / facility denominator; full public support, actual future private",
+  "state": "post_week; original committed event/action prefix authoritative; derived state recomputed",
+  "timing": "historical arrivals/receipts then current event, new orders/lead0, production/fulfilment, stage peaks/holding/cash",
+  "checkpoint": "l06-committed-journal/1; schema1 SQLite is host-owned, actor may use any internal persistence",
+  "quality_design": "before any policy solve: improve expected cost at least15% over legal spot contingency; additional registered feasible reference tolerance to be frozen after full construction",
+  "limits": "synthetic finite business; no real procurement, OS side-channel, arbitrary failure or financial certification"
+}

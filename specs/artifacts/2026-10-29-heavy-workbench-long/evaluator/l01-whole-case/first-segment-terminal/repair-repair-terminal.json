@@ -1,0 +1,14 @@
+{
+  "artifact_exit": 0,
+  "changed_dependencies": [
+    "convection-gd-continuation-0.0001",
+    "convection-gd-continuation-0.001",
+    "convection-nncg-continuation-0.01",
+    "convection-nncg-continuation-0.1",
+    "convection-nncg-continuation-1.0"
+  ],
+  "original_training_records_unchanged": true,
+  "docker_create_exit": 1,
+  "remaining_started": false,
+  "reason": "Docker Linux engine pipe unavailable, no restart authorized or attempted"
+}

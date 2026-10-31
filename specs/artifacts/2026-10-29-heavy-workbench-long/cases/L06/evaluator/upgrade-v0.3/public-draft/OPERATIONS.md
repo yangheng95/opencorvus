@@ -1,0 +1,7 @@
+# Four-product operations desk: staged commitments
+
+Original synthetic business, no real supplier/customer. Static catalogue/BOM/route/pack/freight/lead/holding/sales terms inherit the declared L06 manufacturing model. This is a new instance, not the old0.2 input or lower bound. Eight equally probable joint paths combine three later announcements at weeks4,8,12. The tree is public support; the actual selected future is private to execution.
+
+The spot supplier can serve a conservative current-needs alternative but is costly. Forward suppliers offer lower unit prices, integer packs, dispatch minimums and lead1/2. Supply announcements never revoke already placed orders. Production routes share real work hours; warehouse limits apply before consumption/dispatch. All current demand must be fulfilled. Historical cash arrives only after the declared lag; late receivables remain assets and cannot be spent early. Completed-week actions and receipts cannot be edited on restart.
+
+Compare a lawful full-observation-history policy, an executable costly alternative and a clearly labelled information relaxation. An action may stay unchanged after news. Neither a path label nor a solver status proves causality, physical feasibility, quality or approval. Preserve failures and give practical operator recovery/credit advice. All money/volume/hour units are the raw table integer units; not real currency commitments.

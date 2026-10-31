@@ -9,7 +9,7 @@ def main():
     a.out.mkdir(parents=True,exist_ok=False)
     for source in (HERE/'reference-source').glob('*.py'):shutil.copy2(source,a.out/source.name)
     shutil.copy2(HERE/'representability.py',a.out/'physics_structure.py')
-    for name in ('pinn_numeric_check.py','pinn_torch_check.py'):shutil.copy2(repo/'script/benchmark'/name,a.out/name)
+    for name in ('pinn_numeric_check.py','pinn_torch_check.py','pinn_submission_check.py'):shutil.copy2(repo/'script/benchmark'/name,a.out/name)
     shutil.copytree(case/'public',a.out/'inputs')
     (a.out/'requirements.txt').write_text('numpy==1.26.4\ntorch==2.7.1\nscipy==1.15.3\nmatplotlib==3.10.3\nreportlab==4.4.0\npypdf==5.5.0\n',encoding='utf-8')
     (a.out/'plan.md').write_text('''# Prospective author study plan

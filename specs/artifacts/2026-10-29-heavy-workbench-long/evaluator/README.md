@@ -50,3 +50,5 @@ L06/0.2.0[最终独立合同审查](../cases/L06/evaluator/independent-freeze-re
 当前L01整题建设入口为[l01-whole-case](l01-whole-case/README.md)：实际自然reaction终态与新NNCG诊断失败、同架构结构控制/原图、完整研究源码及唯一正在执行的作者矩阵。上文旧组件/活跃表仅历史，不当重启依据。未有完整L01评分或冻结。
 
 当前case-only checker已连接真实native/逐attempt/closure与独立最终质量、单次研究审查原子锚点；[实际错误programme](l01-whole-case/checker-construction/REPORT.md)在同入口失败，完整原矩阵正向/科学可达和整审仍待。14质量不能被175研究评级或方法分覆盖。
+
+最新[L01原首段与发布修复](l01-whole-case/first-segment-terminal/REPORT.md)记录真实41000步native0和高误差，不重训、不放宽质量；后段未启动因为Docker不可用。新[L06有限树建设](../cases/L06/evaluator/upgrade-v0.3/README.md)已有完整业务/信息政策与正错文件，但在线原生执行尚无，均不宣布全case。

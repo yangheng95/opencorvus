@@ -1,0 +1,133 @@
+{
+  "case": "L06",
+  "case_version": "L06/0.3.0-draft",
+  "status": "construction_not_frozen_not_fully_executed",
+  "fixed_denominator": 100,
+  "good_rule": {
+    "minimum_score": 90,
+    "all_critical": "verified_pass"
+  },
+  "unknown": "total/good remain null if execution/review/readiness incomplete; observed failure cannot be compensated",
+  "leaves": [
+    {
+      "id": "M01",
+      "requirement": "Complete policy identity/tensor/coverage matches raw business identities",
+      "weight": 4,
+      "critical": true,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "M02",
+      "requirement": "Every path physically feasible under exact weekly recurrence and terminal requirements",
+      "weight": 8,
+      "critical": true,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "M03",
+      "requirement": "All complete observed prefixes have consistent complete actions",
+      "weight": 8,
+      "critical": true,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "M04",
+      "requirement": "Causal feasible expected cost at least15percent below canonical lawful spot policy",
+      "weight": 8,
+      "critical": true,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "M05",
+      "requirement": "Weekly CSV and exact expected cost components/probabilities/receivables close",
+      "weight": 6,
+      "critical": false,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "M06",
+      "requirement": "Credit timing, due receipts and final cash/FG/pipeline agree with original events",
+      "weight": 6,
+      "critical": true,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "M07",
+      "requirement": "Captured source-only execution corresponds to sealed programme and public inputs",
+      "weight": 5,
+      "critical": true,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "M08",
+      "requirement": "Actual actor receives only current history/state and fixed public support; neutral diagnostics",
+      "weight": 8,
+      "critical": true,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "M09",
+      "requirement": "Real commit-before-ACK interruption resumes original prefix/receipt and next operation",
+      "weight": 8,
+      "critical": true,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "M10",
+      "requirement": "Original committed actions and actual stored/exported facts retained across recovery",
+      "weight": 4,
+      "critical": true,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "M11",
+      "requirement": "Same sealed programme rebuilds declared input controls without cached old answers",
+      "weight": 5,
+      "critical": true,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "M12",
+      "requirement": "Required source/ledger/policy/report outputs complete and reproducible",
+      "weight": 5,
+      "critical": false,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "H01",
+      "requirement": "Explain lawful information/lead commitments and bounded alternatives from actual evidence",
+      "weight": 5,
+      "critical": false,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "H02",
+      "requirement": "Explain exact costs, credit/receivables and uncertainty without optimality overclaim",
+      "weight": 5,
+      "critical": false,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "H03",
+      "requirement": "Usable operator handoff and named recovery/credit escalation decisions",
+      "weight": 5,
+      "critical": true,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "H04",
+      "requirement": "Actual readable figures bind original ledger/units/scenarios and explain material limits",
+      "weight": 5,
+      "critical": false,
+      "unresolved": "unassessed"
+    },
+    {
+      "id": "H05",
+      "requirement": "Claims preserve finite-scope facts/failures and avoid false real-world approvals/guarantees",
+      "weight": 5,
+      "critical": true,
+      "unresolved": "unassessed"
+    }
+  ],
+  "limits": "Draft intended whole-case contract; native online/perturbations/full grader/review not yet implemented/validated; no candidate or reference score"
+}

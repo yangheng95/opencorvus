@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:/myhexin-local/opencorvus/script/benchmark/pinn_submission_check.py",
+    "--root",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project",
+    "--manifest",
+    "work/results/manifest.json",
+    "--profile",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs\\profile.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-study\\first-registered-cell\\artifact-assessment.json"
+  ],
+  "started_wall_seconds": 4217281.2017772,
+  "finished_at": "2026-10-30T22:30:31.331501+00:00",
+  "seconds": 0.5977574000135064,
+  "exit_code": 2,
+  "stdout": "{\"artifact_contract_checked\": false, \"error\": \"dependency_state\", \"detail\": \"dependency_state: convection-gd-continuation-0.0001\"}\n",
+  "stderr": ""
+}
