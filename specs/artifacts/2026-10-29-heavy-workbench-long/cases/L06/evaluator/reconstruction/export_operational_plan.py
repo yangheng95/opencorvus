@@ -105,11 +105,10 @@ def save_csv(path, rows):
         writer.writerows(rows)
 
 
-def export(args):
+def evaluate(args):
     mps = args.original_mps.resolve()
     values = json.loads(args.values.read_text(encoding="utf-8"))
     check = verify(mps, values, args.reported_objective)
-    write(args.out / "independent-original-model-check.json", check)
     if not check["feasible"] or check["objective_consistent"] is False:
         raise ValueError("closed_plan_fails_original_mathematical_model")
     row_types, coefficients, rhs, bounds, integers, objective = read_original_model(mps)
@@ -273,10 +272,6 @@ def export(args):
                   for name, parts in sorted(costs.items())]
     economic_total = math.fsum(row["original_objective_contribution"] for row in components)
     close(economic_total, check["independent_objective"], "operational_original_economic_closure")
-    save_csv(args.out / "class-arc-plan.csv", arc_rows)
-    save_csv(args.out / "anonymous-vessel-paths.csv", paths)
-    save_csv(args.out / "port-period-ledger.csv", ledger)
-    save_csv(args.out / "economic-components.csv", components)
     result = {"at": now(), "instance": args.instance, "original_model_periods": periods,
               "raw_metadata_periods": int(number(metadata, "numPeriods")),
               "raw_prefix_scope": f"Only original MPS time indices 0..{periods - 1}; raw extra periods are not evaluated",
@@ -292,6 +287,15 @@ def export(args):
               "solver_reports_original_optimal": args.computation_scope == "original_model" and args.computation_status == "optimal",
               "benchmark_score": None,
               "whole_benchmark_qualified": False, "original_check": check}
+    return result, {"arcs": arc_rows, "paths": paths, "ledger": ledger, "costs": components}
+
+
+def export(args):
+    result, tables = evaluate(args)
+    write(args.out / "independent-original-model-check.json", result["original_check"])
+    for key, name in [("arcs", "class-arc-plan.csv"), ("paths", "anonymous-vessel-paths.csv"),
+                      ("ledger", "port-period-ledger.csv"), ("costs", "economic-components.csv")]:
+        save_csv(args.out / name, tables[key])
     write(args.out / "operational-closure.json", result)
     return result
 

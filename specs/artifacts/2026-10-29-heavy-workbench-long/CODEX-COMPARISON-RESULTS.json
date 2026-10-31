@@ -1,0 +1,96 @@
+{
+  "at": "2026-10-31T13:41:48.618810+00:00",
+  "read_only_original_results": true,
+  "original_grades_recomputed_or_changed": false,
+  "paired_results": [
+    {
+      "case": "L02",
+      "version": "0.2.0",
+      "systems": {
+        "Codex": {
+          "grade": 100,
+          "good": true,
+          "study_complete": true,
+          "quality_success": true,
+          "actual_grade_source": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\final-assessment\\assessment.json"
+        },
+        "OpenCorvus": {
+          "grade": 100,
+          "good": true,
+          "study_complete": true,
+          "quality_success": true,
+          "actual_grade_source": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\final-assessment\\assessment.json"
+        }
+      }
+    },
+    {
+      "case": "L06",
+      "version": "v03",
+      "systems": {
+        "Codex": {
+          "grade": 100,
+          "all_critical_pass": true,
+          "good": true,
+          "actual_grade_source": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\final-grade.json",
+          "actual_model": "unknown/not exposed",
+          "same_model_resource_comparison_established": false,
+          "actual_quality_source": "D:\\opencorvus-benchmark-runs\\l06-v03-codex-fresh-native-20261031\\evaluation\\private-run\\logical-and-journal-assessment.json",
+          "expected_cost_exact": "387449/8"
+        },
+        "OpenCorvus": {
+          "grade": 100,
+          "all_critical_pass": true,
+          "good": true,
+          "actual_grade_source": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\final-grade.json",
+          "actual_model": "gpt-6.1-sol verified from actual streaming requests",
+          "same_model_resource_comparison_established": false,
+          "actual_quality_source": "D:\\opencorvus-benchmark-runs\\l06-v03-opencorvus-native-20261031\\evaluation\\private-run\\logical-and-journal-assessment.json",
+          "expected_cost_exact": "197049/4"
+        }
+      }
+    },
+    {
+      "case": "L06",
+      "version": "v04",
+      "systems": {
+        "Codex": {
+          "grade": 100,
+          "all_critical_pass": true,
+          "good": true,
+          "actual_grade_source": "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\final-grade.json",
+          "actual_model": "unknown/not exposed",
+          "same_model_resource_comparison_established": false,
+          "actual_quality_source": "D:\\opencorvus-benchmark-runs\\l06-v04-codex-fresh-native-20261031\\evaluation\\assessment\\actual-facts.json",
+          "expected_costs_exact": {
+            "base": "300834939/4000000",
+            "cash-tight": "11287373277/128000000",
+            "shifted-prior": "90125954529/1280000000"
+          }
+        },
+        "OpenCorvus": {
+          "grade": 100,
+          "all_critical_pass": true,
+          "good": true,
+          "actual_grade_source": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\final-grade.json",
+          "actual_model": "gpt-6.1-sol verified from actual streaming requests",
+          "same_model_resource_comparison_established": false,
+          "actual_quality_source": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\actual-facts.json",
+          "expected_costs_exact": {
+            "base": "300834939/4000000",
+            "cash-tight": "11287373277/128000000",
+            "shifted-prior": "90125954529/1280000000"
+          }
+        }
+      }
+    }
+  ],
+  "l06_v03_cost_difference": {
+    "opencorvus_minus_codex_exact": "6649/8",
+    "codex_lower_fraction_of_opencorvus": "6649/394098",
+    "codex_lower_percentage_of_opencorvus": 1.6871438068703724
+  },
+  "no_new_valid_heavy_benchmark_comparison": true,
+  "effective_candidate_hours_qualification": "0/10",
+  "actual_codex_model_usage": "unknown/not exposed",
+  "limits": "Same frozen task/public/grader per pair, not established identical underlying model/resources; no general speed/cost/model superiority ranking. L06 original scores are engineering acceptance only."
+}

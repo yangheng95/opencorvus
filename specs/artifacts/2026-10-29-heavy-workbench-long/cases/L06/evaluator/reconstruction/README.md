@@ -161,3 +161,24 @@ python -B report_constructed_input_study.py --run <closed-new-owned-study-dir> -
 ```
 
 规划/求解依赖见requirements.txt，绘图环境见plot-requirements.txt。第三方原数据从原站获取，实际两个新输入配方/seed封在首源码中。运行器本次入口只承担这两个已登记构造研究，未冒通用新候选评分接口。未知输入任务与正式质量标尺仍须完整建设。
+
+## 真实经济界与完整数字交付检查
+
+[经济质量合同草稿](NUMERICAL-QUALITY.draft.md)现在明确区分工程有效、经济成本与科学成果：不再把“进入1%阈值”聚合为满分。主量为原成本P，辅以独立可核[L,U]和允许低于1的参照成本比；没有新的100分裁剪、候选总分或有效工时结论。完整数字原子合同N01..N08与逐层科学锚点S01..S05已落盘，科学部分仍未独评，不拿表格数量作完成证据。
+
+[实际完整数字交付/界报告](economic-measurement/README.md)对应两个新输入的首独立证书：
+
+| 输入 | 精确弱对偶下界L（约） | 精确可达上界U（约） | [L,U]剩余不确定度 |
+| --- | --- | --- | --- |
+| native_rate_validation_vc05 | 36050.09623027005 | 51776.88672766906 | 30.3742% |
+| native_rate_validation_vc03 | 70604.14079312999 | 161633.73254488615 | 56.3184% |
+
+这是最优值所在区间，不是测得参考计划实际离最优有这些误差。GLOP各只执行一次连续放松以提议原行乘子；[唯一有理核验](verify_economic_bounds.py)对原MPS十进制/Fraction重算弱对偶和全部界，未信其声称的下界。两个native0、实际各0.873/0.800秒（含精确检查），本次dual投影0。原路线整数保留，仅另做一次有理库存/alpha补全，所有2520/2400行与6476/5594变量、整数性精确通过，独立给U；不改原native声明/P/向量，不冒新路线方法、整数最优或重旧LP控制。
+
+[完整数字checker](assess_operating_delivery.py)首次只读检查原四份正确交付：全部完整MPS、raw运营语义、实际弧表、1680港期账、费用表、48条匿名路径及正流多重集均过；同一MPS/运营事实源，无另一个隐藏模型，也没有重新导出/优化这些对象。文件名按显式layout定位、路径ID和合法分解自由，正确计划保各自不同P，科学内容仍unreviewed/总分null。
+
+[真实错误programme](write_wrong_operating_report.py)从同一实际闭合计划原生写两份完整数字交付：一份把alpha经济费用置零，报37872.30832949673；另一份保正确51776.886727669065但运营账省人工退出服务。两producer实际native0，同checker分别native4/目标声明错误和native4/port0期105退出服务差220；原错误表、源、命令和实际assessment全部保。前者数学P被错报，后者数学计划/目标正确但真实运营账错误，未运行的科学部分不补分。
+
+current exporter只把既有运营计算提取为单一evaluate，原CLI仍负责写同四表；本次checker复用该计算，未再运行旧导出命令。新增Fraction数值类型只在同一MPS parser中，float原路径保持；实际两原生LP证书、精确上下见证和完整正错交付都经当前实现。报告实际渲染并view_image，不重旧科学图。
+
+[原件投影范围](observations/economic-measurement-first/scope.json)明确完整有理证书/向量/CSV继续外部保存，repo源胶囊、原native命令日志、上下界核验事实、四正向/two错误真实assessment和新报告图可读。当前正式未知输入任务、完整参考科学移交/锚点校准、一次集中整题独审与后来fresh/有效小时仍缺；不启动新candidate、0.5或重复资格审查。

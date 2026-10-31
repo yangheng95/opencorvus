@@ -1,0 +1,182 @@
+
+Initial problem: 2520 rows, 6476 columns, 18698 entries with magnitude in [1.000000e+00, 3.000000e+02]
+Objective stats: 4313 non-zeros, range [-1.190000e+00, 9.167199e+02]
+Bounds stats: 7207 non-zeros, range [-4.900000e+01, 5.520000e+02]
+Parameters: max_time_in_seconds: 60 use_preprocessing: true log_search_progress: true
+
+Starting presolve...
+ShiftVariableBoundsPreprocessor              : 2520(0) rows, 6476(0) columns, 18698(0) entries. (0.000091s)
+FixedVariablePreprocessor                    : 2520(0) rows, 6465(-11) columns, 18687(-11) entries. (0.000120s)
+SingletonPreprocessor                        : 2520(0) rows, 6105(-371) columns, 18327(-371) entries. (0.000667s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2506(-14) rows, 6059(-417) columns, 18185(-513) entries. (0.000352s)
+ImpliedFreePreprocessor                      : 2506(-14) rows, 6059(-417) columns, 18185(-513) entries. (0.001053s)
+DoubletonFreeColumnPreprocessor              : 2439(-81) rows, 6059(-417) columns, 18118(-580) entries. (0.000401s)
+FixedVariablePreprocessor                    : 2439(-81) rows, 5992(-484) columns, 18051(-647) entries. (0.000098s)
+SingletonPreprocessor                        : 2437(-83) rows, 5992(-484) columns, 18049(-649) entries. (0.000075s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2423(-97) rows, 5946(-530) columns, 17907(-791) entries. (0.000368s)
+ImpliedFreePreprocessor                      : 2423(-97) rows, 5946(-530) columns, 17907(-791) entries. (0.000998s)
+UnconstrainedVariablePreprocessor            : 2423(-97) rows, 5944(-532) columns, 17905(-793) entries. (0.000301s)
+DoubletonFreeColumnPreprocessor              : 2390(-130) rows, 5944(-532) columns, 17872(-826) entries. (0.000374s)
+FixedVariablePreprocessor                    : 2390(-130) rows, 5911(-565) columns, 17839(-859) entries. (0.000112s)
+SingletonPreprocessor                        : 2388(-132) rows, 5911(-565) columns, 17837(-861) entries. (0.000092s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2374(-146) rows, 5838(-638) columns, 17599(-1099) entries. (0.000350s)
+ImpliedFreePreprocessor                      : 2374(-146) rows, 5838(-638) columns, 17599(-1099) entries. (0.000996s)
+UnconstrainedVariablePreprocessor            : 2374(-146) rows, 5836(-640) columns, 17597(-1101) entries. (0.000295s)
+DoubletonFreeColumnPreprocessor              : 2352(-168) rows, 5836(-640) columns, 17575(-1123) entries. (0.000373s)
+FixedVariablePreprocessor                    : 2352(-168) rows, 5814(-662) columns, 17553(-1145) entries. (0.000095s)
+SingletonPreprocessor                        : 2350(-170) rows, 5814(-662) columns, 17551(-1147) entries. (0.000089s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2339(-181) rows, 5711(-765) columns, 17202(-1496) entries. (0.000339s)
+ImpliedFreePreprocessor                      : 2339(-181) rows, 5711(-765) columns, 17202(-1496) entries. (0.000958s)
+UnconstrainedVariablePreprocessor            : 2339(-181) rows, 5709(-767) columns, 17200(-1498) entries. (0.000289s)
+DoubletonFreeColumnPreprocessor              : 2312(-208) rows, 5709(-767) columns, 17173(-1525) entries. (0.000361s)
+FixedVariablePreprocessor                    : 2312(-208) rows, 5682(-794) columns, 17146(-1552) entries. (0.000125s)
+SingletonPreprocessor                        : 2311(-209) rows, 5682(-794) columns, 17145(-1553) entries. (0.000118s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2302(-218) rows, 5577(-899) columns, 16787(-1911) entries. (0.000336s)
+ImpliedFreePreprocessor                      : 2302(-218) rows, 5577(-899) columns, 16787(-1911) entries. (0.000980s)
+UnconstrainedVariablePreprocessor            : 2302(-218) rows, 5576(-900) columns, 16786(-1912) entries. (0.000287s)
+DoubletonFreeColumnPreprocessor              : 2275(-245) rows, 5576(-900) columns, 16759(-1939) entries. (0.000365s)
+FixedVariablePreprocessor                    : 2275(-245) rows, 5549(-927) columns, 16732(-1966) entries. (0.000087s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2269(-251) rows, 5513(-963) columns, 16613(-2085) entries. (0.000311s)
+ImpliedFreePreprocessor                      : 2269(-251) rows, 5513(-963) columns, 16613(-2085) entries. (0.001121s)
+DoubletonFreeColumnPreprocessor              : 2255(-265) rows, 5513(-963) columns, 16599(-2099) entries. (0.000420s)
+FixedVariablePreprocessor                    : 2255(-265) rows, 5499(-977) columns, 16585(-2113) entries. (0.000083s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2250(-270) rows, 5460(-1016) columns, 16453(-2245) entries. (0.000291s)
+ImpliedFreePreprocessor                      : 2250(-270) rows, 5460(-1016) columns, 16453(-2245) entries. (0.000977s)
+DoubletonFreeColumnPreprocessor              : 2239(-281) rows, 5460(-1016) columns, 16442(-2256) entries. (0.000369s)
+FixedVariablePreprocessor                    : 2239(-281) rows, 5449(-1027) columns, 16431(-2267) entries. (0.000088s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2235(-285) rows, 5411(-1065) columns, 16301(-2397) entries. (0.000282s)
+ImpliedFreePreprocessor                      : 2235(-285) rows, 5411(-1065) columns, 16301(-2397) entries. (0.000953s)
+DoubletonFreeColumnPreprocessor              : 2227(-293) rows, 5411(-1065) columns, 16293(-2405) entries. (0.000343s)
+FixedVariablePreprocessor                    : 2227(-293) rows, 5403(-1073) columns, 16285(-2413) entries. (0.000077s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2224(-296) rows, 5385(-1091) columns, 16226(-2472) entries. (0.000269s)
+ImpliedFreePreprocessor                      : 2224(-296) rows, 5385(-1091) columns, 16226(-2472) entries. (0.000915s)
+DoubletonFreeColumnPreprocessor              : 2220(-300) rows, 5385(-1091) columns, 16222(-2476) entries. (0.000338s)
+FixedVariablePreprocessor                    : 2220(-300) rows, 5381(-1095) columns, 16218(-2480) entries. (0.000073s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2218(-302) rows, 5367(-1109) columns, 16172(-2526) entries. (0.000263s)
+ImpliedFreePreprocessor                      : 2218(-302) rows, 5367(-1109) columns, 16172(-2526) entries. (0.000919s)
+DoubletonFreeColumnPreprocessor              : 2217(-303) rows, 5367(-1109) columns, 16171(-2527) entries. (0.000323s)
+FixedVariablePreprocessor                    : 2217(-303) rows, 5366(-1110) columns, 16170(-2528) entries. (0.000068s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2215(-305) rows, 5356(-1120) columns, 16138(-2560) entries. (0.000261s)
+ImpliedFreePreprocessor                      : 2215(-305) rows, 5356(-1120) columns, 16138(-2560) entries. (0.000904s)
+DoubletonFreeColumnPreprocessor              : 2214(-306) rows, 5356(-1120) columns, 16137(-2561) entries. (0.000321s)
+FixedVariablePreprocessor                    : 2214(-306) rows, 5355(-1121) columns, 16136(-2562) entries. (0.000068s)
+ForcingAndImpliedFreeConstraintPreprocessor  : 2213(-307) rows, 5352(-1124) columns, 16127(-2571) entries. (0.000255s)
+ImpliedFreePreprocessor                      : 2213(-307) rows, 5352(-1124) columns, 16127(-2571) entries. (0.000896s)
+Reached fixed point after presolve pass #12
+EmptyConstraintPreprocessor                  : 2206(-314) rows, 5352(-1124) columns, 16127(-2571) entries. (0.000055s)
+ScalingPreprocessor                          : 2206(-314) rows, 5352(-1124) columns, 16127(-2571) entries. (0.000328s)
+
+Presolved problem: 2206 rows, 5352 columns, 16127 entries with magnitude in [2.402811e-01, 1.000000e+00]
+Objective stats: 3867 non-zeros, range [-1.471319e+03, 1.310047e+03]
+Bounds stats: 6064 non-zeros, range [-8.953613e-01, 9.663224e+00]
+Starting basis: create from scratch.
+Trying to remove 1500 fixed variables from the initial basis.
+
+The matrix with slacks has 2206 rows, 7558 columns, 18333 entries.
+Number of basic infeasible variables: 10
+Number of basic slack variables: 705
+Number of basic variables at bound: 1285
+Number of basic fixed variables: 0
+Number of basic free variables: 10
+Number of super-basic variables: 0
+
+Primal feasibility phase, iteration # 0, sum_primal_infeasibilities = 4.118693549208719E+01 [norms]
+Primal feasibility phase, iteration # 35, sum_primal_infeasibilities = 8.881784197001252E-16 [check]
+Current status: PRIMAL_FEASIBLE
+Primal infeasibility (bounds) = 4.44089e-16
+Primal residual |A.x - b| = 8.88178e-16
+Dual infeasibility (reduced costs) = 2877.78
+Dual residual |c_B - y.B| = 2.27374e-13
+
+Primal optimization phase, iteration # 0, objective = 1.387906980324455E+06
+Primal optimization phase, iteration # 65, objective = 1.264213406559722E+06
+Primal optimization phase, iteration # 130, objective = 1.124304371550750E+06
+Primal optimization phase, iteration # 195, objective = 1.041746923148858E+06
+Primal optimization phase, iteration # 260, objective = 9.375354148915409E+05
+Primal optimization phase, iteration # 325, objective = 8.379342953715175E+05
+Primal optimization phase, iteration # 390, objective = 7.696969774960892E+05
+Primal optimization phase, iteration # 455, objective = 6.765718338601051E+05
+Primal optimization phase, iteration # 520, objective = 6.131241312151069E+05
+Primal optimization phase, iteration # 585, objective = 5.157943582147980E+05
+Primal optimization phase, iteration # 650, objective = 4.432970412323083E+05
+Primal optimization phase, iteration # 715, objective = 3.777626869055898E+05
+Primal optimization phase, iteration # 780, objective = 3.439169463413829E+05
+Primal optimization phase, iteration # 845, objective = 2.963930252733615E+05
+Primal optimization phase, iteration # 910, objective = 2.285291528089500E+05
+Primal optimization phase, iteration # 975, objective = 1.889124027017945E+05
+Primal optimization phase, iteration # 1040, objective = 1.465103598918130E+05
+Primal optimization phase, iteration # 1105, objective = 1.341685080470239E+05
+Primal optimization phase, iteration # 1170, objective = 1.195995373838115E+05
+Primal optimization phase, iteration # 1235, objective = 1.093719141434816E+05
+Primal optimization phase, iteration # 1300, objective = 1.024173522790935E+05
+Primal optimization phase, iteration # 1365, objective = 1.001504557491141E+05
+Primal optimization phase, iteration # 1430, objective = 9.842177130659651E+04
+Primal optimization phase, iteration # 1495, objective = 9.670398202095767E+04
+Primal optimization phase, iteration # 1560, objective = 9.482935199072647E+04
+Primal optimization phase, iteration # 1625, objective = 9.272679260680183E+04
+Primal optimization phase, iteration # 1690, objective = 9.093095013522988E+04
+Primal optimization phase, iteration # 1755, objective = 8.759605570896147E+04
+Primal optimization phase, iteration # 1820, objective = 8.376119518707537E+04
+Primal optimization phase, iteration # 1885, objective = 7.928467779203912E+04
+Primal optimization phase, iteration # 1950, objective = 7.696215604506787E+04
+Primal optimization phase, iteration # 2015, objective = 7.465553847427017E+04
+Primal optimization phase, iteration # 2080, objective = 7.103918230448752E+04
+Primal optimization phase, iteration # 2145, objective = 6.736250172099489E+04
+Primal optimization phase, iteration # 2210, objective = 6.387473392554040E+04
+Primal optimization phase, iteration # 2275, objective = 6.073247544672560E+04
+Primal optimization phase, iteration # 2340, objective = 5.736329404758640E+04
+Primal optimization phase, iteration # 2405, objective = 5.304902023556055E+04
+Primal optimization phase, iteration # 2470, objective = 4.913257826591759E+04
+Primal optimization phase, iteration # 2535, objective = 4.167421204859925E+04
+Primal optimization phase, iteration # 2600, objective = 3.735586209965902E+04
+Primal optimization phase, iteration # 2665, objective = 3.682952780234617E+04
+Primal optimization phase, iteration # 2730, objective = 3.674476130238987E+04
+Primal optimization phase, iteration # 2795, objective = 3.663534505203460E+04
+Primal optimization phase, iteration # 2860, objective = 3.655709505446760E+04
+Primal optimization phase, iteration # 2925, objective = 3.648282493914801E+04
+Primal optimization phase, iteration # 2990, objective = 3.640174452146242E+04
+Primal optimization phase, iteration # 3055, objective = 3.635775293476356E+04
+Primal optimization phase, iteration # 3120, objective = 3.628349274490085E+04
+Primal optimization phase, iteration # 3185, objective = 3.624863708693621E+04
+Primal optimization phase, iteration # 3250, objective = 3.621734699314326E+04
+Primal optimization phase, iteration # 3315, objective = 3.619254858952279E+04
+Primal optimization phase, iteration # 3380, objective = 3.617599950071505E+04
+Primal optimization phase, iteration # 3445, objective = 3.613722926775289E+04
+Primal optimization phase, iteration # 3510, objective = 3.611110289747462E+04
+Primal optimization phase, iteration # 3575, objective = 3.609254835215780E+04
+Primal optimization phase, iteration # 3640, objective = 3.608074983800522E+04
+Primal optimization phase, iteration # 3705, objective = 3.607070088095737E+04
+Primal optimization phase, iteration # 3770, objective = 3.606609448229550E+04
+Primal optimization phase, iteration # 3835, objective = 3.606076500727794E+04
+Primal optimization phase, iteration # 3900, objective = 3.605497327459451E+04
+Primal optimization phase, iteration # 3965, objective = 3.605039268437171E+04
+Primal optimization phase, iteration # 4030, objective = 3.605024037327509E+04
+Primal optimization phase, iteration # 4095, objective = 3.605017949806179E+04
+Primal optimization phase, iteration # 4160, objective = 3.605013062898549E+04
+Primal optimization phase, iteration # 4225, objective = 3.605010418104626E+04
+Primal optimization phase, iteration # 4290, objective = 3.605009691968099E+04
+Primal optimization phase, iteration # 4294, objective = 3.605009622331363E+04 [reduced costs]
+Current status: OPTIMAL
+Primal infeasibility (bounds) = 0
+Primal residual |A.x - b| = 6.32827e-15
+Dual infeasibility (reduced costs) = 5.45697e-12
+Dual residual |c_B - y.B| = 1.59162e-12
+
+Final unscaled solution:
+Primal objective (before moving primal/dual values) = 3.605009623027388E+04
+Dual objective (before moving primal/dual values) = 3.605009623027365E+04
+Max. primal values move = 0
+Max. dual values move = 1.37015e-12
+Primal objective (after moving primal/dual values) = 3.605009623027388E+04
+Max. rhs perturbation = 4.83169e-13
+Max. cost perturbation = 5.17275e-11
+Max. primal infeasibility = 4.83169e-13
+Max. dual infeasibility = 0
+Objective error <= 1.22435
+status: OPTIMAL
+objective: 36050.1
+iterations: 4329
+time: 0.341604
+deterministic_time: 0.399335
+
+{"native_relaxation_objective": 36050.09623027388, "native_lp_iterations": 4329, "wall_seconds_including_exact_checks": 0.8731448999969871, "lower": {"verified": true, "exact_lower_bound": "450626202878375631776721066068361/12500000000000000000000000000", "lower_bound_float": 36050.09623027005, "rows_verified": 2520, "variables_verified": 6476, "scope": "Weak-duality bound for full declared model, including all variable bounds; not an integer optimality claim"}, "upper": {"verified": true, "exact_upper_bound": "32360554204793159/625000000000", "upper_bound_float": 51776.88672766906, "variables_verified": 6476, "constraints_verified": 2520, "scope": "Full rational feasible integer plan; upper bound, not global optimum"}, "dual_projection_count": 0, "route_source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc05\\class-pair\\final-values.json", "route_integer_values_unchanged_after_declared_tolerance_rounding": true, "upper_completion_scope": "New explicit rational inventory/alpha completion of the same route; does not replace historical submitted values/objective", "model_score": null}

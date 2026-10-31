@@ -1,0 +1,26 @@
+{
+  "native_relaxation_objective": 70604.14079313628,
+  "native_lp_iterations": 4366,
+  "wall_seconds_including_exact_checks": 0.8002189999970142,
+  "lower": {
+    "verified": true,
+    "exact_lower_bound": "4412758799570624202178346408874717/62500000000000000000000000000",
+    "lower_bound_float": 70604.14079312999,
+    "rows_verified": 2400,
+    "variables_verified": 5594,
+    "scope": "Weak-duality bound for full declared model, including all variable bounds; not an integer optimality claim"
+  },
+  "upper": {
+    "verified": true,
+    "exact_upper_bound": "404084331362215403/2500000000000",
+    "upper_bound_float": 161633.73254488615,
+    "variables_verified": 5594,
+    "constraints_verified": 2400,
+    "scope": "Full rational feasible integer plan; upper bound, not global optimum"
+  },
+  "dual_projection_count": 0,
+  "route_source": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\class-pair\\final-values.json",
+  "route_integer_values_unchanged_after_declared_tolerance_rounding": true,
+  "upper_completion_scope": "New explicit rational inventory/alpha completion of the same route; does not replace historical submitted values/objective",
+  "model_score": null
+}

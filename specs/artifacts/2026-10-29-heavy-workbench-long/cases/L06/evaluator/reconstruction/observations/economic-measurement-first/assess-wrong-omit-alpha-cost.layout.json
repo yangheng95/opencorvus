@@ -1,0 +1,11 @@
+{
+  "values": "values.json",
+  "reported_objective": {
+    "file": "objective.json",
+    "key": null
+  },
+  "arcs": "class-arc-plan.csv",
+  "paths": "anonymous-vessel-paths.csv",
+  "ledger": "port-period-ledger.csv",
+  "costs": "economic-components.csv"
+}

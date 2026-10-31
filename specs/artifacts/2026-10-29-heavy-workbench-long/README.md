@@ -56,3 +56,7 @@
 
 
 最新0.4：[首fresh Codex真正同冻结100/17pass/allcritical](cases/L06/evaluator/pilot-codex-v04-native-20261031/README.md)，完整自然原件先封后私有全链/实际图/唯一候选内容独评/真正grade；原readonly设施失败和修复分开保。OC本版原Task仍活动、业务分null，尚未两good；旧线和1%事前质量不改，L01原矩阵继续、小时未认证。
+
+## Codex对照结果
+
+[原始成绩、实际业务差异及未完成项](CODEX-COMPARISON-RESULTS.md)直接读取已终态同版grade和私有执行事实。L06/0.3两100掩盖Codex成本更低约1.69%；0.4三个输入确实同成本。当前没有新的有效重型模型对照，作者研究/检查器不替代用户要的比较。

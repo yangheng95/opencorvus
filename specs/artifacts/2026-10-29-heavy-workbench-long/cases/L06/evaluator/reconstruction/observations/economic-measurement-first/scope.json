@@ -1,0 +1,311 @@
+{
+  "at": "2026-10-31T13:35:45.739341+00:00",
+  "external_root": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\economic-measurement-first",
+  "included_files": [
+    {
+      "path": "assess-wrong-omit-alpha-cost.assessment.json",
+      "bytes": 2042
+    },
+    {
+      "path": "assess-wrong-omit-alpha-cost.layout.json",
+      "bytes": 267
+    },
+    {
+      "path": "assess-wrong-omit-alpha-cost.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "assess-wrong-omit-alpha-cost.stdout.txt",
+      "bytes": 115
+    },
+    {
+      "path": "assess-wrong-omit-exit-service.assessment.json",
+      "bytes": 2138
+    },
+    {
+      "path": "assess-wrong-omit-exit-service.layout.json",
+      "bytes": 267
+    },
+    {
+      "path": "assess-wrong-omit-exit-service.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "assess-wrong-omit-exit-service.stdout.txt",
+      "bytes": 224
+    },
+    {
+      "path": "before-change-source.zip",
+      "bytes": 112580
+    },
+    {
+      "path": "bounds/native_rate_validation_vc03/result.json",
+      "bytes": 1320
+    },
+    {
+      "path": "bounds/native_rate_validation_vc05/result.json",
+      "bytes": 1316
+    },
+    {
+      "path": "bounds-native-commands.json",
+      "bytes": 2181
+    },
+    {
+      "path": "bounds-pre-execution-source.zip",
+      "bytes": 111482
+    },
+    {
+      "path": "native_rate_validation_vc03-class-pair.assessment.json",
+      "bytes": 3941
+    },
+    {
+      "path": "native_rate_validation_vc03-class-pair.layout.json",
+      "bytes": 422
+    },
+    {
+      "path": "native_rate_validation_vc03-class-pair.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "native_rate_validation_vc03-class-pair.stdout.txt",
+      "bytes": 90
+    },
+    {
+      "path": "native_rate_validation_vc03-cold.assessment.json",
+      "bytes": 3966
+    },
+    {
+      "path": "native_rate_validation_vc03-cold.layout.json",
+      "bytes": 442
+    },
+    {
+      "path": "native_rate_validation_vc03-cold.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "native_rate_validation_vc03-cold.stdout.txt",
+      "bytes": 90
+    },
+    {
+      "path": "native_rate_validation_vc03.bounds.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "native_rate_validation_vc03.bounds.stdout.txt",
+      "bytes": 12744
+    },
+    {
+      "path": "native_rate_validation_vc05-class-pair.assessment.json",
+      "bytes": 4005
+    },
+    {
+      "path": "native_rate_validation_vc05-class-pair.layout.json",
+      "bytes": 422
+    },
+    {
+      "path": "native_rate_validation_vc05-class-pair.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "native_rate_validation_vc05-class-pair.stdout.txt",
+      "bytes": 90
+    },
+    {
+      "path": "native_rate_validation_vc05-cold.assessment.json",
+      "bytes": 3995
+    },
+    {
+      "path": "native_rate_validation_vc05-cold.layout.json",
+      "bytes": 442
+    },
+    {
+      "path": "native_rate_validation_vc05-cold.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "native_rate_validation_vc05-cold.stdout.txt",
+      "bytes": 90
+    },
+    {
+      "path": "native_rate_validation_vc05.bounds.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "native_rate_validation_vc05.bounds.stdout.txt",
+      "bytes": 15723
+    },
+    {
+      "path": "numeric-delivery-pre-execution-source.zip",
+      "bytes": 118873
+    },
+    {
+      "path": "numeric-native-commands.json",
+      "bytes": 14377
+    },
+    {
+      "path": "report-native-command.json",
+      "bytes": 697
+    },
+    {
+      "path": "report-pre-execution-source.zip",
+      "bytes": 3334
+    },
+    {
+      "path": "report.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "report.stdout.txt",
+      "bytes": 78
+    },
+    {
+      "path": "write-wrong-omit-alpha-cost.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "write-wrong-omit-alpha-cost.stdout.txt",
+      "bytes": 118
+    },
+    {
+      "path": "write-wrong-omit-exit-service.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "write-wrong-omit-exit-service.stdout.txt",
+      "bytes": 121
+    },
+    {
+      "path": "wrong-omit-alpha-cost/objective.json",
+      "bytes": 19
+    },
+    {
+      "path": "wrong-omit-alpha-cost/REPORT.md",
+      "bytes": 141
+    },
+    {
+      "path": "wrong-omit-exit-service/objective.json",
+      "bytes": 20
+    },
+    {
+      "path": "wrong-omit-exit-service/REPORT.md",
+      "bytes": 142
+    },
+    {
+      "path": "visual-review.json",
+      "bytes": 431
+    }
+  ],
+  "retained_externally": [
+    {
+      "path": "assessment-source/assess_operating_delivery.py",
+      "bytes": 8371
+    },
+    {
+      "path": "assessment-source/export_operational_plan.py",
+      "bytes": 18189
+    },
+    {
+      "path": "assessment-source/verify_economic_bounds.py",
+      "bytes": 4736
+    },
+    {
+      "path": "assessment-source/verify_original_mps.py",
+      "bytes": 7314
+    },
+    {
+      "path": "assessment-source/write_wrong_operating_report.py",
+      "bytes": 3125
+    },
+    {
+      "path": "bound-source/construct_economic_bounds.py",
+      "bytes": 6087
+    },
+    {
+      "path": "bound-source/verify_economic_bounds.py",
+      "bytes": 4736
+    },
+    {
+      "path": "bound-source/verify_original_mps.py",
+      "bytes": 7314
+    },
+    {
+      "path": "bounds/native_rate_validation_vc03/lower-certificate.json",
+      "bytes": 148329
+    },
+    {
+      "path": "bounds/native_rate_validation_vc03/upper-values.json",
+      "bytes": 190817
+    },
+    {
+      "path": "bounds/native_rate_validation_vc05/lower-certificate.json",
+      "bytes": 161311
+    },
+    {
+      "path": "bounds/native_rate_validation_vc05/upper-values.json",
+      "bytes": 222453
+    },
+    {
+      "path": "report/actual-economic-quality.png",
+      "bytes": 133123
+    },
+    {
+      "path": "report/mpl-config/fontlist-v3.11.0.json",
+      "bytes": 150115
+    },
+    {
+      "path": "report/README.md",
+      "bytes": 4150
+    },
+    {
+      "path": "report/report-data.json",
+      "bytes": 22721
+    },
+    {
+      "path": "report-source/report_economic_measurement.py",
+      "bytes": 6929
+    },
+    {
+      "path": "wrong-omit-alpha-cost/anonymous-vessel-paths.csv",
+      "bytes": 9833
+    },
+    {
+      "path": "wrong-omit-alpha-cost/class-arc-plan.csv",
+      "bytes": 12806
+    },
+    {
+      "path": "wrong-omit-alpha-cost/economic-components.csv",
+      "bytes": 228
+    },
+    {
+      "path": "wrong-omit-alpha-cost/port-period-ledger.csv",
+      "bytes": 48741
+    },
+    {
+      "path": "wrong-omit-alpha-cost/values.json",
+      "bytes": 230444
+    },
+    {
+      "path": "wrong-omit-exit-service/anonymous-vessel-paths.csv",
+      "bytes": 9833
+    },
+    {
+      "path": "wrong-omit-exit-service/class-arc-plan.csv",
+      "bytes": 12806
+    },
+    {
+      "path": "wrong-omit-exit-service/economic-components.csv",
+      "bytes": 261
+    },
+    {
+      "path": "wrong-omit-exit-service/port-period-ledger.csv",
+      "bytes": 47609
+    },
+    {
+      "path": "wrong-omit-exit-service/values.json",
+      "bytes": 230444
+    }
+  ],
+  "scope": "Source archives, native commands/logs, actual complete numeric assessments, exact bound result facts and two real wrong-report outputs. Full rational witnesses/values/CSVs and extracted source copies stay external. Human report/figure/data separately in economic-measurement. No new integer solve, old export or independent review run.",
+  "total_score": null,
+  "whole_heavy_benchmark_complete": false
+}

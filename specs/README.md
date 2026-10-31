@@ -86,7 +86,7 @@
 
 - [批准后的代码提交验收](records/2026-10/2026-10-30-approved-code-workflow.md)：完整真实改码、测试、批准和范围Git提交的当前版本验收。
 
-- [L02发布时间输入资格](records/2026-10/2026-10-30-heavy-workbench-l02-qualification.md)：[最新Recall](records/2026-10/2026-10-29-heavy-workbench-long.md)保旧验收/有效性纠偏；L06已交[原问题任务草稿、运营计划和实际方法对照](artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/README.md)，正式质量/新输入与重型资格仍待，L01原训练继续。；L06三原完整raw构造等价与两预登记新输入全链已实测，质量标尺/整题审查/有效小时未成立
+- [L02发布时间输入资格](records/2026-10/2026-10-30-heavy-workbench-l02-qualification.md)：[最新Recall](records/2026-10/2026-10-29-heavy-workbench-long.md)保旧验收/有效性纠偏；L06已交[原问题任务草稿、运营计划和实际方法对照](artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/README.md)，正式质量/新输入与重型资格仍待，L01原训练继续。；L06三原完整raw构造等价与两预登记新输入全链已实测，质量标尺/整题审查/有效小时未成立；L06真实有理经济界/完整数字正错交付已核，科学整审与重型资格仍待；[实际Codex对照结果](artifacts/2026-10-29-heavy-workbench-long/CODEX-COMPARISON-RESULTS.md)单列原成绩和成本差异，未完成有效重型比较
 - [L05跨系统副作用资格](records/2026-10/2026-10-30-heavy-workbench-l05-qualification.md)：完整旧事故/真实在途/持久计划中断续接/双sender/服务重启/monitor/移交整审开发冻，参考100、伪保证94关键失败，非模型成绩。
 
 - [Mission 创建选择旅程](records/2026-10/2026-10-30-mission-selection-journey.md)：真实搜索、保留选择、类型切换及取消状态调查。

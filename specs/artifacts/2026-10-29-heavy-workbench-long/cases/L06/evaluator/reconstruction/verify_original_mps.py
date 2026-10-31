@@ -4,7 +4,7 @@ import math
 from pathlib import Path
 
 
-def read_original_model(path: Path):
+def read_original_model(path: Path, *, numeric_type=float):
     section = ""
     row_types, coefficients, rhs, bounds, integers = {}, {}, {}, {}, set()
     integer_block = False
@@ -38,13 +38,13 @@ def read_original_model(path: Path):
                     raise ValueError("unknown_integrality_marker")
                 integer_block = fields[2] == "'INTORG'"
                 continue
-            bounds.setdefault(variable, [0.0, math.inf])
+            bounds.setdefault(variable, [numeric_type(0), math.inf])
             if integer_block:
                 integers.add(variable)
             if len(fields) not in {3, 5}:
                 raise ValueError("original_column_pair_count")
             for i in range(1, len(fields), 2):
-                row, value = fields[i], float(fields[i + 1].replace("D", "E"))
+                row, value = fields[i], numeric_type(fields[i + 1].replace("D", "E"))
                 if row not in row_types or not math.isfinite(value):
                     raise ValueError("original_column_row_or_coefficient")
                 coefficients.setdefault(row, []).append((variable, value))
@@ -56,7 +56,7 @@ def read_original_model(path: Path):
             if fields[0] != rhs_set:
                 raise ValueError("multiple_rhs_vectors_ambiguous")
             for i in range(1, len(fields), 2):
-                rhs[fields[i]] = float(fields[i + 1].replace("D", "E"))
+                rhs[fields[i]] = numeric_type(fields[i + 1].replace("D", "E"))
         elif section == "BOUNDS":
             if len(fields) not in {3, 4}:
                 raise ValueError("bound_record_field_count")
@@ -65,7 +65,7 @@ def read_original_model(path: Path):
                 bound_set_name = bound_set
             if bound_set != bound_set_name or variable not in bounds:
                 raise ValueError("original_bound_set_or_variable")
-            value = float(fields[3].replace("D", "E")) if len(fields) == 4 else None
+            value = numeric_type(fields[3].replace("D", "E")) if len(fields) == 4 else None
             if kind in {"LO", "UP", "FX"} and (value is None or not math.isfinite(value)):
                 raise ValueError("finite_numeric_bound_required")
             if kind == "UP":
@@ -75,7 +75,7 @@ def read_original_model(path: Path):
             elif kind == "FX":
                 bounds[variable] = [value, value]
             elif kind == "BV" and value in {None, 1.0}:
-                bounds[variable] = [0.0, 1.0]
+                bounds[variable] = [numeric_type(0), numeric_type(1)]
                 integers.add(variable)
             elif kind == "PL" and value is None:
                 bounds[variable][1] = math.inf

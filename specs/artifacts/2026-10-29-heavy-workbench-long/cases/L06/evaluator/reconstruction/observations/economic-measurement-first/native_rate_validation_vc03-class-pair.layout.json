@@ -1,0 +1,11 @@
+{
+  "values": "class-pair/final-values.json",
+  "reported_objective": {
+    "file": "class-pair/independent-original-model-check.json",
+    "key": "reported_objective"
+  },
+  "arcs": "operations-class-pair/class-arc-plan.csv",
+  "paths": "operations-class-pair/anonymous-vessel-paths.csv",
+  "ledger": "operations-class-pair/port-period-ledger.csv",
+  "costs": "operations-class-pair/economic-components.csv"
+}

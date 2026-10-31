@@ -1,0 +1,40 @@
+[
+  {
+    "argv": [
+      "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+      "-u",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\economic-measurement-first\\bound-source\\construct_economic_bounds.py",
+      "--model",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc05\\model\\native_rate_validation_vc05_t120.mps",
+      "--route-values",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc05\\class-pair\\final-values.json",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\economic-measurement-first\\bounds\\native_rate_validation_vc05"
+    ],
+    "started_at": "2026-10-31T13:30:09.182689+00:00",
+    "finished_at": "2026-10-31T13:30:10.439726+00:00",
+    "native_exit": 0
+  },
+  {
+    "argv": [
+      "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+      "-u",
+      "-X",
+      "utf8",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\economic-measurement-first\\bound-source\\construct_economic_bounds.py",
+      "--model",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\model\\native_rate_validation_vc03_t120.mps",
+      "--route-values",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\constructed-input-study-first\\run-after-source-closure\\native_rate_validation_vc03\\class-pair\\final-values.json",
+      "--out",
+      "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\economic-measurement-first\\bounds\\native_rate_validation_vc03"
+    ],
+    "started_at": "2026-10-31T13:30:10.448305+00:00",
+    "finished_at": "2026-10-31T13:30:11.538252+00:00",
+    "native_exit": 0
+  }
+]
