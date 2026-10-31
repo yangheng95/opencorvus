@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [设置项名称的页面发现](2026-10-31-settings-control-discovery.md)：双语页面发现、命令面板和编辑保留调查。
+
 - [用量周期真实账本对照](2026-10-31-usage-ledger-reconciliation.md)：733条原请求、自然区间与当前呈现调查。
 
 - [计划任务校验与修正](2026-10-31-scheduled-validation-journey.md)：本地校验、规范拒绝与远期暂停定义。

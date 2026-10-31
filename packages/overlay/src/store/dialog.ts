@@ -25,18 +25,44 @@ export interface ConfigSection {
   id: ConfigDialogTab
   labelKey: string
   searchTerms?: readonly string[]
+  searchLabelKeys?: readonly string[]
 }
 
-// Single source for the config sections, their i18n label keys, and their
-// order. Consumed by:
+export function configSectionSearchText(section: ConfigSection, translate: (key: string) => string): string {
+  return [
+    section.id,
+    section.id.replace(/-/g, " "),
+    translate(section.labelKey),
+    ...(section.searchTerms ?? []),
+    ...(section.searchLabelKeys ?? []).map((key) => translate(key)),
+  ].join(" ")
+}
+
+// Single source for the config sections, translated search labels, and order.
+// Consumed by:
 //   • ConfigDialogHost — renders the sidebar nav (adds per-section icons),
-//   • services/dialog.ts — the valid-tab guard set,
-//   • TitlebarMenubar — the top-level Settings menu,
+//   • config-dialog-control — the valid-tab guard set,
 //   • CommandPalette — the Cmd/Ctrl+K Settings commands.
 // Add a section here once and it surfaces in every settings entrypoint.
 export const CONFIG_SECTIONS: readonly ConfigSection[] = [
-  { id: "general", labelKey: "settings.title" },
-  { id: "appearance", labelKey: "settings.section.appearance" },
+  {
+    id: "general",
+    labelKey: "settings.title",
+    searchLabelKeys: [
+      "settings.section.notifications",
+      "settings.desktop_notifications_label",
+      "permissions.title",
+      "settings.git_preferences",
+      "settings.offer_git_init",
+      "settings.section.diagnostics",
+      "settings.log_export_label",
+    ],
+  },
+  {
+    id: "appearance",
+    labelKey: "settings.section.appearance",
+    searchLabelKeys: ["settings.theme.label", "settings.language"],
+  },
   {
     id: "code",
     labelKey: "settings.section.code",
@@ -64,7 +90,11 @@ export const CONFIG_SECTIONS: readonly ConfigSection[] = [
   },
   { id: "channel", labelKey: "channel.title" },
   { id: "memory", labelKey: "memory.title" },
-  { id: "network", labelKey: "network.title" },
+  {
+    id: "network",
+    labelKey: "network.title",
+    searchLabelKeys: ["settings.section.connection", "settings.server_url", "network.proxy.title"],
+  },
   {
     id: "usage",
     labelKey: "usage.title",

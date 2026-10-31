@@ -1363,6 +1363,17 @@ Canonical navigation groups and tab objects retain their component identity
 across filtering and selection, keeping the active trigger registered in the
 shared Tabs collection throughout the update.
 
+Settings navigation and the command palette derive their searchable section text
+from CONFIG_SECTIONS through configSectionSearchText. Page labels and referenced
+control labels resolve through the current interface language; existing aliases
+and identifiers remain searchable. The directory references actual translation
+keys instead of copying their text. General exposes its notification, permission, Git and
+diagnostic labels; Appearance exposes Theme and Language; Network exposes
+connection, server URL and proxy labels. These terms discover their owning
+page through its existing explicit activation. They do not change a preference
+or imply full-text search of every setting. Direct locale and theme commands
+retain their existing separate action semantics.
+
 Command palette ledger selections close the settings page through that same
 reveal lifecycle after file departure is approved and before selecting the
 exact Mission, Task or conversation.

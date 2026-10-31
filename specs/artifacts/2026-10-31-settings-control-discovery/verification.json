@@ -1,0 +1,174 @@
+{
+  "at": "2026-10-31T08:06:15.040Z",
+  "batch": 831,
+  "singleAgent": true,
+  "scope": "Discover existing settings pages by localized control labels",
+  "productionFiles": [
+    "packages/overlay/src/store/dialog.ts",
+    "packages/overlay/src/components/ConfigDialogHost.tsx",
+    "packages/overlay/src/components/CommandPalette.tsx"
+  ],
+  "manualScreenshots": 18,
+  "desktop": [
+    1280,
+    720
+  ],
+  "baselineCases": [
+    "Language/Theme/Proxy page search did not discover owning page",
+    "Chinese language page search had no matching page",
+    "Palette already had direct locale actions; owning Appearance page missing",
+    "Chinese proxy palette query returned ledger result but no Network command"
+  ],
+  "candidateCases": [
+    "English Language/Theme -> Appearance",
+    "English Proxy -> Network",
+    "English Notifications -> General",
+    "Chinese language/theme -> Appearance",
+    "Chinese proxy -> Network",
+    "Chinese permissions/Git/diagnostics/notifications -> General",
+    "English and Chinese palette Network activation",
+    "English palette Appearance activation",
+    "Chinese palette Appearance plus original direct locale actions",
+    "Existing recurring alias resolves Scheduled",
+    "Unmatched search and Escape clear preserve unsaved proxy draft; draft restored empty",
+    "Back and reopen clear query and focus search in General"
+  ],
+  "checks": {
+    "typesReviewed": 0,
+    "uiBuildReviewed": 0,
+    "i18n": 0,
+    "localeCount": 2,
+    "i18nKeys": 2671,
+    "publicHistoryAndSourcesReadbacks": 0,
+    "originalPausedAutomations": 2,
+    "isolatedConfigBytesPreserved": true
+  },
+  "scopes": [
+    {
+      "phase": "before",
+      "data": {
+        "at": "2026-10-31T07:55:22.431Z",
+        "phase": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 216597,
+        "current": 216599,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease",
+            "old": 44402,
+            "now": 44403
+          },
+          {
+            "table": "engine_control_activation_lease_grant",
+            "old": 44460,
+            "now": 44461
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "attachments": 75,
+        "protectedProjects": 13,
+        "trackedFiles": 28,
+        "workspaceFiles": 13,
+        "additionalProtectedFiles": 39,
+        "requests": 0,
+        "cumulativeRequests": 1118,
+        "reserveMs": 3448777,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-DXSogkYB.js"
+      },
+      "ledger": {
+        "calls": 733,
+        "tokens": 36428624
+      },
+      "retirement": {
+        "publicShutdown": 200,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "osBirthIdentitySettled": true,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "reserveMs": 3448777,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      }
+    },
+    {
+      "phase": "after",
+      "data": {
+        "at": "2026-10-31T08:04:31.663Z",
+        "phase": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 216599,
+        "current": 216601,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease",
+            "old": 44403,
+            "now": 44404
+          },
+          {
+            "table": "engine_control_activation_lease_grant",
+            "old": 44461,
+            "now": 44462
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "attachments": 75,
+        "protectedProjects": 13,
+        "trackedFiles": 28,
+        "workspaceFiles": 13,
+        "additionalProtectedFiles": 39,
+        "requests": 0,
+        "cumulativeRequests": 1118,
+        "reserveMs": 2899558,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-C9RR4r9v.js"
+      },
+      "ledger": {
+        "calls": 733,
+        "tokens": 36428624
+      },
+      "retirement": {
+        "publicShutdown": 200,
+        "nativeExit": 0,
+        "launcherExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "osBirthIdentitySettled": true,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "reserveMs": 2899558,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      }
+    }
+  ],
+  "requests": 0,
+  "cumulativeRequests": 1118,
+  "uncovered": [
+    "Every settings field",
+    "All command/locale combinations",
+    "Native Tauri",
+    "Mobile or tablet"
+  ]
+}

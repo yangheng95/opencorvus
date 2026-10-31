@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [设置项名称的页面发现](records/2026-10/2026-10-31-settings-control-discovery.md)：实际控件名、统一设置检索与显式导航实页验收。
+
 - [用量周期真实账本对照](records/2026-10/2026-10-31-usage-ledger-reconciliation.md)：当前四周期、分组与桶的实际账本和实页复核。
 
 - [计划任务校验与修正](records/2026-10/2026-10-31-scheduled-validation-journey.md)：自定义日历错误、输入保留与修正保存实页调查。

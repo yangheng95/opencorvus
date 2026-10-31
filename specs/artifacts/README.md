@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [设置项名称的页面发现](2026-10-31-settings-control-discovery/README.md)：当前搜索复现、修正及桌面交互截图。
+
 - [用量周期真实账本对照](2026-10-31-usage-ledger-reconciliation/README.md)：实际公共接口、独立SQLite对照与桌面截图。
 
 - [计划任务校验与修正](2026-10-31-scheduled-validation-journey/README.md)：真实错误反馈、完整输入和保存回读证据。

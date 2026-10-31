@@ -37,7 +37,14 @@ import { boardStore } from "../store/board"
 import { settingsStore } from "../store/settings"
 import { closeConfigDialog, setConfigSidebarWidth, switchConfigTab } from "../services/config-dialog-control"
 import { activeProjectDirectory } from "../services/project-directory"
-import { dialogStore, setDialogStore, CONFIG_SECTIONS, type ConfigDialogTab } from "../store/dialog"
+import {
+  dialogStore,
+  setDialogStore,
+  CONFIG_SECTIONS,
+  configSectionSearchText,
+  type ConfigDialogTab,
+  type ConfigSection,
+} from "../store/dialog"
 import { getHostTransport } from "../services/host-transport-runtime"
 import { t } from "../utils/i18n"
 import {
@@ -61,10 +68,7 @@ import {
 import type { AutomationRunSession } from "../services/automations"
 import type { WorkLedgerItemRow } from "../services/work-ledger"
 
-interface ConfigTabDef {
-  id: ConfigDialogTab
-  labelKey: string
-  searchTerms?: readonly string[]
+interface ConfigTabDef extends ConfigSection {
   icon: IconName
   badgeID?: string
 }
@@ -99,9 +103,7 @@ const SECTION_BADGES: Partial<Record<ConfigDialogTab, string>> = {
 }
 
 const CONFIG_TABS: ConfigTabDef[] = CONFIG_SECTIONS.map((section) => ({
-  id: section.id,
-  labelKey: section.labelKey,
-  searchTerms: section.searchTerms,
+  ...section,
   icon: SECTION_ICONS[section.id],
   badgeID: SECTION_BADGES[section.id],
 }))
@@ -348,9 +350,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
   const visibleConfigTabs = createMemo(() => {
     const query = normalizedSettingsSearch()
     if (!query) return CONFIG_TABS
-    return CONFIG_TABS.filter((tab) =>
-      `${t(tab.labelKey)} ${tab.id} ${(tab.searchTerms ?? []).join(" ")}`.toLowerCase().includes(query),
-    )
+    return CONFIG_TABS.filter((tab) => configSectionSearchText(tab, t).toLowerCase().includes(query))
   })
   const visibleConfigTabIDs = createMemo(
     () => new Set([...visibleConfigTabs().map((tab) => tab.id), activeConfigTab()]),

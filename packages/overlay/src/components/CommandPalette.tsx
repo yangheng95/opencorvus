@@ -33,7 +33,7 @@ import {
   type WorkLedgerTaskRow,
 } from "../services/work-ledger"
 import { openConfigDialog } from "../services/config-dialog-control"
-import { CONFIG_SECTIONS } from "../store/dialog"
+import { CONFIG_SECTIONS, configSectionSearchText } from "../store/dialog"
 import { t } from "../utils/i18n"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
@@ -218,7 +218,7 @@ export function CommandPalette(props: {
         label: t(section.labelKey),
         hint: t("config.title"),
         group: t("cmdk.group.commands"),
-        keywords: `settings config ${section.id} ${section.id.replace(/-/g, " ")}`,
+        keywords: `settings config ${configSectionSearchText(section, t)}`,
         icon: "config-general",
         run: () => {
           openConfigDialog(section.id)
