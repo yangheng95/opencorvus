@@ -2554,6 +2554,9 @@
             "$ref": "#/components/schemas/Event.permission.terminated"
           },
           {
+            "$ref": "#/components/schemas/Event.project.config.changed"
+          },
+          {
             "$ref": "#/components/schemas/Event.project.memory.notice.changed"
           },
           {
@@ -4407,6 +4410,22 @@
           },
           "type": {
             "const": "permission.terminated",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "properties"
+        ],
+        "type": "object"
+      },
+      "Event.project.config.changed": {
+        "properties": {
+          "properties": {
+            "$ref": "#/components/schemas/Config"
+          },
+          "type": {
+            "const": "project.config.changed",
             "type": "string"
           }
         },

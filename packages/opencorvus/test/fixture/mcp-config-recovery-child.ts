@@ -28,7 +28,7 @@ async function peerRuntimeRace(credential = false) {
   const localCommitted = Promise.withResolvers<void>()
   const observed: string[] = []
   const listener = (event: { directory?: string; payload: { type?: string; properties?: Config.Info } }) => {
-    if (event.directory !== directory || event.payload.type !== "config.changed") return
+    if (event.directory !== directory || event.payload.type !== Config.Event.ProjectChanged.type) return
     const username = event.payload.properties?.username
     if (username === "peer-owner-middle" || username === "peer-owner-final") observed.push(username)
   }

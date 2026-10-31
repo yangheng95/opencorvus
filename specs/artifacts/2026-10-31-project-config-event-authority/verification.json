@@ -1,0 +1,338 @@
+{
+  "purpose": "Project configuration event authority; actual staged attachment and Sources qualification",
+  "schemaVersion": 9,
+  "uiEntry": "main-Rn-pJKfx.js",
+  "baselinePublicEvent": {
+    "at": "2026-10-31T13:29:01.505Z",
+    "phase": "before",
+    "pid": 11064,
+    "httpStatus": 200,
+    "eventType": "config.changed",
+    "propertiesKeys": [
+      "$schema",
+      "agent",
+      "assistant",
+      "command",
+      "experimental",
+      "mcp",
+      "model",
+      "permission_mode",
+      "plugin",
+      "prompt_profile",
+      "small_model",
+      "terminal",
+      "username"
+    ],
+    "maximumExecutorGroups": 4,
+    "sessionID": null,
+    "schemaResult": "schema-error",
+    "issues": [
+      {
+        "path": [
+          "properties",
+          "sessionID"
+        ],
+        "code": "invalid_type"
+      }
+    ]
+  },
+  "observerCalibration": {
+    "schemaResult": "schema-error",
+    "issues": [
+      {
+        "path": [
+          "properties",
+          "mcp",
+          "browser",
+          "command"
+        ],
+        "code": "custom"
+      }
+    ],
+    "cause": "Observer used a different Bun executable than the producer; Config.Info enforces the exact built-in Browser executable identity. The original result is retained.",
+    "correction": "Use the exact producer executable, then repeat 4 -> 5 -> 4 through the same actual UI; no production schema weakening."
+  },
+  "candidatePublicEvent": {
+    "at": "2026-10-31T13:47:41.314Z",
+    "phase": "after",
+    "pid": 8000,
+    "httpStatus": 200,
+    "eventType": "project.config.changed",
+    "propertiesKeys": [
+      "$schema",
+      "agent",
+      "assistant",
+      "command",
+      "experimental",
+      "mcp",
+      "model",
+      "permission_mode",
+      "plugin",
+      "prompt_profile",
+      "small_model",
+      "terminal",
+      "username"
+    ],
+    "maximumExecutorGroups": 4,
+    "sessionID": null,
+    "schemaResult": "valid",
+    "issues": []
+  },
+  "backendChecks": [
+    {
+      "label": "sdk-build",
+      "exitCode": 0
+    },
+    {
+      "label": "types-backend",
+      "exitCode": 0
+    },
+    {
+      "label": "types-final",
+      "exitCode": 0
+    },
+    {
+      "label": "ui-build-final",
+      "exitCode": 0
+    },
+    {
+      "label": "cf",
+      "exitCode": 0
+    },
+    {
+      "label": "docs-final",
+      "exitCode": 0
+    }
+  ],
+  "backendTests": {
+    "files": 7,
+    "passes": [
+      2,
+      9,
+      4,
+      12,
+      5,
+      25,
+      1
+    ],
+    "total": 58
+  },
+  "isolatedWindowsGitProbe": {
+    "longDirectoryCharacters": 252,
+    "sameRepositoryCopiedDirectoryCharacters": 30,
+    "longDiscoveryExit": 128,
+    "shortCopyDiscoveryExit": 0,
+    "originalFailure": "Git discovery failed during MCP setup before recovery scheduling",
+    "resolution": "Shorten only the owned checker runtime label and rerun the original seven test files; production and test contracts unchanged."
+  },
+  "originalAfterSave": [
+    {
+      "at": "2026-10-31T13:29:21.895Z",
+      "ageMs": 119242.05541992188,
+      "maximumExecutorGroups": 4,
+      "bytes": 54,
+      "canonicalStatus": 200,
+      "originalMatched": true,
+      "blobStillExists": true
+    },
+    {
+      "ageMs": 103213.05151367188,
+      "parallelism": 4,
+      "status": 200,
+      "bytes": 54,
+      "exactOriginalBytes": true
+    }
+  ],
+  "requests": {
+    "before": 5,
+    "after": 5,
+    "batch": 10,
+    "cumulative": 1152,
+    "model": "gpt-6.1-sol",
+    "allStreaming200ReaderEOF": true,
+    "unusedAllowanceRetired": [
+      3,
+      3
+    ]
+  },
+  "data": {
+    "at": "2026-10-31T13:51:49.654Z",
+    "phase": "after",
+    "schema": 9,
+    "tables": 92,
+    "originals": 224870,
+    "current": 226303,
+    "changes": [
+      {
+        "table": "bus_publication_delivery",
+        "old": 43904,
+        "now": 44192
+      },
+      {
+        "table": "bus_publication_delivery_receipt",
+        "old": 43904,
+        "now": 44192
+      },
+      {
+        "table": "bus_publication_outbox",
+        "old": 5765,
+        "now": 5803
+      },
+      {
+        "table": "bus_publication_owner",
+        "old": 5765,
+        "now": 5803
+      },
+      {
+        "table": "bus_publication_phase_receipt",
+        "old": 17295,
+        "now": 17409
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "old": 46070,
+        "now": 46360
+      },
+      {
+        "table": "engine_control_activation_lease_grant",
+        "old": 46128,
+        "now": 46418
+      },
+      {
+        "table": "event_occurrence",
+        "old": 5567,
+        "now": 5605
+      },
+      {
+        "table": "memory_chunk",
+        "old": 56,
+        "now": 57
+      },
+      {
+        "table": "memory_file",
+        "old": 56,
+        "now": 57
+      },
+      {
+        "table": "message",
+        "old": 737,
+        "now": 742
+      },
+      {
+        "table": "part",
+        "old": 2105,
+        "now": 2117
+      },
+      {
+        "table": "permission_execution_result",
+        "old": 177,
+        "now": 178
+      },
+      {
+        "table": "permission_ledger",
+        "old": 901,
+        "now": 906
+      },
+      {
+        "table": "permission_policy",
+        "old": 38,
+        "now": 39
+      },
+      {
+        "table": "project",
+        "old": 56,
+        "now": 57
+      },
+      {
+        "table": "protocol_event",
+        "old": 2204,
+        "now": 2212
+      },
+      {
+        "table": "provider_activity_outcome",
+        "old": 741,
+        "now": 744
+      },
+      {
+        "table": "provider_activity_request",
+        "old": 741,
+        "now": 744
+      },
+      {
+        "table": "provider_usage_event",
+        "old": 762,
+        "now": 767
+      },
+      {
+        "table": "session",
+        "old": 98,
+        "now": 99
+      },
+      {
+        "table": "tool_part_outcome",
+        "old": 594,
+        "now": 595
+      },
+      {
+        "table": "tool_part_request",
+        "old": 594,
+        "now": 595
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "capacity": [
+      {
+        "slot": 0,
+        "fields": [
+          "expires_at",
+          "lease_id",
+          "owner_id",
+          "time_acquired"
+        ],
+        "currentRuntimeOwner": true,
+        "releasedByPhysicalFinish": true
+      },
+      {
+        "slot": 1,
+        "fields": [
+          "expires_at",
+          "lease_id",
+          "owner_id",
+          "time_acquired"
+        ],
+        "currentRuntimeOwner": true,
+        "releasedByPhysicalFinish": true
+      }
+    ],
+    "attachments": 115,
+    "protectedProjects": 13,
+    "trackedFiles": 28,
+    "workspaceFiles": 13,
+    "additionalProtectedFiles": 39,
+    "requests": 5,
+    "cumulativeRequests": 1152,
+    "reserveMs": 2030943,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-Rn-pJKfx.js"
+  },
+  "nativeScopes": {
+    "before": {
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "reserveMs": 3207055
+    },
+    "after": {
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "reserveMs": 2030943
+    }
+  },
+  "browserWarningsAndErrors": 0,
+  "manuallyViewedScreenshots": 13
+}

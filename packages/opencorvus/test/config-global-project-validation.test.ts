@@ -27,7 +27,7 @@ test("a retained global writer settles its original transition after repeated pr
   const listener = (event: { directory?: string; payload: { type?: string; properties?: Config.Info } }) => {
     if (
       event.directory !== project.path ||
-      event.payload.type !== "config.changed" ||
+      event.payload.type !== Config.Event.ProjectChanged.type ||
       event.payload.properties?.username !== "retained-global-retry"
     )
       return

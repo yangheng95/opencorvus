@@ -38,7 +38,7 @@ describe.serial("cross-process Config convergence", () => {
         await release.promise
       }
       const listener = (event: { directory?: string; payload: { type?: string; properties?: Config.Info } }) => {
-        if (event.directory !== project.path || event.payload.type !== "config.changed") return
+        if (event.directory !== project.path || event.payload.type !== Config.Event.ProjectChanged.type) return
         const username = event.payload.properties?.username
         if (username) observed.push(username)
         if (username === "joined-final") {
@@ -126,7 +126,7 @@ describe.serial("cross-process Config convergence", () => {
     const listener = (event: { directory?: string; payload: { type?: string; properties?: Config.Info } }) => {
       if (
         event.directory !== project.path ||
-        event.payload.type !== "config.changed" ||
+        event.payload.type !== Config.Event.ProjectChanged.type ||
         event.payload.properties?.username !== "retry-after"
       ) {
         return
@@ -174,7 +174,7 @@ describe.serial("cross-process Config convergence", () => {
     const listener = (event: { directory?: string; payload: { type?: string; properties?: Config.Info } }) => {
       if (
         event.directory !== project.path ||
-        event.payload.type !== "config.changed" ||
+        event.payload.type !== Config.Event.ProjectChanged.type ||
         event.payload.properties?.username !== "drain-after"
       ) {
         return
@@ -253,7 +253,7 @@ describe.serial("cross-process Config convergence", () => {
     })
     const observed: string[] = []
     const listener = async (event: { directory?: string; payload: { type?: string; properties?: Config.Info } }) => {
-      if (event.directory !== changedProject.path || event.payload.type !== "config.changed") return
+      if (event.directory !== changedProject.path || event.payload.type !== Config.Event.ProjectChanged.type) return
       const description = event.payload.properties?.agent?.coding?.description
       if (!description) return
       observed.push(description)
@@ -432,7 +432,7 @@ describe.serial("cross-process Config convergence", () => {
       })
       const observed = new Map<string, string[]>()
       const listener = async (event: { directory?: string; payload: { type?: string; properties?: Config.Info } }) => {
-        if (event.payload.type !== "config.changed") return
+        if (event.payload.type !== Config.Event.ProjectChanged.type) return
         if (event.directory !== firstProject.path && event.directory !== secondProject.path) return
         const username = event.payload.properties?.username
         if (username !== "peer-global-middle" && username !== "peer-global-after" && username !== "peer-global-later") {

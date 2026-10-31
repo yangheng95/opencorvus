@@ -868,6 +868,7 @@ export type Event =
   | EventPermissionAsked
   | EventPermissionReplied
   | EventPermissionTerminated
+  | EventProjectConfigChanged
   | EventProjectMemoryNoticeChanged
   | EventProjectMemoryOrganizeRequested
   | EventProjectUpdated
@@ -1370,6 +1371,11 @@ export type EventPermissionTerminated = {
     status: "cancelled" | "stale"
   }
   type: "permission.terminated"
+}
+
+export type EventProjectConfigChanged = {
+  properties: Config
+  type: "project.config.changed"
 }
 
 export type EventProjectMemoryNoticeChanged = {

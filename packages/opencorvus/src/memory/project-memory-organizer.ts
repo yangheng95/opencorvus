@@ -5,6 +5,7 @@ import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
 import { configuredDefaultModelRef } from "@/agent/model"
 import { sessionRuntimeFromNativeAgent } from "@/agent/session-agent-runtime"
 import { EffectiveConfig } from "@/config/effective"
+import { Config } from "@/config/config"
 import { Instance } from "@/project/instance"
 import { Provider } from "@/provider/provider"
 import { LLM } from "@/session/llm"
@@ -424,7 +425,7 @@ export namespace ProjectMemoryOrganizer {
         ),
       )
       const projectConfigListener = (event: { directory?: string; payload?: { type?: string } }) => {
-        if (event.directory !== directory || event.payload?.type !== "config.changed") return
+        if (event.directory !== directory || event.payload?.type !== Config.Event.ProjectChanged.type) return
         Database.immediateTransaction((db) => {
           ProjectMemory.invalidateOrganizerAvailabilityInTransaction(db, { projectID })
           ProjectMemory.requestOrganizationInTransaction(db, { projectID })

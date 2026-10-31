@@ -13,7 +13,12 @@
 
 - **存储**：`opencorvus.jsonc`，按声明的来源优先级合并。
 - **验证**：Zod schema（完整，无 `as any`）
-- **接口**：`GET /config` · `PATCH /config`（JSON Merge Patch RFC 7396）· SSE `config.changed`
+- **接口**：`GET /config` · `PATCH /config`（JSON Merge Patch RFC 7396）· SSE `project.config.changed`
+
+Project 配置调和发布唯一 `Config.Event.ProjectChanged`：`project.config.changed` 的
+`properties` 是有效 `Config.Info`，外层保留实际 directory，进入同一公开 BusEvent union。
+Session/Task 的 `config.changed` 则始终携带精确 `sessionID`，只刷新该 Session 的配置投影；
+它不承载项目配置，也不靠缺字段猜测来源。两者均不改写持久历史或已有 Session 模型。
 
 有效值按低到高合并：remote well-known、global、`OPENCORVUS_CONFIG` 自定义文件、project、独立
 `OPENCORVUS_CONFIG_DIR` 资源配置、inline、managed。每个文件来源保留原稀疏声明和新鲜 revision
@@ -175,7 +180,7 @@ opencorvus.jsonc ──→ 声明层 + 累积校验/合并 ──→ Config.get(
                       ├─→ EngineConfig.get()     合并 DEFAULTS，返回完整 typed config
                       ├─→ GET  /config                  → Overlay appStore.config (reactive)
                       ├─→ PATCH /config {partial diff}  → mergeDeep → 原子替换 canonical file
-                      └─→ 本 backend "config.changed"   → SSE → 该 backend 的 Overlay 实例刷新
+                      └─→ 本 backend "project.config.changed" → 公开 Project 配置信号
 ```
 
 **关键变化**：
@@ -412,7 +417,7 @@ boundaries.
 
 peer backend 替换 Project/global 文件后，owner 加载稳定 generation，并统一结算 MCP（Model Context
 Protocol，模型上下文协议）、Provider、native Agent 与 Channel projection；全部 projection 成功后才通过
-该 backend 原有的 `config.changed` 事件刷新客户端。本地 writer 的 direct transition 也登记在同一个在途
+该 backend 的 `project.config.changed` 发布规范 Project 配置信号。本地 writer 的 direct transition 也登记在同一个在途
 状态机中，因此事件回调里的并发读取不会重复发布同一 target。projection 或事件失败保留 exact
 before/after transition 供重试；较新的 canonical generation 只更新 queued latest target，前一 transition
 成功后才构造 `previous.after → latest`。本地 direct settlement 完成后仅 rewarm 活跃 state；若 canonical

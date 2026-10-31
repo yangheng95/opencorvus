@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [项目配置事件权威](2026-10-31-project-config-event-authority/README.md)：十三实图、真实事件校验与原件/数据保全回执。
+
 - [匿名项目搜索辨识](2026-10-31-project-search-identification/README.md)：九张实图、实际目录请求和原件/数据保全结果。
 
 - [批量附件上限反馈](2026-10-31-attachment-limit-feedback/README.md)：十七张实图、真实上传和零模型数据保全回执。

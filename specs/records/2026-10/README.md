@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [项目配置事件权威](2026-10-31-project-config-event-authority.md)：实际协议红灯、58正向用例、SDK生成及十次真实流式请求。
+
 - [匿名项目搜索辨识](2026-10-31-project-search-identification.md)：双语结果、命名项目导航与六纯函数正向合同。
 
 - [批量附件上限反馈](2026-10-31-attachment-limit-feedback.md)：单待完成请求真实复现、即时提示和双语10/9/10恢复。

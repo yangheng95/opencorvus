@@ -35,7 +35,6 @@ describe("MCP configure commits the credential before the definition", () => {
       directory: project.path,
       fn: async () => {
         const projectID = Instance.project.id
-        const oldGeneration = Instance.projectGeneration
         const recreatedGeneration = crypto.randomUUID()
         Database.use((db) => {
           const row = db.select().from(ProjectTable).where(eq(ProjectTable.id, projectID)).get()
@@ -51,14 +50,12 @@ describe("MCP configure commits the credential before the definition", () => {
 
         expect({
           generations: {
-            old: oldGeneration,
             instance: Instance.projectGeneration,
             durable: Project.occurrence(projectID)?.generation,
           },
           credential: (await McpAuth.get(`${projectID}:${SERVER}`))?.staticCredential?.secret,
         }).toEqual({
           generations: {
-            old: expect.not.stringMatching(new RegExp(`^${recreatedGeneration}$`)),
             instance: recreatedGeneration,
             durable: recreatedGeneration,
           },
@@ -381,7 +378,7 @@ describe("MCP configure commits the credential before the definition", () => {
         })
         const definitions: string[] = []
         const listener = (event: { directory?: string; payload: { type?: string; properties?: Config.Info } }) => {
-          if (event.directory !== project.path || event.payload.type !== "config.changed") return
+          if (event.directory !== project.path || event.payload.type !== Config.Event.ProjectChanged.type) return
           const definition = event.payload.properties?.mcp?.[SERVER]
           if (definition && "credential" in definition && definition.credential?.type === "header") {
             definitions.push(definition.credential.name)

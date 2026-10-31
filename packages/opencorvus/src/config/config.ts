@@ -27,6 +27,7 @@ import { Installation } from "@/installation"
 import { ConfigMarkdown } from "./markdown"
 import { constants, existsSync } from "fs"
 import { GlobalBus } from "@/bus/global"
+import { BusEvent } from "@/bus/bus-event"
 import { Glob } from "../util/glob"
 import { PackageRegistry } from "@/bun/registry"
 import { proxied } from "@/util/proxied"
@@ -1852,6 +1853,10 @@ export namespace Config {
 
   export type Info = z.output<typeof Info>
 
+  export const Event = {
+    ProjectChanged: BusEvent.define("project.config.changed", Info),
+  }
+
   type DeclaredFields<T> = unknown extends T
     ? T
     : T extends readonly unknown[]
@@ -2090,7 +2095,7 @@ export namespace Config {
         await GlobalBus.emitAndWait("event", {
           directory: transition.directory,
           payload: {
-            type: "config.changed",
+            type: Event.ProjectChanged.type,
             properties: transition.after,
           },
         })

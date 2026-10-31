@@ -755,10 +755,12 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
     await using projectB = await memoryProject()
     let projectAID = ""
     let projectBID = ""
+    let projectAConfig!: Config.Info
     await Instance.provide({
       directory: projectA.path,
       fn: async () => {
         projectAID = Instance.project.id
+        projectAConfig = await Config.get()
         ProjectMemoryOrganizer.init()
       },
     })
@@ -769,7 +771,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         ProjectMemoryOrganizer.init()
         await GlobalBus.emitAndWait("event", {
           directory: projectA.path,
-          payload: { type: "config.changed" },
+          payload: { type: Config.Event.ProjectChanged.type, properties: projectAConfig },
         })
       },
     })
@@ -810,7 +812,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
         ProjectMemoryOrganizer.init()
         await GlobalBus.emitAndWait("event", {
           directory: project.path,
-          payload: { type: "config.changed" },
+          payload: { type: Config.Event.ProjectChanged.type, properties: await Config.get() },
         })
         const lease = Database.transaction((db) =>
           ProjectMemory.beginOrganizerAttemptInTransaction(db, {
@@ -1468,7 +1470,7 @@ describe("Project MEMORY.MD pending input and organizer document", () => {
 
           await GlobalBus.emitAndWait("event", {
             directory: project.path,
-            payload: { type: "config.changed" },
+            payload: { type: Config.Event.ProjectChanged.type, properties: await Config.get() },
           })
           await waitFor(
             () =>

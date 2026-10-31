@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [项目配置事件权威](records/2026-10/2026-10-31-project-config-event-authority.md)：独立Project公开事件、附件草稿及Sources真实闭环。
+
 - [匿名项目搜索辨识](records/2026-10/2026-10-31-project-search-identification.md)：侧栏与命令检索共用短名、原目录尾号及真实选择。
 
 - [批量附件上限反馈](records/2026-10/2026-10-31-attachment-limit-feedback.md)：同步接纳反馈、旧上传与新草稿归属及实际容量恢复。
