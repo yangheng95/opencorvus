@@ -22,6 +22,162 @@ const mediaReferences = [
   { filename: "plain.png", alt: "line1\n\nline2", reference: "[line1&#10;&#10;line2](<plain.png>)" },
 ]
 
+const secondMediaSource = {
+  sha: "df46e50c23cb2a1650972b0125a60903ae7babc19826fc6497880261766cd88a",
+  url: "/attachment/project/df46e50c23cb2a1650972b0125a60903ae7babc19826fc6497880261766cd88a.png",
+  mime: "image/png",
+  size: 4821,
+}
+
+test.each([
+  { first: "plot.png", second: "plot.png", names: ["plot.png", "plot (2).png"] },
+  { first: "plot.png", second: "Plot.PNG", names: ["plot.png", "Plot (2).PNG"] },
+  { first: "p:lot.png", second: "p?lot.png", names: ["p_lot.png", "p_lot (2).png"] },
+])("Notebook references use the final distinct names for $first and $second", ({ first, second, names }) => {
+  const files = artifactExports({
+    ...base,
+    renderer: "notebook@1",
+    cells: [
+      {
+        kind: "code",
+        language: "plaintext",
+        source: "original code",
+        outputs: [
+          { kind: "media", source: { ...mediaSource, filename: first }, alt: "Alpha" },
+          { kind: "media", source: { ...secondMediaSource, filename: second }, alt: "Bravo" },
+          { kind: "media", source: { ...mediaSource, filename: "alias.png" }, alt: "Repeat" },
+        ],
+      },
+    ],
+  })
+  const file = files[0]!
+  const notebook = JSON.parse("text" in file ? file.text : "")
+  expect({
+    references: notebook.cells[0].outputs.map(
+      (output: { data: Record<string, string> }) => output.data["text/markdown"],
+    ),
+    files: files.slice(1),
+  }).toEqual({
+    references: [
+      `[Alpha](<${encodeURIComponent(names[0]!)}>)`,
+      `[Bravo](<${encodeURIComponent(names[1]!)}>)`,
+      `[Repeat](<${encodeURIComponent(names[0]!)}>)`,
+    ],
+    files: [
+      { filename: names[0], mime: mediaSource.mime, url: mediaSource.url },
+      { filename: names[1], mime: secondMediaSource.mime, url: secondMediaSource.url },
+    ],
+  })
+})
+
+test("Presentation references match both distinct companion downloads", () => {
+  expect(
+    artifactExports({
+      ...base,
+      renderer: "presentation@1",
+      aspectRatio: "16:9",
+      slides: [
+        {
+          id: "alpha",
+          title: "Alpha",
+          markdown: "Original alpha",
+          image: { ...mediaSource, filename: "plot.png" },
+          imageAlt: "Alpha",
+          notes: "Alpha notes",
+        },
+        {
+          id: "bravo",
+          title: "Bravo",
+          markdown: "Original bravo",
+          image: { ...secondMediaSource, filename: "plot.png" },
+          imageAlt: "Bravo",
+          notes: "Bravo notes",
+        },
+      ],
+    }),
+  ).toEqual([
+    {
+      filename: "Acceptance.md",
+      mime: "text/markdown",
+      text: "# Alpha\n\nOriginal alpha\n\n![Alpha](<plot.png>)\n\nAlpha notes\n\n---\n\n# Bravo\n\nOriginal bravo\n\n![Bravo](<plot%20(2).png>)\n\nBravo notes",
+    },
+    { filename: "plot.png", mime: mediaSource.mime, url: mediaSource.url },
+    { filename: "plot (2).png", mime: secondMediaSource.mime, url: secondMediaSource.url },
+  ])
+})
+
+test("Media references retain the first canonical download name for a repeated URL", () => {
+  const files = artifactExports(
+    {
+      ...base,
+      renderer: "notebook@1",
+      cells: [
+        {
+          kind: "code",
+          language: "plaintext",
+          source: "original code",
+          outputs: [{ kind: "media", source: { ...mediaSource, filename: "alias.png" }, alt: "Original" }],
+        },
+      ],
+    },
+    [{ filename: "original.png", mime: mediaSource.mime, url: mediaSource.url }],
+  )
+  const notebook = JSON.parse("text" in files[1]! ? files[1].text : "")
+  expect({
+    original: files[0],
+    count: files.length,
+    reference: notebook.cells[0].outputs[0].data["text/markdown"],
+  }).toEqual({
+    original: { filename: "original.png", mime: mediaSource.mime, url: mediaSource.url },
+    count: 2,
+    reference: "[Original](<original.png>)",
+  })
+})
+
+test("Export collision suffixes preserve names already declared by the delivery", () => {
+  const files = artifactExports(
+    {
+      ...base,
+      renderer: "notebook@1",
+      cells: [
+        {
+          kind: "code",
+          language: "plaintext",
+          source: "original code",
+          outputs: [
+            { kind: "media", source: { ...mediaSource, filename: "plot.png" }, alt: "Alpha" },
+            { kind: "media", source: { ...secondMediaSource, filename: "plot.png" }, alt: "Bravo" },
+          ],
+        },
+      ],
+    },
+    [{ filename: "plot (2).png", mime: "image/png", url: "/resources/declared-plot.png" }],
+  )
+  expect(files.map((file) => file.filename)).toEqual(["plot (2).png", "Acceptance.ipynb", "plot.png", "plot (3).png"])
+})
+
+test("Spreadsheet exports retain every sheet under distinct sanitized filenames", () => {
+  const files = artifactExports({
+    ...base,
+    renderer: "spreadsheet@1",
+    editable: false,
+    sheets: ["Data:raw", "Data?raw", "Data_raw (2)"].map((name, index) => ({
+      id: `sheet-${index}`,
+      name,
+      rowCount: 1,
+      columnCount: 1,
+      frozenRows: 0,
+      frozenColumns: 0,
+      cells: [{ address: "A1", value: index + 1 }],
+    })),
+  })
+  expect(files).toEqual([
+    { filename: "Acceptance - Data_raw.csv", mime: "text/csv;charset=utf-8", text: '"1"' },
+    { filename: "Acceptance - Data_raw (3).csv", mime: "text/csv;charset=utf-8", text: '"2"' },
+    { filename: "Acceptance - Data_raw (2).csv", mime: "text/csv;charset=utf-8", text: '"3"' },
+  ])
+})
+
 test.each(mediaReferences)(
   "Notebook media export preserves $filename and its plain label",
   ({ filename, alt, reference }) => {

@@ -2018,8 +2018,14 @@ authority. A source/data export does not replace a requested PDF or Word file.
 Notebook media links and Presentation image references preserve plain-text
 labels through CommonMark escaping. Their companion filenames use one URI
 component encoding inside angle-bracket destinations, including literal `%`,
-fragment delimiters and unpaired parentheses. Authored Markdown, code, notes
-and the original downloadable media retain their existing content and names.
+fragment delimiters and unpaired parentheses. Authored Markdown, code and notes
+retain their existing content; original media bytes remain intact.
+One export collection assigns distinct download filenames before serializing
+generated media references. Resource URLs retain their first declared export
+name; different resources with case-insensitive or sanitized-name collisions
+receive numeric suffixes before the final extension. Suffixes preserve other
+explicitly declared names, and generated references use that same allocation.
+This is a download projection; original attachment metadata remains intact.
 For native Office delivery cards, `InteractiveArtifactRecord.downloads` is a
 read projection of the exact producing display Part's completed Tool outcome.
 The declared source identity selects its canonical attachment within the same

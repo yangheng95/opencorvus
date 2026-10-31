@@ -3,6 +3,10 @@ import type { InteractiveArtifact, InteractiveArtifactPayload } from "./interact
 
 export type ArtifactExport = { filename: string; mime: string } & ({ text: string } | { url: string })
 
+type ExportFilename = (url: string) => string
+type ExportText = string | ((filename: ExportFilename) => string)
+type ArtifactExportPlan = { filename: string; mime: string } & ({ text: ExportText } | { url: string })
+
 export function artifactFilename(name: string): string {
   return (name.split(/[\\/]/).at(-1)?.trim() || "artifact").replace(/[<>:"|?*\u0000-\u001f]/g, "_")
 }
@@ -50,20 +54,46 @@ export function artifactExports(
   downloads: NonNullable<InteractiveArtifact["downloads"]> = [],
 ): ArtifactExport[] {
   const seen = new Set<string>()
-  return [
-    ...downloads.map((file) => ({ ...file, filename: artifactFilename(file.filename || file.url) })),
+  const plans = [
+    ...downloads.map((file) => ({ ...file, filename: file.filename || file.url })),
     ...rendererExports(payload),
-  ].filter((file) => {
-    if (!("url" in file)) return true
-    if (seen.has(file.url)) return false
-    seen.add(file.url)
-    return true
+  ]
+    .filter((file) => {
+      if (!("url" in file)) return true
+      if (seen.has(file.url)) return false
+      seen.add(file.url)
+      return true
+    })
+    .map((file) => ({ ...file, filename: artifactFilename(file.filename) }))
+  // Generated suffixes must leave every explicitly declared name available.
+  const reserved = new Set(plans.map((file) => file.filename.toLowerCase()))
+  const used = new Set<string>()
+  const resources = new Map<string, string>()
+  const named = plans.map((file) => {
+    let filename = file.filename
+    if (used.has(filename.toLowerCase())) {
+      const dot = filename.lastIndexOf(".")
+      const stem = dot > 0 ? filename.slice(0, dot) : filename
+      const extension = dot > 0 ? filename.slice(dot) : ""
+      let suffix = 2
+      do filename = `${stem} (${suffix++})${extension}`
+      while (used.has(filename.toLowerCase()) || reserved.has(filename.toLowerCase()))
+    }
+    used.add(filename.toLowerCase())
+    if ("url" in file) resources.set(file.url, filename)
+    return { ...file, filename }
   })
+  // Serialize generated links only after their companion names are final.
+  return named.map((file) =>
+    "text" in file
+      ? { ...file, text: typeof file.text === "string" ? file.text : file.text((url) => resources.get(url)!) }
+      : file,
+  )
 }
 
-function rendererExports(payload: InteractiveArtifactPayload): ArtifactExport[] {
+function rendererExports(payload: InteractiveArtifactPayload): ArtifactExportPlan[] {
   const name = artifactFilename(payload.title)
-  const text = (extension: string, content: string, mime = "text/plain"): ArtifactExport[] => [
+  const text = (extension: string, content: ExportText, mime = "text/plain"): ArtifactExportPlan[] => [
     { filename: `${name}.${extension}`, mime, text: content },
   ]
   const json = (value: unknown, extension = "json") =>
@@ -121,39 +151,42 @@ function rendererExports(payload: InteractiveArtifactPayload): ArtifactExport[] 
       ]
     case "notebook@1":
       return [
-        ...json(
-          {
-            nbformat: 4,
-            nbformat_minor: 5,
-            metadata: {},
-            cells: payload.cells.map((cell, index) =>
-              cell.kind === "markdown"
-                ? { id: `cell-${index}`, cell_type: "markdown", metadata: {}, source: cell.markdown }
-                : {
-                    id: `cell-${index}`,
-                    cell_type: "code",
-                    metadata: { language: cell.language },
-                    source: cell.source,
-                    execution_count: cell.executionCount ?? null,
-                    outputs: cell.outputs.map((output) => ({
-                      output_type: "display_data",
-                      metadata: {},
-                      data:
-                        output.kind === "text"
-                          ? { "text/plain": output.text }
-                          : output.kind === "markdown"
-                            ? { "text/markdown": output.markdown }
-                            : {
-                                "text/markdown": markdownMediaReference(
-                                  output.alt,
-                                  output.source.filename || output.source.url,
-                                ),
-                              },
-                    })),
-                  },
-            ),
-          },
+        ...text(
           "ipynb",
+          (filename) =>
+            JSON.stringify(
+              {
+                nbformat: 4,
+                nbformat_minor: 5,
+                metadata: {},
+                cells: payload.cells.map((cell, index) =>
+                  cell.kind === "markdown"
+                    ? { id: `cell-${index}`, cell_type: "markdown", metadata: {}, source: cell.markdown }
+                    : {
+                        id: `cell-${index}`,
+                        cell_type: "code",
+                        metadata: { language: cell.language },
+                        source: cell.source,
+                        execution_count: cell.executionCount ?? null,
+                        outputs: cell.outputs.map((output) => ({
+                          output_type: "display_data",
+                          metadata: {},
+                          data:
+                            output.kind === "text"
+                              ? { "text/plain": output.text }
+                              : output.kind === "markdown"
+                                ? { "text/markdown": output.markdown }
+                                : {
+                                    "text/markdown": markdownMediaReference(output.alt, filename(output.source.url)),
+                                  },
+                        })),
+                      },
+                ),
+              },
+              null,
+              2,
+            ),
+          "application/json",
         ),
         ...payload.cells.flatMap((cell) =>
           cell.kind === "code"
@@ -175,12 +208,13 @@ function rendererExports(payload: InteractiveArtifactPayload): ArtifactExport[] 
       return [
         ...text(
           "md",
-          payload.slides
-            .map(
-              (slide) =>
-                `# ${slide.title}\n\n${slide.markdown}${slide.image ? `\n\n!${markdownMediaReference(slide.imageAlt!, slide.image.filename || slide.image.url)}` : ""}${slide.notes ? `\n\n${slide.notes}` : ""}`,
-            )
-            .join("\n\n---\n\n"),
+          (filename) =>
+            payload.slides
+              .map(
+                (slide) =>
+                  `# ${slide.title}\n\n${slide.markdown}${slide.image ? `\n\n!${markdownMediaReference(slide.imageAlt!, filename(slide.image.url))}` : ""}${slide.notes ? `\n\n${slide.notes}` : ""}`,
+              )
+              .join("\n\n---\n\n"),
           "text/markdown",
         ),
         ...payload.slides.flatMap((slide) =>

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [产物导出同名文件身份](records/2026-11/2026-11-01-artifact-export-filename-identity.md)：同名资源、下载集合与派生链接的真实身份。
+
 - [Notebook 与演示媒体导出引用](records/2026-11/2026-11-01-artifact-media-reference-export.md)：特殊文件名、纯文本描述与真实导出交付。
 
 - [Unicode 来源定位实测](records/2026-11/2026-11-01-unicode-source-navigation.md)：中文、emoji、字节顺序标记及混合换行的真实 Sources 定位。

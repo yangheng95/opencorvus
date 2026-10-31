@@ -1,0 +1,388 @@
+{
+  "purpose": "Preserve distinct original media identities in one artifact download collection",
+  "productionFiles": [
+    "packages/overlay/src/services/artifact-export.ts"
+  ],
+  "actualModel": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "requests": 6,
+    "maximumRequests": 8,
+    "unusedRetired": 2,
+    "allStreamed200EOF": true,
+    "cumulativeRequests": 1175
+  },
+  "actualPublication": {
+    "tool": "publish_interactive_artifact",
+    "completedCalls": 2,
+    "naturalMessages": 6,
+    "artifacts": [
+      {
+        "id": "art_g0VZeNxoV00wdGzSIuDC",
+        "title": "Notebook849",
+        "renderer": "notebook@1"
+      },
+      {
+        "id": "art_g0VZeNzM200K4cN4yN5K",
+        "title": "Presentation849",
+        "renderer": "presentation@1"
+      }
+    ]
+  },
+  "downloads": {
+    "before": {
+      "at": "2026-10-31T17:47:10.447Z",
+      "phase": "before",
+      "actualBrowserDownloads": true,
+      "results": [
+        {
+          "kind": "notebook",
+          "status": "invalid",
+          "error": {
+            "code": "MEDIA_REFERENCE_COLLISION",
+            "filenames": [
+              "同名图849.png",
+              "同名图849.png"
+            ],
+            "differentOriginalBytes": true
+          },
+          "markdown": "[同名原件 1](<%E5%90%8C%E5%90%8D%E5%9B%BE849.png>)\n\n[同名原件 2](<%E5%90%8C%E5%90%8D%E5%9B%BE849.png>)"
+        },
+        {
+          "kind": "presentation",
+          "status": "invalid",
+          "error": {
+            "code": "MEDIA_REFERENCE_COLLISION",
+            "filenames": [
+              "同名图849.png",
+              "同名图849.png"
+            ],
+            "differentOriginalBytes": true
+          },
+          "markdown": "# 同名媒体 1\n\n静态原图，不执行代码。\n\n![同名原件 1](<%E5%90%8C%E5%90%8D%E5%9B%BE849.png>)\n\n---\n\n# 同名媒体 2\n\n静态原图，不执行代码。\n\n![同名原件 2](<%E5%90%8C%E5%90%8D%E5%9B%BE849.png>)"
+        }
+      ],
+      "originalMediaBytes": [
+        10627,
+        4821
+      ]
+    },
+    "after": {
+      "at": "2026-10-31T17:53:45.418Z",
+      "phase": "after",
+      "actualBrowserDownloads": true,
+      "results": [
+        {
+          "kind": "notebook",
+          "status": "valid",
+          "referenceType": "link",
+          "matches": [
+            {
+              "filename": "同名图849.png",
+              "bytes": 10627,
+              "label": "同名原件 1"
+            },
+            {
+              "filename": "同名图849 (2).png",
+              "bytes": 4821,
+              "label": "同名原件 2"
+            }
+          ],
+          "markdown": "[同名原件 1](<%E5%90%8C%E5%90%8D%E5%9B%BE849.png>)\n\n[同名原件 2](<%E5%90%8C%E5%90%8D%E5%9B%BE849%20(2).png>)"
+        },
+        {
+          "kind": "presentation",
+          "status": "valid",
+          "referenceType": "image",
+          "matches": [
+            {
+              "filename": "同名图849.png",
+              "bytes": 10627,
+              "label": "同名原件 1"
+            },
+            {
+              "filename": "同名图849 (2).png",
+              "bytes": 4821,
+              "label": "同名原件 2"
+            }
+          ],
+          "markdown": "# 同名媒体 1\n\n静态原图，不执行代码。\n\n![同名原件 1](<%E5%90%8C%E5%90%8D%E5%9B%BE849.png>)\n\n---\n\n# 同名媒体 2\n\n静态原图，不执行代码。\n\n![同名原件 2](<%E5%90%8C%E5%90%8D%E5%9B%BE849%20(2).png>)"
+        }
+      ],
+      "originalMediaBytes": [
+        10627,
+        4821
+      ]
+    },
+    "actualAfterBasenames": [
+      "同名图849.png",
+      "同名图849 (2).png"
+    ],
+    "chineseEqualEnglish": true,
+    "baselineDownloadsRetiredAfterBytePreservingArchive": 4
+  },
+  "replay": {
+    "originalSnapshotAndSelectionPreserved": true,
+    "requests": 0
+  },
+  "preservation": {
+    "before": {
+      "at": "2026-10-31T17:49:50.704Z",
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 231147,
+      "current": 232899,
+      "changes": [
+        {
+          "table": "bus_publication_delivery",
+          "old": 45164,
+          "now": 45514
+        },
+        {
+          "table": "bus_publication_delivery_receipt",
+          "old": 45164,
+          "now": 45514
+        },
+        {
+          "table": "bus_publication_outbox",
+          "old": 5931,
+          "now": 5977
+        },
+        {
+          "table": "bus_publication_owner",
+          "old": 5931,
+          "now": 5977
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "old": 17793,
+          "now": 17931
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "old": 47343,
+          "now": 47696
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 47401,
+          "now": 47754
+        },
+        {
+          "table": "event_occurrence",
+          "old": 5733,
+          "now": 5779
+        },
+        {
+          "table": "interactive_artifact",
+          "old": 10,
+          "now": 12
+        },
+        {
+          "table": "memory_chunk",
+          "old": 60,
+          "now": 61
+        },
+        {
+          "table": "memory_file",
+          "old": 60,
+          "now": 61
+        },
+        {
+          "table": "message",
+          "old": 759,
+          "now": 765
+        },
+        {
+          "table": "part",
+          "old": 2159,
+          "now": 2175
+        },
+        {
+          "table": "permission_execution_result",
+          "old": 180,
+          "now": 182
+        },
+        {
+          "table": "permission_ledger",
+          "old": 916,
+          "now": 926
+        },
+        {
+          "table": "permission_policy",
+          "old": 40,
+          "now": 41
+        },
+        {
+          "table": "project",
+          "old": 60,
+          "now": 61
+        },
+        {
+          "table": "protocol_event",
+          "old": 2243,
+          "now": 2254
+        },
+        {
+          "table": "provider_activity_outcome",
+          "old": 755,
+          "now": 759
+        },
+        {
+          "table": "provider_activity_request",
+          "old": 755,
+          "now": 759
+        },
+        {
+          "table": "provider_usage_event",
+          "old": 784,
+          "now": 790
+        },
+        {
+          "table": "session",
+          "old": 102,
+          "now": 103
+        },
+        {
+          "table": "tool_part_outcome",
+          "old": 600,
+          "now": 602
+        },
+        {
+          "table": "tool_part_request",
+          "old": 600,
+          "now": 602
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [
+        {
+          "slot": 0,
+          "fields": [
+            "expires_at",
+            "lease_id",
+            "owner_id",
+            "time_acquired"
+          ],
+          "currentRuntimeOwner": true,
+          "releasedByPhysicalFinish": true
+        },
+        {
+          "slot": 1,
+          "fields": [
+            "expires_at",
+            "lease_id",
+            "owner_id",
+            "time_acquired"
+          ],
+          "currentRuntimeOwner": true,
+          "releasedByPhysicalFinish": true
+        }
+      ],
+      "attachments": 130,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 6,
+      "cumulativeRequests": 1175,
+      "reserveMs": 3253078,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BpsZkX2B.js"
+    },
+    "after": {
+      "at": "2026-10-31T17:56:19.100Z",
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 232899,
+      "current": 232901,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 47696,
+          "now": 47697
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 47754,
+          "now": 47755
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [],
+      "attachments": 138,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1175,
+      "reserveMs": 2844599,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CryNnb8b.js"
+    }
+  },
+  "native": {
+    "before": {
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "reserveMs": 3253078
+    },
+    "after": {
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "reserveMs": 2844599
+    },
+    "pairedCopiesRetired": 4,
+    "sourceBefore": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "sourceAfter": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    }
+  },
+  "tests": {
+    "runner": "packages/overlay/script/run-unit-tests.ts",
+    "file": "test/artifact-export.test.ts",
+    "before": {
+      "passed": 15,
+      "failed": 7
+    },
+    "after": {
+      "passed": 22,
+      "failed": 0
+    },
+    "kind": "positive serialized file data contracts"
+  },
+  "screenshots": {
+    "count": 8,
+    "personallyViewed": true,
+    "scope": "actual media preview and download menus in English and Chinese"
+  },
+  "checks": {
+    "ae-final": 0,
+    "types-final": 0,
+    "i18n-final": 0,
+    "ui-build-final": 0,
+    "docs-final": 0
+  },
+  "uiAutomationTests": 0,
+  "delegation": "single agent",
+  "goalStatus": "active"
+}
