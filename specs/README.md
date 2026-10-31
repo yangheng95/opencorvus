@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [用量周期真实账本对照](records/2026-10/2026-10-31-usage-ledger-reconciliation.md)：当前四周期、分组与桶的实际账本和实页复核。
+
 - [计划任务校验与修正](records/2026-10/2026-10-31-scheduled-validation-journey.md)：自定义日历错误、输入保留与修正保存实页调查。
 
 - [文件改名与草稿归属](records/2026-10/2026-10-31-file-rename-draft-journey.md)：文件及父目录改名、未保存决定与真实路径回读。

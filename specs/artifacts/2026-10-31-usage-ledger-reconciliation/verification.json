@@ -1,0 +1,162 @@
+{
+  "at": "2026-10-31T07:45:01.091Z",
+  "batch": 830,
+  "scope": "Real current ledger reconciliation; documentation correction only",
+  "productionCodeChanged": false,
+  "statisticalDefectObserved": false,
+  "periods": [
+    {
+      "period": "day",
+      "start": 1793376000000,
+      "end": 1793462400000,
+      "previousStart": 1793289600000,
+      "calls": 22,
+      "tokens": 545393,
+      "requestTimeEstimatedCostUSD": 0,
+      "pricedTokens": 545393,
+      "buckets": 24,
+      "models": 1,
+      "previousCalls": 123,
+      "previousTokens": 6591892,
+      "peakTokens": 311384,
+      "allBucketFieldsMatchIndependentSQL": true,
+      "allGroupsMatchIndependentSQL": true
+    },
+    {
+      "period": "week",
+      "start": 1792944000000,
+      "end": 1793548800000,
+      "previousStart": 1792339200000,
+      "calls": 733,
+      "tokens": 36428624,
+      "requestTimeEstimatedCostUSD": 0,
+      "pricedTokens": 36428624,
+      "buckets": 7,
+      "models": 1,
+      "previousCalls": 0,
+      "previousTokens": 0,
+      "peakTokens": 18234654,
+      "allBucketFieldsMatchIndependentSQL": true,
+      "allGroupsMatchIndependentSQL": true
+    },
+    {
+      "period": "month",
+      "start": 1790784000000,
+      "end": 1793462400000,
+      "previousStart": 1788192000000,
+      "calls": 733,
+      "tokens": 36428624,
+      "requestTimeEstimatedCostUSD": 0,
+      "pricedTokens": 36428624,
+      "buckets": 31,
+      "models": 1,
+      "previousCalls": 0,
+      "previousTokens": 0,
+      "peakTokens": 18234654,
+      "allBucketFieldsMatchIndependentSQL": true,
+      "allGroupsMatchIndependentSQL": true
+    },
+    {
+      "period": "year",
+      "start": 1767196800000,
+      "end": 1798732800000,
+      "previousStart": 1735660800000,
+      "calls": 733,
+      "tokens": 36428624,
+      "requestTimeEstimatedCostUSD": 0,
+      "pricedTokens": 36428624,
+      "buckets": 365,
+      "models": 1,
+      "previousCalls": 0,
+      "previousTokens": 0,
+      "peakTokens": 18234654,
+      "allBucketFieldsMatchIndependentSQL": true,
+      "allGroupsMatchIndependentSQL": true
+    }
+  ],
+  "ledgerCalls": 733,
+  "ledgerTokens": 36428624,
+  "timeZone": "Asia/Shanghai",
+  "independentSQLRounds": 2,
+  "allOriginalLedgerColumnsPreserved": 733,
+  "manualScreenshots": 12,
+  "desktop": [
+    1280,
+    720
+  ],
+  "manualCases": [
+    "English four periods",
+    "Chinese year/day/month",
+    "Refresh by keyboard",
+    "Home zero bucket",
+    "End measured bucket",
+    "Directional peak bucket",
+    "Exact model totals",
+    "Official comparison disclosure"
+  ],
+  "officialBilling": "Management sources unconfigured; no management credentials used; request-time estimates do not establish billed amounts",
+  "checks": {
+    "realAPIAndIndependentSQL": 0,
+    "originalHistoriesAndSources": 0,
+    "originalFiles": 0,
+    "originalPausedAutomations": 2
+  },
+  "data": {
+    "at": "2026-10-31T07:43:51.448Z",
+    "phase": "before",
+    "schema": 9,
+    "tables": 92,
+    "originals": 216595,
+    "current": 216597,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease",
+        "old": 44401,
+        "now": 44402
+      },
+      {
+        "table": "engine_control_activation_lease_grant",
+        "old": 44459,
+        "now": 44460
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "attachments": 75,
+    "protectedProjects": 13,
+    "trackedFiles": 28,
+    "workspaceFiles": 13,
+    "additionalProtectedFiles": 39,
+    "requests": 0,
+    "cumulativeRequests": 1118,
+    "reserveMs": 2958434,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-DXSogkYB.js"
+  },
+  "retirement": {
+    "publicShutdownHTTP": 200,
+    "originalExecExit": 0,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalCompletion": true,
+    "outputDrainComplete": true,
+    "requestCleanupComplete": true,
+    "osBirthIdentitySettled": true,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "reserveMs": 2958434,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    }
+  },
+  "uncovered": [
+    "Other time zones",
+    "Configured official management billing accounts",
+    "Concurrent period changes"
+  ]
+}

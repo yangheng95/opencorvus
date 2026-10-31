@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [用量周期真实账本对照](2026-10-31-usage-ledger-reconciliation/README.md)：实际公共接口、独立SQLite对照与桌面截图。
+
 - [计划任务校验与修正](2026-10-31-scheduled-validation-journey/README.md)：真实错误反馈、完整输入和保存回读证据。
 
 - [文件改名与草稿归属](2026-10-31-file-rename-draft-journey/README.md)：实际页面、磁盘内容和完整原数据保护。

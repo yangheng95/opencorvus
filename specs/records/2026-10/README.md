@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [用量周期真实账本对照](2026-10-31-usage-ledger-reconciliation.md)：733条原请求、自然区间与当前呈现调查。
+
 - [计划任务校验与修正](2026-10-31-scheduled-validation-journey.md)：本地校验、规范拒绝与远期暂停定义。
 
 - [文件改名与草稿归属](2026-10-31-file-rename-draft-journey.md)：保存、取消、文件及父目录重命名实页调查。
