@@ -1,0 +1,207 @@
+{
+  "verifiedAt": "2026-10-31T10:49:07.960Z",
+  "productionFixCommit": "46418da4abe4e24d02e376c477e804b7fb6eb4e8",
+  "reviewedHead": "b3378cbffeab378ff6cd52c70c1b1c85ac1ed59f",
+  "uiEntry": "main-DurJDA2Q.js",
+  "scope": "Independent developer serve /ui; current idle stop, conversion guidance and continuation; single agent",
+  "manualScreenshots": 7,
+  "locales": [
+    "en-US",
+    "zh-CN"
+  ],
+  "defaultCancelPreservesFullSnapshotAndOwner": true,
+  "explicitStops": [
+    {
+      "path": "/coding/chat/session/ses_-zUQNKNLpzz8c2iQ1fN2/abort",
+      "method": "POST",
+      "origin": "http://localhost:38462",
+      "diagnostic": false
+    },
+    {
+      "path": "/coding/chat/session/ses_-zUQNKNLpzz8c2iQ1fN2/abort",
+      "method": "POST",
+      "origin": "http://localhost:38462",
+      "diagnostic": false
+    }
+  ],
+  "conversionAttempts": 3,
+  "conversionBlockedTwiceWithTyped409": true,
+  "sameProjectAndSessionAfterConversion": true,
+  "projectGenerationPreserved": true,
+  "oldMessagePartsPreserved": true,
+  "originalSixFilesAndGitPreserved": true,
+  "finalMessages": 4,
+  "finalFiles": 8,
+  "naturalReplies": [
+    "PREFLIGHT_836_IDLE_OK",
+    "PREFLIGHT_836_RESUME_OK"
+  ],
+  "oldAndNewPromptGenerations": [
+    "cal_g0VZcfcyh00z2GlLwrm2",
+    "cal_g0VZcgKAU003SO6B6tvE"
+  ],
+  "modelRequests": 4,
+  "providerUsageEvents": 4,
+  "allRequestsModel": "gpt-6.1-sol",
+  "allRequestsStreamingHTTP200SettledEOF": true,
+  "cumulativeRequests": 1128,
+  "budget": 4,
+  "oldData": {
+    "at": "2026-10-31T10:48:36.867Z",
+    "phase": "before",
+    "schema": 9,
+    "tables": 92,
+    "originals": 218558,
+    "current": 219634,
+    "changes": [
+      {
+        "table": "bus_publication_delivery",
+        "old": 42657,
+        "now": 42874
+      },
+      {
+        "table": "bus_publication_delivery_receipt",
+        "old": 42657,
+        "now": 42874
+      },
+      {
+        "table": "bus_publication_outbox",
+        "old": 5587,
+        "now": 5616
+      },
+      {
+        "table": "bus_publication_owner",
+        "old": 5587,
+        "now": 5616
+      },
+      {
+        "table": "bus_publication_phase_receipt",
+        "old": 16761,
+        "now": 16848
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "old": 44809,
+        "now": 45027
+      },
+      {
+        "table": "engine_control_activation_lease_grant",
+        "old": 44867,
+        "now": 45085
+      },
+      {
+        "table": "event_occurrence",
+        "old": 5389,
+        "now": 5418
+      },
+      {
+        "table": "memory_chunk",
+        "old": 48,
+        "now": 49
+      },
+      {
+        "table": "memory_file",
+        "old": 48,
+        "now": 49
+      },
+      {
+        "table": "message",
+        "old": 714,
+        "now": 718
+      },
+      {
+        "table": "part",
+        "old": 2048,
+        "now": 2056
+      },
+      {
+        "table": "project",
+        "old": 48,
+        "now": 49
+      },
+      {
+        "table": "protocol_event",
+        "old": 2161,
+        "now": 2169
+      },
+      {
+        "table": "provider_activity_outcome",
+        "old": 728,
+        "now": 730
+      },
+      {
+        "table": "provider_activity_request",
+        "old": 728,
+        "now": 730
+      },
+      {
+        "table": "provider_usage_event",
+        "old": 739,
+        "now": 743
+      },
+      {
+        "table": "session",
+        "old": 92,
+        "now": 93
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "capacity": [
+      {
+        "slot": 0,
+        "fields": [
+          "expires_at",
+          "lease_id",
+          "owner_id",
+          "time_acquired"
+        ],
+        "currentRuntimeOwner": true,
+        "releasedByPhysicalFinish": true
+      },
+      {
+        "slot": 1,
+        "fields": [
+          "expires_at",
+          "lease_id",
+          "owner_id",
+          "time_acquired"
+        ],
+        "currentRuntimeOwner": true,
+        "releasedByPhysicalFinish": true
+      }
+    ],
+    "attachments": 81,
+    "protectedProjects": 13,
+    "trackedFiles": 28,
+    "workspaceFiles": 13,
+    "additionalProtectedFiles": 39,
+    "requests": 4,
+    "cumulativeRequests": 1128,
+    "reserveMs": 3261464,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-DurJDA2Q.js"
+  },
+  "engineTasks": {
+    "before": 8,
+    "after": 8
+  },
+  "retirement": {
+    "publicShutdown": 200,
+    "originalExecExit": 0,
+    "nativeExit": 0,
+    "launcherExit": 0,
+    "physicalOutputRequestSettled": true,
+    "pairedCopiesRetired": true,
+    "sourceCredentialsAndCatalogPreserved": true,
+    "reserveMs": 3261464
+  },
+  "limits": [
+    "No production source changes were required for these two already shipped fixes.",
+    "Native Tauri directory picker and active Task/Mission cancellation were not exercised.",
+    "An intermediate old-directory Goal read error was observed during conversion; the successful transition and reopened original chat were verified, not universal transition-banner parity."
+  ]
+}

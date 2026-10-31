@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [当前空闲停止与转换复核](2026-10-31-idle-stop-current-review.md)：四次真实流式请求及停止、转换、继续完整结果。
+
 - [历史附件的辨识与原始下载](2026-10-31-history-attachment-identification.md)：完整消息附件语境及真实预览和下载。
 
 - [同名附件来源的引用辨识](2026-10-31-same-name-source-references.md)：同一回复卡片内不同原件的来源引用编号。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前空闲停止与转换复核](records/2026-10/2026-10-31-idle-stop-current-review.md)：双语停止入口、精确转换引导与原对话继续的真实闭环。
+
 - [历史附件的辨识与原始下载](records/2026-10/2026-10-31-history-attachment-identification.md)：同消息附件位置、历史预览与原始下载身份。
 
 - [同名附件来源的引用辨识](records/2026-10/2026-10-31-same-name-source-references.md)：跨消息小组的同名来源语境与原件引用验收。
