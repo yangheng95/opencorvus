@@ -1,0 +1,27 @@
+{
+  "at": "2026-10-31T15:59:43.031763+00:00",
+  "method": "main agent actual view_image, original candidate PNGs, no UI automation/redraw",
+  "viewed": [
+    {
+      "system": "Codex",
+      "file": "figures/economics.png",
+      "finding": "actual three methods, three fleet panels; CP poor values preserved, terminal adjustment explicitly excluded visually but retained in CSV; scale difference clear; weak CP very high bar makes direct/LNS contrast less prominent, numeric comparison table remains necessary"
+    },
+    {
+      "system": "Codex",
+      "file": "figures/paths.png",
+      "finding": "all16 anonymous paths with class and labeled port segments, source markers and service-bearing exits; model time correctly labelled, no future-voyage claim"
+    },
+    {
+      "system": "OC",
+      "file": "figures/economics.png",
+      "finding": "actual default/feasibility result and alpha penalty bars, single-class regression visibly preserved; exact totals not chart-only scoring"
+    },
+    {
+      "system": "OC",
+      "file": "figures/LR1_DR03_VC03_V16a-routes.png",
+      "finding": "all16 anonymous paths, clear exit service note; port endpoints less informative than Codex labelled segments, still valid chart; number of PNGs is not evidence of stronger optimization"
+    }
+  ],
+  "scope": "representative actual product inspection; no scientific score/format-based bonus"
+}

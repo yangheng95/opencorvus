@@ -1,0 +1,212 @@
+{
+  "format": "maritime-candidate-scientific-review/1",
+  "assignment_id": "l06-maritime-pair-content-71fa72e40dc74c3fb2234d69b4ed3be7",
+  "reviewer": "/root/benchmark_review",
+  "reviewed_at": "2026-10-31T16:13:13.808600+00:00",
+  "disclosure": "Single non-blind AI reviewer, familiar with author research, previous versions and both current products. Not a professional-human, statistically calibrated or fresh-content-blind evaluation. Codex actual model/usage unknown. No model-level cost/speed causal ranking.",
+  "scope": "First candidate content/scientific review of these naturally sealed products. Existing root mathematical/operating audits are identified as external evidence; reviewer used archive identity, source reading, actual PNG views and selected independent CSV/Fraction/raw arithmetic. No new candidate/native/solver/LP/checker/certificate execution.",
+  "rating_semantics": "Descriptive S01..S05 evidence layers, not binary engineering points or a numeric scale. Layers are not summed; honest limitations are not automatically scientific failures.",
+  "aggregate_score": null,
+  "heavy_benchmark_qualified": false,
+  "candidate_effective_hours_qualified": false,
+  "candidate": "opencorvus",
+  "workspace": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\complete-workspace.zip",
+  "static_snapshot": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation",
+  "source_only_run": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run",
+  "originals_preserved": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus",
+  "initial_observations": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\REVIEW-STATIC-CHECKPOINT.md",
+  "private_outcomes": [
+    {
+      "system": "opencorvus",
+      "label": "maritime-eval-vc05",
+      "native_exit": 4,
+      "engineering_status": "invalid_delivery",
+      "P": null,
+      "error": "numeric_delivery_declaration:[Errno 2] No such file or directory: 'D:\\\\opencorvus-benchmark-runs\\\\l06-maritime-opencorvus-native-20261031\\\\evaluation\\\\private-run\\\\outputs\\\\maritime-eval-vc05\\\\layout.json'",
+      "source": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-maritime-eval-vc05-actual-assessment.json",
+      "keys": [
+        "at",
+        "model",
+        "raw_archive",
+        "instance",
+        "delivery",
+        "layout",
+        "mathematical_check",
+        "engineering_status",
+        "operating_check",
+        "economic_measurement",
+        "scientific_review",
+        "total_score",
+        "heavy_benchmark_qualified",
+        "subject_role",
+        "error"
+      ]
+    },
+    {
+      "system": "opencorvus",
+      "label": "maritime-eval-vc03",
+      "native_exit": 4,
+      "engineering_status": "invalid_delivery",
+      "P": null,
+      "error": "numeric_delivery_declaration:[Errno 2] No such file or directory: 'D:\\\\opencorvus-benchmark-runs\\\\l06-maritime-opencorvus-native-20261031\\\\evaluation\\\\private-run\\\\outputs\\\\maritime-eval-vc03\\\\layout.json'",
+      "source": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-maritime-eval-vc03-actual-assessment.json",
+      "keys": [
+        "at",
+        "model",
+        "raw_archive",
+        "instance",
+        "delivery",
+        "layout",
+        "mathematical_check",
+        "engineering_status",
+        "operating_check",
+        "economic_measurement",
+        "scientific_review",
+        "total_score",
+        "heavy_benchmark_qualified",
+        "subject_role",
+        "error"
+      ]
+    }
+  ],
+  "optimizer_diagnostics": [
+    {
+      "label": "maritime-eval-vc05",
+      "P": 93207.21333184093,
+      "scope": "Diagnostic original-model optimizer vector, not a completed operating delivery"
+    },
+    {
+      "label": "maritime-eval-vc03",
+      "P": 137597.773752728,
+      "scope": "Diagnostic original-model optimizer vector, not a completed operating delivery"
+    }
+  ],
+  "findings": [
+    {
+      "id": "S01",
+      "evidence_level": "Middle supported; bounded higher-layer bundled-method explanation",
+      "status": "supported_with_limits",
+      "basis": "A real default-SCIP versus FEASIBILITY-emphasis intervention with identical nominal profile, one solver thread/seed/tolerance, genuine event records and complete development outcomes. Five-class P155802.789097→76171.695603, three-class198645.509041→165342.444816, but single-class33808.970020→47173.278254 (+39.53%). Regression, fixed execution order and first baseline before design registration are explicitly disclosed. Mature solver configuration is a valid method; no originality requirement is imposed.",
+      "limits_or_missing": "FEASIBILITY changes a bundle of parameters, not one isolated heuristic. Single baseline integration preceded the six-run design; one run/seed/build and fixed order do not establish general causal superiority. The later new-input parser failure does not erase this valid development experiment.",
+      "sources": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\REPORT.md",
+          "locator": "lines48–138,199–208,266–274"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\experiments.py",
+          "locator": "design chronology and sequential launch"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\solve.py",
+          "locator": "setEmphasis, parameter/timing/event capture"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\method-parameter-diff.json",
+          "locator": "bundled default/feasibility differences"
+        }
+      ]
+    },
+    {
+      "id": "S02",
+      "evidence_level": "Middle supported; limited bundled-intervention economic attribution",
+      "status": "supported_with_limits",
+      "basis": "Independent selected ledger/cost sums support five-class loading loss625→205 and port1 shortage402→36 with more sailing cost. Three-class total cost improves, but port2 shortage95→205 worsens, correctly stated. Single-class sails less yet incurs24 loading loss+124 discharge shortfall, overwhelming saved voyage cost. These are actual feasible schedules and deterministic objective contributions, not invented operating gains.",
+      "limits_or_missing": "The configuration intervention establishes an observed bundle outcome and its accounting mechanism. It does not isolate which internal heuristic or particular route caused the entire gain; no route-removal counterfactual was delivered. Alpha is modeled slack, not a demonstrated unavoidable real supply shortfall.",
+      "sources": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\REPORT.md",
+          "locator": "lines141–230"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\static-binding-and-spots.json",
+          "locator": "opencorvus selected costs/per_port/reduction"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\operating-summary.json",
+          "locator": "per-port/class operating data"
+        }
+      ]
+    },
+    {
+      "id": "S03",
+      "evidence_level": "Middle supported on development; general self-validator coverage contradicted by new input",
+      "status": "supported_limits_with_scope_defect",
+      "basis": "The report honestly separates SCIP numerical full-model lower bounds, feasibility and unresolved optimum; no restricted/LP result is promoted to an exact integer optimum. The three original development models were independently valid. For the two new models the real optimizer vectors are also separately root-checked feasible and objective-consistent; its own validator falsely rejects them after parsing RHS incorrectly.",
+      "limits_or_missing": "The claimed complete assigned-MPS self-check is not reliable across the allowed serialized family. Native SCIP bound/optimizer correctness is separate from that defective parser. No candidate-owned exact rational certificate; external evaluator witnesses are not candidate scientific proof.",
+      "sources": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\REPORT.md",
+          "locator": "lines80–85,232–274"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\modelio.py",
+          "locator": "lines24–103: header detection and rhs defaults"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\private-originals\\oc-private-failure-investigation.json",
+          "locator": "separate root original-model checks"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\private-facts-and-parser-cause.json",
+          "locator": "actual nonzero RHS rows"
+        }
+      ]
+    },
+    {
+      "id": "S04",
+      "evidence_level": "Observed new-input execution failure; successful transfer layer not met",
+      "status": "failed_on_both_registered_new_inputs",
+      "basis": "Same original source/argv and exact assigned raw/MPS bytes as Codex were executed without repair. Both actual native1; the original solver obtained valid vectors with P93207.21333184093/137597.773752728, then candidate self-validation aborted. No layout or four operating CSVs were generated. Actual full checker4/invalid_delivery and complete-delivery P null are correct.",
+      "limits_or_missing": "The optimizer did not fail to find feasibility. This is parser/self-validation/export handoff failure on legal RHS-set name RHS, mixed with demand perturbation. It is not evidence that route optimization alone is worse; on the three-class input the diagnostic optimizer cost is lower than Codex. No missing tables are supplied by the reviewer.",
+      "sources": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\private-originals\\opencorvus\\owner-terminal.json",
+          "locator": "two natural native1"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\modelio.py",
+          "locator": "lines33–46 consumes multi-token RHS data as header"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\solve.py",
+          "locator": "lines119–139 values saved; assert before export/layout"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\actual-private-checker-binding.json",
+          "locator": "two actual checker4, P null"
+        }
+      ]
+    },
+    {
+      "id": "S05",
+      "evidence_level": "Development scientific handoff supported; required new-input end-to-end handoff fails",
+      "status": "development_supported_new_input_handoff_failed",
+      "basis": "The report, eight actually viewed PNGs, original logs/source, dependency and reproduction documents provide a useful, traceable development research product. Full ZIP contains tools omitted from the curated static snapshot. Original source closure and declared dependency were actually available in the private runs.",
+      "limits_or_missing": "HANDOFF says new inputs produce layout and full operating outputs, but both real fresh runs stop before export because of the parser defect. This blocks successful general programme handoff. It is not missing dependency, Git/commit noncompliance, scientific dishonesty or failure of the previously delivered six development plans.",
+      "sources": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\HANDOFF.md",
+          "locator": "assigned interface and per-run output promise"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\static-binding-and-spots.json",
+          "locator": "full-archive helper/source and eight figure binding"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\private-facts-and-parser-cause.json",
+          "locator": "byte-identical compute closure and missing actual exports"
+        }
+      ]
+    }
+  ],
+  "material_failures": [
+    {
+      "id": "OC-NEW-MPS-RHS",
+      "scope": "Required assigned-input programme self-validation/export",
+      "cause": "modelio.read_mps dispatches on p[0] in section-name set without data/header distinction; actual RHS data lines have RHS as the set name, so all are discarded. Missing RHS defaults0. Correct native SCIP solve is then falsely rejected.",
+      "impact": "Both new-input native1; no layout/operating tables; complete-delivery P unavailable although optimizer P is independently valid.",
+      "fixed_or_retried": false
+    }
+  ]
+}

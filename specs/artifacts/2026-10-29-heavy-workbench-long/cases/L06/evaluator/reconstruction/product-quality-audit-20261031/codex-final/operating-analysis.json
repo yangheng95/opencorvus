@@ -1,0 +1,748 @@
+{
+  "LR1_DR02_VC01_V6a_t120": {
+    "artifact_directory": "experiments\\classblock180\\LR1_DR02_VC01_V6a_t120",
+    "initial_service": [
+      {
+        "anonymous_path_id": "class0-path001",
+        "vessel_class": 0,
+        "initial_port": 0,
+        "first_available_period": 2,
+        "first_service_period": 3,
+        "initial_wait_periods": 1,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class0-path002",
+        "vessel_class": 0,
+        "initial_port": 0,
+        "first_available_period": 5,
+        "first_service_period": 5,
+        "initial_wait_periods": 0,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class0-path003",
+        "vessel_class": 0,
+        "initial_port": 0,
+        "first_available_period": 8,
+        "first_service_period": 11,
+        "initial_wait_periods": 3,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class0-path004",
+        "vessel_class": 0,
+        "initial_port": 1,
+        "first_available_period": 4,
+        "first_service_period": 4,
+        "initial_wait_periods": 0,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class0-path005",
+        "vessel_class": 0,
+        "initial_port": 2,
+        "first_available_period": 0,
+        "first_service_period": 3,
+        "initial_wait_periods": 3,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class0-path006",
+        "vessel_class": 0,
+        "initial_port": 2,
+        "first_available_period": 10,
+        "first_service_period": 11,
+        "initial_wait_periods": 1,
+        "first_service_kind": "empty_return"
+      }
+    ],
+    "port_stats": [
+      {
+        "port": 0,
+        "role": "Loading",
+        "signed_total_rate": 8640.0,
+        "initial_stock": 216.0,
+        "ending_stock": 156.0000000000636,
+        "min_ending_stock": 0.0,
+        "max_ending_stock": 432.0,
+        "alpha_quantity": -1.0302869668521453e-12,
+        "alpha_cost": -9.952469069076077e-11,
+        "service_count": 29,
+        "service_quantity": 8700.0,
+        "used_berth_periods": 29.0,
+        "available_berth_periods": 120.0,
+        "class_service_counts": {
+          "0": 29
+        },
+        "alpha_periods": []
+      },
+      {
+        "port": 1,
+        "role": "Discharge",
+        "signed_total_rate": -3840.0,
+        "initial_stock": 192.0,
+        "ending_stock": 251.99999999998997,
+        "min_ending_stock": 35.99999999999977,
+        "max_ending_stock": 384.0,
+        "alpha_quantity": 7.105427357601002e-14,
+        "alpha_cost": 7.22098322487307e-12,
+        "service_count": 13,
+        "service_quantity": 3900.0,
+        "used_berth_periods": 13.0,
+        "available_berth_periods": 120.0,
+        "class_service_counts": {
+          "0": 13
+        },
+        "alpha_periods": []
+      },
+      {
+        "port": 2,
+        "role": "Discharge",
+        "signed_total_rate": -4800.0,
+        "initial_stock": 220.0,
+        "ending_stock": 220.00000000000227,
+        "min_ending_stock": 0.0,
+        "max_ending_stock": 440.0000000000011,
+        "alpha_quantity": 1.9539925233402755e-12,
+        "alpha_cost": 1.7323601150209878e-10,
+        "service_count": 16,
+        "service_quantity": 4800.0,
+        "used_berth_periods": 16.0,
+        "available_berth_periods": 120.0,
+        "class_service_counts": {
+          "0": 16
+        },
+        "alpha_periods": []
+      }
+    ],
+    "routes": {
+      "class0:P0->P2": {
+        "count": 14,
+        "cost": 12320.307883052059,
+        "service_at_origin": 4200.0
+      },
+      "class0:P0->P1": {
+        "count": 12,
+        "cost": 5705.786572762848,
+        "service_at_origin": 3600.0
+      },
+      "class0:P1->P0": {
+        "count": 12,
+        "cost": 5080.629258210276,
+        "service_at_origin": 3600.0
+      },
+      "class0:P2->P0": {
+        "count": 14,
+        "cost": 10368.646306441642,
+        "service_at_origin": 4200.0
+      }
+    }
+  },
+  "LR1_DR02_VC05_V8a_t120": {
+    "artifact_directory": "experiments\\classblock180\\LR1_DR02_VC05_V8a_t120",
+    "initial_service": [
+      {
+        "anonymous_path_id": "class2-path001",
+        "vessel_class": 2,
+        "initial_port": 0,
+        "first_available_period": 0,
+        "first_service_period": 3,
+        "initial_wait_periods": 3,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class4-path002",
+        "vessel_class": 4,
+        "initial_port": 0,
+        "first_available_period": 3,
+        "first_service_period": 4,
+        "initial_wait_periods": 1,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class0-path003",
+        "vessel_class": 0,
+        "initial_port": 0,
+        "first_available_period": 6,
+        "first_service_period": 6,
+        "initial_wait_periods": 0,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class2-path004",
+        "vessel_class": 2,
+        "initial_port": 0,
+        "first_available_period": 9,
+        "first_service_period": 13,
+        "initial_wait_periods": 4,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class0-path005",
+        "vessel_class": 0,
+        "initial_port": 1,
+        "first_available_period": 3,
+        "first_service_period": 5,
+        "initial_wait_periods": 2,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class3-path006",
+        "vessel_class": 3,
+        "initial_port": 2,
+        "first_available_period": 4,
+        "first_service_period": 4,
+        "initial_wait_periods": 0,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class1-path007",
+        "vessel_class": 1,
+        "initial_port": 2,
+        "first_available_period": 7,
+        "first_service_period": 8,
+        "initial_wait_periods": 1,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class1-path008",
+        "vessel_class": 1,
+        "initial_port": 2,
+        "first_available_period": 8,
+        "first_service_period": 12,
+        "initial_wait_periods": 4,
+        "first_service_kind": "empty_return"
+      }
+    ],
+    "port_stats": [
+      {
+        "port": 0,
+        "role": "Loading",
+        "signed_total_rate": 8280.0,
+        "initial_stock": 276.0,
+        "ending_stock": 441.0,
+        "min_ending_stock": 18.0,
+        "max_ending_stock": 552.0,
+        "alpha_quantity": 35.00000000000006,
+        "alpha_cost": 3275.6882370190506,
+        "service_count": 34,
+        "service_quantity": 8080.0,
+        "used_berth_periods": 34.0,
+        "available_berth_periods": 120.0,
+        "class_service_counts": {
+          "2": 9,
+          "0": 9,
+          "1": 8,
+          "3": 4,
+          "4": 4
+        },
+        "alpha_periods": [
+          43,
+          98
+        ]
+      },
+      {
+        "port": 1,
+        "role": "Discharge",
+        "signed_total_rate": -2880.0,
+        "initial_stock": 168.0,
+        "ending_stock": 66.0,
+        "min_ending_stock": 0.0,
+        "max_ending_stock": 336.0,
+        "alpha_quantity": 8.0,
+        "alpha_cost": 747.3829504554906,
+        "service_count": 12,
+        "service_quantity": 2770.0,
+        "used_berth_periods": 12.0,
+        "available_berth_periods": 120.0,
+        "class_service_counts": {
+          "2": 4,
+          "0": 2,
+          "3": 2,
+          "1": 3,
+          "4": 1
+        },
+        "alpha_periods": [
+          68
+        ]
+      },
+      {
+        "port": 2,
+        "role": "Discharge",
+        "signed_total_rate": -5400.0,
+        "initial_stock": 180.0,
+        "ending_stock": 100.0,
+        "min_ending_stock": 0.0,
+        "max_ending_stock": 355.0,
+        "alpha_quantity": 90.0,
+        "alpha_cost": 8645.536164310233,
+        "service_count": 22,
+        "service_quantity": 5230.0,
+        "used_berth_periods": 22.0,
+        "available_berth_periods": 120.0,
+        "class_service_counts": {
+          "0": 6,
+          "3": 3,
+          "4": 3,
+          "1": 6,
+          "2": 4
+        },
+        "alpha_periods": [
+          27,
+          28,
+          40,
+          83,
+          89
+        ]
+      }
+    ],
+    "routes": {
+      "class2:P0->P1": {
+        "count": 4,
+        "cost": 1854.410944183058,
+        "service_at_origin": 880.0
+      },
+      "class2:P0->P2": {
+        "count": 4,
+        "cost": 3101.732996940794,
+        "service_at_origin": 880.0
+      },
+      "class0:P0->P2": {
+        "count": 6,
+        "cost": 5500.319394493429,
+        "service_at_origin": 1800.0
+      },
+      "class3:P0->P1": {
+        "count": 2,
+        "cost": 849.0662946963198,
+        "service_at_origin": 360.0
+      },
+      "class1:P0->P1": {
+        "count": 3,
+        "cost": 1524.7610836719382,
+        "service_at_origin": 780.0
+      },
+      "class1:P0->P2": {
+        "count": 4,
+        "cost": 3403.1445166144786,
+        "service_at_origin": 1040.0
+      },
+      "class4:P0->P2": {
+        "count": 3,
+        "cost": 1902.439798164476,
+        "service_at_origin": 450.0
+      },
+      "class3:P0->P2": {
+        "count": 2,
+        "cost": 1418.9989586131599,
+        "service_at_origin": 360.0
+      },
+      "class0:P0->P1": {
+        "count": 1,
+        "cost": 547.3232832549174,
+        "service_at_origin": 300.0
+      },
+      "class4:P0->P1": {
+        "count": 1,
+        "cost": 379.88218883661165,
+        "service_at_origin": 150.0
+      },
+      "class0:P1->P0": {
+        "count": 2,
+        "cost": 875.7172532078679,
+        "service_at_origin": 600.0
+      },
+      "class3:P1->P0": {
+        "count": 2,
+        "cost": 679.2530357570558,
+        "service_at_origin": 360.0
+      },
+      "class1:P1->P0": {
+        "count": 3,
+        "cost": 1219.8088669375506,
+        "service_at_origin": 780.0
+      },
+      "class2:P1->P0": {
+        "count": 3,
+        "cost": 1112.6465665098349,
+        "service_at_origin": 660.0
+      },
+      "class4:P1->P0": {
+        "count": 1,
+        "cost": 303.9057510692893,
+        "service_at_origin": 150.0
+      },
+      "class0:P2->P0": {
+        "count": 6,
+        "cost": 4285.055515594743,
+        "service_at_origin": 1800.0
+      },
+      "class1:P2->P0": {
+        "count": 5,
+        "cost": 3307.1445166144786,
+        "service_at_origin": 1300.0
+      },
+      "class2:P2->P0": {
+        "count": 4,
+        "cost": 2404.586397552635,
+        "service_at_origin": 880.0
+      },
+      "class4:P2->P0": {
+        "count": 2,
+        "cost": 976.234559021054,
+        "service_at_origin": 300.0
+      },
+      "class3:P2->P0": {
+        "count": 2,
+        "cost": 1096.7991668905279,
+        "service_at_origin": 360.0
+      }
+    }
+  },
+  "LR1_DR03_VC03_V16a_t120": {
+    "artifact_directory": "experiments\\classblock180\\LR1_DR03_VC03_V16a_t120",
+    "initial_service": [
+      {
+        "anonymous_path_id": "class2-path001",
+        "vessel_class": 2,
+        "initial_port": 0,
+        "first_available_period": 0,
+        "first_service_period": 0,
+        "initial_wait_periods": 0,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class1-path002",
+        "vessel_class": 1,
+        "initial_port": 0,
+        "first_available_period": 1,
+        "first_service_period": 1,
+        "initial_wait_periods": 0,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class1-path003",
+        "vessel_class": 1,
+        "initial_port": 0,
+        "first_available_period": 11,
+        "first_service_period": 14,
+        "initial_wait_periods": 3,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class2-path004",
+        "vessel_class": 2,
+        "initial_port": 0,
+        "first_available_period": 14,
+        "first_service_period": 15,
+        "initial_wait_periods": 1,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class2-path005",
+        "vessel_class": 2,
+        "initial_port": 0,
+        "first_available_period": 16,
+        "first_service_period": 23,
+        "initial_wait_periods": 7,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class0-path006",
+        "vessel_class": 0,
+        "initial_port": 0,
+        "first_available_period": 4,
+        "first_service_period": 4,
+        "initial_wait_periods": 0,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class1-path007",
+        "vessel_class": 1,
+        "initial_port": 0,
+        "first_available_period": 8,
+        "first_service_period": 8,
+        "initial_wait_periods": 0,
+        "first_service_kind": "loaded_voyage"
+      },
+      {
+        "anonymous_path_id": "class0-path008",
+        "vessel_class": 0,
+        "initial_port": 1,
+        "first_available_period": 2,
+        "first_service_period": 2,
+        "initial_wait_periods": 0,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class1-path009",
+        "vessel_class": 1,
+        "initial_port": 2,
+        "first_available_period": 0,
+        "first_service_period": 1,
+        "initial_wait_periods": 1,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class0-path010",
+        "vessel_class": 0,
+        "initial_port": 2,
+        "first_available_period": 16,
+        "first_service_period": 20,
+        "initial_wait_periods": 4,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class2-path011",
+        "vessel_class": 2,
+        "initial_port": 2,
+        "first_available_period": 18,
+        "first_service_period": 18,
+        "initial_wait_periods": 0,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class0-path012",
+        "vessel_class": 0,
+        "initial_port": 2,
+        "first_available_period": 4,
+        "first_service_period": 8,
+        "initial_wait_periods": 4,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class0-path013",
+        "vessel_class": 0,
+        "initial_port": 3,
+        "first_available_period": 0,
+        "first_service_period": 0,
+        "initial_wait_periods": 0,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class0-path014",
+        "vessel_class": 0,
+        "initial_port": 3,
+        "first_available_period": 10,
+        "first_service_period": 15,
+        "initial_wait_periods": 5,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class1-path015",
+        "vessel_class": 1,
+        "initial_port": 3,
+        "first_available_period": 24,
+        "first_service_period": 49,
+        "initial_wait_periods": 25,
+        "first_service_kind": "empty_return"
+      },
+      {
+        "anonymous_path_id": "class2-path016",
+        "vessel_class": 2,
+        "initial_port": 3,
+        "first_available_period": 26,
+        "first_service_period": 27,
+        "initial_wait_periods": 1,
+        "first_service_kind": "empty_return"
+      }
+    ],
+    "port_stats": [
+      {
+        "port": 0,
+        "role": "Loading",
+        "signed_total_rate": 12240.0,
+        "initial_stock": 408.0,
+        "ending_stock": 550.0,
+        "min_ending_stock": 162.0,
+        "max_ending_stock": 714.0,
+        "alpha_quantity": 498.0,
+        "alpha_cost": 47052.63416292623,
+        "service_count": 45,
+        "service_quantity": 11600.0,
+        "used_berth_periods": 45.0,
+        "available_berth_periods": 120.0,
+        "class_service_counts": {
+          "2": 12,
+          "1": 14,
+          "0": 19
+        },
+        "alpha_periods": [
+          30,
+          31,
+          34,
+          35,
+          82,
+          83,
+          101
+        ]
+      },
+      {
+        "port": 1,
+        "role": "Discharge",
+        "signed_total_rate": -4920.0,
+        "initial_stock": 205.0,
+        "ending_stock": 34.0,
+        "min_ending_stock": 0.0,
+        "max_ending_stock": 406.0,
+        "alpha_quantity": 99.0,
+        "alpha_cost": 9502.321012206985,
+        "service_count": 17,
+        "service_quantity": 4650.0,
+        "used_berth_periods": 17.0,
+        "available_berth_periods": 120.0,
+        "class_service_counts": {
+          "0": 11,
+          "1": 3,
+          "2": 3
+        },
+        "alpha_periods": [
+          26,
+          27,
+          48,
+          49,
+          93
+        ]
+      },
+      {
+        "port": 2,
+        "role": "Discharge",
+        "signed_total_rate": -4920.0,
+        "initial_stock": 225.0,
+        "ending_stock": 21.0,
+        "min_ending_stock": 0.0,
+        "max_ending_stock": 434.0,
+        "alpha_quantity": 66.0,
+        "alpha_cost": 6100.262267629839,
+        "service_count": 18,
+        "service_quantity": 4650.0,
+        "used_berth_periods": 18.0,
+        "available_berth_periods": 120.0,
+        "class_service_counts": {
+          "1": 7,
+          "0": 7,
+          "2": 4
+        },
+        "alpha_periods": [
+          68,
+          69,
+          100
+        ]
+      },
+      {
+        "port": 3,
+        "role": "Discharge",
+        "signed_total_rate": -2400.0,
+        "initial_stock": 20.0,
+        "ending_stock": 120.0,
+        "min_ending_stock": 0.0,
+        "max_ending_stock": 300.0,
+        "alpha_quantity": 1.5987211554602254e-14,
+        "alpha_cost": 1.2902878816946459e-12,
+        "service_count": 10,
+        "service_quantity": 2500.0,
+        "used_berth_periods": 10.0,
+        "available_berth_periods": 120.0,
+        "class_service_counts": {
+          "0": 4,
+          "2": 4,
+          "1": 2
+        },
+        "alpha_periods": []
+      }
+    ],
+    "routes": {
+      "class2:P0->P3": {
+        "count": 3,
+        "cost": 5522.075941211988,
+        "service_at_origin": 600.0
+      },
+      "class1:P0->P2": {
+        "count": 6,
+        "cost": 8298.597332668063,
+        "service_at_origin": 1500.0
+      },
+      "class0:P0->P1": {
+        "count": 10,
+        "cost": 4884.104200798284,
+        "service_at_origin": 3000.0
+      },
+      "class1:P0->P1": {
+        "count": 3,
+        "cost": 1355.0021622208587,
+        "service_at_origin": 750.0
+      },
+      "class2:P0->P2": {
+        "count": 3,
+        "cost": 3774.8120478921965,
+        "service_at_origin": 600.0
+      },
+      "class0:P0->P2": {
+        "count": 5,
+        "cost": 7461.624095784393,
+        "service_at_origin": 1500.0
+      },
+      "class0:P0->P3": {
+        "count": 2,
+        "cost": 4408.4607529695895,
+        "service_at_origin": 600.0
+      },
+      "class2:P0->P1": {
+        "count": 3,
+        "cost": 1229.0260501995713,
+        "service_at_origin": 600.0
+      },
+      "class1:P0->P3": {
+        "count": 1,
+        "cost": 2034.5791249804222,
+        "service_at_origin": 250.0
+      },
+      "class0:P1->P0": {
+        "count": 11,
+        "cost": 4322.21169670249,
+        "service_at_origin": 3300.0
+      },
+      "class1:P1->P0": {
+        "count": 3,
+        "cost": 1090.601729776687,
+        "service_at_origin": 750.0
+      },
+      "class2:P1->P0": {
+        "count": 3,
+        "cost": 989.820840159657,
+        "service_at_origin": 600.0
+      },
+      "class1:P2->P0": {
+        "count": 7,
+        "cost": 7357.557510490193,
+        "service_at_origin": 1750.0
+      },
+      "class2:P2->P0": {
+        "count": 3,
+        "cost": 2853.6496383137574,
+        "service_at_origin": 600.0
+      },
+      "class0:P2->P0": {
+        "count": 5,
+        "cost": 5692.299276627515,
+        "service_at_origin": 1500.0
+      },
+      "class0:P3->P0": {
+        "count": 2,
+        "cost": 3519.9686023756717,
+        "service_at_origin": 600.0
+      },
+      "class2:P3->P0": {
+        "count": 3,
+        "cost": 4407.4607529695895,
+        "service_at_origin": 600.0
+      },
+      "class1:P3->P0": {
+        "count": 1,
+        "cost": 1624.2632999843377,
+        "service_at_origin": 250.0
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "at": "2026-10-31T15:57:06.736554+00:00",
+  "source_workspace_receipt": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\complete-workspace-receipt.json",
+  "source_files": [
+    "solve.py",
+    "modelio.py",
+    "submission.json",
+    "source-map.json",
+    "requirements-lock.txt"
+  ],
+  "compute_closure": "two original declared compute files; no development vectors/logs/answers/reference",
+  "generic_dependencies": "original declared numerical runtime PySCIPOpt/SCIP",
+  "manifest": {
+    "argv": [
+      "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+      "-B",
+      "solve.py",
+      "--model",
+      "{model}",
+      "--raw",
+      "{raw_archive}",
+      "--instance",
+      "{instance}",
+      "--out",
+      "{out}",
+      "--optimization-seconds",
+      "{optimization_seconds}",
+      "--method",
+      "feasibility"
+    ],
+    "numeric_layout": "layout.json",
+    "report": "REPORT.md",
+    "source_map": "source-map.json",
+    "reproduce": "HANDOFF.md",
+    "dependencies": "requirements-lock.txt",
+    "figures": [
+      "figures/convergence.png",
+      "figures/economics.png",
+      "figures/LR1_DR02_VC01_V6a-inventory.png",
+      "figures/LR1_DR02_VC01_V6a-routes.png",
+      "figures/LR1_DR02_VC05_V8a-inventory.png",
+      "figures/LR1_DR02_VC05_V8a-routes.png",
+      "figures/LR1_DR03_VC03_V16a-inventory.png",
+      "figures/LR1_DR03_VC03_V16a-routes.png"
+    ]
+  },
+  "pool_registration": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\fresh-pair-registered-inputs\\registration.json",
+  "profile": {
+    "optimization_seconds": 180,
+    "solver_threads": 1,
+    "whole_agent_limit": null
+  },
+  "execution_order": "after the original Codex two-input programme naturally ends, no parallel private solver arms",
+  "background_condition": "L01 original GPU matrix remains active; no speed/cost causal ranking",
+  "native_results": null
+}

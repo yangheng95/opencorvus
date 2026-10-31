@@ -1,0 +1,87 @@
+{
+  "scope": "targeted original MPS/vector re-evaluation and read-only call of captured parser to explain post-solve assertion; no solver/source fix/re-export",
+  "records": [
+    {
+      "label": "maritime-eval-vc03",
+      "candidate_native_exit": 1,
+      "error_type": "candidate post-solve self-validation assertion, not solver infeasibility",
+      "optimizer_native_P": 137597.773752728,
+      "root_independent_original_model_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 5594,
+        "integer_variables_recomputed": 4630,
+        "constraints_recomputed": 2400,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 137597.773752728,
+        "independent_objective": 137597.77375272376,
+        "objective_absolute_error": 4.249159246683121e-09,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "root_expected_rhs_first": 102.0,
+      "candidate_parsed_structure": "{'rows': {'flowBalance_(0,0),0,Term': 'E', 'flowBalance_(0,1),0,Term': 'E', 'flowBalance_(0,2),0,Term': 'E', 'flowBalance_(0,3),0,Term': 'E', 'flowBalance_(0,4),0,Term': 'E', 'flowBalance_(0,5),0,Term': 'E', 'flowBalance_(0,6),0,Term': 'E', 'flowBalance_(0,7),0,Term': 'E', 'flowBalance_(0,8),0,Term': 'E', 'flowBalance_(0,9),0,Term': 'E', 'flowBalance_(0,10),0,Term': 'E', 'flowBalance_(0,11),0,Term': 'E', 'flowBalance_(0,12),0,Term': 'E', 'flowBalance_(0,13),0,Term': 'E', 'flowBalance_(0,14),0,Term': 'E', 'flowBalance_(0,15),0,Term': 'E', 'flowBalance_(0,16),0,Term': 'E', 'flowBalance_(0,17),0,Term': 'E', 'flowBalance_(0,18),0,Term': 'E', 'flowBalance_(0,19),0,Term': 'E', 'flowBalance_(0,20),0,Term': 'E', 'flowBalance_(0,21),0,Term': 'E', 'flowBalance_(0,22),0,Term': 'E', 'flowBalance_(0,23),0,Term': 'E', 'flowBalance_(0,24),0,Term': 'E', 'flowBalance_(0,25),0,Term': 'E', 'flowBalance_(0,",
+      "mps_rhs_excerpt": [
+        "RHS",
+        "    RHS                   flowBalance_(0,0),0,Term                         0  flowBalance_(0,1),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,2),0,Term                         0  flowBalance_(0,3),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,4),0,Term                         0  flowBalance_(0,5),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,6),0,Term                         0  flowBalance_(0,7),0,Term                         0 "
+      ],
+      "candidate_operating_layout_exists": false,
+      "candidate_exported_operating_tables": [],
+      "candidate_parsed_rhs_entries": 0,
+      "candidate_rhs_first": 0,
+      "root_cause": "section header branch tests p[0] in marker set without distinguishing one-token header from multi-token RHS-set row; actual assigned RHS set is named RHS, so every RHS data row is discarded and absent RHS defaults0",
+      "candidate_postsolve_stage": "original native SCIP solve succeeded and values saved; self-validator then rejects against its wrongly parsed zero RHS; export/layout stage not executed",
+      "classification": "candidate completed programme delivery failure; original optimizer vector independently valid, not original-MILP infeasibility or harness missing dependency",
+      "input_covariate": "new MPS is semantically constructed preregistered model, with SCIP writer RHS-set label RHS; original public files use a different RHS-set label. Full-MPS contract does not fix set label. This tests serialization robustness together with new numeric data, so do not attribute solely to route optimization skill."
+    },
+    {
+      "label": "maritime-eval-vc05",
+      "candidate_native_exit": 1,
+      "error_type": "candidate post-solve self-validation assertion, not solver infeasibility",
+      "optimizer_native_P": 93207.21333184093,
+      "root_independent_original_model_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 6476,
+        "integer_variables_recomputed": 5753,
+        "constraints_recomputed": 2520,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 93207.21333184093,
+        "independent_objective": 93207.21333183823,
+        "objective_absolute_error": 2.7066562324762344e-09,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "root_expected_rhs_first": 70.0,
+      "candidate_parsed_structure": "{'rows': {'flowBalance_(0,0),0,Term': 'E', 'flowBalance_(0,1),0,Term': 'E', 'flowBalance_(0,2),0,Term': 'E', 'flowBalance_(0,3),0,Term': 'E', 'flowBalance_(0,4),0,Term': 'E', 'flowBalance_(0,5),0,Term': 'E', 'flowBalance_(0,6),0,Term': 'E', 'flowBalance_(0,7),0,Term': 'E', 'flowBalance_(0,8),0,Term': 'E', 'flowBalance_(0,9),0,Term': 'E', 'flowBalance_(0,10),0,Term': 'E', 'flowBalance_(0,11),0,Term': 'E', 'flowBalance_(0,12),0,Term': 'E', 'flowBalance_(0,13),0,Term': 'E', 'flowBalance_(0,14),0,Term': 'E', 'flowBalance_(0,15),0,Term': 'E', 'flowBalance_(0,16),0,Term': 'E', 'flowBalance_(0,17),0,Term': 'E', 'flowBalance_(0,18),0,Term': 'E', 'flowBalance_(0,19),0,Term': 'E', 'flowBalance_(0,20),0,Term': 'E', 'flowBalance_(0,21),0,Term': 'E', 'flowBalance_(0,22),0,Term': 'E', 'flowBalance_(0,23),0,Term': 'E', 'flowBalance_(0,24),0,Term': 'E', 'flowBalance_(0,25),0,Term': 'E', 'flowBalance_(0,",
+      "mps_rhs_excerpt": [
+        "RHS",
+        "    RHS                   flowBalance_(0,0),0,Term                         0  flowBalance_(0,1),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,2),0,Term                         0  flowBalance_(0,3),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,4),0,Term                         0  flowBalance_(0,5),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,6),0,Term                         0  flowBalance_(0,7),0,Term                         0 "
+      ],
+      "candidate_operating_layout_exists": false,
+      "candidate_exported_operating_tables": [],
+      "candidate_parsed_rhs_entries": 0,
+      "candidate_rhs_first": 0,
+      "root_cause": "section header branch tests p[0] in marker set without distinguishing one-token header from multi-token RHS-set row; actual assigned RHS set is named RHS, so every RHS data row is discarded and absent RHS defaults0",
+      "candidate_postsolve_stage": "original native SCIP solve succeeded and values saved; self-validator then rejects against its wrongly parsed zero RHS; export/layout stage not executed",
+      "classification": "candidate completed programme delivery failure; original optimizer vector independently valid, not original-MILP infeasibility or harness missing dependency",
+      "input_covariate": "new MPS is semantically constructed preregistered model, with SCIP writer RHS-set label RHS; original public files use a different RHS-set label. Full-MPS contract does not fix set label. This tests serialization robustness together with new numeric data, so do not attribute solely to route optimization skill."
+    }
+  ],
+  "at": "2026-10-31T16:08:48.526278+00:00",
+  "no_solver_rerun": true,
+  "no_candidate_source_fix": true,
+  "no_missing_tables_supplied": true
+}

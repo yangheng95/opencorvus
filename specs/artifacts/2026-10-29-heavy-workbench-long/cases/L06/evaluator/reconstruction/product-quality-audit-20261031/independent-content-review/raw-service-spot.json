@@ -1,0 +1,21 @@
+{
+  "raw_member": "Group2_data_format_only_files/LR1_DR02_VC05_V8a/discharge_port_data.txt",
+  "port_1": {
+    "initialInventory": 168,
+    "per_period_consumption": 24,
+    "capacity": 336
+  },
+  "vessel_member": "Group2_data_format_only_files/LR1_DR02_VC05_V8a/vessel_data.txt",
+  "initial_vessel": {
+    "class": 0,
+    "capacity": 300,
+    "firstTimeAvailable": 3
+  },
+  "same-period_end_stock_if_service": {
+    "3": 372,
+    "4": 348,
+    "5": 324
+  },
+  "report_claim_supported": true,
+  "derivation": "168 - 24*(t+1) + 300; rates accrue in each indexed period before the same original inventory equality closes. Raw port/vessel fields were read directly, no candidate import."
+}

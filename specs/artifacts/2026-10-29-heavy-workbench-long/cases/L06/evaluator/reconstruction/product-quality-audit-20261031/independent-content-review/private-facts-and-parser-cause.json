@@ -1,0 +1,360 @@
+{
+  "assignment_id": "l06-maritime-pair-content-71fa72e40dc74c3fb2234d69b4ed3be7",
+  "at": "2026-10-31T16:10:02.560119+00:00",
+  "scope": "Naturally completed actual originals and source/input binding; selected RHS textual reasoning only. No parser/candidate import, solver, full checker or export run.",
+  "source_bindings": [
+    {
+      "system": "codex",
+      "actual_source": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\source\\optimize.py",
+      "sealed_member": "submission/optimize.py",
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "actual_source": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\source\\solve.py",
+      "sealed_member": "submission/solve.py",
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "actual_source": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\source\\core.py",
+      "sealed_member": "submission/core.py",
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "actual_source": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\source\\submission.json",
+      "sealed_member": "submission/submission.json",
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "actual_source": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\source\\source-map.json",
+      "sealed_member": "submission/source-map.json",
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "actual_source": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\source\\requirements-lock.txt",
+      "sealed_member": "submission/requirements-lock.txt",
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "actual_source": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\source\\solve.py",
+      "sealed_member": "submission/solve.py",
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "actual_source": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\source\\modelio.py",
+      "sealed_member": "submission/modelio.py",
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "actual_source": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\source\\submission.json",
+      "sealed_member": "submission/submission.json",
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "actual_source": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\source\\source-map.json",
+      "sealed_member": "submission/source-map.json",
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "actual_source": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\source\\requirements-lock.txt",
+      "sealed_member": "submission/requirements-lock.txt",
+      "byte_equal": true
+    }
+  ],
+  "records": [
+    {
+      "system": "codex",
+      "label": "maritime-eval-vc05",
+      "start": {
+        "started_at": "2026-10-31T15:53:12.187302+00:00",
+        "argv": [
+          "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+          "-B",
+          "optimize.py",
+          "--model",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc05\\maritime-eval-vc05_t120.mps",
+          "--raw",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc05\\maritime-eval-vc05.raw.zip",
+          "--instance",
+          "maritime-eval-vc05",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc05",
+          "--optimization-seconds",
+          "180"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\source",
+        "wrapper_pid": 15348,
+        "launcher_pid": 29532,
+        "pid_scope": "Windows venv launcher; actual interpreter as candidate execution.json"
+      },
+      "terminal": {
+        "label": "maritime-eval-vc05",
+        "native_exit": 0,
+        "started_at": "2026-10-31T15:53:12.187302+00:00",
+        "finished_at": "2026-10-31T15:56:15.392534+00:00",
+        "wrapper_seconds": 183.20523500000127,
+        "output": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc05"
+      },
+      "input_mps_byte_equal_registered_generated": true,
+      "both_candidates_same_mps_bytes": true,
+      "both_candidates_same_raw_bytes": true,
+      "optimizer_P": 63855.512411443444,
+      "optimizer_status": "FEASIBLE",
+      "layout_exists": true,
+      "delivered_table_files": [
+        "arcs.csv",
+        "paths.csv",
+        "port-period.csv",
+        "costs.csv"
+      ],
+      "RHS_header_and_first_rows": [
+        "RHS",
+        "    RHS                   flowBalance_(0,0),0,Term                         0  flowBalance_(0,1),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,2),0,Term                         0  flowBalance_(0,3),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,4),0,Term                         0  flowBalance_(0,5),0,Term                         0 "
+      ],
+      "first_inventory_RHS": {
+        "line": "    RHS                   invBalanceRegion_(0,0)                        70  berthLimit_(0,0)                             1 ",
+        "tokens": [
+          "RHS",
+          "invBalanceRegion_(0,0)",
+          "70",
+          "berthLimit_(0,0)",
+          "1"
+        ],
+        "discarded_by_original_OC_header_predicate": true
+      },
+      "root_full_model_check": "Root full CLI pending; no second full model check by content reviewer.",
+      "source_only_result_semantics": "Full delivered plan pending formal audit"
+    },
+    {
+      "system": "codex",
+      "label": "maritime-eval-vc03",
+      "start": {
+        "started_at": "2026-10-31T15:56:15.393246+00:00",
+        "argv": [
+          "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+          "-B",
+          "optimize.py",
+          "--model",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc03\\maritime-eval-vc03_t120.mps",
+          "--raw",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc03\\maritime-eval-vc03.raw.zip",
+          "--instance",
+          "maritime-eval-vc03",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc03",
+          "--optimization-seconds",
+          "180"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\source",
+        "wrapper_pid": 15348,
+        "launcher_pid": 30344,
+        "pid_scope": "Windows venv launcher; actual interpreter as candidate execution.json"
+      },
+      "terminal": {
+        "label": "maritime-eval-vc03",
+        "native_exit": 0,
+        "started_at": "2026-10-31T15:56:15.393246+00:00",
+        "finished_at": "2026-10-31T15:59:18.604760+00:00",
+        "wrapper_seconds": 183.2115502000015,
+        "output": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc03"
+      },
+      "input_mps_byte_equal_registered_generated": true,
+      "both_candidates_same_mps_bytes": true,
+      "both_candidates_same_raw_bytes": true,
+      "optimizer_P": 200079.49032861626,
+      "optimizer_status": "FEASIBLE",
+      "layout_exists": true,
+      "delivered_table_files": [
+        "arcs.csv",
+        "paths.csv",
+        "port-period.csv",
+        "costs.csv"
+      ],
+      "RHS_header_and_first_rows": [
+        "RHS",
+        "    RHS                   flowBalance_(0,0),0,Term                         0  flowBalance_(0,1),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,2),0,Term                         0  flowBalance_(0,3),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,4),0,Term                         0  flowBalance_(0,5),0,Term                         0 "
+      ],
+      "first_inventory_RHS": {
+        "line": "    RHS                   invBalanceRegion_(0,0)                       102  berthLimit_(0,0)                             1 ",
+        "tokens": [
+          "RHS",
+          "invBalanceRegion_(0,0)",
+          "102",
+          "berthLimit_(0,0)",
+          "1"
+        ],
+        "discarded_by_original_OC_header_predicate": true
+      },
+      "root_full_model_check": "Root full CLI pending; no second full model check by content reviewer.",
+      "source_only_result_semantics": "Full delivered plan pending formal audit"
+    },
+    {
+      "system": "opencorvus",
+      "label": "maritime-eval-vc05",
+      "start": {
+        "started_at": "2026-10-31T15:59:54.775243+00:00",
+        "argv": [
+          "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+          "-B",
+          "solve.py",
+          "--model",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc05\\maritime-eval-vc05_t120.mps",
+          "--raw",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc05\\maritime-eval-vc05.raw.zip",
+          "--instance",
+          "maritime-eval-vc05",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc05",
+          "--optimization-seconds",
+          "180",
+          "--method",
+          "feasibility"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\source",
+        "wrapper_pid": 16784,
+        "launcher_pid": 25568,
+        "pid_scope": "Windows venv launcher; actual interpreter as candidate execution.json"
+      },
+      "terminal": {
+        "label": "maritime-eval-vc05",
+        "native_exit": 1,
+        "started_at": "2026-10-31T15:59:54.775243+00:00",
+        "finished_at": "2026-10-31T16:02:55.141774+00:00",
+        "wrapper_seconds": 180.3665495000023,
+        "output": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc05"
+      },
+      "input_mps_byte_equal_registered_generated": true,
+      "both_candidates_same_mps_bytes": true,
+      "both_candidates_same_raw_bytes": true,
+      "optimizer_P": 93207.21333184093,
+      "optimizer_status": "timelimit",
+      "layout_exists": false,
+      "delivered_table_files": [],
+      "RHS_header_and_first_rows": [
+        "RHS",
+        "    RHS                   flowBalance_(0,0),0,Term                         0  flowBalance_(0,1),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,2),0,Term                         0  flowBalance_(0,3),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,4),0,Term                         0  flowBalance_(0,5),0,Term                         0 "
+      ],
+      "first_inventory_RHS": {
+        "line": "    RHS                   invBalanceRegion_(0,0)                        70  berthLimit_(0,0)                             1 ",
+        "tokens": [
+          "RHS",
+          "invBalanceRegion_(0,0)",
+          "70",
+          "berthLimit_(0,0)",
+          "1"
+        ],
+        "discarded_by_original_OC_header_predicate": true
+      },
+      "root_full_model_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 6476,
+        "integer_variables_recomputed": 5753,
+        "constraints_recomputed": 2520,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 93207.21333184093,
+        "independent_objective": 93207.21333183823,
+        "objective_absolute_error": 2.7066562324762344e-09,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "source_only_result_semantics": "Candidate post-solve validator rejects its own erroneous zero-RHS interpretation; raw optimizer vector has separate root mathematical validity evidence. No completed operating delivery/P."
+    },
+    {
+      "system": "opencorvus",
+      "label": "maritime-eval-vc03",
+      "start": {
+        "started_at": "2026-10-31T16:02:55.142737+00:00",
+        "argv": [
+          "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+          "-B",
+          "solve.py",
+          "--model",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc03\\maritime-eval-vc03_t120.mps",
+          "--raw",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc03\\maritime-eval-vc03.raw.zip",
+          "--instance",
+          "maritime-eval-vc03",
+          "--out",
+          "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc03",
+          "--optimization-seconds",
+          "180",
+          "--method",
+          "feasibility"
+        ],
+        "cwd": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\source",
+        "wrapper_pid": 16784,
+        "launcher_pid": 31508,
+        "pid_scope": "Windows venv launcher; actual interpreter as candidate execution.json"
+      },
+      "terminal": {
+        "label": "maritime-eval-vc03",
+        "native_exit": 1,
+        "started_at": "2026-10-31T16:02:55.142737+00:00",
+        "finished_at": "2026-10-31T16:05:55.122369+00:00",
+        "wrapper_seconds": 179.97964079999656,
+        "output": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc03"
+      },
+      "input_mps_byte_equal_registered_generated": true,
+      "both_candidates_same_mps_bytes": true,
+      "both_candidates_same_raw_bytes": true,
+      "optimizer_P": 137597.773752728,
+      "optimizer_status": "timelimit",
+      "layout_exists": false,
+      "delivered_table_files": [],
+      "RHS_header_and_first_rows": [
+        "RHS",
+        "    RHS                   flowBalance_(0,0),0,Term                         0  flowBalance_(0,1),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,2),0,Term                         0  flowBalance_(0,3),0,Term                         0 ",
+        "    RHS                   flowBalance_(0,4),0,Term                         0  flowBalance_(0,5),0,Term                         0 "
+      ],
+      "first_inventory_RHS": {
+        "line": "    RHS                   invBalanceRegion_(0,0)                       102  berthLimit_(0,0)                             1 ",
+        "tokens": [
+          "RHS",
+          "invBalanceRegion_(0,0)",
+          "102",
+          "berthLimit_(0,0)",
+          "1"
+        ],
+        "discarded_by_original_OC_header_predicate": true
+      },
+      "root_full_model_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 5594,
+        "integer_variables_recomputed": 4630,
+        "constraints_recomputed": 2400,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 137597.773752728,
+        "independent_objective": 137597.77375272376,
+        "objective_absolute_error": 4.249159246683121e-09,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "source_only_result_semantics": "Candidate post-solve validator rejects its own erroneous zero-RHS interpretation; raw optimizer vector has separate root mathematical validity evidence. No completed operating delivery/P."
+    }
+  ],
+  "aggregate_score": null
+}

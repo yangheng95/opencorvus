@@ -1,0 +1,1818 @@
+{
+  "at": "2026-10-31T15:52:26.675083+00:00",
+  "scope": "actual existing complete vectors/tables through current single MPS/operating consumers, no candidate checker trust, no optimization or reference-bound generation, not complete private-candidate grading",
+  "plans": [
+    {
+      "system": "codex",
+      "instance": "LR1_DR02_VC01_V6a",
+      "method": "cp",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\controlled180\\LR1_DR02_VC01_V6a_t120-cp",
+      "native_claim": 186208.42485911574,
+      "current_final_programme": false,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 2058,
+        "integer_variables_recomputed": 1333,
+        "constraints_recomputed": 1080,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 186208.42485911574,
+        "independent_objective": 186208.42485911574,
+        "objective_absolute_error": 0.0,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 186208.42485911574,
+      "cost_components": {
+        "empty_return": 13544.654606499878,
+        "initial_source": 334.0,
+        "loaded_voyage": 15315.086043727944,
+        "lost_production": 81795.16275668396,
+        "original_objective_constant": 0.0,
+        "stockout": 75220.33145220396,
+        "terminal_exit": -0.81,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 157,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 6,
+          "arc_units": 157
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:22.473953+00:00",
+        "instance": "LR1_DR02_VC01_V6a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 1,
+        "anonymous_paths": 6,
+        "positive_original_arc_rows": 157,
+        "path_arc_units": 157,
+        "port_period_rows": 360,
+        "max_inventory_residual": 0.0,
+        "original_cost": 186208.42485911574,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 13544.654606499878
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 334.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 15315.086043727944
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 81795.16275668396
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 75220.33145220396
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -0.81
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 2058,
+          "integer_variables_recomputed": 1333,
+          "constraints_recomputed": 1080,
+          "max_row_violation": 0.0,
+          "max_bound_violation": 0.0,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 186208.42485911574,
+          "independent_objective": 186208.42485911574,
+          "objective_absolute_error": 0.0,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "codex",
+      "instance": "LR1_DR02_VC01_V6a",
+      "method": "scip",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\controlled180\\LR1_DR02_VC01_V6a_t120-scip",
+      "native_claim": 33808.950020457356,
+      "current_final_programme": false,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 2058,
+        "integer_variables_recomputed": 1333,
+        "constraints_recomputed": 1080,
+        "max_row_violation": 3.679279103607769e-13,
+        "max_bound_violation": 4.7634785005357116e-11,
+        "max_integrality_violation": 6.480149750132114e-13,
+        "reported_objective": 33808.950020457356,
+        "independent_objective": 33808.950020457356,
+        "objective_absolute_error": 0.0,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 33808.950020457356,
+      "cost_components": {
+        "empty_return": 15449.275564651922,
+        "initial_source": 334.0,
+        "loaded_voyage": 18026.094455814902,
+        "lost_production": -5.5227273383338045e-09,
+        "original_objective_constant": 0.0,
+        "stockout": -4.130563433334466e-09,
+        "terminal_exit": -0.42000000000000004,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 123,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 6,
+          "arc_units": 123
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:22.605786+00:00",
+        "instance": "LR1_DR02_VC01_V6a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 1,
+        "anonymous_paths": 6,
+        "positive_original_arc_rows": 123,
+        "path_arc_units": 123,
+        "port_period_rows": 360,
+        "max_inventory_residual": 2.842170943040401e-14,
+        "original_cost": 33808.950020457356,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 15449.275564651922
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 334.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 18026.094455814902
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": -5.5227273383338045e-09
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": -4.130563433334466e-09
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -0.42000000000000004
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 2058,
+          "integer_variables_recomputed": 1333,
+          "constraints_recomputed": 1080,
+          "max_row_violation": 3.679279103607769e-13,
+          "max_bound_violation": 4.7634785005357116e-11,
+          "max_integrality_violation": 6.480149750132114e-13,
+          "reported_objective": 33808.950020457356,
+          "independent_objective": 33808.950020457356,
+          "objective_absolute_error": 0.0,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "codex",
+      "instance": "LR1_DR02_VC05_V8a",
+      "method": "cp",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\controlled180\\LR1_DR02_VC05_V8a_t120-cp",
+      "native_claim": 281581.4786415734,
+      "current_final_programme": false,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 7370,
+        "integer_variables_recomputed": 6645,
+        "constraints_recomputed": 2520,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 281581.4786415734,
+        "independent_objective": 281581.4786415734,
+        "objective_absolute_error": 0.0,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 281581.4786415734,
+      "cost_components": {
+        "empty_return": 12877.309619658716,
+        "initial_source": 396.0,
+        "loaded_voyage": 17317.567020696984,
+        "lost_production": 136302.70426690884,
+        "original_objective_constant": 0.0,
+        "stockout": 114689.50773430886,
+        "terminal_exit": -1.61,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 184,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 8,
+          "arc_units": 187
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:22.912937+00:00",
+        "instance": "LR1_DR02_VC05_V8a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 5,
+        "anonymous_paths": 8,
+        "positive_original_arc_rows": 184,
+        "path_arc_units": 187,
+        "port_period_rows": 360,
+        "max_inventory_residual": 0.0,
+        "original_cost": 281581.4786415734,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 12877.309619658716
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 396.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 17317.567020696984
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 136302.70426690884
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 114689.50773430886
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -1.61
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 7370,
+          "integer_variables_recomputed": 6645,
+          "constraints_recomputed": 2520,
+          "max_row_violation": 0.0,
+          "max_bound_violation": 0.0,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 281581.4786415734,
+          "independent_objective": 281581.4786415734,
+          "objective_absolute_error": 0.0,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "codex",
+      "instance": "LR1_DR02_VC05_V8a",
+      "method": "scip",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\controlled180\\LR1_DR02_VC05_V8a_t120-scip",
+      "native_claim": 157652.78054729357,
+      "current_final_programme": false,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 7370,
+        "integer_variables_recomputed": 6645,
+        "constraints_recomputed": 2520,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 157652.78054729357,
+        "independent_objective": 157652.78054729357,
+        "objective_absolute_error": 0.0,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 157652.78054729357,
+      "cost_components": {
+        "empty_return": 14813.869310615864,
+        "initial_source": 396.0,
+        "loaded_voyage": 18251.30759517807,
+        "lost_production": 59060.74235690575,
+        "original_objective_constant": 0.0,
+        "stockout": 65131.80128459388,
+        "terminal_exit": -0.9400000000000001,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 210,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 8,
+          "arc_units": 210
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:23.217427+00:00",
+        "instance": "LR1_DR02_VC05_V8a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 5,
+        "anonymous_paths": 8,
+        "positive_original_arc_rows": 210,
+        "path_arc_units": 210,
+        "port_period_rows": 360,
+        "max_inventory_residual": 0.0,
+        "original_cost": 157652.78054729357,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 14813.869310615864
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 396.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 18251.30759517807
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 59060.74235690575
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 65131.80128459388
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -0.9400000000000001
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 7370,
+          "integer_variables_recomputed": 6645,
+          "constraints_recomputed": 2520,
+          "max_row_violation": 0.0,
+          "max_bound_violation": 0.0,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 157652.78054729357,
+          "independent_objective": 157652.78054729357,
+          "objective_absolute_error": 0.0,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "codex",
+      "instance": "LR1_DR03_VC03_V16a",
+      "method": "cp",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\controlled180\\LR1_DR03_VC03_V16a_t120-cp",
+      "native_claim": 1832191.8904189053,
+      "current_final_programme": false,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 6300,
+        "integer_variables_recomputed": 5334,
+        "constraints_recomputed": 2400,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 1832191.8904189053,
+        "independent_objective": 1832191.8904189053,
+        "objective_absolute_error": 0.0,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 1832191.8904189053,
+      "cost_components": {
+        "initial_source": 565.0,
+        "loaded_voyage": 1258.2706826307322,
+        "lost_production": 960122.9361762637,
+        "original_objective_constant": 0.0,
+        "stockout": 870261.8935600108,
+        "terminal_exit": -16.21,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 138,
+        "ledger": 480,
+        "costs": 7,
+        "paths": {
+          "paths": 16,
+          "arc_units": 138
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:23.493911+00:00",
+        "instance": "LR1_DR03_VC03_V16a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 4,
+        "classes": 3,
+        "anonymous_paths": 16,
+        "positive_original_arc_rows": 138,
+        "path_arc_units": 138,
+        "port_period_rows": 480,
+        "max_inventory_residual": 0.0,
+        "original_cost": 1832191.8904189053,
+        "economic_components": [
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 565.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 1258.2706826307322
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 960122.9361762637
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 870261.8935600108
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -16.21
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 6300,
+          "integer_variables_recomputed": 5334,
+          "constraints_recomputed": 2400,
+          "max_row_violation": 0.0,
+          "max_bound_violation": 0.0,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 1832191.8904189053,
+          "independent_objective": 1832191.8904189053,
+          "objective_absolute_error": 0.0,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "codex",
+      "instance": "LR1_DR03_VC03_V16a",
+      "method": "scip",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\controlled180\\LR1_DR03_VC03_V16a_t120-scip",
+      "native_claim": 198645.5090407813,
+      "current_final_programme": false,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 6300,
+        "integer_variables_recomputed": 5334,
+        "constraints_recomputed": 2400,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 1.1368683772161603e-13,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 198645.5090407813,
+        "independent_objective": 198645.5090407813,
+        "objective_absolute_error": 0.0,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 198645.5090407813,
+      "cost_components": {
+        "empty_return": 30571.963655370997,
+        "initial_source": 565.0,
+        "loaded_voyage": 36582.62671442702,
+        "lost_production": 79255.99937517346,
+        "original_objective_constant": 0.0,
+        "stockout": 51672.299295809826,
+        "terminal_exit": -2.38,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 291,
+        "ledger": 480,
+        "costs": 8,
+        "paths": {
+          "paths": 16,
+          "arc_units": 294
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:23.800098+00:00",
+        "instance": "LR1_DR03_VC03_V16a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 4,
+        "classes": 3,
+        "anonymous_paths": 16,
+        "positive_original_arc_rows": 291,
+        "path_arc_units": 294,
+        "port_period_rows": 480,
+        "max_inventory_residual": 0.0,
+        "original_cost": 198645.5090407813,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 30571.963655370997
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 565.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 36582.62671442702
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 79255.99937517346
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 51672.299295809826
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -2.38
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 6300,
+          "integer_variables_recomputed": 5334,
+          "constraints_recomputed": 2400,
+          "max_row_violation": 0.0,
+          "max_bound_violation": 1.1368683772161603e-13,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 198645.5090407813,
+          "independent_objective": 198645.5090407813,
+          "objective_absolute_error": 0.0,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "codex",
+      "instance": "LR1_DR02_VC01_V6a",
+      "method": "classblock",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\classblock180\\LR1_DR02_VC01_V6a_t120",
+      "native_claim": 33808.96002046674,
+      "current_final_programme": true,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 2058,
+        "integer_variables_recomputed": 1333,
+        "constraints_recomputed": 1080,
+        "max_row_violation": 5.684341886080802e-14,
+        "max_bound_violation": 1.1084466677857563e-12,
+        "max_integrality_violation": 2.915445662665661e-13,
+        "reported_objective": 33808.96002046674,
+        "independent_objective": 33808.96002046674,
+        "objective_absolute_error": 0.0,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 33808.96002046674,
+      "cost_components": {
+        "empty_return": 15449.275564651922,
+        "initial_source": 334.0,
+        "loaded_voyage": 18026.094455814902,
+        "lost_production": -9.952469069076077e-11,
+        "original_objective_constant": 0.0,
+        "stockout": 1.8045699472697187e-10,
+        "terminal_exit": -0.41000000000000003,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 124,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 6,
+          "arc_units": 124
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:24.103893+00:00",
+        "instance": "LR1_DR02_VC01_V6a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 1,
+        "anonymous_paths": 6,
+        "positive_original_arc_rows": 124,
+        "path_arc_units": 124,
+        "port_period_rows": 360,
+        "max_inventory_residual": 5.684341886080802e-14,
+        "original_cost": 33808.96002046674,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 15449.275564651922
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 334.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 18026.094455814902
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": -9.952469069076077e-11
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 1.8045699472697187e-10
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -0.41000000000000003
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 2058,
+          "integer_variables_recomputed": 1333,
+          "constraints_recomputed": 1080,
+          "max_row_violation": 5.684341886080802e-14,
+          "max_bound_violation": 1.1084466677857563e-12,
+          "max_integrality_violation": 2.915445662665661e-13,
+          "reported_objective": 33808.96002046674,
+          "independent_objective": 33808.96002046674,
+          "objective_absolute_error": 0.0,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "codex",
+      "instance": "LR1_DR02_VC05_V8a",
+      "method": "classblock",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\classblock180\\LR1_DR02_VC05_V8a_t120",
+      "native_claim": 49807.06844040899,
+      "current_final_programme": true,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 7370,
+        "integer_variables_recomputed": 6645,
+        "constraints_recomputed": 2520,
+        "max_row_violation": 5.684341886080802e-14,
+        "max_bound_violation": 1.7053025658242404e-13,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 49807.06844040899,
+        "independent_objective": 49807.06844040899,
+        "objective_absolute_error": 0.0,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 49807.06844040899,
+      "cost_components": {
+        "empty_return": 16261.151629155038,
+        "initial_source": 396.0,
+        "loaded_voyage": 20482.079459469183,
+        "lost_production": 3275.6882370190506,
+        "original_objective_constant": 0.0,
+        "stockout": 9392.919114765724,
+        "terminal_exit": -0.77,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 143,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 8,
+          "arc_units": 143
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:24.509791+00:00",
+        "instance": "LR1_DR02_VC05_V8a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 5,
+        "anonymous_paths": 8,
+        "positive_original_arc_rows": 143,
+        "path_arc_units": 143,
+        "port_period_rows": 360,
+        "max_inventory_residual": 0.0,
+        "original_cost": 49807.06844040899,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 16261.151629155038
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 396.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 20482.079459469183
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 3275.6882370190506
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 9392.919114765724
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -0.77
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 7370,
+          "integer_variables_recomputed": 6645,
+          "constraints_recomputed": 2520,
+          "max_row_violation": 5.684341886080802e-14,
+          "max_bound_violation": 1.7053025658242404e-13,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 49807.06844040899,
+          "independent_objective": 49807.06844040899,
+          "objective_absolute_error": 0.0,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "codex",
+      "instance": "LR1_DR03_VC03_V16a",
+      "method": "classblock",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\classblock180\\LR1_DR03_VC03_V16a_t120",
+      "native_claim": 134043.71249888832,
+      "current_final_programme": true,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 6300,
+        "integer_variables_recomputed": 5334,
+        "constraints_recomputed": 2400,
+        "max_row_violation": 2.842170943040401e-14,
+        "max_bound_violation": 4.085620730620576e-14,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 134043.71249888832,
+        "independent_objective": 134043.71249888832,
+        "objective_absolute_error": 0.0,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 134043.71249888832,
+      "cost_components": {
+        "empty_return": 31857.833347399897,
+        "initial_source": 565.0,
+        "loaded_voyage": 38968.281708725364,
+        "lost_production": 47052.63416292623,
+        "original_objective_constant": 0.0,
+        "stockout": 15602.583279836825,
+        "terminal_exit": -2.62,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 190,
+        "ledger": 480,
+        "costs": 8,
+        "paths": {
+          "paths": 16,
+          "arc_units": 190
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:24.841465+00:00",
+        "instance": "LR1_DR03_VC03_V16a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 4,
+        "classes": 3,
+        "anonymous_paths": 16,
+        "positive_original_arc_rows": 190,
+        "path_arc_units": 190,
+        "port_period_rows": 480,
+        "max_inventory_residual": 2.842170943040401e-14,
+        "original_cost": 134043.71249888832,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 31857.833347399897
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 565.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 38968.281708725364
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 47052.63416292623
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 15602.583279836825
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -2.62
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 6300,
+          "integer_variables_recomputed": 5334,
+          "constraints_recomputed": 2400,
+          "max_row_violation": 2.842170943040401e-14,
+          "max_bound_violation": 4.085620730620576e-14,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 134043.71249888832,
+          "independent_objective": 134043.71249888832,
+          "objective_absolute_error": 0.0,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "opencorvus_observation",
+      "instance": "LR1_DR02_VC01_V6a",
+      "method": "default",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR02_VC01_V6a\\default",
+      "native_claim": 33808.970020465786,
+      "current_final_programme": false,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 2058,
+        "integer_variables_recomputed": 1333,
+        "constraints_recomputed": 1080,
+        "max_row_violation": 2.842170943040401e-14,
+        "max_bound_violation": 8.810729923425242e-12,
+        "max_integrality_violation": 8.748557434046234e-14,
+        "reported_objective": 33808.970020465786,
+        "independent_objective": 33808.9700204668,
+        "objective_absolute_error": 1.0113581083714962e-09,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 33808.9700204668,
+      "cost_components": {
+        "empty_return": 15449.275564651922,
+        "initial_source": 334.0,
+        "loaded_voyage": 18026.094455814902,
+        "lost_production": 7.127002146900587e-12,
+        "original_objective_constant": 0.0,
+        "stockout": -3.462600142880942e-11,
+        "terminal_exit": -0.4,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 124,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 6,
+          "arc_units": 125
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:25.208009+00:00",
+        "instance": "LR1_DR02_VC01_V6a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 1,
+        "anonymous_paths": 6,
+        "positive_original_arc_rows": 124,
+        "path_arc_units": 125,
+        "port_period_rows": 360,
+        "max_inventory_residual": 5.684341886080802e-14,
+        "original_cost": 33808.9700204668,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 15449.275564651922
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 334.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 18026.094455814902
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 7.127002146900587e-12
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": -3.462600142880942e-11
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -0.4
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 2058,
+          "integer_variables_recomputed": 1333,
+          "constraints_recomputed": 1080,
+          "max_row_violation": 2.842170943040401e-14,
+          "max_bound_violation": 8.810729923425242e-12,
+          "max_integrality_violation": 8.748557434046234e-14,
+          "reported_objective": 33808.970020465786,
+          "independent_objective": 33808.9700204668,
+          "objective_absolute_error": 1.0113581083714962e-09,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "opencorvus_observation",
+      "instance": "LR1_DR02_VC01_V6a",
+      "method": "feasibility",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR02_VC01_V6a\\feasibility",
+      "native_claim": 47173.27825381351,
+      "current_final_programme": true,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 2058,
+        "integer_variables_recomputed": 1333,
+        "constraints_recomputed": 1080,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 47173.27825381351,
+        "independent_objective": 47173.27825381338,
+        "objective_absolute_error": 1.2369127944111824e-10,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 47173.27825381338,
+      "cost_components": {
+        "empty_return": 15025.889793134398,
+        "initial_source": 334.0,
+        "loaded_voyage": 17550.612241418,
+        "lost_production": 2296.638937612831,
+        "original_objective_constant": 0.0,
+        "stockout": 11966.737281648151,
+        "terminal_exit": -0.6,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 119,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 6,
+          "arc_units": 119
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:25.345947+00:00",
+        "instance": "LR1_DR02_VC01_V6a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 1,
+        "anonymous_paths": 6,
+        "positive_original_arc_rows": 119,
+        "path_arc_units": 119,
+        "port_period_rows": 360,
+        "max_inventory_residual": 0.0,
+        "original_cost": 47173.27825381338,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 15025.889793134398
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 334.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 17550.612241418
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 2296.638937612831
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 11966.737281648151
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -0.6
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 2058,
+          "integer_variables_recomputed": 1333,
+          "constraints_recomputed": 1080,
+          "max_row_violation": 0.0,
+          "max_bound_violation": 0.0,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 47173.27825381351,
+          "independent_objective": 47173.27825381338,
+          "objective_absolute_error": 1.2369127944111824e-10,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "opencorvus_observation",
+      "instance": "LR1_DR02_VC05_V8a",
+      "method": "default",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR02_VC05_V8a\\default",
+      "native_claim": 155802.78909678897,
+      "current_final_programme": false,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 7370,
+        "integer_variables_recomputed": 6645,
+        "constraints_recomputed": 2520,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 155802.78909678897,
+        "independent_objective": 155802.78909678714,
+        "objective_absolute_error": 1.8335413187742233e-09,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 155802.78909678714,
+      "cost_components": {
+        "empty_return": 15424.225334897095,
+        "initial_source": 396.0,
+        "loaded_voyage": 18873.92198490668,
+        "lost_production": 59464.184290719975,
+        "original_objective_constant": 0.0,
+        "stockout": 61645.21748626339,
+        "terminal_exit": -0.76,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 177,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 8,
+          "arc_units": 178
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:25.680239+00:00",
+        "instance": "LR1_DR02_VC05_V8a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 5,
+        "anonymous_paths": 8,
+        "positive_original_arc_rows": 177,
+        "path_arc_units": 178,
+        "port_period_rows": 360,
+        "max_inventory_residual": 0.0,
+        "original_cost": 155802.78909678714,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 15424.225334897095
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 396.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 18873.92198490668
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 59464.184290719975
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 61645.21748626339
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -0.76
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 7370,
+          "integer_variables_recomputed": 6645,
+          "constraints_recomputed": 2520,
+          "max_row_violation": 0.0,
+          "max_bound_violation": 0.0,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 155802.78909678897,
+          "independent_objective": 155802.78909678714,
+          "objective_absolute_error": 1.8335413187742233e-09,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "opencorvus_observation",
+      "instance": "LR1_DR02_VC05_V8a",
+      "method": "feasibility",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR02_VC05_V8a\\feasibility",
+      "native_claim": 76171.69560303981,
+      "current_final_programme": true,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 7370,
+        "integer_variables_recomputed": 6645,
+        "constraints_recomputed": 2520,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 76171.69560303981,
+        "independent_objective": 76171.69560303922,
+        "objective_absolute_error": 5.966285243630409e-10,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 76171.69560303922,
+      "cost_components": {
+        "empty_return": 15835.559731337265,
+        "initial_source": 396.0,
+        "loaded_voyage": 20351.85387031502,
+        "lost_production": 19278.692576260768,
+        "original_objective_constant": 0.0,
+        "stockout": 20310.389425126166,
+        "terminal_exit": -0.8,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 138,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 8,
+          "arc_units": 138
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:26.035588+00:00",
+        "instance": "LR1_DR02_VC05_V8a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 3,
+        "classes": 5,
+        "anonymous_paths": 8,
+        "positive_original_arc_rows": 138,
+        "path_arc_units": 138,
+        "port_period_rows": 360,
+        "max_inventory_residual": 0.0,
+        "original_cost": 76171.69560303922,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 15835.559731337265
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 396.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 20351.85387031502
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 19278.692576260768
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 20310.389425126166
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -0.8
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 7370,
+          "integer_variables_recomputed": 6645,
+          "constraints_recomputed": 2520,
+          "max_row_violation": 0.0,
+          "max_bound_violation": 0.0,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 76171.69560303981,
+          "independent_objective": 76171.69560303922,
+          "objective_absolute_error": 5.966285243630409e-10,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "opencorvus_observation",
+      "instance": "LR1_DR03_VC03_V16a",
+      "method": "default",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR03_VC03_V16a\\default",
+      "native_claim": 198645.5090407827,
+      "current_final_programme": false,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 6300,
+        "integer_variables_recomputed": 5334,
+        "constraints_recomputed": 2400,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 1.1368683772161603e-13,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 198645.5090407827,
+        "independent_objective": 198645.5090407813,
+        "objective_absolute_error": 1.3969838619232178e-09,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 198645.5090407813,
+      "cost_components": {
+        "empty_return": 30571.963655370997,
+        "initial_source": 565.0,
+        "loaded_voyage": 36582.62671442702,
+        "lost_production": 79255.99937517346,
+        "original_objective_constant": 0.0,
+        "stockout": 51672.299295809826,
+        "terminal_exit": -2.38,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 291,
+        "ledger": 480,
+        "costs": 8,
+        "paths": {
+          "paths": 16,
+          "arc_units": 294
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:26.318556+00:00",
+        "instance": "LR1_DR03_VC03_V16a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 4,
+        "classes": 3,
+        "anonymous_paths": 16,
+        "positive_original_arc_rows": 291,
+        "path_arc_units": 294,
+        "port_period_rows": 480,
+        "max_inventory_residual": 0.0,
+        "original_cost": 198645.5090407813,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 30571.963655370997
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 565.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 36582.62671442702
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 79255.99937517346
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 51672.299295809826
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -2.38
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 6300,
+          "integer_variables_recomputed": 5334,
+          "constraints_recomputed": 2400,
+          "max_row_violation": 0.0,
+          "max_bound_violation": 1.1368683772161603e-13,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 198645.5090407827,
+          "independent_objective": 198645.5090407813,
+          "objective_absolute_error": 1.3969838619232178e-09,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    },
+    {
+      "system": "opencorvus_observation",
+      "instance": "LR1_DR03_VC03_V16a",
+      "method": "feasibility",
+      "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR03_VC03_V16a\\feasibility",
+      "native_claim": 165342.44481585734,
+      "current_final_programme": true,
+      "mathematical_check": {
+        "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+        "feasible": true,
+        "objective_consistent": true,
+        "variables_recomputed": 6300,
+        "integer_variables_recomputed": 5334,
+        "constraints_recomputed": 2400,
+        "max_row_violation": 0.0,
+        "max_bound_violation": 0.0,
+        "max_integrality_violation": 0.0,
+        "reported_objective": 165342.44481585734,
+        "independent_objective": 165342.44481586025,
+        "objective_absolute_error": 2.9103830456733704e-09,
+        "violations": [],
+        "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+      },
+      "status": "original_math_and_all_operating_tables_valid",
+      "independent_P": 165342.44481586025,
+      "cost_components": {
+        "empty_return": 31925.0879577498,
+        "initial_source": 565.0,
+        "loaded_voyage": 36216.899021484656,
+        "lost_production": 50878.30351426682,
+        "original_objective_constant": 0.0,
+        "stockout": 45759.90432235896,
+        "terminal_exit": -2.75,
+        "waiting": 0.0
+      },
+      "operating_counts": {
+        "arcs": 226,
+        "ledger": 480,
+        "costs": 8,
+        "paths": {
+          "paths": 16,
+          "arc_units": 226
+        }
+      },
+      "operating_closure": {
+        "at": "2026-10-31T15:52:26.607932+00:00",
+        "instance": "LR1_DR03_VC03_V16a",
+        "original_model_periods": 120,
+        "raw_metadata_periods": 360,
+        "raw_prefix_scope": "Only original MPS time indices 0..119; raw extra periods are not evaluated",
+        "ports": 4,
+        "classes": 3,
+        "anonymous_paths": 16,
+        "positive_original_arc_rows": 226,
+        "path_arc_units": 226,
+        "port_period_rows": 480,
+        "max_inventory_residual": 0.0,
+        "original_cost": 165342.44481586025,
+        "economic_components": [
+          {
+            "component": "empty_return",
+            "original_objective_contribution": 31925.0879577498
+          },
+          {
+            "component": "initial_source",
+            "original_objective_contribution": 565.0
+          },
+          {
+            "component": "loaded_voyage",
+            "original_objective_contribution": 36216.899021484656
+          },
+          {
+            "component": "lost_production",
+            "original_objective_contribution": 50878.30351426682
+          },
+          {
+            "component": "original_objective_constant",
+            "original_objective_contribution": 0.0
+          },
+          {
+            "component": "stockout",
+            "original_objective_contribution": 45759.90432235896
+          },
+          {
+            "component": "terminal_exit",
+            "original_objective_contribution": -2.75
+          },
+          {
+            "component": "waiting",
+            "original_objective_contribution": 0.0
+          }
+        ],
+        "raw_original_semantics": "All original arcs: vessel identity/time/geometry cost; every port-period: raw rate prefix, class-capacity cargo, berth, inventory and alpha penalty; source multiset: original raw fleet",
+        "terminal_exit_scope": "Original sink arcs consume a berth and load/unload a full class cargo at their origin. Their negative objective is a terminal adjustment. No physical destination or delivered future demand is inferred.",
+        "path_identity": "Deterministic decomposition of aggregate class flow, not unique original named-vessel assignments",
+        "computation_status": "closed_artifact_observation",
+        "computation_scope": "original_model",
+        "original_model_bound": null,
+        "solver_reports_original_optimal": false,
+        "benchmark_score": null,
+        "whole_benchmark_qualified": false,
+        "original_check": {
+          "object": "declared input linear model recomputed from its MPS, without optimization relaxations",
+          "feasible": true,
+          "objective_consistent": true,
+          "variables_recomputed": 6300,
+          "integer_variables_recomputed": 5334,
+          "constraints_recomputed": 2400,
+          "max_row_violation": 0.0,
+          "max_bound_violation": 0.0,
+          "max_integrality_violation": 0.0,
+          "reported_objective": 165342.44481585734,
+          "independent_objective": 165342.44481586025,
+          "objective_absolute_error": 2.9103830456733704e-09,
+          "violations": [],
+          "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"
+        }
+      },
+      "reference_bounds": "not part of this existing-artifact inspection",
+      "science_review": "unreviewed_no_grade"
+    }
+  ],
+  "all_original_math_and_operating_valid": true,
+  "aggregate_score": null
+}

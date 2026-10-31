@@ -1,0 +1,204 @@
+{
+  "format": "maritime-candidate-scientific-review/1",
+  "assignment_id": "l06-maritime-pair-content-71fa72e40dc74c3fb2234d69b4ed3be7",
+  "reviewer": "/root/benchmark_review",
+  "reviewed_at": "2026-10-31T16:13:13.808600+00:00",
+  "disclosure": "Single non-blind AI reviewer, familiar with author research, previous versions and both current products. Not a professional-human, statistically calibrated or fresh-content-blind evaluation. Codex actual model/usage unknown. No model-level cost/speed causal ranking.",
+  "scope": "First candidate content/scientific review of these naturally sealed products. Existing root mathematical/operating audits are identified as external evidence; reviewer used archive identity, source reading, actual PNG views and selected independent CSV/Fraction/raw arithmetic. No new candidate/native/solver/LP/checker/certificate execution.",
+  "rating_semantics": "Descriptive S01..S05 evidence layers, not binary engineering points or a numeric scale. Layers are not summed; honest limitations are not automatically scientific failures.",
+  "aggregate_score": null,
+  "heavy_benchmark_qualified": false,
+  "candidate_effective_hours_qualified": false,
+  "candidate": "codex",
+  "workspace": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\complete-workspace.zip",
+  "static_snapshot": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex",
+  "source_only_run": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run",
+  "originals_preserved": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex",
+  "initial_observations": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\REVIEW-STATIC-CHECKPOINT.md",
+  "private_outcomes": [
+    {
+      "system": "codex",
+      "label": "maritime-eval-vc05",
+      "native_exit": 0,
+      "engineering_status": "numeric_delivery_valid_science_unreviewed",
+      "P": 63855.512411443444,
+      "error": null,
+      "source": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex-maritime-eval-vc05-actual-assessment.json",
+      "keys": [
+        "at",
+        "model",
+        "raw_archive",
+        "instance",
+        "delivery",
+        "layout",
+        "mathematical_check",
+        "engineering_status",
+        "operating_check",
+        "economic_measurement",
+        "scientific_review",
+        "total_score",
+        "heavy_benchmark_qualified",
+        "subject_role",
+        "bound_checks"
+      ]
+    },
+    {
+      "system": "codex",
+      "label": "maritime-eval-vc03",
+      "native_exit": 0,
+      "engineering_status": "numeric_delivery_valid_science_unreviewed",
+      "P": 200079.49032861626,
+      "error": null,
+      "source": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex-maritime-eval-vc03-actual-assessment.json",
+      "keys": [
+        "at",
+        "model",
+        "raw_archive",
+        "instance",
+        "delivery",
+        "layout",
+        "mathematical_check",
+        "engineering_status",
+        "operating_check",
+        "economic_measurement",
+        "scientific_review",
+        "total_score",
+        "heavy_benchmark_qualified",
+        "subject_role",
+        "bound_checks"
+      ]
+    }
+  ],
+  "optimizer_diagnostics": [
+    {
+      "label": "maritime-eval-vc05",
+      "P": 63855.512411443444,
+      "scope": "Actual submitted full delivery P after external full checker"
+    },
+    {
+      "label": "maritime-eval-vc03",
+      "P": 200079.49032861626,
+      "scope": "Actual submitted full delivery P after external full checker"
+    }
+  ],
+  "findings": [
+    {
+      "id": "S01",
+      "evidence_level": "Middle supported; bounded higher-layer mechanism evidence",
+      "status": "supported_with_limits",
+      "basis": "Three meaningful development methods at the same nominal one-thread/180s profile, real native incumbent histories and failures. Class-block development reduces five-class P 157652.780547→49807.068440 and three-class 198645.509041→134043.712499; single-class is 0.01 worse and CP-SAT is much more expensive. Source fixes other class flows within each actual neighborhood and retains only unrestricted bounds globally.",
+      "limits_or_missing": "The later LNS design was selected after earlier development results. Fresh terminal seed, restarts, neighborhood allocation and warm start jointly differ from direct SCIP; the entire improvement is not isolated to a single operator. One run/build/seed, some measured clock overrun; not universal superiority.",
+      "sources": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\REPORT.md",
+          "locator": "lines 7–63,108–128"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\optimize.py",
+          "locator": "terminal_seed, registered schedule, incumbent_before/retained, global_bounds"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\solve.py",
+          "locator": "solve_scip free_classes fixed arc bounds; native recorder"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\static-binding-and-spots.json",
+          "locator": "selected_report_spots codex"
+        }
+      ]
+    },
+    {
+      "id": "S02",
+      "evidence_level": "Middle supported; additional localized higher-layer intervention evidence",
+      "status": "supported_with_limits",
+      "basis": "Saved costs/ledger support greater sailing spending with far lower alpha penalties, not a free reduction of every objective component. Five-class loading loss632→35, P1 shortage512→8, P2 185→90. Three-class port3 shortage230→0 while loading loss844→498. Original raw independently supports the P1 capacity example: service at t3 gives372>336, t4 gives348, t5 gives324; initial ship availability3/cargo300 is a genuine timing/storage interaction. Actual class-pair feasible improvement while other class arcs are fixed supplies a localized intervention, beyond a cost list.",
+      "limits_or_missing": "No route-specific ablation identifies each voyage as necessary, and no one vessel is established as the sole cause of the total gain. Raw alpha is legal priced slack; avoidable incumbent slack is not inevitable physical unmet demand. Terminal exits are service at their origin, not future delivery.",
+      "sources": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\REPORT.md",
+          "locator": "lines45–106"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\raw-service-spot.json",
+          "locator": "raw fields and t3/t4/t5 arithmetic"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\static-binding-and-spots.json",
+          "locator": "costs and per_port"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\solve.py",
+          "locator": "fixed non-free class arcs"
+        }
+      ]
+    },
+    {
+      "id": "S03",
+      "evidence_level": "Middle supported; not an exact global-optimality proof",
+      "status": "supported_with_limits",
+      "basis": "Report/source distinguish full original SCIP numerical bounds, restricted neighborhood bounds, and floating-scaled CP-SAT bounds. The port-chain incidence/integral-data argument for the integer-stock comparison is coherent for this family; it does not claim the coupled routing MILP is integral. Actual numerical tolerances, priced slack, CP failure and remaining global gaps are disclosed.",
+      "limits_or_missing": "No candidate-owned exact rational full-MILP optimum certificate or optimum found. Root later supplied weak-duality/rational witnesses from existing routes for measurement; those are external and provide no additional candidate S03 credit. Private delivered P still has substantial unresolved lower-bound distance.",
+      "sources": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\REPORT.md",
+          "locator": "lines9–13,63,108–128"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\solve.py",
+          "locator": "derived_integer_bounds and explicit bound_scope"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\private-originals\\actual-private-checker-commands.json",
+          "locator": "witness scope and source route"
+        }
+      ]
+    },
+    {
+      "id": "S04",
+      "evidence_level": "Middle: two registered new inputs completed; statistical higher layer unsupported",
+      "status": "supported_on_two_registered_inputs",
+      "basis": "Original sealed source/argv ran source-only on the same two registered raw/MPS files as the other product, with no old vectors. Both natural native0; actual full checker0 validates mathematical model and all four operating tables/path coverage. P is63855.512411443444 and200079.49032861626; these remain uncapped raw costs.",
+      "limits_or_missing": "Only two restricted demand-perturbation inputs, not a representative population or repeated-seed study. Data and legitimate MPS RHS serialization both changed, so this tests whole-program transfer rather than isolating route optimization. Static report honestly makes no claim to unseen results it had not received.",
+      "sources": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\private-facts-and-parser-cause.json",
+          "locator": "codex records and source/input byte binding"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\actual-private-checker-binding.json",
+          "locator": "two actual checker0 outcomes"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\private-originals\\pool-registration.json",
+          "locator": "registered recipe/profile"
+        }
+      ]
+    },
+    {
+      "id": "S05",
+      "evidence_level": "Middle supported; actual assigned-input source-only reconstruction supports handoff",
+      "status": "supported_with_limits",
+      "basis": "Source-map, full source/parameters/logs/stage vectors, six actually viewed figures and original native handoff commands are coherent. The three compute modules and declared dependencies produced complete outputs on two fresh assigned inputs with source bytes equal to sealed submission. Selected report mechanisms trace to preserved CSV/raw/phase evidence.",
+      "limits_or_missing": "Reviewer did not re-run the full three-method development study or refit/re-optimize; this would duplicate authorized evidence. New-input compute reconstruction is demonstrated, not every possible environment or complete statistical scientific replication. No OS security or heavy-hours certification.",
+      "sources": [
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\HANDOFF.md",
+          "locator": "assigned interface, development reproduction, dependencies/provenance"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\source-map.json",
+          "locator": "report/figure source mapping"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\static-binding-and-spots.json",
+          "locator": "actual_visual_review/archive_bindings"
+        },
+        {
+          "path": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\private-facts-and-parser-cause.json",
+          "locator": "source_bindings and complete layouts"
+        }
+      ]
+    }
+  ],
+  "material_failures": []
+}

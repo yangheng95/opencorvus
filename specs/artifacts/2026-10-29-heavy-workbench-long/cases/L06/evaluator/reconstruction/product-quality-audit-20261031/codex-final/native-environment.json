@@ -1,0 +1,32 @@
+{
+  "python": "3.14.2 (tags/v3.14.2:df79316, Dec  5 2025, 17:18:21) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "D:\\opencorvus-benchmark-runs\\native-operations-reconstruction-20261031\\Scripts\\python.exe",
+  "declared_runtime_packages": {
+    "pyscipopt": "6.3.0",
+    "ortools": "9.15.6755",
+    "numpy": "2.5.4"
+  },
+  "ortools_declared_dependencies": [
+    "absl-py>=2.0.0",
+    "numpy>=2.0.2",
+    "pandas>=2.0.0",
+    "protobuf<6.34,>=6.33.1",
+    "typing-extensions>=4.12",
+    "immutabledict>=3.0.0"
+  ],
+  "owned_vendor": {
+    "contourpy": "1.4.0",
+    "cycler": "0.12.1",
+    "fonttools": "4.68.0",
+    "kiwisolver": "1.5.1",
+    "matplotlib": "3.10.7",
+    "numpy": "2.5.4",
+    "packaging": "26.3",
+    "pillow": "13.0.0",
+    "pyparsing": "3.3.3",
+    "pypdf": "6.1.3",
+    "python-dateutil": "3.0.0",
+    "six": "1.17.0",
+    "tzdata": "2026.6"
+  }
+}

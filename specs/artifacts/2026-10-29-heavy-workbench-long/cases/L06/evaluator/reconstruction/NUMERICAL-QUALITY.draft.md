@@ -1,5 +1,7 @@
 # 数字交付与经济质量测量合同草稿
 
+> 状态说明：下文保留前期测量开发草稿的论证。当前完整pilot公开/首整审闭合状态以[PILOT-FREEZE](PILOT-FREEZE.json)、[COMPLETE-CASE](COMPLETE-CASE.md)和真实pair locator为准；已启动的两个候选及新输入不能被本文历史“尚未生成/不启动”语句覆盖。主经济P/科学分层不变，参见[实物核查](product-quality-audit-20261031/README.md)。
+
 本合同尚未冻结，不发布新总分或宣称数小时难度已经成立。原0.2/0.3/0.4的public、rubric、分数全部只读。当前实现与真实结果见[完整测量报告](economic-measurement/README.md)。
 
 ## 任务和输入事实

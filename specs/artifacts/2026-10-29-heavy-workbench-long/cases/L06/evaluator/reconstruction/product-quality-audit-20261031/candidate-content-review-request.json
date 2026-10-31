@@ -1,0 +1,27 @@
+{
+  "assignment_id": "l06-maritime-pair-content-71fa72e40dc74c3fb2234d69b4ed3be7",
+  "at": "2026-10-31T16:00:57.355138+00:00",
+  "purpose": "first necessary candidate-content review of each of the two natural sealed deliveries, same batch; not another author whole-case review",
+  "roles": {
+    "codex": "candidate",
+    "opencorvus": "candidate"
+  },
+  "case_public": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/public",
+  "science_anchors": "D:/myhexin-local/opencorvus/specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/NUMERICAL-QUALITY.draft.md#S01-S05",
+  "codex_workspace": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\complete-workspace.zip",
+  "codex_receipt": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\complete-workspace-receipt.json",
+  "codex_static_snapshot": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex",
+  "opencorvus_workspace": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\complete-workspace.zip",
+  "opencorvus_receipt": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\complete-workspace-receipt.json",
+  "opencorvus_static_snapshot": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation",
+  "oc_final_binding": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\oc-final-artifact-binding.json",
+  "existing_numeric_audit": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\independent-existing-product-audit.json",
+  "candidate_source_only": {
+    "codex": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run",
+    "opencorvus": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run"
+  },
+  "private_execution": "Codex both native0 completed; OC actual first same two inputs in sequence still running. Main will provide immutable full private checker outcomes once ready; do not execute programme/solver/LP/grader or repeat15plan full check. Read saved facts and inspect mathematical/scientific claims by raw/CSV/source spot arithmetic only.",
+  "output_root": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031",
+  "expected": "per-candidate S01..S05 evidence levels and concrete supported/false/missing claims, actual figure review and comparison validity/limits; no forced score differences/no100/aggregate/heavy-hours claim",
+  "constraints": "existing single reviewer only, no delegation/new cold/native/solver/LP/counter/author re-review; preserve first observations and original final reports, no source repairs or candidate feedback"
+}

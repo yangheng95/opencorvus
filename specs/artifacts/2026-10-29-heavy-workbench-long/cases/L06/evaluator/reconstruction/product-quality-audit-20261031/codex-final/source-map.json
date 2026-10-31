@@ -1,0 +1,73 @@
+{
+  "format": "maritime-source-map/1",
+  "compute": {
+    "optimize.py": "Fresh assigned-input class-block numerical allocation, stage search, best-plan selection and run accounting",
+    "solve.py": "Native original-MPS SCIP solve and integer-stock CP-SAT comparison, exact parameter and event capture",
+    "core.py": "Complete free-format MPS parser, assigned raw archive matching, original-model feasibility/objective checker, terminal seed and six operating outputs"
+  },
+  "validation": {
+    "check.py": "Independent wire/table and path/ledger/cost reconciliation against original MPS and supplied raw facts",
+    "verify_delivery.py": "All 22 original-model and operating audits, public schema wire types, native process completion, static manifest references and actual PNG decoding"
+  },
+  "research": {
+    "run_experiments.py": "Registered sequential six-run one-thread direct SCIP/CP-SAT comparison",
+    "run_classblock.py": "Registered sequential three-run one-thread full-horizon class-block refinement",
+    "figures.py": "Six actual-data rendered PNGs and analysis-summary.json",
+    "analyse_operations.py": "Operating mechanisms, route/class service and actual initial-service tables",
+    "write_report.py": "Report tables and narrative traced to actual run JSON/CSV"
+  },
+  "static_deliverables": {
+    "REPORT.md": "Economic comparisons, full/local bound scopes, mechanisms, timing and uncertainty",
+    "HANDOFF.md": "Native assigned-input and development reproduction commands",
+    "EXPOSURE.md": "Input boundary, incidental exposure and generic method documentation",
+    "requirements-lock.txt": "Exact observed generic package versions",
+    "native-environment.json": "Declared interpreter, solver versions and owned vendor package metadata",
+    "specs/PLAN.md": "Original recall and pre-implementation analysis",
+    "specs/CLASSBLOCK.md": "Registered refinement and one-thread allocation",
+    "VISUAL_REVIEW.md": "Recorded visual inspection of every final actual-data figure and fixes",
+    "delivery-validation.json": "Passed real plan/schema/process artifact audit, plus separate actual visual review record",
+    "initial-failures.json": "Transcribed actual initial native tool failures and smoke statuses, with observed command exit codes"
+  },
+  "development_experiments": [
+    {
+      "instance": "LR1_DR02_VC01_V6a_t120",
+      "direct_scip": "experiments/controlled180/LR1_DR02_VC01_V6a_t120-scip",
+      "integer_stock_cp": "experiments/controlled180/LR1_DR02_VC01_V6a_t120-cp",
+      "classblock": "experiments/classblock180/LR1_DR02_VC01_V6a_t120"
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a_t120",
+      "direct_scip": "experiments/controlled180/LR1_DR02_VC05_V8a_t120-scip",
+      "integer_stock_cp": "experiments/controlled180/LR1_DR02_VC05_V8a_t120-cp",
+      "classblock": "experiments/classblock180/LR1_DR02_VC05_V8a_t120"
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a_t120",
+      "direct_scip": "experiments/controlled180/LR1_DR03_VC03_V16a_t120-scip",
+      "integer_stock_cp": "experiments/controlled180/LR1_DR03_VC03_V16a_t120-cp",
+      "classblock": "experiments/classblock180/LR1_DR03_VC03_V16a_t120"
+    }
+  ],
+  "per_run_evidence": {
+    "full_vector": "full-plan.json",
+    "native_claim": "native-result.json",
+    "original_model_check": "validation.json",
+    "separate_operating_audit": "independent-audit.json",
+    "native_parameters": "parameters.txt (or per-stage parameters.txt)",
+    "native_log": "solver.log (or per-stage solver.log)",
+    "genuine_incumbent_events": "incumbents.jsonl",
+    "process_facts": "process-result.json",
+    "original_source_snapshot": "source-snapshot/",
+    "numeric_layout": "layout.json"
+  },
+  "figure_sources": {
+    "figures/comparison.png": "Actual completed run JSON and arcs/paths/port-period/costs CSV under the exact development experiment directories; selected operating-plan directories are recorded in analysis-summary.json",
+    "figures/convergence.png": "Actual completed run JSON and arcs/paths/port-period/costs CSV under the exact development experiment directories; selected operating-plan directories are recorded in analysis-summary.json",
+    "figures/economics.png": "Actual completed run JSON and arcs/paths/port-period/costs CSV under the exact development experiment directories; selected operating-plan directories are recorded in analysis-summary.json",
+    "figures/inventory.png": "Actual completed run JSON and arcs/paths/port-period/costs CSV under the exact development experiment directories; selected operating-plan directories are recorded in analysis-summary.json",
+    "figures/class-service.png": "Actual completed run JSON and arcs/paths/port-period/costs CSV under the exact development experiment directories; selected operating-plan directories are recorded in analysis-summary.json",
+    "figures/paths.png": "Actual completed run JSON and arcs/paths/port-period/costs CSV under the exact development experiment directories; selected operating-plan directories are recorded in analysis-summary.json"
+  },
+  "source_only_execution": "No development vector, log, figure, report number or cache is loaded by optimize.py or solve.py. Every assigned plan is recomputed from complete model/raw arguments.",
+  "provenance": "Local .git in this owned project only; no remote, host-repository action or push."
+}

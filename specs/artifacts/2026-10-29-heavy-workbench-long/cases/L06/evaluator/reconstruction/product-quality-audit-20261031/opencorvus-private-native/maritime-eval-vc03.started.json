@@ -1,0 +1,24 @@
+{
+  "started_at": "2026-10-31T16:02:55.142737+00:00",
+  "argv": [
+    "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+    "-B",
+    "solve.py",
+    "--model",
+    "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc03\\maritime-eval-vc03_t120.mps",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc03\\maritime-eval-vc03.raw.zip",
+    "--instance",
+    "maritime-eval-vc03",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc03",
+    "--optimization-seconds",
+    "180",
+    "--method",
+    "feasibility"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\source",
+  "wrapper_pid": 16784,
+  "launcher_pid": 31508,
+  "pid_scope": "Windows venv launcher; actual interpreter as candidate execution.json"
+}

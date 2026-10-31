@@ -1,0 +1,89 @@
+{
+  "scope": "development artifacts, Codex final sealed/OC still-running observation; no unseen/global capability ranking",
+  "pairs": [
+    {
+      "instance": "LR1_DR02_VC01_V6a",
+      "Codex_final_programme_P": 33808.96002046674,
+      "OC_current_programme_P": 47173.27825381338,
+      "Codex_lower_than_OC_percent": 28.330272408545834,
+      "absolute_cost_difference": 13364.318233346647,
+      "Codex_alpha_cost": 8.09323040362111e-11,
+      "OC_alpha_cost": 14263.376219260983,
+      "alpha_cost_difference": 14263.376219260903,
+      "Codex_operating_counts": {
+        "arcs": 124,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 6,
+          "arc_units": 124
+        }
+      },
+      "OC_operating_counts": {
+        "arcs": 119,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 6,
+          "arc_units": 119
+        }
+      }
+    },
+    {
+      "instance": "LR1_DR02_VC05_V8a",
+      "Codex_final_programme_P": 49807.06844040899,
+      "OC_current_programme_P": 76171.69560303922,
+      "Codex_lower_than_OC_percent": 34.61210486901422,
+      "absolute_cost_difference": 26364.627162630226,
+      "Codex_alpha_cost": 12668.607351784774,
+      "OC_alpha_cost": 39589.08200138694,
+      "alpha_cost_difference": 26920.47464960216,
+      "Codex_operating_counts": {
+        "arcs": 143,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 8,
+          "arc_units": 143
+        }
+      },
+      "OC_operating_counts": {
+        "arcs": 138,
+        "ledger": 360,
+        "costs": 8,
+        "paths": {
+          "paths": 8,
+          "arc_units": 138
+        }
+      }
+    },
+    {
+      "instance": "LR1_DR03_VC03_V16a",
+      "Codex_final_programme_P": 134043.71249888832,
+      "OC_current_programme_P": 165342.44481586025,
+      "Codex_lower_than_OC_percent": 18.929641660874754,
+      "absolute_cost_difference": 31298.73231697193,
+      "Codex_alpha_cost": 62655.21744276305,
+      "OC_alpha_cost": 96638.20783662578,
+      "alpha_cost_difference": 33982.990393862725,
+      "Codex_operating_counts": {
+        "arcs": 190,
+        "ledger": 480,
+        "costs": 8,
+        "paths": {
+          "paths": 16,
+          "arc_units": 190
+        }
+      },
+      "OC_operating_counts": {
+        "arcs": 226,
+        "ledger": 480,
+        "costs": 8,
+        "paths": {
+          "paths": 16,
+          "arc_units": 226
+        }
+      }
+    }
+  ]
+}

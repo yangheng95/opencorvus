@@ -1,0 +1,25 @@
+{
+  "argv": [
+    "optimize.py",
+    "--model",
+    "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc03\\maritime-eval-vc03_t120.mps",
+    "--raw",
+    "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc03\\maritime-eval-vc03.raw.zip",
+    "--instance",
+    "maritime-eval-vc03",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc03",
+    "--optimization-seconds",
+    "180"
+  ],
+  "utc_start": "2026-10-31T15:56:15.546275+00:00",
+  "instance": "maritime-eval-vc03",
+  "pid": 13892,
+  "executable": "D:\\opencorvus-benchmark-runs\\native-operations-reconstruction-20261031\\Scripts\\python.exe",
+  "python": "3.14.2 (tags/v3.14.2:df79316, Dec  5 2025, 17:18:21) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "model": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc03\\maritime-eval-vc03_t120.mps",
+  "raw_archive": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\inputs\\maritime-eval-vc03\\maritime-eval-vc03.raw.zip",
+  "registered_numerical_allocation_seconds": 180.0,
+  "solver_threads": 1
+}

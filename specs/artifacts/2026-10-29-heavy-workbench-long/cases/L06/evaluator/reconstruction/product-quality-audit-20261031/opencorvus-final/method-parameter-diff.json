@@ -1,0 +1,370 @@
+{
+  "separating/maxrounds": {
+    "default": "-1",
+    "feasibility": "1"
+  },
+  "separating/maxroundsroot": {
+    "default": "-1",
+    "feasibility": "5"
+  },
+  "nodeselection/restartdfs/stdpriority": {
+    "default": "10000",
+    "feasibility": "536870911"
+  },
+  "heuristics/dks/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/dps/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/padm/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/ofins/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/reoptsols/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/trivialnegation/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/trivial/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/clique/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/locks/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/vbounds/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/shiftandpropagate/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/zeroobj/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/completesol/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/repair/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/randrounding/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/shifting/freq": {
+    "default": "5",
+    "feasibility": "3"
+  },
+  "heuristics/intshifting/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/twoopt/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/scheduler/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/adaptivediving/freq": {
+    "default": "5",
+    "feasibility": "3"
+  },
+  "heuristics/adaptivediving/maxlpiterquot": {
+    "default": "0.15",
+    "feasibility": "0.225"
+  },
+  "heuristics/indicatordiving/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/indicatordiving/maxlpiterquot": {
+    "default": "0.05",
+    "feasibility": "0.075"
+  },
+  "heuristics/indicatordiving/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/fixandinfer/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/farkasdiving/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/farkasdiving/maxlpiterquot": {
+    "default": "0.05",
+    "feasibility": "0.075"
+  },
+  "heuristics/farkasdiving/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/feaspump/freq": {
+    "default": "20",
+    "feasibility": "10"
+  },
+  "heuristics/feaspump/maxlpiterquot": {
+    "default": "0.05",
+    "feasibility": "0.075"
+  },
+  "heuristics/feaspump/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/conflictdiving/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/conflictdiving/maxlpiterquot": {
+    "default": "0.05",
+    "feasibility": "0.075"
+  },
+  "heuristics/conflictdiving/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/coefdiving/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/pscostdiving/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/pscostdiving/maxlpiterquot": {
+    "default": "0.05",
+    "feasibility": "0.075"
+  },
+  "heuristics/pscostdiving/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/fracdiving/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/fracdiving/maxlpiterquot": {
+    "default": "0.05",
+    "feasibility": "0.075"
+  },
+  "heuristics/fracdiving/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/nlpdiving/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/veclendiving/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/veclendiving/maxlpiterquot": {
+    "default": "0.05",
+    "feasibility": "0.075"
+  },
+  "heuristics/veclendiving/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/distributiondiving/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/distributiondiving/maxlpiterquot": {
+    "default": "0.05",
+    "feasibility": "0.075"
+  },
+  "heuristics/distributiondiving/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/intdiving/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/actconsdiving/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/objpscostdiving/freq": {
+    "default": "20",
+    "feasibility": "10"
+  },
+  "heuristics/objpscostdiving/maxlpiterquot": {
+    "default": "0.05",
+    "feasibility": "0.075"
+  },
+  "heuristics/objpscostdiving/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/rootsoldiving/freq": {
+    "default": "20",
+    "feasibility": "10"
+  },
+  "heuristics/rootsoldiving/maxlpiterquot": {
+    "default": "0.01",
+    "feasibility": "0.015"
+  },
+  "heuristics/rootsoldiving/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/linesearchdiving/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/linesearchdiving/maxlpiterquot": {
+    "default": "0.05",
+    "feasibility": "0.075"
+  },
+  "heuristics/linesearchdiving/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/guideddiving/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/guideddiving/maxlpiterquot": {
+    "default": "0.05",
+    "feasibility": "0.075"
+  },
+  "heuristics/guideddiving/maxlpiterofs": {
+    "default": "1000",
+    "feasibility": "1500"
+  },
+  "heuristics/octane/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/rens/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/rens/minfixingrate": {
+    "default": "0.5",
+    "feasibility": "0.3"
+  },
+  "heuristics/rens/nodesofs": {
+    "default": "500",
+    "feasibility": "2000"
+  },
+  "heuristics/alns/freq": {
+    "default": "20",
+    "feasibility": "10"
+  },
+  "heuristics/alns/trustregion/active": {
+    "default": "FALSE",
+    "feasibility": "TRUE"
+  },
+  "heuristics/alns/nodesofs": {
+    "default": "500",
+    "feasibility": "2000"
+  },
+  "heuristics/alns/nodesquot": {
+    "default": "0.1",
+    "feasibility": "0.2"
+  },
+  "heuristics/rins/freq": {
+    "default": "15",
+    "feasibility": "8"
+  },
+  "heuristics/localbranching/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/trustregion/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/gins/freq": {
+    "default": "10",
+    "feasibility": "5"
+  },
+  "heuristics/mutation/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/crossover/freq": {
+    "default": "15",
+    "feasibility": "8"
+  },
+  "heuristics/crossover/nwaitingnodes": {
+    "default": "200",
+    "feasibility": "20"
+  },
+  "heuristics/crossover/nodesquot": {
+    "default": "0.1",
+    "feasibility": "0.15"
+  },
+  "heuristics/crossover/minfixingrate": {
+    "default": "0.666",
+    "feasibility": "0.5"
+  },
+  "heuristics/crossover/dontwaitatroot": {
+    "default": "FALSE",
+    "feasibility": "TRUE"
+  },
+  "heuristics/lpface/freq": {
+    "default": "15",
+    "feasibility": "8"
+  },
+  "heuristics/dins/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/bound/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/undercover/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "heuristics/proximity/freq": {
+    "default": "-1",
+    "feasibility": "20"
+  },
+  "heuristics/mpec/freq": {
+    "default": "50",
+    "feasibility": "25"
+  },
+  "heuristics/multistart/freq": {
+    "default": "0",
+    "feasibility": "20"
+  },
+  "separating/aggregation/freq": {
+    "default": "10",
+    "feasibility": "-1"
+  },
+  "separating/mcf/freq": {
+    "default": "0",
+    "feasibility": "-1"
+  }
+}

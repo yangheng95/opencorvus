@@ -1,0 +1,111 @@
+{
+  "assignment_id": "l06-maritime-pair-content-71fa72e40dc74c3fb2234d69b4ed3be7",
+  "records": [
+    {
+      "system": "codex",
+      "label": "maritime-eval-vc05",
+      "native_exit": 0,
+      "engineering_status": "numeric_delivery_valid_science_unreviewed",
+      "P": 63855.512411443444,
+      "error": null,
+      "source": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex-maritime-eval-vc05-actual-assessment.json",
+      "keys": [
+        "at",
+        "model",
+        "raw_archive",
+        "instance",
+        "delivery",
+        "layout",
+        "mathematical_check",
+        "engineering_status",
+        "operating_check",
+        "economic_measurement",
+        "scientific_review",
+        "total_score",
+        "heavy_benchmark_qualified",
+        "subject_role",
+        "bound_checks"
+      ]
+    },
+    {
+      "system": "opencorvus",
+      "label": "maritime-eval-vc05",
+      "native_exit": 4,
+      "engineering_status": "invalid_delivery",
+      "P": null,
+      "error": "numeric_delivery_declaration:[Errno 2] No such file or directory: 'D:\\\\opencorvus-benchmark-runs\\\\l06-maritime-opencorvus-native-20261031\\\\evaluation\\\\private-run\\\\outputs\\\\maritime-eval-vc05\\\\layout.json'",
+      "source": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-maritime-eval-vc05-actual-assessment.json",
+      "keys": [
+        "at",
+        "model",
+        "raw_archive",
+        "instance",
+        "delivery",
+        "layout",
+        "mathematical_check",
+        "engineering_status",
+        "operating_check",
+        "economic_measurement",
+        "scientific_review",
+        "total_score",
+        "heavy_benchmark_qualified",
+        "subject_role",
+        "error"
+      ]
+    },
+    {
+      "system": "codex",
+      "label": "maritime-eval-vc03",
+      "native_exit": 0,
+      "engineering_status": "numeric_delivery_valid_science_unreviewed",
+      "P": 200079.49032861626,
+      "error": null,
+      "source": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex-maritime-eval-vc03-actual-assessment.json",
+      "keys": [
+        "at",
+        "model",
+        "raw_archive",
+        "instance",
+        "delivery",
+        "layout",
+        "mathematical_check",
+        "engineering_status",
+        "operating_check",
+        "economic_measurement",
+        "scientific_review",
+        "total_score",
+        "heavy_benchmark_qualified",
+        "subject_role",
+        "bound_checks"
+      ]
+    },
+    {
+      "system": "opencorvus",
+      "label": "maritime-eval-vc03",
+      "native_exit": 4,
+      "engineering_status": "invalid_delivery",
+      "P": null,
+      "error": "numeric_delivery_declaration:[Errno 2] No such file or directory: 'D:\\\\opencorvus-benchmark-runs\\\\l06-maritime-opencorvus-native-20261031\\\\evaluation\\\\private-run\\\\outputs\\\\maritime-eval-vc03\\\\layout.json'",
+      "source": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-maritime-eval-vc03-actual-assessment.json",
+      "keys": [
+        "at",
+        "model",
+        "raw_archive",
+        "instance",
+        "delivery",
+        "layout",
+        "mathematical_check",
+        "engineering_status",
+        "operating_check",
+        "economic_measurement",
+        "scientific_review",
+        "total_score",
+        "heavy_benchmark_qualified",
+        "subject_role",
+        "error"
+      ]
+    }
+  ],
+  "witness_scope": "Root-generated exact witness of existing Codex route and weak-duality L, no candidate-owned optimality proof, no new integer solve. Not S03 credit.",
+  "reviewer_reran_checker": false
+}

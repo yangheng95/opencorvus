@@ -1,0 +1,33 @@
+{
+  "system": "opencorvus",
+  "label": "maritime-eval-vc05",
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\assessment-source\\assess_operating_delivery.py",
+    "--model",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\fresh-pair-registered-inputs\\maritime-eval-vc05\\model\\maritime-eval-vc05_t120.mps",
+    "--raw-archive",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\fresh-pair-registered-inputs\\maritime-eval-vc05\\maritime-eval-vc05.raw.zip",
+    "--instance",
+    "maritime-eval-vc05",
+    "--delivery",
+    "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc05",
+    "--layout",
+    "D:\\opencorvus-benchmark-runs\\l06-maritime-opencorvus-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc05\\layout.json",
+    "--lower-certificate",
+    "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\reference-witnesses\\maritime-eval-vc05\\lower-certificate.json",
+    "--upper-values",
+    "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\reference-witnesses\\maritime-eval-vc05\\upper-values.json",
+    "--role",
+    "candidate",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-maritime-eval-vc05-actual-assessment.json"
+  ],
+  "started_at": "2026-10-31T16:09:34.086180+00:00",
+  "finished_at": "2026-10-31T16:09:34.683386+00:00",
+  "native_exit": 4,
+  "assessment": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-maritime-eval-vc05-actual-assessment.json"
+}

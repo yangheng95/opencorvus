@@ -1050,3 +1050,33 @@ Recall：用户要完整重型任务的实质质量，不再接受工程文件�
 - 实际pair phase=fresh_codex_and_opencorvus_running_no_business_results，active_evaluation=null，P/科学结果null。同十public字节/后来同两全输入/同数值profile，不作同模型费用速度因果排名。后续只自然交付和全部自有子进程终态→先封全workspace/失败/Git/deps/原源→实际source-only两输入执行→实际图与一次内容独评→报告真实成本/失败差异；停止作者算法/证明/曲线/组件活动代替此次结果。
 - L01仅一次15:06:35Z只读：owner23296/训练18416活，stage无execution/owner终态/新error、stderr0；wave-hybrid最新15:04:19Z28000接受/loss.0017796142927746774。rawloss不替解/初边值1%，不重开/热改原矩阵，旧root54408错误仍历史。下次心跳接后台，不持续监听。
 - actual-pair-native-20261031是启动与注册投影，完整公料/新输入/环境/真实audit外部保。无新grade，十题/数小时/统计成熟未达，ACTIVE；此真实start不冒比较结论。
+
+### 用户要求从真实产物反推评价缺陷：实施前Recall（2026-10-31）
+
+- 用户最新：“查真实产物看质量，反推评价方法的问题”。当前Codex已自然交付，OC仍原Task running。不能把其自报valid/文件数或旧双100当质量结论；先封Codex自然完整产物，核原子进程终态；OC只做明确时间点只读观察，不改其源/提前封最终版/提供反馈。
+- 已读实际submission.json、报告/移交/真实实验结果及当前单一原MPS/运营检查器、NUMERICAL锚点、首整审/私有池注册。明显现象是合法性与经济质量分离，候选报告使用不同gap定义、改进参照与多因素方法干预；直接触发是把自审数量或valid视作能力/科研质量，旧二值rubric未测连续业务损失。根因须由原向量/原声明/行账/源和图验证，不从报告标题推断。
+- 本轮只读真实交付并以现有同一verify/evaluate复算已完成原向量/全运营表和目标，不重任何solver/LP/原矩阵/图/作者方法或组件资格；实际view候选原PNG。保存原始报告和结果时点，找数字质量/报告推断/实验控制/资源/实际移交与当前评价的具体错位。新私有两输入仍按事前合同只在自然终态/原件先封后source-only执行；不按已见结果改public/经济目标/阈值/旧分，不把开发结果冒未知输入总排名。
+- 范围仅本任务产物/评价诊断，生产调度/UI/数据库/Provider协议/凭据/用户进程不适用，不动正在运行Task。root此次审阅不替未来唯一候选内容独评，也不新增独立作者整审。风险是OC还活、时间基准/模型归因未知和单次公开实例统计不足，全部明示。结论与具体代码/原数字/图绑定，必要设施问题才修当前唯一consumer，禁止先造通用新评估框架。相关定义调用已定位C/assess_operating_delivery、verify_original_mps、export_operational_plan、verify_economic_bounds以及各原submission声明与source-map，原完整公开契约不改变。
+
+- 实际新输入测量依赖说明（执行前，2026-11-01本地）：当前full assess CLI还要求独立lower/upper见证，不能把其facility错误当候选失败或把LP界设通过线。为真正同checker新对照，只在两候选原programme顺序自然结束后，对每个已注册输入各一次既有GLOP提议+Fraction全原模型核与整数路线不变的有理库存补全；参考路线固定取先自然交付Codex对应原private向量，不按最好结果选。两系统共享同见证，U来源必须如实标为Codex路线可达控制，非独立作者最优/新算法/100；P保各真实native原值，P/U可低于1。只此必要测量依赖，不再作者证明研究、额外整数搜索或重复旧LP。精确源先封pre-assessment-consumer-source.zip。独评原候选内容一次集中双份，不重作者整审。
+
+### 真实候选产物核查：已完成事实（UTC2026-10-31/本地跨入2026-11-01）
+
+- Codex自然完成后完整root先封86172277byte/4814members/203329078原bytes，Git b283400241f788d909b08910d959f779a917644a、公料0变动0extras。OC随后Task completed/all occurrence inactive，62provider/61tool request均有outcome、open0、自有Python自然终态；完整project先封174433879byte/4970members/271048071原bytes、实际TaskSQLite11120640byte另保。封后原stop正常dispose/runtimeDisposed+credentialsRemoved true；API60414自此退休，源credential不动。OC Git initialized但unborn HEAD，原probe128文本保、receipt语义改git_head=null而非冒commit；公开合同未要求Gitcommit不扣其分。
+- 用户“查真实产物看质量，反推评价方法的问题”：root从封存Codex和原OC只读快照核9+6=15完整plan。不是信候选自审：当前唯一MPS reader/verify和evaluate/四表consumer按原向量独立全行/域/整数/原目标、全弧/港期/费用/路径多重集复算，全部valid；没有solver/LP/导出/作图。OC原110file后与完整final封存全字节同，原numeric审结论准确绑定final，不需重复核旧plan。
+- 原最终programme开发P：Codex33808.96002047/49807.06844041/134043.71249889；OC固定feasibility47173.27825381/76171.69560304/165342.44481586，Codex低28.3303%/34.6121%/18.9296%。OC单类default33808.9700是另一个实验，不替其提交argv选最佳文件；OC已诚实说明面向已声明未来多类，不当造假。两报告保退化、原nativegap分母和单次因果限制；不能硬造文字扣分拉分。
+- 5类差距来自Codex多花555.8175航费但少26920.4746alpha罚费，净少26364.6272；3类也多航费少罚费。数值合法与业务损失相差真实，同3类正确CPplan1832191.8904/正确LNS134043.7125约13.67倍，valid/图/文件/audit数无法代表质量。已实际view两方经济图和16路径图，源/数值/图语义可追，未用图片数量评分。不同ownbaseline改善比例和SCIP(P-L)/L对(P-L)/P也不能直接排名；doc记录分母/界scope与方法干预范围。
+- 整个诊断在reconstruction/product-quality-audit-20261031和外部maritime-real-product-quality-audit-20261031；原工作区/全部dependency/cache/原始数据/失败外部保，科学投影不冒小ZIP含全。NUMERICAL草稿显式标历史阶段状态，当前PILOT-FREEZE/public/locator优先，未改public、原P/分数/阈值/方法或增加通用框架。
+- 自然交付各唯一原argv已从首封源执行注册两新输入，Codex两native0完、OC随后顺序首执行。原同两输入、同nominal180/单thread，不能以native0当数学或科学成功；完整private checker/候选科学独评待其原对象闭合。原/root/benchmark_review唯一批次各候选首次S内容审正在执行，assignment l06-maritime-pair-content-71fa72e40dc74c3fb2234d69b4ed3be7，不新作者整审/solver/cold/组件。公开开发优势不冒新输入或总体能力排名；有效小时/十题仍未达，ACTIVE。
+
+### 新输入真实失败的根因与评价反证（2026-11-01本地）
+
+- 原source-only两输入：Codex15:53:12→15:59:18Z两native0（183.205235/183.211550秒wrapper）；OC随后15:59:54→16:05:55Z两native1（180.36655/179.97964秒）。各自原源封存、无补wrapper/换报告/改动作/原料/阈值或重solver。两次fullchecker各0/4，共四真实CLI原argv/native收据保actual-private-checker-commands.json，科学/总分仍null。
+- Codex完整P63855.512411443444/200079.49032861626；OC完整交付P不可用（layout/四表缺），但真实SCIP已保存完整原数学向量，root单一reader/verify独立全行/界/整数/真实native目标均可行且一致/maxrow0，中间optimizer P93207.21333184093/137597.773752728。不能补表使其成功，也不能抹掉中间可行质量并把OC一概称算法失败；3类OC优化器反而低31.2284%。
+- 根因有直接源码/数据流：OC modelio.py read_mps在section判断中只测p[0]是否header keyword，未区分单token段标题与多token数据行。新SCIP模型RHS set名为RHS，故所有RHS数据被continue、parsed rhs={}，真实首库存RHS70/102变成0；SCIP本体读模型正确并优化，solve.py先保存values，再assert其错误check，误报行违约75/103而中断export/layout。不是缺源依赖、求解模型不可行、宿主生产调度或root checker错误。保原错误大列表和完整原native，没修候选或重测。
+- 这同时暴露评价设计的混合covariate：既有数字8%扰动，也有合法MPS序列化/RHS名变化。它符合完整MPS合同、两系统同预登记输入、成熟SCIP正常读取，候选鲁棒性故障真实；但不能将whole programme failure直接解释为纯路线优化能力差。应分别列优化器合法P、解析/校验鲁棒性、完整运营交付；以后欲隔离数值优化先事前固定/公开覆盖writer样式，不在此次事后改输入助一方。
+- 只为真实fullchecker各例一次共用LP-dual提议/Fraction见证和固定Codex原整数路线的有理库存补全，原native/精确结果另保。U来源明确为本次同一Codex路线，不是独立作者最优、不是给候选S03的功劳、不是P/U=1就满分。原P保持真实浮点声明，哪怕另一算法中间P更低也只如实标未完成。两完整candidate科学独评同assignment71fa仍集中结案中，不重旧作者审。
+- CODEX-COMPARISON-RESULTS.md/.json已增加真实新输入及失败层次，原0.2/.3/.4全部历史分数不改。新结果是小样本pipeline产品事实，不是十题重型/有效小时成熟或同模型费用速度因果排名。
+
+- 同唯一候选内容独评71fa已正式结案，无本assignment待评项；原静态checkpoint/原失误保，64成员源/报告/图与完整ZIP绑定、14PNG实际view、原CSV/raw/源/四actualCLI只读核。两方研究S01–S03均有受限支持；OC实际新输入自校验解析错影响S04/S05，不抹其已核优化器质量和诚实开发报告；evaluator后建精确见证不算candidate成果。无新solver/LP/重复checker/反例/作者整审。正式review/两份S/限制/原spot在product-quality-audit/independent-content-review。pair已paired_completed_quality_decomposed_no_heavy_qualification、active_candidate/evaluation=null，旧60414已退役，禁止再重复此两candidate或机械升版。
+- L01本轮末次只读16:13:56Z，owner23296/train18416活，当前原convection-lbfgs-s456-lrnone19000接受/loss.0020118511066985435，native终态/新error无、stderr0。原矩阵继续，不把loss冒质量、不热改/重原ID；真实local-transition/actual-product-quality-audit-end-observation.json保。十题完整重型/有效小时目标仍ACTIVE未达。

@@ -120,7 +120,7 @@
 
 - [2026-10-29-text-encoding-journey](2026-10-29-text-encoding-journey/README.md)：Unicode原文乱码修复、双语错误、真实JSON和五份下载核验。
 
-- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：旧合同/分数/证据只读；[原问题任务草稿、运营交付与整类方法对照](2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/README.md)已有真实质量改进，完整新题、未知输入验证与重型有效性仍未成立，不机械升版。；L06三原完整raw构造等价与两预登记新输入全链已实测，质量标尺/整题审查/有效小时未成立；L06真实有理经济界/完整数字正错交付已核，科学整审与重型资格仍待；[实际Codex对照结果](2026-10-29-heavy-workbench-long/CODEX-COMPARISON-RESULTS.md)单列原成绩和成本差异，未完成有效重型比较；L06实质完整case收敛及首次整审进行中，尚未启动新模型对照；L06实质完整case首整审集中闭合，待登记同pool/profile后进行必要fresh实际对照，非重型资格 新完整海运题整审闭合后实际fresh Codex/OC已各启动，业务结果仍null。
+- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：旧合同/分数/证据只读；[原问题任务草稿、运营交付与整类方法对照](2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/README.md)已有真实质量改进，完整新题、未知输入验证与重型有效性仍未成立，不机械升版。；L06三原完整raw构造等价与两预登记新输入全链已实测，质量标尺/整题审查/有效小时未成立；L06真实有理经济界/完整数字正错交付已核，科学整审与重型资格仍待；[实际Codex对照结果](2026-10-29-heavy-workbench-long/CODEX-COMPARISON-RESULTS.md)单列原成绩和成本差异，未完成有效重型比较；L06实质完整case收敛及首次整审进行中，尚未启动新模型对照；L06实质完整case首整审集中闭合，待登记同pool/profile后进行必要fresh实际对照，非重型资格 新完整海运题整审闭合后实际fresh Codex/OC已各启动，业务结果仍null。 已直接核真实候选15完整计划，合法性与经济质量分离，实物评价诊断另交。
 
 - [2026-10-29-text-attachment-history](2026-10-29-text-attachment-history/README.md)：23张真实发送/历史回看原图、指定模型流式请求、原件下载与数据/运行结算。
 

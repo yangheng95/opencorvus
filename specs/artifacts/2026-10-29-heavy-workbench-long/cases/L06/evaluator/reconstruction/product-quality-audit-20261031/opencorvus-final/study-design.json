@@ -1,0 +1,18 @@
+{
+  "instances": [
+    "LR1_DR02_VC01_V6a",
+    "LR1_DR02_VC05_V8a",
+    "LR1_DR03_VC03_V16a"
+  ],
+  "methods": [
+    "default",
+    "feasibility"
+  ],
+  "seconds_each": 180,
+  "threads_each": 1,
+  "seedshift": 0,
+  "ordering": "instance then default, feasibility; sequential",
+  "hypothesis": "SCIP feasibility emphasis may improve early primal search, at risk of weaker bounds and late quality.",
+  "repetitions": 1,
+  "completed_first_run": "single-class default already executed during integration"
+}

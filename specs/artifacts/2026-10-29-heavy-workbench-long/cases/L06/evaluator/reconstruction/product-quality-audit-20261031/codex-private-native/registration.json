@@ -1,0 +1,52 @@
+{
+  "at": "2026-10-31T15:53:11.659365+00:00",
+  "source_workspace_receipt": "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\complete-workspace-receipt.json",
+  "source_files": [
+    "optimize.py",
+    "solve.py",
+    "core.py",
+    "submission.json",
+    "source-map.json",
+    "requirements-lock.txt"
+  ],
+  "compute_closure": "three original declared compute files; no development vectors/logs/answers or author reference",
+  "generic_dependencies": "original declared operations runtime packages, no old candidate vendor dependency bytes needed by these compute modules",
+  "manifest": {
+    "argv": [
+      "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+      "-B",
+      "optimize.py",
+      "--model",
+      "{model}",
+      "--raw",
+      "{raw_archive}",
+      "--instance",
+      "{instance}",
+      "--out",
+      "{out}",
+      "--optimization-seconds",
+      "{optimization_seconds}"
+    ],
+    "numeric_layout": "layout.json",
+    "report": "REPORT.md",
+    "source_map": "source-map.json",
+    "reproduce": "HANDOFF.md",
+    "dependencies": "requirements-lock.txt",
+    "figures": [
+      "figures/comparison.png",
+      "figures/convergence.png",
+      "figures/economics.png",
+      "figures/inventory.png",
+      "figures/class-service.png",
+      "figures/paths.png"
+    ]
+  },
+  "pool_registration": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\fresh-pair-registered-inputs\\registration.json",
+  "profile": {
+    "optimization_seconds": 180,
+    "solver_threads": 1,
+    "whole_agent_limit": null
+  },
+  "background_condition": "L01 original GPU training and OC original Task may still be active; no speed/cost causal ranking",
+  "native_results": null
+}

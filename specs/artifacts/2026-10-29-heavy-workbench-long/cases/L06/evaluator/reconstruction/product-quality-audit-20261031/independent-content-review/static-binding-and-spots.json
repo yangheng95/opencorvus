@@ -1,0 +1,1938 @@
+{
+  "assignment_id": "l06-maritime-pair-content-71fa72e40dc74c3fb2234d69b4ed3be7",
+  "at": "2026-10-31T16:07:49.222229+00:00",
+  "argv": [
+    "D:/opencorvus-benchmark-runs/l06-maritime-candidate-content-review-20261031/review_spots.py"
+  ],
+  "source": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\review_spots.py",
+  "scope": "Selected report arithmetic and immutable submission/public object identity; not 15-plan recheck and not new candidate execution.",
+  "archive_bindings": [
+    {
+      "system": "codex",
+      "member": "submission/analyse_operations.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\analyse_operations.py",
+      "bytes": 3340,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/analysis-summary.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\analysis-summary.json",
+      "bytes": 29341,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/check.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\check.py",
+      "bytes": 7246,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/core.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\core.py",
+      "bytes": 16282,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/delivery-validation.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\delivery-validation.json",
+      "bytes": 28143,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/EXPOSURE.md",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\EXPOSURE.md",
+      "bytes": 3337,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures.py",
+      "bytes": 11113,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/HANDOFF.md",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\HANDOFF.md",
+      "bytes": 6195,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/initial-failures.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\initial-failures.json",
+      "bytes": 1264,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/model-pdf-extracted.txt",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\model-pdf-extracted.txt",
+      "bytes": 5789,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/native-environment.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\native-environment.json",
+      "bytes": 902,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/operating-analysis.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\operating-analysis.json",
+      "bytes": 21011,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/optimize.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\optimize.py",
+      "bytes": 7745,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/README.md",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\README.md",
+      "bytes": 623,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/REPORT.md",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\REPORT.md",
+      "bytes": 19017,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/requirements-lock.txt",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\requirements-lock.txt",
+      "bytes": 360,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/run_classblock.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\run_classblock.py",
+      "bytes": 2725,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/run_experiments.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\run_experiments.py",
+      "bytes": 2790,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/solve.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\solve.py",
+      "bytes": 14293,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/source-map.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\source-map.json",
+      "bytes": 5437,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/submission.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\submission.json",
+      "bytes": 675,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/verify_delivery.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\verify_delivery.py",
+      "bytes": 4181,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/VISUAL_REVIEW.md",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\VISUAL_REVIEW.md",
+      "bytes": 2120,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/write_report.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\write_report.py",
+      "bytes": 19038,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures/class-service.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\class-service.png",
+      "bytes": 103116,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures/comparison.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\comparison.png",
+      "bytes": 131610,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures/convergence.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\convergence.png",
+      "bytes": 78137,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures/economics.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\economics.png",
+      "bytes": 113086,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures/inventory.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\inventory.png",
+      "bytes": 276526,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures/paths.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\paths.png",
+      "bytes": 171491,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/all-operating-audits.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\all-operating-audits.json",
+      "bytes": 7363,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/analyze.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\analyze.py",
+      "bytes": 8195,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/checks.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\checks.py",
+      "bytes": 2670,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/child-process-records.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\child-process-records.json",
+      "bytes": 5066,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/class-route-summary.csv",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\class-route-summary.csv",
+      "bytes": 2148,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/delivery-inventory.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\delivery-inventory.json",
+      "bytes": 8195,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/environment.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\environment.json",
+      "bytes": 561,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/experiments.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments.py",
+      "bytes": 2970,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/final-checks.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\final-checks.json",
+      "bytes": 1214,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/HANDOFF.md",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\HANDOFF.md",
+      "bytes": 6089,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/method-parameter-diff.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\method-parameter-diff.json",
+      "bytes": 8492,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/modelio.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\modelio.py",
+      "bytes": 11881,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/operating-summary.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\operating-summary.json",
+      "bytes": 8974,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/package.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\package.py",
+      "bytes": 5710,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/postprocess-console.txt",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\postprocess-console.txt",
+      "bytes": 4967,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/REPORT.md",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\REPORT.md",
+      "bytes": 17437,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/requirements-lock.txt",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\requirements-lock.txt",
+      "bytes": 353,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/requirements-plot.txt",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\requirements-plot.txt",
+      "bytes": 198,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/solve.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\solve.py",
+      "bytes": 5754,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/source-map.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\source-map.json",
+      "bytes": 3108,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/study-design.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\study-design.json",
+      "bytes": 521,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/study-results.csv",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\study-results.csv",
+      "bytes": 2025,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/study-results.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\study-results.json",
+      "bytes": 4965,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/submission.json",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\submission.json",
+      "bytes": 860,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/summarize.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\summarize.py",
+      "bytes": 4147,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/validate.py",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\validate.py",
+      "bytes": 8310,
+      "snapshot_available": false,
+      "byte_equal": null
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/convergence.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\convergence.png",
+      "bytes": 77294,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/economics.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\economics.png",
+      "bytes": 73825,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR02_VC01_V6a-inventory.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR02_VC01_V6a-inventory.png",
+      "bytes": 206728,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR02_VC01_V6a-routes.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR02_VC01_V6a-routes.png",
+      "bytes": 44105,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR02_VC05_V8a-inventory.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR02_VC05_V8a-inventory.png",
+      "bytes": 199378,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR02_VC05_V8a-routes.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR02_VC05_V8a-routes.png",
+      "bytes": 46682,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR03_VC03_V16a-inventory.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR03_VC03_V16a-inventory.png",
+      "bytes": 259759,
+      "snapshot_available": true,
+      "byte_equal": true
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR03_VC03_V16a-routes.png",
+      "snapshot_path": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR03_VC03_V16a-routes.png",
+      "bytes": 63729,
+      "snapshot_available": true,
+      "byte_equal": true
+    }
+  ],
+  "actual_visual_review": [
+    {
+      "system": "codex",
+      "member": "submission/figures/class-service.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\class-service.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\figures\\class-service.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures/comparison.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\comparison.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\figures\\comparison.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures/convergence.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\convergence.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\figures\\convergence.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures/economics.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\economics.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\figures\\economics.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures/inventory.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\inventory.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\figures\\inventory.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "codex",
+      "member": "submission/figures/paths.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\figures\\paths.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\figures\\paths.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/convergence.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\convergence.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\figures\\convergence.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/economics.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\economics.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\figures\\economics.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR02_VC01_V6a-inventory.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR02_VC01_V6a-inventory.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\figures\\LR1_DR02_VC01_V6a-inventory.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR02_VC01_V6a-routes.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR02_VC01_V6a-routes.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\figures\\LR1_DR02_VC01_V6a-routes.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR02_VC05_V8a-inventory.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR02_VC05_V8a-inventory.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\figures\\LR1_DR02_VC05_V8a-inventory.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR02_VC05_V8a-routes.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR02_VC05_V8a-routes.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\figures\\LR1_DR02_VC05_V8a-routes.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR03_VC03_V16a-inventory.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR03_VC03_V16a-inventory.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\figures\\LR1_DR03_VC03_V16a-inventory.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    },
+    {
+      "system": "opencorvus",
+      "member": "submission/figures/LR1_DR03_VC03_V16a-routes.png",
+      "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\figures\\LR1_DR03_VC03_V16a-routes.png",
+      "saved_copy": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\figures\\LR1_DR03_VC03_V16a-routes.png",
+      "actual_view_completed": true,
+      "view_scope": "Original individual PNG opened through view_image during this review; not an automated visual test."
+    }
+  ],
+  "selected_report_spots": [
+    {
+      "system": "codex",
+      "instance": "LR1_DR02_VC05_V8a",
+      "baseline": {
+        "method": "scip",
+        "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\controlled180\\LR1_DR02_VC05_V8a_t120-scip",
+        "P_from_cost_rows": {
+          "exact": "157652780547293587/1000000000000",
+          "decimal": 157652.78054729357
+        },
+        "P_root_independent_full_check": 157652.78054729357,
+        "costs": {
+          "empty_return": {
+            "exact": "7406934655307933/500000000000",
+            "decimal": 14813.869310615866
+          },
+          "initial_source": {
+            "exact": "396",
+            "decimal": 396.0
+          },
+          "loaded_voyage": {
+            "exact": "18251307595178067/1000000000000",
+            "decimal": 18251.307595178067
+          },
+          "lost_production": {
+            "exact": "369129639730661/6250000000",
+            "decimal": 59060.74235690576
+          },
+          "original_objective_constant": {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          "stockout": {
+            "exact": "32565900642296947/500000000000",
+            "decimal": 65131.801284593894
+          },
+          "terminal_exit": {
+            "exact": "-47/50",
+            "decimal": -0.94
+          },
+          "waiting": {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        },
+        "per_port": [
+          {
+            "identity": [
+              "0",
+              "LoadingRegion_0_Port_0",
+              "Loading"
+            ],
+            "alpha": {
+              "exact": "632",
+              "decimal": 632.0
+            },
+            "service": {
+              "exact": "7500",
+              "decimal": 7500.0
+            },
+            "berth_periods": {
+              "exact": "30",
+              "decimal": 30.0
+            },
+            "alpha_cost": {
+              "exact": "590607423569057491/10000000000000",
+              "decimal": 59060.74235690575
+            }
+          },
+          {
+            "identity": [
+              "1",
+              "DischargeRegion_0_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "512",
+              "decimal": 512.0
+            },
+            "service": {
+              "exact": "2200",
+              "decimal": 2200.0
+            },
+            "berth_periods": {
+              "exact": "8",
+              "decimal": 8.0
+            },
+            "alpha_cost": {
+              "exact": "94859546945917581/2000000000000",
+              "decimal": 47429.77347295879
+            }
+          },
+          {
+            "identity": [
+              "2",
+              "DischargeRegion_1_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "185",
+              "decimal": 185.0
+            },
+            "service": {
+              "exact": "5040",
+              "decimal": 5040.0
+            },
+            "berth_periods": {
+              "exact": "21",
+              "decimal": 21.0
+            },
+            "alpha_cost": {
+              "exact": "1106376738227193/62500000000",
+              "decimal": 17702.02781163509
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "method": "classblock",
+        "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\classblock180\\LR1_DR02_VC05_V8a_t120",
+        "P_from_cost_rows": {
+          "exact": "249035342202044963/5000000000000",
+          "decimal": 49807.06844040899
+        },
+        "P_root_independent_full_check": 49807.06844040899,
+        "costs": {
+          "empty_return": {
+            "exact": "8130575814577519/500000000000",
+            "decimal": 16261.151629155038
+          },
+          "initial_source": {
+            "exact": "396",
+            "decimal": 396.0
+          },
+          "loaded_voyage": {
+            "exact": "1024103972973459/50000000000",
+            "decimal": 20482.07945946918
+          },
+          "lost_production": {
+            "exact": "16378441185095253/5000000000000",
+            "decimal": 3275.6882370190506
+          },
+          "original_objective_constant": {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          "stockout": {
+            "exact": "2348229778691431/250000000000",
+            "decimal": 9392.919114765724
+          },
+          "terminal_exit": {
+            "exact": "-77/100",
+            "decimal": -0.77
+          },
+          "waiting": {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        },
+        "per_port": [
+          {
+            "identity": [
+              "0",
+              "LoadingRegion_0_Port_0",
+              "Loading"
+            ],
+            "alpha": {
+              "exact": "875000000000001411743585439399/25000000000000000000000000000",
+              "decimal": 35.00000000000006
+            },
+            "service": {
+              "exact": "8080",
+              "decimal": 8080.0
+            },
+            "berth_periods": {
+              "exact": "34",
+              "decimal": 34.0
+            },
+            "alpha_cost": {
+              "exact": "327568823701905064807218560531/100000000000000000000000000",
+              "decimal": 3275.6882370190506
+            }
+          },
+          {
+            "identity": [
+              "1",
+              "DischargeRegion_0_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "8",
+              "decimal": 8.0
+            },
+            "service": {
+              "exact": "2770",
+              "decimal": 2770.0
+            },
+            "berth_periods": {
+              "exact": "12",
+              "decimal": 12.0
+            },
+            "alpha_cost": {
+              "exact": "3736914752277453/5000000000000",
+              "decimal": 747.3829504554906
+            }
+          },
+          {
+            "identity": [
+              "2",
+              "DischargeRegion_1_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "90",
+              "decimal": 90.0
+            },
+            "service": {
+              "exact": "5230",
+              "decimal": 5230.0
+            },
+            "berth_periods": {
+              "exact": "22",
+              "decimal": 22.0
+            },
+            "alpha_cost": {
+              "exact": "172910723286204671/20000000000000",
+              "decimal": 8645.536164310233
+            }
+          }
+        ]
+      },
+      "P_change": {
+        "exact": "-5392285605344229/50000000000",
+        "decimal": -107845.71210688457
+      },
+      "relative_reduction": {
+        "exact": "10784571210688458/15765278054729357",
+        "decimal": 0.6840711069763367
+      },
+      "interpretation": "Exact arithmetic on saved decimal exports only. Full-plan validity comes from the separately identified root audit; no optimization or second full checker was executed."
+    },
+    {
+      "system": "codex",
+      "instance": "LR1_DR03_VC03_V16a",
+      "baseline": {
+        "method": "scip",
+        "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\controlled180\\LR1_DR03_VC03_V16a_t120-scip",
+        "P_from_cost_rows": {
+          "exact": "198645509040781317/1000000000000",
+          "decimal": 198645.50904078133
+        },
+        "P_root_independent_full_check": 198645.5090407813,
+        "costs": {
+          "empty_return": {
+            "exact": "30571963655370997/1000000000000",
+            "decimal": 30571.963655370997
+          },
+          "initial_source": {
+            "exact": "565",
+            "decimal": 565.0
+          },
+          "loaded_voyage": {
+            "exact": "228641416965169/6250000000",
+            "decimal": 36582.62671442704
+          },
+          "lost_production": {
+            "exact": "3962799968758673/50000000000",
+            "decimal": 79255.99937517346
+          },
+          "original_objective_constant": {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          "stockout": {
+            "exact": "2583614964790491/50000000000",
+            "decimal": 51672.29929580982
+          },
+          "terminal_exit": {
+            "exact": "-119/50",
+            "decimal": -2.38
+          },
+          "waiting": {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        },
+        "per_port": [
+          {
+            "identity": [
+              "0",
+              "LoadingRegion_0_Port_0",
+              "Loading"
+            ],
+            "alpha": {
+              "exact": "84400000000000000368683772161603/100000000000000000000000000000",
+              "decimal": 844.0
+            },
+            "service": {
+              "exact": "11250",
+              "decimal": 11250.0
+            },
+            "berth_periods": {
+              "exact": "42",
+              "decimal": 42.0
+            },
+            "alpha_cost": {
+              "exact": "15851199875034692613146698953307/200000000000000000000000000",
+              "decimal": 79255.99937517346
+            }
+          },
+          {
+            "identity": [
+              "1",
+              "DischargeRegion_0_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "226",
+              "decimal": 226.0
+            },
+            "service": {
+              "exact": "4650",
+              "decimal": 4650.0
+            },
+            "berth_periods": {
+              "exact": "16",
+              "decimal": 16.0
+            },
+            "alpha_cost": {
+              "exact": "2142066004293090283/100000000000000",
+              "decimal": 21420.660042930904
+            }
+          },
+          {
+            "identity": [
+              "2",
+              "DischargeRegion_1_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "95",
+              "decimal": 95.0
+            },
+            "service": {
+              "exact": "4600",
+              "decimal": 4600.0
+            },
+            "berth_periods": {
+              "exact": "18",
+              "decimal": 18.0
+            },
+            "alpha_cost": {
+              "exact": "88165824486967017/10000000000000",
+              "decimal": 8816.582448696701
+            }
+          },
+          {
+            "identity": [
+              "3",
+              "DischargeRegion_2_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "230",
+              "decimal": 230.0
+            },
+            "service": {
+              "exact": "2250",
+              "decimal": 2250.0
+            },
+            "berth_periods": {
+              "exact": "9",
+              "decimal": 9.0
+            },
+            "alpha_cost": {
+              "exact": "214350568041822173/10000000000000",
+              "decimal": 21435.05680418222
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "method": "classblock",
+        "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\classblock180\\LR1_DR03_VC03_V16a_t120",
+        "P_from_cost_rows": {
+          "exact": "134043712498888349/1000000000000",
+          "decimal": 134043.71249888834
+        },
+        "P_root_independent_full_check": 134043.71249888832,
+        "costs": {
+          "empty_return": {
+            "exact": "31857833347399897/1000000000000",
+            "decimal": 31857.833347399897
+          },
+          "initial_source": {
+            "exact": "565",
+            "decimal": 565.0
+          },
+          "loaded_voyage": {
+            "exact": "19484140854362693/500000000000",
+            "decimal": 38968.281708725386
+          },
+          "lost_production": {
+            "exact": "294078963518289/6250000000",
+            "decimal": 47052.63416292624
+          },
+          "original_objective_constant": {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          "stockout": {
+            "exact": "7801291639918413/500000000000",
+            "decimal": 15602.583279836826
+          },
+          "terminal_exit": {
+            "exact": "-131/50",
+            "decimal": -2.62
+          },
+          "waiting": {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        },
+        "per_port": [
+          {
+            "identity": [
+              "0",
+              "LoadingRegion_0_Port_0",
+              "Loading"
+            ],
+            "alpha": {
+              "exact": "124500000000000001/250000000000000",
+              "decimal": 498.0
+            },
+            "service": {
+              "exact": "11600",
+              "decimal": 11600.0
+            },
+            "berth_periods": {
+              "exact": "45",
+              "decimal": 45.0
+            },
+            "alpha_cost": {
+              "exact": "470526341629262337/10000000000000",
+              "decimal": 47052.63416292623
+            }
+          },
+          {
+            "identity": [
+              "1",
+              "DischargeRegion_0_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "99",
+              "decimal": 99.0
+            },
+            "service": {
+              "exact": "4650",
+              "decimal": 4650.0
+            },
+            "berth_periods": {
+              "exact": "17",
+              "decimal": 17.0
+            },
+            "alpha_cost": {
+              "exact": "237558025305174643/25000000000000",
+              "decimal": 9502.321012206985
+            }
+          },
+          {
+            "identity": [
+              "2",
+              "DischargeRegion_1_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "66",
+              "decimal": 66.0
+            },
+            "service": {
+              "exact": "4650",
+              "decimal": 4650.0
+            },
+            "berth_periods": {
+              "exact": "18",
+              "decimal": 18.0
+            },
+            "alpha_cost": {
+              "exact": "30501311338149193/5000000000000",
+              "decimal": 6100.262267629839
+            }
+          },
+          {
+            "identity": [
+              "3",
+              "DischargeRegion_2_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "799360577730113/50000000000000000000000000000",
+              "decimal": 1.598721155460226e-14
+            },
+            "service": {
+              "exact": "2500",
+              "decimal": 2500.0
+            },
+            "berth_periods": {
+              "exact": "10",
+              "decimal": 10.0
+            },
+            "alpha_cost": {
+              "exact": "645143940847323/500000000000000000000000000",
+              "decimal": 1.290287881694646e-12
+            }
+          }
+        ]
+      },
+      "P_change": {
+        "exact": "-3230089827094649/50000000000",
+        "decimal": -64601.79654189298
+      },
+      "relative_reduction": {
+        "exact": "3230089827094649/9932275452039065",
+        "decimal": 0.3252114626393614
+      },
+      "interpretation": "Exact arithmetic on saved decimal exports only. Full-plan validity comes from the separately identified root audit; no optimization or second full checker was executed."
+    },
+    {
+      "system": "opencorvus_observation",
+      "instance": "LR1_DR02_VC05_V8a",
+      "baseline": {
+        "method": "default",
+        "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR02_VC05_V8a\\default",
+        "P_from_cost_rows": {
+          "exact": "38950697274196791/250000000000",
+          "decimal": 155802.78909678716
+        },
+        "P_root_independent_full_check": 155802.78909678714,
+        "costs": {
+          "empty_return": {
+            "exact": "154242253348971/10000000000",
+            "decimal": 15424.2253348971
+          },
+          "initial_source": {
+            "exact": "396",
+            "decimal": 396.0
+          },
+          "loaded_voyage": {
+            "exact": "18873921984906683/1000000000000",
+            "decimal": 18873.921984906683
+          },
+          "lost_production": {
+            "exact": "2378567371628799/40000000000",
+            "decimal": 59464.184290719975
+          },
+          "original_objective_constant": {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          "stockout": {
+            "exact": "30822608743131703/500000000000",
+            "decimal": 61645.217486263406
+          },
+          "terminal_exit": {
+            "exact": "-19/25",
+            "decimal": -0.76
+          },
+          "waiting": {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        },
+        "per_port": [
+          {
+            "identity": [
+              "0",
+              "LoadingRegion_0_Port_0",
+              "Loading"
+            ],
+            "alpha": {
+              "exact": "625",
+              "decimal": 625.0
+            },
+            "service": {
+              "exact": "7520",
+              "decimal": 7520.0
+            },
+            "berth_periods": {
+              "exact": "32",
+              "decimal": 32.0
+            },
+            "alpha_cost": {
+              "exact": "2322819698856249/39062500000",
+              "decimal": 59464.184290719975
+            }
+          },
+          {
+            "identity": [
+              "1",
+              "DischargeRegion_0_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "402",
+              "decimal": 402.0
+            },
+            "service": {
+              "exact": "2310",
+              "decimal": 2310.0
+            },
+            "berth_periods": {
+              "exact": "9",
+              "decimal": 9.0
+            },
+            "alpha_cost": {
+              "exact": "3828070395733535847/100000000000000",
+              "decimal": 38280.70395733536
+            }
+          },
+          {
+            "identity": [
+              "2",
+              "DischargeRegion_1_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "245",
+              "decimal": 245.0
+            },
+            "service": {
+              "exact": "4990",
+              "decimal": 4990.0
+            },
+            "berth_periods": {
+              "exact": "22",
+              "decimal": 22.0
+            },
+            "alpha_cost": {
+              "exact": "584112838223200847/25000000000000",
+              "decimal": 23364.513528928033
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "method": "feasibility",
+        "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR02_VC05_V8a\\feasibility",
+        "P_from_cost_rows": {
+          "exact": "761716956030392260001/10000000000000000",
+          "decimal": 76171.69560303923
+        },
+        "P_root_independent_full_check": 76171.69560303922,
+        "costs": {
+          "empty_return": {
+            "exact": "1583555973133727/100000000000",
+            "decimal": 15835.55973133727
+          },
+          "initial_source": {
+            "exact": "396",
+            "decimal": 396.0
+          },
+          "loaded_voyage": {
+            "exact": "10175926935157513/500000000000",
+            "decimal": 20351.853870315026
+          },
+          "lost_production": {
+            "exact": "4819673144065191/250000000000",
+            "decimal": 19278.692576260764
+          },
+          "original_objective_constant": {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          "stockout": {
+            "exact": "10155194712563083/500000000000",
+            "decimal": 20310.389425126166
+          },
+          "terminal_exit": {
+            "exact": "-7999999999999999/10000000000000000",
+            "decimal": -0.7999999999999999
+          },
+          "waiting": {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        },
+        "per_port": [
+          {
+            "identity": [
+              "0",
+              "LoadingRegion_0_Port_0",
+              "Loading"
+            ],
+            "alpha": {
+              "exact": "205",
+              "decimal": 205.0
+            },
+            "service": {
+              "exact": "7900",
+              "decimal": 7900.0
+            },
+            "berth_periods": {
+              "exact": "33",
+              "decimal": 33.0
+            },
+            "alpha_cost": {
+              "exact": "9639346288130383/500000000000",
+              "decimal": 19278.692576260764
+            }
+          },
+          {
+            "identity": [
+              "1",
+              "DischargeRegion_0_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "36",
+              "decimal": 36.0
+            },
+            "service": {
+              "exact": "2700",
+              "decimal": 2700.0
+            },
+            "berth_periods": {
+              "exact": "9",
+              "decimal": 9.0
+            },
+            "alpha_cost": {
+              "exact": "34006334237434139/10000000000000",
+              "decimal": 3400.633423743414
+            }
+          },
+          {
+            "identity": [
+              "2",
+              "DischargeRegion_1_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "180",
+              "decimal": 180.0
+            },
+            "service": {
+              "exact": "5160",
+              "decimal": 5160.0
+            },
+            "berth_periods": {
+              "exact": "24",
+              "decimal": 24.0
+            },
+            "alpha_cost": {
+              "exact": "84548780006913759/5000000000000",
+              "decimal": 16909.756001382753
+            }
+          }
+        ]
+      },
+      "P_change": {
+        "exact": "-995388668671849/12500000000",
+        "decimal": -79631.09349374792
+      },
+      "relative_reduction": {
+        "exact": "3981554674687396/7790139454839357",
+        "decimal": 0.511101848403239
+      },
+      "interpretation": "Exact arithmetic on saved decimal exports only. Full-plan validity comes from the separately identified root audit; no optimization or second full checker was executed."
+    },
+    {
+      "system": "opencorvus_observation",
+      "instance": "LR1_DR03_VC03_V16a",
+      "baseline": {
+        "method": "default",
+        "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR03_VC03_V16a\\default",
+        "P_from_cost_rows": {
+          "exact": "99322754520390643/500000000000",
+          "decimal": 198645.5090407813
+        },
+        "P_root_independent_full_check": 198645.5090407813,
+        "costs": {
+          "empty_return": {
+            "exact": "15285981827685491/500000000000",
+            "decimal": 30571.963655370982
+          },
+          "initial_source": {
+            "exact": "565",
+            "decimal": 565.0
+          },
+          "loaded_voyage": {
+            "exact": "2286414169651689/62500000000",
+            "decimal": 36582.626714427024
+          },
+          "lost_production": {
+            "exact": "3962799968758673/50000000000",
+            "decimal": 79255.99937517346
+          },
+          "original_objective_constant": {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          "stockout": {
+            "exact": "2583614964790491/50000000000",
+            "decimal": 51672.29929580982
+          },
+          "terminal_exit": {
+            "exact": "-119/50",
+            "decimal": -2.38
+          },
+          "waiting": {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        },
+        "per_port": [
+          {
+            "identity": [
+              "0",
+              "LoadingRegion_0_Port_0",
+              "Loading"
+            ],
+            "alpha": {
+              "exact": "84400000000000000368683772161603/100000000000000000000000000000",
+              "decimal": 844.0
+            },
+            "service": {
+              "exact": "11250",
+              "decimal": 11250.0
+            },
+            "berth_periods": {
+              "exact": "42",
+              "decimal": 42.0
+            },
+            "alpha_cost": {
+              "exact": "15851199875034692613146698953307/200000000000000000000000000",
+              "decimal": 79255.99937517346
+            }
+          },
+          {
+            "identity": [
+              "1",
+              "DischargeRegion_0_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "226",
+              "decimal": 226.0
+            },
+            "service": {
+              "exact": "4650",
+              "decimal": 4650.0
+            },
+            "berth_periods": {
+              "exact": "16",
+              "decimal": 16.0
+            },
+            "alpha_cost": {
+              "exact": "2142066004293090283/100000000000000",
+              "decimal": 21420.660042930904
+            }
+          },
+          {
+            "identity": [
+              "2",
+              "DischargeRegion_1_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "95",
+              "decimal": 95.0
+            },
+            "service": {
+              "exact": "4600",
+              "decimal": 4600.0
+            },
+            "berth_periods": {
+              "exact": "18",
+              "decimal": 18.0
+            },
+            "alpha_cost": {
+              "exact": "88165824486967017/10000000000000",
+              "decimal": 8816.582448696701
+            }
+          },
+          {
+            "identity": [
+              "3",
+              "DischargeRegion_2_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "230",
+              "decimal": 230.0
+            },
+            "service": {
+              "exact": "2250",
+              "decimal": 2250.0
+            },
+            "berth_periods": {
+              "exact": "9",
+              "decimal": 9.0
+            },
+            "alpha_cost": {
+              "exact": "214350568041822173/10000000000000",
+              "decimal": 21435.05680418222
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "method": "feasibility",
+        "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR03_VC03_V16a\\feasibility",
+        "P_from_cost_rows": {
+          "exact": "82671222407930117/500000000000",
+          "decimal": 165342.44481586025
+        },
+        "P_root_independent_full_check": 165342.44481586025,
+        "costs": {
+          "empty_return": {
+            "exact": "3990635994718723/125000000000",
+            "decimal": 31925.087957749784
+          },
+          "initial_source": {
+            "exact": "565",
+            "decimal": 565.0
+          },
+          "loaded_voyage": {
+            "exact": "3621689902148467/100000000000",
+            "decimal": 36216.89902148467
+          },
+          "lost_production": {
+            "exact": "2543915175713341/50000000000",
+            "decimal": 50878.30351426682
+          },
+          "original_objective_constant": {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          "stockout": {
+            "exact": "571998804029487/12500000000",
+            "decimal": 45759.90432235896
+          },
+          "terminal_exit": {
+            "exact": "-11/4",
+            "decimal": -2.75
+          },
+          "waiting": {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        },
+        "per_port": [
+          {
+            "identity": [
+              "0",
+              "LoadingRegion_0_Port_0",
+              "Loading"
+            ],
+            "alpha": {
+              "exact": "536",
+              "decimal": 536.0
+            },
+            "service": {
+              "exact": "11550",
+              "decimal": 11550.0
+            },
+            "berth_periods": {
+              "exact": "45",
+              "decimal": 45.0
+            },
+            "alpha_cost": {
+              "exact": "254391517571334117/5000000000000",
+              "decimal": 50878.30351426682
+            }
+          },
+          {
+            "identity": [
+              "1",
+              "DischargeRegion_0_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "106",
+              "decimal": 106.0
+            },
+            "service": {
+              "exact": "4650",
+              "decimal": 4650.0
+            },
+            "berth_periods": {
+              "exact": "17",
+              "decimal": 17.0
+            },
+            "alpha_cost": {
+              "exact": "49456684555048089/5000000000000",
+              "decimal": 9891.336911009617
+            }
+          },
+          {
+            "identity": [
+              "2",
+              "DischargeRegion_1_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "205",
+              "decimal": 205.0
+            },
+            "service": {
+              "exact": "4550",
+              "decimal": 4550.0
+            },
+            "berth_periods": {
+              "exact": "19",
+              "decimal": 19.0
+            },
+            "alpha_cost": {
+              "exact": "6076615468328833/312500000000",
+              "decimal": 19445.169498652267
+            }
+          },
+          {
+            "identity": [
+              "3",
+              "DischargeRegion_2_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "180",
+              "decimal": 180.0
+            },
+            "service": {
+              "exact": "2200",
+              "decimal": 2200.0
+            },
+            "berth_periods": {
+              "exact": "8",
+              "decimal": 8.0
+            },
+            "alpha_cost": {
+              "exact": "82116989563485381/5000000000000",
+              "decimal": 16423.397912697077
+            }
+          }
+        ]
+      },
+      "P_change": {
+        "exact": "-666061284498421/20000000000",
+        "decimal": -33303.06422492105
+      },
+      "relative_reduction": {
+        "exact": "666061284498421/3972910180815626",
+        "decimal": 0.16765072810220963
+      },
+      "interpretation": "Exact arithmetic on saved decimal exports only. Full-plan validity comes from the separately identified root audit; no optimization or second full checker was executed."
+    },
+    {
+      "system": "opencorvus_observation",
+      "instance": "LR1_DR02_VC01_V6a",
+      "baseline": {
+        "method": "default",
+        "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR02_VC01_V6a\\default",
+        "P_from_cost_rows": {
+          "exact": "1690448501023338175050035904561/50000000000000000000000000",
+          "decimal": 33808.97002046676
+        },
+        "P_root_independent_full_check": 33808.9700204668,
+        "costs": {
+          "empty_return": {
+            "exact": "15449275564651907/1000000000000",
+            "decimal": 15449.275564651907
+          },
+          "initial_source": {
+            "exact": "334",
+            "decimal": 334.0
+          },
+          "loaded_voyage": {
+            "exact": "4506523613953721/250000000000",
+            "decimal": 18026.094455814884
+          },
+          "lost_production": {
+            "exact": "712700214690063/100000000000000000000000000",
+            "decimal": 7.12700214690063e-12
+          },
+          "original_objective_constant": {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          "stockout": {
+            "exact": "-3462600142880941/100000000000000000000000000",
+            "decimal": -3.462600142880941e-11
+          },
+          "terminal_exit": {
+            "exact": "-2/5",
+            "decimal": -0.4
+          },
+          "waiting": {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        },
+        "per_port": [
+          {
+            "identity": [
+              "0",
+              "LoadingRegion_0_Port_0",
+              "Loading"
+            ],
+            "alpha": {
+              "exact": "131450406115618509/500000000000000000000000000000",
+              "decimal": 2.62900812231237e-13
+            },
+            "service": {
+              "exact": "8700",
+              "decimal": 8700.0
+            },
+            "berth_periods": {
+              "exact": "29",
+              "decimal": 29.0
+            },
+            "alpha_cost": {
+              "exact": "712700214690062007/100000000000000000000000000000",
+              "decimal": 7.12700214690062e-12
+            }
+          },
+          {
+            "identity": [
+              "1",
+              "DischargeRegion_0_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "-199840144432528191/5000000000000000000000000000000",
+              "decimal": -3.9968028886505635e-14
+            },
+            "service": {
+              "exact": "3900",
+              "decimal": 3900.0
+            },
+            "berth_periods": {
+              "exact": "13",
+              "decimal": 13.0
+            },
+            "alpha_cost": {
+              "exact": "-35194369359845649/6250000000000000000000000000",
+              "decimal": -5.631099097575304e-12
+            }
+          },
+          {
+            "identity": [
+              "2",
+              "DischargeRegion_1_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "-8526512829121201/25000000000000000000000000000",
+              "decimal": -3.4106051316484804e-13
+            },
+            "service": {
+              "exact": "4800",
+              "decimal": 4800.0
+            },
+            "berth_periods": {
+              "exact": "16",
+              "decimal": 16.0
+            },
+            "alpha_cost": {
+              "exact": "-289949023312341461/10000000000000000000000000000",
+              "decimal": -2.8994902331234147e-11
+            }
+          }
+        ]
+      },
+      "comparison": {
+        "method": "feasibility",
+        "artifact": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\opencorvus-observation\\experiments\\LR1_DR02_VC01_V6a\\feasibility",
+        "P_from_cost_rows": {
+          "exact": "47173278253813373/1000000000000",
+          "decimal": 47173.278253813376
+        },
+        "P_root_independent_full_check": 47173.27825381338,
+        "costs": {
+          "empty_return": {
+            "exact": "3756472448283599/250000000000",
+            "decimal": 15025.889793134396
+          },
+          "initial_source": {
+            "exact": "334",
+            "decimal": 334.0
+          },
+          "loaded_voyage": {
+            "exact": "3510122448283599/200000000000",
+            "decimal": 17550.612241417995
+          },
+          "lost_production": {
+            "exact": "2296638937612831/1000000000000",
+            "decimal": 2296.638937612831
+          },
+          "original_objective_constant": {
+            "exact": "0",
+            "decimal": 0.0
+          },
+          "stockout": {
+            "exact": "11966737281648151/1000000000000",
+            "decimal": 11966.737281648151
+          },
+          "terminal_exit": {
+            "exact": "-3/5",
+            "decimal": -0.6
+          },
+          "waiting": {
+            "exact": "0",
+            "decimal": 0.0
+          }
+        },
+        "per_port": [
+          {
+            "identity": [
+              "0",
+              "LoadingRegion_0_Port_0",
+              "Loading"
+            ],
+            "alpha": {
+              "exact": "24",
+              "decimal": 24.0
+            },
+            "service": {
+              "exact": "8400",
+              "decimal": 8400.0
+            },
+            "berth_periods": {
+              "exact": "28",
+              "decimal": 28.0
+            },
+            "alpha_cost": {
+              "exact": "2296638937612831/1000000000000",
+              "decimal": 2296.638937612831
+            }
+          },
+          {
+            "identity": [
+              "1",
+              "DischargeRegion_0_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "124",
+              "decimal": 124.0
+            },
+            "service": {
+              "exact": "3600",
+              "decimal": 3600.0
+            },
+            "berth_periods": {
+              "exact": "12",
+              "decimal": 12.0
+            },
+            "alpha_cost": {
+              "exact": "29916843204120379/2500000000000",
+              "decimal": 11966.737281648151
+            }
+          },
+          {
+            "identity": [
+              "2",
+              "DischargeRegion_1_Port_0",
+              "Discharge"
+            ],
+            "alpha": {
+              "exact": "0",
+              "decimal": 0.0
+            },
+            "service": {
+              "exact": "4800",
+              "decimal": 4800.0
+            },
+            "berth_periods": {
+              "exact": "16",
+              "decimal": 16.0
+            },
+            "alpha_cost": {
+              "exact": "0",
+              "decimal": 0.0
+            }
+          }
+        ]
+      },
+      "P_change": {
+        "exact": "668215411667329/50000000000",
+        "decimal": 13364.30823334658
+      },
+      "relative_reduction": {
+        "exact": "-668215411667329/1690448501023340",
+        "decimal": -0.3952888309006835
+      },
+      "interpretation": "Exact arithmetic on saved decimal exports only. Full-plan validity comes from the separately identified root audit; no optimization or second full checker was executed."
+    }
+  ],
+  "private_result_state": "Await root immutable private result notification. No active private output inspected.",
+  "aggregate_score": null
+}

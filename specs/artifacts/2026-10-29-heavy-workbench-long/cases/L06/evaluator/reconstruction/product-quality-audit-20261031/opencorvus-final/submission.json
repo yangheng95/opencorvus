@@ -1,0 +1,28 @@
+{
+  "argv": [
+    "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+    "-B",
+    "solve.py",
+    "--model", "{model}",
+    "--raw", "{raw_archive}",
+    "--instance", "{instance}",
+    "--out", "{out}",
+    "--optimization-seconds", "{optimization_seconds}",
+    "--method", "feasibility"
+  ],
+  "numeric_layout": "layout.json",
+  "report": "REPORT.md",
+  "source_map": "source-map.json",
+  "reproduce": "HANDOFF.md",
+  "dependencies": "requirements-lock.txt",
+  "figures": [
+    "figures/convergence.png",
+    "figures/economics.png",
+    "figures/LR1_DR02_VC01_V6a-inventory.png",
+    "figures/LR1_DR02_VC01_V6a-routes.png",
+    "figures/LR1_DR02_VC05_V8a-inventory.png",
+    "figures/LR1_DR02_VC05_V8a-routes.png",
+    "figures/LR1_DR03_VC03_V16a-inventory.png",
+    "figures/LR1_DR03_VC03_V16a-routes.png"
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\assessment-source\\construct_economic_bounds.py",
+    "--model",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\fresh-pair-registered-inputs\\maritime-eval-vc03\\model\\maritime-eval-vc03_t120.mps",
+    "--route-values",
+    "D:\\opencorvus-benchmark-runs\\l06-maritime-codex-fresh-native-20261031\\evaluation\\private-run\\outputs\\maritime-eval-vc03\\full-plan.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\reference-witnesses\\maritime-eval-vc03"
+  ],
+  "started_at": "2026-10-31T16:09:34.691104+00:00",
+  "finished_at": "2026-10-31T16:09:35.855888+00:00",
+  "native_exit": 0,
+  "scope": "one necessary full-checker witness generation from fixed existing candidate route; no integer route solve"
+}

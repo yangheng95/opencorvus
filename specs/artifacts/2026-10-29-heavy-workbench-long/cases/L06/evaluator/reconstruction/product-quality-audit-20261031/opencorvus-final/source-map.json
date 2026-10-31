@@ -1,0 +1,37 @@
+{
+  "entrypoint": "solve.py",
+  "assigned_source_closure": ["solve.py", "modelio.py"],
+  "assigned_generic_dependency": "PySCIPOpt 6.3.0, SCIP 10.0.2, declared Python 3.14.2",
+  "assigned_instance_inputs": ["--model full MPS", "--raw supplied ZIP", "--instance identifier"],
+  "no_solution_inputs": true,
+  "sources": {
+    "solve.py": "Full-MPS native SCIP solve, fixed method setting, single-thread/time controls, real event capture, final complete vector and timing",
+    "modelio.py": "Original MPS sparse reader, raw ZIP reader, direct numeric vector validation and complete six-slot operating export",
+    "validate.py": "Saved-file checking implementation: original rows/domains/objective plus all wire-table and route/ledger reconciliation",
+    "experiments.py": "Six-run paired sequential default/feasibility study and source-provenance capture; skip recorded runs",
+    "analyze.py": "Saved-file audits, study-results JSON/CSV, eight rendered figures from actual experiments",
+    "summarize.py": "Port/class mechanism summaries and exact native parameter differences",
+    "checks.py": "Six deliberate corruption rejection tests, no optimization",
+    "package.py": "Final source-only archive, native/parsed model parity and final manifest/provenance checks"
+  },
+  "static_outputs": {
+    "REPORT.md": "Scientific account, comparisons, operating implications, uncertainty, limitations and attribution",
+    "HANDOFF.md": "Exact native commands, layout and dependencies",
+    "study-design.json": "Two methods, three inputs, identical numerical allocations and chronology",
+    "study-results.json": "Unrounded outcomes and cost terms; study-results.csv is a tabular counterpart",
+    "all-operating-audits.json": "All six saved-file reconciliation results",
+    "operating-summary.json": "All port-wise alpha, service quantities/calls and inventory summaries",
+    "class-route-summary.csv": "Loaded voyages/quantity/cost by original class and destination",
+    "method-parameter-diff.json": "Every observed native parameter setting changed by emphasis",
+    "validation-tests/results.json": "Negative-test outcomes; accompanying copies are deliberately INVALID, never solver inputs",
+    "source-provenance": "Preserved solve.py/modelio.py/experiments.py used for development",
+    "experiments/<instance>/<method>": "Complete original vectors, operating tables, native result, event JSONL, original solver log, parameter set, validation and audit for each actual run"
+  },
+  "figure_inputs": {
+    "figures/convergence.png": "All six incumbents.jsonl files and terminal native-result.json records",
+    "figures/economics.png": "All six costs.csv files reconciled in operating-audit.json",
+    "figures/*-inventory.png": "feasibility/port-period.csv for named instance",
+    "figures/*-routes.png": "feasibility/paths.csv for named instance"
+  },
+  "exposure": "Only supplied public problem/contract files and declared runtime, plus generic pip plotting dependencies. No external instance answers or other run roots. General model pretraining knowledge used; no pristine-pretraining claim."
+}

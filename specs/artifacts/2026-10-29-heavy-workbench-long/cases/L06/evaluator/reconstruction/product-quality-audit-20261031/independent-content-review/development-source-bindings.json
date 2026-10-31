@@ -1,0 +1,38 @@
+[
+  {
+    "system": "codex",
+    "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\classblock180\\LR1_DR02_VC05_V8a_t120\\source-snapshot\\core.py",
+    "final": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\core.py",
+    "same": true
+  },
+  {
+    "system": "codex",
+    "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\classblock180\\LR1_DR02_VC05_V8a_t120\\source-snapshot\\optimize.py",
+    "final": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\optimize.py",
+    "same": true
+  },
+  {
+    "system": "codex",
+    "original": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\codex\\experiments\\classblock180\\LR1_DR02_VC05_V8a_t120\\source-snapshot\\solve.py",
+    "final": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\codex\\solve.py",
+    "same": true
+  },
+  {
+    "system": "opencorvus",
+    "member": "submission/source-provenance/experiments.py",
+    "final": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\experiments.py",
+    "same": true
+  },
+  {
+    "system": "opencorvus",
+    "member": "submission/source-provenance/modelio.py",
+    "final": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\modelio.py",
+    "same": true
+  },
+  {
+    "system": "opencorvus",
+    "member": "submission/source-provenance/solve.py",
+    "final": "D:\\opencorvus-benchmark-runs\\l06-maritime-candidate-content-review-20261031\\received-materials\\opencorvus\\solve.py",
+    "same": true
+  }
+]

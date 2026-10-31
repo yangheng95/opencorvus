@@ -92,5 +92,45 @@
   "no_new_valid_heavy_benchmark_comparison": true,
   "effective_candidate_hours_qualification": "0/10",
   "actual_codex_model_usage": "unknown/not exposed",
-  "limits": "Same frozen task/public/grader per pair, not established identical underlying model/resources; no general speed/cost/model superiority ranking. L06 original scores are engineering acceptance only."
+  "limits": "Same frozen task/public/grader per pair, not established identical underlying model/resources; no general speed/cost/model superiority ranking. L06 original scores are engineering acceptance only.",
+  "latest_maritime_product_inspection": {
+    "at": "2026-10-31T16:11:29.679841+00:00",
+    "new_input_results": [
+      {
+        "input": "maritime-eval-vc05",
+        "Codex_complete_delivery_valid": true,
+        "Codex_complete_P": 63855.512411443444,
+        "OC_complete_delivery_valid": false,
+        "OC_complete_P": null,
+        "OC_independently_feasible_optimizer_P": 93207.21333184093,
+        "OC_optimizer_math_valid": true,
+        "OC_complete_failure": "post-solve self-validator discards RHS data rows whose set label is RHS; missing layout/four operating tables",
+        "OC_optimizer_cost_difference_percent_of_Codex": 45.96580594526311
+      },
+      {
+        "input": "maritime-eval-vc03",
+        "Codex_complete_delivery_valid": true,
+        "Codex_complete_P": 200079.49032861626,
+        "OC_complete_delivery_valid": false,
+        "OC_complete_P": null,
+        "OC_independently_feasible_optimizer_P": 137597.773752728,
+        "OC_optimizer_math_valid": true,
+        "OC_complete_failure": "post-solve self-validator discards RHS data rows whose set label is RHS; missing layout/four operating tables",
+        "OC_optimizer_cost_difference_percent_of_Codex": -31.228446490575568
+      }
+    ],
+    "formal_source_only_numeric_checks": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\actual-private-checker-commands.json",
+    "root_cause": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\oc-private-failure-investigation.json",
+    "scientific_review": {
+      "assignment_id": "l06-maritime-pair-content-71fa72e40dc74c3fb2234d69b4ed3be7",
+      "completed": true,
+      "scope": "original per-candidate S01-S05 levels, no aggregate",
+      "repo_report": "cases/L06/evaluator/reconstruction/product-quality-audit-20261031/independent-content-review/REVIEW.md"
+    },
+    "aggregate_score": null,
+    "heavy_benchmark_qualified": false,
+    "measurement_limitation": "numeric perturbation and legal MPS serialization change both occur; report end-to-end delivery and valid optimizer cost separately",
+    "report": "cases/L06/evaluator/reconstruction/product-quality-audit-20261031/README.md"
+  },
+  "latest_observation_at": "2026-10-31T16:13:01.773802+00:00"
 }

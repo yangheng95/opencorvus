@@ -1,0 +1,65 @@
+{
+  "assignment_id": "l06-maritime-pair-content-71fa72e40dc74c3fb2234d69b4ed3be7",
+  "reviewed_at": "2026-10-31T16:13:13.808600+00:00",
+  "remaining_work": [],
+  "reviewer": "/root/benchmark_review",
+  "scope": "same first necessary content review of each candidate, no new programme/solver/LP/fullchecker run, original static checkpoint preserved",
+  "ratings": {
+    "codex": [
+      {
+        "id": "S01",
+        "evidence_level": "Middle supported; bounded higher-layer mechanism evidence",
+        "status": "supported_with_limits"
+      },
+      {
+        "id": "S02",
+        "evidence_level": "Middle supported; additional localized higher-layer intervention evidence",
+        "status": "supported_with_limits"
+      },
+      {
+        "id": "S03",
+        "evidence_level": "Middle supported; not an exact global-optimality proof",
+        "status": "supported_with_limits"
+      },
+      {
+        "id": "S04",
+        "evidence_level": "Middle: two registered new inputs completed; statistical higher layer unsupported",
+        "status": "supported_on_two_registered_inputs"
+      },
+      {
+        "id": "S05",
+        "evidence_level": "Middle supported; actual assigned-input source-only reconstruction supports handoff",
+        "status": "supported_with_limits"
+      }
+    ],
+    "opencorvus": [
+      {
+        "id": "S01",
+        "evidence_level": "Middle supported; bounded higher-layer bundled-method explanation",
+        "status": "supported_with_limits"
+      },
+      {
+        "id": "S02",
+        "evidence_level": "Middle supported; limited bundled-intervention economic attribution",
+        "status": "supported_with_limits"
+      },
+      {
+        "id": "S03",
+        "evidence_level": "Middle supported on development; general self-validator coverage contradicted by new input",
+        "status": "supported_limits_with_scope_defect"
+      },
+      {
+        "id": "S04",
+        "evidence_level": "Observed new-input execution failure; successful transfer layer not met",
+        "status": "failed_on_both_registered_new_inputs"
+      },
+      {
+        "id": "S05",
+        "evidence_level": "Development scientific handoff supported; required new-input end-to-end handoff fails",
+        "status": "development_supported_new_input_handoff_failed"
+      }
+    ]
+  },
+  "aggregate_score": null,
+  "heavy_benchmark_qualified": false
+}

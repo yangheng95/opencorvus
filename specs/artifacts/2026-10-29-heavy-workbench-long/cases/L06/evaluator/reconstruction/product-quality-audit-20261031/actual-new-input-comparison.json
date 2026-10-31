@@ -1,0 +1,42 @@
+{
+  "at": "2026-10-31T16:11:29.679841+00:00",
+  "case": "L06/maritime-research-pilot",
+  "scope": "actual same preregistered new inputs, original source-only programme, sequential first native executions; original delivery captured first",
+  "cases": [
+    {
+      "input": "maritime-eval-vc05",
+      "Codex_complete_delivery_valid": true,
+      "Codex_complete_P": 63855.512411443444,
+      "OC_complete_delivery_valid": false,
+      "OC_complete_P": null,
+      "OC_independently_feasible_optimizer_P": 93207.21333184093,
+      "OC_optimizer_math_valid": true,
+      "OC_complete_failure": "post-solve self-validator discards RHS data rows whose set label is RHS; missing layout/four operating tables",
+      "OC_optimizer_cost_difference_percent_of_Codex": 45.96580594526311
+    },
+    {
+      "input": "maritime-eval-vc03",
+      "Codex_complete_delivery_valid": true,
+      "Codex_complete_P": 200079.49032861626,
+      "OC_complete_delivery_valid": false,
+      "OC_complete_P": null,
+      "OC_independently_feasible_optimizer_P": 137597.773752728,
+      "OC_optimizer_math_valid": true,
+      "OC_complete_failure": "post-solve self-validator discards RHS data rows whose set label is RHS; missing layout/four operating tables",
+      "OC_optimizer_cost_difference_percent_of_Codex": -31.228446490575568
+    }
+  ],
+  "scientific_review": {
+    "assignment_id": "l06-maritime-pair-content-71fa72e40dc74c3fb2234d69b4ed3be7",
+    "status": "complete",
+    "source": "D:\\opencorvus-benchmark-runs\\maritime-real-product-quality-audit-20261031\\candidate-content-review-closed.json",
+    "aggregate_score": null
+  },
+  "quality_interpretation": "separate complete operating delivery and independently verified original optimizer objective; no artificial missing OC outputs or claim of route infeasibility",
+  "measurement_covariate": "numeric rate profiles and legal MPS serialization/RHS-set label both change; full contract allows it, but this does not isolate pure numeric optimization generalization",
+  "candidate_sources_patched": false,
+  "repeated_candidate_solves": false,
+  "aggregate_score": null,
+  "heavy_benchmark_qualified": false,
+  "closed_at": "2026-10-31T16:17:28.826092+00:00"
+}

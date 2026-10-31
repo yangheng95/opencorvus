@@ -1,0 +1,15 @@
+{
+  "python": "3.14.2 (tags/v3.14.2:df79316, Dec  5 2025, 17:18:21) [MSC v.1944 64 bit (AMD64)]",
+  "executable": "D:\\opencorvus-benchmark-runs\\native-operations-reconstruction-20261031\\Scripts\\python.exe",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "scip": "10.0.2",
+  "pyscipopt": "6.3.0",
+  "solving_dependencies": [
+    "Python standard library",
+    "PySCIPOpt 6.3.0 and bundled SCIP 10.0.2"
+  ],
+  "optional_unused": [
+    "OR-Tools 9.15.6755 (available; no experiment claimed)"
+  ],
+  "plot_dependency_pins": "requirements-plot.txt"
+}

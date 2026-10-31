@@ -190,3 +190,5 @@ current exporter只把既有运营计算提取为单一evaluate，原CLI仍负�
 首完整整审已最终结案：[原两阻断与同assignment集中闭合](whole-case-review/REVIEW-FINAL.md)，当前[完整pilot合同](PILOT-FREEZE.json)允许在预先登记同输入/数值配置后做原授权必要fresh对照。原source-only冷源v1与修后consumer/public分开，原等价格式误拒保留，仅一次受影响正向复验0；未重优化/LP/cold。此前“正在审/尚未批准”是历史阶段，不据此重开审查。尚无新候选成绩，重型/小时/统计资格仍未成立。
 
 实际模型对照启动见[actual-pair-native-20261031](actual-pair-native-20261031/README.md)；两新系统运行、无新业务结果，本目录参考不替候选。
+
+用户要求的[真实产物质量与评价问题核查](product-quality-audit-20261031/README.md)直接复算两候选已有完成计划；全部合法仍有显著成本差，开发结果/最终argv/新输入结果分别记录，不能以图片或audit数替质量。
