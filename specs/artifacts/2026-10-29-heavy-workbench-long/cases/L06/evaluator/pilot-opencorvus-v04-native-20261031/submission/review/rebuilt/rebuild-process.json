@@ -1,0 +1,19 @@
+{
+  "argv": [
+    "C:\\Python314\\python.exe",
+    "-X",
+    "utf8",
+    "-u",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\review\\rebuilt\\solver.py",
+    "--public",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\review\\rebuilt\\public",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\review\\rebuilt\\actor\\tables",
+    "--certificates",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\review\\rebuilt\\certificates"
+  ],
+  "exit": 0,
+  "stdout": "base 300834939/4000000 CacheInfo(hits=77064, misses=23281, maxsize=None, currsize=23281) CacheInfo(hits=27732, misses=35045, maxsize=None, currsize=35045)\nbase {'optimum_exact': '300834939/4000000', 'policy_exact': '300834939/4000000', 'regret_exact': '0', 'laboratory_states': 23281, 'operations_states': 35045, 'action_comparisons': 204963, 'infeasible_comparisons': 25569, 'terminal_histories': 67, 'reachable_table_states': 251, 'class_optima_exact': {'A1': '3796298817/64000000', 'B1': '41972250459/640000000'}, 'advance_class_bound_exact': '79935238629/1280000000', 'no_inspection_physical_exact': '118', 'seconds': 1.6940484000006109}\ncash-tight 11287373277/128000000 CacheInfo(hits=67696, misses=21258, maxsize=None, currsize=21258) CacheInfo(hits=25191, misses=32127, maxsize=None, currsize=32127)\ncash-tight {'optimum_exact': '11287373277/128000000', 'policy_exact': '11287373277/128000000', 'regret_exact': '0', 'laboratory_states': 21258, 'operations_states': 32127, 'action_comparisons': 186891, 'infeasible_comparisons': 25422, 'terminal_histories': 49, 'reachable_table_states': 188, 'class_optima_exact': {'A1': '80959253829/1280000000', 'B1': '2249806017/32000000'}, 'advance_class_bound_exact': '170951494509/2560000000', 'no_inspection_physical_exact': '119', 'seconds': 1.513623099999677}\nshifted-prior 90125954529/1280000000 CacheInfo(hits=77064, misses=23281, maxsize=None, currsize=23281) CacheInfo(hits=27732, misses=35045, maxsize=None, currsize=35045)\nshifted-prior {'optimum_exact': '90125954529/1280000000', 'policy_exact': '90125954529/1280000000', 'regret_exact': '0', 'laboratory_states': 23281, 'operations_states': 35045, 'action_comparisons': 204963, 'infeasible_comparisons': 25569, 'terminal_histories': 81, 'reachable_table_states': 260, 'class_optima_exact': {'A1': '3796298817/64000000', 'B1': '41972250459/640000000'}, 'advance_class_bound_exact': '155861214969/2560000000', 'no_inspection_physical_exact': '118', 'seconds': 1.717827499996929}\n",
+  "stderr": ""
+}

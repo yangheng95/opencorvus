@@ -1,0 +1,25 @@
+{
+  "started_at": "2026-10-31T10:01:17.867000+00:00",
+  "finished_at": "2026-10-31T10:02:44.497037+00:00",
+  "native_exit": 0,
+  "actual_native_owner_pid": 31008,
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-u",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\public-inputs\\exercise.py",
+    "--project",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\source-project",
+    "--public",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\public-inputs",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\private-run",
+    "--python",
+    "C:/Python314/python.exe"
+  ],
+  "stdout": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\private-stdout.txt",
+  "stderr": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\private-stderr.txt",
+  "scope": "actual first source-only private native execution; original candidate content/policy/report unchanged"
+}

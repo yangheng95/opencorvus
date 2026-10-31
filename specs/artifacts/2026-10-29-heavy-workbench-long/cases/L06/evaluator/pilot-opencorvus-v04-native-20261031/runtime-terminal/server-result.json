@@ -1,0 +1,35 @@
+{
+  "registration": {
+    "benchmark": "HeavyWorkBench-Long/0.4.0-dev",
+    "case": "L06",
+    "model": "openai/gpt-6.1-sol",
+    "inactivitySeconds": 3600,
+    "tokenBudgetScope": "task-session-lineage",
+    "budget": {
+      "total_model_tokens": null
+    },
+    "runRoot": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031",
+    "project": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project",
+    "caseVersion": "L06/0.4.0-dev"
+  },
+  "pid": 3568,
+  "startedAt": "2026-10-31T08:43:58.721Z",
+  "comparable": false,
+  "projection": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol"
+  },
+  "preflight": {
+    "sessionID": "ses_hT9wID9AIvDENyuDvdwS",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "outcome": "owned_server_stop_requested_after_task_settlement",
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "endedAt": "2026-10-31T09:59:27.103Z"
+}

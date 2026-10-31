@@ -1,0 +1,100 @@
+L06 active inspection — operator handoff
+
+READ FIRST: submission/report.pdf (full mathematical argument, exact outputs,
+limitations, figures and reproducible commands); source: submission/report.md.
+No independent acceptance, real business approval or arbitrary-failure guarantee
+is claimed. All values are synthetic. Preserve every original run and failure.
+
+DELIVERED ENTRY
+  submission/actor/submission.json
+  argv: {python} -X utf8 -u -B {project}/actor.py {public} {instance}
+  Project: submission/actor ; public: public or the exact execution input copy.
+  Online: Python standard library only, no optimizer/network. Input one full
+  observed packet per line. Output one exact-belief, stable-key action per line.
+  All three input directories and CSV row reorder are supported.
+
+EXACT OUTPUTS
+  submission/exports-complete/stage-ledger.csv
+  submission/exports-complete/summary.json
+  submission/actor/tables/{base,cash-tight,shifted-prior}.json
+  submission/certificates/*.json.gz
+  submission/certificate-verification.json
+  submission/figures/{decisions,cost-information,cash,material,belief-information}.png
+
+ROOT VALUES (policy = same-information optimum, regret exactly zero)
+  base:          300834939/4000000
+  cash-tight:    11287373277/128000000
+  shifted-prior: 90125954529/1280000000
+Advance class bounds (future individual results remain unknown):
+  base:          79935238629/1280000000
+  cash-tight:    170951494509/2560000000
+  shifted-prior: 155861214969/2560000000
+Complete native histories: 67 / 49 / 81; mass 1 in each input.
+Minimum cash: -13 / -15 / -13; minimum final cash: 4 / 0 / 1.
+Actual good-material stage peak: 3 units in every instance; capacity is 4.
+Every final path retains 24 due week 8 and 12 due week 9; do NOT collect early.
+
+ORIGINAL RECEIPT RECOVERY — completed demonstration, not an instruction to
+replay successful business creates or overwrite the delivered database
+  submission/native-complete/episode-a97d8a49becdcaef/journal.sqlite3
+  cut-order/original-prefix.json          original seq 1, paid order
+  cut-laboratory/resume-receipt.json      recovered original order receipt
+  cut-laboratory/original-prefix.json     original seq 2, paid A inspection, good
+  completed/resume-receipt.json           recovered same original good result
+  completed/journal-export.json           same complete 16-row original prefix
+The cut-order and cut-laboratory controller exits were both 73; actor exits 0.
+Each worker directory retains actual PID/argv/exit/wire/stderr records.
+
+For an actually interrupted NEW episode, keep the same journal and original
+packet/key/payload. Recover the journaled receipt first, never resample. Do not
+restore original-prefix.json over the SQLite file; it is comparison evidence.
+Never cancel old orders, clear retained material or reassign receivables.
+Same-key changed payload is a conflict; diagnose rather than invent a new key.
+Changed/corrupt/duplicate facts, credit infeasibility or an unsupported policy
+state must fail closed with its named diagnosis; do not use a fallback policy.
+
+NATIVE RUNS AND REAL FAILURE
+  submission/native-original     genuine first run; retained PermissionError
+    at exercise's row-order rewrite because copytree retained Windows readonly.
+    Driver failure receipt: submission/exports/exercise-process.json.
+  submission/execution-public    all 21 original bytes copied with copyfile,
+    changing only writable destination attributes; public remains read-only.
+  submission/native-complete    unchanged public exercise, every supported path,
+    two genuine commit-before-ack cuts, same-key result recovery, row reorder.
+  submission/native-rebuilt     full second native exercise of source-rebuilt actor.
+  submission/exports-rebuilt    independent public-audit export of rebuilt run;
+    complete summary exactly equals exports-complete/summary.json.
+  actor-verification.json and rebuilt-actor-verification.json retain all-node
+    replay/restart/all-instance reorder and all 18 named negative fixtures.
+
+REPRODUCTION (Git Bash, from project root; use fresh output paths)
+  export PYTHONDONTWRITEBYTECODE=1
+  export TEMP="$PWD/submission/tmp" TMP="$PWD/submission/tmp"
+  C:/Python314/python.exe -X utf8 -u -B submission/rebuild.py --source submission/source.zip --out submission/rebuilt-new
+  C:/Python314/python.exe -X utf8 -u -B submission/run_native.py --project submission/rebuilt-new/actor --public submission/rebuilt-new/public --out submission/native-new --export submission/exports-new
+  C:/Python314/python.exe -X utf8 -u -B submission/test_actor.py --project submission/rebuilt-new/actor --public submission/rebuilt-new/public --run submission/native-new --out submission/new-actor-verification.json
+  C:/Python314/python.exe -X utf8 -u -B submission/verify_certificates.py --public submission/rebuilt-new/public --certificates submission/rebuilt-new/certificates --out submission/new-certificate-verification.json
+The source archive has no precomputed policy tables; rebuilding regenerates them.
+Original public model.py/exercise.py/audit.py are included with unchanged bytes.
+run_native.py executes that exercise, preserving its process receipt, then calls
+the actual public audit.analyze. Audit temporary SQLite copies stay under tmp.
+
+OFFLINE FIGURE/PDF DEPENDENCIES (native Python 3.12 Windows)
+  C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe -B -m venv submission/env-new
+  submission/env-new/Scripts/python.exe -B -m pip install --no-index --find-links submission/wheels -r submission/requirements-lock.txt
+  export MPLCONFIGDIR="$PWD/submission/mpl"
+  submission/env-new/Scripts/python.exe -B submission/make_report.py
+Keep pip caches and all temporary files under submission. No global installs.
+
+ARCHIVES
+  submission/source.zip        source/raw inputs, no generated tables
+  submission/dependencies.zip  exact locked scientific dependency wheels
+  submission/native-evidence.zip  original native sources/wires/SQLite/prefix
+    records/failures/exports/certificates, with original project-relative paths
+Original directories remain on disk; the archive is transport, not replacement.
+
+LIMITS
+The guarantee is finite supported-model and the two specified process losses.
+No physical power loss, arbitrary failure, OS security, real approval, useful-hour
+or broader-input certification is inferred. No numerical pure-information
+ablation is claimed: prohibiting inspection also removes physical material yield.

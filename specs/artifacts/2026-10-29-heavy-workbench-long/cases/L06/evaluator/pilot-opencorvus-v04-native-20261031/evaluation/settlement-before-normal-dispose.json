@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-31T09:59:26.996779+00:00",
+  "task_id": "tsk_g00VZcBwhb00fHHP9RSj",
+  "actual_task_status": "completed",
+  "actual_request_closure": {
+    "at": "2026-10-31T09:55:32.451290+00:00",
+    "open_provider_requests": 0,
+    "open_tool_requests": 0,
+    "task_budget": null,
+    "scope": "read-only actual own durable request/outcome closure; persistent session ownership is not counted as live execution"
+  },
+  "provider_source_reader": {
+    "at": "2026-10-31T09:54:42.804207+00:00",
+    "actual_request_count": 191,
+    "models": [
+      "gpt-6.1-sol"
+    ],
+    "all_streaming": true,
+    "http_statuses": [
+      200
+    ],
+    "source_reader_states": [
+      "settled"
+    ],
+    "source_file": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evidence\\provider-audit\\provider-3568-abf97885-77af-43ad-acc9-fe6af6048924-765.json",
+    "scope": "actual provider source-reader metadata only, including preflight; not an external invoice or case score"
+  },
+  "owned_remaining_processes_before_dispose": [
+    {
+      "pid": 3568,
+      "name": "bun.exe",
+      "scope": "owned server"
+    },
+    {
+      "pid": 21088,
+      "name": "conhost.exe",
+      "scope": "owned hidden server child"
+    }
+  ],
+  "complete_workspace": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\complete-workspace.zip",
+  "complete_workspace_receipt": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\complete-workspace-receipt.json",
+  "Task_database_backup": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\native-task-database.sqlite3",
+  "scope": "all Task/provider/tool work naturally settled and original workspace/DB preserved before normal server dispose, not a business grade"
+}

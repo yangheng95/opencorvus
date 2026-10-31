@@ -1,0 +1,32 @@
+{
+  "case_version": "L06/0.4.0-dev",
+  "assignment_id": "l06-inspection-d030f401348d4e5f8c98b978ca843884",
+  "subject": "New OpenCorvus candidate content/science only",
+  "reviewed_at": "2026-10-31T10:09:13.591960+00:00",
+  "content_review_complete": true,
+  "five_H": {
+    "H01": "verified_pass",
+    "H02": "verified_pass",
+    "H03": "verified_pass",
+    "H04": "verified_pass",
+    "H05": "verified_pass"
+  },
+  "substantive_content_blockers": [],
+  "aggregate": "not handwritten; root runs actual frozen grader",
+  "no_new_actor_native_DP_solver_verifier": true,
+  "actual_private_execution_read": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\private-run",
+  "evidence": [
+    "independent-numeric-audit.json",
+    "source-science-binding-audit.json",
+    "visual-observations.json"
+  ],
+  "disclosure": "One independent AI-agent content/science reviewer, non-blind and familiar with prior L06 author and candidate work. Rated this original candidate from its own submitted source/report and actual private execution. Not professional human or statistical certification. No causal speed/cost/model ranking; reported lifecycle/Inspect success is not business score. No new native/actor/cold/DP/solver/certificate-verifier/Provider/Task/Docker/WSL/UI or L01 action.",
+  "not_certified": [
+    "professional human/statistical maturity",
+    "effective hours/fresh discrimination",
+    "OS/physical-power-loss/arbitrary-failure/real-business safety",
+    "causal model/speed/cost comparison",
+    "complete ten-case goal"
+  ],
+  "reviewer_observations": "No current candidate-specific contrary evidence. Code reuse limited to independent physical parser with new raw/actual private data; no prior scores/results used. No new execution error encountered in this audit."
+}

@@ -1,0 +1,164 @@
+[
+  {
+    "instance": "base",
+    "all_decision_packets": 260,
+    "exact_replays": true,
+    "all_node_row_reorder_exact": true,
+    "new_process_key_exact": true,
+    "batch_seconds": 1.61715710000135
+  },
+  {
+    "instance": "base",
+    "negative": "changed_state",
+    "diagnosis": "complete_original_packet",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"complete_original_packet\", \"detail\": \"complete_original_packet\"}\n"
+  },
+  {
+    "instance": "base",
+    "negative": "duplicate",
+    "diagnosis": "duplicate_original_key",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"duplicate_original_key\", \"detail\": \"duplicate_original_key\"}\n"
+  },
+  {
+    "instance": "base",
+    "negative": "corrupt_receipt",
+    "diagnosis": "original_receipt_state",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"original_receipt_state\", \"detail\": \"original_receipt_state\"}\n"
+  },
+  {
+    "instance": "base",
+    "negative": "changed_key",
+    "diagnosis": "changed_original_request_key",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"changed_original_request_key\", \"detail\": \"changed_original_request_key\"}\n"
+  },
+  {
+    "instance": "base",
+    "negative": "truncated_prefix",
+    "diagnosis": "changed_original_request_key",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"changed_original_request_key\", \"detail\": \"changed_original_request_key\"}\n"
+  },
+  {
+    "instance": "base",
+    "negative": "changed_facts",
+    "exit": 1,
+    "stderr": "Traceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\actor\\actor.py\", line 38, in <module>\n    require(canonical(normalize(data)) == canonical(table[\"law\"]), \"changed_original_facts\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\execution-public\\model.py\", line 14, in require\n    if not ok: raise ContractError(code)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^\nmodel.ContractError: changed_original_facts\n"
+  },
+  {
+    "instance": "cash-tight",
+    "all_decision_packets": 192,
+    "exact_replays": true,
+    "all_node_row_reorder_exact": true,
+    "new_process_key_exact": true,
+    "batch_seconds": 1.175236800001585
+  },
+  {
+    "instance": "cash-tight",
+    "negative": "changed_state",
+    "diagnosis": "complete_original_packet",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"complete_original_packet\", \"detail\": \"complete_original_packet\"}\n"
+  },
+  {
+    "instance": "cash-tight",
+    "negative": "duplicate",
+    "diagnosis": "duplicate_original_key",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"duplicate_original_key\", \"detail\": \"duplicate_original_key\"}\n"
+  },
+  {
+    "instance": "cash-tight",
+    "negative": "corrupt_receipt",
+    "diagnosis": "original_receipt_state",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"original_receipt_state\", \"detail\": \"original_receipt_state\"}\n"
+  },
+  {
+    "instance": "cash-tight",
+    "negative": "changed_key",
+    "diagnosis": "changed_original_request_key",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"changed_original_request_key\", \"detail\": \"changed_original_request_key\"}\n"
+  },
+  {
+    "instance": "cash-tight",
+    "negative": "truncated_prefix",
+    "diagnosis": "changed_original_request_key",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"changed_original_request_key\", \"detail\": \"changed_original_request_key\"}\n"
+  },
+  {
+    "instance": "cash-tight",
+    "negative": "changed_facts",
+    "exit": 1,
+    "stderr": "Traceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\actor\\actor.py\", line 38, in <module>\n    require(canonical(normalize(data)) == canonical(table[\"law\"]), \"changed_original_facts\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\execution-public\\model.py\", line 14, in require\n    if not ok: raise ContractError(code)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^\nmodel.ContractError: changed_original_facts\n"
+  },
+  {
+    "instance": "shifted-prior",
+    "all_decision_packets": 274,
+    "exact_replays": true,
+    "all_node_row_reorder_exact": true,
+    "new_process_key_exact": true,
+    "batch_seconds": 1.6850045999999566
+  },
+  {
+    "instance": "shifted-prior",
+    "negative": "changed_state",
+    "diagnosis": "complete_original_packet",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"complete_original_packet\", \"detail\": \"complete_original_packet\"}\n"
+  },
+  {
+    "instance": "shifted-prior",
+    "negative": "duplicate",
+    "diagnosis": "duplicate_original_key",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"duplicate_original_key\", \"detail\": \"duplicate_original_key\"}\n"
+  },
+  {
+    "instance": "shifted-prior",
+    "negative": "corrupt_receipt",
+    "diagnosis": "original_receipt_state",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"original_receipt_state\", \"detail\": \"original_receipt_state\"}\n"
+  },
+  {
+    "instance": "shifted-prior",
+    "negative": "changed_key",
+    "diagnosis": "changed_original_request_key",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"changed_original_request_key\", \"detail\": \"changed_original_request_key\"}\n"
+  },
+  {
+    "instance": "shifted-prior",
+    "negative": "truncated_prefix",
+    "diagnosis": "changed_original_request_key",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "{\"diagnosis\": \"changed_original_request_key\", \"detail\": \"changed_original_request_key\"}\n"
+  },
+  {
+    "instance": "shifted-prior",
+    "negative": "changed_facts",
+    "exit": 1,
+    "stderr": "Traceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\actor\\actor.py\", line 38, in <module>\n    require(canonical(normalize(data)) == canonical(table[\"law\"]), \"changed_original_facts\")\n    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\execution-public\\model.py\", line 14, in require\n    if not ok: raise ContractError(code)\n               ^^^^^^^^^^^^^^^^^^^^^^^^^\nmodel.ContractError: changed_original_facts\n"
+  }
+]

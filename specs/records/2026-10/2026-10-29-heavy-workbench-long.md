@@ -751,3 +751,23 @@ L01原唯一owner23296/实际训练18416继续：08:33Z只读观察reaction纯L-
 唯一候选内容独评09:02:56Z封存，独立raw CSV/Fraction、3152privateSQL+3154wire/197support/绝对AR/两原receipt及rowcontrol重建、源码充分状态/12已保存Bellman证书/信息比较和3实际PNG全核；五H全pass。未再native/DP/solver/cold/证书器或作者整审。非阻断DEPENDENCIES笼统绘图stdlib表述但完整requirements/环境/正确HANDOFF已给，不伪扣成缺依赖；独评自身最初即时采购120误作无验货最优的原错误保，按已有政策carry后独立算118/119/118纠正，不扣候选。真正grade从closed重算12M接绑定5H，直接native_exit0/total100/17pass/allcritical/goodtrue/subject_rolecandidate；不是自报/作者分或手写聚合。
 
 完整可读产品/全部源/实际三图/原评分/唯一独评及错误在cases/L06/evaluator/pilot-codex-v04-native-20261031；originals.zip16,176,552bytes/5245members保独特科学/native/原失败/修复/private/grade/review，逐成员及78MB完整workspace外部第三方cache/Git事实范围以receipt为准，不谎称小ZIP含全部第三方字节。当前仅0.4一个新系统good，OC原Task tsk_g00VZcBwhb00fHHP9RSj于09:03:46Z仍running/active/1running，分null；不提前触发0.5或重候选/旧0.3。L01原唯一GPU矩阵继续，无新终态证据不启动整审/重格。套件9/10、有效候选小时0/10、职业统计成熟未认证；L02另版义务保。只本机、定时ACTIVE，所有本任务修改范围commit/正常fetch merge/审全待推/必要检查及完整hook后push，foreign全保。
+
+## 同轮原OC证据封存（仅原合同验收，不作重型bench成绩）
+
+原OC0.4 Task自然completed，实际189provider/186tool请求均有outcome，191source-reader全gpt-6.1-sol/streamingHTTP200/settled；完整原project28,533文件/947,008,393原bytes/Gitf35e85f7c43fd32f6b3dc0c5650c49f72f330c3b/untracked/deps/cache/失败先封483,935,603byte ZIP，原21public无变化无extras。实际TaskSQLite backup26,066,944byte/持久化ZIP4,956,717byte外部保；原normal dispose09:59:27Z/runtimeDisposed+credentialsRemoved true，源凭据不动、API58512已退休。
+
+封后唯一新外部原actor/tables source-only私有执行10:01:17→10:02:44Z直接native0/owner31008/wrapper86.630037秒，全197终史/3152stage、两73原键payloadreceipt/观察恢复+16行序控制通过。原OPERATOR-HANDOFF.txt真实兼含source map和reproduction指令；没有补wrapper/换报告/改原public/code/质量。首readonly行序设施错和原修复各原件保。真正prepare12Mpass，assignmentd030f401348d4e5f8c98b978ca843884；唯一候选内容/科学独评10:09:13Z五H通过，rawCSV/Fraction/3152SQL+3154wire/AR/原两receipt/源科学和五PNG实核，未重native/DP/solver/cold/证书器/作者审查。真正grade直接0/100/17pass/allcritical/good，原正确计算/原分不回写；下节明确它的意义只限开发验收。
+
+原完整交付/图/源/原评分/原失误/唯一审查保pilot-opencorvus-v04-native-20261031，科学原件48,575,524byte/12891members，完整483MB/Git/第三方/TaskDB外部另保、逐成员receipt明确，凭据不进prompt/log/spec/提交。source解、执行和聚合没有发现算错，不等于测量了用户要求的重型能力；不再按两个100机械创建0.5。下节用户纠偏优先于历史升版规则。
+
+## 用户再次纠偏：停止把开发验收分当成重型benchmark有效性
+
+用户指出连续两系统满分暴露设计问题。根因不是需要把正确答案扣低，也没有证据表明这次100的数值聚合算错，而是我把工程验收题的合规分作为“数小时重型全链路评估”的成绩和推进依据。最初Recall已写“状态空间/依赖链过小、内容完整不等于分辨率”，我仍重复相同失败：有限合成题→全链合规检查→两个满分→换版本。此路线停止，不能再拿0.5编号作为修复结果。
+
+已核的具体证据：12个机器叶75分，其中只有M04的10分直接检验优化质量，且仅为是否进入1%阈值的二值通过；其余65分是正确性、身份/完整性、运行/恢复和交付验收。5个人评叶25分也均为二值通过，主要评说明、证书/移交/图和诚实范围。二值rubric本身并非必然无效，但在这份低上限任务中，一旦合法解达到数值最优并写全报告，整个100很容易同时封顶，没有建立要测的高水平工作质量分布。
+
+题目核心是完整公开的小型有限状态模型；三个输入只改变少量融资/先验参数，同一个算法覆盖。public已提供物理/后验/原生执行/对账primitive，大量交付由固定运行器产生。首次完整三个精确DP各不到1秒，两个新系统均独立达到同信息最优，真实同grader全部17叶通过。这些事实只能证明它们完成该验收任务，不能证明题目具有重型难度、数小时有效工作、专家质量分层或模型区分度。坏programme拒绝和一轮完整独审也只支持规则/验收正确，不能替代这些缺失证据。
+
+不适用与影响面：本次只纠正benchmark任务定义/评分解释/资格状态及下一步执行路线，不修改生产调度、Task/Mission/Session、数据库、UI、Provider或凭据。L01原长训练不取消、不热改或重开。所有原题面、权重、阈值、正确/错误programme、评分、原失误/审查及完整workspace保留；不回写旧100、不临时拉高线、不在观察答案后造扣分。停止自动创建0.5同型题、启动新candidate或做重复资格/独审。
+
+原始“10个真正重型任务、实际数小时有效工作、对齐成熟benchmark”的目标未完成。9份工程合同只是库存，不能再表述为重型benchmark已完成9/10；有效小时资格仍0/10。L02/L06的天花板问题已有实际证据，其余仅作者参考通过的题尚未取得fresh区分度证据，不能假定合格。后续必须回到完整任务本身的真实未解决工作、交付质量和失败模式，先建立有依据的实质质量层次及上限/可达性，再做完整任务实测；不得扩通用评分框架/堆叶数、规模或耗时，也不以保证“没人满分”为目标。原另版义务转为实质重建需求，而非机械升版复跑。

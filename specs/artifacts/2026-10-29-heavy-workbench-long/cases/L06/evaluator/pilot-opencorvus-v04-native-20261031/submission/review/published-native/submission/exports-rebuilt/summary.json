@@ -1,0 +1,850 @@
+{
+  "format": "l06-inspection-summary/1",
+  "instances": {
+    "base": {
+      "expected_cost_exact": "300834939/4000000",
+      "components_exact": {
+        "certified": "27848009/800000",
+        "disposal": "4572647/8000000",
+        "holding": "80169651/32000000",
+        "laboratory": "23112549/4000000",
+        "normal": "625398521/32000000",
+        "production": "12"
+      },
+      "minimum_cash": -13,
+      "minimum_final_cash": 4,
+      "maximum_raw_peak": 3,
+      "terminal_histories": 67,
+      "decision_histories": 260,
+      "probability_mass_exact": "1",
+      "receivables_by_path": {
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:good|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:good|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:good|w6:B:reject|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:good|w6:B:reject|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:good|w6:B:reject|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:good|w6:B:reject|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:good|w6:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:good|w6:B:reject|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:good|w6:B:reject|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:good|w6:B:reject|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:good|w6:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:good|w6:B:reject|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:good|w6:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        }
+      }
+    },
+    "cash-tight": {
+      "expected_cost_exact": "11287373277/128000000",
+      "components_exact": {
+        "certified": "846638457/16000000",
+        "disposal": "74988917/128000000",
+        "holding": "125888651/64000000",
+        "laboratory": "316103039/64000000",
+        "normal": "504823331/32000000",
+        "production": "12"
+      },
+      "minimum_cash": -15,
+      "minimum_final_cash": 0,
+      "maximum_raw_peak": 3,
+      "terminal_histories": 49,
+      "decision_histories": 192,
+      "probability_mass_exact": "1",
+      "receivables_by_path": {
+        "w1:A:reject|w5:A:good|w6:A:reject|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:good|w6:B:reject|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:good|w6:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w5:A:good|w6:A:reject|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w5:A:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:good|w6:B:reject|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:reject|w6:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        }
+      }
+    },
+    "shifted-prior": {
+      "expected_cost_exact": "90125954529/1280000000",
+      "components_exact": {
+        "certified": "4924705947/160000000",
+        "disposal": "772546073/1280000000",
+        "holding": "80897931/32000000",
+        "laboratory": "186178809/32000000",
+        "normal": "298908641/16000000",
+        "production": "12"
+      },
+      "minimum_cash": -13,
+      "minimum_final_cash": 1,
+      "maximum_raw_peak": 3,
+      "terminal_histories": 81,
+      "decision_histories": 274,
+      "probability_mass_exact": "1",
+      "receivables_by_path": {
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:reject|w6:B:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:reject|w6:B:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:B:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:good|w6:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:good|w6:B:reject|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:good|w6:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:good|w6:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:reject|w6:B:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:good|w6:B:reject|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:B:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:reject|w6:B:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:good|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:good|w6:B:reject|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:reject|w6:B:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:reject|w6:B:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:reject|w6:B:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:reject|w6:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:reject|w6:B:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:good|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:good|w6:B:reject|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:good|w6:B:reject|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:good|w6:B:reject|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:good|w5:B:good|w6:B:reject|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:reject|w6:B:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:good|w5:B:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:reject|w4:B:reject|w5:A:reject|w6:B:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:B:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:good|w5:A:good|w6:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:reject|w6:B:good|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:reject|w6:A:good|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:reject|w5:A:reject|w6:B:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:reject|w6:B:good|w7:B:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:reject|w4:B:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:reject|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:reject|w4:A:good|w5:A:good|w6:A:reject|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:reject|w6:A:good|w7:A:reject": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:reject|w2:B:good|w3:B:good|w4:B:reject|w5:B:good|w6:B:reject|w7:B:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        },
+        "w1:A:good|w2:A:good|w3:A:good|w4:A:reject|w5:A:good|w6:A:reject|w7:A:good": {
+          "8": 24,
+          "9": 12
+        }
+      }
+    }
+  }
+}

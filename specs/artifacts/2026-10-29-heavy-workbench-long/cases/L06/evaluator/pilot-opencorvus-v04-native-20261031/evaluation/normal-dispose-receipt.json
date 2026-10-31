@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-31T10:00:33.381826+00:00",
+  "actual_server_ended_at": "2026-10-31T09:59:27.103Z",
+  "server_pid": 3568,
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "auth_file_present": false,
+  "models_file_present": false,
+  "source_credentials": "not modified by coordinator",
+  "api_retired": "http://127.0.0.1:58512/",
+  "scope": "normal existing runtime dispose after complete Task/workspace/database preservation, not a candidate restart or process kill"
+}

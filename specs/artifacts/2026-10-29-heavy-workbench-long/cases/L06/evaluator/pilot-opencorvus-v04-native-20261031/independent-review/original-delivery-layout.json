@@ -1,0 +1,19 @@
+{
+  "format": "l06-inspection-layout/1",
+  "paths": {
+    "programme": "actor",
+    "report": "report.md",
+    "ledger": "exports-complete/stage-ledger.csv",
+    "summary": "exports-complete/summary.json",
+    "source_map": "OPERATOR-HANDOFF.txt",
+    "reproduce": "OPERATOR-HANDOFF.txt",
+    "requirements": "requirements-lock.txt",
+    "figures": [
+      "figures/decisions.png",
+      "figures/cost-information.png",
+      "figures/cash.png",
+      "figures/material.png",
+      "figures/belief-information.png"
+    ]
+  }
+}

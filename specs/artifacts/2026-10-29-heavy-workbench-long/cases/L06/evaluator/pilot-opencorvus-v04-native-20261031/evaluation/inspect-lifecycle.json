@@ -1,0 +1,44 @@
+{
+  "status": "success",
+  "stats": {
+    "started_at": "2026-10-31T08:44:56+00:00",
+    "completed_at": "2026-10-31T09:39:06+00:00",
+    "model_usage": {},
+    "role_usage": {},
+    "connection_limit_history": []
+  },
+  "scores": {
+    "total_samples": 1,
+    "completed_samples": 1,
+    "early_stopping": null,
+    "scores": [
+      {
+        "name": "task_completed",
+        "scorer": "task_completed",
+        "reducer": null,
+        "scored_samples": 1,
+        "unscored_samples": 0,
+        "params": {},
+        "metrics": {
+          "accuracy": {
+            "name": "accuracy",
+            "group": null,
+            "value": 1.0,
+            "params": {},
+            "metadata": null
+          },
+          "stderr": {
+            "name": "stderr",
+            "group": null,
+            "value": 0.0,
+            "params": {},
+            "metadata": null
+          }
+        },
+        "metadata": null
+      }
+    ],
+    "metadata": null
+  },
+  "scope": "Inspect lifecycle scorer only; not business grade or effective useful hours"
+}

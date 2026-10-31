@@ -76,7 +76,7 @@
 
 - [2026-10-30-approved-code-workflow.md](2026-10-30-approved-code-workflow.md)：独立QA的真实审批后提交全流程，保留旧793失败历史。
 
-- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：旧双100另版待履行；[最新十题Recall](2026-10-29-heavy-workbench-long.md)保L01原矩阵、L06/0.4首fresh真100及OC活动，区分度/小时未认证。
+- [2026-10-30-heavy-workbench-l02-qualification.md](2026-10-30-heavy-workbench-l02-qualification.md)：[最新用户纠偏和根因](2026-10-29-heavy-workbench-long.md)区分验收分与重型bench有效性，停止机械升版并保原始证据，L01原训练不重开。
 - [2026-10-30-heavy-workbench-l05-qualification.md](2026-10-30-heavy-workbench-l05-qualification.md)：完整两库事故/真实在途/持久恢复/双sender/监测交付及三输入/正错程序/整审开发冻，参考100、伪保证94关键失败。
 
 - [2026-10-30-mission-selection-journey.md](2026-10-30-mission-selection-journey.md)：创建表单专家团搜索与选择的实际体验。

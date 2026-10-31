@@ -1,0 +1,140 @@
+{
+  "format": "l06-inspection-assignment/1",
+  "assignment_id": "l06-inspection-d030f401348d4e5f8c98b978ca843884",
+  "case_version": "L06/0.4.0-dev",
+  "subject_role": "candidate",
+  "created_at": "2026-10-31T10:04:29.692577+00:00",
+  "original_run": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\private-run",
+  "delivery_layout": {
+    "format": "l06-inspection-layout/1",
+    "paths": {
+      "programme": "actor",
+      "report": "report.md",
+      "ledger": "exports-complete/stage-ledger.csv",
+      "summary": "exports-complete/summary.json",
+      "source_map": "OPERATOR-HANDOFF.txt",
+      "reproduce": "OPERATOR-HANDOFF.txt",
+      "requirements": "requirements-lock.txt",
+      "figures": [
+        "figures/decisions.png",
+        "figures/cost-information.png",
+        "figures/cash.png",
+        "figures/material.png",
+        "figures/belief-information.png"
+      ]
+    }
+  },
+  "leaves": {
+    "M01": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "Every actual terminal logical path unique, all child outcome support complete, exact mass1"
+    },
+    "M02": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "All actual laboratory/material/pack/order/demand transitions reconciled from original raw facts"
+    },
+    "M03": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "Every real response belief is the exact posterior from its full actual selected-test history"
+    },
+    "M04": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "All three exact actual expected costs within the prospectively registered101/100 of independently physically verified Bellman root values"
+    },
+    "M05": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "All original claimed numerical rows/strict probabilities/beliefs/cost/cash/absolute AR equal actual private facts by instance+observable path+seq; deployment episode/key naming is not forced"
+    },
+    "M06": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "Every actual payment/settled cash/absolute arrival and AR reconciled, all floors and terminal conditions pass"
+    },
+    "M07": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "Actual immutable captured programme/controller/public and delivered programme bytes bound; identity alone is not the physical or optimality proof"
+    },
+    "M08": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "Actual complete source actor/controller commands and SQLite/wire/worker EOF0; two controller73 then same original row continuation, no claim of worker kill/power loss"
+    },
+    "M09": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "Actual order commit73, new process original packet/key/payload/receipt and all original SQL values retained"
+    },
+    "M10": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "Actual paid-lab commit73, old observation and key recovered in new process, original SQL/wire values retained"
+    },
+    "M11": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "Separate actual row-order control has same original input semantics and complete business history"
+    },
+    "M12": {
+      "status": "verified_pass",
+      "evidence": [
+        "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment\\closed\\run"
+      ],
+      "reason": "Original source/policy programme, full numeric ledger/summary/map, handoff/rebuild, declared dependencies, actual report and figures present; content judged independently"
+    },
+    "H01": {
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "H02": {
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "H03": {
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "H04": {
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    },
+    "H05": {
+      "status": "unassessed",
+      "evidence": [],
+      "reason": "complete native/independent content evidence required"
+    }
+  },
+  "total": null,
+  "fixed_denominator": 100
+}

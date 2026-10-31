@@ -1,0 +1,56 @@
+{
+  "base": {
+    "optimum_exact": "300834939/4000000",
+    "policy_exact": "300834939/4000000",
+    "regret_exact": "0",
+    "laboratory_states": 23281,
+    "operations_states": 35045,
+    "action_comparisons": 204963,
+    "infeasible_comparisons": 25569,
+    "terminal_histories": 67,
+    "reachable_table_states": 251,
+    "class_optima_exact": {
+      "A1": "3796298817/64000000",
+      "B1": "41972250459/640000000"
+    },
+    "advance_class_bound_exact": "79935238629/1280000000",
+    "no_inspection_physical_exact": "118",
+    "seconds": 1.6940484000006109
+  },
+  "cash-tight": {
+    "optimum_exact": "11287373277/128000000",
+    "policy_exact": "11287373277/128000000",
+    "regret_exact": "0",
+    "laboratory_states": 21258,
+    "operations_states": 32127,
+    "action_comparisons": 186891,
+    "infeasible_comparisons": 25422,
+    "terminal_histories": 49,
+    "reachable_table_states": 188,
+    "class_optima_exact": {
+      "A1": "80959253829/1280000000",
+      "B1": "2249806017/32000000"
+    },
+    "advance_class_bound_exact": "170951494509/2560000000",
+    "no_inspection_physical_exact": "119",
+    "seconds": 1.513623099999677
+  },
+  "shifted-prior": {
+    "optimum_exact": "90125954529/1280000000",
+    "policy_exact": "90125954529/1280000000",
+    "regret_exact": "0",
+    "laboratory_states": 23281,
+    "operations_states": 35045,
+    "action_comparisons": 204963,
+    "infeasible_comparisons": 25569,
+    "terminal_histories": 81,
+    "reachable_table_states": 260,
+    "class_optima_exact": {
+      "A1": "3796298817/64000000",
+      "B1": "41972250459/640000000"
+    },
+    "advance_class_bound_exact": "155861214969/2560000000",
+    "no_inspection_physical_exact": "118",
+    "seconds": 1.717827499996929
+  }
+}

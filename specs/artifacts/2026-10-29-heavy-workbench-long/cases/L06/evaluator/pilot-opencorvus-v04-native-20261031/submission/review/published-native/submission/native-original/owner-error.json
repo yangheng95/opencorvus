@@ -1,0 +1,8 @@
+{
+  "at": "2026-10-31T08:53:12.894154+00:00",
+  "code": "PermissionError",
+  "error": "[Errno 13] Permission denied: 'D:\\\\opencorvus-benchmark-runs\\\\l06-v04-opencorvus-native-20261031\\\\project\\\\submission\\\\native-original\\\\row-order-public\\\\instances\\\\base\\\\latent-law.csv'",
+  "traceback": "Traceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\public\\exercise.py\", line 163, in main\n    with p.open('w',encoding='utf-8',newline='') as f:csv.writer(f).writerows(rows[:1]+list(reversed(rows[1:])))\n         ~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 771, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nPermissionError: [Errno 13] Permission denied: 'D:\\\\opencorvus-benchmark-runs\\\\l06-v04-opencorvus-native-20261031\\\\project\\\\submission\\\\native-original\\\\row-order-public\\\\instances\\\\base\\\\latent-law.csv'\n",
+  "score": null,
+  "action": "preserve original partial source/wires/native failures; no automatic retry"
+}

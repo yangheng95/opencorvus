@@ -1,0 +1,122 @@
+[
+  {
+    "certificate": "base-A1.json.gz",
+    "nodes": 7853,
+    "candidate_actions_checked": 78915,
+    "physically_invalid": 53418,
+    "future_infeasible": 601,
+    "root_exact": "3796298817/64000000",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 2.0939690999985032
+  },
+  {
+    "certificate": "base-B1.json.gz",
+    "nodes": 7853,
+    "candidate_actions_checked": 78915,
+    "physically_invalid": 53418,
+    "future_infeasible": 601,
+    "root_exact": "41972250459/640000000",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 2.0957046000003174
+  },
+  {
+    "certificate": "base-no-inspection.json.gz",
+    "nodes": 556,
+    "candidate_actions_checked": 4448,
+    "physically_invalid": 3344,
+    "future_infeasible": 85,
+    "root_exact": "118",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 0.1194988999995985
+  },
+  {
+    "certificate": "base-same.json.gz",
+    "nodes": 58326,
+    "candidate_actions_checked": 595518,
+    "physically_invalid": 412674,
+    "future_infeasible": 4202,
+    "root_exact": "300834939/4000000",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 16.91124640000271
+  },
+  {
+    "certificate": "cash-tight-A1.json.gz",
+    "nodes": 7191,
+    "candidate_actions_checked": 72201,
+    "physically_invalid": 49186,
+    "future_infeasible": 680,
+    "root_exact": "80959253829/1280000000",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 1.7922646999977587
+  },
+  {
+    "certificate": "cash-tight-B1.json.gz",
+    "nodes": 7191,
+    "candidate_actions_checked": 72201,
+    "physically_invalid": 49186,
+    "future_infeasible": 680,
+    "root_exact": "2249806017/32000000",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 1.8654889999997977
+  },
+  {
+    "certificate": "cash-tight-no-inspection.json.gz",
+    "nodes": 420,
+    "candidate_actions_checked": 3360,
+    "physically_invalid": 2641,
+    "future_infeasible": 108,
+    "root_exact": "119",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 0.09289849999913713
+  },
+  {
+    "certificate": "cash-tight-same.json.gz",
+    "nodes": 53385,
+    "candidate_actions_checked": 545679,
+    "physically_invalid": 380713,
+    "future_infeasible": 4274,
+    "root_exact": "11287373277/128000000",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 20.048857099998713
+  },
+  {
+    "certificate": "shifted-prior-A1.json.gz",
+    "nodes": 7853,
+    "candidate_actions_checked": 78915,
+    "physically_invalid": 53418,
+    "future_infeasible": 601,
+    "root_exact": "3796298817/64000000",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 2.0273151000001235
+  },
+  {
+    "certificate": "shifted-prior-B1.json.gz",
+    "nodes": 7853,
+    "candidate_actions_checked": 78915,
+    "physically_invalid": 53418,
+    "future_infeasible": 601,
+    "root_exact": "41972250459/640000000",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 1.9983525999996345
+  },
+  {
+    "certificate": "shifted-prior-no-inspection.json.gz",
+    "nodes": 556,
+    "candidate_actions_checked": 4448,
+    "physically_invalid": 3344,
+    "future_infeasible": 85,
+    "root_exact": "118",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 0.11739310000120895
+  },
+  {
+    "certificate": "shifted-prior-same.json.gz",
+    "nodes": 58326,
+    "candidate_actions_checked": 595518,
+    "physically_invalid": 412674,
+    "future_infeasible": 4202,
+    "root_exact": "90125954529/1280000000",
+    "all_equalities_and_minima_verified": true,
+    "seconds": 17.998723799999425
+  }
+]

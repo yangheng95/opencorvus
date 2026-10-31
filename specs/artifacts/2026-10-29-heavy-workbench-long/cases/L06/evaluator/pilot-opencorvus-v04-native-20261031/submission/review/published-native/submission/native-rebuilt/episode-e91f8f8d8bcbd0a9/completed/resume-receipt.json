@@ -1,0 +1,45 @@
+{
+  "request_id": "l06-e17e63bc946eeb139c3ff6fa6dc658d4439b358843cd7c8b03af8f68ab77cf3a",
+  "original_receipt": {
+    "action": {
+      "test": "A"
+    },
+    "observation": "reject",
+    "phase": "laboratory",
+    "post_state": {
+      "cash": 15,
+      "costs": {
+        "certified": 8,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 1,
+        "normal": 3,
+        "production": 1
+      },
+      "cumulative_cost": 13,
+      "good": 0,
+      "incoming": [],
+      "minimum_cash": 6,
+      "phase": "operations",
+      "quarantine": {
+        "A": 0,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 12,
+          "due_week": 2,
+          "receipt_id": "sale-week-0"
+        }
+      ],
+      "terminal": false,
+      "week": 1
+    },
+    "request_id": "l06-e17e63bc946eeb139c3ff6fa6dc658d4439b358843cd7c8b03af8f68ab77cf3a",
+    "seq": 2,
+    "week": 1
+  },
+  "next_seq": 3,
+  "replayed_existing_result": true,
+  "new_sample_drawn": false
+}

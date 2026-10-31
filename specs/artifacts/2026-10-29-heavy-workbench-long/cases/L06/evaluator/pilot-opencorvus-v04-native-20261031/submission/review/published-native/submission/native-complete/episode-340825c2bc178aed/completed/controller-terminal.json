@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-31T08:55:49.278300+00:00",
+  "native_exit": 0,
+  "rows": 16,
+  "terminal_state": {
+    "cash": 54,
+    "costs": {
+      "certified": 35,
+      "disposal": 0,
+      "holding": 3,
+      "laboratory": 7,
+      "normal": 21,
+      "production": 12
+    },
+    "cumulative_cost": 78,
+    "good": 0,
+    "incoming": [],
+    "minimum_cash": 2,
+    "phase": "terminal",
+    "quarantine": {
+      "A": 0,
+      "B": 0
+    },
+    "receivables": [
+      {
+        "amount": 24,
+        "due_week": 8,
+        "receipt_id": "sale-week-6"
+      },
+      {
+        "receipt_id": "sale-week-7",
+        "amount": 12,
+        "due_week": 9
+      }
+    ],
+    "terminal": true,
+    "week": 7
+  }
+}

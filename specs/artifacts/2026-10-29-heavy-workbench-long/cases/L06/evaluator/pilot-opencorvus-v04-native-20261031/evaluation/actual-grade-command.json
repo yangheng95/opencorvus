@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "C:/Python314/python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\upgrade-v0.4\\check_whole.py",
+    "grade",
+    "--assignment",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\assessment",
+    "--review",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-independent-review-20261031\\review.json",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\evaluation\\final-grade.json"
+  ],
+  "started_at": "2026-10-31T10:09:46.045558+00:00",
+  "finished_at": "2026-10-31T10:09:53.087003+00:00",
+  "native_exit": 0,
+  "stdout": "{\"all_critical_pass\":true,\"assignment_id\":\"l06-inspection-d030f401348d4e5f8c98b978ca843884\",\"case_version\":\"L06/0.4.0-dev\",\"development_frozen\":true,\"fixed_denominator\":100,\"format\":\"l06-inspection-grade/1\",\"good\":true,\"limits\":\"actual source/native/science/content dev result only; no effective-hour/professional/statistical maturity\",\"review_complete\":true,\"reviewed_points\":100,\"subject_role\":\"candidate\",\"total\":100}\n",
+  "stderr": "",
+  "scope": "actual same-frozen grader recomputes12M from closed original source/private native/delivery and joins exactly bound fiveH; not manual aggregate"
+}

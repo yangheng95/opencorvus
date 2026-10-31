@@ -1,0 +1,639 @@
+[
+  {
+    "seq": 0,
+    "week": 0,
+    "phase": "laboratory",
+    "request_id": "l06-413b49c4efcd99072870bed1ded5e1cfa893d2cd38325a48c595efc590100d3c",
+    "action": {
+      "test": null
+    },
+    "observation": null,
+    "post_state": {
+      "cash": 18,
+      "costs": {
+        "certified": 0,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 0,
+        "normal": 0,
+        "production": 0
+      },
+      "cumulative_cost": 0,
+      "good": 0,
+      "incoming": [],
+      "minimum_cash": 18,
+      "phase": "operations",
+      "quarantine": {
+        "A": 0,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 10,
+          "due_week": 1,
+          "receipt_id": "prior-completed-job"
+        }
+      ],
+      "terminal": false,
+      "week": 0
+    }
+  },
+  {
+    "seq": 1,
+    "week": 0,
+    "phase": "operations",
+    "request_id": "l06-6581855e698e1059bd7194d2a1a18c44e98a7f3bb5bd6156b373927fc48d4ab0",
+    "action": {
+      "certified_units": 1,
+      "order": "A"
+    },
+    "observation": null,
+    "post_state": {
+      "cash": 16,
+      "costs": {
+        "certified": 8,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 0,
+        "normal": 3,
+        "production": 1
+      },
+      "cumulative_cost": 12,
+      "good": 0,
+      "incoming": [],
+      "minimum_cash": 6,
+      "phase": "laboratory",
+      "quarantine": {
+        "A": 1,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 12,
+          "due_week": 2,
+          "receipt_id": "sale-week-0"
+        }
+      ],
+      "terminal": false,
+      "week": 1
+    }
+  },
+  {
+    "seq": 2,
+    "week": 1,
+    "phase": "laboratory",
+    "request_id": "l06-62cbc1e9bdd7767249c331b0804eaa9085d8345bb7c53cc19f76448f0314bfb4",
+    "action": {
+      "test": "A"
+    },
+    "observation": "reject",
+    "post_state": {
+      "cash": 15,
+      "costs": {
+        "certified": 8,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 1,
+        "normal": 3,
+        "production": 1
+      },
+      "cumulative_cost": 13,
+      "good": 0,
+      "incoming": [],
+      "minimum_cash": 6,
+      "phase": "operations",
+      "quarantine": {
+        "A": 0,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 12,
+          "due_week": 2,
+          "receipt_id": "sale-week-0"
+        }
+      ],
+      "terminal": false,
+      "week": 1
+    }
+  },
+  {
+    "seq": 3,
+    "week": 1,
+    "phase": "operations",
+    "request_id": "l06-868a39a1b5cd70a39f1a51ddd15835792e02ccab1d8459d5cca5594ea59758cc",
+    "action": {
+      "certified_units": 2,
+      "order": "B"
+    },
+    "observation": null,
+    "post_state": {
+      "cash": 5,
+      "costs": {
+        "certified": 24,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 1,
+        "normal": 7,
+        "production": 3
+      },
+      "cumulative_cost": 35,
+      "good": 0,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "laboratory",
+      "quarantine": {
+        "A": 0,
+        "B": 1
+      },
+      "receivables": [
+        {
+          "amount": 24,
+          "due_week": 3,
+          "receipt_id": "sale-week-1"
+        }
+      ],
+      "terminal": false,
+      "week": 2
+    }
+  },
+  {
+    "seq": 4,
+    "week": 2,
+    "phase": "laboratory",
+    "request_id": "l06-2dfb41c066c23712a108e556a467d607fdaf5a8ec23fd1d137123b68e8abf9d2",
+    "action": {
+      "test": "B"
+    },
+    "observation": "good",
+    "post_state": {
+      "cash": 4,
+      "costs": {
+        "certified": 24,
+        "disposal": 0,
+        "holding": 0,
+        "laboratory": 2,
+        "normal": 7,
+        "production": 3
+      },
+      "cumulative_cost": 36,
+      "good": 2,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "operations",
+      "quarantine": {
+        "A": 0,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 24,
+          "due_week": 3,
+          "receipt_id": "sale-week-1"
+        }
+      ],
+      "terminal": false,
+      "week": 2
+    }
+  },
+  {
+    "seq": 5,
+    "week": 2,
+    "phase": "operations",
+    "request_id": "l06-d5792a9bdc857856fcb527bfedd44d29e88f3716c1395f4815ebea3f55ab5734",
+    "action": {
+      "certified_units": 0,
+      "order": "B"
+    },
+    "observation": null,
+    "post_state": {
+      "cash": 22,
+      "costs": {
+        "certified": 24,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 2,
+        "normal": 11,
+        "production": 4
+      },
+      "cumulative_cost": 42,
+      "good": 1,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "laboratory",
+      "quarantine": {
+        "A": 0,
+        "B": 1
+      },
+      "receivables": [
+        {
+          "amount": 12,
+          "due_week": 4,
+          "receipt_id": "sale-week-2"
+        }
+      ],
+      "terminal": false,
+      "week": 3
+    }
+  },
+  {
+    "seq": 6,
+    "week": 3,
+    "phase": "laboratory",
+    "request_id": "l06-2e22728a8146470584ffe4d645c2ab085976a03528d47f5a6fd79d3319c5a7bb",
+    "action": {
+      "test": "B"
+    },
+    "observation": "good",
+    "post_state": {
+      "cash": 21,
+      "costs": {
+        "certified": 24,
+        "disposal": 0,
+        "holding": 1,
+        "laboratory": 3,
+        "normal": 11,
+        "production": 4
+      },
+      "cumulative_cost": 43,
+      "good": 3,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "operations",
+      "quarantine": {
+        "A": 0,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 12,
+          "due_week": 4,
+          "receipt_id": "sale-week-2"
+        }
+      ],
+      "terminal": false,
+      "week": 3
+    }
+  },
+  {
+    "seq": 7,
+    "week": 3,
+    "phase": "operations",
+    "request_id": "l06-4a5d3503fcea973b8704b09c3cb6eca0ea847044ef9180007a03145aec5cd862",
+    "action": {
+      "certified_units": 0,
+      "order": "B"
+    },
+    "observation": null,
+    "post_state": {
+      "cash": 26,
+      "costs": {
+        "certified": 24,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 3,
+        "normal": 15,
+        "production": 6
+      },
+      "cumulative_cost": 50,
+      "good": 1,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "laboratory",
+      "quarantine": {
+        "A": 0,
+        "B": 1
+      },
+      "receivables": [
+        {
+          "amount": 24,
+          "due_week": 5,
+          "receipt_id": "sale-week-3"
+        }
+      ],
+      "terminal": false,
+      "week": 4
+    }
+  },
+  {
+    "seq": 8,
+    "week": 4,
+    "phase": "laboratory",
+    "request_id": "l06-2d8513893e8f3d81b7a7d1b07ebdab1aa5cb87bbb1cf14252747cb222ef40707",
+    "action": {
+      "test": "B"
+    },
+    "observation": "reject",
+    "post_state": {
+      "cash": 25,
+      "costs": {
+        "certified": 24,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 4,
+        "normal": 15,
+        "production": 6
+      },
+      "cumulative_cost": 51,
+      "good": 1,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "operations",
+      "quarantine": {
+        "A": 0,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 24,
+          "due_week": 5,
+          "receipt_id": "sale-week-3"
+        }
+      ],
+      "terminal": false,
+      "week": 4
+    }
+  },
+  {
+    "seq": 9,
+    "week": 4,
+    "phase": "operations",
+    "request_id": "l06-80dd625290f96f1423fc05519dd55c179889440d97fa2d759c6ac11244c11654",
+    "action": {
+      "certified_units": 1,
+      "order": "B"
+    },
+    "observation": null,
+    "post_state": {
+      "cash": 32,
+      "costs": {
+        "certified": 35,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 4,
+        "normal": 19,
+        "production": 8
+      },
+      "cumulative_cost": 68,
+      "good": 0,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "laboratory",
+      "quarantine": {
+        "A": 0,
+        "B": 1
+      },
+      "receivables": [
+        {
+          "amount": 24,
+          "due_week": 6,
+          "receipt_id": "sale-week-4"
+        }
+      ],
+      "terminal": false,
+      "week": 5
+    }
+  },
+  {
+    "seq": 10,
+    "week": 5,
+    "phase": "laboratory",
+    "request_id": "l06-23f3e72da1d5b1187fccdb4124c87a34fdbad4209ed7dad157653ee5f4aee0ae",
+    "action": {
+      "test": "B"
+    },
+    "observation": "reject",
+    "post_state": {
+      "cash": 31,
+      "costs": {
+        "certified": 35,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 5,
+        "normal": 19,
+        "production": 8
+      },
+      "cumulative_cost": 69,
+      "good": 0,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "operations",
+      "quarantine": {
+        "A": 0,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 24,
+          "due_week": 6,
+          "receipt_id": "sale-week-4"
+        }
+      ],
+      "terminal": false,
+      "week": 5
+    }
+  },
+  {
+    "seq": 11,
+    "week": 5,
+    "phase": "operations",
+    "request_id": "l06-5169e1b2fb199910f7613b59aae4590194c087003eac0d7aec8def72d41b2846",
+    "action": {
+      "certified_units": 1,
+      "order": "B"
+    },
+    "observation": null,
+    "post_state": {
+      "cash": 39,
+      "costs": {
+        "certified": 46,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 5,
+        "normal": 23,
+        "production": 9
+      },
+      "cumulative_cost": 85,
+      "good": 0,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "laboratory",
+      "quarantine": {
+        "A": 0,
+        "B": 1
+      },
+      "receivables": [
+        {
+          "amount": 12,
+          "due_week": 7,
+          "receipt_id": "sale-week-5"
+        }
+      ],
+      "terminal": false,
+      "week": 6
+    }
+  },
+  {
+    "seq": 12,
+    "week": 6,
+    "phase": "laboratory",
+    "request_id": "l06-bb47ee73dba9dd862815cc1344703bbe8e91a1f0b735c890edf876cb5b4a8108",
+    "action": {
+      "test": "B"
+    },
+    "observation": "reject",
+    "post_state": {
+      "cash": 38,
+      "costs": {
+        "certified": 46,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 23,
+        "production": 9
+      },
+      "cumulative_cost": 86,
+      "good": 0,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "operations",
+      "quarantine": {
+        "A": 0,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 12,
+          "due_week": 7,
+          "receipt_id": "sale-week-5"
+        }
+      ],
+      "terminal": false,
+      "week": 6
+    }
+  },
+  {
+    "seq": 13,
+    "week": 6,
+    "phase": "operations",
+    "request_id": "l06-6b0b5134ce6571580d186beb43dbd68f7ea66e0247cb47ea972dac1fe95386e4",
+    "action": {
+      "certified_units": 2,
+      "order": "A"
+    },
+    "observation": null,
+    "post_state": {
+      "cash": 29,
+      "costs": {
+        "certified": 62,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 6,
+        "normal": 26,
+        "production": 11
+      },
+      "cumulative_cost": 107,
+      "good": 0,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "laboratory",
+      "quarantine": {
+        "A": 1,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 24,
+          "due_week": 8,
+          "receipt_id": "sale-week-6"
+        }
+      ],
+      "terminal": false,
+      "week": 7
+    }
+  },
+  {
+    "seq": 14,
+    "week": 7,
+    "phase": "laboratory",
+    "request_id": "l06-d87d4051851e6b54a34e6040a45cad5124136b17162432b9dc9a24558d5b52e3",
+    "action": {
+      "test": "A"
+    },
+    "observation": "good",
+    "post_state": {
+      "cash": 28,
+      "costs": {
+        "certified": 62,
+        "disposal": 0,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 26,
+        "production": 11
+      },
+      "cumulative_cost": 108,
+      "good": 2,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "operations",
+      "quarantine": {
+        "A": 0,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 24,
+          "due_week": 8,
+          "receipt_id": "sale-week-6"
+        }
+      ],
+      "terminal": false,
+      "week": 7
+    }
+  },
+  {
+    "seq": 15,
+    "week": 7,
+    "phase": "operations",
+    "request_id": "l06-8d7b9e03c4ccbfc0127cf039951123a5c53b72b17b246a9314218b0a74e13c3d",
+    "action": {
+      "certified_units": 0,
+      "order": null
+    },
+    "observation": null,
+    "post_state": {
+      "cash": 26,
+      "costs": {
+        "certified": 62,
+        "disposal": 1,
+        "holding": 2,
+        "laboratory": 7,
+        "normal": 26,
+        "production": 12
+      },
+      "cumulative_cost": 110,
+      "good": 0,
+      "incoming": [],
+      "minimum_cash": -7,
+      "phase": "terminal",
+      "quarantine": {
+        "A": 0,
+        "B": 0
+      },
+      "receivables": [
+        {
+          "amount": 24,
+          "due_week": 8,
+          "receipt_id": "sale-week-6"
+        },
+        {
+          "receipt_id": "sale-week-7",
+          "amount": 12,
+          "due_week": 9
+        }
+      ],
+      "terminal": true,
+      "week": 7
+    }
+  }
+]

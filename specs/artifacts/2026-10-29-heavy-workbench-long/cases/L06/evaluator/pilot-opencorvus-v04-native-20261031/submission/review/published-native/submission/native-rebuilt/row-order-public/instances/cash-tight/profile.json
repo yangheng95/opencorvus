@@ -1,0 +1,16 @@
+{
+  "format": "l06-inspection-input/1",
+  "id": "cash-tight",
+  "weeks": 8,
+  "raw_capacity": 4,
+  "pack_good_units": 2,
+  "initial_cash": 14,
+  "cash_floor": -15,
+  "production_cost": 1,
+  "revenue": 12,
+  "lab_fee": 1,
+  "holding": 1,
+  "terminal_good_disposal": 1,
+  "terminal_pack_disposal": 1,
+  "sales_receipt_lag": 2
+}

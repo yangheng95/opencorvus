@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-31T10:09:13.591960+00:00",
+  "observations": [
+    {
+      "file": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\figures\\decisions.png",
+      "actually_viewed": true,
+      "assignment_closed_bytes_same": true
+    },
+    {
+      "file": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\figures\\cost-information.png",
+      "actually_viewed": true,
+      "assignment_closed_bytes_same": true
+    },
+    {
+      "file": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\figures\\cash.png",
+      "actually_viewed": true,
+      "assignment_closed_bytes_same": true
+    },
+    {
+      "file": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\figures\\material.png",
+      "actually_viewed": true,
+      "assignment_closed_bytes_same": true
+    },
+    {
+      "file": "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\figures\\belief-information.png",
+      "actually_viewed": true,
+      "assignment_closed_bytes_same": true
+    }
+  ],
+  "observations_detail": "Five actual candidate PNGs opened. Decisions show reach-probability mass for tests and orders for each instance; cost compares same-info, advance class and physical no-test explicitly; cash shows supported range/weighted mean/floor and terminal0; material shows received actual peaks versus cap4; belief shows probability-weighted CLASS entropy, not elimination of four-label aliases. Units, stages, legends and finite-support labels readable. Exact data remain rational in exports."
+}

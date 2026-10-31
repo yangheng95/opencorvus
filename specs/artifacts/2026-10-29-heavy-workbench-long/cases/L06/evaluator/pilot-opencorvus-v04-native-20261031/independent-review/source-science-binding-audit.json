@@ -1,0 +1,798 @@
+{
+  "at": "2026-10-31T10:07:47.150443+00:00",
+  "checks": [
+    {
+      "check": "actual frozen project",
+      "pass": true,
+      "details": {
+        "members": [
+          "actor.py",
+          "submission.json",
+          "tables/base.json",
+          "tables/cash-tight.json",
+          "tables/certificate.json",
+          "tables/shifted-prior.json"
+        ],
+        "different": []
+      }
+    },
+    {
+      "check": "delivered actor",
+      "pass": true,
+      "details": {
+        "members": [
+          "actor.py",
+          "submission.json",
+          "tables/base.json",
+          "tables/cash-tight.json",
+          "tables/certificate.json",
+          "tables/shifted-prior.json"
+        ],
+        "different": []
+      }
+    },
+    {
+      "check": "actual controller",
+      "pass": true,
+      "details": {
+        "members": [
+          "exercise.py",
+          "model.py"
+        ],
+        "different": []
+      }
+    },
+    {
+      "check": "actual public",
+      "pass": true,
+      "details": {
+        "members": [
+          "audit.py",
+          "exercise.py",
+          "instances/base/latent-law.csv",
+          "instances/base/opening-receivables.csv",
+          "instances/base/profile.json",
+          "instances/base/suppliers.csv",
+          "instances/base/weeks.csv",
+          "instances/cash-tight/latent-law.csv",
+          "instances/cash-tight/opening-receivables.csv",
+          "instances/cash-tight/profile.json",
+          "instances/cash-tight/suppliers.csv",
+          "instances/cash-tight/weeks.csv",
+          "instances/shifted-prior/latent-law.csv",
+          "instances/shifted-prior/opening-receivables.csv",
+          "instances/shifted-prior/profile.json",
+          "instances/shifted-prior/suppliers.csv",
+          "instances/shifted-prior/weeks.csv",
+          "model.py",
+          "OPERATIONS.md",
+          "OUTPUTS.md",
+          "TASK.md"
+        ],
+        "different": []
+      }
+    },
+    {
+      "check": "Complete delivered source ZIP original source/raw identity",
+      "pass": true,
+      "details": {
+        "members": [
+          "public/audit.py",
+          "public/exercise.py",
+          "public/instances/base/latent-law.csv",
+          "public/instances/base/opening-receivables.csv",
+          "public/instances/base/profile.json",
+          "public/instances/base/suppliers.csv",
+          "public/instances/base/weeks.csv",
+          "public/instances/cash-tight/latent-law.csv",
+          "public/instances/cash-tight/opening-receivables.csv",
+          "public/instances/cash-tight/profile.json",
+          "public/instances/cash-tight/suppliers.csv",
+          "public/instances/cash-tight/weeks.csv",
+          "public/instances/shifted-prior/latent-law.csv",
+          "public/instances/shifted-prior/opening-receivables.csv",
+          "public/instances/shifted-prior/profile.json",
+          "public/instances/shifted-prior/suppliers.csv",
+          "public/instances/shifted-prior/weeks.csv",
+          "public/model.py",
+          "public/OPERATIONS.md",
+          "public/OUTPUTS.md",
+          "public/TASK.md",
+          "actor/actor.py",
+          "actor/submission.json",
+          "archive_evidence.py",
+          "bundle_source.py",
+          "make_report.py",
+          "OPERATOR-HANDOFF.txt",
+          "prepare_dependencies.py",
+          "prepare_inputs.py",
+          "rebuild.py",
+          "requirements-lock.txt",
+          "requirements.txt",
+          "run_native.py",
+          "solver.py",
+          "test_actor.py",
+          "verify_certificates.py"
+        ],
+        "different": [],
+        "archive_generated_table_members": []
+      }
+    },
+    {
+      "check": "Actual private 200 controller command outcomes",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Row-reordered public raw semantic identity",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "actual complete row-control SQL16",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Row-control original full business packet/action/receipt identity",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count base-same.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count base-A1.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count base-B1.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count base-no-inspection.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Advance class value arithmetic base",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "No-inspection selected path16 actual arithmetic base",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count cash-tight-same.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count cash-tight-A1.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count cash-tight-B1.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count cash-tight-no-inspection.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Advance class value arithmetic cash-tight",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "No-inspection selected path16 actual arithmetic cash-tight",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count shifted-prior-same.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count shifted-prior-A1.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count shifted-prior-B1.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Stored certificate root/count shifted-prior-no-inspection.json.gz",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Advance class value arithmetic shifted-prior",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "No-inspection selected path16 actual arithmetic shifted-prior",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Original first facility failure exact traceback",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Original final archive rebuild process exited0",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Original source regenerated complete actor table base",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Original source regenerated complete actor table cash-tight",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Original source regenerated complete actor table shifted-prior",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Original rebuilt native summary full numerical identity",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Actual closed content same report.md",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Actual closed content same OPERATOR-HANDOFF.txt",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Actual closed content same requirements-lock.txt",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Actual closed content same figures/decisions.png",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Actual closed content same figures/cost-information.png",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Actual closed content same figures/cash.png",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Actual closed content same figures/material.png",
+      "pass": true,
+      "details": null
+    },
+    {
+      "check": "Actual closed content same figures/belief-information.png",
+      "pass": true,
+      "details": null
+    }
+  ],
+  "all_pass": true,
+  "math_failures": [],
+  "class_information_arithmetic": {
+    "base": {
+      "class_prior": "1/2",
+      "same_information_root": "300834939/4000000",
+      "class_A_root": "3796298817/64000000",
+      "class_B_root": "41972250459/640000000",
+      "weighted_advance_class_bound": "79935238629/1280000000",
+      "intrinsic_information_value": "16331941851/1280000000",
+      "no_inspection_actual_cost": 118,
+      "no_inspection_path": [
+        {
+          "seq": 0,
+          "action": {
+            "test": null
+          },
+          "cost": 0,
+          "cash": 18,
+          "peak": 0
+        },
+        {
+          "seq": 1,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 9,
+          "cash": 9,
+          "peak": 1
+        },
+        {
+          "seq": 2,
+          "action": {
+            "test": null
+          },
+          "cost": 9,
+          "cash": 19,
+          "peak": 0
+        },
+        {
+          "seq": 3,
+          "action": {
+            "certified_units": 2,
+            "order": null
+          },
+          "cost": 27,
+          "cash": 1,
+          "peak": 2
+        },
+        {
+          "seq": 4,
+          "action": {
+            "test": null
+          },
+          "cost": 27,
+          "cash": 13,
+          "peak": 0
+        },
+        {
+          "seq": 5,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 37,
+          "cash": 3,
+          "peak": 1
+        },
+        {
+          "seq": 6,
+          "action": {
+            "test": null
+          },
+          "cost": 37,
+          "cash": 27,
+          "peak": 0
+        },
+        {
+          "seq": 7,
+          "action": {
+            "certified_units": 4,
+            "order": null
+          },
+          "cost": 77,
+          "cash": -13,
+          "peak": 4
+        },
+        {
+          "seq": 8,
+          "action": {
+            "test": null
+          },
+          "cost": 77,
+          "cash": -1,
+          "peak": 2
+        },
+        {
+          "seq": 9,
+          "action": {
+            "certified_units": 0,
+            "order": null
+          },
+          "cost": 79,
+          "cash": -3,
+          "peak": 2
+        },
+        {
+          "seq": 10,
+          "action": {
+            "test": null
+          },
+          "cost": 79,
+          "cash": 21,
+          "peak": 0
+        },
+        {
+          "seq": 11,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 91,
+          "cash": 9,
+          "peak": 1
+        },
+        {
+          "seq": 12,
+          "action": {
+            "test": null
+          },
+          "cost": 91,
+          "cash": 33,
+          "peak": 0
+        },
+        {
+          "seq": 13,
+          "action": {
+            "certified_units": 2,
+            "order": null
+          },
+          "cost": 109,
+          "cash": 15,
+          "peak": 2
+        },
+        {
+          "seq": 14,
+          "action": {
+            "test": null
+          },
+          "cost": 109,
+          "cash": 27,
+          "peak": 0
+        },
+        {
+          "seq": 15,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 118,
+          "cash": 18,
+          "peak": 1
+        }
+      ]
+    },
+    "cash-tight": {
+      "class_prior": "1/2",
+      "same_information_root": "11287373277/128000000",
+      "class_A_root": "80959253829/1280000000",
+      "class_B_root": "2249806017/32000000",
+      "weighted_advance_class_bound": "170951494509/2560000000",
+      "intrinsic_information_value": "54795971031/2560000000",
+      "no_inspection_actual_cost": 119,
+      "no_inspection_path": [
+        {
+          "seq": 0,
+          "action": {
+            "test": null
+          },
+          "cost": 0,
+          "cash": 14,
+          "peak": 0
+        },
+        {
+          "seq": 1,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 9,
+          "cash": 5,
+          "peak": 1
+        },
+        {
+          "seq": 2,
+          "action": {
+            "test": null
+          },
+          "cost": 9,
+          "cash": 15,
+          "peak": 0
+        },
+        {
+          "seq": 3,
+          "action": {
+            "certified_units": 2,
+            "order": null
+          },
+          "cost": 27,
+          "cash": -3,
+          "peak": 2
+        },
+        {
+          "seq": 4,
+          "action": {
+            "test": null
+          },
+          "cost": 27,
+          "cash": 9,
+          "peak": 0
+        },
+        {
+          "seq": 5,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 37,
+          "cash": -1,
+          "peak": 1
+        },
+        {
+          "seq": 6,
+          "action": {
+            "test": null
+          },
+          "cost": 37,
+          "cash": 23,
+          "peak": 0
+        },
+        {
+          "seq": 7,
+          "action": {
+            "certified_units": 3,
+            "order": null
+          },
+          "cost": 67,
+          "cash": -7,
+          "peak": 3
+        },
+        {
+          "seq": 8,
+          "action": {
+            "test": null
+          },
+          "cost": 67,
+          "cash": 5,
+          "peak": 1
+        },
+        {
+          "seq": 9,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 80,
+          "cash": -8,
+          "peak": 2
+        },
+        {
+          "seq": 10,
+          "action": {
+            "test": null
+          },
+          "cost": 80,
+          "cash": 16,
+          "peak": 0
+        },
+        {
+          "seq": 11,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 92,
+          "cash": 4,
+          "peak": 1
+        },
+        {
+          "seq": 12,
+          "action": {
+            "test": null
+          },
+          "cost": 92,
+          "cash": 28,
+          "peak": 0
+        },
+        {
+          "seq": 13,
+          "action": {
+            "certified_units": 2,
+            "order": null
+          },
+          "cost": 110,
+          "cash": 10,
+          "peak": 2
+        },
+        {
+          "seq": 14,
+          "action": {
+            "test": null
+          },
+          "cost": 110,
+          "cash": 22,
+          "peak": 0
+        },
+        {
+          "seq": 15,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 119,
+          "cash": 13,
+          "peak": 1
+        }
+      ]
+    },
+    "shifted-prior": {
+      "class_prior": "3/4",
+      "same_information_root": "90125954529/1280000000",
+      "class_A_root": "3796298817/64000000",
+      "class_B_root": "41972250459/640000000",
+      "weighted_advance_class_bound": "155861214969/2560000000",
+      "intrinsic_information_value": "24390694089/2560000000",
+      "no_inspection_actual_cost": 118,
+      "no_inspection_path": [
+        {
+          "seq": 0,
+          "action": {
+            "test": null
+          },
+          "cost": 0,
+          "cash": 18,
+          "peak": 0
+        },
+        {
+          "seq": 1,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 9,
+          "cash": 9,
+          "peak": 1
+        },
+        {
+          "seq": 2,
+          "action": {
+            "test": null
+          },
+          "cost": 9,
+          "cash": 19,
+          "peak": 0
+        },
+        {
+          "seq": 3,
+          "action": {
+            "certified_units": 2,
+            "order": null
+          },
+          "cost": 27,
+          "cash": 1,
+          "peak": 2
+        },
+        {
+          "seq": 4,
+          "action": {
+            "test": null
+          },
+          "cost": 27,
+          "cash": 13,
+          "peak": 0
+        },
+        {
+          "seq": 5,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 37,
+          "cash": 3,
+          "peak": 1
+        },
+        {
+          "seq": 6,
+          "action": {
+            "test": null
+          },
+          "cost": 37,
+          "cash": 27,
+          "peak": 0
+        },
+        {
+          "seq": 7,
+          "action": {
+            "certified_units": 4,
+            "order": null
+          },
+          "cost": 77,
+          "cash": -13,
+          "peak": 4
+        },
+        {
+          "seq": 8,
+          "action": {
+            "test": null
+          },
+          "cost": 77,
+          "cash": -1,
+          "peak": 2
+        },
+        {
+          "seq": 9,
+          "action": {
+            "certified_units": 0,
+            "order": null
+          },
+          "cost": 79,
+          "cash": -3,
+          "peak": 2
+        },
+        {
+          "seq": 10,
+          "action": {
+            "test": null
+          },
+          "cost": 79,
+          "cash": 21,
+          "peak": 0
+        },
+        {
+          "seq": 11,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 91,
+          "cash": 9,
+          "peak": 1
+        },
+        {
+          "seq": 12,
+          "action": {
+            "test": null
+          },
+          "cost": 91,
+          "cash": 33,
+          "peak": 0
+        },
+        {
+          "seq": 13,
+          "action": {
+            "certified_units": 2,
+            "order": null
+          },
+          "cost": 109,
+          "cash": 15,
+          "peak": 2
+        },
+        {
+          "seq": 14,
+          "action": {
+            "test": null
+          },
+          "cost": 109,
+          "cash": 27,
+          "peak": 0
+        },
+        {
+          "seq": 15,
+          "action": {
+            "certified_units": 1,
+            "order": null
+          },
+          "cost": 118,
+          "cash": 18,
+          "peak": 1
+        }
+      ]
+    }
+  },
+  "stored_certificates": 12,
+  "stored_certificate_nodes": 217363,
+  "scope": "Original candidate objects, source static mathematical audit, exact arithmetic and stored path evaluation only. No candidate import, planner/DP/solver/verifier/native execution. Source/capsule bytes prove actual object identity; raw functional correctness is separately independently reconstructed."
+}

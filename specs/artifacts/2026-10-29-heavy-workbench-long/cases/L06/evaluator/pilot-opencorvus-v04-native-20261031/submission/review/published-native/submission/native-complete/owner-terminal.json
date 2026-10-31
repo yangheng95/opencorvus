@@ -1,0 +1,1219 @@
+{
+  "at": "2026-10-31T08:56:32.570517+00:00",
+  "native_exit": 0,
+  "seconds": 94.70319519999975,
+  "instances": {
+    "base": {
+      "expected_cost_exact": "300834939/4000000",
+      "probability_mass": "1",
+      "terminal_histories": 67,
+      "decision_nodes": 260,
+      "episodes": [
+        {
+          "directory": "episode-a97d8a49becdcaef",
+          "probability": "132651/64000000",
+          "discovered_cost": 112,
+          "controlled_cuts": true
+        },
+        {
+          "directory": "episode-49c460255d2ec0c8",
+          "probability": "132651/64000000",
+          "discovered_cost": 130,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-ff8670cdd7f848cf",
+          "probability": "132651/64000000",
+          "discovered_cost": 112,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-787a30c5003e710e",
+          "probability": "12069149/64000000",
+          "discovered_cost": 69,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-1a07092f499f47be",
+          "probability": "132651/128000000",
+          "discovered_cost": 96,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-958b3ec0d4962272",
+          "probability": "132651/64000000",
+          "discovered_cost": 92,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-d7966f113e23c147",
+          "probability": "132651/128000000",
+          "discovered_cost": 99,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-10b4039448431385",
+          "probability": "642447/128000000",
+          "discovered_cost": 95,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-94527d09307d709a",
+          "probability": "642447/128000000",
+          "discovered_cost": 93,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-f7b3b127d46af2b7",
+          "probability": "7599/160000",
+          "discovered_cost": 113,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-cdcf2344332151b6",
+          "probability": "132651/128000000",
+          "discovered_cost": 80,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-f05d49d499cb31d3",
+          "probability": "2131851/64000000",
+          "discovered_cost": 85,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-85fdf68642a96398",
+          "probability": "387549/64000000",
+          "discovered_cost": 96,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-b3d19af9c6c7b235",
+          "probability": "132651/128000000",
+          "discovered_cost": 97,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-1043b3dfeea43ba3",
+          "probability": "642447/128000000",
+          "discovered_cost": 69,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-ad81e1e800e67f1f",
+          "probability": "132651/128000000",
+          "discovered_cost": 78,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-f39514d05bc5920e",
+          "probability": "387549/64000000",
+          "discovered_cost": 78,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-8ed93ef67ecbf547",
+          "probability": "132651/64000000",
+          "discovered_cost": 93,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-951074f41b438537",
+          "probability": "51/800",
+          "discovered_cost": 132,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-07520f6ea033b882",
+          "probability": "2131851/64000000",
+          "discovered_cost": 55,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-42b697b261608865",
+          "probability": "132651/64000000",
+          "discovered_cost": 113,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-2b52858d5d466635",
+          "probability": "2131851/64000000",
+          "discovered_cost": 77,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-1f36f7ae75ef4898",
+          "probability": "132651/128000000",
+          "discovered_cost": 119,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-b408668afb5e9f22",
+          "probability": "132651/64000000",
+          "discovered_cost": 92,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-21328cc4cc416fd7",
+          "probability": "2131851/64000000",
+          "discovered_cost": 59,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-454690ec0cdac92d",
+          "probability": "642447/128000000",
+          "discovered_cost": 71,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-de472ace8a69e90b",
+          "probability": "2131851/64000000",
+          "discovered_cost": 56,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-7512d6a47ec789d2",
+          "probability": "132651/64000000",
+          "discovered_cost": 111,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-0dc44fa19cfbde7c",
+          "probability": "387549/64000000",
+          "discovered_cost": 77,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-b4a376bc1a377a43",
+          "probability": "2601/160000",
+          "discovered_cost": 120,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-9b7681c58b531945",
+          "probability": "642447/128000000",
+          "discovered_cost": 89,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-590f38b1701c5de4",
+          "probability": "132651/64000000",
+          "discovered_cost": 110,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-45d601754db58888",
+          "probability": "642447/128000000",
+          "discovered_cost": 92,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-22805abc59d6a9be",
+          "probability": "2131851/64000000",
+          "discovered_cost": 76,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-059709f6b65c750a",
+          "probability": "642447/128000000",
+          "discovered_cost": 70,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-f4af2732ac7be8c6",
+          "probability": "2131851/64000000",
+          "discovered_cost": 80,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-5baa02cc8f82bc52",
+          "probability": "642447/128000000",
+          "discovered_cost": 112,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-296c4483f5f89b82",
+          "probability": "132651/128000000",
+          "discovered_cost": 102,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-789f2eb879cb24d7",
+          "probability": "132651/128000000",
+          "discovered_cost": 100,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-0e8464683d5c9854",
+          "probability": "132651/128000000",
+          "discovered_cost": 101,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-8c7402b066c2c7ba",
+          "probability": "2131851/64000000",
+          "discovered_cost": 64,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-55db83884b26c9b2",
+          "probability": "132651/64000000",
+          "discovered_cost": 89,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-4e9ed96cf5617b93",
+          "probability": "132651/64000000",
+          "discovered_cost": 88,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-67d9a5713ee63926",
+          "probability": "132651/64000000",
+          "discovered_cost": 131,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-b5f275c8df13ee84",
+          "probability": "387549/64000000",
+          "discovered_cost": 92,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-744b93046aa4f7b8",
+          "probability": "132651/128000000",
+          "discovered_cost": 120,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-bbe400e04d82bcef",
+          "probability": "132651/128000000",
+          "discovered_cost": 98,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-578ab5f6bce00dd0",
+          "probability": "2131851/64000000",
+          "discovered_cost": 76,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-294366c5803ddb3d",
+          "probability": "132651/128000000",
+          "discovered_cost": 74,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-d4ad26e2e920c0ad",
+          "probability": "642447/128000000",
+          "discovered_cost": 73,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-97668e8124b0dcb1",
+          "probability": "387549/64000000",
+          "discovered_cost": 97,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-217f3aee9519e955",
+          "probability": "132651/64000000",
+          "discovered_cost": 109,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-3ccd6c12b486104b",
+          "probability": "132651/64000000",
+          "discovered_cost": 111,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-c9df1b750783b3b1",
+          "probability": "387549/64000000",
+          "discovered_cost": 71,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-29ef9786dc23dd00",
+          "probability": "642447/128000000",
+          "discovered_cost": 68,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-0e39d33936540924",
+          "probability": "12069149/64000000",
+          "discovered_cost": 48,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-2ae12ab1b7725c63",
+          "probability": "642447/128000000",
+          "discovered_cost": 91,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-d252f76a9a31a666",
+          "probability": "132651/128000000",
+          "discovered_cost": 77,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-02381f0cd1b9106c",
+          "probability": "2131851/64000000",
+          "discovered_cost": 55,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-868db3a3e7310b19",
+          "probability": "132651/128000000",
+          "discovered_cost": 76,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-65522f3d5c575f95",
+          "probability": "642447/128000000",
+          "discovered_cost": 113,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-2c486ed5f98ca48f",
+          "probability": "132651/128000000",
+          "discovered_cost": 75,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-5e89231d9e6c2c2c",
+          "probability": "132651/128000000",
+          "discovered_cost": 100,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-0141e5e466d798e7",
+          "probability": "642447/128000000",
+          "discovered_cost": 67,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-40076b1c4b3752d8",
+          "probability": "642447/128000000",
+          "discovered_cost": 90,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-92f93b8160517c3f",
+          "probability": "642447/128000000",
+          "discovered_cost": 94,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-cba0ff3292425905",
+          "probability": "642447/128000000",
+          "discovered_cost": 93,
+          "controlled_cuts": false
+        }
+      ]
+    },
+    "cash-tight": {
+      "expected_cost_exact": "11287373277/128000000",
+      "probability_mass": "1",
+      "terminal_histories": 49,
+      "decision_nodes": 192,
+      "episodes": [
+        {
+          "directory": "episode-147d589527fbf2e9",
+          "probability": "642447/128000000",
+          "discovered_cost": 91,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-1bd838c731e7b39b",
+          "probability": "132651/128000000",
+          "discovered_cost": 75,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-5b2b2b560215919c",
+          "probability": "12069149/64000000",
+          "discovered_cost": 48,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-cdbdb9733c404ad3",
+          "probability": "642447/128000000",
+          "discovered_cost": 89,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-38f37a2241c9d654",
+          "probability": "2601/160000",
+          "discovered_cost": 118,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-9aa838820882c497",
+          "probability": "2131851/64000000",
+          "discovered_cost": 59,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-09f745c6166feace",
+          "probability": "2131851/64000000",
+          "discovered_cost": 55,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-ec61ca58cefe4332",
+          "probability": "642447/128000000",
+          "discovered_cost": 67,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-b2b8aeb9a27cce97",
+          "probability": "41801/160000",
+          "discovered_cost": 114,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-6bfc5f273e89c2e8",
+          "probability": "132651/128000000",
+          "discovered_cost": 96,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-684ffbb1e88ef38a",
+          "probability": "132651/64000000",
+          "discovered_cost": 92,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-eddb58b9c28811c6",
+          "probability": "132651/64000000",
+          "discovered_cost": 92,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-233c1fd941ea4715",
+          "probability": "2131851/64000000",
+          "discovered_cost": 64,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-ea6abe43c8131035",
+          "probability": "132651/64000000",
+          "discovered_cost": 93,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-4fd3f32a56b78532",
+          "probability": "642447/128000000",
+          "discovered_cost": 70,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-90039bb2f6a072a8",
+          "probability": "132651/128000000",
+          "discovered_cost": 119,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-7c99835157ffd1a9",
+          "probability": "132651/64000000",
+          "discovered_cost": 111,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-adb792200dd47280",
+          "probability": "132651/128000000",
+          "discovered_cost": 100,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-2b00c9016878334a",
+          "probability": "132651/64000000",
+          "discovered_cost": 109,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-4d6c97a9f3fc39a7",
+          "probability": "2131851/64000000",
+          "discovered_cost": 76,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-73f3f499bb820eee",
+          "probability": "642447/128000000",
+          "discovered_cost": 71,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-0714098aa1f6475a",
+          "probability": "51/800",
+          "discovered_cost": 132,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-6062d9cdd14a15bb",
+          "probability": "132651/64000000",
+          "discovered_cost": 112,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-cc7d1f5910583984",
+          "probability": "642447/128000000",
+          "discovered_cost": 112,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-9f6279bddf8ea673",
+          "probability": "132651/64000000",
+          "discovered_cost": 88,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-aa48562d3c1ac703",
+          "probability": "2131851/64000000",
+          "discovered_cost": 55,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-ed88dbe804a75caa",
+          "probability": "132651/128000000",
+          "discovered_cost": 101,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-d0a42b8534dc4caa",
+          "probability": "2131851/64000000",
+          "discovered_cost": 56,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-bd2d6855b055cb1d",
+          "probability": "132651/128000000",
+          "discovered_cost": 98,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-32a4d710471e3f2d",
+          "probability": "132651/128000000",
+          "discovered_cost": 74,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-c1e542b45c2323a0",
+          "probability": "132651/64000000",
+          "discovered_cost": 130,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-64206838f26d2bd0",
+          "probability": "132651/128000000",
+          "discovered_cost": 80,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-f660458459f1ee66",
+          "probability": "132651/64000000",
+          "discovered_cost": 111,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-223c6807a74e2d17",
+          "probability": "132651/128000000",
+          "discovered_cost": 76,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-d3ac75d117db591b",
+          "probability": "642447/128000000",
+          "discovered_cost": 93,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-528c35f4768ca8dc",
+          "probability": "387549/64000000",
+          "discovered_cost": 71,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-35bfbc91e32fd51d",
+          "probability": "51/800",
+          "discovered_cost": 98,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-41da71f2dfd04ad3",
+          "probability": "7599/160000",
+          "discovered_cost": 111,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-354ab56822c7a598",
+          "probability": "7599/160000",
+          "discovered_cost": 121,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-530d0f8d9413aad1",
+          "probability": "387549/64000000",
+          "discovered_cost": 96,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-340825c2bc178aed",
+          "probability": "132651/128000000",
+          "discovered_cost": 78,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-acbe3d018b34d454",
+          "probability": "642447/128000000",
+          "discovered_cost": 69,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-398f69cd802527d8",
+          "probability": "642447/128000000",
+          "discovered_cost": 68,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-4f233c4ac7c9b961",
+          "probability": "132651/128000000",
+          "discovered_cost": 77,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-b54679462efc7703",
+          "probability": "387549/64000000",
+          "discovered_cost": 78,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-93a11dbf3a3c5b70",
+          "probability": "387549/64000000",
+          "discovered_cost": 77,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-518c2033b8af0880",
+          "probability": "132651/64000000",
+          "discovered_cost": 89,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-5e5387fa4e4f3eb2",
+          "probability": "642447/128000000",
+          "discovered_cost": 94,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-586bf511c2bae4fb",
+          "probability": "642447/128000000",
+          "discovered_cost": 73,
+          "controlled_cuts": false
+        }
+      ]
+    },
+    "shifted-prior": {
+      "expected_cost_exact": "90125954529/1280000000",
+      "probability_mass": "1",
+      "terminal_histories": 81,
+      "decision_nodes": 274,
+      "episodes": [
+        {
+          "directory": "episode-bacdb256d5e867e1",
+          "probability": "6494697/2560000000",
+          "discovered_cost": 112,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-e14c208f970e0cec",
+          "probability": "19203183/2560000000",
+          "discovered_cost": 68,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-758a58ebee250da0",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 80,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-ff287994bf744154",
+          "probability": "6494697/2560000000",
+          "discovered_cost": 91,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-63ad41933aee8310",
+          "probability": "3195711/64000000",
+          "discovered_cost": 55,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-d91b14c56e17655c",
+          "probability": "1067991/64000000",
+          "discovered_cost": 80,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-2aaa51394973f9a6",
+          "probability": "19203183/2560000000",
+          "discovered_cost": 71,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-6becaf516e28c556",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 96,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-bc55dec33aa68be9",
+          "probability": "19203183/2560000000",
+          "discovered_cost": 67,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-e99f857ba1e804a6",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 74,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-b58bd26223819724",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 119,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-51cc8ca618990493",
+          "probability": "569619/64000000",
+          "discovered_cost": 97,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-d16155feaa8b3ea8",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 109,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-7c1822556f2efaef",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 114,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-04f3977c51807289",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 120,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-38a6d4e678bb380b",
+          "probability": "663/16000",
+          "discovered_cost": 132,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-4cf5028615c15891",
+          "probability": "18103359/64000000",
+          "discovered_cost": 48,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-e6c8c8cdffc69298",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 108,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-77aedff463305c1e",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 135,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-1ee391e9ffcfcfc8",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 97,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-9f38c242cab63fad",
+          "probability": "1067991/64000000",
+          "discovered_cost": 77,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-813634940699a554",
+          "probability": "1067991/64000000",
+          "discovered_cost": 76,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-78d8cce4b8849ba1",
+          "probability": "19203183/2560000000",
+          "discovered_cost": 73,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-7824f86bc9c0395a",
+          "probability": "3195711/64000000",
+          "discovered_cost": 64,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-714d34ba9ce30732",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 108,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-19abd2cb7196bbba",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 96,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-9b4d7a9ef5f71830",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 115,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-8732b269b0474edc",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 76,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-e4d56d3304922f23",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 78,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-358b4f08f08f12d9",
+          "probability": "569619/64000000",
+          "discovered_cost": 71,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-31f80319bf649b7c",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 127,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-66fe5220325bbc05",
+          "probability": "1067991/64000000",
+          "discovered_cost": 85,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-8365efd027791545",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 116,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-5563c143cb80044f",
+          "probability": "6494697/2560000000",
+          "discovered_cost": 92,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-03dac5a86cddb1f5",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 100,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-f93ffbac8cd736fe",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 102,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-312e6ecf13cad898",
+          "probability": "6034939/64000000",
+          "discovered_cost": 69,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-2e721452162f8a0c",
+          "probability": "3195711/64000000",
+          "discovered_cost": 56,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-502808d43ceb1936",
+          "probability": "3195711/64000000",
+          "discovered_cost": 59,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-03170f709dbe0f40",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 98,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-f907961229bb34fe",
+          "probability": "569619/64000000",
+          "discovered_cost": 77,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-2ecfec60e6838c6c",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 116,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-7769ebd529756be1",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 86,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-ef199bee0dffc47c",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 100,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-8af85df46636712a",
+          "probability": "6494697/2560000000",
+          "discovered_cost": 90,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-5cb31375963dc1bd",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 128,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-a7557edeabdeef19",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 107,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-3392556c17340fb5",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 77,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-3fa0a6626660d9d2",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 134,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-acc5fe61c0e9034b",
+          "probability": "6494697/2560000000",
+          "discovered_cost": 89,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-94c685f0c947a186",
+          "probability": "6494697/2560000000",
+          "discovered_cost": 93,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-831a876e38b0d474",
+          "probability": "19203183/2560000000",
+          "discovered_cost": 69,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-8c994ae71f36fa7b",
+          "probability": "569619/64000000",
+          "discovered_cost": 96,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-a68f78b3059e6096",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 89,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-9a596bae0772ffe8",
+          "probability": "3195711/64000000",
+          "discovered_cost": 55,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-209ffab3a94d44f3",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 101,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-8b60b181bd5bcd87",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 89,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-98c3cf63de6e6ea1",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 113,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-284fb3855ff5e855",
+          "probability": "6494697/2560000000",
+          "discovered_cost": 93,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-8911338988855465",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 85,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-bbe58e02e8faed29",
+          "probability": "569619/64000000",
+          "discovered_cost": 78,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-c09e7daeadd62932",
+          "probability": "6494697/2560000000",
+          "discovered_cost": 113,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-113234e63d0cd069",
+          "probability": "2601/160000",
+          "discovered_cost": 120,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-3d42849541bcdd1a",
+          "probability": "205479/64000000",
+          "discovered_cost": 92,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-ecc1665a835216c2",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 75,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-4a7e51448c587c7c",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 96,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-02dd1b1df7b390e0",
+          "probability": "11169/160000",
+          "discovered_cost": 113,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-1144971a5f1273c8",
+          "probability": "19203183/2560000000",
+          "discovered_cost": 70,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-1c3d6269ed4a3602",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 109,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-a34f3827a43a0a3a",
+          "probability": "1067991/64000000",
+          "discovered_cost": 76,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-651154998fd0d619",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 106,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-4c9d35b082115d1a",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 92,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-59771425643c8949",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 117,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-67c7aae35b00b5a6",
+          "probability": "6494697/2560000000",
+          "discovered_cost": 95,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-543664f39727ad19",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 115,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-1b5b05d7092b6cab",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 99,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-3a8bd12ce6942e8e",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 97,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-77493e29ef7201be",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 110,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-f392e2d6d7f81f50",
+          "probability": "6494697/2560000000",
+          "discovered_cost": 94,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-b4293fba9559d506",
+          "probability": "1724463/2560000000",
+          "discovered_cost": 93,
+          "controlled_cuts": false
+        },
+        {
+          "directory": "episode-b85208fdf94d8dbb",
+          "probability": "3581577/2560000000",
+          "discovered_cost": 90,
+          "controlled_cuts": false
+        }
+      ]
+    }
+  },
+  "controller_cuts": {
+    "order": true,
+    "laboratory": true
+  },
+  "all_source_actor_branches_executed": true,
+  "scope": "finite-model and two controlled process-loss proofs only; no OS/power-loss/candidate-hours certification"
+}

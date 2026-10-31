@@ -1,0 +1,22 @@
+{
+  "at": "2026-10-31T08:55:31.023561+00:00",
+  "pid": 6296,
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\native-complete\\controller-source\\exercise.py",
+    "--controller",
+    "--project",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\native-complete\\sealed-project",
+    "--public",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\native-complete\\public",
+    "--instance",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\native-complete\\public\\instances\\cash-tight",
+    "--db",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\native-complete\\episode-147d589527fbf2e9\\journal.sqlite3",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-v04-opencorvus-native-20261031\\project\\submission\\native-complete\\episode-147d589527fbf2e9\\completed",
+    "--python",
+    "C:\\Python314\\python.exe"
+  ],
+  "existing_rows": 0,
+  "future_transport": "parent stdin; not persisted or supplied to actor"
+}

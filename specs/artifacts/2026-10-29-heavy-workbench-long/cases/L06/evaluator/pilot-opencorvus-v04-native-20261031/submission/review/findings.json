@@ -1,0 +1,89 @@
+{
+  "format": "l06-independent-whole-case-review/1",
+  "verdict": "accepted_within_original_finite_scope",
+  "scope": "All 21 supplied public inputs, three complete eight-week instances, every positive-support delivered-policy history, row reorder and both specified controlled native process losses. No real-world approval or score.",
+  "reviewer": "base-tester",
+  "business_authority": ["public/TASK.md", "public/OPERATIONS.md", "public/OUTPUTS.md", "public/instances/*"],
+  "immutable_inputs_snapshot": "8a095184-b50f-5173-a498-510420fde9c5",
+  "immutable_delivery_snapshot": "5f46f60d-7a84-5ad7-a1e8-2c99b339953e",
+  "producer_claim_source": {"session_id":"ses_h2mYNclMpUxqXmM0XWa8", "message_id":"msg_g0VZcK8yR00GVaNwCQ3q"},
+  "findings": [
+    {
+      "criterion": "Complete original inputs and delivered publication",
+      "expected": "Use each complete input independently; preserve public; deliver usable source, policy, report, exports, native evidence and dependencies.",
+      "observed": "Immutable source archive has all 21 original public inputs and 36 total members, with no generated policy tables. Every archive member matches its corresponding primary-project file. All 5037 immutable native-evidence members match retained primary files. The inspected PDF, five PNGs, ledger, summary and dependency archive have exact binary identity with the independently published immutable resource references.",
+      "status": "fulfilled",
+      "evidence": ["reconciliation.json", "publication-identity.json", "review.py", "publication_identity.py"]
+    },
+    {
+      "criterion": "Risk feasibility on every positive-probability branch",
+      "expected": "Meet demand, material/stage capacity, retained-slot and arrival commitments, intermediate cash >= -15 and terminal cash >= 0 after disposal, without collecting future AR.",
+      "observed": "Fresh public audit on copies extracted from the immutable archive reconciles every journal row and both inspection outcomes at each paid-test prefix. Native-complete and native-rebuilt each contain 67/49/81 terminal histories and 260/192/274 distinct decision prefixes, respectively. Probability mass is exactly 1 per instance. Maximum actual raw peak is 3 units. Minimum cash is -13/-15/-13; minimum terminal cash is 4/0/1. Every path retains 24 due week 8 and 12 due week 9.",
+      "status": "fulfilled",
+      "evidence": ["reconciliation.json", "public/audit.py:30-104", "public/model.py:63-116"]
+    },
+    {
+      "criterion": "Exact same-information optimum and complete legal action coverage",
+      "expected": "At most 1 percent above exact same-information optimum per instance, justified by rational derivation rather than optimizer status; no unsafe support pruning.",
+      "observed": "Reviewed Bellman recurrence enumerates all integer certified quantities and none/A/B orders, all available laboratory actions and skip. Both strictly positive inspection outcomes must have feasible continuations. Fresh execution of the reviewed checker verifies 12 graphs, 217363 nodes and 2209033 candidate-action checks against the public physical primitive. Successor closure, Bellman minima and selected minimizers hold exactly. Every delivered lookup action equals its certified minimizer. Journal expectations equal certificate roots exactly, so regret is zero for each instance.",
+      "status": "fulfilled",
+      "evidence": ["certificates.json", "reconciliation.json", "submission/solver.py:44-107", "submission/verify_certificates.py:36-140"]
+    },
+    {
+      "criterion": "Sufficient Bayesian and feasibility state",
+      "expected": "Retain all information needed for future constraints and value; condition only on actual paid inspections; preserve equivalent-label ratios.",
+      "observed": "For these lead-1 inputs every decision occurs after arrivals, so no unreceived order remains. Fixed fulfilled demands imply outstanding AR and next collections are determined by week. Current settled cash retains financing information; reporting costs and past minima do not change future controls. The likelihood statistic k gives class odds alpha/(1-alpha)*(17/3)^k. Full-prefix replay separately validates historical feasibility. All 726 actual discovery prefixes return exact full-label Bayes probabilities, with A1:A2=1:3 and B1:B2=3:1. Identical likelihood pairs remain indistinguishable under adaptive experiments; finite observations cannot identify the class with certainty.",
+      "status": "fulfilled",
+      "evidence": ["reconciliation.json", "submission/report.md:7-27", "submission/actor/actor.py:51-94"]
+    },
+    {
+      "criterion": "Advance-class bound and physical no-inspection comparison",
+      "expected": "Reveal class before week 0 without revealing future results; do not mislabel no-inspection as information-only ablation.",
+      "observed": "Class-conditioned certificates retain 17/20 and 3/20 random outcomes and both-branch risk feasibility, then are prior-weighted. Exact bounds are 79935238629/1280000000, 170951494509/2560000000 and 155861214969/2560000000. No-inspection restricts laboratory actions to skip and has optima 118/119/118. Report and cost figure correctly label that restriction as removal of physical yield as well as information, not pure information value.",
+      "status": "fulfilled",
+      "evidence": ["certificates.json", "submission/report.md:80-86", "submission/figures/cost-information.png"]
+    },
+    {
+      "criterion": "Exact ledger and summary reconciliation",
+      "expected": "One exported row per complete logical path and sequence, exact prior/posterior and path/prefix probabilities, actual raw peaks, settled/closing cash, all cost components and AR.",
+      "observed": "All 3152 ledger rows equal the fresh public export from original immutable journals after semantic JSON parsing. Summary instances, components, path AR, minima and branch counts match exactly. Both native runs have identical complete summaries. Closing cash subtracts rolled collections; raw peak is actual material, not hypothetical inspection success. Repeated terminal probability is not multiplied per row.",
+      "status": "fulfilled",
+      "evidence": ["reconciliation.json", "submission/exports-complete/stage-ledger.csv", "submission/exports-complete/summary.json"]
+    },
+    {
+      "criterion": "Genuine native cuts and original receipt recovery",
+      "expected": "Actually lose the controller after committed nonzero order and paid laboratory result, before acknowledgement; use same key and payload in new processes and recover old receipt/result without resampling; preserve rows, wires and PID/argv/exits.",
+      "observed": "Causal producer Tool receipts record the failed original exercise, successful native-complete and source-rebuilt exercise commands. Immutable journals and replay wires confirm both exits 73, saved-row prefixes unchanged, original-key/payload repeats and old receipts recovered. In native-complete, cuts are seq 1 (order) and seq 2 (A inspection, good); recovery continues at seq 3 with cash 15, laboratory cost 1 and good stock 2, not another sample. Three distinct controller and actor PIDs are recorded through the chain. Each successful native run has 198 controller exits 0 plus two exits 73, including the row-order control.",
+      "status": "fulfilled",
+      "evidence": ["reconciliation.json", "submission/native-complete/episode-a97d8a49becdcaef/cut-order/crash-after-commit.json", "submission/native-complete/episode-a97d8a49becdcaef/completed/resume-receipt.json", "public/exercise.py:80-114"]
+    },
+    {
+      "criterion": "Deterministic online actor and named diagnoses",
+      "expected": "Full-prefix original-state validation, stable keys across new processes, exact pre-decision belief, no future hidden inputs or online optimizer/network, each response within 30 seconds.",
+      "observed": "Fresh replay of all 726 packets equals original source-produced responses; all-instance CSV reorder and new-process initial-key checks pass. Eighteen malformed-prefix or changed-fact fixtures are rejected with named diagnoses. Each entire 192-274-packet instance batch finishes in under 1.7 seconds, stronger than the per-operation deadline. Actor imports only standard library and public model, reads only public facts/policy tables/full current packet; controller future sequence is parent stdin, not actor input. Idempotency hash binds canonical original law and packet and is retained as genuine protocol identity, not correctness evidence.",
+      "status": "fulfilled",
+      "evidence": ["actor-checks.json", "submission/actor/actor.py", "public/exercise.py:23-57,80-114"]
+    },
+    {
+      "criterion": "Self-contained source reconstruction and actual rebuilt execution",
+      "expected": "Archive source must rebuild without precomputed tables; retain actual rebuilt execution and equivalence, not just a successful build status.",
+      "observed": "Fresh reviewer rebuild from the immutable source archive regenerates all policy tables and certificate roots. The regenerated tables equal delivered tables. Existing source-rebuilt native execution is independently audited from immutable SQLite evidence on all 197 histories and both recoveries. Final-capsule source, rebuilt-final tables and actually executed native-rebuilt sealed-project tables are equivalent. No gratuitous third full native exercise was performed.",
+      "status": "fulfilled",
+      "evidence": ["publication-identity.json", "reconciliation.json", "rebuild-process.json", "submission/rebuild.py"]
+    },
+    {
+      "criterion": "Readable scientific report, figures and operator handoff",
+      "expected": "View actual figures/PDF; show decisions, cost/information comparison, cash and material peaks with units/probability semantics; give executable recovery/rebuild commands, failure handling and honest finite limits.",
+      "observed": "Viewed the immutable 11-page PDF and all five actual PNGs. Labels, units, stage timing, probability-weighted means, supported-path envelopes and physical-vs-information comparison are readable. Report distinguishes exact fractions from chart approximations. Handoff gives fresh-path native commands and original receipt recovery instructions, preserves commitments/AR, and requires fail-closed treatment of credit infeasibility, corrupt prefixes, unsupported states or changed facts. Source rebuild command was executed in review. No score, real business approval, arbitrary-failure, physical power-loss, OS isolation or useful-hour claim is accepted or made.",
+      "status": "fulfilled",
+      "evidence": ["submission/report.pdf", "submission/figures/", "submission/OPERATOR-HANDOFF.txt"]
+    }
+  ],
+  "contradicted_original_obligations": [],
+  "unresolved_business_requirements": [],
+  "preserved_failure": "The first genuine run failed with PermissionError at the row-order CSV rewrite. Raw causal receipt and immutable native-original evidence preserve it. Successful execution uses writable byte-identical copies under submission; original public files are unchanged.",
+  "review_tool_limitation": "artifact_read could not deliver dependencies.zip due to its 33554432-byte attachment limit. This is not claimed as a complete Artifact read. The primary archive was inspected entry-by-entry and independently bound to the published immutable binary reference; contents match all retained wheel/lock files. No dependency installation or external network was required for review.",
+  "review_check_failure": "A reviewer JSON-validation command incorrectly asserted eleven grouped findings; the report contains ten groups covering the obligations. That bookkeeping assertion failed before copying the rebuild receipt. It was replaced by checks for nonempty unique criteria and explicit statuses, without changing any product or verification result. Original failed command remains in the Host trace.",
+  "review_boundaries": "Only reviewer scripts, JSON findings and generated review copies/output under submission/review were created. Product and original execution evidence were not changed. All Python used -B/PYTHONDONTWRITEBYTECODE and TEMP/TMP under submission. No external web, private source, other project, UI automation or user process/service/window action was used.",
+  "fact_check_items": []
+}
