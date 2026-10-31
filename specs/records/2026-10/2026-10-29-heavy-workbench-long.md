@@ -871,6 +871,6 @@ native-constructive-first于11:38:05→11:39:40Z实际exit0，内部92.1663761�
 
 reconstruction/observations新静止原件明确分开：三例CP UNKNOWN且优化阶段未执行、原目标nullable局部真实重算、Group2原HTTP成员来源/首源封存/完整原日志与事件/原重算和图源。完整第三方ZIP/MPS/PDF及全部原解/中间向量、环境/wheel/cache留外部；仓库没有以自写代码许可再分发原数据。scope列逐文件原路径与实际字节，不把小投影说成全原件。原日志原有尾空格不修改，维护代码/文档差异检查与实际数学/图证据分开。
 
-12:08Z只读原L01状态：owner23296与真实训练18416存活、native阶段execution终态/新error均无、stderr0；原wave-lbfgs-s345-lrnone最新progress为12:02:37Z26000接受更新/loss0.01972867563354555。parent-only观察未读到嵌套progress，另存原路径detail补充收据，不覆盖初观察；不是候选/生产异常。原root owner-error仍为2026-10-30T22:30:31Z旧54408发布停止，不当当前本机失败。原矩阵继续后台，不热改源/重完成格/按loss替三PDE同final质量。L01完整研究/当前合法质量可达/论文图/一次整题独审仍待。
+12:05:29Z只读原L01状态：owner23296与真实训练18416存活、native阶段execution终态/新error均无、stderr0；原wave-lbfgs-s345-lrnone最新progress为12:02:37Z26000接受更新/loss0.01972867563354555。parent-only观察未读到嵌套progress，另存原路径detail补充收据，不覆盖初观察；不是候选/生产异常。原root owner-error仍为2026-10-30T22:30:31Z旧54408发布停止，不当当前本机失败。原矩阵继续后台，不热改源/重完成格/按loss替三PDE同final质量。L01完整研究/当前合法质量可达/论文图/一次整题独审仍待。
 
 本轮取得的仅是完整原问题正确计划之间的实际经济质量轴；没有新rubric、作者100、fresh模型成绩、候选有效小时或合格重型题完成数。停止机械0.5/新candidate/重复旧测试的用户纠偏不变。下一工作须把完整运营研究任务、可达质量锚点/输出合同和有作用的方法做实，不能将这些曲线再次包装成已经建立区分度。
