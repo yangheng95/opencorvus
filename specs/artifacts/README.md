@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标长度边界](2026-10-31-goal-objective-length/README.md)：真实页面、校验反馈与数据保护回读。
+
 - [文件来源路径阅读](2026-10-31-source-path-readability/README.md)：真实桌面截图、来源和完整数据回读证据。
 
 - [空闲对话后台活动停止](2026-10-31-idle-background-stop/README.md)：实页菜单、确认、转换与数据保护证据。

@@ -1,0 +1,85 @@
+{
+  "at": "2026-10-31T05:39:52.163Z",
+  "phase": "before",
+  "schema": 9,
+  "tables": 92,
+  "originals": 215870,
+  "current": 215944,
+  "changes": [
+    {
+      "table": "bus_publication_delivery",
+      "old": 42123,
+      "now": 42137
+    },
+    {
+      "table": "bus_publication_delivery_receipt",
+      "old": 42123,
+      "now": 42137
+    },
+    {
+      "table": "bus_publication_outbox",
+      "old": 5516,
+      "now": 5518
+    },
+    {
+      "table": "bus_publication_owner",
+      "old": 5516,
+      "now": 5518
+    },
+    {
+      "table": "bus_publication_phase_receipt",
+      "old": 16548,
+      "now": 16554
+    },
+    {
+      "table": "engine_control_activation_lease",
+      "old": 44253,
+      "now": 44268
+    },
+    {
+      "table": "engine_control_activation_lease_grant",
+      "old": 44311,
+      "now": 44326
+    },
+    {
+      "table": "event_occurrence",
+      "old": 5318,
+      "now": 5320
+    },
+    {
+      "table": "memory_chunk",
+      "old": 45,
+      "now": 46
+    },
+    {
+      "table": "memory_file",
+      "old": 45,
+      "now": 46
+    },
+    {
+      "table": "project",
+      "old": 45,
+      "now": 46
+    },
+    {
+      "table": "session",
+      "old": 89,
+      "now": 90
+    }
+  ],
+  "allOriginalBusinessRowsPreserved": true,
+  "attachments": 75,
+  "protectedProjects": 13,
+  "trackedFiles": 28,
+  "workspaceFiles": 13,
+  "additionalProtectedFiles": 39,
+  "requests": 0,
+  "cumulativeRequests": 1118,
+  "reserveMs": 3297454,
+  "source": {
+    "catalogSameBytes": true,
+    "catalogSameMetadata": true,
+    "authSameMetadata": true
+  },
+  "uiEntry": "main-2S0VY1ep.js"
+}

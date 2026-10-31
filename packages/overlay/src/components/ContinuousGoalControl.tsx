@@ -35,6 +35,7 @@ import { Icon } from "./ui/Icon"
 import { TextField } from "./ui/TextField"
 
 const REFRESH_MS = 5_000
+const OBJECTIVE_MAX_LENGTH = 16_000
 const CREATE_ACTION_LABEL_KEY = "continuous_goal.start"
 const guideSteps = ["start", "define", "manage"] as const
 
@@ -172,6 +173,7 @@ export function ContinuousGoalControl(props: {
   const [busy, setBusy] = createSignal(false)
   const [failure, setFailure] = createSignal<unknown>()
   const [validation, setValidation] = createSignal("")
+  const objectiveLengthInvalid = () => validation() === "continuous_goal.validation.objective_length"
   const [notice, setNotice] = createSignal("")
   let attempt: { key: string; requestID: string } | undefined
   let launchOwner: GoalLaunchContext | undefined
@@ -478,9 +480,11 @@ export function ContinuousGoalControl(props: {
       const tokenBudget = budget(tokens(), existing?.tokenBudget)
       const turnBudget = budget(turns(), existing?.turnBudget)
       if (!existing) {
-        if (!objective().trim()) throw new Error("continuous_goal.validation.objective")
+        const value = objective().trim()
+        if (!value) throw new Error("continuous_goal.validation.objective")
+        if (value.length > OBJECTIVE_MAX_LENGTH) throw new Error("continuous_goal.validation.objective_length")
         const input = {
-          objective: objective().trim(),
+          objective: value,
           ...(tokenBudget !== undefined ? { tokenBudget } : {}),
           ...(turnBudget !== undefined ? { turnBudget } : {}),
         }
@@ -520,9 +524,10 @@ export function ContinuousGoalControl(props: {
       const failedMode = mode()
       setValidation(message)
       queueMicrotask(() => {
+        const target = objectiveLengthInvalid() ? objectiveField : validationFeedback
         if (disposed || mode() !== failedMode || validation() !== message ||
-          !validationFeedback?.isConnected || !dialog?.contains(validationFeedback)) return
-        validationFeedback.focus()
+          !target?.isConnected || !dialog?.contains(target)) return
+        target.focus()
       })
     }
   }
@@ -779,7 +784,7 @@ export function ContinuousGoalControl(props: {
               <Show when={pendingComposerContext()}>
                 <p class="continuous-goal__hint">{t("continuous_goal.pending_context_hint")}</p>
               </Show>
-              <TextField.Root as="label" variant="multiline">
+              <TextField.Root as="label" variant="multiline" invalid={objectiveLengthInvalid()}>
                 <TextField.Label>{t("continuous_goal.objective")}</TextField.Label>
                 <TextField.TextArea
                   ref={(element) => { objectiveField = element }}
@@ -791,12 +796,17 @@ export function ContinuousGoalControl(props: {
                     setObjective(e.currentTarget.value)
                   }}
                   required
-                  maxLength={16000}
+                  maxLength={OBJECTIVE_MAX_LENGTH}
                   rows={3}
                   disabled={busy()}
                   placeholder={t("continuous_goal.objective_placeholder")}
                   readOnly={props.readOnly}
                 />
+                <Show when={objectiveLengthInvalid()}>
+                  <TextField.ErrorMessage role="alert">
+                    {t("continuous_goal.validation.objective_length", { limit: number(OBJECTIVE_MAX_LENGTH) })}
+                  </TextField.ErrorMessage>
+                </Show>
               </TextField.Root>
             </Show>
             <Show
@@ -939,7 +949,7 @@ export function ContinuousGoalControl(props: {
                 <TextField.Description>{t("continuous_goal.complete_hint")}</TextField.Description>
               </TextField.Root>
             </Show>
-            <Show when={validation()}>
+            <Show when={validation() && !objectiveLengthInvalid()}>
               <Feedback ref={(element) => { validationFeedback = element }} tabIndex={-1}
                 tone="error" title={t("continuous_goal.validation.title")}>
                 {t(validation(), { max: number(Number.MAX_SAFE_INTEGER) })}

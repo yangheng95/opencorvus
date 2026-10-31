@@ -3963,6 +3963,14 @@ retain the real composer as the primary action. Goal explanation, model guidance
 and optional budgets remain within the original form and guide. Opening
 the home form preserves the composer draft and creates no owner, Message, or
 goal; confirmation invokes the existing new-conversation/goal launch flow.
+The shared create form validates the trimmed objective against its existing
+16,000-character limit before either launching a new conversation or mutating
+the selected owner. This also covers programmatically prefilled composer drafts,
+which native maxlength validity may accept. A localized field error immediately
+below Objective retains the complete draft and budgets, keeps the current page,
+and focuses that field for correction. Other validation keeps its shared form
+feedback. The field and submit check share one client limit; the original
+server schema remains authoritative for HTTP and tool input.
 Selected conversations keep the owner-bound strip above their transcript.
 Session-scoped Goal forms describe their scope as the current conversation,
 covering both Chat and Work experiences without exposing the internal chat kind

@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [持续目标长度边界](2026-10-31-goal-objective-length.md)：超长草稿的表单和创建事实调查。
+
 - [文件来源路径阅读](2026-10-31-source-path-readability.md)：保留原路径的单行目录与实际文件阅读。
 
 - [空闲对话后台活动停止](2026-10-31-idle-background-stop.md)：保留运行保护的明确停止与转换旅程。

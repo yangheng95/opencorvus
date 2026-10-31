@@ -2675,6 +2675,7 @@
   "continuous_goal.error.review": "Your draft is preserved. Review the current state; error details retain the original response.",
   "continuous_goal.validation.title": "Check the goal settings",
   "continuous_goal.validation.objective": "Enter an objective.",
+  "continuous_goal.validation.objective_length": "Keep the objective within {{limit}} characters. Your full draft is preserved.",
   "continuous_goal.validation.budget": "Enter a whole number from 1 to {{max}}.",
   "continuous_goal.validation.keep_budget": "An existing budget cannot be cleared. Keep a positive whole number.",
   "continuous_goal.validation.remaining": "To resume, each limit must exceed its cumulative usage.",

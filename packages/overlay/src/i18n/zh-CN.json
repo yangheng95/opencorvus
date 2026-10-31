@@ -2674,6 +2674,7 @@
   "continuous_goal.error.review": "表单草稿已保留。请核对当前状态；错误详情保留原始响应。",
   "continuous_goal.validation.title": "请检查目标设置",
   "continuous_goal.validation.objective": "请填写目标。",
+  "continuous_goal.validation.objective_length": "目标内容不能超过 {{limit}} 个字符，完整草稿已保留。",
   "continuous_goal.validation.budget": "请输入 1 到 {{max}} 之间的整数。",
   "continuous_goal.validation.keep_budget": "已设置的预算不能清空，请保留有效正整数。",
   "continuous_goal.validation.remaining": "要恢复目标，各项上限需要高于对应的累计用量。",

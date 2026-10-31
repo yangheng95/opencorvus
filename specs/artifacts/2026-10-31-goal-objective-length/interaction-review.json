@@ -1,0 +1,131 @@
+{
+  "at": "2026-10-31T05:58:05.509Z",
+  "desktop": {
+    "width": 1280,
+    "height": 720,
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ]
+  },
+  "method": "Actual native serve /ui interactions and personally viewed screenshots; read-only DOM observations only diagnose native prefilled length semantics, not visual acceptance",
+  "baseline": {
+    "inputCharacters": 16001,
+    "fieldMaximum": 16000,
+    "nativeTooLong": false,
+    "nativeValid": true,
+    "response": {
+      "method": "POST",
+      "status": 400,
+      "code": "too_big",
+      "path": "objective",
+      "maximum": 16000
+    },
+    "createdProject": "prj_hU2x5qELOWzhTRNnVUxn",
+    "createdSession": "ses_-zUQOZSwyzz3zVNCFWmY",
+    "messages": 0,
+    "goal": null,
+    "providerRequests": 0
+  },
+  "initialCandidate": {
+    "lengthValidationVisible": true,
+    "fullDraftPreserved": true,
+    "budget": {
+      "tokens": 120000,
+      "turns": 2
+    },
+    "expandedBudgetErrorBodyBelowFold": true,
+    "qualifiedAsFinal": false
+  },
+  "finalCandidate": {
+    "fieldErrorImmediatelyBelowObjective": true,
+    "fullDraftPreserved": true,
+    "objectiveFocusedForCorrection": true,
+    "expandedBudgetErrorVisible": true,
+    "budget": {
+      "tokens": 120000,
+      "turns": 2
+    },
+    "guideReturnAndCloseReopenPreserveCorrectedDraft": true,
+    "correctedEditableCharacters": 16000,
+    "emptyObjectiveNativeMessage": "Enter an objective.",
+    "trimBoundaryEdited": {
+      "rawCharacters": 16002,
+      "trimmedCharacters": 16000
+    },
+    "chineseErrorShownWithLocalizedLimit": true,
+    "chineseCorrectionReopened": true,
+    "existingWorkConversationMenuEntryReviewed": true,
+    "existingSessionMessages": 0,
+    "existingGoal": null,
+    "observedNewSessions": 0,
+    "observedNewProjects": 0,
+    "providerRequests": 0
+  },
+  "scopeLimits": [
+    "Valid 16000-character and trimmed-boundary objectives were edited/read only; no valid Goal launch or model execution was performed in this batch",
+    "Main Home and an existing Work conversation were exercised; Task, Mission and SideChat share the changed component but were not separately launched",
+    "Desktop only; no UI automation tests or screenshot assertions"
+  ],
+  "screenshots": [
+    "01-before-home.png",
+    "02-before-prefilled-form.png",
+    "03-before-submit.png",
+    "04-before-real-error.png",
+    "05-before-length-error-details.png",
+    "06-before-empty-conversation.png",
+    "07-after-english-validation.png",
+    "08-after-budget-preserved.png",
+    "09-after-corrected-edit.png",
+    "10-final-field-error.png",
+    "11-final-expanded-budgets.png",
+    "12-final-corrected-return.png",
+    "13-final-reopened-draft.png",
+    "14-final-empty-validation.png",
+    "15-final-trim-boundary-edit.png",
+    "16-final-chinese-validation.png",
+    "17-final-chinese-corrected.png",
+    "18-final-existing-conversation.png"
+  ],
+  "data": {
+    "taskMessages": 68,
+    "missionMessages": 80,
+    "chatMessages": 3,
+    "workMessages": 8,
+    "reportGoal": {
+      "messages": 12,
+      "tokens": 380471,
+      "turns": 1
+    },
+    "goal823": {
+      "messages": 9,
+      "tokens": 242063,
+      "turns": 1
+    },
+    "preflight823Messages": 2,
+    "promoted824Messages": 6,
+    "promoted824SourceBytes": [
+      94,
+      90
+    ],
+    "stopped825Messages": [
+      2,
+      4
+    ],
+    "web": {
+      "messages": 4,
+      "sources": 2
+    },
+    "file": {
+      "messages": 3,
+      "sources": 8
+    },
+    "attachment": {
+      "messages": 4,
+      "readmeBytes": 176
+    },
+    "allOriginalFullHttpResponsesPreserved": true,
+    "baselineEmptyCasePreserved": true,
+    "baselineEmptyProjectFiles": 22
+  }
+}

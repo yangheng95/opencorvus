@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标长度边界](records/2026-10/2026-10-31-goal-objective-length.md)：长草稿输入、真实校验与创建副作用复核。
+
 - [文件来源路径阅读](records/2026-10/2026-10-31-source-path-readability.md)：长目录视觉密度、完整身份与真实阅读回归。
 
 - [空闲对话后台活动停止](records/2026-10/2026-10-31-idle-background-stop.md)：待机停止入口、转换引导与真实用户操作。
