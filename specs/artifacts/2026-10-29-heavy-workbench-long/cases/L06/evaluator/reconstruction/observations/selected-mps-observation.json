@@ -1,0 +1,49 @@
+{
+  "member": "Group1_MPS_files/LR1_1_DR1_3_VC1_V7a_t45.mps",
+  "bytes": 2193517,
+  "section_counts": {
+    "ROWS": 7910,
+    "COLUMNS": 36420,
+    "RHS": 1687,
+    "BOUNDS": 8045
+  },
+  "examples": {
+    "NAME": [],
+    "ROWS": [
+      " N  OBJ",
+      " E  flowBalance_(0,0),0",
+      " E  flowBalance_(0,0),1",
+      " E  flowBalance_(0,0),2"
+    ],
+    "COLUMNS": [
+      "    supplyAtNode_0  OBJ       0",
+      "    alphaSlack_0  OBJ       0",
+      "    betaSlack_0  OBJ       0",
+      "    f_0,0     OBJ       0"
+    ],
+    "RHS": [
+      "    RHS1      invBalancePort_(0,0)  99",
+      "    RHS1      invBalancePort_(1,0)  -39",
+      "    RHS1      invBalancePort_(2,0)  -34",
+      "    RHS1      invBalancePort_(3,0)  -26"
+    ],
+    "BOUNDS": [
+      " FX BND1      supplyAtNode_0  0",
+      " FX BND1      alphaSlack_0  0",
+      " FX BND1      betaSlack_0  0",
+      " FX BND1      f_0,0     0"
+    ],
+    "ENDATA": []
+  },
+  "bound_types": {
+    "FX": 228,
+    "UP": 7817
+  },
+  "marker_count": 2524,
+  "first_markers": [
+    "    MARKER    'MARKER'                 'INTORG'",
+    "    MARKER    'MARKER'                 'INTEND'",
+    "    MARKER    'MARKER'                 'INTORG'",
+    "    MARKER    'MARKER'                 'INTEND'"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-31T11:00:11.628880+00:00",
+  "actual_python_pid": 16128,
+  "original_member": "Group1_MPS_files/LR1_1_DR1_3_VC1_V7a_t45.mps",
+  "parameters": {
+    "parallel/maxnthreads": 1,
+    "limits/time": 60.0,
+    "randomization/randomseedshift": 0,
+    "numerics/feastol": 1e-08
+  },
+  "original_variables": 8045,
+  "original_constraints": 7909,
+  "scope": "whole original problem observation; no task score or original-competition reproduction claim"
+}

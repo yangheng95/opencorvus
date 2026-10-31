@@ -1,0 +1,814 @@
+{
+  "started_at": "2026-10-31T10:57:03.569763+00:00",
+  "scope": "original third-party input acquisition, not solver or benchmark acceptance",
+  "redistribution": "not established; originals retained only in external local research cache",
+  "registered_original_instances": [
+    "LR1_1_DR1_3_VC1_V7a",
+    "LR1_2_DR1_3_VC3_V8a",
+    "LR2_22_DR2_22_VC3_V10a"
+  ],
+  "original_periods": 45,
+  "downloads": [
+    {
+      "url": "https://mirplib.scl.gatech.edu/sites/default/files/Group1_data_format_only_files.zip",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-inputs\\Group1_data_format_only_files.zip",
+      "status": 200,
+      "content_type": "application/zip",
+      "last_modified": "Sat, 15 Jun 2013 20:16:54 GMT",
+      "etag": "\"d1e2-4df370b61d980\"",
+      "bytes": 53730,
+      "immutable_resource_sha256": "dc506ec6fb0d780b3d21efecba390a0405500de3eeca506322d7cf1ba0fb5bc8",
+      "members": [
+        {
+          "name": "Group1_data_format_only_files/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12b/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12b/travelTimes.txt",
+          "bytes": 565,
+          "crc32": 1894942831
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12b/metadata.txt",
+          "bytes": 591,
+          "crc32": 3238224104
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12b/distances.txt",
+          "bytes": 389,
+          "crc32": 1146177881
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12b/loading_port_data.txt",
+          "bytes": 1754,
+          "crc32": 2510759825
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12b/discharge_port_data.txt",
+          "bytes": 12865,
+          "crc32": 2986404766
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12b/vessel_data.txt",
+          "bytes": 2412,
+          "crc32": 3650542089
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12b/vessel_class_data.txt",
+          "bytes": 519,
+          "crc32": 4087904993
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/vessel_data.txt",
+          "bytes": 2010,
+          "crc32": 307815345
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/vessel_class_data.txt",
+          "bytes": 519,
+          "crc32": 4087904993
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/distances.txt",
+          "bytes": 779,
+          "crc32": 320056050
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/travelTimes.txt",
+          "bytes": 979,
+          "crc32": 3026346650
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/discharge_port_data.txt",
+          "bytes": 12862,
+          "crc32": 1200779560
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/metadata.txt",
+          "bytes": 595,
+          "crc32": 1942958426
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/loading_port_data.txt",
+          "bytes": 5572,
+          "crc32": 3082030109
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V17a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V17a/metadata.txt",
+          "bytes": 599,
+          "crc32": 1487679582
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V17a/distances.txt",
+          "bytes": 1789,
+          "crc32": 2521695318
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V17a/vessel_class_data.txt",
+          "bytes": 692,
+          "crc32": 4132639026
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V17a/travelTimes.txt",
+          "bytes": 2646,
+          "crc32": 1332125424
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V17a/loading_port_data.txt",
+          "bytes": 5559,
+          "crc32": 654703929
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V17a/discharge_port_data.txt",
+          "bytes": 28947,
+          "crc32": 3597134081
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V17a/vessel_data.txt",
+          "bytes": 3425,
+          "crc32": 3100330472
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V9a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V9a/discharge_port_data.txt",
+          "bytes": 12868,
+          "crc32": 2537642063
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V9a/travelTimes.txt",
+          "bytes": 565,
+          "crc32": 3385566582
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V9a/loading_port_data.txt",
+          "bytes": 1754,
+          "crc32": 2768291254
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V9a/metadata.txt",
+          "bytes": 591,
+          "crc32": 110346744
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V9a/distances.txt",
+          "bytes": 389,
+          "crc32": 718846924
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V9a/vessel_data.txt",
+          "bytes": 1804,
+          "crc32": 1382614755
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V9a/vessel_class_data.txt",
+          "bytes": 519,
+          "crc32": 4087904993
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/vessel_class_data.txt",
+          "bytes": 519,
+          "crc32": 4087904993
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/vessel_data.txt",
+          "bytes": 1604,
+          "crc32": 3844322172
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/loading_port_data.txt",
+          "bytes": 2790,
+          "crc32": 371702866
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/travelTimes.txt",
+          "bytes": 565,
+          "crc32": 3767770042
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/discharge_port_data.txt",
+          "bytes": 9651,
+          "crc32": 3723410583
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/distances.txt",
+          "bytes": 389,
+          "crc32": 1547419930
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/metadata.txt",
+          "bytes": 591,
+          "crc32": 2100495431
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12a/distances.txt",
+          "bytes": 389,
+          "crc32": 2642174583
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12a/travelTimes.txt",
+          "bytes": 565,
+          "crc32": 1542707011
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12a/vessel_class_data.txt",
+          "bytes": 519,
+          "crc32": 4087904993
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12a/vessel_data.txt",
+          "bytes": 2414,
+          "crc32": 3480206073
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12a/discharge_port_data.txt",
+          "bytes": 12868,
+          "crc32": 2506013695
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12a/metadata.txt",
+          "bytes": 591,
+          "crc32": 3238224104
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V12a/loading_port_data.txt",
+          "bytes": 1755,
+          "crc32": 2407238658
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/metadata.txt",
+          "bytes": 587,
+          "crc32": 2457981526
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/loading_port_data.txt",
+          "bytes": 1394,
+          "crc32": 3825126249
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/travelTimes.txt",
+          "bytes": 273,
+          "crc32": 1155453877
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/vessel_data.txt",
+          "bytes": 1405,
+          "crc32": 679064306
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/discharge_port_data.txt",
+          "bytes": 9651,
+          "crc32": 3335227632
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/vessel_class_data.txt",
+          "bytes": 173,
+          "crc32": 3787680974
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/distances.txt",
+          "bytes": 295,
+          "crc32": 2642605079
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC2_V6a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC2_V6a/vessel_class_data.txt",
+          "bytes": 346,
+          "crc32": 1767997151
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC2_V6a/vessel_data.txt",
+          "bytes": 1202,
+          "crc32": 1535819208
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC2_V6a/distances.txt",
+          "bytes": 389,
+          "crc32": 443267867
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC2_V6a/discharge_port_data.txt",
+          "bytes": 9651,
+          "crc32": 347799178
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC2_V6a/loading_port_data.txt",
+          "bytes": 2788,
+          "crc32": 2667174962
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC2_V6a/travelTimes.txt",
+          "bytes": 436,
+          "crc32": 1605085532
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_2_DR1_3_VC2_V6a/metadata.txt",
+          "bytes": 589,
+          "crc32": 2526014579
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V8a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V8a/vessel_class_data.txt",
+          "bytes": 519,
+          "crc32": 4087904993
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V8a/metadata.txt",
+          "bytes": 591,
+          "crc32": 2357949254
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V8a/travelTimes.txt",
+          "bytes": 565,
+          "crc32": 3385566582
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V8a/loading_port_data.txt",
+          "bytes": 1755,
+          "crc32": 1746849234
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V8a/distances.txt",
+          "bytes": 389,
+          "crc32": 718846924
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V8a/discharge_port_data.txt",
+          "bytes": 12868,
+          "crc32": 731357451
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V8a/vessel_data.txt",
+          "bytes": 1603,
+          "crc32": 1545917563
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC5_V12a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC5_V12a/metadata.txt",
+          "bytes": 599,
+          "crc32": 2033446665
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC5_V12a/vessel_data.txt",
+          "bytes": 2408,
+          "crc32": 1778840326
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC5_V12a/loading_port_data.txt",
+          "bytes": 3149,
+          "crc32": 2967803483
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC5_V12a/distances.txt",
+          "bytes": 779,
+          "crc32": 1420710260
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC5_V12a/travelTimes.txt",
+          "bytes": 1513,
+          "crc32": 574181835
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC5_V12a/vessel_class_data.txt",
+          "bytes": 865,
+          "crc32": 2740040530
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC5_V12a/discharge_port_data.txt",
+          "bytes": 19297,
+          "crc32": 2600997079
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V11a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V11a/vessel_data.txt",
+          "bytes": 2208,
+          "crc32": 900344311
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V11a/vessel_class_data.txt",
+          "bytes": 519,
+          "crc32": 4087904993
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V11a/metadata.txt",
+          "bytes": 591,
+          "crc32": 1813328644
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V11a/discharge_port_data.txt",
+          "bytes": 12867,
+          "crc32": 2229605073
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V11a/travelTimes.txt",
+          "bytes": 565,
+          "crc32": 4205003847
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V11a/loading_port_data.txt",
+          "bytes": 1754,
+          "crc32": 3989333485
+        },
+        {
+          "name": "Group1_data_format_only_files/LR1_1_DR1_4_VC3_V11a/distances.txt",
+          "bytes": 389,
+          "crc32": 1237954191
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V14a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V14a/loading_port_data.txt",
+          "bytes": 22428,
+          "crc32": 3328070880
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V14a/distances.txt",
+          "bytes": 1789,
+          "crc32": 1065081260
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V14a/vessel_data.txt",
+          "bytes": 2817,
+          "crc32": 1114425962
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V14a/travelTimes.txt",
+          "bytes": 2646,
+          "crc32": 1366564188
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V14a/metadata.txt",
+          "bytes": 599,
+          "crc32": 1790284787
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V14a/vessel_class_data.txt",
+          "bytes": 692,
+          "crc32": 4149241661
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_22_DR3_333_VC4_V14a/discharge_port_data.txt",
+          "bytes": 28947,
+          "crc32": 832819300
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_22_VC3_V6a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_22_VC3_V6a/discharge_port_data.txt",
+          "bytes": 12864,
+          "crc32": 2390762706
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_22_VC3_V6a/travelTimes.txt",
+          "bytes": 685,
+          "crc32": 3520444150
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_22_VC3_V6a/metadata.txt",
+          "bytes": 595,
+          "crc32": 4034563425
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_22_VC3_V6a/loading_port_data.txt",
+          "bytes": 2787,
+          "crc32": 2480913433
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_22_VC3_V6a/distances.txt",
+          "bytes": 501,
+          "crc32": 2523971574
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_22_VC3_V6a/vessel_data.txt",
+          "bytes": 1206,
+          "crc32": 4131752252
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_22_VC3_V6a/vessel_class_data.txt",
+          "bytes": 519,
+          "crc32": 2828138335
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC4_V11a/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC4_V11a/discharge_port_data.txt",
+          "bytes": 19295,
+          "crc32": 1064798416
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC4_V11a/metadata.txt",
+          "bytes": 597,
+          "crc32": 3208272221
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC4_V11a/distances.txt",
+          "bytes": 779,
+          "crc32": 2683203313
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC4_V11a/loading_port_data.txt",
+          "bytes": 2789,
+          "crc32": 3429792373
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC4_V11a/travelTimes.txt",
+          "bytes": 1246,
+          "crc32": 2684003415
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC4_V11a/vessel_class_data.txt",
+          "bytes": 692,
+          "crc32": 232995951
+        },
+        {
+          "name": "Group1_data_format_only_files/LR2_11_DR2_33_VC4_V11a/vessel_data.txt",
+          "bytes": 2211,
+          "crc32": 741402968
+        }
+      ],
+      "original_instance_members": {
+        "LR1_1_DR1_3_VC1_V7a": [
+          "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/",
+          "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/metadata.txt",
+          "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/loading_port_data.txt",
+          "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/travelTimes.txt",
+          "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/vessel_data.txt",
+          "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/discharge_port_data.txt",
+          "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/vessel_class_data.txt",
+          "Group1_data_format_only_files/LR1_1_DR1_3_VC1_V7a/distances.txt"
+        ],
+        "LR1_2_DR1_3_VC3_V8a": [
+          "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/",
+          "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/vessel_class_data.txt",
+          "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/vessel_data.txt",
+          "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/loading_port_data.txt",
+          "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/travelTimes.txt",
+          "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/discharge_port_data.txt",
+          "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/distances.txt",
+          "Group1_data_format_only_files/LR1_2_DR1_3_VC3_V8a/metadata.txt"
+        ],
+        "LR2_22_DR2_22_VC3_V10a": [
+          "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/",
+          "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/vessel_data.txt",
+          "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/vessel_class_data.txt",
+          "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/distances.txt",
+          "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/travelTimes.txt",
+          "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/discharge_port_data.txt",
+          "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/metadata.txt",
+          "Group1_data_format_only_files/LR2_22_DR2_22_VC3_V10a/loading_port_data.txt"
+        ]
+      }
+    },
+    {
+      "url": "https://mirplib.scl.gatech.edu/sites/default/files/Group1_MPS_files.zip",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-inputs\\Group1_MPS_files.zip",
+      "status": 200,
+      "content_type": "application/zip",
+      "last_modified": "Sat, 15 Jun 2013 20:16:53 GMT",
+      "etag": "\"1795670-4df370b529740\"",
+      "bytes": 24729200,
+      "immutable_resource_sha256": "e492231fa04471cbb6478184baabe1bb9f2d3e256de78080bc2a3bec3dc48ade",
+      "members": [
+        {
+          "name": "Group1_MPS_files/",
+          "bytes": 0,
+          "crc32": 0
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_4_VC3_V9a_t60.mps",
+          "bytes": 5244372,
+          "crc32": 247649575
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_4_VC3_V12b_t45.mps",
+          "bytes": 4851142,
+          "crc32": 3444933373
+        },
+        {
+          "name": "Group1_MPS_files/LR2_11_DR2_22_VC3_V6a_t60.mps",
+          "bytes": 4161219,
+          "crc32": 3166069685
+        },
+        {
+          "name": "Group1_MPS_files/LR2_22_DR2_22_VC3_V10a_t60.mps",
+          "bytes": 11010572,
+          "crc32": 1250657868
+        },
+        {
+          "name": "Group1_MPS_files/LR2_22_DR3_333_VC4_V17a_t45.mps",
+          "bytes": 22576526,
+          "crc32": 4188402375
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_4_VC3_V8a_t45.mps",
+          "bytes": 3356245,
+          "crc32": 511765888
+        },
+        {
+          "name": "Group1_MPS_files/LR1_2_DR1_3_VC3_V8a_t45.mps",
+          "bytes": 3607641,
+          "crc32": 1797222464
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_4_VC3_V11a_t60.mps",
+          "bytes": 6275303,
+          "crc32": 1907827983
+        },
+        {
+          "name": "Group1_MPS_files/LR2_11_DR2_33_VC4_V11a_t45.mps",
+          "bytes": 7421765,
+          "crc32": 1650074197
+        },
+        {
+          "name": "Group1_MPS_files/LR2_11_DR2_33_VC4_V11a_t60.mps",
+          "bytes": 11017077,
+          "crc32": 2893101898
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_4_VC3_V11a_t45.mps",
+          "bytes": 4306075,
+          "crc32": 3379209718
+        },
+        {
+          "name": "Group1_MPS_files/LR1_2_DR1_3_VC3_V8a_t60.mps",
+          "bytes": 5117508,
+          "crc32": 2671765469
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_4_VC3_V8a_t60.mps",
+          "bytes": 4793659,
+          "crc32": 3087884444
+        },
+        {
+          "name": "Group1_MPS_files/LR2_22_DR3_333_VC4_V17a_t60.mps",
+          "bytes": 35258153,
+          "crc32": 1314748042
+        },
+        {
+          "name": "Group1_MPS_files/LR2_11_DR2_22_VC3_V6a_t45.mps",
+          "bytes": 2850818,
+          "crc32": 642306677
+        },
+        {
+          "name": "Group1_MPS_files/LR2_22_DR2_22_VC3_V10a_t45.mps",
+          "bytes": 7428695,
+          "crc32": 2867684114
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_4_VC3_V12b_t60.mps",
+          "bytes": 7001282,
+          "crc32": 953598386
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_4_VC3_V9a_t45.mps",
+          "bytes": 3632479,
+          "crc32": 679098559
+        },
+        {
+          "name": "Group1_MPS_files/LR2_22_DR3_333_VC4_V14a_t60.mps",
+          "bytes": 28878648,
+          "crc32": 2970074227
+        },
+        {
+          "name": "Group1_MPS_files/LR1_2_DR1_3_VC2_V6a_t45.mps",
+          "bytes": 2706694,
+          "crc32": 1752472280
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_3_VC1_V7a_t60.mps",
+          "bytes": 3101070,
+          "crc32": 2759945052
+        },
+        {
+          "name": "Group1_MPS_files/LR2_11_DR2_33_VC5_V12a_t60.mps",
+          "bytes": 11917371,
+          "crc32": 4161562009
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_4_VC3_V12a_t45.mps",
+          "bytes": 4773767,
+          "crc32": 235189112
+        },
+        {
+          "name": "Group1_MPS_files/LR2_11_DR2_33_VC5_V12a_t45.mps",
+          "bytes": 7990904,
+          "crc32": 1307999332
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_4_VC3_V12a_t60.mps",
+          "bytes": 6924067,
+          "crc32": 2001563903
+        },
+        {
+          "name": "Group1_MPS_files/LR1_1_DR1_3_VC1_V7a_t45.mps",
+          "bytes": 2193517,
+          "crc32": 2795842596
+        },
+        {
+          "name": "Group1_MPS_files/LR1_2_DR1_3_VC2_V6a_t60.mps",
+          "bytes": 3848852,
+          "crc32": 449557033
+        },
+        {
+          "name": "Group1_MPS_files/LR2_22_DR3_333_VC4_V14a_t45.mps",
+          "bytes": 18446092,
+          "crc32": 2280150652
+        }
+      ],
+      "original_instance_members": {
+        "LR1_1_DR1_3_VC1_V7a": [
+          "Group1_MPS_files/LR1_1_DR1_3_VC1_V7a_t60.mps",
+          "Group1_MPS_files/LR1_1_DR1_3_VC1_V7a_t45.mps"
+        ],
+        "LR1_2_DR1_3_VC3_V8a": [
+          "Group1_MPS_files/LR1_2_DR1_3_VC3_V8a_t45.mps",
+          "Group1_MPS_files/LR1_2_DR1_3_VC3_V8a_t60.mps"
+        ],
+        "LR2_22_DR2_22_VC3_V10a": [
+          "Group1_MPS_files/LR2_22_DR2_22_VC3_V10a_t60.mps",
+          "Group1_MPS_files/LR2_22_DR2_22_VC3_V10a_t45.mps"
+        ]
+      }
+    },
+    {
+      "url": "https://mirplib.scl.gatech.edu/sites/default/files/Group1_MIP_Model.pdf",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-inputs\\Group1_MIP_Model.pdf",
+      "status": 200,
+      "content_type": "application/pdf",
+      "last_modified": "Fri, 15 Feb 2013 02:28:43 GMT",
+      "etag": "\"39ebe-4d5ba224dccc0\"",
+      "bytes": 237246,
+      "immutable_resource_sha256": "43850ea08b480cbadeac1e4ccb040d1a11336b100b1b93cf8ad21e5d69cc7bef"
+    },
+    {
+      "url": "https://mirplib.scl.gatech.edu/sites/default/files/Data_only_format_instructions.pdf",
+      "path": "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-inputs\\Data_only_format_instructions.pdf",
+      "status": 200,
+      "content_type": "application/pdf",
+      "last_modified": "Tue, 28 Jan 2014 03:44:05 GMT",
+      "etag": "\"66d6e-4f0ffa2c52b40\"",
+      "bytes": 421230,
+      "immutable_resource_sha256": "5ae0f1b2b6784a54e6537d18203ca30983d491ec8661d6c7e2dc57c992a9a0d2"
+    }
+  ],
+  "finished_at": "2026-10-31T10:57:12.785568+00:00"
+}

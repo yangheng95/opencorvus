@@ -1,0 +1,11 @@
+Collecting pyscipopt==6.3.0
+  Downloading pyscipopt-6.3.0-cp314-cp314-win_amd64.whl.metadata (7.6 kB)
+Collecting numpy>=1.16.0 (from pyscipopt==6.3.0)
+  Downloading numpy-2.5.4-cp314-cp314-win_amd64.whl.metadata (6.6 kB)
+Downloading pyscipopt-6.3.0-cp314-cp314-win_amd64.whl (49.4 MB)
+   ---------------------------------------- 49.4/49.4 MB 9.6 MB/s  0:00:05
+Downloading numpy-2.5.4-cp314-cp314-win_amd64.whl (12.7 MB)
+   ---------------------------------------- 12.7/12.7 MB 10.4 MB/s  0:00:01
+Installing collected packages: numpy, pyscipopt
+
+Successfully installed numpy-2.5.4 pyscipopt-6.3.0

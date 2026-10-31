@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-31T11:00:10.568162+00:00",
+  "launcher_pid": 24360,
+  "argv": [
+    "D:/opencorvus-benchmark-runs/native-operations-reconstruction-20261031/Scripts/python.exe",
+    "-u",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\L06\\evaluator\\reconstruction\\run_original_baseline.py",
+    "--original-inputs",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\original-inputs",
+    "--out",
+    "D:\\opencorvus-benchmark-runs\\l06-substantive-reconstruction-20261031\\native-first"
+  ],
+  "source_archive": "pre-execution-source.zip"
+}

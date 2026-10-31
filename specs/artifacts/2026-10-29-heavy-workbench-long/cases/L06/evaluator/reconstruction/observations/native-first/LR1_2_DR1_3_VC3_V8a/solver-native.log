@@ -1,0 +1,43 @@
+original problem has 12745 variables (9893 bin, 0 int, 2852 cont) and 12325 constraints
+presolving:
+(round 1, fast)       871 del vars, 1214 del conss, 0 add conss, 617 chg bounds, 0 chg sides, 865 chg coeffs, 0 upgd conss, 4305 impls, 15202 clqs, 0 implints
+(round 2, fast)       904 del vars, 1258 del conss, 0 add conss, 627 chg bounds, 0 chg sides, 865 chg coeffs, 0 upgd conss, 4331 impls, 15126 clqs, 0 implints
+(round 3, fast)       916 del vars, 1268 del conss, 0 add conss, 627 chg bounds, 0 chg sides, 865 chg coeffs, 0 upgd conss, 4331 impls, 15126 clqs, 0 implints
+(round 4, exhaustive) 916 del vars, 1268 del conss, 0 add conss, 627 chg bounds, 0 chg sides, 865 chg coeffs, 9079 upgd conss, 4331 impls, 15126 clqs, 0 implints
+   (0.0s) probing: 1000/9570 (10.4%) - 4 fixings, 0 aggregations, 36061 implications, 1 bound changes
+   (0.0s) probing: 1013/9570 (10.6%) - 4 fixings, 0 aggregations, 36302 implications, 1 bound changes
+   (0.0s) probing aborted: 1000/1000 successive useless probings
+   (0.0s) symmetry computation started: requiring (bin +, int +, cont +), (fixed: bin -, int -, cont -)
+   (0.0s) no symmetry present (symcode time: 0.00)
+presolving (5 rounds: 5 fast, 2 medium, 2 exhaustive):
+ 920 deleted vars, 1272 deleted constraints, 0 added constraints, 628 tightened bounds, 0 added holes, 0 changed sides, 868 changed coefficients
+ 23090 implications, 39842 cliques, 0 implied integral variables (0 bin, 0 int, 0 cont)
+presolved problem has 11837 variables (9566 bin, 0 int, 2271 cont) and 11053 constraints
+   7292 constraints of type <varbound>
+    324 constraints of type <setppc>
+   1976 constraints of type <linear>
+   1461 constraints of type <logicor>
+Presolving Time: 0.00
+
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+  2.0s|     1 |     0 | 12390 |     - |   120M |   0 |  11k|  11k|  11k|   0 |  0 |  47 |   0 |-2.815742e+04 |      --      |    Inf | unknown
+  9.0s|     1 |     0 | 34906 |     - |   137M |   0 |  11k|  11k|  11k|  98 |  1 |  47 |   0 |-2.814365e+04 |      --      |    Inf | unknown
+ 10.0s|     1 |     0 | 35860 |     - |   138M |   0 |  11k|  11k|  11k| 165 |  2 |  47 |   0 |-2.813269e+04 |      --      |    Inf | unknown
+ 10.0s|     1 |     0 | 36101 |     - |   141M |   0 |  11k|  11k|  11k| 218 |  3 |  47 |   0 |-2.813212e+04 |      --      |    Inf | unknown
+ 11.0s|     1 |     0 | 36435 |     - |   142M |   0 |  11k|  11k|  11k| 255 |  4 |  47 |   0 |-2.813139e+04 |      --      |    Inf | unknown
+ 11.0s|     1 |     0 | 36646 |     - |   143M |   0 |  11k|  11k|  11k| 290 |  5 |  47 |   0 |-2.813123e+04 |      --      |    Inf | unknown
+ 12.0s|     1 |     0 | 36781 |     - |   145M |   0 |  11k|  11k|  11k| 323 |  6 |  47 |   0 |-2.813105e+04 |      --      |    Inf | unknown
+ 12.0s|     1 |     0 | 36902 |     - |   146M |   0 |  11k|  11k|  11k| 348 |  7 |  47 |   0 |-2.813095e+04 |      --      |    Inf | unknown
+ 12.0s|     1 |     0 | 37058 |     - |   149M |   0 |  11k|  11k|  11k| 372 |  8 |  47 |   0 |-2.813086e+04 |      --      |    Inf | unknown
+ 13.0s|     1 |     0 | 37337 |     - |   150M |   0 |  11k|  11k|  11k| 400 |  9 |  49 |   0 |-2.813027e+04 |      --      |    Inf | unknown
+ 13.0s|     1 |     0 | 37530 |     - |   151M |   0 |  11k|  11k|  11k| 434 | 10 |  59 |   0 |-2.812995e+04 |      --      |    Inf | unknown
+ 14.0s|     1 |     0 | 37622 |     - |   153M |   0 |  11k|  11k|  11k| 466 | 11 |  59 |   0 |-2.812991e+04 |      --      |    Inf | unknown
+ 14.0s|     1 |     0 | 37852 |     - |   155M |   0 |  11k|  11k|  11k| 493 | 12 |  59 |   0 |-2.812905e+04 |      --      |    Inf | unknown
+ 28.0s|     1 |     2 | 47867 |     - |   157M |   0 |  11k|  11k|  11k| 493 | 12 |  61 |  20 |-2.812835e+04 |      --      |    Inf | unknown
+
+SCIP Status        : solving was interrupted [time limit reached]
+Solving Time (sec) : 60.00
+Solving Nodes      : 6
+Primal Bound       : +1.00000000000000e+20 (0 solutions)
+Dual Bound         : -2.81283505495756e+04
+Gap                : infinite

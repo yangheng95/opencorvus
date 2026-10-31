@@ -1,0 +1,79 @@
+{
+  "finished_at": "2026-10-31T11:03:11.173259+00:00",
+  "actual_python_pid": 16128,
+  "wall_seconds": 179.60761160000038,
+  "results": [
+    {
+      "instance": "LR1_1_DR1_3_VC1_V7a",
+      "original_member": "Group1_MPS_files/LR1_1_DR1_3_VC1_V7a_t45.mps",
+      "finished_at": "2026-10-31T11:01:11.004098+00:00",
+      "status": "timelimit",
+      "solver_seconds": 60.0,
+      "whole_read_and_solve_wall_seconds": 59.43407590000061,
+      "solutions_reported": 0,
+      "incumbent_events_saved": 0,
+      "primal_bound": null,
+      "dual_bound": -25628.561701657018,
+      "relative_gap_reported": null,
+      "nodes": 59,
+      "parameters": {
+        "parallel/maxnthreads": 1,
+        "limits/time": 60.0,
+        "randomization/randomseedshift": 0,
+        "numerics/feastol": 1e-08
+      },
+      "independent_validation": null,
+      "score": null,
+      "benchmark_qualification": "not_established"
+    },
+    {
+      "instance": "LR1_2_DR1_3_VC3_V8a",
+      "original_member": "Group1_MPS_files/LR1_2_DR1_3_VC3_V8a_t45.mps",
+      "finished_at": "2026-10-31T11:02:11.007926+00:00",
+      "status": "timelimit",
+      "solver_seconds": 60.0,
+      "whole_read_and_solve_wall_seconds": 59.9607877999988,
+      "solutions_reported": 0,
+      "incumbent_events_saved": 0,
+      "primal_bound": null,
+      "dual_bound": -28128.35054957559,
+      "relative_gap_reported": null,
+      "nodes": 6,
+      "parameters": {
+        "parallel/maxnthreads": 1,
+        "limits/time": 60.0,
+        "randomization/randomseedshift": 0,
+        "numerics/feastol": 1e-08
+      },
+      "independent_validation": null,
+      "score": null,
+      "benchmark_qualification": "not_established"
+    },
+    {
+      "instance": "LR2_22_DR2_22_VC3_V10a",
+      "original_member": "Group1_MPS_files/LR2_22_DR2_22_VC3_V10a_t45.mps",
+      "finished_at": "2026-10-31T11:03:11.008145+00:00",
+      "status": "timelimit",
+      "solver_seconds": 60.0,
+      "whole_read_and_solve_wall_seconds": 59.933943,
+      "solutions_reported": 0,
+      "incumbent_events_saved": 0,
+      "primal_bound": null,
+      "dual_bound": -44845.03963551211,
+      "relative_gap_reported": null,
+      "nodes": 1,
+      "parameters": {
+        "parallel/maxnthreads": 1,
+        "limits/time": 60.0,
+        "randomization/randomseedshift": 0,
+        "numerics/feastol": 1e-08
+      },
+      "independent_validation": null,
+      "score": null,
+      "benchmark_qualification": "not_established"
+    }
+  ],
+  "complete_original_problem_runs": 3,
+  "native_code": 0,
+  "scope": "execution complete; entire benchmark task/report/rubric/review/candidate study still incomplete"
+}

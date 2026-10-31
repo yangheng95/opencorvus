@@ -1,0 +1,348 @@
+original problem has 8045 variables (5915 bin, 0 int, 2130 cont) and 7909 constraints
+presolving:
+(round 1, fast)       7395 del vars, 7410 del conss, 0 add conss, 1342 chg bounds, 0 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 2, fast)       7722 del vars, 7763 del conss, 0 add conss, 1887 chg bounds, 3 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 3, fast)       7773 del vars, 7808 del conss, 0 add conss, 2032 chg bounds, 3 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 4, fast)       7776 del vars, 7812 del conss, 0 add conss, 2130 chg bounds, 4 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 5, fast)       7786 del vars, 7820 del conss, 0 add conss, 2173 chg bounds, 4 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 6, fast)       7799 del vars, 7820 del conss, 0 add conss, 2203 chg bounds, 5 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 7, fast)       7802 del vars, 7821 del conss, 0 add conss, 2251 chg bounds, 7 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 8, fast)       7807 del vars, 7823 del conss, 0 add conss, 2275 chg bounds, 8 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 9, fast)       7810 del vars, 7824 del conss, 0 add conss, 2290 chg bounds, 8 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 10, fast)       7811 del vars, 7824 del conss, 0 add conss, 2302 chg bounds, 10 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 11, fast)       7818 del vars, 7826 del conss, 0 add conss, 2324 chg bounds, 11 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 12, fast)       7822 del vars, 7827 del conss, 0 add conss, 2339 chg bounds, 12 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 13, fast)       7826 del vars, 7828 del conss, 0 add conss, 2353 chg bounds, 13 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 14, fast)       7828 del vars, 7829 del conss, 0 add conss, 2354 chg bounds, 14 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 15, fast)       7830 del vars, 7830 del conss, 0 add conss, 2355 chg bounds, 15 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 16, fast)       7832 del vars, 7831 del conss, 0 add conss, 2356 chg bounds, 16 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 17, fast)       7835 del vars, 7832 del conss, 0 add conss, 2356 chg bounds, 17 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 18, fast)       7838 del vars, 7833 del conss, 0 add conss, 2356 chg bounds, 18 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 19, fast)       7842 del vars, 7834 del conss, 0 add conss, 2356 chg bounds, 19 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 20, fast)       7846 del vars, 7835 del conss, 0 add conss, 2356 chg bounds, 20 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 21, fast)       7850 del vars, 7836 del conss, 0 add conss, 2356 chg bounds, 21 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 22, fast)       7854 del vars, 7837 del conss, 0 add conss, 2356 chg bounds, 22 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 23, fast)       7858 del vars, 7838 del conss, 0 add conss, 2356 chg bounds, 23 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 24, fast)       7862 del vars, 7839 del conss, 0 add conss, 2356 chg bounds, 24 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 25, fast)       7864 del vars, 7840 del conss, 0 add conss, 2356 chg bounds, 25 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 26, fast)       7866 del vars, 7841 del conss, 0 add conss, 2356 chg bounds, 26 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 27, fast)       7870 del vars, 7842 del conss, 0 add conss, 2356 chg bounds, 27 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 28, fast)       7872 del vars, 7843 del conss, 0 add conss, 2356 chg bounds, 28 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 29, fast)       7876 del vars, 7844 del conss, 0 add conss, 2356 chg bounds, 29 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 30, fast)       7880 del vars, 7845 del conss, 0 add conss, 2356 chg bounds, 30 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 31, fast)       7884 del vars, 7846 del conss, 0 add conss, 2356 chg bounds, 31 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 32, fast)       7889 del vars, 7847 del conss, 0 add conss, 2356 chg bounds, 32 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 33, fast)       7893 del vars, 7848 del conss, 0 add conss, 2356 chg bounds, 34 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 34, fast)       7899 del vars, 7850 del conss, 0 add conss, 2356 chg bounds, 35 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 35, fast)       7901 del vars, 7851 del conss, 0 add conss, 2356 chg bounds, 36 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 36, fast)       7905 del vars, 7852 del conss, 0 add conss, 2356 chg bounds, 37 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 37, fast)       7907 del vars, 7853 del conss, 0 add conss, 2356 chg bounds, 38 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 38, fast)       7910 del vars, 7854 del conss, 0 add conss, 2356 chg bounds, 39 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 39, fast)       7915 del vars, 7855 del conss, 0 add conss, 2356 chg bounds, 40 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 40, fast)       7917 del vars, 7856 del conss, 0 add conss, 2356 chg bounds, 42 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 41, fast)       7924 del vars, 7858 del conss, 0 add conss, 2356 chg bounds, 43 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 42, fast)       7929 del vars, 7859 del conss, 0 add conss, 2356 chg bounds, 44 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 43, fast)       7933 del vars, 7861 del conss, 0 add conss, 2356 chg bounds, 46 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 44, fast)       7939 del vars, 7863 del conss, 0 add conss, 2356 chg bounds, 46 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 45, fast)       7940 del vars, 7863 del conss, 0 add conss, 2356 chg bounds, 47 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 46, fast)       7942 del vars, 7864 del conss, 0 add conss, 2356 chg bounds, 48 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 47, fast)       7944 del vars, 7865 del conss, 0 add conss, 2356 chg bounds, 48 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 48, fast)       7945 del vars, 7865 del conss, 0 add conss, 2356 chg bounds, 49 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 49, fast)       7948 del vars, 7866 del conss, 0 add conss, 2356 chg bounds, 50 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 50, fast)       7951 del vars, 7868 del conss, 0 add conss, 2356 chg bounds, 51 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 51, fast)       7956 del vars, 7870 del conss, 0 add conss, 2356 chg bounds, 51 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 52, fast)       7959 del vars, 7870 del conss, 0 add conss, 2356 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 53, fast)       7960 del vars, 7871 del conss, 0 add conss, 2356 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 54, exhaustive) 7964 del vars, 7871 del conss, 0 add conss, 2356 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 55, fast)       7968 del vars, 7875 del conss, 0 add conss, 2370 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 56, fast)       7978 del vars, 7885 del conss, 0 add conss, 2388 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 57, fast)       7982 del vars, 7889 del conss, 0 add conss, 2402 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 58, fast)       7984 del vars, 7891 del conss, 0 add conss, 2417 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 59, fast)       7988 del vars, 7891 del conss, 0 add conss, 2438 chg bounds, 53 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 60, fast)       7990 del vars, 7892 del conss, 0 add conss, 2446 chg bounds, 53 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 61, fast)       7990 del vars, 7892 del conss, 0 add conss, 2452 chg bounds, 54 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 62, fast)       7992 del vars, 7893 del conss, 0 add conss, 2455 chg bounds, 54 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 63, fast)       7992 del vars, 7893 del conss, 0 add conss, 2455 chg bounds, 55 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 64, fast)       7996 del vars, 7894 del conss, 0 add conss, 2455 chg bounds, 55 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 65, fast)       7996 del vars, 7894 del conss, 0 add conss, 2455 chg bounds, 56 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 66, fast)       8000 del vars, 7895 del conss, 0 add conss, 2455 chg bounds, 56 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 67, fast)       8001 del vars, 7895 del conss, 0 add conss, 2455 chg bounds, 56 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 68, fast)       8001 del vars, 7895 del conss, 0 add conss, 2455 chg bounds, 57 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 69, fast)       8005 del vars, 7896 del conss, 0 add conss, 2455 chg bounds, 57 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 70, fast)       8005 del vars, 7896 del conss, 0 add conss, 2455 chg bounds, 58 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 71, fast)       8007 del vars, 7897 del conss, 0 add conss, 2455 chg bounds, 58 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 72, fast)       8007 del vars, 7897 del conss, 0 add conss, 2455 chg bounds, 59 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 73, fast)       8009 del vars, 7898 del conss, 0 add conss, 2455 chg bounds, 59 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 74, fast)       8009 del vars, 7898 del conss, 0 add conss, 2455 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 75, fast)       8012 del vars, 7899 del conss, 0 add conss, 2455 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 76, fast)       8013 del vars, 7899 del conss, 0 add conss, 2455 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 77, fast)       8013 del vars, 7899 del conss, 0 add conss, 2455 chg bounds, 61 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 78, fast)       8017 del vars, 7900 del conss, 0 add conss, 2455 chg bounds, 61 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 79, fast)       8017 del vars, 7900 del conss, 0 add conss, 2455 chg bounds, 62 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 80, fast)       8020 del vars, 7901 del conss, 0 add conss, 2455 chg bounds, 62 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 81, fast)       8021 del vars, 7901 del conss, 0 add conss, 2455 chg bounds, 62 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 82, fast)       8021 del vars, 7901 del conss, 0 add conss, 2455 chg bounds, 63 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 83, fast)       8023 del vars, 7902 del conss, 0 add conss, 2455 chg bounds, 63 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 84, fast)       8024 del vars, 7902 del conss, 0 add conss, 2455 chg bounds, 63 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 85, fast)       8024 del vars, 7902 del conss, 0 add conss, 2455 chg bounds, 64 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 86, fast)       8028 del vars, 7903 del conss, 0 add conss, 2455 chg bounds, 64 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 87, fast)       8028 del vars, 7903 del conss, 0 add conss, 2455 chg bounds, 65 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 88, fast)       8030 del vars, 7904 del conss, 0 add conss, 2455 chg bounds, 65 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 89, fast)       8031 del vars, 7904 del conss, 0 add conss, 2455 chg bounds, 65 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 90, fast)       8031 del vars, 7904 del conss, 0 add conss, 2455 chg bounds, 66 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 91, fast)       8035 del vars, 7905 del conss, 0 add conss, 2455 chg bounds, 66 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 92, fast)       8035 del vars, 7905 del conss, 0 add conss, 2455 chg bounds, 67 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 93, fast)       8036 del vars, 7906 del conss, 0 add conss, 2455 chg bounds, 67 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 94, fast)       8037 del vars, 7906 del conss, 0 add conss, 2455 chg bounds, 67 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 95, fast)       8037 del vars, 7906 del conss, 0 add conss, 2455 chg bounds, 68 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 96, fast)       8041 del vars, 7907 del conss, 0 add conss, 2455 chg bounds, 68 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 97, fast)       8041 del vars, 7907 del conss, 0 add conss, 2455 chg bounds, 69 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+presolving (98 rounds: 98 fast, 2 medium, 2 exhaustive):
+ 8045 deleted vars, 7909 deleted constraints, 0 added constraints, 2455 tightened bounds, 0 added holes, 69 changed sides, 0 changed coefficients
+ 0 implications, 0 cliques, 0 implied integral variables (0 bin, 0 int, 0 cont)
+transformed 1/1 original solutions to the transformed problem space
+presolving solved problem
+Presolving Time: 0.00
+
+SCIP Status        : problem is solved [optimal solution found]
+Solving Time (sec) : 0.00
+Solving Nodes      : 0
+Primal Bound       : -1.32720861231387e+04 (1 solutions)
+Dual Bound         : -1.32720861231387e+04
+Gap                : 0.00 %
+{"instance": "LR1_1_DR1_3_VC1_V7a", "original_mps_member": "Group1_MPS_files/LR1_1_DR1_3_VC1_V7a_t45.mps", "published_start_member": "T45/T45_LR1_1_DR1_3_VC1_V7a.mst", "fixed_published_integers": 5915, "status": "optimal", "solver_seconds": 0.0, "claim": "continuous completion conditional on published routes only", "global_milp_bound": null, "score": null, "independent_check": {"object": "original linear model, not a re-created or relaxed planning model", "feasible": true, "objective_consistent": true, "variables_recomputed": 8045, "integer_variables_recomputed": 5915, "constraints_recomputed": 7909, "max_row_violation": 0.0, "max_bound_violation": 0.0, "max_integrality_violation": 0.0, "reported_objective": -13272.086123138663, "independent_objective": -13272.086123138663, "objective_absolute_error": 0.0, "violations": [], "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"}}
+original problem has 12745 variables (9893 bin, 0 int, 2852 cont) and 12325 constraints
+presolving:
+(round 1, fast)       11956 del vars, 11735 del conss, 0 add conss, 1863 chg bounds, 0 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 2, fast)       12412 del vars, 12212 del conss, 0 add conss, 2638 chg bounds, 5 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 3, fast)       12425 del vars, 12223 del conss, 0 add conss, 2704 chg bounds, 5 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 4, fast)       12432 del vars, 12227 del conss, 0 add conss, 2737 chg bounds, 5 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 5, fast)       12437 del vars, 12227 del conss, 0 add conss, 2767 chg bounds, 6 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 6, fast)       12439 del vars, 12228 del conss, 0 add conss, 2798 chg bounds, 8 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 7, fast)       12447 del vars, 12231 del conss, 0 add conss, 2816 chg bounds, 8 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 8, fast)       12448 del vars, 12231 del conss, 0 add conss, 2836 chg bounds, 10 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 9, fast)       12455 del vars, 12233 del conss, 0 add conss, 2847 chg bounds, 11 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 10, fast)       12460 del vars, 12234 del conss, 0 add conss, 2864 chg bounds, 12 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 11, fast)       12461 del vars, 12235 del conss, 0 add conss, 2875 chg bounds, 14 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 12, fast)       12469 del vars, 12237 del conss, 0 add conss, 2880 chg bounds, 14 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 13, fast)       12470 del vars, 12237 del conss, 0 add conss, 2882 chg bounds, 16 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 14, fast)       12476 del vars, 12239 del conss, 0 add conss, 2890 chg bounds, 17 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 15, fast)       12482 del vars, 12240 del conss, 0 add conss, 2894 chg bounds, 17 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 16, fast)       12482 del vars, 12240 del conss, 0 add conss, 2894 chg bounds, 20 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 17, fast)       12492 del vars, 12243 del conss, 0 add conss, 2894 chg bounds, 20 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 18, fast)       12492 del vars, 12243 del conss, 0 add conss, 2894 chg bounds, 23 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 19, fast)       12501 del vars, 12246 del conss, 0 add conss, 2894 chg bounds, 23 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 20, fast)       12504 del vars, 12246 del conss, 0 add conss, 2894 chg bounds, 23 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 21, fast)       12504 del vars, 12246 del conss, 0 add conss, 2894 chg bounds, 26 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 22, fast)       12510 del vars, 12249 del conss, 0 add conss, 2894 chg bounds, 26 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 23, fast)       12513 del vars, 12249 del conss, 0 add conss, 2894 chg bounds, 26 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 24, fast)       12513 del vars, 12249 del conss, 0 add conss, 2894 chg bounds, 29 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 25, fast)       12524 del vars, 12252 del conss, 0 add conss, 2894 chg bounds, 29 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 26, fast)       12525 del vars, 12252 del conss, 0 add conss, 2894 chg bounds, 31 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 27, fast)       12532 del vars, 12254 del conss, 0 add conss, 2894 chg bounds, 32 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 28, fast)       12537 del vars, 12255 del conss, 0 add conss, 2894 chg bounds, 33 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 29, fast)       12540 del vars, 12256 del conss, 0 add conss, 2894 chg bounds, 35 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 30, fast)       12545 del vars, 12258 del conss, 0 add conss, 2894 chg bounds, 35 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 31, fast)       12547 del vars, 12258 del conss, 0 add conss, 2894 chg bounds, 36 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 32, fast)       12550 del vars, 12259 del conss, 0 add conss, 2894 chg bounds, 38 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 33, fast)       12556 del vars, 12261 del conss, 0 add conss, 2894 chg bounds, 38 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 34, fast)       12558 del vars, 12261 del conss, 0 add conss, 2894 chg bounds, 39 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 35, fast)       12560 del vars, 12262 del conss, 0 add conss, 2894 chg bounds, 41 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 36, fast)       12565 del vars, 12264 del conss, 0 add conss, 2894 chg bounds, 41 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 37, fast)       12567 del vars, 12264 del conss, 0 add conss, 2894 chg bounds, 42 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 38, fast)       12571 del vars, 12265 del conss, 0 add conss, 2894 chg bounds, 44 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 39, fast)       12578 del vars, 12267 del conss, 0 add conss, 2894 chg bounds, 45 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 40, fast)       12580 del vars, 12268 del conss, 0 add conss, 2894 chg bounds, 46 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 41, fast)       12586 del vars, 12271 del conss, 0 add conss, 2894 chg bounds, 47 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 42, fast)       12588 del vars, 12272 del conss, 0 add conss, 2894 chg bounds, 48 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 43, fast)       12592 del vars, 12274 del conss, 0 add conss, 2894 chg bounds, 48 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 44, fast)       12593 del vars, 12274 del conss, 0 add conss, 2894 chg bounds, 49 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 45, fast)       12597 del vars, 12275 del conss, 0 add conss, 2894 chg bounds, 50 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 46, fast)       12601 del vars, 12276 del conss, 0 add conss, 2894 chg bounds, 51 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 47, fast)       12605 del vars, 12278 del conss, 0 add conss, 2894 chg bounds, 51 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 48, fast)       12606 del vars, 12278 del conss, 0 add conss, 2894 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 49, fast)       12609 del vars, 12279 del conss, 0 add conss, 2894 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 50, exhaustive) 12611 del vars, 12279 del conss, 0 add conss, 2894 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 51, fast)       12613 del vars, 12281 del conss, 0 add conss, 2900 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 52, fast)       12614 del vars, 12282 del conss, 0 add conss, 2912 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 53, fast)       12614 del vars, 12282 del conss, 0 add conss, 2924 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 54, fast)       12614 del vars, 12282 del conss, 0 add conss, 2938 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 55, fast)       12614 del vars, 12282 del conss, 0 add conss, 2948 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 56, fast)       12614 del vars, 12282 del conss, 0 add conss, 2955 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 57, fast)       12614 del vars, 12282 del conss, 0 add conss, 2959 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 58, fast)       12616 del vars, 12285 del conss, 0 add conss, 2962 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 59, fast)       12621 del vars, 12287 del conss, 0 add conss, 2962 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 60, fast)       12628 del vars, 12287 del conss, 0 add conss, 2962 chg bounds, 52 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 61, fast)       12628 del vars, 12287 del conss, 0 add conss, 2962 chg bounds, 53 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 62, fast)       12631 del vars, 12288 del conss, 0 add conss, 2962 chg bounds, 53 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 63, fast)       12631 del vars, 12288 del conss, 0 add conss, 2962 chg bounds, 54 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 64, fast)       12634 del vars, 12289 del conss, 0 add conss, 2962 chg bounds, 54 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 65, fast)       12635 del vars, 12289 del conss, 0 add conss, 2962 chg bounds, 54 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 66, fast)       12635 del vars, 12289 del conss, 0 add conss, 2962 chg bounds, 55 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 67, fast)       12637 del vars, 12290 del conss, 0 add conss, 2962 chg bounds, 55 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 68, fast)       12637 del vars, 12290 del conss, 0 add conss, 2962 chg bounds, 56 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 69, fast)       12641 del vars, 12291 del conss, 0 add conss, 2962 chg bounds, 56 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 70, fast)       12641 del vars, 12291 del conss, 0 add conss, 2962 chg bounds, 57 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 71, fast)       12644 del vars, 12292 del conss, 0 add conss, 2962 chg bounds, 57 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 72, fast)       12645 del vars, 12292 del conss, 0 add conss, 2962 chg bounds, 57 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 73, fast)       12645 del vars, 12292 del conss, 0 add conss, 2962 chg bounds, 58 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 74, fast)       12647 del vars, 12293 del conss, 0 add conss, 2962 chg bounds, 58 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 75, fast)       12648 del vars, 12293 del conss, 0 add conss, 2962 chg bounds, 58 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 76, fast)       12648 del vars, 12293 del conss, 0 add conss, 2962 chg bounds, 59 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 77, fast)       12653 del vars, 12294 del conss, 0 add conss, 2962 chg bounds, 59 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 78, fast)       12653 del vars, 12294 del conss, 0 add conss, 2962 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 79, fast)       12656 del vars, 12295 del conss, 0 add conss, 2962 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 80, fast)       12656 del vars, 12295 del conss, 0 add conss, 2965 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 81, exhaustive) 12667 del vars, 12295 del conss, 0 add conss, 2965 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 82, fast)       12668 del vars, 12296 del conss, 0 add conss, 2965 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 83, exhaustive) 12669 del vars, 12296 del conss, 0 add conss, 2965 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 84, fast)       12670 del vars, 12297 del conss, 0 add conss, 2965 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 85, exhaustive) 12671 del vars, 12297 del conss, 0 add conss, 2965 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 86, fast)       12672 del vars, 12299 del conss, 0 add conss, 2965 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 87, fast)       12675 del vars, 12301 del conss, 0 add conss, 2965 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 88, fast)       12676 del vars, 12301 del conss, 0 add conss, 2965 chg bounds, 60 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+   (0.0s) dualsparsify: 4 nonzeros canceled
+(round 89, exhaustive) 12676 del vars, 12301 del conss, 0 add conss, 2965 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 90, fast)       12676 del vars, 12301 del conss, 0 add conss, 2973 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 91, fast)       12678 del vars, 12301 del conss, 0 add conss, 2980 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 92, fast)       12678 del vars, 12301 del conss, 0 add conss, 2989 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 93, fast)       12679 del vars, 12302 del conss, 0 add conss, 3006 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 94, fast)       12679 del vars, 12302 del conss, 0 add conss, 3015 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 95, fast)       12679 del vars, 12302 del conss, 0 add conss, 3022 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 96, fast)       12679 del vars, 12302 del conss, 0 add conss, 3032 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 97, fast)       12679 del vars, 12302 del conss, 0 add conss, 3041 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 98, fast)       12681 del vars, 12304 del conss, 0 add conss, 3044 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 99, fast)       12682 del vars, 12305 del conss, 0 add conss, 3044 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 100, fast)       12683 del vars, 12306 del conss, 0 add conss, 3044 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 101, fast)       12683 del vars, 12306 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 102, exhaustive) 12709 del vars, 12306 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 103, fast)       12710 del vars, 12307 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 104, exhaustive) 12711 del vars, 12307 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 105, fast)       12712 del vars, 12308 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 106, exhaustive) 12713 del vars, 12308 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 107, fast)       12714 del vars, 12309 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 108, exhaustive) 12715 del vars, 12309 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 109, fast)       12716 del vars, 12310 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 110, exhaustive) 12717 del vars, 12310 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 111, fast)       12718 del vars, 12311 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 112, exhaustive) 12719 del vars, 12311 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 113, fast)       12720 del vars, 12312 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 114, exhaustive) 12721 del vars, 12312 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 115, fast)       12722 del vars, 12313 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 116, exhaustive) 12723 del vars, 12313 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 117, fast)       12724 del vars, 12314 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 118, exhaustive) 12725 del vars, 12314 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 119, fast)       12726 del vars, 12315 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 120, exhaustive) 12727 del vars, 12315 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 121, fast)       12728 del vars, 12316 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 122, exhaustive) 12729 del vars, 12316 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 123, fast)       12730 del vars, 12317 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 124, exhaustive) 12731 del vars, 12317 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 125, fast)       12732 del vars, 12318 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 126, exhaustive) 12733 del vars, 12318 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 127, fast)       12742 del vars, 12323 del conss, 0 add conss, 3052 chg bounds, 60 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 128, fast)       12743 del vars, 12324 del conss, 0 add conss, 3052 chg bounds, 62 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 129, fast)       12744 del vars, 12325 del conss, 0 add conss, 3052 chg bounds, 62 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+presolving (130 rounds: 130 fast, 19 medium, 19 exhaustive):
+ 12745 deleted vars, 12325 deleted constraints, 0 added constraints, 3052 tightened bounds, 0 added holes, 62 changed sides, 4 changed coefficients
+ 0 implications, 0 cliques, 0 implied integral variables (0 bin, 0 int, 0 cont)
+transformed 1/1 original solutions to the transformed problem space
+presolving solved problem
+Presolving Time: 0.00
+
+SCIP Status        : problem is solved [optimal solution found]
+Solving Time (sec) : 0.00
+Solving Nodes      : 0
+Primal Bound       : -1.20101953448203e+04 (1 solutions)
+Dual Bound         : -1.20101953448203e+04
+Gap                : 0.00 %
+{"instance": "LR1_2_DR1_3_VC3_V8a", "original_mps_member": "Group1_MPS_files/LR1_2_DR1_3_VC3_V8a_t45.mps", "published_start_member": "T45/T45_LR1_2_DR1_3_VC3_V8a.mst", "fixed_published_integers": 9893, "status": "optimal", "solver_seconds": 0.0, "claim": "continuous completion conditional on published routes only", "global_milp_bound": null, "score": null, "independent_check": {"object": "original linear model, not a re-created or relaxed planning model", "feasible": true, "objective_consistent": true, "variables_recomputed": 12745, "integer_variables_recomputed": 9893, "constraints_recomputed": 12325, "max_row_violation": 0.0, "max_bound_violation": 0.0, "max_integrality_violation": 0.0, "reported_objective": -12010.195344820282, "independent_objective": -12010.195344820282, "objective_absolute_error": 0.0, "violations": [], "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"}}
+original problem has 24631 variables (19479 bin, 0 int, 5152 cont) and 26234 constraints
+presolving:
+(round 1, fast)       23472 del vars, 25416 del conss, 0 add conss, 3752 chg bounds, 0 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 2, fast)       23916 del vars, 25897 del conss, 0 add conss, 4719 chg bounds, 7 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 3, fast)       24001 del vars, 25984 del conss, 0 add conss, 5009 chg bounds, 8 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 4, fast)       24019 del vars, 25997 del conss, 0 add conss, 5079 chg bounds, 8 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 5, fast)       24033 del vars, 26007 del conss, 0 add conss, 5122 chg bounds, 9 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 6, fast)       24035 del vars, 26007 del conss, 0 add conss, 5145 chg bounds, 10 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 7, fast)       24037 del vars, 26009 del conss, 0 add conss, 5158 chg bounds, 10 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 8, fast)       24038 del vars, 26009 del conss, 0 add conss, 5166 chg bounds, 10 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 9, fast)       24038 del vars, 26009 del conss, 0 add conss, 5173 chg bounds, 11 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 10, fast)       24044 del vars, 26012 del conss, 0 add conss, 5177 chg bounds, 11 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 11, fast)       24045 del vars, 26013 del conss, 0 add conss, 5179 chg bounds, 12 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 12, fast)       24049 del vars, 26014 del conss, 0 add conss, 5180 chg bounds, 12 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 13, fast)       24049 del vars, 26014 del conss, 0 add conss, 5180 chg bounds, 13 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 14, fast)       24052 del vars, 26015 del conss, 0 add conss, 5180 chg bounds, 13 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 15, fast)       24053 del vars, 26015 del conss, 0 add conss, 5180 chg bounds, 13 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 16, fast)       24053 del vars, 26015 del conss, 0 add conss, 5180 chg bounds, 14 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 17, fast)       24056 del vars, 26016 del conss, 0 add conss, 5180 chg bounds, 14 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 18, fast)       24057 del vars, 26016 del conss, 0 add conss, 5180 chg bounds, 14 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 19, fast)       24057 del vars, 26016 del conss, 0 add conss, 5180 chg bounds, 15 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 20, fast)       24058 del vars, 26017 del conss, 0 add conss, 5180 chg bounds, 15 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 21, fast)       24059 del vars, 26017 del conss, 0 add conss, 5180 chg bounds, 15 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 22, fast)       24059 del vars, 26017 del conss, 0 add conss, 5180 chg bounds, 16 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 23, fast)       24061 del vars, 26018 del conss, 0 add conss, 5180 chg bounds, 16 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 24, fast)       24062 del vars, 26018 del conss, 0 add conss, 5180 chg bounds, 16 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 25, fast)       24062 del vars, 26018 del conss, 0 add conss, 5180 chg bounds, 17 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 26, fast)       24065 del vars, 26019 del conss, 0 add conss, 5180 chg bounds, 17 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 27, fast)       24066 del vars, 26019 del conss, 0 add conss, 5180 chg bounds, 17 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 28, fast)       24066 del vars, 26019 del conss, 0 add conss, 5180 chg bounds, 18 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 29, fast)       24067 del vars, 26020 del conss, 0 add conss, 5180 chg bounds, 18 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 30, fast)       24068 del vars, 26020 del conss, 0 add conss, 5180 chg bounds, 18 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 31, fast)       24068 del vars, 26020 del conss, 0 add conss, 5180 chg bounds, 19 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 32, fast)       24071 del vars, 26021 del conss, 0 add conss, 5180 chg bounds, 19 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 33, fast)       24072 del vars, 26021 del conss, 0 add conss, 5180 chg bounds, 19 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 34, fast)       24072 del vars, 26021 del conss, 0 add conss, 5180 chg bounds, 20 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 35, fast)       24075 del vars, 26022 del conss, 0 add conss, 5180 chg bounds, 20 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 36, fast)       24076 del vars, 26022 del conss, 0 add conss, 5180 chg bounds, 20 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 37, fast)       24076 del vars, 26022 del conss, 0 add conss, 5180 chg bounds, 21 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 38, fast)       24077 del vars, 26023 del conss, 0 add conss, 5180 chg bounds, 21 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 39, fast)       24078 del vars, 26023 del conss, 0 add conss, 5180 chg bounds, 21 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 40, fast)       24078 del vars, 26023 del conss, 0 add conss, 5180 chg bounds, 22 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 41, fast)       24081 del vars, 26024 del conss, 0 add conss, 5180 chg bounds, 22 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 42, fast)       24082 del vars, 26024 del conss, 0 add conss, 5180 chg bounds, 22 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 43, fast)       24082 del vars, 26024 del conss, 0 add conss, 5180 chg bounds, 23 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 44, fast)       24085 del vars, 26025 del conss, 0 add conss, 5180 chg bounds, 23 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 45, fast)       24086 del vars, 26025 del conss, 0 add conss, 5180 chg bounds, 23 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 46, fast)       24086 del vars, 26025 del conss, 0 add conss, 5180 chg bounds, 24 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 47, fast)       24090 del vars, 26027 del conss, 0 add conss, 5180 chg bounds, 24 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 48, fast)       24094 del vars, 26028 del conss, 0 add conss, 5180 chg bounds, 24 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 49, exhaustive) 24108 del vars, 26028 del conss, 0 add conss, 5180 chg bounds, 24 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 50, fast)       24120 del vars, 26041 del conss, 0 add conss, 5243 chg bounds, 25 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 51, fast)       24138 del vars, 26056 del conss, 0 add conss, 5284 chg bounds, 25 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 52, fast)       24142 del vars, 26059 del conss, 0 add conss, 5299 chg bounds, 26 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 53, fast)       24151 del vars, 26068 del conss, 0 add conss, 5315 chg bounds, 27 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 54, fast)       24156 del vars, 26072 del conss, 0 add conss, 5318 chg bounds, 27 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 55, fast)       24158 del vars, 26073 del conss, 0 add conss, 5320 chg bounds, 28 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 56, fast)       24164 del vars, 26075 del conss, 0 add conss, 5322 chg bounds, 29 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 57, fast)       24166 del vars, 26077 del conss, 0 add conss, 5325 chg bounds, 30 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 58, fast)       24169 del vars, 26078 del conss, 0 add conss, 5327 chg bounds, 30 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 59, fast)       24170 del vars, 26078 del conss, 0 add conss, 5327 chg bounds, 30 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 60, fast)       24170 del vars, 26078 del conss, 0 add conss, 5342 chg bounds, 30 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 61, exhaustive) 24182 del vars, 26078 del conss, 0 add conss, 5342 chg bounds, 30 chg sides, 0 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+   (1.0s) dualsparsify: 4 nonzeros canceled
+(round 62, exhaustive) 24182 del vars, 26078 del conss, 0 add conss, 5342 chg bounds, 30 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 63, fast)       24184 del vars, 26080 del conss, 0 add conss, 5353 chg bounds, 30 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 64, fast)       24188 del vars, 26082 del conss, 0 add conss, 5361 chg bounds, 30 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 65, fast)       24188 del vars, 26082 del conss, 0 add conss, 5366 chg bounds, 30 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+(round 66, exhaustive) 24188 del vars, 26082 del conss, 0 add conss, 5387 chg bounds, 30 chg sides, 4 chg coeffs, 0 upgd conss, 0 impls, 0 clqs, 0 implints
+   (1.0s) symmetry computation started: requiring (bin +, int +, cont +), (fixed: bin -, int -, cont -)
+   (1.0s) no symmetry present (symcode time: 0.00)
+presolving (67 rounds: 67 fast, 5 medium, 5 exhaustive):
+ 24496 deleted vars, 26189 deleted constraints, 0 added constraints, 5389 tightened bounds, 0 added holes, 30 changed sides, 4 changed coefficients
+ 0 implications, 0 cliques, 0 implied integral variables (0 bin, 0 int, 0 cont)
+presolved problem has 135 variables (0 bin, 0 int, 135 cont) and 45 constraints
+     45 constraints of type <linear>
+Presolving Time: 1.00
+
+ time | node  | left  |LP iter|LP it/n|mem/heur|mdpt |vars |cons |rows |cuts |sepa|confs|strbr|  dualbound   | primalbound  |  gap   | compl. 
+* 1.0s|     1 |     0 |    43 |     - |    LP  |   0 | 135 |  45 |  45 |   0 |  0 |   0 |   0 |-2.474981e+04 |-2.474981e+04 |   0.00%| unknown
+  1.0s|     1 |     0 |    43 |     - |    99M |   0 | 135 |  45 |  45 |   0 |  0 |   0 |   0 |-2.474981e+04 |-2.474981e+04 |   0.00%| unknown
+
+SCIP Status        : problem is solved [optimal solution found]
+Solving Time (sec) : 1.00
+Solving Nodes      : 1
+Primal Bound       : -2.47498085251116e+04 (1 solutions)
+Dual Bound         : -2.47498085251116e+04
+Gap                : 0.00 %
+{"instance": "LR2_22_DR2_22_VC3_V10a", "original_mps_member": "Group1_MPS_files/LR2_22_DR2_22_VC3_V10a_t45.mps", "published_start_member": "T45/T45_LR2_22_DR2_22_VC3_V10a.mst", "fixed_published_integers": 19479, "status": "optimal", "solver_seconds": 1.0, "claim": "continuous completion conditional on published routes only", "global_milp_bound": null, "score": null, "independent_check": {"object": "original linear model, not a re-created or relaxed planning model", "feasible": true, "objective_consistent": true, "variables_recomputed": 24631, "integer_variables_recomputed": 19479, "constraints_recomputed": 26234, "max_row_violation": 0.0, "max_bound_violation": 0.0, "max_integrality_violation": 0.0, "reported_objective": -24749.808525111635, "independent_objective": -24749.808525111606, "objective_absolute_error": 2.9103830456733704e-11, "violations": [], "scope": "original deterministic mathematical model only; operational translation and benchmark quality remain unvalidated"}}
