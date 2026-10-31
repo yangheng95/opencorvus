@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [音视频附件入口与辨识](2026-10-31-media-attachment-identification.md)：八流式请求、双图Sources、四播放器和零请求最终复核。
+
 - [项目转换读取交接](2026-10-31-project-conversion-handoff.md)：复现并修复转换期间Goal及目录项旧目录重读。
 
 - [当前空闲停止与转换复核](2026-10-31-idle-stop-current-review.md)：四次真实流式请求及停止、转换、继续完整结果。

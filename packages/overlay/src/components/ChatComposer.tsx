@@ -249,6 +249,8 @@ const PASTE_EXT_BY_MIME: Record<string, string> = {
 
 const SUPPORTED_COMPOSER_FILE_ACCEPT = [
   "image/*",
+  "audio/*",
+  "video/*",
   "application/pdf",
   "text/plain",
   "text/markdown",
@@ -1593,7 +1595,16 @@ export function ChatComposer(props: ChatComposerProps) {
                   when={att.kind === "file" && !att.mime.startsWith("image/")}
                   fallback={
                     <>
-                      <Show when={att.kind === "folder"} fallback={<FilePart part={{ type: "file", ...att }} presentation="composer-thumbnail" />}>
+                      <Show
+                        when={att.kind === "folder"}
+                        fallback={
+                          <FilePart
+                            part={{ type: "file", ...att }}
+                            presentation="composer-thumbnail"
+                            displayLabel={attachmentDisplayLabel(att, index())}
+                          />
+                        }
+                      >
                         <span class="chat-attachment-icon">
                           <Icon name="folder-open" size="medium" />
                         </span>

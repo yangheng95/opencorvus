@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [音视频附件入口与辨识](2026-10-31-media-attachment-identification/README.md)：二十六张实图与六下载、数据保护和物理结清回执。
+
 - [项目转换读取交接](2026-10-31-project-conversion-handoff/README.md)：十三实图、当前请求、原始数据和物理结清。
 
 - [当前空闲停止与转换复核](2026-10-31-idle-stop-current-review/README.md)：七张实页截图和当前请求、数据、物理结清回执。

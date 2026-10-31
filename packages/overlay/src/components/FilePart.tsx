@@ -151,6 +151,7 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
       </Match>
       <Match when={kind() === "video" && url()}>
         <div class="msg-video-wrap">
+          <span class="msg-file-chip__name" title={label()}>{label()}</span>
           <video class="md-video" src={resolveResourceUrl(url())} aria-label={label()} controls preload="metadata" />
         </div>
       </Match>
@@ -160,6 +161,7 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
       </Match>
       <Match when={kind() === "audio" && url()}>
         <div class="msg-audio-wrap">
+          <span class="msg-file-chip__name" title={label()}>{label()}</span>
           <audio class="md-audio" src={resolveResourceUrl(url())} aria-label={label()} controls preload="metadata" />
         </div>
       </Match>
@@ -277,6 +279,7 @@ function AuthedVideo(props: { url: string; name: string; displayLabel?: string; 
       <Show when={!objectUrl.loading && objectUrl()}>
         {(resolved) => (
           <div class="msg-video-wrap">
+            <span class="msg-file-chip__name" title={props.displayLabel ?? props.name}>{props.displayLabel ?? props.name}</span>
             <video class="md-video" src={resolved()} aria-label={props.displayLabel ?? props.name} controls preload="metadata">
               {props.mime ? <source src={resolved()} type={props.mime} /> : null}
             </video>
@@ -301,6 +304,7 @@ function AuthedAudio(props: { url: string; name: string; displayLabel?: string; 
       <Show when={!objectUrl.loading && objectUrl()}>
         {(resolved) => (
           <div class="msg-audio-wrap">
+            <span class="msg-file-chip__name" title={props.displayLabel ?? props.name}>{props.displayLabel ?? props.name}</span>
             <audio class="md-audio" src={resolved()} aria-label={props.displayLabel ?? props.name} controls preload="metadata">
               {props.mime ? <source src={resolved()} type={props.mime} /> : null}
             </audio>

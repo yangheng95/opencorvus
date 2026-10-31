@@ -1,0 +1,188 @@
+{
+  "at": "2026-10-31T12:04:12.835Z",
+  "scope": "media attachment identification",
+  "visualReview": {
+    "screenshots": 26,
+    "reviewedManually": true,
+    "uiAutomatedTests": 0,
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "played": [
+      "alpha/clip.mp4",
+      "alpha/clip.wav",
+      "bravo/clip.wav",
+      "bravo/clip.mp4"
+    ],
+    "reopenedNaturalConversation": true,
+    "twoImageSourcesOpened": true
+  },
+  "qualifications": [
+    {
+      "at": "2026-10-31T11:37:24.223Z",
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 221185,
+      "current": 221713,
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 91,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 2,
+      "cumulativeRequests": 1136,
+      "reserveMs": 4147346,
+      "uiEntry": "main-BzqB5s8C.js"
+    },
+    {
+      "at": "2026-10-31T11:50:37.312Z",
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 221713,
+      "current": 223420,
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 93,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 6,
+      "cumulativeRequests": 1142,
+      "reserveMs": 3332790,
+      "uiEntry": "main-CEaGJaja.js"
+    },
+    {
+      "at": "2026-10-31T12:02:45.357Z",
+      "phase": "after2",
+      "schema": 9,
+      "tables": 92,
+      "originals": 223420,
+      "current": 223422,
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 109,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1142,
+      "reserveMs": 2590798,
+      "uiEntry": "main-BulfLqRd.js"
+    }
+  ],
+  "downloads": [
+    {
+      "index": 5,
+      "name": "clip.mp4",
+      "branch": "bravo",
+      "bytes": 2257,
+      "browserDownloadMatchesOriginal": true
+    },
+    {
+      "index": 4,
+      "name": "clip.wav",
+      "branch": "bravo",
+      "bytes": 88278,
+      "browserDownloadMatchesOriginal": true
+    },
+    {
+      "index": 3,
+      "name": "clip.wav",
+      "branch": "alpha",
+      "bytes": 88278,
+      "browserDownloadMatchesOriginal": true
+    },
+    {
+      "index": 2,
+      "name": "clip.mp4",
+      "branch": "alpha",
+      "bytes": 2257,
+      "browserDownloadMatchesOriginal": true
+    },
+    {
+      "index": 1,
+      "name": "capture.png",
+      "branch": "alpha",
+      "bytes": 86030,
+      "browserDownloadMatchesOriginal": true
+    },
+    {
+      "index": 6,
+      "name": "capture.png",
+      "branch": "bravo",
+      "bytes": 84429,
+      "browserDownloadMatchesOriginal": true
+    }
+  ],
+  "currentContract": {
+    "at": "2026-10-31T12:02:20.587Z",
+    "messages": 6,
+    "completeNaturalSnapshotPreserved": true,
+    "readTools": 2,
+    "originals": [
+      {
+        "position": 1,
+        "filename": "capture.png",
+        "mime": "image/png",
+        "bytes": 86030,
+        "rawOriginalMatched": true
+      },
+      {
+        "position": 2,
+        "filename": "clip.mp4",
+        "mime": "video/mp4",
+        "bytes": 2257,
+        "rawOriginalMatched": true
+      },
+      {
+        "position": 3,
+        "filename": "clip.wav",
+        "mime": "audio/wav",
+        "bytes": 88278,
+        "rawOriginalMatched": true
+      },
+      {
+        "position": 4,
+        "filename": "clip.wav",
+        "mime": "audio/wav",
+        "bytes": 88278,
+        "rawOriginalMatched": true
+      },
+      {
+        "position": 5,
+        "filename": "clip.mp4",
+        "mime": "video/mp4",
+        "bytes": 2257,
+        "rawOriginalMatched": true
+      },
+      {
+        "position": 6,
+        "filename": "capture.png",
+        "mime": "image/png",
+        "bytes": 84429,
+        "rawOriginalMatched": true
+      }
+    ],
+    "requests": 0,
+    "newUsage": 0
+  },
+  "checks": [
+    {
+      "label": "types-final",
+      "code": 0
+    },
+    {
+      "label": "ui-build-final",
+      "code": 0
+    }
+  ],
+  "limitations": [
+    "Playback verified for these WAV and H.264 MP4 originals only.",
+    "Only the two PNG images were actually read by the model; audio and video were identified by filename and MIME.",
+    "Native Tauri directory picker and existing Task/Mission cancellation were not re-exercised."
+  ]
+}

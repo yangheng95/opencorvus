@@ -249,6 +249,12 @@ download actions use the display annotation. Original filenames, authored alt
 text, resource URLs, editor filename inputs and actual download names retain
 their published values. A display annotation does not create another file
 identity, reorder parts or change the resource cache.
+The ordinary file picker includes the image, audio and video families consumed
+by the existing media renderer. Composer image-preview controls receive the same
+display annotation as their chips while retaining the original image alt and
+download identity. Audio and video attachments show their display filename above
+the existing native controls, including same-name position annotations. Their
+original-download action continues to save the original filename.
 
 User-message PDF parts retain their chronological position and show their file
 label in a compact native disclosure by default. Expanding it loads the same

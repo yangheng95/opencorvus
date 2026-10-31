@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [音视频附件入口与辨识](records/2026-10/2026-10-31-media-attachment-identification.md)：真实六附件选择、同名播放器可见名与原件下载。
+
 - [项目转换读取交接](records/2026-10/2026-10-31-project-conversion-handoff.md)：旧目录请求竞态、当前工作区生命周期与真实转换验收。
 
 - [当前空闲停止与转换复核](records/2026-10/2026-10-31-idle-stop-current-review.md)：双语停止入口、精确转换引导与原对话继续的真实闭环。
