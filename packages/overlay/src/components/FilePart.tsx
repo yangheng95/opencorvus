@@ -6,7 +6,7 @@ import {
   peekResourceObjectUrl,
   resolveResourceUrl,
 } from "../services/api"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { PreviewableImage } from "./ImagePreview"
 import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
 import { Disclosure } from "./ui/Disclosure"
@@ -51,6 +51,8 @@ type MediaKind = "image" | "video" | "audio" | "pdf" | "other"
 
 export type MessageFilePart = {
   type: "file"
+  id?: string
+  messageID?: string
   url?: string
   mime?: string
   mediaType?: string
@@ -59,6 +61,20 @@ export type MessageFilePart = {
 }
 
 export type FilePartPresentation = "content" | "thumbnail" | "composer-thumbnail"
+
+export function messageAttachmentDisplayLabel(
+  part: MessageFilePart,
+  parts: readonly { type?: string; id?: string; messageID?: string; filename?: string }[],
+): string | undefined {
+  if (!part.id || !part.filename) return undefined
+  const files = parts.filter((entry) => entry.type === "file" && entry.messageID === part.messageID)
+  const position = files.findIndex((entry) => entry.id === part.id)
+  if (position < 0 || files.filter((entry) => entry.filename === part.filename).length < 2) return undefined
+  return t("chat.attachment.duplicate_label", {
+    position: new Intl.NumberFormat(localeTag()).format(position + 1),
+    name: part.filename,
+  })
+}
 
 function mimeOf(part: MessageFilePart): string {
   return (part.mime || part.mediaType || "").toLowerCase()
@@ -99,9 +115,10 @@ function compactFileType(name: string, mime: string): string {
   return mime
 }
 
-export function FilePart(props: { part: MessageFilePart; presentation?: FilePartPresentation }) {
+export function FilePart(props: { part: MessageFilePart; presentation?: FilePartPresentation; displayLabel?: string }) {
   const url = () => props.part.url || ""
   const name = () => props.part.filename || url() || "file"
+  const label = () => props.displayLabel ?? name()
   const alt = () => props.part.alt || name()
   const kind = () => kindOf(props.part)
   const authed = () => needsAuthedFetch(url())
@@ -109,18 +126,19 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
   const composerThumbnail = () => props.presentation === "composer-thumbnail"
 
   return (
-    <Switch fallback={<FallbackDownload url={url()} name={name()} mime={mimeOf(props.part)} />}>
+    <Switch fallback={<FallbackDownload url={url()} name={name()} displayLabel={props.displayLabel} mime={mimeOf(props.part)} />}>
       <Match when={props.presentation === "thumbnail" && url() && (mimeOf(props.part).startsWith("text/") || mimeOf(props.part) === "application/json")}>
-        <TextAttachment url={url()} name={name()} mime={mimeOf(props.part)} />
+        <TextAttachment url={url()} name={name()} displayLabel={props.displayLabel} mime={mimeOf(props.part)} />
       </Match>
       <Match when={kind() === "image" && url() && authed()}>
-        <AuthedImage url={url()} alt={alt()} presentation={props.presentation ?? "content"} />
+        <AuthedImage url={url()} alt={alt()} displayLabel={props.displayLabel} presentation={props.presentation ?? "content"} />
       </Match>
       <Match when={kind() === "image" && url()}>
         <div class={composerThumbnail() ? "composer-attachment-thumbnail" : thumbnail() ? "msg-image-attachment" : "msg-img-wrap"}>
           <PreviewableImage
             src={resolveResourceUrl(url())}
             alt={alt()}
+            displayLabel={props.displayLabel}
             triggerClass={composerThumbnail() ? "composer-attachment-preview-trigger" : thumbnail() ? "msg-image-attachment__trigger" : undefined}
             imageClass={composerThumbnail() ? "chat-attachment-thumb" : thumbnail() ? "msg-image-attachment__image" : undefined}
             imageDataUI={composerThumbnail() ? "composer-image-attachment-thumbnail" : thumbnail() ? "message-image-attachment-thumbnail" : undefined}
@@ -129,47 +147,47 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
       </Match>
 
       <Match when={kind() === "video" && url() && authed()}>
-        <AuthedVideo url={url()} name={name()} mime={mimeOf(props.part)} />
+        <AuthedVideo url={url()} name={name()} displayLabel={props.displayLabel} mime={mimeOf(props.part)} />
       </Match>
       <Match when={kind() === "video" && url()}>
         <div class="msg-video-wrap">
-          <video class="md-video" src={resolveResourceUrl(url())} controls preload="metadata" />
+          <video class="md-video" src={resolveResourceUrl(url())} aria-label={label()} controls preload="metadata" />
         </div>
       </Match>
 
       <Match when={kind() === "audio" && url() && authed()}>
-        <AuthedAudio url={url()} name={name()} mime={mimeOf(props.part)} />
+        <AuthedAudio url={url()} name={name()} displayLabel={props.displayLabel} mime={mimeOf(props.part)} />
       </Match>
       <Match when={kind() === "audio" && url()}>
         <div class="msg-audio-wrap">
-          <audio class="md-audio" src={resolveResourceUrl(url())} controls preload="metadata" />
+          <audio class="md-audio" src={resolveResourceUrl(url())} aria-label={label()} controls preload="metadata" />
         </div>
       </Match>
 
       <Match when={kind() === "pdf" && url()}>
-        <PdfAttachment url={url()} name={name()} authed={authed()} compact={props.presentation === "thumbnail"} />
+        <PdfAttachment url={url()} name={name()} displayLabel={props.displayLabel} authed={authed()} compact={props.presentation === "thumbnail"} />
       </Match>
     </Switch>
   )
 }
 
-function TextAttachment(props: { url: string; name: string; mime: string }) {
+function TextAttachment(props: { url: string; name: string; displayLabel?: string; mime: string }) {
   const [expanded, setExpanded] = createSignal(false)
   return (
     <Disclosure.Root class="msg-text-attachment" variant="surface" open={expanded()} onOpenChange={setExpanded}>
       <Disclosure.Trigger
         indicatorPosition="end"
-        title={props.name}
-        aria-label={t("chat.attachment.preview", { name: props.name })}
+        title={props.displayLabel ?? props.name}
+        aria-label={t("chat.attachment.preview", { name: props.displayLabel ?? props.name })}
       >
         <span class="msg-text-attachment__type">{compactFileType(props.name, props.mime)}</span>
-        <span class="msg-text-attachment__name">{props.name}</span>
+        <span class="msg-text-attachment__name">{props.displayLabel ?? props.name}</span>
       </Disclosure.Trigger>
       <Disclosure.Content>
         <Show when={expanded()}>
-          <ResourceTextPreview url={props.url} filename={props.name} label={props.name} />
+          <ResourceTextPreview url={props.url} filename={props.name} label={props.displayLabel ?? props.name} />
           <div class="msg-text-attachment__actions">
-            <OriginalFileDownload url={props.url} name={props.name} />
+            <OriginalFileDownload url={props.url} name={props.name} displayLabel={props.displayLabel} />
           </div>
         </Show>
       </Disclosure.Content>
@@ -177,11 +195,11 @@ function TextAttachment(props: { url: string; name: string; mime: string }) {
   )
 }
 
-function PdfAttachment(props: { url: string; name: string; authed: boolean; compact: boolean }) {
+function PdfAttachment(props: { url: string; name: string; displayLabel?: string; authed: boolean; compact: boolean }) {
   const [expanded, setExpanded] = createSignal(false)
   const content = () => (
-    <Show when={props.authed} fallback={<div class="msg-pdf-wrap"><PdfContent url={props.url} name={props.name} /></div>}>
-      <AuthedPdf url={props.url} name={props.name} />
+    <Show when={props.authed} fallback={<div class="msg-pdf-wrap"><PdfContent url={props.url} name={props.displayLabel ?? props.name} /></div>}>
+      <AuthedPdf url={props.url} name={props.name} displayLabel={props.displayLabel} />
     </Show>
   )
 
@@ -190,11 +208,11 @@ function PdfAttachment(props: { url: string; name: string; authed: boolean; comp
       <Disclosure.Root class="msg-pdf-attachment" variant="surface" open={expanded()} onOpenChange={setExpanded}>
         <Disclosure.Trigger
           indicatorPosition="end"
-          title={props.name}
-          aria-label={t("chat.attachment.preview", { name: props.name })}
+          title={props.displayLabel ?? props.name}
+          aria-label={t("chat.attachment.preview", { name: props.displayLabel ?? props.name })}
         >
           <span class="msg-pdf-attachment__type">PDF</span>
-          <span class="msg-pdf-attachment__name">{props.name}</span>
+          <span class="msg-pdf-attachment__name">{props.displayLabel ?? props.name}</span>
         </Disclosure.Trigger>
         <Disclosure.Content>
           <Show when={expanded()}>{content()}</Show>
@@ -210,7 +228,7 @@ function PdfAttachment(props: { url: string; name: string; authed: boolean; comp
 // `initialValue` seeds the resource signal from the cache so a cache-hit
 // path renders on the first tick without a spinner flash.
 
-function AuthedImage(props: { url: string; alt: string; presentation: FilePartPresentation }) {
+function AuthedImage(props: { url: string; alt: string; displayLabel?: string; presentation: FilePartPresentation }) {
   const thumbnail = () => props.presentation !== "content"
   const composerThumbnail = () => props.presentation === "composer-thumbnail"
   const previewUrl = () => attachmentImagePreviewUrl(props.url)
@@ -233,6 +251,7 @@ function AuthedImage(props: { url: string; alt: string; presentation: FilePartPr
               src={resolved()}
               resourceUrl={props.url}
               alt={props.alt}
+              displayLabel={props.displayLabel}
               triggerClass={composerThumbnail() ? "composer-attachment-preview-trigger" : thumbnail() ? "msg-image-attachment__trigger" : undefined}
               imageClass={composerThumbnail() ? "chat-attachment-thumb" : thumbnail() ? "msg-image-attachment__image" : undefined}
               imageDataUI={composerThumbnail() ? "composer-image-attachment-thumbnail" : thumbnail() ? "message-image-attachment-thumbnail" : undefined}
@@ -245,7 +264,7 @@ function AuthedImage(props: { url: string; alt: string; presentation: FilePartPr
   )
 }
 
-function AuthedVideo(props: { url: string; name: string; mime: string }) {
+function AuthedVideo(props: { url: string; name: string; displayLabel?: string; mime: string }) {
   const [objectUrl] = createResource(
     () => ({ url: props.url, authority: captureApiAuthority() }),
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
@@ -254,14 +273,14 @@ function AuthedVideo(props: { url: string; name: string; mime: string }) {
     },
   )
   return (
-    <Show when={!objectUrl.error} fallback={<LoadError name={props.name} />}>
+    <Show when={!objectUrl.error} fallback={<LoadError name={props.displayLabel ?? props.name} />}>
       <Show when={!objectUrl.loading && objectUrl()}>
         {(resolved) => (
           <div class="msg-video-wrap">
-            <video class="md-video" src={resolved()} controls preload="metadata">
+            <video class="md-video" src={resolved()} aria-label={props.displayLabel ?? props.name} controls preload="metadata">
               {props.mime ? <source src={resolved()} type={props.mime} /> : null}
             </video>
-            <DownloadLink href={resolved()} name={props.name} />
+            <DownloadLink href={resolved()} name={props.name} displayLabel={props.displayLabel} />
           </div>
         )}
       </Show>
@@ -269,7 +288,7 @@ function AuthedVideo(props: { url: string; name: string; mime: string }) {
   )
 }
 
-function AuthedAudio(props: { url: string; name: string; mime: string }) {
+function AuthedAudio(props: { url: string; name: string; displayLabel?: string; mime: string }) {
   const [objectUrl] = createResource(
     () => ({ url: props.url, authority: captureApiAuthority() }),
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
@@ -278,14 +297,14 @@ function AuthedAudio(props: { url: string; name: string; mime: string }) {
     },
   )
   return (
-    <Show when={!objectUrl.error} fallback={<LoadError name={props.name} />}>
+    <Show when={!objectUrl.error} fallback={<LoadError name={props.displayLabel ?? props.name} />}>
       <Show when={!objectUrl.loading && objectUrl()}>
         {(resolved) => (
           <div class="msg-audio-wrap">
-            <audio class="md-audio" src={resolved()} controls preload="metadata">
+            <audio class="md-audio" src={resolved()} aria-label={props.displayLabel ?? props.name} controls preload="metadata">
               {props.mime ? <source src={resolved()} type={props.mime} /> : null}
             </audio>
-            <DownloadLink href={resolved()} name={props.name} />
+            <DownloadLink href={resolved()} name={props.name} displayLabel={props.displayLabel} />
           </div>
         )}
       </Show>
@@ -293,7 +312,7 @@ function AuthedAudio(props: { url: string; name: string; mime: string }) {
   )
 }
 
-function AuthedPdf(props: { url: string; name: string }) {
+function AuthedPdf(props: { url: string; name: string; displayLabel?: string }) {
   const [objectUrl] = createResource(
     () => ({ url: props.url, authority: captureApiAuthority() }),
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
@@ -302,12 +321,12 @@ function AuthedPdf(props: { url: string; name: string }) {
     },
   )
   return (
-    <Show when={!objectUrl.error} fallback={<LoadError name={props.name} />}>
+    <Show when={!objectUrl.error} fallback={<LoadError name={props.displayLabel ?? props.name} />}>
       <Show when={!objectUrl.loading && objectUrl()}>
         {(resolved) => (
           <div class="msg-pdf-wrap">
-            <PdfContent url={resolved()} name={props.name} />
-            <DownloadLink href={resolved()} name={props.name} />
+            <PdfContent url={resolved()} name={props.displayLabel ?? props.name} />
+            <DownloadLink href={resolved()} name={props.name} displayLabel={props.displayLabel} />
           </div>
         )}
       </Show>
@@ -317,16 +336,16 @@ function AuthedPdf(props: { url: string; name: string }) {
 
 // ── Fallback + helpers ──
 
-function FallbackDownload(props: { url: string; name: string; mime: string }) {
+function FallbackDownload(props: { url: string; name: string; displayLabel?: string; mime: string }) {
   return (
     <div class="msg-file-chip">
-      <span class="msg-file-chip__name">{props.name}</span>
+      <span class="msg-file-chip__name">{props.displayLabel ?? props.name}</span>
       <Show when={props.mime}>
         <span class="msg-file-chip__mime" title={props.mime}>
           {compactFileType(props.name, props.mime)}
         </span>
       </Show>
-      <OriginalFileDownload url={props.url} name={props.name} />
+      <OriginalFileDownload url={props.url} name={props.name} displayLabel={props.displayLabel} />
     </div>
   )
 }

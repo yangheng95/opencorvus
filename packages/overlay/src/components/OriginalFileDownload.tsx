@@ -10,7 +10,7 @@ import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 
 /** Download the original bytes through the same authorized resource cache as previews. */
-export function OriginalFileDownload(props: { url: string; name: string; authority?: ApiAuthority }) {
+export function OriginalFileDownload(props: { url: string; name: string; displayLabel?: string; authority?: ApiAuthority }) {
   const authed = () => props.url.startsWith("/")
   const [objectUrl, { refetch }] = createResource(
     () => (authed() && props.url ? { url: props.url, authority: props.authority ?? captureApiAuthority() } : null),
@@ -37,7 +37,7 @@ export function OriginalFileDownload(props: { url: string; name: string; authori
               size="sm"
               tone="neutral"
               disabled={objectUrl.loading}
-              aria-label={`${t("file.retry_download")}: ${props.name}`}
+              aria-label={`${t("file.retry_download")}: ${props.displayLabel ?? props.name}`}
               onClick={() => void refetch()}
             >
               {t(objectUrl.loading ? "common.retrying" : "file.retry_download")}
@@ -49,15 +49,17 @@ export function OriginalFileDownload(props: { url: string; name: string; authori
       }
     >
       <Show when={href()}>
-        <DownloadLink href={href()} name={props.name} />
+        <DownloadLink href={href()} name={props.name} displayLabel={props.displayLabel} />
       </Show>
     </Show>
   )
 }
 
-export function DownloadLink(props: { href: string; name: string }) {
+export function DownloadLink(props: { href: string; name: string; displayLabel?: string }) {
   return (
-    <a class="msg-file-download" href={props.href} download={props.name} target="_blank" rel="noopener noreferrer">
+    <a class="msg-file-download" href={props.href} download={props.name}
+      aria-label={props.displayLabel ? t("file.download_named", { name: props.displayLabel }) : undefined}
+      target="_blank" rel="noopener noreferrer">
       {t("file.download")}
     </a>
   )

@@ -78,6 +78,7 @@ function isAbortError(error: unknown): boolean {
 export function PreviewableImage(props: {
   src: string
   alt?: string
+  displayLabel?: string
   triggerClass?: string
   imageClass?: string
   imageDataUI?: string
@@ -86,7 +87,8 @@ export function PreviewableImage(props: {
   resourceUrl?: string
 }) {
   const alt = () => props.alt || ""
-  const trigger = createMemo(() => imagePreviewTriggerContract({ src: props.src, alt: alt() }))
+  // Display annotations name the trigger; alt retains preview/download identity.
+  const trigger = createMemo(() => imagePreviewTriggerContract({ src: props.src, alt: props.displayLabel ?? alt() }))
   const triggerClass = () => imagePreviewTriggerClass(props.triggerClass)
   const imageClass = () => ["md-img", props.imageClass].filter(Boolean).join(" ")
   const imageAttributes = () => props.imageAttributes ?? {}
@@ -147,7 +149,7 @@ export function PreviewableImage(props: {
       data-ui={trigger().dataUi}
       data-image-preview-trigger={delegatedPreview() ? trigger().triggerFlag : undefined}
       data-image-preview-src={delegatedPreview() ? trigger().src : undefined}
-      data-image-preview-alt={delegatedPreview() ? trigger().alt : undefined}
+      data-image-preview-alt={delegatedPreview() ? alt() : undefined}
       data-image-failed={failed() ? "true" : undefined}
       title={failed() ? t("image_preview.load_failed") : trigger().label}
       aria-label={trigger().label}

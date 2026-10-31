@@ -1,0 +1,372 @@
+{
+  "at": "2026-10-31T10:18:45.441Z",
+  "scope": "Historical message attachment display context with preserved original downloads",
+  "singleAgent": true,
+  "checks": {
+    "types-reviewed": {
+      "exitCode": 0
+    },
+    "ui-build-reviewed": {
+      "exitCode": 0
+    },
+    "i18n-reviewed": {
+      "exitCode": 0
+    },
+    "types-final": {
+      "exitCode": 0
+    },
+    "ui-build-final": {
+      "exitCode": 0
+    },
+    "before-cases": {
+      "exitCode": 0
+    },
+    "before-histories": {
+      "exitCode": 0
+    },
+    "before-extra": {
+      "exitCode": 0
+    },
+    "before-sources": {
+      "exitCode": 0
+    },
+    "before-readme": {
+      "exitCode": 0
+    },
+    "before-report": {
+      "exitCode": 0
+    },
+    "before-824": {
+      "exitCode": 0
+    },
+    "before-825": {
+      "exitCode": 0
+    },
+    "before-empty": {
+      "exitCode": 0
+    },
+    "before-protection": {
+      "exitCode": 0
+    },
+    "final-cases": {
+      "exitCode": 0
+    },
+    "final-histories": {
+      "exitCode": 0
+    },
+    "final-extra": {
+      "exitCode": 0
+    },
+    "final-sources": {
+      "exitCode": 0
+    },
+    "final-readme": {
+      "exitCode": 0
+    },
+    "final-report": {
+      "exitCode": 0
+    },
+    "final-824": {
+      "exitCode": 0
+    },
+    "final-825": {
+      "exitCode": 0
+    },
+    "final-empty": {
+      "exitCode": 0
+    },
+    "final-protection": {
+      "exitCode": 0
+    },
+    "docs-final": {
+      "exitCode": 0,
+      "operations": 352,
+      "groups": 26
+    }
+  },
+  "scopes": [
+    {
+      "at": "2026-10-31T09:55:07.097Z",
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 218552,
+      "current": 218554,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 44806,
+          "now": 44807
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 44864,
+          "now": 44865
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 81,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1124,
+      "reserveMs": 1852638,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CB_Qh88y.js",
+      "exhausted": false,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    },
+    {
+      "at": "2026-10-31T10:05:37.090Z",
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 218554,
+      "current": 218556,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 44807,
+          "now": 44808
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 44865,
+          "now": 44866
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 81,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1124,
+      "reserveMs": 1224500,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-Y10k_dM8.js",
+      "exhausted": false,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    },
+    {
+      "at": "2026-10-31T10:11:38.195Z",
+      "phase": "after2",
+      "schema": 9,
+      "tables": 92,
+      "originals": 218556,
+      "current": 218558,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 44808,
+          "now": 44809
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 44866,
+          "now": 44867
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "attachments": 81,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1124,
+      "reserveMs": 861226,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DurJDA2Q.js",
+      "exhausted": false,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    }
+  ],
+  "newModelRequests": 0,
+  "cumulativeRequests": 1124,
+  "preservedUsageEvents": 739,
+  "originalDownloadAndMedia": {
+    "at": "2026-10-31T10:01:29.161Z",
+    "downloads": [
+      {
+        "phase": "before-download-private.json",
+        "original": "bravo",
+        "bytes": 52,
+        "originalName": "notes.txt"
+      },
+      {
+        "phase": "after-download-1-private.json",
+        "original": "bravo",
+        "bytes": 52,
+        "originalName": "notes.txt"
+      },
+      {
+        "phase": "after-download-2-private.json",
+        "original": "alpha",
+        "bytes": 52,
+        "originalName": "notes.txt"
+      }
+    ],
+    "media": [
+      {
+        "filename": "12-after-chinese-home-hint.jpg",
+        "mime": "image/jpeg",
+        "bytes": 47688,
+        "status": 200
+      },
+      {
+        "filename": "opencorvus-case-brief-en-zh.pdf",
+        "mime": "application/pdf",
+        "bytes": 111015,
+        "status": 200
+      },
+      {
+        "filename": "opencorvus-logo-dark.svg",
+        "mime": "image/svg+xml",
+        "bytes": 6426,
+        "status": 200
+      }
+    ]
+  },
+  "finalOriginalDownloads": {
+    "at": "2026-10-31T10:11:28.094Z",
+    "finalText": {
+      "originalName": "notes.txt",
+      "bytes": 52,
+      "original": "alpha"
+    },
+    "finalImage": {
+      "originalName": "12-after-chinese-home-hint.jpg",
+      "bytes": 47688
+    },
+    "originalBytesPreserved": true
+  },
+  "originalCaseReadbacks": [
+    {
+      "at": "2026-10-31T09:54:43.045Z",
+      "phase": "before",
+      "results": [
+        {
+          "key": "before",
+          "messages": 2,
+          "checks": []
+        },
+        {
+          "key": "after",
+          "messages": 4,
+          "checks": [
+            {
+              "sourceId": "37f2e78f4517403b64b92b80a128cd0396002b21b4d146797f442c4816280b74",
+              "toolPartID": "prt_g0VZcILO900Ykd4Sz5pj",
+              "bytes": 52,
+              "firstLine": "CHECKPOINT_833_BRAVO"
+            },
+            {
+              "sourceId": "1f31ff3466024c9fec93183438ec52aba87f1b77b16c7aa61df5e7a19c72d5a1",
+              "toolPartID": "prt_g0VZcIMVR00GEXbEKVwS",
+              "bytes": 52,
+              "firstLine": "CHECKPOINT_833_ALPHA"
+            }
+          ]
+        }
+      ],
+      "requests": 0,
+      "cumulativeRequests": 1124
+    },
+    {
+      "at": "2026-10-31T10:09:51.193Z",
+      "phase": "after",
+      "results": [
+        {
+          "key": "before",
+          "messages": 2,
+          "checks": []
+        },
+        {
+          "key": "after",
+          "messages": 4,
+          "checks": [
+            {
+              "sourceId": "37f2e78f4517403b64b92b80a128cd0396002b21b4d146797f442c4816280b74",
+              "toolPartID": "prt_g0VZcILO900Ykd4Sz5pj",
+              "bytes": 52,
+              "firstLine": "CHECKPOINT_833_BRAVO"
+            },
+            {
+              "sourceId": "1f31ff3466024c9fec93183438ec52aba87f1b77b16c7aa61df5e7a19c72d5a1",
+              "toolPartID": "prt_g0VZcIMVR00GEXbEKVwS",
+              "bytes": 52,
+              "firstLine": "CHECKPOINT_833_ALPHA"
+            }
+          ]
+        }
+      ],
+      "requests": 0,
+      "cumulativeRequests": 1124
+    }
+  ],
+  "manualVisualReview": {
+    "screenshots": [
+      "01-before-identical-history-controls-en.png",
+      "02-before-first-history-original-en.png",
+      "03-before-both-history-originals-en.png",
+      "04-after-distinct-history-controls-en.png",
+      "05-after-first-history-original-en.png",
+      "06-after-both-history-originals-en.png",
+      "07-after-independent-disclosures-en.png",
+      "08-after-localized-history-and-download-zh.png",
+      "09-after-reopened-first-history-original-zh.png",
+      "10-diagnostic-wrong-experience-link-zh.png",
+      "11-after-unique-media-history-zh.png",
+      "12-after-original-pdf-preview-zh.png",
+      "13-after-original-pdf-next-page-zh.png",
+      "14-after-original-image-preview-zh.png",
+      "15-final-history-original-en.png",
+      "16-final-original-image-and-download-en.png",
+      "17-final-reopened-history-and-sources-zh.png"
+    ],
+    "allPersonallyViewed": true,
+    "diagnosticScreenshot": "10-diagnostic-wrong-experience-link-zh.png"
+  },
+  "uiAutomatedTestsRun": false,
+  "limits": [
+    "No new model messages or duplicate-image/audio/video/cross-message cases were generated; code/call-site audit is not claimed as visual coverage",
+    "Existing unique JPEG and PDF were visually exercised; SVG original endpoint bytes were checked",
+    "Native Tauri was not exercised"
+  ],
+  "planDeviations": {
+    "inheritedEarlierDeadline": 1793442351504,
+    "independentNew60MinuteWindowAchieved": false,
+    "deadlineExtended": false,
+    "initialCandidateTabClosedAfterShutdown": true,
+    "finalCandidateTabClosedBeforeShutdown": true
+  },
+  "imageIdentityReview": "Presentation label names the image trigger; original alt remains the preview and download identity. A final build and fresh native scope verify text and original-image downloads."
+}

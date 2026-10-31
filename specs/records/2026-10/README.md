@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [历史附件的辨识与原始下载](2026-10-31-history-attachment-identification.md)：完整消息附件语境及真实预览和下载。
+
 - [同名附件来源的引用辨识](2026-10-31-same-name-source-references.md)：同一回复卡片内不同原件的来源引用编号。
 
 - [同名附件的核对与发送身份](2026-10-31-same-name-attachment-review.md)：同名附件的展示歧义与原始身份验证。

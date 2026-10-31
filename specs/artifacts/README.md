@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [历史附件的辨识与原始下载](2026-10-31-history-attachment-identification/README.md)：同名历史附件、双语预览与实际原始下载。
+
 - [同名附件来源的引用辨识](2026-10-31-same-name-source-references/README.md)：双语来源操作、真实原件与完整历史回归。
 
 - [同名附件的核对与发送身份](2026-10-31-same-name-attachment-review/README.md)：真实文件选择、双语核对和模型读取证据。

@@ -20,7 +20,7 @@ import { Avatar } from "./Avatar"
 import { CardDurationChip, CardErrorReasonIndicator } from "./CardHeaderChrome"
 import { Card } from "./Card"
 import { CardParts } from "./CardParts"
-import { FilePart, isImageFilePart } from "./FilePart"
+import { FilePart, isImageFilePart, messageAttachmentDisplayLabel } from "./FilePart"
 import { ReviewStreamSection } from "./ReviewStreamSection"
 import { storeCardNode } from "./StoreCardNode"
 import { Button } from "./ui/Button"
@@ -249,6 +249,7 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
   const renderBodyParts = () => (
     <CardParts
       parts={userPartPartition().body}
+      attachmentParts={props.node.parts}
       filePresentation={isUser() ? "thumbnail" : "content"}
       collapsedContextMessageIDs={props.node.collapsedContextMessageIDs}
       depth={props.depth}
@@ -332,7 +333,7 @@ export function ChatBubble(props: { node: CardNode; depth: number; collapsible?:
                 <Show when={userPartPartition().images.length > 0}>
                   <div class="chat-bubble__image-strip" data-ui="message-image-attachment-strip">
                     <For each={userPartPartition().images}>
-                      {(part) => <FilePart part={part} presentation="thumbnail" />}
+                      {(part) => <FilePart part={part} presentation="thumbnail" displayLabel={messageAttachmentDisplayLabel(part, props.node.parts)} />}
                     </For>
                   </div>
                 </Show>

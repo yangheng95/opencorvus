@@ -4,7 +4,7 @@ import type { CardNode } from "../store/card-tree"
 import { TextPart } from "./TextPart"
 import { InteractionCard } from "./InteractionCard"
 import { PermissionRequestContent } from "./PermissionRequestContent"
-import { FilePart, type FilePartPresentation } from "./FilePart"
+import { FilePart, messageAttachmentDisplayLabel, type FilePartPresentation, type MessageFilePart } from "./FilePart"
 import { describeToolPart, shortRelativePath, type ToolDisplayModel } from "../utils/tool"
 import { boardStore, selectedTaskDirectory } from "../store/board"
 import { toolToCardNode } from "../utils/tool-card-node"
@@ -78,6 +78,7 @@ function trailingLiveTextPart(parts: any[], streaming?: boolean): any | undefine
 
 function RenderableCardPart(props: {
   part: any
+  attachmentLabel: (part: MessageFilePart) => string | undefined
   depth: number
   streaming?: boolean
   streamingTextPart?: any
@@ -109,7 +110,7 @@ function RenderableCardPart(props: {
         </div>
       </Match>
       <Match when={part()?.type === "file"}>
-        <FilePart part={part()} presentation={props.filePresentation} />
+        <FilePart part={part()} presentation={props.filePresentation} displayLabel={props.attachmentLabel(part())} />
       </Match>
       <Match when={part()?.type === "interactive-artifact"}>
         <InteractiveArtifactPart part={part()} />
@@ -151,6 +152,7 @@ function RenderableCardPart(props: {
 interface PartCollectionProps {
   parts: any[]
   contextSources: ConversationSourcePart[]
+  attachmentLabel: (part: MessageFilePart) => string | undefined
   depth: number
   streaming?: boolean
   streamingTextPart?: any
@@ -188,6 +190,7 @@ function CitationAwareBodyParts(props: PartCollectionProps) {
               {(part) => (
                 <RenderableCardPart
                   part={part()}
+                  attachmentLabel={props.attachmentLabel}
                   depth={props.depth}
                   streaming={props.streaming}
                   streamingTextPart={props.streamingTextPart}
@@ -322,6 +325,7 @@ function ExecutionEventRun(props: PartCollectionProps) {
                     fallback={
                       <RenderableCardPart
                         part={part()}
+                        attachmentLabel={props.attachmentLabel}
                         depth={props.depth}
                         streaming={props.streaming}
                         filePresentation={props.filePresentation}
@@ -405,12 +409,14 @@ function DelegatedContextParts(props: PartCollectionProps & { messageID: string 
 
 /** Render a card without splitting transcript ownership. Context delegation
  * changes only the default disclosure state of the matching message runs. */
-export function CardParts(props: Omit<PartCollectionProps, "contextSources"> & {
+export function CardParts(props: Omit<PartCollectionProps, "contextSources" | "attachmentLabel"> & {
+  attachmentParts?: CardNode["parts"]
   collapsedContextMessageIDs?: string[]
   messageFailures?: CardNode["messageFailures"]
 }) {
   const displayParts = createMemo(() => props.parts.filter((part) => !isNoActionDecisionToolPart(part)))
   const contextSources = createMemo(() => sourceParts(displayParts()))
+  const attachmentLabel = (part: MessageFilePart) => messageAttachmentDisplayLabel(part, props.attachmentParts ?? props.parts)
   const runs = createMemo(() =>
     partitionCardMessageRuns(
       displayParts(),
@@ -425,11 +431,12 @@ export function CardParts(props: Omit<PartCollectionProps, "contextSources"> & {
         <section class="card-message-run" data-message-id={run().messageID || undefined}>
           <Show
             when={run().collapsedContext}
-            fallback={<PartCollection {...props} contextSources={contextSources()} parts={run().parts} streamingTextPart={streamingTextPart()} />}
+            fallback={<PartCollection {...props} contextSources={contextSources()} attachmentLabel={attachmentLabel} parts={run().parts} streamingTextPart={streamingTextPart()} />}
           >
             <DelegatedContextParts
               {...props}
               contextSources={contextSources()}
+              attachmentLabel={attachmentLabel}
               parts={run().parts}
               streamingTextPart={streamingTextPart()}
               messageID={run().messageID}

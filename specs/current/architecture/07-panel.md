@@ -240,8 +240,18 @@ Composer uploads preserve every supplied nonempty original filename before
 metadata is stored; generated paste names apply only to unnamed inputs. Physical
 staging names remain the AttachmentStore's responsibility.
 
-User-message PDF parts retain their chronological position and show the original
-filename in a compact native disclosure by default. Expanding it loads the same
+Message file parts preserve the original filename in their stored identity.
+Within a message, same-name file parts use
+localized position labels derived from the complete original file list and
+stable part IDs. Image-strip and body partitions share that same list; message
+boundaries reset the positions. Review labels, media accessibility and named
+download actions use the display annotation. Original filenames, authored alt
+text, resource URLs, editor filename inputs and actual download names retain
+their published values. A display annotation does not create another file
+identity, reorder parts or change the resource cache.
+
+User-message PDF parts retain their chronological position and show their file
+label in a compact native disclosure by default. Expanding it loads the same
 PDF reader and original download; its reading viewport scrolls within a bound.
 Collapsing releases that document, and reopening starts its normal document
 lifecycle. Other file-content consumers retain their full-content presentation.
