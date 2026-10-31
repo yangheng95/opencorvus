@@ -1,6 +1,6 @@
 # Artifact entry points
 
-- [应用内普通预览窗](2026-11-01-in-app-preview-dialogs/README.md)：21张实图、原件/当前编辑下载和数据保全。
+- [应用内普通预览窗](2026-11-01-in-app-preview-dialogs/README.md)：27张实图、原件/当前编辑下载和数据保全。
 
 - [原生Office预览输入复核](2026-11-01-native-office-card-review/README.md)：11张原图与默认全屏修复的前置证据。
 

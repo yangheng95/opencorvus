@@ -124,6 +124,7 @@
 .msg-artifact[data-artifact-workspace]:popover-open .msg-artifact-presentation {
   width: 100%;
   max-width: none;
-  height: calc(100vh - calc(64px * var(--ui-scale)));
+  height: 100%;
+  min-height: 0;
   aspect-ratio: auto;
 }

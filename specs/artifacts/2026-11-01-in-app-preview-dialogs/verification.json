@@ -5,7 +5,8 @@
   "rootCause": {
     "artifact": "The Open action and MCP fullscreen mode invoked native browser fullscreen",
     "image": "ImagePreview always selected the full-shell Dialog variant",
-    "workbook": "Existing stable floating content container followed native fullscreen only and was obscured behind an in-app popover"
+    "workbook": "Existing stable floating content container followed native fullscreen only and was obscured behind an in-app popover",
+    "presentation": "Legacy viewport height exceeded the bounded preview body; expanded deck now uses its parent content height"
   },
   "implementation": {
     "oneMountedArtifact": true,
@@ -17,9 +18,9 @@
     "currentUniverPatchFormats": 4
   },
   "manualUI": {
-    "screenshots": 21,
+    "screenshots": 27,
     "personallyViewed": true,
-    "actualCurrentBuild": "main-p29xDJyQ.js",
+    "actualCurrentBuild": "main-B454iFzK.js",
     "observedOrdinaryViewport": "1280 x 720 before, during and after preview",
     "officeAndImageInApp": true,
     "englishAndChinese": true,
@@ -31,7 +32,16 @@
     "editableCellAcrossCloseAndReopen": "Alpha852 final",
     "earlierEditedCell": "Alpha852 retained",
     "actualContextMenuAndSubmenu": true,
-    "originalDurableCell": "Alpha850"
+    "originalDurableCell": "Alpha850",
+    "officeWorkbookBuild": "main-p29xDJyQ.js",
+    "presentation": {
+      "before": "22: old viewport height clips page controls",
+      "intermediate": "23: inline page after initial loading transition, not expanded proof",
+      "after": "24: complete controls within bounded dialog",
+      "secondSlide": "25: actual next slide",
+      "retained": "26: close and reopen keeps slide 2 of 2",
+      "imageHandoff": "27: image opens ordinary dialog and original artifact is collapsed"
+    }
   },
   "coverageLimits": {
     "mcpApp": "Current shared code and build checked; no actual MCP App replay",
@@ -327,12 +337,98 @@
       "outputDrainComplete": true,
       "requestCleanupComplete": true,
       "credentialCopiesRetired": 2
+    },
+    "media": {
+      "data": {
+        "at": "2026-10-31T20:32:43.249Z",
+        "kind": "media",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234303,
+        "current": 234305,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48040,
+            "after": 48041
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 47982,
+            "after": 47983
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 986564,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-p29xDJyQ.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopiesRetired": 2
+    },
+    "media2": {
+      "data": {
+        "at": "2026-10-31T20:35:38.733Z",
+        "kind": "media2",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234305,
+        "current": 234307,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48041,
+            "after": 48042
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 47983,
+            "after": 47984
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 794120,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-B454iFzK.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopiesRetired": 2
     }
   },
   "modelRequests": 0,
   "maximumRequests": 0,
   "cumulativeRequests": 1180,
-  "pairedCopiesRetired": 8,
+  "pairedCopiesRetired": 12,
   "uiAutomationTests": 0,
   "checks": {
     "types-final2": 0,
@@ -341,7 +437,10 @@
     "ui-build-final2": 0,
     "patch-frozen": 0,
     "downloads-final3": 0,
-    "docs-final": 0
+    "docs-final": 0,
+    "ui-build-presentation": 0,
+    "css-presentation": 0,
+    "docs-presentation": 0
   },
   "sourceUserDatabase": "Not accessed; owned retired QA copies only",
   "goalStatus": "active; scoped to latest user request"
