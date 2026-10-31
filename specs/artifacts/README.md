@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前 Sources 显示复核](2026-10-31-current-source-display-review/README.md)：八条原始来源、实际粘贴、摘录中英及原件定位实图。
+
 - [编码项目文件引用](2026-10-31-encoded-project-file-references/README.md)：可见输入、自然消息与真实文件/图片路径验收。
 
 - [模型原文来源链接导航](2026-10-31-source-citation-navigation/README.md)：真实点击、原文新标签与来源只读体验。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [当前 Sources 显示复核](records/2026-10/2026-10-31-current-source-display-review.md)：中文摘录语义、八来源展开、真实复制粘贴与原件定位。
+
 - [编码项目文件引用](records/2026-10/2026-10-31-encoded-project-file-references.md)：真实文件名保留字符、正文链接及文档相对图片。
 
 - [模型原文来源链接导航](records/2026-10/2026-10-31-source-citation-navigation.md)：正文原件链接与结构化Sources的实际导航身份。

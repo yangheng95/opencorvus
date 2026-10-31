@@ -1,5 +1,7 @@
 # 2026-10 Records
 
+- [当前 Sources 显示复核](2026-10-31-current-source-display-review.md)：六处中文术语更正、十二实图及零新增模型请求的保全验收。
+
 - [编码项目文件引用](2026-10-31-encoded-project-file-references.md)：URI组件解码、实际文件名、行范围与字面百分号。
 
 - [模型原文来源链接导航](2026-10-31-source-citation-navigation.md)：复用自然消息、跨项目同名原件及新标签生命周期。

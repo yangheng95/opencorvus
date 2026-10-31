@@ -1,0 +1,167 @@
+{
+  "purpose": "Correct Chinese saved-source excerpt terminology; manually verify real Sources operations",
+  "production": {
+    "file": "packages/overlay/src/i18n/zh-CN.json",
+    "existingLocaleValues": 6,
+    "from": "摘要",
+    "to": "摘录"
+  },
+  "manualUI": {
+    "sourceSession": "ses_-zUQb23QSzzjAhs9qntn",
+    "sources": 8,
+    "locations": "4:21,17:34,20:26,24:13,30:13,38:17,44:26; invoice.py:4:5",
+    "singleFileSourceSession": "ses_-zUQMMOfWzzM4JVQUxAt",
+    "singleLocationPaste": true,
+    "eightLocationsPaste": true,
+    "verbatimExcerptPaste": true,
+    "originalFileOpen": true,
+    "lineColumnNavigation": true,
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "screenshots": [
+      "01-existing-file-sources.jpg",
+      "02-source-location-pasted.jpg",
+      "03-source-original-file.jpg",
+      "04-eight-sources-expanded.jpg",
+      "05-saved-source-excerpt.jpg",
+      "06-eight-locations-pasted.jpg",
+      "07-source-line-column-opened.jpg",
+      "08-saved-excerpt-zh.jpg",
+      "09-after-saved-excerpt-zh.jpg",
+      "10-after-excerpt-pasted-zh.jpg",
+      "11-after-source-tooltip-and-location-zh.jpg",
+      "12-after-saved-excerpt-en.jpg"
+    ],
+    "review": "Every screenshot was rendered and personally inspected; no UI automation tests"
+  },
+  "observationBoundary": {
+    "clipboardToolReadback": "Returned earlier clipboard text; actual in-page native paste returned the current correct content",
+    "citation": "Existing caret and line-band navigation contract retained",
+    "longFilenames": "No new long-filename acceptance claimed"
+  },
+  "failedDiagnosticStart": {
+    "cause": "Diagnostic admission must retain its shutdown and settlement window",
+    "nativeExit": 7,
+    "launcherExit": 7,
+    "outerRunnerExit": 1,
+    "physicalSettled": true,
+    "requests": 0,
+    "credentialCopyRetired": true,
+    "modelCatalogCopyRetired": true,
+    "sourcePreserved": true,
+    "recovery": "Fresh 846 scope copies private evidence only; original 845 retired without deadline extension"
+  },
+  "checks": {
+    "types-final": {
+      "exitCode": 0
+    },
+    "ui-build-final": {
+      "exitCode": 0
+    },
+    "i18n-final": {
+      "exitCode": 0
+    }
+  },
+  "isolation": {
+    "before": {
+      "at": "2026-10-31T15:47:53.645Z",
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 227962,
+      "current": 227964,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 46697,
+          "now": 46698
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 46755,
+          "now": 46756
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [],
+      "attachments": 123,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1158,
+      "reserveMs": 3123232,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BYRLiwcz.js",
+      "sessions": 100,
+      "tasks": 8,
+      "normalProcessReceipt": {
+        "target": "runtime_process",
+        "exactNativeIdentity": true,
+        "historicalReceipt": true
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    },
+    "after": {
+      "at": "2026-10-31T15:51:33.262Z",
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 227964,
+      "current": 227966,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease",
+          "old": 46698,
+          "now": 46699
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "old": 46756,
+          "now": 46757
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "capacity": [],
+      "attachments": 123,
+      "protectedProjects": 13,
+      "trackedFiles": 28,
+      "workspaceFiles": 13,
+      "additionalProtectedFiles": 39,
+      "requests": 0,
+      "cumulativeRequests": 1158,
+      "reserveMs": 2902803,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BYRLiwcz.js",
+      "sessions": 100,
+      "tasks": 8,
+      "normalProcessReceipt": {
+        "target": "runtime_process",
+        "exactNativeIdentity": true,
+        "historicalReceipt": true
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    }
+  },
+  "providerRequests": 0,
+  "cumulativeRequests": 1158
+}
