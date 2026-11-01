@@ -136,12 +136,12 @@
     minmax(0, 1fr)
     calc(var(--conversation-message-end-inset) + var(--ui-chat-scrollbar-gutter-x));
   grid-template-rows: auto auto auto auto;
-  align-content: start;
+  align-content: safe center;
   justify-items: stretch;
   row-gap: var(--ui-gap-lg);
   min-width: 0;
   min-height: 0;
-  padding-block: calc(48px * var(--ui-scale)) var(--ui-gap-3xl);
+  padding-block: var(--ui-gap-3xl);
   box-sizing: border-box;
   overflow-y: auto;
   overscroll-behavior-y: contain;

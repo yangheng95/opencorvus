@@ -124,3 +124,17 @@ Recall：ad3fc0b49已完成提交推送，用户仍明确反馈“字体还是�
 实际冻结构建19753通过正式`/ui/`打开原五轮真实会话。72深色设置、73回执双栏、74浅色设置均已截图并逐张肉眼查看：页名20px/600、组标题14px/600且同x=396，二级导航11px/400（当前选中500）；正文与辅助说明层次清楚，侧栏缩进和全部18个入口保留。双栏完整五行文件清单与上下文/授权/模型同排，原结果JSON和磁盘回执实际呈现，没有裁字或水平挤压。
 
 通过原文件链接打开receipt.json并实际下载为`receipt (1).json`，`verify_receipt.py`再次核验四组金额25.29/-1.25/44.00/0.30、订单数10/9/1及下载376字节与磁盘文件相同。此次为纯字体尺度迭代，没有再次发起LLM请求，也不把原五轮执行包装为本次新执行。CSS token检查9029引用/269token、Overlay typecheck与build/renderer已通过。文档检查与正常Git hook在提交推送前执行；19753及其临时认证/模型目录副本在验收后退出和清理，用户源凭据及进程保持原状。
+
+## 首页输入区恢复居中
+
+Recall：用户追问“首页的输入框位置恢复到中间了吗”。5d7ddf499字号修订已推送，但70原图及当前CSS明确显示首页仍靠上，不能声称已经居中。继续原界面任务，恢复首页标题/输入/快捷操作这一组在主内容区的纵向中部，横向沿用既有共同内容列；已确认12/11px字体尺度保持。
+
+分析与已读：全仓搜索唯一chat-home-composition、solidChatHomePromptMount与solidChatComposer，读取App挂载、Conversation的homeContentActive/Portal/ResizeObserver和conversation.css全部首页规则及ContinuousGoalControl。直接根因是首页专有布局align-content:start、上48px/下24px；前轮错误地把紧凑布局与顶部锚定捆绑，字号迭代自然不能纠正定位。唯一home事实仍为真实Portal非空，非首页仍display:contents并由原底部Composer owner布局；不改homeActive状态、路由、草稿、模式、发送、消息、持久化、API或Provider流程。不涉及队列/生命周期异常或迁移。相关源码未包含UI自动化；不新增运行UI测试。
+
+实施前方案：只在首页现有grid owner将align-content改为safe center，padding-block使用对称24px，共同列、原DOM和四行流保留。依[MDN align-content](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/align-content)的safe语义，内容高于可用高度时转为起始对齐，继续复用本容器overflow-y:auto，不另造测量/缩放/定位状态。风险是展开Goal或输入增高时可能溢出，必须真实展开复核。
+
+验收方案：独立正式开发/ui截图修改前与新冻结构建后的首页，实际点击快捷项填入原输入并编辑、展开原持续目标表单、回到真实五轮任务确认输入仍贴底，截取当前区域查看。仅桌面默认视口。此次只有布局，不发起新的LLM任务；常规CSS/build和文档检查辅助验证。新增截图继续在现有artifact目录并更新其README，提交推送范围排除其他工作区修改。
+
+实页结果：19754修改前75输入框760×102，y=146/中心197；19755新冻结构建76同一输入尺寸，y=326/中心377，主内容区y=37/高683/中心378.5。79中文首页也已肉眼复核居中。实际点击Fix a bug，原输入立即填入建议；77打开原持续目标，实际形态为独立Dialog，目标文字带入正确，未创建/启动。78使用原分隔条End将输入增至原260px上限，标题、模型、发送及全部快捷项仍完整可达，再Home恢复并清空草稿。80从最近列表进入原五轮真实会话，输入y=598/bottom704，首页容器恢复display:contents，截图确认底部位置。
+
+75—80六张原图均实际呈现并人工查看，不使用UI自动化/注入样式/视口覆盖。此次仅视觉与已有会话阅读，未再次复制认证/模型目录或发送Provider请求，因此80保留原模型配置暂不可用提示，不能当作新模型发送验收；前述五轮44次真实请求证据仍有效。CSS token9028引用/269token、build/renderer、docs:check及architecture-index通过；正常Git检查后提交推送。本人19754/19755隔离服务和本轮页面均在复核后正常关闭，用户进程保持原状。

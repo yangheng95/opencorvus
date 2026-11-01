@@ -79,10 +79,13 @@ existing pane resize/minimum-width contract. Shared segmented controls use one
 quiet track and a selected surface; switches retain a 24px input region around
 their 34px by 20px visual track. Their native input and focus owners remain.
 
-The homepage uses a 48px top inset and one shared inline column for heading,
-input and equal-height shortcut cells. Title/description and utility actions
-form one head region, stacking within narrow desktop panes. The existing Composer, draft and
-selection owners retain all interaction behavior; layout does not create a
+The homepage centers its heading, input and equal-height shortcut cells as one
+group in the main content area, with symmetric 24px block padding and one shared
+inline column. Safe center alignment keeps expanded content reachable through
+the same scroll container when it exceeds the available height. Title/description
+and utility actions form one head region, stacking within narrow desktop panes.
+The existing Composer, draft and selection owners retain all interaction behavior;
+layout does not create a
 second input or a separate navigation state.
 
 The Composer uses one reference/context selector for its mode, target and
