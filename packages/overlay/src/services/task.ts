@@ -370,9 +370,8 @@ export async function selectTask(taskID: string, options: SelectTaskOptions): Pr
       throw error
     }
 
-    // Persist the active task so initApp -> restoreInitialWorkspace() can
-    // resume it on the next launch. Without this write the localStorage key
-    // stays empty and the overlay always boots into an empty workspace.
+    // Persist this explicit Task selection through the current host settings.
+    // Cold start resolves the same identity through the global exact reader.
     const restoreDir = workspaceRestoreDirectory(selectedDirectory)
     setSettingsStore("workspaceTaskID", nextTaskID)
     setSettingsStore("workspaceDirectory", restoreDir)

@@ -1,0 +1,312 @@
+{
+  "at": "2026-11-01T18:42:22.945Z",
+  "purpose": "Real startup navigation, manual desktop review and finite Goal execution",
+  "uiAutomation": false,
+  "manualScreenshots": 19,
+  "corpus": {
+    "actualTasks": 8,
+    "visiblePageSize": 10,
+    "paginatedScaleUI": "not verified",
+    "archivedScaleUI": "not verified"
+  },
+  "before": {
+    "at": "2026-11-01T18:25:11.787Z",
+    "kind": "before",
+    "schema": 9,
+    "tables": 92,
+    "originals": 255253,
+    "current": 255258,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52223,
+        "after": 52224
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52165,
+        "after": 52166
+      },
+      {
+        "table": "memory_chunk",
+        "before": 95,
+        "after": 96
+      },
+      {
+        "table": "memory_file",
+        "before": 95,
+        "after": 96
+      },
+      {
+        "table": "project",
+        "before": 98,
+        "after": 99
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 227,
+    "projects": 98,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1249,
+    "reserveMs": 3985482,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-D9X9cQOM.js"
+  },
+  "after": {
+    "at": "2026-11-01T18:40:46.759Z",
+    "kind": "after",
+    "schema": 9,
+    "tables": 92,
+    "originals": 255258,
+    "current": 258659,
+    "changes": [
+      {
+        "table": "bus_publication_delivery_receipt",
+        "before": 49898,
+        "after": 50589
+      },
+      {
+        "table": "bus_publication_delivery",
+        "before": 49898,
+        "after": 50589
+      },
+      {
+        "table": "bus_publication_outbox",
+        "before": 6573,
+        "after": 6653
+      },
+      {
+        "table": "bus_publication_owner",
+        "before": 6573,
+        "after": 6653
+      },
+      {
+        "table": "bus_publication_phase_receipt",
+        "before": 19719,
+        "after": 19959
+      },
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52224,
+        "after": 52918
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52166,
+        "after": 52860
+      },
+      {
+        "table": "event_occurrence",
+        "before": 6375,
+        "after": 6455
+      },
+      {
+        "table": "memory_chunk",
+        "before": 96,
+        "after": 97
+      },
+      {
+        "table": "memory_file",
+        "before": 96,
+        "after": 97
+      },
+      {
+        "table": "message",
+        "before": 843,
+        "after": 855
+      },
+      {
+        "table": "part",
+        "before": 2388,
+        "after": 2418
+      },
+      {
+        "table": "permission_execution_result",
+        "before": 200,
+        "after": 202
+      },
+      {
+        "table": "permission_ledger",
+        "before": 1016,
+        "after": 1026
+      },
+      {
+        "table": "permission_policy",
+        "before": 50,
+        "after": 51
+      },
+      {
+        "table": "project",
+        "before": 99,
+        "after": 100
+      },
+      {
+        "table": "protocol_event",
+        "before": 2448,
+        "after": 2485
+      },
+      {
+        "table": "provider_activity_outcome",
+        "before": 823,
+        "after": 834
+      },
+      {
+        "table": "provider_activity_request",
+        "before": 823,
+        "after": 834
+      },
+      {
+        "table": "provider_usage_event",
+        "before": 864,
+        "after": 875
+      },
+      {
+        "table": "session_control_event",
+        "before": 68,
+        "after": 69
+      },
+      {
+        "table": "session_control_record",
+        "before": 67,
+        "after": 68
+      },
+      {
+        "table": "session",
+        "before": 129,
+        "after": 130
+      },
+      {
+        "table": "tool_part_outcome",
+        "before": 652,
+        "after": 662
+      },
+      {
+        "table": "tool_part_request",
+        "before": 652,
+        "after": 662
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [
+      {
+        "slot": 0,
+        "priorExpiredAt": 1793553460558,
+        "reacquiredAt": 1793558066982,
+        "releasedAt": 1793558071177,
+        "ownedByRuntime": true
+      }
+    ],
+    "sourceDatabasePreserved": true,
+    "attachments": 227,
+    "projects": 99,
+    "filesystemExclusions": 0,
+    "requests": 11,
+    "cumulativeRequests": 1260,
+    "reserveMs": 3058566,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-CWKdLhpS.js"
+  },
+  "goal": {
+    "at": "2026-11-01T18:39:33.488Z",
+    "sessionID": "ses_-zUQFZJOAzzdBf6RDQ2v",
+    "goalID": "pev_g0VZkQgjy00kTMNnWU1p",
+    "goalStatus": "complete",
+    "sessionStatus": "idle",
+    "turnBudget": 12,
+    "turnsAccepted": 1,
+    "tokensUsed": 383698,
+    "model": "openai/gpt-6.1-sol",
+    "requests": 11,
+    "maximumRequests": 16,
+    "streamHTTP200EOF": 11,
+    "completedTools": [
+      "read",
+      "read",
+      "read",
+      "glob",
+      "apply_patch",
+      "read",
+      "read",
+      "read",
+      "get_continuous_goal",
+      "update_continuous_goal"
+    ],
+    "sourceFiles": [
+      {
+        "id": "prt_g0VZkQi5N00PP6lO7bKx",
+        "title": "sources\\brief.md",
+        "toolPartID": "prt_g0VZkQhyA00PSs9BCqp0"
+      },
+      {
+        "id": "prt_g0VZkQj3300IduG3ZVhb",
+        "title": "sources\\actions.csv",
+        "toolPartID": "prt_g0VZkQiwT00fN1fA1mo5"
+      },
+      {
+        "id": "prt_g0VZkQnqx00B0rI696IV",
+        "title": "result.md",
+        "toolPartID": "prt_g0VZkQnk300yBTN3mhHV"
+      },
+      {
+        "id": "prt_g0VZkQolD00NRqR0j91i",
+        "title": "sources\\brief.md",
+        "toolPartID": "prt_g0VZkQofW00FBlXhSS5v"
+      },
+      {
+        "id": "prt_g0VZkQpT700vJtgUIgIF",
+        "title": "sources\\actions.csv",
+        "toolPartID": "prt_g0VZkQpMz00mUgwza6CJ"
+      }
+    ],
+    "projectSessions": 1,
+    "taskCount": 8,
+    "documentLines": 22,
+    "actions": 4,
+    "owners": 3,
+    "distribution": {
+      "林青": 2,
+      "周宁": 1,
+      "陈舟": 1
+    },
+    "sourceFilesPreserved": true,
+    "resultReadback": "completed"
+  },
+  "checks": {
+    "build": 0,
+    "overlayTypecheck": 0,
+    "i18nCssDocuments": 0
+  },
+  "originalNative": {
+    "before": {
+      "handle": 37666,
+      "code": 0
+    },
+    "after": {
+      "handle": 44714,
+      "code": 0
+    }
+  },
+  "preservation": {
+    "pairedCopiesRetired": 4,
+    "sourceAuthMetadataPreserved": true,
+    "sourceModelBytesAndMetadataPreserved": true,
+    "userDatabaseUsed": false,
+    "userWindowUsed": false
+  },
+  "limitations": [
+    "Only 8 real retained Tasks; a larger-than-first-page and archived visibility UI corpus was unavailable.",
+    "Reconnect under an induced outage was not exercised."
+  ],
+  "followup": "Actual get_continuous_goal/update_continuous_goal tool names remain technical; investigate shared display registry in a subsequent phase."
+}

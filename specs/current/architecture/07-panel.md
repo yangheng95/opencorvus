@@ -35,6 +35,11 @@ owner supersedes that launch intent. Its actual project scope owns subsequent
 initial data loading. The same initialization owner consumes the launch input
 once; subsequent reconnects hydrate the current workspace. A cold start without
 a locator still discovers its default and restores its existing saved preference.
+An empty saved Task preference keeps the discovered Project Home and its creation
+actions. A saved Task identity uses the existing exact global reader independently
+of activity-list paging, archive visibility or status; list order and an active
+Task do not create a navigation intent. A failed exact read retains the current
+localized resource diagnostic rather than selecting a different Task.
 The visible-period monitor distinguishes transport health from a completed
 workspace recovery, so a healthy probe by another caller or an initialization
 failure cannot retire pending recovery. It is registered after the initial

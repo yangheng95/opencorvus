@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [默认页与保存任务](2026-11-02-startup-selection/README.md)：冷启动、保存Task、显式定位及Goal实页证据。
+
 - [Markdown 表格阅读](2026-11-02-table-reading/README.md)：真实生成文档及宽窄表格手动体验证据。
 
 - [执行与来源阅读](2026-11-02-execution-reading/README.md)：真实流式执行、网页/文件来源和成果截图。

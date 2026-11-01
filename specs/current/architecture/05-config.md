@@ -140,6 +140,7 @@ Overlay 的配置投影按当前实际目录选择读取范围：项目读取 `/
 - 桌面集成：`desktopNotifications`
 
 `directory` · `workspaceTaskID` · `workspaceDirectory` 是持久化文档中的可选工作区恢复指针，出现时必须为非空字符串。
+没有显式网址时，保存的 `workspaceTaskID` 通过既有全局按身份 reader 恢复，不依赖任务列表首屏、状态或归档可见性；空任务指针保留当前项目首页。列表中的活动任务不会替代用户保存的导航意图，精确读取失败沿既有可见错误合同结算。字段与持久格式保持不变。
 
 ### Layer 3: Session State — 运行态
 

@@ -436,8 +436,6 @@ export function persistAndSyncSettings(): void {
 
 // ── Workspace restoration ──
 
-const RESTORABLE_RUNNING_TASK_STATUSES = new Set(["active"])
-
 async function restoreTaskSelection(taskID: string, authority: ApiAuthority): Promise<boolean> {
   const selectionEpoch = beginWorkspaceSelection()
   try {
@@ -455,31 +453,6 @@ async function restoreTaskSelection(taskID: string, authority: ApiAuthority): Pr
     throw error
   }
   return isApiAuthorityCurrent(authority) && ownsWorkspaceSelection(selectionEpoch) && activeTaskID() === taskID
-}
-
-function taskIDFromItem(item: any): string {
-  const id = item?.task?.id ?? item?.id
-  return typeof id === "string" ? id.trim() : ""
-}
-
-function taskStatusFromItem(item: any): string {
-  const status = item?.task?.status ?? item?.status
-  return typeof status === "string" ? status.trim() : ""
-}
-
-export function initialRestoreTaskID(
-  tasks: any[],
-  savedTaskID: string,
-  options: { selectRunningWhenUnmatched?: boolean } = {},
-): string {
-  const list = Array.isArray(tasks) ? tasks : []
-  const saved = typeof savedTaskID === "string" ? savedTaskID.trim() : ""
-  if (saved && list.some((item: any) => taskIDFromItem(item) === saved)) {
-    return saved
-  }
-  if (options.selectRunningWhenUnmatched === false) return ""
-  const running = list.find((item: any) => RESTORABLE_RUNNING_TASK_STATUSES.has(taskStatusFromItem(item)))
-  return taskIDFromItem(running)
 }
 
 export async function restoreInitialWorkspaceLocation(
@@ -517,7 +490,6 @@ export async function restoreInitialWorkspaceLocation(
 export async function restoreInitialWorkspace(authority = captureApiAuthority()): Promise<boolean> {
   if (!isApiAuthorityCurrent(authority)) return false
   const { workspaceTaskID, workspaceDirectory, directory: activeDir } = settingsStore
-  const tasks = boardStore.tasks
 
   // Skip if a workspace selection is already in progress (epoch > 0).
   if (settingsStore.workspaceEpoch > 0) return false
@@ -534,7 +506,9 @@ export async function restoreInitialWorkspace(authority = captureApiAuthority())
     bumpDirectoryEpoch()
   }
 
-  const taskID = initialRestoreTaskID(tasks, workspaceTaskID || "", { selectRunningWhenUnmatched: !moved })
+  // Restore the saved identity through its exact reader, independently of the
+  // paginated activity list. An empty preference keeps the current Home.
+  const taskID = workspaceTaskID.trim()
 
   if (taskID) {
     if (activeTaskID() !== taskID || !boardStore.board) {
@@ -553,7 +527,7 @@ export async function restoreInitialWorkspace(authority = captureApiAuthority())
     bumpDirectoryEpoch()
   }
 
-  if ((workspaceTaskID || "").trim() || boardStore.selectedSource?.kind === "task" || boardStore.board?.task) {
+  if (boardStore.selectedSource?.kind === "task" || boardStore.board?.task) {
     await restoreTaskSelection("", authority)
   }
   return false
