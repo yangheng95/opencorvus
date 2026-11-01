@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件工作台查找](2026-11-01-file-workbench-find/README.md)：15张实图、草稿/撤销/重开与当前区域快捷键。
+
 - [元数据多词筛选](2026-11-01-multi-term-metadata-search/README.md)：21张实图、9项纯数据测试与完整数据保全。
 
 - [全局导航与目标发现](2026-11-01-workspace-navigation-review/README.md)：17张实图、原目标/消息与数据保全。

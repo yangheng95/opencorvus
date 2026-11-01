@@ -65,6 +65,7 @@ function workLedgerArchiveLabel(row: WorkLedgerItemRow): string {
 }
 
 function ChatViewTitle(props: {
+  active: boolean
   title: () => string
   item: () => WorkLedgerItemRow | null
   onCopyDebug: () => Promise<void>
@@ -128,7 +129,7 @@ function ChatViewTitle(props: {
 
   useHotkey({
     key: "f", cmdOrCtrl: true, alt: false, shift: false, target: "window",
-    when: () => !!props.item() && (searchOpen() || !document.querySelector(".dialog")),
+    when: () => props.active && !!props.item() && (searchOpen() || !document.querySelector(".dialog")),
     run: (event) => {
       if (event.defaultPrevented) return
       event.preventDefault()
@@ -137,7 +138,15 @@ function ChatViewTitle(props: {
     },
   })
 
+  createEffect(() => {
+    if (!props.active) {
+      setSearchOpen(false)
+      searchReturnFocus = null
+    }
+  })
+
   function openConversationSearch(target?: HTMLElement): void {
+    if (!props.active) return
     searchReturnFocus = target ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null)
     setSearchOpen(true)
   }
@@ -659,6 +668,7 @@ export function App(props: AppProps) {
                                   />
                                 </span>
                                 <ChatViewTitle
+                                  active={props.primarySurface() === "conversation" && !props.homeActive && !dialogStore.config.open}
                                   title={props.conversationTitle}
                                   item={props.conversationItem}
                                   onCopyDebug={props.onCopyConversationDebug}

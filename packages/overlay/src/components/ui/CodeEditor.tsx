@@ -1,4 +1,5 @@
 import { Compartment, EditorSelection } from "@codemirror/state"
+import { openSearchPanel } from "@codemirror/search"
 import type { SourceFileRange } from "@opencorvus-ai/sdk"
 import { basicSetup, EditorView } from "codemirror"
 import { createEffect, createSignal, onCleanup, onMount, Show, splitProps, type JSX } from "solid-js"
@@ -26,6 +27,7 @@ export interface CodeEditorProps extends Omit<JSX.HTMLAttributes<HTMLDivElement>
   path: string
   ariaLabel: string
   onValueChange: (value: string) => void
+  onSearchReady?: (search: (() => void) | undefined) => void
   lineRange?: SourceFileRange
   revealRevision?: number
   revealFocusOrigin?: Element | null
@@ -39,6 +41,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
     "path",
     "ariaLabel",
     "onValueChange",
+    "onSearchReady",
     "lineRange",
     "revealRevision",
     "revealFocusOrigin",
@@ -169,6 +172,10 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
         }),
       ],
     })
+    const editor = view
+    local.onSearchReady?.(() => {
+      if (view === editor) openSearchPanel(editor)
+    })
     revealObserver = new ResizeObserver(revealOnLayout.schedule)
     revealObserver.observe(host)
     revealOnLayout.schedule()
@@ -237,6 +244,7 @@ export function CodeEditor(props: CodeEditorProps): JSX.Element {
   })
 
   onCleanup(() => {
+    local.onSearchReady?.(undefined)
     revealOnLayout.cancel()
     revealAfterMeasure.cancel()
     revealObserver?.disconnect()

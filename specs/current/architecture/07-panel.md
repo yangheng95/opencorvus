@@ -732,6 +732,14 @@ navigation-reservation boundaries, mutation feedback, refresh and post-create
 editor admission remain owned by that existing operation.
 
 Markdown text files offer Source and Preview views of the same current draft.
+The file header exposes Find in file for text documents, including read-only
+sources. It and Ctrl/Cmd+F within the file pane open that retained CodeMirror
+view's native search panel. Finding from Markdown Preview reveals Source first;
+the same draft, history and search state stay owned by that editor. The editor
+publishes this action only for its live view and retires it on cleanup. Deferred
+focus verifies the original file, load generation and API authority. The main
+conversation's window search shortcut is active only while that conversation
+surface is visible; Settings and other primary surfaces retire that shortcut.
 Explicit file links activated inside that Preview resolve relative paths from
 the current document's parent, using the existing server-path primitives and
 selectedFileTarget identity. Absolute paths keep their existing meaning. The

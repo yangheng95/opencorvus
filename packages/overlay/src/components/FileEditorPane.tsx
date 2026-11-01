@@ -115,6 +115,7 @@ export function FileEditorPane() {
   const [reloading, setReloading] = createSignal(false)
   const [downloading, setDownloading] = createSignal(false)
   const [textView, setTextView] = createSignal<"source" | "preview">("source")
+  const [editorSearch, setEditorSearch] = createSignal<(() => void) | undefined>()
   const [error, setError] = createSignal<FileEditorFailure | null>(null)
   const [loadFailure, setLoadFailure] = createSignal<{ error: unknown } | null>(null)
   const [leaveDialogOpen, setLeaveDialogOpen] = createSignal(false)
@@ -211,6 +212,21 @@ export function FileEditorPane() {
     ? `${file.directory}\u0000${file.path}\u0000${file.sourceAbsolutePath ?? ""}` : ""
   const resourceReady = () => !loading() && identityOf(target()) === activeTargetIdentity
   const isBusy = () => !resourceReady() || saving() || reloading()
+  const searchFile = () => {
+    const file = target()
+    const search = editorSearch()
+    if (!file || !search || !textContent() || isBusy() || fileEditorReserved()) return
+    const generation = loadGeneration
+    const authority = captureApiAuthority()
+    setTextView("source")
+    // Solid reveals the retained editor before its native panel claims focus.
+    queueMicrotask(() => {
+      if (
+        generation === loadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority) &&
+        editorSearch() === search && !isBusy() && !fileEditorReserved()
+      ) search()
+    })
+  }
   const currentErrorMessage = () => {
     const failure = error()
     return failure && t(failure.messageKey)
@@ -513,15 +529,22 @@ export function FileEditorPane() {
       aria-label={t("file_editor.title")}
       onKeyDown={(event) => {
         if (
+          event.defaultPrevented ||
           event.isComposing ||
           event.altKey ||
           event.shiftKey ||
-          !(event.ctrlKey || event.metaKey) ||
-          event.key.toLowerCase() !== "s"
+          !(event.ctrlKey || event.metaKey)
         )
           return
-        event.preventDefault()
-        void save()
+        const key = event.key.toLowerCase()
+        if (key === "s") {
+          event.preventDefault()
+          void save()
+        } else if (key === "f" && textContent()) {
+          event.preventDefault()
+          event.stopPropagation()
+          searchFile()
+        }
       }}
     >
       <Show
@@ -564,6 +587,15 @@ export function FileEditorPane() {
             }
           >
             <Badge tone="neutral" size="sm">{t("file_editor.read_only")}</Badge>
+          </Show>
+          <Show when={textContent()}>
+            <Button type="button" variant="ghost" size="icon" tone="neutral"
+              disabled={!editorSearch() || isBusy() || fileEditorReserved()}
+              title={`${t("file_editor.find")} (Ctrl/Cmd+F)`}
+              aria-label={t("file_editor.find")} aria-keyshortcuts="Control+f Meta+f"
+              onClick={searchFile}>
+              <Icon name="search" />
+            </Button>
           </Show>
           <Show when={writable()}>
             <Button type="button" variant="ghost" size="icon" tone="neutral"
@@ -711,6 +743,7 @@ export function FileEditorPane() {
                     revealFocusOrigin={revealFocusOrigin()}
                     ariaLabel={fileTitle()}
                     onValueChange={updateDraft}
+                    onSearchReady={(search) => setEditorSearch(() => search)}
                     readOnly={!writable() || fileEditorReserved()}
                   />
                   <Show when={previewVisible()}>

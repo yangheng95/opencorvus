@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [文件工作台查找与焦点归属](2026-11-01-file-workbench-find.md)：预览查找、原编辑器生命周期和实页验证。
+
 - [命令、模型与Provider多词查找](2026-11-01-multi-term-metadata-search.md)：同候选多词匹配、真实模型选择与Provider身份。
 
 - [全局导航与目标发现](2026-11-01-workspace-navigation-review.md)：Ctrl+K目标入口、草稿保留与原目标归属。

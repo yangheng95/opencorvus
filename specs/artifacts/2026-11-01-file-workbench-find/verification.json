@@ -1,0 +1,229 @@
+{
+  "purpose": "Find the current file draft from its Source, Preview or header; scope conversation shortcut to the visible primary surface",
+  "delegation": "single agent",
+  "implementation": "Existing live CodeMirror view and native search panel own text, history and query",
+  "currentBuild": "main-D3gqrsEQ.js",
+  "manualUI": {
+    "screenshots": 15,
+    "personallyViewed": true,
+    "englishAndChinese": true,
+    "previewShortcut": true,
+    "fileHeaderAction": true,
+    "nextLine": 5,
+    "previousLine": 3,
+    "queryRetained": true,
+    "undoRestoresSavedBaseline": true,
+    "redoRestoresDraft": true,
+    "saveAndExplorerReopen": true,
+    "currentRegionSettingsAndBoard": true,
+    "mainConversationShortcutRestored": true
+  },
+  "originalGoals": 9,
+  "originalGoalsPreserved": true,
+  "cases": {
+    "before": {
+      "data": {
+        "newFileBytes": 149,
+        "newFile": "notes-855-before.md",
+        "at": "2026-11-01T02:16:20.383Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234309,
+        "current": 234401,
+        "changes": [
+          {
+            "table": "bus_publication_delivery_receipt",
+            "before": 45794,
+            "after": 45812
+          },
+          {
+            "table": "bus_publication_delivery",
+            "before": 45794,
+            "after": 45812
+          },
+          {
+            "table": "bus_publication_outbox",
+            "before": 6014,
+            "after": 6017
+          },
+          {
+            "table": "bus_publication_owner",
+            "before": 6014,
+            "after": 6017
+          },
+          {
+            "table": "bus_publication_phase_receipt",
+            "before": 18042,
+            "after": 18051
+          },
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48043,
+            "after": 48062
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 47985,
+            "after": 48004
+          },
+          {
+            "table": "event_occurrence",
+            "before": 5816,
+            "after": 5819
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 3448212,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-B5pEdU0R.js"
+      },
+      "publicFileReadback": {
+        "http": 200,
+        "file": "notes-855-before.md",
+        "bytes": 149,
+        "type": "text",
+        "revisionReturned": true,
+        "physicalBytesEqual": true
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2,
+      "publishedEvents": [
+        {
+          "event_type": "file.edited"
+        },
+        {
+          "event_type": "file.edited"
+        },
+        {
+          "event_type": "file.edited"
+        }
+      ]
+    },
+    "after": {
+      "data": {
+        "newFileBytes": 149,
+        "newFile": "notes-855-after.md",
+        "at": "2026-11-01T02:24:16.895Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234401,
+        "current": 234493,
+        "changes": [
+          {
+            "table": "bus_publication_delivery_receipt",
+            "before": 45812,
+            "after": 45830
+          },
+          {
+            "table": "bus_publication_delivery",
+            "before": 45812,
+            "after": 45830
+          },
+          {
+            "table": "bus_publication_outbox",
+            "before": 6017,
+            "after": 6020
+          },
+          {
+            "table": "bus_publication_owner",
+            "before": 6017,
+            "after": 6020
+          },
+          {
+            "table": "bus_publication_phase_receipt",
+            "before": 18051,
+            "after": 18060
+          },
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48062,
+            "after": 48081
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48004,
+            "after": 48023
+          },
+          {
+            "table": "event_occurrence",
+            "before": 5819,
+            "after": 5822
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 3028093,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-D3gqrsEQ.js"
+      },
+      "publicFileReadback": {
+        "http": 200,
+        "file": "notes-855-after.md",
+        "bytes": 149,
+        "type": "text",
+        "revisionReturned": true,
+        "physicalBytesEqual": true
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2,
+      "publishedEvents": [
+        {
+          "event_type": "file.edited"
+        },
+        {
+          "event_type": "file.edited"
+        },
+        {
+          "event_type": "file.edited"
+        }
+      ]
+    }
+  },
+  "checks": {
+    "types-after": 0,
+    "i18n-after-retry": 0,
+    "ui-build-after": 0,
+    "docs-delivery": 0
+  },
+  "modelRequests": 0,
+  "cumulativeRequests": 1180,
+  "pairedCopiesRetired": 4,
+  "automatedUITests": 0,
+  "coverageLimits": [
+    "Real Markdown project files; read-only absolute sources, other text types and binary previews not separately replayed",
+    "No model execution or Goal run",
+    "Existing preview fullscreen, Sources and Rendering fixes not rerun"
+  ],
+  "userWindowAndDatabase": "Not operated or accessed"
+}
