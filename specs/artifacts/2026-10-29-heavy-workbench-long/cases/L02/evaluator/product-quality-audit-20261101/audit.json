@@ -1,0 +1,2452 @@
+{
+  "started_at": "2026-11-01T00:43:37.936010+00:00",
+  "finished_at": "2026-11-01T00:43:42.246418+00:00",
+  "seconds": 4.310401299997466,
+  "scope": "one read-only exact consumption of original selected predictions and original labels; no candidate, matrix, prepare, grade or independent review execution",
+  "consumer_source": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\evaluator-source",
+  "functions": [
+    "StudySource.context_and_labels",
+    "l02_scoring.score",
+    "l02_quality.decision_metrics"
+  ],
+  "same_original_materials": {
+    "material-contract.json": {
+      "bytes": 1194,
+      "same_original_bytes": true
+    },
+    "raw/availability.json": {
+      "bytes": 713,
+      "same_original_bytes": true
+    },
+    "raw/covariate-vintages.csv": {
+      "bytes": 3598636,
+      "same_original_bytes": true
+    },
+    "raw/hierarchy.csv": {
+      "bytes": 57,
+      "same_original_bytes": true
+    },
+    "raw/observations.csv": {
+      "bytes": 951712,
+      "same_original_bytes": true
+    },
+    "raw/origins.csv": {
+      "bytes": 4790,
+      "same_original_bytes": true
+    },
+    "raw/series.csv": {
+      "bytes": 133,
+      "same_original_bytes": true
+    },
+    "raw/time-axis.json": {
+      "bytes": 210,
+      "same_original_bytes": true
+    },
+    "raw/units.json": {
+      "bytes": 137,
+      "same_original_bytes": true
+    },
+    "study.json": {
+      "bytes": 1518,
+      "same_original_bytes": true
+    }
+  },
+  "systems": {
+    "codex": {
+      "original_grade": 100,
+      "grade_source": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\final-assessment\\assessment.json",
+      "original_quality_success": true,
+      "origins": [
+        "outer-20250115",
+        "outer-20250215",
+        "outer-20250315",
+        "outer-20250415",
+        "outer-20250515",
+        "outer-20250620",
+        "outer-20250715",
+        "outer-20250815",
+        "outer-20250915",
+        "outer-20251015",
+        "outer-20251115",
+        "outer-20251215"
+      ],
+      "selected": {
+        "outer-20250115": {
+          "method_id": "weather-operations",
+          "cell_id": 12,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\12\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250215": {
+          "method_id": "without-weather",
+          "cell_id": 26,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\26\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250315": {
+          "method_id": "without-weather",
+          "cell_id": 39,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\39\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250415": {
+          "method_id": "without-weather",
+          "cell_id": 52,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\52\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250515": {
+          "method_id": "without-weather",
+          "cell_id": 65,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\65\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250620": {
+          "method_id": "weather-operations",
+          "cell_id": 77,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\77\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250715": {
+          "method_id": "weather-operations",
+          "cell_id": 90,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\90\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250815": {
+          "method_id": "weather-operations",
+          "cell_id": 103,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\103\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250915": {
+          "method_id": "without-weather",
+          "cell_id": 117,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\117\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20251015": {
+          "method_id": "without-weather",
+          "cell_id": 130,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\130\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20251115": {
+          "method_id": "without-weather",
+          "cell_id": 143,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\143\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20251215": {
+          "method_id": "without-weather",
+          "cell_id": 156,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\156\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        }
+      },
+      "recomputed_losses": {
+        "macro.scaled_mse": {
+          "exact": "2495676417937517030451399373067582317893763457113608048659183275106365097924184213221783076481/812393661723776788900168409176778184121524704636919541665139739158290432000000000000000000000000",
+          "value": 0.003072003802494062,
+          "equals_original_record": true
+        },
+        "macro.scaled_wis": {
+          "exact": "648871061461291322260546176653086826452756624939/30288110420215692264688301703314332160000000000000",
+          "value": 0.02142329291787726,
+          "equals_original_record": true
+        },
+        "node.A1.scaled_mse": {
+          "exact": "505154800367386478325128238949340993/58703635389672000000000000000000000000",
+          "value": 0.008605170651088172,
+          "equals_original_record": true
+        },
+        "node.A1.scaled_wis": {
+          "exact": "957109091857223376791/27806425920000000000000",
+          "value": 0.03442042837906812,
+          "equals_original_record": true
+        },
+        "decision.A1.underage_1": {
+          "exact": "26842644453316777/67200000000000",
+          "value": 399.4441138886425,
+          "equals_original_record": true
+        },
+        "decision.A1.underage_3": {
+          "exact": "138978989022241979/168000000000000",
+          "value": 827.2558870371546,
+          "equals_original_record": true
+        },
+        "decision.A1.underage_9": {
+          "exact": "109901578129519521/56000000000000",
+          "value": 1962.5281808842772,
+          "equals_original_record": true
+        },
+        "node.A2.scaled_mse": {
+          "exact": "48425046928714152460882418945444867/156518697641886720000000000000000000000",
+          "value": 0.0003093882562165844,
+          "equals_original_record": true
+        },
+        "node.A2.scaled_wis": {
+          "exact": "4481089414603089797/840818048000000000000",
+          "value": 0.005329440091422835,
+          "equals_original_record": true
+        },
+        "decision.A2.underage_1": {
+          "exact": "1402175896830263/22400000000000",
+          "value": 62.597138251351026,
+          "equals_original_record": true
+        },
+        "decision.A2.underage_3": {
+          "exact": "327644630473749/3200000000000",
+          "value": 102.38894702304657,
+          "equals_original_record": true
+        },
+        "decision.A2.underage_9": {
+          "exact": "1583195799761201/10500000000000",
+          "value": 150.78055235820963,
+          "equals_original_record": true
+        },
+        "node.B1.scaled_mse": {
+          "exact": "204157418641329551188169503740337847/37820945907897600000000000000000000000",
+          "value": 0.005397998747532603,
+          "equals_original_record": true
+        },
+        "node.B1.scaled_wis": {
+          "exact": "905971731996657488167/24953638080000000000000",
+          "value": 0.036306198282276984,
+          "equals_original_record": true
+        },
+        "decision.B1.underage_1": {
+          "exact": "137371988138284873/336000000000000",
+          "value": 408.8452027925145,
+          "equals_original_record": true
+        },
+        "decision.B1.underage_3": {
+          "exact": "252427025633827229/336000000000000",
+          "value": 751.2709096244859,
+          "equals_original_record": true
+        },
+        "decision.B1.underage_9": {
+          "exact": "36488392039019909/21000000000000",
+          "value": 1737.542478048567,
+          "equals_original_record": true
+        },
+        "node.B2.scaled_mse": {
+          "exact": "25026209305556869731921157101047663/34935668854739520000000000000000000000",
+          "value": 0.0007163512285857297,
+          "equals_original_record": true
+        },
+        "node.B2.scaled_wis": {
+          "exact": "246935076006064176961/21450983232000000000000",
+          "value": 0.011511597083237336,
+          "equals_original_record": true
+        },
+        "decision.B2.underage_1": {
+          "exact": "598493386185461/4480000000000",
+          "value": 133.59227370211184,
+          "equals_original_record": true
+        },
+        "decision.B2.underage_3": {
+          "exact": "69620373141182201/336000000000000",
+          "value": 207.2034914916137,
+          "equals_original_record": true
+        },
+        "decision.B2.underage_9": {
+          "exact": "2338702201191343/8000000000000",
+          "value": 292.3377751489179,
+          "equals_original_record": true
+        },
+        "node.ZA.scaled_mse": {
+          "exact": "58502563850404935207663653475249383/21520943905312320000000000000000000000",
+          "value": 0.002718401391119463,
+          "equals_original_record": true
+        },
+        "node.ZA.scaled_wis": {
+          "exact": "514242590026726411063/25254256608000000000000",
+          "value": 0.020362610470340495,
+          "equals_original_record": true
+        },
+        "node.ZB.scaled_mse": {
+          "exact": "63051715629888094026640096341553/30679720673280000000000000000000000",
+          "value": 0.002055159377145241,
+          "equals_original_record": true
+        },
+        "node.ZB.scaled_wis": {
+          "exact": "3424204838690053081/158919936000000000000",
+          "value": 0.021546729283165915,
+          "equals_original_record": true
+        }
+      },
+      "local": [
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-operations",
+          "series_id": "A1",
+          "truth_mean_litres": "104221/14",
+          "forecast_mean_litres": "103414313290479601/14000000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "5315161981145060268999347205766703/9783939231612000000000000000000000000",
+          "scaled_mae": "22199128028637503/1182246000000000000",
+          "scaled_wis": "11934438205464617579/1158601080000000000000"
+        },
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-operations",
+          "series_id": "A2",
+          "truth_mean_litres": "86491/14",
+          "forecast_mean_litres": "174202097101623809/28000000000000",
+          "coverage80_count": 7,
+          "coverage80_denominator": 14,
+          "scaled_mse": "452007450807444831054269119452667/869548320232704000000000000000000000",
+          "scaled_mae": "13164496176045149/643483200000000000",
+          "scaled_wis": "5190946040399735617/472960152000000000000"
+        },
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-operations",
+          "series_id": "B1",
+          "truth_mean_litres": "6458",
+          "forecast_mean_litres": "36563324671005257/5600000000000",
+          "coverage80_count": 9,
+          "coverage80_denominator": 14,
+          "scaled_mse": "3270774385902099486361154983738201/3151745492324800000000000000000000000",
+          "scaled_mae": "76422441982151159/2970671200000000000",
+          "scaled_wis": "9182958314803269/649834325000000000"
+        },
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-operations",
+          "series_id": "B2",
+          "truth_mean_litres": "5770",
+          "forecast_mean_litres": "5103505123935027/875000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "696178449075914728604110602455491/1164522295157984000000000000000000000",
+          "scaled_mae": "133898253702691033/6384221200000000000",
+          "scaled_wis": "1854784466947067337/178758193600000000000"
+        },
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-operations",
+          "series_id": "ZA",
+          "truth_mean_litres": "95356/7",
+          "forecast_mean_litres": "190515361841291507/14000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "894956385181188316785217300087783/3228141585796848000000000000000000000",
+          "scaled_mae": "5691741423197239/429494160000000000",
+          "scaled_wis": "14951412463559605549/2104521384000000000000"
+        },
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-operations",
+          "series_id": "ZB",
+          "truth_mean_litres": "12228",
+          "forecast_mean_litres": "173064393660473577/14000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "263198647244597017716439280823/365234769920000000000000000000000",
+          "scaled_mae": "4298723997241491/189190400000000000",
+          "scaled_wis": "37504953513645713/3310832000000000000"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "without-weather",
+          "series_id": "A1",
+          "truth_mean_litres": "107735/14",
+          "forecast_mean_litres": "7712860179806643/1000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "421135316409055017146333871512253/1087104359068000000000000000000000000",
+          "scaled_mae": "27939221281605563/1655144400000000000",
+          "scaled_wis": "52498028201647047/6179205760000000000"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "without-weather",
+          "series_id": "A2",
+          "truth_mean_litres": "89315/14",
+          "forecast_mean_litres": "88572933916194929/14000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1317111275787409794724227005291833/3260806200872640000000000000000000000",
+          "scaled_mae": "1559086352903431/107247200000000000",
+          "scaled_wis": "5367718827071902963/630613536000000000000"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "without-weather",
+          "series_id": "B1",
+          "truth_mean_litres": "13563/2",
+          "forecast_mean_litres": "6751817013479039/1000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "6425010890762967534234701681690583/7879363730812000000000000000000000000",
+          "scaled_mae": "174838006976228067/7426678000000000000",
+          "scaled_wis": "205313458063026723/16245858125000000000"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "without-weather",
+          "series_id": "B2",
+          "truth_mean_litres": "11915/2",
+          "forecast_mean_litres": "11933327687772951/2000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "18820493256620779212978422536041/29113057378949600000000000000000000",
+          "scaled_mae": "67232055554513581/3192110600000000000",
+          "scaled_wis": "4883404067454104951/446895484000000000000"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "without-weather",
+          "series_id": "ZA",
+          "truth_mean_litres": "14075",
+          "forecast_mean_litres": "19655297643348793/1400000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "924979386060056514119209292089579/4035176982246060000000000000000000000",
+          "scaled_mae": "93185789691098623/7516147800000000000",
+          "scaled_wis": "4690988450630735437/701507128000000000000"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "without-weather",
+          "series_id": "ZB",
+          "truth_mean_litres": "12739",
+          "forecast_mean_litres": "445146830007793/35000000000",
+          "coverage80_count": 9,
+          "coverage80_denominator": 14,
+          "scaled_mse": "159793363560535926897643528639/319580423680000000000000000000000",
+          "scaled_mae": "233077351326931/11824400000000000",
+          "scaled_wis": "2030417252597163/206927000000000000"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "without-weather",
+          "series_id": "A1",
+          "truth_mean_litres": "56346/7",
+          "forecast_mean_litres": "16306245870107811/2000000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "484995401279325997952476458641609/978393923161200000000000000000000000",
+          "scaled_mae": "11002745844187159/636594000000000000",
+          "scaled_wis": "3838234878625778139/386200360000000000000"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "without-weather",
+          "series_id": "A2",
+          "truth_mean_litres": "46023/7",
+          "forecast_mean_litres": "186437099429238311/28000000000000",
+          "coverage80_count": 9,
+          "coverage80_denominator": 14,
+          "scaled_mse": "7898570697042349437564383888734021/13043224803490560000000000000000000000",
+          "scaled_mae": "54195684962667403/2702629440000000000",
+          "scaled_wis": "6899526447548092747/630613536000000000000"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "without-weather",
+          "series_id": "B1",
+          "truth_mean_litres": "50545/7",
+          "forecast_mean_litres": "102678519254293859/14000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "4015185950377101240800966834552449/3939681865406000000000000000000000000",
+          "scaled_mae": "175214326051336851/7426678000000000000",
+          "scaled_wis": "1138403331071360071/83178793600000000000"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "without-weather",
+          "series_id": "B2",
+          "truth_mean_litres": "43621/7",
+          "forecast_mean_litres": "25380778052662511/4000000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "10904239447417099643984844102177989/11645222951579840000000000000000000000",
+          "scaled_mae": "42462054388426523/1824063200000000000",
+          "scaled_wis": "11963397043659435153/893790968000000000000"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "without-weather",
+          "series_id": "ZA",
+          "truth_mean_litres": "102369/7",
+          "forecast_mean_litres": "103681135402686913/7000000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "167759328107493201768790406285373/448352998027340000000000000000000000",
+          "scaled_mae": "112534405305957533/7516147800000000000",
+          "scaled_wis": "18564633680933827307/2104521384000000000000"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "without-weather",
+          "series_id": "ZB",
+          "truth_mean_litres": "94166/7",
+          "forecast_mean_litres": "47877810609653161/3500000000000",
+          "coverage80_count": 9,
+          "coverage80_denominator": 14,
+          "scaled_mse": "509904457523868619521172009497/639160847360000000000000000000000",
+          "scaled_mae": "1812534630907129/94595200000000000",
+          "scaled_wis": "163855906285696271/13243328000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "without-weather",
+          "series_id": "A1",
+          "truth_mean_litres": "118553/14",
+          "forecast_mean_litres": "59161424120214987/7000000000000",
+          "coverage80_count": 8,
+          "coverage80_denominator": 14,
+          "scaled_mse": "43945427037376808541349477584757/69885280225800000000000000000000000",
+          "scaled_mae": "28562074088277741/1379287000000000000",
+          "scaled_wis": "26608394276885306167/2317202160000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "without-weather",
+          "series_id": "A2",
+          "truth_mean_litres": "48120/7",
+          "forecast_mean_litres": "190306234837810481/28000000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "8600377909878781176042417332885753/13043224803490560000000000000000000000",
+          "scaled_mae": "253384330497145243/13513147200000000000",
+          "scaled_wis": "7152753599931562991/630613536000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "without-weather",
+          "series_id": "B1",
+          "truth_mean_litres": "63417/7",
+          "forecast_mean_litres": "107401113602788141/14000000000000",
+          "coverage80_count": 1,
+          "coverage80_denominator": 14,
+          "scaled_mse": "313876958480923478455635315480504639/7879363730812000000000000000000000000",
+          "scaled_mae": "1418600706996465707/7426678000000000000",
+          "scaled_wis": "48945330852523815169/297067120000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "without-weather",
+          "series_id": "B2",
+          "truth_mean_litres": "91509/14",
+          "forecast_mean_litres": "7267513292824213/1120000000000",
+          "coverage80_count": 13,
+          "coverage80_denominator": 14,
+          "scaled_mse": "5641049548230500528990549743178797/11645222951579840000000000000000000000",
+          "scaled_mae": "6355717105835169/364812640000000000",
+          "scaled_wis": "1232586624761489153/127684424000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "without-weather",
+          "series_id": "ZA",
+          "truth_mean_litres": "214793/14",
+          "forecast_mean_litres": "42695193131867043/2800000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "129050606802773991672574775012337/256201713158480000000000000000000000",
+          "scaled_mae": "87490181986753169/5010765200000000000",
+          "scaled_wis": "3579898684028715499/350753564000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "without-weather",
+          "series_id": "ZB",
+          "truth_mean_litres": "218343/14",
+          "forecast_mean_litres": "99122514881545401/7000000000000",
+          "coverage80_count": 1,
+          "coverage80_denominator": 14,
+          "scaled_mse": "16066910891575356594705323257931/1278321694720000000000000000000000",
+          "scaled_mae": "10048985118454599/94595200000000000",
+          "scaled_wis": "116477379975604077/1324332800000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "without-weather",
+          "series_id": "A1",
+          "truth_mean_litres": "124301/14",
+          "forecast_mean_litres": "15499950124942849/1750000000000",
+          "coverage80_count": 9,
+          "coverage80_denominator": 14,
+          "scaled_mse": "245332138080464865259611052673609/407664134650500000000000000000000000",
+          "scaled_mae": "27966715326690341/1379287000000000000",
+          "scaled_wis": "25084002121150311883/2317202160000000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "without-weather",
+          "series_id": "A2",
+          "truth_mean_litres": "49909/7",
+          "forecast_mean_litres": "1423352066749161/200000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1044760501628090027607818737709251/1630403100436320000000000000000000000",
+          "scaled_mae": "2944870695080023/140761950000000000",
+          "scaled_wis": "693251318994959269/63061353600000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "without-weather",
+          "series_id": "B1",
+          "truth_mean_litres": "139323/14",
+          "forecast_mean_litres": "16516816798152371/1750000000000",
+          "coverage80_count": 1,
+          "coverage80_denominator": 14,
+          "scaled_mse": "11645673243545523745988160220790169/1969840932703000000000000000000000000",
+          "scaled_mae": "65594748734876917/928334750000000000",
+          "scaled_wis": "476575185446422819/10609540000000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "without-weather",
+          "series_id": "B2",
+          "truth_mean_litres": "96433/14",
+          "forecast_mean_litres": "191697991923421483/28000000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1260712700148862791415905595042403/2329044590315968000000000000000000000",
+          "scaled_mae": "228749351049839981/12768442400000000000",
+          "scaled_wis": "2256356784579082617/223447742000000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "without-weather",
+          "series_id": "ZA",
+          "truth_mean_litres": "32017/2",
+          "forecast_mean_litres": "223634245671984067/14000000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "5378382437632653977490399865960597/16140707928984240000000000000000000000",
+          "scaled_mae": "3311732013892417/200430608000000000",
+          "scaled_wis": "16612533171135681707/2104521384000000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "without-weather",
+          "series_id": "ZB",
+          "truth_mean_litres": "117878/7",
+          "forecast_mean_litres": "22798353034692971/1400000000000",
+          "coverage80_count": 6,
+          "coverage80_denominator": 14,
+          "scaled_mse": "161531647773459985999368671933/79895105920000000000000000000000",
+          "scaled_mae": "2708177579467/65920000000000",
+          "scaled_wis": "82610307563669731/3783808000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-operations",
+          "series_id": "A1",
+          "truth_mean_litres": "71633/7",
+          "forecast_mean_litres": "124776940794380487/14000000000000",
+          "coverage80_count": 9,
+          "coverage80_denominator": 14,
+          "scaled_mse": "436390019462691678203965578544475659/4891969615806000000000000000000000000",
+          "scaled_mae": "1428078577376283659/8275722000000000000",
+          "scaled_wis": "13430114392836046331/82757220000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-operations",
+          "series_id": "A2",
+          "truth_mean_litres": "34954/7",
+          "forecast_mean_litres": "9876448446675767/2000000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "2879864360876747495425530752298437/3260806200872640000000000000000000000",
+          "scaled_mae": "131036295080179813/6756573600000000000",
+          "scaled_wis": "10584046919590513939/945920304000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-operations",
+          "series_id": "B1",
+          "truth_mean_litres": "140225/14",
+          "forecast_mean_litres": "1094700059798743/112000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "6619967746383035173972316619502363/3939681865406000000000000000000000000",
+          "scaled_mae": "282613662098823/8487632000000000",
+          "scaled_wis": "523522195154171023/18566695000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-operations",
+          "series_id": "B2",
+          "truth_mean_litres": "48921/7",
+          "forecast_mean_litres": "189698862091274131/28000000000000",
+          "coverage80_count": 8,
+          "coverage80_denominator": 14,
+          "scaled_mse": "18007091094005657642013335413099609/11645222951579840000000000000000000000",
+          "scaled_mae": "440084289969321153/12768442400000000000",
+          "scaled_wis": "15744826343121942599/893790968000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-operations",
+          "series_id": "ZA",
+          "truth_mean_litres": "106587/7",
+          "forecast_mean_litres": "193912079921110849/14000000000000",
+          "coverage80_count": 6,
+          "coverage80_denominator": 14,
+          "scaled_mse": "443033520271118141073298586266483459/16140707928984240000000000000000000000",
+          "scaled_mae": "1534943810903879989/15032295600000000000",
+          "scaled_wis": "197167430154294339767/2104521384000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-operations",
+          "series_id": "ZB",
+          "truth_mean_litres": "238067/14",
+          "forecast_mean_litres": "115843469260239969/7000000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "368346376826307053840957324653/255664338944000000000000000000000",
+          "scaled_mae": "3190030739760031/94595200000000000",
+          "scaled_wis": "51067163230327031/2648665600000000000"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weather-operations",
+          "series_id": "A1",
+          "truth_mean_litres": "92534/7",
+          "forecast_mean_litres": "3285592614499249/250000000000",
+          "coverage80_count": 4,
+          "coverage80_denominator": 14,
+          "scaled_mse": "616815614532934686502449118514047/174713200564500000000000000000000000",
+          "scaled_mae": "36782172397738843/689643500000000000",
+          "scaled_wis": "137997065724810391/4137861000000000000"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weather-operations",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "0",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "0",
+          "scaled_mae": "0",
+          "scaled_wis": "0"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weather-operations",
+          "series_id": "B1",
+          "truth_mean_litres": "69168/7",
+          "forecast_mean_litres": "135251966871405851/14000000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "7796176969404079612518546157787179/3939681865406000000000000000000000000",
+          "scaled_mae": "267737121549893747/7426678000000000000",
+          "scaled_wis": "2056204280812765343/74266780000000000000"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weather-operations",
+          "series_id": "B2",
+          "truth_mean_litres": "96393/14",
+          "forecast_mean_litres": "192650417335802917/28000000000000",
+          "coverage80_count": 13,
+          "coverage80_denominator": 14,
+          "scaled_mse": "8232153305591096915200036035281349/11645222951579840000000000000000000000",
+          "scaled_mae": "55920757272568081/2553688480000000000",
+          "scaled_wis": "1034499223477557289/89379096800000000000"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weather-operations",
+          "series_id": "ZA",
+          "truth_mean_litres": "92534/7",
+          "forecast_mean_litres": "3285592614499249/250000000000",
+          "coverage80_count": 4,
+          "coverage80_denominator": 14,
+          "scaled_mse": "616815614532934686502449118514047/576453854606580000000000000000000000",
+          "scaled_mae": "36782172397738843/1252691300000000000",
+          "scaled_wis": "137997065724810391/7516147800000000000"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weather-operations",
+          "series_id": "ZB",
+          "truth_mean_litres": "234729/14",
+          "forecast_mean_litres": "231577175539307307/14000000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "67072667860485160796702806769/62357155840000000000000000000000",
+          "scaled_mae": "1000132321576467/37838080000000000",
+          "scaled_wis": "226245126349437051/13243328000000000000"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-operations",
+          "series_id": "A1",
+          "truth_mean_litres": "175717/14",
+          "forecast_mean_litres": "35291168789121723/2800000000000",
+          "coverage80_count": 5,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1494090937209063548628060558881899/698852802258000000000000000000000000",
+          "scaled_mae": "313294022024805961/8275722000000000000",
+          "scaled_wis": "12645159457042552047/386200360000000000000"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-operations",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "0",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "0",
+          "scaled_mae": "0",
+          "scaled_wis": "0"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-operations",
+          "series_id": "B1",
+          "truth_mean_litres": "126017/14",
+          "forecast_mean_litres": "124912136782087213/14000000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "2389578258396125899109481445679523/3939681865406000000000000000000000000",
+          "scaled_mae": "21046927131389657/1060954000000000000",
+          "scaled_wis": "2957478070316762389/148533560000000000000"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-operations",
+          "series_id": "B2",
+          "truth_mean_litres": "45405/7",
+          "forecast_mean_litres": "25972675233262929/4000000000000",
+          "coverage80_count": 13,
+          "coverage80_denominator": 14,
+          "scaled_mse": "8440742193349720226384853814588343/11645222951579840000000000000000000000",
+          "scaled_mae": "275825395616708841/12768442400000000000",
+          "scaled_wis": "10661951452379705427/893790968000000000000"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-operations",
+          "series_id": "ZA",
+          "truth_mean_litres": "175717/14",
+          "forecast_mean_litres": "35291168789121723/2800000000000",
+          "coverage80_count": 5,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1494090937209063548628060558881899/2305815418426320000000000000000000000",
+          "scaled_mae": "313294022024805961/15032295600000000000",
+          "scaled_wis": "12645159457042552047/701507128000000000000"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-operations",
+          "series_id": "ZB",
+          "truth_mean_litres": "216827/14",
+          "forecast_mean_litres": "26977062512313433/1750000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "240318303683596993411052148021/639160847360000000000000000000000",
+          "scaled_mae": "673697018750333/47297600000000000",
+          "scaled_wis": "318072914245303543/26486656000000000000"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "without-weather",
+          "series_id": "A1",
+          "truth_mean_litres": "83574/7",
+          "forecast_mean_litres": "16938141683703517/1400000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "34424615756135980923908638044709/21269433112200000000000000000000000",
+          "scaled_mae": "27168793230800197/827572200000000000",
+          "scaled_wis": "24087047560880307499/579300540000000000000"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "without-weather",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "0",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "0",
+          "scaled_mae": "0",
+          "scaled_wis": "0"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "without-weather",
+          "series_id": "B1",
+          "truth_mean_litres": "115747/14",
+          "forecast_mean_litres": "14136811795097241/1750000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "2538380344697824116743092982893451/1969840932703000000000000000000000000",
+          "scaled_mae": "100930132836784511/3713339000000000000",
+          "scaled_wis": "16786671959978458787/1039734920000000000000"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "without-weather",
+          "series_id": "B2",
+          "truth_mean_litres": "86339/14",
+          "forecast_mean_litres": "43378692180699257/7000000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "230232036645877574254845410969357/831801639398560000000000000000000000",
+          "scaled_mae": "1136893280223/89065585937500",
+          "scaled_wis": "7344021922333247243/893790968000000000000"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "without-weather",
+          "series_id": "ZA",
+          "truth_mean_litres": "83574/7",
+          "forecast_mean_litres": "16938141683703517/1400000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "791766162391127561249898675028307/1614070792898424000000000000000000000",
+          "scaled_mae": "27168793230800197/1503229560000000000",
+          "scaled_wis": "24087047560880307499/1052260692000000000000"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "without-weather",
+          "series_id": "ZB",
+          "truth_mean_litres": "101043/7",
+          "forecast_mean_litres": "49962969680544111/3500000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "262541141413826785840811275699/639160847360000000000000000000000",
+          "scaled_mae": "1260018433942889/94595200000000000",
+          "scaled_wis": "17513661700044827/1891904000000000000"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "without-weather",
+          "series_id": "A1",
+          "truth_mean_litres": "80492/7",
+          "forecast_mean_litres": "20016397570976573/1750000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "449262676998519731775451709139451/244598480790300000000000000000000000",
+          "scaled_mae": "24120003626998533/689643500000000000",
+          "scaled_wis": "5543541428806082081/89123160000000000000"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "without-weather",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "0",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "0",
+          "scaled_mae": "0",
+          "scaled_wis": "0"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "without-weather",
+          "series_id": "B1",
+          "truth_mean_litres": "55283/7",
+          "forecast_mean_litres": "7333225695693221/1000000000000",
+          "coverage80_count": 2,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1923238080105553166833289092092239/281405847529000000000000000000000000",
+          "scaled_mae": "288380669500764069/3713339000000000000",
+          "scaled_wis": "28838305249328778799/519867460000000000000"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "without-weather",
+          "series_id": "B2",
+          "truth_mean_litres": "82669/14",
+          "forecast_mean_litres": "4676283469052037/800000000000",
+          "coverage80_count": 13,
+          "coverage80_denominator": 14,
+          "scaled_mse": "5786822694153039328952655817717913/11645222951579840000000000000000000000",
+          "scaled_mae": "232140420498527911/12768442400000000000",
+          "scaled_wis": "3472662889247066889/357516387200000000000"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "without-weather",
+          "series_id": "ZA",
+          "truth_mean_litres": "80492/7",
+          "forecast_mean_litres": "20016397570976573/1750000000000",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "449262676998519731775451709139451/807035396449212000000000000000000000",
+          "scaled_mae": "24120003626998533/1252691300000000000",
+          "scaled_wis": "72066038574479067053/2104521384000000000000"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "without-weather",
+          "series_id": "ZB",
+          "truth_mean_litres": "27605/2",
+          "forecast_mean_litres": "36900024089623147/2800000000000",
+          "coverage80_count": 4,
+          "coverage80_denominator": 14,
+          "scaled_mse": "6581322756583098681977210245349/2556643389440000000000000000000000",
+          "scaled_mae": "1746975910376853/37838080000000000",
+          "scaled_wis": "5885691876186327/211893248000000000"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "without-weather",
+          "series_id": "A1",
+          "truth_mean_litres": "76835/7",
+          "forecast_mean_litres": "77552053754265651/7000000000000",
+          "coverage80_count": 13,
+          "coverage80_denominator": 14,
+          "scaled_mse": "275656646910521187853953442624207/271776089767000000000000000000000000",
+          "scaled_mae": "21545169237243137/1034465250000000000",
+          "scaled_wis": "3469882797524106161/231720216000000000000"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "without-weather",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "0",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "0",
+          "scaled_mae": "0",
+          "scaled_wis": "0"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "without-weather",
+          "series_id": "B1",
+          "truth_mean_litres": "103645/14",
+          "forecast_mean_litres": "100768063226422117/14000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "4459284350814161702377020232729901/3939681865406000000000000000000000000",
+          "scaled_mae": "214883453365571703/7426678000000000000",
+          "scaled_wis": "30906275173879166589/2079469840000000000000"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "without-weather",
+          "series_id": "B2",
+          "truth_mean_litres": "5645",
+          "forecast_mean_litres": "3165846927885531/560000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1020503990552012724014008934324691/1164522295157984000000000000000000000",
+          "scaled_mae": "14544520428257201/638422120000000000",
+          "scaled_wis": "11622945240533134589/893790968000000000000"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "without-weather",
+          "series_id": "ZA",
+          "truth_mean_litres": "76835/7",
+          "forecast_mean_litres": "77552053754265651/7000000000000",
+          "coverage80_count": 13,
+          "coverage80_denominator": 14,
+          "scaled_mse": "275656646910521187853953442624207/896705996054680000000000000000000000",
+          "scaled_mae": "21545169237243137/1879036950000000000",
+          "scaled_wis": "3469882797524106161/420904276800000000000"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "without-weather",
+          "series_id": "ZB",
+          "truth_mean_litres": "182675/14",
+          "forecast_mean_litres": "35982847284712079/2800000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1701698917417776315911809511727/2556643389440000000000000000000000",
+          "scaled_mae": "3986090700537653/189190400000000000",
+          "scaled_wis": "30522097890676083/2648665600000000000"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "without-weather",
+          "series_id": "A1",
+          "truth_mean_litres": "76352/7",
+          "forecast_mean_litres": "18792719023388529/1750000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1543184964661567436722030973269519/1222992403951500000000000000000000000",
+          "scaled_mae": "119614890450077531/4137861000000000000",
+          "scaled_wis": "5743339547601226317/386200360000000000000"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "without-weather",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "0",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "0",
+          "scaled_mae": "0",
+          "scaled_wis": "0"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "without-weather",
+          "series_id": "B1",
+          "truth_mean_litres": "14763/2",
+          "forecast_mean_litres": "49540351428081377/7000000000000",
+          "coverage80_count": 9,
+          "coverage80_denominator": 14,
+          "scaled_mse": "20767374120204295884837084755483891/7879363730812000000000000000000000000",
+          "scaled_mae": "19566845379343863/464167375000000000",
+          "scaled_wis": "12093567092414892339/519867460000000000000"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "without-weather",
+          "series_id": "B2",
+          "truth_mean_litres": "39756/7",
+          "forecast_mean_litres": "155903032189176673/28000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "8870905226766178434138425367145419/11645222951579840000000000000000000000",
+          "scaled_mae": "59217705128954983/2553688480000000000",
+          "scaled_wis": "10409482561821082231/893790968000000000000"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "without-weather",
+          "series_id": "ZA",
+          "truth_mean_litres": "76352/7",
+          "forecast_mean_litres": "18792719023388529/1750000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1543184964661567436722030973269519/4035176982246060000000000000000000000",
+          "scaled_mae": "119614890450077531/7516147800000000000",
+          "scaled_wis": "5743339547601226317/701507128000000000000"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "without-weather",
+          "series_id": "ZB",
+          "truth_mean_litres": "182853/14",
+          "forecast_mean_litres": "177032218950751093/14000000000000",
+          "coverage80_count": 8,
+          "coverage80_denominator": 14,
+          "scaled_mse": "551517606251598288856839902137/365234769920000000000000000000000",
+          "scaled_mae": "5995049647986033/189190400000000000",
+          "scaled_wis": "11843574376371077/646016000000000000"
+        }
+      ],
+      "all_recomputed_losses_equal_original": true,
+      "original_report_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\formal-run\\cells\\157\\accepted.zip"
+    },
+    "opencorvus": {
+      "original_grade": 100,
+      "grade_source": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\final-assessment\\assessment.json",
+      "original_quality_success": true,
+      "origins": [
+        "outer-20250115",
+        "outer-20250215",
+        "outer-20250315",
+        "outer-20250415",
+        "outer-20250515",
+        "outer-20250620",
+        "outer-20250715",
+        "outer-20250815",
+        "outer-20250915",
+        "outer-20251015",
+        "outer-20251115",
+        "outer-20251215"
+      ],
+      "selected": {
+        "outer-20250115": {
+          "method_id": "weather-ridge",
+          "cell_id": 9,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\9\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250215": {
+          "method_id": "weekday",
+          "cell_id": 18,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\18\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250315": {
+          "method_id": "weather-ridge",
+          "cell_id": 29,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\29\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250415": {
+          "method_id": "weather-ridge",
+          "cell_id": 39,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\39\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250515": {
+          "method_id": "weather-ridge",
+          "cell_id": 49,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\49\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250620": {
+          "method_id": "weather-ridge",
+          "cell_id": 59,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\59\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250715": {
+          "method_id": "weekday",
+          "cell_id": 68,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\68\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250815": {
+          "method_id": "weather-ridge",
+          "cell_id": 79,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\79\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20250915": {
+          "method_id": "weather-ridge",
+          "cell_id": 89,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\89\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20251015": {
+          "method_id": "weather-ridge",
+          "cell_id": 99,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\99\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20251115": {
+          "method_id": "weather-ridge",
+          "cell_id": 109,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\109\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        },
+        "outer-20251215": {
+          "method_id": "weather-ridge",
+          "cell_id": 119,
+          "accepted_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\119\\accepted.zip",
+          "member": "output/result/forecast.json",
+          "original_phase": "verified",
+          "original_native_exit": 0
+        }
+      },
+      "recomputed_losses": {
+        "macro.scaled_mse": {
+          "exact": "2377453607547883180431626085570418695539069713205240222245206455129361209713822487626863107033/162478732344755357780033681835355636824304940927383908333027947831658086400000000000000000000000",
+          "value": 0.014632398796066955,
+          "equals_original_record": true
+        },
+        "macro.scaled_wis": {
+          "exact": "2690169247978620569266952996775064490966700088747/60576220840431384529376603406628664320000000000000",
+          "value": 0.0444096579591026,
+          "equals_original_record": true
+        },
+        "node.A1.scaled_mse": {
+          "exact": "1103157322464777580189256086336986859/46962908311737600000000000000000000000",
+          "value": 0.023489970321728598,
+          "equals_original_record": true
+        },
+        "node.A1.scaled_wis": {
+          "exact": "621741750962912668009/9268808640000000000000",
+          "value": 0.06707892838349856,
+          "equals_original_record": true
+        },
+        "decision.A1.underage_1": {
+          "exact": "23956825541701781/33600000000000",
+          "value": 713.0007601696958,
+          "equals_original_record": true
+        },
+        "decision.A1.underage_3": {
+          "exact": "181005584511934043/112000000000000",
+          "value": 1616.1212902851255,
+          "equals_original_record": true
+        },
+        "decision.A1.underage_9": {
+          "exact": "1331096166200407039/336000000000000",
+          "value": 3961.5957327393066,
+          "equals_original_record": true
+        },
+        "node.A2.scaled_mse": {
+          "exact": "8928548388076070820182532943316291927/156518697641886720000000000000000000000",
+          "value": 0.05704461206612199,
+          "equals_original_record": true
+        },
+        "node.A2.scaled_wis": {
+          "exact": "72739648344940381577/945920304000000000000",
+          "value": 0.0768982841761058,
+          "equals_original_record": true
+        },
+        "decision.A2.underage_1": {
+          "exact": "3219915642364209/5600000000000",
+          "value": 574.9849361364659,
+          "equals_original_record": true
+        },
+        "decision.A2.underage_3": {
+          "exact": "71595604992690463/112000000000000",
+          "value": 639.246473149022,
+          "equals_original_record": true
+        },
+        "decision.A2.underage_9": {
+          "exact": "59779160221198451/84000000000000",
+          "value": 711.6566692999816,
+          "equals_original_record": true
+        },
+        "node.B1.scaled_mse": {
+          "exact": "373554586384029566742617295602587567/37820945907897600000000000000000000000",
+          "value": 0.009876923419464915,
+          "equals_original_record": true
+        },
+        "node.B1.scaled_wis": {
+          "exact": "194169000344131471481/4158939680000000000000",
+          "value": 0.04668714030113836,
+          "equals_original_record": true
+        },
+        "decision.B1.underage_1": {
+          "exact": "102948012464925407/168000000000000",
+          "value": 612.7857884816989,
+          "equals_original_record": true
+        },
+        "decision.B1.underage_3": {
+          "exact": "40042503186544279/42000000000000",
+          "value": 953.392933012959,
+          "equals_original_record": true
+        },
+        "decision.B1.underage_9": {
+          "exact": "19218138115282339/11200000000000",
+          "value": 1715.9051888644944,
+          "equals_original_record": true
+        },
+        "node.B2.scaled_mse": {
+          "exact": "264163642967679193432105900708651/111794140335166464000000000000000000",
+          "value": 0.0023629471292117687,
+          "equals_original_record": true
+        },
+        "node.B2.scaled_wis": {
+          "exact": "231126542451576631543/10725491616000000000000",
+          "value": 0.021549272585956646,
+          "equals_original_record": true
+        },
+        "decision.B2.underage_1": {
+          "exact": "80013178520189983/336000000000000",
+          "value": 238.1344598815178,
+          "equals_original_record": true
+        },
+        "decision.B2.underage_3": {
+          "exact": "14623403618412173/42000000000000",
+          "value": 348.1762766288613,
+          "equals_original_record": true
+        },
+        "decision.B2.underage_9": {
+          "exact": "13431193175203471/28000000000000",
+          "value": 479.6854705429811,
+          "equals_original_record": true
+        },
+        "node.ZA.scaled_mse": {
+          "exact": "1442087990897839064221792297014302783/193688495147810880000000000000000000000",
+          "value": 0.0074453982917123095,
+          "equals_original_record": true
+        },
+        "node.ZA.scaled_wis": {
+          "exact": "999522317196533736119/25254256608000000000000",
+          "value": 0.039578370201556703,
+          "equals_original_record": true
+        },
+        "node.ZB.scaled_mse": {
+          "exact": "144101740627932013952150494608653/30679720673280000000000000000000000",
+          "value": 0.00469697042429187,
+          "equals_original_record": true
+        },
+        "node.ZB.scaled_wis": {
+          "exact": "1015608011199097889/31783987200000000000",
+          "value": 0.03195344891150403,
+          "equals_original_record": true
+        }
+      },
+      "local": [
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-ridge",
+          "series_id": "A1",
+          "truth_mean_litres": "104221/14",
+          "forecast_mean_litres": "102827655251679579/14000000000000",
+          "coverage80_count": 9,
+          "coverage80_denominator": 14,
+          "scaled_mse": "4410903470469787963408415594710741/3261313077204000000000000000000000000",
+          "scaled_mae": "20443361739812119/636594000000000000",
+          "scaled_wis": "294545978818435039/18537617280000000000"
+        },
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-ridge",
+          "series_id": "A2",
+          "truth_mean_litres": "86491/14",
+          "forecast_mean_litres": "172629704297272233/28000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "18778358186424223920611837114456969/13043224803490560000000000000000000000",
+          "scaled_mae": "412560315280981187/13513147200000000000",
+          "scaled_wis": "28625952975459884069/1891840608000000000000"
+        },
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-ridge",
+          "series_id": "B1",
+          "truth_mean_litres": "6458",
+          "forecast_mean_litres": "180798061625699611/28000000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "3907927750020576804612415028131943/2251246780232000000000000000000000000",
+          "scaled_mae": "75454999881214081/2121908000000000000",
+          "scaled_wis": "38027383052415676303/2079469840000000000000"
+        },
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-ridge",
+          "series_id": "B2",
+          "truth_mean_litres": "5770",
+          "forecast_mean_litres": "1295317144164819/224000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "19837353268694378894157533681275541/11645222951579840000000000000000000000",
+          "scaled_mae": "405890271266588993/12768442400000000000",
+          "scaled_wis": "156729688618212608439/8937909680000000000000"
+        },
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-ridge",
+          "series_id": "ZA",
+          "truth_mean_litres": "95356/7",
+          "forecast_mean_litres": "189142507400315697/14000000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "2013595939775423777230557945543989/1793411992109360000000000000000000000",
+          "scaled_mae": "143151511697354471/5010765200000000000",
+          "scaled_wis": "9626655438345506663/701507128000000000000"
+        },
+        {
+          "origin": "outer-20250115",
+          "method_id": "weather-ridge",
+          "series_id": "ZB",
+          "truth_mean_litres": "12228",
+          "forecast_mean_litres": "85678176161575499/7000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "2990269593598454492540583233/1826173849600000000000000000000",
+          "scaled_mae": "3143345602154417/94595200000000000",
+          "scaled_wis": "112936579669463813/6621664000000000000"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "weekday",
+          "series_id": "A1",
+          "truth_mean_litres": "107735/14",
+          "forecast_mean_litres": "12714802083333333/1750000000000",
+          "coverage80_count": 4,
+          "coverage80_denominator": 14,
+          "scaled_mse": "499594747783219007686975198412783/152874050493937500000000000000000000",
+          "scaled_mae": "54901322916666691/1034465250000000000",
+          "scaled_wis": "12396641/402991680"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "weekday",
+          "series_id": "A2",
+          "truth_mean_litres": "89315/14",
+          "forecast_mean_litres": "8501824999999999/1400000000000",
+          "coverage80_count": 2,
+          "coverage80_denominator": 14,
+          "scaled_mse": "54526003343363313308388095238349/21738708005817600000000000000000000",
+          "scaled_mae": "4480896428571439/96522480000000000",
+          "scaled_wis": "1433082199/50449082880"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "weekday",
+          "series_id": "B1",
+          "truth_mean_litres": "13563/2",
+          "forecast_mean_litres": "43730791666666667/7000000000000",
+          "coverage80_count": 4,
+          "coverage80_denominator": 14,
+          "scaled_mse": "12625867340698162784548662698412783/1969840932703000000000000000000000000",
+          "scaled_mae": "272998708333333309/3713339000000000000",
+          "scaled_wis": "23314579399999988831/519867460000000000000"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "weekday",
+          "series_id": "B2",
+          "truth_mean_litres": "11915/2",
+          "forecast_mean_litres": "7944583333333333/1400000000000",
+          "coverage80_count": 6,
+          "coverage80_denominator": 14,
+          "scaled_mse": "167294763955277978714912698412783/58226114757899200000000000000000000",
+          "scaled_mae": "15461008928571439/319211060000000000",
+          "scaled_wis": "1836426471/71503277440"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "weekday",
+          "series_id": "ZA",
+          "truth_mean_litres": "14075",
+          "forecast_mean_litres": "93368333333333327/7000000000000",
+          "coverage80_count": 2,
+          "coverage80_denominator": 14,
+          "scaled_mse": "22462515212123065598506984127014663/8070353964492120000000000000000000000",
+          "scaled_mae": "125478888888889043/2505382600000000000",
+          "scaled_wis": "10569189149/336723421440"
+        },
+        {
+          "origin": "outer-20250215",
+          "method_id": "weekday",
+          "series_id": "ZB",
+          "truth_mean_litres": "12739",
+          "forecast_mean_litres": "83453708333333339/7000000000000",
+          "coverage80_count": 4,
+          "coverage80_denominator": 14,
+          "scaled_mse": "5514353265128958994162698412703/1278321694720000000000000000000000",
+          "scaled_mae": "5719291666666661/94595200000000000",
+          "scaled_wis": "77062299/2118932480"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "weather-ridge",
+          "series_id": "A1",
+          "truth_mean_litres": "56346/7",
+          "forecast_mean_litres": "56572416155636247/7000000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "421609565511004470171117285566707/349426401129000000000000000000000000",
+          "scaled_mae": "116572840463426689/4137861000000000000",
+          "scaled_wis": "16884574859036472907/1158601080000000000000"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "weather-ridge",
+          "series_id": "A2",
+          "truth_mean_litres": "46023/7",
+          "forecast_mean_litres": "13172587764036753/2000000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "5240605598940814002571575981107909/3260806200872640000000000000000000000",
+          "scaled_mae": "230224836139311319/6756573600000000000",
+          "scaled_wis": "15804875306320968241/945920304000000000000"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "weather-ridge",
+          "series_id": "B1",
+          "truth_mean_litres": "50545/7",
+          "forecast_mean_litres": "40217502369803777/5600000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "35022314228712211904254434705287597/15758727461624000000000000000000000000",
+          "scaled_mae": "558238234585818579/14853356000000000000",
+          "scaled_wis": "41739591776819100947/2079469840000000000000"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "weather-ridge",
+          "series_id": "B2",
+          "truth_mean_litres": "43621/7",
+          "forecast_mean_litres": "87868130181246809/14000000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "12092350649432309669576926594933669/5822611475789920000000000000000000000",
+          "scaled_mae": "45198353596841999/1276844240000000000",
+          "scaled_wis": "1379443306577901767/71503277440000000000"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "weather-ridge",
+          "series_id": "ZA",
+          "truth_mean_litres": "102369/7",
+          "forecast_mean_litres": "102676473329764881/7000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "541503054837149934694419242886631/448352998027340000000000000000000000",
+          "scaled_mae": "6460349354327669/234879618750000000",
+          "scaled_wis": "5983237952643240503/420904276800000000000"
+        },
+        {
+          "origin": "outer-20250315",
+          "method_id": "weather-ridge",
+          "series_id": "ZB",
+          "truth_mean_litres": "94166/7",
+          "forecast_mean_litres": "188411886105756251/14000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "4865014782940147299835701933289/2556643389440000000000000000000000",
+          "scaled_mae": "6527885207481027/189190400000000000",
+          "scaled_wis": "17076596657664589/945952000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "weather-ridge",
+          "series_id": "A1",
+          "truth_mean_litres": "118553/14",
+          "forecast_mean_litres": "234757841239679423/28000000000000",
+          "coverage80_count": 8,
+          "coverage80_denominator": 14,
+          "scaled_mse": "40921576866753304549372601671914113/19567878463224000000000000000000000000",
+          "scaled_mae": "186945530712267591/5517148000000000000",
+          "scaled_wis": "5790706933516419077/289650270000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "weather-ridge",
+          "series_id": "A2",
+          "truth_mean_litres": "48120/7",
+          "forecast_mean_litres": "5412452510629217/800000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "29505825042107199123256052728153117/13043224803490560000000000000000000000",
+          "scaled_mae": "541727926709357503/13513147200000000000",
+          "scaled_wis": "37672951276442717699/1891840608000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "weather-ridge",
+          "series_id": "B1",
+          "truth_mean_litres": "63417/7",
+          "forecast_mean_litres": "15361617680236869/2000000000000",
+          "coverage80_count": 1,
+          "coverage80_denominator": 14,
+          "scaled_mse": "2422523579476689183352146434779717/61557529146968750000000000000000000",
+          "scaled_mae": "1409095365398959941/7426678000000000000",
+          "scaled_wis": "3428201697464359729/21219080000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "weather-ridge",
+          "series_id": "B2",
+          "truth_mean_litres": "91509/14",
+          "forecast_mean_litres": "11367836928043987/1750000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "10990744489122194781928784254132361/5822611475789920000000000000000000000",
+          "scaled_mae": "52432038201354151/1596055300000000000",
+          "scaled_wis": "15517725119332938493/893790968000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "weather-ridge",
+          "series_id": "ZA",
+          "truth_mean_litres": "214793/14",
+          "forecast_mean_litres": "21209683955585099/1400000000000",
+          "coverage80_count": 8,
+          "coverage80_denominator": 14,
+          "scaled_mse": "8037003965297942914404870180616049/4035176982246060000000000000000000000",
+          "scaled_mae": "135656752967113949/3758073900000000000",
+          "scaled_wis": "13311620785357488623/701507128000000000000"
+        },
+        {
+          "origin": "outer-20250415",
+          "method_id": "weather-ridge",
+          "series_id": "ZB",
+          "truth_mean_litres": "218343/14",
+          "forecast_mean_litres": "1550578274890703/109375000000",
+          "coverage80_count": 3,
+          "coverage80_denominator": 14,
+          "scaled_mse": "8289360726159652953112119267941/639160847360000000000000000000000",
+          "scaled_mae": "155226412609297/1478050000000000",
+          "scaled_wis": "2075632878936130937/26486656000000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "weather-ridge",
+          "series_id": "A1",
+          "truth_mean_litres": "124301/14",
+          "forecast_mean_litres": "62001002378935169/7000000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "19298351923125423848216506484423/8959651311000000000000000000000000",
+          "scaled_mae": "34121090992095337/1034465250000000000",
+          "scaled_wis": "23665029111027324431/1158601080000000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "weather-ridge",
+          "series_id": "A2",
+          "truth_mean_litres": "49909/7",
+          "forecast_mean_litres": "40128212614035647/5600000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "10004146896265663308609624483309199/4347741601163520000000000000000000000",
+          "scaled_mae": "496831826771318347/13513147200000000000",
+          "scaled_wis": "9672715094792592541/472960152000000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "weather-ridge",
+          "series_id": "B1",
+          "truth_mean_litres": "139323/14",
+          "forecast_mean_litres": "4079131722102431/437500000000",
+          "coverage80_count": 13,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1127332559745608635817858396168569/123115058293937500000000000000000000",
+          "scaled_mae": "20053978036522537/232083687500000000",
+          "scaled_wis": "17830726168736907589/415893968000000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "weather-ridge",
+          "series_id": "B2",
+          "truth_mean_litres": "96433/14",
+          "forecast_mean_litres": "96013002531572937/14000000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "6942605045682103540732399730760241/2911305737894960000000000000000000000",
+          "scaled_mae": "237902485445698543/6384221200000000000",
+          "scaled_wis": "2642063271467687897/127684424000000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "weather-ridge",
+          "series_id": "ZA",
+          "truth_mean_litres": "32017/2",
+          "forecast_mean_litres": "4486450725859189/280000000000",
+          "coverage80_count": 9,
+          "coverage80_denominator": 14,
+          "scaled_mse": "15101067782748211096576675517498219/8070353964492120000000000000000000000",
+          "scaled_mae": "30934625904391681/939518475000000000",
+          "scaled_wis": "5797977041882837233/300645912000000000000"
+        },
+        {
+          "origin": "outer-20250515",
+          "method_id": "weather-ridge",
+          "series_id": "ZB",
+          "truth_mean_litres": "117878/7",
+          "forecast_mean_litres": "4045450314979477/250000000000",
+          "coverage80_count": 13,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1268838239337491446532258444041/319580423680000000000000000000000",
+          "scaled_mae": "5377979831022341/94595200000000000",
+          "scaled_wis": "176982160671622069/6621664000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-ridge",
+          "series_id": "A1",
+          "truth_mean_litres": "71633/7",
+          "forecast_mean_litres": "7788425712841643/875000000000",
+          "coverage80_count": 7,
+          "coverage80_denominator": 14,
+          "scaled_mse": "33232356815194182474914829792787357/349426401129000000000000000000000000",
+          "scaled_mae": "29378968784749769/159148500000000000",
+          "scaled_wis": "192383419000470646133/1158601080000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-ridge",
+          "series_id": "A2",
+          "truth_mean_litres": "34954/7",
+          "forecast_mean_litres": "2488482636149907/500000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "717073141549138515060876088415413/407600775109080000000000000000000000",
+          "scaled_mae": "47488411251360697/1689143400000000000",
+          "scaled_wis": "4720575253725708239/315306768000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-ridge",
+          "series_id": "B1",
+          "truth_mean_litres": "140225/14",
+          "forecast_mean_litres": "28757595144742437/2800000000000",
+          "coverage80_count": 13,
+          "coverage80_denominator": 14,
+          "scaled_mse": "14537306117281909360597113119392143/3939681865406000000000000000000000000",
+          "scaled_mae": "383338506356706681/7426678000000000000",
+          "scaled_wis": "15586301037472485923/519867460000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-ridge",
+          "series_id": "B2",
+          "truth_mean_litres": "48921/7",
+          "forecast_mean_litres": "190105180810436911/28000000000000",
+          "coverage80_count": 7,
+          "coverage80_denominator": 14,
+          "scaled_mse": "36358441142423323240031295814605073/11645222951579840000000000000000000000",
+          "scaled_mae": "24864223040607641/510737696000000000",
+          "scaled_wis": "45276344723791783393/1787581936000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-ridge",
+          "series_id": "ZA",
+          "truth_mean_litres": "106587/7",
+          "forecast_mean_litres": "97146162608831837/7000000000000",
+          "coverage80_count": 7,
+          "coverage80_denominator": 14,
+          "scaled_mse": "239921294026983062640895877201087269/8070353964492120000000000000000000000",
+          "scaled_mae": "56808522877989957/501076520000000000",
+          "scaled_wis": "34003277148818665803/350753564000000000000"
+        },
+        {
+          "origin": "outer-20250620",
+          "method_id": "weather-ridge",
+          "series_id": "ZB",
+          "truth_mean_litres": "238067/14",
+          "forecast_mean_litres": "59710141532232661/3500000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "388913358460770491911336350153/182617384960000000000000000000000",
+          "scaled_mae": "863101995425599/23648800000000000",
+          "scaled_wis": "54704124164903291/2648665600000000000"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weekday",
+          "series_id": "A1",
+          "truth_mean_litres": "92534/7",
+          "forecast_mean_litres": "586415/56",
+          "coverage80_count": 0,
+          "coverage80_denominator": 14,
+          "scaled_mse": "2049857579057/17393669745088",
+          "scaled_mae": "11231561/33102888",
+          "scaled_wis": "1216892699/3783187200"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weekday",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "5401573979591837/1000000000000",
+          "coverage80_count": 0,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1096703424903423591341946123015877499/1630403100436320000000000000000000000",
+          "scaled_mae": "394314900510204101/482612400000000000",
+          "scaled_wis": "623301229/772179840"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weekday",
+          "series_id": "B1",
+          "truth_mean_litres": "69168/7",
+          "forecast_mean_litres": "7829766666666667/700000000000",
+          "coverage80_count": 1,
+          "coverage80_denominator": 14,
+          "scaled_mse": "657886885154563955415812698412783/19698409327030000000000000000000000",
+          "scaled_mae": "66646566666666691/371333900000000000",
+          "scaled_wis": "765981189/8317879360"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weekday",
+          "series_id": "B2",
+          "truth_mean_litres": "96393/14",
+          "forecast_mean_litres": "12643124999999999/1750000000000",
+          "coverage80_count": 2,
+          "coverage80_denominator": 14,
+          "scaled_mse": "312584168543246863449714285715047/90978304309217500000000000000000000",
+          "scaled_mae": "43361999999999927/798027650000000000",
+          "scaled_wis": "288691567/8937909680"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weekday",
+          "series_id": "ZA",
+          "truth_mean_litres": "92534/7",
+          "forecast_mean_litres": "13889111607142857/875000000000",
+          "coverage80_count": 0,
+          "coverage80_denominator": 14,
+          "scaled_mse": "44121312451748899332694831018524637/1345058994082020000000000000000000000",
+          "scaled_mae": "24218913903061223/134216925000000000",
+          "scaled_wis": "1944768253/12025836480"
+        },
+        {
+          "origin": "outer-20250715",
+          "method_id": "weekday",
+          "series_id": "ZB",
+          "truth_mean_litres": "234729/14",
+          "forecast_mean_litres": "128870166666666659/7000000000000",
+          "coverage80_count": 1,
+          "coverage80_denominator": 14,
+          "scaled_mse": "19793914773313466860603174603183/1278321694720000000000000000000000",
+          "scaled_mae": "11505666666666659/94595200000000000",
+          "scaled_wis": "60303035/847572992"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-ridge",
+          "series_id": "A1",
+          "truth_mean_litres": "175717/14",
+          "forecast_mean_litres": "91893024942733463/7000000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "4834256272200572920352837039803037/489196961580600000000000000000000000",
+          "scaled_mae": "151933813152547217/2068930500000000000",
+          "scaled_wis": "51270188068377939617/1158601080000000000000"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-ridge",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "0",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "0",
+          "scaled_mae": "0",
+          "scaled_wis": "0"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-ridge",
+          "series_id": "B1",
+          "truth_mean_litres": "126017/14",
+          "forecast_mean_litres": "19169874472868983/2000000000000",
+          "coverage80_count": 7,
+          "coverage80_denominator": 14,
+          "scaled_mse": "29993197941875617902676454525442661/3939681865406000000000000000000000000",
+          "scaled_mae": "596564855636050313/7426678000000000000",
+          "scaled_wis": "42851072089361990341/1039734920000000000000"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-ridge",
+          "series_id": "B2",
+          "truth_mean_litres": "45405/7",
+          "forecast_mean_litres": "184147040324891269/28000000000000",
+          "coverage80_count": 13,
+          "coverage80_denominator": 14,
+          "scaled_mse": "25971795081768216184565682960786607/11645222951579840000000000000000000000",
+          "scaled_mae": "471928456501743111/12768442400000000000",
+          "scaled_wis": "1058516820468908119/51073769600000000000"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-ridge",
+          "series_id": "ZA",
+          "truth_mean_litres": "175717/14",
+          "forecast_mean_litres": "91893024942733463/7000000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "4834256272200572920352837039803037/1614070792898424000000000000000000000",
+          "scaled_mae": "151933813152547217/3758073900000000000",
+          "scaled_wis": "51270188068377939617/2104521384000000000000"
+        },
+        {
+          "origin": "outer-20250815",
+          "method_id": "weather-ridge",
+          "series_id": "ZB",
+          "truth_mean_litres": "216827/14",
+          "forecast_mean_litres": "226262641472528523/14000000000000",
+          "coverage80_count": 9,
+          "coverage80_denominator": 14,
+          "scaled_mse": "9571208798416875691289823452547/2556643389440000000000000000000000",
+          "scaled_mae": "9634143313457657/189190400000000000",
+          "scaled_wis": "103373319358977039/3783808000000000000"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "weather-ridge",
+          "series_id": "A1",
+          "truth_mean_litres": "83574/7",
+          "forecast_mean_litres": "46320835962223967/3500000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "37549300217248902613541856929021447/1222992403951500000000000000000000000",
+          "scaled_mae": "47281432177478513/295561500000000000",
+          "scaled_wis": "15901434394463999891/231720216000000000000"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "weather-ridge",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "0",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "0",
+          "scaled_mae": "0",
+          "scaled_wis": "0"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "weather-ridge",
+          "series_id": "B1",
+          "truth_mean_litres": "115747/14",
+          "forecast_mean_litres": "117411581862815739/14000000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "12584439671280682134418557096784613/3939681865406000000000000000000000000",
+          "scaled_mae": "323267378695378767/7426678000000000000",
+          "scaled_wis": "51429878961503530657/2079469840000000000000"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "weather-ridge",
+          "series_id": "B2",
+          "truth_mean_litres": "86339/14",
+          "forecast_mean_litres": "175069342204575947/28000000000000",
+          "coverage80_count": 13,
+          "coverage80_denominator": 14,
+          "scaled_mse": "23766338647708723974059228488886167/11645222951579840000000000000000000000",
+          "scaled_mae": "421879558122359441/12768442400000000000",
+          "scaled_wis": "3434515576388450173/178758193600000000000"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "weather-ridge",
+          "series_id": "ZA",
+          "truth_mean_litres": "83574/7",
+          "forecast_mean_litres": "46320835962223967/3500000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "37549300217248902613541856929021447/4035176982246060000000000000000000000",
+          "scaled_mae": "47281432177478513/536867700000000000",
+          "scaled_wis": "15901434394463999891/420904276800000000000"
+        },
+        {
+          "origin": "outer-20250915",
+          "method_id": "weather-ridge",
+          "series_id": "ZB",
+          "truth_mean_litres": "101043/7",
+          "forecast_mean_litres": "12809140810318983/875000000000",
+          "coverage80_count": 12,
+          "coverage80_denominator": 14,
+          "scaled_mse": "91026678585771216195375665257/36523476992000000000000000000000",
+          "scaled_mae": "508199866210581/13513600000000000",
+          "scaled_wis": "575222128549593813/26486656000000000000"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "weather-ridge",
+          "series_id": "A1",
+          "truth_mean_litres": "80492/7",
+          "forecast_mean_litres": "23789437314147581/2000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "3591174843131101450978936837638589/543552179534000000000000000000000000",
+          "scaled_mae": "182643220859927869/2758574000000000000",
+          "scaled_wis": "2780927700534374673/77240072000000000000"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "weather-ridge",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "0",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "0",
+          "scaled_mae": "0",
+          "scaled_wis": "0"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "weather-ridge",
+          "series_id": "B1",
+          "truth_mean_litres": "55283/7",
+          "forecast_mean_litres": "21114619867643219/2800000000000",
+          "coverage80_count": 6,
+          "coverage80_denominator": 14,
+          "scaled_mse": "17285703143617687466532431181482177/3939681865406000000000000000000000000",
+          "scaled_mae": "392182385370783397/7426678000000000000",
+          "scaled_wis": "1644384004892618323/51986746000000000000"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "weather-ridge",
+          "series_id": "B2",
+          "truth_mean_litres": "82669/14",
+          "forecast_mean_litres": "20684358467753261/3500000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "480156798295135144027290801206269/291130573789496000000000000000000000",
+          "scaled_mae": "97427805416542843/3192110600000000000",
+          "scaled_wis": "929493653675384563/55861935500000000000"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "weather-ridge",
+          "series_id": "ZA",
+          "truth_mean_litres": "80492/7",
+          "forecast_mean_litres": "23789437314147581/2000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "3591174843131101450978936837638589/1793411992109360000000000000000000000",
+          "scaled_mae": "182643220859927869/5010765200000000000",
+          "scaled_wis": "2780927700534374673/140301425600000000000"
+        },
+        {
+          "origin": "outer-20251015",
+          "method_id": "weather-ridge",
+          "series_id": "ZB",
+          "truth_mean_litres": "27605/2",
+          "forecast_mean_litres": "188310533209229129/14000000000000",
+          "coverage80_count": 7,
+          "coverage80_denominator": 14,
+          "scaled_mse": "5756686670421575056806518806341/2556643389440000000000000000000000",
+          "scaled_mae": "7652732507100881/189190400000000000",
+          "scaled_wis": "19452191629885143/945952000000000000"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "weather-ridge",
+          "series_id": "A1",
+          "truth_mean_litres": "76835/7",
+          "forecast_mean_litres": "153107761407369151/14000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "26263904954101929381463849005372401/4891969615806000000000000000000000000",
+          "scaled_mae": "2653205987027909/42439600000000000",
+          "scaled_wis": "6748115370633395249/231720216000000000000"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "weather-ridge",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "0",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "0",
+          "scaled_mae": "0",
+          "scaled_wis": "0"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "weather-ridge",
+          "series_id": "B1",
+          "truth_mean_litres": "103645/14",
+          "forecast_mean_litres": "197090881229997173/28000000000000",
+          "coverage80_count": 8,
+          "coverage80_denominator": 14,
+          "scaled_mse": "69999658050838332614644017062220901/15758727461624000000000000000000000000",
+          "scaled_mae": "911530409240590019/14853356000000000000",
+          "scaled_wis": "61607910860078251559/2079469840000000000000"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "weather-ridge",
+          "series_id": "B2",
+          "truth_mean_litres": "5645",
+          "forecast_mean_litres": "978497838450123/175000000000",
+          "coverage80_count": 10,
+          "coverage80_denominator": 14,
+          "scaled_mse": "16258840706292013965193171297664311/5822611475789920000000000000000000000",
+          "scaled_mae": "6791140969379983/159605530000000000",
+          "scaled_wis": "205261879346904904873/8937909680000000000000"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "weather-ridge",
+          "series_id": "ZA",
+          "truth_mean_litres": "76835/7",
+          "forecast_mean_litres": "153107761407369151/14000000000000",
+          "coverage80_count": 11,
+          "coverage80_denominator": 14,
+          "scaled_mse": "26263904954101929381463849005372401/16140707928984240000000000000000000000",
+          "scaled_mae": "34491677831362817/1002153040000000000",
+          "scaled_wis": "6748115370633395249/420904276800000000000"
+        },
+        {
+          "origin": "outer-20251115",
+          "method_id": "weather-ridge",
+          "series_id": "ZB",
+          "truth_mean_litres": "182675/14",
+          "forecast_mean_litres": "22103158461376053/1750000000000",
+          "coverage80_count": 8,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1957554199029563051917925957497/639160847360000000000000000000000",
+          "scaled_mae": "169576761777391/3378400000000000",
+          "scaled_wis": "25284184887835203/1059466240000000000"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "weather-ridge",
+          "series_id": "A1",
+          "truth_mean_litres": "76352/7",
+          "forecast_mean_litres": "10519898336675879/1000000000000",
+          "coverage80_count": 6,
+          "coverage80_denominator": 14,
+          "scaled_mse": "7693439001638107039457894366573041/1222992403951500000000000000000000000",
+          "scaled_mae": "2138943421690713/29984500000000000",
+          "scaled_wis": "95740808171398147/2546376000000000000"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "weather-ridge",
+          "series_id": "A2",
+          "truth_mean_litres": "0",
+          "forecast_mean_litres": "0",
+          "coverage80_count": 14,
+          "coverage80_denominator": 14,
+          "scaled_mse": "0",
+          "scaled_mae": "0",
+          "scaled_wis": "0"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "weather-ridge",
+          "series_id": "B1",
+          "truth_mean_litres": "14763/2",
+          "forecast_mean_litres": "2570377306997713/350000000000",
+          "coverage80_count": 8,
+          "coverage80_denominator": 14,
+          "scaled_mse": "5751478381440357646641009378173289/1969840932703000000000000000000000000",
+          "scaled_mae": "156954828815461/3713339000000000",
+          "scaled_wis": "1386157624127481869/59413424000000000000"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "weather-ridge",
+          "series_id": "B2",
+          "truth_mean_litres": "39756/7",
+          "forecast_mean_litres": "78096047453766971/14000000000000",
+          "coverage80_count": 9,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1257016770009314923767683571071267/582261147578992000000000000000000000",
+          "scaled_mae": "51058294498041197/1276844240000000000",
+          "scaled_wis": "186409956548841667003/8937909680000000000000"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "weather-ridge",
+          "series_id": "ZA",
+          "truth_mean_litres": "76352/7",
+          "forecast_mean_litres": "10519898336675879/1000000000000",
+          "coverage80_count": 6,
+          "coverage80_denominator": 14,
+          "scaled_mse": "7693439001638107039457894366573041/4035176982246060000000000000000000000",
+          "scaled_mae": "49195698698886399/1252691300000000000",
+          "scaled_wis": "1244630506228175911/60129182400000000000"
+        },
+        {
+          "origin": "outer-20251215",
+          "method_id": "weather-ridge",
+          "series_id": "ZB",
+          "truth_mean_litres": "182853/14",
+          "forecast_mean_litres": "5653473116677359/437500000000",
+          "coverage80_count": 7,
+          "coverage80_denominator": 14,
+          "scaled_mse": "1537724183329790073079158483573/639160847360000000000000000000000",
+          "scaled_mae": "1919304220431181/47297600000000000",
+          "scaled_wis": "286118195240882929/13243328000000000000"
+        }
+      ],
+      "all_recomputed_losses_equal_original": true,
+      "original_report_archive": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\formal-run\\cells\\121\\accepted.zip"
+    }
+  },
+  "comparison": {
+    "macro.scaled_mse": {
+      "codex": 0.003072003802494062,
+      "opencorvus": 0.014632398796066955,
+      "codex_relative_change_percent_of_OC": -79.00546694148477,
+      "lower_loss_system": "codex"
+    },
+    "macro.scaled_wis": {
+      "codex": 0.02142329291787726,
+      "opencorvus": 0.0444096579591026,
+      "codex_relative_change_percent_of_OC": -51.75983355330898,
+      "lower_loss_system": "codex"
+    },
+    "node.A1.scaled_mse": {
+      "codex": 0.008605170651088172,
+      "opencorvus": 0.023489970321728598,
+      "codex_relative_change_percent_of_OC": -63.36661761071596,
+      "lower_loss_system": "codex"
+    },
+    "node.A1.scaled_wis": {
+      "codex": 0.03442042837906812,
+      "opencorvus": 0.06707892838349856,
+      "codex_relative_change_percent_of_OC": -48.68667522193816,
+      "lower_loss_system": "codex"
+    },
+    "decision.A1.underage_1": {
+      "codex": 399.4441138886425,
+      "opencorvus": 713.0007601696958,
+      "codex_relative_change_percent_of_OC": -43.97704235356301,
+      "lower_loss_system": "codex"
+    },
+    "decision.A1.underage_3": {
+      "codex": 827.2558870371546,
+      "opencorvus": 1616.1212902851255,
+      "codex_relative_change_percent_of_OC": -48.812264771834954,
+      "lower_loss_system": "codex"
+    },
+    "decision.A1.underage_9": {
+      "codex": 1962.5281808842772,
+      "opencorvus": 3961.5957327393066,
+      "codex_relative_change_percent_of_OC": -50.46116985977121,
+      "lower_loss_system": "codex"
+    },
+    "node.A2.scaled_mse": {
+      "codex": 0.0003093882562165844,
+      "opencorvus": 0.05704461206612199,
+      "codex_relative_change_percent_of_OC": -99.45763807481421,
+      "lower_loss_system": "codex"
+    },
+    "node.A2.scaled_wis": {
+      "codex": 0.005329440091422835,
+      "opencorvus": 0.0768982841761058,
+      "codex_relative_change_percent_of_OC": -93.06949413953397,
+      "lower_loss_system": "codex"
+    },
+    "decision.A2.underage_1": {
+      "codex": 62.597138251351026,
+      "opencorvus": 574.9849361364659,
+      "codex_relative_change_percent_of_OC": -89.11325596250154,
+      "lower_loss_system": "codex"
+    },
+    "decision.A2.underage_3": {
+      "codex": 102.38894702304657,
+      "opencorvus": 639.246473149022,
+      "codex_relative_change_percent_of_OC": -83.98286868621057,
+      "lower_loss_system": "codex"
+    },
+    "decision.A2.underage_9": {
+      "codex": 150.78055235820963,
+      "opencorvus": 711.6566692999816,
+      "codex_relative_change_percent_of_OC": -78.81273950449669,
+      "lower_loss_system": "codex"
+    },
+    "node.B1.scaled_mse": {
+      "codex": 0.005397998747532603,
+      "opencorvus": 0.009876923419464915,
+      "codex_relative_change_percent_of_OC": -45.34736660107627,
+      "lower_loss_system": "codex"
+    },
+    "node.B1.scaled_wis": {
+      "codex": 0.036306198282276984,
+      "opencorvus": 0.04668714030113836,
+      "codex_relative_change_percent_of_OC": -22.235120746104602,
+      "lower_loss_system": "codex"
+    },
+    "decision.B1.underage_1": {
+      "codex": 408.8452027925145,
+      "opencorvus": 612.7857884816989,
+      "codex_relative_change_percent_of_OC": -33.28089350676499,
+      "lower_loss_system": "codex"
+    },
+    "decision.B1.underage_3": {
+      "codex": 751.2709096244859,
+      "opencorvus": 953.392933012959,
+      "codex_relative_change_percent_of_OC": -21.20028546359341,
+      "lower_loss_system": "codex"
+    },
+    "decision.B1.underage_9": {
+      "codex": 1737.542478048567,
+      "opencorvus": 1715.9051888644944,
+      "codex_relative_change_percent_of_OC": 1.2609839590491059,
+      "lower_loss_system": "opencorvus"
+    },
+    "node.B2.scaled_mse": {
+      "codex": 0.0007163512285857297,
+      "opencorvus": 0.0023629471292117687,
+      "codex_relative_change_percent_of_OC": -69.68399251384477,
+      "lower_loss_system": "codex"
+    },
+    "node.B2.scaled_wis": {
+      "codex": 0.011511597083237336,
+      "opencorvus": 0.021549272585956646,
+      "codex_relative_change_percent_of_OC": -46.58011291416268,
+      "lower_loss_system": "codex"
+    },
+    "decision.B2.underage_1": {
+      "codex": 133.59227370211184,
+      "opencorvus": 238.1344598815178,
+      "codex_relative_change_percent_of_OC": -43.90048640227048,
+      "lower_loss_system": "codex"
+    },
+    "decision.B2.underage_3": {
+      "codex": 207.2034914916137,
+      "opencorvus": 348.1762766288613,
+      "codex_relative_change_percent_of_OC": -40.48891168065354,
+      "lower_loss_system": "codex"
+    },
+    "decision.B2.underage_9": {
+      "codex": 292.3377751489179,
+      "opencorvus": 479.6854705429811,
+      "codex_relative_change_percent_of_OC": -39.05636232466966,
+      "lower_loss_system": "codex"
+    },
+    "node.ZA.scaled_mse": {
+      "codex": 0.002718401391119463,
+      "opencorvus": 0.0074453982917123095,
+      "codex_relative_change_percent_of_OC": -63.48883854681898,
+      "lower_loss_system": "codex"
+    },
+    "node.ZA.scaled_wis": {
+      "codex": 0.020362610470340495,
+      "opencorvus": 0.039578370201556703,
+      "codex_relative_change_percent_of_OC": -48.55116477348128,
+      "lower_loss_system": "codex"
+    },
+    "node.ZB.scaled_mse": {
+      "codex": 0.002055159377145241,
+      "opencorvus": 0.00469697042429187,
+      "codex_relative_change_percent_of_OC": -56.24500068136828,
+      "lower_loss_system": "codex"
+    },
+    "node.ZB.scaled_wis": {
+      "codex": 0.021546729283165915,
+      "opencorvus": 0.03195344891150403,
+      "codex_relative_change_percent_of_OC": -32.56837675694982,
+      "lower_loss_system": "codex"
+    }
+  },
+  "old_grades_changed": false,
+  "new_grade": null,
+  "model_resource_comparability": false,
+  "limits": "same frozen task and inputs, 12 temporally related original origins; no significance, model-wide causal ranking or new heavy qualification; single-period L losses are not full inventory/cash outcomes"
+}

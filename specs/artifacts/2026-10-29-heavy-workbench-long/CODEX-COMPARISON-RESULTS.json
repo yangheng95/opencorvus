@@ -12,14 +12,36 @@
           "good": true,
           "study_complete": true,
           "quality_success": true,
-          "actual_grade_source": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\final-assessment\\assessment.json"
+          "actual_grade_source": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\final-assessment\\assessment.json",
+          "original_raw_loss_audit": "cases/L02/evaluator/product-quality-audit-20261101/audit.json",
+          "macro_scaled_mse": {
+            "exact": "2495676417937517030451399373067582317893763457113608048659183275106365097924184213221783076481/812393661723776788900168409176778184121524704636919541665139739158290432000000000000000000000000",
+            "value": 0.003072003802494062,
+            "equals_original_record": true
+          },
+          "macro_scaled_wis": {
+            "exact": "648871061461291322260546176653086826452756624939/30288110420215692264688301703314332160000000000000",
+            "value": 0.02142329291787726,
+            "equals_original_record": true
+          }
         },
         "OpenCorvus": {
           "grade": 100,
           "good": true,
           "study_complete": true,
           "quality_success": true,
-          "actual_grade_source": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\final-assessment\\assessment.json"
+          "actual_grade_source": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\final-assessment\\assessment.json",
+          "original_raw_loss_audit": "cases/L02/evaluator/product-quality-audit-20261101/audit.json",
+          "macro_scaled_mse": {
+            "exact": "2377453607547883180431626085570418695539069713205240222245206455129361209713822487626863107033/162478732344755357780033681835355636824304940927383908333027947831658086400000000000000000000000",
+            "value": 0.014632398796066955,
+            "equals_original_record": true
+          },
+          "macro_scaled_wis": {
+            "exact": "2690169247978620569266952996775064490966700088747/60576220840431384529376603406628664320000000000000",
+            "value": 0.0444096579591026,
+            "equals_original_record": true
+          }
         }
       }
     },
@@ -132,5 +154,39 @@
     "measurement_limitation": "numeric perturbation and legal MPS serialization change both occur; report end-to-end delivery and valid optimizer cost separately",
     "report": "cases/L06/evaluator/reconstruction/product-quality-audit-20261031/README.md"
   },
-  "latest_observation_at": "2026-10-31T16:13:01.773802+00:00"
+  "latest_observation_at": "2026-11-01T00:48:03.913269+00:00",
+  "latest_l02_product_inspection": {
+    "at": "2026-11-01T00:48:03.913269+00:00",
+    "original_grade_unchanged": {
+      "Codex": 100,
+      "OpenCorvus": 100
+    },
+    "macro": {
+      "macro.scaled_mse": {
+        "codex": 0.003072003802494062,
+        "opencorvus": 0.014632398796066955,
+        "codex_relative_change_percent_of_OC": -79.00546694148477,
+        "lower_loss_system": "codex"
+      },
+      "macro.scaled_wis": {
+        "codex": 0.02142329291787726,
+        "opencorvus": 0.0444096579591026,
+        "codex_relative_change_percent_of_OC": -51.75983355330898,
+        "lower_loss_system": "codex"
+      }
+    },
+    "B1_underage9": {
+      "codex": 1737.542478048567,
+      "opencorvus": 1715.9051888644944,
+      "codex_relative_change_percent_of_OC": 1.2609839590491059,
+      "lower_loss_system": "opencorvus"
+    },
+    "july_share_of_total_macro_MSE_difference_percent": 82.30403775989224,
+    "original_selected_forecasts_per_system": 12,
+    "point_rows_per_system": 1008,
+    "exact_original_losses_reproduced": true,
+    "new_case_or_grade_execution": false,
+    "report": "cases/L02/evaluator/product-quality-audit-20261101/README.md",
+    "limits": "same frozen task and inputs, 12 temporally related original origins; no significance, model-wide causal ranking or new heavy qualification; single-period L losses are not full inventory/cash outcomes"
+  }
 }

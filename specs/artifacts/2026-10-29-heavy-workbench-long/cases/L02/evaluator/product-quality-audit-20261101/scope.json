@@ -1,0 +1,177 @@
+{
+  "at": "2026-11-01T00:48:03.913269+00:00",
+  "meaning": "scientific projection of closed original products, not the complete pair workspace or a new execution",
+  "members": [
+    {
+      "path": "actual-origin-metrics.csv",
+      "bytes": 9693
+    },
+    {
+      "path": "actual-selected-points.csv",
+      "bytes": 242245
+    },
+    {
+      "path": "audit.json",
+      "bytes": 107414
+    },
+    {
+      "path": "audit.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "audit.stdout.txt",
+      "bytes": 754
+    },
+    {
+      "path": "audit_original_products.py",
+      "bytes": 9267
+    },
+    {
+      "path": "codex/original-report/action-summary.csv",
+      "bytes": 16087
+    },
+    {
+      "path": "codex/original-report/calibration-summary.csv",
+      "bytes": 40601
+    },
+    {
+      "path": "codex/original-report/decisions.png",
+      "bytes": 174307
+    },
+    {
+      "path": "codex/original-report/fit-summary.csv",
+      "bytes": 819477
+    },
+    {
+      "path": "codex/original-report/methods.md",
+      "bytes": 9729
+    },
+    {
+      "path": "codex/original-report/metrics.png",
+      "bytes": 229968
+    },
+    {
+      "path": "codex/original-report/node-summary.csv",
+      "bytes": 7145
+    },
+    {
+      "path": "codex/original-report/report.md",
+      "bytes": 14846
+    },
+    {
+      "path": "codex/original-report/selection-trace.csv",
+      "bytes": 8371
+    },
+    {
+      "path": "codex/original-report/target-feature-summary.csv",
+      "bytes": 3978102
+    },
+    {
+      "path": "codex/original-report/weather-bias-summary.csv",
+      "bytes": 540900
+    },
+    {
+      "path": "codex/original-report/worst-origin.png",
+      "bytes": 549395
+    },
+    {
+      "path": "codex/original-submission.json",
+      "bytes": 1442
+    },
+    {
+      "path": "codex-node-origin.csv",
+      "bytes": 15798
+    },
+    {
+      "path": "descriptive-contrasts.json",
+      "bytes": 16726
+    },
+    {
+      "path": "input-binding.json",
+      "bytes": 861
+    },
+    {
+      "path": "opencorvus/original-report/action-summary.csv",
+      "bytes": 6403
+    },
+    {
+      "path": "opencorvus/original-report/coverage-summary.csv",
+      "bytes": 3115
+    },
+    {
+      "path": "opencorvus/original-report/coverage.png",
+      "bytes": 71082
+    },
+    {
+      "path": "opencorvus/original-report/METHODS.md",
+      "bytes": 4237
+    },
+    {
+      "path": "opencorvus/original-report/origin-losses.png",
+      "bytes": 117698
+    },
+    {
+      "path": "opencorvus/original-report/report.md",
+      "bytes": 14799
+    },
+    {
+      "path": "opencorvus/original-report/selection-trace.csv",
+      "bytes": 5400
+    },
+    {
+      "path": "opencorvus/original-report/USAGE.md",
+      "bytes": 6615
+    },
+    {
+      "path": "opencorvus/original-report/worst-local.png",
+      "bytes": 78843
+    },
+    {
+      "path": "opencorvus/original-submission.json",
+      "bytes": 1401
+    },
+    {
+      "path": "opencorvus-node-origin.csv",
+      "bytes": 15427
+    },
+    {
+      "path": "original-quality-policy.json",
+      "bytes": 1016
+    },
+    {
+      "path": "original-scales.json",
+      "bytes": 107
+    },
+    {
+      "path": "original-selected-outputs.zip",
+      "bytes": 177121
+    },
+    {
+      "path": "original-study.json",
+      "bytes": 1518
+    },
+    {
+      "path": "project_audit.py",
+      "bytes": 6345
+    },
+    {
+      "path": "README.md",
+      "bytes": 5586
+    },
+    {
+      "path": "reference-floor.json",
+      "bytes": 1619
+    }
+  ],
+  "external_only": [
+    "complete original workspace archives and original raw material registrations",
+    "all original inner/unselected cells, native lifecycle, databases, dependencies and references",
+    "old final-assessment and single independent reviews remain in original roots"
+  ],
+  "pair_root": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d",
+  "old_grades_unchanged": true,
+  "new_grade": null,
+  "heavy_qualification": false,
+  "projected_bytes": 7311460,
+  "manifest_scope": "all regular files in this projection except this self-describing scope.json"
+}

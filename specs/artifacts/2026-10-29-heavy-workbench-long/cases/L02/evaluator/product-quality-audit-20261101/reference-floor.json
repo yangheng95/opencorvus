@@ -1,0 +1,34 @@
+{
+  "codex": {
+    "source": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\codex\\evaluation\\final-assessment\\assessment.json",
+    "original_reference_id": "seasonal-weekday-8-365-calibration-56-84-112/1",
+    "macro": [
+      {
+        "id": "macro.scaled_mse",
+        "reference_loss_exact": "19161240310122900941940284886285306876957504390293814152561875018204733357274353251077426452573/751103607362959309264208958188589297449634527216086854350166178955520000000000000000000000000000",
+        "value": 0.02551078189784745
+      },
+      {
+        "id": "macro.scaled_wis",
+        "reference_loss_exact": "217637060647790474661122074529566477177895978977/3038940844837694876055682445148595200000000000000",
+        "value": 0.07161608986811789
+      }
+    ]
+  },
+  "opencorvus": {
+    "source": "D:\\opencorvus-benchmark-runs\\L02-paired-20261030-cb3a704d\\opencorvus\\evaluation\\final-assessment\\assessment.json",
+    "original_reference_id": "seasonal-weekday-8-365-calibration-56-84-112/1",
+    "macro": [
+      {
+        "id": "macro.scaled_mse",
+        "reference_loss_exact": "19161240310122900941940284886285306876957504390293814152561875018204733357274353251077426452573/751103607362959309264208958188589297449634527216086854350166178955520000000000000000000000000000",
+        "value": 0.02551078189784745
+      },
+      {
+        "id": "macro.scaled_wis",
+        "reference_loss_exact": "217637060647790474661122074529566477177895978977/3038940844837694876055682445148595200000000000000",
+        "value": 0.07161608986811789
+      }
+    ]
+  }
+}

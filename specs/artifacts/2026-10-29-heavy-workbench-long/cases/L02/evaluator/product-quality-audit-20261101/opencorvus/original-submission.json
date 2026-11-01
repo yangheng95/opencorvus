@@ -1,0 +1,18 @@
+{
+  "format": "l02-numerical-submission/1",
+  "pool": {
+    "format": "l02-method-pool/1",
+    "methods": [
+      {"method_id": "weekday", "role": "baseline", "configuration": {"model": "weekday", "weather": false, "window_days": 365, "weekday_count": 8, "calibration_days_before": [28,56,84], "minimum_calibration_pairs": 14}},
+      {"method_id": "weather-ridge", "role": "extension", "configuration": {"model": "ridge", "weather": true, "window_days": 365, "ridge": 10, "calibration_days_before": [28,56,84], "minimum_calibration_pairs": 14}},
+      {"method_id": "no-weather", "role": "ablation", "configuration": {"model": "ridge", "weather": false, "window_days": 365, "ridge": 10, "calibration_days_before": [28,56,84], "minimum_calibration_pairs": 14}}
+    ],
+    "selection_ids": ["weekday", "weather-ridge"],
+    "outer_ids": ["weekday", "weather-ridge", "no-weather"]
+  },
+  "programs": {
+    "predict": {"files": ["l02_common.py", "l02_predict.py"], "argv": ["/opt/cpsat/bin/python", "-B", "l02_predict.py"]},
+    "select": {"files": ["l02_common.py", "l02_select.py"], "argv": ["/opt/cpsat/bin/python", "-B", "l02_select.py"]},
+    "report": {"files": ["l02_common.py", "l02_report.py", "METHODS.md", "USAGE.md", "references/claims.json", "references/wis.html", "references/wis-correction.html", "references/gneiting.pdf"], "argv": ["/opt/cpsat/bin/python", "-B", "l02_report.py"]}
+  }
+}

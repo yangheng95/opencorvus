@@ -1,0 +1,413 @@
+{
+  "at": "2026-11-01T00:48:03.913269+00:00",
+  "paired_origins": [
+    {
+      "origin": "outer-20250115",
+      "scaled_mse": {
+        "codex": 0.000586798825362792,
+        "opencorvus": 0.0014690018220271171,
+        "OC_minus_Codex_exact": "59724676903651658928922461869014573849937914041803356609572434632237877593571853646482224863/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.010331012432898079,
+        "opencorvus": 0.01604996069162194,
+        "OC_minus_Codex_exact": "779472613564778629374685581028411150424735748163/136296496890970615191097357664914494720000000000000"
+      }
+    },
+    {
+      "origin": "outer-20250215",
+      "scaled_mse": {
+        "codex": 0.00046395952844495366,
+        "opencorvus": 0.0036566502529754076,
+        "OC_minus_Codex_exact": "108071737852201393648531671610910772234975160891807151569286084928317858760146181809530385147/33849735905157366204173683715699091005063529359871647569380822464928768000000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.009196452188067502,
+        "opencorvus": 0.03315148685474866,
+        "OC_minus_Codex_exact": "217665820531360149216870290042466086408644874669/9086433126064707679406490510994299648000000000000"
+      }
+    },
+    {
+      "origin": "outer-20250315",
+      "scaled_mse": {
+        "codex": 0.0006750861374715041,
+        "opencorvus": 0.0016667786835622004,
+        "OC_minus_Codex_exact": "67137061568566339293191026701715768000084081326914446694682048229469363666609976518493245429/67699471810314732408347367431398182010127058719743295138761644929857536000000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.01129233764676093,
+        "opencorvus": 0.016897616771692162,
+        "OC_minus_Codex_exact": "381989954412106013815523700960866090211710622121/68148248445485307595548678832457247360000000000000"
+      }
+    },
+    {
+      "origin": "outer-20250415",
+      "scaled_mse": {
+        "codex": 0.00846910578084853,
+        "opencorvus": 0.009439570479245854,
+        "OC_minus_Codex_exact": "32849973746027645524961596411745125675508537316009409977933536525067529905426449640980806583/33849735905157366204173683715699091005063529359871647569380822464928768000000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.049194607463822246,
+        "opencorvus": 0.051688914448110995,
+        "OC_minus_Codex_exact": "135986121651695291176871195603379776018707272119/54518598756388246076438943065965797888000000000000"
+      }
+    },
+    {
+      "origin": "outer-20250515",
+      "scaled_mse": {
+        "codex": 0.0015507394497842972,
+        "opencorvus": 0.003459920914686214,
+        "OC_minus_Codex_exact": "1615632209548783485896044065613835033894259483611067437927693168236368000502967264847107143/846243397628934155104342092892477275126588233996791189234520561623219200000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.017036057311849973,
+        "opencorvus": 0.024558496685916493,
+        "OC_minus_Codex_exact": "50013762671218171649426895512535562220094530449/6648609604437590984931578422678755840000000000000"
+      }
+    },
+    {
+      "origin": "outer-20250620",
+      "scaled_mse": {
+        "codex": 0.018886637139106422,
+        "opencorvus": 0.020924202407181562,
+        "OC_minus_Codex_exact": "11495174368977438158610436013138543782064781147533843157354396164739019071565287738464871109/5641622650859561034028947285949848500843921559978607928230137077488128000000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.05565260309518737,
+        "opencorvus": 0.05894036028936118,
+        "OC_minus_Codex_exact": "224054894096988368543854617373993402691573156159/68148248445485307595548678832457247360000000000000"
+      }
+    },
+    {
+      "origin": "outer-20250715",
+      "scaled_mse": {
+        "codex": 0.0013134400778863984,
+        "opencorvus": 0.1154895024063215,
+        "OC_minus_Codex_exact": "1545931822603326028177032405048930343494382434406348254443321726544227404700446514647964022457/13539894362062946481669473486279636402025411743948659027752328985971507200000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.0179373051770319,
+        "opencorvus": 0.21487133863009308,
+        "OC_minus_Codex_exact": "26841418878261457857926360329753877859784132665671/136296496890970615191097357664914494720000000000000"
+      }
+    },
+    {
+      "origin": "outer-20250815",
+      "scaled_mse": {
+        "codex": 0.0006896497770731283,
+        "opencorvus": 0.004150355575898225,
+        "OC_minus_Codex_exact": "4598380944857691205844768782902322285365894267775109968757068239124850688746773/1328740786465822628230005223036821964708383907875434840473600000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.015581446946989317,
+        "opencorvus": 0.026194274470219662,
+        "OC_minus_Codex_exact": "1198884416168645587831442623726183262935799/112965598804316354234658999781120000000000000"
+      }
+    },
+    {
+      "origin": "outer-20250915",
+      "scaled_mse": {
+        "codex": 0.0006233136307155563,
+        "opencorvus": 0.0074416861429593174,
+        "OC_minus_Codex_exact": "158547368950875128780764223097801187096668681046064726673754100089017445268667349/23252963763151895994025091403144384382396718387820109708288000000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.016279654695119238,
+        "opencorvus": 0.028945265100081632,
+        "OC_minus_Codex_exact": "2861556527237513062146514297634762096124623/225931197608632708469317999562240000000000000"
+      }
+    },
+    {
+      "origin": "outer-20251015",
+      "scaled_mse": {
+        "codex": 0.0019287286483660336,
+        "opencorvus": 0.0026439878936415783,
+        "OC_minus_Codex_exact": "519746790989113020622513871843970647951913181787789569453054551876934265982021/726655117598496749813284106348262011949897449619378428384000000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.03142835740713132,
+        "opencorvus": 0.020630382679905884,
+        "OC_minus_Codex_exact": "-487919872373958145190446524450656463650599/45186239521726541693863599912448000000000000"
+      }
+    },
+    {
+      "origin": "outer-20251115",
+      "scaled_mse": {
+        "codex": 0.0006210643342189197,
+        "opencorvus": 0.0027478574510601777,
+        "OC_minus_Codex_exact": "98908486555261295045742015178048445393330758592794238789664196662943225192077541/46505927526303791988050182806288768764793436775640219416576000000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.010297003230326892,
+        "opencorvus": 0.02018859552708865,
+        "OC_minus_Codex_exact": "2234819293863710085978309119718139998731673/225931197608632708469317999562240000000000000"
+      }
+    },
+    {
+      "origin": "outer-20251215",
+      "scaled_mse": {
+        "codex": 0.0010555223006502089,
+        "opencorvus": 0.0024992715232442955,
+        "OC_minus_Codex_exact": "67142896712118033908221824164973996105447503083402391264532909015016175998973621/46505927526303791988050182806288768764793436775640219416576000000000000000000000000"
+      },
+      "scaled_wis": {
+        "codex": 0.012852677419342375,
+        "opencorvus": 0.020799203360390872,
+        "OC_minus_Codex_exact": "51296232076832974891293835964784497382167/6455177074532363099123371416064000000000000"
+      }
+    }
+  ],
+  "july_share_of_total_macro_MSE_difference_percent": 82.30403775989224,
+  "selected_july_A2": {
+    "codex": {
+      "origin": "outer-20250715",
+      "method_id": "weather-operations",
+      "series_id": "A2",
+      "truth_mean_litres": "0",
+      "forecast_mean_litres": "0",
+      "coverage80_count": 14,
+      "coverage80_denominator": 14,
+      "scaled_mse": "0",
+      "scaled_mae": "0",
+      "scaled_wis": "0"
+    },
+    "opencorvus": {
+      "origin": "outer-20250715",
+      "method_id": "weekday",
+      "series_id": "A2",
+      "truth_mean_litres": "0",
+      "forecast_mean_litres": "5401573979591837/1000000000000",
+      "coverage80_count": 0,
+      "coverage80_denominator": 14,
+      "scaled_mse": "1096703424903423591341946123015877499/1630403100436320000000000000000000000",
+      "scaled_mae": "394314900510204101/482612400000000000",
+      "scaled_wis": "623301229/772179840"
+    }
+  },
+  "selected_80pct_coverage": {
+    "codex": {
+      "A1": {
+        "covered": 119,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      },
+      "A2": {
+        "covered": 145,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      },
+      "B1": {
+        "covered": 109,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      },
+      "B2": {
+        "covered": 142,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      },
+      "ZA": {
+        "covered": 120,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      },
+      "ZB": {
+        "covered": 113,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      }
+    },
+    "opencorvus": {
+      "A1": {
+        "covered": 98,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      },
+      "A2": {
+        "covered": 127,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      },
+      "B1": {
+        "covered": 95,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      },
+      "B2": {
+        "covered": 115,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      },
+      "ZA": {
+        "covered": 95,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      },
+      "ZB": {
+        "covered": 97,
+        "targets": 168,
+        "scope": "descriptive marginal coverage; no pass line, independence assumption or joint guarantee"
+      }
+    }
+  },
+  "comparison": {
+    "macro.scaled_mse": {
+      "codex": 0.003072003802494062,
+      "opencorvus": 0.014632398796066955,
+      "codex_relative_change_percent_of_OC": -79.00546694148477,
+      "lower_loss_system": "codex"
+    },
+    "macro.scaled_wis": {
+      "codex": 0.02142329291787726,
+      "opencorvus": 0.0444096579591026,
+      "codex_relative_change_percent_of_OC": -51.75983355330898,
+      "lower_loss_system": "codex"
+    },
+    "node.A1.scaled_mse": {
+      "codex": 0.008605170651088172,
+      "opencorvus": 0.023489970321728598,
+      "codex_relative_change_percent_of_OC": -63.36661761071596,
+      "lower_loss_system": "codex"
+    },
+    "node.A1.scaled_wis": {
+      "codex": 0.03442042837906812,
+      "opencorvus": 0.06707892838349856,
+      "codex_relative_change_percent_of_OC": -48.68667522193816,
+      "lower_loss_system": "codex"
+    },
+    "decision.A1.underage_1": {
+      "codex": 399.4441138886425,
+      "opencorvus": 713.0007601696958,
+      "codex_relative_change_percent_of_OC": -43.97704235356301,
+      "lower_loss_system": "codex"
+    },
+    "decision.A1.underage_3": {
+      "codex": 827.2558870371546,
+      "opencorvus": 1616.1212902851255,
+      "codex_relative_change_percent_of_OC": -48.812264771834954,
+      "lower_loss_system": "codex"
+    },
+    "decision.A1.underage_9": {
+      "codex": 1962.5281808842772,
+      "opencorvus": 3961.5957327393066,
+      "codex_relative_change_percent_of_OC": -50.46116985977121,
+      "lower_loss_system": "codex"
+    },
+    "node.A2.scaled_mse": {
+      "codex": 0.0003093882562165844,
+      "opencorvus": 0.05704461206612199,
+      "codex_relative_change_percent_of_OC": -99.45763807481421,
+      "lower_loss_system": "codex"
+    },
+    "node.A2.scaled_wis": {
+      "codex": 0.005329440091422835,
+      "opencorvus": 0.0768982841761058,
+      "codex_relative_change_percent_of_OC": -93.06949413953397,
+      "lower_loss_system": "codex"
+    },
+    "decision.A2.underage_1": {
+      "codex": 62.597138251351026,
+      "opencorvus": 574.9849361364659,
+      "codex_relative_change_percent_of_OC": -89.11325596250154,
+      "lower_loss_system": "codex"
+    },
+    "decision.A2.underage_3": {
+      "codex": 102.38894702304657,
+      "opencorvus": 639.246473149022,
+      "codex_relative_change_percent_of_OC": -83.98286868621057,
+      "lower_loss_system": "codex"
+    },
+    "decision.A2.underage_9": {
+      "codex": 150.78055235820963,
+      "opencorvus": 711.6566692999816,
+      "codex_relative_change_percent_of_OC": -78.81273950449669,
+      "lower_loss_system": "codex"
+    },
+    "node.B1.scaled_mse": {
+      "codex": 0.005397998747532603,
+      "opencorvus": 0.009876923419464915,
+      "codex_relative_change_percent_of_OC": -45.34736660107627,
+      "lower_loss_system": "codex"
+    },
+    "node.B1.scaled_wis": {
+      "codex": 0.036306198282276984,
+      "opencorvus": 0.04668714030113836,
+      "codex_relative_change_percent_of_OC": -22.235120746104602,
+      "lower_loss_system": "codex"
+    },
+    "decision.B1.underage_1": {
+      "codex": 408.8452027925145,
+      "opencorvus": 612.7857884816989,
+      "codex_relative_change_percent_of_OC": -33.28089350676499,
+      "lower_loss_system": "codex"
+    },
+    "decision.B1.underage_3": {
+      "codex": 751.2709096244859,
+      "opencorvus": 953.392933012959,
+      "codex_relative_change_percent_of_OC": -21.20028546359341,
+      "lower_loss_system": "codex"
+    },
+    "decision.B1.underage_9": {
+      "codex": 1737.542478048567,
+      "opencorvus": 1715.9051888644944,
+      "codex_relative_change_percent_of_OC": 1.2609839590491059,
+      "lower_loss_system": "opencorvus"
+    },
+    "node.B2.scaled_mse": {
+      "codex": 0.0007163512285857297,
+      "opencorvus": 0.0023629471292117687,
+      "codex_relative_change_percent_of_OC": -69.68399251384477,
+      "lower_loss_system": "codex"
+    },
+    "node.B2.scaled_wis": {
+      "codex": 0.011511597083237336,
+      "opencorvus": 0.021549272585956646,
+      "codex_relative_change_percent_of_OC": -46.58011291416268,
+      "lower_loss_system": "codex"
+    },
+    "decision.B2.underage_1": {
+      "codex": 133.59227370211184,
+      "opencorvus": 238.1344598815178,
+      "codex_relative_change_percent_of_OC": -43.90048640227048,
+      "lower_loss_system": "codex"
+    },
+    "decision.B2.underage_3": {
+      "codex": 207.2034914916137,
+      "opencorvus": 348.1762766288613,
+      "codex_relative_change_percent_of_OC": -40.48891168065354,
+      "lower_loss_system": "codex"
+    },
+    "decision.B2.underage_9": {
+      "codex": 292.3377751489179,
+      "opencorvus": 479.6854705429811,
+      "codex_relative_change_percent_of_OC": -39.05636232466966,
+      "lower_loss_system": "codex"
+    },
+    "node.ZA.scaled_mse": {
+      "codex": 0.002718401391119463,
+      "opencorvus": 0.0074453982917123095,
+      "codex_relative_change_percent_of_OC": -63.48883854681898,
+      "lower_loss_system": "codex"
+    },
+    "node.ZA.scaled_wis": {
+      "codex": 0.020362610470340495,
+      "opencorvus": 0.039578370201556703,
+      "codex_relative_change_percent_of_OC": -48.55116477348128,
+      "lower_loss_system": "codex"
+    },
+    "node.ZB.scaled_mse": {
+      "codex": 0.002055159377145241,
+      "opencorvus": 0.00469697042429187,
+      "codex_relative_change_percent_of_OC": -56.24500068136828,
+      "lower_loss_system": "codex"
+    },
+    "node.ZB.scaled_wis": {
+      "codex": 0.021546729283165915,
+      "opencorvus": 0.03195344891150403,
+      "codex_relative_change_percent_of_OC": -32.56837675694982,
+      "lower_loss_system": "codex"
+    }
+  },
+  "interpretation": "descriptive decomposition of the original registered mean, not an estimated causal contribution, significance test or a new threshold"
+}

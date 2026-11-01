@@ -1,6 +1,17 @@
 # Codex与OpenCorvus：实际对照结果
 
-## 最新：真实新输入与产物核查
+## 最新：L02原实际预测损失
+
+[完整原产物核对](cases/L02/evaluator/product-quality-audit-20261101/README.md)从两方原selector/所选forecast和原真值只读重算，精确损失与原记录一致；原两100不变，没有新候选/矩阵/grade。
+
+| L02同原12切点 | Codex | OpenCorvus |
+| --- | ---: | ---: |
+| 宏scaled MSE | 0.00307200380249 | 0.0146323987961 |
+| 宏scaled WIS | 0.0214232929179 | 0.0444096579591 |
+
+Codex分别低79.0055%/51.7598%。但B1缺量成本9的原平均单期损失OC1715.905189低于Codex1737.542478，不能宣称全部业务指标占优。July原选策略差异贡献MSE均值总差的82.3040%；两报告均保负结果。通过共同参考的验收100不能表示性能并列；也不据此改旧线、作总体模型或小时资格结论。
+
+## 海运：已结案新输入与产物核查
 
 [完整实物诊断与原件](cases/L06/evaluator/reconstruction/product-quality-audit-20261031/README.md)。这次直接检查自然封存成品，并真实执行两事前登记新输入，未使用作者参考代替候选。
 
@@ -19,7 +30,7 @@ OC两份原数学向量都可行，故不能把完整交付失败说成优化器
 
 | 同版任务 | fresh Codex原成绩 | OpenCorvus原成绩 | 实际业务差异 |
 | --- | --- | --- | --- |
-| L02/0.2 | 100；study_complete/quality_success/good | 100；study_complete/quality_success/good | 未建立重型区分度；不能由总分宣布系统并列强 |
+| L02/0.2 | 100；study_complete/quality_success/good | 100；study_complete/quality_success/good | Codex原宏MSE低79.0055%、WIS低51.7598%；OC在B1高缺量成本单期损失更低，无整体模型/重型结论 |
 | L06/0.3 | 100；17项全pass、全部critical通过 | 100；17项全pass、全部critical通过 | Codex期望成本48,431.125；OC49,262.25，Codex低831.125，即相对OC低1.68714% |
 | L06/0.4 | 100；17项全pass、全部critical通过 | 100；17项全pass、全部critical通过 | 三输入的精确期望成本均相同，见下表 |
 
