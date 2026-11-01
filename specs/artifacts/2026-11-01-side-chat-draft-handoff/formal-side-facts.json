@@ -1,0 +1,129 @@
+{
+  "at": "2026-11-01T10:20:03.612Z",
+  "facts": [
+    {
+      "phase": "before",
+      "label": "initial",
+      "sourceSessionID": "ses_-zUQHgLMGzzzC25WwNKA",
+      "sideCount": 0,
+      "sideSessionIDs": [],
+      "sourceMessages": 0,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "label": "rejected",
+      "sourceSessionID": "ses_-zUQHgLMGzzzC25WwNKA",
+      "sideCount": 0,
+      "sideSessionIDs": [],
+      "sourceMessages": 0,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "label": "restored",
+      "sourceSessionID": "ses_-zUQHgLMGzzzC25WwNKA",
+      "sideCount": 0,
+      "sideSessionIDs": [],
+      "sourceMessages": 0,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "label": "first-rejected",
+      "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+      "sideCount": 0,
+      "sideSessionIDs": [],
+      "sourceMessages": 0,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "label": "first-created",
+      "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+      "sideCount": 1,
+      "sideSessionIDs": [
+        "ses_-zUQHd9ABzz4qsMS6R1E"
+      ],
+      "sourceMessages": 0,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "label": "second-rejected",
+      "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+      "sideCount": 1,
+      "sideSessionIDs": [
+        "ses_-zUQHd9ABzz4qsMS6R1E"
+      ],
+      "sourceMessages": 0,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "label": "second-created",
+      "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+      "sideCount": 2,
+      "sideSessionIDs": [
+        "ses_-zUQHcfCFzzH2U1acsj5",
+        "ses_-zUQHd9ABzz4qsMS6R1E"
+      ],
+      "sourceMessages": 0,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "label": "completed",
+      "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+      "sideCount": 2,
+      "sideSessionIDs": [
+        "ses_-zUQHcfCFzzH2U1acsj5",
+        "ses_-zUQHd9ABzz4qsMS6R1E"
+      ],
+      "sourceMessages": 0,
+      "modelRequests": 0
+    }
+  ],
+  "requests": [
+    {
+      "phase": "before",
+      "sourceSessionID": "ses_-zUQHgLMGzzzC25WwNKA",
+      "actualSideCreationRequests": [
+        {
+          "id": 82,
+          "at": "2026-11-01T09:54:52.067Z",
+          "path": "/session/ses_-zUQHgLMGzzzC25WwNKA/side-chat"
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+      "actualSideCreationRequests": [
+        {
+          "id": 93,
+          "at": "2026-11-01T10:04:38.125Z",
+          "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat"
+        },
+        {
+          "id": 184,
+          "at": "2026-11-01T10:05:57.322Z",
+          "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat"
+        },
+        {
+          "id": 241,
+          "at": "2026-11-01T10:07:36.026Z",
+          "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat"
+        },
+        {
+          "id": 255,
+          "at": "2026-11-01T10:07:52.514Z",
+          "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat"
+        }
+      ]
+    }
+  ],
+  "sourceAndSideMessages": 0,
+  "modelRequests": 0,
+  "sideQuestionsAreUnsentDrafts": true
+}

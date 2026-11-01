@@ -1389,6 +1389,14 @@ card is presentation of that draft. Submission serializes the quotation as a
 visible Markdown blockquote in the real user Message, using the same text for
 storage, rendering and model input. Side replies can be quoted back into the
 main composer for the user to review and send.
+The main `/side` command retains its authored source draft until the existing
+Side request consumer confirms that the new Session and target draft are ready,
+or that an empty command has opened an existing side conversation. The request
+carries the existing source draft revision, not a second persisted draft. Its
+consumer clears only that unchanged revision. Creation failure, panel retirement
+and reload retain the main input; retrying an older request preserves newer
+source prose while placing the requested question in its new side draft. Text
+selection and ordinary Side opening retain their existing quotation semantics.
 Removing a quotation returns keyboard focus to that same composer's existing
 enabled, connected and visible textarea while retaining its draft text. Main
 and Side inputs own this synchronous handoff; hidden or inert controls and a

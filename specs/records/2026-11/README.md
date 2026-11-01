@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [/side 原稿交接](2026-11-01-side-chat-draft-handoff.md)：主稿与侧稿归属、失败/重载/重试和空命令的实页复验。
+
 - [主输入发送接受与草稿归属](2026-11-01-composer-send-acceptance.md)：真实回执清理、作用域交接与完整请求重试验收。
 
 - [附件文本与原件保留](2026-11-01-composer-text-review.md)：八种原件核对、超过grace的冷重开保留及真实模型链路。

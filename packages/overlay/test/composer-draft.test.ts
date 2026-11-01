@@ -12,12 +12,30 @@ import {
   parseComposerDraftRecords,
   pruneComposerDraftRecords,
   setComposerDraftStore,
+  setComposerDraft,
   workspaceComposerDraftKey,
 } from "../src/services/composer-draft"
 
 afterEach(() => setComposerDraftStore("drafts", reconcile({})))
 
 describe("composer draft records", () => {
+  test("confirmed handoff retains the target question and consumes its unchanged source command", () => {
+    setComposerDraftStore("drafts", reconcile({ source: { text: "/side author question", updated: 100 } }))
+    const source = captureComposerDraftRevision("source")!
+    setComposerDraft("side", "author question")
+    expect(clearComposerDraftRevision(source)).toBe(true)
+    expect(composerDraftStore.drafts).toEqual({ side: { text: "author question", updated: expect.any(Number) } })
+  })
+
+  test("confirmed handoff retains both the original target question and newer source input", () => {
+    setComposerDraftStore("drafts", reconcile({ source: { text: "/side original question", updated: 100 } }))
+    const source = captureComposerDraftRevision("source")!
+    setComposerDraft("source", "new independent input")
+    setComposerDraft("side", "original question")
+    clearComposerDraftRevision(source)
+    expect(composerDraftStore.drafts).toEqual({ source: { text: "new independent input", updated: expect.any(Number) }, side: { text: "original question", updated: expect.any(Number) } })
+  })
+
   test("consumes the acknowledged revision while retaining independent input", () => {
     setComposerDraftStore("drafts", reconcile({ current: { text: "accepted input", updated: 100 }, other: { text: "later work", updated: 200 } }))
     const revision = captureComposerDraftRevision("current")!

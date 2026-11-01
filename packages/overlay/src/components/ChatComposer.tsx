@@ -194,7 +194,7 @@ export interface ChatComposerProps {
   resolveAttachmentDirectory: (selectionEpoch: number, authority: ApiAuthority) => ComposerProjectOperation
   /** Called when the user clicks the stop button while busy. */
   onStop?: () => void
-  onSideChat?: (prompt: string) => Promise<void>
+  onSideChat?: (prompt: string, sourceDraft: ComposerDraftRevision | undefined) => Promise<void>
   onGoal: () => void
   formID?: string
   textareaID?: string
@@ -1135,9 +1135,7 @@ export function ChatComposer(props: ChatComposerProps) {
         return
       }
       if (command?.kind === "side" && props.onSideChat) {
-        await props.onSideChat(command.text)
-        if (!ownsScope()) return
-        writeDraftText("")
+        await props.onSideChat(command.text, captureComposerDraftRevision(submittedDraftKey))
         return
       }
       const directives = resolveComposerMentionDirectives(trimmed, mentionCatalog())

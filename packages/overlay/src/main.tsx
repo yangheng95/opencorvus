@@ -62,7 +62,7 @@ import { ScreenshotBrowserPanel } from "./components/ScreenshotBrowserPanel"
 import { SubagentConversationPanel } from "./components/SubagentConversationPanel"
 import { SideChatPanel, type SideChatRequest } from "./components/SideChatPanel"
 import { QuotationSelection } from "./components/QuotationSelection"
-import { setComposerQuotation } from "./services/composer-draft"
+import { clearComposerDraftRevision, setComposerQuotation } from "./services/composer-draft"
 import type { Quotation } from "./services/quotation"
 import { RightDock, type RightDockPanel, type RightDockTab } from "./components/RightDock"
 import { FileEditorPane } from "./components/FileEditorPane"
@@ -541,11 +541,11 @@ function quoteInMain(quotation: Quotation) {
   queueMicrotask(() => document.querySelector<HTMLTextAreaElement>("#solidChatComposer textarea")?.focus())
 }
 
-function requestSideChat(quotation?: Quotation, prompt?: string) {
+function requestSideChat(quotation?: Quotation, prompt?: string, sourceDraft?: SideChatRequest["sourceDraft"]) {
   if (fileEditorReserved()) return
   const source = sideChatSource()
   if (!source) throw new Error(t("side_chat.source_required"))
-  setSideChatRequest({ source, intent: quotation || prompt?.trim() ? "fork" : "open", quotation, prompt })
+  setSideChatRequest({ source, intent: quotation || prompt?.trim() ? "fork" : "open", quotation, prompt, sourceDraft })
   showRightDockForExplicitAction()
   openCenterWorkbenchPanel("side-chat")
 }
@@ -2769,7 +2769,7 @@ function OverlayRoot() {
       composer={(onGoal) => (
         <ChatComposer
           onGoal={onGoal}
-          onSideChat={async (prompt) => requestSideChat(undefined, prompt)}
+          onSideChat={async (prompt, sourceDraft) => requestSideChat(undefined, prompt, sourceDraft)}
           availability={
             !canComposeChat() || selectionUnavailable() || selectedArchived()
               ? "unavailable"
@@ -3167,7 +3167,10 @@ function OverlayRoot() {
             <SideChatPanel
               source={sideChatSource()}
               request={sideChatRequest()}
-              consumeRequest={(request) => setSideChatRequest((current) => (current === request ? undefined : current))}
+              consumeRequest={(request) => {
+                if (request.sourceDraft) clearComposerDraftRevision(request.sourceDraft)
+                setSideChatRequest((current) => (current === request ? undefined : current))
+              }}
               onQuoteInMain={quoteInMain}
             />
           </TabPanel>

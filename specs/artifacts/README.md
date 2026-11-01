@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [/side 原稿交接](2026-11-01-side-chat-draft-handoff/README.md)：12张原图、真实存储拒绝、两稿保留及结构/数据结清。
+
 - [主输入发送接受与草稿归属](2026-11-01-composer-send-acceptance/README.md)：17张实图、失败候选、稳定重试及三服务数据结清。
 
 - [附件文本与原件保留](2026-11-01-composer-text-review/README.md)：基线/失败候选/最终原图、原件下载与完整结清证据。

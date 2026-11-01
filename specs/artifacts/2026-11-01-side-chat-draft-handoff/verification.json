@@ -1,0 +1,445 @@
+{
+  "at": "2026-11-01T10:20:03.616Z",
+  "singleAgent": true,
+  "userWindowsUntouched": true,
+  "isolatedDevelopmentUI": true,
+  "manualScreenshots": [
+    "01-before-main-intent.jpg",
+    "02-before-rejected-empty-main.jpg",
+    "03-before-http-details.jpg",
+    "04-before-reloaded-empty.jpg",
+    "05-after-rejected-main-retained-en.jpg",
+    "06-after-reloaded-main-retained-en.jpg",
+    "07-after-confirmed-handoff-zh.jpg",
+    "08-after-second-rejected-zh.jpg",
+    "09-after-independent-main-before-retry.jpg",
+    "10-after-two-intents-preserved.jpg",
+    "11-after-reloaded-two-drafts.jpg",
+    "12-after-empty-command-existing-side.jpg"
+  ],
+  "positiveTests": 16,
+  "expectations": 19,
+  "checks": [
+    {
+      "label": "unit-drafts-after",
+      "exitCode": 0,
+      "startedAt": 1793527179974,
+      "closedAt": 1793527184516
+    },
+    {
+      "label": "types-after",
+      "exitCode": 0,
+      "startedAt": 1793527179975,
+      "closedAt": 1793527201284
+    },
+    {
+      "label": "i18n-after",
+      "exitCode": 0,
+      "startedAt": 1793527179975,
+      "closedAt": 1793527182836
+    },
+    {
+      "label": "ui-build-after",
+      "exitCode": 0,
+      "startedAt": 1793527180020,
+      "closedAt": 1793527239303
+    }
+  ],
+  "cases": [
+    {
+      "at": "2026-11-01T09:56:33.481Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 238803,
+      "current": 238861,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 46651,
+          "after": 46661
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 46651,
+          "after": 46661
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6141,
+          "after": 6143
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6141,
+          "after": 6143
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18423,
+          "after": 18429
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48938,
+          "after": 48949
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48880,
+          "after": 48891
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5943,
+          "after": 5945
+        },
+        {
+          "table": "memory_chunk",
+          "before": 78,
+          "after": 79
+        },
+        {
+          "table": "memory_file",
+          "before": 78,
+          "after": 79
+        },
+        {
+          "table": "project",
+          "before": 80,
+          "after": 81
+        },
+        {
+          "table": "session",
+          "before": 111,
+          "after": 112
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 217,
+      "projects": 80,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1193,
+      "reserveMs": 4074058,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-D2WqW_LM.js",
+      "schemaObjectsPreserved": true,
+      "schemaObjectCount": 527,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "maximumRequests": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "port": 38538
+    },
+    {
+      "at": "2026-11-01T10:09:52.319Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 238861,
+      "current": 239041,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 46661,
+          "after": 46695
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 46661,
+          "after": 46695
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6143,
+          "after": 6149
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6143,
+          "after": 6149
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18429,
+          "after": 18447
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48949,
+          "after": 48984
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48891,
+          "after": 48926
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5945,
+          "after": 5951
+        },
+        {
+          "table": "memory_chunk",
+          "before": 79,
+          "after": 80
+        },
+        {
+          "table": "memory_file",
+          "before": 79,
+          "after": 80
+        },
+        {
+          "table": "project",
+          "before": 81,
+          "after": 82
+        },
+        {
+          "table": "session",
+          "before": 112,
+          "after": 115
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 217,
+      "projects": 81,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1193,
+      "reserveMs": 3272713,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DJUBbXEj.js",
+      "schemaObjectsPreserved": true,
+      "schemaObjectCount": 527,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "maximumRequests": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "port": 38539
+    }
+  ],
+  "originalGoals": 9,
+  "totalModelRequests": 0,
+  "cumulativeRequests": 1193,
+  "retiredPairedCopies": 4,
+  "absoluteDeadline": 1793531043908,
+  "formalSideFacts": {
+    "at": "2026-11-01T10:20:03.612Z",
+    "facts": [
+      {
+        "phase": "before",
+        "label": "initial",
+        "sourceSessionID": "ses_-zUQHgLMGzzzC25WwNKA",
+        "sideCount": 0,
+        "sideSessionIDs": [],
+        "sourceMessages": 0,
+        "modelRequests": 0
+      },
+      {
+        "phase": "before",
+        "label": "rejected",
+        "sourceSessionID": "ses_-zUQHgLMGzzzC25WwNKA",
+        "sideCount": 0,
+        "sideSessionIDs": [],
+        "sourceMessages": 0,
+        "modelRequests": 0
+      },
+      {
+        "phase": "before",
+        "label": "restored",
+        "sourceSessionID": "ses_-zUQHgLMGzzzC25WwNKA",
+        "sideCount": 0,
+        "sideSessionIDs": [],
+        "sourceMessages": 0,
+        "modelRequests": 0
+      },
+      {
+        "phase": "after",
+        "label": "first-rejected",
+        "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+        "sideCount": 0,
+        "sideSessionIDs": [],
+        "sourceMessages": 0,
+        "modelRequests": 0
+      },
+      {
+        "phase": "after",
+        "label": "first-created",
+        "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+        "sideCount": 1,
+        "sideSessionIDs": [
+          "ses_-zUQHd9ABzz4qsMS6R1E"
+        ],
+        "sourceMessages": 0,
+        "modelRequests": 0
+      },
+      {
+        "phase": "after",
+        "label": "second-rejected",
+        "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+        "sideCount": 1,
+        "sideSessionIDs": [
+          "ses_-zUQHd9ABzz4qsMS6R1E"
+        ],
+        "sourceMessages": 0,
+        "modelRequests": 0
+      },
+      {
+        "phase": "after",
+        "label": "second-created",
+        "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+        "sideCount": 2,
+        "sideSessionIDs": [
+          "ses_-zUQHcfCFzzH2U1acsj5",
+          "ses_-zUQHd9ABzz4qsMS6R1E"
+        ],
+        "sourceMessages": 0,
+        "modelRequests": 0
+      },
+      {
+        "phase": "after",
+        "label": "completed",
+        "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+        "sideCount": 2,
+        "sideSessionIDs": [
+          "ses_-zUQHcfCFzzH2U1acsj5",
+          "ses_-zUQHd9ABzz4qsMS6R1E"
+        ],
+        "sourceMessages": 0,
+        "modelRequests": 0
+      }
+    ],
+    "requests": [
+      {
+        "phase": "before",
+        "sourceSessionID": "ses_-zUQHgLMGzzzC25WwNKA",
+        "actualSideCreationRequests": [
+          {
+            "id": 82,
+            "at": "2026-11-01T09:54:52.067Z",
+            "path": "/session/ses_-zUQHgLMGzzzC25WwNKA/side-chat"
+          }
+        ]
+      },
+      {
+        "phase": "after",
+        "sourceSessionID": "ses_-zUQHdnFzzz3BwfFrMBQ",
+        "actualSideCreationRequests": [
+          {
+            "id": 93,
+            "at": "2026-11-01T10:04:38.125Z",
+            "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat"
+          },
+          {
+            "id": 184,
+            "at": "2026-11-01T10:05:57.322Z",
+            "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat"
+          },
+          {
+            "id": 241,
+            "at": "2026-11-01T10:07:36.026Z",
+            "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat"
+          },
+          {
+            "id": 255,
+            "at": "2026-11-01T10:07:52.514Z",
+            "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat"
+          }
+        ]
+      }
+    ],
+    "sourceAndSideMessages": 0,
+    "modelRequests": 0,
+    "sideQuestionsAreUnsentDrafts": true
+  },
+  "diagnosticFaults": [
+    {
+      "phase": "before",
+      "at": "2026-11-01T09:54:52.075Z",
+      "requestID": "80091b34-4e6d-4d5c-9133-b74b10b8cdd5",
+      "method": "POST",
+      "path": "/session/ses_-zUQHgLMGzzzC25WwNKA/side-chat",
+      "numericFacts": {
+        "statusCode": 500
+      },
+      "excerpts": [
+        {
+          "field": "data.error.message",
+          "originalExcerpt": "Owned QA side-chat storage rejection 866"
+        },
+        {
+          "field": "data.error.stack",
+          "originalExcerpt": "SQLiteError: Owned QA side-chat storage rejection 866\n    at run (unknown)\n    at #run (bun:sqlite:187:20)\n    at"
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "at": "2026-11-01T10:04:38.134Z",
+      "requestID": "19044b71-381d-4445-87db-d2d84847be44",
+      "method": "POST",
+      "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat",
+      "numericFacts": {
+        "statusCode": 500
+      },
+      "excerpts": [
+        {
+          "field": "data.error.message",
+          "originalExcerpt": "Owned QA side-chat storage rejection 866"
+        },
+        {
+          "field": "data.error.stack",
+          "originalExcerpt": "SQLiteError: Owned QA side-chat storage rejection 866\n    at run (unknown)\n    at #run (bun:sqlite:187:20)\n    at"
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "at": "2026-11-01T10:07:36.032Z",
+      "requestID": "a644c00f-c1e0-4212-9469-a7527d0e9054",
+      "method": "POST",
+      "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat",
+      "numericFacts": {
+        "statusCode": 500
+      },
+      "excerpts": [
+        {
+          "field": "data.error.message",
+          "originalExcerpt": "Owned QA side-chat storage rejection 866"
+        },
+        {
+          "field": "data.error.stack",
+          "originalExcerpt": "SQLiteError: Owned QA side-chat storage rejection 866\n    at run (unknown)\n    at #run (bun:sqlite:187:20)\n    at"
+        }
+      ]
+    }
+  ],
+  "coverageLimits": [
+    "No Side LLM send or Stop was executed: this batch verifies the real draft handoff and creation path.",
+    "Existing quoted-history transfer behavior was inspected in code, not claimed as a new real-model run.",
+    "At screenshot 12 the tester explicitly replaced the already-preserved new main input with /side; its subsequent consumption is the intended command action."
+  ]
+}

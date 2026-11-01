@@ -27,6 +27,7 @@ import {
   setComposerQuotation,
   clearComposerDraft,
   composerSubmission,
+  type ComposerDraftRevision,
 } from "../services/composer-draft"
 import { quotedPrompt, type Quotation } from "../services/quotation"
 import type { SubagentConversationTranscript, SubagentTranscriptMessage } from "../services/subagent-conversation"
@@ -54,6 +55,7 @@ export interface SideChatRequest {
   intent: "open" | "fork"
   quotation?: Quotation
   prompt?: string
+  sourceDraft?: ComposerDraftRevision
 }
 
 function SideMessage(props: { message: SubagentTranscriptMessage }) {

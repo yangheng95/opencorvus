@@ -1,0 +1,62 @@
+[
+  {
+    "phase": "before",
+    "at": "2026-11-01T09:54:52.075Z",
+    "requestID": "80091b34-4e6d-4d5c-9133-b74b10b8cdd5",
+    "method": "POST",
+    "path": "/session/ses_-zUQHgLMGzzzC25WwNKA/side-chat",
+    "numericFacts": {
+      "statusCode": 500
+    },
+    "excerpts": [
+      {
+        "field": "data.error.message",
+        "originalExcerpt": "Owned QA side-chat storage rejection 866"
+      },
+      {
+        "field": "data.error.stack",
+        "originalExcerpt": "SQLiteError: Owned QA side-chat storage rejection 866\n    at run (unknown)\n    at #run (bun:sqlite:187:20)\n    at"
+      }
+    ]
+  },
+  {
+    "phase": "after",
+    "at": "2026-11-01T10:04:38.134Z",
+    "requestID": "19044b71-381d-4445-87db-d2d84847be44",
+    "method": "POST",
+    "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat",
+    "numericFacts": {
+      "statusCode": 500
+    },
+    "excerpts": [
+      {
+        "field": "data.error.message",
+        "originalExcerpt": "Owned QA side-chat storage rejection 866"
+      },
+      {
+        "field": "data.error.stack",
+        "originalExcerpt": "SQLiteError: Owned QA side-chat storage rejection 866\n    at run (unknown)\n    at #run (bun:sqlite:187:20)\n    at"
+      }
+    ]
+  },
+  {
+    "phase": "after",
+    "at": "2026-11-01T10:07:36.032Z",
+    "requestID": "a644c00f-c1e0-4212-9469-a7527d0e9054",
+    "method": "POST",
+    "path": "/session/ses_-zUQHdnFzzz3BwfFrMBQ/side-chat",
+    "numericFacts": {
+      "statusCode": 500
+    },
+    "excerpts": [
+      {
+        "field": "data.error.message",
+        "originalExcerpt": "Owned QA side-chat storage rejection 866"
+      },
+      {
+        "field": "data.error.stack",
+        "originalExcerpt": "SQLiteError: Owned QA side-chat storage rejection 866\n    at run (unknown)\n    at #run (bun:sqlite:187:20)\n    at"
+      }
+    ]
+  }
+]
