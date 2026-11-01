@@ -39,8 +39,11 @@ export function AutoGrowTextarea(props: AutoGrowTextareaProps) {
   let width: number | undefined
   let observer: ResizeObserver | undefined
 
-  function resize() {
+  function resize(revealEditingEnd = false) {
     if (disposed || !el?.isConnected || el.getBoundingClientRect().width <= 0) return
+    const scrollTop = el.scrollTop
+    const editingEnd = revealEditingEnd && el.ownerDocument.activeElement === el &&
+      el.selectionStart === el.value.length && el.selectionEnd === el.value.length
     // Reset to auto first so scrollHeight reflects the natural content height
     // rather than the previously-pinned height.
     el.style.height = "auto"
@@ -50,9 +53,15 @@ export function AutoGrowTextarea(props: AutoGrowTextareaProps) {
       lineHeight: parseFloat(cs.lineHeight) || 20,
       padTop: parseFloat(cs.paddingTop) || 0,
       padBottom: parseFloat(cs.paddingBottom) || 0,
+      borderTop: parseFloat(cs.borderTopWidth) || 0,
+      borderBottom: parseFloat(cs.borderBottomWidth) || 0,
+      borderBox: cs.boxSizing === "border-box",
       maxLines: local.maxLines ?? DEFAULT_MAX_VISIBLE_LINES,
     })
     el.style.height = `${height}px`
+    // Measuring must preserve a reader's viewport. Value changes also keep an
+    // actual end caret visible when an edit grows beyond the line cap.
+    el.scrollTop = editingEnd ? el.scrollHeight : scrollTop
   }
 
   // queueMicrotask defers the measure until after Solid flushes the new value
@@ -60,7 +69,7 @@ export function AutoGrowTextarea(props: AutoGrowTextareaProps) {
   createEffect(() => {
     const value = local.value
     if (el && el.value !== value) el.value = value
-    queueMicrotask(resize)
+    queueMicrotask(() => resize(true))
   })
 
   onMount(() => {

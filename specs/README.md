@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标长文本表单](records/2026-11/2026-11-02-goal-form-reading.md)：目标与完成依据的内容增高、草稿和校验。
+
 - [持续目标操作可读性](records/2026-11/2026-11-02-goal-operation-reading.md)：真实Goal工具名和目录读取身份。
 
 - [默认页与保存任务](records/2026-11/2026-11-02-startup-selection.md)：启动项目、精确任务恢复与默认Goal入口。

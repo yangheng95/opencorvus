@@ -1465,6 +1465,11 @@ connected, nonzero geometry is required. Its observer ignores height-only update
 and disconnects on disposal. Caller rows and CSS minimum heights keep their
 existing floors, including the main Composer's manual resize floor. Opening or
 resizing a Dock therefore remeasures wrapping without requiring another keystroke.
+Its measured padding-box height is converted through the field's actual box
+model, including borders for border-box fields. Measuring preserves the current
+input viewport; a value change with a focused, collapsed caret at the native
+text end reveals that editing end after resizing. Geometry-only changes retain
+the reader's viewport and do not follow the caret.
 
 ## Reference-led navigation and usage
 

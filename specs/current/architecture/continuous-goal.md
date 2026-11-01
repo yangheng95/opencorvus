@@ -341,6 +341,10 @@ Their invalid events report the existing localized goal error, and editing clear
 the custom validity and the prior local submission summary before updating the
 field value. Server failures retain their original disclosure. Native focus, required and
 numeric constraints still precede the unchanged application and service checks.
+Objective and completion-evidence drafts use the shared AutoGrowTextarea. Content
+and usable-width changes grow the existing native field to the common line cap,
+then retain internal scrolling; caller rows and the original validation, draft
+ownership and focus refs remain in effect.
 
 The goal dialog keeps its header and action footer inside the existing bounded
 frame while its form or introduction owns body scrolling. Expanded diagnostics

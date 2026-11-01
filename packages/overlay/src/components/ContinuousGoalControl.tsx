@@ -25,6 +25,7 @@ import { formatErrorDetails } from "../services/diagnostics"
 import { composerDraftText, composerQuotation, setComposerDraft } from "../services/composer-draft"
 import { randomUUID } from "../utils/random-id"
 import { localeTag, t } from "../utils/i18n"
+import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Badge, type BadgeTone } from "./ui/Badge"
 import { Button } from "./ui/Button"
 import { Checkbox } from "./ui/Checkbox"
@@ -788,7 +789,7 @@ export function ContinuousGoalControl(props: {
               </Show>
               <TextField.Root as="label" variant="multiline" invalid={objectiveLengthInvalid()}>
                 <TextField.Label>{t("continuous_goal.objective")}</TextField.Label>
-                <TextField.TextArea
+                <AutoGrowTextarea
                   ref={(element) => { objectiveField = element }}
                   value={objective()}
                   onInvalid={(e) => e.currentTarget.setCustomValidity(t("continuous_goal.validation.objective"))}
@@ -933,7 +934,7 @@ export function ContinuousGoalControl(props: {
             >
               <TextField.Root as="label" variant="multiline">
                 <TextField.Label>{t("continuous_goal.evidence")}</TextField.Label>
-                <TextField.TextArea
+                <AutoGrowTextarea
                   ref={(element) => { completionField = element }}
                   value={reason()}
                   onInvalid={(e) => e.currentTarget.setCustomValidity(t("continuous_goal.validation.reason"))}

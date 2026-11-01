@@ -1,0 +1,343 @@
+{
+  "at": "2026-11-01T19:45:33.704Z",
+  "purpose": "Real Goal drafts, shared textarea box model and editing/reading viewport",
+  "uiAutomation": false,
+  "manualScreenshots": 36,
+  "phases": {
+    "before": {
+      "at": "2026-11-01T19:07:32.239Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258663,
+      "current": 258665,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52920,
+          "after": 52921
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52862,
+          "after": 52863
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4344231,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DA5cPY77.js"
+    },
+    "after": {
+      "at": "2026-11-01T19:20:46.451Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258665,
+      "current": 258667,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52921,
+          "after": 52922
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52863,
+          "after": 52864
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3549450,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DjRtjGCF.js"
+    },
+    "final": {
+      "at": "2026-11-01T19:37:57.480Z",
+      "kind": "final",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258667,
+      "current": 258669,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52922,
+          "after": 52923
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52864,
+          "after": 52865
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 2517841,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CkimZRe3.js"
+    }
+  },
+  "originalNativeHandles": {
+    "before": 10376,
+    "after": 41155,
+    "final": 56422
+  },
+  "originalNativeExitCodes": {
+    "before": 0,
+    "after": 0,
+    "final": 0
+  },
+  "firstAdmission": {
+    "beforeRequests": 0,
+    "afterRequests": 0,
+    "commonDeadlineMinutes": 75,
+    "retirementReserveMinutes": 5,
+    "kind": "Manual Goal objective and completion evidence drafts only; no valid creation/completion submission or model execution"
+  },
+  "additionalFinalAdmission": {
+    "at": "2026-11-01T19:24:52.087Z",
+    "maximumRequests": 0,
+    "deadlineAt": 1793564371339,
+    "scope": "Complete shared box-model and native editing viewport fixes; fresh final occurrence, no prior allowance/deadline mutation"
+  },
+  "finalGoals": [
+    {
+      "id": "pev_g0VZkQgjy00kTMNnWU1p",
+      "sessionID": "ses_-zUQFZJOAzzdBf6RDQ2v",
+      "status": "complete",
+      "sessionStatus": "idle",
+      "turnBudget": 12,
+      "turnsAccepted": 1,
+      "tokensUsed": 383698
+    },
+    {
+      "id": "pev_g0VZizqAV00n2UrSitIS",
+      "sessionID": "ses_-zUQH0A0MzzeoWecyS2i",
+      "status": "paused",
+      "sessionStatus": "idle",
+      "turnBudget": 2,
+      "turnsAccepted": 1,
+      "tokensUsed": 503626
+    }
+  ],
+  "manualDOMObservations": {
+    "before-objective": {
+      "clientHeight": 61,
+      "height": 62.5625,
+      "maximumLength": 16000,
+      "scrollHeight": 158,
+      "scrollTop": 0,
+      "valueLength": 170
+    },
+    "before-evidence": {
+      "clientHeight": 77,
+      "height": 78.75,
+      "maximumLength": 4000,
+      "scrollHeight": 142,
+      "scrollTop": 0,
+      "valueLength": 146
+    },
+    "after-objective": {
+      "clientHeight": 156,
+      "height": 158,
+      "maximumLength": 16000,
+      "scrollHeight": 158,
+      "scrollTop": 0,
+      "valueLength": 170
+    },
+    "after-evidence": {
+      "clientHeight": 140,
+      "height": 142,
+      "maximumLength": 4000,
+      "scrollHeight": 142,
+      "scrollTop": 0,
+      "valueLength": 146
+    },
+    "autogrow-border": {
+      "borderBottom": "1px",
+      "borderTop": "1px",
+      "boxSizing": "border-box",
+      "clientHeight": 156,
+      "inlineHeight": "158px",
+      "lineHeight": "16.2px",
+      "paddingBottom": "6px",
+      "paddingTop": "6px",
+      "scrollHeight": 158
+    },
+    "after-paste-evidence": {
+      "clientHeight": 172,
+      "focused": true,
+      "scrollHeight": 401,
+      "scrollTop": 0,
+      "selectionEnd": 695,
+      "selectionStart": 695,
+      "validationMessage": "",
+      "valueLength": 695
+    },
+    "final-composer-nine": {
+      "clientHeight": 156,
+      "height": 156,
+      "scrollHeight": 156,
+      "scrollTop": 0,
+      "selectionEnd": 170,
+      "selectionStart": 170,
+      "valueLength": 170
+    },
+    "final-composer-long": {
+      "clientHeight": 172,
+      "height": 172,
+      "scrollHeight": 399,
+      "scrollTop": 227,
+      "selectionEnd": 695,
+      "selectionStart": 695,
+      "valueLength": 695
+    },
+    "final-objective-nine": {
+      "clientHeight": 158,
+      "height": 160,
+      "scrollHeight": 158,
+      "scrollTop": 0,
+      "selectionEnd": 170,
+      "selectionStart": 170,
+      "valueLength": 170
+    },
+    "final-objective-long": {
+      "clientHeight": 174,
+      "height": 176,
+      "scrollHeight": 401,
+      "scrollTop": 227,
+      "selectionEnd": 695,
+      "selectionStart": 695,
+      "valueLength": 695
+    },
+    "final-short-objective": {
+      "clientHeight": 61,
+      "height": 63,
+      "scrollHeight": 61,
+      "valueLength": 6
+    },
+    "final-mission-nine": {
+      "clientHeight": 158,
+      "height": 160,
+      "scrollHeight": 158,
+      "scrollTop": 0,
+      "valueLength": 170
+    },
+    "final-mission-long": {
+      "clientHeight": 272,
+      "height": 274,
+      "scrollHeight": 401,
+      "scrollTop": 129,
+      "selectionEnd": 695,
+      "selectionStart": 695,
+      "valueLength": 695
+    },
+    "final-evidence-eight": {
+      "clientHeight": 142,
+      "height": 144,
+      "maximumLength": 4000,
+      "scrollHeight": 142,
+      "scrollTop": 0,
+      "selectionEnd": 146,
+      "selectionStart": 146,
+      "valueLength": 146
+    },
+    "final-evidence-long": {
+      "clientHeight": 174,
+      "focused": true,
+      "height": 176,
+      "scrollHeight": 401,
+      "scrollTop": 227,
+      "selectionEnd": 695,
+      "selectionStart": 695,
+      "valueLength": 695
+    },
+    "final-evidence-middle-edit": {
+      "clientHeight": 174,
+      "height": 176,
+      "scrollHeight": 401,
+      "scrollTop": 5,
+      "selectionEnd": 30,
+      "selectionStart": 30,
+      "valueLength": 696
+    },
+    "final-evidence-short": {
+      "clientHeight": 77,
+      "height": 79,
+      "scrollHeight": 77,
+      "valueLength": 6
+    },
+    "final-evidence-invalid": {
+      "maximumLength": 4000,
+      "required": true,
+      "validationMessage": "标记完成前，请填写实际完成依据。",
+      "valueLength": 0
+    },
+    "reader-pan-before": {
+      "scrollTop": 0,
+      "selectionEnd": 695,
+      "selectionStart": 695,
+      "valueLength": 695,
+      "width": 726
+    },
+    "reader-pan-after": {
+      "scrollTop": 0,
+      "selectionEnd": 695,
+      "selectionStart": 695,
+      "valueLength": 695,
+      "width": 500
+    }
+  },
+  "checks": {
+    "build": 0,
+    "overlayTypecheck": 0,
+    "i18nCssDocuments": 0
+  },
+  "pairedCopiesRetired": 6,
+  "userDatabaseUsed": false,
+  "userWindowUsed": false,
+  "limitations": [
+    "All actually reviewed fields used border-box; content-box was not exercised by adding a separate style.",
+    "Other shared writing surfaces received a call-site audit rather than individual visual acceptance.",
+    "Full IME composition was not exercised; actual paste and a single Chinese character insertion were reviewed."
+  ],
+  "failedTrialRetained": {
+    "uiEntry": "main-DjRtjGCF.js",
+    "caretAtEndWithViewportAtStart": true,
+    "nativePasteScreenshot": "19-after-native-paste-evidence-zh.jpg",
+    "finalDirectPasteScreenshot": "31-final-evidence-native-paste-tail-zh.jpg"
+  }
+}
