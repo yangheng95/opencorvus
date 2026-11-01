@@ -1,0 +1,24 @@
+{
+  "argv": [
+    "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\current-evaluator\\check_package.py",
+    "--public",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\frozen-public",
+    "--workbook",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "--source-calculations",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\original-source-arithmetic.json",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\posthoc-measurement\\opencorvus\\assessment.json",
+    "--node",
+    "C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe"
+  ],
+  "started_at": "2026-11-01T10:34:04.100822+00:00",
+  "ended_at": "2026-11-01T10:34:06.960012+00:00",
+  "native_exit": 0,
+  "stage": "post_hoc_measurement_repair",
+  "original_frozen_native_exit": 4,
+  "new_model_run": false,
+  "candidate_modified": false
+}

@@ -1,0 +1,50 @@
+{
+  "actual_contact_views": {
+    "codex": [
+      "evidence/contact_01.png",
+      "evidence/contact_02.png",
+      "evidence/contact_03.png",
+      "evidence/contact_04.png",
+      "evidence/contact_05.png",
+      "evidence/contact_06.png",
+      "evidence/contact_07.png",
+      "evidence/contact_08.png",
+      "evidence/contact_09.png",
+      "evidence/contact_10.png"
+    ],
+    "opencorvus": [
+      "visual/contact_01.png",
+      "visual/contact_02.png",
+      "visual/contact_03.png",
+      "visual/contact_04.png",
+      "visual/contact_05.png",
+      "visual/contact_06.png",
+      "visual/contact_07.png",
+      "visual/contact_08.png",
+      "visual/contact_09.png",
+      "visual/contact_10.png",
+      "visual/contact_11.png"
+    ]
+  },
+  "direct_formal_xlsx_render_receipt": "render-receipt.json",
+  "template_readonly_render_receipt": "template-render-receipt.json",
+  "full_size_direct_views_actually_viewed": true,
+  "actual_handoffs_read": [
+    "codex/project/submission/README.md",
+    "opencorvus/project/submission/HANDOFF.md"
+  ],
+  "reader_failures": [
+    {
+      "operation": "collect_pair_measurements.py first call",
+      "native_exit": 1,
+      "error": "AttributeError: 'tuple' object has no attribute 'items'",
+      "correction": "Unpack existing expectations return tuple; successful read-only collector native0; no model/build/checker rerun"
+    },
+    {
+      "operation": "root Get-Content guessed filename legal-credit-basis-measure.execution.json",
+      "error": "path not found",
+      "actual": "legal-credit-basis-consumer.execution.json"
+    }
+  ],
+  "scope": "These read-only observer errors are not candidate or shared production failures. No original candidate modified. No new review/model/Provider/native Task."
+}

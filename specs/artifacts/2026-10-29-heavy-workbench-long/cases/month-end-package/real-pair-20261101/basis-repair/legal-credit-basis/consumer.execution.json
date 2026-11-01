@@ -1,0 +1,21 @@
+{
+  "label": "legal-credit-basis-consumer",
+  "argv": [
+    "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\implementation\\check_package.py",
+    "--public",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\public",
+    "--workbook",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\validation\\legal-credit-basis\\Aurisic_Financials_4-25-1.xlsx",
+    "--source-calculations",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\original-source-arithmetic.json",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\validation\\legal-credit-basis\\assessment.json",
+    "--node",
+    "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe"
+  ],
+  "started_at": "2026-11-01T10:30:31.160479+00:00",
+  "ended_at": "2026-11-01T10:30:35.521433+00:00",
+  "native_exit": 0
+}

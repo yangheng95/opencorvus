@@ -135,7 +135,7 @@
 
 - [2026-10-29-heavy-workbench-cross-system.md](2026-10-29-heavy-workbench-cross-system.md)：同一H05旧题两方真实业务交付、清洁复跑、升级触发及小时级要求。
 
-- [2026-10-29-heavy-workbench-long.md](2026-10-29-heavy-workbench-long.md)：旧原件/实际产物质量诊断保；最新人类授权恢复心跳并修月结独审缺陷、补公平条件后做真实Codex/OC。当前完整正错消费已实测，模型比较待实际推进，十题/有效小时未达、通用修正行为根治未证。
+- [2026-10-29-heavy-workbench-long.md](2026-10-29-heavy-workbench-long.md)：最新用户授权恢复心跳、修月结并真实Codex/OC已实际完成一对；原件先封/原源码重建/消费与图保，表示误拒后验修复而非倒改原4。十题/有效小时0/10保持、心跳ACTIVE、通用验证行为根治未证。
 
 - [2026-10-29-attachment-workspace-journey.md](2026-10-29-attachment-workspace-journey.md)：跨项目文件附加、内容核对与草稿作用域实页调查。
 

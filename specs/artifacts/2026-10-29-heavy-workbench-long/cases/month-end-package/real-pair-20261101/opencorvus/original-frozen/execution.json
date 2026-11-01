@@ -1,0 +1,24 @@
+{
+  "candidate": "opencorvus",
+  "argv": [
+    "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\frozen-evaluator\\check_package.py",
+    "--public",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\frozen-public",
+    "--workbook",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "--source-calculations",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\original-source-arithmetic.json",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\evaluation\\opencorvus\\assessment.json",
+    "--node",
+    "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe"
+  ],
+  "started_at": "2026-11-01T10:24:31.224000+00:00",
+  "ended_at": "2026-11-01T10:24:34.094203+00:00",
+  "native_exit": 4,
+  "original_submission_modified": false,
+  "source_commit": "394c7ee04ed06e988a3faa5d35da1d67fb03e48e",
+  "scope": "Numeric/source/declared-refresh contracts only; not a whole professional grade or aggregate score"
+}

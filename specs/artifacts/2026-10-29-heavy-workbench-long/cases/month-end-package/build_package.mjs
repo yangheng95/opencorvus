@@ -273,6 +273,15 @@ if(variant==='legal-funding') {
 if(variant==='drop-payroll-note')put(payroll,'E18',[[null]]);
 if(variant==='frozen-bonus')put(bonus,'B15',[[(await source('AccrBonus-1.xlsx')).worksheets.getItemAt(0).getRange('B15').values[0][0]]]);
 if(variant==='changed-invoice')put(legal,'E3',[['altered-source-identity']]);
+if(['legal-credit-basis','wrong-mixed-basis','wrong-credit-amount'].includes(variant)){
+ put(payroll,'A36',[['Opening March GL2200 credit']]);put(payroll,'C36',[[-march(2200)]]);
+ if(variant!=='wrong-mixed-basis'){
+  put(payroll,'A38',[['Source credit rollforward']]);f(payroll,'C38','=C36-C37');
+  put(payroll,'A39',[['April GL2200 credit']]);f(payroll,'C39',`=-${ref(2200)}`);
+  put(payroll,'A40',[['GL credit less source credit rollforward']]);f(payroll,'C40','=C39-C38');
+ }
+ if(variant==='wrong-credit-amount')f(payroll,'C38','=C36-C37+100');
+}
 const ix=names[20];put(ix,'A1',[['Claim','Sheet','Address','Role','Columns','Basis'],...evidence]);
 for(const [col,width]of [['A',42],['B',44],['C',20],['D',18],['E',58],['F',70]])get(ix).getRange(`${col}:${col}`).format.columnWidth=width;
 get(ix).getRange(`A2:F${evidence.length+1}`).format.wrapText=true;get(ix).freezePanes.freezeRows(1);

@@ -1,0 +1,14 @@
+[
+  {
+    "argv": [
+      "pwsh.exe",
+      "-NoProfile",
+      "-Command",
+      "& './submission/build.ps1'"
+    ],
+    "cwd": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\source-reproduction\\codex\\project",
+    "started_at": "2026-11-01T10:32:05.215512+00:00",
+    "ended_at": "2026-11-01T10:32:32.215248+00:00",
+    "native_exit": 0
+  }
+]

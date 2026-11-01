@@ -1,0 +1,561 @@
+{
+  "measured_contracts_match": true,
+  "errors": [],
+  "ledger_accounts": 105,
+  "numeric_claims": 142,
+  "source_inputs_checked": 1362,
+  "accounting_basis": {
+    "payroll_liability_controls": "credit_positive",
+    "raw_observations": {
+      "payroll.opening": 259800,
+      "payroll.rollforward": 318500,
+      "payroll.gl": 141033,
+      "payroll.gap": -177467
+    },
+    "semantic_label_review_required": true,
+    "scope": "Coupled quantity consistency only; actual labels and formulas must establish the claimed accounting meaning"
+  },
+  "engine_native_exit": 0,
+  "refresh": [
+    {
+      "input": "input.cash1024",
+      "input_delta": 1,
+      "expected": {
+        "cash.balance": 1,
+        "bank.book": 1
+      },
+      "deltas": {
+        "cash.balance": 1,
+        "bank.book": 1
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    },
+    {
+      "input": "input.bonus",
+      "input_delta": 100,
+      "expected": {
+        "bonus.total": 100,
+        "bonus.headline": 100,
+        "bonus.gap": -100,
+        "bonus.source_reported": 0
+      },
+      "deltas": {
+        "bonus.total": 100,
+        "bonus.headline": 100,
+        "bonus.gap": -100,
+        "bonus.source_reported": 0
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    },
+    {
+      "input": "input.prepaid_addition",
+      "input_delta": 6,
+      "expected": {
+        "prepaid.expense.amortization25": 1,
+        "prepaid.expense.vendor.25": 5,
+        "prepaid.expense.total": 5,
+        "prepaid.expense.gap": -5
+      },
+      "deltas": {
+        "prepaid.expense.amortization25": 1,
+        "prepaid.expense.vendor.25": 5,
+        "prepaid.expense.total": 5,
+        "prepaid.expense.gap": -5
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    },
+    {
+      "input": "input.fees",
+      "input_delta": 1,
+      "expected": {
+        "fees.balance": 1
+      },
+      "deltas": {
+        "fees.balance": 1
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    },
+    {
+      "input": "input.check",
+      "input_delta": 1,
+      "expected": {
+        "bank.checks": 1
+      },
+      "deltas": {
+        "bank.checks": 1
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    },
+    {
+      "input": "input.loan1_rate",
+      "input_delta": -1,
+      "expected": {
+        "loan1.charge": -15041.09589041096,
+        "loan1.interest": -15041.09589041096,
+        "loans.interest": -15041.09589041096
+      },
+      "deltas": {
+        "loan1.charge": -15041.095890410961,
+        "loan1.interest": -15041.095890410961,
+        "loans.interest": -15041.095890410958
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    }
+  ],
+  "score": null,
+  "saved_cache_observations": {
+    "cash.borrowing": [
+      18300000
+    ],
+    "cash.intercompany": [
+      12485540.32
+    ],
+    "cash.unused": [
+      5814459.68
+    ],
+    "cash.balance": [
+      6610926.8
+    ],
+    "cash.excess": [
+      796467.1200000001
+    ],
+    "bank.checks": [
+      16166.779999999999
+    ],
+    "bank.book": [
+      6610926.8
+    ],
+    "bank.reclass": [
+      16166.779999999999
+    ],
+    "funding.funding": [
+      4687985
+    ],
+    "funding.funding_average": [
+      1171996.25
+    ],
+    "funding.intercompany": [
+      233042.36
+    ],
+    "funding.intercompany_average": [
+      58260.59
+    ],
+    "funding.bank_other": [
+      76715.65,
+      5499.999999999069
+    ],
+    "funding.bank_other_average": [
+      19178.9125,
+      1374.9999999997672
+    ],
+    "funding.total": [
+      5003243.01
+    ],
+    "funding.total_average": [
+      1250810.7525
+    ],
+    "prepaid.expense.vendor.8": [
+      80.39090909090929
+    ],
+    "prepaid.expense.vendor.9": [
+      11534.920000000002
+    ],
+    "prepaid.expense.vendor.10": [
+      25905.095833333347
+    ],
+    "prepaid.expense.vendor.11": [
+      642.6249999999997
+    ],
+    "prepaid.expense.vendor.12": [
+      2780.044999999999
+    ],
+    "prepaid.expense.vendor.13": [
+      6229.355555555553
+    ],
+    "prepaid.expense.vendor.14": [
+      2976.3524999999995
+    ],
+    "prepaid.expense.vendor.15": [
+      45269.525
+    ],
+    "prepaid.expense.vendor.16": [
+      25910.416666666664
+    ],
+    "prepaid.expense.vendor.17": [
+      3266.6666666666665
+    ],
+    "prepaid.expense.vendor.18": [
+      16894.800000000003
+    ],
+    "prepaid.expense.vendor.19": [
+      44832.00000000001
+    ],
+    "prepaid.expense.vendor.20": [
+      54000
+    ],
+    "prepaid.expense.vendor.21": [
+      7396.365000000001
+    ],
+    "prepaid.expense.vendor.22": [
+      3075
+    ],
+    "prepaid.expense.vendor.23": [
+      3075
+    ],
+    "prepaid.expense.vendor.24": [
+      3075
+    ],
+    "prepaid.expense.vendor.25": [
+      8333.333333333334
+    ],
+    "prepaid.expense.vendor.26": [
+      26493.333333333332
+    ],
+    "prepaid.expense.vendor.27": [
+      17642.46
+    ],
+    "prepaid.expense.vendor.28": [
+      175000
+    ],
+    "prepaid.expense.vendor.29": [
+      1699.9999999999995
+    ],
+    "prepaid.expense.vendor.30": [
+      17968.481666666667
+    ],
+    "prepaid.expense.vendor.31": [
+      14000
+    ],
+    "prepaid.expense.vendor.32": [
+      15765.600000000004
+    ],
+    "prepaid.expense.vendor.33": [
+      1734.4249999999997
+    ],
+    "prepaid.expense.vendor.34": [
+      572.6666666666665
+    ],
+    "prepaid.expense.vendor.35": [
+      0
+    ],
+    "prepaid.expense.vendor.36": [
+      18666.666666666664
+    ],
+    "prepaid.expense.vendor.37": [
+      37333.33333333333
+    ],
+    "prepaid.expense.vendor.38": [
+      1.1368683772161603e-12
+    ],
+    "prepaid.expense.vendor.39": [
+      44400.18916666665
+    ],
+    "prepaid.expense.vendor.40": [
+      27612.1825
+    ],
+    "prepaid.expense.vendor.41": [
+      7968
+    ],
+    "prepaid.expense.vendor.42": [
+      20367.08333333334
+    ],
+    "prepaid.expense.vendor.45": [
+      0
+    ],
+    "prepaid.expense.total": [
+      692501.3131313131
+    ],
+    "prepaid.expense.gap": [
+      0.01686868688557297
+    ],
+    "prepaid.expense.gl": [
+      692501.33
+    ],
+    "prepaid.insurance.vendor.7": [
+      88270.75
+    ],
+    "prepaid.insurance.vendor.8": [
+      39128
+    ],
+    "prepaid.insurance.vendor.9": [
+      73254.95
+    ],
+    "prepaid.insurance.vendor.10": [
+      23800
+    ],
+    "prepaid.insurance.vendor.11": [
+      11864.44
+    ],
+    "prepaid.insurance.vendor.12": [
+      33724
+    ],
+    "prepaid.insurance.vendor.13": [
+      11259
+    ],
+    "prepaid.insurance.vendor.14": [
+      23204
+    ],
+    "prepaid.insurance.vendor.15": [
+      11861
+    ],
+    "prepaid.insurance.vendor.16": [
+      33695
+    ],
+    "prepaid.insurance.vendor.17": [
+      11259
+    ],
+    "prepaid.insurance.vendor.18": [
+      23194
+    ],
+    "prepaid.insurance.vendor.19": [
+      11259
+    ],
+    "prepaid.insurance.vendor.20": [
+      33695
+    ],
+    "prepaid.insurance.vendor.21": [
+      23194
+    ],
+    "prepaid.insurance.vendor.22": [
+      11861
+    ],
+    "prepaid.insurance.vendor.23": [
+      -3081
+    ],
+    "prepaid.insurance.vendor.24": [
+      2193
+    ],
+    "prepaid.insurance.vendor.25": [
+      23194
+    ],
+    "prepaid.insurance.vendor.26": [
+      11861
+    ],
+    "prepaid.insurance.vendor.27": [
+      11259
+    ],
+    "prepaid.insurance.vendor.28": [
+      33695
+    ],
+    "prepaid.insurance.vendor.29": [
+      -543644.14
+    ],
+    "prepaid.insurance.vendor.30": [
+      5493.27
+    ],
+    "prepaid.insurance.total": [
+      5493.27
+    ],
+    "prepaid.insurance.gap": [
+      49137.41
+    ],
+    "prepaid.insurance.gl": [
+      54630.68
+    ],
+    "prepaid.expense.amortization25": [
+      1666.6666666666667
+    ],
+    "fees.balance": [
+      -160270.21999999997
+    ],
+    "legal.total": [
+      435284.69000000006
+    ],
+    "legal.gl": [
+      435284.69
+    ],
+    "legal.gap": [
+      -5.820766091346741e-11
+    ],
+    "legal.april": [
+      62772.929999999964
+    ],
+    "loan1.principal": [
+      18300000
+    ],
+    "loan1.charge": [
+      45123.28767123288
+    ],
+    "loan1.interest": [
+      45123.28802739741
+    ],
+    "loan2.principal": [
+      13500000
+    ],
+    "loan2.charge": [
+      22191.780821917808
+    ],
+    "loan2.interest": [
+      22191.776301369853
+    ],
+    "loans.interest": [
+      67315.06432876726
+    ],
+    "loans.interest_gl": [
+      67315.07
+    ],
+    "loans.interest_gap": [
+      0.0056712327495915815
+    ],
+    "loans.principal": [
+      31800000
+    ],
+    "loans.principal_gl": [
+      31800000
+    ],
+    "loans.principal_gap": [
+      0
+    ],
+    "ap.control": [
+      314563.78
+    ],
+    "ar.source": [
+      10997
+    ],
+    "ar.division10": [
+      10997
+    ],
+    "ar.gap": [
+      0
+    ],
+    "ar.division12": [
+      60500
+    ],
+    "payroll.first": [
+      3.637978807091713e-12
+    ],
+    "payroll.second": [
+      2.4556356947869062e-11
+    ],
+    "payroll.estimate": [
+      236448.88800000006
+    ],
+    "payroll.opening": [
+      259800
+    ],
+    "payroll.postings": [
+      -58700
+    ],
+    "payroll.rollforward": [
+      318500
+    ],
+    "payroll.gl": [
+      141033
+    ],
+    "payroll.gap": [
+      -177467
+    ],
+    "payroll.salary": [
+      380356.01
+    ],
+    "payroll.salary_gl": [
+      388005.99
+    ],
+    "payroll.salary_gap": [
+      7649.979999999981
+    ],
+    "payroll.expenses": [
+      18097.83
+    ],
+    "payroll.expenses_gl": [
+      -8653.07
+    ],
+    "payroll.expenses_gap": [
+      -26750.9
+    ],
+    "rebates.total": [
+      159707.50999999998
+    ],
+    "rebates.gl": [
+      159707.51
+    ],
+    "rebates.gap": [
+      -2.9103830456733704e-11
+    ],
+    "uninvoiced.total": [
+      304169.11
+    ],
+    "uninvoiced.gl": [
+      304169.11
+    ],
+    "uninvoiced.gap": [
+      0
+    ],
+    "bonus.total": [
+      334593.73
+    ],
+    "bonus.gl": [
+      334593.73
+    ],
+    "bonus.gap": [
+      0
+    ],
+    "misc.total": [
+      146796.75999999998
+    ],
+    "misc.gl": [
+      146796.76
+    ],
+    "misc.gap": [
+      2.9103830456733704e-11
+    ],
+    "bonus.headline": [
+      334593.73
+    ],
+    "bonus.salary_ytd": [
+      1463026.36
+    ],
+    "bonus.ten_percent_reference": [
+      146302.63600000003
+    ],
+    "bonus.source_salary": [
+      1463026.36
+    ],
+    "bonus.source_reported": [
+      334593.73
+    ],
+    "tb.net.period": [
+      -162926.77000000025
+    ],
+    "tb.net.ytd": [
+      -497479.8099999996
+    ],
+    "tb.clearing.period": [
+      162926.77
+    ],
+    "tb.clearing.ytd": [
+      497479.81
+    ],
+    "tb.proof.period": [
+      4.4701664592139423e-10
+    ],
+    "tb.proof.ytd": [
+      -9.73705027718097e-09
+    ]
+  },
+  "scope": "Indexed actual-XLSX recalculated data and declared dependency contracts only. Saved caches are observations, not the truth or a gate. Free-text meaning, company policy, visual usability and complete handoff require separate whole-product review. Not an official GDPval score, company sign-off or general Excel-engine certification."
+}

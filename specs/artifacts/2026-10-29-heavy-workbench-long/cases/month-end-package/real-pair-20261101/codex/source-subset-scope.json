@@ -1,0 +1,102 @@
+{
+  "source_archive": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\codex\\sealed\\complete-project.zip",
+  "members": [
+    {
+      "path": "submission/build.ps1",
+      "bytes": 1477,
+      "sha256": "f1cf64cee3ff8b2f10111932d09785f697158225a143a6eae7b94965cf7ca4a9"
+    },
+    {
+      "path": "submission/build_workbook.py",
+      "bytes": 48700,
+      "sha256": "a4fb34488f80792af77c98142413ffa0aa4784a9446d764cb1695a36331e348a"
+    },
+    {
+      "path": "submission/cache_and_reopen.py",
+      "bytes": 3170,
+      "sha256": "b324e651e6fe59e997a41d0df4fcee4d429c4313a50b34953d0cab53b7194329"
+    },
+    {
+      "path": "submission/calculate_observations.py",
+      "bytes": 541,
+      "sha256": "897b087f2258cb3f8754ccb79bdb603e831d464e3035f01b5b2ea482f95e0dcb"
+    },
+    {
+      "path": "submission/detail_read.py",
+      "bytes": 1011,
+      "sha256": "7a1119bd25133ceedf35511baef27da4d1490e620fe06a7fe09ad84a49dab839"
+    },
+    {
+      "path": "submission/evidence/visual_review.md",
+      "bytes": 2763,
+      "sha256": "cae109c76380bf18d2ea85a7fa391e8e0143abe336ac1ac62057862cd107de68"
+    },
+    {
+      "path": "submission/formula_inventory.py",
+      "bytes": 394,
+      "sha256": "f04b54dc7ba67a18faa1f0d5e8ae1c1736c16b82d531424ed55919e0224a6ec2"
+    },
+    {
+      "path": "submission/inspect_inputs.py",
+      "bytes": 925,
+      "sha256": "2be17205c0220da611711bde6f8b74e21333d9898b74bbb6c8e4be66dda8e72a"
+    },
+    {
+      "path": "submission/make_contacts.py",
+      "bytes": 704,
+      "sha256": "7609a2df4cb2d842db61a923560a8863b27e3b142aaaa635f5f30a1f3de281aa"
+    },
+    {
+      "path": "submission/PLAN.md",
+      "bytes": 6431,
+      "sha256": "cd8e320c54e9d6c24e96a8d45546b0cd62b641fc6fb6e2d8ce1a1fb10ec358ca"
+    },
+    {
+      "path": "submission/read_periods.py",
+      "bytes": 602,
+      "sha256": "ee2bcb2d90a5a098049e058311d63701b93a1335360ed5dc3b1f830d25275257"
+    },
+    {
+      "path": "submission/read_prepaids.py",
+      "bytes": 681,
+      "sha256": "7667f594e4ccc6e0a5756e6eb7f77486878cf3c939e81e3e5be0cb4849360d10"
+    },
+    {
+      "path": "submission/read_summary.py",
+      "bytes": 665,
+      "sha256": "61ed35bd974cdced60979b608747f42c71bf5e6317c2230ab0b3ff89d087bef5"
+    },
+    {
+      "path": "submission/README.md",
+      "bytes": 5068,
+      "sha256": "d32ef0dfe2658e44b79b8bb02ba30a8293c679d1dcc345cb35e33a626f98a572"
+    },
+    {
+      "path": "submission/recalculate.mjs",
+      "bytes": 2907,
+      "sha256": "8b30deb1f819eace832bb5b6917e82136bc2144d8d7eb5d249e5f87f9b84c510"
+    },
+    {
+      "path": "submission/runtime_probe.mjs",
+      "bytes": 711,
+      "sha256": "4aaddecaef905a2d2a501c88799f0fcf74dc9554f030681a3265b4e24ebb7c8e"
+    },
+    {
+      "path": "submission/simple_source_calc.py",
+      "bytes": 2355,
+      "sha256": "9e30d44d681fd7c050a0a144b3d092cb238d17ecebfc5535ff50079ac36f1ed1"
+    },
+    {
+      "path": "submission/validate_sources.py",
+      "bytes": 10175,
+      "sha256": "548654b7aba99f72b104e2bde148574d0fe86afb5ccde23a4ce5cc14eecaae78"
+    },
+    {
+      "path": "submission/verify_final.mjs",
+      "bytes": 1394,
+      "sha256": "441950955c78534fb3c305253441a0e96267b4830e0c0a7f7f646f34edb15875"
+    }
+  ],
+  "full_project": false,
+  "generated_workbooks_caches_claim_json_excluded": true
+}

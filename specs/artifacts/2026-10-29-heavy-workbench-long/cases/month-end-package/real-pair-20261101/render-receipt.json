@@ -1,0 +1,112 @@
+[
+  {
+    "candidate": "codex",
+    "source": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\codex\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "sheet": "#14) Payroll Accrual #2200",
+    "range": "A36:F55",
+    "target": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\whole-product-review\\codex\\payroll.png",
+    "started_at": "2026-11-01T10:50:47.592Z",
+    "ended_at": "2026-11-01T10:50:48.187Z",
+    "source_overwritten": false
+  },
+  {
+    "candidate": "codex",
+    "source": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\codex\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "sheet": "#10) Legal Audit Expense #6200",
+    "range": "A43:N75",
+    "target": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\whole-product-review\\codex\\legal.png",
+    "started_at": "2026-11-01T10:50:48.188Z",
+    "ended_at": "2026-11-01T10:50:48.565Z",
+    "source_overwritten": false
+  },
+  {
+    "candidate": "codex",
+    "source": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\codex\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "sheet": "CFO review requests",
+    "range": "A1:F6",
+    "target": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\whole-product-review\\codex\\cfo1.png",
+    "started_at": "2026-11-01T10:50:48.565Z",
+    "ended_at": "2026-11-01T10:50:48.755Z",
+    "source_overwritten": false
+  },
+  {
+    "candidate": "codex",
+    "source": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\codex\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "sheet": "CFO review requests",
+    "range": "A7:F12",
+    "target": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\whole-product-review\\codex\\cfo2.png",
+    "started_at": "2026-11-01T10:50:48.755Z",
+    "ended_at": "2026-11-01T10:50:48.955Z",
+    "source_overwritten": false
+  },
+  {
+    "candidate": "codex",
+    "source": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\codex\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "sheet": "CFO review requests",
+    "range": "A13:F19",
+    "target": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\whole-product-review\\codex\\cfo3.png",
+    "started_at": "2026-11-01T10:50:48.955Z",
+    "ended_at": "2026-11-01T10:50:49.169Z",
+    "source_overwritten": false
+  },
+  {
+    "candidate": "opencorvus",
+    "source": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "sheet": "#14) Payroll Accrual #2200",
+    "range": "A31:F56",
+    "target": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\whole-product-review\\opencorvus\\payroll.png",
+    "started_at": "2026-11-01T10:50:49.616Z",
+    "ended_at": "2026-11-01T10:50:49.849Z",
+    "source_overwritten": false
+  },
+  {
+    "candidate": "opencorvus",
+    "source": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "sheet": "#7) PPD Exps #1250 (2025)",
+    "range": "A31:H48",
+    "target": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\whole-product-review\\opencorvus\\prepaid.png",
+    "started_at": "2026-11-01T10:50:49.849Z",
+    "ended_at": "2026-11-01T10:50:50.089Z",
+    "source_overwritten": false
+  },
+  {
+    "candidate": "opencorvus",
+    "source": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "sheet": "#10) Legal Audit Expense #6200",
+    "range": "A31:I60",
+    "target": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\whole-product-review\\opencorvus\\legal.png",
+    "started_at": "2026-11-01T10:50:50.090Z",
+    "ended_at": "2026-11-01T10:50:50.434Z",
+    "source_overwritten": false
+  },
+  {
+    "candidate": "opencorvus",
+    "source": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "sheet": "CFO Review",
+    "range": "A1:F14",
+    "target": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\whole-product-review\\opencorvus\\cfo1.png",
+    "started_at": "2026-11-01T10:50:50.434Z",
+    "ended_at": "2026-11-01T10:50:50.801Z",
+    "source_overwritten": false
+  },
+  {
+    "candidate": "opencorvus",
+    "source": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "sheet": "CFO Review",
+    "range": "A15:F28",
+    "target": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\whole-product-review\\opencorvus\\cfo2.png",
+    "started_at": "2026-11-01T10:50:50.801Z",
+    "ended_at": "2026-11-01T10:50:51.147Z",
+    "source_overwritten": false
+  },
+  {
+    "candidate": "opencorvus",
+    "source": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+    "sheet": "CFO Review",
+    "range": "A29:F36",
+    "target": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\whole-product-review\\opencorvus\\cfo3.png",
+    "started_at": "2026-11-01T10:50:51.147Z",
+    "ended_at": "2026-11-01T10:50:51.357Z",
+    "source_overwritten": false
+  }
+]

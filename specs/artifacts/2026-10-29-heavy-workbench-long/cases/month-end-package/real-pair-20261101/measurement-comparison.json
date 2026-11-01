@@ -1,0 +1,4934 @@
+{
+  "assembled_at": "2026-11-01T10:52:58.748918+00:00",
+  "stage": "original_products_with_explicit_posthoc_measurement_repair",
+  "candidates": {
+    "codex": {
+      "original_integrity": {
+        "file": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\codex\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+        "sealed_sha256": "07de1286615c09a47f2ddf62c1ed5ffa6868c127179461c2b591c4f6e92f38fe",
+        "current_sha256": "07de1286615c09a47f2ddf62c1ed5ffa6868c127179461c2b591c4f6e92f38fe",
+        "immutable_original_same": true,
+        "bytes": 176849,
+        "scope": "Same sealed original identity only; not financial acceptance"
+      },
+      "original_frozen_consumer": {
+        "native_exit": 4,
+        "errors": [
+          {
+            "contract": "AMOUNT_MISMATCH",
+            "claim": "payroll.opening",
+            "expected": "-259800",
+            "actual": 259800
+          },
+          {
+            "contract": "AMOUNT_MISMATCH",
+            "claim": "payroll.rollforward",
+            "expected": "-318500",
+            "actual": 318500
+          },
+          {
+            "contract": "AMOUNT_MISMATCH",
+            "claim": "payroll.gl",
+            "expected": "-141033.00",
+            "actual": 141033
+          },
+          {
+            "contract": "AMOUNT_MISMATCH",
+            "claim": "payroll.gap",
+            "expected": "177467.00",
+            "actual": -177467
+          }
+        ]
+      },
+      "posthoc_consumer": {
+        "native_exit": 0,
+        "errors": [],
+        "basis": "credit_positive"
+      },
+      "source_reproduction": {
+        "source_only_build_native_exit": 0,
+        "declared_output_present": true,
+        "declared_output_bytes": 176850,
+        "original_candidate_untouched": true,
+        "scope": "Actual original submitted command in a new source/public-only workspace; generic declared runtime reused. Financial correctness requires independent consumption."
+      },
+      "source_reproduction_consumer": {
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\current-evaluator\\check_package.py",
+          "--public",
+          "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\frozen-public",
+          "--workbook",
+          "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\source-reproduction\\codex\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+          "--source-calculations",
+          "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\original-source-arithmetic.json",
+          "--output",
+          "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\source-reproduction\\codex\\independent-assessment.json",
+          "--node",
+          "C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe"
+        ],
+        "started_at": "2026-11-01T10:37:14.584810+00:00",
+        "ended_at": "2026-11-01T10:37:19.668276+00:00",
+        "native_exit": 0,
+        "stage": "posthoc_corrected_consumer_on_source_only_reconstruction",
+        "new_model_run": false,
+        "original_candidate_modified": false
+      },
+      "numeric_claims": [
+        {
+          "claim": "cash.borrowing",
+          "source_expected_signed": "18300000.00",
+          "actual": 18300000,
+          "normalized_signed": "18300000",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "cash.intercompany",
+          "source_expected_signed": "12485540.32",
+          "actual": 12485540.32,
+          "normalized_signed": "12485540.32",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "cash.unused",
+          "source_expected_signed": "5814459.68",
+          "actual": 5814459.68,
+          "normalized_signed": "5814459.68",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "cash.balance",
+          "source_expected_signed": "6610926.80",
+          "actual": 6610926.8,
+          "normalized_signed": "6610926.8",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "cash.excess",
+          "source_expected_signed": "796467.12",
+          "actual": 796467.1200000001,
+          "normalized_signed": "796467.1200000001",
+          "absolute_error": "1E-10"
+        },
+        {
+          "claim": "bank.checks",
+          "source_expected_signed": "16166.78",
+          "actual": 16166.779999999999,
+          "normalized_signed": "16166.779999999999",
+          "absolute_error": "1E-12"
+        },
+        {
+          "claim": "bank.book",
+          "source_expected_signed": "6610926.80",
+          "actual": 6610926.8,
+          "normalized_signed": "6610926.8",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bank.reclass",
+          "source_expected_signed": "16166.78",
+          "actual": 16166.779999999999,
+          "normalized_signed": "16166.779999999999",
+          "absolute_error": "1E-12"
+        },
+        {
+          "claim": "funding.funding",
+          "source_expected_signed": "4687985.00",
+          "actual": 4687985,
+          "normalized_signed": "4687985",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "funding.funding_average",
+          "source_expected_signed": "1171996.25",
+          "actual": 1171996.25,
+          "normalized_signed": "1171996.25",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "funding.intercompany",
+          "source_expected_signed": "233042.36",
+          "actual": 233042.36,
+          "normalized_signed": "233042.36",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "funding.intercompany_average",
+          "source_expected_signed": "58260.59",
+          "actual": 58260.59,
+          "normalized_signed": "58260.59",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "funding.bank_other",
+          "source_expected_signed": "82215.65",
+          "actual": 82215.65,
+          "normalized_signed": "82215.65",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "funding.bank_other_average",
+          "source_expected_signed": "20553.9125",
+          "actual": 20553.9125,
+          "normalized_signed": "20553.9125",
+          "absolute_error": "0.0000"
+        },
+        {
+          "claim": "funding.total",
+          "source_expected_signed": "5003243.01",
+          "actual": 5003243.010000001,
+          "normalized_signed": "5003243.010000001",
+          "absolute_error": "1E-9"
+        },
+        {
+          "claim": "funding.total_average",
+          "source_expected_signed": "1250810.7525",
+          "actual": 1250810.7525000002,
+          "normalized_signed": "1250810.7525000002",
+          "absolute_error": "2E-10"
+        },
+        {
+          "claim": "prepaid.expense.vendor.8",
+          "source_expected_signed": "80.39090909090929",
+          "actual": 80.39090909090929,
+          "normalized_signed": "80.39090909090929",
+          "absolute_error": "0E-14"
+        },
+        {
+          "claim": "prepaid.expense.vendor.9",
+          "source_expected_signed": "11534.920000000002",
+          "actual": 11534.920000000002,
+          "normalized_signed": "11534.920000000002",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.10",
+          "source_expected_signed": "25905.095833333347",
+          "actual": 25905.095833333347,
+          "normalized_signed": "25905.095833333347",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.11",
+          "source_expected_signed": "642.6249999999997",
+          "actual": 642.6249999999997,
+          "normalized_signed": "642.6249999999997",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.12",
+          "source_expected_signed": "2780.044999999999",
+          "actual": 2780.044999999999,
+          "normalized_signed": "2780.044999999999",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.13",
+          "source_expected_signed": "6229.355555555553",
+          "actual": 6229.355555555553,
+          "normalized_signed": "6229.355555555553",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.14",
+          "source_expected_signed": "2976.3524999999995",
+          "actual": 2976.3524999999995,
+          "normalized_signed": "2976.3524999999995",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.15",
+          "source_expected_signed": "45269.525",
+          "actual": 45269.525,
+          "normalized_signed": "45269.525",
+          "absolute_error": "0.000"
+        },
+        {
+          "claim": "prepaid.expense.vendor.16",
+          "source_expected_signed": "25910.416666666664",
+          "actual": 25910.416666666664,
+          "normalized_signed": "25910.416666666664",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.17",
+          "source_expected_signed": "3266.6666666666665",
+          "actual": 3266.6666666666665,
+          "normalized_signed": "3266.6666666666665",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.18",
+          "source_expected_signed": "16894.800000000003",
+          "actual": 16894.800000000003,
+          "normalized_signed": "16894.800000000003",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.19",
+          "source_expected_signed": "44832.00000000001",
+          "actual": 44832.00000000001,
+          "normalized_signed": "44832.00000000001",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "prepaid.expense.vendor.20",
+          "source_expected_signed": "54000.0",
+          "actual": 54000,
+          "normalized_signed": "54000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.21",
+          "source_expected_signed": "7396.365000000001",
+          "actual": 7396.365000000001,
+          "normalized_signed": "7396.365000000001",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.22",
+          "source_expected_signed": "3075.0",
+          "actual": 3075,
+          "normalized_signed": "3075",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.23",
+          "source_expected_signed": "3075.0",
+          "actual": 3075,
+          "normalized_signed": "3075",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.24",
+          "source_expected_signed": "3075.0",
+          "actual": 3075,
+          "normalized_signed": "3075",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.25",
+          "source_expected_signed": "8333.333333333334",
+          "actual": 8333.333333333334,
+          "normalized_signed": "8333.333333333334",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.26",
+          "source_expected_signed": "26493.333333333332",
+          "actual": 26493.333333333332,
+          "normalized_signed": "26493.333333333332",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.27",
+          "source_expected_signed": "17642.46",
+          "actual": 17642.46,
+          "normalized_signed": "17642.46",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.expense.vendor.28",
+          "source_expected_signed": "175000.0",
+          "actual": 175000,
+          "normalized_signed": "175000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.29",
+          "source_expected_signed": "1699.9999999999995",
+          "actual": 1699.9999999999995,
+          "normalized_signed": "1699.9999999999995",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.30",
+          "source_expected_signed": "17968.481666666667",
+          "actual": 17968.481666666667,
+          "normalized_signed": "17968.481666666667",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.31",
+          "source_expected_signed": "14000.0",
+          "actual": 14000,
+          "normalized_signed": "14000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.32",
+          "source_expected_signed": "15765.600000000004",
+          "actual": 15765.600000000004,
+          "normalized_signed": "15765.600000000004",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.33",
+          "source_expected_signed": "1734.4249999999997",
+          "actual": 1734.4249999999997,
+          "normalized_signed": "1734.4249999999997",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.34",
+          "source_expected_signed": "572.6666666666665",
+          "actual": 572.6666666666665,
+          "normalized_signed": "572.6666666666665",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.35",
+          "source_expected_signed": "0.0",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.36",
+          "source_expected_signed": "18666.666666666664",
+          "actual": 18666.666666666664,
+          "normalized_signed": "18666.666666666664",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.37",
+          "source_expected_signed": "37333.33333333333",
+          "actual": 37333.33333333333,
+          "normalized_signed": "37333.33333333333",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "prepaid.expense.vendor.38",
+          "source_expected_signed": "1.1368683772161603E-12",
+          "actual": 1.1368683772161603e-12,
+          "normalized_signed": "1.1368683772161603E-12",
+          "absolute_error": "0E-28"
+        },
+        {
+          "claim": "prepaid.expense.vendor.39",
+          "source_expected_signed": "44400.18916666665",
+          "actual": 44400.18916666665,
+          "normalized_signed": "44400.18916666665",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "prepaid.expense.vendor.40",
+          "source_expected_signed": "27612.1825",
+          "actual": 27612.1825,
+          "normalized_signed": "27612.1825",
+          "absolute_error": "0.0000"
+        },
+        {
+          "claim": "prepaid.expense.vendor.41",
+          "source_expected_signed": "7968.0",
+          "actual": 7968,
+          "normalized_signed": "7968",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.42",
+          "source_expected_signed": "20367.08333333334",
+          "actual": 20367.08333333334,
+          "normalized_signed": "20367.08333333334",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "prepaid.expense.vendor.45",
+          "source_expected_signed": "0.0",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.total",
+          "source_expected_signed": "692501.3131313131418268683772",
+          "actual": 692501.3131313131,
+          "normalized_signed": "692501.3131313131",
+          "absolute_error": "4.18268683772E-11"
+        },
+        {
+          "claim": "prepaid.expense.gl",
+          "source_expected_signed": "692501.33",
+          "actual": 692501.33,
+          "normalized_signed": "692501.33",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.expense.gap",
+          "source_expected_signed": "0.0168686868581731316228",
+          "actual": 0.01686868688557297,
+          "normalized_signed": "0.01686868688557297",
+          "absolute_error": "2.73998383772E-11"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.7",
+          "source_expected_signed": "88270.75",
+          "actual": 88270.75,
+          "normalized_signed": "88270.75",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.8",
+          "source_expected_signed": "39128.0",
+          "actual": 39128,
+          "normalized_signed": "39128",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.9",
+          "source_expected_signed": "73254.95",
+          "actual": 73254.95,
+          "normalized_signed": "73254.95",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.10",
+          "source_expected_signed": "23800.0",
+          "actual": 23800,
+          "normalized_signed": "23800",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.11",
+          "source_expected_signed": "11864.44",
+          "actual": 11864.44,
+          "normalized_signed": "11864.44",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.12",
+          "source_expected_signed": "33724.0",
+          "actual": 33724,
+          "normalized_signed": "33724",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.13",
+          "source_expected_signed": "11259.0",
+          "actual": 11259,
+          "normalized_signed": "11259",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.14",
+          "source_expected_signed": "23204.0",
+          "actual": 23204,
+          "normalized_signed": "23204",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.15",
+          "source_expected_signed": "11861.0",
+          "actual": 11861,
+          "normalized_signed": "11861",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.16",
+          "source_expected_signed": "33695.0",
+          "actual": 33695,
+          "normalized_signed": "33695",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.17",
+          "source_expected_signed": "11259.0",
+          "actual": 11259,
+          "normalized_signed": "11259",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.18",
+          "source_expected_signed": "23194.0",
+          "actual": 23194,
+          "normalized_signed": "23194",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.19",
+          "source_expected_signed": "11259.0",
+          "actual": 11259,
+          "normalized_signed": "11259",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.20",
+          "source_expected_signed": "33695.0",
+          "actual": 33695,
+          "normalized_signed": "33695",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.21",
+          "source_expected_signed": "23194.0",
+          "actual": 23194,
+          "normalized_signed": "23194",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.22",
+          "source_expected_signed": "11861.0",
+          "actual": 11861,
+          "normalized_signed": "11861",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.23",
+          "source_expected_signed": "-3081.0",
+          "actual": -3081,
+          "normalized_signed": "-3081",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.24",
+          "source_expected_signed": "2193.0",
+          "actual": 2193,
+          "normalized_signed": "2193",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.25",
+          "source_expected_signed": "23194.0",
+          "actual": 23194,
+          "normalized_signed": "23194",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.26",
+          "source_expected_signed": "11861.0",
+          "actual": 11861,
+          "normalized_signed": "11861",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.27",
+          "source_expected_signed": "11259.0",
+          "actual": 11259,
+          "normalized_signed": "11259",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.28",
+          "source_expected_signed": "33695.0",
+          "actual": 33695,
+          "normalized_signed": "33695",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.29",
+          "source_expected_signed": "-543644.14",
+          "actual": -543644.14,
+          "normalized_signed": "-543644.14",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.30",
+          "source_expected_signed": "5493.27",
+          "actual": 5493.27,
+          "normalized_signed": "5493.27",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.total",
+          "source_expected_signed": "5493.27",
+          "actual": 5493.27,
+          "normalized_signed": "5493.27",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.gl",
+          "source_expected_signed": "54630.68",
+          "actual": 54630.68,
+          "normalized_signed": "54630.68",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.gap",
+          "source_expected_signed": "49137.41",
+          "actual": 49137.41,
+          "normalized_signed": "49137.41",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.expense.amortization25",
+          "source_expected_signed": "1666.666666666666666666666667",
+          "actual": 1666.6666666666667,
+          "normalized_signed": "1666.6666666666667",
+          "absolute_error": "3.3333333333E-14"
+        },
+        {
+          "claim": "fees.balance",
+          "source_expected_signed": "-160270.22",
+          "actual": -160270.21999999997,
+          "normalized_signed": "-160270.21999999997",
+          "absolute_error": "3E-11"
+        },
+        {
+          "claim": "legal.total",
+          "source_expected_signed": "435284.69",
+          "actual": 435284.69000000006,
+          "normalized_signed": "435284.69000000006",
+          "absolute_error": "6E-11"
+        },
+        {
+          "claim": "legal.gl",
+          "source_expected_signed": "435284.69",
+          "actual": 435284.69,
+          "normalized_signed": "435284.69",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "legal.gap",
+          "source_expected_signed": "0.00",
+          "actual": -5.820766091346741e-11,
+          "normalized_signed": "-5.820766091346741E-11",
+          "absolute_error": "5.820766091346741E-11"
+        },
+        {
+          "claim": "legal.april",
+          "source_expected_signed": "62772.93",
+          "actual": 62772.929999999964,
+          "normalized_signed": "62772.929999999964",
+          "absolute_error": "3.6E-11"
+        },
+        {
+          "claim": "loan1.principal",
+          "source_expected_signed": "18300000.0",
+          "actual": 18300000,
+          "normalized_signed": "18300000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "loan1.charge",
+          "source_expected_signed": "45123.28767123288",
+          "actual": 45123.28767123288,
+          "normalized_signed": "45123.28767123288",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "loan1.interest",
+          "source_expected_signed": "45123.28802739741",
+          "actual": 45123.28802739741,
+          "normalized_signed": "45123.28802739741",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "loan2.principal",
+          "source_expected_signed": "13500000.0",
+          "actual": 13500000,
+          "normalized_signed": "13500000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "loan2.charge",
+          "source_expected_signed": "22191.780821917808",
+          "actual": 22191.780821917808,
+          "normalized_signed": "22191.780821917808",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "loan2.interest",
+          "source_expected_signed": "22191.776301369853",
+          "actual": 22191.776301369853,
+          "normalized_signed": "22191.776301369853",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "loans.interest",
+          "source_expected_signed": "67315.064328767263",
+          "actual": 67315.06432876726,
+          "normalized_signed": "67315.06432876726",
+          "absolute_error": "3E-12"
+        },
+        {
+          "claim": "loans.interest_gl",
+          "source_expected_signed": "67315.07",
+          "actual": 67315.07,
+          "normalized_signed": "67315.07",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "loans.interest_gap",
+          "source_expected_signed": "0.005671232737",
+          "actual": 0.0056712327495915815,
+          "normalized_signed": "0.0056712327495915815",
+          "absolute_error": "1.25915815E-11"
+        },
+        {
+          "claim": "loans.principal",
+          "source_expected_signed": "31800000.0",
+          "actual": 31800000,
+          "normalized_signed": "31800000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "loans.principal_gl",
+          "source_expected_signed": "31800000.00",
+          "actual": 31800000,
+          "normalized_signed": "31800000",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "loans.principal_gap",
+          "source_expected_signed": "0.00",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "ap.control",
+          "source_expected_signed": "314563.78",
+          "actual": 314563.78,
+          "normalized_signed": "314563.78",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "ar.source",
+          "source_expected_signed": "10997",
+          "actual": 10997,
+          "normalized_signed": "10997",
+          "absolute_error": "0"
+        },
+        {
+          "claim": "ar.division10",
+          "source_expected_signed": "10997.00",
+          "actual": 10997,
+          "normalized_signed": "10997",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "ar.gap",
+          "source_expected_signed": "0.00",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "ar.division12",
+          "source_expected_signed": "60500.00",
+          "actual": 60500,
+          "normalized_signed": "60500",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.first",
+          "source_expected_signed": "-1.8189894035458565E-12",
+          "actual": 3.637978807091713e-12,
+          "normalized_signed": "3.637978807091713E-12",
+          "absolute_error": "5.4569682106375695E-12"
+        },
+        {
+          "claim": "payroll.second",
+          "source_expected_signed": "2.9103830456733704E-11",
+          "actual": 2.4556356947869062e-11,
+          "normalized_signed": "2.4556356947869062E-11",
+          "absolute_error": "4.547473508864642E-12"
+        },
+        {
+          "claim": "payroll.estimate",
+          "source_expected_signed": "236448.88800000006",
+          "actual": 236448.88800000006,
+          "normalized_signed": "236448.88800000006",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "payroll.opening",
+          "source_expected_signed": "-259800",
+          "actual": 259800,
+          "normalized_signed": "-259800",
+          "absolute_error": "0"
+        },
+        {
+          "claim": "payroll.postings",
+          "source_expected_signed": "-58700",
+          "actual": -58700,
+          "normalized_signed": "-58700",
+          "absolute_error": "0"
+        },
+        {
+          "claim": "payroll.rollforward",
+          "source_expected_signed": "-318500",
+          "actual": 318500,
+          "normalized_signed": "-318500",
+          "absolute_error": "0"
+        },
+        {
+          "claim": "payroll.gl",
+          "source_expected_signed": "-141033.00",
+          "actual": 141033,
+          "normalized_signed": "-141033",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.gap",
+          "source_expected_signed": "177467.00",
+          "actual": -177467,
+          "normalized_signed": "177467",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.salary",
+          "source_expected_signed": "380356.01",
+          "actual": 380356.01,
+          "normalized_signed": "380356.01",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.salary_gl",
+          "source_expected_signed": "388005.99",
+          "actual": 388005.99,
+          "normalized_signed": "388005.99",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.salary_gap",
+          "source_expected_signed": "7649.98",
+          "actual": 7649.979999999981,
+          "normalized_signed": "7649.979999999981",
+          "absolute_error": "1.9E-11"
+        },
+        {
+          "claim": "payroll.expenses",
+          "source_expected_signed": "18097.83",
+          "actual": 18097.83,
+          "normalized_signed": "18097.83",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.expenses_gl",
+          "source_expected_signed": "-8653.07",
+          "actual": -8653.07,
+          "normalized_signed": "-8653.07",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.expenses_gap",
+          "source_expected_signed": "-26750.90",
+          "actual": -26750.9,
+          "normalized_signed": "-26750.9",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "rebates.total",
+          "source_expected_signed": "159707.51",
+          "actual": 159707.50999999998,
+          "normalized_signed": "159707.50999999998",
+          "absolute_error": "2E-11"
+        },
+        {
+          "claim": "rebates.gl",
+          "source_expected_signed": "159707.51",
+          "actual": 159707.51,
+          "normalized_signed": "159707.51",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "rebates.gap",
+          "source_expected_signed": "-0.00",
+          "actual": -2.9103830456733704e-11,
+          "normalized_signed": "-2.9103830456733704E-11",
+          "absolute_error": "2.9103830456733704E-11"
+        },
+        {
+          "claim": "uninvoiced.total",
+          "source_expected_signed": "304169.11",
+          "actual": 304169.11,
+          "normalized_signed": "304169.11",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "uninvoiced.gl",
+          "source_expected_signed": "304169.11",
+          "actual": 304169.11,
+          "normalized_signed": "304169.11",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "uninvoiced.gap",
+          "source_expected_signed": "0.00",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.total",
+          "source_expected_signed": "334593.73",
+          "actual": 334593.73,
+          "normalized_signed": "334593.73",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.gl",
+          "source_expected_signed": "334593.73",
+          "actual": 334593.73,
+          "normalized_signed": "334593.73",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.gap",
+          "source_expected_signed": "0.00",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "misc.total",
+          "source_expected_signed": "146796.76",
+          "actual": 146796.75999999998,
+          "normalized_signed": "146796.75999999998",
+          "absolute_error": "2E-11"
+        },
+        {
+          "claim": "misc.gl",
+          "source_expected_signed": "146796.76",
+          "actual": 146796.76,
+          "normalized_signed": "146796.76",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "misc.gap",
+          "source_expected_signed": "0.00",
+          "actual": 2.9103830456733704e-11,
+          "normalized_signed": "2.9103830456733704E-11",
+          "absolute_error": "2.9103830456733704E-11"
+        },
+        {
+          "claim": "bonus.headline",
+          "source_expected_signed": "334593.73",
+          "actual": 334593.73,
+          "normalized_signed": "334593.73",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.salary_ytd",
+          "source_expected_signed": "1463026.36",
+          "actual": 1463026.36,
+          "normalized_signed": "1463026.36",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.ten_percent_reference",
+          "source_expected_signed": "146302.636",
+          "actual": 146302.63600000003,
+          "normalized_signed": "146302.63600000003",
+          "absolute_error": "3E-11"
+        },
+        {
+          "claim": "bonus.source_salary",
+          "source_expected_signed": "1463026.36",
+          "actual": 1463026.36,
+          "normalized_signed": "1463026.36",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.source_reported",
+          "source_expected_signed": "334593.73",
+          "actual": 334593.73,
+          "normalized_signed": "334593.73",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "tb.net.period",
+          "source_expected_signed": "-162926.77",
+          "actual": -162926.7699999999,
+          "normalized_signed": "-162926.7699999999",
+          "absolute_error": "1E-10"
+        },
+        {
+          "claim": "tb.clearing.period",
+          "source_expected_signed": "162926.77",
+          "actual": 162926.77,
+          "normalized_signed": "162926.77",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "tb.proof.period",
+          "source_expected_signed": "0.00",
+          "actual": 9.777068044058979e-11,
+          "normalized_signed": "9.777068044058979E-11",
+          "absolute_error": "9.777068044058979E-11"
+        },
+        {
+          "claim": "tb.net.ytd",
+          "source_expected_signed": "-497479.81",
+          "actual": -497479.81000000035,
+          "normalized_signed": "-497479.81000000035",
+          "absolute_error": "3.5E-10"
+        },
+        {
+          "claim": "tb.clearing.ytd",
+          "source_expected_signed": "497479.81",
+          "actual": 497479.81,
+          "normalized_signed": "497479.81",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "tb.proof.ytd",
+          "source_expected_signed": "0.00",
+          "actual": -8.747520041652024e-09,
+          "normalized_signed": "-8.747520041652024E-9",
+          "absolute_error": "8.747520041652024E-9"
+        }
+      ],
+      "ledger": [
+        {
+          "division": 10,
+          "account": 1023,
+          "period": 0,
+          "ytd": 50000,
+          "expected_period": "0.00",
+          "expected_ytd": "50000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Cash - Operating",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1024,
+          "period": 419460.93,
+          "ytd": 6560926.8,
+          "expected_period": "419460.93",
+          "expected_ytd": "6560926.80",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Cash - Deposits",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1101,
+          "period": -40174,
+          "ytd": 10997,
+          "expected_period": "-40174.00",
+          "expected_ytd": "10997.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "A/R - Accruals",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1130,
+          "period": 3626.33,
+          "ytd": 4207.65,
+          "expected_period": "3626.33",
+          "expected_ytd": "4207.65",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "A/R Employee Advances",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1250,
+          "period": -49820.2,
+          "ytd": 692501.33,
+          "expected_period": "-49820.20",
+          "expected_ytd": "692501.33",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Prepaid Expenses",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1251,
+          "period": 5493.27,
+          "ytd": 54630.68,
+          "expected_period": "5493.27",
+          "expected_ytd": "54630.68",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Prepaid Insurance",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1305,
+          "period": -5000,
+          "ytd": 56000,
+          "expected_period": "-5000.00",
+          "expected_ytd": "56000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Inventory - Consigned",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1435,
+          "period": 0,
+          "ytd": 100424.48,
+          "expected_period": "0.00",
+          "expected_ytd": "100424.48",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "F/A - Machinery & Equipment",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1446,
+          "period": 0,
+          "ytd": 366813.84,
+          "expected_period": "0.00",
+          "expected_ytd": "366813.84",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "F/A - IT Hardware",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1450,
+          "period": 0,
+          "ytd": 20819,
+          "expected_period": "0.00",
+          "expected_ytd": "20819.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "F/A - Leasehold Improvements",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1546,
+          "period": -1644.79,
+          "ytd": -39905.74,
+          "expected_period": "-1644.79",
+          "expected_ytd": "-39905.74",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "A/D - IT Hardware",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1550,
+          "period": -346.98,
+          "ytd": -3816.79,
+          "expected_period": "-346.98",
+          "expected_ytd": "-3816.79",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "A/D - Leasehold Improvements",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1603,
+          "period": 0,
+          "ytd": 13529013.45,
+          "expected_period": "0.00",
+          "expected_ytd": "13529013.45",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "SH Investment - Aurisic US",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1604,
+          "period": 0,
+          "ytd": 7250,
+          "expected_period": "0.00",
+          "expected_ytd": "7250.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "SH Investment - Aurisic IN",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1651,
+          "period": -47777.8,
+          "ytd": 4016804.56,
+          "expected_period": "-47777.80",
+          "expected_ytd": "4016804.56",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic UK",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1652,
+          "period": 16491.34,
+          "ytd": 3314759.25,
+          "expected_period": "16491.34",
+          "expected_ytd": "3314759.25",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic MX",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1653,
+          "period": -17591.86,
+          "ytd": 1780756.69,
+          "expected_period": "-17591.86",
+          "expected_ytd": "1780756.69",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic CA",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1654,
+          "period": -15942.23,
+          "ytd": 1617796.41,
+          "expected_period": "-15942.23",
+          "expected_ytd": "1617796.41",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic JP",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1656,
+          "period": 7565.6,
+          "ytd": 1520685.72,
+          "expected_period": "7565.60",
+          "expected_ytd": "1520685.72",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic DE",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1663,
+          "period": 0,
+          "ytd": 82063,
+          "expected_period": "0.00",
+          "expected_ytd": "82063.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic AU",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1664,
+          "period": 0,
+          "ytd": 152674.69,
+          "expected_period": "0.00",
+          "expected_ytd": "152674.69",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic BR",
+          "classification": "a"
+        },
+        {
+          "division": 12,
+          "account": 1101,
+          "period": 60500,
+          "ytd": 60500,
+          "expected_period": "60500.00",
+          "expected_ytd": "60500.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "A/R - Accruals",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 2000,
+          "period": -235493.53,
+          "ytd": -314563.78,
+          "expected_period": "-235493.53",
+          "expected_ytd": "-314563.78",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accounts Payable - Trade",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2001,
+          "period": 55036.69,
+          "ytd": -16166.78,
+          "expected_period": "55036.69",
+          "expected_ytd": "-16166.78",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Allowance for Accounts Payable",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2005,
+          "period": -129903.58,
+          "ytd": -159707.51,
+          "expected_period": "-129903.58",
+          "expected_ytd": "-159707.51",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vendor Rebates - Receivable",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2011,
+          "period": -35254.11,
+          "ytd": -304169.11,
+          "expected_period": "-35254.11",
+          "expected_ytd": "-304169.11",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Allowance for Uninvoiced",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2041,
+          "period": -15646.7,
+          "ytd": -54745.96,
+          "expected_period": "-15646.70",
+          "expected_ytd": "-54745.96",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Credit Card Clearing",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2066,
+          "period": -408.26,
+          "ytd": -4156.37,
+          "expected_period": "-408.26",
+          "expected_ytd": "-4156.37",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "I/C Aurisic US",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2200,
+          "period": 118767,
+          "ytd": -141033,
+          "expected_period": "118767.00",
+          "expected_ytd": "-141033.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Payroll",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2213,
+          "period": -1303.3,
+          "ytd": -17839.18,
+          "expected_period": "-1303.30",
+          "expected_ytd": "-17839.18",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "FSA w/holding",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2227,
+          "period": 0,
+          "ytd": -15695.77,
+          "expected_period": "0.00",
+          "expected_ytd": "-15695.77",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Pension Payable",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2401,
+          "period": -229297.69,
+          "ytd": -334593.73,
+          "expected_period": "-229297.69",
+          "expected_ytd": "-334593.73",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Bonuses",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2402,
+          "period": 134630.14,
+          "ytd": -67315.07,
+          "expected_period": "134630.14",
+          "expected_ytd": "-67315.07",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Interest",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2404,
+          "period": 166955,
+          "ytd": -160270.22,
+          "expected_period": "166955.00",
+          "expected_ytd": "-160270.22",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Legal/Audit Fees",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2410,
+          "period": 5.5,
+          "ytd": -146796.76,
+          "expected_period": "5.50",
+          "expected_ytd": "-146796.76",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Expenses - Miscellaneous",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2500,
+          "period": 62096.98,
+          "ytd": 70637.92,
+          "expected_period": "62096.98",
+          "expected_ytd": "70637.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Interdivisional Clearing",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2600,
+          "period": 0,
+          "ytd": -18300000,
+          "expected_period": "0.00",
+          "expected_ytd": "-18300000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Payable - LOC",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2601,
+          "period": 0,
+          "ytd": -13500000,
+          "expected_period": "0.00",
+          "expected_ytd": "-13500000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Other LOC",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 3250,
+          "period": -4301587,
+          "ytd": -5586245,
+          "expected_period": "-4301587.00",
+          "expected_ytd": "-5586245.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Equity Distributions",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 3251,
+          "period": 3351587,
+          "ytd": 4392160,
+          "expected_period": "3351587.00",
+          "expected_ytd": "4392160.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Distributions - Aurisic",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 3253,
+          "period": 950000,
+          "ytd": 1194085,
+          "expected_period": "950000.00",
+          "expected_ytd": "1194085.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Distributions - Account 123454321",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 3300,
+          "period": 0,
+          "ytd": 78631.03,
+          "expected_period": "0.00",
+          "expected_ytd": "78631.03",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Retained Earnings - Prior",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 3400,
+          "period": -164523.75,
+          "ytd": -503867.73,
+          "expected_period": "-164523.75",
+          "expected_ytd": "-503867.73",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Retained Earnings - Current",
+          "classification": "l"
+        },
+        {
+          "division": 12,
+          "account": 2500,
+          "period": -62096.98,
+          "ytd": -70637.92,
+          "expected_period": "-62096.98",
+          "expected_ytd": "-70637.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Interdivisional Clearing",
+          "classification": "l"
+        },
+        {
+          "division": 12,
+          "account": 3400,
+          "period": 1596.98,
+          "ytd": 6387.92,
+          "expected_period": "1596.98",
+          "expected_ytd": "6387.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Retained Earnings - Current",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 7075,
+          "period": -62091.9,
+          "ytd": -233042.36,
+          "expected_period": "-62091.90",
+          "expected_ytd": "-233042.36",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Intercompany/Interest Income",
+          "classification": "i"
+        },
+        {
+          "division": 10,
+          "account": 7076,
+          "period": -19051.45,
+          "ytd": -76715.65,
+          "expected_period": "-19051.45",
+          "expected_ytd": "-76715.65",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Bank/Interest Income",
+          "classification": "i"
+        },
+        {
+          "division": 10,
+          "account": 7092,
+          "period": -5500,
+          "ytd": -5500,
+          "expected_period": "-5500.00",
+          "expected_ytd": "-5500.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Other Income",
+          "classification": "i"
+        },
+        {
+          "division": 10,
+          "account": 7206,
+          "period": -1171996,
+          "ytd": -4687985,
+          "expected_period": "-1171996.00",
+          "expected_ytd": "-4687985.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Shared Funding",
+          "classification": "i"
+        },
+        {
+          "division": 10,
+          "account": 6000,
+          "period": 388005.99,
+          "ytd": 1463026.36,
+          "expected_period": "388005.99",
+          "expected_ytd": "1463026.36",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Salaries & Wages",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6010,
+          "period": 22208.4,
+          "ytd": 132515.88,
+          "expected_period": "22208.40",
+          "expected_ytd": "132515.88",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "FICA",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6020,
+          "period": 42601.55,
+          "ytd": 191045.69,
+          "expected_period": "42601.55",
+          "expected_ytd": "191045.69",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Health Insurance",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6027,
+          "period": -15255.02,
+          "ytd": -60545.95,
+          "expected_period": "-15255.02",
+          "expected_ytd": "-60545.95",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Employee Benefit - Reimbursement",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6030,
+          "period": 7254.29,
+          "ytd": 39505.83,
+          "expected_period": "7254.29",
+          "expected_ytd": "39505.83",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Pension Expense - 401(k)",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6031,
+          "period": 40658.59,
+          "ytd": 145955,
+          "expected_period": "40658.59",
+          "expected_ytd": "145955.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Bonus Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6040,
+          "period": 0,
+          "ytd": 224.63,
+          "expected_period": "0.00",
+          "expected_ytd": "224.63",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Employee Functions/Events",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6045,
+          "period": 45.25,
+          "ytd": 45.25,
+          "expected_period": "45.25",
+          "expected_ytd": "45.25",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Uniform Expenses",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6060,
+          "period": 128,
+          "ytd": 5570.88,
+          "expected_period": "128.00",
+          "expected_ytd": "5570.88",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Employee Training/Seminars",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6065,
+          "period": 2622.06,
+          "ytd": 11710.65,
+          "expected_period": "2622.06",
+          "expected_ytd": "11710.65",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Payroll Processing Charges",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6070,
+          "period": 10428.5,
+          "ytd": 28821.31,
+          "expected_period": "10428.50",
+          "expected_ytd": "28821.31",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Employee Recruiting Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6090,
+          "period": 11076.92,
+          "ytd": 59307.68,
+          "expected_period": "11076.92",
+          "expected_ytd": "59307.68",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Contract Labor",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6200,
+          "period": 62772.93,
+          "ytd": 435284.69,
+          "expected_period": "62772.93",
+          "expected_ytd": "435284.69",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Legal Fees / Attorneys",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6300,
+          "period": 25163.27,
+          "ytd": 47846.7,
+          "expected_period": "25163.27",
+          "expected_ytd": "47846.70",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Airfare",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6301,
+          "period": 3118.08,
+          "ytd": 7247.21,
+          "expected_period": "3118.08",
+          "expected_ytd": "7247.21",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Rental Car",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6302,
+          "period": 12694.47,
+          "ytd": 29460.54,
+          "expected_period": "12694.47",
+          "expected_ytd": "29460.54",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Hotel/Lodging",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6303,
+          "period": 562.96,
+          "ytd": 562.96,
+          "expected_period": "562.96",
+          "expected_ytd": "562.96",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Meals 100% Deductible",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6304,
+          "period": 1773.57,
+          "ytd": 6154.6,
+          "expected_period": "1773.57",
+          "expected_ytd": "6154.60",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Meals 50% Deductible",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6305,
+          "period": -8653.07,
+          "ytd": -1487.06,
+          "expected_period": "-8653.07",
+          "expected_ytd": "-1487.06",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Miscellaneous",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6306,
+          "period": 316,
+          "ytd": 866.84,
+          "expected_period": "316.00",
+          "expected_ytd": "866.84",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Parking and Tolls",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6402,
+          "period": 408.26,
+          "ytd": 1706.85,
+          "expected_period": "408.26",
+          "expected_ytd": "1706.85",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Rent - Equipment",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6403,
+          "period": 3237,
+          "ytd": 12948,
+          "expected_period": "3237.00",
+          "expected_ytd": "12948.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Rent - Apartments",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6410,
+          "period": 181.17,
+          "ytd": 649.84,
+          "expected_period": "181.17",
+          "expected_ytd": "649.84",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Utilities - Electrical",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6412,
+          "period": 63.62,
+          "ytd": 283.64,
+          "expected_period": "63.62",
+          "expected_ytd": "283.64",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Utilities - Water/Sewer",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6420,
+          "period": 981,
+          "ytd": 981,
+          "expected_period": "981.00",
+          "expected_ytd": "981.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Maintenance - Building",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6425,
+          "period": 0,
+          "ytd": 5702.8,
+          "expected_period": "0.00",
+          "expected_ytd": "5702.80",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Maintenance - Equipment",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6430,
+          "period": 1644.79,
+          "ytd": 6579.16,
+          "expected_period": "1644.79",
+          "expected_ytd": "6579.16",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Depreciation Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6512,
+          "period": 1474.61,
+          "ytd": 5640.99,
+          "expected_period": "1474.61",
+          "expected_ytd": "5640.99",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Telephone - Internet Comm.",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6515,
+          "period": 1875,
+          "ytd": 8431.17,
+          "expected_period": "1875.00",
+          "expected_ytd": "8431.17",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Telephone - Cellular",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6610,
+          "period": 0,
+          "ytd": 150000,
+          "expected_period": "0.00",
+          "expected_ytd": "150000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Insurance - Comm/Property/Liabil",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6615,
+          "period": 150,
+          "ytd": 1420.28,
+          "expected_period": "150.00",
+          "expected_ytd": "1420.28",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Insurance - Vehicle",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6650,
+          "period": 3268.73,
+          "ytd": 13074.92,
+          "expected_period": "3268.73",
+          "expected_ytd": "13074.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Other Taxes",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6701,
+          "period": 2133.62,
+          "ytd": 12859.73,
+          "expected_period": "2133.62",
+          "expected_ytd": "12859.73",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Office Supplies",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6703,
+          "period": 2187.89,
+          "ytd": 3223.96,
+          "expected_period": "2187.89",
+          "expected_ytd": "3223.96",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Coffee/Water/Grocery Supplies",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6725,
+          "period": 1687.81,
+          "ytd": 5517.13,
+          "expected_period": "1687.81",
+          "expected_ytd": "5517.13",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Bank Charges/Fees",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6749,
+          "period": 14952.5,
+          "ytd": 59478.08,
+          "expected_period": "14952.50",
+          "expected_ytd": "59478.08",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Sales Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6750,
+          "period": 0,
+          "ytd": -1117.54,
+          "expected_period": "0.00",
+          "expected_ytd": "-1117.54",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Miscellaneous Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6760,
+          "period": 99945.84,
+          "ytd": 315224.95,
+          "expected_period": "99945.84",
+          "expected_ytd": "315224.95",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "IT Support Services",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6762,
+          "period": 94553.29,
+          "ytd": 368121.51,
+          "expected_period": "94553.29",
+          "expected_ytd": "368121.51",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Software Licenses/Maintenance",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6767,
+          "period": 0,
+          "ytd": 40485.09,
+          "expected_period": "0.00",
+          "expected_ytd": "40485.09",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Computer Supp-Employee Hardware",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6768,
+          "period": 0,
+          "ytd": 1005.21,
+          "expected_period": "0.00",
+          "expected_ytd": "1005.21",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Computer Supp-Main Server Room",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6780,
+          "period": 71.98,
+          "ytd": 107.97,
+          "expected_period": "71.98",
+          "expected_ytd": "107.97",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Maint & Repair",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6781,
+          "period": 360.03,
+          "ytd": 1518.68,
+          "expected_period": "360.03",
+          "expected_ytd": "1518.68",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Gas & Oil",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6782,
+          "period": 0,
+          "ytd": 200,
+          "expected_period": "0.00",
+          "expected_ytd": "200.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Emp Car Allowance Insurance",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6783,
+          "period": 0,
+          "ytd": 4500,
+          "expected_period": "0.00",
+          "expected_ytd": "4500.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Lease Costs",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6784,
+          "period": 2674.95,
+          "ytd": 5454.18,
+          "expected_period": "2674.95",
+          "expected_ytd": "5454.18",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Mileage Costs",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6785,
+          "period": 3550,
+          "ytd": 14200,
+          "expected_period": "3550.00",
+          "expected_ytd": "14200.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Car Allowance",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6786,
+          "period": 8.42,
+          "ytd": 8.42,
+          "expected_period": "8.42",
+          "expected_ytd": "8.42",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Toll & Parking",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6810,
+          "period": 67315.07,
+          "ytd": 269260.28,
+          "expected_period": "67315.07",
+          "expected_ytd": "269260.28",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Interest Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 7010,
+          "period": -4059.99,
+          "ytd": -4351.24,
+          "expected_period": "-4059.99",
+          "expected_ytd": "-4351.24",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "State Tax Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 7011,
+          "period": 16453.11,
+          "ytd": 34832.7,
+          "expected_period": "16453.11",
+          "expected_ytd": "34832.70",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Foreign Tax Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 7107,
+          "period": 171474.16,
+          "ytd": 618307.83,
+          "expected_period": "171474.16",
+          "expected_ytd": "618307.83",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Shared Expenses",
+          "classification": "e"
+        },
+        {
+          "division": 12,
+          "account": 6420,
+          "period": 1250,
+          "ytd": 5000,
+          "expected_period": "1250.00",
+          "expected_ytd": "5000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Maintenance - Building",
+          "classification": "e"
+        },
+        {
+          "division": 12,
+          "account": 6430,
+          "period": 346.98,
+          "ytd": 1387.92,
+          "expected_period": "346.98",
+          "expected_ytd": "1387.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Depreciation Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 9999,
+          "period": 164523.75,
+          "ytd": 503867.73,
+          "expected_period": "164523.75",
+          "expected_ytd": "503867.73",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Clearing Profit",
+          "classification": "c"
+        },
+        {
+          "division": 12,
+          "account": 9999,
+          "period": -1596.98,
+          "ytd": -6387.92,
+          "expected_period": "-1596.98",
+          "expected_ytd": "-6387.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Clearing Profit",
+          "classification": "c"
+        }
+      ],
+      "refresh": [
+        {
+          "input": "input.cash1024",
+          "input_delta": 1,
+          "expected": {
+            "cash.balance": 1,
+            "bank.book": 1
+          },
+          "deltas": {
+            "cash.balance": 1,
+            "bank.book": 1
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        },
+        {
+          "input": "input.bonus",
+          "input_delta": 100,
+          "expected": {
+            "bonus.total": 100,
+            "bonus.headline": 100,
+            "bonus.gap": -100,
+            "bonus.source_reported": 0
+          },
+          "deltas": {
+            "bonus.total": 100,
+            "bonus.headline": 100,
+            "bonus.gap": -100,
+            "bonus.source_reported": 0
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        },
+        {
+          "input": "input.prepaid_addition",
+          "input_delta": 6,
+          "expected": {
+            "prepaid.expense.amortization25": 1,
+            "prepaid.expense.vendor.25": 5,
+            "prepaid.expense.total": 5,
+            "prepaid.expense.gap": -5
+          },
+          "deltas": {
+            "prepaid.expense.amortization25": 1,
+            "prepaid.expense.vendor.25": 5,
+            "prepaid.expense.total": 5,
+            "prepaid.expense.gap": -5
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        },
+        {
+          "input": "input.fees",
+          "input_delta": 1,
+          "expected": {
+            "fees.balance": 1
+          },
+          "deltas": {
+            "fees.balance": 1
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        },
+        {
+          "input": "input.check",
+          "input_delta": 1,
+          "expected": {
+            "bank.checks": 1
+          },
+          "deltas": {
+            "bank.checks": 1
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        },
+        {
+          "input": "input.loan1_rate",
+          "input_delta": -1,
+          "expected": {
+            "loan1.charge": -15041.09589041096,
+            "loan1.interest": -15041.09589041096,
+            "loans.interest": -15041.09589041096
+          },
+          "deltas": {
+            "loan1.charge": -15041.095890410961,
+            "loan1.interest": -15041.095890410961,
+            "loans.interest": -15041.095890410958
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        }
+      ],
+      "max_numeric_absolute_error": "8.747520041652024E-9",
+      "max_ledger_absolute_error": "0.00",
+      "source_inputs_checked": 1362
+    },
+    "opencorvus": {
+      "original_integrity": {
+        "file": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+        "sealed_sha256": "8062f8a0ebb171b86fb82096f9d6030b588d23dfed64c1064eb1e8f97b5836e5",
+        "current_sha256": "8062f8a0ebb171b86fb82096f9d6030b588d23dfed64c1064eb1e8f97b5836e5",
+        "immutable_original_same": true,
+        "bytes": 167477,
+        "scope": "Same sealed original identity only; not financial acceptance"
+      },
+      "original_frozen_consumer": {
+        "native_exit": 4,
+        "errors": [
+          {
+            "contract": "AMOUNT_MISMATCH",
+            "claim": "payroll.opening",
+            "expected": "-259800",
+            "actual": 259800
+          },
+          {
+            "contract": "AMOUNT_MISMATCH",
+            "claim": "payroll.rollforward",
+            "expected": "-318500",
+            "actual": 318500
+          },
+          {
+            "contract": "AMOUNT_MISMATCH",
+            "claim": "payroll.gl",
+            "expected": "-141033.00",
+            "actual": 141033
+          },
+          {
+            "contract": "AMOUNT_MISMATCH",
+            "claim": "payroll.gap",
+            "expected": "177467.00",
+            "actual": -177467
+          }
+        ]
+      },
+      "posthoc_consumer": {
+        "native_exit": 0,
+        "errors": [],
+        "basis": "credit_positive"
+      },
+      "source_reproduction": {
+        "source_only_build_native_exit": 0,
+        "declared_output_present": true,
+        "declared_output_bytes": 167478,
+        "original_candidate_untouched": true,
+        "scope": "Actual original submitted command in a new source/public-only workspace; generic declared runtime reused. Financial correctness requires independent consumption."
+      },
+      "source_reproduction_consumer": {
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\current-evaluator\\check_package.py",
+          "--public",
+          "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\frozen-public",
+          "--workbook",
+          "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\source-reproduction\\opencorvus\\project\\submission\\Aurisic_Financials_4-25-1.xlsx",
+          "--source-calculations",
+          "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\original-source-arithmetic.json",
+          "--output",
+          "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\source-reproduction\\opencorvus\\independent-assessment.json",
+          "--node",
+          "C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe"
+        ],
+        "started_at": "2026-11-01T10:37:19.669283+00:00",
+        "ended_at": "2026-11-01T10:37:25.101414+00:00",
+        "native_exit": 0,
+        "stage": "posthoc_corrected_consumer_on_source_only_reconstruction",
+        "new_model_run": false,
+        "original_candidate_modified": false
+      },
+      "numeric_claims": [
+        {
+          "claim": "cash.borrowing",
+          "source_expected_signed": "18300000.00",
+          "actual": 18300000,
+          "normalized_signed": "18300000",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "cash.intercompany",
+          "source_expected_signed": "12485540.32",
+          "actual": 12485540.32,
+          "normalized_signed": "12485540.32",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "cash.unused",
+          "source_expected_signed": "5814459.68",
+          "actual": 5814459.68,
+          "normalized_signed": "5814459.68",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "cash.balance",
+          "source_expected_signed": "6610926.80",
+          "actual": 6610926.8,
+          "normalized_signed": "6610926.8",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "cash.excess",
+          "source_expected_signed": "796467.12",
+          "actual": 796467.1200000001,
+          "normalized_signed": "796467.1200000001",
+          "absolute_error": "1E-10"
+        },
+        {
+          "claim": "bank.checks",
+          "source_expected_signed": "16166.78",
+          "actual": 16166.779999999999,
+          "normalized_signed": "16166.779999999999",
+          "absolute_error": "1E-12"
+        },
+        {
+          "claim": "bank.book",
+          "source_expected_signed": "6610926.80",
+          "actual": 6610926.8,
+          "normalized_signed": "6610926.8",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bank.reclass",
+          "source_expected_signed": "16166.78",
+          "actual": 16166.779999999999,
+          "normalized_signed": "16166.779999999999",
+          "absolute_error": "1E-12"
+        },
+        {
+          "claim": "funding.funding",
+          "source_expected_signed": "4687985.00",
+          "actual": 4687985,
+          "normalized_signed": "4687985",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "funding.funding_average",
+          "source_expected_signed": "1171996.25",
+          "actual": 1171996.25,
+          "normalized_signed": "1171996.25",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "funding.intercompany",
+          "source_expected_signed": "233042.36",
+          "actual": 233042.36,
+          "normalized_signed": "233042.36",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "funding.intercompany_average",
+          "source_expected_signed": "58260.59",
+          "actual": 58260.59,
+          "normalized_signed": "58260.59",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "funding.bank_other",
+          "source_expected_signed": "82215.65",
+          "actual": 82215.65,
+          "normalized_signed": "82215.65",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "funding.bank_other_average",
+          "source_expected_signed": "20553.9125",
+          "actual": 20553.9125,
+          "normalized_signed": "20553.9125",
+          "absolute_error": "0.0000"
+        },
+        {
+          "claim": "funding.total",
+          "source_expected_signed": "5003243.01",
+          "actual": 5003243.010000001,
+          "normalized_signed": "5003243.010000001",
+          "absolute_error": "1E-9"
+        },
+        {
+          "claim": "funding.total_average",
+          "source_expected_signed": "1250810.7525",
+          "actual": 1250810.7525000002,
+          "normalized_signed": "1250810.7525000002",
+          "absolute_error": "2E-10"
+        },
+        {
+          "claim": "prepaid.expense.vendor.8",
+          "source_expected_signed": "80.39090909090929",
+          "actual": 80.39090909090929,
+          "normalized_signed": "80.39090909090929",
+          "absolute_error": "0E-14"
+        },
+        {
+          "claim": "prepaid.expense.vendor.9",
+          "source_expected_signed": "11534.920000000002",
+          "actual": 11534.920000000002,
+          "normalized_signed": "11534.920000000002",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.10",
+          "source_expected_signed": "25905.095833333347",
+          "actual": 25905.095833333347,
+          "normalized_signed": "25905.095833333347",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.11",
+          "source_expected_signed": "642.6249999999997",
+          "actual": 642.6249999999997,
+          "normalized_signed": "642.6249999999997",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.12",
+          "source_expected_signed": "2780.044999999999",
+          "actual": 2780.044999999999,
+          "normalized_signed": "2780.044999999999",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.13",
+          "source_expected_signed": "6229.355555555553",
+          "actual": 6229.355555555553,
+          "normalized_signed": "6229.355555555553",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.14",
+          "source_expected_signed": "2976.3524999999995",
+          "actual": 2976.3524999999995,
+          "normalized_signed": "2976.3524999999995",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.15",
+          "source_expected_signed": "45269.525",
+          "actual": 45269.525,
+          "normalized_signed": "45269.525",
+          "absolute_error": "0.000"
+        },
+        {
+          "claim": "prepaid.expense.vendor.16",
+          "source_expected_signed": "25910.416666666664",
+          "actual": 25910.416666666664,
+          "normalized_signed": "25910.416666666664",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.17",
+          "source_expected_signed": "3266.6666666666665",
+          "actual": 3266.6666666666665,
+          "normalized_signed": "3266.6666666666665",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.18",
+          "source_expected_signed": "16894.800000000003",
+          "actual": 16894.800000000003,
+          "normalized_signed": "16894.800000000003",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.19",
+          "source_expected_signed": "44832.00000000001",
+          "actual": 44832.00000000001,
+          "normalized_signed": "44832.00000000001",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "prepaid.expense.vendor.20",
+          "source_expected_signed": "54000.0",
+          "actual": 54000,
+          "normalized_signed": "54000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.21",
+          "source_expected_signed": "7396.365000000001",
+          "actual": 7396.365000000001,
+          "normalized_signed": "7396.365000000001",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.22",
+          "source_expected_signed": "3075.0",
+          "actual": 3075,
+          "normalized_signed": "3075",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.23",
+          "source_expected_signed": "3075.0",
+          "actual": 3075,
+          "normalized_signed": "3075",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.24",
+          "source_expected_signed": "3075.0",
+          "actual": 3075,
+          "normalized_signed": "3075",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.25",
+          "source_expected_signed": "8333.333333333334",
+          "actual": 8333.333333333334,
+          "normalized_signed": "8333.333333333334",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.26",
+          "source_expected_signed": "26493.333333333332",
+          "actual": 26493.333333333332,
+          "normalized_signed": "26493.333333333332",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.27",
+          "source_expected_signed": "17642.46",
+          "actual": 17642.46,
+          "normalized_signed": "17642.46",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.expense.vendor.28",
+          "source_expected_signed": "175000.0",
+          "actual": 175000,
+          "normalized_signed": "175000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.29",
+          "source_expected_signed": "1699.9999999999995",
+          "actual": 1699.9999999999995,
+          "normalized_signed": "1699.9999999999995",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.30",
+          "source_expected_signed": "17968.481666666667",
+          "actual": 17968.481666666667,
+          "normalized_signed": "17968.481666666667",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.31",
+          "source_expected_signed": "14000.0",
+          "actual": 14000,
+          "normalized_signed": "14000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.32",
+          "source_expected_signed": "15765.600000000004",
+          "actual": 15765.600000000004,
+          "normalized_signed": "15765.600000000004",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.33",
+          "source_expected_signed": "1734.4249999999997",
+          "actual": 1734.4249999999997,
+          "normalized_signed": "1734.4249999999997",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.34",
+          "source_expected_signed": "572.6666666666665",
+          "actual": 572.6666666666665,
+          "normalized_signed": "572.6666666666665",
+          "absolute_error": "0E-13"
+        },
+        {
+          "claim": "prepaid.expense.vendor.35",
+          "source_expected_signed": "0.0",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.36",
+          "source_expected_signed": "18666.666666666664",
+          "actual": 18666.666666666664,
+          "normalized_signed": "18666.666666666664",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "prepaid.expense.vendor.37",
+          "source_expected_signed": "37333.33333333333",
+          "actual": 37333.33333333333,
+          "normalized_signed": "37333.33333333333",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "prepaid.expense.vendor.38",
+          "source_expected_signed": "1.1368683772161603E-12",
+          "actual": 1.1368683772161603e-12,
+          "normalized_signed": "1.1368683772161603E-12",
+          "absolute_error": "0E-28"
+        },
+        {
+          "claim": "prepaid.expense.vendor.39",
+          "source_expected_signed": "44400.18916666665",
+          "actual": 44400.18916666665,
+          "normalized_signed": "44400.18916666665",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "prepaid.expense.vendor.40",
+          "source_expected_signed": "27612.1825",
+          "actual": 27612.1825,
+          "normalized_signed": "27612.1825",
+          "absolute_error": "0.0000"
+        },
+        {
+          "claim": "prepaid.expense.vendor.41",
+          "source_expected_signed": "7968.0",
+          "actual": 7968,
+          "normalized_signed": "7968",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.vendor.42",
+          "source_expected_signed": "20367.08333333334",
+          "actual": 20367.08333333334,
+          "normalized_signed": "20367.08333333334",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "prepaid.expense.vendor.45",
+          "source_expected_signed": "0.0",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.expense.total",
+          "source_expected_signed": "692501.3131313131418268683772",
+          "actual": 692501.3131313131,
+          "normalized_signed": "692501.3131313131",
+          "absolute_error": "4.18268683772E-11"
+        },
+        {
+          "claim": "prepaid.expense.gl",
+          "source_expected_signed": "692501.33",
+          "actual": 692501.33,
+          "normalized_signed": "692501.33",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.expense.gap",
+          "source_expected_signed": "0.0168686868581731316228",
+          "actual": 0.01686868688557297,
+          "normalized_signed": "0.01686868688557297",
+          "absolute_error": "2.73998383772E-11"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.7",
+          "source_expected_signed": "88270.75",
+          "actual": 88270.75,
+          "normalized_signed": "88270.75",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.8",
+          "source_expected_signed": "39128.0",
+          "actual": 39128,
+          "normalized_signed": "39128",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.9",
+          "source_expected_signed": "73254.95",
+          "actual": 73254.95,
+          "normalized_signed": "73254.95",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.10",
+          "source_expected_signed": "23800.0",
+          "actual": 23800,
+          "normalized_signed": "23800",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.11",
+          "source_expected_signed": "11864.44",
+          "actual": 11864.44,
+          "normalized_signed": "11864.44",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.12",
+          "source_expected_signed": "33724.0",
+          "actual": 33724,
+          "normalized_signed": "33724",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.13",
+          "source_expected_signed": "11259.0",
+          "actual": 11259,
+          "normalized_signed": "11259",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.14",
+          "source_expected_signed": "23204.0",
+          "actual": 23204,
+          "normalized_signed": "23204",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.15",
+          "source_expected_signed": "11861.0",
+          "actual": 11861,
+          "normalized_signed": "11861",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.16",
+          "source_expected_signed": "33695.0",
+          "actual": 33695,
+          "normalized_signed": "33695",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.17",
+          "source_expected_signed": "11259.0",
+          "actual": 11259,
+          "normalized_signed": "11259",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.18",
+          "source_expected_signed": "23194.0",
+          "actual": 23194,
+          "normalized_signed": "23194",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.19",
+          "source_expected_signed": "11259.0",
+          "actual": 11259,
+          "normalized_signed": "11259",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.20",
+          "source_expected_signed": "33695.0",
+          "actual": 33695,
+          "normalized_signed": "33695",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.21",
+          "source_expected_signed": "23194.0",
+          "actual": 23194,
+          "normalized_signed": "23194",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.22",
+          "source_expected_signed": "11861.0",
+          "actual": 11861,
+          "normalized_signed": "11861",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.23",
+          "source_expected_signed": "-3081.0",
+          "actual": -3081,
+          "normalized_signed": "-3081",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.24",
+          "source_expected_signed": "2193.0",
+          "actual": 2193,
+          "normalized_signed": "2193",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.25",
+          "source_expected_signed": "23194.0",
+          "actual": 23194,
+          "normalized_signed": "23194",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.26",
+          "source_expected_signed": "11861.0",
+          "actual": 11861,
+          "normalized_signed": "11861",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.27",
+          "source_expected_signed": "11259.0",
+          "actual": 11259,
+          "normalized_signed": "11259",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.28",
+          "source_expected_signed": "33695.0",
+          "actual": 33695,
+          "normalized_signed": "33695",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.29",
+          "source_expected_signed": "-543644.14",
+          "actual": -543644.14,
+          "normalized_signed": "-543644.14",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.vendor.30",
+          "source_expected_signed": "5493.27",
+          "actual": 5493.27,
+          "normalized_signed": "5493.27",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.total",
+          "source_expected_signed": "5493.27",
+          "actual": 5493.27,
+          "normalized_signed": "5493.27",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.gl",
+          "source_expected_signed": "54630.68",
+          "actual": 54630.68,
+          "normalized_signed": "54630.68",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.insurance.gap",
+          "source_expected_signed": "49137.41",
+          "actual": 49137.41,
+          "normalized_signed": "49137.41",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "prepaid.expense.amortization25",
+          "source_expected_signed": "1666.666666666666666666666667",
+          "actual": 1666.6666666666667,
+          "normalized_signed": "1666.6666666666667",
+          "absolute_error": "3.3333333333E-14"
+        },
+        {
+          "claim": "fees.balance",
+          "source_expected_signed": "-160270.22",
+          "actual": -160270.21999999997,
+          "normalized_signed": "-160270.21999999997",
+          "absolute_error": "3E-11"
+        },
+        {
+          "claim": "legal.total",
+          "source_expected_signed": "435284.69",
+          "actual": 435284.69000000006,
+          "normalized_signed": "435284.69000000006",
+          "absolute_error": "6E-11"
+        },
+        {
+          "claim": "legal.gl",
+          "source_expected_signed": "435284.69",
+          "actual": 435284.69,
+          "normalized_signed": "435284.69",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "legal.gap",
+          "source_expected_signed": "0.00",
+          "actual": -5.820766091346741e-11,
+          "normalized_signed": "-5.820766091346741E-11",
+          "absolute_error": "5.820766091346741E-11"
+        },
+        {
+          "claim": "legal.april",
+          "source_expected_signed": "62772.93",
+          "actual": 62772.929999999964,
+          "normalized_signed": "62772.929999999964",
+          "absolute_error": "3.6E-11"
+        },
+        {
+          "claim": "loan1.principal",
+          "source_expected_signed": "18300000.0",
+          "actual": 18300000,
+          "normalized_signed": "18300000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "loan1.charge",
+          "source_expected_signed": "45123.28767123288",
+          "actual": 45123.28767123288,
+          "normalized_signed": "45123.28767123288",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "loan1.interest",
+          "source_expected_signed": "45123.28802739741",
+          "actual": 45123.28802739741,
+          "normalized_signed": "45123.28802739741",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "loan2.principal",
+          "source_expected_signed": "13500000.0",
+          "actual": 13500000,
+          "normalized_signed": "13500000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "loan2.charge",
+          "source_expected_signed": "22191.780821917808",
+          "actual": 22191.780821917808,
+          "normalized_signed": "22191.780821917808",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "loan2.interest",
+          "source_expected_signed": "22191.776301369853",
+          "actual": 22191.776301369853,
+          "normalized_signed": "22191.776301369853",
+          "absolute_error": "0E-12"
+        },
+        {
+          "claim": "loans.interest",
+          "source_expected_signed": "67315.064328767263",
+          "actual": 67315.06432876726,
+          "normalized_signed": "67315.06432876726",
+          "absolute_error": "3E-12"
+        },
+        {
+          "claim": "loans.interest_gl",
+          "source_expected_signed": "67315.07",
+          "actual": 67315.07,
+          "normalized_signed": "67315.07",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "loans.interest_gap",
+          "source_expected_signed": "0.005671232737",
+          "actual": 0.0056712327495915815,
+          "normalized_signed": "0.0056712327495915815",
+          "absolute_error": "1.25915815E-11"
+        },
+        {
+          "claim": "loans.principal",
+          "source_expected_signed": "31800000.0",
+          "actual": 31800000,
+          "normalized_signed": "31800000",
+          "absolute_error": "0.0"
+        },
+        {
+          "claim": "loans.principal_gl",
+          "source_expected_signed": "31800000.00",
+          "actual": 31800000,
+          "normalized_signed": "31800000",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "loans.principal_gap",
+          "source_expected_signed": "0.00",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "ap.control",
+          "source_expected_signed": "314563.78",
+          "actual": 314563.78,
+          "normalized_signed": "314563.78",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "ar.source",
+          "source_expected_signed": "10997",
+          "actual": 10997,
+          "normalized_signed": "10997",
+          "absolute_error": "0"
+        },
+        {
+          "claim": "ar.division10",
+          "source_expected_signed": "10997.00",
+          "actual": 10997,
+          "normalized_signed": "10997",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "ar.gap",
+          "source_expected_signed": "0.00",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "ar.division12",
+          "source_expected_signed": "60500.00",
+          "actual": 60500,
+          "normalized_signed": "60500",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.first",
+          "source_expected_signed": "-1.8189894035458565E-12",
+          "actual": 3.637978807091713e-12,
+          "normalized_signed": "3.637978807091713E-12",
+          "absolute_error": "5.4569682106375695E-12"
+        },
+        {
+          "claim": "payroll.second",
+          "source_expected_signed": "2.9103830456733704E-11",
+          "actual": 2.4556356947869062e-11,
+          "normalized_signed": "2.4556356947869062E-11",
+          "absolute_error": "4.547473508864642E-12"
+        },
+        {
+          "claim": "payroll.estimate",
+          "source_expected_signed": "236448.88800000006",
+          "actual": 236448.88800000006,
+          "normalized_signed": "236448.88800000006",
+          "absolute_error": "0E-11"
+        },
+        {
+          "claim": "payroll.opening",
+          "source_expected_signed": "-259800",
+          "actual": 259800,
+          "normalized_signed": "-259800",
+          "absolute_error": "0"
+        },
+        {
+          "claim": "payroll.postings",
+          "source_expected_signed": "-58700",
+          "actual": -58700,
+          "normalized_signed": "-58700",
+          "absolute_error": "0"
+        },
+        {
+          "claim": "payroll.rollforward",
+          "source_expected_signed": "-318500",
+          "actual": 318500,
+          "normalized_signed": "-318500",
+          "absolute_error": "0"
+        },
+        {
+          "claim": "payroll.gl",
+          "source_expected_signed": "-141033.00",
+          "actual": 141033,
+          "normalized_signed": "-141033",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.gap",
+          "source_expected_signed": "177467.00",
+          "actual": -177467,
+          "normalized_signed": "177467",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.salary",
+          "source_expected_signed": "380356.01",
+          "actual": 380356.01,
+          "normalized_signed": "380356.01",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.salary_gl",
+          "source_expected_signed": "388005.99",
+          "actual": 388005.99,
+          "normalized_signed": "388005.99",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.salary_gap",
+          "source_expected_signed": "7649.98",
+          "actual": 7649.979999999981,
+          "normalized_signed": "7649.979999999981",
+          "absolute_error": "1.9E-11"
+        },
+        {
+          "claim": "payroll.expenses",
+          "source_expected_signed": "18097.83",
+          "actual": 18097.83,
+          "normalized_signed": "18097.83",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.expenses_gl",
+          "source_expected_signed": "-8653.07",
+          "actual": -8653.07,
+          "normalized_signed": "-8653.07",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "payroll.expenses_gap",
+          "source_expected_signed": "-26750.90",
+          "actual": -26750.9,
+          "normalized_signed": "-26750.9",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "rebates.total",
+          "source_expected_signed": "159707.51",
+          "actual": 159707.50999999998,
+          "normalized_signed": "159707.50999999998",
+          "absolute_error": "2E-11"
+        },
+        {
+          "claim": "rebates.gl",
+          "source_expected_signed": "159707.51",
+          "actual": 159707.51,
+          "normalized_signed": "159707.51",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "rebates.gap",
+          "source_expected_signed": "-0.00",
+          "actual": -2.9103830456733704e-11,
+          "normalized_signed": "-2.9103830456733704E-11",
+          "absolute_error": "2.9103830456733704E-11"
+        },
+        {
+          "claim": "uninvoiced.total",
+          "source_expected_signed": "304169.11",
+          "actual": 304169.11,
+          "normalized_signed": "304169.11",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "uninvoiced.gl",
+          "source_expected_signed": "304169.11",
+          "actual": 304169.11,
+          "normalized_signed": "304169.11",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "uninvoiced.gap",
+          "source_expected_signed": "0.00",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.total",
+          "source_expected_signed": "334593.73",
+          "actual": 334593.73,
+          "normalized_signed": "334593.73",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.gl",
+          "source_expected_signed": "334593.73",
+          "actual": 334593.73,
+          "normalized_signed": "334593.73",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.gap",
+          "source_expected_signed": "0.00",
+          "actual": 0,
+          "normalized_signed": "0",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "misc.total",
+          "source_expected_signed": "146796.76",
+          "actual": 146796.75999999998,
+          "normalized_signed": "146796.75999999998",
+          "absolute_error": "2E-11"
+        },
+        {
+          "claim": "misc.gl",
+          "source_expected_signed": "146796.76",
+          "actual": 146796.76,
+          "normalized_signed": "146796.76",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "misc.gap",
+          "source_expected_signed": "0.00",
+          "actual": 2.9103830456733704e-11,
+          "normalized_signed": "2.9103830456733704E-11",
+          "absolute_error": "2.9103830456733704E-11"
+        },
+        {
+          "claim": "bonus.headline",
+          "source_expected_signed": "334593.73",
+          "actual": 334593.73,
+          "normalized_signed": "334593.73",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.salary_ytd",
+          "source_expected_signed": "1463026.36",
+          "actual": 1463026.36,
+          "normalized_signed": "1463026.36",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.ten_percent_reference",
+          "source_expected_signed": "146302.636",
+          "actual": 146302.63600000003,
+          "normalized_signed": "146302.63600000003",
+          "absolute_error": "3E-11"
+        },
+        {
+          "claim": "bonus.source_salary",
+          "source_expected_signed": "1463026.36",
+          "actual": 1463026.36,
+          "normalized_signed": "1463026.36",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "bonus.source_reported",
+          "source_expected_signed": "334593.73",
+          "actual": 334593.73,
+          "normalized_signed": "334593.73",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "tb.net.period",
+          "source_expected_signed": "-162926.77",
+          "actual": -162926.7699999999,
+          "normalized_signed": "-162926.7699999999",
+          "absolute_error": "1E-10"
+        },
+        {
+          "claim": "tb.clearing.period",
+          "source_expected_signed": "162926.77",
+          "actual": 162926.77,
+          "normalized_signed": "162926.77",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "tb.proof.period",
+          "source_expected_signed": "0.00",
+          "actual": 9.777068044058979e-11,
+          "normalized_signed": "9.777068044058979E-11",
+          "absolute_error": "9.777068044058979E-11"
+        },
+        {
+          "claim": "tb.net.ytd",
+          "source_expected_signed": "-497479.81",
+          "actual": -497479.81000000035,
+          "normalized_signed": "-497479.81000000035",
+          "absolute_error": "3.5E-10"
+        },
+        {
+          "claim": "tb.clearing.ytd",
+          "source_expected_signed": "497479.81",
+          "actual": 497479.81,
+          "normalized_signed": "497479.81",
+          "absolute_error": "0.00"
+        },
+        {
+          "claim": "tb.proof.ytd",
+          "source_expected_signed": "0.00",
+          "actual": -8.747520041652024e-09,
+          "normalized_signed": "-8.747520041652024E-9",
+          "absolute_error": "8.747520041652024E-9"
+        }
+      ],
+      "ledger": [
+        {
+          "division": 10,
+          "account": 1023,
+          "period": 0,
+          "ytd": 50000,
+          "expected_period": "0.00",
+          "expected_ytd": "50000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Cash - Operating",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1024,
+          "period": 419460.93,
+          "ytd": 6560926.8,
+          "expected_period": "419460.93",
+          "expected_ytd": "6560926.80",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Cash - Deposits",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1101,
+          "period": -40174,
+          "ytd": 10997,
+          "expected_period": "-40174.00",
+          "expected_ytd": "10997.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "A/R - Accruals",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1130,
+          "period": 3626.33,
+          "ytd": 4207.65,
+          "expected_period": "3626.33",
+          "expected_ytd": "4207.65",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "A/R Employee Advances",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1250,
+          "period": -49820.2,
+          "ytd": 692501.33,
+          "expected_period": "-49820.20",
+          "expected_ytd": "692501.33",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Prepaid Expenses",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1251,
+          "period": 5493.27,
+          "ytd": 54630.68,
+          "expected_period": "5493.27",
+          "expected_ytd": "54630.68",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Prepaid Insurance",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1305,
+          "period": -5000,
+          "ytd": 56000,
+          "expected_period": "-5000.00",
+          "expected_ytd": "56000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Inventory - Consigned",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1435,
+          "period": 0,
+          "ytd": 100424.48,
+          "expected_period": "0.00",
+          "expected_ytd": "100424.48",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "F/A - Machinery & Equipment",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1446,
+          "period": 0,
+          "ytd": 366813.84,
+          "expected_period": "0.00",
+          "expected_ytd": "366813.84",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "F/A - IT Hardware",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1450,
+          "period": 0,
+          "ytd": 20819,
+          "expected_period": "0.00",
+          "expected_ytd": "20819.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "F/A - Leasehold Improvements",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1546,
+          "period": -1644.79,
+          "ytd": -39905.74,
+          "expected_period": "-1644.79",
+          "expected_ytd": "-39905.74",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "A/D - IT Hardware",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1550,
+          "period": -346.98,
+          "ytd": -3816.79,
+          "expected_period": "-346.98",
+          "expected_ytd": "-3816.79",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "A/D - Leasehold Improvements",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1603,
+          "period": 0,
+          "ytd": 13529013.45,
+          "expected_period": "0.00",
+          "expected_ytd": "13529013.45",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "SH Investment - Aurisic US",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1604,
+          "period": 0,
+          "ytd": 7250,
+          "expected_period": "0.00",
+          "expected_ytd": "7250.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "SH Investment - Aurisic IN",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1651,
+          "period": -47777.8,
+          "ytd": 4016804.56,
+          "expected_period": "-47777.80",
+          "expected_ytd": "4016804.56",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic UK",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1652,
+          "period": 16491.34,
+          "ytd": 3314759.25,
+          "expected_period": "16491.34",
+          "expected_ytd": "3314759.25",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic MX",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1653,
+          "period": -17591.86,
+          "ytd": 1780756.69,
+          "expected_period": "-17591.86",
+          "expected_ytd": "1780756.69",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic CA",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1654,
+          "period": -15942.23,
+          "ytd": 1617796.41,
+          "expected_period": "-15942.23",
+          "expected_ytd": "1617796.41",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic JP",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1656,
+          "period": 7565.6,
+          "ytd": 1520685.72,
+          "expected_period": "7565.60",
+          "expected_ytd": "1520685.72",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic DE",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1663,
+          "period": 0,
+          "ytd": 82063,
+          "expected_period": "0.00",
+          "expected_ytd": "82063.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic AU",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 1664,
+          "period": 0,
+          "ytd": 152674.69,
+          "expected_period": "0.00",
+          "expected_ytd": "152674.69",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Rec - Aurisic BR",
+          "classification": "a"
+        },
+        {
+          "division": 12,
+          "account": 1101,
+          "period": 60500,
+          "ytd": 60500,
+          "expected_period": "60500.00",
+          "expected_ytd": "60500.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "A/R - Accruals",
+          "classification": "a"
+        },
+        {
+          "division": 10,
+          "account": 2000,
+          "period": -235493.53,
+          "ytd": -314563.78,
+          "expected_period": "-235493.53",
+          "expected_ytd": "-314563.78",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accounts Payable - Trade",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2001,
+          "period": 55036.69,
+          "ytd": -16166.78,
+          "expected_period": "55036.69",
+          "expected_ytd": "-16166.78",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Allowance for Accounts Payable",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2005,
+          "period": -129903.58,
+          "ytd": -159707.51,
+          "expected_period": "-129903.58",
+          "expected_ytd": "-159707.51",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vendor Rebates - Receivable",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2011,
+          "period": -35254.11,
+          "ytd": -304169.11,
+          "expected_period": "-35254.11",
+          "expected_ytd": "-304169.11",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Allowance for Uninvoiced",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2041,
+          "period": -15646.7,
+          "ytd": -54745.96,
+          "expected_period": "-15646.70",
+          "expected_ytd": "-54745.96",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Credit Card Clearing",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2066,
+          "period": -408.26,
+          "ytd": -4156.37,
+          "expected_period": "-408.26",
+          "expected_ytd": "-4156.37",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "I/C Aurisic US",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2200,
+          "period": 118767,
+          "ytd": -141033,
+          "expected_period": "118767.00",
+          "expected_ytd": "-141033.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Payroll",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2213,
+          "period": -1303.3,
+          "ytd": -17839.18,
+          "expected_period": "-1303.30",
+          "expected_ytd": "-17839.18",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "FSA w/holding",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2227,
+          "period": 0,
+          "ytd": -15695.77,
+          "expected_period": "0.00",
+          "expected_ytd": "-15695.77",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Pension Payable",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2401,
+          "period": -229297.69,
+          "ytd": -334593.73,
+          "expected_period": "-229297.69",
+          "expected_ytd": "-334593.73",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Bonuses",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2402,
+          "period": 134630.14,
+          "ytd": -67315.07,
+          "expected_period": "134630.14",
+          "expected_ytd": "-67315.07",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Interest",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2404,
+          "period": 166955,
+          "ytd": -160270.22,
+          "expected_period": "166955.00",
+          "expected_ytd": "-160270.22",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Legal/Audit Fees",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2410,
+          "period": 5.5,
+          "ytd": -146796.76,
+          "expected_period": "5.50",
+          "expected_ytd": "-146796.76",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Accrued Expenses - Miscellaneous",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2500,
+          "period": 62096.98,
+          "ytd": 70637.92,
+          "expected_period": "62096.98",
+          "expected_ytd": "70637.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Interdivisional Clearing",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2600,
+          "period": 0,
+          "ytd": -18300000,
+          "expected_period": "0.00",
+          "expected_ytd": "-18300000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Notes Payable - LOC",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 2601,
+          "period": 0,
+          "ytd": -13500000,
+          "expected_period": "0.00",
+          "expected_ytd": "-13500000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Other LOC",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 3250,
+          "period": -4301587,
+          "ytd": -5586245,
+          "expected_period": "-4301587.00",
+          "expected_ytd": "-5586245.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Equity Distributions",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 3251,
+          "period": 3351587,
+          "ytd": 4392160,
+          "expected_period": "3351587.00",
+          "expected_ytd": "4392160.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Distributions - Aurisic",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 3253,
+          "period": 950000,
+          "ytd": 1194085,
+          "expected_period": "950000.00",
+          "expected_ytd": "1194085.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Distributions - Account 123454321",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 3300,
+          "period": 0,
+          "ytd": 78631.03,
+          "expected_period": "0.00",
+          "expected_ytd": "78631.03",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Retained Earnings - Prior",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 3400,
+          "period": -164523.75,
+          "ytd": -503867.73,
+          "expected_period": "-164523.75",
+          "expected_ytd": "-503867.73",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Retained Earnings - Current",
+          "classification": "l"
+        },
+        {
+          "division": 12,
+          "account": 2500,
+          "period": -62096.98,
+          "ytd": -70637.92,
+          "expected_period": "-62096.98",
+          "expected_ytd": "-70637.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Interdivisional Clearing",
+          "classification": "l"
+        },
+        {
+          "division": 12,
+          "account": 3400,
+          "period": 1596.98,
+          "ytd": 6387.92,
+          "expected_period": "1596.98",
+          "expected_ytd": "6387.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Retained Earnings - Current",
+          "classification": "l"
+        },
+        {
+          "division": 10,
+          "account": 7075,
+          "period": -62091.9,
+          "ytd": -233042.36,
+          "expected_period": "-62091.90",
+          "expected_ytd": "-233042.36",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Intercompany/Interest Income",
+          "classification": "i"
+        },
+        {
+          "division": 10,
+          "account": 7076,
+          "period": -19051.45,
+          "ytd": -76715.65,
+          "expected_period": "-19051.45",
+          "expected_ytd": "-76715.65",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Bank/Interest Income",
+          "classification": "i"
+        },
+        {
+          "division": 10,
+          "account": 7092,
+          "period": -5500,
+          "ytd": -5500,
+          "expected_period": "-5500.00",
+          "expected_ytd": "-5500.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Other Income",
+          "classification": "i"
+        },
+        {
+          "division": 10,
+          "account": 7206,
+          "period": -1171996,
+          "ytd": -4687985,
+          "expected_period": "-1171996.00",
+          "expected_ytd": "-4687985.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Shared Funding",
+          "classification": "i"
+        },
+        {
+          "division": 10,
+          "account": 6000,
+          "period": 388005.99,
+          "ytd": 1463026.36,
+          "expected_period": "388005.99",
+          "expected_ytd": "1463026.36",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Salaries & Wages",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6010,
+          "period": 22208.4,
+          "ytd": 132515.88,
+          "expected_period": "22208.40",
+          "expected_ytd": "132515.88",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "FICA",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6020,
+          "period": 42601.55,
+          "ytd": 191045.69,
+          "expected_period": "42601.55",
+          "expected_ytd": "191045.69",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Health Insurance",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6027,
+          "period": -15255.02,
+          "ytd": -60545.95,
+          "expected_period": "-15255.02",
+          "expected_ytd": "-60545.95",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Employee Benefit - Reimbursement",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6030,
+          "period": 7254.29,
+          "ytd": 39505.83,
+          "expected_period": "7254.29",
+          "expected_ytd": "39505.83",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Pension Expense - 401(k)",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6031,
+          "period": 40658.59,
+          "ytd": 145955,
+          "expected_period": "40658.59",
+          "expected_ytd": "145955.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Bonus Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6040,
+          "period": 0,
+          "ytd": 224.63,
+          "expected_period": "0.00",
+          "expected_ytd": "224.63",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Employee Functions/Events",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6045,
+          "period": 45.25,
+          "ytd": 45.25,
+          "expected_period": "45.25",
+          "expected_ytd": "45.25",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Uniform Expenses",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6060,
+          "period": 128,
+          "ytd": 5570.88,
+          "expected_period": "128.00",
+          "expected_ytd": "5570.88",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Employee Training/Seminars",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6065,
+          "period": 2622.06,
+          "ytd": 11710.65,
+          "expected_period": "2622.06",
+          "expected_ytd": "11710.65",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Payroll Processing Charges",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6070,
+          "period": 10428.5,
+          "ytd": 28821.31,
+          "expected_period": "10428.50",
+          "expected_ytd": "28821.31",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Employee Recruiting Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6090,
+          "period": 11076.92,
+          "ytd": 59307.68,
+          "expected_period": "11076.92",
+          "expected_ytd": "59307.68",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Contract Labor",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6200,
+          "period": 62772.93,
+          "ytd": 435284.69,
+          "expected_period": "62772.93",
+          "expected_ytd": "435284.69",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Legal Fees / Attorneys",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6300,
+          "period": 25163.27,
+          "ytd": 47846.7,
+          "expected_period": "25163.27",
+          "expected_ytd": "47846.70",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Airfare",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6301,
+          "period": 3118.08,
+          "ytd": 7247.21,
+          "expected_period": "3118.08",
+          "expected_ytd": "7247.21",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Rental Car",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6302,
+          "period": 12694.47,
+          "ytd": 29460.54,
+          "expected_period": "12694.47",
+          "expected_ytd": "29460.54",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Hotel/Lodging",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6303,
+          "period": 562.96,
+          "ytd": 562.96,
+          "expected_period": "562.96",
+          "expected_ytd": "562.96",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Meals 100% Deductible",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6304,
+          "period": 1773.57,
+          "ytd": 6154.6,
+          "expected_period": "1773.57",
+          "expected_ytd": "6154.60",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Meals 50% Deductible",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6305,
+          "period": -8653.07,
+          "ytd": -1487.06,
+          "expected_period": "-8653.07",
+          "expected_ytd": "-1487.06",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Miscellaneous",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6306,
+          "period": 316,
+          "ytd": 866.84,
+          "expected_period": "316.00",
+          "expected_ytd": "866.84",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "T & E - Parking and Tolls",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6402,
+          "period": 408.26,
+          "ytd": 1706.85,
+          "expected_period": "408.26",
+          "expected_ytd": "1706.85",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Rent - Equipment",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6403,
+          "period": 3237,
+          "ytd": 12948,
+          "expected_period": "3237.00",
+          "expected_ytd": "12948.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Rent - Apartments",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6410,
+          "period": 181.17,
+          "ytd": 649.84,
+          "expected_period": "181.17",
+          "expected_ytd": "649.84",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Utilities - Electrical",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6412,
+          "period": 63.62,
+          "ytd": 283.64,
+          "expected_period": "63.62",
+          "expected_ytd": "283.64",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Utilities - Water/Sewer",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6420,
+          "period": 981,
+          "ytd": 981,
+          "expected_period": "981.00",
+          "expected_ytd": "981.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Maintenance - Building",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6425,
+          "period": 0,
+          "ytd": 5702.8,
+          "expected_period": "0.00",
+          "expected_ytd": "5702.80",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Maintenance - Equipment",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6430,
+          "period": 1644.79,
+          "ytd": 6579.16,
+          "expected_period": "1644.79",
+          "expected_ytd": "6579.16",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Depreciation Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6512,
+          "period": 1474.61,
+          "ytd": 5640.99,
+          "expected_period": "1474.61",
+          "expected_ytd": "5640.99",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Telephone - Internet Comm.",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6515,
+          "period": 1875,
+          "ytd": 8431.17,
+          "expected_period": "1875.00",
+          "expected_ytd": "8431.17",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Telephone - Cellular",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6610,
+          "period": 0,
+          "ytd": 150000,
+          "expected_period": "0.00",
+          "expected_ytd": "150000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Insurance - Comm/Property/Liabil",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6615,
+          "period": 150,
+          "ytd": 1420.28,
+          "expected_period": "150.00",
+          "expected_ytd": "1420.28",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Insurance - Vehicle",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6650,
+          "period": 3268.73,
+          "ytd": 13074.92,
+          "expected_period": "3268.73",
+          "expected_ytd": "13074.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Other Taxes",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6701,
+          "period": 2133.62,
+          "ytd": 12859.73,
+          "expected_period": "2133.62",
+          "expected_ytd": "12859.73",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Office Supplies",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6703,
+          "period": 2187.89,
+          "ytd": 3223.96,
+          "expected_period": "2187.89",
+          "expected_ytd": "3223.96",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Coffee/Water/Grocery Supplies",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6725,
+          "period": 1687.81,
+          "ytd": 5517.13,
+          "expected_period": "1687.81",
+          "expected_ytd": "5517.13",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Bank Charges/Fees",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6749,
+          "period": 14952.5,
+          "ytd": 59478.08,
+          "expected_period": "14952.50",
+          "expected_ytd": "59478.08",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Sales Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6750,
+          "period": 0,
+          "ytd": -1117.54,
+          "expected_period": "0.00",
+          "expected_ytd": "-1117.54",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Miscellaneous Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6760,
+          "period": 99945.84,
+          "ytd": 315224.95,
+          "expected_period": "99945.84",
+          "expected_ytd": "315224.95",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "IT Support Services",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6762,
+          "period": 94553.29,
+          "ytd": 368121.51,
+          "expected_period": "94553.29",
+          "expected_ytd": "368121.51",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Software Licenses/Maintenance",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6767,
+          "period": 0,
+          "ytd": 40485.09,
+          "expected_period": "0.00",
+          "expected_ytd": "40485.09",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Computer Supp-Employee Hardware",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6768,
+          "period": 0,
+          "ytd": 1005.21,
+          "expected_period": "0.00",
+          "expected_ytd": "1005.21",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Computer Supp-Main Server Room",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6780,
+          "period": 71.98,
+          "ytd": 107.97,
+          "expected_period": "71.98",
+          "expected_ytd": "107.97",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Maint & Repair",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6781,
+          "period": 360.03,
+          "ytd": 1518.68,
+          "expected_period": "360.03",
+          "expected_ytd": "1518.68",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Gas & Oil",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6782,
+          "period": 0,
+          "ytd": 200,
+          "expected_period": "0.00",
+          "expected_ytd": "200.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Emp Car Allowance Insurance",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6783,
+          "period": 0,
+          "ytd": 4500,
+          "expected_period": "0.00",
+          "expected_ytd": "4500.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Lease Costs",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6784,
+          "period": 2674.95,
+          "ytd": 5454.18,
+          "expected_period": "2674.95",
+          "expected_ytd": "5454.18",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Mileage Costs",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6785,
+          "period": 3550,
+          "ytd": 14200,
+          "expected_period": "3550.00",
+          "expected_ytd": "14200.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Car Allowance",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6786,
+          "period": 8.42,
+          "ytd": 8.42,
+          "expected_period": "8.42",
+          "expected_ytd": "8.42",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Vehicle Expense - Toll & Parking",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 6810,
+          "period": 67315.07,
+          "ytd": 269260.28,
+          "expected_period": "67315.07",
+          "expected_ytd": "269260.28",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Interest Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 7010,
+          "period": -4059.99,
+          "ytd": -4351.24,
+          "expected_period": "-4059.99",
+          "expected_ytd": "-4351.24",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "State Tax Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 7011,
+          "period": 16453.11,
+          "ytd": 34832.7,
+          "expected_period": "16453.11",
+          "expected_ytd": "34832.70",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Foreign Tax Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 7107,
+          "period": 171474.16,
+          "ytd": 618307.83,
+          "expected_period": "171474.16",
+          "expected_ytd": "618307.83",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Shared Expenses",
+          "classification": "e"
+        },
+        {
+          "division": 12,
+          "account": 6420,
+          "period": 1250,
+          "ytd": 5000,
+          "expected_period": "1250.00",
+          "expected_ytd": "5000.00",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Maintenance - Building",
+          "classification": "e"
+        },
+        {
+          "division": 12,
+          "account": 6430,
+          "period": 346.98,
+          "ytd": 1387.92,
+          "expected_period": "346.98",
+          "expected_ytd": "1387.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Depreciation Expense",
+          "classification": "e"
+        },
+        {
+          "division": 10,
+          "account": 9999,
+          "period": 164523.75,
+          "ytd": 503867.73,
+          "expected_period": "164523.75",
+          "expected_ytd": "503867.73",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Clearing Profit",
+          "classification": "c"
+        },
+        {
+          "division": 12,
+          "account": 9999,
+          "period": -1596.98,
+          "ytd": -6387.92,
+          "expected_period": "-1596.98",
+          "expected_ytd": "-6387.92",
+          "period_error": "0.00",
+          "ytd_error": "0.00",
+          "name": "Clearing Profit",
+          "classification": "c"
+        }
+      ],
+      "refresh": [
+        {
+          "input": "input.cash1024",
+          "input_delta": 1,
+          "expected": {
+            "cash.balance": 1,
+            "bank.book": 1
+          },
+          "deltas": {
+            "cash.balance": 1,
+            "bank.book": 1
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        },
+        {
+          "input": "input.bonus",
+          "input_delta": 100,
+          "expected": {
+            "bonus.total": 100,
+            "bonus.headline": 100,
+            "bonus.gap": -100,
+            "bonus.source_reported": 0
+          },
+          "deltas": {
+            "bonus.total": 100,
+            "bonus.headline": 100,
+            "bonus.gap": -100,
+            "bonus.source_reported": 0
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        },
+        {
+          "input": "input.prepaid_addition",
+          "input_delta": 6,
+          "expected": {
+            "prepaid.expense.amortization25": 1,
+            "prepaid.expense.vendor.25": 5,
+            "prepaid.expense.total": 5,
+            "prepaid.expense.gap": -5
+          },
+          "deltas": {
+            "prepaid.expense.amortization25": 1,
+            "prepaid.expense.vendor.25": 5,
+            "prepaid.expense.total": 5,
+            "prepaid.expense.gap": -5
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        },
+        {
+          "input": "input.fees",
+          "input_delta": 1,
+          "expected": {
+            "fees.balance": 1
+          },
+          "deltas": {
+            "fees.balance": 1
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        },
+        {
+          "input": "input.check",
+          "input_delta": 1,
+          "expected": {
+            "bank.checks": 1
+          },
+          "deltas": {
+            "bank.checks": 1
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        },
+        {
+          "input": "input.loan1_rate",
+          "input_delta": -1,
+          "expected": {
+            "loan1.charge": -15041.09589041096,
+            "loan1.interest": -15041.09589041096,
+            "loans.interest": -15041.09589041096
+          },
+          "deltas": {
+            "loan1.charge": -15041.095890410961,
+            "loan1.interest": -15041.095890410961,
+            "loans.interest": -15041.095890410958
+          },
+          "unavailable": {
+            "bank.statement": "Unavailable",
+            "bank.reconciliation": "Unavailable",
+            "ap.detail": "Unavailable"
+          }
+        }
+      ],
+      "max_numeric_absolute_error": "8.747520041652024E-9",
+      "max_ledger_absolute_error": "0.00",
+      "source_inputs_checked": 1362
+    }
+  },
+  "aggregate_score": null,
+  "ranking_established": false,
+  "usage": {
+    "opencorvus": {
+      "all_recorded": {
+        "rows": 99,
+        "input_tokens": 1070311,
+        "output_tokens": 34607,
+        "reasoning_tokens": 8120,
+        "cache_read_tokens": 11232768,
+        "cache_write_tokens": 0,
+        "total_tokens": 12345806,
+        "cost_usd": 0
+      },
+      "preflight_session": {
+        "rows": 2,
+        "input_tokens": 33634,
+        "output_tokens": 81,
+        "reasoning_tokens": 115,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "total_tokens": 33830,
+        "cost_usd": 0
+      },
+      "task_lineage": {
+        "rows": 97,
+        "input_tokens": 1036677,
+        "output_tokens": 34526,
+        "reasoning_tokens": 8005,
+        "cache_read_tokens": 11232768,
+        "cache_write_tokens": 0,
+        "total_tokens": 12311976,
+        "cost_usd": 0
+      }
+    },
+    "codex": null,
+    "scope": "Recorded usage events; internal cost=0 is not external free. Codex actual model/usage unknown; no equal-resource or same-model inference. Cached/context totals are not active work hours."
+  }
+}

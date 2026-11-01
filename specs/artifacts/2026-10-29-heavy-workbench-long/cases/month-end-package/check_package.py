@@ -196,7 +196,23 @@ def measure(args):
         for field in ["name","class"]:
             if normalized(r.get(field))!=normalized(w[field]):error("ACCOUNT_METADATA_MISMATCH",account=key,field=field,expected=w[field],actual=r.get(field))
     for key in actual_ledger.keys()-ledger.keys():error("ACCOUNT_UNEXPECTED",account=key)
-    for claim,w in wanted.items():match(claim,scalar(claim),w)
+    # A liability balance can be shown as a signed ledger amount or as an
+    # explicitly labelled positive credit balance. Normalize the WHOLE coupled
+    # control group, never an individual absolute value or a nearest-fit amount.
+    controls=['payroll.opening','payroll.rollforward','payroll.gl','payroll.gap']
+    raw_controls={claim:scalar(claim) for claim in controls}
+    def fits(multiplier):
+        return all(isinstance(raw_controls[k],(int,float)) and D(raw_controls[k]).is_finite()
+                   and abs(D(raw_controls[k])*multiplier-wanted[k])<=D('.0050001') for k in controls)
+    basis='ledger_signed' if fits(1) else 'credit_positive' if fits(-1) else 'inconsistent'
+    if basis=='inconsistent':
+        error('ACCOUNTING_BASIS_INCONSISTENT',group='payroll_liability_controls',actual=raw_controls,
+              ledger_signed_expected={k:str(wanted[k]) for k in controls},
+              credit_positive_expected={k:str(-wanted[k]) for k in controls})
+    for claim,w in wanted.items():
+        if claim in controls:
+            if basis!='inconsistent':match(claim,D(raw_controls[claim])*(-1 if basis=='credit_positive' else 1),w)
+        else:match(claim,scalar(claim),w)
     for claim in ["bank.statement","bank.reconciliation","ap.detail"]:
         e=entry(claim);v=scalar(claim)
         if e and (e["role"]!="unavailable" or isinstance(v,(int,float))):error("MISSING_SOURCE_STATUS_REQUIRED",claim=claim,actual=v)
@@ -244,6 +260,8 @@ def measure(args):
                 if isinstance(v,(int,float)):error("INDEPENDENT_SOURCE_STILL_REQUIRED",claim=claim,actual=v)
     if child.returncode:error("WORKBOOK_ENGINE_CONSUMPTION_ERROR",native_exit=child.returncode,detail=child.stderr[-2000:])
     return dict(measured_contracts_match=not errors,errors=errors,ledger_accounts=len(actual_ledger),numeric_claims=len(wanted),source_inputs_checked=inputs_checked,
+                accounting_basis=dict(payroll_liability_controls=basis,raw_observations=raw_controls,semantic_label_review_required=True,
+                                      scope='Coupled quantity consistency only; actual labels and formulas must establish the claimed accounting meaning'),
                 engine_native_exit=child.returncode,refresh=engine["refresh"] if engine else None,score=None,
                 saved_cache_observations={claim:[book[e['sheet']][c.strip()].value for c in e['address'].split(',')] for claim,e in index.items() if claim in wanted},
                 scope="Indexed actual-XLSX recalculated data and declared dependency contracts only. Saved caches are observations, not the truth or a gate. Free-text meaning, company policy, visual usability and complete handoff require separate whole-product review. Not an official GDPval score, company sign-off or general Excel-engine certification.")

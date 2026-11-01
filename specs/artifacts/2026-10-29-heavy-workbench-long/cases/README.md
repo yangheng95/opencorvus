@@ -1,6 +1,6 @@
 # 工程题包库存与重型评估有效性缺口
 
-新[完整April月结待审包](month-end-package/README.md)已有全工作簿、独立源重算/错误同消费与实际图；唯一获准[独立整审](month-end-package/independent-review/README.md)已完成，发现预付期间/工资独有注释/模板Proof及全题公平消费缺口，模型比较与数小时资格未就绪，不计下表完成率。
+新[完整April月结真实对照](month-end-package/real-pair-20261101/README.md)已实际运行自然fresh Codex和原生OpenCorvus，完整原件先封/原源码真实重建/实际XLSX同消费/完整内容与图均已交。原冻结双4属于工资表示误拒，后验修复双0保阶段，未强造总100或整体质量胜负；数小时/有效小时及十题目标仍未达，不计下表完成率，心跳ACTIVE。
 
 新[工作量分配原型](workload-distribution/README.md)有完整实际参考/原料定位/真实错误消费，但尚未整审、运行候选或证明数小时难度；不纳入下表十题完成率。首查[热防护源任务](thermal-screening/README.md)缺公开几何且原专家交付不同源，未采用且不补隐藏模型。
 

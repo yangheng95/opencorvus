@@ -1,0 +1,44 @@
+{
+  "phase": "paired_completed_quality_decomposed_posthoc_measurement_repaired_no_heavy_qualification",
+  "pair_root": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101",
+  "codex": {
+    "agent": "/root/codex_month_end_fresh",
+    "status": "natural_completed_original_sealed",
+    "fork": "none",
+    "override": null,
+    "actual_model": null,
+    "usage": null,
+    "original_frozen_consumer_native_exit": 4,
+    "posthoc_corrected_consumer_native_exit": 0,
+    "source_only_reproduction_native_exit": 0
+  },
+  "opencorvus": {
+    "task_id": "tsk_g00VZiL5cz00wyrNlttX",
+    "status": "completed_all_occurrences_inactive_original_sealed_runtime_disposed",
+    "server_url": "http://127.0.0.1:57201/",
+    "launcher_pid": 16272,
+    "observer_owner_pid": 31300,
+    "preflight": {
+      "sessionID": "ses_hF35Lf0b2Lxei8R7YSgT",
+      "credential": "usable",
+      "catalog": "projected",
+      "actualModel": "gpt-6.1-sol",
+      "streaming": true
+    },
+    "service_retired": true,
+    "original_frozen_consumer_native_exit": 4,
+    "posthoc_corrected_consumer_native_exit": 0,
+    "source_only_reproduction_native_exit": 0
+  },
+  "active_candidate": null,
+  "active_evaluation": null,
+  "automatic_duplicate_launch_allowed": false,
+  "overall_goal": "ACTIVE and unfinished; ten deep tasks and effective hours0/10",
+  "heartbeat": "benchmark ACTIVE 20min; do not delete on subtask closure",
+  "automatic_followup_review_allowed": false,
+  "report": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\COMPARISON.md",
+  "repository_report": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\month-end-package\\real-pair-20261101\\README.md",
+  "pair_complete": true,
+  "next_work": "Next genuine complete deep full-chain task and valid product comparison; do not repeat this closed pair/author studies/components",
+  "generic_verification_behavior_cure_proven": false
+}

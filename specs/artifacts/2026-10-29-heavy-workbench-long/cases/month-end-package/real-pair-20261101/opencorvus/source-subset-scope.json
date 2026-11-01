@@ -1,0 +1,62 @@
+{
+  "source_archive": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus\\sealed\\complete-project.zip",
+  "members": [
+    {
+      "path": "submission/build.py",
+      "bytes": 54106,
+      "sha256": "7c32fbc386f3257d2d0c4afa7e858fca9c2e9bc7893bc1b443e77e675bd71474"
+    },
+    {
+      "path": "submission/consumer.mjs",
+      "bytes": 4222,
+      "sha256": "74e6b3fcad99da59e666f229dfa8d088f9cc1f4092ad07629a0b90107881325a"
+    },
+    {
+      "path": "submission/finalize.py",
+      "bytes": 6056,
+      "sha256": "d0508195493146bb08d0a0bf9c01eb37c0d388e2b332c3b604f71238de0a7fd1"
+    },
+    {
+      "path": "submission/HANDOFF.md",
+      "bytes": 5526,
+      "sha256": "0b636912e1750aa458772214b26e25dce09f2ad0b1e89ac796edb89427484788"
+    },
+    {
+      "path": "submission/inspect_focus.py",
+      "bytes": 1070,
+      "sha256": "967be1870d187960af9d849d5bd0c78ff1841a39f7ff9b15501541ad51e9e9cd"
+    },
+    {
+      "path": "submission/inspect_inputs.py",
+      "bytes": 935,
+      "sha256": "d17f845b53b8b53a1ac34ac2bc6aeaff4e6ae3ef025eaeca585fb26640999b24"
+    },
+    {
+      "path": "submission/make_visual_index.py",
+      "bytes": 2102,
+      "sha256": "586677a86a690316649296e92fced31514b6627e1fe8a53657563176ef7fef2d"
+    },
+    {
+      "path": "submission/presentation.py",
+      "bytes": 2297,
+      "sha256": "ecf3ebf0b8ff25a0c8c18f1bdac6cfd85d551b0ece64f9fd098c9b1ad60f4c46"
+    },
+    {
+      "path": "submission/run_all.py",
+      "bytes": 2329,
+      "sha256": "280d1eeb8acc3417e842609e289bc2089f1a72f6fc1cb3f143ad586164eb72ef"
+    },
+    {
+      "path": "submission/validate.py",
+      "bytes": 15281,
+      "sha256": "7ee357eac073fa5689541a2279d0a3bc0a869a8641297552a0ca24de64229d53"
+    },
+    {
+      "path": "submission/VISUAL-REVIEW.md",
+      "bytes": 2032,
+      "sha256": "7c8d88e18c2f00c9aae9957f04f9f8b582e6bb3e3184732869138c59652c27e2"
+    }
+  ],
+  "full_project": false,
+  "generated_workbooks_caches_claim_json_excluded": true
+}

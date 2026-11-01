@@ -1,0 +1,36 @@
+{
+  "opencorvus": {
+    "all_recorded": {
+      "rows": 99,
+      "input_tokens": 1070311,
+      "output_tokens": 34607,
+      "reasoning_tokens": 8120,
+      "cache_read_tokens": 11232768,
+      "cache_write_tokens": 0,
+      "total_tokens": 12345806,
+      "cost_usd": 0
+    },
+    "preflight_session": {
+      "rows": 2,
+      "input_tokens": 33634,
+      "output_tokens": 81,
+      "reasoning_tokens": 115,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 33830,
+      "cost_usd": 0
+    },
+    "task_lineage": {
+      "rows": 97,
+      "input_tokens": 1036677,
+      "output_tokens": 34526,
+      "reasoning_tokens": 8005,
+      "cache_read_tokens": 11232768,
+      "cache_write_tokens": 0,
+      "total_tokens": 12311976,
+      "cost_usd": 0
+    }
+  },
+  "codex": null,
+  "scope": "Recorded usage events; internal cost=0 is not external free. Codex actual model/usage unknown; no equal-resource or same-model inference. Cached/context totals are not active work hours."
+}

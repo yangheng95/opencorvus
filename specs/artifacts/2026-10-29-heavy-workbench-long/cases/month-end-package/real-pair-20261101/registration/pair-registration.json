@@ -1,0 +1,136 @@
+{
+  "registered_at": "2026-11-01T09:57:41.339270+00:00",
+  "public_commit": "394c7ee04ed06e988a3faa5d35da1d67fb03e48e",
+  "source_task": "ee09d943-5a11-430a-b7a2-971b4e9b01b5",
+  "inputs": [
+    {
+      "name": "Accr2011-1.xlsx",
+      "bytes": 9640,
+      "sha256": "d59163c5d3f3208192ea8955851ff3dd0a64788e13c1a37e93b35ae6929b71e0"
+    },
+    {
+      "name": "AccrBonus-1.xlsx",
+      "bytes": 10564,
+      "sha256": "36e703e3f02723cdc23f6686230262e445cddf1ea0fd359962cf40cdc5eca9d2"
+    },
+    {
+      "name": "AccrMisc-1.xlsx",
+      "bytes": 10401,
+      "sha256": "f362307a075b522de4d1735c184158d83581c08dba476e7d12741a0cbd6adb43"
+    },
+    {
+      "name": "AR_Accrual-1.xlsx",
+      "bytes": 9686,
+      "sha256": "c1f3ab8ce2914468eed1474179d6d483c822aeae35277358812f78886f7290d1"
+    },
+    {
+      "name": "Aurisic_Corp_Payrolls_April_2025-1.xlsx",
+      "bytes": 13680,
+      "sha256": "623d016a3aeab4e671b6b694aefc27407ddb75ab5af1d0667471c9e2926e344b"
+    },
+    {
+      "name": "Aurisic_Final_TB_4-25-1.txt",
+      "bytes": 12423,
+      "sha256": "348fbbd9e92703b1df1a72dd4ab269d5103a3cfecf28c3f45862bde41e771ef2"
+    },
+    {
+      "name": "Aurisic_Financials_3-25-1.xlsx",
+      "bytes": 86735,
+      "sha256": "35a7ac2f974b716793ed0c00f5144a333f39f36b5c93e3e3b863f1acd2576364"
+    },
+    {
+      "name": "Aurisic_Prepaid_Expenses_4-25-1.xlsx",
+      "bytes": 43084,
+      "sha256": "e2b6afaf79c631716f1f50538a47055fbee23648c8dea94e1ccdd3285e9f7393"
+    },
+    {
+      "name": "Good Insurance Co - Loan II.xlsx",
+      "bytes": 13719,
+      "sha256": "e93731e06706ce12023ae76ad2c80549319f9df0110c77e75c466b76f04b5f8a"
+    },
+    {
+      "name": "Good Insurance Co - Loan.xlsx",
+      "bytes": 18460,
+      "sha256": "2fa3c05b59973a753c04e59abe6770599e55afc5c8cfc5a2c913132663bfc477"
+    },
+    {
+      "name": "INPUTS.json",
+      "bytes": 5228,
+      "sha256": "ceb050b607246eef42c5ee48acf2fa617aa8f05522430efdd886b2df211016d5"
+    },
+    {
+      "name": "Legal_Dump-1.xlsx",
+      "bytes": 14929,
+      "sha256": "fb4078b5e1a301bc8873b6f89a49ae08d4cea9f15b880b1edfbeaf66e83a7701"
+    },
+    {
+      "name": "OUTPUTS.md",
+      "bytes": 8373,
+      "sha256": "02ce5690adc5c8b2eefe1a31a6b3253733801730ccea65cca5805a25f29cc8cd"
+    },
+    {
+      "name": "Outstanding_CKs_4-30-25-1.xlsx",
+      "bytes": 12370,
+      "sha256": "83118f0429d638112886ddd38d6e4dc04eddbebb1ba503c7078944fa1d16bca6"
+    },
+    {
+      "name": "Payroll-1.xlsx",
+      "bytes": 11252,
+      "sha256": "1ec5dff2ba854c21a8d721333170089f6b8d4c9d6893e7aa1b4679a82d46be22"
+    },
+    {
+      "name": "PPD1250-1.xlsx",
+      "bytes": 30651,
+      "sha256": "ce321db3a9291d4c66fe97f0ae705b3f714a45d3bc737638de0e056fea702b56"
+    },
+    {
+      "name": "PPD1251-1.xlsx",
+      "bytes": 18683,
+      "sha256": "3396ea7d0510f74ecc88c8eb30b3d971d13d9d89860729046fceb06735e5bc96"
+    },
+    {
+      "name": "Prof_Fee_Dump-1.xlsx",
+      "bytes": 11272,
+      "sha256": "b06e27b2ed79bfb9e69320a860fe3577f46c61ec548989e421b9c3ec5c5e8ae9"
+    },
+    {
+      "name": "QUALITY-CONTRACT.md",
+      "bytes": 5634,
+      "sha256": "991b09451a03bd2cb42e557f144669c1e8a8a74809a147d609d5761108c815fa"
+    },
+    {
+      "name": "Rebates-1.xlsx",
+      "bytes": 9746,
+      "sha256": "e854ea34c1744a1e7c008f625a568b00f93c6d9b2a9ff53a01915cbcff9cc8ce"
+    },
+    {
+      "name": "RUNTIME.md",
+      "bytes": 2382,
+      "sha256": "7947cfaec6ddecbb4f82318838538559048cc648dc36818e657eb8ad431a6d26"
+    },
+    {
+      "name": "SOURCE-POLICY.md",
+      "bytes": 2576,
+      "sha256": "391e7943690cd5f7f1a67218bd7c4947b1bac8eab00f5c8430a7c091b240e865"
+    },
+    {
+      "name": "TASK.original.txt",
+      "bytes": 3043,
+      "sha256": "fbbfaadc84a95e15370b8d1d5ba050f4fb6939fe397a0886df44067b3ebb9368"
+    }
+  ],
+  "candidates": [
+    "codex",
+    "opencorvus"
+  ],
+  "settings": {
+    "codex": "fresh fork none, no model override; underlying actual model/usage unknown until evidenced",
+    "opencorvus": "existing Inspect/native Task/full streaming; openai/gpt-6.1-sol; new owned runtime and fresh paired credential/catalog staging"
+  },
+  "comparison": "M01-M13 public dimensions and current actual-XLSX consumer; no aggregate100 or guaranteed ranking; errors, numbers, meaning, refresh, full delivery and scope kept separate",
+  "seal_before_evaluation": true,
+  "patch_candidate_after_terminal": false,
+  "reuse_retired_services_or_budget": false,
+  "effective_hours_qualification": false,
+  "overall_ten_task_goal_complete": false
+}

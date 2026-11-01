@@ -1,0 +1,37 @@
+{
+  "registration": {
+    "benchmark": "HeavyWorkBench-MonthEnd/1.0.0-pilot",
+    "case": "M01",
+    "model": "openai/gpt-6.1-sol",
+    "inactivitySeconds": 3600,
+    "tokenBudgetScope": "task-session-lineage",
+    "budget": {
+      "total_model_tokens": null
+    },
+    "runRoot": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus",
+    "project": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101\\opencorvus\\project",
+    "caseVersion": "month-end-clarified-CFO-review",
+    "public_commit": "394c7ee04ed06e988a3faa5d35da1d67fb03e48e",
+    "comparable": false
+  },
+  "pid": 16272,
+  "startedAt": "2026-11-01T09:57:42.397Z",
+  "comparable": false,
+  "projection": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol"
+  },
+  "preflight": {
+    "sessionID": "ses_hF35Lf0b2Lxei8R7YSgT",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "outcome": "owned_server_stop_requested_after_task_settlement",
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "endedAt": "2026-11-01T10:25:43.280Z"
+}

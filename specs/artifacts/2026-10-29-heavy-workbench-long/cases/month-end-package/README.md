@@ -1,8 +1,12 @@
-# April完整月结待审包
+# April完整月结：实质修复与真实Codex/OC对照已交
 
-用户最新授权已进入[九项发现修复与真实对照计划](REPAIR-AND-PAIR-PLAN.md)：当前唯一producer与consumer已替换旧坐标路径，保工资业务注、实时奖金、损益/清算Proof、具体期间冲突和源组件桥；[公开输出合同](public/OUTPUTS.md)容许合法位置、资金分类及未知措辞。新实物/完整正错消费与实际刷新在`D:/opencorvus-benchmark-runs/month-end-fair-pair-20261101`，旧作者/独审原件与成绩保持。当前正推进这一个完整任务的真实Codex/OC对照；下文是旧作者/独审时点记录，不能拿旧“无修复授权”限制覆盖最新指令。总体十题未达，20分钟心跳已恢复ACTIVE。
+[本次真实产物比较及证据](real-pair-20261101/README.md)已完成：两方同394冻结public自然交付，完整原件先封；原冻结消费者各native4，均是合法工资贷方正额被signed-only预期误拒。原4保留，当前唯一消费者修复整组表示合同后两原件各0，三个完整合法/错误programme分别0/4/4；两原提交源码从只含public+代码的新目录按原命令重建、新工作簿消费均0。后验修复不是事前无缺陷公平验收，更不是新模型试验或行为根治证据。
 
-[修复实物和实际完整正错验证](repair-validation-20261101/README.md)已保存，含合法布局/资金分类和真实冻结headline错误的不同结果、源Period列共同误读的首失败、修后原表头独立预期与最终release。它们服务接下来的真实模型比较，不当模型结果、专业财务签字或十题资格。
+105联合账户金额误差均0.00，142逐值支持、1362源输入和六变化相符；主方实际阅读两份CFO交接、全部contact/所有表及直接从正式XLSX渲染的关键视图。两份均为有明确未知事项的有效待审草稿，当前没有充分实质质量优劣；无总分/满分、整体模型排名、公司签字、原生Excel或数小时资格。Codex实际model/usage未知；OC99条真实流式请求gpt-6.1-sol/终态/全tool outcome/正常dispose已封，端口57201退休。完整原根`D:/opencorvus-benchmark-runs/month-end-fair-pair-20261101/current.json`优先。
+
+[九项发现修复与对照计划](REPAIR-AND-PAIR-PLAN.md)、[对照前真实正错消费](repair-validation-20261101/README.md)及[实际双候选暴露的表示误拒修复](ACCOUNTING-BASIS-REPAIR.md)保全部阶段。总体十题/有效候选小时仍0/10，心跳benchmark保持ACTIVE/20min，不因本对完成删除；后续必须服务新的完整深度任务和真实产品比较，不重复此pair/旧作者研究/独审/组件资格。
+
+## 历史作者与一次独审时点（以下不代表当前活跃对象）
 
 已交一份从实际公开来源构建的[完整工作簿](D:/opencorvus-benchmark-runs/gdpval-month-end-task-20261101/reference/Aurisic_Financials_4-25-1.xlsx)，覆盖目录、April总账、现金/银行/资金来源、预付、费用、两笔贷款、应付/应收、工资及各应计支持，并将缺失来源与真实账差放入CFO待审事项。它是**可复建、已核数和实际看图的作者参考待审包**，不是已签字财务报表、独立整审通过、冻结benchmark或模型成绩。没有自动启动候选/审查。
 

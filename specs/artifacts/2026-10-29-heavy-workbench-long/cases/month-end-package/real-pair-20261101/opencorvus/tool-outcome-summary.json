@@ -1,0 +1,85 @@
+{
+  "request_parts": 94,
+  "outcome_parts": 94,
+  "unsettled_request_count": 0,
+  "outcomes": {
+    "\"completed\"": 90,
+    "\"failed\"": 4
+  },
+  "request_tools": {
+    "read": 43,
+    "glob": 3,
+    "bash": 26,
+    "apply_patch": 15,
+    "search_code": 4,
+    "ReadCompactionEvidence": 1,
+    "artifact_snapshot": 1,
+    "manage_task": 1
+  },
+  "actual_png_read_requests": [
+    {
+      "filePath": "submission/visual/02_01.png"
+    },
+    {
+      "filePath": "submission/visual/05_02.png"
+    },
+    {
+      "filePath": "submission/visual/10_01.png"
+    },
+    {
+      "filePath": "submission/visual/20_01.png"
+    },
+    {
+      "filePath": "submission/visual/21_02.png"
+    },
+    {
+      "filePath": "submission/visual/contact_01.png"
+    },
+    {
+      "filePath": "submission/visual/contact_02.png"
+    },
+    {
+      "filePath": "submission/visual/10_01.png"
+    },
+    {
+      "filePath": "submission/visual/contact_03.png"
+    },
+    {
+      "filePath": "submission/visual/contact_04.png"
+    },
+    {
+      "filePath": "submission/visual/contact_05.png"
+    },
+    {
+      "filePath": "submission/visual/contact_06.png"
+    },
+    {
+      "filePath": "submission/visual/contact_07.png"
+    },
+    {
+      "filePath": "submission/visual/contact_08.png"
+    },
+    {
+      "filePath": "submission/visual/contact_09.png"
+    },
+    {
+      "filePath": "submission/visual/contact_10.png"
+    },
+    {
+      "filePath": "submission/visual/contact_11.png"
+    },
+    {
+      "filePath": "submission/visual/00_01.png"
+    },
+    {
+      "filePath": "submission/visual/20_01.png"
+    },
+    {
+      "filePath": "submission/visual/20_02.png"
+    },
+    {
+      "filePath": "submission/visual/20_03.png"
+    }
+  ],
+  "scope": "Original immutable Task SQLite facts; native completion and read actions are not a financial grade"
+}

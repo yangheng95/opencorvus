@@ -1,0 +1,13 @@
+{
+  "at": "2026-11-01T10:30:17.499228+00:00",
+  "trigger": "Both sealed real products explicitly use coherent credit-positive payroll liability controls; original frozen consumer4 is preserved for each",
+  "cases": {
+    "legal-credit-basis": "native0 expected; all four controls coherent and original signed postings retained",
+    "wrong-mixed-basis": "native4 ACCOUNTING_BASIS_INCONSISTENT",
+    "wrong-credit-amount": "native4 ACCOUNTING_BASIS_INCONSISTENT; coherent direction but actual +100 amount error"
+  },
+  "change": "whole-group exact signed/credit basis, not abs per cell, keyword inference, nearest fit or threshold change",
+  "prospective_model_comparison": false,
+  "candidate_outputs_modified": false,
+  "new_model_requests": false
+}

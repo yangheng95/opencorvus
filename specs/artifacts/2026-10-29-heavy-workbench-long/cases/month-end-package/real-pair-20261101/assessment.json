@@ -1,0 +1,111 @@
+{
+  "completed_at": "2026-11-01T10:55:17.443093+00:00",
+  "review_type": "root whole-product comparison; no second delegated review",
+  "review_complete": true,
+  "remaining_pair_work": [],
+  "dimensions": [
+    {
+      "id": "M01",
+      "observed_support": "原105联合账户身份/名称/类别和signed period/YTD，两方金额误差0.00",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M02",
+      "observed_support": "现金及指定intercompany控制实际重算、源变化传播",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M03",
+      "observed_support": "checks逐项源输入/总额及book控制实测；statement/reconciliation仍未知",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M04",
+      "observed_support": "资金来源及四个月均值相同；合法合并/拆分均接受，子公司映射未知",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M05",
+      "observed_support": "专用源计算、GL残差、版本/期间/分母冲突具体升级；公司policy未获批准",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M06",
+      "observed_support": "真实交易/反转符号保；法律单次计数和April Period425独立量值相符",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M07",
+      "observed_support": "本金/利息/日期/payment/accrual与GL分列；历史条款及precision policy未知",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M08",
+      "observed_support": "工资副本计一次/E18注保；credit-positive一致；AR实体映射未知；bonus live与fixed观察分列",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M09",
+      "observed_support": "March+movement桥及source组成候选完整呈现，未冒批准journal",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M10",
+      "observed_support": "两份具体CFO草稿保missing AP/bank/entity/coverage/history/policy与待补证据",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M11",
+      "observed_support": "全部contact/全部表及11直接正式XLSX重点图实际view；布局差异不按作者坐标扣分，完整逐格/native Excel可读性未认证",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M12",
+      "observed_support": "原正式XLSX和原源码重建新XLSX实际消费均相符；同通用runtime，不是冷OS或原生Excel",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    },
+    {
+      "id": "M13",
+      "observed_support": "两方review draft边界诚实；没有充分整体质量优劣、总分或模型因果排名",
+      "source": "COMPARISON.md and measurement-comparison.json"
+    }
+  ],
+  "candidates": {
+    "codex": {
+      "natural_terminal": true,
+      "original_sealed": true,
+      "original_frozen_consumer_native_exit": 4,
+      "posthoc_corrected_consumer_native_exit": 0,
+      "source_only_build_native_exit": 0,
+      "reproduced_workbook_consumer_native_exit": 0,
+      "financial_signoff": false
+    },
+    "opencorvus": {
+      "natural_terminal": true,
+      "original_sealed": true,
+      "original_frozen_consumer_native_exit": 4,
+      "posthoc_corrected_consumer_native_exit": 0,
+      "source_only_build_native_exit": 0,
+      "reproduced_workbook_consumer_native_exit": 0,
+      "financial_signoff": false
+    }
+  },
+  "aggregate_score": null,
+  "quality_winner": null,
+  "prospective_measurement_completely_validated": false,
+  "posthoc_repair": "Coupled payroll liability accounting basis; original4 retained",
+  "same_actual_model_comparability": "unknown; Codex actual model unknown",
+  "statistical_maturity": false,
+  "effective_hours_qualified": false,
+  "overall_ten_task_goal_complete": false,
+  "heartbeat": "benchmark ACTIVE 20min; keep active while overall goal unfinished",
+  "professional_human_certification": null,
+  "unmet": [
+    "company AP/bank/entity/coverage/posting-history/policy evidence",
+    "Microsoft Excel native application behavior",
+    "broad legal-variant coverage",
+    "multiple comparable model runs and statistical maturity",
+    "ten deep full-chain tasks and effective candidate hours"
+  ],
+  "generic_verification_behavior_cure_proven": false
+}

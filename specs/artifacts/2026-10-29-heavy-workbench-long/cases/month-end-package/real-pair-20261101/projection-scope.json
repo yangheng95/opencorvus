@@ -1,0 +1,302 @@
+{
+  "members": [
+    {
+      "path": "assessment.json",
+      "bytes": 4685
+    },
+    {
+      "path": "evidence-log.json",
+      "bytes": 1815
+    },
+    {
+      "path": "measurement-comparison.json",
+      "bytes": 157502
+    },
+    {
+      "path": "README.md",
+      "bytes": 12305
+    },
+    {
+      "path": "render-receipt.json",
+      "bytes": 5284
+    },
+    {
+      "path": "template-render-receipt.json",
+      "bytes": 1417
+    },
+    {
+      "path": "terminal-current.json",
+      "bytes": 1978
+    },
+    {
+      "path": "usage-summary.json",
+      "bytes": 1047
+    },
+    {
+      "path": "basis-repair/registration.json",
+      "bytes": 762
+    },
+    {
+      "path": "codex/natural-terminal.json",
+      "bytes": 556
+    },
+    {
+      "path": "codex/original-submitted-source.zip",
+      "bytes": 39131
+    },
+    {
+      "path": "codex/sealed-original-location.json",
+      "bytes": 768
+    },
+    {
+      "path": "codex/source-subset-scope.json",
+      "bytes": 3407
+    },
+    {
+      "path": "opencorvus/natural-terminal.json",
+      "bytes": 589
+    },
+    {
+      "path": "opencorvus/original-submitted-source.zip",
+      "bytes": 34815
+    },
+    {
+      "path": "opencorvus/sealed-original-location.json",
+      "bytes": 783
+    },
+    {
+      "path": "opencorvus/server-result.json",
+      "bytes": 1128
+    },
+    {
+      "path": "opencorvus/source-subset-scope.json",
+      "bytes": 2045
+    },
+    {
+      "path": "opencorvus/tool-outcome-summary.json",
+      "bytes": 1915
+    },
+    {
+      "path": "registration/frozen-public-identity.json",
+      "bytes": 3892
+    },
+    {
+      "path": "registration/pair-registration.json",
+      "bytes": 4638
+    },
+    {
+      "path": "root-observers/collect_pair_measurements.py",
+      "bytes": 4826
+    },
+    {
+      "path": "root-observers/consume_reproductions.py",
+      "bytes": 1297
+    },
+    {
+      "path": "root-observers/evaluate_product.py",
+      "bytes": 1774
+    },
+    {
+      "path": "root-observers/posthoc_consume.py",
+      "bytes": 1325
+    },
+    {
+      "path": "root-observers/reproduce_source.py",
+      "bytes": 3042
+    },
+    {
+      "path": "root-observers/review_original_views.mjs",
+      "bytes": 2118
+    },
+    {
+      "path": "root-observers/seal_product.py",
+      "bytes": 3772
+    },
+    {
+      "path": "basis-repair/legal-credit-basis/assessment.json",
+      "bytes": 12013
+    },
+    {
+      "path": "basis-repair/legal-credit-basis/consumer.execution.json",
+      "bytes": 1039
+    },
+    {
+      "path": "basis-repair/legal-credit-basis/layout.execution.json",
+      "bytes": 640
+    },
+    {
+      "path": "basis-repair/legal-credit-basis/producer.execution.json",
+      "bytes": 594
+    },
+    {
+      "path": "basis-repair/wrong-credit-amount/assessment.json",
+      "bytes": 12694
+    },
+    {
+      "path": "basis-repair/wrong-credit-amount/consumer.execution.json",
+      "bytes": 1042
+    },
+    {
+      "path": "basis-repair/wrong-credit-amount/layout.execution.json",
+      "bytes": 642
+    },
+    {
+      "path": "basis-repair/wrong-credit-amount/producer.execution.json",
+      "bytes": 597
+    },
+    {
+      "path": "basis-repair/wrong-mixed-basis/assessment.json",
+      "bytes": 12697
+    },
+    {
+      "path": "basis-repair/wrong-mixed-basis/consumer.execution.json",
+      "bytes": 1036
+    },
+    {
+      "path": "basis-repair/wrong-mixed-basis/layout.execution.json",
+      "bytes": 638
+    },
+    {
+      "path": "basis-repair/wrong-mixed-basis/producer.execution.json",
+      "bytes": 591
+    },
+    {
+      "path": "codex/original-frozen/assessment.json",
+      "bytes": 12180
+    },
+    {
+      "path": "codex/original-frozen/execution.json",
+      "bytes": 1232
+    },
+    {
+      "path": "codex/posthoc-corrected/assessment.json",
+      "bytes": 12027
+    },
+    {
+      "path": "codex/posthoc-corrected/execution.json",
+      "bytes": 1128
+    },
+    {
+      "path": "codex/source-reproduction/execution.json",
+      "bytes": 374
+    },
+    {
+      "path": "codex/source-reproduction/independent-assessment.json",
+      "bytes": 12027
+    },
+    {
+      "path": "codex/source-reproduction/independent-consumer.execution.json",
+      "bytes": 1162
+    },
+    {
+      "path": "codex/source-reproduction/result.json",
+      "bytes": 332
+    },
+    {
+      "path": "codex/source-reproduction/source-extraction.json",
+      "bytes": 1675
+    },
+    {
+      "path": "opencorvus/original-frozen/assessment.json",
+      "bytes": 12180
+    },
+    {
+      "path": "opencorvus/original-frozen/execution.json",
+      "bytes": 1247
+    },
+    {
+      "path": "opencorvus/posthoc-corrected/assessment.json",
+      "bytes": 12027
+    },
+    {
+      "path": "opencorvus/posthoc-corrected/execution.json",
+      "bytes": 1138
+    },
+    {
+      "path": "opencorvus/source-reproduction/execution.json",
+      "bytes": 853
+    },
+    {
+      "path": "opencorvus/source-reproduction/independent-assessment.json",
+      "bytes": 12027
+    },
+    {
+      "path": "opencorvus/source-reproduction/independent-consumer.execution.json",
+      "bytes": 1172
+    },
+    {
+      "path": "opencorvus/source-reproduction/result.json",
+      "bytes": 332
+    },
+    {
+      "path": "opencorvus/source-reproduction/source-extraction.json",
+      "bytes": 1389
+    },
+    {
+      "path": "views/codex/cfo1.png",
+      "bytes": 164342
+    },
+    {
+      "path": "views/codex/cfo2.png",
+      "bytes": 225928
+    },
+    {
+      "path": "views/codex/cfo3.png",
+      "bytes": 235725
+    },
+    {
+      "path": "views/codex/legal.png",
+      "bytes": 237406
+    },
+    {
+      "path": "views/codex/payroll.png",
+      "bytes": 116997
+    },
+    {
+      "path": "views/opencorvus/cfo1.png",
+      "bytes": 304124
+    },
+    {
+      "path": "views/opencorvus/cfo2.png",
+      "bytes": 323848
+    },
+    {
+      "path": "views/opencorvus/cfo3.png",
+      "bytes": 172667
+    },
+    {
+      "path": "views/opencorvus/legal.png",
+      "bytes": 238135
+    },
+    {
+      "path": "views/opencorvus/payroll.png",
+      "bytes": 133520
+    },
+    {
+      "path": "views/opencorvus/prepaid.png",
+      "bytes": 135846
+    },
+    {
+      "path": "views/template/fees.png",
+      "bytes": 69699
+    },
+    {
+      "path": "views/template/legal.png",
+      "bytes": 119442
+    },
+    {
+      "path": "views/template/prepaid.png",
+      "bytes": 30019
+    }
+  ],
+  "full_originals": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101",
+  "complete_workspace": false,
+  "excluded": [
+    "full original candidate ZIPs",
+    "formal XLSX/input XLSX and full expert/parquet/raw row",
+    "full Task SQLite/provider logs/credentials/environment/dependencies",
+    "complete source-reader observations and all contact/full-size original panels",
+    "first author repairs/initial technical errors retained in original R"
+  ],
+  "scope": "Small evidence/source/actual-view projection; no financial or quality credit from member count, hashes or bytes."
+}
