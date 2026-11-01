@@ -1,0 +1,184 @@
+{
+  "recorded_at": "2026-11-01T12:13:57.739577+00:00",
+  "phase": "paired_completed_quality_decomposed_shared_atomicity_gap_no_heavy_qualification",
+  "public_commit": "a65cd9101ede709628b189e0d9a7932ac4afb2c0",
+  "candidates": {
+    "codex": {
+      "source_commit": "cb9517ac51b56bb5292bc53eaaa0de678bb0208a",
+      "original_project": {
+        "archive_bytes": 1528850,
+        "file_members": 593,
+        "original_bytes": 7281385,
+        "public_bytes_same": true,
+        "git_status": ""
+      },
+      "frozen_consumer": {
+        "native_exit": 0,
+        "functions": {
+          "passed": 60
+        },
+        "workflow_completed": true,
+        "contract_errors": 0
+      },
+      "ordinary_integration_matches": true,
+      "disclosed_boundary": {
+        "precise_preoperation_state_restored": false,
+        "before_rows": [
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            7
+          ]
+        ],
+        "after_rows": [
+          [
+            1,
+            5
+          ]
+        ],
+        "outer_finalize": {
+          "error_family": [
+            "CheckpointNotActiveError",
+            "Exception",
+            "BaseException",
+            "object"
+          ],
+          "error": "cf11f9c1a7d748f79ecc291c9b13efc3"
+        }
+      },
+      "original_unconditional_atomicity_contract_satisfied": false,
+      "model_and_usage": "unknown"
+    },
+    "opencorvus": {
+      "source_commit": "947ce5c177b57645747d252407d41ffc6529a58e",
+      "original_project": {
+        "archive_bytes": 1171553,
+        "file_members": 300,
+        "original_bytes": 3784874,
+        "public_bytes_same": true,
+        "git_status": " M .gitignore\n?? .gitattributes\n?? .opencorvus/\n"
+      },
+      "frozen_consumer": {
+        "native_exit": 0,
+        "functions": {
+          "passed": 60
+        },
+        "workflow_completed": true,
+        "contract_errors": 0
+      },
+      "ordinary_integration_matches": true,
+      "disclosed_boundary": {
+        "precise_preoperation_state_restored": false,
+        "before_rows": [
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            7
+          ]
+        ],
+        "after_rows": [
+          [
+            1,
+            5
+          ]
+        ],
+        "outer_finalize": {
+          "error_family": [
+            "CheckpointNotActiveError",
+            "Exception",
+            "BaseException",
+            "object"
+          ],
+          "error": "3c8c4917f30b422da0138793339dfb4c"
+        }
+      },
+      "original_unconditional_atomicity_contract_satisfied": false,
+      "model_and_usage": "actual gpt-6.1-sol/streaming, separately recorded usage"
+    }
+  },
+  "aggregate_score": null,
+  "overall_model_ranking": null,
+  "official_score": false,
+  "effective_candidate_hours_qualified": false,
+  "ten_task_goal_complete": false,
+  "generic_verification_behavior_improvement_or_root_cure": "not established",
+  "opencorvus_execution": {
+    "observed_at": "2026-11-01T12:08:21.383282+00:00",
+    "task_id": "tsk_g00VZikJoh00dTqYpNPB",
+    "lifecycle": "completed",
+    "activity": {
+      "total": 1,
+      "running": 0,
+      "inactive": 1
+    },
+    "sessions": [
+      "ses_-zUQHFekozz7IviH2tkT",
+      "ses_-zUQHFfpezzbv5MmbBjl"
+    ],
+    "tool_requests_all": 94,
+    "tool_outcomes_all": 94,
+    "task_requests": 94,
+    "task_outcomes": 94,
+    "task_pending": [],
+    "outcome_counts": {
+      "completed": 90,
+      "failed": 4
+    },
+    "actual_requests": 97,
+    "actual_request_model_counts": {
+      "gpt-6.1-sol": 97
+    },
+    "actual_request_streaming_counts": {
+      "True": 97
+    },
+    "actual_request_http_counts": {
+      "200": 97
+    },
+    "usage": {
+      "all_recorded": {
+        "events": 97,
+        "input_tokens": 209198,
+        "output_tokens": 24376,
+        "reasoning_tokens": 13453,
+        "cache_read_tokens": 9161344,
+        "cache_write_tokens": 0,
+        "total_tokens": 9408371,
+        "cost_usd": 0.0
+      },
+      "task_lineage": {
+        "events": 95,
+        "input_tokens": 175594,
+        "output_tokens": 24294,
+        "reasoning_tokens": 13453,
+        "cache_read_tokens": 9161344,
+        "cache_write_tokens": 0,
+        "total_tokens": 9374685,
+        "cost_usd": 0.0
+      },
+      "other_preflight": {
+        "events": 2,
+        "input_tokens": 33604,
+        "output_tokens": 82,
+        "reasoning_tokens": 0,
+        "cache_read_tokens": 0,
+        "cache_write_tokens": 0,
+        "total_tokens": 33686,
+        "cost_usd": 0.0
+      }
+    },
+    "scope": "Provider usage events are recorded accounting, not an invoice or effective activity hours. Internal cost0 does not establish external free use. Codex actual model/usage unknown; no same-model/resource causal ranking."
+  },
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "review_scope": "Root reads both full HANDOFFs, new safety implementation and affected transaction/CLI changes, new guide/API/reference sections and actual outcomes; not a complete audit of every unchanged upstream function or a professional/statistical certification.",
+  "frozen_consumer_changed_after_candidates": false,
+  "boundary_observation_scope": "Post-delivery symmetric disclosed-edge check, registered before execution; not a pre-registered heldout or new model trial. Initial root observation failed before this edge due to upstream indexed-column rename contract, preserved separately."
+}

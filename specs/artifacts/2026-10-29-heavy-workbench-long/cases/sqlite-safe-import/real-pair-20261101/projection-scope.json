@@ -1,0 +1,526 @@
+{
+  "external_root": "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101",
+  "complete_workspace_included": false,
+  "retained_external": [
+    "both complete project ZIP/manifests/Git/generated databases and source runtime",
+    "original SQLite backup/full tool requests and outcomes/full provider-audit/usage",
+    "all input archives/reference/private tests/first preparation failures and dependencies",
+    "source reproduction directories and complete native logs/databases",
+    "first root observer failed databases"
+  ],
+  "projection": [
+    {
+      "path": "assessment.json",
+      "bytes": 5674
+    },
+    {
+      "path": "codex/frozen-consumer-assessment.json",
+      "bytes": 25907
+    },
+    {
+      "path": "codex/native-execution.json",
+      "bytes": 1034
+    },
+    {
+      "path": "codex/original-retention.json",
+      "bytes": 1333
+    },
+    {
+      "path": "codex/original-source/changes.patch",
+      "bytes": 128151
+    },
+    {
+      "path": "codex/original-source/HANDOFF.md",
+      "bytes": 6144
+    },
+    {
+      "path": "codex/original-source/source-only.zip",
+      "bytes": 285515
+    },
+    {
+      "path": "codex/raw/add-count-invariant.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/add-count-invariant.stdout.log",
+      "bytes": 34
+    },
+    {
+      "path": "codex/raw/add-failing-invariant.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/add-failing-invariant.stdout.log",
+      "bytes": 34
+    },
+    {
+      "path": "codex/raw/add-row-invariant.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/add-row-invariant.stdout.log",
+      "bytes": 34
+    },
+    {
+      "path": "codex/raw/bulk-update-commit.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/bulk-update-commit.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/bulk-update-invariant-error.stderr.log",
+      "bytes": 107
+    },
+    {
+      "path": "codex/raw/bulk-update-invariant-error.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/disable-safe.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/disable-safe.stdout.log",
+      "bytes": 22
+    },
+    {
+      "path": "codex/raw/disabled-explicit-error.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/disabled-explicit-error.stdout.log",
+      "bytes": 89
+    },
+    {
+      "path": "codex/raw/enable-safe.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/enable-safe.stdout.log",
+      "bytes": 21
+    },
+    {
+      "path": "codex/raw/first-observer-execution.json",
+      "bytes": 3240
+    },
+    {
+      "path": "codex/raw/first-observer.stderr.log",
+      "bytes": 854
+    },
+    {
+      "path": "codex/raw/get-failing-invariant-id.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/get-failing-invariant-id.stdout.log",
+      "bytes": 222
+    },
+    {
+      "path": "codex/raw/list-invariants.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/list-invariants.stdout.log",
+      "bytes": 187
+    },
+    {
+      "path": "codex/raw/new-feature-contracts.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/new-feature-contracts.stdout.log",
+      "bytes": 6164
+    },
+    {
+      "path": "codex/raw/new.xml",
+      "bytes": 6384
+    },
+    {
+      "path": "codex/raw/ordinary-insert.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/ordinary-insert.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/read-persisted-invariants.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/read-persisted-invariants.stdout.log",
+      "bytes": 148
+    },
+    {
+      "path": "codex/raw/remaining-invariants.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/remaining-invariants.stdout.log",
+      "bytes": 148
+    },
+    {
+      "path": "codex/raw/remove-failing-invariant.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/remove-failing-invariant.stdout.log",
+      "bytes": 52
+    },
+    {
+      "path": "codex/raw/safe-insert-commit.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/safe-insert-commit.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/safe-insert-invariant-error.stderr.log",
+      "bytes": 107
+    },
+    {
+      "path": "codex/raw/safe-insert-invariant-error.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/safe-upsert-commit.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/safe-upsert-commit.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/safe-upsert-invariant-error.stderr.log",
+      "bytes": 107
+    },
+    {
+      "path": "codex/raw/safe-upsert-invariant-error.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/validate-failure-api.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/validate-failure-api.stdout.log",
+      "bytes": 147
+    },
+    {
+      "path": "codex/raw/validate-failure-native-zero.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/validate-failure-native-zero.stdout.log",
+      "bytes": 213
+    },
+    {
+      "path": "codex/raw/validate-success-api.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/validate-success-api.stdout.log",
+      "bytes": 33
+    },
+    {
+      "path": "codex/raw/validate-success.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "codex/raw/validate-success.stdout.log",
+      "bytes": 61
+    },
+    {
+      "path": "codex/source-extraction.json",
+      "bytes": 3888
+    },
+    {
+      "path": "codex/whole-product-observation-execution.json",
+      "bytes": 3290
+    },
+    {
+      "path": "codex/whole-product-state.json",
+      "bytes": 3221
+    },
+    {
+      "path": "opencorvus/frozen-consumer-assessment.json",
+      "bytes": 26027
+    },
+    {
+      "path": "opencorvus/native-execution.json",
+      "bytes": 1064
+    },
+    {
+      "path": "opencorvus/original-retention.json",
+      "bytes": 1443
+    },
+    {
+      "path": "opencorvus/original-source/changes.patch",
+      "bytes": 97203
+    },
+    {
+      "path": "opencorvus/original-source/HANDOFF.md",
+      "bytes": 6444
+    },
+    {
+      "path": "opencorvus/original-source/source-only.zip",
+      "bytes": 280109
+    },
+    {
+      "path": "opencorvus/raw/add-count-invariant.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/add-count-invariant.stdout.log",
+      "bytes": 34
+    },
+    {
+      "path": "opencorvus/raw/add-failing-invariant.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/add-failing-invariant.stdout.log",
+      "bytes": 34
+    },
+    {
+      "path": "opencorvus/raw/add-row-invariant.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/add-row-invariant.stdout.log",
+      "bytes": 34
+    },
+    {
+      "path": "opencorvus/raw/bulk-update-commit.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/bulk-update-commit.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/bulk-update-invariant-error.stderr.log",
+      "bytes": 165
+    },
+    {
+      "path": "opencorvus/raw/bulk-update-invariant-error.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/disable-safe.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/disable-safe.stdout.log",
+      "bytes": 22
+    },
+    {
+      "path": "opencorvus/raw/disabled-explicit-error.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/disabled-explicit-error.stdout.log",
+      "bytes": 89
+    },
+    {
+      "path": "opencorvus/raw/enable-safe.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/enable-safe.stdout.log",
+      "bytes": 21
+    },
+    {
+      "path": "opencorvus/raw/first-observer-execution.json",
+      "bytes": 3250
+    },
+    {
+      "path": "opencorvus/raw/first-observer.stderr.log",
+      "bytes": 864
+    },
+    {
+      "path": "opencorvus/raw/get-failing-invariant-id.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/get-failing-invariant-id.stdout.log",
+      "bytes": 222
+    },
+    {
+      "path": "opencorvus/raw/list-invariants.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/list-invariants.stdout.log",
+      "bytes": 92
+    },
+    {
+      "path": "opencorvus/raw/new-feature-contracts.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/new-feature-contracts.stdout.log",
+      "bytes": 6164
+    },
+    {
+      "path": "opencorvus/raw/new.xml",
+      "bytes": 6384
+    },
+    {
+      "path": "opencorvus/raw/ordinary-insert.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/ordinary-insert.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/read-persisted-invariants.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/read-persisted-invariants.stdout.log",
+      "bytes": 148
+    },
+    {
+      "path": "opencorvus/raw/remaining-invariants.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/remaining-invariants.stdout.log",
+      "bytes": 148
+    },
+    {
+      "path": "opencorvus/raw/remove-failing-invariant.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/remove-failing-invariant.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/safe-insert-commit.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/safe-insert-commit.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/safe-insert-invariant-error.stderr.log",
+      "bytes": 165
+    },
+    {
+      "path": "opencorvus/raw/safe-insert-invariant-error.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/safe-upsert-commit.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/safe-upsert-commit.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/safe-upsert-invariant-error.stderr.log",
+      "bytes": 165
+    },
+    {
+      "path": "opencorvus/raw/safe-upsert-invariant-error.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/validate-failure-api.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/validate-failure-api.stdout.log",
+      "bytes": 155
+    },
+    {
+      "path": "opencorvus/raw/validate-failure-native-zero.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/validate-failure-native-zero.stdout.log",
+      "bytes": 90
+    },
+    {
+      "path": "opencorvus/raw/validate-success-api.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/validate-success-api.stdout.log",
+      "bytes": 33
+    },
+    {
+      "path": "opencorvus/raw/validate-success.stderr.log",
+      "bytes": 0
+    },
+    {
+      "path": "opencorvus/raw/validate-success.stdout.log",
+      "bytes": 6
+    },
+    {
+      "path": "opencorvus/source-extraction.json",
+      "bytes": 3759
+    },
+    {
+      "path": "opencorvus/whole-product-observation-execution.json",
+      "bytes": 3300
+    },
+    {
+      "path": "opencorvus/whole-product-state.json",
+      "bytes": 3221
+    },
+    {
+      "path": "opencorvus-execution-summary.json",
+      "bytes": 1753
+    },
+    {
+      "path": "opencorvus-inspect-terminal.json",
+      "bytes": 323
+    },
+    {
+      "path": "opencorvus-server-result.json",
+      "bytes": 1159
+    },
+    {
+      "path": "pair-registration.json",
+      "bytes": 16859
+    },
+    {
+      "path": "product-review-registration.json",
+      "bytes": 1452
+    },
+    {
+      "path": "README.md",
+      "bytes": 9858
+    },
+    {
+      "path": "tools/collect_terminal.py",
+      "bytes": 3413
+    },
+    {
+      "path": "tools/evaluate_sealed.py",
+      "bytes": 2381
+    },
+    {
+      "path": "tools/review_actual_state-first.py",
+      "bytes": 3882
+    },
+    {
+      "path": "tools/review_actual_state.py",
+      "bytes": 3931
+    },
+    {
+      "path": "tools/seal_pair.py",
+      "bytes": 4105
+    }
+  ],
+  "scope": "Selected exact-byte original objects plus root analysis; source-only ZIPs contain original tracked code/docs/public/tests without generated evidence, and are not the full project. Identity checks do not assert functional quality."
+}

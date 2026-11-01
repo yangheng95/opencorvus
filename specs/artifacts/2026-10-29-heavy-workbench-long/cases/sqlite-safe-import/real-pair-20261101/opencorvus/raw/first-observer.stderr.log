@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "<string>", line 14, in <module>
+  File "D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\source-reproduction\opencorvus\source\sqlite_utils\db.py", line 1915, in transform
+    sqls = self.transform_sql(
+           ^^^^^^^^^^^^^^^^^^^
+  File "D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\source-reproduction\opencorvus\source\sqlite_utils\db.py", line 2146, in transform_sql
+    raise TransformError(
+sqlite_utils.db.TransformError: Index 'idx_items_name' column 'name' is not in updated table 'items'. You must manually drop this index prior to running this transformation and manually recreate the new index after running this transformation. The original index sql statement is: `CREATE INDEX "idx_items_name"
+    ON "items" ("name")`. No changes have been applied to this table.

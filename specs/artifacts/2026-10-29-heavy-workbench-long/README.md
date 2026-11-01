@@ -1,6 +1,6 @@
 # HeavyWorkBench 长程任务建设与真实验收
 
-[下一完整仓库任务：SQLite安全导入](cases/sqlite-safe-import/README.md)已完成固定原料、原生全链消费者和合法/真实错误准备；当前模型结果以月结原对照为准，SQLite尚待同public真正fresh，未补重型/有效小时。
+[SQLite真实完整仓库对照](cases/sqlite-safe-import/real-pair-20261101/README.md)已完成：两份原source同冻结消费0/60pass，但均有已披露且实测的嵌套全回滚缺口；原无条件恢复保证未满足，无合成100/整体排名/小时资格。旧月结结果保留，总体十题继续。
 
 [最新月结真实Codex/OC产品比较](cases/month-end-package/real-pair-20261101/README.md)已完成：自然交付原件先封、原冻结双4误拒保，表示消费者后验修复两原件双0，原源码新目录重建及新XLSX实测双0；完整内容/图无充分整体优劣，未造总分。十题深度/有效候选小时仍0/10，心跳benchmark保持ACTIVE/20min；旧active描述以最新locator/Recall为准，不重开旧对象。下一推进真正完整深度任务，不连做作者研究或机械版本。
 

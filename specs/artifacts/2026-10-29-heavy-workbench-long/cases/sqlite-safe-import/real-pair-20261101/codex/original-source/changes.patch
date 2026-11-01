@@ -1,0 +1,2833 @@
+diff --git a/.gitignore b/.gitignore
+index 6743708..8d31f96 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -15,6 +15,7 @@ venv
+ .schema
+ .vscode
+ .hypothesis
++.local-tmp/
+ Pipfile
+ Pipfile.lock
+ uv.lock
+diff --git a/HANDOFF.md b/HANDOFF.md
+new file mode 100644
+index 0000000..05d0e73
+--- /dev/null
++++ b/HANDOFF.md
+@@ -0,0 +1,56 @@
++# Safe import handoff
++
++The existing sqlite-utils package now includes persistent import invariants, connection-local nested checkpoints with named lifecycle errors, safe insert/upsert/CSV/JSON APIs, six CLI management commands, and `--safe-mode` on insert/upsert/bulk (including UPDATE). Safe operations validate all registered tables to cover trigger writes. Rollback covers processing batches, parser/converter/SQL/validation failures and transactional schema changes. First-use metadata setup is included in the rollback boundary. CLI `--strict` retains its existing SQLite STRICT-table meaning.
++
++Public task/runtime files were not modified. Work stayed on main; no branch, worktree, remote write, push, download, model call, delegation, Docker, WSL or UI operation was used. The source commit is identified by `git log -1 --format="%H %s"` after this handoff is committed.
++
++## Reproduce from this project root (PowerShell)
++
++```powershell
++$taskPython = 'D:/opencorvus-benchmark-runs/sqlite-safe-import-pair-20261101/runtime/Scripts/python.exe'
++New-Item -ItemType Directory -Force .local-tmp | Out-Null
++$env:TEMP = (Resolve-Path .local-tmp).Path
++$env:TMP = $env:TEMP
++$env:PYTHONDONTWRITEBYTECODE = '1'
++& $taskPython -B -m sqlite_utils --help
++& $taskPython -B -m pytest tests/test_safe_import.py tests/test_cli_insert.py tests/test_cli_bulk.py tests/test_upsert.py tests/test_create.py tests/test_transform.py tests/test_enable_counts.py tests/test_fts.py tests/test_docs.py -q -rs --basetemp .local-tmp/pytest-review
++& $taskPython -B specs/artifacts/safe-import/verify.py
++```
++
++Observed relevant regression result: **471 passed, 1 skipped**; the skip is the upstream optional pandas/numpy test, whose dependencies are not installed. This is behavior evidence, not a benchmark grade. The first regression run caught a counts-tracer regression and incomplete command docs; both were corrected and the original check set rerun successfully.
++
++The verification script compiles the current source to project-owned bytecode, builds a standard-library zipapp of the same sqlite-utils package and launches actual native CLI subprocesses for both source and rebuilt archive. It also checks CLI reference generation with the existing embedded generator. The archive path is recorded in `specs/artifacts/safe-import/evidence.json`; run it using:
++
++```powershell
++$evidence = Get-Content specs/artifacts/safe-import/evidence.json -Raw | ConvertFrom-Json
++& $taskPython -B $evidence.source_rebuild.archive --help
++```
++
++This is a reproducible source-only runnable build, **not a wheel**. The declared runtime lacks setuptools, wheel, build, Black, Cog and Sphinx. No dependency downloads are authorized, so the official setuptools wheel build, formatter executables and rendered Sphinx documentation build were not run. Python compilation, native execution, generated CLI-reference consistency and focused tests completed with the supplied runtime.
++
++## Evidence and usage
++
++- `specs/artifacts/safe-import/evidence.json`: actual command arguments/stdin/stdout/stderr/exit codes, source build facts, complete before/after schema/data and failure identities. Native SQLite database files and runnable archives remain under the recorded project-owned `.local-tmp/source-evidence/` directory.
++- `specs/artifacts/safe-import/regression.txt`: real final regression transcript.
++- `tests/test_safe_import.py`: actual SQLite lifecycle, persistence, scalar/aggregate/SELECT semantics, custom aggregates, schema rollback, deferred constraint failures at commit, parser/stream failures, nested operations, first-use metadata restoration and native CLI contracts.
++- `docs/cli.rst`, `docs/cli-reference.rst`, `docs/python-api.rst`: command examples, API contracts, error identities and transaction boundaries.
++- `specs/records/2026-11/sqlite-safe-import.md`: initial analysis, decisions and validation record.
++
++Example commands (JSON is default; CSV requires `--csv`):
++
++```powershell
++& $taskPython -B -m sqlite_utils add-import-invariant demo.db inventory 'quantity >= 0'
++& $taskPython -B -m sqlite_utils insert demo.db inventory input.json --pk id --safe-mode
++& $taskPython -B -m sqlite_utils bulk demo.db 'UPDATE inventory SET quantity = :quantity WHERE id = :id' changes.json --safe-mode
++& $taskPython -B -m sqlite_utils validate-import-invariants demo.db inventory
++```
++
++Failed safe CLI writes exit 1; successful writes exit 0. Completed validation exits 0 even for failed invariants and prints `Validation failed` with failing IDs. Check the JSON `valid` field. Safe Python helpers return `{success: true}` or `{success: false, checkpoint_id: str, failures: list, error_report: str}`; strict mode rolls back and raises. See the API docs for cleanup and nested finalization semantics.
++
++## Material boundaries / remaining limit
++
++Checkpoints are SQLite savepoints, not durable recovery snapshots. They are connection-local; support settings and invariants persist. Caller-owned outer transactions remain caller-owned. Direct connection commit/rollback/context-manager operations, autocommit changes and explicit transaction-control SQL must not be mixed with active checkpoints. SQLite journal recovery handles process termination; no crash/power-loss experiment was performed. External side effects of generators, converters and SQL functions are outside a SQLite transaction.
++
++SQLite transaction-wide conflict actions (`RAISE(ROLLBACK, ...)` in triggers or `OR ROLLBACK`) can also undo earlier writes in an enclosing caller transaction or manual checkpoint. A top-level safe import with a ROLLBACK trigger is tested to restore its original state and report the original error; nested transaction-wide rollback is **not narrowed to the inner operation**. Thus the task's unconditional exact-pre-operation guarantee is not fully satisfied for that explicit SQLite edge. Use statement-local `RAISE(ABORT, ...)` inside nested checkpoints. Ordinary nested commit/rollback and nested safe imports are verified. No snapshot fallback or speculative SQL rewriting was introduced to hide that limitation.
++
++All owned subprocesses completed naturally. No publishing action is included.
+diff --git a/docs/cli-reference.rst b/docs/cli-reference.rst
+index 6231dbf..8b51475 100644
+--- a/docs/cli-reference.rst
++++ b/docs/cli-reference.rst
+@@ -49,6 +49,9 @@ This page lists the ``--help`` for every ``sqlite-utils`` CLI sub-command.
+         "enable-wal": "cli_wal",
+         "enable-counts": "cli_enable_counts",
+         "bulk": "cli_bulk",
++        **dict.fromkeys(("enable-safe-import", "disable-safe-import",
++            "add-import-invariant", "remove-import-invariant",
++            "list-import-invariants", "validate-import-invariants"), "cli_safe_import"),
+         "create-database": "cli_create_database",
+         "create-table": "cli_create_table",
+         "drop-table": "cli_drop_table",
+@@ -117,15 +120,15 @@ See :ref:`cli_query`.
+       --tsv                       Output TSV
+       --no-headers                Omit CSV headers
+       -t, --table                 Output as a formatted table
+-      --fmt TEXT                  Table format - one of asciidoc, double_grid,
+-                                  double_outline, fancy_grid, fancy_outline, github,
+-                                  grid, heavy_grid, heavy_outline, html, jira,
+-                                  latex, latex_booktabs, latex_longtable, latex_raw,
+-                                  mediawiki, mixed_grid, mixed_outline, moinmoin,
+-                                  orgtbl, outline, pipe, plain, presto, pretty,
+-                                  psql, rounded_grid, rounded_outline, rst, simple,
+-                                  simple_grid, simple_outline, textile, tsv,
+-                                  unsafehtml, youtrack
++      --fmt TEXT                  Table format - one of asciidoc, colon_grid,
++                                  double_grid, double_outline, fancy_grid,
++                                  fancy_outline, github, grid, heavy_grid,
++                                  heavy_outline, html, jira, latex, latex_booktabs,
++                                  latex_longtable, latex_raw, mediawiki, mixed_grid,
++                                  mixed_outline, moinmoin, orgtbl, outline, pipe,
++                                  plain, presto, pretty, psql, rounded_grid,
++                                  rounded_outline, rst, simple, simple_grid,
++                                  simple_outline, textile, tsv, unsafehtml, youtrack
+       --json-cols                 Detect JSON cols and output them as JSON, not
+                                   escaped strings
+       -r, --raw                   Raw output, first column of first row
+@@ -186,15 +189,15 @@ See :ref:`cli_memory`.
+       --tsv                       Output TSV
+       --no-headers                Omit CSV headers
+       -t, --table                 Output as a formatted table
+-      --fmt TEXT                  Table format - one of asciidoc, double_grid,
+-                                  double_outline, fancy_grid, fancy_outline, github,
+-                                  grid, heavy_grid, heavy_outline, html, jira,
+-                                  latex, latex_booktabs, latex_longtable, latex_raw,
+-                                  mediawiki, mixed_grid, mixed_outline, moinmoin,
+-                                  orgtbl, outline, pipe, plain, presto, pretty,
+-                                  psql, rounded_grid, rounded_outline, rst, simple,
+-                                  simple_grid, simple_outline, textile, tsv,
+-                                  unsafehtml, youtrack
++      --fmt TEXT                  Table format - one of asciidoc, colon_grid,
++                                  double_grid, double_outline, fancy_grid,
++                                  fancy_outline, github, grid, heavy_grid,
++                                  heavy_outline, html, jira, latex, latex_booktabs,
++                                  latex_longtable, latex_raw, mediawiki, mixed_grid,
++                                  mixed_outline, moinmoin, orgtbl, outline, pipe,
++                                  plain, presto, pretty, psql, rounded_grid,
++                                  rounded_outline, rst, simple, simple_grid,
++                                  simple_outline, textile, tsv, unsafehtml, youtrack
+       --json-cols                 Detect JSON cols and output them as JSON, not
+                                   escaped strings
+       -r, --raw                   Raw output, first column of first row
+@@ -280,6 +283,8 @@ See :ref:`cli_inserting_data`, :ref:`cli_insert_csv_tsv`, :ref:`cli_insert_unstr
+       --sniff                   Detect delimiter and quote character
+       --no-headers              CSV file has no header row
+       --encoding TEXT           Character encoding for input, defaults to utf-8
++      --safe-mode               Roll back the entire import if a write or invariant
++                                validation fails
+       --batch-size INTEGER      Commit every X records
+       --stop-after INTEGER      Stop after X records
+       --alter                   Alter existing table to add any missing columns
+@@ -338,6 +343,8 @@ See :ref:`cli_upsert`.
+       --sniff                   Detect delimiter and quote character
+       --no-headers              CSV file has no header row
+       --encoding TEXT           Character encoding for input, defaults to utf-8
++      --safe-mode               Roll back the entire import if a write or invariant
++                                validation fails
+       --batch-size INTEGER      Commit every X records
+       --stop-after INTEGER      Stop after X records
+       --alter                   Alter existing table to add any missing columns
+@@ -376,6 +383,7 @@ See :ref:`cli_bulk`.
+ 
+     Options:
+       --batch-size INTEGER   Commit every X records
++      --safe-mode            Commit all statements only after invariant validation
+       --functions TEXT       Python code or file path defining custom SQL functions
+       --flatten              Flatten nested JSON objects, so {"a": {"b": 1}} becomes
+                              {"a_b": 1}
+@@ -425,14 +433,15 @@ See :ref:`cli_search`.
+       --tsv                  Output TSV
+       --no-headers           Omit CSV headers
+       -t, --table            Output as a formatted table
+-      --fmt TEXT             Table format - one of asciidoc, double_grid,
+-                             double_outline, fancy_grid, fancy_outline, github,
+-                             grid, heavy_grid, heavy_outline, html, jira, latex,
+-                             latex_booktabs, latex_longtable, latex_raw, mediawiki,
+-                             mixed_grid, mixed_outline, moinmoin, orgtbl, outline,
+-                             pipe, plain, presto, pretty, psql, rounded_grid,
+-                             rounded_outline, rst, simple, simple_grid,
+-                             simple_outline, textile, tsv, unsafehtml, youtrack
++      --fmt TEXT             Table format - one of asciidoc, colon_grid,
++                             double_grid, double_outline, fancy_grid, fancy_outline,
++                             github, grid, heavy_grid, heavy_outline, html, jira,
++                             latex, latex_booktabs, latex_longtable, latex_raw,
++                             mediawiki, mixed_grid, mixed_outline, moinmoin, orgtbl,
++                             outline, pipe, plain, presto, pretty, psql,
++                             rounded_grid, rounded_outline, rst, simple,
++                             simple_grid, simple_outline, textile, tsv, unsafehtml,
++                             youtrack
+       --json-cols            Detect JSON cols and output them as JSON, not escaped
+                              strings
+       --load-extension TEXT  Path to SQLite extension, with optional :entrypoint
+@@ -690,14 +699,15 @@ See :ref:`cli_tables`.
+       --tsv                  Output TSV
+       --no-headers           Omit CSV headers
+       -t, --table            Output as a formatted table
+-      --fmt TEXT             Table format - one of asciidoc, double_grid,
+-                             double_outline, fancy_grid, fancy_outline, github,
+-                             grid, heavy_grid, heavy_outline, html, jira, latex,
+-                             latex_booktabs, latex_longtable, latex_raw, mediawiki,
+-                             mixed_grid, mixed_outline, moinmoin, orgtbl, outline,
+-                             pipe, plain, presto, pretty, psql, rounded_grid,
+-                             rounded_outline, rst, simple, simple_grid,
+-                             simple_outline, textile, tsv, unsafehtml, youtrack
++      --fmt TEXT             Table format - one of asciidoc, colon_grid,
++                             double_grid, double_outline, fancy_grid, fancy_outline,
++                             github, grid, heavy_grid, heavy_outline, html, jira,
++                             latex, latex_booktabs, latex_longtable, latex_raw,
++                             mediawiki, mixed_grid, mixed_outline, moinmoin, orgtbl,
++                             outline, pipe, plain, presto, pretty, psql,
++                             rounded_grid, rounded_outline, rst, simple,
++                             simple_grid, simple_outline, textile, tsv, unsafehtml,
++                             youtrack
+       --json-cols            Detect JSON cols and output them as JSON, not escaped
+                              strings
+       --columns              Include list of columns for each table
+@@ -731,14 +741,15 @@ See :ref:`cli_views`.
+       --tsv                  Output TSV
+       --no-headers           Omit CSV headers
+       -t, --table            Output as a formatted table
+-      --fmt TEXT             Table format - one of asciidoc, double_grid,
+-                             double_outline, fancy_grid, fancy_outline, github,
+-                             grid, heavy_grid, heavy_outline, html, jira, latex,
+-                             latex_booktabs, latex_longtable, latex_raw, mediawiki,
+-                             mixed_grid, mixed_outline, moinmoin, orgtbl, outline,
+-                             pipe, plain, presto, pretty, psql, rounded_grid,
+-                             rounded_outline, rst, simple, simple_grid,
+-                             simple_outline, textile, tsv, unsafehtml, youtrack
++      --fmt TEXT             Table format - one of asciidoc, colon_grid,
++                             double_grid, double_outline, fancy_grid, fancy_outline,
++                             github, grid, heavy_grid, heavy_outline, html, jira,
++                             latex, latex_booktabs, latex_longtable, latex_raw,
++                             mediawiki, mixed_grid, mixed_outline, moinmoin, orgtbl,
++                             outline, pipe, plain, presto, pretty, psql,
++                             rounded_grid, rounded_outline, rst, simple,
++                             simple_grid, simple_outline, textile, tsv, unsafehtml,
++                             youtrack
+       --json-cols            Detect JSON cols and output them as JSON, not escaped
+                              strings
+       --columns              Include list of columns for each view
+@@ -777,15 +788,15 @@ See :ref:`cli_rows`.
+       --tsv                       Output TSV
+       --no-headers                Omit CSV headers
+       -t, --table                 Output as a formatted table
+-      --fmt TEXT                  Table format - one of asciidoc, double_grid,
+-                                  double_outline, fancy_grid, fancy_outline, github,
+-                                  grid, heavy_grid, heavy_outline, html, jira,
+-                                  latex, latex_booktabs, latex_longtable, latex_raw,
+-                                  mediawiki, mixed_grid, mixed_outline, moinmoin,
+-                                  orgtbl, outline, pipe, plain, presto, pretty,
+-                                  psql, rounded_grid, rounded_outline, rst, simple,
+-                                  simple_grid, simple_outline, textile, tsv,
+-                                  unsafehtml, youtrack
++      --fmt TEXT                  Table format - one of asciidoc, colon_grid,
++                                  double_grid, double_outline, fancy_grid,
++                                  fancy_outline, github, grid, heavy_grid,
++                                  heavy_outline, html, jira, latex, latex_booktabs,
++                                  latex_longtable, latex_raw, mediawiki, mixed_grid,
++                                  mixed_outline, moinmoin, orgtbl, outline, pipe,
++                                  plain, presto, pretty, psql, rounded_grid,
++                                  rounded_outline, rst, simple, simple_grid,
++                                  simple_outline, textile, tsv, unsafehtml, youtrack
+       --json-cols                 Detect JSON cols and output them as JSON, not
+                                   escaped strings
+       --load-extension TEXT       Path to SQLite extension, with optional
+@@ -817,14 +828,15 @@ See :ref:`cli_triggers`.
+       --tsv                  Output TSV
+       --no-headers           Omit CSV headers
+       -t, --table            Output as a formatted table
+-      --fmt TEXT             Table format - one of asciidoc, double_grid,
+-                             double_outline, fancy_grid, fancy_outline, github,
+-                             grid, heavy_grid, heavy_outline, html, jira, latex,
+-                             latex_booktabs, latex_longtable, latex_raw, mediawiki,
+-                             mixed_grid, mixed_outline, moinmoin, orgtbl, outline,
+-                             pipe, plain, presto, pretty, psql, rounded_grid,
+-                             rounded_outline, rst, simple, simple_grid,
+-                             simple_outline, textile, tsv, unsafehtml, youtrack
++      --fmt TEXT             Table format - one of asciidoc, colon_grid,
++                             double_grid, double_outline, fancy_grid, fancy_outline,
++                             github, grid, heavy_grid, heavy_outline, html, jira,
++                             latex, latex_booktabs, latex_longtable, latex_raw,
++                             mediawiki, mixed_grid, mixed_outline, moinmoin, orgtbl,
++                             outline, pipe, plain, presto, pretty, psql,
++                             rounded_grid, rounded_outline, rst, simple,
++                             simple_grid, simple_outline, textile, tsv, unsafehtml,
++                             youtrack
+       --json-cols            Detect JSON cols and output them as JSON, not escaped
+                              strings
+       --load-extension TEXT  Path to SQLite extension, with optional :entrypoint
+@@ -856,14 +868,15 @@ See :ref:`cli_indexes`.
+       --tsv                  Output TSV
+       --no-headers           Omit CSV headers
+       -t, --table            Output as a formatted table
+-      --fmt TEXT             Table format - one of asciidoc, double_grid,
+-                             double_outline, fancy_grid, fancy_outline, github,
+-                             grid, heavy_grid, heavy_outline, html, jira, latex,
+-                             latex_booktabs, latex_longtable, latex_raw, mediawiki,
+-                             mixed_grid, mixed_outline, moinmoin, orgtbl, outline,
+-                             pipe, plain, presto, pretty, psql, rounded_grid,
+-                             rounded_outline, rst, simple, simple_grid,
+-                             simple_outline, textile, tsv, unsafehtml, youtrack
++      --fmt TEXT             Table format - one of asciidoc, colon_grid,
++                             double_grid, double_outline, fancy_grid, fancy_outline,
++                             github, grid, heavy_grid, heavy_outline, html, jira,
++                             latex, latex_booktabs, latex_longtable, latex_raw,
++                             mediawiki, mixed_grid, mixed_outline, moinmoin, orgtbl,
++                             outline, pipe, plain, presto, pretty, psql,
++                             rounded_grid, rounded_outline, rst, simple,
++                             simple_grid, simple_outline, textile, tsv, unsafehtml,
++                             youtrack
+       --json-cols            Detect JSON cols and output them as JSON, not escaped
+                              strings
+       --load-extension TEXT  Path to SQLite extension, with optional :entrypoint
+@@ -1048,6 +1061,109 @@ disable-fts
+       -h, --help             Show this message and exit.
+ 
+ 
++.. _cli_ref_enable_safe_import:
++
++enable-safe-import
++==================
++
++See :ref:`cli_safe_import`.
++
++::
++
++    Usage: sqlite-utils enable-safe-import [OPTIONS] PATH
++
++      Enable persistent safe import checkpoint support for a database.
++
++    Options:
++      -h, --help  Show this message and exit.
++
++
++.. _cli_ref_disable_safe_import:
++
++disable-safe-import
++===================
++
++See :ref:`cli_safe_import`.
++
++::
++
++    Usage: sqlite-utils disable-safe-import [OPTIONS] PATH
++
++      Disable persistent safe import checkpoint support for a database.
++
++    Options:
++      -h, --help  Show this message and exit.
++
++
++.. _cli_ref_add_import_invariant:
++
++add-import-invariant
++====================
++
++See :ref:`cli_safe_import`.
++
++::
++
++    Usage: sqlite-utils add-import-invariant [OPTIONS] PATH TABLE SQL
++
++      Register a persistent table invariant and print its identity.
++
++    Options:
++      -h, --help  Show this message and exit.
++
++
++.. _cli_ref_remove_import_invariant:
++
++remove-import-invariant
++=======================
++
++See :ref:`cli_safe_import`.
++
++::
++
++    Usage: sqlite-utils remove-import-invariant [OPTIONS] PATH TABLE INVARIANT_ID
++
++      Remove an invariant by the textual identity printed when it was added.
++
++    Options:
++      -h, --help  Show this message and exit.
++
++
++.. _cli_ref_list_import_invariants:
++
++list-import-invariants
++======================
++
++See :ref:`cli_safe_import`.
++
++::
++
++    Usage: sqlite-utils list-import-invariants [OPTIONS] PATH TABLE
++
++      Print registered invariant identities and their SQL as JSON.
++
++    Options:
++      -h, --help  Show this message and exit.
++
++
++.. _cli_ref_validate_import_invariants:
++
++validate-import-invariants
++==========================
++
++See :ref:`cli_safe_import`.
++
++::
++
++    Usage: sqlite-utils validate-import-invariants [OPTIONS] PATH TABLE
++
++      Report invariant pass/fail and failing identities; validation always exits
++      zero.
++
++    Options:
++      -h, --help  Show this message and exit.
++
++
+ .. _cli_ref_optimize:
+ 
+ optimize
+@@ -1147,7 +1263,7 @@ See :ref:`cli_add_column`.
+ ::
+ 
+     Usage: sqlite-utils add-column [OPTIONS] PATH TABLE COL_NAME
+-                          [[integer|int|float|real|text|str|blob|bytes]]
++                          [integer|int|float|real|text|str|blob|bytes]
+ 
+       Add a column to the specified table
+ 
+diff --git a/docs/cli.rst b/docs/cli.rst
+index a608160..90bff0a 100644
+--- a/docs/cli.rst
++++ b/docs/cli.rst
+@@ -2808,3 +2808,69 @@ You can uninstall packages that were installed using ``sqlite-utils install`` wi
+     sqlite-utils uninstall beautifulsoup4
+ 
+ Use ``-y`` to skip the request for confirmation.
++.. _cli_safe_import:
++
++Safe imports and table invariants
++================================
++
++Use ``--safe-mode`` with ``insert``, ``upsert`` or ``bulk`` to make the entire
++operation atomic, including all batches, table creation, added columns, indexes,
++triggers and CSV type detection. A write, parsing, conversion or validation error
++rolls back the operation and exits with status 1. Successful operations exit 0.
++Ordinary imports retain their existing batch commit behavior.
++
++Safe operations enable checkpoint support automatically. You can also enable or
++disable manual checkpoint support explicitly::
++
++    sqlite-utils enable-safe-import data.db
++    sqlite-utils disable-safe-import data.db
++
++Register persistent invariants before importing. Each command prints an opaque
++identity; pass that exact text to remove the invariant::
++
++    sqlite-utils add-import-invariant data.db products 'price >= 0'
++    sqlite-utils add-import-invariant data.db products 'COUNT(*) <= 10000'
++    sqlite-utils add-import-invariant data.db products 'SELECT SUM(price) >= 0 FROM products'
++    sqlite-utils list-import-invariants data.db products
++    sqlite-utils remove-import-invariant data.db products INVARIANT_ID
++
++``list-import-invariants`` prints JSON containing each ``id`` and original SQL
++``expression``. Invariants survive closing and reopening the database, and may be
++registered before their target table exists. SQL errors become identified
++validation failures. A scalar expression must be truthy for every row; an
++aggregate expression is evaluated once by SQLite. A ``SELECT`` query uses only
++the first column of its first row; an empty SELECT is false. Scalar expressions
++on empty tables pass, while aggregate expressions still evaluate their result.
++NULL is false. Use a full SELECT for joins, subqueries or grouped checks.
++
++Validate without changing any data::
++
++    sqlite-utils validate-import-invariants data.db products
++
++This command always exits 0 for a completed validation, including failed
++invariants or invalid invariant SQL. Its output says ``Validation passed`` or
++``Validation failed`` and includes the failing identities, expressions and error
++details. Invalid command arguments or an inaccessible database remain ordinary
++CLI errors. Use the JSON ``valid`` field to decide whether validation passed.
++
++Safe writes validate all registered invariants in the database before committing,
++so trigger writes to other tables are checked too. An already failing invariant
++on another table will also reject the operation::
++
++    sqlite-utils insert data.db products products.json --pk id --safe-mode
++    sqlite-utils insert data.db products products.csv --csv --alter --safe-mode
++    sqlite-utils upsert data.db products changes.json --pk id --safe-mode
++    sqlite-utils bulk data.db 'UPDATE products SET price = :price WHERE id = :id' changes.json --safe-mode
++
++JSON is the default format. The existing ``--csv``, ``--tsv`` and ``--nl`` flags
++select other formats. ``--batch-size`` still controls processing chunks in safe
++mode, but those chunks are committed together. ``--strict`` on CLI insert/upsert
++continues to mean SQLite STRICT table creation; failures in CLI safe mode always
++produce a nonzero exit status.
++
++Safe import support uses the reserved tables ``_sqlite_utils_import_settings``
++and ``_sqlite_utils_import_invariants``. Do not edit them directly. Checkpoints
++use SQLite transactions, not persistent recovery snapshots; process termination
++rolls back pending writes using SQLite's normal journal recovery. As with any
++SQLite transaction, external files and side effects of Python conversion code or
++SQL functions are outside the rollback boundary.
+diff --git a/docs/python-api.rst b/docs/python-api.rst
+index 267591a..db47b65 100644
+--- a/docs/python-api.rst
++++ b/docs/python-api.rst
+@@ -2970,3 +2970,96 @@ Creating a spatial index
+ 
+ .. automethod:: sqlite_utils.db.Table.create_spatial_index
+    :noindex:
++.. _python_api_safe_import:
++
++Safe imports
++===========
++
++``Database.safe_bulk_insert(table, records, strict=False, **kwargs)`` and
++``Database.safe_bulk_upsert(table, records, pk, strict=False, **kwargs)`` perform
++atomic imports using the existing ``Table.insert_all()`` / ``upsert_all()``
++options, including ``batch_size``, ``alter`` and ``conversions``::
++
++    db.add_import_invariant("products", "price >= 0")
++    result = db.safe_bulk_insert("products", [{"id": 1, "price": 10}], pk="id")
++    assert result == {"success": True}
++    result = db.safe_bulk_upsert("products", [{"id": 1, "price": -5}], pk="id")
++    assert result["success"] is False
++    print(result["checkpoint_id"], result["failures"], result["error_report"])
++
++The operation validates every registered table invariant before committing.
++Failure restores user data and transactional schema changes, including trigger
++effects and all processed batches. Non-strict failures contain ``success=False``,
++a nonempty string ``checkpoint_id``, a list of invariant ``failures`` (empty for
++insertion/parsing errors) and an ``error_report`` string. The failed checkpoint
++is finalized; call ``cleanup_checkpoint(result["checkpoint_id"])`` to forget it.
++With ``strict=True`` the operation rolls back and raises the original error;
++invariant failures raise ``sqlite_utils.ImportInvariantError`` with a ``failures``
++attribute. Here ``strict`` controls error handling, rather than SQLite table
++strictness. Configure table strictness on the Database when needed.
++
++``import_csv(table, source, safe_mode=False, strict=False)`` accepts a UTF-8
++path string, ``Path`` or caller-owned text file-like object; CSV values retain
++their strings. ``import_json(table, data, safe_mode=False, strict=False)`` accepts
++a dictionary, iterable of records, JSON text/bytes, or caller-owned JSON text
++stream. Both return ``{"success": True}`` on success. Pass ``safe_mode=True``
++for rollback and the same strict/non-strict failure contract::
++
++    db.import_csv("products", "products.csv", safe_mode=True, strict=True)
++    db.import_json("products", '[{"id": 2, "price": 8}]', safe_mode=True)
++
++These explicit safe operations enable checkpoint support if necessary. Ordinary
++imports with ``safe_mode=False`` use the existing batch behavior, even when
++manual checkpoint support has been enabled. Automatic enablement and metadata
++creation are inside the safe operation's checkpoint, so a failed first import
++also restores the original metadata state.
++
++``add_import_invariant(table, sql)`` returns an opaque identity.
++``list_import_invariants(table)`` returns ``[{"id": ..., "expression": ...}]``;
++``remove_import_invariant(table, id)`` removes that registration. Identities and
++original SQL persist in the database. Registration before table creation is
++supported. ``validate_import_invariants(table)`` returns
++``{"valid": bool, "failures": [{"id": ..., "expression": ..., "error": ...}]}``.
++SQL errors are validation failures. SELECT statements use the first column of
++the first row, with an empty result false. Other expressions must be truthy for
++every returned row; SQLite naturally evaluates aggregates once, including on
++empty tables. Scalar expressions on empty tables pass; NULL is false.
++
++Manual checkpoints
++------------------
++
++``enable_safe_import()`` / ``disable_safe_import()`` persistently control manual
++checkpoint creation. ``create_import_checkpoint()`` raises
++``SafeImportNotEnabledError`` when disabled. After enabling it::
++
++    db.enable_safe_import()
++    outer = db.create_import_checkpoint()
++    db["products"].insert({"id": 3, "price": 12})
++    inner = db.create_import_checkpoint()
++    db["products"].insert({"id": 4, "price": 14})
++    db.rollback_to_checkpoint(inner)
++    db.commit_checkpoint(outer)
++    db.cleanup_checkpoint(inner)
++    db.cleanup_checkpoint(outer)
++
++Checkpoint identities are nonempty strings, connection-local and valid only
++until cleaned up or the Database is closed. Commit/rollback finalizes the
++identity and all nested descendants. Further commit/rollback raises
++``CheckpointNotActiveError``. Unknown or cleaned identities raise
++``CheckpointNotFoundError``. Cleaning an active checkpoint first rolls it back;
++disabling support rolls back all active checkpoints before disabling creation.
++The named errors are exported from ``sqlite_utils`` as well as ``sqlite_utils.db``.
++Manual commit releases a savepoint without running invariants; safe operations
++perform validation themselves.
++
++A committed inner checkpoint is still tentative until the outer transaction
++commits. If the connection already has a caller-owned transaction, committing
++the checkpoint preserves that outer transaction. While checkpoints are active,
++use package write methods and ``Database.execute()`` / ``executescript()``;
++direct connection commit/rollback, connection contexts, changing autocommit,
++and explicit transaction-control SQL invalidate the checkpoint boundary and
++must not be mixed with it. SQLite conflict actions such as a trigger's
++``RAISE(ROLLBACK, ...)`` roll back the entire enclosing SQLite transaction,
++including earlier outer-checkpoint writes; use ``RAISE(ABORT, ...)`` for errors
++that must remain within a nested checkpoint. External side effects of SQL
++functions or Python generators/converters cannot be undone by SQLite.
+diff --git a/specs/README.md b/specs/README.md
+new file mode 100644
+index 0000000..64a2731
+--- /dev/null
++++ b/specs/README.md
+@@ -0,0 +1,4 @@
++# Specifications
++
++- [Safe import implementation and evidence](records/2026-11/sqlite-safe-import.md)
++- [Validation artifacts](artifacts/README.md)
+diff --git a/specs/artifacts/README.md b/specs/artifacts/README.md
+new file mode 100644
+index 0000000..43cbd95
+--- /dev/null
++++ b/specs/artifacts/README.md
+@@ -0,0 +1,3 @@
++# Validation artifacts
++
++- [Safe import source rebuild and real behavior evidence](safe-import/README.md)
+diff --git a/specs/artifacts/safe-import/README.md b/specs/artifacts/safe-import/README.md
+new file mode 100644
+index 0000000..4d6de51
+--- /dev/null
++++ b/specs/artifacts/safe-import/README.md
+@@ -0,0 +1,13 @@
++# Safe import evidence
++
++- `verify.py`: source-only bytecode/zipapp rebuild, generated CLI reference verification and actual API/native CLI checker.
++- `evidence.json`: saved command inputs, outputs, exit codes and SQLite before/after facts from that checker.
++- `regression.txt`: final relevant upstream/feature regression output, including its optional dependency skip.
++
++Run from the project root with the interpreter in `public/RUNTIME.md`:
++
++```powershell
++& D:/opencorvus-benchmark-runs/sqlite-safe-import-pair-20261101/runtime/Scripts/python.exe -B specs/artifacts/safe-import/verify.py
++```
++
++The script writes owned databases, bytecode and a runnable source zipapp under `.local-tmp/source-evidence/`. Each invocation uses a fresh output directory and records actual state and native process behavior for both local source and the rebuilt zipapp. No wheel backend, downloads, model calls, database dumps as replacement implementations or mocked CLI processes are used. It preserves failures in its JSON evidence if an assertion fails. See HANDOFF.md for the explicit nested SQLite transaction-wide ROLLBACK boundary and unavailable wheel/Sphinx build tooling.
+diff --git a/specs/artifacts/safe-import/evidence.json b/specs/artifacts/safe-import/evidence.json
+new file mode 100644
+index 0000000..9cedbd8
+--- /dev/null
++++ b/specs/artifacts/safe-import/evidence.json
+@@ -0,0 +1,809 @@
++{
++  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
++  "executable": "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
++  "sqlite": "3.53.1",
++  "run_directory": ".local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb",
++  "completed": true,
++  "commands": [
++    {
++      "mode": "source",
++      "arguments": [
++        "enable-safe-import",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "Safe import enabled\n",
++      "stderr": ""
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "add-import-invariant",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db",
++        "inventory",
++        "quantity >= 0"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "0002204f43de4992b3bf8ddb0bf518f9\n",
++      "stderr": ""
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "list-import-invariants",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db",
++        "inventory"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "[\n  {\n    \"id\": \"0002204f43de4992b3bf8ddb0bf518f9\",\n    \"expression\": \"quantity >= 0\"\n  }\n]\n",
++      "stderr": ""
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "insert",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db",
++        "inventory",
++        "-",
++        "--pk",
++        "id",
++        "--safe-mode"
++      ],
++      "stdin": "[{\"id\": 1, \"quantity\": 10}]",
++      "exit_code": 0,
++      "stdout": "",
++      "stderr": ""
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "upsert",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db",
++        "inventory",
++        "-",
++        "--pk",
++        "id",
++        "--safe-mode"
++      ],
++      "stdin": "[{\"id\": 1, \"quantity\": 12}]",
++      "exit_code": 0,
++      "stdout": "",
++      "stderr": ""
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "bulk",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db",
++        "UPDATE inventory SET quantity = :quantity WHERE id = :id",
++        "-",
++        "--batch-size",
++        "1",
++        "--safe-mode"
++      ],
++      "stdin": "[{\"id\": 1, \"quantity\": 20}, {\"id\": 1, \"quantity\": -5}]",
++      "exit_code": 1,
++      "stdout": "",
++      "stderr": "Error: Import invariant validation failed: 0002204f43de4992b3bf8ddb0bf518f9: Invariant evaluated to false\n"
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "validate-import-invariants",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db",
++        "inventory"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "Validation passed\n{\n  \"valid\": true,\n  \"failures\": []\n}\n",
++      "stderr": ""
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "bulk",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db",
++        "UPDATE inventory SET quantity = :quantity WHERE id = :id",
++        "-",
++        "--safe-mode"
++      ],
++      "stdin": "[{\"id\": 1, \"quantity\": 15}]",
++      "exit_code": 0,
++      "stdout": "",
++      "stderr": ""
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "bulk",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db",
++        "UPDATE inventory SET quantity = :quantity WHERE id = :id",
++        "-"
++      ],
++      "stdin": "[{\"id\": 1, \"quantity\": -2}]",
++      "exit_code": 0,
++      "stdout": "",
++      "stderr": ""
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "validate-import-invariants",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db",
++        "inventory"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "Validation failed\n{\n  \"valid\": false,\n  \"failures\": [\n    {\n      \"id\": \"0002204f43de4992b3bf8ddb0bf518f9\",\n      \"expression\": \"quantity >= 0\",\n      \"error\": \"Invariant evaluated to false\"\n    }\n  ]\n}\n",
++      "stderr": ""
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "remove-import-invariant",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db",
++        "inventory",
++        "0002204f43de4992b3bf8ddb0bf518f9"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "Removed invariant 0002204f43de4992b3bf8ddb0bf518f9\n",
++      "stderr": ""
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "list-import-invariants",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db",
++        "inventory"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "[]\n",
++      "stderr": ""
++    },
++    {
++      "mode": "source",
++      "arguments": [
++        "disable-safe-import",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\source.db"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "Safe import disabled\n",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "enable-safe-import",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "Safe import enabled\n",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "add-import-invariant",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db",
++        "inventory",
++        "quantity >= 0"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "8f9f90bea2e649ac84e69ca69a257ec6\n",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "list-import-invariants",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db",
++        "inventory"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "[\n  {\n    \"id\": \"8f9f90bea2e649ac84e69ca69a257ec6\",\n    \"expression\": \"quantity >= 0\"\n  }\n]\n",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "insert",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db",
++        "inventory",
++        "-",
++        "--pk",
++        "id",
++        "--safe-mode"
++      ],
++      "stdin": "[{\"id\": 1, \"quantity\": 10}]",
++      "exit_code": 0,
++      "stdout": "",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "upsert",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db",
++        "inventory",
++        "-",
++        "--pk",
++        "id",
++        "--safe-mode"
++      ],
++      "stdin": "[{\"id\": 1, \"quantity\": 12}]",
++      "exit_code": 0,
++      "stdout": "",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "bulk",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db",
++        "UPDATE inventory SET quantity = :quantity WHERE id = :id",
++        "-",
++        "--batch-size",
++        "1",
++        "--safe-mode"
++      ],
++      "stdin": "[{\"id\": 1, \"quantity\": 20}, {\"id\": 1, \"quantity\": -5}]",
++      "exit_code": 1,
++      "stdout": "",
++      "stderr": "Error: Import invariant validation failed: 8f9f90bea2e649ac84e69ca69a257ec6: Invariant evaluated to false\n"
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "validate-import-invariants",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db",
++        "inventory"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "Validation passed\n{\n  \"valid\": true,\n  \"failures\": []\n}\n",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "bulk",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db",
++        "UPDATE inventory SET quantity = :quantity WHERE id = :id",
++        "-",
++        "--safe-mode"
++      ],
++      "stdin": "[{\"id\": 1, \"quantity\": 15}]",
++      "exit_code": 0,
++      "stdout": "",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "bulk",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db",
++        "UPDATE inventory SET quantity = :quantity WHERE id = :id",
++        "-"
++      ],
++      "stdin": "[{\"id\": 1, \"quantity\": -2}]",
++      "exit_code": 0,
++      "stdout": "",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "validate-import-invariants",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db",
++        "inventory"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "Validation failed\n{\n  \"valid\": false,\n  \"failures\": [\n    {\n      \"id\": \"8f9f90bea2e649ac84e69ca69a257ec6\",\n      \"expression\": \"quantity >= 0\",\n      \"error\": \"Invariant evaluated to false\"\n    }\n  ]\n}\n",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "remove-import-invariant",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db",
++        "inventory",
++        "8f9f90bea2e649ac84e69ca69a257ec6"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "Removed invariant 8f9f90bea2e649ac84e69ca69a257ec6\n",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "list-import-invariants",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db",
++        "inventory"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "[]\n",
++      "stderr": ""
++    },
++    {
++      "mode": "rebuilt_zipapp",
++      "arguments": [
++        "disable-safe-import",
++        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\codex\\project\\.local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\rebuilt_zipapp.db"
++      ],
++      "stdin": null,
++      "exit_code": 0,
++      "stdout": "Safe import disabled\n",
++      "stderr": ""
++    }
++  ],
++  "cli_reference": "matches current native CLI help using its upstream generator",
++  "source_rebuild": {
++    "compiled_modules": [
++      "sqlite_utils\\__init__.py",
++      "sqlite_utils\\__main__.py",
++      "sqlite_utils\\cli.py",
++      "sqlite_utils\\db.py",
++      "sqlite_utils\\hookspecs.py",
++      "sqlite_utils\\plugins.py",
++      "sqlite_utils\\recipes.py",
++      "sqlite_utils\\utils.py"
++    ],
++    "archive": ".local-tmp\\source-evidence\\4596f12fbfca4ac5bb818e377d148bdb\\sqlite-utils.pyz",
++    "format": "standard-library zipapp of sqlite_utils source; not a wheel"
++  },
++  "first_failure_metadata_rollback": {
++    "result": {
++      "success": false,
++      "checkpoint_id": "ea8cd6704c3d4d3c8c717b38564caa9b",
++      "failures": [
++        {
++          "id": "b07d29a12b364b81b14acd64151d7939",
++          "expression": "quantity >= 0",
++          "error": "Invariant evaluated to false"
++        }
++      ],
++      "error_report": "Import invariant validation failed: b07d29a12b364b81b14acd64151d7939: Invariant evaluated to false"
++    },
++    "before": {
++      "schema": [
++        {
++          "type": "index",
++          "name": "sqlite_autoindex__sqlite_utils_import_invariants_1",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": null
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_invariants",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": "CREATE TABLE _sqlite_utils_import_invariants (\n                id TEXT PRIMARY KEY, table_name TEXT NOT NULL, expression TEXT NOT NULL\n            )"
++        }
++      ],
++      "data": {
++        "_sqlite_utils_import_invariants": [
++          {
++            "id": "b07d29a12b364b81b14acd64151d7939",
++            "table_name": "inventory",
++            "expression": "quantity >= 0"
++          }
++        ]
++      }
++    },
++    "after": {
++      "schema": [
++        {
++          "type": "index",
++          "name": "sqlite_autoindex__sqlite_utils_import_invariants_1",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": null
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_invariants",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": "CREATE TABLE _sqlite_utils_import_invariants (\n                id TEXT PRIMARY KEY, table_name TEXT NOT NULL, expression TEXT NOT NULL\n            )"
++        }
++      ],
++      "data": {
++        "_sqlite_utils_import_invariants": [
++          {
++            "id": "b07d29a12b364b81b14acd64151d7939",
++            "table_name": "inventory",
++            "expression": "quantity >= 0"
++          }
++        ]
++      }
++    }
++  },
++  "schema_rollback": {
++    "result": {
++      "success": false,
++      "checkpoint_id": "46d53db107f4468c99d1e42df8ccad90",
++      "failures": [
++        {
++          "id": "8ba883b4806949ce9e90e5e0870dfb7f",
++          "expression": "quantity >= 0",
++          "error": "Invariant evaluated to false"
++        }
++      ],
++      "error_report": "Import invariant validation failed: 8ba883b4806949ce9e90e5e0870dfb7f: Invariant evaluated to false"
++    },
++    "invariant_id": "8ba883b4806949ce9e90e5e0870dfb7f",
++    "before": {
++      "schema": [
++        {
++          "type": "index",
++          "name": "inventory_quantity",
++          "tbl_name": "inventory",
++          "sql": "CREATE UNIQUE INDEX inventory_quantity ON inventory(quantity)"
++        },
++        {
++          "type": "index",
++          "name": "sqlite_autoindex__sqlite_utils_import_invariants_1",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": null
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_invariants",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": "CREATE TABLE _sqlite_utils_import_invariants (\n                id TEXT PRIMARY KEY, table_name TEXT NOT NULL, expression TEXT NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_settings",
++          "tbl_name": "_sqlite_utils_import_settings",
++          "sql": "CREATE TABLE _sqlite_utils_import_settings (\n                id INTEGER PRIMARY KEY CHECK (id = 1), enabled INTEGER NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "audit",
++          "tbl_name": "audit",
++          "sql": "CREATE TABLE audit (quantity INTEGER)"
++        },
++        {
++          "type": "table",
++          "name": "inventory",
++          "tbl_name": "inventory",
++          "sql": "CREATE TABLE inventory (id INTEGER PRIMARY KEY, quantity INTEGER)"
++        },
++        {
++          "type": "trigger",
++          "name": "inventory_log",
++          "tbl_name": "inventory",
++          "sql": "CREATE TRIGGER inventory_log AFTER INSERT ON inventory\n                BEGIN INSERT INTO audit VALUES(new.quantity); END"
++        }
++      ],
++      "data": {
++        "_sqlite_utils_import_settings": [
++          {
++            "id": 1,
++            "enabled": 1
++          }
++        ],
++        "inventory": [
++          {
++            "id": 1,
++            "quantity": 10
++          }
++        ],
++        "audit": [
++          {
++            "quantity": 10
++          }
++        ],
++        "_sqlite_utils_import_invariants": [
++          {
++            "id": "8ba883b4806949ce9e90e5e0870dfb7f",
++            "table_name": "inventory",
++            "expression": "quantity >= 0"
++          }
++        ]
++      }
++    },
++    "after": {
++      "schema": [
++        {
++          "type": "index",
++          "name": "inventory_quantity",
++          "tbl_name": "inventory",
++          "sql": "CREATE UNIQUE INDEX inventory_quantity ON inventory(quantity)"
++        },
++        {
++          "type": "index",
++          "name": "sqlite_autoindex__sqlite_utils_import_invariants_1",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": null
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_invariants",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": "CREATE TABLE _sqlite_utils_import_invariants (\n                id TEXT PRIMARY KEY, table_name TEXT NOT NULL, expression TEXT NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_settings",
++          "tbl_name": "_sqlite_utils_import_settings",
++          "sql": "CREATE TABLE _sqlite_utils_import_settings (\n                id INTEGER PRIMARY KEY CHECK (id = 1), enabled INTEGER NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "audit",
++          "tbl_name": "audit",
++          "sql": "CREATE TABLE audit (quantity INTEGER)"
++        },
++        {
++          "type": "table",
++          "name": "inventory",
++          "tbl_name": "inventory",
++          "sql": "CREATE TABLE inventory (id INTEGER PRIMARY KEY, quantity INTEGER)"
++        },
++        {
++          "type": "trigger",
++          "name": "inventory_log",
++          "tbl_name": "inventory",
++          "sql": "CREATE TRIGGER inventory_log AFTER INSERT ON inventory\n                BEGIN INSERT INTO audit VALUES(new.quantity); END"
++        }
++      ],
++      "data": {
++        "_sqlite_utils_import_settings": [
++          {
++            "id": 1,
++            "enabled": 1
++          }
++        ],
++        "inventory": [
++          {
++            "id": 1,
++            "quantity": 10
++          }
++        ],
++        "audit": [
++          {
++            "quantity": 10
++          }
++        ],
++        "_sqlite_utils_import_invariants": [
++          {
++            "id": "8ba883b4806949ce9e90e5e0870dfb7f",
++            "table_name": "inventory",
++            "expression": "quantity >= 0"
++          }
++        ]
++      }
++    },
++    "schema_differences": [],
++    "data_differences": []
++  },
++  "api_committed_rows": [
++    {
++      "id": 1,
++      "quantity": 12
++    }
++  ],
++  "source_bulk_rollback": {
++    "before": {
++      "schema": [
++        {
++          "type": "index",
++          "name": "sqlite_autoindex__sqlite_utils_import_invariants_1",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": null
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_invariants",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": "CREATE TABLE _sqlite_utils_import_invariants (\n                id TEXT PRIMARY KEY, table_name TEXT NOT NULL, expression TEXT NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_settings",
++          "tbl_name": "_sqlite_utils_import_settings",
++          "sql": "CREATE TABLE _sqlite_utils_import_settings (\n                id INTEGER PRIMARY KEY CHECK (id = 1), enabled INTEGER NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "inventory",
++          "tbl_name": "inventory",
++          "sql": "CREATE TABLE \"inventory\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"quantity\" INTEGER\n)"
++        }
++      ],
++      "data": {
++        "_sqlite_utils_import_settings": [
++          {
++            "id": 1,
++            "enabled": 1
++          }
++        ],
++        "_sqlite_utils_import_invariants": [
++          {
++            "id": "0002204f43de4992b3bf8ddb0bf518f9",
++            "table_name": "inventory",
++            "expression": "quantity >= 0"
++          }
++        ],
++        "inventory": [
++          {
++            "id": 1,
++            "quantity": 12
++          }
++        ]
++      }
++    },
++    "after": {
++      "schema": [
++        {
++          "type": "index",
++          "name": "sqlite_autoindex__sqlite_utils_import_invariants_1",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": null
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_invariants",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": "CREATE TABLE _sqlite_utils_import_invariants (\n                id TEXT PRIMARY KEY, table_name TEXT NOT NULL, expression TEXT NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_settings",
++          "tbl_name": "_sqlite_utils_import_settings",
++          "sql": "CREATE TABLE _sqlite_utils_import_settings (\n                id INTEGER PRIMARY KEY CHECK (id = 1), enabled INTEGER NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "inventory",
++          "tbl_name": "inventory",
++          "sql": "CREATE TABLE \"inventory\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"quantity\" INTEGER\n)"
++        }
++      ],
++      "data": {
++        "_sqlite_utils_import_settings": [
++          {
++            "id": 1,
++            "enabled": 1
++          }
++        ],
++        "_sqlite_utils_import_invariants": [
++          {
++            "id": "0002204f43de4992b3bf8ddb0bf518f9",
++            "table_name": "inventory",
++            "expression": "quantity >= 0"
++          }
++        ],
++        "inventory": [
++          {
++            "id": 1,
++            "quantity": 12
++          }
++        ]
++      }
++    }
++  },
++  "source_final_rows": [
++    {
++      "id": 1,
++      "quantity": -2
++    }
++  ],
++  "rebuilt_zipapp_bulk_rollback": {
++    "before": {
++      "schema": [
++        {
++          "type": "index",
++          "name": "sqlite_autoindex__sqlite_utils_import_invariants_1",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": null
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_invariants",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": "CREATE TABLE _sqlite_utils_import_invariants (\n                id TEXT PRIMARY KEY, table_name TEXT NOT NULL, expression TEXT NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_settings",
++          "tbl_name": "_sqlite_utils_import_settings",
++          "sql": "CREATE TABLE _sqlite_utils_import_settings (\n                id INTEGER PRIMARY KEY CHECK (id = 1), enabled INTEGER NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "inventory",
++          "tbl_name": "inventory",
++          "sql": "CREATE TABLE \"inventory\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"quantity\" INTEGER\n)"
++        }
++      ],
++      "data": {
++        "_sqlite_utils_import_settings": [
++          {
++            "id": 1,
++            "enabled": 1
++          }
++        ],
++        "_sqlite_utils_import_invariants": [
++          {
++            "id": "8f9f90bea2e649ac84e69ca69a257ec6",
++            "table_name": "inventory",
++            "expression": "quantity >= 0"
++          }
++        ],
++        "inventory": [
++          {
++            "id": 1,
++            "quantity": 12
++          }
++        ]
++      }
++    },
++    "after": {
++      "schema": [
++        {
++          "type": "index",
++          "name": "sqlite_autoindex__sqlite_utils_import_invariants_1",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": null
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_invariants",
++          "tbl_name": "_sqlite_utils_import_invariants",
++          "sql": "CREATE TABLE _sqlite_utils_import_invariants (\n                id TEXT PRIMARY KEY, table_name TEXT NOT NULL, expression TEXT NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "_sqlite_utils_import_settings",
++          "tbl_name": "_sqlite_utils_import_settings",
++          "sql": "CREATE TABLE _sqlite_utils_import_settings (\n                id INTEGER PRIMARY KEY CHECK (id = 1), enabled INTEGER NOT NULL\n            )"
++        },
++        {
++          "type": "table",
++          "name": "inventory",
++          "tbl_name": "inventory",
++          "sql": "CREATE TABLE \"inventory\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"quantity\" INTEGER\n)"
++        }
++      ],
++      "data": {
++        "_sqlite_utils_import_settings": [
++          {
++            "id": 1,
++            "enabled": 1
++          }
++        ],
++        "_sqlite_utils_import_invariants": [
++          {
++            "id": "8f9f90bea2e649ac84e69ca69a257ec6",
++            "table_name": "inventory",
++            "expression": "quantity >= 0"
++          }
++        ],
++        "inventory": [
++          {
++            "id": 1,
++            "quantity": 12
++          }
++        ]
++      }
++    }
++  },
++  "rebuilt_zipapp_final_rows": [
++    {
++      "id": 1,
++      "quantity": -2
++    }
++  ]
++}
+diff --git a/specs/artifacts/safe-import/regression.txt b/specs/artifacts/safe-import/regression.txt
+new file mode 100644
+index 0000000..4cb7fda
+--- /dev/null
++++ b/specs/artifacts/safe-import/regression.txt
+@@ -0,0 +1,10 @@
++........................................................................ [ 15%]
++........................................................................ [ 30%]
++................................................s....................... [ 45%]
++........................................................................ [ 61%]
++........................................................................ [ 76%]
++........................................................................ [ 91%]
++........................................                                 [100%]
++=========================== short test summary info ===========================
++SKIPPED [1] tests\test_create.py:992: pandas and numpy are not installed
++471 passed, 1 skipped in 12.45s
+diff --git a/specs/artifacts/safe-import/verify.py b/specs/artifacts/safe-import/verify.py
+new file mode 100644
+index 0000000..2562e47
+--- /dev/null
++++ b/specs/artifacts/safe-import/verify.py
+@@ -0,0 +1,192 @@
++"""Rebuild the pure-Python application and save real SQLite/CLI evidence."""
++
++import json
++import os
++from pathlib import Path
++import py_compile
++import shutil
++import sqlite3
++import subprocess
++import sys
++import textwrap
++import traceback
++import zipapp
++
++
++ROOT = Path(__file__).resolve().parents[3]
++sys.path.insert(0, str(ROOT))
++from sqlite_utils import Database  # noqa: E402
++
++
++def state(db):
++    return {
++        "schema": list(db.query(
++            "SELECT type, name, tbl_name, sql FROM sqlite_master ORDER BY type, name"
++        )),
++        "data": {name: list(db[name].rows) for name in db.table_names()},
++    }
++
++
++def verify():
++    output = ROOT / ".local-tmp" / "source-evidence"
++    output.mkdir(parents=True, exist_ok=True)
++    # Every output path is project-owned. Unique database names preserve earlier
++    # runs without deleting or recreating any user database.
++    import uuid
++    run = output / uuid.uuid4().hex
++    run.mkdir()
++    report = {
++        "python": sys.version,
++        "executable": sys.executable,
++        "sqlite": sqlite3.sqlite_version,
++        "run_directory": str(run.relative_to(ROOT)),
++        "completed": False,
++        "commands": [],
++    }
++    try:
++        reference = (ROOT / "docs" / "cli-reference.rst").read_text(encoding="utf-8")
++        start = reference.index(".. [[[cog\n") + len(".. [[[cog\n")
++        stop = reference.index(".. ]]]", start)
++        end = reference.index(".. [[[end]]]", stop)
++        class Output:
++            def __init__(self):
++                self.parts = []
++
++            def out(self, value):
++                self.parts.append(value)
++
++        cog = Output()
++        exec(textwrap.dedent(reference[start:stop]), {"cog": cog})
++        actual = reference[stop + len(".. ]]]") + 1:end]
++        assert actual == "".join(cog.parts)
++        report["cli_reference"] = "matches current native CLI help using its upstream generator"
++
++        staging = run / "source"
++        shutil.copytree(ROOT / "sqlite_utils", staging / "sqlite_utils",
++                        ignore=shutil.ignore_patterns("__pycache__", "*.pyc"))
++        compiled = []
++        for path in sorted((staging / "sqlite_utils").rglob("*.py")):
++            target = run / "bytecode" / path.relative_to(staging).with_suffix(".pyc")
++            target.parent.mkdir(parents=True, exist_ok=True)
++            py_compile.compile(str(path), cfile=str(target), doraise=True)
++            compiled.append(str(path.relative_to(staging)))
++        archive = run / "sqlite-utils.pyz"
++        zipapp.create_archive(staging, target=archive, main="sqlite_utils.cli:cli")
++        report["source_rebuild"] = {
++            "compiled_modules": compiled,
++            "archive": str(archive.relative_to(ROOT)),
++            "format": "standard-library zipapp of sqlite_utils source; not a wheel",
++        }
++
++        with Database(run / "first-failure.db") as db:
++            db.add_import_invariant("inventory", "quantity >= 0")
++            before = state(db)
++            result = db.safe_bulk_insert("inventory", [{"quantity": -1}])
++            after = state(db)
++            report["first_failure_metadata_rollback"] = {
++                "result": result, "before": before, "after": after,
++            }
++            assert result["success"] is False
++            assert before == after
++
++        with Database(run / "api.db") as db:
++            db.enable_safe_import()
++            db.executescript("""
++                CREATE TABLE inventory (id INTEGER PRIMARY KEY, quantity INTEGER);
++                CREATE UNIQUE INDEX inventory_quantity ON inventory(quantity);
++                CREATE TABLE audit (quantity INTEGER);
++                CREATE TRIGGER inventory_log AFTER INSERT ON inventory
++                BEGIN INSERT INTO audit VALUES(new.quantity); END;
++                INSERT INTO inventory VALUES (1, 10);
++            """)
++            identity = db.add_import_invariant("inventory", "quantity >= 0")
++            before = state(db)
++            def records():
++                db.executescript("""
++                    ALTER TABLE inventory ADD COLUMN note TEXT;
++                    DROP INDEX inventory_quantity;
++                    DROP TRIGGER inventory_log;
++                    CREATE TABLE transient (value TEXT);
++                    CREATE INDEX transient_value ON transient(value);
++                    CREATE TRIGGER inventory_changed AFTER UPDATE ON inventory
++                    BEGIN INSERT INTO audit VALUES(new.quantity); END;
++                """)
++                yield {"id": 2, "quantity": 5, "note": "batch one"}
++                yield {"id": 3, "quantity": -1, "note": "batch two"}
++            result = db.safe_bulk_insert("inventory", records(), batch_size=1)
++            after = state(db)
++            report["schema_rollback"] = {
++                "result": result, "invariant_id": identity,
++                "before": before, "after": after,
++                "schema_differences": [] if before["schema"] == after["schema"] else ["schema changed"],
++                "data_differences": [] if before["data"] == after["data"] else ["data changed"],
++            }
++            assert result["success"] is False
++            assert result["failures"][0]["id"] == identity
++            assert after == before
++            assert db.safe_bulk_upsert("inventory", [{"id": 1, "quantity": 12}], pk="id") == {"success": True}
++            report["api_committed_rows"] = list(db["inventory"].rows)
++
++        for mode, prefix in (
++            ("source", [sys.executable, "-B", "-m", "sqlite_utils"]),
++            ("rebuilt_zipapp", [sys.executable, "-B", str(archive)]),
++        ):
++            path = run / (mode + ".db")
++            def command(arguments, input=None, code=0):
++                completed = subprocess.run(
++                    prefix + [str(arg) for arg in arguments],
++                    cwd=ROOT, input=input, text=True, encoding="utf-8",
++                    capture_output=True, env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"),
++                )
++                report["commands"].append({
++                    "mode": mode, "arguments": [str(a) for a in arguments],
++                    "stdin": input, "exit_code": completed.returncode,
++                    "stdout": completed.stdout, "stderr": completed.stderr,
++                })
++                assert completed.returncode == code, completed.stderr
++                return completed.stdout
++
++            command(["enable-safe-import", path])
++            invariant = command(["add-import-invariant", path, "inventory", "quantity >= 0"]).strip()
++            listed = command(["list-import-invariants", path, "inventory"])
++            assert json.loads(listed) == [{"id": invariant, "expression": "quantity >= 0"}]
++            command(["insert", path, "inventory", "-", "--pk", "id", "--safe-mode"],
++                    '[{"id": 1, "quantity": 10}]')
++            command(["upsert", path, "inventory", "-", "--pk", "id", "--safe-mode"],
++                    '[{"id": 1, "quantity": 12}]')
++            with Database(path) as db:
++                before = state(db)
++            command(["bulk", path, "UPDATE inventory SET quantity = :quantity WHERE id = :id",
++                     "-", "--batch-size", "1", "--safe-mode"],
++                    '[{"id": 1, "quantity": 20}, {"id": 1, "quantity": -5}]', code=1)
++            with Database(path) as db:
++                after = state(db)
++                report[mode + "_bulk_rollback"] = {"before": before, "after": after}
++                assert before == after
++            assert "Validation passed" in command(["validate-import-invariants", path, "inventory"])
++            command(["bulk", path, "UPDATE inventory SET quantity = :quantity WHERE id = :id", "-", "--safe-mode"],
++                    '[{"id": 1, "quantity": 15}]')
++            # An ordinary write can violate a stored invariant: the validation
++            # command communicates failure while still returning exit code 0.
++            command(["bulk", path, "UPDATE inventory SET quantity = :quantity WHERE id = :id", "-"],
++                    '[{"id": 1, "quantity": -2}]')
++            validation = command(["validate-import-invariants", path, "inventory"])
++            assert "Validation failed" in validation and invariant in validation
++            command(["remove-import-invariant", path, "inventory", invariant])
++            assert json.loads(command(["list-import-invariants", path, "inventory"])) == []
++            command(["disable-safe-import", path])
++            with Database(path) as db:
++                report[mode + "_final_rows"] = list(db["inventory"].rows)
++                assert list(db["inventory"].rows) == [{"id": 1, "quantity": -2}]
++        report["completed"] = True
++    except BaseException:
++        report["failure"] = traceback.format_exc()
++        raise
++    finally:
++        target = Path(__file__).with_name("evidence.json")
++        target.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
++    print("Saved actual source rebuild and SQLite/CLI evidence to", target.relative_to(ROOT))
++
++
++if __name__ == "__main__":
++    verify()
+diff --git a/specs/records/2026-11/README.md b/specs/records/2026-11/README.md
+new file mode 100644
+index 0000000..c991482
+--- /dev/null
++++ b/specs/records/2026-11/README.md
+@@ -0,0 +1,3 @@
++# November 2026
++
++- [SQLite safe imports](sqlite-safe-import.md)
+diff --git a/specs/records/2026-11/sqlite-safe-import.md b/specs/records/2026-11/sqlite-safe-import.md
+new file mode 100644
+index 0000000..1858622
+--- /dev/null
++++ b/specs/records/2026-11/sqlite-safe-import.md
+@@ -0,0 +1,43 @@
++# SQLite safe imports
++
++## Recall
++
++The public task requires checkpoint lifecycle APIs with named errors, persistent table invariants, atomic safe insert/upsert/CSV/JSON APIs and CLI insert/upsert/bulk including UPDATE, documentation, actual SQLite validation, HANDOFF.md and a source commit on main. Public material and the declared runtime are immutable. No delegation, network, branch, remote change or push is authorized.
++
++Read: public/TASK.md, TASK.original.md, QUALITY.md, INPUTS.json, RUNTIME.md; pyproject.toml; Database construction/execution, table creation, insert/upsert, transform, script and transaction paths; CLI import options/parser and bulk execution; focused existing tests and documentation generation rules.
++
++Search: checkpoint/invariant/import API definitions across sqlite_utils are absent. All commit-capable connection contexts and executescript calls in db.py were identified; CLI insert/upsert/bulk share insert_upsert_implementation. No specs tree or package.json documentation checker exists in this upstream Python repository. No UI is in scope. No scheduling/queue mechanism is involved. No delegation was used.
++
++## Analysis before implementation
++
++Observable issue: normal imports commit batches independently; later insertion, conversion or invariant errors can leave earlier writes and schema changes committed. Direct trigger effects and type conversion must be atomic with the operation. Root cause: sqlite3 connection contexts commit on success and roll back on failure, regardless of an external savepoint. executescript also commits pending transactions. A wrapper savepoint without addressing these paths cannot protect an import.
++
++Impact: Database/Table transaction contexts, Database.executescript, persistent metadata, the common CLI importer and docs. Existing public ordinary write behavior remains the contract when no checkpoint is active. Checkpoints are connection-local savepoints, persistent configuration/invariants use two reserved SQLite tables. No existing data format is migrated; metadata is created lazily without rewriting user tables. Direct caller connection commit/rollback and transaction-control SQL remain caller-owned and cannot safely coexist with active checkpoints; this boundary will be documented.
++
++## Implementation plan
++
++1. Introduce named checkpoint and validation errors, persistent enable/invariant APIs and nested savepoint lifecycle. Finalizing an ancestor finalizes descendants; cleaning an active checkpoint rolls it back before removing its identity.
++2. Replace package-owned connection contexts with a shared checkpoint-aware transaction context. Preserve script statements without implicit commit while checkpoints are active. Do not introduce database snapshots or shadow user data.
++3. Execute SELECT invariants using the first value; execute expressions as SELECT(expression) FROM table and require every returned row to be truthy. SQLite naturally emits one row for aggregates. Preserve SQL errors as identified failures.
++4. Integrate one safe-operation runner into insert/upsert/CSV/JSON and CLI import/bulk. Validate all registered tables so triggers/cross-table changes are covered. Keep strict rollback-and-raise and non-strict structured failures. Explicit safe operations enable safe support when needed; manual checkpoint creation requires enablement.
++5. Add focused real-SQLite tests for lifecycle, persistence, complete schema/data rollback, batching/parser failures, strict/non-strict, trigger effects, nested operation, and native CLI process contracts. Run appropriate upstream import/transform tests. Save reproducible evidence, update docs and HANDOFF, review diff and commit on main.
++
++## Verification
++
++Pending implementation. Use only the Python interpreter declared in public/RUNTIME.md, local sources, and actual SQLite files. Set TEMP/TMP and pytest base directory inside this project. No benchmark grade is inferred from checks.
++
++## Implementation and verification outcome
++
++Implemented the plan in the existing package. A shared Database.transaction() preserves active savepoints across all package-owned Database/Table connection contexts. Script execution uses SQLite complete_statement parsing while checkpoints are active, retaining full trigger statements without sqlite3.executescript's implicit commit. The counts-trigger script retains its original tracer visibility through the same internal script primitive. No-checkpoint behavior remains ordinary batch commits.
++
++Explicit safe operations start their checkpoint before automatic enablement, so a failed first operation restores metadata as well as user schema and rows. This also preserves caller-owned transactions. Persistent invariants use SQLite's own scalar/aggregate evaluation, including custom aggregate functions. The CLI parser and CSV type transform are inside the safe boundary; safe CSV parsing uses the csv module's strict parser. All registered invariants are validated to cover trigger-side writes.
++
++Validation commands and full native reproduction are in HANDOFF.md. The final relevant check set returned 471 passed, one optional pandas/numpy skip. The original regression run returned seven failures (six missing command-doc entries and one counts-tracer expectation); those actual issues were fixed and the same set rerun. No UI tests were involved. The saved final transcript is specs/artifacts/safe-import/regression.txt.
++
++The source rebuild/evidence checker compiled current source, built its standard-library zipapp, compared the existing CLI reference generator with generated documentation and executed actual source/zipapp CLI subprocesses against real databases. specs/artifacts/safe-import/evidence.json records complete before/after schema and data, actual invariant IDs, commands, inputs, outputs and process exit codes. Source SQLite schema/data restoration includes altered columns, dropped indexes/triggers, newly created tables/indexes/triggers, multiple import batches and first-use metadata. No source hashes are acceptance criteria.
++
++Tooling boundary: the declared runtime has no setuptools/wheel/build/Black/Cog/Sphinx; dependency fetches are forbidden. The source runnable archive and native execution succeeded. An official wheel and rendered Sphinx build were not claimed.
++
++Known semantic boundary: SQLite RAISE(ROLLBACK)/OR ROLLBACK aborts the entire enclosing transaction. Top-level rollback-trigger failures preserve pre-operation state and original error (tested). Inside a caller-owned transaction or outer checkpoint this SQLite action also undoes earlier outer writes, so the unconditional exact-inner-pre-operation requirement is not fulfilled for that edge. Direct caller transaction-control operations likewise invalidate savepoints. These limitations are explicit in HANDOFF.md and Python API documentation; no backup fallback or keyword rewriting was added. No crash/power-loss experiment was performed. External Python/SQL-function side effects are outside SQLite rollback.
++
++All owned child processes settled naturally. Source changes will be committed on main as authorized; no remote, branch, worktree, push or publication operation is part of this task.
+diff --git a/specs/records/README.md b/specs/records/README.md
+new file mode 100644
+index 0000000..240e6b8
+--- /dev/null
++++ b/specs/records/README.md
+@@ -0,0 +1,3 @@
++# Records
++
++- [November 2026](2026-11/README.md)
+diff --git a/sqlite_utils/__init__.py b/sqlite_utils/__init__.py
+index b8046f6..e4a4233 100644
+--- a/sqlite_utils/__init__.py
++++ b/sqlite_utils/__init__.py
+@@ -1,6 +1,21 @@
+ from .utils import suggest_column_types
+ from .hookspecs import hookimpl
+ from .hookspecs import hookspec
+-from .db import Database
++from .db import (
++    Database,
++    SafeImportNotEnabledError,
++    CheckpointNotFoundError,
++    CheckpointNotActiveError,
++    ImportInvariantError,
++)
+ 
+-__all__ = ["Database", "suggest_column_types", "hookimpl", "hookspec"]
++__all__ = [
++    "Database",
++    "suggest_column_types",
++    "hookimpl",
++    "hookspec",
++    "SafeImportNotEnabledError",
++    "CheckpointNotFoundError",
++    "CheckpointNotActiveError",
++    "ImportInvariantError",
++]
+diff --git a/sqlite_utils/cli.py b/sqlite_utils/cli.py
+index 9b9ee20..eeff097 100644
+--- a/sqlite_utils/cli.py
++++ b/sqlite_utils/cli.py
+@@ -150,6 +150,68 @@ def cli():
+     pass
+ 
+ 
++def _import_database(path):
++    db = sqlite_utils.Database(path)
++    _register_db_for_cleanup(db)
++    return db
++
++
++@cli.command(name="enable-safe-import")
++@click.argument("path", type=click.Path(dir_okay=False))
++def enable_safe_import(path):
++    "Enable persistent safe import checkpoint support for a database."
++    _import_database(path).enable_safe_import()
++    click.echo("Safe import enabled")
++
++
++@cli.command(name="disable-safe-import")
++@click.argument("path", type=click.Path(dir_okay=False))
++def disable_safe_import(path):
++    "Disable persistent safe import checkpoint support for a database."
++    _import_database(path).disable_safe_import()
++    click.echo("Safe import disabled")
++
++
++@cli.command(name="add-import-invariant")
++@click.argument("path", type=click.Path(dir_okay=False))
++@click.argument("table")
++@click.argument("sql")
++def add_import_invariant(path, table, sql):
++    "Register a persistent table invariant and print its identity."
++    try:
++        click.echo(_import_database(path).add_import_invariant(table, sql))
++    except (ValueError, sqlite3.Error) as ex:
++        raise click.ClickException(str(ex))
++
++
++@cli.command(name="remove-import-invariant")
++@click.argument("path", type=click.Path(dir_okay=False))
++@click.argument("table")
++@click.argument("invariant_id")
++def remove_import_invariant(path, table, invariant_id):
++    "Remove an invariant by the textual identity printed when it was added."
++    _import_database(path).remove_import_invariant(table, invariant_id)
++    click.echo("Removed invariant {}".format(invariant_id))
++
++
++@cli.command(name="list-import-invariants")
++@click.argument("path", type=click.Path(dir_okay=False))
++@click.argument("table")
++def list_import_invariants(path, table):
++    "Print registered invariant identities and their SQL as JSON."
++    click.echo(json.dumps(_import_database(path).list_import_invariants(table), indent=2))
++
++
++@cli.command(name="validate-import-invariants")
++@click.argument("path", type=click.Path(dir_okay=False))
++@click.argument("table")
++def validate_import_invariants(path, table):
++    "Report invariant pass/fail and failing identities; validation always exits zero."
++    result = _import_database(path).validate_import_invariants(table)
++    click.echo("Validation {}".format("passed" if result["valid"] else "failed"))
++    click.echo(json.dumps(result, indent=2))
++
++
+ @cli.command()
+ @click.argument(
+     "path",
+@@ -918,6 +980,11 @@ def insert_upsert_options(*, require_pk=False):
+             )
+             + _import_options
+             + (
++                click.option(
++                    "--safe-mode",
++                    is_flag=True,
++                    help="Roll back the entire import if a write or invariant validation fails",
++                ),
+                 click.option(
+                     "--batch-size", type=int, default=100, help="Commit every X records"
+                 ),
+@@ -970,7 +1037,25 @@ def insert_upsert_options(*, require_pk=False):
+     return inner
+ 
+ 
+-def insert_upsert_implementation(
++def insert_upsert_implementation(path, *args, safe_mode=False, **kwargs):
++    db = sqlite_utils.Database(path)
++    _register_db_for_cleanup(db)
++    operation = lambda: _insert_upsert_implementation(
++        db, path, *args, safe_mode=safe_mode, **kwargs
++    )
++    if safe_mode:
++        try:
++            db._run_safe_import(operation, strict=True)
++        except click.ClickException:
++            raise
++        except Exception as ex:
++            raise click.ClickException(str(ex))
++    else:
++        operation()
++
++
++def _insert_upsert_implementation(
++    db,
+     path,
+     table,
+     file,
+@@ -1006,9 +1091,8 @@ def insert_upsert_implementation(
+     bulk_sql=None,
+     functions=None,
+     strict=False,
++    safe_mode=False,
+ ):
+-    db = sqlite_utils.Database(path)
+-    _register_db_for_cleanup(db)
+     _load_extensions(db, load_extension)
+     _maybe_register_functions(db, functions)
+     if (delimiter or quotechar or sniff or no_headers) and not tsv:
+@@ -1047,6 +1131,8 @@ def insert_upsert_implementation(
+             else:
+                 dialect = "excel-tab" if tsv else "excel"
+             csv_reader_args: dict[str, Any] = {"dialect": dialect}
++            if safe_mode:
++                csv_reader_args["strict"] = True
+             if delimiter:
+                 csv_reader_args["delimiter"] = delimiter
+             if quotechar:
+@@ -1145,7 +1231,7 @@ def insert_upsert_implementation(
+             else:
+                 doc_chunks = [docs]
+             for doc_chunk in doc_chunks:
+-                with db.conn:
++                with db.transaction():
+                     db.conn.cursor().executemany(bulk_sql, doc_chunk)
+             return
+ 
+@@ -1248,6 +1334,7 @@ def insert(
+     not_null,
+     default,
+     strict,
++    safe_mode,
+ ):
+     """
+     Insert records from FILE into a table, creating the table if it
+@@ -1328,6 +1415,7 @@ def insert(
+             not_null=not_null,
+             default=default,
+             strict=strict,
++            safe_mode=safe_mode,
+         )
+     except UnicodeDecodeError as ex:
+         raise click.ClickException(UNICODE_ERROR.format(ex))
+@@ -1365,6 +1453,7 @@ def upsert(
+     load_extension,
+     silent,
+     strict,
++    safe_mode,
+ ):
+     """
+     Upsert records based on their primary key. Works like 'insert' but if
+@@ -1411,6 +1500,7 @@ def upsert(
+             load_extension=load_extension,
+             silent=silent,
+             strict=strict,
++            safe_mode=safe_mode,
+         )
+     except UnicodeDecodeError as ex:
+         raise click.ClickException(UNICODE_ERROR.format(ex))
+@@ -1425,6 +1515,7 @@ def upsert(
+ @click.argument("sql")
+ @click.argument("file", type=click.File("rb"), required=True)
+ @click.option("--batch-size", type=int, default=100, help="Commit every X records")
++@click.option("--safe-mode", is_flag=True, help="Commit all statements only after invariant validation")
+ @click.option(
+     "--functions",
+     help="Python code or file path defining custom SQL functions",
+@@ -1453,6 +1544,7 @@ def bulk(
+     no_headers,
+     encoding,
+     load_extension,
++    safe_mode,
+ ):
+     """
+     Execute parameterized SQL against the provided list of documents.
+@@ -1499,6 +1591,7 @@ def bulk(
+             silent=False,
+             bulk_sql=sql,
+             functions=functions,
++            safe_mode=safe_mode,
+         )
+     except (OperationalError, sqlite3.IntegrityError) as e:
+         raise click.ClickException(str(e))
+diff --git a/sqlite_utils/db.py b/sqlite_utils/db.py
+index aacdc89..e555724 100644
+--- a/sqlite_utils/db.py
++++ b/sqlite_utils/db.py
+@@ -13,6 +13,7 @@ import binascii
+ from collections import namedtuple
+ from collections.abc import Mapping
+ import contextlib
++import csv
+ import datetime
+ import decimal
+ import inspect
+@@ -282,6 +283,30 @@ class InvalidColumns(Exception):
+     "Specified columns do not exist"
+ 
+ 
++class SafeImportNotEnabledError(Exception):
++    "Enable safe imports before creating a checkpoint."
++
++
++class CheckpointNotFoundError(Exception):
++    "The checkpoint identity is unknown or has been cleaned up."
++
++
++class CheckpointNotActiveError(Exception):
++    "The checkpoint has already been finalized."
++
++
++class ImportInvariantError(Exception):
++    "Imported data failed invariant validation."
++
++    def __init__(self, failures):
++        self.failures = failures
++        super().__init__(
++            "Import invariant validation failed: {}".format(
++                "; ".join("{}: {}".format(f["id"], f["error"]) for f in failures)
++            )
++        )
++
++
+ class DescIndex(str):
+     pass
+ 
+@@ -377,6 +402,8 @@ class Database:
+             assert not recreate, "recreate cannot be used with connections, only paths"
+             self.conn = filename_or_conn
+         self._tracer = tracer
++        self._import_checkpoints: Dict[str, bool] = {}
++        self._active_import_checkpoints: List[str] = []
+         if recursive_triggers:
+             self.execute("PRAGMA recursive_triggers=on;")
+         self._registered_functions: set = set()
+@@ -400,6 +427,247 @@ class Database:
+         "Close the SQLite connection, and the underlying database file"
+         self.conn.close()
+ 
++    @contextlib.contextmanager
++    def transaction(self):
++        """Use normal batch commits, or a nested savepoint inside a checkpoint."""
++        if not self._active_import_checkpoints:
++            with self.conn:
++                yield
++            return
++        name = quote_identifier("sqlite_utils_transaction_" + uuid.uuid4().hex)
++        self.execute("SAVEPOINT " + name)
++        try:
++            yield
++            self.execute("RELEASE SAVEPOINT " + name)
++        except BaseException:
++            # RAISE(ROLLBACK) in a trigger can already have rolled back the
++            # entire SQLite transaction. Preserve that original error.
++            if self.conn.in_transaction:
++                self.execute("ROLLBACK TO SAVEPOINT " + name)
++                self.execute("RELEASE SAVEPOINT " + name)
++            raise
++
++    def enable_safe_import(self) -> None:
++        """Persistently enable manual import checkpoints for this database."""
++        with self.transaction():
++            self.execute("""CREATE TABLE IF NOT EXISTS _sqlite_utils_import_settings (
++                id INTEGER PRIMARY KEY CHECK (id = 1), enabled INTEGER NOT NULL
++            )""")
++            self.execute("""INSERT INTO _sqlite_utils_import_settings VALUES (1, 1)
++                ON CONFLICT(id) DO UPDATE SET enabled = 1""")
++
++    def disable_safe_import(self) -> None:
++        """Roll back active checkpoints and persistently disable new checkpoints."""
++        if self._active_import_checkpoints:
++            self.rollback_to_checkpoint(self._active_import_checkpoints[0])
++        with self.transaction():
++            if self._safe_import_enabled():
++                self.execute(
++                    "UPDATE _sqlite_utils_import_settings SET enabled = 0 WHERE id = 1"
++                )
++
++    def _safe_import_enabled(self) -> bool:
++        if "_sqlite_utils_import_settings" not in self.table_names():
++            return False
++        row = self.execute(
++            "SELECT enabled FROM _sqlite_utils_import_settings WHERE id = 1"
++        ).fetchone()
++        return bool(row and row[0])
++
++    def create_import_checkpoint(self) -> str:
++        """Create a connection-local savepoint, including transactional schema changes."""
++        if not self._safe_import_enabled():
++            raise SafeImportNotEnabledError("Safe imports are disabled")
++        return self._start_import_checkpoint()
++
++    def _start_import_checkpoint(self) -> str:
++        checkpoint_id = uuid.uuid4().hex
++        self.execute("SAVEPOINT " + quote_identifier(checkpoint_id))
++        self._import_checkpoints[checkpoint_id] = True
++        self._active_import_checkpoints.append(checkpoint_id)
++        return checkpoint_id
++
++    def _check_import_checkpoint(self, checkpoint_id):
++        if checkpoint_id not in self._import_checkpoints:
++            raise CheckpointNotFoundError(checkpoint_id)
++        if not self.conn.in_transaction:
++            self._forget_active_import_checkpoints()
++        if not self._import_checkpoints[checkpoint_id]:
++            raise CheckpointNotActiveError(checkpoint_id)
++
++    def _forget_active_import_checkpoints(self):
++        for checkpoint_id in self._active_import_checkpoints:
++            self._import_checkpoints[checkpoint_id] = False
++        self._active_import_checkpoints.clear()
++
++    def _finalize_import_checkpoint(self, checkpoint_id, rollback):
++        self._check_import_checkpoint(checkpoint_id)
++        name = quote_identifier(checkpoint_id)
++        if rollback:
++            self.execute("ROLLBACK TO SAVEPOINT " + name)
++        self.execute("RELEASE SAVEPOINT " + name)
++        index = self._active_import_checkpoints.index(checkpoint_id)
++        for child in self._active_import_checkpoints[index:]:
++            self._import_checkpoints[child] = False
++        del self._active_import_checkpoints[index:]
++
++    def rollback_to_checkpoint(self, checkpoint_id) -> None:
++        """Restore the checkpoint, finalizing it and all of its descendants."""
++        self._finalize_import_checkpoint(checkpoint_id, rollback=True)
++
++    def commit_checkpoint(self, checkpoint_id) -> None:
++        """Release this savepoint; an enclosing checkpoint still owns its changes."""
++        self._finalize_import_checkpoint(checkpoint_id, rollback=False)
++
++    def cleanup_checkpoint(self, checkpoint_id) -> None:
++        """Roll back an active checkpoint, then forget its identity."""
++        if checkpoint_id not in self._import_checkpoints:
++            raise CheckpointNotFoundError(checkpoint_id)
++        if self._import_checkpoints[checkpoint_id]:
++            self.rollback_to_checkpoint(checkpoint_id)
++        del self._import_checkpoints[checkpoint_id]
++
++    def add_import_invariant(self, table: str, sql: str) -> str:
++        """Persist a SELECT query or expression to check after safe writes."""
++        if not sql.strip():
++            raise ValueError("An import invariant must contain SQL")
++        invariant_id = uuid.uuid4().hex
++        with self.transaction():
++            self.execute("""CREATE TABLE IF NOT EXISTS _sqlite_utils_import_invariants (
++                id TEXT PRIMARY KEY, table_name TEXT NOT NULL, expression TEXT NOT NULL
++            )""")
++            self.execute(
++                "INSERT INTO _sqlite_utils_import_invariants VALUES (?, ?, ?)",
++                (invariant_id, table, sql),
++            )
++        return invariant_id
++
++    def remove_import_invariant(self, table: str, invariant_id) -> None:
++        """Remove a registered invariant using its textual identity."""
++        with self.transaction():
++            if "_sqlite_utils_import_invariants" in self.table_names():
++                self.execute(
++                    "DELETE FROM _sqlite_utils_import_invariants WHERE table_name = ? AND id = ?",
++                    (table, str(invariant_id)),
++                )
++
++    def list_import_invariants(self, table: str) -> List[dict]:
++        """Return persistent invariant identities and original SQL expressions."""
++        if "_sqlite_utils_import_invariants" not in self.table_names():
++            return []
++        return list(self.query(
++            "SELECT id, expression FROM _sqlite_utils_import_invariants "
++            "WHERE table_name = ? ORDER BY rowid", [table]
++        ))
++
++    def validate_import_invariants(self, table: str) -> dict:
++        """Evaluate each invariant, retaining identities and SQL errors on failure."""
++        failures = []
++        for invariant in self.list_import_invariants(table):
++            sql = invariant["expression"].strip().rstrip(";")
++            try:
++                if re.match(r"SELECT\b", sql, re.IGNORECASE):
++                    row = self.execute(sql).fetchone()
++                    valid = bool(row and row[0])
++                else:
++                    # SQLite emits one row for aggregates and one per input row for
++                    # scalar expressions, including user-defined SQL functions.
++                    values = self.execute(
++                        "SELECT ({}) FROM {}".format(sql, quote_identifier(table))
++                    )
++                    valid = all(bool(row[0]) for row in values)
++                if valid:
++                    continue
++                error = "Invariant evaluated to false"
++            except Exception as ex:
++                error = str(ex)
++            failures.append(dict(invariant, error=error))
++        return {"valid": not failures, "failures": failures}
++
++    def _validate_all_import_invariants(self):
++        if "_sqlite_utils_import_invariants" not in self.table_names():
++            return []
++        tables = [row[0] for row in self.execute(
++            "SELECT DISTINCT table_name FROM _sqlite_utils_import_invariants"
++        )]
++        return [
++            failure
++            for table in tables
++            for failure in self.validate_import_invariants(table)["failures"]
++        ]
++
++    def _run_safe_import(self, operation, strict=False):
++        # Explicit safe operations opt in without committing metadata setup
++        # outside the operation's rollback boundary.
++        checkpoint_id = self._start_import_checkpoint()
++        try:
++            if not self._safe_import_enabled():
++                self.enable_safe_import()
++            operation()
++            failures = self._validate_all_import_invariants()
++            if failures:
++                raise ImportInvariantError(failures)
++            self.commit_checkpoint(checkpoint_id)
++        except BaseException as ex:
++            if self.conn.in_transaction:
++                self.rollback_to_checkpoint(checkpoint_id)
++            else:
++                self._forget_active_import_checkpoints()
++            if strict or not isinstance(ex, Exception):
++                raise
++            return {
++                "success": False,
++                "checkpoint_id": checkpoint_id,
++                "failures": getattr(ex, "failures", []),
++                "error_report": str(ex),
++            }
++        self.cleanup_checkpoint(checkpoint_id)
++        return {"success": True}
++
++    def safe_bulk_insert(self, table: str, records, strict=False, **kwargs) -> dict:
++        """Atomically insert records using Table.insert_all options."""
++        return self._run_safe_import(
++            lambda: self.table(table).insert_all(records, **kwargs), strict
++        )
++
++    def safe_bulk_upsert(self, table: str, records, pk, strict=False, **kwargs) -> dict:
++        """Atomically insert or update records by primary key."""
++        return self._run_safe_import(
++            lambda: self.table(table).upsert_all(records, pk=pk, **kwargs), strict
++        )
++
++    def import_csv(self, table: str, source, safe_mode=False, strict=False) -> dict:
++        """Import a UTF-8 CSV path or caller-owned text stream."""
++
++        def operation():
++            if isinstance(source, (str, pathlib.Path)):
++                with open(source, encoding="utf-8-sig", newline="") as fp:
++                    self.table(table).insert_all(csv.DictReader(fp, strict=True))
++            else:
++                self.table(table).insert_all(csv.DictReader(source, strict=True))
++        if safe_mode:
++            return self._run_safe_import(operation, strict)
++        operation()
++        return {"success": True}
++
++    def import_json(self, table: str, data, safe_mode=False, strict=False) -> dict:
++        """Import decoded records, JSON text or a caller-owned JSON text stream."""
++
++        def operation():
++            if hasattr(data, "read"):
++                records = json.load(data)
++            elif isinstance(data, (str, bytes, bytearray)):
++                records = json.loads(data)
++            else:
++                records = data
++            if isinstance(records, Mapping):
++                records = [records]
++            self.table(table).insert_all(records)
++        if safe_mode:
++            return self._run_safe_import(operation, strict)
++        operation()
++        return {"success": True}
++
+     @contextlib.contextmanager
+     def ensure_autocommit_off(self) -> Generator[None, None, None]:
+         """
+@@ -413,6 +681,8 @@ class Database:
+         This will reset to the previous autocommit state at the end of the block.
+         """
+         old_isolation_level = self.conn.isolation_level
++        if self._active_import_checkpoints:
++            raise RuntimeError("Cannot change autocommit with an active import checkpoint")
+         try:
+             self.conn.isolation_level = None
+             yield
+@@ -575,6 +845,23 @@ class Database:
+         """
+         if self._tracer:
+             self._tracer(sql, None)
++        return self._executescript(sql)
++
++    def _executescript(self, sql: str) -> sqlite3.Cursor:
++        if self._active_import_checkpoints:
++            # sqlite3.executescript commits before running a script. Execute complete
++            # statements individually instead; complete_statement handles triggers,
++            # comments and semicolons inside literals using SQLite's own parser.
++            statement = ""
++            cursor = self.conn.cursor()
++            for char in sql:
++                statement += char
++                if char == ";" and sqlite3.complete_statement(statement):
++                    cursor.execute(statement)
++                    statement = ""
++            if statement.strip():
++                cursor.execute(statement)
++            return cursor
+         return self.conn.executescript(sql)
+ 
+     def table(self, table_name: str, **kwargs: Any) -> "Table":
+@@ -723,7 +1010,7 @@ class Database:
+         if not hasattr(self, "_supports_strict"):
+             try:
+                 table_name = "t{}".format(secrets.token_hex(16))
+-                with self.conn:
++                with self.transaction():
+                     self.conn.execute(
+                         "create table {} (name text) strict".format(table_name)
+                     )
+@@ -739,7 +1026,7 @@ class Database:
+         if not hasattr(self, "_supports_on_conflict"):
+             table_name = "t{}".format(secrets.token_hex(16))
+             try:
+-                with self.conn:
++                with self.transaction():
+                     self.conn.execute(
+                         "create table {} (id integer primary key, name text)".format(
+                             table_name
+@@ -791,7 +1078,7 @@ class Database:
+                 self.execute("PRAGMA journal_mode=delete;")
+ 
+     def _ensure_counts_table(self) -> None:
+-        with self.conn:
++        with self.transaction():
+             self.execute(_COUNTS_TABLE_CREATE_SQL.format(self._counts_table_name))
+ 
+     def enable_counts(self) -> None:
+@@ -827,7 +1114,7 @@ class Database:
+     def reset_counts(self) -> None:
+         "Re-calculate cached counts for tables."
+         tables = [table for table in self.tables if table.has_counts_triggers]
+-        with self.conn:
++        with self.transaction():
+             self._ensure_counts_table()
+             counts_table = self.table(self._counts_table_name)
+             counts_table.delete_where()
+@@ -1814,7 +2101,7 @@ class Table(Queryable):
+             self._defaults["strict"] = strict
+ 
+         columns = {name: value for (name, value) in columns.items()}
+-        with self.db.conn:
++        with self.db.transaction():
+             self.db.create_table(
+                 self.name,
+                 columns,
+@@ -1842,7 +2129,7 @@ class Table(Queryable):
+         """
+         if not self.exists():
+             raise NoTable(f"Table {self.name} does not exist")
+-        with self.db.conn:
++        with self.db.transaction():
+             sql = "CREATE TABLE {} AS SELECT * FROM {};".format(
+                 quote_identifier(new_name),
+                 quote_identifier(self.name),
+@@ -1905,7 +2192,7 @@ class Table(Queryable):
+         try:
+             if pragma_foreign_keys_was_on:
+                 self.db.execute("PRAGMA foreign_keys=0;")
+-            with self.db.conn:
++            with self.db.transaction():
+                 for sql in sqls:
+                     self.db.execute(sql)
+                 # Run the foreign_key_check before we commit
+@@ -2519,8 +2806,8 @@ class Table(Queryable):
+                 ),
+             )
+         )
+-        with self.db.conn:
+-            self.db.conn.executescript(sql)
++        with self.db.transaction():
++            self.db._executescript(sql)
+         self.db.use_counts_table = True
+ 
+     @property
+@@ -2673,7 +2960,7 @@ class Table(Queryable):
+         trigger_names = []
+         for row in self.db.execute(sql).fetchall():
+             trigger_names.append(row[0])
+-        with self.db.conn:
++        with self.db.transaction():
+             for trigger_name in trigger_names:
+                 self.db.execute(
+                     "DROP TRIGGER IF EXISTS {}".format(quote_identifier(trigger_name))
+@@ -2880,7 +3167,7 @@ class Table(Queryable):
+         sql = "delete from {} where {wheres}".format(
+             quote_identifier(self.name), wheres=" and ".join(wheres)
+         )
+-        with self.db.conn:
++        with self.db.transaction():
+             self.db.execute(sql, pk_values)
+         return self
+ 
+@@ -2953,7 +3240,7 @@ class Table(Queryable):
+             sets=", ".join(sets),
+             wheres=" and ".join(wheres),
+         )
+-        with self.db.conn:
++        with self.db.transaction():
+             try:
+                 rowcount = self.db.execute(sql, args).rowcount
+             except OperationalError as e:
+@@ -3042,7 +3329,7 @@ class Table(Queryable):
+                 ),
+                 where=" where {}".format(where) if where is not None else "",
+             )
+-            with self.db.conn:
++            with self.db.transaction():
+                 self.db.execute(sql, where_args or [])
+                 if drop:
+                     self.transform(drop=columns)
+@@ -3090,7 +3377,7 @@ class Table(Queryable):
+         with progressbar(
+             length=self.count, silent=not show_progress, label="2: Updating"
+         ) as bar:
+-            with self.db.conn:
++            with self.db.transaction():
+                 for pk, updates in pk_to_values.items():
+                     self.update(pk, updates)
+                     bar.update(1)
+@@ -3309,7 +3596,7 @@ class Table(Queryable):
+             list_mode,
+         )
+         result = None
+-        with self.db.conn:
++        with self.db.transaction():
+             for query, params in queries_and_params:
+                 try:
+                     result = self.db.execute(query, params)
+diff --git a/tests/test_safe_import.py b/tests/test_safe_import.py
+new file mode 100644
+index 0000000..9be5f7e
+--- /dev/null
++++ b/tests/test_safe_import.py
+@@ -0,0 +1,404 @@
++"""Safe imports exercised against SQLite, including native CLI subprocesses."""
++
++import io
++import json
++import os
++import subprocess
++import sys
++
++import pytest
++
++from sqlite_utils import (
++    Database,
++    CheckpointNotActiveError,
++    CheckpointNotFoundError,
++    ImportInvariantError,
++    SafeImportNotEnabledError,
++)
++from sqlite_utils.utils import sqlite3
++
++
++def snapshot(db):
++    return {
++        "schema": list(db.query("SELECT type, name, tbl_name, sql FROM sqlite_master ORDER BY type, name")),
++        "rows": {name: list(db[name].rows) for name in db.table_names()},
++    }
++
++
++def test_checkpoint_lifecycle_and_persistence(tmp_path):
++    path = tmp_path / "lifecycle.db"
++    db = Database(path)
++    with pytest.raises(SafeImportNotEnabledError):
++        db.create_import_checkpoint()
++    db.enable_safe_import()
++    db.close()
++    db = Database(path)
++    outer = db.create_import_checkpoint()
++    assert isinstance(outer, str) and len(outer) > 0
++    db["items"].insert({"id": 1}, pk="id")
++    inner = db.create_import_checkpoint()
++    db["items"].insert({"id": 2})
++    db.rollback_to_checkpoint(inner)
++    assert list(db["items"].rows) == [{"id": 1}]
++    for action in (db.commit_checkpoint, db.rollback_to_checkpoint):
++        with pytest.raises(CheckpointNotActiveError):
++            action(inner)
++    db.cleanup_checkpoint(inner)
++    with pytest.raises(CheckpointNotFoundError):
++        db.commit_checkpoint(inner)
++    db.commit_checkpoint(outer)
++    with pytest.raises(CheckpointNotActiveError):
++        db.rollback_to_checkpoint(outer)
++    db.close()
++    db = Database(path)
++    assert list(db["items"].rows) == [{"id": 1}]
++    db.disable_safe_import()
++    db.close()
++    db = Database(path)
++    with pytest.raises(SafeImportNotEnabledError):
++        db.create_import_checkpoint()
++    with pytest.raises(CheckpointNotFoundError):
++        db.cleanup_checkpoint("unknown")
++
++
++@pytest.mark.parametrize("finalize", ["commit_checkpoint", "rollback_to_checkpoint", "cleanup_checkpoint", "disable_safe_import"])
++def test_ancestor_finalizes_children(finalize):
++    db = Database(memory=True)
++    db.enable_safe_import()
++    db["t"].insert({"n": 0})
++    outer = db.create_import_checkpoint()
++    db["t"].insert({"n": 1})
++    inner = db.create_import_checkpoint()
++    db["t"].insert({"n": 2})
++    if finalize == "disable_safe_import":
++        db.disable_safe_import()
++    else:
++        getattr(db, finalize)(outer)
++    assert list(db["t"].rows) == ([{"n": 0}, {"n": 1}, {"n": 2}] if finalize == "commit_checkpoint" else [{"n": 0}])
++    with pytest.raises(CheckpointNotActiveError):
++        db.commit_checkpoint(inner)
++
++
++def test_invariants_persist_and_use_sqlite_expression_semantics(tmp_path):
++    path = tmp_path / "invariants.db"
++    db = Database(path)
++    db["odd table"].insert_all([{"value": 2}, {"value": 4}])
++    expressions = [
++        "value > 0",
++        "COUNT(*) = 2 AND SUM(value) = 6 AND AVG(value) = 3 AND MIN(value) = 2 AND MAX(value) = 4",
++        "  select sum(value) = 6 from [odd table]",
++        "length('SUM(value)') > 0",  # Scalar text containing an aggregate name.
++    ]
++    ids = [db.add_import_invariant("odd table", sql) for sql in expressions]
++    db.close()
++    db = Database(path)
++    assert db.list_import_invariants("odd table") == [dict(id=id_, expression=sql) for id_, sql in zip(ids, expressions)]
++    assert db.validate_import_invariants("odd table") == {"valid": True, "failures": []}
++    for id_ in ids:
++        db.remove_import_invariant("odd table", str(id_))
++    assert db.list_import_invariants("odd table") == []
++
++
++def test_invariant_failure_details_and_empty_table():
++    db = Database(memory=True)
++    db["t"].insert_all([{"n": 2}, {"n": -1}])
++    row_id = db.add_import_invariant("t", "n > 0")
++    select_id = db.add_import_invariant("t", "SELECT 0 UNION ALL SELECT 1")
++    error_id = db.add_import_invariant("t", "missing_column > 0")
++    result = db.validate_import_invariants("t")
++    assert result["valid"] is False
++    assert [f["id"] for f in result["failures"]] == [row_id, select_id, error_id]
++    assert result["failures"][0] == {"id": row_id, "expression": "n > 0", "error": "Invariant evaluated to false"}
++    assert result["failures"][2]["error"] == "no such column: missing_column"
++    db["empty"].create({"n": int})
++    db.add_import_invariant("empty", "n > 0")
++    assert db.validate_import_invariants("empty") == {"valid": True, "failures": []}
++    count_id = db.add_import_invariant("empty", "COUNT(*) > 0")
++    assert db.validate_import_invariants("empty")["failures"] == [{"id": count_id, "expression": "COUNT(*) > 0", "error": "Invariant evaluated to false"}]
++
++
++def test_user_defined_aggregate_uses_sqlite_semantics():
++    class Sum:
++        def __init__(self):
++            self.value = 0
++
++        def step(self, value):
++            self.value += value
++
++        def finalize(self):
++            return self.value
++
++    db = Database(memory=True)
++    db.conn.create_aggregate("custom_sum", 1, Sum)
++    db["t"].insert_all([{"n": 2}, {"n": 3}])
++    db.add_import_invariant("t", "custom_sum(n) = 5")
++    db.add_import_invariant("t", "TOTAL(n) = 5 AND GROUP_CONCAT(n) = '2,3'")
++    assert db.validate_import_invariants("t") == {"valid": True, "failures": []}
++
++
++def test_ordinary_csv_and_json_imports():
++    db = Database(memory=True)
++    assert db.import_csv("t", io.StringIO("n\n2\n3\n")) == {"success": True}
++    assert db.import_json("t", {"n": "4"}) == {"success": True}
++    assert list(db["t"].rows) == [{"n": "2"}, {"n": "3"}, {"n": "4"}]
++
++
++def test_first_safe_failure_restores_complete_database_and_disabled_setting():
++    db = Database(memory=True)
++    invariant = db.add_import_invariant("t", "n > 0")
++    before = snapshot(db)
++    result = db.safe_bulk_insert("t", [{"n": -1}])
++    assert result["failures"][0]["id"] == invariant
++    assert snapshot(db) == before
++    with pytest.raises(SafeImportNotEnabledError):
++        db.create_import_checkpoint()
++    assert db.safe_bulk_insert("t", [{"n": 2}]) == {"success": True}
++    checkpoint = db.create_import_checkpoint()
++    db.commit_checkpoint(checkpoint)
++
++
++def test_safe_operation_preserves_caller_transaction():
++    db = Database(memory=True)
++    db["t"].create({"n": int})
++    db.execute('INSERT INTO t VALUES (1)')
++    assert db.safe_bulk_insert("t", [{"n": 2}]) == {"success": True}
++    assert db.conn.in_transaction is True
++    assert list(db["t"].rows) == [{"n": 1}, {"n": 2}]
++    db.conn.rollback()
++    assert list(db["t"].rows) == []
++
++
++def test_deferred_constraint_failure_at_commit_restores_state():
++    db = Database(memory=True)
++    db.execute("PRAGMA foreign_keys = ON")
++    db.executescript("""
++        CREATE TABLE parent (id INTEGER PRIMARY KEY);
++        CREATE TABLE child (parent_id INTEGER REFERENCES parent(id)
++            DEFERRABLE INITIALLY DEFERRED);
++    """)
++    before = snapshot(db)
++    result = db.safe_bulk_insert("child", [{"parent_id": 7}])
++    assert result["success"] is False
++    assert result["error_report"] == "FOREIGN KEY constraint failed"
++    assert snapshot(db) == before
++
++
++@pytest.mark.parametrize("strict", [False, True])
++def test_full_schema_and_data_rollback(strict):
++    db = Database(memory=True)
++    db.enable_safe_import()
++    db.executescript("""
++        CREATE TABLE t (id INTEGER PRIMARY KEY, n INTEGER, payload BLOB);
++        CREATE UNIQUE INDEX t_n ON t(n);
++        CREATE TABLE audit (n INTEGER);
++        CREATE TRIGGER t_log AFTER INSERT ON t BEGIN INSERT INTO audit VALUES(new.n); END;
++        INSERT INTO t VALUES(1, 2, x'001122');
++    """)
++    invariant = db.add_import_invariant("t", "n > 0")
++    before = snapshot(db)
++
++    def records():
++        db.executescript("""
++            ALTER TABLE t ADD COLUMN extra TEXT;
++            CREATE TABLE transient (text TEXT);
++            CREATE INDEX transient_index ON transient(text);
++            DROP INDEX t_n;
++            DROP TRIGGER t_log;
++            CREATE TRIGGER altered AFTER UPDATE ON t BEGIN INSERT INTO audit VALUES (new.n); END;
++        """)
++        yield {"id": 2, "n": 5, "extra": "first batch"}
++        yield {"id": 3, "n": -1, "extra": "second batch"}
++
++    if strict:
++        with pytest.raises(ImportInvariantError, match="validation") as ex:
++            db.safe_bulk_insert("t", records(), batch_size=1, strict=True)
++        assert ex.value.failures[0]["id"] == invariant
++    else:
++        result = db.safe_bulk_insert("t", records(), batch_size=1)
++        assert result["success"] is False
++        assert isinstance(result["checkpoint_id"], str) and len(result["checkpoint_id"]) > 0
++        assert result["failures"][0]["id"] == invariant
++        with pytest.raises(CheckpointNotActiveError):
++            db.rollback_to_checkpoint(result["checkpoint_id"])
++        db.cleanup_checkpoint(result["checkpoint_id"])
++    assert snapshot(db) == before
++
++
++@pytest.mark.parametrize("strict", [False, True])
++def test_sql_error_rollback_after_batches_and_added_column(strict):
++    db = Database(memory=True)
++    db.enable_safe_import()
++    db["t"].insert({"id": 1, "n": 2}, pk="id")
++    before = snapshot(db)
++    rows = [{"id": 2, "n": 3, "extra": "column"}, {"id": 1, "n": 4}]
++    if strict:
++        with pytest.raises(sqlite3.IntegrityError, match="UNIQUE constraint failed"):
++            db.safe_bulk_insert("t", rows, alter=True, batch_size=1, strict=True)
++    else:
++        result = db.safe_bulk_insert("t", rows, alter=True, batch_size=1)
++        assert result["success"] is False
++        assert result["failures"] == []
++        assert "UNIQUE constraint failed" in result["error_report"]
++    assert snapshot(db) == before
++
++
++def test_trigger_invariants_upsert_and_nested_safe_operation():
++    db = Database(memory=True)
++    db.enable_safe_import()
++    db.executescript("""
++        CREATE TABLE t (id INTEGER PRIMARY KEY, n INTEGER);
++        CREATE TABLE audit (n INTEGER);
++        CREATE TRIGGER t_log AFTER INSERT ON t BEGIN INSERT INTO audit VALUES(new.n); END;
++    """)
++    invariant = db.add_import_invariant("audit", "n > 0")
++    before = snapshot(db)
++    result = db.safe_bulk_insert("t", [{"id": 1, "n": -2}])
++    assert result["failures"][0]["id"] == invariant
++    assert snapshot(db) == before
++    assert db.safe_bulk_insert("t", [{"id": 1, "n": 2}], pk="id") == {"success": True}
++    outer = db.create_import_checkpoint()
++    assert db.safe_bulk_upsert("t", [{"id": 1, "n": 3}, {"id": 2, "n": 4}], pk="id", batch_size=1) == {"success": True}
++    assert list(db["t"].rows) == [{"id": 1, "n": 3}, {"id": 2, "n": 4}]
++    db.rollback_to_checkpoint(outer)
++    assert list(db["t"].rows) == [{"id": 1, "n": 2}]
++    assert list(db["audit"].rows) == [{"n": 2}]
++
++
++@pytest.mark.parametrize("kind", ["csv_path", "csv_stream", "json_text", "json_records", "json_stream"])
++def test_import_sources_success_and_validation_rollback(tmp_path, kind):
++    db = Database(tmp_path / "sources.db")
++    invariant = db.add_import_invariant("t", "CAST(n AS INTEGER) > 0")
++    def source(n):
++        if kind == "csv_path":
++            path = tmp_path / "data.csv"
++            path.write_text("n\n{}\n".format(n), encoding="utf-8")
++            return str(path)
++        if kind == "csv_stream":
++            return io.StringIO("n\n{}\n".format(n))
++        records = [{"n": n}]
++        return records if kind == "json_records" else io.StringIO(json.dumps(records)) if kind == "json_stream" else json.dumps(records)
++    method = db.import_csv if kind.startswith("csv") else db.import_json
++    assert method("t", source(2), safe_mode=True) == {"success": True}
++    before = snapshot(db)
++    result = method("t", source(-1), safe_mode=True)
++    assert result["success"] is False
++    assert result["failures"][0]["id"] == invariant
++    assert snapshot(db) == before
++    with pytest.raises(ImportInvariantError, match="invariant"):
++        method("t", source(-1), safe_mode=True, strict=True)
++    assert snapshot(db) == before
++
++
++def test_parser_and_stream_failures_restore_new_table():
++    db = Database(memory=True)
++    db.enable_safe_import()
++    before = snapshot(db)
++    broken_csv = io.StringIO("n\n" + "2\n" * 101 + '"unterminated\n')
++    result = db.import_csv("new_table", broken_csv, safe_mode=True)
++    assert result["success"] is False
++    assert result["error_report"] == "unexpected end of data"
++    assert snapshot(db) == before
++    result = db.import_json("new_table", "[{", safe_mode=True)
++    assert result["success"] is False
++    assert "Expecting property name" in result["error_report"]
++    assert snapshot(db) == before
++    def broken_records():
++        yield {"n": 2}
++        raise ValueError("source read failed")
++    result = db.safe_bulk_insert("new_table", broken_records(), batch_size=1)
++    assert result["error_report"] == "source read failed"
++    assert snapshot(db) == before
++
++
++def test_trigger_rollback_reports_original_error_and_restores_state():
++    db = Database(memory=True)
++    db.enable_safe_import()
++    db.executescript("""
++        CREATE TABLE t (n INTEGER);
++        INSERT INTO t VALUES (1);
++        CREATE TRIGGER reject_negative BEFORE INSERT ON t WHEN new.n < 0
++        BEGIN SELECT RAISE(ROLLBACK, 'negative value'); END;
++    """)
++    before = snapshot(db)
++    result = db.safe_bulk_insert("t", [{"n": 2}, {"n": -1}], batch_size=1)
++    assert result["success"] is False
++    assert result["error_report"] == "negative value"
++    assert result["failures"] == []
++    assert snapshot(db) == before
++    assert db.safe_bulk_insert("t", [{"n": 3}]) == {"success": True}
++    assert list(db["t"].rows) == [{"n": 1}, {"n": 3}]
++
++
++def native_cli(*arguments, input=None):
++    result = subprocess.run(
++        [sys.executable, "-B", "-m", "sqlite_utils", *map(str, arguments)],
++        input=input, text=True, encoding="utf-8", capture_output=True,
++        env=dict(os.environ, PYTHONDONTWRITEBYTECODE="1"),
++    )
++    return result
++
++
++def test_native_cli_management_and_insert_upsert_bulk_update(tmp_path):
++    path = tmp_path / "cli.db"
++    assert native_cli("enable-safe-import", path).returncode == 0
++    added = native_cli("add-import-invariant", path, "t", "n > 0")
++    assert added.returncode == 0, added.stderr
++    invariant = added.stdout.strip()
++    listed = native_cli("list-import-invariants", path, "t")
++    assert json.loads(listed.stdout) == [{"id": invariant, "expression": "n > 0"}]
++    inserted = native_cli("insert", path, "t", "-", "--pk", "id", "--safe-mode", input='[{"id": 1, "n": 2}]')
++    assert inserted.returncode == 0, inserted.stderr
++    passed = native_cli("validate-import-invariants", path, "t")
++    assert passed.returncode == 0
++    assert "Validation passed" in passed.stdout
++    upserted = native_cli("upsert", path, "t", "-", "--pk", "id", "--safe-mode", input='[{"id": 1, "n": 3}]')
++    assert upserted.returncode == 0, upserted.stderr
++    for command, arguments, data in [
++        ("insert", ["t", "-", "--alter", "--pk", "id"], '[{"id": 2, "n": 4, "extra": 1}, {"id": 3, "n": -1, "extra": 2}]'),
++        ("upsert", ["t", "-", "--pk", "id"], '[{"id": 1, "n": 4}, {"id": 2, "n": -1}]'),
++        ("bulk", ["UPDATE t SET n = :n WHERE id = :id", "-"], '[{"id": 1, "n": 4}, {"id": 1, "n": -1}]'),
++    ]:
++        with Database(path) as db:
++            before = snapshot(db)
++        result = native_cli(command, path, *arguments, "--safe-mode", "--batch-size", "1", input=data)
++        assert result.returncode == 1, result.stderr
++        assert invariant in result.stderr
++        with Database(path) as db:
++            assert snapshot(db) == before
++    updated = native_cli("bulk", path, "UPDATE t SET n = :n WHERE id = :id", "-", "--safe-mode", input='[{"id": 1, "n": 7}]')
++    assert updated.returncode == 0, updated.stderr
++    with Database(path) as db:
++        assert list(db["t"].rows) == [{"id": 1, "n": 7}]
++        db["t"].update(1, {"n": -1})
++    failed = native_cli("validate-import-invariants", path, "t")
++    assert failed.returncode == 0
++    assert "Validation failed" in failed.stdout and invariant in failed.stdout
++    assert native_cli("remove-import-invariant", path, "t", invariant).returncode == 0
++    assert json.loads(native_cli("list-import-invariants", path, "t").stdout) == []
++    assert native_cli("disable-safe-import", path).returncode == 0
++    with Database(path) as db:
++        with pytest.raises(SafeImportNotEnabledError):
++            db.create_import_checkpoint()
++
++
++def test_native_cli_csv_transform_and_late_json_error(tmp_path):
++    path = tmp_path / "csv.db"
++    result = native_cli("insert", path, "t", "-", "--csv", "--safe-mode", input="id,n\n1,2\n2,3\n")
++    assert result.returncode == 0, result.stderr
++    with Database(path) as db:
++        assert list(db["t"].rows) == [{"id": 1, "n": 2}, {"id": 2, "n": 3}]
++        db.add_import_invariant("t", "n > 0")
++        before = snapshot(db)
++    result = native_cli("insert", path, "t", "-", "--csv", "--safe-mode", "--alter", input="id,n,extra\n3,-1,new\n")
++    assert result.returncode == 1
++    with Database(path) as db:
++        assert snapshot(db) == before
++    result = native_cli("insert", path, "t", "-", "--nl", "--safe-mode", "--batch-size", "1", input='{"id": 3, "n": 4}\n{\n')
++    assert result.returncode == 1
++    with Database(path) as db:
++        assert snapshot(db) == before
++    result = native_cli("insert", path, "t", "-", "--csv", "--safe-mode", "--batch-size", "1", input='id,n\n3,4\n4,"unterminated\n')
++    assert result.returncode == 1
++    assert "unexpected end of data" in result.stderr
++    with Database(path) as db:
++        assert snapshot(db) == before

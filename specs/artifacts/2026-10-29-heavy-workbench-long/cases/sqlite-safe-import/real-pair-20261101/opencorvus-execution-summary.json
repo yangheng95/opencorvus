@@ -1,0 +1,66 @@
+{
+  "observed_at": "2026-11-01T12:08:21.383282+00:00",
+  "task_id": "tsk_g00VZikJoh00dTqYpNPB",
+  "lifecycle": "completed",
+  "activity": {
+    "total": 1,
+    "running": 0,
+    "inactive": 1
+  },
+  "sessions": [
+    "ses_-zUQHFekozz7IviH2tkT",
+    "ses_-zUQHFfpezzbv5MmbBjl"
+  ],
+  "tool_requests_all": 94,
+  "tool_outcomes_all": 94,
+  "task_requests": 94,
+  "task_outcomes": 94,
+  "task_pending": [],
+  "outcome_counts": {
+    "completed": 90,
+    "failed": 4
+  },
+  "actual_requests": 97,
+  "actual_request_model_counts": {
+    "gpt-6.1-sol": 97
+  },
+  "actual_request_streaming_counts": {
+    "True": 97
+  },
+  "actual_request_http_counts": {
+    "200": 97
+  },
+  "usage": {
+    "all_recorded": {
+      "events": 97,
+      "input_tokens": 209198,
+      "output_tokens": 24376,
+      "reasoning_tokens": 13453,
+      "cache_read_tokens": 9161344,
+      "cache_write_tokens": 0,
+      "total_tokens": 9408371,
+      "cost_usd": 0.0
+    },
+    "task_lineage": {
+      "events": 95,
+      "input_tokens": 175594,
+      "output_tokens": 24294,
+      "reasoning_tokens": 13453,
+      "cache_read_tokens": 9161344,
+      "cache_write_tokens": 0,
+      "total_tokens": 9374685,
+      "cost_usd": 0.0
+    },
+    "other_preflight": {
+      "events": 2,
+      "input_tokens": 33604,
+      "output_tokens": 82,
+      "reasoning_tokens": 0,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 33686,
+      "cost_usd": 0.0
+    }
+  },
+  "scope": "Provider usage events are recorded accounting, not an invoice or effective activity hours. Internal cost0 does not establish external free use. Codex actual model/usage unknown; no same-model/resource causal ranking."
+}

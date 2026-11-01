@@ -181,7 +181,7 @@
 
 - [H05横向对照与难度升级](records/2026-10/2026-10-29-heavy-workbench-cross-system.md)：两方旧标准100开发点、独立清洁复跑及天花板证据。
 
-- [数小时长程任务资格](records/2026-10/2026-10-29-heavy-workbench-long.md)：[月结真实Codex/OC](artifacts/2026-10-29-heavy-workbench-long/cases/month-end-package/real-pair-20261101/README.md)原双4/后验双0及源重建保；正推进[SQLite完整仓库任务](artifacts/2026-10-29-heavy-workbench-long/cases/sqlite-safe-import/README.md)同public真实对照，完整原生合法/真错误消费已备。十题/有效小时仍0/10，心跳ACTIVE、通用根治未证。
+- [数小时长程任务资格](records/2026-10/2026-10-29-heavy-workbench-long.md)：[SQLite真实Codex/OC](artifacts/2026-10-29-heavy-workbench-long/cases/sqlite-safe-import/real-pair-20261101/README.md)已先封后测，两原source冻结消费0/60pass，共同嵌套全回滚缺口实测保；无总100/小时资格。旧月结等原结果不改，十题仍0/10、心跳ACTIVE、通用行为根治未证。
 
 - [文件附件与跨项目输入体验](records/2026-10/2026-10-29-attachment-workspace-journey.md)：真实文件选择、核对与暂存附件/独立草稿的归属调查。
 

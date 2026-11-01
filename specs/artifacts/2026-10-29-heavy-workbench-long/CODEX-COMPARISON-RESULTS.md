@@ -1,5 +1,11 @@
 # Codex与OpenCorvus：实际对照结果
 
+## 最新：SQLite完整仓库真实对照
+
+[原两份源码与真实消费](cases/sqlite-safe-import/real-pair-20261101/README.md)已自然终态并先封：Codex cb9517ac / OC 947ce5c。相同a65公开base/任务及声明runtime，未改源码在新目录进入冻结消费者，各native0/60pass、真实CLI和独立SQLite状态相符。**这不是两个100**：两交接都披露嵌套RAISE(ROLLBACK)会撤销外层先前写入，主方同输入实测调用前[(1,5),(2,7)]→失败后[(1,5)]，原无条件恢复保证均未满足。
+
+共同普通写入/count/列变换检查通过；完整源码、CLI/API文档和源移交有证。原60项未事后改分，额外边界核查明确为交付后观察，不冒事前heldout或新模型试验。无充分整体优劣、合成总分或同模型资源因果；OC97次实际流式gpt-6.1-sol，Codex底层model/usage未知。原pair已释放且不重复，十题/有效小时0/10、心跳ACTIVE和通用行为根治未证保持。
+
 ## 最新：April月结真实两方自然交付
 
 [完整实际结果](cases/month-end-package/real-pair-20261101/README.md)来自同394冻结public的真实fresh Codex和原生OpenCorvus任务，原正式XLSX和完整项目先封再消费、原源码按原命令重新生成工作簿。不是作者参考或独审代替模型结果。

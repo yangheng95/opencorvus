@@ -1,0 +1,9 @@
+{
+  "scope": "Post-delivery whole-product review of the two already sealed original sources; not a new candidate or change to the frozen 60-function consumer",
+  "reason": "Both original handoffs disclose SQLite transaction-wide ROLLBACK inside an enclosing checkpoint. Source inspection confirms savepoint-only containment. Verify the actual disclosed boundary symmetrically, and check ordinary write/count/schema integration affected by both shared transaction changes.",
+  "inputs": "The same fixed ordinary-write workflow and one nested RAISE(ROLLBACK) trigger workflow for both sources; no seed selection or candidate patches",
+  "independent_expected": "Ordinary committed rows/count/column names follow the explicitly issued writes. Under the original task unconditional failure-restoration wording, the nested operation should restore the exact user state immediately before its call, including the earlier outer-checkpoint row.",
+  "reporting": "Keep frozen-consumer native0/60pass results unchanged. Report ordinary observed results and disclosed-boundary state differences separately; no aggregate score, new threshold, forced winner or global impossibility claim.",
+  "not_run": "No candidate-specific self-test harness rerun, broad unreviewed upstream suite, author reference, model/Provider call or source modification",
+  "primary_semantics": ["https://www.sqlite.org/lang_conflict.html", "https://www.sqlite.org/lang_savepoint.html"]
+}

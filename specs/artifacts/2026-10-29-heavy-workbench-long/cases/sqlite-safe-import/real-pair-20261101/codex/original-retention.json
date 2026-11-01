@@ -1,0 +1,47 @@
+{
+  "started_at": "2026-11-01T12:06:55.407303+00:00",
+  "sealed_at": "2026-11-01T12:06:57.490368+00:00",
+  "archive_bytes": 1528850,
+  "original_file_bytes": 7281385,
+  "public_identity": [
+    {
+      "name": "INPUTS.json",
+      "immutable_public_bytes_same": true
+    },
+    {
+      "name": "QUALITY.md",
+      "immutable_public_bytes_same": true
+    },
+    {
+      "name": "RUNTIME.md",
+      "immutable_public_bytes_same": true
+    },
+    {
+      "name": "TASK.md",
+      "immutable_public_bytes_same": true
+    },
+    {
+      "name": "TASK.original.md",
+      "immutable_public_bytes_same": true
+    }
+  ],
+  "git": {
+    "head": {
+      "native_exit": 0,
+      "value": "cb9517ac51b56bb5292bc53eaaa0de678bb0208a\n"
+    },
+    "status": {
+      "native_exit": 0,
+      "value": ""
+    },
+    "log": {
+      "native_exit": 0,
+      "value": "cb9517ac51b56bb5292bc53eaaa0de678bb0208a Implement atomic safe imports and persistent invariants\n6bf3ad2d12ffe9143b08b91abbf9fb6a407a3d2a Materialize pinned upstream source and identical public task\n"
+    },
+    "diff": {
+      "native_exit": 0,
+      "value": ""
+    }
+  },
+  "scope": "Complete owned original project; external generic runtime excluded; hashes identify retained original objects, not correctness or effective hours."
+}

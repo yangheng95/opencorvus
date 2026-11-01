@@ -1,0 +1,11 @@
+Validation failed
+{
+  "valid": false,
+  "failures": [
+    {
+      "id": "3cd68a837ca4492ebc49533ef2afd7f4",
+      "expression": "COUNT(*) = 0",
+      "error": "Invariant evaluated to false"
+    }
+  ]
+}

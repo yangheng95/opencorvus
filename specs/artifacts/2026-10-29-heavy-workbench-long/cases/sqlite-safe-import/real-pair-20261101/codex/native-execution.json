@@ -1,0 +1,20 @@
+{
+  "candidate": "codex",
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\consume_native.py",
+    "--source",
+    "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\source-reproduction\\codex\\source",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\candidate-consumption\\codex"
+  ],
+  "started_at": "2026-11-01T12:07:35.158123+00:00",
+  "ended_at": "2026-11-01T12:07:46.287777+00:00",
+  "native_exit": 0,
+  "stdout": "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\source-reproduction\\codex\\consumer.stdout.log",
+  "stderr": "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\source-reproduction\\codex\\consumer.stderr.log",
+  "assessment": "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\candidate-consumption\\codex\\assessment.json"
+}

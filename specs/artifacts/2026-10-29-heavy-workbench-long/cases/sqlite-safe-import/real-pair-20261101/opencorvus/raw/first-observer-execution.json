@@ -1,0 +1,16 @@
+{
+  "candidate": "opencorvus",
+  "native_exit": 1,
+  "started_at": "2026-11-01T12:10:09.916901+00:00",
+  "ended_at": "2026-11-01T12:10:10.237149+00:00",
+  "argv": [
+    "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "-c",
+    "\nimport json,sqlite3,sys\nfrom pathlib import Path\nfrom sqlite_utils import Database\nout=Path(sys.argv[1]);out.mkdir(exist_ok=False)\nordinary=out/'ordinary.db'\nd=Database(ordinary)\nd['items'].insert({'id':1,'name':'Alpha'},pk='id')\nd['items'].create_index(['name'])\nd['items'].enable_counts()\nd['items'].upsert_all([{'id':1,'name':'Beta'},{'id':2,'name':'Gamma'}],pk='id')\ncounts=d.cached_counts(['items'])\nrows_before=list(d.query('select id,name from items order by id'))\nd['items'].transform(rename={'name':'label'})\nd['items'].update(1,{'label':'Delta'})\nd['items'].delete(2)\nd.close()\nwith sqlite3.connect(ordinary) as c:\n rows=c.execute('select id,label from items order by id').fetchall()\n columns=[x[1] for x in c.execute('pragma table_info(items)')]\n integrity=c.execute('pragma integrity_check').fetchone()[0]\nexpected={'counts':{'items':2},'rows_before':[{'id':1,'name':'Beta'},{'id':2,'name':'Gamma'}],'rows':[(1,'Delta')],'columns':['id','label'],'integrity':'ok'}\nobserved={'counts':counts,'rows_before':rows_before,'rows':rows,'columns':columns,'integrity':integrity}\nboundary=out/'nested-rollback.db'\nd=Database(boundary);d.enable_safe_import()\nd.executescript(\"CREATE TABLE items(id INTEGER PRIMARY KEY, quantity INTEGER); INSERT INTO items VALUES(1,5); CREATE TRIGGER reject_three BEFORE INSERT ON items WHEN new.id=3 BEGIN SELECT RAISE(ROLLBACK,'scope-probe'); END;\")\nouter=d.create_import_checkpoint();d['items'].insert({'id':2,'quantity':7})\ndef state():\n return {'schema':[list(x) for x in d.execute(\"select type,name,tbl_name,sql from sqlite_master where tbl_name='items' order by type,name\")], 'rows':[list(x) for x in d.execute('select id,quantity from items order by id')]}\nbefore=state();result=d.safe_bulk_insert('items',[{'id':3,'quantity':9}],strict=False);after=state()\ntry:\n d.commit_checkpoint(outer);outer_result={'outcome':'finalized'}\nexcept Exception as e:\n outer_result={'error_family':[b.__name__ for b in type(e).__mro__],'error':str(e)}\nd.close()\nwith sqlite3.connect(boundary) as c:reopened=[list(x) for x in c.execute('select id,quantity from items order by id')]\nreport={'ordinary':{'observed':observed,'expected':expected,'matches':observed==expected},'disclosed_nested_boundary':{'before_call':before,'expected_after_failure':before,'actual_after_failure':after,'result':result,'exact_user_state_restored':after==before,'outer_finalize':outer_result,'independently_reopened_rows':reopened},'scope':'Symmetric post-delivery observation; original frozen-consumer results unchanged. No patched candidate or new model trial.'}\n(out/'assessment.json').write_text(json.dumps(report,indent=2),encoding='utf-8');print(json.dumps(report))\n",
+    "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\whole-product-review\\opencorvus"
+  ],
+  "scope": "Observation script exit is distinct from the reported functional state matches"
+}

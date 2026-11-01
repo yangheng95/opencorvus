@@ -1,0 +1,64 @@
+............................................................             [100%]
+============================== warnings summary ===============================
+test_safe_bulk_import.py::test_cli_enable_safe_import
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:427: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_disable_safe_import
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:435: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_add_import_invariant
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:444: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_remove_import_invariant
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:461: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_list_import_invariants
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:480: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_validate_import_invariants
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:496: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_validate_import_invariants_with_failure
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:514: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_insert_with_safe_mode
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:535: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_insert_csv_with_safe_mode
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:555: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_insert_csv_from_file_with_safe_mode
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:579: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_insert_csv_with_safe_mode_failure
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:606: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_bulk_import_with_safe_mode
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:691: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_insert_with_invariant_violation_prevents_write
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:746: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_cli_upsert_safe_mode
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:940: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+test_safe_bulk_import.py::test_bulk_safe_mode_with_update
+  D:\opencorvus-benchmark-runs\sqlite-safe-import-pair-20261101\consumer\test_safe_bulk_import.py:987: DeprecationWarning: 'isolated_filesystem' is deprecated and will be removed in Click 9.0. Use 'tempfile.TemporaryDirectory' or pytest's 'tmp_path' fixture with absolute paths instead.
+    with runner.isolated_filesystem():
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+60 passed, 15 warnings in 1.56s

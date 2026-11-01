@@ -1,0 +1,47 @@
+{
+  "started_at": "2026-11-01T12:06:57.493880+00:00",
+  "sealed_at": "2026-11-01T12:06:58.435675+00:00",
+  "archive_bytes": 1171553,
+  "original_file_bytes": 3784874,
+  "public_identity": [
+    {
+      "name": "INPUTS.json",
+      "immutable_public_bytes_same": true
+    },
+    {
+      "name": "QUALITY.md",
+      "immutable_public_bytes_same": true
+    },
+    {
+      "name": "RUNTIME.md",
+      "immutable_public_bytes_same": true
+    },
+    {
+      "name": "TASK.md",
+      "immutable_public_bytes_same": true
+    },
+    {
+      "name": "TASK.original.md",
+      "immutable_public_bytes_same": true
+    }
+  ],
+  "git": {
+    "head": {
+      "native_exit": 0,
+      "value": "947ce5c177b57645747d252407d41ffc6529a58e\n"
+    },
+    "status": {
+      "native_exit": 0,
+      "value": " M .gitignore\n?? .gitattributes\n?? .opencorvus/\n"
+    },
+    "log": {
+      "native_exit": 0,
+      "value": "947ce5c177b57645747d252407d41ffc6529a58e Make imports atomic with checkpoints and persistent invariants\n6bf3ad2d12ffe9143b08b91abbf9fb6a407a3d2a Materialize pinned upstream source and identical public task\n"
+    },
+    "diff": {
+      "native_exit": 0,
+      "value": " .gitignore | 1 +\n 1 file changed, 1 insertion(+)\n"
+    }
+  },
+  "scope": "Complete owned original project; external generic runtime excluded; hashes identify retained original objects, not correctness or effective hours."
+}

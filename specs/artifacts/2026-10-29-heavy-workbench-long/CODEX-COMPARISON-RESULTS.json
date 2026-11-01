@@ -188,5 +188,26 @@
     "new_case_or_grade_execution": false,
     "report": "cases/L02/evaluator/product-quality-audit-20261101/README.md",
     "limits": "same frozen task and inputs, 12 temporally related original origins; no significance, model-wide causal ranking or new heavy qualification; single-period L losses are not full inventory/cash outcomes"
+  },
+  "latest_sqlite_real_pair": {
+    "report": "cases/sqlite-safe-import/real-pair-20261101/README.md",
+    "summary": "cases/sqlite-safe-import/real-pair-20261101/assessment.json",
+    "source_root": "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101",
+    "frozen_native": [
+      0,
+      0
+    ],
+    "frozen_functions_passed": [
+      60,
+      60
+    ],
+    "original_unconditional_atomicity_satisfied": [
+      false,
+      false
+    ],
+    "post_delivery_disclosed_boundary": "Both lose earlier outer-checkpoint row on inner transaction-wide ROLLBACK; original frozen results unchanged",
+    "original_scores_changed": false,
+    "effective_hours_qualified": false,
+    "aggregate_score": null
   }
 }

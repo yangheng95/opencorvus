@@ -1,0 +1,37 @@
+{
+  "registration": {
+    "benchmark": "HeavyWorkBench-SQLite/1.0.0-native-pilot",
+    "case": "C01",
+    "model": "openai/gpt-6.1-sol",
+    "inactivitySeconds": 3600,
+    "tokenBudgetScope": "task-session-lineage",
+    "budget": {
+      "total_model_tokens": null
+    },
+    "runRoot": "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\opencorvus",
+    "project": "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\opencorvus\\project",
+    "caseVersion": "sqlite-safe-import-complete-original-task-native",
+    "public_commit": "a65cd9101ede709628b189e0d9a7932ac4afb2c0",
+    "comparable": false
+  },
+  "pid": 30468,
+  "startedAt": "2026-11-01T11:37:57.776Z",
+  "comparable": false,
+  "projection": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol"
+  },
+  "preflight": {
+    "sessionID": "ses_hXWdcSfnJPzvtZVKKCK9",
+    "credential": "usable",
+    "catalog": "projected",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true
+  },
+  "outcome": "owned_server_stop_requested_after_task_settlement",
+  "cleanup": {
+    "runtimeDisposed": true,
+    "credentialsRemoved": true
+  },
+  "endedAt": "2026-11-01T12:08:22.026Z"
+}
