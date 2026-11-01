@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Mission 创建表单校验](2026-11-02-mission-form-validation/README.md)：中英文错误反馈及真实保存编辑的实页复核。
+
 - [重命名项目的统一显示](2026-11-02-project-names/README.md)：三真实别名与命名项目手动保存的实页复核。
 
 - [项目选择中的查找](2026-11-02-project-discovery/README.md)：真实项目搜索、键盘、取消及原组合框调用复核。

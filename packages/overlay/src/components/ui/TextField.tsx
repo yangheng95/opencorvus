@@ -80,11 +80,21 @@ function Root(props: TextFieldRootProps): JSX.Element {
     setErrorPresent,
   }
   const shared = {
-    class: classes("oc-text-field", local.class),
-    "data-size": local.size ?? "md",
-    "data-variant": local.variant ?? "default",
-    "data-disabled": local.disabled ? "" : undefined,
-    "data-invalid": local.invalid ? "" : undefined,
+    get class() {
+      return classes("oc-text-field", local.class)
+    },
+    get "data-size"() {
+      return local.size ?? "md"
+    },
+    get "data-variant"() {
+      return local.variant ?? "default"
+    },
+    get "data-disabled"() {
+      return local.disabled ? "" : undefined
+    },
+    get "data-invalid"() {
+      return local.invalid ? "" : undefined
+    },
   }
   return (
     <TextFieldContext.Provider value={context}>

@@ -1226,6 +1226,11 @@ Mission creation failures preserve the entered fields and focus the existing
 inline Feedback into view. Its current-language summary identifies the submitted
 creation mode; the original diagnostic remains in expandable Details. Changing
 mode or reopening clears that submission's feedback through the form's owner.
+The creation form's existing trimmed-field validation owns empty title/request
+feedback and first-invalid-field focus in both creation modes. Native interactive
+form validation is disabled for this form so browser-language bubbles cannot
+preempt those localized field errors. Required accessibility semantics, editable
+length limits, context prerequisites and server validation retain their owners.
 
 Mission creation searches update candidates while retaining the exact authored
 selection, including a deliberately cleared selection. Context initialization,
@@ -2986,6 +2991,12 @@ The canonical TextField primitive also owns the regular body font weight for
 entered input and textarea text. Parent headings or emphasized layouts cannot
 leak heavy typography into editable content, and feature surfaces such as
 Composer do not carry a second corrective font-weight rule.
+Its label/div root bindings read current class, size, variant, disabled and
+invalid properties reactively. Correcting a field updates its outer visual
+state together with its existing input accessibility state; mount-time copies
+of those properties must not retain stale errors or layout.
+Attribute updates preserve the root's child ownership and the focused input's
+identity and selection; reactive attributes do not recreate authored controls.
 
 Every repeated collection inside Environment Information uses one bounded-list
 surface. Goals, Worktrees, Tools, and Sources retain their complete canonical

@@ -567,6 +567,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         id="missionCreateForm"
         class="mission-create-form"
         data-mode={mode()}
+        noValidate
         onSubmit={(event) => {
           event.preventDefault()
           void submit()

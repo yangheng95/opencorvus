@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Mission 创建表单校验](records/2026-11/2026-11-02-mission-form-validation.md)：空字段本地化反馈、逐项纠正及真实草稿保存编辑。
+
 - [重命名项目的统一显示](records/2026-11/2026-11-02-project-names.md)：现项目名称读取、旧目录检索与真实手动草稿目标。
 
 - [项目选择中的查找](records/2026-11/2026-11-02-project-discovery.md)：大量项目中的名称/路径搜索、明确选值与草稿保全。

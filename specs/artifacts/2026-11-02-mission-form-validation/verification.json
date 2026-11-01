@@ -1,0 +1,419 @@
+{
+  "batch": 886,
+  "at": "2026-11-01T23:44:48.006Z",
+  "singleAgent": true,
+  "ownedDevPorts": [
+    38592,
+    38593,
+    38594,
+    38595
+  ],
+  "images": 25,
+  "manualVisualReview": true,
+  "uiAutomationTests": "none added, modified, updated or run",
+  "schema": 9,
+  "tables": 92,
+  "phases": [
+    {
+      "at": "2026-11-01T23:20:30.108Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258768,
+      "current": 258770,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52950,
+          "after": 52951
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52892,
+          "after": 52893
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4349664,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-rfyQogTc.js"
+    },
+    {
+      "at": "2026-11-01T23:29:54.446Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258770,
+      "current": 258858,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 50601,
+          "after": 50616
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 50601,
+          "after": 50616
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6657,
+          "after": 6662
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6657,
+          "after": 6662
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 19971,
+          "after": 19986
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52951,
+          "after": 52967
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52893,
+          "after": 52909
+        },
+        {
+          "table": "session",
+          "before": 131,
+          "after": 132
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3782959,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-Dy-WPf6n.js"
+    },
+    {
+      "at": "2026-11-01T23:36:18.576Z",
+      "kind": "final",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258858,
+      "current": 258860,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52967,
+          "after": 52968
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52909,
+          "after": 52910
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3399142,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BhuCsu-W.js"
+    },
+    {
+      "at": "2026-11-01T23:42:53.483Z",
+      "kind": "final2",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258860,
+      "current": 258862,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52968,
+          "after": 52969
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52910,
+          "after": 52911
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3003966,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DSE5KBTe.js"
+    }
+  ],
+  "checks": {
+    "ui-build-after": {
+      "code": 0,
+      "startedAt": 1793575258995,
+      "closedAt": 1793575322825
+    },
+    "ui-build-final": {
+      "code": 0,
+      "startedAt": 1793575879870,
+      "closedAt": 1793575938166
+    },
+    "ui-build-final2": {
+      "code": 0,
+      "startedAt": 1793576228792,
+      "closedAt": 1793576286503
+    },
+    "overlay-typecheck": {
+      "code": 0,
+      "startedAt": 1793575259018,
+      "closedAt": 1793575287739
+    },
+    "final-typecheck": {
+      "code": 0,
+      "startedAt": 1793575879870,
+      "closedAt": 1793575901492
+    },
+    "final2-typecheck": {
+      "code": 0,
+      "startedAt": 1793576228792,
+      "closedAt": 1793576250324
+    },
+    "focused-checks": {
+      "code": 0,
+      "startedAt": 1793575259006,
+      "closedAt": 1793575272686
+    },
+    "final-focused-checks": {
+      "code": 0,
+      "startedAt": 1793575879879,
+      "closedAt": 1793575891172
+    },
+    "final2-focused-checks": {
+      "code": 0,
+      "startedAt": 1793576228820,
+      "closedAt": 1793576239663
+    }
+  },
+  "draft": {
+    "created": {
+      "at": "2026-11-01T23:25:30.388Z",
+      "stage": "created",
+      "status": 200,
+      "submission": {
+        "id": 69,
+        "at": "2026-11-01T23:25:25.873Z",
+        "path": "/mission/draft",
+        "method": "POST",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "body": {
+          "title": "表单校验验收886（未执行）",
+          "request": "这是一份未执行的表单校验草稿，仅保存此请求以核对标题和描述；不启动任务或调用模型。",
+          "productPillar": "work",
+          "expertSquadIDs": [
+            "base"
+          ]
+        }
+      },
+      "record": {
+        "missionID": "c7f66600b7f80fc0",
+        "sessionID": "ses_-zUQENsLqzzjXteuzqt3",
+        "title": "表单校验验收886（未执行）",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "created": 1793575525877,
+        "updated": 1793575525904,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "这是一份未执行的表单校验草稿，仅保存此请求以核对标题和描述；不启动任务或调用模型。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      "projectName": "Project journey 773",
+      "persisted": {
+        "sessionID": "ses_-zUQENsLqzzjXteuzqt3",
+        "projectID": "prj_hFmj1f6BXMBemXaPwm5n",
+        "kind": "mission",
+        "title": "表单校验验收886（未执行）",
+        "pendingRequestMatched": true,
+        "directoryMatched": true,
+        "squadsMatched": true
+      }
+    },
+    "edited": {
+      "at": "2026-11-01T23:26:09.068Z",
+      "stage": "edited",
+      "status": 200,
+      "submission": {
+        "id": 79,
+        "at": "2026-11-01T23:26:05.497Z",
+        "path": "/mission/c7f66600b7f80fc0/draft",
+        "method": "PATCH",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "body": {
+          "request": "这是一份未执行的表单校验草稿，仅保存此请求以核对标题和描述；不启动任务或调用模型。\n补充：以当前标题和真实目录为准。",
+          "expectedRequest": "这是一份未执行的表单校验草稿，仅保存此请求以核对标题和描述；不启动任务或调用模型。"
+        }
+      },
+      "record": {
+        "missionID": "c7f66600b7f80fc0",
+        "sessionID": "ses_-zUQENsLqzzjXteuzqt3",
+        "title": "表单校验验收886（未执行）",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "created": 1793575525877,
+        "updated": 1793575565502,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "这是一份未执行的表单校验草稿，仅保存此请求以核对标题和描述；不启动任务或调用模型。\n补充：以当前标题和真实目录为准。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      "projectName": "Project journey 773",
+      "persisted": {
+        "sessionID": "ses_-zUQENsLqzzjXteuzqt3",
+        "projectID": "prj_hFmj1f6BXMBemXaPwm5n",
+        "kind": "mission",
+        "title": "表单校验验收886（未执行）",
+        "pendingRequestMatched": true,
+        "directoryMatched": true,
+        "squadsMatched": true
+      }
+    },
+    "final": {
+      "at": "2026-11-01T23:42:14.848Z",
+      "status": 200,
+      "record": {
+        "missionID": "c7f66600b7f80fc0",
+        "sessionID": "ses_-zUQENsLqzzjXteuzqt3",
+        "title": "表单校验验收886（未执行）",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "created": 1793575525877,
+        "updated": 1793575565502,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "这是一份未执行的表单校验草稿，仅保存此请求以核对标题和描述；不启动任务或调用模型。\n补充：以当前标题和真实目录为准。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      "persistedProjectID": "prj_hFmj1f6BXMBemXaPwm5n",
+      "requestMatched": true,
+      "originalDraftIdentityMatched": true,
+      "runtimeConfigurationBytesPreserved": true
+    }
+  },
+  "fieldObservations": {
+    "staleTitle": {
+      "image": "16-after-corrected-fields-stale-root-enclosure-zh.jpg",
+      "ariaInvalid": null,
+      "rootInvalid": "",
+      "border": "rgb(231, 152, 152)"
+    },
+    "finalTyping": {
+      "ariaInvalid": null,
+      "border": "rgb(91, 141, 239)",
+      "caret": 15,
+      "focused": true,
+      "rootInvalid": null,
+      "value": "Keep typing 886"
+    },
+    "finalProvider": {
+      "ariaInvalid": null,
+      "border": "rgb(91, 141, 239)",
+      "caret": 22,
+      "focused": true,
+      "rootInvalid": null,
+      "value": "https://example.com/v1"
+    }
+  },
+  "physicalClose": {
+    "before": {
+      "originalToolHandle": 41312,
+      "originalHandleConsumed": true,
+      "code": 0
+    },
+    "after": {
+      "originalToolHandle": 77910,
+      "originalHandleConsumed": true,
+      "code": 0
+    },
+    "final": {
+      "originalToolHandle": 2011,
+      "originalHandleConsumed": true,
+      "code": 0
+    },
+    "final2": {
+      "originalToolHandle": 97421,
+      "originalHandleConsumed": true,
+      "code": 0
+    }
+  },
+  "allPublicShutdown": 200,
+  "pairedCopiesRetired": 8,
+  "limitations": [
+    "Intermediate stale-border and focus-loss screenshots are retained and identified.",
+    "Actual visual coverage includes Mission and Provider; the complete combination matrix of all 15 TextField consumers was not rerun.",
+    "First model quota for every stage was zero; no model workflow acceptance is claimed.",
+    "API URL is a technical identifier and package-owned squad text retains its original content."
+  ],
+  "primaryReference": "https://docs.solidjs.com/concepts/components/props"
+}
