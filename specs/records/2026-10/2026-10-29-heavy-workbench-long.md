@@ -1138,3 +1138,18 @@ Recall：用户要完整重型任务的实质质量，不再接受工程文件�
 - 19页23关键视图实际render/view，原标题截断/长浮点/遗留错误说明重叠据图在同一producer修正，修后复看；现金源+1使现金/银行book控制各+1、独立银行仍未知，真实内存副本未覆盖交付。ArtifactTool2.8.106/Node24.22.1/Py3.12.14，未用Excel窗口、Docker、UI自动化、Provider或模型请求；只在自有calc-deps装独立库，原科学env/GPU不改。
 - 源身份新事实：固定parquet逐字段对captured row只有prompt/rubric_json/rubric_pretty三文字字段字节不同；原料/交付文件列表/URI及task同。prompt diff为固定替换字符与原捕获标点/项目符号、末尾换行差，原对象/完整diff照保，未宣布所有字段相同/rowrevision已核。首次consumer误把源杂项B5常数公式当literal，native1原工具错误保；只新算该源后同核数过。补丁上下文验证失败/错误目录观察未改业务对象，属于root工具准备，不当共享生产异常。
 - 当前交的是完整可审作者参考，不是独立整题审查/公司政策确认/财务签字、职业统计成熟、合法变体全覆盖或候选成绩。原支持大量预填、13秒作者生产不证明候选数小时；原十题/有效候选小时0/10不变。此实物闭合后禁止重复作者源分析/生产/错误/图/刷新/检查器刷资格；无授权不新模型/审查或机械版。通用修正已实施、有限场景通过、行为改善/根治效果未证仍最高。
+
+### 月结一次独立整审新增授权与Recall（2026-11-01）
+
+- 用户对原async问题明确回答“授权这一次独立整审”，覆盖且仅覆盖本月结完整对象的一次集中独立agent审查。此后不再重复询问同一授权；自动候选/后续审查仍false，不调用Provider或旧预算/服务。先落cases/month-end-package/independent-review/PLAN.md再委托，严格一层、禁止再次委托。
+- 开始Git HEAD=upstream b62c80cb91e2ea7577b6a8dba77435fd09dc70d2，benchmark范围clean、staged空，foreign181保。审查只读封定公私源/原参考与错误XLSX/源/实际收据/23既有PNG，要求原prompt和原源优先，不信作者数量/标题，逐M01–M13核来源/业务结果/判断/视觉/reader效度、合法替代与可达/深度。只有必要直接源小算术spot，不重作者producer/checker/公式/刷新/render、不安装/开服务/新候选。
+- Root负责核验独评证据和保存，不在本轮修原参考/阈值/评分或另开复评；原artifact/旧错误/原分保持。审查未知部分如实unknown，不等同真人职业认证/统计成熟/候选数小时或Codex结果。用户授权了审查，不是授权宣布任务ready或再次使用退休凭据/模型预算。
+
+### 月结唯一集中独审自然完成：原参考/公平评测未就绪（2026-11-01）
+
+- 唯一assignment month-end-whole-case-38c7a899ab9c4d5388e2ae1ac9cfa209、/root/month_end_review（fork none/无override）自然完成，REVIEW.md/assessment.json/evidence-log.json在D:/opencorvus-benchmark-runs/gdpval-month-end-review-20261101。review_complete=true、remaining_work=[]仅指这一次审查；13维均有独立状态、23既有PNG真实view。原97成员/5061116bytes快照ZIP3099703bytes只作身份，未冒全workspace/财务验收。只有本次授权LLM-agent审查本身，底层model/usage未知，无额外Provider/nativeTask/模型API/凭据/服务、再次委托、原工作簿写或作者producer/checker/公式/刷新/render；不以评估侧时间补候选小时。
+- 独评9项F01–F09：原预付分母/覆盖期间/描述矛盾仍未具体升级；corporate April E18“need to reallocate”在Payroll-1和参考中缺失；原TB损益/清算Proof语义未恢复；165000/−84000/−159695桥有原预付/法律/transfer-pricing组件但仅泛问；奖金B15固定源观察与B13公式角色未区分；AR GA-0015→division10缺公开crosswalk；实际legal身份截断/TOC状态泛；坐标/缓存reader不覆盖全题合法变化与坏输出；原44项rubric/专家改1251导致49137.41总资产/利润差、要求重复法律小计870569.38和未公开AP私料，不能当忠实原源真值。只此task，不外推整个GDPval无效，不补新分或强行找失败。
+- Root只读特定原格核证：两原工资E18确实一有注一空且参考空；奖金B13=SUM(B5:B12)但B15为原源同数literal，当前金额没有错，新输入后的分歧只是静态依赖推论，没有新刷新实验；March TB C102:E104/C114:E114在参考只余asset/liability/income/expense汇总、相关Proof缺；预付BU20/36/37=81000/28000/56000及BU47、原法律March31 M55/M56与2011 B5提供桥候选。金额精确相合不证明因果过账/公司批准，AR映射也未证明实际错。原JSON/源/图定位与root-reconciliation保，未修财务或评分。
+- 旧明示数值匹配仍保：105/5/122/874是相关合同观察，不是全题通过率/独立统计样本。错误159ledger差异=145金额字段+8缺身份+6名称/空白/类别等元数据，不冒159独立货币错误；33支持不匹配=30既有结果错+3后来新增本金控制缺失。旧错误产物早于当前参考增强，不冒当前producer只有一行干预的完美对照。0/4/native原收据不改。
+- 独评结论：有用的完整待审实物，reference_quality.ready=false、candidate_grading.ready=false、hours_and_depth.qualified=false、model_launch.ready=false。未能重复完整captured-row/parquet字段比较是冻结scope边界，原三文字差/身份收据仍保，不补对象再审。AP/银行独立源/coverage/entity/postedjournal/公司政策/Excel原生/合法变体实测/真人统计成熟/候选小时仍未满足；这不是本assignment待重开工作。
+- 原REVIEW/assessment/evidence-log/spot、读取原工具及root具体核证投影到cases/month-end-package/independent-review，完整public/target cell观察、原公私XLSX/快照/原临时输出外部保。独评inline观察无保存、cp1252、comprehension语法和EmptyCell查询错误原evidence-log照记，均为只读观察工具问题，不当共享生产异常。没有新candidate/Provider、修复/复验或第二次整审。授权现已消费完成，不再等同一授权/不再重复问；全十题/有效小时0/10仍未达，通用修正行为根治未证。

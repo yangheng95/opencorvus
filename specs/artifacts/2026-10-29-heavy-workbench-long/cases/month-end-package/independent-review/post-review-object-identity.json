@@ -1,0 +1,396 @@
+{
+  "at": "2026-11-01T04:13:30.062376+00:00",
+  "assignment_id": "month-end-whole-case-38c7a899ab9c4d5388e2ae1ac9cfa209",
+  "identity_only_not_acceptance": true,
+  "objects": [
+    {
+      "path": "case/AUTHOR-REVIEW.md",
+      "same_original_object": true
+    },
+    {
+      "path": "case/BUILD-PLAN.md",
+      "same_original_object": true
+    },
+    {
+      "path": "case/build_package.mjs",
+      "same_original_object": true
+    },
+    {
+      "path": "case/CFO-HANDOFF.md",
+      "same_original_object": true
+    },
+    {
+      "path": "case/check_package.py",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/actual-recalculated-values.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/actual-refresh.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/delivery.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/final-delivery-commands.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/final-reference-build-delivery.stderr",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/final-reference-build-delivery.stdout",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/final-reference-layout-delivery.stderr",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/final-reference-layout-delivery.stdout",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/final-reference-measure-delivery.stderr",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/final-reference-measure-delivery.stdout",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/final-reference-views-delivery.stderr",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/final-reference-views-delivery.stdout",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/final-wrong-stale-tb-measure-delivery.stderr",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/final-wrong-stale-tb-measure-delivery.stdout",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/first-executed-programme.mjs",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/first-programme-commands.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/fixed-source-identity.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/formula-error-scan.ndjson",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/independent-source-recalculation.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/layout-receipt.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/misc-source-recalculation.stderr",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/misc-source-recalculation.stdout",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/projection-scope.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/reference-measurements.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/source-recalculation-terminal.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/source-recalculation.stderr",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/source-recalculation.stdout",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/tool-incidents.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/evidence/wrong-measurements.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/independent-review/PLAN.md",
+      "same_original_object": true
+    },
+    {
+      "path": "case/prepare_source.py",
+      "same_original_object": true
+    },
+    {
+      "path": "case/preserve_layout.py",
+      "same_original_object": true
+    },
+    {
+      "path": "case/public/INPUTS.json",
+      "same_original_object": true
+    },
+    {
+      "path": "case/public/QUALITY-CONTRACT.md",
+      "same_original_object": true
+    },
+    {
+      "path": "case/README.md",
+      "same_original_object": true
+    },
+    {
+      "path": "case/recompute_sources.py",
+      "same_original_object": true
+    },
+    {
+      "path": "case/SOURCE-FLOW.md",
+      "same_original_object": true
+    },
+    {
+      "path": "case/view_package.mjs",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/00-toc.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/01-tb-head.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/01-tb-tail.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/02-cash.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/03-bank.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/04-funding.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/05-prepaids.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/06-insurance.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/07-fees.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/08-legal-head.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/08-legal-tail.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/09-loan1-april.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/09-loan1-terms.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/10-loan2.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/11-ap.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/12-ar.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/13-payroll.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/14-rebates.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/15-uninvoiced.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/16-bonus.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/17-misc.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/18-issues.png",
+      "same_original_object": true
+    },
+    {
+      "path": "case/views/19-issues-tail.png",
+      "same_original_object": true
+    },
+    {
+      "path": "expert/Aurisic_Financials_4-25-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Accr2011-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/AccrBonus-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/AccrMisc-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/AR_Accrual-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Aurisic_Corp_Payrolls_April_2025-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Aurisic_Final_TB_4-25-1.txt",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Aurisic_Financials_3-25-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Aurisic_Prepaid_Expenses_4-25-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Good Insurance Co - Loan II.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Good Insurance Co - Loan.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Legal_Dump-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Outstanding_CKs_4-30-25-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Payroll-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/PPD1250-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/PPD1251-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Prof_Fee_Dump-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/Rebates-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "public/TASK.original.txt",
+      "same_original_object": true
+    },
+    {
+      "path": "reference/actual-recalculated-values.json",
+      "same_original_object": true
+    },
+    {
+      "path": "reference/actual-refresh.json",
+      "same_original_object": true
+    },
+    {
+      "path": "reference/Aurisic_Financials_4-25-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "reference/full-source-measurements.json",
+      "same_original_object": true
+    },
+    {
+      "path": "source-provenance/download-receipt.json",
+      "same_original_object": true
+    },
+    {
+      "path": "source-provenance/fixed-source-identity.json",
+      "same_original_object": true
+    },
+    {
+      "path": "source-provenance/prompt-revision.diff",
+      "same_original_object": true
+    },
+    {
+      "path": "source-provenance/rubric.original.json",
+      "same_original_object": true
+    },
+    {
+      "path": "source-provenance/rubric.original.txt",
+      "same_original_object": true
+    },
+    {
+      "path": "source-provenance/TASK.fixed-revision.txt",
+      "same_original_object": true
+    },
+    {
+      "path": "wrong-stale-tb/Aurisic_Financials_4-25-1.xlsx",
+      "same_original_object": true
+    },
+    {
+      "path": "wrong-stale-tb/full-source-measurements.json",
+      "same_original_object": true
+    }
+  ],
+  "all_original_objects_retained": true
+}

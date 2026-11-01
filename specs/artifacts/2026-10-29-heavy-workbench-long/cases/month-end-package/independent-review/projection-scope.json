@@ -1,0 +1,75 @@
+{
+  "assignment_id": "month-end-whole-case-38c7a899ab9c4d5388e2ae1ac9cfa209",
+  "external_review_root": "D:\\opencorvus-benchmark-runs\\gdpval-month-end-review-20261101",
+  "scope": "Original completed review/report, bounded source spots, actual evidence log, root specific corroboration, original read-only observation scripts and object-identity receipts. No new financial production or model comparison.",
+  "external_only": [
+    "Frozen input directory and 3099703-byte complete input-snapshot.zip",
+    "Full public-cell-inspection.json and target-cell-inspection.json",
+    "All original public/expert/rubric workbooks, original reference and wrong XLSX",
+    "Full intermediate observations and registration history"
+  ],
+  "original_financial_objects_changed": false,
+  "functional_acceptance_from_identity": false,
+  "members": [
+    {
+      "path": "assessment.json",
+      "bytes": 26854
+    },
+    {
+      "path": "dispatch-receipt.json",
+      "bytes": 809
+    },
+    {
+      "path": "evidence-log.json",
+      "bytes": 22338
+    },
+    {
+      "path": "object-binding-verification.json",
+      "bytes": 13552
+    },
+    {
+      "path": "original-review-tools/inspect_public.py",
+      "bytes": 1352
+    },
+    {
+      "path": "original-review-tools/inspect_targets.py",
+      "bytes": 1536
+    },
+    {
+      "path": "original-review-tools/review_spotchecks.py",
+      "bytes": 4403
+    },
+    {
+      "path": "original-review-tools/root_reconcile_evidence.py",
+      "bytes": 2481
+    },
+    {
+      "path": "PLAN.md",
+      "bytes": 3303
+    },
+    {
+      "path": "post-review-object-identity.json",
+      "bytes": 10224
+    },
+    {
+      "path": "README.md",
+      "bytes": 5987
+    },
+    {
+      "path": "registration.json",
+      "bytes": 18082
+    },
+    {
+      "path": "REVIEW.md",
+      "bytes": 34191
+    },
+    {
+      "path": "root-reconciliation.json",
+      "bytes": 8012
+    },
+    {
+      "path": "spotchecks.json",
+      "bytes": 22350
+    }
+  ]
+}

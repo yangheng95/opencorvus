@@ -1,0 +1,489 @@
+{
+  "assignment_id": "month-end-whole-case-38c7a899ab9c4d5388e2ae1ac9cfa209",
+  "review_complete": true,
+  "remaining_work": [],
+  "inspection_order": [
+    "AGENTS.md, registration and spreadsheet read-only skill",
+    "Original task and public quality contract",
+    "Actual public workbook/TB cells before target claims",
+    "Saved reference/wrong formula, value and metadata observations",
+    "All 23 existing PNGs actually viewed; no render rerun",
+    "Source/build/consumer/layout/view scripts and execution/source/refresh receipts",
+    "Late evaluator-only rubric/expert inspection",
+    "Author README/AUTHOR-REVIEW/CFO-HANDOFF as claims"
+  ],
+  "source_inventory": {
+    "public_workbooks": [
+      "AR_Accrual-1.xlsx",
+      "Accr2011-1.xlsx",
+      "AccrBonus-1.xlsx",
+      "AccrMisc-1.xlsx",
+      "Aurisic_Corp_Payrolls_April_2025-1.xlsx",
+      "Aurisic_Financials_3-25-1.xlsx",
+      "Aurisic_Prepaid_Expenses_4-25-1.xlsx",
+      "Good Insurance Co - Loan II.xlsx",
+      "Good Insurance Co - Loan.xlsx",
+      "Legal_Dump-1.xlsx",
+      "Outstanding_CKs_4-30-25-1.xlsx",
+      "PPD1250-1.xlsx",
+      "PPD1251-1.xlsx",
+      "Payroll-1.xlsx",
+      "Prof_Fee_Dump-1.xlsx",
+      "Rebates-1.xlsx"
+    ],
+    "public_texts": [
+      "TASK.original.txt",
+      "Aurisic_Final_TB_4-25-1.txt"
+    ],
+    "missing_named_input": "AP_TB-1.xlsx",
+    "all_nonempty_public_cells_machine_read": true,
+    "full_public_cell_observations": "public-cell-inspection.json",
+    "all_formulas_accounting_certified": false
+  },
+  "saved_workbooks_inspected": [
+    "input/reference/Aurisic_Financials_4-25-1.xlsx",
+    "input/wrong-stale-tb/Aurisic_Financials_4-25-1.xlsx"
+  ],
+  "late_evaluator_only": [
+    "input/expert/Aurisic_Financials_4-25-1.xlsx",
+    "input/source-provenance/rubric.original.txt",
+    "input/source-provenance/rubric.original.json"
+  ],
+  "code_read": [
+    "input/case/prepare_source.py",
+    "input/case/build_package.mjs",
+    "input/case/check_package.py",
+    "input/case/recompute_sources.py",
+    "input/case/preserve_layout.py",
+    "input/case/view_package.mjs",
+    "input/case/evidence/first-executed-programme.mjs (full text read for focused diff against final)"
+  ],
+  "claims_read_after_source_work": [
+    "input/case/README.md",
+    "input/case/AUTHOR-REVIEW.md",
+    "input/case/CFO-HANDOFF.md",
+    "input/case/SOURCE-FLOW.md",
+    "input/case/BUILD-PLAN.md",
+    "input/case/public/INPUTS.json"
+  ],
+  "receipts_read": [
+    "input/case/evidence/actual-recalculated-values.json",
+    "input/case/evidence/actual-refresh.json",
+    "input/case/evidence/delivery.json",
+    "input/case/evidence/final-delivery-commands.json",
+    "input/case/evidence/first-programme-commands.json",
+    "input/case/evidence/fixed-source-identity.json",
+    "input/case/evidence/formula-error-scan.ndjson",
+    "input/case/evidence/independent-source-recalculation.json",
+    "input/case/evidence/layout-receipt.json",
+    "input/case/evidence/source-recalculation-terminal.json",
+    "input/case/evidence/source-recalculation.stdout",
+    "input/case/evidence/source-recalculation.stderr",
+    "input/case/evidence/misc-source-recalculation.stdout",
+    "input/case/evidence/misc-source-recalculation.stderr",
+    "input/case/evidence/tool-incidents.json",
+    "input/case/evidence/projection-scope.json",
+    "input/case/evidence/final-reference-build-delivery.stdout",
+    "input/case/evidence/final-reference-build-delivery.stderr",
+    "input/case/evidence/final-reference-measure-delivery.stdout",
+    "input/case/evidence/final-wrong-stale-tb-measure-delivery.stdout",
+    "input/case/evidence/final-reference-views-delivery.stdout",
+    "input/reference/full-source-measurements.json",
+    "input/wrong-stale-tb/full-source-measurements.json",
+    "input/source-provenance/download-receipt.json (opening provenance entries)",
+    "input/source-provenance/prompt-revision.diff"
+  ],
+  "observations_and_arithmetic": {
+    "public_cells": "public-cell-inspection.json",
+    "target_cells_formula_cache_metadata": "target-cell-inspection.json",
+    "bounded_spots_and_original_report_summary": "spotchecks.json",
+    "dimension_specific_cells": [
+      {
+        "dimension": "M01",
+        "evidence": [
+          "public/Aurisic_Final_TB_4-25-1.txt: all original account records and printed category controls",
+          "reference/Aurisic_Financials_4-25-1.xlsx:#3a) TB convert 4-30-25!A99:F106,D109:E113",
+          "reference/full-source-measurements.json:ledger 105/105, zero listed differences"
+        ],
+        "code": [
+          "case/prepare_source.py:10-38",
+          "case/check_package.py:14-68",
+          "case/build_package.mjs:50-63"
+        ]
+      },
+      {
+        "dimension": "M02",
+        "evidence": [
+          "public/Aurisic_Financials_3-25-1.xlsx:#4) Cash Availability Status!B5,B8:B21",
+          "reference/Aurisic_Financials_4-25-1.xlsx:#4) Cash Availability Status!B5,B8:B15,B17,B19,B21",
+          "reference/full-source-measurements.json:cash_controls five matches"
+        ],
+        "code": [
+          "case/build_package.mjs:65-72",
+          "case/check_package.py:69-85"
+        ]
+      },
+      {
+        "dimension": "M03",
+        "evidence": [
+          "public/Outstanding_CKs_4-30-25-1.xlsx:#6) Bank recon 4-30-25!A7:E8,C4,B10,C12,C14,C16",
+          "reference/Aurisic_Financials_4-25-1.xlsx:#5) Bank recon 4-30-25!B10,C4,C12,C14,C16,C18,A19",
+          "case/views/03-bank.png"
+        ],
+        "code": [
+          "case/build_package.mjs:73-77",
+          "case/check_package.py:121-125"
+        ]
+      },
+      {
+        "dimension": "M04",
+        "evidence": [
+          "public/Aurisic_Financials_3-25-1.xlsx:#6) Aurisic Funding Sources!A5:A11,D5:E17",
+          "reference/Aurisic_Financials_4-25-1.xlsx:#6) Aurisic Funding Sources!D5:G18,A20:A21",
+          "case/views/04-funding.png"
+        ],
+        "code": [
+          "case/build_package.mjs:79-92",
+          "case/check_package.py:126-129"
+        ]
+      },
+      {
+        "dimension": "M05",
+        "evidence": [
+          "public/PPD1250-1.xlsx:PPD Exps #1250 (2025)!BV40,BW40,BY40,BZ40,BY8,BY17,BY22:BY23",
+          "public/PPD1251-1.xlsx:PPD Ins #1251 (2025)!AR4,AS29,AT29:AT35,AU30",
+          "public/Aurisic_Prepaid_Expenses_4-25-1.xlsx:PPD Exps #1250!BX9,BX53; PPD Ins #1251 (2024)!AR4,AT5,AT29:AT32",
+          "reference/Aurisic_Financials_4-25-1.xlsx:#7!BX46:BX49; #8!AT32:AT35",
+          "case/evidence/independent-source-recalculation.json; case/views/05-prepaids.png; case/views/06-insurance.png"
+        ],
+        "code": [
+          "case/build_package.mjs:94-105,113-117,149-151",
+          "case/recompute_sources.py:18-25",
+          "case/check_package.py:130-143"
+        ]
+      },
+      {
+        "dimension": "M06",
+        "evidence": [
+          "public/Prof_Fee_Dump-1.xlsx:Prof Fees Dump!W3,V4:W10",
+          "public/Legal_Dump-1.xlsx:Legal Dump!L3:M59,L60:M63,C55:M59",
+          "reference/Aurisic_Financials_4-25-1.xlsx:#9!W10; #10!L62:M63,L65:L66",
+          "case/views/07-fees.png; case/views/08-legal-head.png; case/views/08-legal-tail.png"
+        ],
+        "code": [
+          "case/build_package.mjs:106-120",
+          "case/check_package.py:144-148,183-199"
+        ]
+      },
+      {
+        "dimension": "M07",
+        "evidence": [
+          "public/Good Insurance Co - Loan.xlsx:OMAHA!B72:B74,D74:H74,E73",
+          "public/Good Insurance Co - Loan II.xlsx:OMAHAII!B22:B24,D24:H24,E23",
+          "reference/Aurisic_Financials_4-25-1.xlsx:#11a!E80:E86; #11b!F24:G24",
+          "case/views/09-loan1-terms.png; case/views/09-loan1-april.png; case/views/10-loan2.png"
+        ],
+        "code": [
+          "case/build_package.mjs:121-126",
+          "case/check_package.py:149-157",
+          "case/recompute_sources.py:21-22"
+        ]
+      },
+      {
+        "dimension": "M08",
+        "evidence": [
+          "public/Aurisic_Corp_Payrolls_April_2025-1.xlsx:April 2025!E18,C18:D18",
+          "public/Payroll-1.xlsx:Payroll Accrual!E18,C6:D6,C18:D18,C25:C33,E28:F29",
+          "public/AR_Accrual-1.xlsx:AR Accrual #1101!A4:B6",
+          "public/AccrBonus-1.xlsx:Bonus Accru #2401!B13,B15,B18:B19",
+          "public/Accr2011-1.xlsx:Aurisic Global Accrual #2011!A4:B7; public/AccrMisc-1.xlsx:Misc Accruals #2410!B5,C10; public/Rebates-1.xlsx:Vendor Rebates!B4:B11",
+          "reference/Aurisic_Financials_4-25-1.xlsx:#13!A4:B12; #14!E18,C36:C40; #15!B11:B14; #16!B7:B10; #17!B13:B22; #18!C10:C13"
+        ],
+        "code": [
+          "case/build_package.mjs:33-39,133-144,153-156",
+          "case/check_package.py:158-176,183-199"
+        ]
+      },
+      {
+        "dimension": "M09",
+        "evidence": [
+          "reference/Aurisic_Financials_4-25-1.xlsx:CFO Review Issues!B15:F26",
+          "public/PPD1250-1.xlsx:PPD Exps #1250 (2025)!BU20,BU36:BU37,BU47",
+          "public/Legal_Dump-1.xlsx:Legal Dump!C55,C56,K55:K56,M55:M56,L57:L58",
+          "public/Accr2011-1.xlsx:Aurisic Global Accrual #2011!A5:B5",
+          "public/Aurisic_Financials_3-25-1.xlsx:#3a) TB convert 3-31-25!E6,E26,E57; public/Aurisic_Final_TB_4-25-1.txt:1250/2011/6200"
+        ],
+        "code": [
+          "case/prepare_source.py:33-38",
+          "case/build_package.mjs:157-160"
+        ]
+      },
+      {
+        "dimension": "M10",
+        "evidence": [
+          "reference/Aurisic_Financials_4-25-1.xlsx:#12!B4,G6,G8,B10,G12; #5!C4,C12,C18; CFO Review Issues!A4:F26",
+          "case/CFO-HANDOFF.md:7-18; case/views/11-ap.png; case/views/18-issues.png; case/views/19-issues-tail.png"
+        ],
+        "code": [
+          "case/build_package.mjs:128-132,145-160",
+          "case/check_package.py:177-179,204"
+        ]
+      },
+      {
+        "dimension": "M11",
+        "evidence": [
+          "public/Aurisic_Financials_3-25-1.xlsx:#3a) TB convert 3-31-25!C102:E104,C114:E114",
+          "reference/Aurisic_Financials_4-25-1.xlsx:Table of Contents!A6:C23; #3a!C109:E114; #10!G3:G15,J3:J15,E50; #6!G4",
+          "All 23 supplied case/views/*.png were actually viewed"
+        ],
+        "code": [
+          "case/build_package.mjs:22-31,51,57-62,106-112,166-168",
+          "case/preserve_layout.py:29-58",
+          "case/view_package.mjs:9-23"
+        ]
+      },
+      {
+        "dimension": "M12",
+        "evidence": [
+          "reference/Aurisic_Financials_4-25-1.xlsx:formula text/caches; no observed cached error cells or externalLink ZIP members",
+          "case/evidence/actual-recalculated-values.json; case/evidence/actual-refresh.json; case/evidence/independent-source-recalculation.json",
+          "reference/Aurisic_Financials_4-25-1.xlsx:#17!B13,B15,B18:B22"
+        ],
+        "code": [
+          "case/view_package.mjs:7-8,24-47",
+          "case/check_package.py:33,109-120,204",
+          "case/build_package.mjs:37-39,141-143"
+        ]
+      },
+      {
+        "dimension": "M13",
+        "evidence": [
+          "reference/Aurisic_Financials_4-25-1.xlsx:Table of Contents!A2,C6:C23; CFO Review Issues!A1,F4:F26",
+          "case/AUTHOR-REVIEW.md:7-25; case/CFO-HANDOFF.md:3-20; case/README.md:21-29,47"
+        ],
+        "code": [
+          "case/build_package.mjs:145-168",
+          "case/check_package.py:200-204"
+        ]
+      }
+    ]
+  },
+  "images_actually_viewed": [
+    {
+      "path": "input/case/views/00-toc.png",
+      "coverage": "TOC complete order/status rows",
+      "observation": "Legible; uniform statuses limit triage.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/01-tb-head.png",
+      "coverage": "TB headers and rows1-20",
+      "observation": "Signs/identities/amounts legible.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/01-tb-tail.png",
+      "coverage": "TB rows90-114 and category/proof area",
+      "observation": "Added accounts visible; proof area absent.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/02-cash.png",
+      "coverage": "Full cash schedule",
+      "observation": "Controls and source-scope labeling legible.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/03-bank.png",
+      "coverage": "Checks, blank statement input, unknown calculations and ledger control",
+      "observation": "Missing statement correctly visible; proposal separate.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/04-funding.png",
+      "coverage": "Funding/budget/actuals/averages/reference",
+      "observation": "Missing subsidiary split visible; G4 crowded; reference integers unformatted.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/05-prepaids.png",
+      "coverage": "Vendor list and current April columns plus controls",
+      "observation": "Period conflicts visible; monetary totals legible; historical columns hidden.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/06-insurance.png",
+      "coverage": "Insurance current period/detail/control",
+      "observation": "April values readable; March coverage note remains.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/07-fees.png",
+      "coverage": "Professional-fee signed movements and balance",
+      "observation": "Amount/signs readable; source row heights spacious.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/08-legal-head.png",
+      "coverage": "Legal source headers/first transactions",
+      "observation": "Supplier names and account titles clipped.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/08-legal-tail.png",
+      "coverage": "Legal reversals, subtotals, GL control",
+      "observation": "Amounts readable; E50 invoice clipped.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/09-loan1-april.png",
+      "coverage": "Loan I current period and combined controls",
+      "observation": "Dates/interest/principal controls readable.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/09-loan1-terms.png",
+      "coverage": "Loan I terms and opening",
+      "observation": "Supplied rate/maturity/payment distinctions visible.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/10-loan2.png",
+      "coverage": "Loan II terms, history and April",
+      "observation": "Principal/interest/payment distinctions visible.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/11-ap.png",
+      "coverage": "Missing-source AP schedule and known control",
+      "observation": "Missing file and Pending CFO clear.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/12-ar.png",
+      "coverage": "AR source label and two division controls",
+      "observation": "GA-0015 visible; mapping inference not labeled.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/13-payroll.png",
+      "coverage": "Payroll postings, estimate and 2200 bridge",
+      "observation": "Amounts legible; corporate-only reallocation note absent.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/14-rebates.png",
+      "coverage": "Rebate details and GL control",
+      "observation": "Signed payment and total readable.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/15-uninvoiced.png",
+      "coverage": "Uninvoiced details and GL comparison",
+      "observation": "Transfer-pricing item readable.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/16-bonus.png",
+      "coverage": "Bonus detail, headline and 10% reference",
+      "observation": "Duplicated headline and distinct reference visible; no role distinction.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/17-misc.png",
+      "coverage": "Miscellaneous signed detail and GL comparison",
+      "observation": "Details/controls readable.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": false
+    },
+    {
+      "path": "input/case/views/18-issues.png",
+      "coverage": "Issues rows1-14",
+      "observation": "Actually viewed, also original resolution; legible but generic actions.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": true
+    },
+    {
+      "path": "input/case/views/19-issues-tail.png",
+      "coverage": "Issues rows15-26",
+      "observation": "Actually viewed, also original resolution; numeric gaps readable, generic explanations.",
+      "method": "functions.view_image native image content; no new render",
+      "original_resolution_also_viewed": true
+    }
+  ],
+  "readiness_and_findings": "assessment.json and REVIEW.md",
+  "observed_original_failures_vs_inference": {
+    "original_recorded_failure": "Wrong stale-TB consumer exit4 and existing report mismatches, not reexecuted.",
+    "observed_reference_source_quality_gaps": [
+      "Source period/formula contradictions",
+      "Corporate payroll reallocation note omitted",
+      "Template proof block removed",
+      "AR entity mapping asserted without explicit public crosswalk",
+      "Legal identity clipping in actual PNGs"
+    ],
+    "static_inference_only": [
+      "Bonus B12 change would diverge from copied B15; no change executed",
+      "Legal alternative coordinate/wording/classification false-rejection witnesses",
+      "Cached literal, missing issue/TOC and changed unmeasured details could evade adapter"
+    ],
+    "not_proven": [
+      "Intended corrected amortization amount",
+      "Causal posting history for matching bridge candidates",
+      "AR mapping actually wrong",
+      "Baseline bonus B15 amount wrong",
+      "Statistical or model discrimination"
+    ]
+  },
+  "not_checked": [
+    "Missing AP listing and independent bank statement/approval.",
+    "Entity/allocation mappings and actual coverage terms.",
+    "Posted-journal history and causal approval of bridge candidates.",
+    "Company reporting/materiality/rounding policy and every historical formula accounting rationale.",
+    "Native Excel application interaction, printing and recalculation not performed.",
+    "No producer/checker/formula-engine/refresh/render reruns or counterexample workbooks/programs.",
+    "No empirical legal-alternative acceptance experiment.",
+    "Full captured row/fixed parquet field comparison unavailable within frozen evidence.",
+    "Candidate effective hours, discrimination and model quality not measured."
+  ],
+  "boundary_compliance": {
+    "authorized_LLM_agent_review_performed": true,
+    "underlying_review_model_identity": null,
+    "underlying_review_model_usage": null,
+    "further_agents": 0,
+    "additional_explicit_model_API_Provider_or_nativeTask_invocations": 0,
+    "credential_or_service_calls": 0,
+    "workbook_writes": 0,
+    "repository_writes": 0,
+    "producer_or_checker_runs": 0,
+    "formula_engine_refresh_or_render_reruns": 0,
+    "new_counterexample_programs": 0,
+    "existing_pngs_actually_viewed": 23
+  },
+  "review_tool_incidents": [
+    "An initial PowerShell inline multi-line Python invocation produced no saved observation file; the read-only script was subsequently written in Q and run successfully.",
+    "One terminal print hit cp1252 UnicodeEncodeError; observations were already saved and subsequent prints used UTF-8.",
+    "One summary one-liner had a Python comprehension SyntaxError; no target files were modified, then the bounded receipt-summary script completed.",
+    "One expert-print query hit EmptyCell row AttributeError; a subsequent enumerate-based read completed the targeted expert cells."
+  ],
+  "scope_of_complete": "All M01-M13, source attainability, original numeric/full-quality mismatch, original wrong programme categories, existing images and independent readiness verdicts addressed. No pending second pass or fixes."
+}

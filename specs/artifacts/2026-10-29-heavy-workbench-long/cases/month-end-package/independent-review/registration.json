@@ -1,0 +1,511 @@
+{
+  "assignment_id": "month-end-whole-case-38c7a899ab9c4d5388e2ae1ac9cfa209",
+  "created": "2026-11-01T03:59:31.345707+00:00",
+  "user_authorization": "Explicit async reply: \u6388\u6743\u8fd9\u4e00\u6b21\u72ec\u7acb\u6574\u5ba1",
+  "review_root": "D:\\opencorvus-benchmark-runs\\gdpval-month-end-review-20261101",
+  "input_root": "D:\\opencorvus-benchmark-runs\\gdpval-month-end-review-20261101\\input",
+  "source_case_commit": "a8cf23b620786403a5e1e789059ff6d51540dc62",
+  "repository_head_at_registration": "b62c80cb91e2ea7577b6a8dba77435fd09dc70d2",
+  "scope": "One complete month-end task independent review; identity binds original immutable objects, not acceptance or financial correctness",
+  "members": [
+    {
+      "path": "case/AUTHOR-REVIEW.md",
+      "bytes": 4195,
+      "sha256": "06c27ed6111f64d682f57df52753ac6a6e088c4747c0493fc69cfe84e384f3f9"
+    },
+    {
+      "path": "case/BUILD-PLAN.md",
+      "bytes": 5963,
+      "sha256": "9eab67584b134f14b969010ec94d8398c135ca210e6355c031da42d5833c175c"
+    },
+    {
+      "path": "case/build_package.mjs",
+      "bytes": 15102,
+      "sha256": "45d0df03128c3d8f2496afbb55b4ef794c099ff4bb9c75d5a63e94eeac5ba4f2"
+    },
+    {
+      "path": "case/CFO-HANDOFF.md",
+      "bytes": 4079,
+      "sha256": "7abed1be97d4f86cbaecca048ae28628d6ab150755614a6737300918501dcc54"
+    },
+    {
+      "path": "case/check_package.py",
+      "bytes": 14067,
+      "sha256": "f43a87f0c7379fa85461f6f7b1c593bc48617adb0268c5460148bfa616c66b12"
+    },
+    {
+      "path": "case/evidence/actual-recalculated-values.json",
+      "bytes": 2002,
+      "sha256": "ef89b2c50a93b719c9b4195e40d6b70bf06a816182a6a881485168c6c4044d40"
+    },
+    {
+      "path": "case/evidence/actual-refresh.json",
+      "bytes": 197,
+      "sha256": "834a61abbf8c496dd430eab5fc2c2c7cfc61e19d842686f661b01d6dbc81cdc8"
+    },
+    {
+      "path": "case/evidence/delivery.json",
+      "bytes": 1681,
+      "sha256": "23bf729626363dbdb3cd0acc2e2efaf4c1cfcfd32dc18b08b8e2830483708499"
+    },
+    {
+      "path": "case/evidence/final-delivery-commands.json",
+      "bytes": 3855,
+      "sha256": "a63f660657a418e357cc843db5ddcea14f8d12e0ba2ead765591de15d32e2524"
+    },
+    {
+      "path": "case/evidence/final-reference-build-delivery.stderr",
+      "bytes": 1005,
+      "sha256": "adca43d7e74c8b424c0f8f1ae8e00894c804326187e379c43b2438bbce61b5df"
+    },
+    {
+      "path": "case/evidence/final-reference-build-delivery.stdout",
+      "bytes": 421,
+      "sha256": "d21f5939cf05267499ae55ddae65b20b8cf0fed4cc4ed1a3f1dbb8eeb72c7ca5"
+    },
+    {
+      "path": "case/evidence/final-reference-layout-delivery.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "case/evidence/final-reference-layout-delivery.stdout",
+      "bytes": 215,
+      "sha256": "67c4ae5dd20c383f93c5528464b7fd267a2e1465bbca04a29ee05a918a5e6f64"
+    },
+    {
+      "path": "case/evidence/final-reference-measure-delivery.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "case/evidence/final-reference-measure-delivery.stdout",
+      "bytes": 124,
+      "sha256": "b60ae26803ff3b117328181860bb0510f90af35c471803e66beca9ac16b53a3b"
+    },
+    {
+      "path": "case/evidence/final-reference-views-delivery.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "case/evidence/final-reference-views-delivery.stdout",
+      "bytes": 314,
+      "sha256": "9455f7f17ede0be0416d997b84125c698678542acfb2ef0d566b84db8ef3997f"
+    },
+    {
+      "path": "case/evidence/final-wrong-stale-tb-measure-delivery.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "case/evidence/final-wrong-stale-tb-measure-delivery.stdout",
+      "bytes": 126,
+      "sha256": "6109e22ba014ffe6a5c9fc6e09b10c108b0ad836d022789ac50d90968345eae3"
+    },
+    {
+      "path": "case/evidence/first-executed-programme.mjs",
+      "bytes": 12888,
+      "sha256": "c5af40f9aa9f80e07068b63c8ac0f296696c41dc8ae50464fc95f0fe7567ee6e"
+    },
+    {
+      "path": "case/evidence/first-programme-commands.json",
+      "bytes": 4201,
+      "sha256": "9c9d87445c0abd74b140b92348e8ca8265e48a132140008db220475946f84f7b"
+    },
+    {
+      "path": "case/evidence/fixed-source-identity.json",
+      "bytes": 607,
+      "sha256": "a18fd0c4b8b8ccb3cac6d1d0c7888dff22fc38d15425c25b0da93d2bef9ac15d"
+    },
+    {
+      "path": "case/evidence/formula-error-scan.ndjson",
+      "bytes": 127,
+      "sha256": "de97f84516802e2330cf226bbebb085f15ad18c7cf258e121847f05503b51bba"
+    },
+    {
+      "path": "case/evidence/independent-source-recalculation.json",
+      "bytes": 5920,
+      "sha256": "cf3a85256c4662411401b156d361d1b3b713df9c0f0c991c2bcf75438eee5046"
+    },
+    {
+      "path": "case/evidence/layout-receipt.json",
+      "bytes": 225,
+      "sha256": "ec5e3b73dbb307a92dd22c0e2b267983d0b4eebf76ea1aeaae06dd41860bd506"
+    },
+    {
+      "path": "case/evidence/misc-source-recalculation.stderr",
+      "bytes": 90,
+      "sha256": "18fa58dd9d49000885aa1b28b92147d92234e6782376ef22034018784c4a2964"
+    },
+    {
+      "path": "case/evidence/misc-source-recalculation.stdout",
+      "bytes": 94,
+      "sha256": "34329ab2b9966764a8f0051d06cff0407ab2d7df680bcb92d24370bfa1cbd7b7"
+    },
+    {
+      "path": "case/evidence/projection-scope.json",
+      "bytes": 5914,
+      "sha256": "66e61e2985f58d843cb2e834d31b513d1d13b6925f67dded37834696f83b469a"
+    },
+    {
+      "path": "case/evidence/reference-measurements.json",
+      "bytes": 165638,
+      "sha256": "3a92bb0f6ac25a32feaa3bb812c740b577747145b7e9ebd748ba70a5f07dbfd6"
+    },
+    {
+      "path": "case/evidence/source-recalculation-terminal.json",
+      "bytes": 479,
+      "sha256": "db6e338440fbd0ae34805c1ef64415ff9dd07ae1f2e8bee22bb2b0b18c80b021"
+    },
+    {
+      "path": "case/evidence/source-recalculation.stderr",
+      "bytes": 793,
+      "sha256": "53a2d677582a1ea1f2850c5e5800c7dd0f53b891f336e942c1112a31227f88c8"
+    },
+    {
+      "path": "case/evidence/source-recalculation.stdout",
+      "bytes": 701,
+      "sha256": "bfe93df0d572871fc5c31868c818d39b18b6b933bfa07a54fbf8fe1dafb4c40b"
+    },
+    {
+      "path": "case/evidence/tool-incidents.json",
+      "bytes": 873,
+      "sha256": "1f1afc88c60e687d09c2b7da5b97ed036ef2c64bfd2a16216ae8bcba785c5ca0"
+    },
+    {
+      "path": "case/evidence/wrong-measurements.json",
+      "bytes": 203918,
+      "sha256": "3c2fbdc74fe0f2675a21566a5a35bc4ad04887806ffa6760adca86c9b6be28e2"
+    },
+    {
+      "path": "case/independent-review/PLAN.md",
+      "bytes": 3303,
+      "sha256": "2c73a3191eff4fe20220c4ac5f72055168eb31adc92e67b3cb7d4cfab6e8b021"
+    },
+    {
+      "path": "case/prepare_source.py",
+      "bytes": 3539,
+      "sha256": "e8a8c9f8e038dee6303128cc1b034de6dab067a87bbc105e36035e4df304b98d"
+    },
+    {
+      "path": "case/preserve_layout.py",
+      "bytes": 3873,
+      "sha256": "cd7b24e014b4e17e43ff38b9e0690487610c5d0698500601a000615c0764101c"
+    },
+    {
+      "path": "case/public/INPUTS.json",
+      "bytes": 5373,
+      "sha256": "fd7681f94a35540cd02c6ef48be10676655060c3b4af00bfea7e7a1774707666"
+    },
+    {
+      "path": "case/public/QUALITY-CONTRACT.md",
+      "bytes": 5005,
+      "sha256": "be9c6b4c6a9de54a1f5d78cd1c335a0734e2d7a4a3996fd0d3e28471feeb3871"
+    },
+    {
+      "path": "case/README.md",
+      "bytes": 8290,
+      "sha256": "7bc843308693890293eca799c6becce2ecbbc9f17a910f44ae2b175f1dc6863d"
+    },
+    {
+      "path": "case/recompute_sources.py",
+      "bytes": 3715,
+      "sha256": "e6541cebaafe76b5f5076a166ccf1064989861a938fcfe1c8c06cbe277aaf36b"
+    },
+    {
+      "path": "case/SOURCE-FLOW.md",
+      "bytes": 4978,
+      "sha256": "c347e51b750599628983729f00d6147243ae068f27fa48b45fec73e0b5b1f2fd"
+    },
+    {
+      "path": "case/view_package.mjs",
+      "bytes": 4418,
+      "sha256": "7cbe53d7377a0be6e337cf60097bf89a43283d69a1f68e57b0245e29ed95674b"
+    },
+    {
+      "path": "case/views/00-toc.png",
+      "bytes": 157751,
+      "sha256": "c1c2af65e51fa939c13fa7a91be27314bc6c9dadde8eaca6a056d4bffe500ceb"
+    },
+    {
+      "path": "case/views/01-tb-head.png",
+      "bytes": 117656,
+      "sha256": "f813cfb52c401e5319eb46dd62d5bee650a0c3e8ae4599462e1c457b1fec811d"
+    },
+    {
+      "path": "case/views/01-tb-tail.png",
+      "bytes": 136099,
+      "sha256": "ad1856c2950b01e0006a3ec7c6745b8c950511b6aed3765a2800032ca587acdb"
+    },
+    {
+      "path": "case/views/02-cash.png",
+      "bytes": 78837,
+      "sha256": "492c607f79775104e7c67162dc581561792eb5eabefd26a8bb32061041565a75"
+    },
+    {
+      "path": "case/views/03-bank.png",
+      "bytes": 70097,
+      "sha256": "8afdd081c34404b3ff75a650cf952fc1bf94ebfc50228242ce1c8b96036a0303"
+    },
+    {
+      "path": "case/views/04-funding.png",
+      "bytes": 136124,
+      "sha256": "5e7eed1d45dc02a51ec3a1f8480f9a1b87f508539da0577f156556ad75dde650"
+    },
+    {
+      "path": "case/views/05-prepaids.png",
+      "bytes": 367184,
+      "sha256": "ebecc552e37526ccb8e566a5d0f05c5fb4e7d652db695cc287b59fb7da0820db"
+    },
+    {
+      "path": "case/views/06-insurance.png",
+      "bytes": 261337,
+      "sha256": "014b3c8672450ad3a8f68fe6d6fc330363b2ef8028f61dad495ea1611d5f135f"
+    },
+    {
+      "path": "case/views/07-fees.png",
+      "bytes": 78614,
+      "sha256": "8760c06bf631153bacd5eca70fc858ec4146e6a8f21c425344e931e347cfb634"
+    },
+    {
+      "path": "case/views/08-legal-head.png",
+      "bytes": 116125,
+      "sha256": "d82bd301e6e96a9063f9fa6fdc64c40b75a38ab3767eceb8f7c892a0e05ea7b5"
+    },
+    {
+      "path": "case/views/08-legal-tail.png",
+      "bytes": 122218,
+      "sha256": "c432d3bc8112790437ae5146594e83858868979d8485114353b288fbcd2e9eaa"
+    },
+    {
+      "path": "case/views/09-loan1-april.png",
+      "bytes": 97897,
+      "sha256": "ef7b746dd53862f4afee07049e5d04fec1385e0a3c938b1f94100b2f7b5ddcc4"
+    },
+    {
+      "path": "case/views/09-loan1-terms.png",
+      "bytes": 53265,
+      "sha256": "58c1f9c48db31f6352b11162a85f7a31e69a7f536c54c9fa7c165b90a6bf1065"
+    },
+    {
+      "path": "case/views/10-loan2.png",
+      "bytes": 129233,
+      "sha256": "af0429b32f0eed5b1f85ad03bfe24aec3300ff2e3d314f713d9a56166a27a627"
+    },
+    {
+      "path": "case/views/11-ap.png",
+      "bytes": 34648,
+      "sha256": "57ab8b9ed6c54793e5b906d0e4e9ff5e4165eca9bf6a0eb9fa470b36fcf384a1"
+    },
+    {
+      "path": "case/views/12-ar.png",
+      "bytes": 39916,
+      "sha256": "ebb2c14d7cbd955b2ea157db9ebe30cec8c2f5b1daee32fae84a722751e923c4"
+    },
+    {
+      "path": "case/views/13-payroll.png",
+      "bytes": 174340,
+      "sha256": "d27536464102c97181420c62e9885720a7fb5582d06ce265e26a618558d429c5"
+    },
+    {
+      "path": "case/views/14-rebates.png",
+      "bytes": 45836,
+      "sha256": "fe3ef011b8091e9dc3ca46daf209ebd4722291249c3be08332dd4b5d6335b16a"
+    },
+    {
+      "path": "case/views/15-uninvoiced.png",
+      "bytes": 30315,
+      "sha256": "42d462d4ea680190064ca45f77a700aa7479fb9640977c16a4e794890f432305"
+    },
+    {
+      "path": "case/views/16-bonus.png",
+      "bytes": 76054,
+      "sha256": "24b488726b22dd8cf6ac5aac173ec61ad2bd3033c5426b741ee007dd1ae8c1a9"
+    },
+    {
+      "path": "case/views/17-misc.png",
+      "bytes": 53670,
+      "sha256": "56fbdb9f55d0abb130a24f6ccdd08e8579cfaa1a9378f2d24de9e37d612fc828"
+    },
+    {
+      "path": "case/views/18-issues.png",
+      "bytes": 165316,
+      "sha256": "b33b5e54a3fc7eccb0c8658edd6d0804f6d9a598517793ab2b2a129bf7a0573a"
+    },
+    {
+      "path": "case/views/19-issues-tail.png",
+      "bytes": 155905,
+      "sha256": "982ed5cf29614d007bf388d283fac31a560184322765fe70d886a05b19264065"
+    },
+    {
+      "path": "expert/Aurisic_Financials_4-25-1.xlsx",
+      "bytes": 93974,
+      "sha256": "5a63b873abc8244e2b72e46b5468d1706ee63656284b7e07be77ce317eadbfad"
+    },
+    {
+      "path": "public/Accr2011-1.xlsx",
+      "bytes": 9640,
+      "sha256": "d59163c5d3f3208192ea8955851ff3dd0a64788e13c1a37e93b35ae6929b71e0"
+    },
+    {
+      "path": "public/AccrBonus-1.xlsx",
+      "bytes": 10564,
+      "sha256": "36e703e3f02723cdc23f6686230262e445cddf1ea0fd359962cf40cdc5eca9d2"
+    },
+    {
+      "path": "public/AccrMisc-1.xlsx",
+      "bytes": 10401,
+      "sha256": "f362307a075b522de4d1735c184158d83581c08dba476e7d12741a0cbd6adb43"
+    },
+    {
+      "path": "public/AR_Accrual-1.xlsx",
+      "bytes": 9686,
+      "sha256": "c1f3ab8ce2914468eed1474179d6d483c822aeae35277358812f78886f7290d1"
+    },
+    {
+      "path": "public/Aurisic_Corp_Payrolls_April_2025-1.xlsx",
+      "bytes": 13680,
+      "sha256": "623d016a3aeab4e671b6b694aefc27407ddb75ab5af1d0667471c9e2926e344b"
+    },
+    {
+      "path": "public/Aurisic_Final_TB_4-25-1.txt",
+      "bytes": 12423,
+      "sha256": "348fbbd9e92703b1df1a72dd4ab269d5103a3cfecf28c3f45862bde41e771ef2"
+    },
+    {
+      "path": "public/Aurisic_Financials_3-25-1.xlsx",
+      "bytes": 86735,
+      "sha256": "35a7ac2f974b716793ed0c00f5144a333f39f36b5c93e3e3b863f1acd2576364"
+    },
+    {
+      "path": "public/Aurisic_Prepaid_Expenses_4-25-1.xlsx",
+      "bytes": 43084,
+      "sha256": "e2b6afaf79c631716f1f50538a47055fbee23648c8dea94e1ccdd3285e9f7393"
+    },
+    {
+      "path": "public/Good Insurance Co - Loan II.xlsx",
+      "bytes": 13719,
+      "sha256": "e93731e06706ce12023ae76ad2c80549319f9df0110c77e75c466b76f04b5f8a"
+    },
+    {
+      "path": "public/Good Insurance Co - Loan.xlsx",
+      "bytes": 18460,
+      "sha256": "2fa3c05b59973a753c04e59abe6770599e55afc5c8cfc5a2c913132663bfc477"
+    },
+    {
+      "path": "public/Legal_Dump-1.xlsx",
+      "bytes": 14929,
+      "sha256": "fb4078b5e1a301bc8873b6f89a49ae08d4cea9f15b880b1edfbeaf66e83a7701"
+    },
+    {
+      "path": "public/Outstanding_CKs_4-30-25-1.xlsx",
+      "bytes": 12370,
+      "sha256": "83118f0429d638112886ddd38d6e4dc04eddbebb1ba503c7078944fa1d16bca6"
+    },
+    {
+      "path": "public/Payroll-1.xlsx",
+      "bytes": 11252,
+      "sha256": "1ec5dff2ba854c21a8d721333170089f6b8d4c9d6893e7aa1b4679a82d46be22"
+    },
+    {
+      "path": "public/PPD1250-1.xlsx",
+      "bytes": 30651,
+      "sha256": "ce321db3a9291d4c66fe97f0ae705b3f714a45d3bc737638de0e056fea702b56"
+    },
+    {
+      "path": "public/PPD1251-1.xlsx",
+      "bytes": 18683,
+      "sha256": "3396ea7d0510f74ecc88c8eb30b3d971d13d9d89860729046fceb06735e5bc96"
+    },
+    {
+      "path": "public/Prof_Fee_Dump-1.xlsx",
+      "bytes": 11272,
+      "sha256": "b06e27b2ed79bfb9e69320a860fe3577f46c61ec548989e421b9c3ec5c5e8ae9"
+    },
+    {
+      "path": "public/Rebates-1.xlsx",
+      "bytes": 9746,
+      "sha256": "e854ea34c1744a1e7c008f625a568b00f93c6d9b2a9ff53a01915cbcff9cc8ce"
+    },
+    {
+      "path": "public/TASK.original.txt",
+      "bytes": 3043,
+      "sha256": "fbbfaadc84a95e15370b8d1d5ba050f4fb6939fe397a0886df44067b3ebb9368"
+    },
+    {
+      "path": "reference/actual-recalculated-values.json",
+      "bytes": 2002,
+      "sha256": "ef89b2c50a93b719c9b4195e40d6b70bf06a816182a6a881485168c6c4044d40"
+    },
+    {
+      "path": "reference/actual-refresh.json",
+      "bytes": 197,
+      "sha256": "834a61abbf8c496dd430eab5fc2c2c7cfc61e19d842686f661b01d6dbc81cdc8"
+    },
+    {
+      "path": "reference/Aurisic_Financials_4-25-1.xlsx",
+      "bytes": 511050,
+      "sha256": "135c3dcc0489f489c754daf7fc04f03552a34593f97c54f74d519139fc7bc77f"
+    },
+    {
+      "path": "reference/full-source-measurements.json",
+      "bytes": 165638,
+      "sha256": "3a92bb0f6ac25a32feaa3bb812c740b577747145b7e9ebd748ba70a5f07dbfd6"
+    },
+    {
+      "path": "source-provenance/download-receipt.json",
+      "bytes": 8565,
+      "sha256": "b7b03dbd06bf62616d89b5c2b76f8044dac0df334205d8e21dfeb478657c144a"
+    },
+    {
+      "path": "source-provenance/fixed-source-identity.json",
+      "bytes": 607,
+      "sha256": "a18fd0c4b8b8ccb3cac6d1d0c7888dff22fc38d15425c25b0da93d2bef9ac15d"
+    },
+    {
+      "path": "source-provenance/prompt-revision.diff",
+      "bytes": 5445,
+      "sha256": "be210f8a87290b0ae983d95e3806ebb2280b125361ed6b4e8f0d64a8be7a23e6"
+    },
+    {
+      "path": "source-provenance/rubric.original.json",
+      "bytes": 13671,
+      "sha256": "a2b15191251794bfa7fe7acdb21dd554868846f57ac5905f30bdbe5336035f72"
+    },
+    {
+      "path": "source-provenance/rubric.original.txt",
+      "bytes": 5614,
+      "sha256": "5755bc587cd723dab1e2c5b5eb0b5e8e67fdd8175099f2878374aaeb10beb70d"
+    },
+    {
+      "path": "source-provenance/TASK.fixed-revision.txt",
+      "bytes": 3069,
+      "sha256": "5afff8ae87268b45a9a8de72aa35b74b70900ddacc965eab35e3dbc7ee920840"
+    },
+    {
+      "path": "wrong-stale-tb/Aurisic_Financials_4-25-1.xlsx",
+      "bytes": 510283,
+      "sha256": "95ef1e47be94048607282cfd031c3bd36dfed93f5073bf7ee3a119712b540be7"
+    },
+    {
+      "path": "wrong-stale-tb/full-source-measurements.json",
+      "bytes": 203918,
+      "sha256": "3c2fbdc74fe0f2675a21566a5a35bc4ad04887806ffa6760adca86c9b6be28e2"
+    }
+  ],
+  "prohibited": [
+    "Further delegation",
+    "Candidate/Provider/service/model-budget requests",
+    "Author producer/checker/formula/refresh/render reruns",
+    "Repository or original workbook mutations",
+    "Docker/WSL/UI automation/user processes"
+  ],
+  "active_review": null,
+  "status": "single_authorized_review_completed_no_model_qualification",
+  "remaining_work": [
+    "root_scoped_publication"
+  ],
+  "dispatched": "2026-11-01T04:00:19.724697+00:00",
+  "completed": "2026-11-01T04:13:30.081925+00:00"
+}

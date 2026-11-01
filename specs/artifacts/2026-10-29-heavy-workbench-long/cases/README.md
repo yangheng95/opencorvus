@@ -1,6 +1,6 @@
 # 工程题包库存与重型评估有效性缺口
 
-新[完整April月结待审包](month-end-package/README.md)已交实际来源可追溯的全工作簿、独立源重算、真实错误同消费与全表视觉；公司缺失来源/版本冲突仍明示，未获独立整审、模型比较或数小时深度，不计下表完成率。
+新[完整April月结待审包](month-end-package/README.md)已有全工作簿、独立源重算/错误同消费与实际图；唯一获准[独立整审](month-end-package/independent-review/README.md)已完成，发现预付期间/工资独有注释/模板Proof及全题公平消费缺口，模型比较与数小时资格未就绪，不计下表完成率。
 
 新[工作量分配原型](workload-distribution/README.md)有完整实际参考/原料定位/真实错误消费，但尚未整审、运行候选或证明数小时难度；不纳入下表十题完成率。首查[热防护源任务](thermal-screening/README.md)缺公开几何且原专家交付不同源，未采用且不补隐藏模型。
 

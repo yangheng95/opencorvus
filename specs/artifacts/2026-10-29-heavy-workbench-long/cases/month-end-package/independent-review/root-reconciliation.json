@@ -1,0 +1,270 @@
+{
+  "at": "2026-11-01T04:07:47.134065+00:00",
+  "assignment_id": "month-end-whole-case-38c7a899ab9c4d5388e2ae1ac9cfa209",
+  "method": "Read saved formulas/inputs and caches from frozen originals. No workbook write, evaluation, refresh, renderer, producer or checker execution. These observations corroborate specific review findings, not a second whole-case review.",
+  "observations": [
+    {
+      "file": "reference/Aurisic_Financials_4-25-1.xlsx",
+      "sheet": "#17) Bonus Accrual #2401",
+      "cells": {
+        "B12": {
+          "formula_or_input": 40658.59,
+          "saved_value": 40658.59
+        },
+        "B13": {
+          "formula_or_input": "=SUM(B5:B12)",
+          "saved_value": 334593.73
+        },
+        "B15": {
+          "formula_or_input": 334593.73,
+          "saved_value": 334593.73
+        },
+        "B21": {
+          "formula_or_input": "=-'#3a) TB convert 4-30-25'!E32",
+          "saved_value": 334593.73
+        },
+        "B22": {
+          "formula_or_input": "=B21-B13",
+          "saved_value": 0
+        }
+      }
+    },
+    {
+      "file": "reference/Aurisic_Financials_4-25-1.xlsx",
+      "sheet": "#14) Payroll Accrual #2200",
+      "cells": {
+        "E18": {
+          "formula_or_input": null,
+          "saved_value": null
+        }
+      }
+    },
+    {
+      "file": "public/AccrBonus-1.xlsx",
+      "sheet": "Bonus Accru #2401",
+      "cells": {
+        "B12": {
+          "formula_or_input": 40658.59,
+          "saved_value": 40658.59
+        },
+        "B13": {
+          "formula_or_input": "=SUM(B5:B12)",
+          "saved_value": 334593.73
+        },
+        "B15": {
+          "formula_or_input": 334593.73,
+          "saved_value": 334593.73
+        }
+      }
+    },
+    {
+      "file": "public/Payroll-1.xlsx",
+      "sheet": "Payroll Accrual",
+      "cells": {
+        "E18": {
+          "formula_or_input": null,
+          "saved_value": null
+        }
+      }
+    },
+    {
+      "file": "public/Aurisic_Corp_Payrolls_April_2025-1.xlsx",
+      "sheet": "April 2025",
+      "cells": {
+        "E18": {
+          "formula_or_input": "need to reallocate",
+          "saved_value": "need to reallocate"
+        }
+      }
+    },
+    {
+      "file": "public/Aurisic_Financials_3-25-1.xlsx",
+      "sheet": "#3a) TB convert 3-31-25",
+      "cells": {
+        "C102": {
+          "formula_or_input": "Total Balance Sheet Accounts",
+          "saved_value": "Total Balance Sheet Accounts"
+        },
+        "D102": {
+          "formula_or_input": 0,
+          "saved_value": 0
+        },
+        "E102": {
+          "formula_or_input": 0,
+          "saved_value": 0
+        },
+        "C103": {
+          "formula_or_input": "Total Income & Expenses",
+          "saved_value": "Total Income & Expenses"
+        },
+        "D103": {
+          "formula_or_input": 28948.05,
+          "saved_value": 28948.05
+        },
+        "E103": {
+          "formula_or_input": -329248.04,
+          "saved_value": -329248.04
+        },
+        "C104": {
+          "formula_or_input": "Total Clearing Accounts",
+          "saved_value": "Total Clearing Accounts"
+        },
+        "D104": {
+          "formula_or_input": -28948.05,
+          "saved_value": -28948.05
+        },
+        "E104": {
+          "formula_or_input": 329248.04,
+          "saved_value": 329248.04
+        },
+        "C114": {
+          "formula_or_input": "Proof",
+          "saved_value": "Proof"
+        },
+        "D114": {
+          "formula_or_input": 28948.05,
+          "saved_value": 28948.05
+        },
+        "E114": {
+          "formula_or_input": -329248.04,
+          "saved_value": -329248.04
+        }
+      }
+    },
+    {
+      "file": "reference/Aurisic_Financials_4-25-1.xlsx",
+      "sheet": "#3a) TB convert 4-30-25",
+      "cells": {
+        "C109": {
+          "formula_or_input": "Assets",
+          "saved_value": "Assets"
+        },
+        "D109": {
+          "formula_or_input": "=SUMIF(F2:F106,\"a\",D2:D106)",
+          "saved_value": 334839.6100000001
+        },
+        "E109": {
+          "formula_or_input": "=SUMIF(F2:F106,\"a\",E2:E106)",
+          "saved_value": 33955902.019999996
+        },
+        "C110": {
+          "formula_or_input": "Liabilities",
+          "saved_value": "Liabilities"
+        },
+        "D110": {
+          "formula_or_input": "=SUMIF(F2:F106,\"l\",D2:D106)",
+          "saved_value": -334839.60999999987
+        },
+        "E110": {
+          "formula_or_input": "=SUMIF(F2:F106,\"l\",E2:E106)",
+          "saved_value": -33955902.01999999
+        },
+        "C111": {
+          "formula_or_input": "Balance-sheet control",
+          "saved_value": "Balance-sheet control"
+        },
+        "D111": {
+          "formula_or_input": "=D109+D110",
+          "saved_value": 2.3283064365386963e-10
+        },
+        "E111": {
+          "formula_or_input": "=E109+E110",
+          "saved_value": 7.450580596923828e-09
+        },
+        "C112": {
+          "formula_or_input": "Income",
+          "saved_value": "Income"
+        },
+        "D112": {
+          "formula_or_input": "=SUMIF(F2:F106,\"i\",D2:D106)",
+          "saved_value": -1258639.35
+        },
+        "E112": {
+          "formula_or_input": "=SUMIF(F2:F106,\"i\",E2:E106)",
+          "saved_value": -5003243.01
+        },
+        "C113": {
+          "formula_or_input": "Expenses",
+          "saved_value": "Expenses"
+        },
+        "D113": {
+          "formula_or_input": "=SUMIF(F2:F106,\"e\",D2:D106)",
+          "saved_value": 1095712.5799999998
+        },
+        "E113": {
+          "formula_or_input": "=SUMIF(F2:F106,\"e\",E2:E106)",
+          "saved_value": 4505763.2
+        },
+        "C114": {
+          "formula_or_input": null,
+          "saved_value": null
+        },
+        "D114": {
+          "formula_or_input": null,
+          "saved_value": null
+        },
+        "E114": {
+          "formula_or_input": null,
+          "saved_value": null
+        }
+      }
+    },
+    {
+      "file": "public/Legal_Dump-1.xlsx",
+      "sheet": "Legal Dump",
+      "cells": {
+        "C55": {
+          "formula_or_input": "2025-03-31 00:00:00",
+          "saved_value": "2025-03-31 00:00:00"
+        },
+        "D55": {
+          "formula_or_input": 325,
+          "saved_value": 325
+        },
+        "K55": {
+          "formula_or_input": "amort Apr-Jun",
+          "saved_value": "amort Apr-Jun"
+        },
+        "M55": {
+          "formula_or_input": -28000,
+          "saved_value": -28000
+        },
+        "C56": {
+          "formula_or_input": "2025-03-31 00:00:00",
+          "saved_value": "2025-03-31 00:00:00"
+        },
+        "D56": {
+          "formula_or_input": 325,
+          "saved_value": 325
+        },
+        "K56": {
+          "formula_or_input": "amort Apr-Jun",
+          "saved_value": "amort Apr-Jun"
+        },
+        "M56": {
+          "formula_or_input": -56000,
+          "saved_value": -56000
+        }
+      }
+    },
+    {
+      "file": "public/Accr2011-1.xlsx",
+      "sheet": "Aurisic Global Accrual #2011",
+      "cells": {
+        "A5": {
+          "formula_or_input": "Transfer Pricing Adjust y/e 3-31-25",
+          "saved_value": "Transfer Pricing Adjust y/e 3-31-25"
+        },
+        "B5": {
+          "formula_or_input": 159695,
+          "saved_value": 159695
+        }
+      }
+    }
+  ],
+  "interpretation_boundaries": [
+    "Bonus copied fixed summary currently equals its rollforward; refresh risk is static dependency inference, not observed current amount error.",
+    "Source-backed bridge candidates need company confirmation; numeric identity alone does not establish causal accounting reconciliation.",
+    "Lost payroll annotation and removed TB summary meaning are distinct from correctly preserved numeric inputs."
+  ]
+}

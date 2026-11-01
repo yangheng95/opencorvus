@@ -1,0 +1,494 @@
+{
+  "at": "2026-11-01T04:01:08.397198+00:00",
+  "assignment_id": "month-end-whole-case-38c7a899ab9c4d5388e2ae1ac9cfa209",
+  "identity_scope": "Only original immutable review objects; not functional or accounting acceptance",
+  "functional_acceptance_claim": false,
+  "members": [
+    {
+      "path": "case/AUTHOR-REVIEW.md",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 4195
+    },
+    {
+      "path": "case/BUILD-PLAN.md",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 5963
+    },
+    {
+      "path": "case/build_package.mjs",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 15102
+    },
+    {
+      "path": "case/CFO-HANDOFF.md",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 4079
+    },
+    {
+      "path": "case/check_package.py",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 14067
+    },
+    {
+      "path": "case/evidence/actual-recalculated-values.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 2002
+    },
+    {
+      "path": "case/evidence/actual-refresh.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 197
+    },
+    {
+      "path": "case/evidence/delivery.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 1681
+    },
+    {
+      "path": "case/evidence/final-delivery-commands.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 3855
+    },
+    {
+      "path": "case/evidence/final-reference-build-delivery.stderr",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 1005
+    },
+    {
+      "path": "case/evidence/final-reference-build-delivery.stdout",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 421
+    },
+    {
+      "path": "case/evidence/final-reference-layout-delivery.stderr",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 0
+    },
+    {
+      "path": "case/evidence/final-reference-layout-delivery.stdout",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 215
+    },
+    {
+      "path": "case/evidence/final-reference-measure-delivery.stderr",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 0
+    },
+    {
+      "path": "case/evidence/final-reference-measure-delivery.stdout",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 124
+    },
+    {
+      "path": "case/evidence/final-reference-views-delivery.stderr",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 0
+    },
+    {
+      "path": "case/evidence/final-reference-views-delivery.stdout",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 314
+    },
+    {
+      "path": "case/evidence/final-wrong-stale-tb-measure-delivery.stderr",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 0
+    },
+    {
+      "path": "case/evidence/final-wrong-stale-tb-measure-delivery.stdout",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 126
+    },
+    {
+      "path": "case/evidence/first-executed-programme.mjs",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 12888
+    },
+    {
+      "path": "case/evidence/first-programme-commands.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 4201
+    },
+    {
+      "path": "case/evidence/fixed-source-identity.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 607
+    },
+    {
+      "path": "case/evidence/formula-error-scan.ndjson",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 127
+    },
+    {
+      "path": "case/evidence/independent-source-recalculation.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 5920
+    },
+    {
+      "path": "case/evidence/layout-receipt.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 225
+    },
+    {
+      "path": "case/evidence/misc-source-recalculation.stderr",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 90
+    },
+    {
+      "path": "case/evidence/misc-source-recalculation.stdout",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 94
+    },
+    {
+      "path": "case/evidence/projection-scope.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 5914
+    },
+    {
+      "path": "case/evidence/reference-measurements.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 165638
+    },
+    {
+      "path": "case/evidence/source-recalculation-terminal.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 479
+    },
+    {
+      "path": "case/evidence/source-recalculation.stderr",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 793
+    },
+    {
+      "path": "case/evidence/source-recalculation.stdout",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 701
+    },
+    {
+      "path": "case/evidence/tool-incidents.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 873
+    },
+    {
+      "path": "case/evidence/wrong-measurements.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 203918
+    },
+    {
+      "path": "case/independent-review/PLAN.md",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 3303
+    },
+    {
+      "path": "case/prepare_source.py",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 3539
+    },
+    {
+      "path": "case/preserve_layout.py",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 3873
+    },
+    {
+      "path": "case/public/INPUTS.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 5373
+    },
+    {
+      "path": "case/public/QUALITY-CONTRACT.md",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 5005
+    },
+    {
+      "path": "case/README.md",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 8290
+    },
+    {
+      "path": "case/recompute_sources.py",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 3715
+    },
+    {
+      "path": "case/SOURCE-FLOW.md",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 4978
+    },
+    {
+      "path": "case/view_package.mjs",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 4418
+    },
+    {
+      "path": "case/views/00-toc.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 157751
+    },
+    {
+      "path": "case/views/01-tb-head.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 117656
+    },
+    {
+      "path": "case/views/01-tb-tail.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 136099
+    },
+    {
+      "path": "case/views/02-cash.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 78837
+    },
+    {
+      "path": "case/views/03-bank.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 70097
+    },
+    {
+      "path": "case/views/04-funding.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 136124
+    },
+    {
+      "path": "case/views/05-prepaids.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 367184
+    },
+    {
+      "path": "case/views/06-insurance.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 261337
+    },
+    {
+      "path": "case/views/07-fees.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 78614
+    },
+    {
+      "path": "case/views/08-legal-head.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 116125
+    },
+    {
+      "path": "case/views/08-legal-tail.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 122218
+    },
+    {
+      "path": "case/views/09-loan1-april.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 97897
+    },
+    {
+      "path": "case/views/09-loan1-terms.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 53265
+    },
+    {
+      "path": "case/views/10-loan2.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 129233
+    },
+    {
+      "path": "case/views/11-ap.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 34648
+    },
+    {
+      "path": "case/views/12-ar.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 39916
+    },
+    {
+      "path": "case/views/13-payroll.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 174340
+    },
+    {
+      "path": "case/views/14-rebates.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 45836
+    },
+    {
+      "path": "case/views/15-uninvoiced.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 30315
+    },
+    {
+      "path": "case/views/16-bonus.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 76054
+    },
+    {
+      "path": "case/views/17-misc.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 53670
+    },
+    {
+      "path": "case/views/18-issues.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 165316
+    },
+    {
+      "path": "case/views/19-issues-tail.png",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 155905
+    },
+    {
+      "path": "expert/Aurisic_Financials_4-25-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 93974
+    },
+    {
+      "path": "public/Accr2011-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 9640
+    },
+    {
+      "path": "public/AccrBonus-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 10564
+    },
+    {
+      "path": "public/AccrMisc-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 10401
+    },
+    {
+      "path": "public/AR_Accrual-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 9686
+    },
+    {
+      "path": "public/Aurisic_Corp_Payrolls_April_2025-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 13680
+    },
+    {
+      "path": "public/Aurisic_Final_TB_4-25-1.txt",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 12423
+    },
+    {
+      "path": "public/Aurisic_Financials_3-25-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 86735
+    },
+    {
+      "path": "public/Aurisic_Prepaid_Expenses_4-25-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 43084
+    },
+    {
+      "path": "public/Good Insurance Co - Loan II.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 13719
+    },
+    {
+      "path": "public/Good Insurance Co - Loan.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 18460
+    },
+    {
+      "path": "public/Legal_Dump-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 14929
+    },
+    {
+      "path": "public/Outstanding_CKs_4-30-25-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 12370
+    },
+    {
+      "path": "public/Payroll-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 11252
+    },
+    {
+      "path": "public/PPD1250-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 30651
+    },
+    {
+      "path": "public/PPD1251-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 18683
+    },
+    {
+      "path": "public/Prof_Fee_Dump-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 11272
+    },
+    {
+      "path": "public/Rebates-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 9746
+    },
+    {
+      "path": "public/TASK.original.txt",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 3043
+    },
+    {
+      "path": "reference/actual-recalculated-values.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 2002
+    },
+    {
+      "path": "reference/actual-refresh.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 197
+    },
+    {
+      "path": "reference/Aurisic_Financials_4-25-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 511050
+    },
+    {
+      "path": "reference/full-source-measurements.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 165638
+    },
+    {
+      "path": "source-provenance/download-receipt.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 8565
+    },
+    {
+      "path": "source-provenance/fixed-source-identity.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 607
+    },
+    {
+      "path": "source-provenance/prompt-revision.diff",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 5445
+    },
+    {
+      "path": "source-provenance/rubric.original.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 13671
+    },
+    {
+      "path": "source-provenance/rubric.original.txt",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 5614
+    },
+    {
+      "path": "source-provenance/TASK.fixed-revision.txt",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 3069
+    },
+    {
+      "path": "wrong-stale-tb/Aurisic_Financials_4-25-1.xlsx",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 510283
+    },
+    {
+      "path": "wrong-stale-tb/full-source-measurements.json",
+      "matches_frozen_disk_and_archive": true,
+      "bytes": 203918
+    }
+  ],
+  "all_objects_bound": true
+}

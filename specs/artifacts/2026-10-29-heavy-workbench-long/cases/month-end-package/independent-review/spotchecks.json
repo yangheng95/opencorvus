@@ -1,0 +1,773 @@
+{
+  "recorded_reports": {
+    "reference": {
+      "ledger": {
+        "source_accounts": 105,
+        "actual_accounts": 105,
+        "differences": 0,
+        "extra": 0,
+        "duplicates": 0
+      },
+      "ledger_categories": {},
+      "cash_categories": {
+        "AMOUNT_MATCH": 5
+      },
+      "schedule_categories": {
+        "M03:AMOUNT_MATCH": 4,
+        "M04:AMOUNT_MATCH": 7,
+        "M05:AMOUNT_MATCH": 70,
+        "M06:AMOUNT_MATCH": 4,
+        "M07:AMOUNT_MATCH": 10,
+        "M08:AMOUNT_MATCH": 24,
+        "M10:AMOUNT_MATCH": 3
+      },
+      "retained_categories": {
+        "SOURCE_INPUT_MATCH": 874
+      },
+      "recorded_mismatches": []
+    },
+    "wrong-stale-tb": {
+      "ledger": {
+        "source_accounts": 105,
+        "actual_accounts": 97,
+        "differences": 159,
+        "extra": 0,
+        "duplicates": 0
+      },
+      "ledger_categories": {
+        "ACCOUNT_AMOUNT_MISMATCH": 145,
+        "ACCOUNT_MISSING": 8,
+        "ACCOUNT_IDENTITY_METADATA_MISMATCH": 6
+      },
+      "cash_categories": {
+        "AMOUNT_MATCH": 1,
+        "CONTROL_AMOUNT_MISMATCH": 4
+      },
+      "schedule_categories": {
+        "M03:AMOUNT_MATCH": 3,
+        "M03:SOURCE_RESULT_MISMATCH": 1,
+        "M04:SOURCE_RESULT_MISMATCH": 7,
+        "M05:AMOUNT_MATCH": 66,
+        "M05:SOURCE_RESULT_MISMATCH": 4,
+        "M06:AMOUNT_MATCH": 2,
+        "M06:SOURCE_RESULT_MISMATCH": 2,
+        "M07:AMOUNT_MATCH": 5,
+        "M07:SOURCE_RESULT_MISMATCH": 5,
+        "M08:AMOUNT_MATCH": 11,
+        "M08:SOURCE_RESULT_MISMATCH": 13,
+        "M10:SOURCE_RESULT_MISMATCH": 1,
+        "M10:AMOUNT_MATCH": 2
+      },
+      "retained_categories": {
+        "SOURCE_INPUT_MATCH": 874
+      },
+      "recorded_mismatches": [
+        {
+          "schedule": "4",
+          "cell": "B15",
+          "expected": "12485540.32",
+          "actual": 12542795.270000001,
+          "signed_error": "57254.950000001",
+          "contract": "CONTROL_AMOUNT_MISMATCH"
+        },
+        {
+          "schedule": "4",
+          "cell": "B17",
+          "expected": "5814459.68",
+          "actual": 5757204.729999999,
+          "signed_error": "-57254.950000001",
+          "contract": "CONTROL_AMOUNT_MISMATCH"
+        },
+        {
+          "schedule": "4",
+          "cell": "B19",
+          "expected": "6610926.80",
+          "actual": 6191465.87,
+          "signed_error": "-419460.93",
+          "contract": "CONTROL_AMOUNT_MISMATCH"
+        },
+        {
+          "schedule": "4",
+          "cell": "B21",
+          "expected": "796467.12",
+          "actual": 434261.1400000015,
+          "signed_error": "-362205.9799999985",
+          "contract": "CONTROL_AMOUNT_MISMATCH"
+        },
+        {
+          "dimension": "M03",
+          "schedule": "5",
+          "cell": "C18",
+          "source": "Separate ledger control, not bank evidence",
+          "expected": "6610926.80",
+          "actual": 6191465.87,
+          "signed_error": "-419460.93",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M04",
+          "schedule": "6",
+          "cell": "D12",
+          "source": "April ledger; four elapsed months; other income separate",
+          "expected": "4687985.00",
+          "actual": 3515989,
+          "signed_error": "-1171996.00",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M04",
+          "schedule": "6",
+          "cell": "E12",
+          "source": "April ledger; four elapsed months; other income separate",
+          "expected": "1171996.25",
+          "actual": 878997.25,
+          "signed_error": "-292999.00",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M04",
+          "schedule": "6",
+          "cell": "D14",
+          "source": "April ledger; four elapsed months; other income separate",
+          "expected": "233042.36",
+          "actual": 170950.46,
+          "signed_error": "-62091.90",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M04",
+          "schedule": "6",
+          "cell": "E14",
+          "source": "April ledger; four elapsed months; other income separate",
+          "expected": "58260.59",
+          "actual": 42737.615,
+          "signed_error": "-15522.975",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M04",
+          "schedule": "6",
+          "cell": "D15",
+          "source": "April ledger; four elapsed months; other income separate",
+          "expected": "76715.65",
+          "actual": 57664.2,
+          "signed_error": "-19051.45",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M04",
+          "schedule": "6",
+          "cell": "E15",
+          "source": "April ledger; four elapsed months; other income separate",
+          "expected": "19178.9125",
+          "actual": 14416.05,
+          "signed_error": "-4762.8625",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M04",
+          "schedule": "6",
+          "cell": "D18",
+          "source": "April ledger; four elapsed months; other income separate",
+          "expected": "5500.00",
+          "actual": 0,
+          "signed_error": "-5500.00",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M05",
+          "schedule": "7",
+          "cell": "BX48",
+          "source": "Vendor sum / original GL; discrepancy retained",
+          "expected": "0.0168686868581731316228",
+          "actual": -115179.78313131304,
+          "signed_error": "-115179.7999999998981731316228",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M05",
+          "schedule": "7",
+          "cell": "BX49",
+          "source": "Vendor sum / original GL; discrepancy retained",
+          "expected": "692501.33",
+          "actual": 577321.53,
+          "signed_error": "-115179.80",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M05",
+          "schedule": "8",
+          "cell": "AT34",
+          "source": "Vendor sum / original GL; discrepancy retained",
+          "expected": "49137.41",
+          "actual": 43644.14,
+          "signed_error": "-5493.27",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M05",
+          "schedule": "8",
+          "cell": "AT35",
+          "source": "Vendor sum / original GL; discrepancy retained",
+          "expected": "54630.68",
+          "actual": 49137.41,
+          "signed_error": "-5493.27",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M06",
+          "schedule": "10",
+          "cell": "L65",
+          "source": "GL6200",
+          "expected": "435284.69",
+          "actual": 456511.76,
+          "signed_error": "21227.07",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M06",
+          "schedule": "10",
+          "cell": "L66",
+          "source": "GL less signed source detail",
+          "expected": "0.00",
+          "actual": 21227.06999999995,
+          "signed_error": "21227.06999999995",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M07",
+          "schedule": "11a",
+          "cell": "E81",
+          "source": "Combined independently recomputed loan interest / GL2402",
+          "expected": "67315.07",
+          "actual": 201945.21,
+          "signed_error": "134630.14",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M07",
+          "schedule": "11a",
+          "cell": "E82",
+          "source": "Combined independently recomputed loan interest / GL2402",
+          "expected": "0.005671232737",
+          "actual": 134630.14567123272,
+          "signed_error": "134630.139999999983",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M07",
+          "schedule": "11a",
+          "cell": "E84",
+          "source": "Both independent loan principals / GL2600 and GL2601",
+          "expected": "31800000.0",
+          "actual": null,
+          "signed_error": null,
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M07",
+          "schedule": "11a",
+          "cell": "E85",
+          "source": "Both independent loan principals / GL2600 and GL2601",
+          "expected": "31800000.00",
+          "actual": null,
+          "signed_error": null,
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M07",
+          "schedule": "11a",
+          "cell": "E86",
+          "source": "Both independent loan principals / GL2600 and GL2601",
+          "expected": "0.00",
+          "actual": null,
+          "signed_error": null,
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "13",
+          "cell": "B9",
+          "source": "Division-specific original GL",
+          "expected": "10997.00",
+          "actual": 51171,
+          "signed_error": "40174.00",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "13",
+          "cell": "B10",
+          "source": "Division-specific original GL",
+          "expected": "0.00",
+          "actual": 40174,
+          "signed_error": "40174.00",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "13",
+          "cell": "B12",
+          "source": "Division-specific original GL",
+          "expected": "60500.00",
+          "actual": 0,
+          "signed_error": "-60500.00",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "14",
+          "cell": "C39",
+          "source": "Original payroll calculation, signed postings and March/April GL",
+          "expected": "-141033.00",
+          "actual": -259800,
+          "signed_error": "-118767.00",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "14",
+          "cell": "C40",
+          "source": "Original payroll calculation, signed postings and March/April GL",
+          "expected": "177467.00",
+          "actual": 58700,
+          "signed_error": "-118767.00",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "15",
+          "cell": "B13",
+          "source": "Signed original supporting rows / specific GL control",
+          "expected": "159707.51",
+          "actual": 29803.93,
+          "signed_error": "-129903.58",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "15",
+          "cell": "B14",
+          "source": "Signed original supporting rows / specific GL control",
+          "expected": "-0.00",
+          "actual": 129903.57999999999,
+          "signed_error": "129903.57999999999",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "16",
+          "cell": "B9",
+          "source": "Signed original supporting rows / specific GL control",
+          "expected": "304169.11",
+          "actual": 109220,
+          "signed_error": "-194949.11",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "16",
+          "cell": "B10",
+          "source": "Signed original supporting rows / specific GL control",
+          "expected": "0.00",
+          "actual": -194949.11,
+          "signed_error": "-194949.11",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "17",
+          "cell": "B21",
+          "source": "Signed original supporting rows / specific GL control",
+          "expected": "334593.73",
+          "actual": 105296.04,
+          "signed_error": "-229297.69",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "17",
+          "cell": "B22",
+          "source": "Signed original supporting rows / specific GL control",
+          "expected": "0.00",
+          "actual": -229297.69,
+          "signed_error": "-229297.69",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "18",
+          "cell": "C12",
+          "source": "Signed original supporting rows / specific GL control",
+          "expected": "146796.76",
+          "actual": 146802.26,
+          "signed_error": "5.50",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M08",
+          "schedule": "18",
+          "cell": "C13",
+          "source": "Signed original supporting rows / specific GL control",
+          "expected": "0.00",
+          "actual": 5.500000000029104,
+          "signed_error": "5.500000000029104",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        },
+        {
+          "dimension": "M10",
+          "schedule": "12",
+          "cell": "G6",
+          "source": "Known April AP ledger control",
+          "expected": "314563.78",
+          "actual": 79070.25,
+          "signed_error": "-235493.53",
+          "contract": "SOURCE_RESULT_MISMATCH"
+        }
+      ]
+    }
+  },
+  "bounded_arithmetic": {
+    "loan1_april_interest": "45123.28767123287671232876712",
+    "loan2_april_interest": "22191.78082191780821917808219",
+    "combined_april_interest": "67315.06849315068493150684932",
+    "prepaid_165000_candidate_components": "165000",
+    "legal_84000_candidate_components": "-84000",
+    "payroll_6000_source_movement": "380356.01",
+    "payroll_6000_GL_less_supplied_movement": "7649.98",
+    "payroll_6305_GL_less_supplied_payroll": "-26750.90",
+    "payroll_posted_less_130percent": "51.112",
+    "bonus_reference_10percent_vs_opening_adjusted_total": "188291.094",
+    "actual_income_less_expenses": "497479.81",
+    "rubric_asset_difference": "49137.41",
+    "rubric_profit_difference": "49137.41",
+    "rubric_legal_total_difference": "435284.69",
+    "insurance_april_schedule_movement": "-43644.14"
+  },
+  "source_cell_spots": {
+    "PPD1250-1.xlsx": {
+      "PPD Exps #1250 (2025)": {
+        "BU20": {
+          "cell": "BU20",
+          "value": 81000
+        },
+        "BU36": {
+          "cell": "BU36",
+          "value": 28000
+        },
+        "BU37": {
+          "cell": "BU37",
+          "value": 56000
+        },
+        "BU47": {
+          "cell": "BU47",
+          "value": "=BR46+BS46-BT46+28000+56000+81000",
+          "cached": 742321.5170959595
+        },
+        "BY8": {
+          "cell": "BY8",
+          "value": "5/24-3/25"
+        },
+        "BY17": {
+          "cell": "BY17",
+          "value": "1/24-1/25"
+        },
+        "BY22": {
+          "cell": "BY22",
+          "value": "9/24-12/24"
+        },
+        "BY23": {
+          "cell": "BY23",
+          "value": "12/24-3/25"
+        },
+        "BW40": {
+          "cell": "BW40",
+          "value": "=$BV$40/8",
+          "cached": 3944.5975
+        },
+        "BY40": {
+          "cell": "BY40",
+          "value": "4/25-12/25"
+        },
+        "BZ40": {
+          "cell": "BZ40",
+          "value": "EAGLEHAWK Cybersecurity (12.25-12.26)"
+        },
+        "BV25": {
+          "cell": "BV25",
+          "value": 10000
+        },
+        "BW25": {
+          "cell": "BW25",
+          "value": "=$BV$25/6",
+          "cached": 1666.6666666666667
+        },
+        "BX25": {
+          "cell": "BX25",
+          "value": "=BU25+BV25-BW25",
+          "cached": 8333.333333333334
+        },
+        "P50": {
+          "cell": "P50",
+          "value": "#REF!"
+        },
+        "S50": {
+          "cell": "S50",
+          "value": "#REF!"
+        }
+      }
+    },
+    "Aurisic_Prepaid_Expenses_4-25-1.xlsx": {
+      "PPD Exps #1250": {
+        "BX9": {
+          "cell": "BX9",
+          "value": "=BU9+BV9-BW9",
+          "cached": 80.40090909090928
+        },
+        "BX53": {
+          "cell": "BX53",
+          "value": "=BU52+BV52-BW52",
+          "cached": 692501.3231313131
+        }
+      },
+      "PPD Ins #1251 (2024)": {
+        "A3": {
+          "cell": "A3",
+          "value": "Account Activity for 2024"
+        },
+        "AR4": {
+          "cell": "AR4",
+          "value": "2025-03-31 00:00:00"
+        },
+        "AT5": {
+          "cell": "AT5",
+          "value": "2025-03-31 00:00:00"
+        },
+        "AT29": {
+          "cell": "AT29",
+          "value": "=AQ29+AO29-AP29",
+          "cached": -500000
+        },
+        "AT30": {
+          "cell": "AT30",
+          "value": "=AQ30+AR30-AS30",
+          "cached": 5493.27
+        },
+        "AT32": {
+          "cell": "AT32",
+          "value": "=SUM(AT6:AT31)",
+          "cached": 49137.41000000002
+        }
+      }
+    },
+    "PPD1251-1.xlsx": {
+      "PPD Ins #1251 (2025)": {
+        "AR4": {
+          "cell": "AR4",
+          "value": "2025-04-30 00:00:00"
+        },
+        "AT5": {
+          "cell": "AT5",
+          "value": "2025-04-30 00:00:00"
+        },
+        "AS29": {
+          "cell": "AS29",
+          "value": 43644.14
+        },
+        "AT29": {
+          "cell": "AT29",
+          "value": "=AQ29+AR29-AS29",
+          "cached": -543644.14
+        },
+        "AS30": {
+          "cell": "AS30",
+          "value": "=AQ30",
+          "cached": 5493.27
+        },
+        "AT30": {
+          "cell": "AT30",
+          "value": "=AQ30+AR30-AS30",
+          "cached": 5493.27
+        },
+        "AU30": {
+          "cell": "AU30",
+          "value": "March coverage"
+        },
+        "AT32": {
+          "cell": "AT32",
+          "value": "=SUM(AT6:AT31)",
+          "cached": 5493.27
+        }
+      }
+    },
+    "Aurisic_Financials_3-25-1.xlsx": {
+      "#3a) TB convert 3-31-25": {
+        "E6": {
+          "cell": "E6",
+          "value": 577321.53
+        },
+        "E7": {
+          "cell": "E7",
+          "value": 49137.41
+        },
+        "E27": {
+          "cell": "E27",
+          "value": -39099.26
+        },
+        "E29": {
+          "cell": "E29",
+          "value": -259800
+        },
+        "E61": {
+          "cell": "E61",
+          "value": 4381.03
+        }
+      },
+      "#7) PPD Exps #1250 (2025)": {
+        "A38": {
+          "cell": "A38",
+          "value": "Next Idea"
+        }
+      }
+    },
+    "Legal_Dump-1.xlsx": {
+      "Legal Dump": {
+        "C55": {
+          "cell": "C55",
+          "value": "2025-03-31 00:00:00"
+        },
+        "M55": {
+          "cell": "M55",
+          "value": -28000
+        },
+        "K55": {
+          "cell": "K55",
+          "value": "amort Apr-Jun"
+        },
+        "C56": {
+          "cell": "C56",
+          "value": "2025-03-31 00:00:00"
+        },
+        "M56": {
+          "cell": "M56",
+          "value": -56000
+        },
+        "K56": {
+          "cell": "K56",
+          "value": "amort Apr-Jun"
+        },
+        "L57": {
+          "cell": "L57",
+          "value": 18666.67
+        },
+        "L58": {
+          "cell": "L58",
+          "value": 9333.33
+        },
+        "M59": {
+          "cell": "M59",
+          "value": -166955
+        },
+        "L60": {
+          "cell": "L60",
+          "value": "=SUM(L3:L59)",
+          "cached": 986239.6900000001
+        },
+        "L62": {
+          "cell": "L62",
+          "value": "=SUM(L3:L61)",
+          "cached": 1972479.3800000001
+        },
+        "L63": {
+          "cell": "L63",
+          "value": "=L62+M62",
+          "cached": 870569.3800000001
+        }
+      }
+    },
+    "Aurisic_Corp_Payrolls_April_2025-1.xlsx": {
+      "April 2025": {
+        "A16": {
+          "cell": "A16",
+          "value": "Payroll Fees"
+        },
+        "E18": {
+          "cell": "E18",
+          "value": "need to reallocate"
+        },
+        "C18": {
+          "cell": "C18",
+          "value": 12576.95
+        },
+        "D18": {
+          "cell": "D18",
+          "value": 5520.88
+        }
+      }
+    },
+    "Payroll-1.xlsx": {
+      "Payroll Accrual": {
+        "A16": {
+          "cell": "A16",
+          "value": "Paycom Fees"
+        },
+        "E18": null,
+        "C18": {
+          "cell": "C18",
+          "value": 12576.95
+        },
+        "D18": {
+          "cell": "D18",
+          "value": 5520.88
+        },
+        "E29": {
+          "cell": "E29",
+          "value": "=E28*1.3",
+          "cached": 236448.88800000006
+        },
+        "F29": {
+          "cell": "F29",
+          "value": 1.3
+        }
+      }
+    },
+    "AccrBonus-1.xlsx": {
+      "Bonus Accru #2401": {
+        "B13": {
+          "cell": "B13",
+          "value": "=SUM(B5:B12)",
+          "cached": 334593.73
+        },
+        "A15": {
+          "cell": "A15",
+          "value": "Total Accrued #2401 as of 4-30-25"
+        },
+        "B15": {
+          "cell": "B15",
+          "value": 334593.73
+        },
+        "B18": {
+          "cell": "B18",
+          "value": 1463026.36
+        },
+        "B19": {
+          "cell": "B19",
+          "value": "=B18*0.1",
+          "cached": 146302.63600000003
+        }
+      }
+    },
+    "AR_Accrual-1.xlsx": {
+      "AR Accrual #1101": {
+        "A4": {
+          "cell": "A4",
+          "value": "Aurisic GA-0015"
+        },
+        "B4": {
+          "cell": "B4",
+          "value": 10997
+        }
+      }
+    }
+  }
+}

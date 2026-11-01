@@ -1,0 +1,613 @@
+{
+  "assignment_id": "month-end-whole-case-38c7a899ab9c4d5388e2ae1ac9cfa209",
+  "review_kind": "single_concentrated_independent_whole_case_review",
+  "review_complete": true,
+  "remaining_work": [],
+  "remaining_work_scope": "This review only. Unresolved financial/evaluation prerequisites are limitations, not a pending second review.",
+  "target_commit": "a8cf23b620786403a5e1e789059ff6d51540dc62",
+  "raw_input_revision": "11e7900cdcac61bc4daf59e65feb238acda98fbf",
+  "target_evidence_root": "D:\\opencorvus-benchmark-runs\\gdpval-month-end-review-20261101\\input",
+  "provenance_only": {
+    "registered_members": 97,
+    "registered_source_bytes": 5061116,
+    "identity_is_acceptance": false,
+    "captured_fixed_fields_not_byte_identical": [
+      "prompt",
+      "rubric_json",
+      "rubric_pretty"
+    ],
+    "full_captured_row_fixed_parquet_available_in_snapshot": false
+  },
+  "readiness": {
+    "reference_quality": {
+      "ready": false,
+      "verdict": "Useful substantially populated review draft; full M01-M13 quality not established; observed shortcomings remain."
+    },
+    "candidate_grading": {
+      "ready": false,
+      "verdict": "Reference-coordinate numeric adapter only; fair legal-alternative/full-quality grading not established."
+    },
+    "hours_and_depth": {
+      "qualified": false,
+      "verdict": "Meaningful reconciliation and interpretation exist; many sources prefilled; effective candidate hours and discrimination unestablished.",
+      "effective_candidate_hours": null
+    },
+    "model_launch": {
+      "ready": false,
+      "verdict": "Public resolution policy, whole-case reference quality and fair consumer conditions not established; no additional explicit model API, Provider or nativeTask invocation beyond this authorized LLM-agent review."
+    }
+  },
+  "aggregate_score": null,
+  "hindsight_threshold": null,
+  "professional_human_certification": false,
+  "statistical_maturity_claimed": false,
+  "financial_approval": false,
+  "candidate_or_model_comparison": null,
+  "dimensions": [
+    {
+      "dimension": "M01",
+      "status": "supported_within_existing_numeric_measurement_scope",
+      "evidence": [
+        "public/Aurisic_Final_TB_4-25-1.txt: all original account records and printed category controls",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#3a) TB convert 4-30-25!A99:F106,D109:E113",
+        "reference/full-source-measurements.json:ledger 105/105, zero listed differences"
+      ],
+      "code_references": [
+        "case/prepare_source.py:10-38",
+        "case/check_package.py:14-68",
+        "case/build_package.mjs:50-63"
+      ],
+      "limitations": [
+        "Existing complete comparisons inspected, not rerun; direct saved-cell spots corroborated them.",
+        "Removed template proof controls belong to M11."
+      ],
+      "findings": [
+        "F03"
+      ]
+    },
+    {
+      "dimension": "M02",
+      "status": "supported_for_template_GL2600_scope",
+      "evidence": [
+        "public/Aurisic_Financials_3-25-1.xlsx:#4) Cash Availability Status!B5,B8:B21",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#4) Cash Availability Status!B5,B8:B15,B17,B19,B21",
+        "reference/full-source-measurements.json:cash_controls five matches"
+      ],
+      "code_references": [
+        "case/build_package.mjs:65-72",
+        "case/check_package.py:69-85"
+      ],
+      "limitations": [
+        "Template borrowing scope is GL2600 only, not all company loans or an approved funding policy."
+      ],
+      "findings": []
+    },
+    {
+      "dimension": "M03",
+      "status": "supported_available_data_draft_independent_reconciliation_unavailable",
+      "evidence": [
+        "public/Outstanding_CKs_4-30-25-1.xlsx:#6) Bank recon 4-30-25!A7:E8,C4,B10,C12,C14,C16",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#5) Bank recon 4-30-25!B10,C4,C12,C14,C16,C18,A19",
+        "case/views/03-bank.png"
+      ],
+      "code_references": [
+        "case/build_package.mjs:73-77",
+        "case/check_package.py:121-125"
+      ],
+      "limitations": [
+        "Independent bank statement and reclassification approval unavailable.",
+        "Consumer does not verify every check-level amount/identity or C14/C16."
+      ],
+      "findings": [
+        "F08"
+      ]
+    },
+    {
+      "dimension": "M04",
+      "status": "supported_aggregate_periods_missing_entity_allocation_disclosed",
+      "evidence": [
+        "public/Aurisic_Financials_3-25-1.xlsx:#6) Aurisic Funding Sources!A5:A11,D5:E17",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#6) Aurisic Funding Sources!D5:G18,A20:A21",
+        "case/views/04-funding.png"
+      ],
+      "code_references": [
+        "case/build_package.mjs:79-92",
+        "case/check_package.py:126-129"
+      ],
+      "limitations": [
+        "Subsidiary allocations and duplicate UK mapping unavailable.",
+        "A correct alternative can include other income in the existing Bank Interest & Other Income category."
+      ],
+      "findings": [
+        "F07",
+        "F08"
+      ]
+    },
+    {
+      "dimension": "M05",
+      "status": "partial_arithmetic_supported_period_meaning_unresolved",
+      "evidence": [
+        "public/PPD1250-1.xlsx:PPD Exps #1250 (2025)!BV40,BW40,BY40,BZ40,BY8,BY17,BY22:BY23",
+        "public/PPD1251-1.xlsx:PPD Ins #1251 (2025)!AR4,AS29,AT29:AT35,AU30",
+        "public/Aurisic_Prepaid_Expenses_4-25-1.xlsx:PPD Exps #1250!BX9,BX53; PPD Ins #1251 (2024)!AR4,AT5,AT29:AT32",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#7!BX46:BX49; #8!AT32:AT35",
+        "case/evidence/independent-source-recalculation.json; case/views/05-prepaids.png; case/views/06-insurance.png"
+      ],
+      "code_references": [
+        "case/build_package.mjs:94-105,113-117,149-151",
+        "case/recompute_sources.py:18-25",
+        "case/check_package.py:130-143"
+      ],
+      "limitations": [
+        "Source coverage-period contradictions unflagged by named vendor.",
+        "Source arithmetic is not authority for correct amortization periods.",
+        "No intended contract term or replacement amount has been determined."
+      ],
+      "findings": [
+        "F01",
+        "F08"
+      ]
+    },
+    {
+      "dimension": "M06",
+      "status": "signed_transactions_and_period_amounts_supported_with_review_limits",
+      "evidence": [
+        "public/Prof_Fee_Dump-1.xlsx:Prof Fees Dump!W3,V4:W10",
+        "public/Legal_Dump-1.xlsx:Legal Dump!L3:M59,L60:M63,C55:M59",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#9!W10; #10!L62:M63,L65:L66",
+        "case/views/07-fees.png; case/views/08-legal-head.png; case/views/08-legal-tail.png"
+      ],
+      "code_references": [
+        "case/build_package.mjs:106-120",
+        "case/check_package.py:144-148,183-199"
+      ],
+      "limitations": [
+        "Consumer compares YTD results but does not separately measure April aggregation or retained professional-fee transaction inputs.",
+        "Bridge candidates need journal-history confirmation.",
+        "Legal vendor names are visually clipped."
+      ],
+      "findings": [
+        "F04",
+        "F07",
+        "F08"
+      ]
+    },
+    {
+      "dimension": "M07",
+      "status": "supported_supplied_rate_date_principal_interest_arithmetic",
+      "evidence": [
+        "public/Good Insurance Co - Loan.xlsx:OMAHA!B72:B74,D74:H74,E73",
+        "public/Good Insurance Co - Loan II.xlsx:OMAHAII!B22:B24,D24:H24,E23",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#11a!E80:E86; #11b!F24:G24",
+        "case/views/09-loan1-terms.png; case/views/09-loan1-april.png; case/views/10-loan2.png"
+      ],
+      "code_references": [
+        "case/build_package.mjs:121-126",
+        "case/check_package.py:149-157",
+        "case/recompute_sources.py:21-22"
+      ],
+      "limitations": [
+        "External SOFR, all historical accounting policy, company rounding policy and approval unknown.",
+        "Running accrued balance includes historical cash-payment rounding; different from current-month charge."
+      ],
+      "findings": []
+    },
+    {
+      "dimension": "M08",
+      "status": "partial_main_balances_supported_business_annotation_and_identity_gaps",
+      "evidence": [
+        "public/Aurisic_Corp_Payrolls_April_2025-1.xlsx:April 2025!E18,C18:D18",
+        "public/Payroll-1.xlsx:Payroll Accrual!E18,C6:D6,C18:D18,C25:C33,E28:F29",
+        "public/AR_Accrual-1.xlsx:AR Accrual #1101!A4:B6",
+        "public/AccrBonus-1.xlsx:Bonus Accru #2401!B13,B15,B18:B19",
+        "public/Accr2011-1.xlsx:Aurisic Global Accrual #2011!A4:B7; public/AccrMisc-1.xlsx:Misc Accruals #2410!B5,C10; public/Rebates-1.xlsx:Vendor Rebates!B4:B11",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#13!A4:B12; #14!E18,C36:C40; #15!B11:B14; #16!B7:B10; #17!B13:B22; #18!C10:C13"
+      ],
+      "code_references": [
+        "case/build_package.mjs:33-39,133-144,153-156",
+        "case/check_package.py:158-176,183-199"
+      ],
+      "limitations": [
+        "Unique corporate payroll reallocation note omitted.",
+        "Supplied account6000/6305 movement residuals are computable but omitted; not proven GL errors.",
+        "GA-0015 to division10 mapping is inferred from amount, not established by a public entity crosswalk.",
+        "Bonus source-observation/headline roles ambiguous."
+      ],
+      "findings": [
+        "F02",
+        "F05",
+        "F06"
+      ]
+    },
+    {
+      "dimension": "M09",
+      "status": "arithmetic_question_minimum_substantially_met_action_depth_partial",
+      "evidence": [
+        "reference/Aurisic_Financials_4-25-1.xlsx:CFO Review Issues!B15:F26",
+        "public/PPD1250-1.xlsx:PPD Exps #1250 (2025)!BU20,BU36:BU37,BU47",
+        "public/Legal_Dump-1.xlsx:Legal Dump!C55,C56,K55:K56,M55:M56,L57:L58",
+        "public/Accr2011-1.xlsx:Aurisic Global Accrual #2011!A5:B5",
+        "public/Aurisic_Financials_3-25-1.xlsx:#3a) TB convert 3-31-25!E6,E26,E57; public/Aurisic_Final_TB_4-25-1.txt:1250/2011/6200"
+      ],
+      "code_references": [
+        "case/prepare_source.py:33-38",
+        "case/build_package.mjs:157-160"
+      ],
+      "limitations": [
+        "12 gaps are arithmetic facts/questions, not necessarily errors.",
+        "Available bridge components not connected in handoff.",
+        "Numerical agreement/source wording alone do not establish causal posting history or approval."
+      ],
+      "findings": [
+        "F04"
+      ]
+    },
+    {
+      "dimension": "M10",
+      "status": "partial_AP_and_bank_actions_honest_other_actions_under_specific",
+      "evidence": [
+        "reference/Aurisic_Financials_4-25-1.xlsx:#12!B4,G6,G8,B10,G12; #5!C4,C12,C18; CFO Review Issues!A4:F26",
+        "case/CFO-HANDOFF.md:7-18; case/views/11-ap.png; case/views/18-issues.png; case/views/19-issues-tail.png"
+      ],
+      "code_references": [
+        "case/build_package.mjs:128-132,145-160",
+        "case/check_package.py:177-179,204"
+      ],
+      "limitations": [
+        "Missing AP_TB and bank statement genuinely unresolved.",
+        "Other issue entries lack specific source cell pairs, bridge components, or note context despite available public evidence.",
+        "No external notification or approval occurred."
+      ],
+      "findings": [
+        "F01",
+        "F02",
+        "F04",
+        "F06"
+      ]
+    },
+    {
+      "dimension": "M11",
+      "status": "partial_complete_sheet_coverage_but_template_semantics_and_clipping_gaps",
+      "evidence": [
+        "public/Aurisic_Financials_3-25-1.xlsx:#3a) TB convert 3-31-25!C102:E104,C114:E114",
+        "reference/Aurisic_Financials_4-25-1.xlsx:Table of Contents!A6:C23; #3a!C109:E114; #10!G3:G15,J3:J15,E50; #6!G4",
+        "All 23 supplied case/views/*.png were actually viewed"
+      ],
+      "code_references": [
+        "case/build_package.mjs:22-31,51,57-62,106-112,166-168",
+        "case/preserve_layout.py:29-58",
+        "case/view_package.mjs:9-23"
+      ],
+      "limitations": [
+        "Income/clearing template proof removed without replacement or documented rationale.",
+        "Visible legal identities clipped and TOC statuses generic.",
+        "Native Excel navigation, printing and actual application display unknown."
+      ],
+      "findings": [
+        "F03",
+        "F07"
+      ]
+    },
+    {
+      "dimension": "M12",
+      "status": "partial_saved_recalc_and_cash_refresh_bounded",
+      "evidence": [
+        "reference/Aurisic_Financials_4-25-1.xlsx:formula text/caches; no observed cached error cells or externalLink ZIP members",
+        "case/evidence/actual-recalculated-values.json; case/evidence/actual-refresh.json; case/evidence/independent-source-recalculation.json",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#17!B13,B15,B18:B22"
+      ],
+      "code_references": [
+        "case/view_package.mjs:7-8,24-47",
+        "case/check_package.py:33,109-120,204",
+        "case/build_package.mjs:37-39,141-143"
+      ],
+      "limitations": [
+        "No rerun of any engine or refresh.",
+        "Only original GL1024 +1 cash/book update demonstrated.",
+        "Bonus witness is static inference; B15 may be a valid original source observation, but that role is not explained.",
+        "All other native Excel/engine behavior not established."
+      ],
+      "findings": [
+        "F05",
+        "F08"
+      ]
+    },
+    {
+      "dimension": "M13",
+      "status": "candid_draft_boundary_supported_complete_quality_not_established",
+      "evidence": [
+        "reference/Aurisic_Financials_4-25-1.xlsx:Table of Contents!A2,C6:C23; CFO Review Issues!A1,F4:F26",
+        "case/AUTHOR-REVIEW.md:7-25; case/CFO-HANDOFF.md:3-20; case/README.md:21-29,47"
+      ],
+      "code_references": [
+        "case/build_package.mjs:145-168",
+        "case/check_package.py:200-204"
+      ],
+      "limitations": [
+        "No overall financial approval, independent bank verification, official score, effective-hours qualification or professional-human certification implied.",
+        "Physical completeness does not establish completion of all supported interpretation/review work."
+      ],
+      "findings": [
+        "F01",
+        "F02",
+        "F03",
+        "F04",
+        "F05",
+        "F06",
+        "F07",
+        "F08"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "id": "F01",
+      "priority": "high_reference_quality",
+      "title": "Prepaid period contradictions remain unflagged despite matching source formulas",
+      "basis": "observed_original_and_saved_cells_plus_static_measurement_gap",
+      "dimensions": [
+        "M05",
+        "M10",
+        "M13"
+      ],
+      "business_consequence": "Expense cutoff and remaining prepaid balances can be unsupported even with GL proximity.",
+      "measurement_gap": "M05 closing-cell equality accepts the source formula as the expectation without resolving coverage terms.",
+      "primary_refs": [
+        "public/PPD1250-1.xlsx:PPD Exps #1250 (2025)!BV40,BW40,BY40,BZ40",
+        "public/PPD1251-1.xlsx:PPD Ins #1251 (2025)!AU30",
+        "case/build_package.mjs:94-105",
+        "case/check_package.py:130-143"
+      ],
+      "unknown": "Intended terms and any replacement amount; no approved correction inferred."
+    },
+    {
+      "id": "F02",
+      "priority": "high_reference_quality",
+      "title": "Payroll deduplication drops unique reallocation evidence",
+      "basis": "observed_original_note_and_saved_omission_with_bounded_arithmetic",
+      "dimensions": [
+        "M08",
+        "M10",
+        "M13"
+      ],
+      "business_consequence": "CFO can miss an explicitly unresolved expense allocation and source/GL account-level residuals.",
+      "measurement_gap": "Deduplication based on matching amounts and checking Payroll-1 omits corporate-only annotation.",
+      "primary_refs": [
+        "public/Aurisic_Corp_Payrolls_April_2025-1.xlsx:April 2025!E18",
+        "public/Payroll-1.xlsx:Payroll Accrual!E18",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#14) Payroll Accrual #2200!E18",
+        "case/build_package.mjs:33-39,153",
+        "case/check_package.py:161-166,183-199"
+      ],
+      "unknown": "Nature of additional/reclassified postings; residuals do not prove ledger errors."
+    },
+    {
+      "id": "F03",
+      "priority": "medium_reference_quality",
+      "title": "Template income/clearing proof semantics removed",
+      "basis": "observed_template_to_reference_change",
+      "dimensions": [
+        "M11",
+        "M12"
+      ],
+      "business_consequence": "CFO loses an existing visible reconciliation between income/expense and clearing.",
+      "measurement_gap": "Ledger detail measured, proof block not measured.",
+      "primary_refs": [
+        "public/Aurisic_Financials_3-25-1.xlsx:#3a) TB convert 3-31-25!C102:E104,C114:E114",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#3a) TB convert 4-30-25!C109:E114",
+        "case/build_package.mjs:51,57-62",
+        "case/views/01-tb-tail.png"
+      ]
+    },
+    {
+      "id": "F04",
+      "priority": "medium_review_action_quality",
+      "title": "Generic cross-period escalations omit available component candidates",
+      "basis": "observed_sources_and_actions; causal_journal_history_not_proven",
+      "dimensions": [
+        "M09",
+        "M10"
+      ],
+      "business_consequence": "Available preparation work is returned to CFO as generic questions.",
+      "measurement_gap": "Gap calculation is present but explanation/action meaning is outside adapter.",
+      "primary_refs": [
+        "public/PPD1250-1.xlsx:PPD Exps #1250 (2025)!BU20,BU36,BU37,BU47",
+        "public/Legal_Dump-1.xlsx:Legal Dump!C55,C56,K55,K56,M55,M56",
+        "public/Accr2011-1.xlsx:Aurisic Global Accrual #2011!A5:B5",
+        "reference/Aurisic_Financials_4-25-1.xlsx:CFO Review Issues!D15:F16,D25:F25",
+        "case/prepare_source.py:33-38",
+        "case/build_package.mjs:157-160"
+      ],
+      "unknown": "Exact postings, prior-snapshot revisions and approval. Numerical agreement alone is not causal reconciliation."
+    },
+    {
+      "id": "F05",
+      "priority": "medium_dependency_role_clarity",
+      "title": "Bonus copied headline is not distinguished from live derived output",
+      "basis": "observed_literal_formula_structure; future_change_effect_static_only",
+      "dimensions": [
+        "M12",
+        "M08"
+      ],
+      "business_consequence": "Ongoing use could read a source-observed balance as a refreshed headline.",
+      "measurement_gap": "Consumer omits B15; existing refresh exercises cash only.",
+      "primary_refs": [
+        "public/AccrBonus-1.xlsx:Bonus Accru #2401!B13,B15,B18:B19",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#17) Bonus Accrual #2401!B13,B15,B18:B22",
+        "case/build_package.mjs:37-39,141-143",
+        "case/check_package.py:169-176",
+        "case/view_package.mjs:38-47"
+      ],
+      "textual_witness": "Without executing: B12 +100 implies formula B13 +100, while literal B15 remains334593.73.",
+      "qualification": "B15 is a genuine source literal and baseline-correct. No new refresh failure observed."
+    },
+    {
+      "id": "F06",
+      "priority": "medium_identity_uncertainty",
+      "title": "AR entity mapping is inferred from an equal amount",
+      "basis": "observed_source_identity_and_reference_label; mapping_unknown",
+      "dimensions": [
+        "M08",
+        "M10",
+        "M13"
+      ],
+      "business_consequence": "Amount agreement can conceal entity or consolidation attribution uncertainty.",
+      "measurement_gap": "Adapter checks values, not a public GA-0015-to-division10 crosswalk.",
+      "primary_refs": [
+        "public/AR_Accrual-1.xlsx:AR Accrual #1101!A4:B4",
+        "reference/Aurisic_Financials_4-25-1.xlsx:#13) AR Accruals #1101!A9:B12",
+        "case/build_package.mjs:133-136",
+        "case/check_package.py:158-160"
+      ],
+      "qualification": "No evidence proves the adopted mapping is wrong."
+    },
+    {
+      "id": "F07",
+      "priority": "medium_visual_usability",
+      "title": "Visible legal identity clipping and generic TOC statuses",
+      "basis": "actual_existing_PNG_visual_observation",
+      "dimensions": [
+        "M11"
+      ],
+      "business_consequence": "Vendor identity and review priority are harder to inspect.",
+      "measurement_gap": "Successful rendering and sheet counts do not assess readable identities or differentiated statuses.",
+      "primary_refs": [
+        "case/views/08-legal-head.png:#10 G3:G15,J3:J15",
+        "case/views/08-legal-tail.png:#10 E50",
+        "case/views/04-funding.png:G4",
+        "case/views/00-toc.png:C6:C23",
+        "case/build_package.mjs:22-31,106-112,166-168"
+      ],
+      "qualification": "Most critical amounts readable; no blanket visual failure or native Excel claim."
+    },
+    {
+      "id": "F08",
+      "priority": "high_candidate_grading_readiness",
+      "title": "Coordinate/cached-value adapter cannot fairly grade full legal deliverables",
+      "basis": "static_code_only_legal_and_bad_output_witnesses; no_counterexample_executed",
+      "dimensions": [
+        "M03",
+        "M04",
+        "M05",
+        "M09",
+        "M10",
+        "M11",
+        "M12",
+        "M13"
+      ],
+      "business_consequence": "Correct alternatives can be rejected and incomplete outputs can match numeric cells.",
+      "measurement_gap": "Fixed coordinates/strings, selected source formulas and cached values omit full meaning and qualitative requirements.",
+      "primary_refs": [
+        "case/check_package.py:33-35,86-87,110-143,177-204",
+        "case/view_package.mjs:38-47"
+      ],
+      "legal_witnesses": [
+        "Documented extra header row on appended tab16 moves correct total B7 to B8.",
+        "Correct bank unknown wording not supplied differs from exact unavailable.",
+        "Bank Interest & Other Income can include7076+7092=82215.65 with a stated mapping; D17=5003243.01."
+      ],
+      "unmeasured_bad_output_witnesses": [
+        "Keep matching B10 while changing individual check allocations/identities.",
+        "Keep current cached results as literals in place of formulas.",
+        "Change prepaid vendor names while keeping measured closing values.",
+        "Omit CFO Review Issues or TOC while keeping measured numeric tabs."
+      ],
+      "qualification": "Author explicitly disclaims a general grader; these are readiness limitations, not a claim of false advertising."
+    },
+    {
+      "id": "F09",
+      "priority": "high_evaluation_contract_validity",
+      "title": "Original rubric conflicts with public inputs and requires unavailable AP detail",
+      "basis": "late_evaluator_only_original_and_expert_inspection",
+      "dimensions": [
+        "M01",
+        "M03",
+        "M05",
+        "M06",
+        "M10",
+        "M13"
+      ],
+      "business_consequence": "A score could reward unsupported adjustments, doubled totals or private data.",
+      "measurement_gap": "Expert/private answer amounts are treated as required truth despite public-source limits.",
+      "primary_refs": [
+        "source-provenance/rubric.original.json:44 items",
+        "source-provenance/rubric.original.txt:profit/assets/insurance/legal/AP requirements",
+        "expert/Aurisic_Financials_4-25-1.xlsx:#3a) TB convert 4-30-25!D8:E8; #12) AP Trade #2000!G23,J23",
+        "public/Aurisic_Final_TB_4-25-1.txt:1251 and category controls",
+        "public/Legal_Dump-1.xlsx:Legal Dump!L60:M63"
+      ],
+      "qualification": "Expert/rubric values diagnose inconsistency only; not reference truth or required public inputs."
+    }
+  ],
+  "original_measurement_scope": {
+    "rerun_by_reviewer": false,
+    "reference_ledger_accounts": 105,
+    "reference_cash_matches": 5,
+    "reference_schedule_matches": 122,
+    "reference_retained_input_matches": 874,
+    "scope": "Existing numeric and source-input observations, not M01-M13 whole quality."
+  },
+  "wrong_programme": {
+    "reproduced_by_reviewer": false,
+    "original_saved_workbook_inspected": true,
+    "original_native_exit": 4,
+    "reference_recorded_native_exit": 0,
+    "wrong_ledger_accounts": 97,
+    "ledger_differences": {
+      "amount_fields": 145,
+      "missing_identities": 8,
+      "metadata": 6,
+      "total": 159
+    },
+    "metadata_meaning": {
+      "DE_vs_FR": 1,
+      "Aurisic_name_suffix": 1,
+      "whitespace": 2,
+      "category_letter_case": 2
+    },
+    "cash_control_mismatches": 4,
+    "schedule_mismatches": 33,
+    "existing_different_values": 30,
+    "late_added_principal_cells_absent": 3,
+    "late_added_cells": [
+      "#11a!E84",
+      "#11a!E85",
+      "#11a!E86"
+    ],
+    "retained_source_input_matches": 874,
+    "qualification": "Wrong workbook predates final reference enhancements; not a latest-producer experiment differing only in TB content. Correlated errors are not independent discrimination evidence."
+  },
+  "limitations_not_remaining_review_work": [
+    "Missing AP listing and independent bank statement/approval.",
+    "Entity/allocation mappings and actual coverage terms.",
+    "Posted-journal history and causal approval of bridge candidates.",
+    "Company reporting/materiality/rounding policy and every historical formula accounting rationale.",
+    "Native Excel application interaction, printing and recalculation not performed.",
+    "No producer/checker/formula-engine/refresh/render reruns or counterexample workbooks/programs.",
+    "No empirical legal-alternative acceptance experiment.",
+    "Full captured row/fixed parquet field comparison unavailable within frozen evidence.",
+    "Candidate effective hours, discrimination and model quality not measured."
+  ],
+  "actions_performed": {
+    "authorized_LLM_agent_review_performed": true,
+    "underlying_review_model_identity": null,
+    "underlying_review_model_usage": null,
+    "further_agents": 0,
+    "additional_explicit_model_API_Provider_or_nativeTask_invocations": 0,
+    "credential_or_service_calls": 0,
+    "workbook_writes": 0,
+    "repository_writes": 0,
+    "producer_or_checker_runs": 0,
+    "formula_engine_refresh_or_render_reruns": 0,
+    "new_counterexample_programs": 0,
+    "existing_pngs_actually_viewed": 23
+  },
+  "artifacts": [
+    "REVIEW.md",
+    "assessment.json",
+    "evidence-log.json",
+    "public-cell-inspection.json",
+    "target-cell-inspection.json",
+    "spotchecks.json"
+  ]
+}
