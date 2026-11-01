@@ -1,0 +1,411 @@
+{
+  "at": "2026-11-01T07:16:49.262Z",
+  "scope": "Explorer uses current Project scope for empty guidance, search and background commands; the complete home title uses native balanced/emergency wrapping",
+  "singleAgent": true,
+  "userWindowsTouched": false,
+  "userServiceTouched": false,
+  "isolatedPorts": [
+    38528,
+    38529
+  ],
+  "schema": 9,
+  "tables": 92,
+  "initialRows": 234613,
+  "finalRows": 234657,
+  "cases": [
+    {
+      "kind": "before",
+      "uiEntry": "main-BRqkVBqT.js",
+      "originalRows": 234613,
+      "finalRows": 234618,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48109,
+          "after": 48110
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48051,
+          "after": 48052
+        },
+        {
+          "table": "memory_chunk",
+          "before": 68,
+          "after": 69
+        },
+        {
+          "table": "memory_file",
+          "before": 68,
+          "after": 69
+        },
+        {
+          "table": "project",
+          "before": 70,
+          "after": 71
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 70,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 3244503,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "kind": "after",
+      "uiEntry": "main-DO-l5tMi.js",
+      "originalRows": 234618,
+      "finalRows": 234657,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 45836,
+          "after": 45843
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 45836,
+          "after": 45843
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6021,
+          "after": 6022
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6021,
+          "after": 6022
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18063,
+          "after": 18066
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48110,
+          "after": 48118
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48052,
+          "after": 48060
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5823,
+          "after": 5824
+        },
+        {
+          "table": "memory_chunk",
+          "before": 69,
+          "after": 70
+        },
+        {
+          "table": "memory_file",
+          "before": 69,
+          "after": 70
+        },
+        {
+          "table": "project",
+          "before": 71,
+          "after": 72
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 71,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 2746808,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ],
+  "originalGoals": 9,
+  "originalGoalPublicFactsPreserved": true,
+  "goalReadbackAfterCompleteManualReview": true,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1180,
+  "checks": {
+    "types-after": 0,
+    "i18n-after": 0,
+    "ui-build-after": 0
+  },
+  "persistence": {
+    "at": "2026-11-01T07:14:53.216Z",
+    "publicationID": "bus-occurrence:4545c1b9-fc70-4d43-ae99-06c96ab847d7",
+    "eventType": "file.edited",
+    "projectID": "prj_hrTZJVIjJhMFRHpkMHMr",
+    "file": "created-863.txt",
+    "createdBytes": 0,
+    "eventOccurrenceLinksPublication": true,
+    "executionCounts": {
+      "session": 104,
+      "message": 770,
+      "part": 2186
+    },
+    "originalInputsAndRevisionsPreserved": true,
+    "projectIdentityAndDirectoryPreserved": true,
+    "gitHeadRefIndexPreserved": true,
+    "exactNewProjectStatusAdditions": [
+      "?? .opencorvus/opencorvus.jsonc",
+      "?? created-863.txt"
+    ],
+    "priorOwnedProjectInputsPreserved": true,
+    "originalName": "home-files-863-after2",
+    "finalName": "project-identity-863-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+  },
+  "projectReadbacks": {
+    "baseline": {
+      "phase": "before",
+      "step": "final",
+      "projectID": "prj_hs1r9q28i4NRYxHMGFas",
+      "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-01\\project-file-empty-layout-863-before\\home-files-863-before",
+      "name": "home-files-863-after2",
+      "facts": [
+        {
+          "name": "reference-863.txt",
+          "content": "Original reference input 863 before\n",
+          "revision": "986880a25791e7f09968f84e05ba7eeca9f29493961dc59226408adcf3eb22d2"
+        },
+        {
+          "name": "guide-863.md",
+          "content": "# Project files 863 before\n\nOriginal guide input.\n",
+          "revision": "ed718c4e8c166a5778d8171fce84b9a19bb93b9d48aa28279937104a7226cc44"
+        }
+      ],
+      "git": {
+        "head": {
+          "code": 128,
+          "stdout": "HEAD\n",
+          "stderr": "fatal: ambiguous argument 'HEAD': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n"
+        },
+        "ref": {
+          "code": 0,
+          "stdout": "refs/heads/master\n",
+          "stderr": ""
+        },
+        "index": {
+          "code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "status": {
+          "code": 0,
+          "stdout": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/opencorvus.jsonc\n?? guide-863.md\n?? reference-863.txt\n",
+          "stderr": ""
+        }
+      }
+    },
+    "initial": {
+      "phase": "after",
+      "step": "initial",
+      "projectID": "prj_hrTZJVIjJhMFRHpkMHMr",
+      "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-01\\project-file-empty-layout-863-after\\home-files-863-after2",
+      "name": "home-files-863-after2",
+      "facts": [
+        {
+          "name": "reference-863.txt",
+          "content": "Original reference input 863 after\n",
+          "revision": "0b5781ea7fdf2fc5c42e7d8f2304a2cc0f220fb989dfccebab7a162a85e7f3e8"
+        },
+        {
+          "name": "guide-863.md",
+          "content": "# Project files 863 after\n\nOriginal guide input.\n",
+          "revision": "da12a808378fa68e22a290fe646ac9ab19ea0ffc08ee0eaf1990fda6fae88a2b"
+        }
+      ],
+      "git": {
+        "head": {
+          "code": 128,
+          "stdout": "HEAD\n",
+          "stderr": "fatal: ambiguous argument 'HEAD': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n"
+        },
+        "ref": {
+          "code": 0,
+          "stdout": "refs/heads/master\n",
+          "stderr": ""
+        },
+        "index": {
+          "code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "status": {
+          "code": 0,
+          "stdout": "?? .gitattributes\n?? .gitignore\n?? guide-863.md\n?? reference-863.txt\n",
+          "stderr": ""
+        }
+      }
+    },
+    "created": {
+      "phase": "after",
+      "step": "created",
+      "projectID": "prj_hrTZJVIjJhMFRHpkMHMr",
+      "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-01\\project-file-empty-layout-863-after\\home-files-863-after2",
+      "name": "home-files-863-after2",
+      "facts": [
+        {
+          "name": "reference-863.txt",
+          "content": "Original reference input 863 after\n",
+          "revision": "0b5781ea7fdf2fc5c42e7d8f2304a2cc0f220fb989dfccebab7a162a85e7f3e8"
+        },
+        {
+          "name": "guide-863.md",
+          "content": "# Project files 863 after\n\nOriginal guide input.\n",
+          "revision": "da12a808378fa68e22a290fe646ac9ab19ea0ffc08ee0eaf1990fda6fae88a2b"
+        },
+        {
+          "name": "created-863.txt",
+          "content": "",
+          "revision": "ca5b6deccf670abb7a693f6275480a00b7e0e32abca7aac1833c9c3011aa0e1e"
+        }
+      ],
+      "git": {
+        "head": {
+          "code": 128,
+          "stdout": "HEAD\n",
+          "stderr": "fatal: ambiguous argument 'HEAD': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n"
+        },
+        "ref": {
+          "code": 0,
+          "stdout": "refs/heads/master\n",
+          "stderr": ""
+        },
+        "index": {
+          "code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "status": {
+          "code": 0,
+          "stdout": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/opencorvus.jsonc\n?? created-863.txt\n?? guide-863.md\n?? reference-863.txt\n",
+          "stderr": ""
+        }
+      }
+    },
+    "final": {
+      "phase": "after",
+      "step": "final",
+      "projectID": "prj_hrTZJVIjJhMFRHpkMHMr",
+      "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-01\\project-file-empty-layout-863-after\\home-files-863-after2",
+      "name": "project-identity-863-ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      "facts": [
+        {
+          "name": "reference-863.txt",
+          "content": "Original reference input 863 after\n",
+          "revision": "0b5781ea7fdf2fc5c42e7d8f2304a2cc0f220fb989dfccebab7a162a85e7f3e8"
+        },
+        {
+          "name": "guide-863.md",
+          "content": "# Project files 863 after\n\nOriginal guide input.\n",
+          "revision": "da12a808378fa68e22a290fe646ac9ab19ea0ffc08ee0eaf1990fda6fae88a2b"
+        },
+        {
+          "name": "created-863.txt",
+          "content": "",
+          "revision": "ca5b6deccf670abb7a693f6275480a00b7e0e32abca7aac1833c9c3011aa0e1e"
+        }
+      ],
+      "git": {
+        "head": {
+          "code": 128,
+          "stdout": "HEAD\n",
+          "stderr": "fatal: ambiguous argument 'HEAD': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'\n"
+        },
+        "ref": {
+          "code": 0,
+          "stdout": "refs/heads/master\n",
+          "stderr": ""
+        },
+        "index": {
+          "code": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "status": {
+          "code": 0,
+          "stdout": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/opencorvus.jsonc\n?? created-863.txt\n?? guide-863.md\n?? reference-863.txt\n",
+          "stderr": ""
+        }
+      }
+    }
+  },
+  "matchedTitle": {
+    "displayName": "home-files-863-after2",
+    "before": "03-before-same-name-orphan.jpg",
+    "after": "11-after-matched-chinese-balanced-title.jpg"
+  },
+  "manualScreenshots": [
+    "01-before-title-orphan.jpg",
+    "02-before-matched-title-wrap.jpg",
+    "03-before-same-name-orphan.jpg",
+    "04-before-unselected-project-empty.jpg",
+    "05-before-unscoped-background-menu.jpg",
+    "06-after-english-balanced-title.jpg",
+    "07-after-english-project-guidance.jpg",
+    "08-after-english-unscoped-menu.jpg",
+    "09-after-chinese-project-guidance.jpg",
+    "10-after-chinese-unscoped-menu.jpg",
+    "11-after-matched-chinese-balanced-title.jpg",
+    "12-after-scoped-menu-restored.jpg",
+    "13-after-created-file.jpg",
+    "14-after-scoped-search-no-results.jpg",
+    "15-after-full-width-title.jpg",
+    "16-after-sidebar-collapsed.jpg",
+    "17-after-unbroken-long-identity.jpg",
+    "18-after-final-unselected-project.jpg"
+  ],
+  "finalBuildScreenshots": [
+    "06-after-english-balanced-title.jpg",
+    "07-after-english-project-guidance.jpg",
+    "08-after-english-unscoped-menu.jpg",
+    "09-after-chinese-project-guidance.jpg",
+    "10-after-chinese-unscoped-menu.jpg",
+    "11-after-matched-chinese-balanced-title.jpg",
+    "12-after-scoped-menu-restored.jpg",
+    "13-after-created-file.jpg",
+    "14-after-scoped-search-no-results.jpg",
+    "15-after-full-width-title.jpg",
+    "16-after-sidebar-collapsed.jpg",
+    "17-after-unbroken-long-identity.jpg",
+    "18-after-final-unselected-project.jpg"
+  ],
+  "automatedUITests": 0,
+  "unverifiedLiveBranches": [
+    "Truly empty Project root",
+    "Read failures and offline state",
+    "Native desktop windows"
+  ],
+  "limits": [
+    "Extremely long identity remains complete and occupies five lines; arbitrary text is not guaranteed to use two balanced lines",
+    "New Project config metadata appeared during first UI opening; exact writer was not traced in this batch"
+  ]
+}

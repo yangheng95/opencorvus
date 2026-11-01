@@ -916,6 +916,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     return target && target.directory === directory() ? normalizeExplorerPath(target.path) : ""
   })
   const commandBusy = createMemo(() => fileEditorReserved() || mutationOperation()?.directory === directory())
+  const projectCommandsDisabled = () => !directory() || commandBusy()
 
   function uniquePaths(paths: string[]): string[] {
     return [...new Set(paths.map(normalizeExplorerPath))]
@@ -1923,26 +1924,26 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           <FileExplorerContextMenuItem
             dataUi="file-explorer-context-upload"
             label={t("explorer.upload_files")}
-            disabled={commandBusy() || uploading()}
+            disabled={projectCommandsDisabled() || uploading()}
             onSelect={() => openUploadPicker("")}
           />
           <FileExplorerContextMenuItem
             dataUi="file-explorer-context-new-file"
             label={t("explorer.new_file")}
-            disabled={commandBusy()}
+            disabled={projectCommandsDisabled()}
             onSelect={() => void createEntry("file", "")}
           />
           <FileExplorerContextMenuItem
             dataUi="file-explorer-context-new-folder"
             label={t("explorer.new_folder")}
-            disabled={commandBusy()}
+            disabled={projectCommandsDisabled()}
             onSelect={() => void createEntry("directory", "")}
           />
           <ContextMenu.Separator />
           <FileExplorerContextMenuItem
             dataUi="file-explorer-context-refresh"
             label={t("explorer.refresh")}
-            disabled={commandBusy()}
+            disabled={projectCommandsDisabled()}
             onSelect={() => void refreshVisibleDirectories()}
           />
         </ContextMenu.Content>
@@ -2126,6 +2127,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
               class="file-explorer-search"
               value={query()}
               placeholder={t("explorer.search_placeholder")}
+              disabled={!directory()}
               onValueChange={setQuery}
               clearDataUI="file-explorer-search-clear"
             />
@@ -2137,7 +2139,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                 size="sm"
                 tone="neutral"
                 class="file-explorer-new"
-                disabled={!directory() || commandBusy()}
+                disabled={projectCommandsDisabled()}
                 title={t("explorer.create_in", {
                   target: explorerDirectoryDisplayPath(contextTargetDirectory(selectedItemList()[0] ?? null)),
                 })}
@@ -2219,6 +2221,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           }}
           onDrop={(event) => void handleExplorerDrop(event, "")}
         >
+          <Show when={directory()} fallback={
+            <p class="empty-hint file-explorer-empty" role="status">{t("explorer.choose_project")}</p>
+          }>
           <Show
             when={!rootLoading() && !searchLoading()}
             fallback={<p class="empty-hint file-explorer-empty">{t("common.loading")}</p>}
@@ -2279,10 +2284,13 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
               </Show>
             </Show>
           </Show>
+          </Show>
         </ContextMenu.Trigger>
         {renderBackgroundContextMenu()}
       </ContextMenu.Root>
-      <p class="file-explorer-keyboard-hint">{t("explorer.keyboard_hint")}</p>
+      <Show when={directory()}>
+        <p class="file-explorer-keyboard-hint">{t("explorer.keyboard_hint")}</p>
+      </Show>
     </section>
   )
 }

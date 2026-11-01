@@ -164,11 +164,14 @@
 }
 
 .chat-home-prompt__title {
+  min-width: 0;
   width: 100%;
   max-width: 100%;
   margin: 0;
   padding-inline: calc(var(--ui-composer-content-inset) + var(--oc-border-width));
   text-align: center;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
   font-size: var(--ui-font-page);
   line-height: var(--ui-line-height-tight);
   font-weight: var(--ui-font-weight-strong);

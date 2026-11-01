@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件空状态与首页标题](2026-11-01-project-file-empty-layout/README.md)：18张原图、同名对照、实际新建/文件发布与数据结清。
+
 - [项目首页文件入口](2026-11-01-project-home-files/README.md)：18张原图、首候选失败、真实保存/草稿和完整数据保全。
 
 - [计划项目身份连续性](2026-11-01-scheduled-project-identity/README.md)：12张原图、真实转换前后保存、目录注册与完整数据结清。

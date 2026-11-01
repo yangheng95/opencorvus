@@ -3426,6 +3426,14 @@ Task, Chat Session or model execution and retains the current scoped Composer
 draft. A directory-free launcher offers its existing Project selection flow
 rather than allocating a Project for file browsing. File navigation, dirty
 decisions and conditional saves keep their original owners.
+Explorer distinguishes an unselected Project from an empty directory or an
+empty search. Its existing directory fact owns the localized selection hint,
+search availability, shared background/header command availability and the
+keyboard-navigation hint. Selecting a Project restores the original loading,
+error, row and search presentation through the same readers and mutation owner.
+The launcher heading keeps its original localized text and complete Project
+identity; native balanced wrapping and emergency word wrapping contain it in
+the existing layout as the sidebar and tools change its available width.
 The locale checker reads strict JSON syntax trees before comparing catalog
 shape and placeholders. Duplicate decoded property names within one object,
 including nested array objects, carry the original locale/path/offset in a

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件空状态与首页标题](records/2026-11/2026-11-01-project-file-empty-layout.md)：未选项目提示/操作范围、同名标题均衡换行与真实新建。
+
 - [项目首页文件入口](records/2026-11/2026-11-01-project-home-files.md)：首页/命令同源Explorer、项目草稿与重复语言键校验。
 
 - [计划项目身份连续性](records/2026-11/2026-11-01-scheduled-project-identity.md)：项目转换后原编辑页保存、混合身份选择与双语详情。
