@@ -1,0 +1,108 @@
+{
+  "at": "2026-11-01T11:23:36.262Z",
+  "facts": [
+    {
+      "kind": "before",
+      "port": 38542,
+      "businessCounts": {
+        "project": 85,
+        "session": 124,
+        "message": 784,
+        "part": 2225
+      },
+      "originalGoalFactsPreserved": true,
+      "originalGoals": 9,
+      "providerRequests": 0,
+      "observedNonGetRequests": [
+        {
+          "id": 25,
+          "at": "2026-11-01T11:10:38.660Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "id": 62,
+          "at": "2026-11-01T11:10:41.560Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "id": 79,
+          "at": "2026-11-01T11:10:42.116Z",
+          "method": "POST",
+          "path": "/log"
+        },
+        {
+          "id": 130,
+          "at": "2026-11-01T11:13:25.665Z",
+          "method": "POST",
+          "path": "/shutdown"
+        }
+      ],
+      "browserNotifications": [
+        {
+          "at": "2026-11-01T11:10:42.118Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T11:10:42.118Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        }
+      ]
+    },
+    {
+      "kind": "after",
+      "port": 38543,
+      "businessCounts": {
+        "project": 86,
+        "session": 124,
+        "message": 784,
+        "part": 2225
+      },
+      "originalGoalFactsPreserved": true,
+      "originalGoals": 9,
+      "providerRequests": 0,
+      "observedNonGetRequests": [
+        {
+          "id": 25,
+          "at": "2026-11-01T11:17:30.206Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "id": 77,
+          "at": "2026-11-01T11:18:46.636Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "id": 87,
+          "at": "2026-11-01T11:18:47.177Z",
+          "method": "POST",
+          "path": "/log"
+        },
+        {
+          "id": 131,
+          "at": "2026-11-01T11:21:39.274Z",
+          "method": "POST",
+          "path": "/shutdown"
+        }
+      ],
+      "browserNotifications": [
+        {
+          "at": "2026-11-01T11:18:47.178Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T11:18:47.178Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        }
+      ]
+    }
+  ],
+  "coverage": "Original server arrival observations and retained business rows. Search results and form values are verified by actual manual interactions and the accompanying raw screenshots. Non-GET transport setup and diagnostic POSTs are arrival observations, not assertions that Goal state mutated. Browser layout notifications are retained for the next source audit; their exact cause remains unproven."
+}

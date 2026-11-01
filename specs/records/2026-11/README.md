@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [Goal 操作搜索](2026-11-01-goal-command-discovery.md)：本地化操作发现性、帮助返回及原稿交回。
+
 - [Side Chat 连续操作](2026-11-01-side-chat-request-ownership.md)：重复提交、失败重试和独立新稿的实页核查。
 
 - [/side 原稿交接](2026-11-01-side-chat-draft-handoff.md)：主稿与侧稿归属、失败/重载/重试和空命令的实页复验。

@@ -1,0 +1,187 @@
+{
+  "at": "2026-11-01T11:23:36.265Z",
+  "singleAgent": true,
+  "userWindowsUntouched": true,
+  "isolatedDevelopmentUI": true,
+  "uiOnly": true,
+  "automatedUiTests": false,
+  "manualScreenshots": [
+    "01-before-restored-default-view-en.jpg",
+    "02-before-new-chat-home-en.jpg",
+    "03-before-budget-search-en.jpg",
+    "04-before-budget-search-zh.jpg",
+    "05-before-pause-search-zh.jpg",
+    "06-before-goal-create-form.jpg",
+    "07-before-actual-budget-controls.jpg",
+    "08-after-token-pause-search-en.jpg",
+    "09-after-budget-search-zh.jpg",
+    "10-after-pause-search-zh.jpg",
+    "11-after-token-turn-search-zh.jpg",
+    "12-after-resume-search-zh.jpg",
+    "13-after-filled-goal-and-budgets.jpg",
+    "14-after-goal-guide.jpg",
+    "15-after-guide-return-keeps-values.jpg",
+    "16-after-reopened-keeps-values.jpg",
+    "17-after-main-draft-retained-home.jpg"
+  ],
+  "checks": [
+    {
+      "label": "types-after",
+      "exitCode": 0,
+      "startedAt": 1793531693514,
+      "closedAt": 1793531712149
+    },
+    {
+      "label": "i18n-after",
+      "exitCode": 0,
+      "startedAt": 1793531693505,
+      "closedAt": 1793531695644
+    },
+    {
+      "label": "ui-build-after",
+      "exitCode": 0,
+      "startedAt": 1793531693541,
+      "closedAt": 1793531748933
+    }
+  ],
+  "cases": [
+    {
+      "at": "2026-11-01T11:14:06.320Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 239584,
+      "current": 239589,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 49090,
+          "after": 49091
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 49032,
+          "after": 49033
+        },
+        {
+          "table": "memory_chunk",
+          "before": 82,
+          "after": 83
+        },
+        {
+          "table": "memory_file",
+          "before": 82,
+          "after": 83
+        },
+        {
+          "table": "project",
+          "before": 84,
+          "after": 85
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 217,
+      "projects": 84,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1193,
+      "reserveMs": 4263147,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DS0BafsL.js",
+      "schemaObjectsPreserved": true,
+      "schemaObjectCount": 527,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "maximumRequests": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "port": 38542,
+      "businessCounts": {
+        "project": 85,
+        "session": 124,
+        "message": 784,
+        "part": 2225
+      }
+    },
+    {
+      "at": "2026-11-01T11:22:08.585Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 239589,
+      "current": 239592,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 49091,
+          "after": 49092
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 49033,
+          "after": 49034
+        },
+        {
+          "table": "project",
+          "before": 85,
+          "after": 86
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 217,
+      "projects": 85,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1193,
+      "reserveMs": 3769540,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CaRI8MD9.js",
+      "schemaObjectsPreserved": true,
+      "schemaObjectCount": 527,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "maximumRequests": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "port": 38543,
+      "businessCounts": {
+        "project": 86,
+        "session": 124,
+        "message": 784,
+        "part": 2225
+      }
+    }
+  ],
+  "originalGoals": 9,
+  "totalModelRequests": 0,
+  "cumulativeRequests": 1193,
+  "retiredPairedCopies": 4,
+  "absoluteDeadline": 1793535868917,
+  "coverageLimits": [
+    "No Goal creation, budget mutation, pause/resume or remote model execution was submitted. Actual discovery, navigation, editable form, guide return, close/reopen and primary-draft focus were verified.",
+    "Screenshot01 shows the previously selected owned Task restored after a transient Home loading frame; stable Home was entered through the real New chat command.",
+    "Resume search also returns two real work records. Down then Enter selected the next work record as expected; the tester returned Home, read the actual active Goal option and pressed Enter to open the intended form.",
+    "No claim is made that unsaved Goal form fields survive a full reload or source/authority change. The verified retention is help return and close/reopen under the same Home owner.",
+    "Both before and after logged ResizeObserver loop completed with undelivered notifications while loading an older conversation. Their cause is not established; no clean-console claim is made, and the next iteration will audit that shared layout path."
+  ]
+}

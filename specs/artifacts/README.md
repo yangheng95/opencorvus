@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Goal 操作搜索](2026-11-01-goal-command-discovery/README.md)：真实首页、搜索与Goal表单原图。
+
 - [Side Chat 连续操作](2026-11-01-side-chat-request-ownership/README.md)：原图与正式请求/会话事实。
 
 - [/side 原稿交接](2026-11-01-side-chat-draft-handoff/README.md)：12张原图、真实存储拒绝、两稿保留及结构/数据结清。

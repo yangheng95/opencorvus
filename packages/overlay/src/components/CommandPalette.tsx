@@ -151,7 +151,13 @@ export function CommandPalette(props: {
         label: t("continuous_goal.open"),
         hint: t("cmdk.goal_hint"),
         group: t("cmdk.group.commands"),
-        keywords: "goal continuous objective budget",
+        keywords: [
+          "goal continuous objective budget",
+          t("continuous_goal.token_budget"),
+          t("continuous_goal.turn_budget"),
+          t("continuous_goal.pause"),
+          t("continuous_goal.resume"),
+        ].join(" "),
         icon: "goals",
         run: openGoal,
       })

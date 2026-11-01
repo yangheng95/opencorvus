@@ -4329,6 +4329,10 @@ existing Goal-open request to the palette. A nonempty matching query exposes
 the localized Open goal action before work matches. It opens the same owner-bound
 form and guide used by the Home/composer entries, retaining their draft, read-only
 and creation semantics. It neither creates a Goal nor performs another Goal read.
+Its search metadata consumes the existing localized token/automatic-turn budget,
+Pause and Resume labels, alongside the canonical Goal terms. The result hint
+describes those existing operations; no second command catalog or execution path
+is introduced to make those controls discoverable in the current language.
 Mission Board has no current-page Goal action. Empty-query recent work and
 suggested actions, work pagination and numbered work shortcuts retain their order.
 

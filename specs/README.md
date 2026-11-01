@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Goal 操作搜索](records/2026-11/2026-11-01-goal-command-discovery.md)：首页、预算/暂停检索与表单实页体验。
+
 - [Side Chat 连续操作](records/2026-11/2026-11-01-side-chat-request-ownership.md)：真实双击、作者版本与创建请求归属。
 
 - [/side 原稿交接](records/2026-11/2026-11-01-side-chat-draft-handoff.md)：真实创建失败保留、确认交接与旧重试保护新输入。
