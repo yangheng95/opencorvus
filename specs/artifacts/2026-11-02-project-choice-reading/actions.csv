@@ -1,0 +1,21 @@
+order,phase,action,result
+1,before,Open owned /ui/,Default Home and Goal entry visible
+2,before,Open Tasks and project menu,Six identical project labels observed
+3,before,Select first project and open creation,Board greeting differs from current workspace creation default
+4,before,Open project choices,Common full-path prefix clipped useful path ending
+5,before,Native project item and draft entry,Original draft visible; second selection completion not established
+6,before,Cancel then second board project,Approved-code-801 Mission filtered; labels still ambiguous
+7,after,Open named project choices,Compact parent context distinguishes same names
+8,after,Filter737 and open creation,Exact737 directory and matching real Missions
+9,after,Change AI draft project to801 by native AX plus Enter,Exact801 directory and unchanged original request
+10,after,Cancel and filter801 then open creation,Exact801 default
+11,after,Manual title and description then Home Down Down Enter,Anonymous d3b428 selected and both drafts retained
+12,after,Cancel and select Chinese in owned Settings,Chinese board and creation context verified
+13,after,Chinese737 filter and creation,Exact737 default
+14,after,All-projects view and creation,Original workspace801 default retained
+15,after,Home Goal entry open and close,Actual localized goal dialog visible with no submission
+16,closure,Close owned tab and public shutdown,Original native handle exit0 and complete data qualification
+17,final,Open fresh final board and creation menus,Actual option names contain parent context and visual layout retained
+18,final,Home Enter changes737 to801,Original request retained and exact target directory shown
+19,final,Chinese board and creation,Parent names and737 creation default preserved
+20,final,Close owned tab and public shutdown,Original native handle exit0 and full final qualification

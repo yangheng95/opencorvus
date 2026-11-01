@@ -1,0 +1,240 @@
+{
+  "at": "2026-11-01T21:56:40.638Z",
+  "before": {
+    "at": "2026-11-01T21:42:12.772Z",
+    "kind": "before",
+    "schema": 9,
+    "tables": 92,
+    "originals": 258681,
+    "current": 258683,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52929,
+        "after": 52930
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52871,
+        "after": 52872
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 229,
+    "projects": 100,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1260,
+    "reserveMs": 4368348,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-DeBepK0O.js"
+  },
+  "after": {
+    "at": "2026-11-01T21:49:50.411Z",
+    "kind": "after",
+    "schema": 9,
+    "tables": 92,
+    "originals": 258683,
+    "current": 258685,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52930,
+        "after": 52931
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52872,
+        "after": 52873
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 229,
+    "projects": 100,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1260,
+    "reserveMs": 3907968,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-CZA89Cze.js"
+  },
+  "native": [
+    {
+      "kind": "before",
+      "originalNativeReceipt": {
+        "label": "native-before",
+        "startedAt": 1793569197841,
+        "closedAt": 1793569299388,
+        "code": 0,
+        "signal": null,
+        "childPID": 24808
+      },
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "physicalOutcome": "settled",
+      "requestOutcomes": []
+    },
+    {
+      "kind": "after",
+      "originalNativeReceipt": {
+        "label": "native-after",
+        "startedAt": 1793569573153,
+        "closedAt": 1793569759791,
+        "code": 0,
+        "signal": null,
+        "childPID": 15480
+      },
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "physicalOutcome": "settled",
+      "requestOutcomes": []
+    },
+    {
+      "kind": "final",
+      "originalNativeReceipt": {
+        "label": "native-final",
+        "startedAt": 1793570053338,
+        "closedAt": 1793570133236,
+        "code": 0,
+        "signal": null,
+        "childPID": 14060
+      },
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "physicalOutcome": "settled",
+      "requestOutcomes": []
+    }
+  ],
+  "checks": {
+    "buildInitial": {
+      "label": "ui-build-after",
+      "startedAt": 1793569380461,
+      "closedAt": 1793569454750,
+      "code": 0,
+      "signal": null,
+      "childPID": 11332
+    },
+    "buildFinal": {
+      "label": "ui-build-final",
+      "startedAt": 1793569482516,
+      "closedAt": 1793569533742,
+      "code": 0,
+      "signal": null,
+      "childPID": 24580
+    },
+    "typecheck": {
+      "label": "typecheck",
+      "startedAt": 1793569380461,
+      "closedAt": 1793569409625,
+      "code": 0,
+      "signal": null,
+      "childPID": 22696
+    },
+    "i18nCssDocs": {
+      "label": "checks",
+      "startedAt": 1793569380461,
+      "closedAt": 1793569393467,
+      "code": 0,
+      "signal": null,
+      "childPID": 2896
+    },
+    "accessibleBuild": {
+      "label": "ui-build-accessible",
+      "startedAt": 1793569957367,
+      "closedAt": 1793570012568,
+      "code": 0,
+      "signal": null,
+      "childPID": 9340
+    },
+    "finalTypecheck": {
+      "label": "typecheck-final",
+      "startedAt": 1793570014529,
+      "closedAt": 1793570039494,
+      "code": 0,
+      "signal": null,
+      "childPID": 16692
+    },
+    "finalI18nCssDocs": {
+      "label": "checks-final",
+      "startedAt": 1793570014529,
+      "closedAt": 1793570025844,
+      "code": 0,
+      "signal": null,
+      "childPID": 20628
+    }
+  },
+  "manual": {
+    "screenshots": 23,
+    "locales": [
+      "en-US",
+      "zh-CN"
+    ],
+    "namedProjects": [
+      "code-task-commit-authority-737/project",
+      "approved-code-801/project"
+    ],
+    "anonymousSuffix": "d3b428",
+    "drafts": "AI original request and manual title/description retained after project switch; cancelled normally",
+    "defaultProject": "Explicit project filter supplies creation default; all-projects retains workspace default",
+    "goal": "Opened and closed actual create-goal dialog from Home; no submission",
+    "accessibleChoices": "Actual native AX option Value includes basename and compact parent; observed in final English board, English creation and Chinese board",
+    "finalDraft": "Home/Enter changed737 to801 and retained original request; cancelled"
+  },
+  "limitations": [
+    "No valid creation/dispatch or model execution in zero-request phases",
+    "No real screen-reader software or full-path Tooltip hover qualification",
+    "No all-project combinations, all themes, zoom or responsive-size coverage",
+    "Before two slash-containing locators and after one menu locator failed to match; native AX and keyboard completed relevant after interactions; before screenshot05 does not establish second selection completion",
+    "Intermediate after menus showed parent visually but their accessible option name omitted it; fixed before commit and rechecked in fresh final phase"
+  ],
+  "final": {
+    "at": "2026-11-01T21:55:59.956Z",
+    "kind": "final",
+    "schema": 9,
+    "tables": 92,
+    "originals": 258685,
+    "current": 258687,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52931,
+        "after": 52932
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52873,
+        "after": 52874
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 229,
+    "projects": 100,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1260,
+    "reserveMs": 3534497,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-9mBp8NKe.js"
+  }
+}

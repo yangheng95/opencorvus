@@ -6,7 +6,7 @@ import {
   type ExpertSquadMarketIndexItem,
   type ExpertSquadOption,
 } from "../services/expert-squad"
-import { projectDirectoryLabel } from "../utils/project-directory"
+import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/project-directory"
 import { formatErrorDetails } from "../services/diagnostics"
 import { localeTag, t } from "../utils/i18n"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
@@ -23,7 +23,13 @@ import { TextField } from "./ui/TextField"
 
 type MissionCreateMode = "manual" | "ai"
 type MissionTypeSelection = ProductPillar | ""
-type SelectOption = { value: string; label: string; description?: string; action?: "install-more"; outsideSearch?: boolean }
+type SelectOption = {
+  value: string
+  label: string
+  description?: string
+  action?: "install-more"
+  outsideSearch?: boolean
+}
 type SquadSearchResult = { options: ExpertSquadOption[]; matchingIDs: readonly string[] }
 
 export interface MissionCreateRequest {
@@ -113,7 +119,15 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const projectOptions = createMemo<SelectOption[]>(() =>
     props.projectDirectories.map((directory) => {
       const label = projectDirectoryLabel(directory, t("task.project.unknown"), t("work_ledger.implicit_project"))
-      return { value: directory, label: label.name, description: directory }
+      return {
+        value: directory,
+        label: projectLedgerDisplayName({
+          directory,
+          unknownName: t("task.project.unknown"),
+          implicitProjectName: t("work_ledger.implicit_project"),
+        }),
+        description: label.parent,
+      }
     }),
   )
   const selectedProject = createMemo(
@@ -635,12 +649,23 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                 triggerDataUI="mission-create-project"
                 renderValue={(option) => option?.label ?? t("mission_board.create.project_placeholder")}
                 renderOptionLabel={(option) => (
-                  <span class="mission-create-form__option">
-                    <strong>{option.label}</strong>
-                    <small>{option.description}</small>
-                  </span>
+                  <>
+                    {option.label}
+                    <Show when={option.description}>
+                      {(parent) => <span class="mission-project-parent">{parent()}</span>}
+                    </Show>
+                  </>
                 )}
+                renderOptionTooltip={(option) => option.value}
+                triggerTitle={projectDirectory() || undefined}
               />
+              <Show when={projectDirectory()}>
+                {(directory) => (
+                  <TextField.Description class="mission-create-form__project-directory">
+                    {directory()}
+                  </TextField.Description>
+                )}
+              </Show>
             </TextField.Root>
             <TextField.Root class="mission-create-form__mission-type">
               <TextField.Label>{t("mission_board.create.mission_type")}</TextField.Label>
@@ -683,10 +708,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             <Show when={noMatchingSquads()}>
               <p class="mission-create-form__context-status" role="status">
                 {t("mission_board.create.no_matching_squads")}
-                <Show when={selectedExpertSquadCount() > 0}>
-                  {" "}
-                  {t("mission_board.create.selection_retained")}
-                </Show>
+                <Show when={selectedExpertSquadCount() > 0}> {t("mission_board.create.selection_retained")}</Show>
               </p>
             </Show>
             <div

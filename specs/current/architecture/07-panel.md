@@ -2716,6 +2716,16 @@ use quiet headings and independently scrollable content instead of full-height
 framed containers. Cards lead with the Mission title and retain identity, time,
 project and execution details beneath it. Mailbox uses the shared Feedback and
 neutral navigation selection while retaining unread and attention facts.
+Project choices retain directory identity: Mission board filters and creation
+menus show the existing compact parent label with wrapping and the full original
+directory in the shared Tooltip. Parent context belongs to the option's accessible
+label as well as its visible second line. The selected directory remains visible below
+the filter or project field and is associated with its control. Cards retain
+parent-directory context; implicit project names use the existing ledger suffix.
+Canonical directory values continue to own filtering and creation targets.
+An explicit board project filter supplies the creation dialog's default project;
+the all-projects view retains the current workspace default. Users can change
+that selection in the dialog without changing their request draft.
 Transcript actor avatars use neutral chrome with the role glyph; elapsed times
 are caption metadata and activity disclosures use the shared compact row height.
 The existing pane layout effect observes settings hydration and zoom so resolved

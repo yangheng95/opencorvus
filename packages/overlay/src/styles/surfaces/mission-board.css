@@ -84,6 +84,26 @@ body {
   width: calc(190px * var(--ui-scale));
 }
 
+.mission-board__project-context {
+  flex-basis: 100%;
+  min-width: 0;
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+  overflow-wrap: anywhere;
+}
+
+.mission-project-parent,
+.mission-create-form__project-directory {
+  display: block;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.mission-project-parent {
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+}
+
 .mission-board__error {
   flex: 0 0 auto;
   margin: var(--ui-gap-lg) var(--ui-gap-xl);
@@ -326,6 +346,12 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.mission-board-card__project-parent {
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+  overflow-wrap: anywhere;
 }
 
 .mission-board-card__summary {

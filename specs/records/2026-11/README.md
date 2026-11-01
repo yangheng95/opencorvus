@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [多项目选择的身份线索](2026-11-02-project-choice-reading.md)：项目筛选与创建目标的持续辨认。
+
 - [执行记录导航](2026-11-02-execution-navigation.md)：共享导航可发现性、身份及实际定位。
 
 - [工具结构化内容阅读](2026-11-02-tool-payload-reading.md)：共享字段查看器、宽窄布局和真实数据复核。

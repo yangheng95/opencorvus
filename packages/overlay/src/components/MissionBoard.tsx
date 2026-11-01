@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, For, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, createUniqueId, For, Show } from "solid-js"
 import type { ProductPillar } from "@opencorvus-ai/transport-protocol"
 import type { ExpertSquadMarketIndexItem } from "../services/expert-squad"
 import {
@@ -8,7 +8,7 @@ import {
   type MissionRecord,
 } from "../services/mission"
 import { missionBoardStore, reloadMissionBoard } from "../services/mission-board"
-import { projectDirectoryLabel } from "../utils/project-directory"
+import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/project-directory"
 import { detailStamp, relativeTime } from "../utils/time"
 import { t } from "../utils/i18n"
 import { MissionCreateDialog, type MissionCreateRequest, type MissionManualCreateRequest } from "./MissionCreateDialog"
@@ -25,7 +25,7 @@ import { MissionDraftEditDialog, type MissionDraftEditTarget } from "./MissionDr
 const MISSION_TASK_PREVIEW_LIMIT = 3
 
 type MissionTask = MissionRecord["tasks"][number]
-type ProjectOption = { value: string; label: string }
+type ProjectOption = { value: string; label: string; parent?: string }
 
 export interface MissionBoardProps {
   projectDirectories: readonly string[]
@@ -66,7 +66,11 @@ function taskStatusLabel(task: MissionTask): string {
 }
 
 function missionDirectoryLabel(directory: string): string {
-  return projectDirectoryLabel(directory, t("task.project.unknown"), t("work_ledger.implicit_project")).name
+  return projectLedgerDisplayName({
+    directory,
+    unknownName: t("task.project.unknown"),
+    implicitProjectName: t("work_ledger.implicit_project"),
+  })
 }
 
 function missionProjectLabel(mission: MissionRecord): string {
@@ -109,10 +113,17 @@ function MissionBoardCard(props: {
           onClick={props.onOpen}
         >
           <strong class="mission-board-card__title">{props.mission.title}</strong>
-          <span class="mission-board-card__project">
+          <span class="mission-board-card__project" title={props.mission.directory}>
             <Icon name="folder" size="compact" />
             <span>{missionProjectLabel(props.mission)}</span>
           </span>
+          <Show when={projectDirectoryLabel(props.mission.directory, "", t("work_ledger.implicit_project")).parent}>
+            {(parent) => (
+              <span class="mission-board-card__project-parent" title={props.mission.directory}>
+                {parent()}
+              </span>
+            )}
+          </Show>
           <Show when={props.mission.outcome?.summary}>
             {(summary) => <span class="mission-board-card__summary">{summary()}</span>}
           </Show>
@@ -230,6 +241,7 @@ export function MissionBoard(props: MissionBoardProps) {
   const [editingDraft, setEditingDraft] = createSignal<MissionDraftEditTarget | null>(null)
   let searchInput: HTMLInputElement | undefined
   let actionGeneration = 0
+  const projectContextID = createUniqueId()
 
   const projectOptions = createMemo<ProjectOption[]>(() => {
     const directories = [...new Set(missionBoardStore.records.map((mission) => mission.directory))].sort(
@@ -240,6 +252,7 @@ export function MissionBoard(props: MissionBoardProps) {
       ...directories.map((directory) => ({
         value: directory,
         label: missionDirectoryLabel(directory),
+        parent: projectDirectoryLabel(directory, "", t("work_ledger.implicit_project")).parent,
       })),
     ]
   })
@@ -352,8 +365,16 @@ export function MissionBoard(props: MissionBoardProps) {
           optionValue="value"
           optionTextValue="label"
           renderValue={(option) => option?.label ?? t("mission_board.all_projects")}
-          renderOptionLabel={(option) => option.label}
+          renderOptionLabel={(option) => (
+            <>
+              {option.label}
+              <Show when={option.parent}>{(parent) => <span class="mission-project-parent">{parent()}</span>}</Show>
+            </>
+          )}
+          renderOptionTooltip={(option) => option.value || undefined}
+          triggerTitle={projectDirectory() || undefined}
           ariaLabel={t("mission_board.project_filter")}
+          ariaDescribedBy={projectDirectory() ? projectContextID : undefined}
           disallowEmptySelection
         />
         <Button
@@ -368,6 +389,13 @@ export function MissionBoard(props: MissionBoardProps) {
         >
           <Icon name={missionBoardStore.loading ? "loading" : "refresh"} size="medium" />
         </Button>
+        <Show when={projectDirectory()}>
+          {(directory) => (
+            <div class="mission-board__project-context" id={projectContextID}>
+              {directory()}
+            </div>
+          )}
+        </Show>
       </div>
 
       <Show when={actionError()}>
@@ -507,7 +535,7 @@ export function MissionBoard(props: MissionBoardProps) {
       <MissionCreateDialog
         open={createOpen()}
         projectDirectories={props.projectDirectories}
-        defaultProjectDirectory={props.defaultProjectDirectory}
+        defaultProjectDirectory={projectDirectory() || props.defaultProjectDirectory}
         onInstallMoreExpertSquads={props.onInstallMoreExpertSquads}
         onMarketExpertSquadQuery={props.onMarketExpertSquadQuery}
         onInstallMarketExpertSquad={props.onInstallMarketExpertSquad}

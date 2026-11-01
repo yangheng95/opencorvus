@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [多项目选择的身份线索](records/2026-11/2026-11-02-project-choice-reading.md)：同名项目选择、当前目录与真实页面复核。
+
 - [执行记录导航](records/2026-11/2026-11-02-execution-navigation.md)：点击空间、真实身份与轮次时间。
 
 - [工具结构化内容阅读](records/2026-11/2026-11-02-tool-payload-reading.md)：窄栏字段排版、单复数与原始数据阅读。
