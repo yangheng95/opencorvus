@@ -1,0 +1,84 @@
+[
+  {
+    "label": "final-reference-build",
+    "argv": [
+      "C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\build_package.mjs",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\reference"
+    ],
+    "started": "2026-11-01T02:19:49.306042+00:00",
+    "ended": "2026-11-01T02:20:02.196885+00:00",
+    "native_exit": 0,
+    "expected_contract_exit": 0
+  },
+  {
+    "label": "final-reference-layout",
+    "argv": [
+      "C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+      "-B",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\month-end-package\\preserve_layout.py",
+      "--root",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\reference\\Aurisic_Financials_4-25-1.xlsx"
+    ],
+    "started": "2026-11-01T02:20:02.198301+00:00",
+    "ended": "2026-11-01T02:20:03.011336+00:00",
+    "native_exit": 0,
+    "expected_contract_exit": 0
+  },
+  {
+    "label": "final-reference-measure",
+    "argv": [
+      "C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+      "-B",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\month-end-package\\check_package.py",
+      "--public",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\public",
+      "--workbook",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\reference\\Aurisic_Financials_4-25-1.xlsx",
+      "--source-calculations",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\independent-source-recalculation.json",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\reference\\full-source-measurements.json"
+    ],
+    "started": "2026-11-01T02:20:03.012336+00:00",
+    "ended": "2026-11-01T02:20:04.617664+00:00",
+    "native_exit": 0,
+    "expected_contract_exit": 0
+  },
+  {
+    "label": "final-wrong-stale-tb-measure",
+    "argv": [
+      "C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+      "-B",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\month-end-package\\check_package.py",
+      "--public",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\public",
+      "--workbook",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\wrong-stale-tb\\Aurisic_Financials_4-25-1.xlsx",
+      "--source-calculations",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\independent-source-recalculation.json",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\wrong-stale-tb\\full-source-measurements.json"
+    ],
+    "started": "2026-11-01T02:20:04.618182+00:00",
+    "ended": "2026-11-01T02:20:06.125233+00:00",
+    "native_exit": 4,
+    "expected_contract_exit": 4
+  },
+  {
+    "label": "final-reference-views",
+    "argv": [
+      "C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\view_package.mjs",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\reference"
+    ],
+    "started": "2026-11-01T02:20:06.125233+00:00",
+    "ended": "2026-11-01T02:20:13.216733+00:00",
+    "native_exit": 0,
+    "expected_contract_exit": 0
+  }
+]

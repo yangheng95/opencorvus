@@ -1,0 +1,269 @@
+{
+  "external_root": "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101",
+  "scope": "Original author code, contracts, handoff, actual numerical/source measurements, execution receipts and 23 rendered critical views. Not a complete workspace or raw-source distribution.",
+  "external_only": [
+    "All original input XLSX/TXT",
+    "Captured and fixed full row/parquet/expert/rubric",
+    "Complete reference and wrong XLSX files",
+    "All initial/repaired sources/output archives",
+    "Dependencies/runtime/cache and complete intermediate logs"
+  ],
+  "members": [
+    {
+      "path": "AUTHOR-REVIEW.md",
+      "bytes": 4195
+    },
+    {
+      "path": "BUILD-PLAN.md",
+      "bytes": 5963
+    },
+    {
+      "path": "build_package.mjs",
+      "bytes": 15102
+    },
+    {
+      "path": "CFO-HANDOFF.md",
+      "bytes": 4079
+    },
+    {
+      "path": "check_package.py",
+      "bytes": 14067
+    },
+    {
+      "path": "evidence/actual-recalculated-values.json",
+      "bytes": 2002
+    },
+    {
+      "path": "evidence/actual-refresh.json",
+      "bytes": 197
+    },
+    {
+      "path": "evidence/delivery.json",
+      "bytes": 1681
+    },
+    {
+      "path": "evidence/final-delivery-commands.json",
+      "bytes": 3855
+    },
+    {
+      "path": "evidence/final-reference-build-delivery.stderr",
+      "bytes": 1005
+    },
+    {
+      "path": "evidence/final-reference-build-delivery.stdout",
+      "bytes": 421
+    },
+    {
+      "path": "evidence/final-reference-layout-delivery.stderr",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/final-reference-layout-delivery.stdout",
+      "bytes": 215
+    },
+    {
+      "path": "evidence/final-reference-measure-delivery.stderr",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/final-reference-measure-delivery.stdout",
+      "bytes": 124
+    },
+    {
+      "path": "evidence/final-reference-views-delivery.stderr",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/final-reference-views-delivery.stdout",
+      "bytes": 314
+    },
+    {
+      "path": "evidence/final-wrong-stale-tb-measure-delivery.stderr",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/final-wrong-stale-tb-measure-delivery.stdout",
+      "bytes": 126
+    },
+    {
+      "path": "evidence/first-executed-programme.mjs",
+      "bytes": 12888
+    },
+    {
+      "path": "evidence/first-programme-commands.json",
+      "bytes": 4201
+    },
+    {
+      "path": "evidence/fixed-source-identity.json",
+      "bytes": 607
+    },
+    {
+      "path": "evidence/formula-error-scan.ndjson",
+      "bytes": 127
+    },
+    {
+      "path": "evidence/independent-source-recalculation.json",
+      "bytes": 5920
+    },
+    {
+      "path": "evidence/layout-receipt.json",
+      "bytes": 225
+    },
+    {
+      "path": "evidence/misc-source-recalculation.stderr",
+      "bytes": 90
+    },
+    {
+      "path": "evidence/misc-source-recalculation.stdout",
+      "bytes": 94
+    },
+    {
+      "path": "evidence/reference-measurements.json",
+      "bytes": 165638
+    },
+    {
+      "path": "evidence/source-recalculation-terminal.json",
+      "bytes": 479
+    },
+    {
+      "path": "evidence/source-recalculation.stderr",
+      "bytes": 793
+    },
+    {
+      "path": "evidence/source-recalculation.stdout",
+      "bytes": 701
+    },
+    {
+      "path": "evidence/tool-incidents.json",
+      "bytes": 873
+    },
+    {
+      "path": "evidence/wrong-measurements.json",
+      "bytes": 203918
+    },
+    {
+      "path": "prepare_source.py",
+      "bytes": 3539
+    },
+    {
+      "path": "preserve_layout.py",
+      "bytes": 3873
+    },
+    {
+      "path": "public/INPUTS.json",
+      "bytes": 5373
+    },
+    {
+      "path": "public/QUALITY-CONTRACT.md",
+      "bytes": 5005
+    },
+    {
+      "path": "README.md",
+      "bytes": 8290
+    },
+    {
+      "path": "recompute_sources.py",
+      "bytes": 3715
+    },
+    {
+      "path": "SOURCE-FLOW.md",
+      "bytes": 4978
+    },
+    {
+      "path": "view_package.mjs",
+      "bytes": 4418
+    },
+    {
+      "path": "views/00-toc.png",
+      "bytes": 157751
+    },
+    {
+      "path": "views/01-tb-head.png",
+      "bytes": 117656
+    },
+    {
+      "path": "views/01-tb-tail.png",
+      "bytes": 136099
+    },
+    {
+      "path": "views/02-cash.png",
+      "bytes": 78837
+    },
+    {
+      "path": "views/03-bank.png",
+      "bytes": 70097
+    },
+    {
+      "path": "views/04-funding.png",
+      "bytes": 136124
+    },
+    {
+      "path": "views/05-prepaids.png",
+      "bytes": 367184
+    },
+    {
+      "path": "views/06-insurance.png",
+      "bytes": 261337
+    },
+    {
+      "path": "views/07-fees.png",
+      "bytes": 78614
+    },
+    {
+      "path": "views/08-legal-head.png",
+      "bytes": 116125
+    },
+    {
+      "path": "views/08-legal-tail.png",
+      "bytes": 122218
+    },
+    {
+      "path": "views/09-loan1-april.png",
+      "bytes": 97897
+    },
+    {
+      "path": "views/09-loan1-terms.png",
+      "bytes": 53265
+    },
+    {
+      "path": "views/10-loan2.png",
+      "bytes": 129233
+    },
+    {
+      "path": "views/11-ap.png",
+      "bytes": 34648
+    },
+    {
+      "path": "views/12-ar.png",
+      "bytes": 39916
+    },
+    {
+      "path": "views/13-payroll.png",
+      "bytes": 174340
+    },
+    {
+      "path": "views/14-rebates.png",
+      "bytes": 45836
+    },
+    {
+      "path": "views/15-uninvoiced.png",
+      "bytes": 30315
+    },
+    {
+      "path": "views/16-bonus.png",
+      "bytes": 76054
+    },
+    {
+      "path": "views/17-misc.png",
+      "bytes": 53670
+    },
+    {
+      "path": "views/18-issues.png",
+      "bytes": 165316
+    },
+    {
+      "path": "views/19-issues-tail.png",
+      "bytes": 155905
+    }
+  ]
+}

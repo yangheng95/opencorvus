@@ -1,0 +1,43 @@
+{
+  "at": "2026-11-01T02:23:39.866669+00:00",
+  "phase": "complete_month_end_review_package_unreviewed_no_heavy_qualification",
+  "root": "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101",
+  "reference_file": "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\reference\\Aurisic_Financials_4-25-1.xlsx",
+  "financial_final_approval": false,
+  "active_candidate": null,
+  "active_evaluation": null,
+  "automatic_candidate_launch_allowed": false,
+  "automatic_review_launch_allowed": false,
+  "expert_answer_read": true,
+  "expert_use": "Missing-source diagnosis only; no expert AP amounts supplied to producer or expected values",
+  "source_identity_different_fields": [
+    "rubric_pretty",
+    "prompt",
+    "rubric_json"
+  ],
+  "reference": {
+    "measured_contracts_match": true,
+    "ledger_accounts": 105,
+    "cash_controls": 5,
+    "schedule_results": 122,
+    "retained_source_inputs": 874,
+    "native_consumer_exit": 0
+  },
+  "wrong_original": {
+    "native_consumer_exit": 4,
+    "ledger_differences": 159,
+    "support_mismatches": 33,
+    "missing_new_principal_controls": 3,
+    "retained_source_inputs_match": true
+  },
+  "visual": {
+    "worksheets": 19,
+    "views": 23,
+    "review": "Actual author view, affected layouts repaired and reviewed; no native Microsoft Excel UI"
+  },
+  "score": null,
+  "heavy_qualified": false,
+  "effective_candidate_hours": null,
+  "model_comparison": null,
+  "next": "Independent whole-task professional validity, legitimate variant coverage and real depth/model comparison remain unmet. No automatic delegation/model request or repeat of closed author work."
+}

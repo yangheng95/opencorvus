@@ -1121,3 +1121,20 @@ Recall：用户要完整重型任务的实质质量，不再接受工程文件�
 - 工作簿保存后实际导入，原项目工时+1使个人/部门/项目各+1h，工作日21→20使首人容量160/PMO640；原件不改，六页实际render/view。初固定备注会随刷新失真，单一producer改为引用未分配总小时公式；first-reference.zip/原源/原输出保，修后只必要重交/检查。Artifact Tool真实重算不是Excel窗口或Microsoft Excel原生验收；用户应用未触碰。Q02–Q06机器范围/其余作者源/内容/视觉自查均分列，未代签独立整审。
 - 本地原PDF文本输出一处cp1252 UnicodeEncodeError只影响观察stdout，改显式UTF8重读，没有修改原PDF。固定parquet解码器PyArrow26与原科学env NumPy1.26不兼容，初错误保，仅在本任务parquet-deps另装NumPy2，与新解码器同一自有target，原科学venv/GPU环境未变；随后两固定parquet解码全字段相同。没有重开任何L01/L02/L06、模型/Provider或生产任务，不当生产共享异常。
 - 来源/公私边界/全原件externalroot/原生复建命令/正确错误收据与全数值误差保，新候选只可取公开合同和原三表/原prompt，不取专家/rubric/本Recall。此为完整未整审原型，不是冻结bench或数小时难度证明；简单合并/几秒数值执行不补重型资格。原十题/有效小时0/10未变、没有新Codex/OC对照，通用修正行为根治效果仍未证。禁止借原型自动启动新fresh/审查或重复本次参考/错误/图来凑资格。结束按范围commit/正常fetch merge审全部待推/完整hook push。
+
+### 完整月结包：新工作实施前Recall（2026-11-01）
+
+- 旧对象/工作量小原型均闭合，本轮不另做小表格案例。只在原公开prompt/原料形式基础上选择ee09d943..完整April month-end任务，固定GDPval11e7900；原March模板→April TB/贷款/预付/应计/薪资/费用/现金支持之间的实质关系是候选建设依据，17文件/15模板表本身不证明深度。没有看此task专家答案/rubric设线。方案cases/month-end-package/BUILD-PLAN.md在源下载前落盘；无委托/模型请求。
+- 开始Git HEAD=upstream a010926db（peer overlay已交远端），benchmark范围clean，foreign184保；不推不改未知peer文件。复用唯一来源下载器取本task原prompt/17输入/原专家/rubric到D:/opencorvus-benchmark-runs/gdpval-month-end-task-20261101公私分区，source24成员并不作资格计数。原prompt列AP_TB-1但发布列表缺此文件，任务明确要求发现缺失/不一致标CFO；不从私有答案/邻题补数据，不向CFO外发消息。
+- 首次读全部源表结构和实际关键数值/公式、原March五视图真实render/view，source关系在SOURCE-FLOW，公开QUALITY-CONTRACT事先分13维/连续金额误差与未知事项，不合成100。原TB实际105账户vsMarch97，新增8，按division/account联合身份，不能丢division12的1101/9999。1250跨期算式差165000、多个源预付版本/原汇总范围和缓存不同、银行独立源余额空、模板日期/资金平均旧分母均须实际追源/核算；不据线索造调整/确定账错或以一个相近缓存冒成功。
+- 下一仅推进这一完整月结成果/真实源计算及消费，不建通用框架、不能用原始源文件数或一轮作者核查代替模型结果。原专家源/分数不改，不自动独审/fresh；无法完成完整合同/可达性就保具体阻断。产品调度/UI/schema/Provider/凭据/用户进程无涉，原科学venv/GPU不改，全部本机自有工具。任务仍实施中，未交成功参考、未冻结、无候选/重型/小时结论。
+
+### 完整月结包实物闭合（2026-11-01）
+
+- 新cases/month-end-package交完整19页April CFO待审工作簿/13维公开合同/原17输入定位/交接草稿/当前唯一producer与模板适配数值consumer。原始工作区根gdpval-month-end-task-20261101，current phase=complete_month_end_review_package_unreviewed_no_heavy_qualification，active_candidate/evaluation=null，自动候选/独审false。原料、专家、全部XLSX、原日志/错误/源修前ZIP及依赖外部完整保；仓库约3.2MB逐成员投影不冒全workspace。
+- 先公开原料关系/质量合同后读专家：其AP表含公开17输入未给供应商金额，故不能作同公开材料可达真值；参考只保GL2000 314563.78、AP明细unavailable和CFO待补，不抄私料。银行余额原C4空、未清两支票16166.78，独立调节unavailable；GL现金6610926.8单列，未反造银行对账。
+- 独立formulas1.3.4实际重算原供应商/两贷款/工资/杂项公式；原TB消费者从右端字段独立解析，不信producer regex/JSON/缓存。105联合账户名称/类别/期间/YTD、5现金控制、122支持结果、874原始输入全匹配明确预期。真实最终producer02:19:49.306→02:20:02.197Z/native0；保存后同consumer02:20:03.012→02:20:04.618Z/native0。真实stale-TB完整错误首次已生成19页，同当前consumer02:20:04.618→02:20:06.125Z/native4：159总账差异、30已有支持结果错+3后来补齐的本金控制未提供，874源输入仍匹配。错误programme没重跑，controller0不冒子exit4；此为模板适配测量，非全合法布局candidategrader/总100。
+- 实质财务事实：两本金合计31800000对GL2600/2601，合并应计67315.06432876726与GL67315.07差约.00567；专用预付1250 692501.3131对GL692501.33差约.01687；保险专用5493.27对GL54630.68差49137.41，combined版本另重算49137.41，不为对平选择版本。法律原L62重复小计，逐交易计一次后435284.69对GL；工资滚动−318500对GL−141033差177467，130%算式236448.888对posting236500亦待解释。12跨期桥只升级为具体问题，不宣称全是账错、不做plug。
+- 19页23关键视图实际render/view，原标题截断/长浮点/遗留错误说明重叠据图在同一producer修正，修后复看；现金源+1使现金/银行book控制各+1、独立银行仍未知，真实内存副本未覆盖交付。ArtifactTool2.8.106/Node24.22.1/Py3.12.14，未用Excel窗口、Docker、UI自动化、Provider或模型请求；只在自有calc-deps装独立库，原科学env/GPU不改。
+- 源身份新事实：固定parquet逐字段对captured row只有prompt/rubric_json/rubric_pretty三文字字段字节不同；原料/交付文件列表/URI及task同。prompt diff为固定替换字符与原捕获标点/项目符号、末尾换行差，原对象/完整diff照保，未宣布所有字段相同/rowrevision已核。首次consumer误把源杂项B5常数公式当literal，native1原工具错误保；只新算该源后同核数过。补丁上下文验证失败/错误目录观察未改业务对象，属于root工具准备，不当共享生产异常。
+- 当前交的是完整可审作者参考，不是独立整题审查/公司政策确认/财务签字、职业统计成熟、合法变体全覆盖或候选成绩。原支持大量预填、13秒作者生产不证明候选数小时；原十题/有效候选小时0/10不变。此实物闭合后禁止重复作者源分析/生产/错误/图/刷新/检查器刷资格；无授权不新模型/审查或机械版。通用修正已实施、有限场景通过、行为改善/根治效果未证仍最高。

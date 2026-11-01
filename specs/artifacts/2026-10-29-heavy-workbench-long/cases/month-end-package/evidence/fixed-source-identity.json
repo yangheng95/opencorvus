@@ -1,0 +1,24 @@
+{
+  "task_id": "ee09d943-5a11-430a-b7a2-971b4e9b01b5",
+  "revision": "11e7900cdcac61bc4daf59e65feb238acda98fbf",
+  "fields_compared": [
+    "deliverable_file_hf_uris",
+    "deliverable_file_urls",
+    "deliverable_files",
+    "occupation",
+    "prompt",
+    "reference_file_hf_uris",
+    "reference_file_urls",
+    "reference_files",
+    "rubric_json",
+    "rubric_pretty",
+    "sector",
+    "task_id"
+  ],
+  "different_fields": [
+    "rubric_pretty",
+    "prompt",
+    "rubric_json"
+  ],
+  "scope": "Original fixed object identity, not financial correctness or model qualification"
+}

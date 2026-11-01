@@ -1,0 +1,18 @@
+{
+  "provenance": "Recorded from actual tool results; this is a concise incident receipt, not recreated raw stderr.",
+  "measurement_initial": {
+    "tool_chunk": "149a5a",
+    "native_exit": 1,
+    "error": "SOURCE_LITERAL_REQUIRED:AccrMisc-1.xlsx:B5",
+    "cause": "Original B5 is a formula =-7892+3452, not a literal amount",
+    "repair": "Only this new source was additionally evaluated by the independent formulas engine; same actual XLSX reader rerun"
+  },
+  "patch_preparation": {
+    "error": "apply_patch verification failed on out-of-order finalize_reference.py context",
+    "mutation": "Atomic patch not applied; exact patch order corrected before execution"
+  },
+  "observation": {
+    "error": "A queried source directory did not exist; originals directory remained intact",
+    "impact": "Observation only; no programme/data mutation"
+  }
+}

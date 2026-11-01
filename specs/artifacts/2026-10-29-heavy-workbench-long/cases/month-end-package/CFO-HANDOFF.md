@@ -1,0 +1,20 @@
+# April month-end package — draft for CFO review
+
+The consolidated workbook is prepared from the supplied public records. This is a review draft, pending the source clarifications below and your approval. No external notification has been sent. General ledger (GL), accounts payable (AP), accounts receivable (AR) and year to date (YTD) refer to the actual source labels.
+
+| Area | Known result | Clarification or action required |
+| --- | --- | --- |
+| AP | April GL2000 credit balance314,563.78 | Supply AP_TB-1.xlsx. Vendor-level support was not provided; March vendor balances have not been relabeled as April. |
+| Bank | Two outstanding checks total16,166.78; April ledger cash6,610,926.80 | Supply the independent bank-statement balance. Approve the proposed reclassification separately. Ledger cash does not verify a bank balance. |
+| Funding | GL7206 funding4,687,985; interest233,042.36 and76,715.65; four-month averages retained | Provide April subsidiary allocations and resolve duplicate UK labels. Other income5,500 is shown separately from original funding categories. |
+| Prepaid expenses1250 | Dedicated vendor schedule692,501.3131313132 versus GL692,501.33 | Confirm primary source version and small residual. Combined-version vendor total692,501.3231313131 differs. No balancing entry has been invented. |
+| Insurance1251 | Dedicated schedule5,493.27 versus GL54,630.68, difference49,137.41 | Combined source calculates49,137.41 with different prior-period layout. Confirm period/version before changing the GL or selecting an authoritative schedule. |
+| Legacy prepaid checks | Original PPD1250 P50/S50 are literal #REF! errors | Their intended legacy checks remain unavailable. The vendor closing calculation is separate; original error cells are retained in the original source and earlier output archive. |
+| Legal/professional fees | Corrected signed legal transaction total435,284.69 matches GL6200; professional-fee balance−160,270.22 matches GL2404 | Legal source L62 duplicated a subtotal. Corrected totals count each transaction once. Confirm the cross-period−84,000 bridge, which is a separate question from the legal transaction sum. |
+| Loans | Principal18.3m +13.5m =31.8m matches GL2600/2601; accrued interest67,315.06432876726 versus GL67,315.07 | Confirm rounding convention. Rates/dates follow supplied records; no external rate verification or new accounting policy is claimed. Cash availability retains the template's GL2600-only borrowing scope. |
+| AR | Supplied division10 detail10,997 matches its GL; division12 GL1101 is60,500 | Supply division12 supporting detail and confirm reporting scope. Division identities have not been merged. |
+| Payroll | March GL−259,800 plus supplied April postings−58,700 gives−318,500; April GL−141,033 leaves177,467 | Explain missing/reclassified accrual movements. Source posting236,500 differs from its130% calculation236,448.888; confirm the estimate. Two source copies of the same April payroll were included once. |
+| Other supports | Rebates159,707.51; uninvoiced304,169.11; bonus334,593.73; miscellaneous146,796.76 match their credit controls | Retain each original source/sign. The10% bonus calculation146,302.636 is a reference calculation, not a replacement for the supplied accumulated bonus balance. |
+| Cross-period bridges | Twelve March YTD + April movement versus April YTD differences are listed in the workbook | Explain/approve each bridge, including1250+165,000 and2011−159,695; these arithmetic differences alone do not establish that the ledger is erroneous. |
+
+The Table of Contents and operating schedules are updated, including the new April support tabs. CFO-reserved sections1/2/2a/3 are not supplied as operating schedules. The workbook uses formulas and retains signed source transactions. Its known financial differences are displayed rather than hidden by plugs. Underlying jurisdiction, reporting standard and company materiality/rounding policies were not supplied, so this draft does not claim external financial-reporting compliance or final sign-off.

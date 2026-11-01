@@ -1,0 +1,96 @@
+[
+  {
+    "programme": "reference",
+    "step": "producer",
+    "argv": [
+      "C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\build_package.mjs",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\reference",
+      "reference"
+    ],
+    "started": "2026-11-01T02:04:47.943049+00:00",
+    "ended": "2026-11-01T02:05:00.392071+00:00",
+    "native_exit": 0
+  },
+  {
+    "programme": "reference",
+    "step": "layout",
+    "argv": [
+      "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\month-end-package\\preserve_layout.py",
+      "--root",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\reference\\Aurisic_Financials_4-25-1.xlsx"
+    ],
+    "started": "2026-11-01T02:05:00.392769+00:00",
+    "ended": "2026-11-01T02:05:01.180445+00:00",
+    "native_exit": 0
+  },
+  {
+    "programme": "reference",
+    "step": "checker",
+    "argv": [
+      "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\month-end-package\\check_package.py",
+      "--public",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\public",
+      "--workbook",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\reference\\Aurisic_Financials_4-25-1.xlsx",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\reference\\measurements.json"
+    ],
+    "started": "2026-11-01T02:05:01.180445+00:00",
+    "ended": "2026-11-01T02:05:02.683358+00:00",
+    "native_exit": 0
+  },
+  {
+    "programme": "wrong-stale-tb",
+    "step": "producer",
+    "argv": [
+      "C:/Users/hengu/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\build_package.mjs",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\wrong-stale-tb",
+      "stale-tb"
+    ],
+    "started": "2026-11-01T02:05:02.684360+00:00",
+    "ended": "2026-11-01T02:05:15.779971+00:00",
+    "native_exit": 0
+  },
+  {
+    "programme": "wrong-stale-tb",
+    "step": "layout",
+    "argv": [
+      "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\month-end-package\\preserve_layout.py",
+      "--root",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\wrong-stale-tb\\Aurisic_Financials_4-25-1.xlsx"
+    ],
+    "started": "2026-11-01T02:05:15.780971+00:00",
+    "ended": "2026-11-01T02:05:16.575905+00:00",
+    "native_exit": 0
+  },
+  {
+    "programme": "wrong-stale-tb",
+    "step": "checker",
+    "argv": [
+      "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\month-end-package\\check_package.py",
+      "--public",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\public",
+      "--workbook",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\wrong-stale-tb\\Aurisic_Financials_4-25-1.xlsx",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\wrong-stale-tb\\measurements.json"
+    ],
+    "started": "2026-11-01T02:05:16.576904+00:00",
+    "ended": "2026-11-01T02:05:17.950227+00:00",
+    "native_exit": 4
+  }
+]

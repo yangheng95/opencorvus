@@ -1,0 +1,97 @@
+{
+  "task_id": "ee09d943-5a11-430a-b7a2-971b4e9b01b5",
+  "raw_input_revision": "11e7900cdcac61bc4daf59e65feb238acda98fbf",
+  "public_cache": "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\public",
+  "original_prompt": "TASK.original.txt",
+  "prompt_provenance": "Captured original task text; fixed parquet differs in text bytes. See source identity evidence.",
+  "inputs": [
+    {
+      "name": "Aurisic_Final_TB_4-25-1.txt",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/348fbbd9e92703b1df1a72dd4ab269d5/Aurisic_Final_TB_4-25-1.txt",
+      "bytes": 12423
+    },
+    {
+      "name": "Aurisic_Prepaid_Expenses_4-25-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/f41836df23874e5e027be27fd10ae305/Aurisic_Prepaid_Expenses_4-25-1.xlsx",
+      "bytes": 43084
+    },
+    {
+      "name": "Legal_Dump-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/328e0d3d319142a5d652972cf6e9cc6a/Legal_Dump-1.xlsx",
+      "bytes": 14929
+    },
+    {
+      "name": "Outstanding_CKs_4-30-25-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/8fa9dfa255bef3b2cbf09baa7c0ee36d/Outstanding_CKs_4-30-25-1.xlsx",
+      "bytes": 12370
+    },
+    {
+      "name": "PPD1250-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/2af9eb7c1c58c6042e1c028a9674612c/PPD1250-1.xlsx",
+      "bytes": 30651
+    },
+    {
+      "name": "Prof_Fee_Dump-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/2704c6315098ee0960cb2500370ff607/Prof_Fee_Dump-1.xlsx",
+      "bytes": 11272
+    },
+    {
+      "name": "Accr2011-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/ec5e2b463297b0ddfb074a036ed58b8b/Accr2011-1.xlsx",
+      "bytes": 9640
+    },
+    {
+      "name": "AccrBonus-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/d66ebb3cc6c362e11462625f9808cf36/AccrBonus-1.xlsx",
+      "bytes": 10564
+    },
+    {
+      "name": "AR_Accrual-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/9b3ff362d6764c61c29298ab132685ab/AR_Accrual-1.xlsx",
+      "bytes": 9686
+    },
+    {
+      "name": "Aurisic_Corp_Payrolls_April_2025-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/3f82469796cc673a356823a06278838c/Aurisic_Corp_Payrolls_April_2025-1.xlsx",
+      "bytes": 13680
+    },
+    {
+      "name": "Payroll-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/a6efe49467e050a76777d74a94b17ae7/Payroll-1.xlsx",
+      "bytes": 11252
+    },
+    {
+      "name": "Rebates-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/a58d05097055f3a607bc186a54c371dd/Rebates-1.xlsx",
+      "bytes": 9746
+    },
+    {
+      "name": "Aurisic_Financials_3-25-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/21d59a3e152d568eff768dd9947d9254/Aurisic_Financials_3-25-1.xlsx",
+      "bytes": 86735
+    },
+    {
+      "name": "Good Insurance Co - Loan II.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/ddfdb3a18fcfe34c7adc18c2134ec689/Good%20Insurance%20Co%20-%20Loan%20II.xlsx",
+      "bytes": 13719
+    },
+    {
+      "name": "Good Insurance Co - Loan.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/c04d9809419a98ed20dbeb77e6d8320d/Good%20Insurance%20Co%20-%20Loan.xlsx",
+      "bytes": 18460
+    },
+    {
+      "name": "AccrMisc-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/719bfd265bf5d3da69da4d7864672b60/AccrMisc-1.xlsx",
+      "bytes": 10401
+    },
+    {
+      "name": "PPD1251-1.xlsx",
+      "raw_source_url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/2f01d8a61124af63743d4bcefd39258e/PPD1251-1.xlsx",
+      "bytes": 18683
+    }
+  ],
+  "missing_named_input": "AP_TB-1.xlsx",
+  "output": "Aurisic_Financials_4-25-1.xlsx",
+  "candidate_boundary": "Original local public inputs, original prompt and public quality contract only. No row-service whole object, parquet, expert, rubric, reference, evaluator source, credentials or Recall."
+}
