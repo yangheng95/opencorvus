@@ -851,6 +851,7 @@ export function App(props: AppProps) {
       <div id="commandPaletteHost">
         <CommandPalette
           onNewChat={props.onNewChat}
+          onOpenGoal={props.primarySurface() === "conversation" && (props.homeActive || props.conversationItem()) ? openGoalForm : undefined}
           onSelectProject={props.onSelectProject}
           onSelectMission={props.onSelectMission}
           onSelectTask={props.onSelectTask}

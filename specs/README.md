@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [全局导航与目标发现](records/2026-11/2026-11-01-workspace-navigation-review.md)：全局Goal命令、同一表单与中英文真实导航。
+
 - [应用内普通预览窗](records/2026-11/2026-11-01-in-app-preview-dialogs.md)：默认展开、图片弹窗、稳定编辑器与实际窗口连续性修复。
 
 - [原生Office预览输入复核](records/2026-11/2026-11-01-native-office-card-review.md)：真实历史交付与默认全屏问题的原始页面证据。

@@ -115,6 +115,7 @@ function rowMatches(row: WorkLedgerMissionRow | WorkLedgerTaskRow, query: string
 
 export function CommandPalette(props: {
   onNewChat: () => Promise<void>
+  onOpenGoal?: () => void
   onSelectProject: (directory: string) => Promise<void>
   onSelectMission: (row: WorkLedgerMissionRow) => Promise<void>
   onSelectTask: (taskID: string, directory: string) => Promise<void>
@@ -135,6 +136,19 @@ export function CommandPalette(props: {
 
   const commands = createMemo<Command[]>(() => {
     const cmds: Command[] = []
+
+    const openGoal = props.onOpenGoal
+    if (openGoal) {
+      cmds.push({
+        id: "goal:open",
+        label: t("continuous_goal.open"),
+        hint: t("cmdk.goal_hint"),
+        group: t("cmdk.group.commands"),
+        keywords: "goal continuous objective budget",
+        icon: "goals",
+        run: openGoal,
+      })
+    }
 
     for (const row of ledgerRows()) {
       cmds.push({

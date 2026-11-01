@@ -4165,6 +4165,14 @@ shortcuts and native menu actions cannot navigate away from their unsaved forms.
 The command palette itself retains global navigation ownership. Chrome search
 requests obey the same foreground-dialog boundary as its K shortcut.
 
+On the conversation surface, Home or a loaded conversation also supplies App's
+existing Goal-open request to the palette. A nonempty matching query exposes
+the localized Open goal action before work matches. It opens the same owner-bound
+form and guide used by the Home/composer entries, retaining their draft, read-only
+and creation semantics. It neither creates a Goal nor performs another Goal read.
+Mission Board has no current-page Goal action. Empty-query recent work and
+suggested actions, work pagination and numbered work shortcuts retain their order.
+
 The command palette reads current, unarchived Project/Chat/Task/Mission records through the
 existing Work Ledger search and public cursor. An empty query shows up to nine
 recent selectable work items; Project rows do not consume that empty-query allowance.

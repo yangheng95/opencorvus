@@ -1,0 +1,123 @@
+{
+  "purpose": "Find the existing continuous-goal form through global command search",
+  "delegation": "single agent",
+  "rootCause": "The local command catalog omitted the existing App Goal-open action",
+  "implementation": "Optional callback to the same owner-bound form; no new goal state or backend requests",
+  "currentBuild": "main-BTGhDWow.js",
+  "manualUI": {
+    "screenshots": 17,
+    "personallyViewed": true,
+    "homeDraft": "NAV853_FORM_DRAFT_KEEP",
+    "budgets": [
+      120000,
+      2
+    ],
+    "keyboardEnterAndDraftRetention": true,
+    "englishAndChinese": true,
+    "existingGoal": {
+      "status": "paused",
+      "tokens": 36322,
+      "turns": 1
+    },
+    "conversationSearchAndExactMessage": true,
+    "boardNavigationAndNumberedWorkSelection": true,
+    "generalSettingsCommand": true
+  },
+  "originalGoals": 9,
+  "originalWorkMessages": 2,
+  "originalGoalAndSelectionPreserved": true,
+  "cases": {
+    "before": {
+      "data": {
+        "at": "2026-11-01T01:17:24.978Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234307,
+        "current": 234307,
+        "changes": [],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 3270768,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-B454iFzK.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "after": {
+      "data": {
+        "at": "2026-11-01T01:23:27.070Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234307,
+        "current": 234309,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48042,
+            "after": 48043
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 47984,
+            "after": 47985
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 2903138,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BTGhDWow.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    }
+  },
+  "checks": {
+    "types-after": 0,
+    "i18n-after": 0,
+    "ui-build-after": 0,
+    "docs-after": 0,
+    "docs-delivery": 0
+  },
+  "modelRequests": 0,
+  "cumulativeRequests": 1180,
+  "pairedCopiesRetired": 4,
+  "uiAutomationTests": 0,
+  "coverageLimits": [
+    "No new Goal creation or model execution",
+    "No individual Task, Mission-conversation, archive-owner or SideChat replay through the new command",
+    "Existing continuous-substring search semantics retained"
+  ],
+  "userWindowAndDatabase": "Not operated or accessed"
+}

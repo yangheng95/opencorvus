@@ -64,7 +64,7 @@ function GoalGuideSteps() {
         {(step) => (
           <li>
             <strong>{t(`continuous_goal.guide.${step}.title`)}</strong>
-            <span>{t(`continuous_goal.guide.${step}.body`, { createLabel: t("continuous_goal.title"), submitLabel: t(CREATE_ACTION_LABEL_KEY) })}</span>
+            <span>{t(`continuous_goal.guide.${step}.body`, { createLabel: t("continuous_goal.title"), submitLabel: t(CREATE_ACTION_LABEL_KEY), openLabel: t("continuous_goal.open") })}</span>
           </li>
         )}
       </For>

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [全局导航与目标发现](2026-11-01-workspace-navigation-review.md)：Ctrl+K目标入口、草稿保留与原目标归属。
+
 - [应用内普通预览窗](2026-11-01-in-app-preview-dialogs.md)：普通窗口、图片/Office/表格实测与浮层归属。
 
 - [原生Office预览输入复核](2026-11-01-native-office-card-review.md)：851原始页面及用户范围修正后的结清。
