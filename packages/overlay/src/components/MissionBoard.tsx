@@ -16,7 +16,8 @@ import { Badge, type BadgeTone } from "./ui/Badge"
 import { Button } from "./ui/Button"
 import { ContextMenu } from "./ui/ContextMenu"
 import { Icon } from "./ui/Icon"
-import { SelectControl } from "./ui/SelectControl"
+import { ComboboxControl } from "./ui/ComboboxControl"
+import { matchesSearchTerms } from "../services/text-search"
 import { SearchField } from "./ui/SearchField"
 import { Feedback } from "./ui/Feedback"
 import { appStore } from "../store/app"
@@ -357,14 +358,24 @@ export function MissionBoard(props: MissionBoardProps) {
           placeholder={t("mission_board.search_placeholder")}
           onValueChange={setSearch}
         />
-        <SelectControl<ProjectOption>
+        <ComboboxControl<ProjectOption>
+          presentation="popup"
           class="mission-board__project-filter"
           options={projectOptions()}
           value={selectedProject()}
-          onChange={(option) => setProjectDirectory(option?.value ?? "")}
+          onChange={(option) => {
+            if (option) setProjectDirectory(option.value)
+          }}
           optionValue="value"
-          optionTextValue="label"
-          renderValue={(option) => option?.label ?? t("mission_board.all_projects")}
+          optionTextValue={(option) => `${option.label} ${option.parent ?? ""}`}
+          optionLabel="label"
+          placeholder={t("project_picker.search_placeholder")}
+          defaultFilter={(option, query) =>
+            matchesSearchTerms(query, [option.label, option.parent, option.value, option.value.replaceAll("\\", "/")])
+          }
+          allowsEmptyCollection
+          closeOnSelection
+          emptyContent={t("project_picker.no_matches")}
           renderOptionLabel={(option) => (
             <>
               {option.label}
@@ -372,7 +383,7 @@ export function MissionBoard(props: MissionBoardProps) {
             </>
           )}
           renderOptionTooltip={(option) => option.value || undefined}
-          triggerTitle={projectDirectory() || undefined}
+          inputTitle={projectDirectory() || t("project_picker.search_placeholder")}
           ariaLabel={t("mission_board.project_filter")}
           ariaDescribedBy={projectDirectory() ? projectContextID : undefined}
           disallowEmptySelection

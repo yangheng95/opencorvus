@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [项目选择中的查找](2026-11-02-project-discovery.md)：共享组合框弹层与真实创建/筛选体验。
+
 - [多项目选择的身份线索](2026-11-02-project-choice-reading.md)：项目筛选与创建目标的持续辨认。
 
 - [执行记录导航](2026-11-02-execution-navigation.md)：共享导航可发现性、身份及实际定位。

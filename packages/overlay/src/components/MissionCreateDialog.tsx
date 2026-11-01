@@ -17,7 +17,8 @@ import { Dialog } from "./ui/Dialog"
 import { Feedback } from "./ui/Feedback"
 import { Icon } from "./ui/Icon"
 import { SegmentedControl, type SegmentedControlOption } from "./ui/SegmentedControl"
-import { SelectControl } from "./ui/SelectControl"
+import { ComboboxControl } from "./ui/ComboboxControl"
+import { matchesSearchTerms } from "../services/text-search"
 import { SearchField } from "./ui/SearchField"
 import { TextField } from "./ui/TextField"
 
@@ -637,17 +638,32 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           <div class="mission-create-form__context-grid">
             <TextField.Root>
               <TextField.Label>{t("mission_board.create.project")}</TextField.Label>
-              <SelectControl<SelectOption>
+              <ComboboxControl<SelectOption>
+                presentation="popup"
                 options={projectOptions()}
                 value={selectedProject()}
-                onChange={(option) => changeProject(option?.value ?? "")}
+                onChange={(option) => {
+                  if (option) changeProject(option.value)
+                }}
                 optionValue="value"
-                optionTextValue="label"
+                optionTextValue={(option) => `${option.label} ${option.description ?? ""}`}
+                optionLabel="label"
+                placeholder={t("project_picker.search_placeholder")}
+                defaultFilter={(option, query) =>
+                  matchesSearchTerms(query, [
+                    option.label,
+                    option.description,
+                    option.value,
+                    option.value.replaceAll("\\", "/"),
+                  ])
+                }
+                allowsEmptyCollection
+                closeOnSelection
+                emptyContent={t("project_picker.no_matches")}
                 disallowEmptySelection
-                sameWidth
+                disabled={submitting()}
                 ariaLabel={t("mission_board.create.project")}
-                triggerDataUI="mission-create-project"
-                renderValue={(option) => option?.label ?? t("mission_board.create.project_placeholder")}
+                inputDataUI="mission-create-project"
                 renderOptionLabel={(option) => (
                   <>
                     {option.label}
@@ -657,7 +673,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                   </>
                 )}
                 renderOptionTooltip={(option) => option.value}
-                triggerTitle={projectDirectory() || undefined}
+                inputTitle={projectDirectory() || t("project_picker.search_placeholder")}
               />
               <Show when={projectDirectory()}>
                 {(directory) => (

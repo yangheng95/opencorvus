@@ -1,0 +1,237 @@
+{
+  "at": "2026-11-01T22:32:08.794Z",
+  "phases": [
+    {
+      "qualification": {
+        "at": "2026-11-01T22:09:16.543Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 258687,
+        "current": 258689,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 52932,
+            "after": 52933
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 52874,
+            "after": 52875
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 4429203,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-9mBp8NKe.js"
+      },
+      "nativeReceipt": {
+        "label": "native-before",
+        "startedAt": 1793570891471,
+        "closedAt": 1793570924431,
+        "code": 0,
+        "signal": null,
+        "childPID": 27324
+      },
+      "shutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "physicalOutcome": "settled",
+      "requestOutcomes": []
+    },
+    {
+      "qualification": {
+        "at": "2026-11-01T22:19:31.287Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 258689,
+        "current": 258691,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 52933,
+            "after": 52934
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 52875,
+            "after": 52876
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 3836859,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-Bwy31mOJ.js"
+      },
+      "nativeReceipt": {
+        "label": "native-after",
+        "startedAt": 1793571187954,
+        "closedAt": 1793571516788,
+        "code": 0,
+        "signal": null,
+        "childPID": 31244
+      },
+      "shutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "physicalOutcome": "settled",
+      "requestOutcomes": []
+    },
+    {
+      "qualification": {
+        "at": "2026-11-01T22:29:09.795Z",
+        "kind": "final",
+        "schema": 9,
+        "tables": 92,
+        "originals": 258691,
+        "current": 258693,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 52934,
+            "after": 52935
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 52876,
+            "after": 52877
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 3226771,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-B6mbMiSX.js"
+      },
+      "nativeReceipt": {
+        "label": "native-final",
+        "startedAt": 1793571791611,
+        "closedAt": 1793572126864,
+        "code": 0,
+        "signal": null,
+        "childPID": 20460
+      },
+      "shutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "physicalOutcome": "settled",
+      "requestOutcomes": []
+    }
+  ],
+  "checks": {
+    "ui-build-after": {
+      "label": "ui-build-after",
+      "startedAt": 1793571081905,
+      "closedAt": 1793571142877,
+      "code": 0,
+      "signal": null,
+      "childPID": 24884
+    },
+    "ui-build-final": {
+      "label": "ui-build-final",
+      "startedAt": 1793571636430,
+      "closedAt": 1793571704506,
+      "code": 0,
+      "signal": null,
+      "childPID": 31344
+    },
+    "typecheck": {
+      "label": "typecheck",
+      "startedAt": 1793571081898,
+      "closedAt": 1793571105427,
+      "code": 0,
+      "signal": null,
+      "childPID": 5048
+    },
+    "typecheck-final": {
+      "label": "typecheck-final",
+      "startedAt": 1793571672825,
+      "closedAt": 1793571702070,
+      "code": 0,
+      "signal": null,
+      "childPID": 30212
+    },
+    "checks": {
+      "label": "checks",
+      "startedAt": 1793571081910,
+      "closedAt": 1793571094178,
+      "code": 0,
+      "signal": null,
+      "childPID": 29724
+    },
+    "checks-final": {
+      "label": "checks-final",
+      "startedAt": 1793571672825,
+      "closedAt": 1793571685122,
+      "code": 0,
+      "signal": null,
+      "childPID": 25240
+    }
+  },
+  "manual": {
+    "screenshots": 29,
+    "locales": [
+      "en-US",
+      "zh-CN"
+    ],
+    "retainedProjects": 100,
+    "projectQueries": [
+      "737",
+      "goal-runtime-870-after",
+      "full Windows801 directory",
+      "full forward slash801 directory",
+      "d3b428",
+      "unmatched text"
+    ],
+    "uncommittedDraftsRetained": true,
+    "queryWithoutSelectionPreservesDirectory": true,
+    "explicitEnterChangesTarget": true,
+    "firstEscapeRetainsTimeZoneForm": true,
+    "secondEscapeReachesOuterPage": true,
+    "inlineCommandPaletteAndConversationSearchClose": true,
+    "originalMissionMessages": 29,
+    "approvedTextMatches": 13
+  },
+  "limitations": [
+    "Zero-request read/draft acceptance; no valid creation, dispatch or scheduled save",
+    "Real failure17 retained; fixed in final18/20",
+    "13/21/22 are transitional screenshots; stable23/24/27 used for visual qualification",
+    "No actual screen reader, IME composition, all-project/theme/zoom or full-path Tooltip hover coverage",
+    "Two immediate navigation attempts after a closing search dialog did not switch; normal stable-page retry succeeded; cause unproven",
+    "Existing native date/time display remains browser-formatted in Chinese screenshot20"
+  ]
+}

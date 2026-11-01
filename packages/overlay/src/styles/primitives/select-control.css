@@ -10,7 +10,8 @@
   box-shadow: var(--ui-focused-popup-shadow);
 }
 
-.oc-select-trigger {
+.oc-select-trigger,
+.oc-combobox-control {
   appearance: none;
   display: flex;
   align-items: center;
@@ -47,19 +48,22 @@
   flex: none;
 }
 
-.oc-select-trigger:hover:not([data-disabled]):not(:disabled) {
+.oc-select-trigger:hover:not([data-disabled]):not(:disabled),
+.oc-combobox-control:hover:not([data-disabled]) {
   border-color: var(--border-hover);
   background: var(--surface-hover);
 }
 
-.oc-select-trigger:focus-visible {
+.oc-select-trigger:focus-visible,
+.oc-combobox-control:focus-within {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 calc(2px * var(--ui-scale)) var(--oc-control-focus-ring);
 }
 
 .oc-select-trigger[data-disabled],
-.oc-select-trigger:disabled {
+.oc-select-trigger:disabled,
+.oc-combobox-control[data-disabled] {
   cursor: default;
   opacity: var(--ui-opacity-disabled);
 }
@@ -142,6 +146,48 @@
 .oc-select-indicator {
   display: inline-flex;
   color: var(--accent);
+}
+
+.oc-combobox-control {
+  cursor: text;
+}
+
+.oc-combobox-input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  flex: 1 1 auto;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.oc-combobox-trigger {
+  display: inline-flex;
+  height: 100%;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--text-soft);
+  cursor: pointer;
+}
+
+.oc-combobox-content {
+  min-width: min(calc(320px * var(--ui-scale)), calc(100cqw - (var(--ui-gap-md) * 2)));
+}
+
+.oc-combobox-empty {
+  padding: var(--ui-gap-md);
+  color: var(--text-soft);
+  font-size: var(--ui-font-body);
+  white-space: normal;
 }
 
 /* The composer uses the same closed Select primitive with a compact, inline

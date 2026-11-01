@@ -1,0 +1,24 @@
+order,phase,action,result
+1,before,Open board project menu,Directory context retained but no editable search
+2,before,Type737 in creation project menu,Original full candidates and801 selection retained
+3,after,Query737 and press Enter,Exact737 board and creation default
+4,after,Query unmatched text then Escape,Localized empty state and737 restored with draft
+5,after,Query goal-runtime-870-after and Enter,Non-first-screen project selected with draft retained
+6,after,Query exact Windows and forward slash801 path,Same named801 candidate and explicit selection
+7,after,Query anonymous d3b428 in manual form,Anonymous target selected with original title and body
+8,after,Query801 in board then Escape,Original737 directory retained
+9,after,Show all options then Home Enter,All-projects filter restored
+10,after,Inline command query737,Original six retained results and Escape closes
+11,after,Find approved text in original Mission801,Thirteen matches in29 loaded messages and Escape closes
+12,after,Inline time zone queryLondon,Europe London candidate shown
+13,after,Escape in time zone,Failure: whole Settings page closes; no save
+14,final,Time zone London then first Escape,Settings original timezone title and prompt retained
+15,final,Second Escape from closed timezone,Outer Settings closes as intended
+16,final,Chinese timezone first Escape then Cancel,Original timezone and drafts retained then normal cancellation
+17,final,Chinese737 filter and creation,Exact737 default and localized empty state
+18,final,Escape then select non-first-screen goal project,Original request retained with exact target
+19,final,Query801 then blur without selection,Prior goal project and original draft retained
+20,final,Chinese command query801 and Escape,Seven original records and command dialog closes
+21,final,Filter801 and open original Mission then search,29 messages and13 approved text results
+22,final,Conversation search custom Escape,Original Mission reading remains
+23,closure,Close owned pages and public shutdown,All three original handles exit0 and full data qualification

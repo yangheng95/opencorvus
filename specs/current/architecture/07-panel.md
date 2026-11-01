@@ -2726,6 +2726,19 @@ Canonical directory values continue to own filtering and creation targets.
 An explicit board project filter supplies the creation dialog's default project;
 the all-projects view retains the current workspace default. Users can change
 that selection in the dialog without changing their request draft.
+The board filter and creation project field use the shared ComboboxControl's
+popup presentation. Users can search the existing complete choices by name,
+parent, full directory or implicit-project suffix. Typing and cancelling preserve
+the current directory until explicit selection. Kobalte owns input filtering,
+selection and keyboard dismissal; empty matches stay visible and localized.
+The same primitive retains its inline presentation for the command palette,
+conversation search and automation time zones. Popup chrome reuses the shared
+selection styles and page-owned portal boundary; no parallel project source is
+created.
+An open combobox consumes its first Escape while Kobalte closes suggestions and
+restores the selected label. Custom input handlers retain priority; a later
+Escape from a closed control can reach its surrounding page. This also applies
+to inline time-zone suggestions, which must not close the Settings page.
 Transcript actor avatars use neutral chrome with the role glyph; elapsed times
 are caption metadata and activity disclosures use the shared compact row height.
 The existing pane layout effect observes settings hydration and zoom so resolved
