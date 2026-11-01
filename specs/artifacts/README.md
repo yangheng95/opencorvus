@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [项目首页文件入口](2026-11-01-project-home-files/README.md)：18张原图、首候选失败、真实保存/草稿和完整数据保全。
+
 - [计划项目身份连续性](2026-11-01-scheduled-project-identity/README.md)：12张原图、真实转换前后保存、目录注册与完整数据结清。
 
 - [计划任务作者与项目目标](2026-11-01-scheduled-target-review/README.md)：17张原图、原版本取消/保存、目标ID及数据保全回执。

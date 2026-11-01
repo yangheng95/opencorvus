@@ -3417,6 +3417,19 @@ The Explorer tool's empty chooser, add menu, tab and overflow titles, and
 applicable Environment shortcut resolve the same `explorer.title` as the panel
 body. The File viewing/editing tool retains its separate `file.title`, so both
 tools have distinct localized names while their canonical IDs remain unchanged.
+The selected Project's launcher home also offers a localized Browse files
+action, with the same action discoverable in the command palette. App derives
+their availability from its current connection and active directory, and passes
+stable action/availability readers through the retained Conversation slot. Both
+entries use the existing explicit Explorer panel opener; browsing needs no
+Task, Chat Session or model execution and retains the current scoped Composer
+draft. A directory-free launcher offers its existing Project selection flow
+rather than allocating a Project for file browsing. File navigation, dirty
+decisions and conditional saves keep their original owners.
+The locale checker reads strict JSON syntax trees before comparing catalog
+shape and placeholders. Duplicate decoded property names within one object,
+including nested array objects, carry the original locale/path/offset in a
+catalog contract error; separately scoped names retain their ordinary meaning.
 
 Right Dock tabs and their embedded close actions use the shared `32px`
 header-control geometry. The Dock-global add and close actions use the same

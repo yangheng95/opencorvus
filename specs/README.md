@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [项目首页文件入口](records/2026-11/2026-11-01-project-home-files.md)：首页/命令同源Explorer、项目草稿与重复语言键校验。
+
 - [计划项目身份连续性](records/2026-11/2026-11-01-scheduled-project-identity.md)：项目转换后原编辑页保存、混合身份选择与双语详情。
 
 - [计划任务作者与项目目标](records/2026-11/2026-11-01-scheduled-target-review.md)：草稿入口修正、项目搜索与多选保留、只读目标身份。

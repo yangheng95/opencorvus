@@ -11,6 +11,7 @@
 //   * Theme switcher (settingsStore.theme + applyTheme)
 //   * Locale switcher
 //   * New chat and the current page's continuous goal
+//   * The selected Project's existing file workspace
 //
 // Search uses the existing Work Ledger query and cursor. Local commands use
 // case-insensitive terms across their metadata. The shared Combobox owns active descendant,
@@ -108,6 +109,7 @@ function rowMatches(row: WorkLedgerMissionRow | WorkLedgerTaskRow, query: string
 export function CommandPalette(props: {
   onNewChat: () => Promise<void>
   onOpenGoal?: () => void
+  onOpenFiles?: () => void
   onSelectProject: (directory: string) => Promise<void>
   onSelectMission: (row: WorkLedgerMissionRow) => Promise<void>
   onSelectTask: (taskID: string, directory: string) => Promise<void>
@@ -128,6 +130,19 @@ export function CommandPalette(props: {
 
   const commands = createMemo<Command[]>(() => {
     const cmds: Command[] = []
+
+    const openFiles = props.onOpenFiles
+    if (openFiles) {
+      cmds.push({
+        id: "workspace:files",
+        label: t("explorer.browse_project_files"),
+        hint: t("cmdk.files_hint"),
+        group: t("cmdk.group.commands"),
+        keywords: "files explorer browse project workspace directory",
+        icon: "folder",
+        run: openFiles,
+      })
+    }
 
     const openGoal = props.onOpenGoal
     if (openGoal) {

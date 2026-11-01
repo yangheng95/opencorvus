@@ -1,0 +1,332 @@
+{
+  "at": "2026-11-01T06:48:47.734Z",
+  "scope": "Project home and command palette open the existing Explorer; current project/connection owns availability; catalog checker preserves duplicate-key diagnostics",
+  "singleAgent": true,
+  "userWindowsTouched": false,
+  "userServiceTouched": false,
+  "isolatedPorts": [
+    38525,
+    38526,
+    38527
+  ],
+  "schema": 9,
+  "tables": 92,
+  "initialRows": 234568,
+  "finalRows": 234613,
+  "cases": [
+    {
+      "kind": "before",
+      "uiEntry": "main-L2I5a-bT.js",
+      "originalRows": 234568,
+      "finalRows": 234573,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48100,
+          "after": 48101
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48042,
+          "after": 48043
+        },
+        {
+          "table": "memory_chunk",
+          "before": 65,
+          "after": 66
+        },
+        {
+          "table": "memory_file",
+          "before": 65,
+          "after": 66
+        },
+        {
+          "table": "project",
+          "before": 67,
+          "after": 68
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 67,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 3313684,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "kind": "after",
+      "uiEntry": "main-CMN49CBa.js",
+      "originalRows": 234573,
+      "finalRows": 234578,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48101,
+          "after": 48102
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48043,
+          "after": 48044
+        },
+        {
+          "table": "memory_chunk",
+          "before": 66,
+          "after": 67
+        },
+        {
+          "table": "memory_file",
+          "before": 66,
+          "after": 67
+        },
+        {
+          "table": "project",
+          "before": 68,
+          "after": 69
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 68,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 3071925,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "kind": "after2",
+      "uiEntry": "main-BRqkVBqT.js",
+      "originalRows": 234578,
+      "finalRows": 234613,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 45830,
+          "after": 45836
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 45830,
+          "after": 45836
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6020,
+          "after": 6021
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6020,
+          "after": 6021
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18060,
+          "after": 18063
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48102,
+          "after": 48109
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48044,
+          "after": 48051
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5822,
+          "after": 5823
+        },
+        {
+          "table": "memory_chunk",
+          "before": 67,
+          "after": 68
+        },
+        {
+          "table": "memory_file",
+          "before": 67,
+          "after": 68
+        },
+        {
+          "table": "project",
+          "before": 69,
+          "after": 70
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 69,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 2700601,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ],
+  "originalGoals": 9,
+  "originalGoalPublicFactsPreserved": true,
+  "goalReadbackAfterCompleteManualReview": true,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1180,
+  "checks": {
+    "catalog-contract": 0,
+    "types-after2": 0,
+    "i18n-after2": 0,
+    "ui-build-after2": 0
+  },
+  "duplicateKeyReproduction": {
+    "exitCode": 1,
+    "error": "LocaleCatalogMismatchError",
+    "key": "explorer.open",
+    "offset": 115300
+  },
+  "persistence": {
+    "at": "2026-11-01T06:46:56.739Z",
+    "publicationID": "bus-occurrence:1474bc10-2c71-44dd-9aef-733fd587a5ef",
+    "eventType": "file.edited",
+    "projectID": "prj_hmoYWvhtykJ21ui3GkLI",
+    "file": "welcome-862.md",
+    "savedBytes": 83,
+    "referenceBytes": 39,
+    "eventOccurrenceLinksPublication": true,
+    "executionCounts": {
+      "session": 104,
+      "message": 770,
+      "part": 2186
+    },
+    "exactSavedReadbackAfterReentry": true,
+    "priorOwnedProjectInputsPreserved": true
+  },
+  "fileReadbacks": {
+    "initial": {
+      "projectID": "prj_hmoYWvhtykJ21ui3GkLI",
+      "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-01\\project-home-files-862-after2\\home-files-862-after2",
+      "facts": [
+        {
+          "name": "welcome-862.md",
+          "content": "# File workspace 862 after2\n\nOriginal project input.\n",
+          "revision": "f88f764571bd24f2603a97a5fd47c7750f8bd9aef97cff4546d069ef4c8f9fb7"
+        },
+        {
+          "name": "reference-862.txt",
+          "content": "Independent reference input 862 after2\n",
+          "revision": "10c4b489c48d1929e4bb8d67949d102ffe4fc46acfc3e0ab209d5a962cd59169"
+        }
+      ]
+    },
+    "saved": {
+      "projectID": "prj_hmoYWvhtykJ21ui3GkLI",
+      "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-01\\project-home-files-862-after2\\home-files-862-after2",
+      "facts": [
+        {
+          "name": "welcome-862.md",
+          "content": "# File workspace 862 after2\n\nOriginal project input.\n\nSaved from project home 862.\n",
+          "revision": "0eb53d3f43f2f0c3b807635673fc93c31325b476c023e1ce8c912d3eb49b7c50"
+        },
+        {
+          "name": "reference-862.txt",
+          "content": "Independent reference input 862 after2\n",
+          "revision": "10c4b489c48d1929e4bb8d67949d102ffe4fc46acfc3e0ab209d5a962cd59169"
+        }
+      ]
+    },
+    "reentered": {
+      "projectID": "prj_hmoYWvhtykJ21ui3GkLI",
+      "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-01\\project-home-files-862-after2\\home-files-862-after2",
+      "facts": [
+        {
+          "name": "welcome-862.md",
+          "content": "# File workspace 862 after2\n\nOriginal project input.\n\nSaved from project home 862.\n",
+          "revision": "0eb53d3f43f2f0c3b807635673fc93c31325b476c023e1ce8c912d3eb49b7c50"
+        },
+        {
+          "name": "reference-862.txt",
+          "content": "Independent reference input 862 after2\n",
+          "revision": "10c4b489c48d1929e4bb8d67949d102ffe4fc46acfc3e0ab209d5a962cd59169"
+        }
+      ]
+    }
+  },
+  "manualScreenshots": [
+    "01-before-project-home.jpg",
+    "02-before-home-context.jpg",
+    "03-before-files-command-search.jpg",
+    "04-before-files-command-settled.jpg",
+    "05-first-candidate-restored-work.jpg",
+    "06-first-candidate-label-collision.jpg",
+    "07-final-home-files-action.jpg",
+    "08-final-home-explorer-open.jpg",
+    "09-final-home-file-saved.jpg",
+    "10-final-files-command.jpg",
+    "11-final-command-opened-existing-explorer.jpg",
+    "12-final-chinese-home.jpg",
+    "13-final-chinese-files-command.jpg",
+    "14-final-chinese-reference-file.jpg",
+    "15-final-global-home-project-choice.jpg",
+    "16-final-global-command-scope.jpg",
+    "17-final-project-reentry-draft.jpg",
+    "18-final-reentry-saved-content.jpg"
+  ],
+  "finalBuildScreenshots": [
+    "07-final-home-files-action.jpg",
+    "08-final-home-explorer-open.jpg",
+    "09-final-home-file-saved.jpg",
+    "10-final-files-command.jpg",
+    "11-final-command-opened-existing-explorer.jpg",
+    "12-final-chinese-home.jpg",
+    "13-final-chinese-files-command.jpg",
+    "14-final-chinese-reference-file.jpg",
+    "15-final-global-home-project-choice.jpg",
+    "16-final-global-command-scope.jpg",
+    "17-final-project-reentry-draft.jpg",
+    "18-final-reentry-saved-content.jpg"
+  ],
+  "automatedUITests": 0,
+  "followupObservations": [
+    "Explorer wording after closing the Project",
+    "Long Project title wrapping beside the open tool panel"
+  ],
+  "unverifiedLiveBranches": [
+    "Disconnected entry retirement",
+    "Native desktop windows",
+    "Full file-conflict matrix"
+  ]
+}

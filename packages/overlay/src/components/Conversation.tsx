@@ -457,6 +457,8 @@ export function Conversation(props: {
   homeActive: boolean
   launcherIntent: ComposerIntent
   onGoal: () => void
+  onFiles: () => void
+  filesAvailable: () => boolean
   onOpenSubagentConversation: (sessionID: string) => void
   onOpenMissionBoard: () => void
 }) {
@@ -1032,7 +1034,7 @@ export function Conversation(props: {
                   variant="outline"
                   size="sm"
                   tone="neutral"
-                  class="chat-home-goal"
+                  class="chat-home-action"
                   disabled={!appStore.connected}
                   aria-label={t("continuous_goal.open")}
                   title={t("continuous_goal.open")}
@@ -1041,6 +1043,19 @@ export function Conversation(props: {
                   <Icon name="goals" size="compact" />
                   {t("continuous_goal.title")}
                 </Button>
+                <Show when={props.filesAvailable()}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    tone="neutral"
+                    class="chat-home-action"
+                    onClick={props.onFiles}
+                  >
+                    <Icon name="folder" size="compact" />
+                    {t("explorer.browse_project_files")}
+                  </Button>
+                </Show>
               </p>
             </div>
           </Portal>

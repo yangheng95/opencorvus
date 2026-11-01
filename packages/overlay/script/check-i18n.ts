@@ -1,6 +1,7 @@
 #!/usr/bin/env bun
 
 import * as path from "node:path"
+import { getNodeValue, parseTree, printParseErrorCode, type Node, type ParseError } from "jsonc-parser"
 
 const locales = ["en-US", "zh-CN"] as const
 const i18nDirectory = path.resolve(import.meta.dir, "../src/i18n")
@@ -15,6 +16,37 @@ function placeholders(value: string): string[] {
 
 export class LocaleCatalogMismatchError extends Error {
   override readonly name = "LocaleCatalogMismatchError"
+}
+
+export function readLocaleCatalog(locale: string, source: string): Record<string, unknown> {
+  const errors: ParseError[] = []
+  const tree = parseTree(source, errors, { disallowComments: true, allowTrailingComma: false })
+  if (!tree || errors.length) {
+    const error = errors[0]
+    throw new LocaleCatalogMismatchError(
+      `Locale ${locale} has invalid JSON${error ? ` at offset ${error.offset}: ${printParseErrorCode(error.error)}` : ""}.`,
+    )
+  }
+  const inspect = (node: Node, keyPath: string): void => {
+    if (node.type === "object") {
+      const keys = new Set<string>()
+      for (const property of node.children ?? []) {
+        const [key, value] = property.children!
+        const name = key!.value as string
+        const childPath = keyPath === "<root>" ? name : `${keyPath}.${name}`
+        if (keys.has(name))
+          throw new LocaleCatalogMismatchError(`Locale ${locale} has duplicate key at ${childPath} (offset ${key!.offset}).`)
+        keys.add(name)
+        inspect(value!, childPath)
+      }
+    } else if (node.type === "array") {
+      node.children?.forEach((child, index) => inspect(child, `${keyPath}[${index}]`))
+    }
+  }
+  inspect(tree, "<root>")
+  const value: unknown = getNodeValue(tree)
+  if (!isRecord(value)) throw new LocaleCatalogMismatchError(`Locale ${locale} must be a JSON object.`)
+  return value
 }
 
 export function assertLocaleCatalogParity(
@@ -76,8 +108,7 @@ async function main(): Promise<void> {
   const catalogs = await Promise.all(
     locales.map(async (locale) => {
       const file = path.join(i18nDirectory, `${locale}.json`)
-      const value: unknown = await Bun.file(file).json()
-      if (!isRecord(value)) throw new Error(`Locale ${locale} must be a JSON object.`)
+      const value = readLocaleCatalog(locale, await Bun.file(file).text())
       return { locale, value }
     }),
   )

@@ -30,6 +30,7 @@ import { Feedback } from "./ui/Feedback"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { showAppDialog } from "../services/app-dialog"
+import { activeDirectory } from "../services/workspace"
 import { directoryScopedPath } from "../services/task-path"
 import { downloadBlob } from "../services/file-download"
 import { DropdownMenu } from "./ui/DropdownMenu"
@@ -373,7 +374,7 @@ export interface AppProps {
   mailbox: JSX.Element
   primarySurface: () => "conversation" | "mission-board"
   missionBoard: JSX.Element
-  conversation: (container: HTMLDivElement, onGoal: () => void) => JSX.Element
+  conversation: (container: HTMLDivElement, onGoal: () => void, onFiles: () => void, filesAvailable: () => boolean) => JSX.Element
   composer: (onGoal: () => void) => JSX.Element
   homeActive: boolean
   rightDock: JSX.Element
@@ -406,6 +407,10 @@ export interface AppProps {
 }
 
 export function App(props: AppProps) {
+  const filesAvailable = createMemo(() => appStore.connected && Boolean(activeDirectory().trim()))
+  const openProjectFiles = () => {
+    if (filesAvailable()) props.onOpenRightDockPanel("explorer")
+  }
   const [goalOpenRequest, setGoalOpenRequest] = createSignal(0)
   const openGoalForm = () => setGoalOpenRequest((value) => value + 1)
   const [goalFormRequest, setGoalFormRequest] = createSignal<GoalFormRequest>()
@@ -800,7 +805,7 @@ export function App(props: AppProps) {
                                       tabIndex={0}
                                       ref={chatScroll}
                                     >
-                                      {props.conversation(chatScroll, openGoalForm)}
+                                      {props.conversation(chatScroll, openGoalForm, openProjectFiles, filesAvailable)}
                                     </div>
                                     <div class="chat-home-composition" id="chatHomeComposition">
                                       <div id="solidChatHomePromptMount" />
@@ -877,6 +882,7 @@ export function App(props: AppProps) {
         <CommandPalette
           onNewChat={props.onNewChat}
           onOpenGoal={props.primarySurface() === "conversation" && (props.homeActive || props.conversationItem()) ? openGoalForm : undefined}
+          onOpenFiles={filesAvailable() ? openProjectFiles : undefined}
           onSelectProject={props.onSelectProject}
           onSelectMission={props.onSelectMission}
           onSelectTask={props.onSelectTask}
