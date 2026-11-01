@@ -1,0 +1,18 @@
+{
+  "registered_at": "2026-11-01T11:27:23.093984+00:00",
+  "cases": {
+    "reference": "reference-source",
+    "legal-metadata-and-ids": "legal-metadata-and-ids",
+    "wrong-commit-on-rollback": "wrong-commit-on-rollback",
+    "empty-base": "original-base"
+  },
+  "expected": {
+    "reference": 0,
+    "legal-metadata-and-ids": 0,
+    "wrong-commit-on-rollback": 4,
+    "empty-base": 4
+  },
+  "reason": "Final pre-candidate exception-name contract, opaque ids and positive SQLite state/error consumer; original reference unmodified",
+  "candidate_started": false,
+  "official_score": false
+}

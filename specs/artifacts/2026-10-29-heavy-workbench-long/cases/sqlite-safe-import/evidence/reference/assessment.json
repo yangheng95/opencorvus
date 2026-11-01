@@ -1,0 +1,812 @@
+{
+  "source": "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\reference-source",
+  "recorded_at": "2026-11-01T11:27:31.563020+00:00",
+  "new_feature_suite_native_exit": 0,
+  "tests": [
+    {
+      "name": "test_enable_safe_import",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_disable_safe_import",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_import_creates_checkpoint",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_rollback_to_checkpoint",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_commit_checkpoint",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_add_import_invariant",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_remove_import_invariant",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_list_import_invariants",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_validate_import_invariants_success",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_validate_import_invariants_failure",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_insert_with_validation_success",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_insert_with_validation_failure",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_insert_rollback_on_error",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_upsert_with_validation",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_upsert_with_validation_failure",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_upsert_rollback_on_error",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_upsert_strict_mode_with_invariant_failure",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_import_csv_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_import_csv_with_safe_mode_failure",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_import_csv_with_file_path",
+      "status": "passed",
+      "seconds": "0.065",
+      "reason": null
+    },
+    {
+      "name": "test_import_csv_with_string_path",
+      "status": "passed",
+      "seconds": "0.003",
+      "reason": null
+    },
+    {
+      "name": "test_import_json_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_import_json_with_safe_mode_failure",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_error_report_contains_details",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_multiple_invariants_validation",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_checkpoint_cleanup",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_cli_enable_safe_import",
+      "status": "passed",
+      "seconds": "0.030",
+      "reason": null
+    },
+    {
+      "name": "test_cli_disable_safe_import",
+      "status": "passed",
+      "seconds": "0.042",
+      "reason": null
+    },
+    {
+      "name": "test_cli_add_import_invariant",
+      "status": "passed",
+      "seconds": "0.075",
+      "reason": null
+    },
+    {
+      "name": "test_cli_remove_import_invariant",
+      "status": "passed",
+      "seconds": "0.093",
+      "reason": null
+    },
+    {
+      "name": "test_cli_list_import_invariants",
+      "status": "passed",
+      "seconds": "0.075",
+      "reason": null
+    },
+    {
+      "name": "test_cli_validate_import_invariants",
+      "status": "passed",
+      "seconds": "0.074",
+      "reason": null
+    },
+    {
+      "name": "test_cli_validate_import_invariants_with_failure",
+      "status": "passed",
+      "seconds": "0.079",
+      "reason": null
+    },
+    {
+      "name": "test_cli_insert_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.101",
+      "reason": null
+    },
+    {
+      "name": "test_cli_insert_csv_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.120",
+      "reason": null
+    },
+    {
+      "name": "test_cli_insert_csv_from_file_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.127",
+      "reason": null
+    },
+    {
+      "name": "test_cli_insert_csv_with_safe_mode_failure",
+      "status": "passed",
+      "seconds": "0.065",
+      "reason": null
+    },
+    {
+      "name": "test_safe_import_with_foreign_key_validation",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_import_with_foreign_key_violation",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_nested_checkpoint_handling",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_import_performance_invariant",
+      "status": "passed",
+      "seconds": "0.002",
+      "reason": null
+    },
+    {
+      "name": "test_cli_bulk_import_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.095",
+      "reason": null
+    },
+    {
+      "name": "test_dropped_table_restoration_on_rollback",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_schema_changes_rolled_back",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_cli_insert_with_invariant_violation_prevents_write",
+      "status": "passed",
+      "seconds": "0.086",
+      "reason": null
+    },
+    {
+      "name": "test_nested_savepoints",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_index_and_trigger_preserved_on_rollback",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_expression_vs_select_invariants",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_consistent_failure_schema",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_checkpoint_not_active_after_rollback",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_rollback_nonexistent_checkpoint",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_commit_nonexistent_checkpoint",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_strict_mode_with_invariant_failure",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_checkpoint_inactive_after_commit",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_cli_upsert_safe_mode",
+      "status": "passed",
+      "seconds": "0.135",
+      "reason": null
+    },
+    {
+      "name": "test_bulk_safe_mode_with_update",
+      "status": "passed",
+      "seconds": "0.133",
+      "reason": null
+    },
+    {
+      "name": "test_expression_invariant_checks_all_rows",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_expression_invariant_first_row_passes_later_fails",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_import_csv_with_strict_mode",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_import_json_with_strict_mode",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    }
+  ],
+  "native_commands": [
+    {
+      "label": "new-feature-contracts",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\consumer\\test_safe_bulk_import.py",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--rootdir",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\consumer",
+        "--junitxml",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\new.xml"
+      ],
+      "started_at": "2026-11-01T11:27:23.204747+00:00",
+      "ended_at": "2026-11-01T11:27:25.321539+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": null
+    },
+    {
+      "label": "ordinary-insert",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "insert",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people",
+        "-",
+        "--pk",
+        "id"
+      ],
+      "started_at": "2026-11-01T11:27:25.330050+00:00",
+      "ended_at": "2026-11-01T11:27:25.651371+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "enable-safe",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "enable-safe-import",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:25.661892+00:00",
+      "ended_at": "2026-11-01T11:27:25.956604+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "add-row-invariant",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "add-import-invariant",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people",
+        "age >= 18"
+      ],
+      "started_at": "2026-11-01T11:27:25.956604+00:00",
+      "ended_at": "2026-11-01T11:27:26.249547+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "add-count-invariant",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "add-import-invariant",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people",
+        "COUNT(*) <= 3"
+      ],
+      "started_at": "2026-11-01T11:27:26.249547+00:00",
+      "ended_at": "2026-11-01T11:27:26.544571+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "read-persisted-invariants",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json; from sqlite_utils import Database; d=Database(sys.argv[1]); print(json.dumps(d.list_import_invariants('people'),default=str)); d.close()",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:26.544571+00:00",
+      "ended_at": "2026-11-01T11:27:26.798543+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "list-invariants",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "list-import-invariants",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people"
+      ],
+      "started_at": "2026-11-01T11:27:26.798543+00:00",
+      "ended_at": "2026-11-01T11:27:27.082506+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "safe-insert-commit",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "insert",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people",
+        "-",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:27.082506+00:00",
+      "ended_at": "2026-11-01T11:27:27.385381+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "safe-insert-invariant-error",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "insert",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people",
+        "-",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:27.387885+00:00",
+      "ended_at": "2026-11-01T11:27:27.686056+00:00",
+      "native_exit": 1,
+      "status": "operation_error",
+      "expected_status": "operation_error"
+    },
+    {
+      "label": "safe-upsert-commit",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "upsert",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people",
+        "-",
+        "--pk",
+        "id",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:27.687569+00:00",
+      "ended_at": "2026-11-01T11:27:27.977704+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "safe-upsert-invariant-error",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "upsert",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people",
+        "-",
+        "--pk",
+        "id",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:27.978709+00:00",
+      "ended_at": "2026-11-01T11:27:28.268260+00:00",
+      "native_exit": 1,
+      "status": "operation_error",
+      "expected_status": "operation_error"
+    },
+    {
+      "label": "bulk-update-commit",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "bulk",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "UPDATE people SET age = :age WHERE id = :id",
+        "-",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:28.269341+00:00",
+      "ended_at": "2026-11-01T11:27:28.572163+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "bulk-update-invariant-error",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "bulk",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "UPDATE people SET age = :age WHERE id = :id",
+        "-",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:28.573167+00:00",
+      "ended_at": "2026-11-01T11:27:28.863190+00:00",
+      "native_exit": 1,
+      "status": "operation_error",
+      "expected_status": "operation_error"
+    },
+    {
+      "label": "validate-success",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "validate-import-invariants",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people"
+      ],
+      "started_at": "2026-11-01T11:27:28.864190+00:00",
+      "ended_at": "2026-11-01T11:27:29.147141+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "validate-success-api",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json; from sqlite_utils import Database; d=Database(sys.argv[1]); print(json.dumps(d.validate_import_invariants('people'),default=str)); d.close()",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:29.148141+00:00",
+      "ended_at": "2026-11-01T11:27:29.402098+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "add-failing-invariant",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "add-import-invariant",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people",
+        "COUNT(*) = 0"
+      ],
+      "started_at": "2026-11-01T11:27:29.402098+00:00",
+      "ended_at": "2026-11-01T11:27:29.691618+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "get-failing-invariant-id",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json; from sqlite_utils import Database; d=Database(sys.argv[1]); print(json.dumps(d.list_import_invariants('people'),default=str)); d.close()",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:29.691618+00:00",
+      "ended_at": "2026-11-01T11:27:29.936760+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "validate-failure-native-zero",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "validate-import-invariants",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people"
+      ],
+      "started_at": "2026-11-01T11:27:29.936760+00:00",
+      "ended_at": "2026-11-01T11:27:30.218822+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "validate-failure-api",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json; from sqlite_utils import Database; d=Database(sys.argv[1]); print(json.dumps(d.validate_import_invariants('people'),default=str)); d.close()",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:30.218822+00:00",
+      "ended_at": "2026-11-01T11:27:30.470843+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "remove-failing-invariant",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "remove-import-invariant",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db",
+        "people",
+        "3383892af85aa0cc"
+      ],
+      "started_at": "2026-11-01T11:27:30.470843+00:00",
+      "ended_at": "2026-11-01T11:27:30.759438+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "remaining-invariants",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json; from sqlite_utils import Database; d=Database(sys.argv[1]); print(json.dumps(d.list_import_invariants('people'),default=str)); d.close()",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:30.759438+00:00",
+      "ended_at": "2026-11-01T11:27:31.009031+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "disable-safe",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "disable-safe-import",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:31.009031+00:00",
+      "ended_at": "2026-11-01T11:27:31.302510+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "disabled-explicit-error",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json\nfrom sqlite_utils import Database\nd=Database(sys.argv[1])\ntry:\n d.create_import_checkpoint()\n print(json.dumps({'outcome':'checkpoint_created'}))\nexcept Exception as e:\n print(json.dumps({'error_family':[base.__name__ for base in type(e).__mro__]}))\nd.close()\n",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\reference\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:31.304014+00:00",
+      "ended_at": "2026-11-01T11:27:31.562016+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    }
+  ],
+  "workflow": {
+    "started": true,
+    "completed": true,
+    "final_user_state": {
+      "objects": [
+        [
+          "index",
+          "contract_name",
+          "people",
+          "CREATE INDEX contract_name ON people(name)"
+        ],
+        [
+          "table",
+          "contract_audit",
+          "contract_audit",
+          "CREATE TABLE contract_audit(name TEXT)"
+        ],
+        [
+          "table",
+          "people",
+          "people",
+          "CREATE TABLE \"people\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"name\" TEXT,\n   \"age\" INTEGER\n)"
+        ],
+        [
+          "trigger",
+          "contract_trigger",
+          "people",
+          "CREATE TRIGGER contract_trigger AFTER INSERT ON people BEGIN INSERT INTO contract_audit VALUES(new.name); END"
+        ]
+      ],
+      "rows": {
+        "people": [
+          [
+            1,
+            "Alice",
+            31
+          ],
+          [
+            2,
+            "Bob Updated",
+            41
+          ]
+        ],
+        "contract_audit": [
+          [
+            "Bob"
+          ]
+        ]
+      }
+    },
+    "invariant_expressions": [
+      "COUNT(*) <= 3",
+      "age >= 18"
+    ]
+  },
+  "contract_errors": [],
+  "complete_task_contracts_match": true,
+  "aggregate_score": null,
+  "official_score": false,
+  "base_regression_suite": "not run: original full base tests not reviewed for local hard constraints",
+  "scope": "Original60 new-feature functions adapted prospectively to positive state/error contracts, plus actual subprocess CLI and independent sqlite3 consumer. No UI automation/mocks/expected-output caches. Source schema/state objects, not hashes, establish behavior."
+}

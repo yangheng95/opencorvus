@@ -1,0 +1,150 @@
+{
+  "members": [
+    {
+      "path": "BUILD-PLAN.md",
+      "bytes": 9205
+    },
+    {
+      "path": "README.md",
+      "bytes": 3767
+    },
+    {
+      "path": "UPSTREAM-LICENSE",
+      "bytes": 11357
+    },
+    {
+      "path": "evaluator/consume_native.py",
+      "bytes": 9295
+    },
+    {
+      "path": "evaluator/prepare_consumer.py",
+      "bytes": 5097
+    },
+    {
+      "path": "evaluator/prepare_native.py",
+      "bytes": 2069
+    },
+    {
+      "path": "evaluator/prepare_public.py",
+      "bytes": 6953
+    },
+    {
+      "path": "evaluator/test_safe_bulk_import.py",
+      "bytes": 34903
+    },
+    {
+      "path": "evaluator/validate_freeze.py",
+      "bytes": 1809
+    },
+    {
+      "path": "evidence/download.json",
+      "bytes": 337
+    },
+    {
+      "path": "evidence/final-validation-registration.json",
+      "bytes": 419
+    },
+    {
+      "path": "evidence/frozen-consumer-registration.json",
+      "bytes": 608
+    },
+    {
+      "path": "evidence/native-consumer-registration.json",
+      "bytes": 32408
+    },
+    {
+      "path": "evidence/native-freeze.stdout.log",
+      "bytes": 341
+    },
+    {
+      "path": "evidence/reference-patch-scope.json",
+      "bytes": 523
+    },
+    {
+      "path": "evidence/registration.json",
+      "bytes": 680
+    },
+    {
+      "path": "evidence/validation-summary.json",
+      "bytes": 1519
+    },
+    {
+      "path": "public/INPUTS.json",
+      "bytes": 535
+    },
+    {
+      "path": "public/QUALITY.md",
+      "bytes": 1936
+    },
+    {
+      "path": "public/RUNTIME.md",
+      "bytes": 1475
+    },
+    {
+      "path": "public/TASK.md",
+      "bytes": 2507
+    },
+    {
+      "path": "public/TASK.original.md",
+      "bytes": 2609
+    },
+    {
+      "path": "evidence/empty-base/assessment.json",
+      "bytes": 40146
+    },
+    {
+      "path": "evidence/empty-base/execution.json",
+      "bytes": 626
+    },
+    {
+      "path": "evidence/empty-base/new.xml",
+      "bytes": 40415
+    },
+    {
+      "path": "evidence/legal-metadata-and-ids/assessment.json",
+      "bytes": 26321
+    },
+    {
+      "path": "evidence/legal-metadata-and-ids/execution.json",
+      "bytes": 647
+    },
+    {
+      "path": "evidence/legal-metadata-and-ids/new.xml",
+      "bytes": 6384
+    },
+    {
+      "path": "evidence/reference/assessment.json",
+      "bytes": 26011
+    },
+    {
+      "path": "evidence/reference/execution.json",
+      "bytes": 628
+    },
+    {
+      "path": "evidence/reference/new.xml",
+      "bytes": 6384
+    },
+    {
+      "path": "evidence/wrong-commit-on-rollback/assessment.json",
+      "bytes": 59830
+    },
+    {
+      "path": "evidence/wrong-commit-on-rollback/execution.json",
+      "bytes": 651
+    },
+    {
+      "path": "evidence/wrong-commit-on-rollback/new.xml",
+      "bytes": 31683
+    }
+  ],
+  "full_originals": "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101",
+  "complete_workspace": false,
+  "excluded": [
+    "full original base source/archive",
+    "original private task verifier/reference patch/source",
+    "venv/dependencies",
+    "actual SQLite files and full raw native logs",
+    "all first/adaptation-stage originals"
+  ],
+  "scope": "Public task, scoped current consumer and actual preparation result projection; no model/quality/hour credit from file counts or hashes"
+}

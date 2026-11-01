@@ -135,7 +135,7 @@
 
 - [2026-10-29-heavy-workbench-cross-system.md](2026-10-29-heavy-workbench-cross-system.md)：同一H05旧题两方真实业务交付、清洁复跑、升级触发及小时级要求。
 
-- [2026-10-29-heavy-workbench-long.md](2026-10-29-heavy-workbench-long.md)：最新用户授权恢复心跳、修月结并真实Codex/OC已实际完成一对；原件先封/原源码重建/消费与图保，表示误拒后验修复而非倒改原4。十题/有效小时0/10保持、心跳ACTIVE、通用验证行为根治未证。
+- [2026-10-29-heavy-workbench-long.md](2026-10-29-heavy-workbench-long.md)：月结真实pair已闭合保原；继续完整SQLite仓库任务的固定原料/native合同/全链正错准备后同public fresh。十题/有效小时0/10、心跳ACTIVE、通用行为根治未证。
 
 - [2026-10-29-attachment-workspace-journey.md](2026-10-29-attachment-workspace-journey.md)：跨项目文件附加、内容核对与草稿作用域实页调查。
 

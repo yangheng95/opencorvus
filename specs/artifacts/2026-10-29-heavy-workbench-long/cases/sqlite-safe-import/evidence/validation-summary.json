@@ -1,0 +1,59 @@
+{
+  "at": "2026-11-01T11:28:20.376767+00:00",
+  "programmes": [
+    {
+      "programme": "reference",
+      "native_exit": 0,
+      "feature_functions": {
+        "passed": 60,
+        "failed": 0,
+        "skipped": 0,
+        "collection_error": 0
+      },
+      "workflow_complete": true,
+      "workflow_contract_errors": 0
+    },
+    {
+      "programme": "legal-metadata-and-ids",
+      "native_exit": 0,
+      "feature_functions": {
+        "passed": 60,
+        "failed": 0,
+        "skipped": 0,
+        "collection_error": 0
+      },
+      "workflow_complete": true,
+      "workflow_contract_errors": 0
+    },
+    {
+      "programme": "wrong-commit-on-rollback",
+      "native_exit": 4,
+      "feature_functions": {
+        "passed": 40,
+        "failed": 20,
+        "skipped": 0,
+        "collection_error": 0
+      },
+      "workflow_complete": true,
+      "workflow_contract_errors": 9
+    },
+    {
+      "programme": "empty-base",
+      "native_exit": 4,
+      "feature_functions": {
+        "passed": 0,
+        "failed": 60,
+        "skipped": 0,
+        "collection_error": 0
+      },
+      "workflow_complete": false,
+      "workflow_contract_errors": 1
+    }
+  ],
+  "reference_source_unmodified": true,
+  "aggregate_score": null,
+  "official_score": false,
+  "candidates_started": false,
+  "effective_hours_qualified": false,
+  "scope": "Native preparation witnesses only; not model results or broad statistical/fairness/hour certification"
+}

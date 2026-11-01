@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="20" skipped="0" tests="60" time="1.931" timestamp="2026-11-01T19:27:40.448165+08:00" hostname="Exe-PC"><testcase classname="test_safe_bulk_import" name="test_enable_safe_import" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_disable_safe_import" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_safe_import_creates_checkpoint" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_rollback_to_checkpoint" time="0.001"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len([{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}])">def test_rollback_to_checkpoint():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+        db.enable_safe_import()
+    
+        checkpoint_id = db.create_import_checkpoint()
+        db["users"].insert({"id": 2, "name": "Bob"})
+    
+        db.rollback_to_checkpoint(checkpoint_id)
+    
+        rows = list(db["users"].rows)
+&gt;       assert len(rows) == 1
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len([{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}])
+
+..\consumer\test_safe_bulk_import.py:89: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_commit_checkpoint" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_add_import_invariant" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_remove_import_invariant" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_list_import_invariants" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_validate_import_invariants_success" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_validate_import_invariants_failure" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_safe_bulk_insert_with_validation_success" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_safe_bulk_insert_with_validation_failure" time="0.001"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len([{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}])&#10; +    where [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}] = list(&lt;generator object Queryable.rows_where at 0x000001819CDD8900&gt;)&#10; +      where &lt;generator object Queryable.rows_where at 0x000001819CDD8900&gt; = &lt;Table users (id, name)&gt;.rows">def test_safe_bulk_insert_with_validation_failure():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+        db.enable_safe_import()
+        db.add_import_invariant("users", "COUNT(*) = 1")
+    
+        result = db.safe_bulk_insert("users", [{"id": 2, "name": "Bob"}])
+    
+        assert result["success"] is False
+&gt;       assert len(list(db["users"].rows)) == 1
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len([{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}])
+E        +    where [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}] = list(&lt;generator object Queryable.rows_where at 0x000001819CDD8900&gt;)
+E        +      where &lt;generator object Queryable.rows_where at 0x000001819CDD8900&gt; = &lt;Table users (id, name)&gt;.rows
+
+..\consumer\test_safe_bulk_import.py:194: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_bulk_insert_rollback_on_error" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_safe_bulk_upsert_with_validation" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_safe_bulk_upsert_with_validation_failure" time="0.001"><failure message="assert 2 == 1&#10; +  where 2 = &lt;Table users (id, name)&gt;.count">def test_safe_bulk_upsert_with_validation_failure():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"}, pk="id")
+        db.enable_safe_import()
+        db.add_import_invariant("users", "COUNT(*) = 1")
+    
+        result = db.safe_bulk_upsert("users", [{"id": 2, "name": "Bob"}], pk="id")
+    
+        assert result["success"] is False
+        assert "checkpoint_id" in result
+        assert "failures" in result
+        assert len(result["failures"]) &gt; 0
+        assert "error_report" in result
+&gt;       assert db["users"].count == 1
+E       assert 2 == 1
+E        +  where 2 = &lt;Table users (id, name)&gt;.count
+
+..\consumer\test_safe_bulk_import.py:238: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_bulk_upsert_rollback_on_error" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_safe_bulk_upsert_strict_mode_with_invariant_failure" time="0.001"><failure message="assert 2 == 1&#10; +  where 2 = &lt;Table users (id, name, age)&gt;.count">def test_safe_bulk_upsert_strict_mode_with_invariant_failure():
+        """Test safe_bulk_upsert with strict=True raises exception on invariant violation."""
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice", "age": 30}, pk="id")
+        db.enable_safe_import()
+        db.add_import_invariant("users", "age &gt;= 18")
+    
+        with pytest.raises(Exception) as excinfo:
+            db.safe_bulk_upsert("users", [{"id": 2, "name": "Minor", "age": 15}], pk="id", strict=True)
+    
+        exc_msg = str(excinfo.value).lower()
+        assert "valid" in exc_msg or "invariant" in exc_msg, (
+            f"Expected invariant/validation wording in exception, got: {excinfo.value!r}"
+        )
+&gt;       assert db["users"].count == 1
+E       assert 2 == 1
+E        +  where 2 = &lt;Table users (id, name, age)&gt;.count
+
+..\consumer\test_safe_bulk_import.py:270: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_csv_with_safe_mode" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_import_csv_with_safe_mode_failure" time="0.001"><failure message="assert {'objects': [...'2', 'Bob')]}} == {'objects': [], 'rows': {}}&#10;  &#10;  Differing items:&#10;  {'rows': {'data': [('1', 'Alice'), ('2', 'Bob')]}} != {'rows': {}}&#10;  {'objects': [('table', 'data', 'data', 'CREATE TABLE &quot;data&quot; (\n   &quot;id&quot; TEXT,\n   &quot;name&quot; TEXT\n)')]} != {'objects': []}&#10;  Use -v to get more diff">def test_import_csv_with_safe_mode_failure():
+        db = Database(memory=True)
+        db.enable_safe_import()
+        db.add_import_invariant("data", "COUNT(*) = 0")
+        original_state = _user_state(db, ("data",))
+    
+        csv_data = "id,name\n1,Alice\n2,Bob"
+        result = db.import_csv("data", io.StringIO(csv_data), safe_mode=True)
+    
+        assert result["success"] is False
+        assert "checkpoint_id" in result
+        assert "failures" in result
+        assert len(result["failures"]) &gt; 0
+        assert "error_report" in result
+&gt;       assert _user_state(db, ("data",)) == original_state
+E       assert {'objects': [...'2', 'Bob')]}} == {'objects': [], 'rows': {}}
+E         
+E         Differing items:
+E         {'rows': {'data': [('1', 'Alice'), ('2', 'Bob')]}} != {'rows': {}}
+E         {'objects': [('table', 'data', 'data', 'CREATE TABLE "data" (\n   "id" TEXT,\n   "name" TEXT\n)')]} != {'objects': []}
+E         Use -v to get more diff
+
+..\consumer\test_safe_bulk_import.py:302: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_csv_with_file_path" time="0.064" /><testcase classname="test_safe_bulk_import" name="test_import_csv_with_string_path" time="0.003" /><testcase classname="test_safe_bulk_import" name="test_import_json_with_safe_mode" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_import_json_with_safe_mode_failure" time="0.001"><failure message="assert {'objects': [... (2, 'Bob')]}} == {'objects': [], 'rows': {}}&#10;  &#10;  Differing items:&#10;  {'rows': {'data': [(1, 'Alice'), (2, 'Bob')]}} != {'rows': {}}&#10;  {'objects': [('table', 'data', 'data', 'CREATE TABLE &quot;data&quot; (\n   &quot;id&quot; INTEGER,\n   &quot;name&quot; TEXT\n)')]} != {'objects': []}&#10;  Use -v to get more diff">def test_import_json_with_safe_mode_failure():
+        db = Database(memory=True)
+        db.enable_safe_import()
+        db.add_import_invariant("data", "COUNT(*) = 0")
+        original_state = _user_state(db, ("data",))
+    
+        json_data = [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}]
+        result = db.import_json("data", json_data, safe_mode=True)
+    
+        assert result["success"] is False
+        assert "checkpoint_id" in result
+        assert "failures" in result
+        assert len(result["failures"]) &gt; 0
+        assert "error_report" in result
+&gt;       assert _user_state(db, ("data",)) == original_state
+E       assert {'objects': [... (2, 'Bob')]}} == {'objects': [], 'rows': {}}
+E         
+E         Differing items:
+E         {'rows': {'data': [(1, 'Alice'), (2, 'Bob')]}} != {'rows': {}}
+E         {'objects': [('table', 'data', 'data', 'CREATE TABLE "data" (\n   "id" INTEGER,\n   "name" TEXT\n)')]} != {'objects': []}
+E         Use -v to get more diff
+
+..\consumer\test_safe_bulk_import.py:381: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_error_report_contains_details" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_multiple_invariants_validation" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_checkpoint_cleanup" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_cli_enable_safe_import" time="0.030" /><testcase classname="test_safe_bulk_import" name="test_cli_disable_safe_import" time="0.041" /><testcase classname="test_safe_bulk_import" name="test_cli_add_import_invariant" time="0.074" /><testcase classname="test_safe_bulk_import" name="test_cli_remove_import_invariant" time="0.086" /><testcase classname="test_safe_bulk_import" name="test_cli_list_import_invariants" time="0.073" /><testcase classname="test_safe_bulk_import" name="test_cli_validate_import_invariants" time="0.073" /><testcase classname="test_safe_bulk_import" name="test_cli_validate_import_invariants_with_failure" time="0.073" /><testcase classname="test_safe_bulk_import" name="test_cli_insert_with_safe_mode" time="0.096" /><testcase classname="test_safe_bulk_import" name="test_cli_insert_csv_with_safe_mode" time="0.118" /><testcase classname="test_safe_bulk_import" name="test_cli_insert_csv_from_file_with_safe_mode" time="0.125" /><testcase classname="test_safe_bulk_import" name="test_cli_insert_csv_with_safe_mode_failure" time="0.075"><failure message="AssertionError: Rollback failed: data still exists&#10;assert 2 == 0&#10; +  where 2 = &lt;Table data (id, name)&gt;.count">def test_cli_insert_csv_with_safe_mode_failure():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+            db.enable_safe_import()
+            db.add_import_invariant("data", "COUNT(*) = 0")
+            db.close()
+    
+            result = runner.invoke(cli, [
+                "insert",
+                "test.db",
+                "data",
+                "-",
+                "--csv",
+                "--safe-mode"
+            ], input="id,name\n1,Alice\n2,Bob")
+            assert _cli_contract(result)['status'] == 'operation_error'
+    
+            db = Database("test.db")
+            if "data" in db.table_names():
+&gt;               assert db["data"].count == 0, "Rollback failed: data still exists"
+E               AssertionError: Rollback failed: data still exists
+E               assert 2 == 0
+E                +  where 2 = &lt;Table data (id, name)&gt;.count
+
+..\consumer\test_safe_bulk_import.py:624: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_import_with_foreign_key_validation" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_safe_import_with_foreign_key_violation" time="0.001"><failure message="assert 2 == 1&#10; +  where 2 = &lt;Table employees (id, dept_id, name)&gt;.count">def test_safe_import_with_foreign_key_violation():
+        db = Database(memory=True)
+        db["departments"].insert({"id": 1, "name": "Engineering"})
+        db["employees"].insert({"id": 1, "dept_id": 1, "name": "Alice"})
+        db.enable_safe_import()
+        db.add_import_invariant("employees",
+            "(SELECT COUNT(*) FROM employees WHERE dept_id NOT IN (SELECT id FROM departments)) = 0")
+    
+        result = db.safe_bulk_insert("employees", [{"id": 2, "dept_id": 999, "name": "Bob"}])
+        assert result["success"] is False
+&gt;       assert db["employees"].count == 1
+E       assert 2 == 1
+E        +  where 2 = &lt;Table employees (id, dept_id, name)&gt;.count
+
+..\consumer\test_safe_bulk_import.py:653: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_nested_checkpoint_handling" time="0.001"><failure message="assert 3 == 2&#10; +  where 3 = &lt;Table users (id, name)&gt;.count">def test_nested_checkpoint_handling():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+        db.enable_safe_import()
+    
+        cp1 = db.create_import_checkpoint()
+        db["users"].insert({"id": 2, "name": "Bob"})
+    
+        cp2 = db.create_import_checkpoint()
+        db["users"].insert({"id": 3, "name": "Charlie"})
+    
+        db.rollback_to_checkpoint(cp2)
+&gt;       assert db["users"].count == 2
+E       assert 3 == 2
+E        +  where 3 = &lt;Table users (id, name)&gt;.count
+
+..\consumer\test_safe_bulk_import.py:669: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_import_performance_invariant" time="0.002" /><testcase classname="test_safe_bulk_import" name="test_cli_bulk_import_with_safe_mode" time="0.094" /><testcase classname="test_safe_bulk_import" name="test_dropped_table_restoration_on_rollback" time="0.001"><failure message="AssertionError: assert 'products' in ['users', '_safe_import_config']&#10; +  where ['users', '_safe_import_config'] = table_names()&#10; +    where table_names = &lt;Database &lt;sqlite3.Connection object at 0x000001819D79DB70&gt;&gt;.table_names">def test_dropped_table_restoration_on_rollback():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+        db["products"].insert({"id": 1, "name": "Widget"})
+        db.enable_safe_import()
+    
+        checkpoint_id = db.create_import_checkpoint()
+    
+        db["products"].drop()
+    
+        db.rollback_to_checkpoint(checkpoint_id)
+    
+&gt;       assert "products" in db.table_names()
+E       AssertionError: assert 'products' in ['users', '_safe_import_config']
+E        +  where ['users', '_safe_import_config'] = table_names()
+E        +    where table_names = &lt;Database &lt;sqlite3.Connection object at 0x000001819D79DB70&gt;&gt;.table_names
+
+..\consumer\test_safe_bulk_import.py:721: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_schema_changes_rolled_back" time="0.001"><failure message="AssertionError: assert {'email', 'id', 'name'} == {'id', 'name'}&#10;  &#10;  Extra items in the left set:&#10;  'email'&#10;  Use -v to get more diff">def test_schema_changes_rolled_back():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+        db.enable_safe_import()
+    
+        checkpoint_id = db.create_import_checkpoint()
+    
+        db["users"].add_column("email", str)
+        assert "email" in [col.name for col in db["users"].columns]
+    
+        db.rollback_to_checkpoint(checkpoint_id)
+    
+        columns = [col.name for col in db["users"].columns]
+&gt;       assert set(columns) == {"id", "name"}
+E       AssertionError: assert {'email', 'id', 'name'} == {'id', 'name'}
+E         
+E         Extra items in the left set:
+E         'email'
+E         Use -v to get more diff
+
+..\consumer\test_safe_bulk_import.py:740: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_insert_with_invariant_violation_prevents_write" time="0.096"><failure message="AssertionError: Rollback failed: Bob was written despite invariant violation&#10;assert 2 == 1&#10; +  where 2 = len([{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}])">def test_cli_insert_with_invariant_violation_prevents_write():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+            db["users"].insert({"id": 1, "name": "Alice"})
+            db.enable_safe_import()
+            db.add_import_invariant("users", "COUNT(*) = 1")
+            db.close()
+    
+            result = runner.invoke(cli, [
+                "insert",
+                "test.db",
+                "users",
+                "-",
+                "--safe-mode"
+            ], input='{"id": 2, "name": "Bob"}')
+    
+            assert _cli_contract(result)['status'] == 'operation_error'
+    
+            db = Database("test.db")
+            rows = list(db["users"].rows)
+&gt;           assert len(rows) == 1, "Rollback failed: Bob was written despite invariant violation"
+E           AssertionError: Rollback failed: Bob was written despite invariant violation
+E           assert 2 == 1
+E            +  where 2 = len([{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}])
+
+..\consumer\test_safe_bulk_import.py:765: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_nested_savepoints" time="0.001"><failure message="assert 3 == 2&#10; +  where 3 = &lt;Table users (id, name)&gt;.count">def test_nested_savepoints():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+        db.enable_safe_import()
+    
+        cp1 = db.create_import_checkpoint()
+        db["users"].insert({"id": 2, "name": "Bob"})
+        assert db["users"].count == 2
+    
+        cp2 = db.create_import_checkpoint()
+        db["users"].insert({"id": 3, "name": "Charlie"})
+        assert db["users"].count == 3
+    
+        db.rollback_to_checkpoint(cp2)
+&gt;       assert db["users"].count == 2
+E       assert 3 == 2
+E        +  where 3 = &lt;Table users (id, name)&gt;.count
+
+..\consumer\test_safe_bulk_import.py:784: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_index_and_trigger_preserved_on_rollback" time="0.001"><failure message="assert 0 == 1&#10; +  where 0 = len([])">def test_index_and_trigger_preserved_on_rollback():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+        db.execute("CREATE INDEX idx_name ON users(name)")
+        db.execute("""
+            CREATE TRIGGER update_timestamp
+            AFTER INSERT ON users
+            BEGIN
+                SELECT 1;
+            END
+        """)
+        db.enable_safe_import()
+    
+        checkpoint_id = db.create_import_checkpoint()
+    
+        db.execute("DROP INDEX idx_name")
+        db.execute("DROP TRIGGER update_timestamp")
+    
+        indexes = [row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='index' AND name='idx_name'").fetchall()]
+        triggers = [row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='trigger' AND name='update_timestamp'").fetchall()]
+    
+        db.rollback_to_checkpoint(checkpoint_id)
+    
+        indexes = [row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='index' AND name='idx_name'").fetchall()]
+        triggers = [row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='trigger' AND name='update_timestamp'").fetchall()]
+&gt;       assert len(indexes) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+
+..\consumer\test_safe_bulk_import.py:819: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_expression_vs_select_invariants" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_consistent_failure_schema" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_checkpoint_not_active_after_rollback" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_rollback_nonexistent_checkpoint" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_commit_nonexistent_checkpoint" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_strict_mode_with_invariant_failure" time="0.001"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len([{'id': 1, 'name': 'Alice', 'age': 30}, {'id': 2, 'name': 'Minor', 'age': 15}])&#10; +    where [{'id': 1, 'name': 'Alice', 'age': 30}, {'id': 2, 'name': 'Minor', 'age': 15}] = list(&lt;generator object Queryable.rows_where at 0x000001819CDDAD40&gt;)&#10; +      where &lt;generator object Queryable.rows_where at 0x000001819CDDAD40&gt; = &lt;Table users (id, name, age)&gt;.rows">def test_strict_mode_with_invariant_failure():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice", "age": 30}, pk="id")
+        db.enable_safe_import()
+        db.add_import_invariant("users", "SELECT COUNT(*) = 0 FROM users WHERE age &lt; 18")
+    
+        with pytest.raises(Exception) as exc_info:
+            db.safe_bulk_insert(
+                "users",
+                [{"id": 2, "name": "Minor", "age": 15}],
+                strict=True
+            )
+    
+        assert "valid" in str(exc_info.value).lower() or "invariant" in str(exc_info.value).lower()
+&gt;       assert len(list(db["users"].rows)) == 1
+E       AssertionError: assert 2 == 1
+E        +  where 2 = len([{'id': 1, 'name': 'Alice', 'age': 30}, {'id': 2, 'name': 'Minor', 'age': 15}])
+E        +    where [{'id': 1, 'name': 'Alice', 'age': 30}, {'id': 2, 'name': 'Minor', 'age': 15}] = list(&lt;generator object Queryable.rows_where at 0x000001819CDDAD40&gt;)
+E        +      where &lt;generator object Queryable.rows_where at 0x000001819CDDAD40&gt; = &lt;Table users (id, name, age)&gt;.rows
+
+..\consumer\test_safe_bulk_import.py:916: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_checkpoint_inactive_after_commit" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_cli_upsert_safe_mode" time="0.142"><failure message="AssertionError: assert 2 == 1&#10; +  where 2 = len([{'id': 1, 'name': 'Alice Updated', 'age': 35}, {'id': 2, 'name': 'Minor', 'age': 15}])">def test_cli_upsert_safe_mode():
+        """Test CLI upsert command with --safe-mode flag."""
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+    
+            db = Database("test.db")
+            db["users"].insert({"id": 1, "name": "Alice", "age": 30}, pk="id")
+            db.enable_safe_import()
+            db.add_import_invariant("users", "SELECT COUNT(*) = 0 FROM users WHERE age &lt; 18")
+            db.conn.commit()
+            db.conn.close()
+    
+            result = runner.invoke(cli, [
+                "upsert", "test.db", "users", "-",
+                "--pk", "id",
+                "--safe-mode"
+            ], input='[{"id": 1, "name": "Alice Updated", "age": 35}]')
+    
+            assert result.exit_code == 0
+    
+            db = Database("test.db")
+            rows = list(db["users"].rows)
+            assert len(rows) == 1
+            assert rows[0]["name"] == "Alice Updated"
+            db.conn.close()
+    
+            db = Database("test.db")
+            db.enable_safe_import()
+            db.add_import_invariant("users", "SELECT COUNT(*) = 0 FROM users WHERE age &lt; 18")
+            db.conn.commit()
+            db.conn.close()
+    
+            result = runner.invoke(cli, [
+                "upsert", "test.db", "users", "-",
+                "--pk", "id",
+                "--safe-mode"
+            ], input='[{"id": 2, "name": "Minor", "age": 15}]')
+    
+            assert _cli_contract(result)['status'] == 'operation_error'
+    
+            db = Database("test.db")
+            rows = list(db["users"].rows)
+&gt;           assert len(rows) == 1
+E           AssertionError: assert 2 == 1
+E            +  where 2 = len([{'id': 1, 'name': 'Alice Updated', 'age': 35}, {'id': 2, 'name': 'Minor', 'age': 15}])
+
+..\consumer\test_safe_bulk_import.py:979: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_bulk_safe_mode_with_update" time="0.141"><failure message="assert 15 == 31">def test_bulk_safe_mode_with_update():
+        """Test bulk --safe-mode with UPDATE statement (not just INSERT)."""
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+    
+            db = Database("test.db")
+            db["users"].insert_all([
+                {"id": 1, "name": "Alice", "age": 30},
+                {"id": 2, "name": "Bob", "age": 25}
+            ], pk="id")
+            db.enable_safe_import()
+            db.add_import_invariant("users", "SELECT COUNT(*) = 0 FROM users WHERE age &lt; 18")
+            db.conn.commit()
+            db.conn.close()
+    
+            result = runner.invoke(cli, [
+                "bulk", "test.db",
+                "UPDATE users SET age = :age WHERE id = :id",
+                "-",
+                "--safe-mode"
+            ], input='[{"id": 1, "age": 31}, {"id": 2, "age": 26}]')
+    
+            assert result.exit_code == 0
+    
+    
+            db = Database("test.db")
+            rows = list(db["users"].rows_where(order_by="id"))
+            assert rows[0]["age"] == 31
+            assert rows[1]["age"] == 26
+            db.conn.close()
+    
+    
+            db = Database("test.db")
+            db.enable_safe_import()
+            db.add_import_invariant("users", "SELECT COUNT(*) = 0 FROM users WHERE age &lt; 18")
+            db.conn.commit()
+            db.conn.close()
+    
+            result = runner.invoke(cli, [
+                "bulk", "test.db",
+                "UPDATE users SET age = :age WHERE id = :id",
+                "-",
+                "--safe-mode"
+            ], input='[{"id": 1, "age": 15}]')
+    
+            assert _cli_contract(result)['status'] == 'operation_error'
+    
+    
+            db = Database("test.db")
+            rows = list(db["users"].rows_where(order_by="id"))
+&gt;           assert rows[0]["age"] == 31
+E           assert 15 == 31
+
+..\consumer\test_safe_bulk_import.py:1034: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_expression_invariant_checks_all_rows" time="0.001" /><testcase classname="test_safe_bulk_import" name="test_expression_invariant_first_row_passes_later_fails" time="0.001"><failure message="AssertionError: assert 3 == 1&#10; +  where 3 = len([{'id': 1, 'name': 'Alice', 'age': 30}, {'id': 2, 'name': 'Bob', 'age': 25}, {'id': 3, 'name': 'Charlie', 'age': 15}])">def test_expression_invariant_first_row_passes_later_fails():
+        """Test safe_bulk_insert with invariant where first row passes but later row fails."""
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice", "age": 30}, pk="id")
+    
+        db.enable_safe_import()
+    
+        db.add_import_invariant("users", "age &gt;= 18")
+    
+    
+        result = db.safe_bulk_insert("users", [
+            {"id": 2, "name": "Bob", "age": 25},
+            {"id": 3, "name": "Charlie", "age": 15}
+        ])
+    
+        assert result["success"] is False
+        assert len(result["failures"]) &gt; 0
+    
+    
+        rows = list(db["users"].rows_where(order_by="id"))
+&gt;       assert len(rows) == 1
+E       AssertionError: assert 3 == 1
+E        +  where 3 = len([{'id': 1, 'name': 'Alice', 'age': 30}, {'id': 2, 'name': 'Bob', 'age': 25}, {'id': 3, 'name': 'Charlie', 'age': 15}])
+
+..\consumer\test_safe_bulk_import.py:1080: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_csv_with_strict_mode" time="0.001"><failure message="assert {'objects': [...'2', 'Bob')]}} == {'objects': [], 'rows': {}}&#10;  &#10;  Differing items:&#10;  {'rows': {'data': [('1', 'Alice'), ('2', 'Bob')]}} != {'rows': {}}&#10;  {'objects': [('table', 'data', 'data', 'CREATE TABLE &quot;data&quot; (\n   &quot;id&quot; TEXT,\n   &quot;name&quot; TEXT\n)')]} != {'objects': []}&#10;  Use -v to get more diff">def test_import_csv_with_strict_mode():
+        """Test import_csv with strict=True raises exception on invariant failure."""
+        db = Database(memory=True)
+        db.enable_safe_import()
+        db.add_import_invariant("data", "COUNT(*) = 0")
+        original_state = _user_state(db, ("data",))
+    
+        csv_data = "id,name\n1,Alice\n2,Bob"
+    
+        with pytest.raises(Exception) as excinfo:
+            db.import_csv("data", io.StringIO(csv_data), safe_mode=True, strict=True)
+    
+        exc_msg = str(excinfo.value).lower()
+        assert "valid" in exc_msg or "invariant" in exc_msg, (
+            f"Expected invariant/validation wording in exception, got: {excinfo.value!r}"
+        )
+&gt;       assert _user_state(db, ("data",)) == original_state
+E       assert {'objects': [...'2', 'Bob')]}} == {'objects': [], 'rows': {}}
+E         
+E         Differing items:
+E         {'rows': {'data': [('1', 'Alice'), ('2', 'Bob')]}} != {'rows': {}}
+E         {'objects': [('table', 'data', 'data', 'CREATE TABLE "data" (\n   "id" TEXT,\n   "name" TEXT\n)')]} != {'objects': []}
+E         Use -v to get more diff
+
+..\consumer\test_safe_bulk_import.py:1101: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_json_with_strict_mode" time="0.001"><failure message="assert {'objects': [... (2, 'Bob')]}} == {'objects': [], 'rows': {}}&#10;  &#10;  Differing items:&#10;  {'rows': {'data': [(1, 'Alice'), (2, 'Bob')]}} != {'rows': {}}&#10;  {'objects': [('table', 'data', 'data', 'CREATE TABLE &quot;data&quot; (\n   &quot;id&quot; INTEGER,\n   &quot;name&quot; TEXT\n)')]} != {'objects': []}&#10;  Use -v to get more diff">def test_import_json_with_strict_mode():
+        """Test import_json with strict=True raises exception on invariant failure."""
+        db = Database(memory=True)
+        db.enable_safe_import()
+        db.add_import_invariant("data", "COUNT(*) = 0")
+        original_state = _user_state(db, ("data",))
+    
+        json_data = [{"id": 1, "name": "Alice"}, {"id": 2, "name": "Bob"}]
+    
+        with pytest.raises(Exception) as excinfo:
+            db.import_json("data", json_data, safe_mode=True, strict=True)
+    
+        exc_msg = str(excinfo.value).lower()
+        assert "valid" in exc_msg or "invariant" in exc_msg, (
+            f"Expected invariant/validation wording in exception, got: {excinfo.value!r}"
+        )
+&gt;       assert _user_state(db, ("data",)) == original_state
+E       assert {'objects': [... (2, 'Bob')]}} == {'objects': [], 'rows': {}}
+E         
+E         Differing items:
+E         {'rows': {'data': [(1, 'Alice'), (2, 'Bob')]}} != {'rows': {}}
+E         {'objects': [('table', 'data', 'data', 'CREATE TABLE "data" (\n   "id" INTEGER,\n   "name" TEXT\n)')]} != {'objects': []}
+E         Use -v to get more diff
+
+..\consumer\test_safe_bulk_import.py:1121: AssertionError</failure></testcase></testsuite></testsuites>

@@ -166,7 +166,7 @@
 
 - [2026-10-29-text-encoding-journey](2026-10-29-text-encoding-journey/README.md)：Unicode原文乱码修复、双语错误、真实JSON和五份下载核验。
 
-- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：[月结真实两方自然产物](2026-10-29-heavy-workbench-long/cases/month-end-package/real-pair-20261101/README.md)已有封存/源重建/逐值消费/内容与实际图；原双4误拒与后验双0分别保。无合成100/整体排名或重型小时资格；十题未达，心跳ACTIVE。
+- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：[月结原真实结果](2026-10-29-heavy-workbench-long/cases/month-end-package/real-pair-20261101/README.md)保；下一[SQLite安全导入完整任务](2026-10-29-heavy-workbench-long/cases/sqlite-safe-import/README.md)已固定原source/native全链及正确/错误programme，待真正同public模型比较，不用准备文件/计数补十题/小时。
 
 - [2026-10-29-text-attachment-history](2026-10-29-text-attachment-history/README.md)：23张真实发送/历史回看原图、指定模型流式请求、原件下载与数据/运行结算。
 

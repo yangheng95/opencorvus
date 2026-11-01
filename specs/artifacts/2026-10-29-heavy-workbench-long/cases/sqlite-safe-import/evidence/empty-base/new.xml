@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="60" skipped="0" tests="60" time="1.605" timestamp="2026-11-01T19:27:49.259351+08:00" hostname="Exe-PC"><testcase classname="test_safe_bulk_import" name="test_enable_safe_import" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_enable_safe_import():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+    
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:47: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_disable_safe_import" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_disable_safe_import():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+    
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:58: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_import_creates_checkpoint" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_safe_import_creates_checkpoint():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:69: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_rollback_to_checkpoint" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_rollback_to_checkpoint():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:81: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_commit_checkpoint" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_commit_checkpoint():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:97: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_add_import_invariant" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_add_import_invariant():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:111: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_remove_import_invariant" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_remove_import_invariant():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:123: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_list_import_invariants" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_list_import_invariants():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:136: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_validate_import_invariants_success" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_validate_import_invariants_success():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:149: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_validate_import_invariants_failure" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_validate_import_invariants_failure():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:162: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_bulk_insert_with_validation_success" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_safe_bulk_insert_with_validation_success():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:175: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_bulk_insert_with_validation_failure" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_safe_bulk_insert_with_validation_failure():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:188: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_bulk_insert_rollback_on_error" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_safe_bulk_insert_rollback_on_error():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"}, pk="id")
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:202: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_bulk_upsert_with_validation" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_safe_bulk_upsert_with_validation():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"}, pk="id")
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:215: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_bulk_upsert_with_validation_failure" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_safe_bulk_upsert_with_validation_failure():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"}, pk="id")
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:228: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_bulk_upsert_rollback_on_error" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_safe_bulk_upsert_rollback_on_error():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice", "email": "alice@example.com"}, pk="id")
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:246: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_bulk_upsert_strict_mode_with_invariant_failure" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_safe_bulk_upsert_strict_mode_with_invariant_failure():
+        """Test safe_bulk_upsert with strict=True raises exception on invariant violation."""
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice", "age": 30}, pk="id")
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:260: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_csv_with_safe_mode" time="0.000"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_import_csv_with_safe_mode():
+        db = Database(memory=True)
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:277: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_csv_with_safe_mode_failure" time="0.000"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_import_csv_with_safe_mode_failure():
+        db = Database(memory=True)
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:290: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_csv_with_file_path" time="0.003"><failure message="PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\hengu\\AppData\\Local\\Temp\\tmp261hpu09\\test.db'">def test_import_csv_with_file_path():
+        """Test import_csv with file handle opened from path in safe mode."""
+        import tempfile
+        import os
+    
+        with tempfile.TemporaryDirectory() as tmpdir:
+            csv_path = os.path.join(tmpdir, "test.csv")
+            with open(csv_path, "w") as f:
+                f.write("id,name\n1,Alice\n2,Bob")
+    
+            db_path = os.path.join(tmpdir, "test.db")
+            db = Database(db_path)
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:318: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+path = 'C:\\Users\\hengu\\AppData\\Local\\Temp\\tmp261hpu09'
+onexc = &lt;function TemporaryDirectory._rmtree.&lt;locals&gt;.onexc at 0x0000027A26E9D940&gt;
+
+    def _rmtree_unsafe(path, onexc):
+        def onerror(err):
+            onexc(os.scandir, err.filename, err)
+        results = os.walk(path, topdown=False, onerror=onerror, followlinks=os._walk_symlinks_as_files)
+        for dirpath, dirnames, filenames in results:
+            for name in dirnames:
+                fullname = os.path.join(dirpath, name)
+                try:
+                    os.rmdir(fullname)
+                except OSError as err:
+                    onexc(os.rmdir, fullname, err)
+            for name in filenames:
+                fullname = os.path.join(dirpath, name)
+                try:
+&gt;                   os.unlink(fullname)
+E                   PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\hengu\\AppData\\Local\\Temp\\tmp261hpu09\\test.db'
+
+C:\Users\hengu\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py:633: PermissionError
+
+During handling of the above exception, another exception occurred:
+
+    def test_import_csv_with_file_path():
+        """Test import_csv with file handle opened from path in safe mode."""
+        import tempfile
+        import os
+    
+&gt;       with tempfile.TemporaryDirectory() as tmpdir:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+..\consumer\test_safe_bulk_import.py:311: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\hengu\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py:950: in __exit__
+    self.cleanup()
+C:\Users\hengu\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py:954: in cleanup
+    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)
+C:\Users\hengu\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py:934: in _rmtree
+    _shutil.rmtree(name, onexc=onexc)
+C:\Users\hengu\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py:781: in rmtree
+    return _rmtree_unsafe(path, onexc)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\hengu\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\shutil.py:635: in _rmtree_unsafe
+    onexc(os.unlink, fullname, err)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+func = &lt;built-in function unlink&gt;
+path = 'C:\\Users\\hengu\\AppData\\Local\\Temp\\tmp261hpu09\\test.db'
+exc = PermissionError(13, 'The process cannot access the file because it is being used by another process')
+
+    def onexc(func, path, exc):
+        if isinstance(exc, PermissionError):
+            if repeated and path == name:
+                if ignore_errors:
+                    return
+                raise
+    
+            try:
+                if path != name:
+                    _resetperms(_os.path.dirname(path))
+                _resetperms(path)
+    
+                try:
+&gt;                   _os.unlink(path)
+E                   PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\Users\\hengu\\AppData\\Local\\Temp\\tmp261hpu09\\test.db'
+
+C:\Users\hengu\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\tempfile.py:909: PermissionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_csv_with_string_path" time="0.002"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_import_csv_with_string_path():
+        """Test import_csv accepts a string file path directly."""
+        import tempfile
+        import os
+    
+        with tempfile.TemporaryDirectory() as tmpdir:
+            csv_path = os.path.join(tmpdir, "test.csv")
+            with open(csv_path, "w") as f:
+                f.write("id,name\n1,Alice\n2,Bob")
+    
+            db = Database(memory=True)
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:342: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_json_with_safe_mode" time="0.000"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_import_json_with_safe_mode():
+        db = Database(memory=True)
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:356: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_json_with_safe_mode_failure" time="0.000"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_import_json_with_safe_mode_failure():
+        db = Database(memory=True)
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:369: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_error_report_contains_details" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_error_report_contains_details():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:388: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_multiple_invariants_validation" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_multiple_invariants_validation():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:402: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_checkpoint_cleanup" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_checkpoint_cleanup():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:415: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_enable_safe_import" time="0.003"><failure message="assert 1 == 0&#10; +  where 1 = &lt;Result SystemExit(1)&gt;.exit_code">def test_cli_enable_safe_import():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            result = runner.invoke(cli, ["enable-safe-import", "test.db"])
+&gt;           assert result.exit_code == 0
+E           assert 1 == 0
+E            +  where 1 = &lt;Result SystemExit(1)&gt;.exit_code
+
+..\consumer\test_safe_bulk_import.py:429: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_disable_safe_import" time="0.004"><failure message="assert 1 == 0&#10; +  where 1 = &lt;Result SystemExit(1)&gt;.exit_code">def test_cli_disable_safe_import():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            runner.invoke(cli, ["enable-safe-import", "test.db"])
+            result = runner.invoke(cli, ["disable-safe-import", "test.db"])
+&gt;           assert result.exit_code == 0
+E           assert 1 == 0
+E            +  where 1 = &lt;Result SystemExit(1)&gt;.exit_code
+
+..\consumer\test_safe_bulk_import.py:438: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_add_import_invariant" time="0.031"><failure message="assert 2 == 0&#10; +  where 2 = &lt;Result SystemExit(2)&gt;.exit_code">def test_cli_add_import_invariant():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+            db["users"].insert({"id": 1})
+            db.close()
+    
+            result = runner.invoke(cli, [
+                "add-import-invariant",
+                "test.db",
+                "users",
+                "COUNT(*) &lt;= 100"
+            ])
+&gt;           assert result.exit_code == 0
+E           assert 2 == 0
+E            +  where 2 = &lt;Result SystemExit(2)&gt;.exit_code
+
+..\consumer\test_safe_bulk_import.py:455: AssertionError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_remove_import_invariant" time="0.029"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_cli_remove_import_invariant():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+            db["users"].insert({"id": 1})
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:464: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_list_import_invariants" time="0.029"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_cli_list_import_invariants():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+            db["users"].insert({"id": 1})
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:483: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_validate_import_invariants" time="0.029"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_cli_validate_import_invariants():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+            db["users"].insert({"id": 1})
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:499: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_validate_import_invariants_with_failure" time="0.029"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_cli_validate_import_invariants_with_failure():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+            db["users"].insert({"id": 1})
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:517: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_insert_with_safe_mode" time="0.029"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_cli_insert_with_safe_mode():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+            db["users"].insert({"id": 1, "name": "Alice"})
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:538: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_insert_csv_with_safe_mode" time="0.002"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_cli_insert_csv_with_safe_mode():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:557: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_insert_csv_from_file_with_safe_mode" time="0.003"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_cli_insert_csv_from_file_with_safe_mode():
+        """Test CLI insert --csv with actual file path in safe mode."""
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            with open("test.csv", "w") as f:
+                f.write("id,name\n1,Alice\n2,Bob")
+    
+            db = Database("test.db")
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:584: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_insert_csv_with_safe_mode_failure" time="0.002"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_cli_insert_csv_with_safe_mode_failure():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:608: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_import_with_foreign_key_validation" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_safe_import_with_foreign_key_validation():
+        db = Database(memory=True)
+        db["departments"].insert({"id": 1, "name": "Engineering"})
+        db["employees"].insert({"id": 1, "dept_id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:634: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_import_with_foreign_key_violation" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_safe_import_with_foreign_key_violation():
+        db = Database(memory=True)
+        db["departments"].insert({"id": 1, "name": "Engineering"})
+        db["employees"].insert({"id": 1, "dept_id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:647: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_nested_checkpoint_handling" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_nested_checkpoint_handling():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:660: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_safe_import_performance_invariant" time="0.000"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_safe_import_performance_invariant():
+        db = Database(memory=True)
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:678: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_bulk_import_with_safe_mode" time="0.030"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_cli_bulk_import_with_safe_mode():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+            db["data"].insert({"id": 0})
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:694: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_dropped_table_restoration_on_rollback" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_dropped_table_restoration_on_rollback():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+        db["products"].insert({"id": 1, "name": "Widget"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:713: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_schema_changes_rolled_back" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_schema_changes_rolled_back():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:730: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_insert_with_invariant_violation_prevents_write" time="0.030"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_cli_insert_with_invariant_violation_prevents_write():
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            db = Database("test.db")
+            db["users"].insert({"id": 1, "name": "Alice"})
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:749: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_nested_savepoints" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_nested_savepoints():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:773: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_index_and_trigger_preserved_on_rollback" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_index_and_trigger_preserved_on_rollback():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+        db.execute("CREATE INDEX idx_name ON users(name)")
+        db.execute("""
+            CREATE TRIGGER update_timestamp
+            AFTER INSERT ON users
+            BEGIN
+                SELECT 1;
+            END
+        """)
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:805: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_expression_vs_select_invariants" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_expression_vs_select_invariants():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:827: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_consistent_failure_schema" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_consistent_failure_schema():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"}, pk="id")
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:847: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_checkpoint_not_active_after_rollback" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_checkpoint_not_active_after_rollback():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:871: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_rollback_nonexistent_checkpoint" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_rollback_nonexistent_checkpoint():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:885: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_commit_nonexistent_checkpoint" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_commit_nonexistent_checkpoint():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:895: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_strict_mode_with_invariant_failure" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_strict_mode_with_invariant_failure():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice", "age": 30}, pk="id")
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:905: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_checkpoint_inactive_after_commit" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_checkpoint_inactive_after_commit():
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice"})
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:923: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_cli_upsert_safe_mode" time="0.030"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_cli_upsert_safe_mode():
+        """Test CLI upsert command with --safe-mode flag."""
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+    
+            db = Database("test.db")
+            db["users"].insert({"id": 1, "name": "Alice", "age": 30}, pk="id")
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:944: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_bulk_safe_mode_with_update" time="0.029"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_bulk_safe_mode_with_update():
+        """Test bulk --safe-mode with UPDATE statement (not just INSERT)."""
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+    
+            db = Database("test.db")
+            db["users"].insert_all([
+                {"id": 1, "name": "Alice", "age": 30},
+                {"id": 2, "name": "Bob", "age": 25}
+            ], pk="id")
+&gt;           db.enable_safe_import()
+            ^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:994: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_expression_invariant_checks_all_rows" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_expression_invariant_checks_all_rows():
+        """Test that expression invariants check all rows, not just the first one."""
+        db = Database(memory=True)
+    
+        db["users"].insert_all([
+            {"id": 1, "name": "Alice", "age": 30},
+            {"id": 2, "name": "Bob", "age": 25},
+            {"id": 3, "name": "Charlie", "age": 15}
+        ], pk="id")
+    
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:1049: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_expression_invariant_first_row_passes_later_fails" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_expression_invariant_first_row_passes_later_fails():
+        """Test safe_bulk_insert with invariant where first row passes but later row fails."""
+        db = Database(memory=True)
+        db["users"].insert({"id": 1, "name": "Alice", "age": 30}, pk="id")
+    
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:1065: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_csv_with_strict_mode" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_import_csv_with_strict_mode():
+        """Test import_csv with strict=True raises exception on invariant failure."""
+        db = Database(memory=True)
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:1088: AttributeError</failure></testcase><testcase classname="test_safe_bulk_import" name="test_import_json_with_strict_mode" time="0.001"><failure message="AttributeError: 'Database' object has no attribute 'enable_safe_import'">def test_import_json_with_strict_mode():
+        """Test import_json with strict=True raises exception on invariant failure."""
+        db = Database(memory=True)
+&gt;       db.enable_safe_import()
+        ^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'Database' object has no attribute 'enable_safe_import'
+
+..\consumer\test_safe_bulk_import.py:1108: AttributeError</failure></testcase></testsuite></testsuites>

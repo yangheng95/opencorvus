@@ -1,0 +1,1332 @@
+{
+  "source": "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\wrong-commit-on-rollback",
+  "recorded_at": "2026-11-01T11:27:48.807700+00:00",
+  "new_feature_suite_native_exit": 1,
+  "tests": [
+    {
+      "name": "test_enable_safe_import",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_disable_safe_import",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_import_creates_checkpoint",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_rollback_to_checkpoint",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_rollback_to_checkpoint():\n        db = Database(memory=True)\n        db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\"})\n        db.enable_safe_import()\n    \n        checkpoint_id = db.create_import_checkpoint()\n        db[\"users\"].insert({\"id\": 2, \"name\": \"Bob\"})\n    \n        db.rollback_to_checkpoint(checkpoint_id)\n    \n        rows = list(db[\"users\"].rows)\n>       assert len(rows) == 1\nE       AssertionError: assert 2 == 1\nE        +  where 2 = len([{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}])\n\n..\\consumer\\test_safe_bulk_import.py:89: AssertionError"
+    },
+    {
+      "name": "test_commit_checkpoint",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_add_import_invariant",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_remove_import_invariant",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_list_import_invariants",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_validate_import_invariants_success",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_validate_import_invariants_failure",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_insert_with_validation_success",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_insert_with_validation_failure",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_safe_bulk_insert_with_validation_failure():\n        db = Database(memory=True)\n        db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\"})\n        db.enable_safe_import()\n        db.add_import_invariant(\"users\", \"COUNT(*) = 1\")\n    \n        result = db.safe_bulk_insert(\"users\", [{\"id\": 2, \"name\": \"Bob\"}])\n    \n        assert result[\"success\"] is False\n>       assert len(list(db[\"users\"].rows)) == 1\nE       AssertionError: assert 2 == 1\nE        +  where 2 = len([{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}])\nE        +    where [{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}] = list(<generator object Queryable.rows_where at 0x000001819CDD8900>)\nE        +      where <generator object Queryable.rows_where at 0x000001819CDD8900> = <Table users (id, name)>.rows\n\n..\\consumer\\test_safe_bulk_import.py:194: AssertionError"
+    },
+    {
+      "name": "test_safe_bulk_insert_rollback_on_error",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_upsert_with_validation",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_upsert_with_validation_failure",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_safe_bulk_upsert_with_validation_failure():\n        db = Database(memory=True)\n        db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\"}, pk=\"id\")\n        db.enable_safe_import()\n        db.add_import_invariant(\"users\", \"COUNT(*) = 1\")\n    \n        result = db.safe_bulk_upsert(\"users\", [{\"id\": 2, \"name\": \"Bob\"}], pk=\"id\")\n    \n        assert result[\"success\"] is False\n        assert \"checkpoint_id\" in result\n        assert \"failures\" in result\n        assert len(result[\"failures\"]) > 0\n        assert \"error_report\" in result\n>       assert db[\"users\"].count == 1\nE       assert 2 == 1\nE        +  where 2 = <Table users (id, name)>.count\n\n..\\consumer\\test_safe_bulk_import.py:238: AssertionError"
+    },
+    {
+      "name": "test_safe_bulk_upsert_rollback_on_error",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_bulk_upsert_strict_mode_with_invariant_failure",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_safe_bulk_upsert_strict_mode_with_invariant_failure():\n        \"\"\"Test safe_bulk_upsert with strict=True raises exception on invariant violation.\"\"\"\n        db = Database(memory=True)\n        db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\", \"age\": 30}, pk=\"id\")\n        db.enable_safe_import()\n        db.add_import_invariant(\"users\", \"age >= 18\")\n    \n        with pytest.raises(Exception) as excinfo:\n            db.safe_bulk_upsert(\"users\", [{\"id\": 2, \"name\": \"Minor\", \"age\": 15}], pk=\"id\", strict=True)\n    \n        exc_msg = str(excinfo.value).lower()\n        assert \"valid\" in exc_msg or \"invariant\" in exc_msg, (\n            f\"Expected invariant/validation wording in exception, got: {excinfo.value!r}\"\n        )\n>       assert db[\"users\"].count == 1\nE       assert 2 == 1\nE        +  where 2 = <Table users (id, name, age)>.count\n\n..\\consumer\\test_safe_bulk_import.py:270: AssertionError"
+    },
+    {
+      "name": "test_import_csv_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_import_csv_with_safe_mode_failure",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_import_csv_with_safe_mode_failure():\n        db = Database(memory=True)\n        db.enable_safe_import()\n        db.add_import_invariant(\"data\", \"COUNT(*) = 0\")\n        original_state = _user_state(db, (\"data\",))\n    \n        csv_data = \"id,name\\n1,Alice\\n2,Bob\"\n        result = db.import_csv(\"data\", io.StringIO(csv_data), safe_mode=True)\n    \n        assert result[\"success\"] is False\n        assert \"checkpoint_id\" in result\n        assert \"failures\" in result\n        assert len(result[\"failures\"]) > 0\n        assert \"error_report\" in result\n>       assert _user_state(db, (\"data\",)) == original_state\nE       assert {'objects': [...'2', 'Bob')]}} == {'objects': [], 'rows': {}}\nE         \nE         Differing items:\nE         {'rows': {'data': [('1', 'Alice'), ('2', 'Bob')]}} != {'rows': {}}\nE         {'objects': [('table', 'data', 'data', 'CREATE TABLE \"data\" (\\n   \"id\" TEXT,\\n   \"name\" TEXT\\n)')]} != {'objects': []}\nE         Use -v to get more diff\n\n..\\consumer\\test_safe_bulk_import.py:302: AssertionError"
+    },
+    {
+      "name": "test_import_csv_with_file_path",
+      "status": "passed",
+      "seconds": "0.064",
+      "reason": null
+    },
+    {
+      "name": "test_import_csv_with_string_path",
+      "status": "passed",
+      "seconds": "0.003",
+      "reason": null
+    },
+    {
+      "name": "test_import_json_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_import_json_with_safe_mode_failure",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_import_json_with_safe_mode_failure():\n        db = Database(memory=True)\n        db.enable_safe_import()\n        db.add_import_invariant(\"data\", \"COUNT(*) = 0\")\n        original_state = _user_state(db, (\"data\",))\n    \n        json_data = [{\"id\": 1, \"name\": \"Alice\"}, {\"id\": 2, \"name\": \"Bob\"}]\n        result = db.import_json(\"data\", json_data, safe_mode=True)\n    \n        assert result[\"success\"] is False\n        assert \"checkpoint_id\" in result\n        assert \"failures\" in result\n        assert len(result[\"failures\"]) > 0\n        assert \"error_report\" in result\n>       assert _user_state(db, (\"data\",)) == original_state\nE       assert {'objects': [... (2, 'Bob')]}} == {'objects': [], 'rows': {}}\nE         \nE         Differing items:\nE         {'rows': {'data': [(1, 'Alice'), (2, 'Bob')]}} != {'rows': {}}\nE         {'objects': [('table', 'data', 'data', 'CREATE TABLE \"data\" (\\n   \"id\" INTEGER,\\n   \"name\" TEXT\\n)')]} != {'objects': []}\nE         Use -v to get more diff\n\n..\\consumer\\test_safe_bulk_import.py:381: AssertionError"
+    },
+    {
+      "name": "test_error_report_contains_details",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_multiple_invariants_validation",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_checkpoint_cleanup",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_cli_enable_safe_import",
+      "status": "passed",
+      "seconds": "0.030",
+      "reason": null
+    },
+    {
+      "name": "test_cli_disable_safe_import",
+      "status": "passed",
+      "seconds": "0.041",
+      "reason": null
+    },
+    {
+      "name": "test_cli_add_import_invariant",
+      "status": "passed",
+      "seconds": "0.074",
+      "reason": null
+    },
+    {
+      "name": "test_cli_remove_import_invariant",
+      "status": "passed",
+      "seconds": "0.086",
+      "reason": null
+    },
+    {
+      "name": "test_cli_list_import_invariants",
+      "status": "passed",
+      "seconds": "0.073",
+      "reason": null
+    },
+    {
+      "name": "test_cli_validate_import_invariants",
+      "status": "passed",
+      "seconds": "0.073",
+      "reason": null
+    },
+    {
+      "name": "test_cli_validate_import_invariants_with_failure",
+      "status": "passed",
+      "seconds": "0.073",
+      "reason": null
+    },
+    {
+      "name": "test_cli_insert_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.096",
+      "reason": null
+    },
+    {
+      "name": "test_cli_insert_csv_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.118",
+      "reason": null
+    },
+    {
+      "name": "test_cli_insert_csv_from_file_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.125",
+      "reason": null
+    },
+    {
+      "name": "test_cli_insert_csv_with_safe_mode_failure",
+      "status": "failed",
+      "seconds": "0.075",
+      "reason": "def test_cli_insert_csv_with_safe_mode_failure():\n        runner = CliRunner()\n        with runner.isolated_filesystem():\n            db = Database(\"test.db\")\n            db.enable_safe_import()\n            db.add_import_invariant(\"data\", \"COUNT(*) = 0\")\n            db.close()\n    \n            result = runner.invoke(cli, [\n                \"insert\",\n                \"test.db\",\n                \"data\",\n                \"-\",\n                \"--csv\",\n                \"--safe-mode\"\n            ], input=\"id,name\\n1,Alice\\n2,Bob\")\n            assert _cli_contract(result)['status'] == 'operation_error'\n    \n            db = Database(\"test.db\")\n            if \"data\" in db.table_names():\n>               assert db[\"data\"].count == 0, \"Rollback failed: data still exists\"\nE               AssertionError: Rollback failed: data still exists\nE               assert 2 == 0\nE                +  where 2 = <Table data (id, name)>.count\n\n..\\consumer\\test_safe_bulk_import.py:624: AssertionError"
+    },
+    {
+      "name": "test_safe_import_with_foreign_key_validation",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_safe_import_with_foreign_key_violation",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_safe_import_with_foreign_key_violation():\n        db = Database(memory=True)\n        db[\"departments\"].insert({\"id\": 1, \"name\": \"Engineering\"})\n        db[\"employees\"].insert({\"id\": 1, \"dept_id\": 1, \"name\": \"Alice\"})\n        db.enable_safe_import()\n        db.add_import_invariant(\"employees\",\n            \"(SELECT COUNT(*) FROM employees WHERE dept_id NOT IN (SELECT id FROM departments)) = 0\")\n    \n        result = db.safe_bulk_insert(\"employees\", [{\"id\": 2, \"dept_id\": 999, \"name\": \"Bob\"}])\n        assert result[\"success\"] is False\n>       assert db[\"employees\"].count == 1\nE       assert 2 == 1\nE        +  where 2 = <Table employees (id, dept_id, name)>.count\n\n..\\consumer\\test_safe_bulk_import.py:653: AssertionError"
+    },
+    {
+      "name": "test_nested_checkpoint_handling",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_nested_checkpoint_handling():\n        db = Database(memory=True)\n        db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\"})\n        db.enable_safe_import()\n    \n        cp1 = db.create_import_checkpoint()\n        db[\"users\"].insert({\"id\": 2, \"name\": \"Bob\"})\n    \n        cp2 = db.create_import_checkpoint()\n        db[\"users\"].insert({\"id\": 3, \"name\": \"Charlie\"})\n    \n        db.rollback_to_checkpoint(cp2)\n>       assert db[\"users\"].count == 2\nE       assert 3 == 2\nE        +  where 3 = <Table users (id, name)>.count\n\n..\\consumer\\test_safe_bulk_import.py:669: AssertionError"
+    },
+    {
+      "name": "test_safe_import_performance_invariant",
+      "status": "passed",
+      "seconds": "0.002",
+      "reason": null
+    },
+    {
+      "name": "test_cli_bulk_import_with_safe_mode",
+      "status": "passed",
+      "seconds": "0.094",
+      "reason": null
+    },
+    {
+      "name": "test_dropped_table_restoration_on_rollback",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_dropped_table_restoration_on_rollback():\n        db = Database(memory=True)\n        db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\"})\n        db[\"products\"].insert({\"id\": 1, \"name\": \"Widget\"})\n        db.enable_safe_import()\n    \n        checkpoint_id = db.create_import_checkpoint()\n    \n        db[\"products\"].drop()\n    \n        db.rollback_to_checkpoint(checkpoint_id)\n    \n>       assert \"products\" in db.table_names()\nE       AssertionError: assert 'products' in ['users', '_safe_import_config']\nE        +  where ['users', '_safe_import_config'] = table_names()\nE        +    where table_names = <Database <sqlite3.Connection object at 0x000001819D79DB70>>.table_names\n\n..\\consumer\\test_safe_bulk_import.py:721: AssertionError"
+    },
+    {
+      "name": "test_schema_changes_rolled_back",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_schema_changes_rolled_back():\n        db = Database(memory=True)\n        db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\"})\n        db.enable_safe_import()\n    \n        checkpoint_id = db.create_import_checkpoint()\n    \n        db[\"users\"].add_column(\"email\", str)\n        assert \"email\" in [col.name for col in db[\"users\"].columns]\n    \n        db.rollback_to_checkpoint(checkpoint_id)\n    \n        columns = [col.name for col in db[\"users\"].columns]\n>       assert set(columns) == {\"id\", \"name\"}\nE       AssertionError: assert {'email', 'id', 'name'} == {'id', 'name'}\nE         \nE         Extra items in the left set:\nE         'email'\nE         Use -v to get more diff\n\n..\\consumer\\test_safe_bulk_import.py:740: AssertionError"
+    },
+    {
+      "name": "test_cli_insert_with_invariant_violation_prevents_write",
+      "status": "failed",
+      "seconds": "0.096",
+      "reason": "def test_cli_insert_with_invariant_violation_prevents_write():\n        runner = CliRunner()\n        with runner.isolated_filesystem():\n            db = Database(\"test.db\")\n            db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\"})\n            db.enable_safe_import()\n            db.add_import_invariant(\"users\", \"COUNT(*) = 1\")\n            db.close()\n    \n            result = runner.invoke(cli, [\n                \"insert\",\n                \"test.db\",\n                \"users\",\n                \"-\",\n                \"--safe-mode\"\n            ], input='{\"id\": 2, \"name\": \"Bob\"}')\n    \n            assert _cli_contract(result)['status'] == 'operation_error'\n    \n            db = Database(\"test.db\")\n            rows = list(db[\"users\"].rows)\n>           assert len(rows) == 1, \"Rollback failed: Bob was written despite invariant violation\"\nE           AssertionError: Rollback failed: Bob was written despite invariant violation\nE           assert 2 == 1\nE            +  where 2 = len([{'id': 1, 'name': 'Alice'}, {'id': 2, 'name': 'Bob'}])\n\n..\\consumer\\test_safe_bulk_import.py:765: AssertionError"
+    },
+    {
+      "name": "test_nested_savepoints",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_nested_savepoints():\n        db = Database(memory=True)\n        db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\"})\n        db.enable_safe_import()\n    \n        cp1 = db.create_import_checkpoint()\n        db[\"users\"].insert({\"id\": 2, \"name\": \"Bob\"})\n        assert db[\"users\"].count == 2\n    \n        cp2 = db.create_import_checkpoint()\n        db[\"users\"].insert({\"id\": 3, \"name\": \"Charlie\"})\n        assert db[\"users\"].count == 3\n    \n        db.rollback_to_checkpoint(cp2)\n>       assert db[\"users\"].count == 2\nE       assert 3 == 2\nE        +  where 3 = <Table users (id, name)>.count\n\n..\\consumer\\test_safe_bulk_import.py:784: AssertionError"
+    },
+    {
+      "name": "test_index_and_trigger_preserved_on_rollback",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_index_and_trigger_preserved_on_rollback():\n        db = Database(memory=True)\n        db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\"})\n        db.execute(\"CREATE INDEX idx_name ON users(name)\")\n        db.execute(\"\"\"\n            CREATE TRIGGER update_timestamp\n            AFTER INSERT ON users\n            BEGIN\n                SELECT 1;\n            END\n        \"\"\")\n        db.enable_safe_import()\n    \n        checkpoint_id = db.create_import_checkpoint()\n    \n        db.execute(\"DROP INDEX idx_name\")\n        db.execute(\"DROP TRIGGER update_timestamp\")\n    \n        indexes = [row[0] for row in db.execute(\"SELECT name FROM sqlite_master WHERE type='index' AND name='idx_name'\").fetchall()]\n        triggers = [row[0] for row in db.execute(\"SELECT name FROM sqlite_master WHERE type='trigger' AND name='update_timestamp'\").fetchall()]\n    \n        db.rollback_to_checkpoint(checkpoint_id)\n    \n        indexes = [row[0] for row in db.execute(\"SELECT name FROM sqlite_master WHERE type='index' AND name='idx_name'\").fetchall()]\n        triggers = [row[0] for row in db.execute(\"SELECT name FROM sqlite_master WHERE type='trigger' AND name='update_timestamp'\").fetchall()]\n>       assert len(indexes) == 1\nE       assert 0 == 1\nE        +  where 0 = len([])\n\n..\\consumer\\test_safe_bulk_import.py:819: AssertionError"
+    },
+    {
+      "name": "test_expression_vs_select_invariants",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_consistent_failure_schema",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_checkpoint_not_active_after_rollback",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_rollback_nonexistent_checkpoint",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_commit_nonexistent_checkpoint",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_strict_mode_with_invariant_failure",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_strict_mode_with_invariant_failure():\n        db = Database(memory=True)\n        db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\", \"age\": 30}, pk=\"id\")\n        db.enable_safe_import()\n        db.add_import_invariant(\"users\", \"SELECT COUNT(*) = 0 FROM users WHERE age < 18\")\n    \n        with pytest.raises(Exception) as exc_info:\n            db.safe_bulk_insert(\n                \"users\",\n                [{\"id\": 2, \"name\": \"Minor\", \"age\": 15}],\n                strict=True\n            )\n    \n        assert \"valid\" in str(exc_info.value).lower() or \"invariant\" in str(exc_info.value).lower()\n>       assert len(list(db[\"users\"].rows)) == 1\nE       AssertionError: assert 2 == 1\nE        +  where 2 = len([{'id': 1, 'name': 'Alice', 'age': 30}, {'id': 2, 'name': 'Minor', 'age': 15}])\nE        +    where [{'id': 1, 'name': 'Alice', 'age': 30}, {'id': 2, 'name': 'Minor', 'age': 15}] = list(<generator object Queryable.rows_where at 0x000001819CDDAD40>)\nE        +      where <generator object Queryable.rows_where at 0x000001819CDDAD40> = <Table users (id, name, age)>.rows\n\n..\\consumer\\test_safe_bulk_import.py:916: AssertionError"
+    },
+    {
+      "name": "test_checkpoint_inactive_after_commit",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_cli_upsert_safe_mode",
+      "status": "failed",
+      "seconds": "0.142",
+      "reason": "def test_cli_upsert_safe_mode():\n        \"\"\"Test CLI upsert command with --safe-mode flag.\"\"\"\n        runner = CliRunner()\n        with runner.isolated_filesystem():\n    \n            db = Database(\"test.db\")\n            db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\", \"age\": 30}, pk=\"id\")\n            db.enable_safe_import()\n            db.add_import_invariant(\"users\", \"SELECT COUNT(*) = 0 FROM users WHERE age < 18\")\n            db.conn.commit()\n            db.conn.close()\n    \n            result = runner.invoke(cli, [\n                \"upsert\", \"test.db\", \"users\", \"-\",\n                \"--pk\", \"id\",\n                \"--safe-mode\"\n            ], input='[{\"id\": 1, \"name\": \"Alice Updated\", \"age\": 35}]')\n    \n            assert result.exit_code == 0\n    \n            db = Database(\"test.db\")\n            rows = list(db[\"users\"].rows)\n            assert len(rows) == 1\n            assert rows[0][\"name\"] == \"Alice Updated\"\n            db.conn.close()\n    \n            db = Database(\"test.db\")\n            db.enable_safe_import()\n            db.add_import_invariant(\"users\", \"SELECT COUNT(*) = 0 FROM users WHERE age < 18\")\n            db.conn.commit()\n            db.conn.close()\n    \n            result = runner.invoke(cli, [\n                \"upsert\", \"test.db\", \"users\", \"-\",\n                \"--pk\", \"id\",\n                \"--safe-mode\"\n            ], input='[{\"id\": 2, \"name\": \"Minor\", \"age\": 15}]')\n    \n            assert _cli_contract(result)['status'] == 'operation_error'\n    \n            db = Database(\"test.db\")\n            rows = list(db[\"users\"].rows)\n>           assert len(rows) == 1\nE           AssertionError: assert 2 == 1\nE            +  where 2 = len([{'id': 1, 'name': 'Alice Updated', 'age': 35}, {'id': 2, 'name': 'Minor', 'age': 15}])\n\n..\\consumer\\test_safe_bulk_import.py:979: AssertionError"
+    },
+    {
+      "name": "test_bulk_safe_mode_with_update",
+      "status": "failed",
+      "seconds": "0.141",
+      "reason": "def test_bulk_safe_mode_with_update():\n        \"\"\"Test bulk --safe-mode with UPDATE statement (not just INSERT).\"\"\"\n        runner = CliRunner()\n        with runner.isolated_filesystem():\n    \n            db = Database(\"test.db\")\n            db[\"users\"].insert_all([\n                {\"id\": 1, \"name\": \"Alice\", \"age\": 30},\n                {\"id\": 2, \"name\": \"Bob\", \"age\": 25}\n            ], pk=\"id\")\n            db.enable_safe_import()\n            db.add_import_invariant(\"users\", \"SELECT COUNT(*) = 0 FROM users WHERE age < 18\")\n            db.conn.commit()\n            db.conn.close()\n    \n            result = runner.invoke(cli, [\n                \"bulk\", \"test.db\",\n                \"UPDATE users SET age = :age WHERE id = :id\",\n                \"-\",\n                \"--safe-mode\"\n            ], input='[{\"id\": 1, \"age\": 31}, {\"id\": 2, \"age\": 26}]')\n    \n            assert result.exit_code == 0\n    \n    \n            db = Database(\"test.db\")\n            rows = list(db[\"users\"].rows_where(order_by=\"id\"))\n            assert rows[0][\"age\"] == 31\n            assert rows[1][\"age\"] == 26\n            db.conn.close()\n    \n    \n            db = Database(\"test.db\")\n            db.enable_safe_import()\n            db.add_import_invariant(\"users\", \"SELECT COUNT(*) = 0 FROM users WHERE age < 18\")\n            db.conn.commit()\n            db.conn.close()\n    \n            result = runner.invoke(cli, [\n                \"bulk\", \"test.db\",\n                \"UPDATE users SET age = :age WHERE id = :id\",\n                \"-\",\n                \"--safe-mode\"\n            ], input='[{\"id\": 1, \"age\": 15}]')\n    \n            assert _cli_contract(result)['status'] == 'operation_error'\n    \n    \n            db = Database(\"test.db\")\n            rows = list(db[\"users\"].rows_where(order_by=\"id\"))\n>           assert rows[0][\"age\"] == 31\nE           assert 15 == 31\n\n..\\consumer\\test_safe_bulk_import.py:1034: AssertionError"
+    },
+    {
+      "name": "test_expression_invariant_checks_all_rows",
+      "status": "passed",
+      "seconds": "0.001",
+      "reason": null
+    },
+    {
+      "name": "test_expression_invariant_first_row_passes_later_fails",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_expression_invariant_first_row_passes_later_fails():\n        \"\"\"Test safe_bulk_insert with invariant where first row passes but later row fails.\"\"\"\n        db = Database(memory=True)\n        db[\"users\"].insert({\"id\": 1, \"name\": \"Alice\", \"age\": 30}, pk=\"id\")\n    \n        db.enable_safe_import()\n    \n        db.add_import_invariant(\"users\", \"age >= 18\")\n    \n    \n        result = db.safe_bulk_insert(\"users\", [\n            {\"id\": 2, \"name\": \"Bob\", \"age\": 25},\n            {\"id\": 3, \"name\": \"Charlie\", \"age\": 15}\n        ])\n    \n        assert result[\"success\"] is False\n        assert len(result[\"failures\"]) > 0\n    \n    \n        rows = list(db[\"users\"].rows_where(order_by=\"id\"))\n>       assert len(rows) == 1\nE       AssertionError: assert 3 == 1\nE        +  where 3 = len([{'id': 1, 'name': 'Alice', 'age': 30}, {'id': 2, 'name': 'Bob', 'age': 25}, {'id': 3, 'name': 'Charlie', 'age': 15}])\n\n..\\consumer\\test_safe_bulk_import.py:1080: AssertionError"
+    },
+    {
+      "name": "test_import_csv_with_strict_mode",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_import_csv_with_strict_mode():\n        \"\"\"Test import_csv with strict=True raises exception on invariant failure.\"\"\"\n        db = Database(memory=True)\n        db.enable_safe_import()\n        db.add_import_invariant(\"data\", \"COUNT(*) = 0\")\n        original_state = _user_state(db, (\"data\",))\n    \n        csv_data = \"id,name\\n1,Alice\\n2,Bob\"\n    \n        with pytest.raises(Exception) as excinfo:\n            db.import_csv(\"data\", io.StringIO(csv_data), safe_mode=True, strict=True)\n    \n        exc_msg = str(excinfo.value).lower()\n        assert \"valid\" in exc_msg or \"invariant\" in exc_msg, (\n            f\"Expected invariant/validation wording in exception, got: {excinfo.value!r}\"\n        )\n>       assert _user_state(db, (\"data\",)) == original_state\nE       assert {'objects': [...'2', 'Bob')]}} == {'objects': [], 'rows': {}}\nE         \nE         Differing items:\nE         {'rows': {'data': [('1', 'Alice'), ('2', 'Bob')]}} != {'rows': {}}\nE         {'objects': [('table', 'data', 'data', 'CREATE TABLE \"data\" (\\n   \"id\" TEXT,\\n   \"name\" TEXT\\n)')]} != {'objects': []}\nE         Use -v to get more diff\n\n..\\consumer\\test_safe_bulk_import.py:1101: AssertionError"
+    },
+    {
+      "name": "test_import_json_with_strict_mode",
+      "status": "failed",
+      "seconds": "0.001",
+      "reason": "def test_import_json_with_strict_mode():\n        \"\"\"Test import_json with strict=True raises exception on invariant failure.\"\"\"\n        db = Database(memory=True)\n        db.enable_safe_import()\n        db.add_import_invariant(\"data\", \"COUNT(*) = 0\")\n        original_state = _user_state(db, (\"data\",))\n    \n        json_data = [{\"id\": 1, \"name\": \"Alice\"}, {\"id\": 2, \"name\": \"Bob\"}]\n    \n        with pytest.raises(Exception) as excinfo:\n            db.import_json(\"data\", json_data, safe_mode=True, strict=True)\n    \n        exc_msg = str(excinfo.value).lower()\n        assert \"valid\" in exc_msg or \"invariant\" in exc_msg, (\n            f\"Expected invariant/validation wording in exception, got: {excinfo.value!r}\"\n        )\n>       assert _user_state(db, (\"data\",)) == original_state\nE       assert {'objects': [... (2, 'Bob')]}} == {'objects': [], 'rows': {}}\nE         \nE         Differing items:\nE         {'rows': {'data': [(1, 'Alice'), (2, 'Bob')]}} != {'rows': {}}\nE         {'objects': [('table', 'data', 'data', 'CREATE TABLE \"data\" (\\n   \"id\" INTEGER,\\n   \"name\" TEXT\\n)')]} != {'objects': []}\nE         Use -v to get more diff\n\n..\\consumer\\test_safe_bulk_import.py:1121: AssertionError"
+    }
+  ],
+  "native_commands": [
+    {
+      "label": "new-feature-contracts",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "pytest",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\consumer\\test_safe_bulk_import.py",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--rootdir",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\consumer",
+        "--junitxml",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\new.xml"
+      ],
+      "started_at": "2026-11-01T11:27:40.095566+00:00",
+      "ended_at": "2026-11-01T11:27:42.481076+00:00",
+      "native_exit": 1,
+      "status": "operation_error",
+      "expected_status": null
+    },
+    {
+      "label": "ordinary-insert",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "insert",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people",
+        "-",
+        "--pk",
+        "id"
+      ],
+      "started_at": "2026-11-01T11:27:42.490594+00:00",
+      "ended_at": "2026-11-01T11:27:42.809587+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "enable-safe",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "enable-safe-import",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:42.821722+00:00",
+      "ended_at": "2026-11-01T11:27:43.121177+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "add-row-invariant",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "add-import-invariant",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people",
+        "age >= 18"
+      ],
+      "started_at": "2026-11-01T11:27:43.121177+00:00",
+      "ended_at": "2026-11-01T11:27:43.427137+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "add-count-invariant",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "add-import-invariant",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people",
+        "COUNT(*) <= 3"
+      ],
+      "started_at": "2026-11-01T11:27:43.427137+00:00",
+      "ended_at": "2026-11-01T11:27:43.746373+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "read-persisted-invariants",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json; from sqlite_utils import Database; d=Database(sys.argv[1]); print(json.dumps(d.list_import_invariants('people'),default=str)); d.close()",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:43.746373+00:00",
+      "ended_at": "2026-11-01T11:27:43.997366+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "list-invariants",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "list-import-invariants",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people"
+      ],
+      "started_at": "2026-11-01T11:27:43.998367+00:00",
+      "ended_at": "2026-11-01T11:27:44.283950+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "safe-insert-commit",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "insert",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people",
+        "-",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:44.283950+00:00",
+      "ended_at": "2026-11-01T11:27:44.585491+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "safe-insert-invariant-error",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "insert",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people",
+        "-",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:44.587490+00:00",
+      "ended_at": "2026-11-01T11:27:44.879528+00:00",
+      "native_exit": 1,
+      "status": "operation_error",
+      "expected_status": "operation_error"
+    },
+    {
+      "label": "safe-upsert-commit",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "upsert",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people",
+        "-",
+        "--pk",
+        "id",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:44.881032+00:00",
+      "ended_at": "2026-11-01T11:27:45.173420+00:00",
+      "native_exit": 1,
+      "status": "operation_error",
+      "expected_status": "committed"
+    },
+    {
+      "label": "safe-upsert-invariant-error",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "upsert",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people",
+        "-",
+        "--pk",
+        "id",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:45.175504+00:00",
+      "ended_at": "2026-11-01T11:27:45.467894+00:00",
+      "native_exit": 1,
+      "status": "operation_error",
+      "expected_status": "operation_error"
+    },
+    {
+      "label": "bulk-update-commit",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "bulk",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "UPDATE people SET age = :age WHERE id = :id",
+        "-",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:45.468894+00:00",
+      "ended_at": "2026-11-01T11:27:45.768941+00:00",
+      "native_exit": 1,
+      "status": "operation_error",
+      "expected_status": "committed"
+    },
+    {
+      "label": "bulk-update-invariant-error",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "bulk",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "UPDATE people SET age = :age WHERE id = :id",
+        "-",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:45.770455+00:00",
+      "ended_at": "2026-11-01T11:27:46.062262+00:00",
+      "native_exit": 1,
+      "status": "operation_error",
+      "expected_status": "operation_error"
+    },
+    {
+      "label": "validate-success",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "validate-import-invariants",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people"
+      ],
+      "started_at": "2026-11-01T11:27:46.064262+00:00",
+      "ended_at": "2026-11-01T11:27:46.351676+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "validate-success-api",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json; from sqlite_utils import Database; d=Database(sys.argv[1]); print(json.dumps(d.validate_import_invariants('people'),default=str)); d.close()",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:46.351676+00:00",
+      "ended_at": "2026-11-01T11:27:46.615373+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "add-failing-invariant",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "add-import-invariant",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people",
+        "COUNT(*) = 0"
+      ],
+      "started_at": "2026-11-01T11:27:46.615373+00:00",
+      "ended_at": "2026-11-01T11:27:46.909828+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "get-failing-invariant-id",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json; from sqlite_utils import Database; d=Database(sys.argv[1]); print(json.dumps(d.list_import_invariants('people'),default=str)); d.close()",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:46.909828+00:00",
+      "ended_at": "2026-11-01T11:27:47.162696+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "validate-failure-native-zero",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "validate-import-invariants",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people"
+      ],
+      "started_at": "2026-11-01T11:27:47.162696+00:00",
+      "ended_at": "2026-11-01T11:27:47.451700+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "validate-failure-api",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json; from sqlite_utils import Database; d=Database(sys.argv[1]); print(json.dumps(d.validate_import_invariants('people'),default=str)); d.close()",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:47.451700+00:00",
+      "ended_at": "2026-11-01T11:27:47.710995+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "remove-failing-invariant",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "remove-import-invariant",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people",
+        "d45d675d26aef744"
+      ],
+      "started_at": "2026-11-01T11:27:47.710995+00:00",
+      "ended_at": "2026-11-01T11:27:48.002941+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "remaining-invariants",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json; from sqlite_utils import Database; d=Database(sys.argv[1]); print(json.dumps(d.list_import_invariants('people'),default=str)); d.close()",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:48.002941+00:00",
+      "ended_at": "2026-11-01T11:27:48.254101+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "disable-safe",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "disable-safe-import",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:48.254101+00:00",
+      "ended_at": "2026-11-01T11:27:48.546632+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    },
+    {
+      "label": "disabled-explicit-error",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-c",
+        "import sys,json\nfrom sqlite_utils import Database\nd=Database(sys.argv[1])\ntry:\n d.create_import_checkpoint()\n print(json.dumps({'outcome':'checkpoint_created'}))\nexcept Exception as e:\n print(json.dumps({'error_family':[base.__name__ for base in type(e).__mro__]}))\nd.close()\n",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db"
+      ],
+      "started_at": "2026-11-01T11:27:48.546632+00:00",
+      "ended_at": "2026-11-01T11:27:48.806693+00:00",
+      "native_exit": 0,
+      "status": "committed",
+      "expected_status": "committed"
+    }
+  ],
+  "workflow": {
+    "started": true,
+    "completed": true,
+    "final_user_state": {
+      "objects": [
+        [
+          "index",
+          "contract_name",
+          "people",
+          "CREATE INDEX contract_name ON people(name)"
+        ],
+        [
+          "table",
+          "contract_audit",
+          "contract_audit",
+          "CREATE TABLE contract_audit(name TEXT)"
+        ],
+        [
+          "table",
+          "people",
+          "people",
+          "CREATE TABLE \"people\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"name\" TEXT,\n   \"age\" INTEGER\n)"
+        ],
+        [
+          "trigger",
+          "contract_trigger",
+          "people",
+          "CREATE TRIGGER contract_trigger AFTER INSERT ON people BEGIN INSERT INTO contract_audit VALUES(new.name); END"
+        ]
+      ],
+      "rows": {
+        "people": [
+          [
+            1,
+            "Alice",
+            9
+          ],
+          [
+            2,
+            "Bob Updated",
+            41
+          ],
+          [
+            3,
+            "Minor",
+            15
+          ],
+          [
+            4,
+            "Minor",
+            12
+          ]
+        ],
+        "contract_audit": [
+          [
+            "Bob"
+          ],
+          [
+            "Minor"
+          ],
+          [
+            "Minor"
+          ]
+        ]
+      }
+    },
+    "invariant_expressions": [
+      "COUNT(*) <= 3",
+      "age >= 18"
+    ]
+  },
+  "contract_errors": [
+    {
+      "contract": "INSERT_ERROR_EXACT_USER_STATE",
+      "actual": {
+        "objects": [
+          [
+            "index",
+            "contract_name",
+            "people",
+            "CREATE INDEX contract_name ON people(name)"
+          ],
+          [
+            "table",
+            "contract_audit",
+            "contract_audit",
+            "CREATE TABLE contract_audit(name TEXT)"
+          ],
+          [
+            "table",
+            "people",
+            "people",
+            "CREATE TABLE \"people\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"name\" TEXT,\n   \"age\" INTEGER\n)"
+          ],
+          [
+            "trigger",
+            "contract_trigger",
+            "people",
+            "CREATE TRIGGER contract_trigger AFTER INSERT ON people BEGIN INSERT INTO contract_audit VALUES(new.name); END"
+          ]
+        ],
+        "rows": {
+          "people": [
+            [
+              1,
+              "Alice",
+              30
+            ],
+            [
+              2,
+              "Bob",
+              40
+            ],
+            [
+              3,
+              "Minor",
+              15
+            ]
+          ],
+          "contract_audit": [
+            [
+              "Bob"
+            ],
+            [
+              "Minor"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "objects": [
+          [
+            "index",
+            "contract_name",
+            "people",
+            "CREATE INDEX contract_name ON people(name)"
+          ],
+          [
+            "table",
+            "contract_audit",
+            "contract_audit",
+            "CREATE TABLE contract_audit(name TEXT)"
+          ],
+          [
+            "table",
+            "people",
+            "people",
+            "CREATE TABLE \"people\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"name\" TEXT,\n   \"age\" INTEGER\n)"
+          ],
+          [
+            "trigger",
+            "contract_trigger",
+            "people",
+            "CREATE TRIGGER contract_trigger AFTER INSERT ON people BEGIN INSERT INTO contract_audit VALUES(new.name); END"
+          ]
+        ],
+        "rows": {
+          "people": [
+            [
+              1,
+              "Alice",
+              30
+            ],
+            [
+              2,
+              "Bob",
+              40
+            ]
+          ],
+          "contract_audit": [
+            [
+              "Bob"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "contract": "NATIVE_PROCESS_OUTCOME",
+      "label": "safe-upsert-commit",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "upsert",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "people",
+        "-",
+        "--pk",
+        "id",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:44.881032+00:00",
+      "ended_at": "2026-11-01T11:27:45.173420+00:00",
+      "native_exit": 1,
+      "status": "operation_error",
+      "expected_status": "committed"
+    },
+    {
+      "contract": "SAFE_UPSERT_COMMITTED_ROW",
+      "actual": [
+        [
+          1,
+          "Alice",
+          30
+        ],
+        [
+          2,
+          "Bob Updated",
+          41
+        ],
+        [
+          3,
+          "Minor",
+          15
+        ]
+      ],
+      "expected": [
+        [
+          1,
+          "Alice",
+          30
+        ],
+        [
+          2,
+          "Bob Updated",
+          41
+        ]
+      ]
+    },
+    {
+      "contract": "UPSERT_ERROR_EXACT_USER_STATE",
+      "actual": {
+        "objects": [
+          [
+            "index",
+            "contract_name",
+            "people",
+            "CREATE INDEX contract_name ON people(name)"
+          ],
+          [
+            "table",
+            "contract_audit",
+            "contract_audit",
+            "CREATE TABLE contract_audit(name TEXT)"
+          ],
+          [
+            "table",
+            "people",
+            "people",
+            "CREATE TABLE \"people\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"name\" TEXT,\n   \"age\" INTEGER\n)"
+          ],
+          [
+            "trigger",
+            "contract_trigger",
+            "people",
+            "CREATE TRIGGER contract_trigger AFTER INSERT ON people BEGIN INSERT INTO contract_audit VALUES(new.name); END"
+          ]
+        ],
+        "rows": {
+          "people": [
+            [
+              1,
+              "Alice",
+              30
+            ],
+            [
+              2,
+              "Bob Updated",
+              41
+            ],
+            [
+              3,
+              "Minor",
+              15
+            ],
+            [
+              4,
+              "Minor",
+              12
+            ]
+          ],
+          "contract_audit": [
+            [
+              "Bob"
+            ],
+            [
+              "Minor"
+            ],
+            [
+              "Minor"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "objects": [
+          [
+            "index",
+            "contract_name",
+            "people",
+            "CREATE INDEX contract_name ON people(name)"
+          ],
+          [
+            "table",
+            "contract_audit",
+            "contract_audit",
+            "CREATE TABLE contract_audit(name TEXT)"
+          ],
+          [
+            "table",
+            "people",
+            "people",
+            "CREATE TABLE \"people\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"name\" TEXT,\n   \"age\" INTEGER\n)"
+          ],
+          [
+            "trigger",
+            "contract_trigger",
+            "people",
+            "CREATE TRIGGER contract_trigger AFTER INSERT ON people BEGIN INSERT INTO contract_audit VALUES(new.name); END"
+          ]
+        ],
+        "rows": {
+          "people": [
+            [
+              1,
+              "Alice",
+              30
+            ],
+            [
+              2,
+              "Bob Updated",
+              41
+            ],
+            [
+              3,
+              "Minor",
+              15
+            ]
+          ],
+          "contract_audit": [
+            [
+              "Bob"
+            ],
+            [
+              "Minor"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "contract": "NATIVE_PROCESS_OUTCOME",
+      "label": "bulk-update-commit",
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\runtime\\Scripts\\python.exe",
+        "-m",
+        "sqlite_utils",
+        "bulk",
+        "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\wrong-commit-on-rollback\\actual.db",
+        "UPDATE people SET age = :age WHERE id = :id",
+        "-",
+        "--safe-mode"
+      ],
+      "started_at": "2026-11-01T11:27:45.468894+00:00",
+      "ended_at": "2026-11-01T11:27:45.768941+00:00",
+      "native_exit": 1,
+      "status": "operation_error",
+      "expected_status": "committed"
+    },
+    {
+      "contract": "BULK_UPDATE_COMMITTED_ROW",
+      "actual": [
+        [
+          1,
+          "Alice",
+          31
+        ],
+        [
+          2,
+          "Bob Updated",
+          41
+        ],
+        [
+          3,
+          "Minor",
+          15
+        ],
+        [
+          4,
+          "Minor",
+          12
+        ]
+      ],
+      "expected": [
+        [
+          1,
+          "Alice",
+          31
+        ],
+        [
+          2,
+          "Bob Updated",
+          41
+        ]
+      ]
+    },
+    {
+      "contract": "UPDATE_ERROR_EXACT_USER_STATE",
+      "actual": {
+        "objects": [
+          [
+            "index",
+            "contract_name",
+            "people",
+            "CREATE INDEX contract_name ON people(name)"
+          ],
+          [
+            "table",
+            "contract_audit",
+            "contract_audit",
+            "CREATE TABLE contract_audit(name TEXT)"
+          ],
+          [
+            "table",
+            "people",
+            "people",
+            "CREATE TABLE \"people\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"name\" TEXT,\n   \"age\" INTEGER\n)"
+          ],
+          [
+            "trigger",
+            "contract_trigger",
+            "people",
+            "CREATE TRIGGER contract_trigger AFTER INSERT ON people BEGIN INSERT INTO contract_audit VALUES(new.name); END"
+          ]
+        ],
+        "rows": {
+          "people": [
+            [
+              1,
+              "Alice",
+              9
+            ],
+            [
+              2,
+              "Bob Updated",
+              41
+            ],
+            [
+              3,
+              "Minor",
+              15
+            ],
+            [
+              4,
+              "Minor",
+              12
+            ]
+          ],
+          "contract_audit": [
+            [
+              "Bob"
+            ],
+            [
+              "Minor"
+            ],
+            [
+              "Minor"
+            ]
+          ]
+        }
+      },
+      "expected": {
+        "objects": [
+          [
+            "index",
+            "contract_name",
+            "people",
+            "CREATE INDEX contract_name ON people(name)"
+          ],
+          [
+            "table",
+            "contract_audit",
+            "contract_audit",
+            "CREATE TABLE contract_audit(name TEXT)"
+          ],
+          [
+            "table",
+            "people",
+            "people",
+            "CREATE TABLE \"people\" (\n   \"id\" INTEGER PRIMARY KEY,\n   \"name\" TEXT,\n   \"age\" INTEGER\n)"
+          ],
+          [
+            "trigger",
+            "contract_trigger",
+            "people",
+            "CREATE TRIGGER contract_trigger AFTER INSERT ON people BEGIN INSERT INTO contract_audit VALUES(new.name); END"
+          ]
+        ],
+        "rows": {
+          "people": [
+            [
+              1,
+              "Alice",
+              31
+            ],
+            [
+              2,
+              "Bob Updated",
+              41
+            ],
+            [
+              3,
+              "Minor",
+              15
+            ],
+            [
+              4,
+              "Minor",
+              12
+            ]
+          ],
+          "contract_audit": [
+            [
+              "Bob"
+            ],
+            [
+              "Minor"
+            ],
+            [
+              "Minor"
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "contract": "VALIDATION_SUCCESS_STATE",
+      "actual": {
+        "valid": false,
+        "failures": [
+          {
+            "id": "2f2ef0e4fe1ed201",
+            "expression": "age >= 18",
+            "error": "Invariant expression evaluated to false"
+          },
+          {
+            "id": "dfaa533e5236878c",
+            "expression": "COUNT(*) <= 3",
+            "error": "Invariant expression evaluated to false"
+          }
+        ]
+      },
+      "expected": {
+        "valid": true,
+        "failures": []
+      }
+    },
+    {
+      "contract": "VALIDATION_FAILURE_EXACT_ID",
+      "actual": {
+        "valid": false,
+        "ids": [
+          "2f2ef0e4fe1ed201",
+          "dfaa533e5236878c",
+          "d45d675d26aef744"
+        ]
+      },
+      "expected": {
+        "valid": false,
+        "ids": [
+          "d45d675d26aef744"
+        ]
+      }
+    }
+  ],
+  "complete_task_contracts_match": false,
+  "aggregate_score": null,
+  "official_score": false,
+  "base_regression_suite": "not run: original full base tests not reviewed for local hard constraints",
+  "scope": "Original60 new-feature functions adapted prospectively to positive state/error contracts, plus actual subprocess CLI and independent sqlite3 consumer. No UI automation/mocks/expected-output caches. Source schema/state objects, not hashes, establish behavior."
+}

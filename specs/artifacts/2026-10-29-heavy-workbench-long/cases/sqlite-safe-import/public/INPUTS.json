@@ -1,0 +1,10 @@
+{
+  "source_task": "sqlite-utils-safe-import-checkpoints",
+  "task_repository": "https://github.com/datacurve-ai/deep-swe",
+  "task_commit": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "upstream_repository": "https://github.com/simonw/sqlite-utils",
+  "upstream_commit": "8d74ffc93292c604d5827e2b44fffedca0c28c19",
+  "base_material": "Complete local upstream source at project root; original base archive fixed before any candidate",
+  "source_license": "Apache-2.0; upstream LICENSE retained",
+  "official_score": false
+}

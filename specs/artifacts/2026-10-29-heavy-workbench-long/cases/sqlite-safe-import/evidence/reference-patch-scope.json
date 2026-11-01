@@ -1,0 +1,27 @@
+{
+  "paths": [
+    [
+      "docs/cli-reference.rst",
+      "docs/cli-reference.rst"
+    ],
+    [
+      "docs/cli.rst",
+      "docs/cli.rst"
+    ],
+    [
+      "sqlite_utils/__init__.py",
+      "sqlite_utils/__init__.py"
+    ],
+    [
+      "sqlite_utils/cli.py",
+      "sqlite_utils/cli.py"
+    ],
+    [
+      "sqlite_utils/db.py",
+      "sqlite_utils/db.py"
+    ]
+  ],
+  "reference_source_patched_by_root": false,
+  "original_patch_applied_unchanged": true,
+  "branch_or_worktree_created": false
+}

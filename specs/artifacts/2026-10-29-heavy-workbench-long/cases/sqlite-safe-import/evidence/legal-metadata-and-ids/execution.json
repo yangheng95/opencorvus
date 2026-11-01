@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+    "-X",
+    "utf8",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\consume_native.py",
+    "--source",
+    "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\legal-metadata-and-ids",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\sqlite-safe-import-pair-20261101\\validation-final-native\\legal-metadata-and-ids"
+  ],
+  "started_at": "2026-11-01T11:27:31.573534+00:00",
+  "ended_at": "2026-11-01T11:27:40.003010+00:00",
+  "native_exit": 0,
+  "expected": 0
+}

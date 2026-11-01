@@ -1,0 +1,17 @@
+{
+  "at": "2026-11-01T11:20:17.980374+00:00",
+  "variants": [
+    "reference-final",
+    "legal-metadata-and-ids",
+    "wrong-commit-on-rollback"
+  ],
+  "expected": {
+    "reference-final": 0,
+    "legal-metadata-and-ids": 0,
+    "wrong-commit-on-rollback": 4
+  },
+  "candidate_started": false,
+  "original_reference_modified": false,
+  "root_owned_derived_programmes": true,
+  "official_score": false
+}
