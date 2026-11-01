@@ -1,3 +1,4 @@
+import { isDecodableText } from "@opencorvus-ai/util/text-mime"
 import { SCREENSHOT_BROWSER_THUMBNAIL_VARIANT } from "@opencorvus-ai/transport-protocol"
 import { createResource, createSignal, Show, Switch, Match, lazy, Suspense } from "solid-js"
 import {
@@ -40,7 +41,7 @@ function PdfContent(props: { url: string; name: string }) {
 //   video/*             → <video controls>
 //   audio/*             → <audio controls>
 //   application/pdf     → shared PDF.js preview
-//   text/*, JSON        → on-demand text review in user-message history
+//   decodable text     → on-demand text review in user-message history
 //   anything else       → filename chip with a download affordance
 //
 // Failures are surfaced, not papered over: a fetch error prints to console
@@ -127,7 +128,7 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
 
   return (
     <Switch fallback={<FallbackDownload url={url()} name={name()} displayLabel={props.displayLabel} mime={mimeOf(props.part)} />}>
-      <Match when={props.presentation === "thumbnail" && url() && (mimeOf(props.part).startsWith("text/") || mimeOf(props.part) === "application/json")}>
+      <Match when={props.presentation === "thumbnail" && url() && kind() === "other" && isDecodableText(mimeOf(props.part), props.part.filename)}>
         <TextAttachment url={url()} name={name()} displayLabel={props.displayLabel} mime={mimeOf(props.part)} />
       </Match>
       <Match when={kind() === "image" && url() && authed()}>

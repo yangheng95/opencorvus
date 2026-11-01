@@ -47,6 +47,43 @@ afterEach(() => {
 })
 
 describe("composer attachment upload", () => {
+  test.each(["video/vnd.dlna.mpeg-tts", "video/mp2t", "application/octet-stream"])(
+    "captures UTF-8 TypeScript source as text from ambiguous %s metadata",
+    async (type) => {
+      const text = '\ufeffexport const title: string = "原始源码";\r\n'
+      const bytes = new TextEncoder().encode(text)
+      const captured = await captureComposerFile(new File([bytes], "SOURCE.TS", { type }))
+      expect(captured).toEqual({ bytes, mime: "text/plain" })
+
+      const requests: TransportRequest[] = []
+      setProjectDirectoryContext(DIRECTORY, false)
+      __setHostTransportForTest(recordingTransport(requests))
+      await uploadComposerBytes({ ...captured, filename: "SOURCE.TS", directory: DIRECTORY })
+      expect(requests[0]).toMatchObject({
+        query: { directory: DIRECTORY, filename: "SOURCE.TS" },
+        headers: { "Content-Type": "text/plain" },
+        body: { kind: "binary", value: bytes },
+      })
+    },
+  )
+
+  test.each([
+    Uint8Array.from([0x47, 0x40, 0x00, 0x10, 0xff]),
+    Uint8Array.from([...new TextEncoder().encode("x".repeat(8192)), 0xff]),
+  ])("captures binary transport-stream bytes with their declared media type", async (bytes) => {
+    expect(await captureComposerFile(new File([bytes], "stream.ts", { type: "video/mp2t" }))).toEqual({
+      bytes,
+      mime: "video/mp2t",
+    })
+  })
+
+  test("captures an empty TypeScript document as valid text", async () => {
+    expect(await captureComposerFile(new File([], "empty.ts", { type: "video/mp2t" }))).toEqual({
+      bytes: new Uint8Array(),
+      mime: "text/plain",
+    })
+  })
+
   test("uploads a file as raw binary and returns only the canonical reference", async () => {
     const requests: TransportRequest[] = []
     setProjectDirectoryContext(DIRECTORY, false)

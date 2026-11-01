@@ -367,8 +367,6 @@ export namespace AttachmentStore {
           size: data.byteLength,
         })
       ) {
-        const now = new Date()
-        await Promise.all([fs.utimes(abs, now, now), fs.utimes(metadataAbs, now, now)])
         return reference
       }
 
@@ -1051,14 +1049,11 @@ export namespace AttachmentStore {
   // moves them onto the store, the on-disk directory becomes the single
   // source — and that source needs reaping.
   //
-  // Strategy: on engine boot (wired in `Instance.provide` bootstrap),
-  // collect every `<sha>` referenced by any persisted `part.data`, then
-  // delete on-disk files whose sha is not in that set. Skip files newer
-  // than GC_MIN_AGE_MS so a sweep racing a fresh write does not delete a
-  // file before the part row that references it lands.
+  // A published canonical pair is durable input even before a user sends it.
+  // Database references and publication metadata both retain original bytes.
+  // Only aged, unreferenced blobs without publication metadata are collectible.
 
-  /** Files younger than this are skipped by sweep() so a write racing the
-   *  sweep is not deleted before its part row lands. */
+  /** Keep fresh, incomplete blobs while their publication may still be in flight. */
   const GC_MIN_AGE_MS = 60_000
 
   const REFERENCE_RE = /\/attachment\/[^/"\s]+\/([0-9a-f]{64})\.[0-9a-z]+/gi
@@ -1143,9 +1138,9 @@ export namespace AttachmentStore {
    * that referenced them, so any visual reference older than `GC_MIN_AGE_MS`
    * got unlinked and the build agent ENOENTed on stageToWorktree() copy.
    *
-   * All three sources share the canonical URL shape, so a single regex over
-   * the serialized JSON (see `harvestReferences`) covers every retain surface
-   * — no per-source parsing, no row-shape assumptions to drift.
+   * These database surfaces share the canonical URL shape. The same serialized
+   * reference reader covers them without per-row parsing; publication metadata
+   * separately retains complete canonical originals outside database rows.
    */
   export function collectReferencedShas(projectID?: string): Map<string, Set<string>> {
     const byProject = new Map<string, Set<string>>()
@@ -1277,10 +1272,10 @@ export namespace AttachmentStore {
   }
 
   /**
-   * Delete on-disk files in the project's attachment directory whose sha
-   * is not referenced by any persisted part. Files younger than
-   * `GC_MIN_AGE_MS` are skipped so a sweep racing a concurrent write does
-   * not delete a file before the part row that references it lands.
+   * Collect aged, unreferenced blobs without publication metadata. Canonical
+   * originals remain durable while a Composer or another caller owns their URL,
+   * even before any database row references them. Age is not deletion authority
+   * for a completed publication. Metadata errors remain the reader's contract.
    *
    * Returns the count and total byte size of deleted orphans for logging.
    * Idempotent: running twice in a row deletes 0 the second time.
@@ -1317,14 +1312,21 @@ export namespace AttachmentStore {
           throw error
         })
         if (!current?.isFile()) return { status: "absent" as const }
-        // A deduplicating writer renews the immutable pair's grace timestamp
-        // while holding this same lock. Re-read it after waiting so a sweep
-        // selected from an older directory snapshot cannot delete the pair
-        // before that writer commits its durable reference.
+        const publication = await fs.lstat(metadata).catch((error: NodeJS.ErrnoException) => {
+          if (error.code === "ENOENT") return undefined
+          throw error
+        })
+        if (publication) return { status: "published" as const }
+        // Re-read age inside the writer's lock; a fresh incomplete publication
+        // may have replaced the older directory snapshot.
         if (now - current.mtimeMs < GC_MIN_AGE_MS) return { status: "young" as const }
         return deleteAttachmentPair({ blob: f.abs, metadata, bytes: current.size })
       })
       if (outcome.status === "absent") continue
+      if (outcome.status === "published") {
+        kept++
+        continue
+      }
       if (outcome.status === "young") {
         skippedYoung++
         continue

@@ -4,6 +4,7 @@ import path from "node:path"
 import { ConfigPaths } from "../../src/config/paths"
 import { Instance, runOutsideInstanceContext } from "../../src/project/instance"
 import { Server } from "../../src/server/server"
+import { AttachmentStore } from "../../src/storage/attachment-store"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
 
 afterEach(async () => {
@@ -50,11 +51,21 @@ test("cold attachment capture returns each project's exact bytes and original fi
     expect(response.status).toBe(200)
     const reference = await response.json()
     expect(reference).toMatchObject({ filename, mime: "text/plain", size: bytes.byteLength })
+    const absolute = await Instance.provide({
+      directory,
+      fn: async () => AttachmentStore.resolveAbsolute(Instance.project.id, reference.url.split("/").at(-1)!),
+    })
+    if (!absolute) throw new Error("Uploaded canonical attachment path required")
+    const publishedMetadata = await fs.readFile(`${absolute}.metadata.json`)
+    const aged = new Date(Date.now() - 120_000)
+    await fs.utimes(absolute, aged, aged)
     const original = await request(directory, reference.url)
     expect(original.status).toBe(200)
     expect(Buffer.from(await original.arrayBuffer())).toEqual(bytes)
+    expect(await fs.readFile(`${absolute}.metadata.json`)).toEqual(publishedMetadata)
     const repeated = await upload()
     expect(repeated.status).toBe(200)
+    expect((await fs.stat(absolute)).mtimeMs).toBeCloseTo(aged.getTime(), 0)
     expect(await repeated.json()).toEqual(reference)
   }
 }, 30_000)

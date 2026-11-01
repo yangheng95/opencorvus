@@ -22,9 +22,26 @@ export interface CapturedComposerFile {
 }
 
 export async function captureComposerFile(file: File): Promise<CapturedComposerFile> {
+  const bytes = new Uint8Array(await file.arrayBuffer())
+  let mime = file.type || "application/octet-stream"
+  const essence = mime.split(";", 1)[0].trim().toLowerCase()
+  // Windows also associates .ts source files with MPEG transport streams.
+  // Resolve that specific ambiguity from the complete captured bytes.
+  if (
+    file.name?.toLowerCase().endsWith(".ts") &&
+    ["application/octet-stream", "video/mp2t", "video/vnd.dlna.mpeg-tts"].includes(essence) &&
+    !bytes.some((value) => value <= 0x08 || value === 0x0b || (value >= 0x0e && value <= 0x1a) || (value >= 0x1c && value <= 0x1f))
+  ) {
+    try {
+      new TextDecoder("utf-8", { fatal: true }).decode(bytes)
+      mime = "text/plain"
+    } catch (error) {
+      if (!(error instanceof TypeError)) throw error
+    }
+  }
   return {
-    bytes: new Uint8Array(await file.arrayBuffer()),
-    mime: file.type || "application/octet-stream",
+    bytes,
+    mime,
   }
 }
 

@@ -1,3 +1,4 @@
+import { isDecodableText } from "@opencorvus-ai/util/text-mime"
 import {
   ArtifactReadInputSchema,
   ArtifactSearchInputSchema,
@@ -40,7 +41,6 @@ import {
 } from "@/engine/engine.sql"
 import { projectTaskRowInTransaction, requireTask } from "@/engine/store"
 import { taskPrimaryProjectRoot } from "@/project/task-runtime-root"
-import { isDecodableText } from "@/session/text-mime"
 import { Database, and, desc, eq, lte, sql } from "@/storage/db"
 import { artifactPackageRevision } from "@/session/runtime-contract"
 import {

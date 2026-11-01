@@ -1031,12 +1031,17 @@ sandbox ownership。Workspace/public delete 与 Project delete 仍必须持有�
 Extensions，多用途互联网邮件扩展类型）、文件名和扩展名都不能推导领域语义。
 `AttachmentStore` 只负责 canonical bytes 与 metadata sidecar，也不拥有领域语义。
 物理 attachment 目录不保存第二份 Database authority，也不创建 `.authority.json`。
-Project identity、附件引用和可回收集合只来自当前 Database；`Project.worktree` 是物理位置的唯一
+Project identity 和数据库内附件引用来自当前 Database；`Project.worktree` 是物理位置的唯一
 来源。attachment bytes 位于 `attachments/<database-path-digest>/` 命名空间；同一路径的普通 reopen、
 显式 reset 后建立的新库继续使用同一 bytes 命名空间，不同 SQLite 路径即使指向同一 Project 目录也不
 共享 sweep 集合。该目录段只用于物理隔离，不是可变 marker、锁或平行 authority 文件。write 继续使用
 每个 content-addressed blob/metadata pair 的跨进程锁、临时 staging、哈希、长度与 canonical
-reference 校验；sweep 清理当前命名空间中未引用且超过 grace period 的 blob 及其 sidecar（若存在）。
+reference 校验。成功发布的 metadata sidecar 是 canonical 原件已交付的持久回执，未提交 Composer
+尚无数据库引用，不能因此按年龄删除原件。sweep 保留数据库引用和已有 publication metadata 的
+blob；仅未引用、缺少 metadata 且超过 grace period 的未发布孤立 blob 可回收，并在原 pair 锁内
+重验 metadata 与年龄。metadata 损坏仍保留诊断原件，由正式 reader 报原错误。没有第二个保留
+清单、租约或数据库身份 marker；dedup 返回已验证的不可变 pair，不为 GC 续写时间。已发布而
+不再被引用的原件不自动按年龄清除；清理需要明确删除授权，不能从“数据库未引用”推导。
 显式 `db reset` 必须同时删除 SQLite DB/WAL/SHM 与传入 Project 的 `.opencorvus/.r`；它不靠
 项目文件中的数据库身份阻止或修复不完整的 operator reset。Project identity convergence 只使用
 canonical Database rows、嵌入引用和现有 durable owner 检查，不读取文件系统 marker 作为平行事实源。

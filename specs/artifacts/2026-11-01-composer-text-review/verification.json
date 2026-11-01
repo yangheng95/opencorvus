@@ -1,0 +1,910 @@
+{
+  "at": "2026-11-01T08:13:26.874Z",
+  "manualScreenshots": [
+    "01-before-yaml.jpg",
+    "02-before-typescript.jpg",
+    "03-before-empty-text.jpg",
+    "04-after-yaml.jpg",
+    "05-after-typescript.jpg",
+    "06-after-real-transport.jpg",
+    "07-after-svg-image.jpg",
+    "08-after-binary.jpg",
+    "09-after-xml.jpg",
+    "10-after-javascript.jpg",
+    "11-after-yaml-zh.jpg",
+    "12-after-keyboard-remove.jpg",
+    "13-after-typescript-reselect-zh.jpg",
+    "14-after-empty-text-zh.jpg",
+    "15-before-real-send.jpg",
+    "16-send-result-observation.jpg",
+    "17-final-typescript.jpg",
+    "18-final-yaml.jpg",
+    "19-final-aged-yaml-zh.jpg",
+    "20-final-before-send.jpg",
+    "21-final-real-model-result.jpg",
+    "22-budget-scope-history-yaml.jpg",
+    "23-final-complete-model-result.jpg",
+    "24-complete-response-history-texts.jpg",
+    "25-formal-read-model-result.jpg",
+    "26-formal-source-opens-original.jpg",
+    "27-formal-history-originals.jpg",
+    "28-formal-history-collapsed.jpg"
+  ],
+  "baselineScreenshots": [
+    "01-before-yaml.jpg",
+    "02-before-typescript.jpg",
+    "03-before-empty-text.jpg"
+  ],
+  "formalPassingScreenshots": [
+    "25-formal-read-model-result.jpg",
+    "26-formal-source-opens-original.jpg",
+    "27-formal-history-originals.jpg",
+    "28-formal-history-collapsed.jpg"
+  ],
+  "screenshotNotes": {
+    "16": "Real original garbage-collection failure before Provider",
+    "21-22": "Checker budget blocked main reply after real memory preflight",
+    "23-24": "Completed main reply correctly respected no-tools instruction; original-value readback was not covered",
+    "25-28": "Formal read tools, exact original values, Sources and history passed"
+  },
+  "automatedUITests": 0,
+  "uiBundle": "main-mQQga4p6.js",
+  "checks": {
+    "types-after": 0,
+    "backend-types-after": 0,
+    "i18n-after": 0,
+    "ui-build-after": 0,
+    "unit-upload-after": 0,
+    "unit-mime-after": 0,
+    "projection-after": 0,
+    "retention-after": 0
+  },
+  "positiveTests": 41,
+  "expectations": 87,
+  "originalFiles": {
+    "at": "2026-11-01T07:50:07.660Z",
+    "before": {
+      "canonicalFiles": 6,
+      "namespaceEntries": 12,
+      "items": [
+        {
+          "filename": "empty.txt",
+          "mime": "text/plain",
+          "bytes": 0,
+          "canonicalStoredBytesEqual": true
+        },
+        {
+          "filename": "notes.xml",
+          "mime": "text/xml",
+          "bytes": 78,
+          "canonicalStoredBytesEqual": true
+        },
+        {
+          "filename": "review.js",
+          "mime": "text/javascript",
+          "bytes": 51,
+          "canonicalStoredBytesEqual": true
+        },
+        {
+          "filename": "review.ts",
+          "mime": "video/vnd.dlna.mpeg-tts",
+          "bytes": 59,
+          "canonicalStoredBytesEqual": true
+        },
+        {
+          "filename": "review.yaml",
+          "mime": "application/octet-stream",
+          "bytes": 30,
+          "canonicalStoredBytesEqual": true
+        },
+        {
+          "filename": "unknown.bin",
+          "mime": "application/octet-stream",
+          "bytes": 4,
+          "canonicalStoredBytesEqual": true
+        }
+      ]
+    },
+    "after2": {
+      "canonicalFiles": 8,
+      "namespaceEntries": 17,
+      "items": [
+        {
+          "filename": "drawing.svg",
+          "mime": "image/svg+xml",
+          "bytes": 165,
+          "canonicalStoredBytesEqual": true,
+          "publicReadback": {
+            "status": 200,
+            "exactOriginalBytes": true
+          }
+        },
+        {
+          "filename": "empty.txt",
+          "mime": "text/plain",
+          "bytes": 0,
+          "canonicalStoredBytesEqual": true,
+          "publicReadback": {
+            "status": 200,
+            "exactOriginalBytes": true
+          }
+        },
+        {
+          "filename": "notes.xml",
+          "mime": "text/xml",
+          "bytes": 78,
+          "canonicalStoredBytesEqual": true,
+          "publicReadback": {
+            "status": 200,
+            "exactOriginalBytes": true
+          }
+        },
+        {
+          "filename": "review.js",
+          "mime": "text/javascript",
+          "bytes": 51,
+          "canonicalStoredBytesEqual": true,
+          "publicReadback": {
+            "status": 200,
+            "exactOriginalBytes": true
+          }
+        },
+        {
+          "filename": "review.ts",
+          "mime": "text/plain",
+          "bytes": 59,
+          "canonicalStoredBytesEqual": true,
+          "publicReadback": {
+            "status": 200,
+            "exactOriginalBytes": true
+          }
+        },
+        {
+          "filename": "review.yaml",
+          "mime": "application/octet-stream",
+          "bytes": 30,
+          "canonicalStoredBytesEqual": true,
+          "publicReadback": {
+            "status": 200,
+            "exactOriginalBytes": true
+          }
+        },
+        {
+          "filename": "transport.ts",
+          "mime": "video/vnd.dlna.mpeg-tts",
+          "bytes": 6204,
+          "canonicalStoredBytesEqual": true,
+          "publicReadback": {
+            "status": 200,
+            "exactOriginalBytes": true
+          }
+        },
+        {
+          "filename": "unknown.bin",
+          "mime": "application/octet-stream",
+          "bytes": 4,
+          "canonicalStoredBytesEqual": true,
+          "publicReadback": {
+            "status": 200,
+            "exactOriginalBytes": true
+          }
+        }
+      ]
+    },
+    "downloads": [
+      {
+        "filename": "review.ts",
+        "bytes": 59,
+        "exactOriginalBytes": true
+      },
+      {
+        "filename": "transport.ts",
+        "bytes": 6204,
+        "exactOriginalBytes": true
+      },
+      {
+        "filename": "unknown.bin",
+        "bytes": 4,
+        "exactOriginalBytes": true
+      }
+    ]
+  },
+  "agedEightOriginals": {
+    "at": "2026-11-01T07:51:21.168Z",
+    "phase": "after2",
+    "files": 8,
+    "youngestAgeMs": 160273.224609375,
+    "metadataAndOriginalBytesPreserved": true,
+    "mtimePreserved": true,
+    "publicReadback": 8,
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "credentialRegistered": true,
+    "catalogProjected": true,
+    "requests": 0,
+    "maximumRequests": 1
+  },
+  "agedTwoOriginals": {
+    "at": "2026-11-01T08:03:03.876Z",
+    "files": 2,
+    "youngestAgeMs": 328446.0690917969,
+    "metadataAndOriginalBytesPreserved": true,
+    "mtimePreserved": true,
+    "publicReadback": 2,
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "credentialRegistered": true,
+    "catalogProjected": true,
+    "requests": 2,
+    "maximumRequests": 2
+  },
+  "formalRead": {
+    "exactOriginalValues": true,
+    "completedReads": 2,
+    "sources": 2,
+    "requests": 4,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "originalBytesAfterRetirement": true,
+    "sourceDownload": {
+      "filename": "review.yaml",
+      "bytes": 30,
+      "exactOriginalBytes": true
+    }
+  },
+  "cases": [
+    {
+      "at": "2026-11-01T07:32:51.862Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 234657,
+      "current": 234662,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48118,
+          "after": 48119
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48060,
+          "after": 48061
+        },
+        {
+          "table": "memory_chunk",
+          "before": 70,
+          "after": 71
+        },
+        {
+          "table": "memory_file",
+          "before": 70,
+          "after": 71
+        },
+        {
+          "table": "project",
+          "before": 72,
+          "after": 73
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "attachments": 160,
+      "projects": 72,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1180,
+      "reserveMs": 3344541,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DO-l5tMi.js",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "retiredCopies": 2,
+      "requestOutcomes": []
+    },
+    {
+      "at": "2026-11-01T07:47:08.344Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 234662,
+      "current": 234728,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 45843,
+          "after": 45855
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 45843,
+          "after": 45855
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6022,
+          "after": 6024
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6022,
+          "after": 6024
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18066,
+          "after": 18072
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48119,
+          "after": 48132
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48061,
+          "after": 48074
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5824,
+          "after": 5826
+        },
+        {
+          "table": "memory_chunk",
+          "before": 71,
+          "after": 72
+        },
+        {
+          "table": "memory_file",
+          "before": 71,
+          "after": 72
+        },
+        {
+          "table": "project",
+          "before": 73,
+          "after": 74
+        },
+        {
+          "table": "session",
+          "before": 104,
+          "after": 105
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "attachments": 172,
+      "projects": 73,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1180,
+      "reserveMs": 2546954,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-mQQga4p6.js",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "retiredCopies": 2,
+      "requestOutcomes": []
+    },
+    {
+      "at": "2026-11-01T07:56:13.230Z",
+      "kind": "after2",
+      "schema": 9,
+      "tables": 92,
+      "originals": 234728,
+      "current": 235291,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 45855,
+          "after": 45965
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 45855,
+          "after": 45965
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6024,
+          "after": 6041
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6024,
+          "after": 6041
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18072,
+          "after": 18123
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48132,
+          "after": 48243
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48074,
+          "after": 48185
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5826,
+          "after": 5843
+        },
+        {
+          "table": "memory_chunk",
+          "before": 72,
+          "after": 73
+        },
+        {
+          "table": "memory_file",
+          "before": 72,
+          "after": 73
+        },
+        {
+          "table": "message",
+          "before": 770,
+          "after": 772
+        },
+        {
+          "table": "part",
+          "before": 2186,
+          "after": 2190
+        },
+        {
+          "table": "project",
+          "before": 74,
+          "after": 75
+        },
+        {
+          "table": "protocol_event",
+          "before": 2263,
+          "after": 2269
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 762,
+          "after": 763
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 762,
+          "after": 763
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 795,
+          "after": 796
+        },
+        {
+          "table": "session",
+          "before": 105,
+          "after": 106
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793470059941,
+          "reacquiredAt": 1793519486338,
+          "releasedAt": 1793519493132,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793470057651,
+          "reacquiredAt": 1793519489453,
+          "releasedAt": 1793519489459,
+          "ownedByRuntime": true
+        }
+      ],
+      "sourceDatabasePreserved": true,
+      "attachments": 176,
+      "projects": 74,
+      "filesystemExclusions": 0,
+      "requests": 1,
+      "cumulativeRequests": 1181,
+      "reserveMs": 1991661,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-mQQga4p6.js",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "retiredCopies": 2,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "at": "2026-11-01T08:03:59.924Z",
+      "kind": "after3",
+      "schema": 9,
+      "tables": 92,
+      "originals": 235291,
+      "current": 235889,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 45965,
+          "after": 46082
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 45965,
+          "after": 46082
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6041,
+          "after": 6059
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6041,
+          "after": 6059
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18123,
+          "after": 18177
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48243,
+          "after": 48361
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48185,
+          "after": 48303
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5843,
+          "after": 5861
+        },
+        {
+          "table": "memory_chunk",
+          "before": 73,
+          "after": 74
+        },
+        {
+          "table": "memory_file",
+          "before": 73,
+          "after": 74
+        },
+        {
+          "table": "message",
+          "before": 772,
+          "after": 774
+        },
+        {
+          "table": "part",
+          "before": 2190,
+          "after": 2197
+        },
+        {
+          "table": "project",
+          "before": 75,
+          "after": 76
+        },
+        {
+          "table": "protocol_event",
+          "before": 2269,
+          "after": 2272
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 763,
+          "after": 764
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 763,
+          "after": 764
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 796,
+          "after": 798
+        },
+        {
+          "table": "session",
+          "before": 106,
+          "after": 107
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793519493132,
+          "reacquiredAt": 1793520005404,
+          "releasedAt": 1793520011811,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793519489459,
+          "reacquiredAt": 1793520006469,
+          "releasedAt": 1793520011110,
+          "ownedByRuntime": true
+        }
+      ],
+      "sourceDatabasePreserved": true,
+      "attachments": 195,
+      "projects": 75,
+      "filesystemExclusions": 0,
+      "requests": 2,
+      "cumulativeRequests": 1183,
+      "reserveMs": 1462843,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-mQQga4p6.js",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "retiredCopies": 2,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "at": "2026-11-01T08:11:20.558Z",
+      "kind": "after4",
+      "schema": 9,
+      "tables": 92,
+      "originals": 235889,
+      "current": 237113,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 46082,
+          "after": 46325
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 46082,
+          "after": 46325
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6059,
+          "after": 6091
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6059,
+          "after": 6091
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18177,
+          "after": 18273
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48361,
+          "after": 48607
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48303,
+          "after": 48549
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5861,
+          "after": 5893
+        },
+        {
+          "table": "memory_chunk",
+          "before": 74,
+          "after": 75
+        },
+        {
+          "table": "memory_file",
+          "before": 74,
+          "after": 75
+        },
+        {
+          "table": "message",
+          "before": 774,
+          "after": 778
+        },
+        {
+          "table": "part",
+          "before": 2197,
+          "after": 2209
+        },
+        {
+          "table": "permission_execution_result",
+          "before": 183,
+          "after": 185
+        },
+        {
+          "table": "permission_ledger",
+          "before": 931,
+          "after": 941
+        },
+        {
+          "table": "permission_policy",
+          "before": 42,
+          "after": 43
+        },
+        {
+          "table": "project",
+          "before": 76,
+          "after": 77
+        },
+        {
+          "table": "protocol_event",
+          "before": 2272,
+          "after": 2279
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 764,
+          "after": 767
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 764,
+          "after": 767
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 798,
+          "after": 802
+        },
+        {
+          "table": "session",
+          "before": 107,
+          "after": 108
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 603,
+          "after": 605
+        },
+        {
+          "table": "tool_part_request",
+          "before": 603,
+          "after": 605
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793520011811,
+          "reacquiredAt": 1793520436245,
+          "releasedAt": 1793520440105,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793520011110,
+          "reacquiredAt": 1793520431887,
+          "releasedAt": 1793520435539,
+          "ownedByRuntime": true
+        }
+      ],
+      "sourceDatabasePreserved": true,
+      "attachments": 201,
+      "projects": 76,
+      "filesystemExclusions": 0,
+      "requests": 4,
+      "cumulativeRequests": 1187,
+      "reserveMs": 1048722,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-mQQga4p6.js",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "retiredCopies": 2,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ]
+    }
+  ],
+  "retiredPairedCopies": 10,
+  "totalModelRequests": 7,
+  "cumulativeRequests": 1187,
+  "originalGoals": 9,
+  "goalFactsPreserved": true,
+  "userWindowsOperated": false,
+  "user18571Operated": false,
+  "limitations": [
+    "Original MPEG transport stream codec is not supported by this browser; exact download verified",
+    "Existing wrong MIME metadata is not migrated; non-UTF-8 source identification unchanged",
+    "Published canonical originals require explicit deletion authority; age alone no longer reclaims them",
+    "Failed first-send draft recovery remains a separately observed follow-up"
+  ]
+}

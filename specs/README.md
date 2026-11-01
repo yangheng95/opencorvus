@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [附件文本与原件保留](records/2026-11/2026-11-01-composer-text-review.md)：源码类型、YAML核对与真实发送发现的共享回收根因。
+
 - [文件空状态与首页标题](records/2026-11/2026-11-01-project-file-empty-layout.md)：未选项目提示/操作范围、同名标题均衡换行与真实新建。
 
 - [项目首页文件入口](records/2026-11/2026-11-01-project-home-files.md)：首页/命令同源Explorer、项目草稿与重复语言键校验。

@@ -266,7 +266,7 @@ label in a compact native disclosure by default. Expanding it loads the same
 PDF reader and original download; its reading viewport scrolls within a bound.
 Collapsing releases that document, and reopening starts its normal document
 lifecycle. Other file-content consumers retain their full-content presentation.
-User-message text MIME and JSON attachments also keep a compact, initially
+User-message decodable text attachments also keep a compact, initially
 collapsed filename disclosure. Expanding loads the shared ResourceTextPreview
 with its complete read-only document and original download. Collapsing releases
 the reader; reopening uses the same canonical resource and authorized cache.
@@ -284,9 +284,19 @@ The shared PDF reader expresses page and zoom limits with guarded aria-disabled
 buttons and removes unavailable actions from the Tab sequence. Reaching a limit
 keeps the current button focused, allowing native Tab navigation to continue.
 
-Nonimage file chips open an existing Dialog for review before submission. Stored
-text MIME types and JSON use the same ResourceTextPreview as File preview
+Nonimage file chips open an existing Dialog for review before submission. The
+shared util/text-mime classifier serves both model text projection and review:
+text MIME types, structured JSON/XML, supported application text types and known
+text filenames with octet-stream metadata use ResourceTextPreview as File preview
 artifacts; other formats retain FilePart media or original-download presentation.
+History preserves its existing image, PDF and media presentation priority,
+including SVG images, before choosing decodable text for other file types.
+Composer capture resolves the Windows .ts source/transport-stream ambiguity
+before upload: only octet-stream, video/mp2t or video/vnd.dlna.mpeg-tts metadata
+on a .ts file enters complete-byte strict UTF-8 and standard binary-control-byte
+classification. Valid text is uploaded as text/plain with its exact original
+bytes and filename; binary input retains its supplied type. Other file types and
+already stored references retain their existing metadata and capture behavior.
 The shared text reader decodes original bytes strictly: a UTF-16 BOM selects
 little or big endian, otherwise UTF-8 applies (including a UTF-8 BOM). Malformed
 input shows localized encoding feedback instead of replacement text. Pending

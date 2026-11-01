@@ -1,3 +1,4 @@
+import { isDecodableText } from "@opencorvus-ai/util/text-mime"
 import { Show, createEffect, createSignal } from "solid-js"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import type { StoredAttachmentReference } from "../services/attachment-upload"
@@ -20,7 +21,7 @@ export function ComposerAttachmentPreview(props: { attachment: StoredAttachmentR
   createEffect(() => {
     if (context() && !current()) setOpen(false)
   })
-  const text = () => props.attachment.mime.startsWith("text/") || props.attachment.mime === "application/json"
+  const text = () => isDecodableText(props.attachment.mime, props.attachment.filename)
 
   return (
     <>

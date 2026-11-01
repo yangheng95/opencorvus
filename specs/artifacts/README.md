@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [附件文本与原件保留](2026-11-01-composer-text-review/README.md)：基线/失败候选/最终原图、原件下载与完整结清证据。
+
 - [文件空状态与首页标题](2026-11-01-project-file-empty-layout/README.md)：18张原图、同名对照、实际新建/文件发布与数据结清。
 
 - [项目首页文件入口](2026-11-01-project-home-files/README.md)：18张原图、首候选失败、真实保存/草稿和完整数据保全。
