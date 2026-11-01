@@ -71,12 +71,12 @@ const RETIRED_TYPOGRAPHY_ALIASES = new Set([
   "--work-row-line-height",
 ])
 const TYPOGRAPHY_ROLE_VALUES = new Map([
-  ["--ui-font-page", "calc(22px * var(--ui-scale))"],
-  ["--ui-font-emphasis", "calc(15px * var(--ui-scale))"],
-  ["--ui-font-body", "calc(13px * var(--ui-scale))"],
-  ["--ui-font-secondary", "calc(12px * var(--ui-scale))"],
-  ["--ui-font-code", "calc(13px * var(--ui-scale))"],
-  ["--ui-font-caption", "calc(12px * var(--ui-scale))"],
+  ["--ui-font-page", "calc(20px * var(--ui-scale))"],
+  ["--ui-font-emphasis", "calc(14px * var(--ui-scale))"],
+  ["--ui-font-body", "calc(12px * var(--ui-scale))"],
+  ["--ui-font-secondary", "calc(11px * var(--ui-scale))"],
+  ["--ui-font-code", "calc(12px * var(--ui-scale))"],
+  ["--ui-font-caption", "calc(11px * var(--ui-scale))"],
   ["--ui-line-height-flat", "1"],
   ["--ui-line-height-tight", "1.35"],
   ["--ui-line-height-normal", "1.5"],

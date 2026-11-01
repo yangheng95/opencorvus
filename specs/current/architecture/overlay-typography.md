@@ -5,27 +5,27 @@ and line-height scale owner for OpenCorvus application chrome. At
 `--ui-scale: 1`, application chrome has five proportional roles and one
 monospace role:
 
-- `--ui-font-page` is 22px for prominent settings page headings and the usage
+- `--ui-font-page` is 20px for prominent settings page headings and the usage
   identity heading. It is not a navigation, row, card or dialog-control role.
-- `--ui-font-emphasis` is 15px for surface/group/dialog and empty-state
+- `--ui-font-emphasis` is 14px for surface/group/dialog and empty-state
   headings, plus singular primary totals or product marks that carry the same
   visual emphasis.
-- `--ui-font-body` is 13px for reading prose, section headings, item identities,
+- `--ui-font-body` is 12px for reading prose, section headings, item identities,
   navigation, and controls.
-- `--ui-font-secondary` is 12px for subordinate settings navigation and
+- `--ui-font-secondary` is 11px for subordinate settings navigation and
   secondary control/group descriptions. It separates secondary interface text
   from primary labels without shrinking transcript reading or using metadata
   typography for product prose.
-- `--ui-font-code` is 13px for code blocks and trace bodies that need a
+- `--ui-font-code` is 12px for code blocks and trace bodies that need a
   code-specific reading size. Short monospace identifiers still choose body or
   caption by their semantic role.
-- `--ui-font-caption` is 12px only for compact auxiliary information such as
+- `--ui-font-caption` is 11px only for compact auxiliary information such as
   timestamps, status, counts, and technical metadata; paragraphs, summaries,
   empty-state copy, primary navigation, and primary controls stay body;
   subordinate settings navigation and descriptions use the secondary role.
 
-Page headings are the sole 22px role; other application chrome stays between
-12px and 15px at the default scale. Interactive Artifact content may own an internal type system, but the
+Page headings are the sole 20px role; other application chrome stays between
+11px and 14px at the default scale. Interactive Artifact content may own an internal type system, but the
 surrounding OpenCorvus chrome remains on this scale.
 
 Surface styles may own layout, colour, spacing, and context-specific weight,
@@ -58,9 +58,9 @@ The existing SettingsGroup places its title above one inset content surface
 with a quiet border, 12px radius and 12px inline inset. Untitled dataset groups
 remain transparent; complex lists retain their own section owners. Rows remain
 content-driven with a 40px floor and 8px vertical padding. Page/group/field titles
-use 22/15/13px with 600/600/500 weights. Group headings align with page and panel
-edges; field text is inset 12px. Sidebar category headings use 13px/600 at the
-child icon axis, while subordinate row labels use 12px/400 and indent 24px
+use 20/14/12px with 600/600/500 weights. Group headings align with page and panel
+edges; field text is inset 12px. Sidebar category headings use 12px/600 at the
+child icon axis, while subordinate row labels use 11px/400 and indent 24px
 (500 when selected). Selection uses the theme's neutral highlight. Controls
 retain natural wrapping and their existing focus/scroll owners.
 
