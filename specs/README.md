@@ -175,7 +175,7 @@
 
 - [H05横向对照与难度升级](records/2026-10/2026-10-29-heavy-workbench-cross-system.md)：两方旧标准100开发点、独立清洁复跑及天花板证据。
 
-- [数小时长程任务资格](records/2026-10/2026-10-29-heavy-workbench-long.md)：[真实Codex/OC结果](artifacts/2026-10-29-heavy-workbench-long/CODEX-COMPARISON-RESULTS.md)保L02预测损失/海运交付差异，[L01终态](artifacts/2026-10-29-heavy-workbench-long/evaluator/l01-whole-case/native-matrix-terminal-20261101/README.md)保科学失败；[月结唯一独立整审](artifacts/2026-10-29-heavy-workbench-long/cases/month-end-package/independent-review/README.md)已完成，参考完整质量/公平评分/模型启动未就绪。作者产物和独评不补真实候选数小时或十题资格，旧线/原分不改。
+- [数小时长程任务资格](records/2026-10/2026-10-29-heavy-workbench-long.md)：[真实Codex/OC旧结果](artifacts/2026-10-29-heavy-workbench-long/CODEX-COMPARISON-RESULTS.md)和[L01科学终态](artifacts/2026-10-29-heavy-workbench-long/evaluator/l01-whole-case/native-matrix-terminal-20261101/README.md)保持；[月结实质修复/公平完整消费](artifacts/2026-10-29-heavy-workbench-long/cases/month-end-package/repair-validation-20261101/README.md)支持下一真实对照。合法布局/资金分类通过、业务注/刷新/身份错误分别实测；十题/有效小时仍未达，心跳恢复ACTIVE，通用修正行为根治未证。
 
 - [文件附件与跨项目输入体验](records/2026-10/2026-10-29-attachment-workspace-journey.md)：真实文件选择、核对与暂存附件/独立草稿的归属调查。
 

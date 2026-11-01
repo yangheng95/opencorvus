@@ -1,0 +1,2081 @@
+{
+  "measured_contracts_match": false,
+  "errors": [
+    {
+      "contract": "ACCOUNT_ID_REQUIRED",
+      "actual": {
+        "division": null,
+        "account": null,
+        "name": null,
+        "period": null,
+        "ytd": null,
+        "class": null
+      }
+    },
+    {
+      "contract": "ACCOUNT_ID_REQUIRED",
+      "actual": {
+        "division": null,
+        "account": null,
+        "name": null,
+        "period": null,
+        "ytd": null,
+        "class": null
+      }
+    },
+    {
+      "contract": "ACCOUNT_ID_REQUIRED",
+      "actual": {
+        "division": null,
+        "account": null,
+        "name": null,
+        "period": null,
+        "ytd": null,
+        "class": null
+      }
+    },
+    {
+      "contract": "ACCOUNT_ID_REQUIRED",
+      "actual": {
+        "division": null,
+        "account": null,
+        "name": null,
+        "period": null,
+        "ytd": null,
+        "class": null
+      }
+    },
+    {
+      "contract": "ACCOUNT_ID_REQUIRED",
+      "actual": {
+        "division": null,
+        "account": null,
+        "name": null,
+        "period": null,
+        "ytd": null,
+        "class": null
+      }
+    },
+    {
+      "contract": "ACCOUNT_ID_REQUIRED",
+      "actual": {
+        "division": null,
+        "account": null,
+        "name": null,
+        "period": null,
+        "ytd": null,
+        "class": null
+      }
+    },
+    {
+      "contract": "ACCOUNT_ID_REQUIRED",
+      "actual": {
+        "division": null,
+        "account": null,
+        "name": null,
+        "period": null,
+        "ytd": null,
+        "class": null
+      }
+    },
+    {
+      "contract": "ACCOUNT_ID_REQUIRED",
+      "actual": {
+        "division": null,
+        "account": null,
+        "name": null,
+        "period": null,
+        "ytd": null,
+        "class": null
+      }
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1024).period",
+      "expected": "419460.93",
+      "actual": -585573.42
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1024).ytd",
+      "expected": "6560926.80",
+      "actual": 6141465.87
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1101).period",
+      "expected": "-40174.00",
+      "actual": 42651
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1101).ytd",
+      "expected": "10997.00",
+      "actual": 51171
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1130).period",
+      "expected": "3626.33",
+      "actual": -2918.68
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1130).ytd",
+      "expected": "4207.65",
+      "actual": 581.32
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1250).period",
+      "expected": "-49820.20",
+      "actual": 87514.4
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1250).ytd",
+      "expected": "692501.33",
+      "actual": 577321.53
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1251).period",
+      "expected": "5493.27",
+      "actual": -50000
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1251).ytd",
+      "expected": "54630.68",
+      "actual": 49137.41
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1305).period",
+      "expected": "-5000.00",
+      "actual": 25000
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1305).ytd",
+      "expected": "56000.00",
+      "actual": 61000
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1546).ytd",
+      "expected": "-39905.74",
+      "actual": -38260.95
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1550).ytd",
+      "expected": "-3816.79",
+      "actual": -3469.81
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1651).period",
+      "expected": "-47777.80",
+      "actual": 20586
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1651).ytd",
+      "expected": "4016804.56",
+      "actual": 4064582.36
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1652).period",
+      "expected": "16491.34",
+      "actual": 16953.46
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1652).ytd",
+      "expected": "3314759.25",
+      "actual": 3298267.91
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1653).period",
+      "expected": "-17591.86",
+      "actual": 9117
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1653).ytd",
+      "expected": "1780756.69",
+      "actual": 1798348.55
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1654).period",
+      "expected": "-15942.23",
+      "actual": 8283
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1654).ytd",
+      "expected": "1617796.41",
+      "actual": 1633738.64
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1656).period",
+      "expected": "7565.60",
+      "actual": 7777.6
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 1656).ytd",
+      "expected": "1520685.72",
+      "actual": 1513120.12
+    },
+    {
+      "contract": "ACCOUNT_METADATA_MISMATCH",
+      "account": [
+        10,
+        1656
+      ],
+      "field": "name",
+      "expected": "Notes Rec - Aurisic DE",
+      "actual": "Notes Rec - Aurisic FR"
+    },
+    {
+      "contract": "ACCOUNT_REQUIRED",
+      "account": [
+        12,
+        1101
+      ]
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2000).period",
+      "expected": "-235493.53",
+      "actual": 376609.57
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2000).ytd",
+      "expected": "-314563.78",
+      "actual": -79070.25
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2001).period",
+      "expected": "55036.69",
+      "actual": -60224.11
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2001).ytd",
+      "expected": "-16166.78",
+      "actual": -71203.47
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2005).period",
+      "expected": "-129903.58",
+      "actual": -14893.78
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2005).ytd",
+      "expected": "-159707.51",
+      "actual": -29803.93
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2011).period",
+      "expected": "-35254.11",
+      "actual": -7535.43
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2011).ytd",
+      "expected": "-304169.11",
+      "actual": -109220
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2041).period",
+      "expected": "-15646.70",
+      "actual": 19502.25
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2041).ytd",
+      "expected": "-54745.96",
+      "actual": -39099.26
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2066).period",
+      "expected": "-408.26",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2066).ytd",
+      "expected": "-4156.37",
+      "actual": -3748.11
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2200).period",
+      "expected": "118767.00",
+      "actual": -43500
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2200).ytd",
+      "expected": "-141033.00",
+      "actual": -259800
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2213).ytd",
+      "expected": "-17839.18",
+      "actual": -16535.88
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2401).period",
+      "expected": "-229297.69",
+      "actual": 361506.57
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2401).ytd",
+      "expected": "-334593.73",
+      "actual": -105296.04
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2402).period",
+      "expected": "134630.14",
+      "actual": -69558.91
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2402).ytd",
+      "expected": "-67315.07",
+      "actual": -201945.21
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2404).period",
+      "expected": "166955.00",
+      "actual": -166955
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2404).ytd",
+      "expected": "-160270.22",
+      "actual": -327225.22
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2410).ytd",
+      "expected": "-146796.76",
+      "actual": -146802.26
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2500).period",
+      "expected": "62096.98",
+      "actual": 1596.98
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 2500).ytd",
+      "expected": "70637.92",
+      "actual": 20893.81
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 3250).period",
+      "expected": "-4301587.00",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 3250).ytd",
+      "expected": "-5586245.00",
+      "actual": -9321143
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 3251).period",
+      "expected": "3351587.00",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 3251).ytd",
+      "expected": "4392160.00",
+      "actual": 7415332
+    },
+    {
+      "contract": "ACCOUNT_METADATA_MISMATCH",
+      "account": [
+        10,
+        3251
+      ],
+      "field": "name",
+      "expected": "Distributions - Aurisic",
+      "actual": "Distributions - Aurisic Group Inc"
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 3253).period",
+      "expected": "950000.00",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 3253).ytd",
+      "expected": "1194085.00",
+      "actual": 1905811
+    },
+    {
+      "contract": "ACCOUNT_METADATA_MISMATCH",
+      "account": [
+        10,
+        3253
+      ],
+      "field": "name",
+      "expected": "Distributions - Account 123454321",
+      "actual": "Distributions -Account 123454321"
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 3300).ytd",
+      "expected": "78631.03",
+      "actual": 411919.25
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 3400).period",
+      "expected": "-164523.75",
+      "actual": 27351.07
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 3400).ytd",
+      "expected": "-503867.73",
+      "actual": -679680.07
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(12, 2500).period",
+      "expected": "-62096.98",
+      "actual": -1596.98
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(12, 2500).ytd",
+      "expected": "-70637.92",
+      "actual": -20893.81
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(12, 3400).ytd",
+      "expected": "6387.92",
+      "actual": 17143.81
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 7075).period",
+      "expected": "-62091.90",
+      "actual": -62717.06
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 7075).ytd",
+      "expected": "-233042.36",
+      "actual": -170950.46
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 7076).period",
+      "expected": "-19051.45",
+      "actual": -18652.52
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 7076).ytd",
+      "expected": "-76715.65",
+      "actual": -57664.2
+    },
+    {
+      "contract": "ACCOUNT_REQUIRED",
+      "account": [
+        10,
+        7092
+      ]
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 7206).ytd",
+      "expected": "-4687985.00",
+      "actual": -3515989
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6000).period",
+      "expected": "388005.99",
+      "actual": 364520.55
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6000).ytd",
+      "expected": "1463026.36",
+      "actual": 1075020.37
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6010).period",
+      "expected": "22208.40",
+      "actual": 54174.63
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6010).ytd",
+      "expected": "132515.88",
+      "actual": 110307.48
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6020).period",
+      "expected": "42601.55",
+      "actual": 55894.38
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6020).ytd",
+      "expected": "191045.69",
+      "actual": 148444.14
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6027).period",
+      "expected": "-15255.02",
+      "actual": -15167.48
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6027).ytd",
+      "expected": "-60545.95",
+      "actual": -45290.93
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6030).period",
+      "expected": "7254.29",
+      "actual": 18052.04
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6030).ytd",
+      "expected": "39505.83",
+      "actual": 32251.54
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6031).period",
+      "expected": "40658.59",
+      "actual": 34318.43
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6031).ytd",
+      "expected": "145955.00",
+      "actual": 105296.41
+    },
+    {
+      "contract": "ACCOUNT_REQUIRED",
+      "account": [
+        10,
+        6045
+      ]
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6060).period",
+      "expected": "128.00",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6060).ytd",
+      "expected": "5570.88",
+      "actual": 5442.88
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6065).period",
+      "expected": "2622.06",
+      "actual": 3502.98
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6065).ytd",
+      "expected": "11710.65",
+      "actual": 9088.59
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6070).period",
+      "expected": "10428.50",
+      "actual": 6645.94
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6070).ytd",
+      "expected": "28821.31",
+      "actual": 18392.81
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6090).ytd",
+      "expected": "59307.68",
+      "actual": 48230.76
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6200).period",
+      "expected": "62772.93",
+      "actual": 234365.13
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6200).ytd",
+      "expected": "435284.69",
+      "actual": 456511.76
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6300).period",
+      "expected": "25163.27",
+      "actual": 8429.77
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6300).ytd",
+      "expected": "47846.70",
+      "actual": 22683.43
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6301).period",
+      "expected": "3118.08",
+      "actual": 2438.57
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6301).ytd",
+      "expected": "7247.21",
+      "actual": 4129.13
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6302).period",
+      "expected": "12694.47",
+      "actual": 3409.81
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6302).ytd",
+      "expected": "29460.54",
+      "actual": 16766.07
+    },
+    {
+      "contract": "ACCOUNT_REQUIRED",
+      "account": [
+        10,
+        6303
+      ]
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6304).period",
+      "expected": "1773.57",
+      "actual": 1610.47
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6304).ytd",
+      "expected": "6154.60",
+      "actual": 4381.03
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6305).period",
+      "expected": "-8653.07",
+      "actual": 4136.45
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6305).ytd",
+      "expected": "-1487.06",
+      "actual": 7166.01
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6306).period",
+      "expected": "316.00",
+      "actual": 207
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6306).ytd",
+      "expected": "866.84",
+      "actual": 550.84
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6402).period",
+      "expected": "408.26",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6402).ytd",
+      "expected": "1706.85",
+      "actual": 1298.59
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6403).ytd",
+      "expected": "12948.00",
+      "actual": 9711
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6410).period",
+      "expected": "181.17",
+      "actual": 187.08
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6410).ytd",
+      "expected": "649.84",
+      "actual": 468.67
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6412).period",
+      "expected": "63.62",
+      "actual": 60.16
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6412).ytd",
+      "expected": "283.64",
+      "actual": 220.02
+    },
+    {
+      "contract": "ACCOUNT_REQUIRED",
+      "account": [
+        10,
+        6420
+      ]
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6430).ytd",
+      "expected": "6579.16",
+      "actual": 4934.37
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6512).period",
+      "expected": "1474.61",
+      "actual": 1624.61
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6512).ytd",
+      "expected": "5640.99",
+      "actual": 4166.38
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6515).period",
+      "expected": "1875.00",
+      "actual": 1885.59
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6515).ytd",
+      "expected": "8431.17",
+      "actual": 6556.17
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6610).period",
+      "expected": "0.00",
+      "actual": 50000
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6615).period",
+      "expected": "150.00",
+      "actual": 1170.28
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6615).ytd",
+      "expected": "1420.28",
+      "actual": 1270.28
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6650).ytd",
+      "expected": "13074.92",
+      "actual": 9806.19
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6701).period",
+      "expected": "2133.62",
+      "actual": 6455.24
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6701).ytd",
+      "expected": "12859.73",
+      "actual": 10726.11
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6703).period",
+      "expected": "2187.89",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6703).ytd",
+      "expected": "3223.96",
+      "actual": 1036.07
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6725).period",
+      "expected": "1687.81",
+      "actual": 1456.82
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6725).ytd",
+      "expected": "5517.13",
+      "actual": 3829.32
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6749).period",
+      "expected": "14952.50",
+      "actual": 20009.47
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6749).ytd",
+      "expected": "59478.08",
+      "actual": 44525.58
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6750).period",
+      "expected": "0.00",
+      "actual": -1117.54
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6760).period",
+      "expected": "99945.84",
+      "actual": 77464.03
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6760).ytd",
+      "expected": "315224.95",
+      "actual": 215279.11
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6762).period",
+      "expected": "94553.29",
+      "actual": 113235.01
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6762).ytd",
+      "expected": "368121.51",
+      "actual": 273568.22
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6767).period",
+      "expected": "0.00",
+      "actual": 26634.47
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6780).period",
+      "expected": "71.98",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6780).ytd",
+      "expected": "107.97",
+      "actual": 35.99
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6781).period",
+      "expected": "360.03",
+      "actual": 502.26
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6781).ytd",
+      "expected": "1518.68",
+      "actual": 1158.65
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6784).period",
+      "expected": "2674.95",
+      "actual": 661.16
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6784).ytd",
+      "expected": "5454.18",
+      "actual": 2779.23
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6785).ytd",
+      "expected": "14200.00",
+      "actual": 10650
+    },
+    {
+      "contract": "ACCOUNT_REQUIRED",
+      "account": [
+        10,
+        6786
+      ]
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6810).period",
+      "expected": "67315.07",
+      "actual": 69558.91
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 6810).ytd",
+      "expected": "269260.28",
+      "actual": 201945.21
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 7010).period",
+      "expected": "-4059.99",
+      "actual": 2392.99
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 7010).ytd",
+      "expected": "-4351.24",
+      "actual": -291.25
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 7011).period",
+      "expected": "16453.11",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 7011).ytd",
+      "expected": "34832.70",
+      "actual": 18379.59
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 7107).period",
+      "expected": "171474.16",
+      "actual": 109220
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(10, 7107).ytd",
+      "expected": "618307.83",
+      "actual": 368138.67
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(12, 6420).ytd",
+      "expected": "5000.00",
+      "actual": 3750
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ledger.(12, 6430).ytd",
+      "expected": "1387.92",
+      "actual": 1040.94
+    },
+    {
+      "contract": "ACCOUNT_REQUIRED",
+      "account": [
+        10,
+        9999
+      ]
+    },
+    {
+      "contract": "ACCOUNT_REQUIRED",
+      "account": [
+        12,
+        9999
+      ]
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "cash.intercompany",
+      "expected": "12485540.32",
+      "actual": 12542795.270000001
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "cash.unused",
+      "expected": "5814459.68",
+      "actual": 5757204.729999999
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "cash.balance",
+      "expected": "6610926.80",
+      "actual": 6191465.87
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "cash.excess",
+      "expected": "796467.12",
+      "actual": 434261.1400000015
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bank.book",
+      "expected": "6610926.80",
+      "actual": 6191465.87
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "funding.funding",
+      "expected": "4687985.00",
+      "actual": 3515989
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "funding.funding_average",
+      "expected": "1171996.25",
+      "actual": 878997.25
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "funding.intercompany",
+      "expected": "233042.36",
+      "actual": 170950.46
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "funding.intercompany_average",
+      "expected": "58260.59",
+      "actual": 42737.615
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "funding.bank_other",
+      "expected": "82215.65",
+      "actual": 57664.2
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "funding.bank_other_average",
+      "expected": "20553.9125",
+      "actual": 14416.05
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "funding.total",
+      "expected": "5003243.01",
+      "actual": 3744603.66
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "funding.total_average",
+      "expected": "1250810.7525",
+      "actual": 936150.915
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "prepaid.expense.gl",
+      "expected": "692501.33",
+      "actual": 577321.53
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "prepaid.expense.gap",
+      "expected": "0.0168686868581731316228",
+      "actual": -115179.78313131304
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "prepaid.insurance.gl",
+      "expected": "54630.68",
+      "actual": 49137.41
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "prepaid.insurance.gap",
+      "expected": "49137.41",
+      "actual": 43644.14
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "legal.gl",
+      "expected": "435284.69",
+      "actual": 456511.76
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "legal.gap",
+      "expected": "0.00",
+      "actual": 21227.06999999995
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "loans.interest_gl",
+      "expected": "67315.07",
+      "actual": 201945.21
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "loans.interest_gap",
+      "expected": "0.005671232737",
+      "actual": 134630.14567123272
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ap.control",
+      "expected": "314563.78",
+      "actual": 79070.25
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ar.division10",
+      "expected": "10997.00",
+      "actual": 51171
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ar.gap",
+      "expected": "0.00",
+      "actual": 40174
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "ar.division12",
+      "expected": "60500.00",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "payroll.gl",
+      "expected": "-141033.00",
+      "actual": -259800
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "payroll.gap",
+      "expected": "177467.00",
+      "actual": 58700
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "payroll.salary_gl",
+      "expected": "388005.99",
+      "actual": 364520.55
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "payroll.salary_gap",
+      "expected": "7649.98",
+      "actual": -15835.460000000021
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "payroll.expenses_gl",
+      "expected": "-8653.07",
+      "actual": 4136.45
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "payroll.expenses_gap",
+      "expected": "-26750.90",
+      "actual": -13961.380000000001
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "rebates.gl",
+      "expected": "159707.51",
+      "actual": 29803.93
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "rebates.gap",
+      "expected": "-0.00",
+      "actual": 129903.57999999999
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "uninvoiced.gl",
+      "expected": "304169.11",
+      "actual": 109220
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "uninvoiced.gap",
+      "expected": "0.00",
+      "actual": -194949.11
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bonus.gl",
+      "expected": "334593.73",
+      "actual": 105296.04
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bonus.gap",
+      "expected": "0.00",
+      "actual": -229297.69
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "misc.gl",
+      "expected": "146796.76",
+      "actual": 146802.26
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "misc.gap",
+      "expected": "0.00",
+      "actual": 5.500000000029104
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bonus.salary_ytd",
+      "expected": "1463026.36",
+      "actual": 1075020.37
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bonus.ten_percent_reference",
+      "expected": "146302.636",
+      "actual": 107502.03700000001
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "tb.net.period",
+      "expected": "-162926.77",
+      "actual": 28948.04999999958
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "tb.clearing.period",
+      "expected": "162926.77",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "tb.proof.period",
+      "expected": "0.00",
+      "actual": 28948.04999999958
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "tb.net.ytd",
+      "expected": "-497479.81",
+      "actual": -329248.04000000097
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "tb.clearing.ytd",
+      "expected": "497479.81",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "tb.proof.ytd",
+      "expected": "0.00",
+      "actual": -329248.0399999963
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 1250).movement",
+      "expected": "-49820.20",
+      "actual": 87514.4
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 1250).current",
+      "expected": "692501.33",
+      "actual": 577321.53
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 1250).gap",
+      "expected": "165000.00",
+      "actual": -87514.4
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 2011).movement",
+      "expected": "-35254.11",
+      "actual": -7535.43
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 2011).current",
+      "expected": "-304169.11",
+      "actual": -109220
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 2011).gap",
+      "expected": "-159695.00",
+      "actual": 7535.43
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 2500).movement",
+      "expected": "62096.98",
+      "actual": 1596.98
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 2500).current",
+      "expected": "70637.92",
+      "actual": 20893.81
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 2500).gap",
+      "expected": "-12352.87",
+      "actual": -1596.98
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3250).movement",
+      "expected": "-4301587.00",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3250).current",
+      "expected": "-5586245.00",
+      "actual": -9321143
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3250).gap",
+      "expected": "8036485.00",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3251).movement",
+      "expected": "3351587.00",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3251).current",
+      "expected": "4392160.00",
+      "actual": 7415332
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3251).gap",
+      "expected": "-6374759.00",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3253).movement",
+      "expected": "950000.00",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3253).current",
+      "expected": "1194085.00",
+      "actual": 1905811
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3253).gap",
+      "expected": "-1661726.00",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3300).current",
+      "expected": "78631.03",
+      "actual": 411919.25
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3300).gap",
+      "expected": "-333288.22",
+      "actual": 0
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3400).movement",
+      "expected": "-164523.75",
+      "actual": 27351.07
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3400).current",
+      "expected": "-503867.73",
+      "actual": -679680.07
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 3400).gap",
+      "expected": "340336.09",
+      "actual": -27351.07
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(12, 2500).movement",
+      "expected": "-62096.98",
+      "actual": -1596.98
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(12, 2500).current",
+      "expected": "-70637.92",
+      "actual": -20893.81
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(12, 2500).gap",
+      "expected": "12352.87",
+      "actual": 1596.98
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(12, 3400).current",
+      "expected": "6387.92",
+      "actual": 17143.81
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(12, 3400).gap",
+      "expected": "-12352.87",
+      "actual": -1596.98
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 6200).movement",
+      "expected": "62772.93",
+      "actual": 234365.13
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 6200).current",
+      "expected": "435284.69",
+      "actual": 456511.76
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 6200).gap",
+      "expected": "-84000.00",
+      "actual": -234365.13
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 7107).movement",
+      "expected": "171474.16",
+      "actual": 109220
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 7107).current",
+      "expected": "618307.83",
+      "actual": 368138.67
+    },
+    {
+      "contract": "AMOUNT_MISMATCH",
+      "claim": "bridge.(10, 7107).gap",
+      "expected": "78695.00",
+      "actual": -109220
+    }
+  ],
+  "ledger_accounts": 97,
+  "numeric_claims": 142,
+  "source_inputs_checked": 1362,
+  "engine_native_exit": 0,
+  "refresh": [
+    {
+      "input": "input.cash1024",
+      "input_delta": 1,
+      "expected": {
+        "cash.balance": 1,
+        "bank.book": 1
+      },
+      "deltas": {
+        "cash.balance": 1,
+        "bank.book": 1
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    },
+    {
+      "input": "input.bonus",
+      "input_delta": 100,
+      "expected": {
+        "bonus.total": 100,
+        "bonus.headline": 100,
+        "bonus.gap": -100,
+        "bonus.source_reported": 0
+      },
+      "deltas": {
+        "bonus.total": 100,
+        "bonus.headline": 100,
+        "bonus.gap": -100,
+        "bonus.source_reported": 0
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    },
+    {
+      "input": "input.prepaid_addition",
+      "input_delta": 6,
+      "expected": {
+        "prepaid.expense.amortization25": 1,
+        "prepaid.expense.vendor.25": 5,
+        "prepaid.expense.total": 5,
+        "prepaid.expense.gap": -5
+      },
+      "deltas": {
+        "prepaid.expense.amortization25": 1,
+        "prepaid.expense.vendor.25": 5,
+        "prepaid.expense.total": 5,
+        "prepaid.expense.gap": -5
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    },
+    {
+      "input": "input.fees",
+      "input_delta": 1,
+      "expected": {
+        "fees.balance": 1
+      },
+      "deltas": {
+        "fees.balance": 1
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    },
+    {
+      "input": "input.check",
+      "input_delta": 1,
+      "expected": {
+        "bank.checks": 1
+      },
+      "deltas": {
+        "bank.checks": 1
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    },
+    {
+      "input": "input.loan1_rate",
+      "input_delta": -1,
+      "expected": {
+        "loan1.charge": -15041.09589041096,
+        "loan1.interest": -15041.09589041096,
+        "loans.interest": -15041.09589041096
+      },
+      "deltas": {
+        "loan1.charge": -15041.095890410961,
+        "loan1.interest": -15041.095890410961,
+        "loans.interest": -15041.095890410958
+      },
+      "unavailable": {
+        "bank.statement": null,
+        "bank.reconciliation": "unavailable",
+        "ap.detail": "unavailable"
+      }
+    }
+  ],
+  "score": null,
+  "saved_cache_observations": {
+    "cash.borrowing": [
+      18300000
+    ],
+    "cash.intercompany": [
+      12542795.270000001
+    ],
+    "cash.unused": [
+      5757204.729999999
+    ],
+    "cash.balance": [
+      6191465.87
+    ],
+    "cash.excess": [
+      434261.1400000015
+    ],
+    "bank.checks": [
+      16166.779999999999
+    ],
+    "bank.book": [
+      6191465.87
+    ],
+    "bank.reclass": [
+      16166.779999999999
+    ],
+    "funding.funding": [
+      3515989
+    ],
+    "funding.funding_average": [
+      878997.25
+    ],
+    "funding.intercompany": [
+      170950.46
+    ],
+    "funding.intercompany_average": [
+      42737.615
+    ],
+    "funding.bank_other": [
+      57664.2,
+      0
+    ],
+    "funding.bank_other_average": [
+      14416.05,
+      0
+    ],
+    "funding.total": [
+      3744603.66
+    ],
+    "funding.total_average": [
+      936150.915
+    ],
+    "prepaid.expense.vendor.8": [
+      80.39090909090929
+    ],
+    "prepaid.expense.vendor.9": [
+      11534.920000000002
+    ],
+    "prepaid.expense.vendor.10": [
+      25905.095833333347
+    ],
+    "prepaid.expense.vendor.11": [
+      642.6249999999997
+    ],
+    "prepaid.expense.vendor.12": [
+      2780.044999999999
+    ],
+    "prepaid.expense.vendor.13": [
+      6229.355555555553
+    ],
+    "prepaid.expense.vendor.14": [
+      2976.3524999999995
+    ],
+    "prepaid.expense.vendor.15": [
+      45269.525
+    ],
+    "prepaid.expense.vendor.16": [
+      25910.416666666664
+    ],
+    "prepaid.expense.vendor.17": [
+      3266.6666666666665
+    ],
+    "prepaid.expense.vendor.18": [
+      16894.800000000003
+    ],
+    "prepaid.expense.vendor.19": [
+      44832.00000000001
+    ],
+    "prepaid.expense.vendor.20": [
+      54000
+    ],
+    "prepaid.expense.vendor.21": [
+      7396.365000000001
+    ],
+    "prepaid.expense.vendor.22": [
+      3075
+    ],
+    "prepaid.expense.vendor.23": [
+      3075
+    ],
+    "prepaid.expense.vendor.24": [
+      3075
+    ],
+    "prepaid.expense.vendor.25": [
+      8333.333333333334
+    ],
+    "prepaid.expense.vendor.26": [
+      26493.333333333332
+    ],
+    "prepaid.expense.vendor.27": [
+      17642.46
+    ],
+    "prepaid.expense.vendor.28": [
+      175000
+    ],
+    "prepaid.expense.vendor.29": [
+      1699.9999999999995
+    ],
+    "prepaid.expense.vendor.30": [
+      17968.481666666667
+    ],
+    "prepaid.expense.vendor.31": [
+      14000
+    ],
+    "prepaid.expense.vendor.32": [
+      15765.600000000004
+    ],
+    "prepaid.expense.vendor.33": [
+      1734.4249999999997
+    ],
+    "prepaid.expense.vendor.34": [
+      572.6666666666665
+    ],
+    "prepaid.expense.vendor.35": [
+      0
+    ],
+    "prepaid.expense.vendor.36": [
+      18666.666666666664
+    ],
+    "prepaid.expense.vendor.37": [
+      37333.33333333333
+    ],
+    "prepaid.expense.vendor.38": [
+      1.1368683772161603e-12
+    ],
+    "prepaid.expense.vendor.39": [
+      44400.18916666665
+    ],
+    "prepaid.expense.vendor.40": [
+      27612.1825
+    ],
+    "prepaid.expense.vendor.41": [
+      7968
+    ],
+    "prepaid.expense.vendor.42": [
+      20367.08333333334
+    ],
+    "prepaid.expense.vendor.45": [
+      0
+    ],
+    "prepaid.expense.total": [
+      692501.3131313131
+    ],
+    "prepaid.expense.gap": [
+      -115179.78313131304
+    ],
+    "prepaid.expense.gl": [
+      577321.53
+    ],
+    "prepaid.insurance.vendor.7": [
+      88270.75
+    ],
+    "prepaid.insurance.vendor.8": [
+      39128
+    ],
+    "prepaid.insurance.vendor.9": [
+      73254.95
+    ],
+    "prepaid.insurance.vendor.10": [
+      23800
+    ],
+    "prepaid.insurance.vendor.11": [
+      11864.44
+    ],
+    "prepaid.insurance.vendor.12": [
+      33724
+    ],
+    "prepaid.insurance.vendor.13": [
+      11259
+    ],
+    "prepaid.insurance.vendor.14": [
+      23204
+    ],
+    "prepaid.insurance.vendor.15": [
+      11861
+    ],
+    "prepaid.insurance.vendor.16": [
+      33695
+    ],
+    "prepaid.insurance.vendor.17": [
+      11259
+    ],
+    "prepaid.insurance.vendor.18": [
+      23194
+    ],
+    "prepaid.insurance.vendor.19": [
+      11259
+    ],
+    "prepaid.insurance.vendor.20": [
+      33695
+    ],
+    "prepaid.insurance.vendor.21": [
+      23194
+    ],
+    "prepaid.insurance.vendor.22": [
+      11861
+    ],
+    "prepaid.insurance.vendor.23": [
+      -3081
+    ],
+    "prepaid.insurance.vendor.24": [
+      2193
+    ],
+    "prepaid.insurance.vendor.25": [
+      23194
+    ],
+    "prepaid.insurance.vendor.26": [
+      11861
+    ],
+    "prepaid.insurance.vendor.27": [
+      11259
+    ],
+    "prepaid.insurance.vendor.28": [
+      33695
+    ],
+    "prepaid.insurance.vendor.29": [
+      -543644.14
+    ],
+    "prepaid.insurance.vendor.30": [
+      5493.27
+    ],
+    "prepaid.insurance.total": [
+      5493.27
+    ],
+    "prepaid.insurance.gap": [
+      43644.14
+    ],
+    "prepaid.insurance.gl": [
+      49137.41
+    ],
+    "prepaid.expense.amortization25": [
+      1666.6666666666667
+    ],
+    "fees.balance": [
+      -160270.21999999997
+    ],
+    "legal.total": [
+      435284.69000000006
+    ],
+    "legal.gl": [
+      456511.76
+    ],
+    "legal.gap": [
+      21227.06999999995
+    ],
+    "legal.april": [
+      62772.929999999964
+    ],
+    "loan1.principal": [
+      18300000
+    ],
+    "loan1.charge": [
+      45123.28767123288
+    ],
+    "loan1.interest": [
+      45123.28802739741
+    ],
+    "loan2.principal": [
+      13500000
+    ],
+    "loan2.charge": [
+      22191.780821917808
+    ],
+    "loan2.interest": [
+      22191.776301369853
+    ],
+    "loans.interest": [
+      67315.06432876726
+    ],
+    "loans.interest_gl": [
+      201945.21
+    ],
+    "loans.interest_gap": [
+      134630.14567123272
+    ],
+    "loans.principal": [
+      31800000
+    ],
+    "loans.principal_gl": [
+      31800000
+    ],
+    "loans.principal_gap": [
+      0
+    ],
+    "ap.control": [
+      79070.25
+    ],
+    "ar.source": [
+      10997
+    ],
+    "ar.division10": [
+      51171
+    ],
+    "ar.gap": [
+      40174
+    ],
+    "ar.division12": [
+      0
+    ],
+    "payroll.first": [
+      3.637978807091713e-12
+    ],
+    "payroll.second": [
+      2.4556356947869062e-11
+    ],
+    "payroll.estimate": [
+      236448.88800000006
+    ],
+    "payroll.opening": [
+      -259800
+    ],
+    "payroll.postings": [
+      -58700
+    ],
+    "payroll.rollforward": [
+      -318500
+    ],
+    "payroll.gl": [
+      -259800
+    ],
+    "payroll.gap": [
+      58700
+    ],
+    "payroll.salary": [
+      380356.01
+    ],
+    "payroll.salary_gl": [
+      364520.55
+    ],
+    "payroll.salary_gap": [
+      -15835.460000000021
+    ],
+    "payroll.expenses": [
+      18097.83
+    ],
+    "payroll.expenses_gl": [
+      4136.45
+    ],
+    "payroll.expenses_gap": [
+      -13961.380000000001
+    ],
+    "rebates.total": [
+      159707.50999999998
+    ],
+    "rebates.gl": [
+      29803.93
+    ],
+    "rebates.gap": [
+      129903.57999999999
+    ],
+    "uninvoiced.total": [
+      304169.11
+    ],
+    "uninvoiced.gl": [
+      109220
+    ],
+    "uninvoiced.gap": [
+      -194949.11
+    ],
+    "bonus.total": [
+      334593.73
+    ],
+    "bonus.gl": [
+      105296.04
+    ],
+    "bonus.gap": [
+      -229297.69
+    ],
+    "misc.total": [
+      146796.75999999998
+    ],
+    "misc.gl": [
+      146802.26
+    ],
+    "misc.gap": [
+      5.500000000029104
+    ],
+    "bonus.headline": [
+      334593.73
+    ],
+    "bonus.salary_ytd": [
+      1075020.37
+    ],
+    "bonus.ten_percent_reference": [
+      107502.03700000001
+    ],
+    "bonus.source_salary": [
+      1463026.36
+    ],
+    "bonus.source_reported": [
+      334593.73
+    ],
+    "tb.net.period": [
+      28948.04999999958
+    ],
+    "tb.net.ytd": [
+      -329248.04000000097
+    ],
+    "tb.clearing.period": [
+      0
+    ],
+    "tb.clearing.ytd": [
+      0
+    ],
+    "tb.proof.period": [
+      28948.04999999958
+    ],
+    "tb.proof.ytd": [
+      -329248.0399999963
+    ]
+  },
+  "scope": "Indexed actual-XLSX recalculated data and declared dependency contracts only. Saved caches are observations, not the truth or a gate. Free-text meaning, company policy, visual usability and complete handoff require separate whole-product review. Not an official GDPval score, company sign-off or general Excel-engine certification."
+}

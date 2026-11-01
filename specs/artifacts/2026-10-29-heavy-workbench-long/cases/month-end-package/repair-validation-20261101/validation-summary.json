@@ -1,0 +1,84 @@
+{
+  "at": "2026-11-01T09:51:27.951744+00:00",
+  "root": "D:\\opencorvus-benchmark-runs\\month-end-fair-pair-20261101",
+  "cases": [
+    {
+      "variant": "reference",
+      "measured_contracts_match": true,
+      "errors": 0,
+      "contracts": []
+    },
+    {
+      "variant": "legal-layout",
+      "measured_contracts_match": true,
+      "errors": 0,
+      "contracts": []
+    },
+    {
+      "variant": "legal-funding",
+      "measured_contracts_match": true,
+      "errors": 0,
+      "contracts": []
+    },
+    {
+      "variant": "stale-tb",
+      "measured_contracts_match": false,
+      "errors": 245,
+      "contracts": [
+        "ACCOUNT_ID_REQUIRED",
+        "ACCOUNT_METADATA_MISMATCH",
+        "ACCOUNT_REQUIRED",
+        "AMOUNT_MISMATCH"
+      ]
+    },
+    {
+      "variant": "drop-payroll-note",
+      "measured_contracts_match": false,
+      "errors": 1,
+      "contracts": [
+        "SOURCE_EXPLANATION_REQUIRED"
+      ]
+    },
+    {
+      "variant": "frozen-bonus",
+      "measured_contracts_match": false,
+      "errors": 1,
+      "contracts": [
+        "AMOUNT_MISMATCH"
+      ]
+    },
+    {
+      "variant": "changed-invoice",
+      "measured_contracts_match": false,
+      "errors": 1,
+      "contracts": [
+        "SOURCE_INPUT_MISMATCH"
+      ]
+    }
+  ],
+  "final_consumer_header_contract": "native0; independent original Period/Debit/Credit headers determine April62772.93",
+  "reference_numeric_claims": 142,
+  "final_pngs_changed_since_first_full_visual_review": [
+    "02-cash.png",
+    "04-funding.png",
+    "08-legal-head.png",
+    "08-legal-tail.png",
+    "16-bonus.png",
+    "18-issues-tail.png"
+  ],
+  "image_identity_scope": "Only identifies identical already-viewed immutable PNG bytes. Financial and visual acceptance use actual content, not hashes.",
+  "all_changed_final_views_actually_viewed": true,
+  "first_errors_preserved": [
+    "salary constant-formula reader native1",
+    "signed payroll movement corrected before final validation",
+    "source-row marker overwrote interest/annotation; fixed before final validation",
+    "source labels preserved rather than overwritten",
+    "shared wrong legal period column found by original-header spot and visual inspection despite numeric matching; fixed",
+    "loan intervention moved below printed cap before candidates"
+  ],
+  "official_score": null,
+  "professional_human_certification": null,
+  "effective_candidate_hours_qualified": 0,
+  "candidates_started": false,
+  "scope": "Complete local CFO-review task ready for bounded real comparison; not a signed financial statement, statistical benchmark maturity or ten-task/heavy qualification."
+}

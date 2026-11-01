@@ -1,7 +1,7 @@
 {
   "task_id": "ee09d943-5a11-430a-b7a2-971b4e9b01b5",
   "raw_input_revision": "11e7900cdcac61bc4daf59e65feb238acda98fbf",
-  "public_cache": "D:\\opencorvus-benchmark-runs\\gdpval-month-end-task-20261101\\public",
+  "public_cache": ".",
   "original_prompt": "TASK.original.txt",
   "prompt_provenance": "Captured original task text; fixed parquet differs in text bytes. See source identity evidence.",
   "inputs": [
@@ -93,5 +93,5 @@
   ],
   "missing_named_input": "AP_TB-1.xlsx",
   "output": "Aurisic_Financials_4-25-1.xlsx",
-  "candidate_boundary": "Original local public inputs, original prompt and public quality contract only. No row-service whole object, parquet, expert, rubric, reference, evaluator source, credentials or Recall."
+  "candidate_boundary": "Original local public inputs, original prompt and all public contracts/runtime declarations only. No row-service whole object, parquet, expert, rubric, reference, evaluator source, credentials or Recall."
 }

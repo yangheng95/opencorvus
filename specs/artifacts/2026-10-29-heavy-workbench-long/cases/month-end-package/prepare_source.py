@@ -46,7 +46,15 @@ def prepare(root):
                                  "collapsed": bool(dim.collapsed)} for i, dim in sheet.row_dimensions.items()],
             "merges": [str(x) for x in sheet.merged_cells.ranges], "freeze": sheet.freeze_panes} for sheet in book]
     combined = openpyxl.load_workbook(public / "Aurisic_Prepaid_Expenses_4-25-1.xlsx", data_only=True)
+    payroll = openpyxl.load_workbook(public / "Payroll-1.xlsx", data_only=False).worksheets[0]
+    corporate = openpyxl.load_workbook(public / "Aurisic_Corp_Payrolls_April_2025-1.xlsx", data_only=False).worksheets[0]
+    annotations = [{"cell": cell.coordinate, "text": cell.value,
+                    "source": "Aurisic_Corp_Payrolls_April_2025-1.xlsx"}
+                   for row in corporate for cell in row
+                   if isinstance(cell.value, str) and not cell.value.startswith("=")
+                   and cell.value.strip() and cell.value != payroll[cell.coordinate].value]
     data = {"records": ordered, "source_order_records": records, "march_records": old, "cross_period_gaps": gaps,
+            "corporate_annotations": annotations,
             "metadata": metadata, "combined_prepaid_original_cache": {
                 "expenses_BX53": combined.worksheets[0]["BX53"].value,
                 "insurance_AT32": combined.worksheets[1]["AT32"].value,

@@ -1,0 +1,37 @@
+{
+  "registered_at": "2026-11-01T09:39:31.8988489Z",
+  "task": "month-end whole CFO-review package repair and real Codex/OC pair",
+  "original_inputs": "same 17 original public inputs; AP detail and bank balance missing",
+  "variants": [
+    "reference",
+    "legal-layout",
+    "legal-funding",
+    "stale-tb",
+    "drop-payroll-note",
+    "frozen-bonus",
+    "changed-invoice"
+  ],
+  "expected": {
+    "frozen-bonus": "AMOUNT_MISMATCH in actual refresh headline",
+    "reference": "all measured contracts match; professional/visual review separate",
+    "legal-funding": "combined bank and other income legal representation",
+    "changed-invoice": "SOURCE_INPUT_MISMATCH with totals unchanged",
+    "legal-layout": "same true amounts; alternate bonus output positions and unknown wording",
+    "stale-tb": "ACCOUNT_REQUIRED or AMOUNT_MISMATCH from actual stale ledger",
+    "drop-payroll-note": "SOURCE_EXPLANATION_REQUIRED"
+  },
+  "refresh": [
+    "cash1024+1",
+    "bonus April+100",
+    "prepaid BV25+6",
+    "fees V8+1",
+    "check B7+1",
+    "loan1 floating rate A74+1 percentage point"
+  ],
+  "active_candidate": null,
+  "active_evaluation": null,
+  "phase": "repair_validation_registered",
+  "automatic_launch_before_ready": false,
+  "source_arithmetic_scope": "bound original-source independent formulas observations only; no company policy or official grading truth",
+  "all_old_results_preserved": true
+}

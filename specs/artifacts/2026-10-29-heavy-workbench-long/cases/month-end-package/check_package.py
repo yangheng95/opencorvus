@@ -1,217 +1,259 @@
-"""Independent actual-XLSX measurements from original fixed TB text.
+"""Actual indexed CFO-workbook consumption against independent public sources.
 
-Input parsing uses right-delimited source fields, independently of the producer's
-regular-expression normalization. No expert workbook, producer JSON, hash gate
-or self-reported success is used as the numerical expectation.
+The index locates actual cells; it never supplies expected amounts. Saved values
+and a real workbook engine are measured. Professional/visual review is separate.
 """
 import argparse
+import ast
+from datetime import datetime, date
 from decimal import Decimal
 import json
 from pathlib import Path
+import subprocess
+import unicodedata
 import openpyxl
+from openpyxl.utils import column_index_from_string
+from openpyxl.utils.datetime import to_excel
+D = lambda x: Decimal(str(x))
 
 
 def original_accounts(public):
     result = {}
     for raw in (public / "Aurisic_Final_TB_4-25-1.txt").read_text().splitlines():
-        tokens = raw.split()
-        if not tokens:
-            continue
-        key = tokens[0].split("-")
-        if len(key) != 2 or any(len(x) != 4 or not x.isdigit() for x in key):
-            continue
         fields = raw.rsplit(None, 3)
-        def money(text):
-            sign = -1 if text[-1] == "-" else 1
-            return Decimal(text[:-1] if sign == -1 else text) * sign
-        result[tuple(map(int, key))] = [money(fields[1]), money(fields[2])]
+        if len(fields) != 4: continue
+        identity = fields[0].split(None, 1)
+        pair = identity[0].split("-")
+        if len(identity) != 2 or len(pair) != 2 or any(len(x) != 4 or not x.isdigit() for x in pair): continue
+        def money(text): return D(text.rstrip("-")) * (-1 if text.endswith("-") else 1)
+        result[tuple(map(int,pair))] = dict(name=identity[1],period=money(fields[1]),ytd=money(fields[2]),**{"class":fields[3]})
     return result
 
 
-def measure(public, file, source_calculations):
-    expected = original_accounts(public)
-    book = openpyxl.load_workbook(file, data_only=True)
-    tabs = {s.title.split(")", 1)[0].lstrip("#"): s for s in book if s.title.startswith("#")}
-    tb = tabs["3a"]
-    actual, duplicates, metadata = {}, [], {}
-    for row in tb.values:
-        if len(row) >= 5 and isinstance(row[0], (int, float)) and isinstance(row[1], (int, float)):
-            key = (int(row[0]), int(row[1]))
-            if key in actual:
-                duplicates.append(key)
-            actual[key] = row[3:5]
-            metadata[key] = (row[2],row[5])
-    differences = []
-    for key, amounts in expected.items():
-        if key not in actual:
-            differences.append({"division": key[0], "account": key[1], "contract": "ACCOUNT_MISSING"})
-            continue
-        for index, wanted in enumerate(amounts):
-            value = actual[key][index]
-            error = Decimal(str(value)) - wanted if isinstance(value, (int, float)) else None
-            if error is None or abs(error) > Decimal("0.0000001"):
-                differences.append({"division": key[0], "account": key[1], "field": ["period", "ytd"][index],
-                                    "expected": str(wanted), "actual": value, "signed_error": str(error) if error is not None else None,
-                                    "contract": "ACCOUNT_AMOUNT_MISMATCH"})
-    extra = [list(k) for k in actual.keys() - expected.keys()]
-    for raw in (public / "Aurisic_Final_TB_4-25-1.txt").read_text().splitlines():
-        fields=raw.rsplit(None,3)
-        if len(fields)!=4:
-            continue
-        identity=fields[0].split(None,1)
-        pair=identity[0].split("-")
-        if len(identity)!=2 or len(pair)!=2 or any(not x.isdigit() for x in pair):
-            continue
-        key=tuple(map(int,pair))
-        if key in actual and metadata[key]!=(identity[1],fields[3]):
-            differences.append({"division":key[0],"account":key[1],"contract":"ACCOUNT_IDENTITY_METADATA_MISMATCH",
-                                "expected":[identity[1],fields[3]],"actual":metadata[key]})
-    ytd = lambda account: expected[(10, account)][1]
-    cash = ytd(1023) + ytd(1024)
-    intercompany = sum(ytd(x) for x in [1651, 1652, 1653, 1654, 1656, 1663, 1664])
-    # Identify the template's original borrowing control by its account, not a
-    # candidate-selected denominator or the producer's row map.
-    march = openpyxl.load_workbook(public / "Aurisic_Financials_3-25-1.xlsx", data_only=True)
-    loan_account = int(march.worksheets[1]["B38"].value)
-    borrowing = -ytd(loan_account)
-    expected_controls = [("B5", borrowing), ("B15", intercompany), ("B17", borrowing-intercompany),
-                         ("B19", cash), ("B21", cash-(borrowing-intercompany))]
-    controls = []
-    for cell, wanted in expected_controls:
-        value = tabs["4"][cell].value
-        error = Decimal(str(value))-wanted if isinstance(value,(int,float)) else None
-        controls.append({"schedule":"4","cell":cell,"expected":str(wanted),"actual":value,
-                         "signed_error":str(error) if error is not None else None,
-                         "contract":"AMOUNT_MATCH" if error is not None and abs(error)<Decimal("0.0000001") else "CONTROL_AMOUNT_MISMATCH"})
-    # This adapter measures the supplied template/reference coordinates. It is
-    # not a general grader for every legitimate alternative workbook layout.
+def expectations(public, source_calculations):
+    ledger = original_accounts(public)
     oracle = json.loads(source_calculations.read_text(encoding="utf-8"))
-    calculated = {(r["file"], r["sheet"]): r for r in oracle["results"]}
-    if any(r["source_errors"] for r in calculated.values()):
-        raise ValueError("SOURCE_CALCULATION_ERROR")
-    sources = {}
-    def source(filename, index=0):
-        if filename not in sources:
-            sources[filename] = openpyxl.load_workbook(public / filename, data_only=False)
-        return sources[filename].worksheets[index]
-    def literal(filename, cell, index=0):
-        value = source(filename, index)[cell].value
-        if value is None:
-            return Decimal(0)  # SUM over genuinely empty source cells only.
-        if not isinstance(value, (int, float)):
-            raise ValueError("SOURCE_LITERAL_REQUIRED:" + filename + ":" + cell)
-        return Decimal(str(value))
-    def calc(filename, cell, index=0):
-        name = source(filename, index).title
-        return calculated[(filename, name)]["values"][cell]
-    def source_sum(filename, column, start, end):
-        return sum((literal(filename, f"{column}{r}") for r in range(start, end+1)), Decimal(0))
-    numerical = []
-    def compare(dimension, tab, cell, wanted, origin):
-        value = tabs[tab][cell].value
-        if isinstance(wanted, (Decimal, int, float)):
-            error = Decimal(str(value))-Decimal(str(wanted)) if isinstance(value, (int, float)) else None
-            match = error is not None and abs(error) <= Decimal("0.0000001")
-        else:
-            error, match = None, value == wanted
-        numerical.append({"dimension":dimension,"schedule":tab,"cell":cell,"source":origin,
-                          "expected":str(wanted) if isinstance(wanted, Decimal) else wanted,"actual":value,
-                          "signed_error":str(error) if error is not None else None,
-                          "contract":"AMOUNT_MATCH" if match else "SOURCE_RESULT_MISMATCH"})
-    checks = source_sum("Outstanding_CKs_4-30-25-1.xlsx", "B", 7, 8)
-    compare("M03", "5", "B10", checks, "Two original check amounts B7:B8")
-    compare("M03", "5", "C4", None, "Original independent bank balance is empty")
-    compare("M03", "5", "C12", "unavailable", "Independent reconciliation cannot yet be calculated")
-    compare("M03", "5", "C18", cash, "Separate ledger control, not bank evidence")
-    funding = -ytd(7206)
-    for cell, wanted in [("D12",funding),("E12",funding/4),("D14",-ytd(7075)),("E14",-ytd(7075)/4),
-                         ("D15",-ytd(7076)),("E15",-ytd(7076)/4),("D18",-ytd(7092))]:
-        compare("M04","6",cell,wanted,"April ledger; four elapsed months; other income separate")
-    for filename, tab, column, first, last_row, total, variance, gl_cell, account in [
-        ("PPD1250-1.xlsx","7","BX",8,45,46,48,49,1250),
-        ("PPD1251-1.xlsx","8","AT",6,31,32,34,35,1251),
-    ]:
-        expected_total = Decimal(0)
-        for row in range(first,last_row+1):
-            cell = f"{column}{row}"
-            wanted = calc(filename,cell)
-            compare("M05",tab,cell,wanted,"Independent formulas engine: original vendor calculation")
-            if wanted is not None:
-                expected_total += Decimal(str(wanted))
-        for cell, wanted in [(f"{column}{total}",expected_total),(f"{column}{variance}",ytd(account)-expected_total),
-                             (f"{column}{gl_cell}",ytd(account))]:
-            compare("M05",tab,cell,wanted,"Vendor sum / original GL; discrepancy retained")
-    fees = source_sum("Prof_Fee_Dump-1.xlsx","V",4,8)+source_sum("Prof_Fee_Dump-1.xlsx","W",3,8)
-    legal = source_sum("Legal_Dump-1.xlsx","L",3,59)+source_sum("Legal_Dump-1.xlsx","M",3,59)
-    for tab, cell, wanted, origin in [("9","W10",fees,"Signed original professional-fee postings"),
-        ("10","L63",legal,"Signed original legal transactions, each once"),("10","L65",ytd(6200),"GL6200"),
-        ("10","L66",ytd(6200)-legal,"GL less signed source detail")]: compare("M06",tab,cell,wanted,origin)
-    loan1, loan2 = "Good Insurance Co - Loan.xlsx", "Good Insurance Co - Loan II.xlsx"
-    for filename, tab, cells in [(loan1,"11a",["G74","F74"]),(loan2,"11b",["G24","F24"])]:
-        for cell in cells: compare("M07",tab,cell,calc(filename,cell),"Original dated source, independent formulas engine")
-    interest = Decimal(str(calc(loan1,"F74")))+Decimal(str(calc(loan2,"F24")))
-    for cell, wanted in [("E80",interest),("E81",-ytd(2402)),("E82",-ytd(2402)-interest)]:
-        compare("M07","11a",cell,wanted,"Combined independently recomputed loan interest / GL2402")
-    principal=Decimal(str(calc(loan1,"G74")))+Decimal(str(calc(loan2,"G24")))
-    for cell,wanted in [("E84",principal),("E85",-ytd(2600)-ytd(2601)),("E86",-ytd(2600)-ytd(2601)-principal)]:
-        compare("M07","11a",cell,wanted,"Both independent loan principals / GL2600 and GL2601")
-    compare("M08","13","B6",literal("AR_Accrual-1.xlsx","B4"),"Supplied division10 AR detail")
-    for cell,wanted in [("B9",ytd(1101)),("B10",ytd(1101)-literal("AR_Accrual-1.xlsx","B4")),("B12",expected[(12,1101)][1])]:
-        compare("M08","13",cell,wanted,"Division-specific original GL")
-    opening = next(Decimal(str(r[4])) for r in march.worksheets[1].values if len(r)>4 and r[0]==10 and r[1]==2200)
-    postings = sum(literal("Payroll-1.xlsx",c) for c in ["C25","C28","C32"])
-    for cell,wanted in [("C21",calc("Payroll-1.xlsx","C21")),("D21",calc("Payroll-1.xlsx","D21")),
-                        ("E29",calc("Payroll-1.xlsx","E29")),("C36",opening),("C37",postings),("C38",opening+postings),
-                        ("C39",ytd(2200)),("C40",ytd(2200)-opening-postings)]:
-        compare("M08","14",cell,wanted,"Original payroll calculation, signed postings and March/April GL")
-    rebates = source_sum("Rebates-1.xlsx","B",4,10)
-    uninvoiced = source_sum("Accr2011-1.xlsx","B",4,5)
-    bonus = source_sum("AccrBonus-1.xlsx","B",5,12)
-    misc = literal("AccrMisc-1.xlsx","C4")+Decimal(str(calc("AccrMisc-1.xlsx","B5")))+source_sum("AccrMisc-1.xlsx","B",6,9)
-    for tab, detail_cell, control, diff, account, wanted, direction in [
-        ("15","B11","B13","B14",2005,rebates,-1),("16","B7","B9","B10",2011,uninvoiced,1),
-        ("17","B13","B21","B22",2401,bonus,1),("18","C10","C12","C13",2410,misc,1),
-    ]:
-        for cell, result in [(detail_cell,wanted),(control,-ytd(account)),(diff,direction*(-ytd(account)-wanted))]:
-            compare("M08",tab,cell,result,"Signed original supporting rows / specific GL control")
-    compare("M10","12","G6",-ytd(2000),"Known April AP ledger control")
-    compare("M10","12","G8","unavailable","Detailed AP listing was not supplied")
-    compare("M10","12","G12","Pending CFO","Draft handoff status")
-    # Retain source transaction inputs and dated loan assumptions. This is a
-    # data-contract measurement, not a UI text/snapshot test.
-    inputs = []
-    for filename, tab, ranges in [
-        ("Legal_Dump-1.xlsx","10",[(3,59,1,13)]),
-        (loan1,"11a",[(11,74,1,5)]),(loan2,"11b",[(11,24,1,5)]),
-        ("Payroll-1.xlsx","14",[(5,20,2,4)]),
-    ]:
-        src=source(filename)
-        for r0,r1,c0,c1 in ranges:
-            for row in src.iter_rows(min_row=r0,max_row=r1,min_col=c0,max_col=c1):
-                for cell in row:
-                    if cell.data_type not in ("f","e") and cell.value is not None:
-                        value=tabs[tab][cell.coordinate].value
-                        expected_value=cell.value
-                        if isinstance(expected_value,(int,float)):
-                            match=isinstance(value,(int,float)) and abs(value-expected_value)<1e-7
-                        else: match=value==expected_value
-                        inputs.append({"source_file":filename,"schedule":tab,"cell":cell.coordinate,
-                                       "contract":"SOURCE_INPUT_MATCH" if match else "SOURCE_INPUT_MISMATCH"})
-    measured = not differences and not duplicates and not extra and all(x["contract"] == "AMOUNT_MATCH" for x in controls+numerical) and all(x["contract"]=="SOURCE_INPUT_MATCH" for x in inputs)
-    return {"ledger":{"source_accounts":len(expected),"actual_accounts":len(actual),"differences":differences,"extra":extra,"duplicates":duplicates},
-            "cash_controls":controls,"schedule_results":numerical,"retained_source_inputs":inputs,
-            "source_engine":oracle["engine"],"measured_contracts_match":measured,"score":None,
-            "scope":"Reference-template adapter: original ledger amounts, listed M02–M08/M10 numeric/source contracts. No aggregate or general candidate grade. M09 explanations, M10 action quality, M11 visual/layout, M12 refresh/self-containment, M13 judgments and professional validity require the separate actual review."}
+    observed = {(r["file"],r["sheet"]):r for r in oracle["results"]}
+    if any(r["source_errors"] for r in observed.values()): raise ValueError("SOURCE_CALCULATION_ERROR")
+    books = {}
+    def source(file,sheet=0):
+        if file not in books: books[file]=openpyxl.load_workbook(public/file,data_only=False)
+        return books[file].worksheets[sheet]
+    def literal(file,cell):
+        x=source(file)[cell].value
+        if x is None: return D(0)  # Genuinely empty source summand only.
+        if not isinstance(x,(int,float)): raise ValueError(f"SOURCE_NUMERIC_LITERAL_REQUIRED:{file}:{cell}")
+        return D(x)
+    def calc(file,cell):
+        value=observed[(file,source(file).title)]["values"][cell]
+        return D(value) if value is not None else None
+    def constant_formula(file,cell):
+        # These source salary cells are arithmetic constants, not literal
+        # amounts. Evaluate their original expressions with Decimal arithmetic.
+        text=source(file)[cell].value
+        def number(node):
+            if isinstance(node,ast.Constant) and isinstance(node.value,(int,float)):return D(node.value)
+            if isinstance(node,ast.BinOp):
+                a,b=number(node.left),number(node.right)
+                if isinstance(node.op,ast.Add):return a+b
+                if isinstance(node.op,ast.Sub):return a-b
+                if isinstance(node.op,ast.Mult):return a*b
+                if isinstance(node.op,ast.Div):return a/b
+            raise ValueError(f"SOURCE_CONSTANT_EXPRESSION_REQUIRED:{file}:{cell}")
+        return number(ast.parse(text.removeprefix("="),mode="eval").body)
+    def total(file,col,first,last): return sum((literal(file,f"{col}{r}") for r in range(first,last+1)),D(0))
+    y=lambda account,div=10:ledger[(div,account)]["ytd"]
+    m=lambda account:ledger[(10,account)]["period"]
+    wanted={}
+    def group(prefix,**values): wanted.update({f"{prefix}.{key}":value for key,value in values.items()})
+    cash=y(1023)+y(1024)
+    inter=sum((y(x) for x in [1651,1652,1653,1654,1656,1663,1664]),D(0))
+    group("cash",borrowing=-y(2600),intercompany=inter,unused=-y(2600)-inter,balance=cash,excess=cash+y(2600)+inter)
+    checks=total("Outstanding_CKs_4-30-25-1.xlsx","B",7,8)
+    group("bank",checks=checks,book=cash)
+    wanted["bank.reclass"]=checks  # Source C14=SUM(B10), still only proposed.
+    group("funding",funding=-y(7206),funding_average=-y(7206)/4,intercompany=-y(7075),intercompany_average=-y(7075)/4,
+          bank_other=-y(7076)-y(7092),bank_other_average=(-y(7076)-y(7092))/4,
+          total=-sum((r["ytd"] for r in ledger.values() if r["class"]=="i"),D(0)))
+    wanted["funding.total_average"]=wanted["funding.total"]/4
+    for kind,file,col,first,last,account in [("expense","PPD1250-1.xlsx","BX",8,45,1250),("insurance","PPD1251-1.xlsx","AT",6,31,1251)]:
+        values={r:calc(file,f"{col}{r}") for r in range(first,last+1) if calc(file,f"{col}{r}") is not None}
+        wanted.update({f"prepaid.{kind}.vendor.{r}":v for r,v in values.items()})
+        group(f"prepaid.{kind}",total=sum(values.values(),D(0)),gl=y(account),gap=y(account)-sum(values.values(),D(0)))
+    wanted["prepaid.expense.amortization25"]=literal("PPD1250-1.xlsx","BV25")/6
+    wanted["fees.balance"]=total("Prof_Fee_Dump-1.xlsx","V",4,8)+total("Prof_Fee_Dump-1.xlsx","W",3,8)
+    legal=total("Legal_Dump-1.xlsx","L",3,59)+total("Legal_Dump-1.xlsx","M",3,59)
+    headings={c.value:c.column_letter for c in source("Legal_Dump-1.xlsx")[2] if c.value}
+    april=sum((literal("Legal_Dump-1.xlsx",f"{headings[field]}{r}") for r in range(3,60)
+               if source("Legal_Dump-1.xlsx")[f"{headings['Period']}{r}"].value==425 for field in ["Debit","Credit"]),D(0))
+    group("legal",total=legal,gl=y(6200),gap=y(6200)-legal,april=april)
+    for n,file,row in [(1,"Good Insurance Co - Loan.xlsx",74),(2,"Good Insurance Co - Loan II.xlsx",24)]:
+        group(f"loan{n}",principal=calc(file,f"G{row}"),charge=calc(file,f"E{row}"),interest=calc(file,f"F{row}"))
+    interest=wanted["loan1.interest"]+wanted["loan2.interest"]
+    principal=wanted["loan1.principal"]+wanted["loan2.principal"]
+    group("loans",interest=interest,interest_gl=-y(2402),interest_gap=-y(2402)-interest,principal=principal,
+          principal_gl=-y(2600)-y(2601),principal_gap=-y(2600)-y(2601)-principal)
+    wanted["ap.control"]=-y(2000)
+    ar=literal("AR_Accrual-1.xlsx","B4")
+    group("ar",source=ar,division10=y(1101),gap=y(1101)-ar,division12=y(1101,12))
+    march=openpyxl.load_workbook(public/"Aurisic_Financials_3-25-1.xlsx",data_only=True).worksheets[1]
+    prior={(int(r[0]),int(r[1])):D(r[4]) for r in march.values if len(r)>4 and isinstance(r[0],(int,float)) and isinstance(r[1],(int,float))}
+    p=lambda cell:literal("Payroll-1.xlsx",cell)
+    posts=p("C25")+p("C28")+p("C32")
+    salary=constant_formula("Payroll-1.xlsx","C6")+constant_formula("Payroll-1.xlsx","D6")-posts
+    expenses=p("C18")+p("D18")
+    group("payroll",first=calc("Payroll-1.xlsx","C21"),second=calc("Payroll-1.xlsx","D21"),estimate=calc("Payroll-1.xlsx","E29"),
+          opening=prior[(10,2200)],postings=posts,rollforward=prior[(10,2200)]+posts,gl=y(2200),gap=y(2200)-prior[(10,2200)]-posts,
+          salary=salary,salary_gl=m(6000),salary_gap=m(6000)-salary,expenses=expenses,expenses_gl=m(6305),expenses_gap=m(6305)-expenses)
+    for name,value,account,sign in [
+        ("rebates",total("Rebates-1.xlsx","B",4,10),2005,-1),
+        ("uninvoiced",total("Accr2011-1.xlsx","B",4,5),2011,1),
+        ("bonus",total("AccrBonus-1.xlsx","B",5,12),2401,1),
+        ("misc",literal("AccrMisc-1.xlsx","C4")+calc("AccrMisc-1.xlsx","B5")+total("AccrMisc-1.xlsx","B",6,9),2410,1)]:
+        group(name,total=value,gl=-y(account),gap=sign*(-y(account)-value))
+    group("bonus",headline=wanted["bonus.total"],salary_ytd=y(6000),ten_percent_reference=y(6000)/10,
+          source_salary=literal("AccrBonus-1.xlsx","B18"),source_reported=literal("AccrBonus-1.xlsx","B15"))
+    for period in ["period","ytd"]:
+        for name,codes in [("net",["i","e"]),("clearing",["c"]),("proof",["a","l","i","e","c"])]:
+            wanted[f"tb.{name}.{period}"]=sum((r[period] for r in ledger.values() if r["class"] in codes),D(0))
+    bridges={key:dict(prior=prior[key],movement=r["period"],current=r["ytd"],gap=r["ytd"]-prior[key]-r["period"])
+             for key,r in ledger.items() if key in prior and abs(r["ytd"]-prior[key]-r["period"])>D(".011")}
+    loan_delta=float(-wanted["loan1.principal"]*D(".01")*30/365)
+    refresh=[
+        dict(input="input.cash1024",delta=1,outputs={"cash.balance":1,"bank.book":1}),
+        dict(input="input.bonus",delta=100,outputs={"bonus.total":100,"bonus.headline":100,"bonus.gap":-100,"bonus.source_reported":0}),
+        dict(input="input.prepaid_addition",delta=6,outputs={"prepaid.expense.amortization25":1,"prepaid.expense.vendor.25":5,"prepaid.expense.total":5,"prepaid.expense.gap":-5}),
+        dict(input="input.fees",delta=1,outputs={"fees.balance":1}),
+        dict(input="input.check",delta=1,outputs={"bank.checks":1}),
+        dict(input="input.loan1_rate",delta=-1,outputs={"loan1.charge":loan_delta,"loan1.interest":loan_delta,"loans.interest":loan_delta})]
+    return ledger,wanted,bridges,refresh,source
 
 
-if __name__ == "__main__":
-    parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--public",type=Path,required=True)
-    parser.add_argument("--workbook",type=Path,required=True)
-    parser.add_argument("--output",type=Path,required=True)
-    parser.add_argument("--source-calculations",type=Path,required=True)
-    args=parser.parse_args()
-    result=measure(args.public,args.workbook,args.source_calculations)
-    args.output.write_text(json.dumps(result,indent=2),encoding="utf-8")
-    print(json.dumps({"measured_contracts_match":result["measured_contracts_match"],"source_accounts":result['ledger']['source_accounts'],"actual_accounts":result['ledger']['actual_accounts'],"ledger_differences":len(result['ledger']['differences']),"score":None}))
-    raise SystemExit(0 if result["measured_contracts_match"] else 4)
+def normalized(x):
+    return " ".join(unicodedata.normalize("NFKC",str(x or "")).split()).casefold()
+
+
+def measure(args):
+    ledger,wanted,bridges,refresh,source=expectations(args.public,args.source_calculations)
+    book=openpyxl.load_workbook(args.workbook,data_only=True)
+    index={}
+    errors=[]
+    def error(code,**detail): errors.append(dict(contract=code,**detail))
+    fields=["Claim","Sheet","Address","Role","Columns","Basis"]
+    for sheet in book:
+        for row in sheet.iter_rows(max_row=min(sheet.max_row,25)):
+            labels=[str(c.value or "").strip() for c in row]
+            if not all(f in labels for f in fields): continue
+            positions={f:labels.index(f) for f in fields}
+            for vals in sheet.iter_rows(min_row=row[0].row+1,values_only=True):
+                claim=vals[positions["Claim"]]
+                if not claim: continue
+                if claim in index: error("CLAIM_ID_DUPLICATE",claim=claim)
+                e={f.lower():vals[positions[f]] for f in fields}
+                e["columns"]=json.loads(e["columns"] or "{}")
+                index[claim]=e
+    if not index: error("EVIDENCE_INDEX_REQUIRED")
+    args.output.parent.mkdir(parents=True,exist_ok=True)
+    spec=args.output.with_suffix(".consumer-input.json")
+    observed=args.output.with_suffix(".engine.json")
+    spec.write_text(json.dumps(dict(index=index,scalar_claims=list(wanted),refresh=refresh),indent=2),encoding="utf-8")
+    child=subprocess.run([str(args.node),str(Path(__file__).with_name("consume_package.mjs")),str(args.workbook),str(spec),str(observed)],capture_output=True,text=True,encoding="utf-8")
+    args.output.with_suffix(".engine.stdout.log").write_text(child.stdout,encoding="utf-8")
+    args.output.with_suffix(".engine.stderr.log").write_text(child.stderr,encoding="utf-8")
+    engine=json.loads(observed.read_text(encoding="utf-8")) if observed.exists() else None
+    if child.returncode or engine is None:
+        error("WORKBOOK_ENGINE_CONSUMPTION_ERROR",native_exit=child.returncode,detail=child.stderr[-2000:])
+        return dict(measured_contracts_match=None,errors=errors,ledger_accounts=None,numeric_claims=len(wanted),source_inputs_checked=None,
+                    engine_native_exit=child.returncode,refresh=None,score=None,
+                    scope="Engine consumption unavailable; financial correctness is unmeasured. Distinguish unsupported facility formulas from malformed candidate locators using the retained engine error. Do not count missing engine observations as financial amount errors.")
+    def entry(claim):
+        if claim not in index: error("CLAIM_REQUIRED",claim=claim);return None
+        e=index[claim]
+        if e["sheet"] not in book.sheetnames:error("CLAIM_SHEET_REQUIRED",claim=claim);return None
+        return e
+    def scalar(claim):
+        e=entry(claim)
+        if not e:return None
+        return engine["baseline"].get(claim) if engine else None
+    def match(claim,actual,expected,tolerance=D(".0050001")):
+        ok=isinstance(actual,(int,float,Decimal)) and abs(D(actual)-D(expected))<=tolerance
+        if not ok:error("AMOUNT_MISMATCH",claim=claim,expected=str(expected),actual=actual)
+        return ok
+    def table(claim):
+        e=entry(claim)
+        if not e:return []
+        return engine["tables"].get(claim,[]) if engine else []
+    actual_ledger={}
+    for r in table("ledger"):
+        try:key=(int(r["division"]),int(r["account"]))
+        except (TypeError,ValueError,KeyError):error("ACCOUNT_ID_REQUIRED",actual=r);continue
+        if key in actual_ledger:error("ACCOUNT_DUPLICATE",account=key)
+        actual_ledger[key]=r
+    for key,w in ledger.items():
+        r=actual_ledger.get(key)
+        if not r:error("ACCOUNT_REQUIRED",account=key);continue
+        for field in ["period","ytd"]:match(f"ledger.{key}.{field}",r.get(field),w[field],D(".0000001"))
+        for field in ["name","class"]:
+            if normalized(r.get(field))!=normalized(w[field]):error("ACCOUNT_METADATA_MISMATCH",account=key,field=field,expected=w[field],actual=r.get(field))
+    for key in actual_ledger.keys()-ledger.keys():error("ACCOUNT_UNEXPECTED",account=key)
+    for claim,w in wanted.items():match(claim,scalar(claim),w)
+    for claim in ["bank.statement","bank.reconciliation","ap.detail"]:
+        e=entry(claim);v=scalar(claim)
+        if e and (e["role"]!="unavailable" or isinstance(v,(int,float))):error("MISSING_SOURCE_STATUS_REQUIRED",claim=claim,actual=v)
+    for claim in ["ar.mapping","payroll.annotation","ap.action"]:
+        e=entry(claim);v=scalar(claim)
+        if e and (e["role"]!="explanation" or not isinstance(v,str) or not v.strip()):error("SOURCE_EXPLANATION_REQUIRED",claim=claim)
+    actual_bridges={}
+    for r in table("bridges"):
+        try:key=(int(r["division"]),int(r["account"]))
+        except (TypeError,ValueError,KeyError):error("BRIDGE_ID_REQUIRED",actual=r);continue
+        actual_bridges[key]=r
+    for key,w in bridges.items():
+        if key not in actual_bridges:error("CROSS_PERIOD_BRIDGE_REQUIRED",account=key);continue
+        for field,value in w.items():match(f"bridge.{key}.{field}",actual_bridges[key].get(field),value)
+    inputs_checked=0
+    for id,file,first,last,endcol in [
+        ("legal","Legal_Dump-1.xlsx",3,59,13),("fees","Prof_Fee_Dump-1.xlsx",3,8,23),
+        ("loan1","Good Insurance Co - Loan.xlsx",11,74,5),("loan2","Good Insurance Co - Loan II.xlsx",11,24,5),
+        ("payroll","Payroll-1.xlsx",5,20,4),("checks","Outstanding_CKs_4-30-25-1.xlsx",7,8,5),
+        ("prepaid_expense","PPD1250-1.xlsx",8,45,82),("prepaid_insurance","PPD1251-1.xlsx",6,31,48)]:
+        rows={}
+        for r in table(f"source.{id}"):
+            try:key=int(r["source_row"])
+            except (KeyError,TypeError,ValueError):error("SOURCE_ROW_ID_REQUIRED",source=id);continue
+            if key in rows:error("SOURCE_ROW_DUPLICATE",source=id,row=key)
+            rows[key]=r
+        for row in source(file).iter_rows(min_row=first,max_row=last,max_col=endcol):
+            for cell in row:
+                w=cell.value
+                if w is None or cell.data_type in ("f","e"):continue
+                v=rows.get(cell.row,{}).get(cell.column_letter)
+                if isinstance(w,bool):ok=v==w
+                elif isinstance(w,(int,float)):ok=isinstance(v,(int,float)) and abs(D(v)-D(w))<=D(".0000001")
+                elif isinstance(w,(date,datetime)):
+                    ok=(isinstance(v,(int,float)) and abs(D(v)-D(to_excel(w)))<=D(".0000001")) or (isinstance(v,str) and v[:10]==w.isoformat()[:10])
+                else:ok=normalized(w)==normalized(v)
+                if not ok:error("SOURCE_INPUT_MISMATCH",source=file,cell=cell.coordinate,expected=str(w),actual=str(v))
+                inputs_checked+=1
+    for claim in ["issues","contents"]:
+        if not table(claim):error("HANDOFF_TABLE_REQUIRED",claim=claim)
+    if engine:
+        for run in engine["refresh"]:
+            for claim,w in run["expected"].items():match(f"refresh.{run['input']}.{claim}",run["deltas"].get(claim),w,D(".00001"))
+            for claim,v in run["unavailable"].items():
+                if isinstance(v,(int,float)):error("INDEPENDENT_SOURCE_STILL_REQUIRED",claim=claim,actual=v)
+    if child.returncode:error("WORKBOOK_ENGINE_CONSUMPTION_ERROR",native_exit=child.returncode,detail=child.stderr[-2000:])
+    return dict(measured_contracts_match=not errors,errors=errors,ledger_accounts=len(actual_ledger),numeric_claims=len(wanted),source_inputs_checked=inputs_checked,
+                engine_native_exit=child.returncode,refresh=engine["refresh"] if engine else None,score=None,
+                saved_cache_observations={claim:[book[e['sheet']][c.strip()].value for c in e['address'].split(',')] for claim,e in index.items() if claim in wanted},
+                scope="Indexed actual-XLSX recalculated data and declared dependency contracts only. Saved caches are observations, not the truth or a gate. Free-text meaning, company policy, visual usability and complete handoff require separate whole-product review. Not an official GDPval score, company sign-off or general Excel-engine certification.")
+
+
+if __name__=="__main__":
+    p=argparse.ArgumentParser(description=__doc__)
+    for name in ["public","workbook","source-calculations","output","node"]:p.add_argument("--"+name,type=Path,required=True)
+    args=p.parse_args()
+    result=measure(args)
+    args.output.write_text(json.dumps(result,indent=2,default=str),encoding="utf-8")
+    print(json.dumps({k:result[k] for k in ["measured_contracts_match","ledger_accounts","numeric_claims","source_inputs_checked","engine_native_exit"]}|{"errors":len(result["errors"]),"score":None}))
+    raise SystemExit(3 if result["measured_contracts_match"] is None else 0 if result["measured_contracts_match"] else 4)
