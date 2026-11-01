@@ -92,6 +92,11 @@ tokenBudget stops admitting new automatic turns; it cannot retract accepted requ
 or cap an in-flight turn's final usage. turnBudget counts accepted automatic continuation
 Messages. The last admitted turn can settle after admission reaches the limit.
 Unspecified budgets remain unspecified.
+The shared budget field explains that one automatic turn can include multiple model
+requests and tool steps; manual messages remain separate. Localized token/turn limit
+reasons state that new automatic turns stop while already accepted work may finish.
+The same explanation appears in the status strip and details, independently of whether
+the conversation is currently running. It changes no execution or usage authority.
 
 ## Execution and recovery
 

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Goal 真实预算与继续执行](records/2026-11/2026-11-01-goal-live-budget-workflow.md)：真实创建、预算用量、显式恢复与原文件交付。
+
 - [结果质量选择与交付修复](records/2026-11/2026-11-01-outcome-quality-repair.md)：共享执行/完成合同修复及真实Session、Task前后端到端消费。
 - [紧凑面板与统一对齐](records/2026-11/2026-11-01-compact-panel.md)：真实截图定位、统一桌面密度与双语面板复核。
 

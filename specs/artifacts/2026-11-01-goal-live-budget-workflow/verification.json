@@ -1,0 +1,879 @@
+{
+  "at": "2026-11-01T13:53:36.389Z",
+  "singleAgent": true,
+  "userWindowsUntouched": true,
+  "isolatedDevelopmentUI": true,
+  "uiOnlyProductChange": true,
+  "automatedUiTests": false,
+  "manualScreenshots": [
+    "01-home-owned-project.jpg",
+    "02-create-turn-budget-one.jpg",
+    "03-created-goal-session.jpg",
+    "04-first-goal-running.jpg",
+    "05-first-goal-source-reading.jpg",
+    "06-budget-two-saved-paused.jpg",
+    "07-after-english-budget-form.jpg",
+    "08-after-english-running-limit.jpg",
+    "09-after-english-token-limit.jpg",
+    "10-after-first-turn-settled.jpg",
+    "11-after-budget-edit-preserved-usage.jpg",
+    "12-after-explicit-save-paused.jpg",
+    "13-after-chinese-paused-same-goal.jpg",
+    "14-after-chinese-explicit-resume.jpg",
+    "15-after-chinese-running-token-limit.jpg",
+    "16-after-chinese-natural-completion.jpg",
+    "17-after-complete-details.jpg",
+    "18-after-chinese-turn-hint.jpg",
+    "19-after-delivered-file-in-app.jpg",
+    "20-after-guide-rendered-in-app.jpg"
+  ],
+  "checks": [
+    {
+      "label": "ui-build-before",
+      "exitCode": 0,
+      "startedAt": 1793536608800,
+      "closedAt": 1793536665983
+    },
+    {
+      "label": "ui-build-after",
+      "exitCode": 0,
+      "startedAt": 1793537435615,
+      "closedAt": 1793537503475
+    },
+    {
+      "label": "types-after",
+      "exitCode": 0,
+      "startedAt": 1793537686139,
+      "closedAt": 1793537707475
+    },
+    {
+      "label": "i18n-after",
+      "exitCode": 0,
+      "startedAt": 1793537686138,
+      "closedAt": 1793537687917
+    },
+    {
+      "label": "docs-delivery",
+      "exitCode": 0,
+      "startedAt": 1793541350817,
+      "closedAt": 1793541358159
+    }
+  ],
+  "cases": [
+    {
+      "at": "2026-11-01T12:51:52.608Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 239607,
+      "current": 242645,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 46799,
+          "after": 47402
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 46799,
+          "after": 47402
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6167,
+          "after": 6246
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6167,
+          "after": 6246
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18501,
+          "after": 18738
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 49095,
+          "after": 49700
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 49037,
+          "after": 49642
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5969,
+          "after": 6048
+        },
+        {
+          "table": "memory_chunk",
+          "before": 86,
+          "after": 87
+        },
+        {
+          "table": "memory_file",
+          "before": 86,
+          "after": 87
+        },
+        {
+          "table": "message",
+          "before": 784,
+          "after": 796
+        },
+        {
+          "table": "part",
+          "before": 2225,
+          "after": 2257
+        },
+        {
+          "table": "permission_execution_result",
+          "before": 187,
+          "after": 188
+        },
+        {
+          "table": "permission_ledger",
+          "before": 951,
+          "after": 956
+        },
+        {
+          "table": "permission_policy",
+          "before": 45,
+          "after": 46
+        },
+        {
+          "table": "project",
+          "before": 89,
+          "after": 90
+        },
+        {
+          "table": "protocol_event",
+          "before": 2289,
+          "after": 2327
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 771,
+          "after": 782
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 771,
+          "after": 782
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 808,
+          "after": 819
+        },
+        {
+          "table": "session_control_event",
+          "before": 65,
+          "after": 66
+        },
+        {
+          "table": "session_control_record",
+          "before": 64,
+          "after": 65
+        },
+        {
+          "table": "session",
+          "before": 124,
+          "after": 125
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 607,
+          "after": 617
+        },
+        {
+          "table": "tool_part_request",
+          "before": 607,
+          "after": 617
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793525067560,
+          "reacquiredAt": 1793536956983,
+          "releasedAt": 1793536964672,
+          "ownedByRuntime": true
+        }
+      ],
+      "sourceDatabasePreserved": true,
+      "attachments": 217,
+      "projects": 89,
+      "filesystemExclusions": 0,
+      "requests": 11,
+      "cumulativeRequests": 1204,
+      "reserveMs": 4759386,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-89QD-tyK.js",
+      "businessCounts": {
+        "project": 90,
+        "session": 125,
+        "message": 796,
+        "part": 2257
+      },
+      "schemaObjectsPreserved": true,
+      "schemaObjectCount": 527,
+      "inputs": [
+        {
+          "source": "specs/current/architecture/continuous-goal.md",
+          "target": "sources/goal-contract.md",
+          "bytes": 25999,
+          "originalBytesPreserved": true
+        },
+        {
+          "source": "packages/overlay/src/components/ContinuousGoalControl.tsx",
+          "target": "sources/UI-control.tsx",
+          "bytes": 41748,
+          "originalBytesPreserved": true
+        },
+        {
+          "source": "packages/opencorvus/src/continuous-goal/schema.ts",
+          "target": "sources/goal-schema.ts",
+          "bytes": 2524,
+          "originalBytesPreserved": true
+        }
+      ],
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "maximumRequests": 12,
+      "unusedAllowanceRetired": 1,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "toolOutcomes": [
+        {
+          "id": "prt_g0VZizs5O00KZstAwNyk",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZiztIG000ZKyZKWz9",
+          "tool": "glob",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZizuTF00CRDChVg6U",
+          "tool": "glob",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZizvrp00E7c248jWT",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZizwpU00WuwgJ3FQb",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZizxhk00JvFmwNL6e",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZizyqM00VuFzu6otb",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj01B800lTKNFLxBI",
+          "tool": "apply_patch",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj0GVG00zVq6490zT",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj0Hnq00qlabWHviQ",
+          "tool": "get_continuous_goal",
+          "outcome": "completed"
+        }
+      ],
+      "goalUsageRows": 11,
+      "goalUsageTokens": 503626
+    },
+    {
+      "at": "2026-11-01T13:47:58.026Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 242645,
+      "current": 249142,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 47402,
+          "after": 48690
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 47402,
+          "after": 48690
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6246,
+          "after": 6414
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6246,
+          "after": 6414
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18738,
+          "after": 19242
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 49700,
+          "after": 50994
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 49642,
+          "after": 50936
+        },
+        {
+          "table": "event_occurrence",
+          "before": 6048,
+          "after": 6216
+        },
+        {
+          "table": "memory_chunk",
+          "before": 87,
+          "after": 88
+        },
+        {
+          "table": "memory_file",
+          "before": 87,
+          "after": 88
+        },
+        {
+          "table": "message",
+          "before": 796,
+          "after": 821
+        },
+        {
+          "table": "part",
+          "before": 2257,
+          "after": 2326
+        },
+        {
+          "table": "permission_execution_result",
+          "before": 188,
+          "after": 193
+        },
+        {
+          "table": "permission_ledger",
+          "before": 956,
+          "after": 981
+        },
+        {
+          "table": "permission_policy",
+          "before": 46,
+          "after": 47
+        },
+        {
+          "table": "project",
+          "before": 90,
+          "after": 91
+        },
+        {
+          "table": "protocol_event",
+          "before": 2327,
+          "after": 2404
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 782,
+          "after": 805
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 782,
+          "after": 805
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 819,
+          "after": 842
+        },
+        {
+          "table": "session_control_event",
+          "before": 66,
+          "after": 68
+        },
+        {
+          "table": "session_control_record",
+          "before": 65,
+          "after": 67
+        },
+        {
+          "table": "session",
+          "before": 125,
+          "after": 126
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 617,
+          "after": 638
+        },
+        {
+          "table": "tool_part_progress",
+          "before": 72,
+          "after": 76
+        },
+        {
+          "table": "tool_part_request",
+          "before": 617,
+          "after": 638
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793536964672,
+          "reacquiredAt": 1793539050276,
+          "releasedAt": 1793539059080,
+          "ownedByRuntime": true
+        }
+      ],
+      "sourceDatabasePreserved": true,
+      "attachments": 219,
+      "projects": 90,
+      "filesystemExclusions": 0,
+      "requests": 23,
+      "cumulativeRequests": 1227,
+      "reserveMs": 1275409,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-puEy2hxv.js",
+      "businessCounts": {
+        "project": 91,
+        "session": 126,
+        "message": 821,
+        "part": 2326
+      },
+      "schemaObjectsPreserved": true,
+      "schemaObjectCount": 527,
+      "inputs": [
+        {
+          "source": "specs/current/architecture/continuous-goal.md",
+          "target": "sources/goal-contract.md",
+          "bytes": 26422,
+          "originalBytesPreserved": true
+        },
+        {
+          "source": "packages/overlay/src/components/ContinuousGoalControl.tsx",
+          "target": "sources/UI-control.tsx",
+          "bytes": 41748,
+          "originalBytesPreserved": true
+        },
+        {
+          "source": "packages/opencorvus/src/continuous-goal/schema.ts",
+          "target": "sources/goal-schema.ts",
+          "bytes": 2524,
+          "originalBytesPreserved": true
+        }
+      ],
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "maximumRequests": 24,
+      "unusedAllowanceRetired": 1,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "toolOutcomes": [
+        {
+          "id": "prt_g0VZj6JXL009lCRa2F7R",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj6KZ400sX37QZcMl",
+          "tool": "glob",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj6MTk00djUEEPL2S",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj6NYE0099bbb39R1",
+          "tool": "glob",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj6Ol900cRhU09QA0",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj6Pok006sMpb9CB1",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj6Qy300bskkzHRuO",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj6TCS00CAdqUG0Yc",
+          "tool": "apply_patch",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj6hv100Z51Jk6io3",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj6jWi00IOHGVoQEb",
+          "tool": "get_continuous_goal",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj8V2J00laZ74CUqD",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj8WLn00hYZLfQovv",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj8XYJ00PqHeBrgcP",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj8Ykz002HCab6RGQ",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj8a50003Nz3WlgBM",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj8cBB00qhyoThBtz",
+          "tool": "apply_patch",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj8wgE00YyXVFW7HX",
+          "tool": "read",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj8y2K005OWQDNH73",
+          "tool": "bash",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj8z9600kQDZFdYEy",
+          "tool": "bash",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj91fk00HwzRWziJ4",
+          "tool": "get_continuous_goal",
+          "outcome": "completed"
+        },
+        {
+          "id": "prt_g0VZj92uZ009CFGDW6xD",
+          "tool": "update_continuous_goal",
+          "outcome": "completed"
+        }
+      ],
+      "goalUsageRows": 22,
+      "goalUsageTokens": 1254628
+    }
+  ],
+  "totalModelRequests": 34,
+  "cumulativeRequests": 1227,
+  "retiredPairedCopies": 4,
+  "unusedAllowanceRetired": 2,
+  "absoluteDeadline": 1793542098812,
+  "coverageLimits": [
+    "Current real Work conversation Goal flow only; no new Task/Mission/SideChat execution lifecycle, Stop/cancellation, crash or restart acceptance claim.",
+    "Before retains an intentionally paused unfinished guide. Its original12 request allowance was never increased. Fresh after was declared24 before admission and delivered the complete original two-chapter workflow under the unchanged common deadline.",
+    "English turn and token reasons, Chinese token reason, and both-language turn hints were actually pictured. Chinese turn-reason transient was not captured; screenshot15 shows token priority and is accurately named.",
+    "Screenshot03 is a creation handoff frame. Screenshot19 pairs a loading AX observation with an already painted file editor; screenshot20 verifies the rendered real file.",
+    "The model guide is a static source-review deliverable. The root agent separately exercised the real application and native provider flow; the model report is not that acceptance.",
+    "Shared locale deletions of two old settings-nav labels belong to the other active UI task. Own commit must stage only the three Goal key changes and preserve those foreign working/index hunks."
+  ]
+}
