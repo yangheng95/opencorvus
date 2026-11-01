@@ -200,7 +200,9 @@ export function ContinuousGoalControl(props: {
     return value && systemReasons.has(value) ? t(`continuous_goal.reason.${value}`) : value
   }
   const owns = (key: string) => !disposed && source()?.key === key
-  const initialLoading = () => projection.state === "pending"
+  const initialLoading = () => projection.state === "pending" || (
+    !!source() && !projection.error && projection()?.key !== source()?.key
+  )
   const disabled = () => !!props.readOnly || busy() || initialLoading() || !source() || !!projection.error
   const pendingComposerContext = () => !!props.hasStagedAttachments || !!composerQuotation(props.composerDraftKey)
   const ownsLaunch = () => !disposed && !!launchOwner && isApiAuthorityCurrent(launchOwner.authority) &&

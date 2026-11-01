@@ -1,0 +1,193 @@
+{
+  "purpose": "Expose the existing Goal form in selected-conversation headers and await a current-owner projection when opening it",
+  "delegation": "single agent",
+  "implementation": "One App open request, one existing Goal projection/form; source-key readiness includes authority, selection epoch and owner",
+  "currentBuild": "main-mPTc0h-C.js",
+  "manualUI": {
+    "screenshots": 23,
+    "personallyViewed": true,
+    "firstCandidateFailurePreserved": true,
+    "finalScreenshotRange": "12–23",
+    "englishAndChinese": true,
+    "headerVisibleWithDock": true,
+    "immediateSwitchToPausedGoalOpensDetails": true,
+    "reverseSwitchToNoGoalOpensCreation": true,
+    "pausedGoal": {
+      "tokens": 36322,
+      "automaticTurns": 1,
+      "status": "paused"
+    },
+    "finalDraft": "GOAL856_FINAL_KEEP",
+    "budgets": {
+      "tokens": 120000,
+      "turns": 2
+    },
+    "guideAndReopenPreserveDraft": true,
+    "languageChangePreservesDraft": true,
+    "homeExistingEntryAndForm": true,
+    "archivedChatReadOnlyGuide": true,
+    "unsentDraftCleared": true
+  },
+  "cases": {
+    "before": {
+      "data": {
+        "at": "2026-11-01T02:37:28.439Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234493,
+        "current": 234495,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48081,
+            "after": 48082
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48023,
+            "after": 48024
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 3498324,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-D3gqrsEQ.js"
+      },
+      "manualUIOutcome": "Baseline discovery gap confirmed",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "after": {
+      "data": {
+        "at": "2026-11-01T02:47:47.069Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234495,
+        "current": 234497,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48082,
+            "after": 48083
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48024,
+            "after": 48025
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 2914708,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BnVi7xDm.js"
+      },
+      "manualUIOutcome": "Failed: immediate owner switch opened creation for a paused Goal",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "after2": {
+      "data": {
+        "at": "2026-11-01T02:58:24.394Z",
+        "kind": "after2",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234497,
+        "current": 234499,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48083,
+            "after": 48084
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48025,
+            "after": 48026
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 2258725,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-mPTc0h-C.js"
+      },
+      "manualUIOutcome": "Passed current scoped Goal opening, drafts, languages, Home and archived read-only",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    }
+  },
+  "checks": {
+    "types-after2": 0,
+    "i18n-after2": 0,
+    "ui-build-after2": 0,
+    "docs-delivery": 0
+  },
+  "originalGoals": 9,
+  "originalGoalsPreserved": true,
+  "modelRequests": 0,
+  "cumulativeRequests": 1180,
+  "pairedCopiesRetired": 6,
+  "automatedUITests": 0,
+  "coverageLimits": [
+    "Task, Mission and SideChat share the control but were not separately replayed visually",
+    "Read errors, arbitrary network delays and Goal execution were not exercised",
+    "No Goal creation, state update, Message submission, archive restore or file edit"
+  ],
+  "userWindowAndDatabase": "Not operated or accessed",
+  "projectFileCoverage": {
+    "projects": 62,
+    "excludedProjects": 0,
+    "protectedBusinessFiles": "Every original file captured in the project snapshot",
+    "gitIdentity": "HEAD, ref, index and status",
+    "runtimeMetadataOutsideByteSnapshot": [
+      ".opencorvus",
+      ".git internals"
+    ]
+  }
+}

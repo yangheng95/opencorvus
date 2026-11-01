@@ -4097,6 +4097,17 @@ and focuses that field for correction. Other validation keeps its shared form
 feedback. The field and submit check share one client limit; the original
 server schema remains authoritative for HTTP and tool input.
 Selected conversations keep the owner-bound strip above their transcript.
+Their header also exposes a localized Continuous goal text action, including
+conversations that have no goal yet. It sends the same App Goal-open request as
+the composer and command palette, with the existing connection availability.
+The original owner-bound control decides whether to show creation or details
+and retains read-only handling; the header adds no projection or Goal state.
+Opening waits for a projection matching the current authority, selection epoch
+and owner. A retained previous-owner value during a resource refresh is still
+an initial read for the newly selected owner; it cannot imply that no goal
+exists. Same-owner background refreshes retain the current projection's
+availability, and read failures retain their explicit error feedback.
+Home keeps its existing introductory button instead of a conversation action.
 Session-scoped Goal forms describe their scope as the current conversation,
 covering both Chat and Work experiences without exposing the internal chat kind
 as a different product mode. The original conversation title still identifies

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标入口与会话切换](records/2026-11/2026-11-01-goal-header-entry.md)：已有对话文字入口、当前投影读取就绪、草稿和只读实测。
+
 - [文件工作台查找与焦点归属](records/2026-11/2026-11-01-file-workbench-find.md)：文件内查找、原草稿与编辑历史、当前区域快捷键。
 
 - [命令、模型与Provider多词查找](records/2026-11/2026-11-01-multi-term-metadata-search.md)：跨真实元数据组合筛选、字面内容边界与双语实页。

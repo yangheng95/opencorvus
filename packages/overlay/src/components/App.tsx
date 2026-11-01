@@ -683,6 +683,21 @@ export function App(props: AppProps) {
                               </div>
                               <div class="chat-header-meta oc-surface-header__actions">
                                 <div class="chat-header-actions" data-no-drag="true">
+                                  <Show when={!props.homeActive && props.conversationItem()}>
+                                    <Button
+                                      type="button"
+                                      variant="ghost"
+                                      size="sm"
+                                      tone="neutral"
+                                      disabled={!appStore.connected}
+                                      aria-label={t("continuous_goal.open")}
+                                      title={t("continuous_goal.open")}
+                                      onClick={openGoalForm}
+                                    >
+                                      <Icon name="goals" size="compact" />
+                                      {t("continuous_goal.title")}
+                                    </Button>
+                                  </Show>
                                   <Show when={boardStore.selectedSource}>
                                     <Button
                                       variant="ghost"

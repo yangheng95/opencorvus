@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [持续目标入口与会话切换](2026-11-01-goal-header-entry.md)：可见头部入口、首候选真实失败及共享读取根因修复。
+
 - [文件工作台查找与焦点归属](2026-11-01-file-workbench-find.md)：预览查找、原编辑器生命周期和实页验证。
 
 - [命令、模型与Provider多词查找](2026-11-01-multi-term-metadata-search.md)：同候选多词匹配、真实模型选择与Provider身份。
