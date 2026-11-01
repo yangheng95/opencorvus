@@ -1084,14 +1084,39 @@ superseded upload publication and in-flight backend scan freshness remain
 independent audit boundaries, not guarantees added by this panel lifetime change.
 
 Explorer rows retain their render identity through equivalent directory refreshes.
+Native row buttons also offer unmodified Up/Down/Home/End focus navigation over
+that same current row order. Right expands a directory or enters its visible
+first child; Left collapses it or returns to its visible parent. Search results
+share the linear navigation. Focus stays independent of selection and the opened
+file; native Tab, Enter/Space and modified click selection retain their owners.
+Virtua's existing keepMounted and index scrolling retain the focused row and
+mount an off-screen destination. Deferred focus checks the original operation
+scope, current row key, visible list and unchanged focus origin. The row-ref map
+is only a mounted-element index, not another file or selection projection.
+An off-screen request scrolls through that handle first; its actual scroll
+notification and the destination's mounted ref settle focus after the window
+updates. Already visible targets settle directly. No timer or focus history
+stands in for scroll completion.
+The existing custom item style publication also signals measurement readiness:
+Virtua may mount an item with visibility hidden until its real size is known.
+Settlement requires visible computed style and actual activeElement ownership
+after focus; a connected but still hidden element cannot consume the request.
+All nonempty ready listings use this one Virtualizer, including small directories
+and search results. Growing or shrinking across a size threshold does not switch
+renderers or replace a surviving row. No previous-focus store, threshold handoff
+or second row renderer is retained. Empty, pending and error presentations keep
+their existing owners. The parent file list remains the one scrollable viewport;
+the virtual container retains the library's total-size geometry. It does not
+hide parent scrolling or own another inner scroll surface.
+Current-language keyboard guidance remains in the file panel.
 The key derives from the existing API authority revision, directory, committed
-selection epoch, row kind, physical node type and exact normalized path. Ordinary
-and virtual rows use those string keys and read current metadata through the same
+selection epoch, row kind, physical node type and exact normalized path. All
+rows use those string keys and read current metadata through the same
 row projection; menu labels and actions consume current accessors. Name, ignored,
 loading, error, depth and expansion updates do not replace the row owner. Actual
-removal, rename, type or scope changes retire it. Search/filter retirement,
-virtual-window retirement and switching across the existing virtualization
-threshold can remount rows; stable focus across those boundaries is not promised.
+removal, rename, type or scope changes retire it. Search/filter retirement
+and virtual-window retirement can remount rows; stable focus across those
+boundaries is not promised.
 Successful token/scope-owned directory listings reconcile the existing selection
 Map with that exact parent's current members. Missing or type-replaced members
 and descendants under retired ancestors leave the selection; unchanged members

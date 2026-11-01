@@ -13,7 +13,7 @@ import {
 } from "solid-js"
 import { ContextMenu } from "./ui/ContextMenu"
 import { DropdownMenu } from "./ui/DropdownMenu"
-import { Virtualizer, type CustomContainerComponentProps, type CustomItemComponentProps } from "virtua/solid"
+import { Virtualizer, type VirtualizerHandle, type CustomContainerComponentProps, type CustomItemComponentProps } from "virtua/solid"
 import { ApiError, apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { boardStore } from "../store/board"
 import { showAppDialog } from "../services/app-dialog"
@@ -51,7 +51,6 @@ import { FileRowContent } from "./ui/FileRow"
 import { SurfaceHeader } from "./ui/SurfaceHeader"
 import { Feedback } from "./ui/Feedback"
 
-const VIRTUAL_EXPLORER_ROW_THRESHOLD = 120
 const FILE_EXPLORER_ROW_HEIGHT_PX = 32
 const FILE_EXPLORER_ROW_INDENT_PX = 16
 const FILE_EXPLORER_ROW_CHEVRON_WIDTH_PX = 14
@@ -121,17 +120,6 @@ function ExplorerVirtualWindow(props: CustomContainerComponentProps) {
   }
   return (
     <div ref={setRef} class="file-explorer-virtual-window" style={props.style}>
-      {props.children}
-    </div>
-  )
-}
-
-function ExplorerVirtualItem(props: CustomItemComponentProps) {
-  const setRef = (node: HTMLDivElement) => {
-    if (typeof props.ref === "function") props.ref(node)
-  }
-  return (
-    <div ref={setRef} class="file-explorer-virtual-item" style={props.style}>
       {props.children}
     </div>
   )
@@ -471,6 +459,99 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [mutationFeedback, setMutationFeedback] = createSignal<ExplorerFeedback | null>(null)
   const active = createMemo(() => props.active?.() ?? true)
   const directory = createMemo(() => (props.directory ? props.directory().trim() : ""))
+  const [focusedRowKey, setFocusedRowKey] = createSignal<string | null>(null)
+  const rowElements = new Map<string, HTMLButtonElement>()
+  let listElement: HTMLDivElement | undefined
+  let virtualizer: VirtualizerHandle | undefined
+  let pendingFocus: { key: string; origin: Element; scope: ExplorerOperationScope; waitingForScroll: boolean } | undefined
+
+  function settleRowFocus(): void {
+    const request = pendingFocus
+    if (!request) return
+    const element = rowElements.get(request.key)
+    if (
+      !ownsExplorerOperation(request.scope) || !rowByKey().has(request.key) ||
+      !listElement?.clientWidth || !listElement.clientHeight || listElement.closest("[inert], [hidden]") ||
+      (document.activeElement !== request.origin && document.activeElement !== document.body)
+    ) {
+      pendingFocus = undefined
+      return
+    }
+    if (request.waitingForScroll) return
+    if (!element?.isConnected || getComputedStyle(element).visibility !== "visible") return
+    element.focus({ preventScroll: true })
+    if (document.activeElement === element) pendingFocus = undefined
+  }
+
+  function ExplorerVirtualItem(props: CustomItemComponentProps) {
+    const setRef = (node: HTMLDivElement) => {
+      if (typeof props.ref === "function") props.ref(node)
+    }
+    createEffect(() => {
+      // Virtua hides newly mounted items until their real size is measured.
+      // Its style publication, not mounting alone, makes that row focusable.
+      props.style
+      queueMicrotask(settleRowFocus)
+    })
+    return (
+      <div ref={setRef} class="file-explorer-virtual-item" style={props.style}>
+        {props.children}
+      </div>
+    )
+  }
+
+  function registerRowElement(row: Accessor<ExplorerRow>, element: HTMLButtonElement): void {
+    const key = untrack(row).key
+    rowElements.set(key, element)
+    onCleanup(() => {
+      if (rowElements.get(key) === element) rowElements.delete(key)
+    })
+    queueMicrotask(settleRowFocus)
+  }
+
+  function focusRow(row: ExplorerRow, origin: HTMLButtonElement): void {
+    const scope = currentOperationScope()
+    if (!scope) return
+    const index = rowKeys().indexOf(row.key)
+    if (!virtualizer || index < 0) return
+    const offset = virtualizer.getItemOffset(index)
+    const waitingForScroll = offset < virtualizer.scrollOffset ||
+      offset + virtualizer.getItemSize(index) > virtualizer.scrollOffset + virtualizer.viewportSize
+    pendingFocus = { key: row.key, origin, scope, waitingForScroll }
+    setFocusedRowKey(row.key)
+    if (waitingForScroll) virtualizer.scrollToIndex(index, { align: "nearest" })
+    queueMicrotask(settleRowFocus)
+  }
+
+  function handleRowKeyDown(event: KeyboardEvent & { currentTarget: HTMLButtonElement }, row: ExplorerRow): void {
+    if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+    const visible = rows()
+    const index = visible.findIndex((entry) => entry.key === row.key)
+    if (index < 0) return
+    let next: ExplorerRow | undefined
+    switch (event.key) {
+      case "ArrowDown": next = visible[Math.min(index + 1, visible.length - 1)]; break
+      case "ArrowUp": next = visible[Math.max(index - 1, 0)]; break
+      case "Home": next = visible[0]; break
+      case "End": next = visible.at(-1); break
+      case "ArrowRight":
+        if (row.kind !== "node") return
+        if (row.node.directoryTarget) {
+          if (!row.expanded) toggleDirectory(row.node.path)
+          else if (visible[index + 1]?.depth > row.depth) next = visible[index + 1]
+        }
+        break
+      case "ArrowLeft":
+        if (row.kind !== "node") return
+        if (row.node.directoryTarget && row.expanded) toggleDirectory(row.node.path)
+        else next = visible.find((entry) => entry.kind === "node" && entry.node.path === parentPath(row.node.path))
+        break
+      default: return
+    }
+    event.preventDefault()
+    event.stopPropagation()
+    if (next) focusRow(next, event.currentTarget)
+  }
 
   function normalizeExplorerPath(path: string): string {
     return normalizeProjectFilePath(path, directory())
@@ -784,8 +865,17 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   const rowByKey = createMemo(() => new Map(rows().map((row) => [row.key, row])))
   const rowKeys = createMemo(() => rows().map((row) => row.key))
+  const focusedVirtualRows = createMemo(() => {
+    const index = rowKeys().indexOf(focusedRowKey() ?? "")
+    return index < 0 ? [] : [index]
+  })
+  createEffect(() => {
+    if (focusedRowKey() && !rowByKey().has(focusedRowKey()!)) {
+      pendingFocus = undefined
+      setFocusedRowKey(null)
+    }
+  })
 
-  const shouldVirtualize = createMemo(() => rows().length > VIRTUAL_EXPLORER_ROW_THRESHOLD)
   const explorerRowItemSize = () => scaledExplorerRowHeight()
   const rootLoading = createMemo(
     () =>
@@ -1877,6 +1967,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
             size="sm"
             tone="neutral"
             class="oc-file-row file-explorer-row"
+            ref={(element: HTMLButtonElement) => registerRowElement(row, element)}
+            onFocus={() => setFocusedRowKey(row().key)}
+            onKeyDown={(event) => handleRowKeyDown(event, row())}
             data-ui="file-explorer-row"
             data-app-context-menu-trigger="true"
             data-kind="file"
@@ -1940,6 +2033,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           size="sm"
           tone="neutral"
           class="oc-file-row file-explorer-row"
+          ref={(element: HTMLButtonElement) => registerRowElement(row, element)}
+          onFocus={() => setFocusedRowKey(row().key)}
+          onKeyDown={(event) => handleRowKeyDown(event, row())}
           data-ui="file-explorer-row"
           data-app-context-menu-trigger="true"
           data-kind={node().type}
@@ -2109,10 +2205,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       <ContextMenu.Root>
         <ContextMenu.Trigger
           as="div"
+          ref={(element: HTMLDivElement) => { listElement = element }}
           class="file-explorer-list"
           data-app-context-menu-trigger="true"
           data-drop-target={dropTargetPath() === "" && dropTargetRowPath() === null ? dropStatus() : undefined}
-          data-virtualized={shouldVirtualize() ? "true" : "false"}
           data-searching={deferredQuery() ? "true" : "false"}
           onDragEnter={(event) => updateExplorerDropTarget(event, "")}
           onDragOver={(event) => updateExplorerDropTarget(event, "")}
@@ -2163,23 +2259,30 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                   </p>
                 }
               >
-                <Show when={shouldVirtualize()} fallback={<For each={rowKeys()}>{renderRowKey}</For>}>
-                  <Virtualizer
-                    data={rowKeys()}
-                    itemSize={explorerRowItemSize()}
-                    bufferSize={explorerRowItemSize() * 12}
-                    as={ExplorerVirtualWindow}
-                    item={ExplorerVirtualItem}
-                  >
-                    {renderRowKey}
-                  </Virtualizer>
-                </Show>
+                <Virtualizer
+                  ref={(handle) => { virtualizer = handle }}
+                  data={rowKeys()}
+                  keepMounted={focusedVirtualRows()}
+                  itemSize={explorerRowItemSize()}
+                  bufferSize={explorerRowItemSize() * 12}
+                  as={ExplorerVirtualWindow}
+                  item={ExplorerVirtualItem}
+                  onScroll={() => {
+                    if (pendingFocus?.waitingForScroll) {
+                      pendingFocus.waitingForScroll = false
+                      queueMicrotask(settleRowFocus)
+                    }
+                  }}
+                >
+                  {renderRowKey}
+                </Virtualizer>
               </Show>
             </Show>
           </Show>
         </ContextMenu.Trigger>
         {renderBackgroundContextMenu()}
       </ContextMenu.Root>
+      <p class="file-explorer-keyboard-hint">{t("explorer.keyboard_hint")}</p>
     </section>
   )
 }

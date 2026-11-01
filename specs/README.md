@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件工作区连续操作](records/2026-11/2026-11-01-file-workspace-review.md)：统一列表、方向键、滚轮与测量就绪焦点及真实草稿保护。
+
 - [语言选项与命令发现](records/2026-11/2026-11-01-locale-choice-discovery.md)：统一支持目录、当前名称与自称、两入口切换和持久化。
 
 - [持续目标入口与会话切换](records/2026-11/2026-11-01-goal-header-entry.md)：已有对话文字入口、当前投影读取就绪、草稿和只读实测。

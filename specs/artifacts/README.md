@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件工作区连续操作](2026-11-01-file-workspace-review/README.md)：23张原图、失败候选、首次屏外聚焦、滚轮及原草稿。
+
 - [语言选项与命令发现](2026-11-01-locale-choice-discovery/README.md)：16张实图、双语切换、4项纯解析测试及数据保全。
 
 - [持续目标入口与读取](2026-11-01-goal-header-entry/README.md)：23张实图、即时切换详情/创建、草稿/预算/只读和完整数据保全。

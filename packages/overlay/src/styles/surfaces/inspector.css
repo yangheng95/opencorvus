@@ -710,6 +710,14 @@
   flex: 0 0 auto;
 }
 
+.file-explorer-keyboard-hint {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
 .file-explorer-upload-input {
   --px-exact: 1px;
   position: fixed;
@@ -754,11 +762,8 @@
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
+  overscroll-behavior: contain;
   contain: layout;
-}
-
-.file-explorer-list[data-virtualized="true"] {
-  overflow: hidden;
 }
 
 .file-explorer-list[data-drop-target="move"],
@@ -772,12 +777,6 @@
   outline: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 62%, var(--border));
   outline-offset: calc(-2px * var(--ui-scale));
   background: color-mix(in srgb, var(--bad) 5%, transparent);
-}
-
-.file-explorer-virtual-window {
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
 }
 
 .file-explorer-virtual-item {

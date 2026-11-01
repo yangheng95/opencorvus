@@ -1,0 +1,22 @@
+{
+  "purpose": "Actual diagnostic UI events, not an automated UI assertion",
+  "events": [
+    {
+      "at": "2026-11-01T04:07:03.865Z",
+      "build": "main-K4TMOprN.js",
+      "phase": "focus",
+      "row": "keyboard-review-858",
+      "connected": true
+    },
+    {
+      "at": "2026-11-01T04:07:03.915Z",
+      "build": "main-K4TMOprN.js",
+      "phase": "blur",
+      "row": "keyboard-review-858",
+      "connected": true,
+      "activeElementIsBody": true
+    }
+  ],
+  "libraryObservation": "Installed Virtua ListItem hides unmeasured rows with visibility:hidden until its real ResizeObserver measurement is published",
+  "finalSettlement": "Current item style change and actual visible focus ownership settle the same scoped request"
+}

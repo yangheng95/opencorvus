@@ -1,0 +1,460 @@
+{
+  "purpose": "Continuous real file workspace navigation and focus preservation",
+  "delegation": "single agent",
+  "currentBuild": "main-DTsRoIV5.js",
+  "manualUI": {
+    "screenshots": 23,
+    "finalBuildScreenshots": [
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23
+    ],
+    "failedScreenshots": [
+      4,
+      5,
+      6,
+      7,
+      9,
+      10,
+      11
+    ],
+    "allPersonallyViewed": true,
+    "firstOffscreenEnd": true,
+    "homeReturn": true,
+    "folderExpansionAndCollapse": true,
+    "upDownAndParentChild": true,
+    "nativeTab": true,
+    "searchEnterOriginalFile": true,
+    "emptySearchAndClear": true,
+    "englishAndChinese": true,
+    "wheelBothDirections": true,
+    "unsavedDecisionCancelAndDraftPreservation": true,
+    "temporaryDraftUndone": true,
+    "draft": "DRAFT858_KEEP"
+  },
+  "cases": {
+    "before": {
+      "data": {
+        "at": "2026-11-01T03:52:53.220Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234499,
+        "current": 234501,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48084,
+            "after": 48085
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48026,
+            "after": 48027
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 3221540,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-DqgM6m1u.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "after": {
+      "data": {
+        "at": "2026-11-01T03:56:49.311Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234501,
+        "current": 234503,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48085,
+            "after": 48086
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48027,
+            "after": 48028
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 2980269,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-B2iloEc2.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "after2": {
+      "data": {
+        "at": "2026-11-01T04:00:31.731Z",
+        "kind": "after2",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234503,
+        "current": 234505,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48086,
+            "after": 48087
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48028,
+            "after": 48029
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 2761633,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-C1wjanUv.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "after3": {
+      "data": {
+        "at": "2026-11-01T04:05:26.035Z",
+        "kind": "after3",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234505,
+        "current": 234507,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48087,
+            "after": 48088
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48029,
+            "after": 48030
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 2462647,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-2MMSygWq.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "debug": {
+      "data": {
+        "at": "2026-11-01T04:09:05.146Z",
+        "kind": "debug",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234507,
+        "current": 234509,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48088,
+            "after": 48089
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48030,
+            "after": 48031
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 2246397,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-K4TMOprN.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "final": {
+      "data": {
+        "at": "2026-11-01T04:13:16.075Z",
+        "kind": "final",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234509,
+        "current": 234511,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48089,
+            "after": 48090
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48031,
+            "after": 48032
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 1992478,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-8_rJEgTO.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "final2": {
+      "data": {
+        "at": "2026-11-01T04:19:16.641Z",
+        "kind": "final2",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234511,
+        "current": 234513,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48090,
+            "after": 48091
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48032,
+            "after": 48033
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 1634025,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-iM31oKJY.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "final4": {
+      "data": {
+        "at": "2026-11-01T04:24:18.444Z",
+        "kind": "final4",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234513,
+        "current": 234515,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48091,
+            "after": 48092
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48033,
+            "after": 48034
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 1334600,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-XEghmMeR.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "final5": {
+      "data": {
+        "at": "2026-11-01T04:29:08.123Z",
+        "kind": "final5",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234515,
+        "current": 234517,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 48092,
+            "after": 48093
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 48034,
+            "after": 48035
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 1040179,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-DTsRoIV5.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    }
+  },
+  "checks": {
+    "types-final5": 0,
+    "i18n-after": 0,
+    "ui-build-final5": 0
+  },
+  "originalGoals": 9,
+  "originalGoalsPreserved": true,
+  "pairedCopiesRetired": 18,
+  "modelRequests": 0,
+  "cumulativeRequests": 1180,
+  "automatedUITests": 0,
+  "qaSetupFiles": 132,
+  "originalProjectBusinessFilesPreserved": true,
+  "projectFileCoverage": {
+    "projects": 62,
+    "excludedProjects": 0,
+    "gitIdentity": "HEAD, ref, index and status; exact added QA paths reviewed",
+    "runtimeMetadataOutsideByteSnapshot": [
+      ".opencorvus",
+      ".git internals"
+    ]
+  },
+  "coverageLimits": [
+    "Desktop development /ui only",
+    "No full ARIA tree or screen-reader claim",
+    "Native windows, every modifier key, all read errors and concurrent file mutation not replayed"
+  ],
+  "userWindowAndDatabase": "Not operated or accessed"
+}
