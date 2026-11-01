@@ -1,5 +1,9 @@
 # Specs Storage Index
 
+- [对话管理与真实继续执行](records/2026-11/2026-11-01-session-management-live.md)：改名、归档只读、恢复及真实模型跟进。
+
+- [界面可理解性](records/2026-11/2026-11-01-ui-comprehension.md)：从导航、开始工作到阅读与归档的完整路径。
+
 - [0.1.41发布](records/2026-11/2026-11-01-release-0.1.41.md)：已提交增量、CI修复、原生/官网与失败候选清退。
 
 - [模型自产测试的语义覆盖](records/2026-11/2026-11-01-self-verification-coverage.md)：原漏测敏感性、共享修复及新领域修前修后真实自验。

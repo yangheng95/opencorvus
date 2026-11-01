@@ -820,15 +820,19 @@ async function archiveConversationHandoffCaller(
   setMissionSharedRefreshToken((value) => value + 1)
 }
 
-function focusComposerInput(): void {
+function focusComposerInput(origin: Element | null): void {
+  const target = document.querySelector<HTMLTextAreaElement>("#solidChatComposer textarea")
   queueMicrotask(() => {
-    document.querySelector<HTMLTextAreaElement>("#solidChatComposer textarea")?.focus()
+    if (document.activeElement !== origin && document.activeElement !== document.body) return
+    if (target?.isConnected && !target.disabled && target.getClientRects().length &&
+      !target.closest('[inert], [hidden], [aria-hidden="true"]')) target.focus({ preventScroll: true })
   })
 }
 
 async function applyComposerIntent(
   intent: ComposerIntent,
   selectionEpoch: number,
+  focusOrigin: Element | null,
   authority = captureApiAuthority(),
 ): Promise<void> {
   assertApiAuthorityCurrent(authority)
@@ -843,16 +847,17 @@ async function applyComposerIntent(
   await selectTask("", { preserveComposerAttachments: true, selectionEpoch, authority })
   if (!isApiAuthorityCurrent(authority)) return
   assertUserNavigationCurrent(selectionEpoch)
-  focusComposerInput()
+  focusComposerInput(focusOrigin)
 }
 
 async function handleComposerIntentChange(intent: ComposerIntent): Promise<void> {
+  const focusOrigin = document.activeElement
   const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection()
   if (admission.kind === "unchanged") return
   await closeConfigDialog()
   assertApiAuthorityCurrent(authority)
-  await applyComposerIntent(intent, admission.epoch, authority)
+  await applyComposerIntent(intent, admission.epoch, focusOrigin, authority)
   assertApiAuthorityCurrent(authority)
   assertUserNavigationCurrent(admission.epoch)
   if (!activeDirectory()) replaceWorkspaceLocation({ kind: "launcher", ...intent })
@@ -867,6 +872,7 @@ async function openWorkLedgerChat(row: WorkLedgerChatRow): Promise<void> {
 }
 
 async function openGlobalComposer(intent: ComposerIntent): Promise<void> {
+  const focusOrigin = document.activeElement
   const authority = captureApiAuthority()
   const admission = await requestWorkspaceSelection()
   if (admission.kind === "unchanged") return
@@ -875,7 +881,7 @@ async function openGlobalComposer(intent: ComposerIntent): Promise<void> {
     assertApiAuthorityCurrent(authority)
     await openGlobalChatLauncher(admission.epoch)
     assertApiAuthorityCurrent(authority)
-    await applyComposerIntent(intent, admission.epoch, authority)
+    await applyComposerIntent(intent, admission.epoch, focusOrigin, authority)
     assertApiAuthorityCurrent(authority)
     assertUserNavigationCurrent(admission.epoch)
     replaceWorkspaceLocation({ kind: "launcher", ...intent })
@@ -932,6 +938,7 @@ async function startWorkLedgerMulticaImport(directory: string): Promise<void> {
 }
 
 async function selectWorkLedgerProject(directory: string): Promise<void> {
+  const focusOrigin = document.activeElement
   const authority = captureApiAuthority()
   const projectDirectory = directory.trim()
   if (!projectDirectory) throw new Error(t("project.new_chat_missing_directory"))
@@ -952,7 +959,7 @@ async function selectWorkLedgerProject(directory: string): Promise<void> {
   if (!isApiAuthorityCurrent(authority)) return
   assertUserNavigationCurrent(admission.epoch)
   bumpWorkspaceEpoch()
-  focusComposerInput()
+  focusComposerInput(focusOrigin)
 }
 
 async function deleteWorkLedgerProject(directory: string, presentation: ProjectActionPresentation): Promise<void> {
@@ -2342,7 +2349,7 @@ function OverlayRoot() {
       await refreshSelection()
       if (owns()) {
         setMissionSharedRefreshToken((value) => value + 1)
-        if (!selectedArchived() && (document.activeElement === trigger || document.activeElement === document.body)) focusComposerInput()
+        if (!selectedArchived() && (document.activeElement === trigger || document.activeElement === document.body)) focusComposerInput(trigger)
       }
     } catch (error) { if (owns() && !restored) setRestoreFailure(error) }
     finally { if (owns()) setRestoringSelection(false) }

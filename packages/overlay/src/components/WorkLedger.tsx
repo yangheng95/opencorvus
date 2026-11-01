@@ -1716,6 +1716,10 @@ export function WorkLedger(props: WorkLedgerProps) {
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
               <DropdownMenu.Content>
+                <DropdownMenu.Item as="button" type="button" onSelect={() => openConfigDialog("archive")}>
+                  <Icon name="archive" />
+                  {t("archive.title")}
+                </DropdownMenu.Item>
                 <DropdownMenu.Item
                   as="button"
                   type="button"

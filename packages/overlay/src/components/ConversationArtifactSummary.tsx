@@ -69,16 +69,14 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
           </span>
           <div class="conversation-artifact-summary__identity">
             <strong>{totals().files > 0 ? tc("files.changed", totals().files) : t("diff.unresolved_title")}</strong>
-            <span
-              class="conversation-artifact-summary__totals"
-              aria-label={
-                totals().additions === null || totals().deletions === null
-                  ? t("diff.counts_unavailable_detail")
-                  : t("chat.artifacts.totals", { additions: totals().additions, deletions: totals().deletions })
-              }
-            >
-              <ChangeLineStats additions={totals().additions} deletions={totals().deletions} />
-            </span>
+            <Show when={totals().additions !== null && totals().deletions !== null}>
+              <span
+                class="conversation-artifact-summary__totals"
+                aria-label={t("chat.artifacts.totals", { additions: totals().additions, deletions: totals().deletions })}
+              >
+                <ChangeLineStats additions={totals().additions} deletions={totals().deletions} />
+              </span>
+            </Show>
           </div>
           <Show when={totals().hasUnresolvedChanges}>
             <Tooltip.Root placement="top" fitViewport>
@@ -124,9 +122,11 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
                     name={row.file}
                     icon="file-document"
                     trailing={
-                      <span class="conversation-artifact-summary__file-stats">
-                        <ChangeLineStats additions={row.additions} deletions={row.deletions} isText={row.isText} />
-                      </span>
+                      <Show when={row.additions !== null && row.deletions !== null}>
+                        <span class="conversation-artifact-summary__file-stats">
+                          <ChangeLineStats additions={row.additions} deletions={row.deletions} isText={row.isText} />
+                        </span>
+                      </Show>
                     }
                   />
                 </Button>

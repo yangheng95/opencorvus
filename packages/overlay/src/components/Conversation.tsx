@@ -1043,7 +1043,7 @@ export function Conversation(props: {
                   onClick={props.onGoal}
                 >
                   <Icon name="goals" size="compact" />
-                  {t("continuous_goal.title")}
+                  {t("continuous_goal.open")}
                 </Button>
                 <Show when={props.filesAvailable()}>
                   <Button

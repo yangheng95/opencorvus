@@ -60,7 +60,7 @@ export function RecordedToolComparisons(props: { item: FileChange }) {
     ),
   )
   return (
-    <Show when={receipts().length > 0}>
+    <Show when={receipts().length > 0} fallback={<DiffView item={props.item} />}>
       <section class="msg-tool-diffs" aria-label={t("diff.original_changes")}>
         <p class="empty-hint">{t("diff.original_changes_hint")}</p>
         <For each={receipts()}>

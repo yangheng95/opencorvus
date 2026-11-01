@@ -56,7 +56,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  padding: var(--ui-gap-md) var(--ui-gap-sm);
+  padding: var(--ui-gap-md) var(--ui-gap-xs);
   background: var(--chrome);
 }
 
@@ -87,11 +87,13 @@
 
 .workspace-navigation .sidebar-codex-action {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  min-height: calc(40px * var(--ui-scale));
-  padding: 0;
+  min-height: calc(48px * var(--ui-scale));
+  gap: var(--ui-gap-3xs);
+  padding: var(--ui-gap-xs) 0;
   border-radius: var(--oc-radius-large);
   color: var(--text-muted);
 }
@@ -102,7 +104,17 @@
   color: var(--text-strong);
 }
 
-.workspace-navigation .sidebar-codex-action-label,
+.workspace-navigation .sidebar-codex-action-label {
+  max-width: 100%;
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-tight);
+  text-align: center;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
 .workspace-navigation .chat-version-name,
 .workspace-navigation .chat-version-plan {
   position: absolute;

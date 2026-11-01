@@ -794,6 +794,33 @@
   gap: var(--ui-gap-md);
 }
 
+.composer-intent-field,
+.composer-intent-option-copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-xs);
+  min-width: 0;
+}
+
+.composer-intent-description {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
+  white-space: normal;
+}
+
+.composer-optional-references {
+  margin-top: var(--ui-gap-lg);
+  min-height: 0;
+}
+
+.composer-optional-references > .oc-disclosure__content {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 :is(
   .composer-model-selector,
   .composer-reference-selector,
@@ -903,6 +930,10 @@
   max-height: min(calc(520px * var(--ui-scale)), var(--kb-popper-content-available-height), calc(var(--ui-overlay-shell-height) - 32px));
   overflow-y: auto;
   padding: 0;
+}
+
+.composer-reference-popover[data-editable="true"] {
+  padding: var(--ui-gap-lg);
 }
 
 .composer-reference-popover-heading {

@@ -122,9 +122,6 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
     return (
       <>
         <span class="diff-preview-copy">
-          <Show when={props.target?.agentID}>
-            <span class="diff-preview-scope">{props.target?.agentID}</span>
-          </Show>
           <span class="diff-preview-path" title={props.target?.filePath || ""}>
             {props.target?.filePath}
           </span>
@@ -134,13 +131,15 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
             <span class="change-status" data-status={item()!.status}>
               {changeStatusLabel(item()!.status)}
             </span>
-            <ChangeLineStats additions={item()!.additions} deletions={item()!.deletions} isText={item()!.isText} />
+            <Show when={item()!.evidence.kind === "complete"}>
+              <ChangeLineStats additions={item()!.additions} deletions={item()!.deletions} isText={item()!.isText} />
+            </Show>
           </span>
         </Show>
         <Button
           class="diff-preview-open-file"
           type="button"
-          variant="ghost"
+          variant="outline"
           size="sm"
           tone="accent"
           disabled={!props.directory.trim() || opening() || fileEditorReserved()}
@@ -204,7 +203,6 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
                     hasDiffBody(item()) && isKnownTextDiff(item()) && item()!.before !== item()!.after,
                 }}
               >
-                <DiffView item={item()!} />
                 <Show
                   when={
                     item()!.evidence.kind === "incomplete" &&
@@ -212,6 +210,7 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
                       (group) => group.id === props.target?.groupID && group.observationKind === "tool_interval",
                     )
                   }
+                  fallback={<DiffView item={item()!} />}
                 >
                   <RecordedToolComparisons item={item()!} />
                 </Show>

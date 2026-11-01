@@ -353,7 +353,9 @@ export function FileEditorPane() {
       retireDownload()
       const identity = identityOf(file)
       const retainDraft = identity === activeTargetIdentity && dirty()
-      if (identity !== activeTargetIdentity) setTextView("source")
+      if (identity !== activeTargetIdentity) {
+        setTextView(file && !target()?.range && extToLang(file.path) === "markdown" ? "preview" : "source")
+      }
       activeTargetIdentity = identity
       const generation = ++loadGeneration
       saveGeneration += 1

@@ -1,0 +1,129 @@
+{
+  "at": "2026-11-01T16:37:56.255Z",
+  "surfaces": [
+    "primary navigation",
+    "Home and goal entry",
+    "work type and approach",
+    "optional skills",
+    "document reading and exact source locations",
+    "single/multiple-file Review",
+    "archive and restore",
+    "asynchronous navigation focus"
+  ],
+  "uiAcceptance": "Actual hidden desktop /ui interaction, screenshots and human visual review; no UI automated tests",
+  "screenshots": 37,
+  "models": {
+    "model": "openai/gpt-6.1-sol",
+    "requests": 8,
+    "allStreaming": true,
+    "allHTTP200": true,
+    "allReadersSettledEOF": true,
+    "firstAllowance": 16,
+    "unusedRetired": 8
+  },
+  "business": {
+    "rows": 8,
+    "owners": {
+      "林青": 3,
+      "周宁": 3,
+      "陈舟": 2
+    },
+    "unknownDueDates": 1,
+    "fields": [
+      "id",
+      "owner",
+      "action",
+      "due_date"
+    ],
+    "allOriginalFactsMatch": true,
+    "sessionID": "ses_-zUQG6lTSzzVntjong5Z",
+    "originalMessages": 5,
+    "restoredMessages": 8,
+    "originalSessionRestored": true,
+    "archivedAt": 1793550133248,
+    "finalStatus": "idle"
+  },
+  "sourceRefresh": {
+    "valid": true,
+    "refreshState": "consumed",
+    "otherProvidersPreserved": true,
+    "catalogPreserved": true,
+    "usesOriginalGenerationOwner": true
+  },
+  "deliveryBuild": {
+    "label": "ui-build-focus",
+    "startedAt": 1793550609265,
+    "closedAt": 1793550667356,
+    "code": 0,
+    "signal": null,
+    "childPID": 31536
+  },
+  "types": {
+    "label": "types-focus",
+    "startedAt": 1793550619458,
+    "closedAt": 1793550637054,
+    "code": 0,
+    "signal": null,
+    "childPID": 32064
+  },
+  "checks": {
+    "label": "checks-focus",
+    "startedAt": 1793550904881,
+    "closedAt": 1793550913065,
+    "code": 0,
+    "signal": null,
+    "childPID": 11164
+  },
+  "qualified": {
+    "schema": 9,
+    "tables": 92,
+    "originalRows": 251387,
+    "currentRows": 251392,
+    "projects": 94,
+    "attachments": 223,
+    "allOriginalBusinessRowsPreserved": true,
+    "sourceDatabasePreserved": true,
+    "cumulativeRequests": 1235
+  },
+  "closedScopes": {
+    "visual": {
+      "native": 0,
+      "requests": 0
+    },
+    "sol": {
+      "native": 0,
+      "requests": 8
+    },
+    "focus": {
+      "native": 0,
+      "requests": 0
+    },
+    "expiredAfter": {
+      "reason": "COPIED_OAUTH_CREDENTIAL_EXPIRED",
+      "native": 1,
+      "requests": 0,
+      "unusedAllowanceRetired": 16,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "tables": 92,
+      "rows": 249159,
+      "physicalSettled": true,
+      "credentialCopiesCreated": 0
+    },
+    "unstartedFinal": {
+      "phase": "final-after",
+      "preparedOnly": true,
+      "nativeStarted": false,
+      "requests": 0,
+      "maximumRequests": 0,
+      "sourceRows": 249162,
+      "allOriginalBusinessRowsPreserved": true,
+      "authCopiesCreated": 0
+    }
+  },
+  "limitations": [
+    "No claim that all product UI is now resolved.",
+    "Original producer prose, source identities and advanced technical details retain their real content.",
+    "Original 873 lifecycle task remained unfinished; successful 874 work is independently recorded."
+  ]
+}

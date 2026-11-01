@@ -1413,50 +1413,61 @@ export function ChatComposer(props: ChatComposerProps) {
       <span class="composer-picker-option-icon" aria-hidden="true">
         <Icon name={option.icon} size="compact" />
       </span>
-      <span class="composer-picker-option-label">{option.label}</span>
+      <span class="composer-intent-option-copy">
+        <span class="composer-picker-option-label">{option.label}</span>
+        <span class="composer-intent-description">{option.description}</span>
+      </span>
     </span>
   )
 
   const renderIntentControls = () => (
     <div class="composer-intent-selects" data-ui="composer-intent-selects">
-      <SelectControl<ComposerIntentOption<ProductPillar>>
-        class="composer-intent-select"
-        variant="composer"
-        options={productPillarOptions()}
-        value={selectedProductPillar()}
-        onChange={(option) =>
-          option && props.onComposerIntentChange({ ...props.composerIntent, productPillar: option.value })
-        }
-        optionValue="value"
-        optionTextValue="label"
-        disallowEmptySelection
-        disabled={!composerEnabled() || props.busy}
-        ariaLabel={t("chat.composer_product_pillar_aria_label")}
-        triggerDataUI="composer-product-pillar-select"
-        triggerTitle={selectedProductPillar()?.label}
-        renderValue={renderIntentValue}
-        renderOptionLabel={renderIntentOption}
-        renderOptionTooltip={(option) => <span>{option.description}</span>}
-      />
-      <SelectControl<ComposerIntentOption<ConversationTarget>>
-        class="composer-intent-select"
-        variant="composer"
-        options={conversationTargetOptions()}
-        value={selectedConversationTarget()}
-        onChange={(option) =>
-          option && props.onComposerIntentChange({ ...props.composerIntent, conversationTarget: option.value })
-        }
-        optionValue="value"
-        optionTextValue="label"
-        disallowEmptySelection
-        disabled={!composerEnabled() || props.busy}
-        ariaLabel={t("chat.composer_target_aria_label")}
-        triggerDataUI="composer-conversation-target-select"
-        triggerTitle={selectedConversationTarget()?.label}
-        renderValue={renderIntentValue}
-        renderOptionLabel={renderIntentOption}
-        renderOptionTooltip={(option) => <span>{option.description}</span>}
-      />
+      <div class="composer-intent-field">
+        <span class="oc-section-heading">{t("chat.composer_product_pillar_label")}</span>
+        <SelectControl<ComposerIntentOption<ProductPillar>>
+          class="composer-intent-select"
+          variant="composer"
+          options={productPillarOptions()}
+          value={selectedProductPillar()}
+          onChange={(option) =>
+            option && props.onComposerIntentChange({ ...props.composerIntent, productPillar: option.value })
+          }
+          optionValue="value"
+          optionTextValue="label"
+          disallowEmptySelection
+          disabled={!composerEnabled() || props.busy}
+          ariaLabel={t("chat.composer_product_pillar_aria_label")}
+          triggerDataUI="composer-product-pillar-select"
+          triggerTitle={selectedProductPillar()?.label}
+          renderValue={renderIntentValue}
+          renderOptionLabel={renderIntentOption}
+          renderOptionTooltip={(option) => <span>{option.description}</span>}
+        />
+        <span class="composer-intent-description">{selectedProductPillar()?.description}</span>
+      </div>
+      <div class="composer-intent-field">
+        <span class="oc-section-heading">{t("chat.composer_target_label")}</span>
+        <SelectControl<ComposerIntentOption<ConversationTarget>>
+          class="composer-intent-select"
+          variant="composer"
+          options={conversationTargetOptions()}
+          value={selectedConversationTarget()}
+          onChange={(option) =>
+            option && props.onComposerIntentChange({ ...props.composerIntent, conversationTarget: option.value })
+          }
+          optionValue="value"
+          optionTextValue="label"
+          disallowEmptySelection
+          disabled={!composerEnabled() || props.busy}
+          ariaLabel={t("chat.composer_target_aria_label")}
+          triggerDataUI="composer-conversation-target-select"
+          triggerTitle={selectedConversationTarget()?.label}
+          renderValue={renderIntentValue}
+          renderOptionLabel={renderIntentOption}
+          renderOptionTooltip={(option) => <span>{option.description}</span>}
+        />
+        <span class="composer-intent-description">{selectedConversationTarget()?.description}</span>
+      </div>
     </div>
   )
   const toolbarContextLabel = () => {

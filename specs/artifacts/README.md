@@ -1,5 +1,9 @@
 # Artifact entry points
 
+- [对话管理与真实继续执行](2026-11-01-session-management-live/README.md)：真实生命周期原图与模型交付证据。
+
+- [界面可理解性](2026-11-01-ui-comprehension/README.md)：真实中文与英文完整路径原图。
+
 - [0.1.41发布](2026-11-01-release-0.1.41/README.md)：CI、Intel预检、原生/官网及公网回读证据。
 
 - [模型自产测试的语义覆盖](2026-11-01-self-verification-coverage/README.md)：原程序漏测敏感性、新领域真实运行和逐次故障。

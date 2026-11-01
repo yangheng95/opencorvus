@@ -52,6 +52,15 @@
   min-height: 0;
 }
 
+.changes-review-workspace[data-single-file="true"] {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.changes-review-workspace[data-single-file="true"] .changes-diff-pane {
+  grid-row: 1;
+}
+
 .changes-diff-pane {
   display: flex;
   overflow: hidden;

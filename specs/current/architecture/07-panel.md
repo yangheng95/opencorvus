@@ -680,6 +680,12 @@ downloading the current disk file leaves the recorded comparison intact. Existin
 dirty-draft confirmation applies before changing files. The action and its error
 feedback stay bound to the visible source, comparison and API authority; missing
 current files retain the workbench's normal read-error contract.
+The action is labelled as reading the current file, independently of historical edits.
+Single-file Review keeps the same selected diff owner without an inventory or
+filters that cannot change the selection. Multi-file inventories retain their
+search, status filters and independent scrolling. Incomplete Tool intervals with
+individual comparisons explain the missing combined comparison once; their
+original comparisons remain separately expandable and keep their own counts.
 Incomplete Tool intervals expose their individual original comparisons through
 the recorded Session/Message/Part/file-index receipts. Each disclosure lazily
 uses the same bounded, authority-scoped completed Tool reader and shared diff
@@ -752,6 +758,22 @@ navigation-reservation boundaries, mutation feedback, refresh and post-create
 editor admission remain owned by that existing operation.
 
 Markdown text files offer Source and Preview views of the same current draft.
+New Markdown file identities without a source range open in Preview. Explicit
+source ranges and Find reveal Source; an existing identity retains its chosen
+view and dirty draft through the same file-workbench owner.
+
+Primary navigation retains visible localized captions on the existing actions.
+The Composer's mode selector exposes work type and conversation approach with
+visible descriptions; optional Skill and Expert Squad selection is disclosed
+inside the same popover. Selected references remain actual visible input text,
+and active conversations retain their read-only original assignment. Archive is
+also reachable from the existing More menu and opens the same Settings owner.
+Project navigation, global new-chat launch and Composer intent changes capture
+their focus origin before asynchronous work. Their shared input handoff runs only
+while that origin or BODY still owns focus, and checks the retained textarea is
+visible and enabled. Opening a menu during project loading retains that menu's
+keyboard focus when the directory load completes. Restore uses its original
+trigger with the same handoff, without a global focus listener or parallel store.
 The file header exposes Find in file for text documents, including read-only
 sources. It and Ctrl/Cmd+F within the file pane open that retained CodeMirror
 view's native search panel. Finding from Markdown Preview reveals Source first;
