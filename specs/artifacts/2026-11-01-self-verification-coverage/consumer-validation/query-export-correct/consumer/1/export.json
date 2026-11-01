@@ -1,0 +1,1 @@
+{"exports": [{"name": " 01 ", "table": "group", "columns": ["select", "a\"b"], "match": {"column": "team name", "value": "x"}, "order_by": ["select"]}, {"name": "数据", "table": "数据 名", "columns": ["编号", "值"], "match": {"column": "值", "value": "中"}, "order_by": ["编号"]}]}

@@ -1,0 +1,204 @@
+{
+  "case": "utc-ledger",
+  "passed": false,
+  "scope": "external registered consumption, not model self-verification evidence",
+  "results": [
+    {
+      "name": "ordinary-z",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\original-delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\0\\input",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\0\\result.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\0",
+      "expected": {
+        "sessions": [
+          {
+            "session": "A",
+            "start_utc": "2026-04-01T10:00:00.000000Z",
+            "end_utc": "2026-04-01T10:01:30.000000Z",
+            "seconds": 90,
+            "start_utc_date": "2026-04-01"
+          },
+          {
+            "session": "B",
+            "start_utc": "2026-04-01T11:00:00.000000Z",
+            "end_utc": "2026-04-01T11:00:30.000000Z",
+            "seconds": 30,
+            "start_utc_date": "2026-04-01"
+          }
+        ],
+        "daily": [
+          {
+            "date": "2026-04-01",
+            "sessions": 2,
+            "seconds": 120
+          }
+        ],
+        "total_seconds": 120
+      },
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "sessions": [
+          {
+            "session": "A",
+            "start_utc": "2026-04-01T10:00:00.000000Z",
+            "end_utc": "2026-04-01T10:01:30.000000Z",
+            "seconds": 90.0,
+            "start_utc_date": "2026-04-01"
+          },
+          {
+            "session": "B",
+            "start_utc": "2026-04-01T11:00:00.000000Z",
+            "end_utc": "2026-04-01T11:00:30.000000Z",
+            "seconds": 30.0,
+            "start_utc_date": "2026-04-01"
+          }
+        ],
+        "daily": [
+          {
+            "date": "2026-04-01",
+            "sessions": 2,
+            "seconds": 120.0
+          }
+        ],
+        "total_seconds": 120.0
+      },
+      "passed": true
+    },
+    {
+      "name": "equivalent-offsets-and-local-reversal",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\original-delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\1\\input",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\1\\result.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\1",
+      "expected": {
+        "sessions": [
+          {
+            "session": "001",
+            "start_utc": "2026-04-01T22:30:00.000000Z",
+            "end_utc": "2026-04-01T22:35:00.000000Z",
+            "seconds": 300,
+            "start_utc_date": "2026-04-01"
+          },
+          {
+            "session": "A",
+            "start_utc": "2026-04-01T22:30:00.000000Z",
+            "end_utc": "2026-04-01T22:35:00.000000Z",
+            "seconds": 300,
+            "start_utc_date": "2026-04-01"
+          }
+        ],
+        "daily": [
+          {
+            "date": "2026-04-01",
+            "sessions": 2,
+            "seconds": 600
+          }
+        ],
+        "total_seconds": 600
+      },
+      "exit": 2,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "error": {
+          "code": "NEGATIVE_INTERVAL",
+          "session": "001"
+        }
+      },
+      "passed": false
+    },
+    {
+      "name": "utc-midnight-fractional-and-text-id",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\original-delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\2\\input",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\2\\result.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\2",
+      "expected": {
+        "sessions": [
+          {
+            "session": " 组,\n",
+            "start_utc": "2026-04-01T23:59:59.500000Z",
+            "end_utc": "2026-04-02T00:00:00.250000Z",
+            "seconds": 0.75,
+            "start_utc_date": "2026-04-01"
+          },
+          {
+            "session": "02",
+            "start_utc": "2026-04-02T00:00:00.000000Z",
+            "end_utc": "2026-04-02T00:00:02.000000Z",
+            "seconds": 2,
+            "start_utc_date": "2026-04-02"
+          }
+        ],
+        "daily": [
+          {
+            "date": "2026-04-01",
+            "sessions": 1,
+            "seconds": 0.75
+          },
+          {
+            "date": "2026-04-02",
+            "sessions": 1,
+            "seconds": 2
+          }
+        ],
+        "total_seconds": 2.75
+      },
+      "exit": 2,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "error": {
+          "code": "NEGATIVE_INTERVAL",
+          "session": "02"
+        }
+      },
+      "passed": false
+    },
+    {
+      "name": "negative-instant-error",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\original-delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\3\\input",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\3\\result.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-r0zp24dp\\3",
+      "expected": {
+        "error": {
+          "code": "NEGATIVE_INTERVAL",
+          "session": "bad"
+        }
+      },
+      "exit": 2,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "error": {
+          "code": "NEGATIVE_INTERVAL",
+          "session": "bad"
+        }
+      },
+      "passed": true
+    }
+  ]
+}

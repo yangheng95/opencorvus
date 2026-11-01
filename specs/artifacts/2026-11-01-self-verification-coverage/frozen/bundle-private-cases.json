@@ -1,0 +1,72 @@
+[
+  {
+    "name": "nested-binary",
+    "entries": [
+      {
+        "source": "left/a.bin",
+        "target": "delivery/raw/a.bin",
+        "base64": "AP8NCgA="
+      },
+      {
+        "source": "right/a.bin",
+        "target": "other/a.bin",
+        "base64": "b3RoZXINCg=="
+      },
+      {
+        "source": "empty",
+        "target": "empty",
+        "base64": ""
+      }
+    ]
+  },
+  {
+    "name": "unicode-order",
+    "entries": [
+      {
+        "source": "资料/a,b.txt",
+        "target": "交付/含 空格.txt",
+        "base64": "57K+56GuDQrlrZfnrKY="
+      },
+      {
+        "source": "meta",
+        "target": "z/final.txt",
+        "base64": "ZW5k"
+      }
+    ]
+  },
+  {
+    "name": "reversed-manifest",
+    "entries": [
+      {
+        "source": "two",
+        "target": "z.txt",
+        "base64": "c2Vjb25k"
+      },
+      {
+        "source": "one",
+        "target": "a.txt",
+        "base64": "Zmlyc3Q="
+      }
+    ]
+  },
+  {
+    "name": "native-source-representation",
+    "entries": [
+      {
+        "source": "left\\a.bin",
+        "target": "delivery/raw/a.bin",
+        "base64": "AP8NCgA="
+      },
+      {
+        "source": "right\\a.bin",
+        "target": "other/a.bin",
+        "base64": "b3RoZXINCg=="
+      },
+      {
+        "source": "empty",
+        "target": "empty",
+        "base64": ""
+      }
+    ]
+  }
+]

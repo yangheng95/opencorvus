@@ -1,0 +1,13 @@
+{
+  "phase": "after",
+  "startedAt": "2026-11-01T14:55:40.906825+00:00",
+  "endedAt": "2026-11-01T15:15:29.421327+00:00",
+  "exit": 0,
+  "command": [
+    "bun",
+    "run",
+    "script/delivery-verification-scope-real.ts"
+  ],
+  "maxActualRequests": 180,
+  "result": "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after\\result.json"
+}

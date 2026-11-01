@@ -1,0 +1,45 @@
+{
+  "registeredAt": "2026-11-01T14:39:29.788771+00:00",
+  "baseCommit": "ad3fc0b49324d415a96dae036841cf1d0166ea71",
+  "model": "openai/gpt-6.1-sol",
+  "maxActualRequestsPerPhase": 140,
+  "phases": [
+    "before",
+    "after"
+  ],
+  "orderedRuns": [
+    {
+      "id": "R09",
+      "phase": "before",
+      "kind": "query-export",
+      "entry": "task"
+    },
+    {
+      "id": "R10",
+      "phase": "before",
+      "kind": "utc-ledger",
+      "entry": "coding"
+    },
+    {
+      "id": "R11",
+      "phase": "after",
+      "kind": "query-export",
+      "entry": "task"
+    },
+    {
+      "id": "R12",
+      "phase": "after",
+      "kind": "utc-ledger",
+      "entry": "coding"
+    }
+  ],
+  "privateCounts": {
+    "query-export": 3,
+    "utc-ledger": 4
+  },
+  "primaryOutcome": "model-authored and actually executed semantic-discrimination conditions, separately owner/internal reviewer/external consumer",
+  "basis": "trace exact serialized inputs, final-entry execution and independently grounded assertions; no keyword/test-count or external-pass proxy",
+  "oldServicesBudgets": "retired",
+  "heartbeat": "PAUSED",
+  "limits": "one run per task per phase; order/randomness and small sample prevent unique prompt causality or global failure-rate claims"
+}

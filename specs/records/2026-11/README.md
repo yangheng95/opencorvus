@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [模型自产测试的语义覆盖](2026-11-01-self-verification-coverage.md)：分开核模型实际自验、内部复核和外部消费。
+
 - [审阅阅读空间](2026-11-01-review-content-space.md)：少量文件收敛高度、多文件滚动与真实历史实页。
 
 - [文件审阅与继续操作](2026-11-01-file-review-continuation.md)：真实历史文件审阅和操作链路。

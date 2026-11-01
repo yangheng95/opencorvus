@@ -1,0 +1,263 @@
+{
+  "case": "query-export",
+  "passed": false,
+  "scope": "external registered consumption, not model self-verification evidence",
+  "results": [
+    {
+      "name": "ordinary-identifiers",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\original-delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\0\\input",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\0\\result.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\0",
+      "expected": {
+        "exports": [
+          {
+            "name": "red rows",
+            "columns": [
+              "seq",
+              "amount"
+            ],
+            "rows": [
+              [
+                "001",
+                7
+              ],
+              [
+                "003",
+                11
+              ]
+            ]
+          }
+        ]
+      },
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "exports": [
+          {
+            "name": "red rows",
+            "columns": [
+              "seq",
+              "amount"
+            ],
+            "rows": [
+              [
+                "001",
+                7
+              ],
+              [
+                "003",
+                11
+              ]
+            ]
+          }
+        ]
+      },
+      "passed": true,
+      "source_before": {
+        "schema": [
+          [
+            "index",
+            "preserve index 0",
+            "events",
+            "CREATE INDEX \"preserve index 0\" ON \"events\"(\"seq\")"
+          ],
+          [
+            "table",
+            "events",
+            "events",
+            "CREATE TABLE \"events\" (\"seq\",\"team\",\"amount\")"
+          ]
+        ],
+        "rows": {
+          "events": [
+            [
+              "001",
+              "red",
+              7
+            ],
+            [
+              "002",
+              "blue",
+              9
+            ],
+            [
+              "003",
+              "red",
+              11
+            ]
+          ]
+        },
+        "version": [
+          [
+            7
+          ]
+        ],
+        "integrity": [
+          [
+            "ok"
+          ]
+        ]
+      },
+      "source_after": {
+        "schema": [
+          [
+            "index",
+            "preserve index 0",
+            "events",
+            "CREATE INDEX \"preserve index 0\" ON \"events\"(\"seq\")"
+          ],
+          [
+            "table",
+            "events",
+            "events",
+            "CREATE TABLE \"events\" (\"seq\",\"team\",\"amount\")"
+          ]
+        ],
+        "rows": {
+          "events": [
+            [
+              "001",
+              "red",
+              7
+            ],
+            [
+              "002",
+              "blue",
+              9
+            ],
+            [
+              "003",
+              "red",
+              11
+            ]
+          ]
+        },
+        "version": [
+          [
+            7
+          ]
+        ],
+        "integrity": [
+          [
+            "ok"
+          ]
+        ]
+      },
+      "source_preserved": true
+    },
+    {
+      "name": "quoted-keyword-unicode-identifiers",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\original-delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\1\\input",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\1\\result.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\1",
+      "expected": {
+        "exports": [
+          {
+            "name": " 01 ",
+            "columns": [
+              "select",
+              "a\"b"
+            ],
+            "rows": [
+              [
+                "001",
+                "keep"
+              ]
+            ]
+          },
+          {
+            "name": "数据",
+            "columns": [
+              "编号",
+              "值"
+            ],
+            "rows": [
+              [
+                "a",
+                "中"
+              ]
+            ]
+          }
+        ]
+      },
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\original-delivered.pyz\\__main__.py\", line 6, in <module>\nsqlite3.OperationalError: near \"select\": syntax error\n",
+      "passed": false,
+      "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\oc-selfcheck-consumer-5s7aeifm\\\\1\\\\result.json'"
+    },
+    {
+      "name": "literal-text-and-case",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\original-delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\2\\input",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\2\\result.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\2",
+      "expected": {
+        "exports": [
+          {
+            "name": "apostrophe",
+            "columns": [
+              "code",
+              "note"
+            ],
+            "rows": [
+              [
+                "001",
+                "O'Reilly"
+              ]
+            ]
+          },
+          {
+            "name": "literal SQL",
+            "columns": [
+              "code",
+              "note"
+            ],
+            "rows": [
+              [
+                "002",
+                "' OR 1=1 --"
+              ]
+            ]
+          },
+          {
+            "name": "case",
+            "columns": [
+              "code",
+              "note"
+            ],
+            "rows": [
+              [
+                "005",
+                "code"
+              ]
+            ]
+          }
+        ]
+      },
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-selfcheck-consumer-5s7aeifm\\original-delivered.pyz\\__main__.py\", line 6, in <module>\nsqlite3.OperationalError: near \"Reilly\": syntax error\n",
+      "passed": false,
+      "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\oc-selfcheck-consumer-5s7aeifm\\\\2\\\\result.json'"
+    }
+  ]
+}

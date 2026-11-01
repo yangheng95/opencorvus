@@ -1,0 +1,290 @@
+[
+  {
+    "id": "prt_g0VZjU7GL00Nqkb4XqfD",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git status --short",
+      "description": "Checks existing modifications before making repairs"
+    },
+    "exit": 0,
+    "output": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjUDnD00rKcd9NAXx",
+    "tool": "apply_patch",
+    "status": "error",
+    "input": {
+      "patchText": "*** Begin Patch\n*** Update File: main.py\n@@\n-import argparse,json,sqlite3\n+\"\"\"Export explicitly named SQLite columns without interpreting input as SQL.\"\"\"\n+\n+import argparse\n+import json\n+import sqlite3\n+from contextlib import closing\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input);c=sqlite3.connect(root/\"source.db\");results=[]\n-for r in json.loads((root/\"export.json\").read_text(encoding=\"utf-8\"))[\"exports\"]:\n-    sql=\"SELECT \"+\",\".join(r[\"columns\"])+\" FROM \"+r[\"table\"]+\" WHERE \"+r[\"match\"][\"column\"]+\" = '\"+r[\"match\"][\"value\"]+\"' ORDER BY \",\".join(r[\"order_by\"])\n-    results.append(dict(name=r[\"name\"],columns=r[\"columns\"],rows=[list(row) for row in c.execute(sql)]))\n-c.close();Path(a.output).write_text(json.dumps(dict(exports=results),ensure_ascii=False),encoding=\"utf-8\")\n+\n+\n+def quote_identifier(name):\n+    \"\"\"Quote one identifier (not a dotted path or SQL expression).\"\"\"\n+    return '\"' + name.replace('\"', '\"\"') + '\"'\n+\n+\n+def export_database(root):\n+    requests = json.loads((root / \"export.json\").read_text(encoding=\"utf-8\"))\n+    uri = (root / \"source.db\").resolve().as_uri() + \"?mode=ro\"\n+    results = []\n+    with closing(sqlite3.connect(uri, uri=True)) as connection:\n+        # Hold a consistent read snapshot across all requested exports.\n+        connection.execute(\"BEGIN\")\n+        for request in requests[\"exports\"]:\n+            columns = \", \".join(map(quote_identifier, request[\"columns\"]))\n+            table = quote_identifier(request[\"table\"])\n+            match = quote_identifier(request[\"match\"][\"column\"])\n+            order = \", \".join(\n+                quote_identifier(column) + \" ASC\"\n+                for column in request[\"order_by\"]\n+            )\n+            # Unary + removes column affinity without changing its value/type.\n+            # Thus integer 1 is not text '1', and NOCASE column declarations\n+            # cannot override the explicitly selected BINARY comparison.\n+            sql = (\n+                f\"SELECT {columns} FROM {table} \"\n+                f\"WHERE +{match} COLLATE BINARY = ? ORDER BY {order}\"\n+            )\n+            rows = connection.execute(sql, (request[\"match\"][\"value\"],)).fetchall()\n+            results.append({\n+                \"name\": request[\"name\"],\n+                \"columns\": request[\"columns\"],\n+                \"rows\": [list(row) for row in rows],\n+            })\n+    return {\"exports\": results}\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", type=Path)\n+    parser.add_argument(\"--output\", required=True, type=Path)\n+    args = parser.parse_args()\n+    database = args.input / \"source.db\"\n+    if (args.output.resolve() == database.resolve() or\n+            (args.output.exists() and database.exists() and\n+             args.output.samefile(database))):\n+        parser.error(\"output must not overwrite source.db\")\n+    result = export_database(args.input)\n+    args.output.write_text(json.dumps(result, ensure_ascii=False), encoding=\"utf-8\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: build.py\n+\"\"\"Build the standalone zipapp: python build.py.\"\"\"\n+\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def main():\n+    root = Path(__file__).resolve().parent\n+    source = (root / \"main.py\").read_bytes()\n+    compile(source, \"__main__.py\", \"exec\")\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.writestr(\"__main__.py\", source)\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: test_export.py\n+\"\"\"Black-box contract tests against the delivered archive, using only stdlib.\"\"\"\n+\n+import json\n+from pathlib import Path\n+import sqlite3\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+\n+\n+APP = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n+\n+\n+class ExportTests(unittest.TestCase):\n+    def setUp(self):\n+        self.temp = tempfile.TemporaryDirectory(prefix=\"query export \")\n+        self.addCleanup(self.temp.cleanup)\n+        self.root = Path(self.temp.name)\n+        self.inputs = self.root / \"input # Unicode 雪\"\n+        self.inputs.mkdir()\n+        self.cwd = self.root / \"unrelated cwd\"\n+        self.cwd.mkdir()\n+        self.db = self.inputs / \"source.db\"\n+\n+    def run_export(self, requests, expected):\n+        (self.inputs / \"export.json\").write_text(\n+            json.dumps({\"exports\": requests}, ensure_ascii=False), encoding=\"utf-8\"\n+        )\n+        before = self.db.read_bytes()\n+        with sqlite3.connect(self.db) as connection:\n+            logical_before = list(connection.iterdump())\n+        output = self.root / \"result 雪.json\"\n+        process = subprocess.run(\n+            [sys.executable, str(APP), str(self.inputs), \"--output\", str(output)],\n+            cwd=self.cwd, capture_output=True, text=True,\n+        )\n+        self.assertEqual(process.returncode, 0, process.stderr)\n+        self.assertEqual(json.loads(output.read_text(encoding=\"utf-8\")), expected)\n+        self.assertEqual(self.db.read_bytes(), before)\n+        with sqlite3.connect(self.db) as connection:\n+            self.assertEqual(list(connection.iterdump()), logical_before)\n+            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), (73,))\n+\n+    def test_identifier_value_and_order_boundaries(self):\n+        # Fixed DDL and literal expected rows are independent of exporter quoting.\n+        with sqlite3.connect(self.db) as connection:\n+            connection.executescript('''\n+                CREATE TABLE \"select 雪;--\" (\n+                    \"a\"\"b\" TEXT COLLATE NOCASE, \"order\" INTEGER,\n+                    \"x.y\" TEXT, \"NULL\" INTEGER, \"rank desc\" INTEGER);\n+                CREATE INDEX \"index odd\" ON \"select 雪;--\" (\"order\");\n+                PRAGMA user_version=73;\n+            ''')\n+            connection.executemany('INSERT INTO \"select 雪;--\" VALUES (?,?,?,?,?)', [\n+                (\"O'Reilly\", 2, \"second\", None, 1),\n+                (\"O'Reilly\", 1, \"later\", 8, 2),\n+                (\"O'Reilly\", 1, \"first 雪\", 0, 1),\n+                (\"o'reilly\", 0, \"wrong case\", 9, 0),\n+                (\"' OR 1=1 --\", 3, \"literal\", -7, 0),\n+                (\"001\", 4, \"zeroes\", None, 0),\n+                (\"\", 5, \"empty\", 1, 0),\n+                (\"a\\x00b\", 6, \"nul text\", 2, 0),\n+            ])\n+        requests = []\n+        expected = []\n+        for name, value, rows in [\n+            (' name \" 雪 ', \"O'Reilly\", [[\"first 雪\", 0, 1], [\"later\", 8, 1], [\"second\", None, 2]]),\n+            (\"sql\", \"' OR 1=1 --\", [[\"literal\", -7, 3]]),\n+            (\"numeric\", \"001\", [[\"zeroes\", None, 4]]),\n+            (\"empty\", \"\", [[\"empty\", 1, 5]]),\n+            (\"nul\", \"a\\x00b\", [[\"nul text\", 2, 6]]),\n+            (\"missing\", \"absent\", []),\n+        ]:\n+            columns = [\"x.y\", \"NULL\", \"order\"]\n+            requests.append({\"name\": name, \"table\": \"select 雪;--\", \"columns\": columns,\n+                             \"match\": {\"column\": 'a\"b', \"value\": value},\n+                             \"order_by\": [\"order\", \"rank desc\"]})\n+            expected.append({\"name\": name, \"columns\": columns, \"rows\": rows})\n+        self.run_export(requests, {\"exports\": expected})\n+\n+    def test_text_equality_types_and_sqlite_sorting(self):\n+        with sqlite3.connect(self.db) as connection:\n+            connection.executescript('''\n+                CREATE TABLE data (value, sortkey, payload);\n+                CREATE TABLE numeric_data (value NUMERIC);\n+                INSERT INTO numeric_data VALUES (1), ('1x'), (NULL);\n+                PRAGMA user_version=73;\n+            ''')\n+            connection.executemany(\"INSERT INTO data VALUES (?,?,?)\", [\n+                (\"1\", \"10\", \"text10\"), (\"1\", 10, \"int10\"),\n+                (\"1\", None, \"null\"), (\"1\", -2, \"negative\"),\n+                (\"1\", \"2\", \"text2\"), (1, 0, \"integer must not match\"),\n+                (\"01\", 0, \"leading zero\"), (None, 0, \"null must not match\"),\n+            ])\n+        requests = [\n+            {\"name\": \"types\", \"table\": \"data\", \"columns\": [\"payload\", \"sortkey\", \"value\"],\n+             \"match\": {\"column\": \"value\", \"value\": \"1\"}, \"order_by\": [\"sortkey\"]},\n+            {\"name\": \"affinity\", \"table\": \"numeric_data\", \"columns\": [\"value\"],\n+             \"match\": {\"column\": \"value\", \"value\": \"01\"}, \"order_by\": [\"value\"]},\n+        ]\n+        self.run_export(requests, {\"exports\": [\n+            {\"name\": \"types\", \"columns\": [\"payload\", \"sortkey\", \"value\"], \"rows\": [\n+                [\"null\", None, \"1\"], [\"negative\", -2, \"1\"], [\"int10\", 10, \"1\"],\n+                [\"text10\", \"10\", \"1\"], [\"text2\", \"2\", \"1\"]]},\n+            {\"name\": \"affinity\", \"columns\": [\"value\"], \"rows\": []},\n+        ]})\n+\n+    def test_empty_exports(self):\n+        with sqlite3.connect(self.db) as connection:\n+            connection.execute(\"PRAGMA user_version=73\")\n+        self.run_export([], {\"exports\": []})\n+\n+    def test_output_cannot_replace_database(self):\n+        with sqlite3.connect(self.db) as connection:\n+            connection.execute(\"CREATE TABLE data (value TEXT)\")\n+        before = self.db.read_bytes()\n+        process = subprocess.run(\n+            [sys.executable, str(APP), str(self.inputs), \"--output\", str(self.db)],\n+            cwd=self.cwd, capture_output=True,\n+        )\n+        self.assertNotEqual(process.returncode, 0)\n+        self.assertEqual(self.db.read_bytes(), before)\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n*** End Patch"
+    },
+    "exit": null,
+    "output": null,
+    "failure": {
+      "kind": "tool-execution",
+      "name": "Error",
+      "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\query-export\\main.py:\nimport argparse,json,sqlite3\nfrom pathlib import Path\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input);c=sqlite3.connect(root/\"source.db\");results=[]\nfor r in json.loads((root/\"export.json\").read_text(encoding=\"utf-8\"))[\"exports\"]:\n    sql=\"SELECT \"+\",\".join(r[\"columns\"])+\" FROM \"+r[\"table\"]+\" WHERE \"+r[\"match\"][\"column\"]+\" = '\"+r[\"match\"][\"value\"]+\"' ORDER BY \",\".join(r[\"order_by\"])\n    results.append(dict(name=r[\"name\"],columns=r[\"columns\"],rows=[list(row) for row in c.execute(sql)]))\nc.close();Path(a.output).write_text(json.dumps(dict(exports=results),ensure_ascii=False),encoding=\"utf-8\")",
+      "originSite": "session.processor.tool-error",
+      "classification": "tool-execution",
+      "data": {
+        "toolCallId": "call_f6b4167ed06b49a4872ab8b4b8261588",
+        "toolName": "apply_patch"
+      }
+    }
+  },
+  {
+    "id": "prt_g0VZjUdIA00YwQkM5b0D",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "ls",
+      "description": "Verifies build destination is the project directory"
+    },
+    "exit": 0,
+    "output": "CONTRACT.md\nbuild.py\nmain.py\nsample\ntest_export.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjUeHF00nUy2OeENe",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python build.py",
+      "description": "Builds standalone zipapp from repaired source"
+    },
+    "exit": 0,
+    "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjUfeX00Nl43pnte8",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -m unittest -v test_export",
+      "description": "Runs packaged exporter against contract boundary cases"
+    },
+    "exit": 1,
+    "output": "test_empty_exports (test_export.ExportTests.test_empty_exports) ... ERROR\r\ntest_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries) ... ERROR\r\ntest_output_cannot_replace_database (test_export.ExportTests.test_output_cannot_replace_database) ... ERROR\r\ntest_text_equality_types_and_sqlite_sorting (test_export.ExportTests.test_text_equality_types_and_sqlite_sorting) ... ERROR\r\n\r\n======================================================================\r\nERROR: test_empty_exports (test_export.ExportTests.test_empty_exports)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 98mrb9f1\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 98mrb9f1\\\\input # Unicode 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 6c47g5x_\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 6c47g5x_\\\\input # Unicode 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_output_cannot_replace_database (test_export.ExportTests.test_output_cannot_replace_database)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export t5mix1m6\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export t5mix1m6\\\\input # Unicode 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_text_equality_types_and_sqlite_sorting (test_export.ExportTests.test_text_equality_types_and_sqlite_sorting)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export k__6wklb\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export k__6wklb\\\\input # Unicode 雪\\\\source.db'\r\n\r\n----------------------------------------------------------------------\r\nRan 4 tests in 1.259s\r\n\r\nFAILED (errors=4)\r\n\n\n<bash_metadata>\nexit code: 1\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjUjo500PotsVwoGh",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -m unittest -v test_export",
+      "description": "Rechecks packaged behavior with closed fixture connections"
+    },
+    "exit": 0,
+    "output": "test_empty_exports (test_export.ExportTests.test_empty_exports) ... ok\r\ntest_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries) ... ok\r\ntest_output_cannot_replace_database (test_export.ExportTests.test_output_cannot_replace_database) ... ok\r\ntest_text_equality_types_and_sqlite_sorting (test_export.ExportTests.test_text_equality_types_and_sqlite_sorting) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 4 tests in 0.699s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjUuPO00axBX4WSZc",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -m unittest -v test_export",
+      "description": "Validates isolated zipapp and expanded identifier coverage"
+    },
+    "exit": 0,
+    "output": "test_empty_exports (test_export.ExportTests.test_empty_exports) ... ok\r\ntest_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries) ... ok\r\ntest_output_cannot_replace_database (test_export.ExportTests.test_output_cannot_replace_database) ... ok\r\ntest_quoted_table_and_sql_looking_identifiers (test_export.ExportTests.test_quoted_table_and_sql_looking_identifiers) ... ok\r\ntest_text_equality_types_and_sqlite_sorting (test_export.ExportTests.test_text_equality_types_and_sqlite_sorting) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 5 tests in 0.942s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjUxjr00hWY0NekgY",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -c 'import sqlite3; from contextlib import closing; from pathlib import Path; p=Path(\"sample/source.db\").resolve(); c=sqlite3.connect(p.as_uri()+\"?mode=ro\",uri=True); print(c.execute(\"SELECT sql FROM sqlite_schema ORDER BY name\").fetchall()); print(c.execute(\"SELECT * FROM events ORDER BY seq\").fetchall()); c.close()'",
+      "description": "Inspects supplied sample database read-only for expected values"
+    },
+    "exit": 0,
+    "output": "[('CREATE TABLE \"events\" (\"seq\",\"team\",\"amount\")',), ('CREATE INDEX \"preserve index 0\" ON \"events\"(\"seq\")',)]\r\n[('001', 'red', 7), ('002', 'blue', 9), ('003', 'red', 11)]\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjV17d00hSs1RaDRx",
+    "tool": "apply_patch",
+    "status": "error",
+    "input": {
+      "patchText": "*** Begin Patch\n*** Update File: test_export.py\n@@\n         with closing(sqlite3.connect(self.db)) as connection, connection:\n             logical_before = list(connection.iterdump())\n+            version_before = connection.execute(\"PRAGMA user_version\").fetchone()\n@@\n-            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), (73,))\n+            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), version_before)\n@@\n     def test_empty_exports(self):\n@@\n         self.run_export([], {\"exports\": []})\n+\n+    def test_supplied_sample(self):\n+        sample = APP.parent / \"sample\"\n+        shutil.copyfile(sample / \"source.db\", self.db)\n+        requests = json.loads((sample / \"export.json\").read_text(encoding=\"utf-8\"))\n+        self.run_export(requests[\"exports\"], {\"exports\": [\n+            {\"name\": \"red rows\", \"columns\": [\"seq\", \"amount\"],\n+             \"rows\": [[\"001\", 7], [\"003\", 11]]},\n+        ]})\n*** Add File: HANDOFF.md\n+# SQLite query-export handoff\n+\n+Run with Python 3 (standard library only):\n+\n+```text\n+python deliverable.pyz INPUT_DIRECTORY --output RESULT_JSON\n+```\n+\n+`INPUT_DIRECTORY` supplies `source.db` and UTF-8 `export.json` as specified in\n+`CONTRACT.md`. Paths can be absolute or relative to the caller's working directory.\n+The archive is self-contained; the source files are not needed at runtime.\n+\n+## Repair\n+\n+- `main.py`: readable CLI/export functions, double-quoted identifiers with embedded\n+  quotes escaped, bound match values, explicit BINARY comparison with column affinity\n+  removed, and native ascending SQLite ordering. INTEGER values are not silently\n+  coerced to matching text. JSON preserves export/column order and cell types.\n+- Database opened with a read-only SQLite URI and one consistent read transaction;\n+  the connection is explicitly closed. Output cannot alias the source database.\n+- `build.py`: rebuilds `deliverable.pyz` from `main.py`, independent of build cwd.\n+- `test_export.py`: black-box regression tests with literal expected outputs.\n+\n+## Rebuild and test\n+\n+```text\n+python build.py\n+python -m unittest -v test_export\n+```\n+\n+Tested on Windows with Python 3.14: six tests exercise the supplied sample,\n+quoted/Unicode/SQL-looking identifiers, apostrophes and SQL-looking values,\n+NOCASE override, exact numeric-looking text versus INTEGER, NULLs, integer limits,\n+multi-column ordering, empty exports/results, exact names and column ordering,\n+and refusal to overwrite the database. Each export runs a copied archive without\n+adjacent source files from an unrelated working directory. Checks compare complete\n+decoded JSON against fixed expected values and compare database bytes, logical\n+schema/data/index dumps, and user_version before and after.\n+\n+Inputs are assumed to meet CONTRACT.md; this is not a general input-validation tool.\n+Results are materialized in memory. No third-party dependencies or delegation used.\n*** End Patch"
+    },
+    "exit": null,
+    "output": null,
+    "failure": {
+      "kind": "tool-execution",
+      "name": "Error",
+      "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\query-export\\test_export.py:\n            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), (73,))",
+      "originSite": "session.processor.tool-error",
+      "classification": "tool-execution",
+      "data": {
+        "toolCallId": "call_16303c7ec4244a20a4813aaaec3de656",
+        "toolName": "apply_patch"
+      }
+    }
+  },
+  {
+    "id": "prt_g0VZjVBil00Q0v3QJLRb",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -m unittest -v test_export",
+      "description": "Runs final six-test suite including supplied sample"
+    },
+    "exit": 0,
+    "output": "test_empty_exports (test_export.ExportTests.test_empty_exports) ... ok\r\ntest_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries) ... ok\r\ntest_output_cannot_replace_database (test_export.ExportTests.test_output_cannot_replace_database) ... ok\r\ntest_quoted_table_and_sql_looking_identifiers (test_export.ExportTests.test_quoted_table_and_sql_looking_identifiers) ... ok\r\ntest_supplied_sample (test_export.ExportTests.test_supplied_sample) ... ok\r\ntest_text_equality_types_and_sqlite_sorting (test_export.ExportTests.test_text_equality_types_and_sqlite_sorting) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 6 tests in 1.090s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjVDAQ00Pk21kJObl",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git diff -- main.py",
+      "description": "Audits exporter changes before final delivery"
+    },
+    "exit": 0,
+    "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\ndiff --git a/main.py b/main.py\nindex 4a12c92..7c97863 100644\n--- a/main.py\n+++ b/main.py\n@@ -1,7 +1,60 @@\n-import argparse,json,sqlite3\n+\"\"\"Export explicitly named SQLite columns without interpreting input as SQL.\"\"\"\n+\n+import argparse\n+import json\n+import sqlite3\n+from contextlib import closing\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input);c=sqlite3.connect(root/\"source.db\");results=[]\n-for r in json.loads((root/\"export.json\").read_text(encoding=\"utf-8\"))[\"exports\"]:\n-    sql=\"SELECT \"+\",\".join(r[\"columns\"])+\" FROM \"+r[\"table\"]+\" WHERE \"+r[\"match\"][\"column\"]+\" = '\"+r[\"match\"][\"value\"]+\"' ORDER BY \"+\",\".join(r[\"order_by\"])\n-    results.append(dict(name=r[\"name\"],columns=r[\"columns\"],rows=[list(row) for row in c.execute(sql)]))\n-c.close();Path(a.output).write_text(json.dumps(dict(exports=results),ensure_ascii=False),encoding=\"utf-8\")\n+\n+\n+def quote_identifier(name):\n+    \"\"\"Quote one identifier, never a dotted path or SQL expression.\"\"\"\n+    return '\"' + name.replace('\"', '\"\"') + '\"'\n+\n+\n+def export_database(root):\n+    requests = json.loads((root / \"export.json\").read_text(encoding=\"utf-8\"))\n+    uri = (root / \"source.db\").resolve().as_uri() + \"?mode=ro\"\n+    results = []\n+    with closing(sqlite3.connect(uri, uri=True)) as connection:\n+        connection.execute(\"BEGIN\")  # One consistent read snapshot for all exports.\n+        for request in requests[\"exports\"]:\n+            columns = \", \".join(map(quote_identifier, request[\"columns\"]))\n+            table = quote_identifier(request[\"table\"])\n+            match = quote_identifier(request[\"match\"][\"column\"])\n+            order = \", \".join(\n+                quote_identifier(column) + \" ASC\" for column in request[\"order_by\"]\n+            )\n+            # Unary + removes affinity without changing value/type. Integer 1\n+            # must not equal text '1'; explicit BINARY overrides column NOCASE.\n+            sql = (\n+                f\"SELECT {columns} FROM {table} \"\n+                f\"WHERE +{match} COLLATE BINARY = ? ORDER BY {order}\"\n+            )\n+            rows = connection.execute(sql, (request[\"match\"][\"value\"],)).fetchall()\n+            results.append(\n+                {\n+                    \"name\": request[\"name\"],\n+                    \"columns\": request[\"columns\"],\n+                    \"rows\": [list(row) for row in rows],\n+                }\n+            )\n+    return {\"exports\": results}\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", type=Path)\n+    parser.add_argument(\"--output\", required=True, type=Path)\n+    args = parser.parse_args()\n+    database = args.input / \"source.db\"\n+    if args.output.resolve() == database.resolve() or (\n+        args.output.exists() and database.exists() and args.output.samefile(database)\n+    ):\n+        parser.error(\"output must not overwrite source.db\")\n+    result = export_database(args.input)\n+    args.output.write_text(json.dumps(result, ensure_ascii=False), encoding=\"utf-8\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjVFis00n2qeyBSn5",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git status --short",
+      "description": "Checks task-owned files and preserves unrelated files"
+    },
+    "exit": 0,
+    "output": " M main.py\n?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? HANDOFF.md\n?? __pycache__/\n?? build.py\n?? deliverable.pyz\n?? test_export.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjVGrB008zgy6esnr",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git log -3 --oneline",
+      "description": "Checks repository commit style for scoped repair"
+    },
+    "exit": 0,
+    "output": "2147faa test: initialize delivery prototype\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjVJd600YC7r8z1Fn",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python build.py",
+      "description": "Rebuilds final archive from audited source"
+    },
+    "exit": 0,
+    "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjVL7m00K8OHf3HT5",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -m unittest -v test_export",
+      "description": "Verifies rebuilt final archive across all contract tests"
+    },
+    "exit": 0,
+    "output": "test_empty_exports (test_export.ExportTests.test_empty_exports) ... ok\r\ntest_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries) ... ok\r\ntest_output_cannot_replace_database (test_export.ExportTests.test_output_cannot_replace_database) ... ok\r\ntest_quoted_table_and_sql_looking_identifiers (test_export.ExportTests.test_quoted_table_and_sql_looking_identifiers) ... ok\r\ntest_supplied_sample (test_export.ExportTests.test_supplied_sample) ... ok\r\ntest_text_equality_types_and_sqlite_sorting (test_export.ExportTests.test_text_equality_types_and_sqlite_sorting) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 6 tests in 1.160s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjVNSO00g0ZYm1rvo",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git add -- main.py build.py test_export.py deliverable.pyz HANDOFF.md",
+      "description": "Stages only audited repair source and deliverables"
+    },
+    "exit": 0,
+    "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'HANDOFF.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'build.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'test_export.py', LF will be replaced by CRLF the next time Git touches it\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjVPEh00kGZVIXf2q",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git diff --cached --stat",
+      "description": "Verifies staged scope excludes runtime and unrelated files"
+    },
+    "exit": 0,
+    "output": " HANDOFF.md      |  41 ++++++++++\n build.py        |  16 ++++\n deliverable.pyz | Bin 0 -> 1121 bytes\n main.py         |  65 +++++++++++++--\n test_export.py  | 248 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n 5 files changed, 364 insertions(+), 6 deletions(-)\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjVQO100OXcK70A3A",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git commit -m \"fix: preserve exact SQLite export semantics in standalone zipapp\"",
+      "description": "Commits scoped exporter repair and tested handoff"
+    },
+    "exit": 0,
+    "output": "[master ad1710d] fix: preserve exact SQLite export semantics in standalone zipapp\n 5 files changed, 364 insertions(+), 6 deletions(-)\n create mode 100644 HANDOFF.md\n create mode 100644 build.py\n create mode 100644 deliverable.pyz\n create mode 100644 test_export.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjVRuC00bbIiUUH1g",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git status --short",
+      "description": "Confirms committed repair and untouched unrelated files"
+    },
+    "exit": 0,
+    "output": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? __pycache__/\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjVX1I00msej66t0U",
+    "tool": "manage_task",
+    "status": "completed",
+    "input": {
+      "summary": "Repaired the SQLite exporter directly without delegation, committed the scoped repair as ad1710d, and published deliverable.pyz, main.py, build.py, test_export.py and HANDOFF.md. Final rebuilt zipapp passed six black-box tests on Windows/Python 3.14, including the supplied sample and contract-derived cases with literal expected JSON: unusual and quoted identifiers, SQL-looking values, apostrophes, Unicode, BINARY case sensitivity, numeric-looking text versus INTEGER without affinity coercion, NULL and integer limits, ascending multi-column and mixed-type SQLite ordering, export/column/name preservation, empty results/exports and database-overwrite refusal. Tests consume isolated copies of the final archive from unrelated working directories without adjacent source, compare exact decoded output values, and compare source database bytes, logical schema/data/index dumps and user_version before/after. Initial test-fixture connection cleanup errors were repaired by explicit connection closure; final suite passes. Uses Python standard library only. Maintains read-only database access and bound values separately from quoted identifiers. Valid contract inputs are assumed and results are materialized in memory. Existing unrelated untracked project/runtime files were preserved.",
+      "evidence_locators": [
+        {
+          "source": "session",
+          "session_id": "ses_-zUQGVxG7zz6bbXjbB05"
+        },
+        {
+          "source": "task_artifact_snapshot",
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hM3VpqiQARk22GsYOIxY",
+            "task_id": "tsk_g00VZjU1kW00TlEcoBgt",
+            "snapshot_id": "eca06228-8500-5cab-acd5-e08e84198e0c",
+            "manifest_sha256": "afd0505c8e610d9dce238efe7e07fc601a51115e5b7af4fbd3b4be48f7f1ed9d"
+          }
+        }
+      ],
+      "deliverable_artifact_locators": [
+        {
+          "source": "task_artifact_snapshot",
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hM3VpqiQARk22GsYOIxY",
+            "task_id": "tsk_g00VZjU1kW00TlEcoBgt",
+            "snapshot_id": "eca06228-8500-5cab-acd5-e08e84198e0c",
+            "manifest_sha256": "afd0505c8e610d9dce238efe7e07fc601a51115e5b7af4fbd3b4be48f7f1ed9d"
+          }
+        }
+      ],
+      "accepted_delivery_slice_revision_ids": [],
+      "workflow_id": null,
+      "action": "complete_task"
+    },
+    "exit": null,
+    "output": "Task tsk_g00VZjU1kW00TlEcoBgt completed: Repaired the SQLite exporter directly without delegation, committed the scoped repair as ad1710d, and published deliverable.pyz, main.py, build.py, test_export.py and HANDOFF.md. Final rebuilt zipapp passed six black-box tests on Windows/Python 3.14, including the supplied sample and contract-derived cases with literal expected JSON: unusual and quoted identifiers, SQL-looking values, apostrophes, Unicode, BINARY case sensitivity, numeric-looking text versus INTEGER without affinity coercion, NULL and integer limits, ascending multi-column and mixed-type SQLite ordering, export/column/name preservation, empty results/exports and database-overwrite refusal. Tests consume isolated copies of the final archive from unrelated working directories without adjacent source, compare exact decoded output values, and compare source database bytes, logical schema/data/index dumps and user_version before/after. Initial test-fixture connection cleanup errors were repaired by explicit connection closure; final suite passes. Uses Python standard library only. Maintains read-only database access and bound values separately from quoted identifiers. Valid contract inputs are assumed and results are materialized in memory. Existing unrelated untracked project/runtime files were preserved..",
+    "failure": null
+  }
+]

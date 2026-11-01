@@ -1,0 +1,131 @@
+[
+  {
+    "id": "prt_g0VZjVkkw00sKPs1B3bP",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git status --short",
+      "description": "Check initial workspace for existing changes"
+    },
+    "exit": 0,
+    "output": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjW40l00OVqtdjZoU",
+    "tool": "apply_patch",
+    "status": "error",
+    "input": {
+      "patchText": "*** Begin Patch\n*** Update File: test_ledger.py\n@@\n-             \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\", \"metadata\": \"ignored, text\"},\n+             \"ended_at\": \"2024-01-01T23:00:00.123457+00:00\", \"metadata\": \"ignored, text\"},\n@@\n-        expected_sessions = [\n-            {\"session\": rows[0][\"session\"], \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n-             \"end_utc\": \"2024-01-01T22:00:00.123457Z\"},\n-        ]\n-        # A backward local clock with a positive UTC duration.\n-        rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n         expected_sessions = [\n*** End Patch"
+    },
+    "exit": null,
+    "output": null,
+    "failure": {
+      "kind": "tool-execution",
+      "name": "Error",
+      "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py:\n             \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\", \"metadata\": \"ignored, text\"},",
+      "originSite": "session.processor.tool-error",
+      "classification": "tool-execution",
+      "data": {
+        "toolCallId": "call_f5099323e1984e0ca465c458c1ca9b7a",
+        "toolName": "apply_patch"
+      }
+    }
+  },
+  {
+    "id": "prt_g0VZjW8ht00i272fNMNa",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "ls",
+      "description": "Verify project location before building archive"
+    },
+    "exit": 0,
+    "output": "CONTRACT.md\nbuild.py\nmain.py\nsample\ntest_ledger.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjWBTo00XnY2XXS0H",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python build.py",
+      "description": "Build standalone zipapp from repaired source"
+    },
+    "exit": 0,
+    "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjWCvg00rJo3cX4Nq",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -m unittest -v",
+      "description": "Test final archive using external working directories"
+    },
+    "exit": 0,
+    "output": "test_empty_ledger (test_ledger.LedgerTests.test_empty_ledger) ... ok\r\ntest_first_negative_uses_instants_and_exact_id (test_ledger.LedgerTests.test_first_negative_uses_instants_and_exact_id) ... ok\r\ntest_fraction_lengths_and_nonhour_offsets (test_ledger.LedgerTests.test_fraction_lengths_and_nonhour_offsets) ... ok\r\ntest_microsecond_negative (test_ledger.LedgerTests.test_microsecond_negative) ... ok\r\ntest_utc_semantics_and_csv_variations (test_ledger.LedgerTests.test_utc_semantics_and_csv_variations) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 5 tests in 0.923s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjWLsw00vAW8GCxbt",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -m unittest -v",
+      "description": "Verify copied archive against seven contract tests"
+    },
+    "exit": 0,
+    "output": "test_empty_ledger (test_ledger.LedgerTests.test_empty_ledger) ... ok\r\ntest_first_negative_uses_instants_and_exact_id (test_ledger.LedgerTests.test_first_negative_uses_instants_and_exact_id) ... ok\r\ntest_fraction_lengths_and_nonhour_offsets (test_ledger.LedgerTests.test_fraction_lengths_and_nonhour_offsets) ... ok\r\ntest_microsecond_negative (test_ledger.LedgerTests.test_microsecond_negative) ... ok\r\ntest_supplied_sample (test_ledger.LedgerTests.test_supplied_sample) ... ok\r\ntest_utc_semantics_and_csv_variations (test_ledger.LedgerTests.test_utc_semantics_and_csv_variations) ... ok\r\ntest_year_boundary_and_sorted_days (test_ledger.LedgerTests.test_year_boundary_and_sorted_days) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 7 tests in 1.946s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjWNYq001hcUJIQpE",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git diff --check",
+      "description": "Check tracked changes for whitespace errors"
+    },
+    "exit": 0,
+    "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjWObc00jad0btpSu",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git diff -- main.py",
+      "description": "Review repaired timestamp and report implementation"
+    },
+    "exit": 0,
+    "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\ndiff --git a/main.py b/main.py\nindex 176363d..6a2459f 100644\n--- a/main.py\n+++ b/main.py\n@@ -1,10 +1,89 @@\n-import argparse,csv,json\n-from datetime import datetime\n+import argparse\n+import csv\n+import json\n+import re\n+from datetime import datetime, timezone\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();rows=[];daily={}\n-with open(Path(a.input)/\"sessions.csv\",encoding=\"utf-8\",newline=\"\") as f:\n-    for r in csv.DictReader(f):\n-        start=datetime.fromisoformat(r[\"started_at\"][:19]);end=datetime.fromisoformat(r[\"ended_at\"][:19]);seconds=(end-start).total_seconds()\n-        if seconds<0:Path(a.output).write_text(json.dumps(dict(error=dict(code=\"NEGATIVE_INTERVAL\",session=r[\"session\"]))),encoding=\"utf-8\");raise SystemExit(2)\n-        day=start.date().isoformat();rows.append(dict(session=r[\"session\"],start_utc=start.isoformat(timespec=\"microseconds\")+\"Z\",end_utc=end.isoformat(timespec=\"microseconds\")+\"Z\",seconds=seconds,start_utc_date=day));bucket=daily.setdefault(day,dict(date=day,sessions=0,seconds=0));bucket[\"sessions\"]+=1;bucket[\"seconds\"]+=seconds\n-Path(a.output).write_text(json.dumps(dict(sessions=rows,daily=[daily[k] for k in sorted(daily)],total_seconds=sum(r[\"seconds\"] for r in rows)),ensure_ascii=False),encoding=\"utf-8\")\n+\n+\n+TIMESTAMP = re.compile(\n+    r\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\"\n+    r\"(?:\\.[0-9]{1,6})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])\"\n+)\n+\n+\n+def parse_timestamp(value):\n+    if TIMESTAMP.fullmatch(value) is None:\n+        raise ValueError(\"Invalid timestamp: {!r}\".format(value))\n+    return datetime.fromisoformat(value.replace(\"Z\", \"+00:00\")).astimezone(timezone.utc)\n+\n+\n+def canonical(value):\n+    return value.isoformat(timespec=\"microseconds\").replace(\"+00:00\", \"Z\")\n+\n+\n+def build_report(input_directory):\n+    sessions = []\n+    daily = {}\n+    total_microseconds = 0\n+    with (Path(input_directory) / \"sessions.csv\").open(\n+        encoding=\"utf-8\", newline=\"\"\n+    ) as source:\n+        reader = csv.DictReader(source)\n+        if not {\"session\", \"started_at\", \"ended_at\"}.issubset(reader.fieldnames or []):\n+            raise ValueError(\n+                \"sessions.csv must contain session, started_at and ended_at columns\"\n+            )\n+        for row in reader:\n+            start = parse_timestamp(row[\"started_at\"])\n+            end = parse_timestamp(row[\"ended_at\"])\n+            if end < start:\n+                return {\n+                    \"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": row[\"session\"]}\n+                }, 2\n+            elapsed = end - start\n+            microseconds = (\n+                elapsed.days * 86400 + elapsed.seconds\n+            ) * 1000000 + elapsed.microseconds\n+            day = start.date().isoformat()\n+            sessions.append(\n+                {\n+                    \"session\": row[\"session\"],\n+                    \"start_utc\": canonical(start),\n+                    \"end_utc\": canonical(end),\n+                    \"seconds\": microseconds / 1000000,\n+                    \"start_utc_date\": day,\n+                }\n+            )\n+            bucket = daily.setdefault(day, {\"sessions\": 0, \"microseconds\": 0})\n+            bucket[\"sessions\"] += 1\n+            bucket[\"microseconds\"] += microseconds\n+            total_microseconds += microseconds\n+    return {\n+        \"sessions\": sessions,\n+        \"daily\": [\n+            {\n+                \"date\": day,\n+                \"sessions\": daily[day][\"sessions\"],\n+                \"seconds\": daily[day][\"microseconds\"] / 1000000,\n+            }\n+            for day in sorted(daily)\n+        ],\n+        \"total_seconds\": total_microseconds / 1000000,\n+    }, 0\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=\"Report session durations in UTC.\")\n+    parser.add_argument(\"input\", help=\"Directory containing sessions.csv\")\n+    parser.add_argument(\"--output\", required=True, help=\"Destination JSON file\")\n+    args = parser.parse_args()\n+    report, status = build_report(args.input)\n+    Path(args.output).write_text(\n+        json.dumps(report, ensure_ascii=False, indent=2) + \"\\n\", encoding=\"utf-8\"\n+    )\n+    return status\n+\n+\n+if __name__ == \"__main__\":\n+    raise SystemExit(main())\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjWT0R00REE4Uq8um",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git status --short",
+      "description": "Confirm final deliverables and preserved unrelated files"
+    },
+    "exit": 0,
+    "output": " M main.py\n?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? __pycache__/\n?? build.py\n?? deliverable.pyz\n?? test_ledger.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjWUjl008ptyrg3fv",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -c \"import shutil; shutil.rmtree('__pycache__')\"",
+      "description": "Remove generated test bytecode cache directory"
+    },
+    "exit": 0,
+    "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  }
+]

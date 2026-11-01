@@ -1,0 +1,297 @@
+{
+  "originalSourceUnchanged": true,
+  "originalTestBytesEqual": true,
+  "fault": "reject every native backslash source while preserving other roles and effects",
+  "originalModelTests": [
+    {
+      "name": "owner-positive-original",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_delivery.DeliveryTests.test_exact_bytes_names_order_and_standalone_execution"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\original-r06-sensitivity",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "test_exact_bytes_names_order_and_standalone_execution (test_delivery.DeliveryTests.test_exact_bytes_names_order_and_standalone_execution) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 0.288s\n\nOK\n"
+    },
+    {
+      "name": "reviewer-original",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-B",
+        "-c",
+        "import json,pathlib,random,shutil,subprocess,sys,tempfile,zipfile; root=pathlib.Path.cwd(); app=root/\".review-delivered.pyz\"; targets=[\"z\",\"A space, dots.../resume.txt\",\"nested/\\u6570\\u636e.bin\",\"e\\u0301\",\"\\u00e9\",\"\\U0001f600/data\",\".hidden/...\",\"prefix\",\"prefix/child\",\"_bundle_index.json/data\",\"a,b.c\",\"Empty\"]; sizes=[0,1,256,1024*1024-1,1024*1024,1024*1024+1,2*1024*1024+7,17,31,100,12,0]; expected={}; rows=[]; runs=0\nwith tempfile.TemporaryDirectory(prefix=\".review-fixtures-\",dir=root) as td:\n base=pathlib.Path(td); inputs=base/\"input \\u6570\\u636e, space\"; inputs.mkdir(); cwd=base/\"isolated cwd\"; cwd.mkdir(); shutil.copyfile(app,cwd/\"deliverable.pyz\")\n for i,(target,size) in enumerate(zip(targets,sizes)):\n  source=\"folder %d, \\u00e9/same.bin\"%i; path=inputs/source; path.parent.mkdir(); data=(bytes(range(256))*((size+255)//256))[:size]; path.write_bytes(data); expected[target]=data; rows.append({\"source\":source,\"target\":target})\n rows.append({\"source\":rows[2][\"source\"],\"target\":\"same source, twice\"}); expected[\"same source, twice\"]=expected[targets[2]]; (inputs/\"excluded.bin\").write_bytes(b\"do not copy\"); expected_index={\"files\":[{\"path\":k,\"bytes\":len(expected[k])} for k in sorted(expected)]}; index_bytes=None\n for ascii_json in (True,False):\n  for order in range(3):\n   chosen=list(rows); random.Random(order+37).shuffle(chosen); (inputs/\"manifest.json\").write_text(json.dumps({\"files\":chosen},ensure_ascii=ascii_json),encoding=\"utf-8\"); cmd=[sys.executable,\"-I\",\"deliverable.pyz\",\"../\"+inputs.name,\"--output\",\"result.zip\"]; p=subprocess.run(cmd,cwd=cwd,capture_output=True); assert p.returncode==0,p.stderr\n   with zipfile.ZipFile(cwd/\"result.zip\") as z:\n    assert z.testzip() is None; names=[i.filename for i in z.infolist() if not i.is_dir()]; assert len(names)==len(set(names)); assert set(names)==set(expected)|{\"_bundle_index.json\"}; assert {k:z.read(k) for k in expected}==expected; ib=z.read(\"_bundle_index.json\"); assert json.loads(ib)==expected_index; assert index_bytes is None or ib==index_bytes; index_bytes=ib\n   runs+=1\n for row in rows: assert (inputs/row[\"source\"]).read_bytes()==expected[row[\"target\"]]\n (inputs/\"manifest.json\").write_text(\"{\\\"files\\\": []}\",encoding=\"utf-8\"); p=subprocess.run([sys.executable,\"-I\",str(cwd/\"deliverable.pyz\"),str(inputs),\"--output\",str(cwd/\"empty.zip\")],cwd=base,capture_output=True); assert p.returncode==0,p.stderr\n with zipfile.ZipFile(cwd/\"empty.zip\") as z: assert z.namelist()==[\"_bundle_index.json\"]; assert json.loads(z.read(\"_bundle_index.json\"))=={\"files\":[]}\n print(\"PASS:\",runs,\"mixed-manifest isolated executions plus empty manifest; 13 exact payloads each; full member sets, Unicode-sorted index and byte counts, invariant serialized index, source preservation; escaped/literal Unicode, composed/decomposed names, astral Unicode, commas/spaces/dots, duplicate basenames, repeated source, prefix names, binary/empty and 1 MiB boundary sizes.\"); print(\"Runtime:\",sys.version.split()[0])"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\original-r06-sensitivity",
+      "exit": 0,
+      "stdout": "PASS: 6 mixed-manifest isolated executions plus empty manifest; 13 exact payloads each; full member sets, Unicode-sorted index and byte counts, invariant serialized index, source preservation; escaped/literal Unicode, composed/decomposed names, astral Unicode, commas/spaces/dots, duplicate basenames, repeated source, prefix names, binary/empty and 1 MiB boundary sizes.\nRuntime: 3.12.14\n",
+      "stderr": ""
+    }
+  ],
+  "external": {
+    "case": "bundle",
+    "passed": false,
+    "results": [
+      {
+        "name": "nested-binary",
+        "source_admissibility": [
+          {
+            "source": "left/a.bin",
+            "target": "delivery/raw/a.bin",
+            "native_path": "left\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "right/a.bin",
+            "target": "other/a.bin",
+            "native_path": "right\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "empty",
+            "target": "empty",
+            "native_path": "empty",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\0",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\0\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\0",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "empty": "",
+            "other/a.bin": "b3RoZXINCg=="
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": 0
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "other/a.bin": "b3RoZXINCg==",
+            "empty": ""
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": 0
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "passed": true
+      },
+      {
+        "name": "unicode-order",
+        "source_admissibility": [
+          {
+            "source": "资料/a,b.txt",
+            "target": "交付/含 空格.txt",
+            "native_path": "资料\\a,b.txt",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "meta",
+            "target": "z/final.txt",
+            "native_path": "meta",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\1",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\1\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\1",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "z/final.txt": "ZW5k",
+            "交付/含 空格.txt": "57K+56GuDQrlrZfnrKY="
+          },
+          "index": {
+            "files": [
+              {
+                "path": "z/final.txt",
+                "bytes": 3
+              },
+              {
+                "path": "交付/含 空格.txt",
+                "bytes": 14
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "交付/含 空格.txt": "57K+56GuDQrlrZfnrKY=",
+            "z/final.txt": "ZW5k"
+          },
+          "index": {
+            "files": [
+              {
+                "path": "z/final.txt",
+                "bytes": 3
+              },
+              {
+                "path": "交付/含 空格.txt",
+                "bytes": 14
+              }
+            ]
+          }
+        },
+        "passed": true
+      },
+      {
+        "name": "reversed-manifest",
+        "source_admissibility": [
+          {
+            "source": "two",
+            "target": "z.txt",
+            "native_path": "two",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "one",
+            "target": "a.txt",
+            "native_path": "one",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\2",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\2\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\2",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "a.txt": "Zmlyc3Q=",
+            "z.txt": "c2Vjb25k"
+          },
+          "index": {
+            "files": [
+              {
+                "path": "a.txt",
+                "bytes": 5
+              },
+              {
+                "path": "z.txt",
+                "bytes": 6
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "z.txt": "c2Vjb25k",
+            "a.txt": "Zmlyc3Q="
+          },
+          "index": {
+            "files": [
+              {
+                "path": "a.txt",
+                "bytes": 5
+              },
+              {
+                "path": "z.txt",
+                "bytes": 6
+              }
+            ]
+          }
+        },
+        "passed": true
+      },
+      {
+        "name": "native-source-representation",
+        "source_admissibility": [
+          {
+            "source": "left\\a.bin",
+            "target": "delivery/raw/a.bin",
+            "native_path": "left\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "right\\a.bin",
+            "target": "other/a.bin",
+            "native_path": "right\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "empty",
+            "target": "empty",
+            "native_path": "empty",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\3",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\3\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-_xanefih\\3",
+        "exit": 1,
+        "stdout": "",
+        "stderr": "error: evaluation-only source-domain regression\n",
+        "passed": false,
+        "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\oc-workflow-consumer-_xanefih\\\\3\\\\result.zip'"
+      }
+    ]
+  },
+  "scope": "external sensitivity experiment using original model-authored tests; not a new model run or evidence that the model originally ran this regression"
+}

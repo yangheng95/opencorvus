@@ -1,0 +1,39 @@
+{
+  "head": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after\\query-export-delivered",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit": 0,
+    "stdout": "feeb9ffb3b332d03a935b4a0757c409fc786bd52\n",
+    "stderr": ""
+  },
+  "status": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after\\query-export-delivered",
+      "status",
+      "--short"
+    ],
+    "exit": 0,
+    "stdout": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? __pycache__/\n",
+    "stderr": ""
+  },
+  "log": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after\\query-export-delivered",
+      "log",
+      "-3",
+      "--format=%H %s"
+    ],
+    "exit": 0,
+    "stdout": "feeb9ffb3b332d03a935b4a0757c409fc786bd52 fix: preserve exact SQLite export semantics in standalone zipapp\n752089a23b22cfdb74dca1e528653c83fc79c278 test: initialize delivery prototype\n",
+    "stderr": ""
+  }
+}

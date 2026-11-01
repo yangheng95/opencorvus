@@ -25,13 +25,14 @@ function required(name: string) {
 const authSource = path.resolve(required("AUTH_SOURCE"))
 const model = required("MODEL")
 const phase = required("PHASE")
-const cases: Array<{ kind: "bundle" | "download" | "temperature"; entry: "coding" | "task" }> = JSON.parse(
-  required("CASES"),
-)
+const cases: Array<{
+  kind: "bundle" | "download" | "temperature" | "query-export" | "utc-ledger"
+  entry: "coding" | "task"
+}> = JSON.parse(required("CASES"))
 assert(cases.length > 0)
 assert(new Set(cases.map((row) => row.kind)).size === cases.length)
 for (const row of cases) {
-  assert(["bundle", "download", "temperature"].includes(row.kind))
+  assert(["bundle", "download", "temperature", "query-export", "utc-ledger"].includes(row.kind))
   assert(["coding", "task"].includes(row.entry))
 }
 const output = path.resolve(required("OUTPUT"))
@@ -40,6 +41,7 @@ const maxRequests = Number(required("MAX_REQUESTS"))
 assert(Number.isSafeInteger(maxRequests) && maxRequests > 0)
 const workflowChecker = path.resolve(import.meta.dir, "../../../script/benchmark/delivery_workflow_cases.py")
 const domainChecker = path.resolve(import.meta.dir, "../../../script/benchmark/delivery_domain_cases.py")
+const selfcheckChecker = path.resolve(import.meta.dir, "../../../script/benchmark/delivery_selfcheck_cases.py")
 const supervisor = prepareTestProcessSupervisor()
 const isolated = await bootstrapIsolatedTestRuntime("runner")
 applyIsolatedTestUserEnvironment(isolated)
@@ -179,7 +181,12 @@ try {
     activity: SessionStatus.getActivity,
   })
   for (const { kind, entry } of cases) {
-    const consumer = kind === "bundle" ? workflowChecker : domainChecker
+    const consumer =
+      kind === "bundle"
+        ? workflowChecker
+        : kind === "query-export" || kind === "utc-ledger"
+          ? selfcheckChecker
+          : domainChecker
     const project = path.join(root, kind)
     const setup = JSON.parse(
       execFileSync(python, [consumer, "setup", kind, project], { encoding: "utf8", windowsHide: true }),
@@ -352,7 +359,8 @@ try {
   report.status = failure || cleanupErrors.length ? "execution_failed" : "completed"
   report.consumerScope =
     "Per-case registered inputs and independently derived outputs; completion is not universal contract certification"
-  report.registeredCasesAgree = report.cases.every((row: any) => row.grade?.passed)
+  report.registeredCasesAgree =
+    report.cases.length === cases.length && report.cases.every((row: any) => row.grade?.passed)
   report.error =
     failure instanceof Error
       ? { name: failure.name, message: failure.message }

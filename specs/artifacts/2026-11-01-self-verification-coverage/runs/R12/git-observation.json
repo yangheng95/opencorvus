@@ -1,0 +1,39 @@
+{
+  "head": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after\\utc-ledger-delivered",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit": 0,
+    "stdout": "91bb8805431b277f9b5116c73fc60b95390b2bc6\n",
+    "stderr": ""
+  },
+  "status": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after\\utc-ledger-delivered",
+      "status",
+      "--short"
+    ],
+    "exit": 0,
+    "stdout": " M main.py\n?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? __pycache__/\n?? build.py\n?? deliverable.pyz\n?? test_ledger.py\n",
+    "stderr": ""
+  },
+  "log": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after\\utc-ledger-delivered",
+      "log",
+      "-3",
+      "--format=%H %s"
+    ],
+    "exit": 0,
+    "stdout": "91bb8805431b277f9b5116c73fc60b95390b2bc6 test: initialize delivery prototype\n",
+    "stderr": ""
+  }
+}

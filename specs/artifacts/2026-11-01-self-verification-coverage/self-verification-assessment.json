@@ -1,0 +1,479 @@
+{
+  "assessedAt": "2026-11-01T15:21:28.377460+00:00",
+  "runs": [
+    {
+      "id": "R09",
+      "phase": "before",
+      "kind": "query-export",
+      "producerTest": "ExportTests.test_identifier_value_and_order_boundaries",
+      "executedPart": "prt_g0VZjVL7m00K8OHf3HT5",
+      "suiteCount": 6,
+      "producerCoverage": [
+        "fixed quoted/Unicode/SQL-looking identifier DDL",
+        "literal apostrophe/SQL-looking/case-sensitive text filters",
+        "complete JSON literal expectations and source byte/logical/user_version preservation"
+      ],
+      "reviewerCoverage": "No delegated reviewer observed",
+      "externalCases": 3,
+      "sensitivityFile": "before-test-sensitivity/results.json",
+      "taskID": "tsk_g00VZjU1kW00TlEcoBgt",
+      "sessionID": null,
+      "canonical": {
+        "requests": 32,
+        "outcomes": 32,
+        "states": {
+          "completed": 30,
+          "failed": 2
+        }
+      },
+      "processFaults": [
+        {
+          "part": "prt_g0VZjUDnD00rKcd9NAXx",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Update File: main.py\n@@\n-import argparse,json,sqlite3\n+\"\"\"Export explicitly named SQLite columns without interpreting input as SQL.\"\"\"\n+\n+import argparse\n+import json\n+import sqlite3\n+from contextlib import closing\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input);c=sqlite3.connect(root/\"source.db\");results=[]\n-for r in json.loads((root/\"export.json\").read_text(encoding=\"utf-8\"))[\"exports\"]:\n-    sql=\"SELECT \"+\",\".join(r[\"columns\"])+\" FROM \"+r[\"table\"]+\" WHERE \"+r[\"match\"][\"column\"]+\" = '\"+r[\"match\"][\"value\"]+\"' ORDER BY \",\".join(r[\"order_by\"])\n-    results.append(dict(name=r[\"name\"],columns=r[\"columns\"],rows=[list(row) for row in c.execute(sql)]))\n-c.close();Path(a.output).write_text(json.dumps(dict(exports=results),ensure_ascii=False),encoding=\"utf-8\")\n+\n+\n+def quote_identifier(name):\n+    \"\"\"Quote one identifier (not a dotted path or SQL expression).\"\"\"\n+    return '\"' + name.replace('\"', '\"\"') + '\"'\n+\n+\n+def export_database(root):\n+    requests = json.loads((root / \"export.json\").read_text(encoding=\"utf-8\"))\n+    uri = (root / \"source.db\").resolve().as_uri() + \"?mode=ro\"\n+    results = []\n+    with closing(sqlite3.connect(uri, uri=True)) as connection:\n+        # Hold a consistent read snapshot across all requested exports.\n+        connection.execute(\"BEGIN\")\n+        for request in requests[\"exports\"]:\n+            columns = \", \".join(map(quote_identifier, request[\"columns\"]))\n+            table = quote_identifier(request[\"table\"])\n+            match = quote_identifier(request[\"match\"][\"column\"])\n+            order = \", \".join(\n+                quote_identifier(column) + \" ASC\"\n+                for column in request[\"order_by\"]\n+            )\n+            # Unary + removes column affinity without changing its value/type.\n+            # Thus integer 1 is not text '1', and NOCASE column declarations\n+            # cannot override the explicitly selected BINARY comparison.\n+            sql = (\n+                f\"SELECT {columns} FROM {table} \"\n+                f\"WHERE +{match} COLLATE BINARY = ? ORDER BY {order}\"\n+            )\n+            rows = connection.execute(sql, (request[\"match\"][\"value\"],)).fetchall()\n+            results.append({\n+                \"name\": request[\"name\"],\n+                \"columns\": request[\"columns\"],\n+                \"rows\": [list(row) for row in rows],\n+            })\n+    return {\"exports\": results}\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", type=Path)\n+    parser.add_argument(\"--output\", required=True, type=Path)\n+    args = parser.parse_args()\n+    database = args.input / \"source.db\"\n+    if (args.output.resolve() == database.resolve() or\n+            (args.output.exists() and database.exists() and\n+             args.output.samefile(database))):\n+        parser.error(\"output must not overwrite source.db\")\n+    result = export_database(args.input)\n+    args.output.write_text(json.dumps(result, ensure_ascii=False), encoding=\"utf-8\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: build.py\n+\"\"\"Build the standalone zipapp: python build.py.\"\"\"\n+\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def main():\n+    root = Path(__file__).resolve().parent\n+    source = (root / \"main.py\").read_bytes()\n+    compile(source, \"__main__.py\", \"exec\")\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.writestr(\"__main__.py\", source)\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: test_export.py\n+\"\"\"Black-box contract tests against the delivered archive, using only stdlib.\"\"\"\n+\n+import json\n+from pathlib import Path\n+import sqlite3\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+\n+\n+APP = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n+\n+\n+class ExportTests(unittest.TestCase):\n+    def setUp(self):\n+        self.temp = tempfile.TemporaryDirectory(prefix=\"query export \")\n+        self.addCleanup(self.temp.cleanup)\n+        self.root = Path(self.temp.name)\n+        self.inputs = self.root / \"input # Unicode 雪\"\n+        self.inputs.mkdir()\n+        self.cwd = self.root / \"unrelated cwd\"\n+        self.cwd.mkdir()\n+        self.db = self.inputs / \"source.db\"\n+\n+    def run_export(self, requests, expected):\n+        (self.inputs / \"export.json\").write_text(\n+            json.dumps({\"exports\": requests}, ensure_ascii=False), encoding=\"utf-8\"\n+        )\n+        before = self.db.read_bytes()\n+        with sqlite3.connect(self.db) as connection:\n+            logical_before = list(connection.iterdump())\n+        output = self.root / \"result 雪.json\"\n+        process = subprocess.run(\n+            [sys.executable, str(APP), str(self.inputs), \"--output\", str(output)],\n+            cwd=self.cwd, capture_output=True, text=True,\n+        )\n+        self.assertEqual(process.returncode, 0, process.stderr)\n+        self.assertEqual(json.loads(output.read_text(encoding=\"utf-8\")), expected)\n+        self.assertEqual(self.db.read_bytes(), before)\n+        with sqlite3.connect(self.db) as connection:\n+            self.assertEqual(list(connection.iterdump()), logical_before)\n+            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), (73,))\n+\n+    def test_identifier_value_and_order_boundaries(self):\n+        # Fixed DDL and literal expected rows are independent of exporter quoting.\n+        with sqlite3.connect(self.db) as connection:\n+            connection.executescript('''\n+                CREATE TABLE \"select 雪;--\" (\n+                    \"a\"\"b\" TEXT COLLATE NOCASE, \"order\" INTEGER,\n+                    \"x.y\" TEXT, \"NULL\" INTEGER, \"rank desc\" INTEGER);\n+                CREATE INDEX \"index odd\" ON \"select 雪;--\" (\"order\");\n+                PRAGMA user_version=73;\n+            ''')\n+            connection.executemany('INSERT INTO \"select 雪;--\" VALUES (?,?,?,?,?)', [\n+                (\"O'Reilly\", 2, \"second\", None, 1),\n+                (\"O'Reilly\", 1, \"later\", 8, 2),\n+                (\"O'Reilly\", 1, \"first 雪\", 0, 1),\n+                (\"o'reilly\", 0, \"wrong case\", 9, 0),\n+                (\"' OR 1=1 --\", 3, \"literal\", -7, 0),\n+                (\"001\", 4, \"zeroes\", None, 0),\n+                (\"\", 5, \"empty\", 1, 0),\n+                (\"a\\x00b\", 6, \"nul text\", 2, 0),\n+            ])\n+        requests = []\n+        expected = []\n+        for name, value, rows in [\n+            (' name \" 雪 ', \"O'Reilly\", [[\"first 雪\", 0, 1], [\"later\", 8, 1], [\"second\", None, 2]]),\n+            (\"sql\", \"' OR 1=1 --\", [[\"literal\", -7, 3]]),\n+            (\"numeric\", \"001\", [[\"zeroes\", None, 4]]),\n+            (\"empty\", \"\", [[\"empty\", 1, 5]]),\n+            (\"nul\", \"a\\x00b\", [[\"nul text\", 2, 6]]),\n+            (\"missing\", \"absent\", []),\n+        ]:\n+            columns = [\"x.y\", \"NULL\", \"order\"]\n+            requests.append({\"name\": name, \"table\": \"select 雪;--\", \"columns\": columns,\n+                             \"match\": {\"column\": 'a\"b', \"value\": value},\n+                             \"order_by\": [\"order\", \"rank desc\"]})\n+            expected.append({\"name\": name, \"columns\": columns, \"rows\": rows})\n+        self.run_export(requests, {\"exports\": expected})\n+\n+    def test_text_equality_types_and_sqlite_sorting(self):\n+        with sqlite3.connect(self.db) as connection:\n+            connection.executescript('''\n+                CREATE TABLE data (value, sortkey, payload);\n+                CREATE TABLE numeric_data (value NUMERIC);\n+                INSERT INTO numeric_data VALUES (1), ('1x'), (NULL);\n+                PRAGMA user_version=73;\n+            ''')\n+            connection.executemany(\"INSERT INTO data VALUES (?,?,?)\", [\n+                (\"1\", \"10\", \"text10\"), (\"1\", 10, \"int10\"),\n+                (\"1\", None, \"null\"), (\"1\", -2, \"negative\"),\n+                (\"1\", \"2\", \"text2\"), (1, 0, \"integer must not match\"),\n+                (\"01\", 0, \"leading zero\"), (None, 0, \"null must not match\"),\n+            ])\n+        requests = [\n+            {\"name\": \"types\", \"table\": \"data\", \"columns\": [\"payload\", \"sortkey\", \"value\"],\n+             \"match\": {\"column\": \"value\", \"value\": \"1\"}, \"order_by\": [\"sortkey\"]},\n+            {\"name\": \"affinity\", \"table\": \"numeric_data\", \"columns\": [\"value\"],\n+             \"match\": {\"column\": \"value\", \"value\": \"01\"}, \"order_by\": [\"value\"]},\n+        ]\n+        self.run_export(requests, {\"exports\": [\n+            {\"name\": \"types\", \"columns\": [\"payload\", \"sortkey\", \"value\"], \"rows\": [\n+                [\"null\", None, \"1\"], [\"negative\", -2, \"1\"], [\"int10\", 10, \"1\"],\n+                [\"text10\", \"10\", \"1\"], [\"text2\", \"2\", \"1\"]]},\n+            {\"name\": \"affinity\", \"columns\": [\"value\"], \"rows\": []},\n+        ]})\n+\n+    def test_empty_exports(self):\n+        with sqlite3.connect(self.db) as connection:\n+            connection.execute(\"PRAGMA user_version=73\")\n+        self.run_export([], {\"exports\": []})\n+\n+    def test_output_cannot_replace_database(self):\n+        with sqlite3.connect(self.db) as connection:\n+            connection.execute(\"CREATE TABLE data (value TEXT)\")\n+        before = self.db.read_bytes()\n+        process = subprocess.run(\n+            [sys.executable, str(APP), str(self.inputs), \"--output\", str(self.db)],\n+            cwd=self.cwd, capture_output=True,\n+        )\n+        self.assertNotEqual(process.returncode, 0)\n+        self.assertEqual(self.db.read_bytes(), before)\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\query-export\\main.py:\nimport argparse,json,sqlite3\nfrom pathlib import Path\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input);c=sqlite3.connect(root/\"source.db\");results=[]\nfor r in json.loads((root/\"export.json\").read_text(encoding=\"utf-8\"))[\"exports\"]:\n    sql=\"SELECT \"+\",\".join(r[\"columns\"])+\" FROM \"+r[\"table\"]+\" WHERE \"+r[\"match\"][\"column\"]+\" = '\"+r[\"match\"][\"value\"]+\"' ORDER BY \",\".join(r[\"order_by\"])\n    results.append(dict(name=r[\"name\"],columns=r[\"columns\"],rows=[list(row) for row in c.execute(sql)]))\nc.close();Path(a.output).write_text(json.dumps(dict(exports=results),ensure_ascii=False),encoding=\"utf-8\")",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_f6b4167ed06b49a4872ab8b4b8261588",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null
+        },
+        {
+          "part": "prt_g0VZjUfeX00Nl43pnte8",
+          "tool": "bash",
+          "input": {
+            "command": "python -m unittest -v test_export",
+            "description": "Runs packaged exporter against contract boundary cases"
+          },
+          "failure": null,
+          "exit": 1,
+          "output": "test_empty_exports (test_export.ExportTests.test_empty_exports) ... ERROR\r\ntest_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries) ... ERROR\r\ntest_output_cannot_replace_database (test_export.ExportTests.test_output_cannot_replace_database) ... ERROR\r\ntest_text_equality_types_and_sqlite_sorting (test_export.ExportTests.test_text_equality_types_and_sqlite_sorting) ... ERROR\r\n\r\n======================================================================\r\nERROR: test_empty_exports (test_export.ExportTests.test_empty_exports)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 98mrb9f1\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 98mrb9f1\\\\input # Unicode 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 6c47g5x_\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 6c47g5x_\\\\input # Unicode 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_output_cannot_replace_database (test_export.ExportTests.test_output_cannot_replace_database)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export t5mix1m6\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export t5mix1m6\\\\input # Unicode 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_text_equality_types_and_sqlite_sorting (test_export.ExportTests.test_text_equality_types_and_sqlite_sorting)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export k__6wklb\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export k__6wklb\\\\input # Unicode 雪\\\\source.db'\r\n\r\n----------------------------------------------------------------------\r\nRan 4 tests in 1.259s\r\n\r\nFAILED (errors=4)\r\n\n\n<bash_metadata>\nexit code: 1\n</bash_metadata>"
+        },
+        {
+          "part": "prt_g0VZjV17d00hSs1RaDRx",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Update File: test_export.py\n@@\n         with closing(sqlite3.connect(self.db)) as connection, connection:\n             logical_before = list(connection.iterdump())\n+            version_before = connection.execute(\"PRAGMA user_version\").fetchone()\n@@\n-            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), (73,))\n+            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), version_before)\n@@\n     def test_empty_exports(self):\n@@\n         self.run_export([], {\"exports\": []})\n+\n+    def test_supplied_sample(self):\n+        sample = APP.parent / \"sample\"\n+        shutil.copyfile(sample / \"source.db\", self.db)\n+        requests = json.loads((sample / \"export.json\").read_text(encoding=\"utf-8\"))\n+        self.run_export(requests[\"exports\"], {\"exports\": [\n+            {\"name\": \"red rows\", \"columns\": [\"seq\", \"amount\"],\n+             \"rows\": [[\"001\", 7], [\"003\", 11]]},\n+        ]})\n*** Add File: HANDOFF.md\n+# SQLite query-export handoff\n+\n+Run with Python 3 (standard library only):\n+\n+```text\n+python deliverable.pyz INPUT_DIRECTORY --output RESULT_JSON\n+```\n+\n+`INPUT_DIRECTORY` supplies `source.db` and UTF-8 `export.json` as specified in\n+`CONTRACT.md`. Paths can be absolute or relative to the caller's working directory.\n+The archive is self-contained; the source files are not needed at runtime.\n+\n+## Repair\n+\n+- `main.py`: readable CLI/export functions, double-quoted identifiers with embedded\n+  quotes escaped, bound match values, explicit BINARY comparison with column affinity\n+  removed, and native ascending SQLite ordering. INTEGER values are not silently\n+  coerced to matching text. JSON preserves export/column order and cell types.\n+- Database opened with a read-only SQLite URI and one consistent read transaction;\n+  the connection is explicitly closed. Output cannot alias the source database.\n+- `build.py`: rebuilds `deliverable.pyz` from `main.py`, independent of build cwd.\n+- `test_export.py`: black-box regression tests with literal expected outputs.\n+\n+## Rebuild and test\n+\n+```text\n+python build.py\n+python -m unittest -v test_export\n+```\n+\n+Tested on Windows with Python 3.14: six tests exercise the supplied sample,\n+quoted/Unicode/SQL-looking identifiers, apostrophes and SQL-looking values,\n+NOCASE override, exact numeric-looking text versus INTEGER, NULLs, integer limits,\n+multi-column ordering, empty exports/results, exact names and column ordering,\n+and refusal to overwrite the database. Each export runs a copied archive without\n+adjacent source files from an unrelated working directory. Checks compare complete\n+decoded JSON against fixed expected values and compare database bytes, logical\n+schema/data/index dumps, and user_version before and after.\n+\n+Inputs are assumed to meet CONTRACT.md; this is not a general input-validation tool.\n+Results are materialized in memory. No third-party dependencies or delegation used.\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\query-export\\test_export.py:\n            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), (73,))",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_16303c7ec4244a20a4813aaaec3de656",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null
+        }
+      ],
+      "externalCasesAgree": true,
+      "publishedProgramBindings": [
+        {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hM3VpqiQARk22GsYOIxY",
+            "task_id": "tsk_g00VZjU1kW00TlEcoBgt",
+            "snapshot_id": "eca06228-8500-5cab-acd5-e08e84198e0c",
+            "manifest_sha256": "afd0505c8e610d9dce238efe7e07fc601a51115e5b7af4fbd3b4be48f7f1ed9d"
+          },
+          "resource": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hM3VpqiQARk22GsYOIxY",
+              "task_id": "tsk_g00VZjU1kW00TlEcoBgt",
+              "snapshot_id": "eca06228-8500-5cab-acd5-e08e84198e0c",
+              "manifest_sha256": "afd0505c8e610d9dce238efe7e07fc601a51115e5b7af4fbd3b4be48f7f1ed9d"
+            },
+            "tree": "resources",
+            "path": "deliverable.pyz",
+            "bytes": 1121,
+            "sha256": "a7e321514928f5b4ddb3f9235a0e7734589036bed03ea3ecfa5aaf7d1500a982",
+            "media_type": "application/zip"
+          },
+          "relativeBlob": ".opencorvus\\.r\\tasks\\tsk_g00VZjU1kW00TlEcoBgt\\artifacts\\snapshots\\eca06228-8500-5cab-acd5-e08e84198e0c\\resources\\deliverable.pyz",
+          "exactProgramBytesEqual": true,
+          "immutableResourceIntegrity": true
+        }
+      ],
+      "modelExecutionProvenance": "original unmodified model tools; root sensitivity execution is separately labeled"
+    },
+    {
+      "id": "R10",
+      "phase": "before",
+      "kind": "utc-ledger",
+      "producerTest": "LedgerTests.test_utc_semantics_and_csv_variations",
+      "executedPart": "prt_g0VZjWLsw00vAW8GCxbt",
+      "suiteCount": 7,
+      "producerCoverage": [
+        "mixed numeric offsets with local date/time reversal",
+        "fixed UTC canonical values, start UTC day, daily/total duration",
+        "fractional seconds, exact CSV IDs and explicit negative error"
+      ],
+      "reviewerCoverage": "Coding execution directly",
+      "externalCases": 4,
+      "sensitivityFile": "before-test-sensitivity/results.json",
+      "taskID": null,
+      "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+      "canonical": {
+        "requests": 23,
+        "outcomes": 23,
+        "states": {
+          "completed": 22,
+          "failed": 1
+        }
+      },
+      "processFaults": [
+        {
+          "part": "prt_g0VZjW40l00OVqtdjZoU",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Update File: test_ledger.py\n@@\n-             \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\", \"metadata\": \"ignored, text\"},\n+             \"ended_at\": \"2024-01-01T23:00:00.123457+00:00\", \"metadata\": \"ignored, text\"},\n@@\n-        expected_sessions = [\n-            {\"session\": rows[0][\"session\"], \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n-             \"end_utc\": \"2024-01-01T22:00:00.123457Z\"},\n-        ]\n-        # A backward local clock with a positive UTC duration.\n-        rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n         expected_sessions = [\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py:\n             \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\", \"metadata\": \"ignored, text\"},",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_f5099323e1984e0ca465c458c1ca9b7a",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null
+        }
+      ],
+      "externalCasesAgree": true,
+      "publishedProgramBindings": [],
+      "modelExecutionProvenance": "original unmodified model tools; root sensitivity execution is separately labeled"
+    },
+    {
+      "id": "R11",
+      "phase": "after",
+      "kind": "query-export",
+      "producerTest": "ExportContractTests.test_identifiers_values_order_and_types",
+      "executedPart": "prt_g0VZjYTtd00X1aiQAKm0",
+      "suiteCount": 5,
+      "producerCoverage": [
+        "quoted Unicode/quote/SQL-looking identifiers",
+        "bound text data with case/NUL/trailing space distinctions",
+        "INTEGER/mixed/TEXT affinities and source bytes"
+      ],
+      "reviewerCoverage": "Separate model reviewer ran 54 exports and two empty-list calls; NUMERIC and encoding coverage attributed to reviewer, not producer. Delegation itself breached user instruction.",
+      "externalCases": 3,
+      "sensitivityFile": "after-test-sensitivity/results.json",
+      "taskID": "tsk_g00VZjXqvp00kPXoh3G6",
+      "sessionID": null,
+      "canonical": {
+        "requests": 65,
+        "outcomes": 65,
+        "states": {
+          "completed": 63,
+          "failed": 2
+        }
+      },
+      "processFaults": [
+        {
+          "part": "prt_g0VZjYHNk00giK4ZYZZR",
+          "tool": "bash",
+          "input": {
+            "command": "python -m unittest -v test_export",
+            "description": "Test packaged exporter against contract edge cases"
+          },
+          "failure": null,
+          "exit": 1,
+          "output": "test_identifiers_values_order_and_types (test_export.ExportContractTests.test_identifiers_values_order_and_types) ... ERROR\r\ntest_output_cannot_overwrite_database (test_export.ExportContractTests.test_output_cannot_overwrite_database) ... ERROR\r\ntest_sqlite_order_and_empty_exports (test_export.ExportContractTests.test_sqlite_order_and_empty_exports) ... ERROR\r\ntest_text_equality_without_affinity_coercion (test_export.ExportContractTests.test_text_equality_without_affinity_coercion) ... ERROR\r\n\r\n======================================================================\r\nERROR: test_identifiers_values_order_and_types (test_export.ExportContractTests.test_identifiers_values_order_and_types)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\query-export\\test_export.py\", line 22, in setUp\r\n    self.inputs.mkdir()\r\n    ~~~~~~~~~~~~~~~~~^^\r\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 1011, in mkdir\r\n    os.mkdir(self, mode)\r\n    ~~~~~~~~^^^^^^^^^^^^\r\nOSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export ozykrre0\\\\input #? Unicode'\r\n\r\n======================================================================\r\nERROR: test_output_cannot_overwrite_database (test_export.ExportContractTests.test_output_cannot_overwrite_database)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\query-export\\test_export.py\", line 22, in setUp\r\n    self.inputs.mkdir()\r\n    ~~~~~~~~~~~~~~~~~^^\r\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 1011, in mkdir\r\n    os.mkdir(self, mode)\r\n    ~~~~~~~~^^^^^^^^^^^^\r\nOSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export d789n959\\\\input #? Unicode'\r\n\r\n======================================================================\r\nERROR: test_sqlite_order_and_empty_exports (test_export.ExportContractTests.test_sqlite_order_and_empty_exports)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\query-export\\test_export.py\", line 22, in setUp\r\n    self.inputs.mkdir()\r\n    ~~~~~~~~~~~~~~~~~^^\r\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 1011, in mkdir\r\n    os.mkdir(self, mode)\r\n    ~~~~~~~~^^^^^^^^^^^^\r\nOSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export ig841yft\\\\input #? Unicode'\r\n\r\n======================================================================\r\nERROR: test_text_equality_without_affinity_coercion (test_export.ExportContractTests.test_text_equality_without_affinity_coercion)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\query-export\\test_export.py\", line 22, in setUp\r\n    self.inputs.mkdir()\r\n    ~~~~~~~~~~~~~~~~~^^\r\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 1011, in mkdir\r\n    os.mkdir(self, mode)\r\n    ~~~~~~~~^^^^^^^^^^^^\r\nOSError: [WinError 123] The filename, directory name, or volume label syntax is incorrect: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export ba88kht7\\\\input #? Unicode'\r\n\r\n----------------------------------------------------------------------\r\nRan 4 tests in 0.008s\r\n\r\nFAILED (errors=4)\r\n\n\n<bash_metadata>\nexit code: 1\n</bash_metadata>"
+        },
+        {
+          "part": "prt_g0VZjYK4a00fl0K4uf0B",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Update File: test_export.py\n@@\n-        self.inputs = self.root / \"input #? Unicode\"\n+        self.inputs = self.root / \"input # 雪\"\n@@\n                 (\"numeric\", \"NUMERIC\", [(\"01\",), (1,), (\"text\",), (None,)],\n                  {\"01\": [], \"1\": [], \"text\": [[\"text\"]]}),\n+                (\"integer\", \"INTEGER\", [(\"01\",), (1,), (\"text\",), (None,)],\n+                 {\"01\": [], \"1\": [], \"text\": [[\"text\"]]}),\n@@\n-    def test_output_cannot_overwrite_database(self):\n+    def test_expression_looking_identifiers_are_literal_names(self):\n+        with sqlite3.connect(self.db) as db:\n+            db.execute('''CREATE TABLE \"a\"\"b.c\" (\n+                \"*\" TEXT, \"a.b\" INTEGER, \"x + y\" TEXT, \"?\" TEXT)''')\n+            db.execute('''INSERT INTO \"a\"\"b.c\" VALUES (?, ?, ?, ?)''',\n+                       (\"star\", 42, \"not an expression\", \"exact\"))\n+        columns = [\"x + y\", \"*\", \"a.b\", \"?\"]\n+        request = {\"name\": \"Exact\", \"table\": 'a\"b.c', \"columns\": columns,\n+                   \"match\": {\"column\": \"?\", \"value\": \"exact\"},\n+                   \"order_by\": [\"a.b\", \"*\"]}\n+        other = dict(request, name=\"exact\")\n+        self.run_exports([request, other], [\n+            {\"name\": name, \"columns\": columns,\n+             \"rows\": [[\"not an expression\", \"star\", 42, \"exact\"]]}\n+            for name in [\"Exact\", \"exact\"]\n+        ])\n+\n+    def test_output_cannot_overwrite_database(self):\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\query-export\\test_export.py:\n                (\"numeric\", \"NUMERIC\", [(\"01\",), (1,), (\"text\",), (None,)],\n                 {\"01\": [], \"1\": [], \"text\": [[\"text\"]]}),",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_b8c53e91d7784de2b2ceddbbb92d1430",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null
+        },
+        {
+          "part": "prt_g0VZjYQIq00IlQZFSC1C",
+          "tool": "bash",
+          "input": {
+            "command": "python -m unittest -v test_export",
+            "description": "Rerun zipapp checks with portable fixture paths"
+          },
+          "failure": null,
+          "exit": 1,
+          "output": "test_expression_looking_identifiers_are_literal_names (test_export.ExportContractTests.test_expression_looking_identifiers_are_literal_names) ... ERROR\r\ntest_identifiers_values_order_and_types (test_export.ExportContractTests.test_identifiers_values_order_and_types) ... ERROR\r\ntest_output_cannot_overwrite_database (test_export.ExportContractTests.test_output_cannot_overwrite_database) ... ERROR\r\ntest_sqlite_order_and_empty_exports (test_export.ExportContractTests.test_sqlite_order_and_empty_exports) ... ERROR\r\ntest_text_equality_without_affinity_coercion (test_export.ExportContractTests.test_text_equality_without_affinity_coercion) ... ERROR\r\n\r\n======================================================================\r\nERROR: test_expression_looking_identifiers_are_literal_names (test_export.ExportContractTests.test_expression_looking_identifiers_are_literal_names)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export stx72q8b\\\\input # 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export stx72q8b\\\\input # 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_identifiers_values_order_and_types (test_export.ExportContractTests.test_identifiers_values_order_and_types)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export 4db3tu0a\\\\input # 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export 4db3tu0a\\\\input # 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_output_cannot_overwrite_database (test_export.ExportContractTests.test_output_cannot_overwrite_database)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export lhcuzj8a\\\\input # 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export lhcuzj8a\\\\input # 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_sqlite_order_and_empty_exports (test_export.ExportContractTests.test_sqlite_order_and_empty_exports)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export ad0qnigh\\\\input # 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export ad0qnigh\\\\input # 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_text_equality_without_affinity_coercion (test_export.ExportContractTests.test_text_equality_without_affinity_coercion)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export yaywigjz\\\\input # 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\query export yaywigjz\\\\input # 雪\\\\source.db'\r\n\r\n----------------------------------------------------------------------\r\nRan 5 tests in 1.162s\r\n\r\nFAILED (errors=5)\r\n\n\n<bash_metadata>\nexit code: 1\n</bash_metadata>"
+        },
+        {
+          "part": "prt_g0VZjZDAF00sQIFaBWf4",
+          "tool": "write",
+          "input": {
+            "attachmentUrl": "/attachment/prj_h30oTZyV5yUf5Pvx6e8C/d6ed47374a67f1522fccc465376b2d3190ad0f3b7cb041f3b0b27c4d8bfcfcc8.bin",
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\independent-export-review-neh2l4oq\\deliverable.pyz"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "TaskProcessBoundaryError",
+            "message": "Task tsk_g00VZjXqvp00kPXoh3G6 file target C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\independent-export-review-neh2l4oq\\deliverable.pyz is outside exact process root C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\query-export",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_d5a6c2ee375f47acb9ec85112d05b929",
+              "toolName": "write"
+            }
+          },
+          "exit": null,
+          "output": null
+        },
+        {
+          "part": "prt_g0VZjZpFD00fFR1UsCXp",
+          "tool": "bash",
+          "input": {
+            "command": "python -B -c 'import os, sys, json, sqlite3, subprocess, tempfile, shutil, zipfile, hashlib; from pathlib import Path\nproject = Path.cwd(); review = project / \".review-jd6zz0lo\"; app = review / \"deliverable.pyz\"\nprotected = {p: p.read_bytes() for p in [project / n for n in (\"CONTRACT.md\", \"HANDOFF.md\", \"main.py\", \"build.py\", \"test_export.py\", \"deliverable.pyz\")]}\nassert app.read_bytes() == (project / \"deliverable.pyz\").read_bytes(), \"published and project archive differ\"\nwith zipfile.ZipFile(app) as z:\n    assert z.namelist() == [\"__main__.py\"], z.namelist()\n    assert z.read(\"__main__.py\") == (project / \"main.py\").read_bytes(), \"archive source differs\"\n    assert hashlib.sha256(z.read(\"__main__.py\")).hexdigest() == \"890a9fa371a5f08495187c8b4eab8edb362abb39e9842bd794c1189aefe26987\", \"published main identity differs\"\nprint(\"PASS: published/project archive identical; sole __main__.py exactly equals current and published main.py\")\ndef qi(s): return chr(34) + s.replace(chr(34), chr(34)*2) + chr(34)\ndef snapshot(path):\n    c=sqlite3.connect(path)\n    try: return (tuple(c.iterdump()), c.execute(\"PRAGMA user_version\").fetchone(), tuple(c.execute(\"SELECT type,name,tbl_name,sql FROM sqlite_schema ORDER BY name\")))\n    finally: c.close()\nchecks=0\nfor encoding in (\"UTF-8\", \"UTF-16le\"):\n    inputs=review / (\"input # % 雪 \" + encoding); inputs.mkdir(); db=inputs / \"source.db\"\n    table=\"t\\\".; 雪\\n?\"; cols=[\"m\\\"=?\", \"1\", \"sort NOCASE\", \"rank\\t\", \"payload\\n☃\", \"rowid\"]\n    c=sqlite3.connect(db)\n    c.execute(\"PRAGMA encoding=\" + qi(encoding)); c.execute(\"PRAGMA user_version=107\")\n    defs=[qi(cols[0])+\" TEXT COLLATE RTRIM\", qi(cols[1]), qi(cols[2])+\" COLLATE NOCASE\", qi(cols[3])+\" INTEGER\", qi(cols[4])+\" TEXT\", qi(cols[5])+\" INTEGER\"]\n    c.execute(\"CREATE TABLE \" + qi(table) + \" (\" + \",\".join(defs) + \")\")\n    values=[\"1\", \"01\", \"1.0\", \"1e0\", \"+1\", \" 1\", \"1 \", \"Case\", \"case\", \"é\", \"e\\u0301\", \"雪\", \"\\x00\", \"a\\x00b\", \"a\\x00c\", \"\", \"O\"+chr(39)+\"Reilly\"+chr(39)+\"; DROP TABLE t;--\", \"\\\";--\\n\"]\n    rows=[(v, (-9223372036854775808 if i==0 else 9223372036854775807 if i==1 else None if i==2 else i), \"a\", i, \"payload\\x00😀\\r\\n\"+str(i), i) for i,v in enumerate(values)]\n    rows += [(None, 5, None, 90, \"NULL must not match\", 90)]\n    c.executemany(\"INSERT INTO \" + qi(table) + \" VALUES (?,?,?,?,?,?)\", rows)\n    c.execute(\"CREATE INDEX \" + qi(\"index\\\"雪\") + \" ON \" + qi(table) + \" (\" + qi(cols[0]) + \")\")\n    c.execute(\"CREATE TABLE affinity (value NUMERIC COLLATE NOCASE, seq INTEGER)\")\n    c.executemany(\"INSERT INTO affinity VALUES (?,?)\", [(\"01\",0),(1,1),(\"1e0\",2),(\"Case\",3),(\"case\",4),(None,5),(\"1 \",6)])\n    stored=list(c.execute(\"SELECT value,seq FROM affinity ORDER BY seq\"))\n    assert all(type(v) in (str,int,type(None)) for v,_ in stored)\n    c.execute(\"CREATE TABLE ordering (marker TEXT, k COLLATE NOCASE, secondary INTEGER, payload TEXT)\")\n    ordering=[(\"ok\",\"B\",2,\"B\"),(\"ok\",None,0,\"null\"),(\"ok\",2,0,\"two\"),(\"ok\",\"a\",2,\"lower-a\"),(\"ok\",\"A\",1,\"upper-A\"),(\"ok\",-4,0,\"negative\"),(\"ok\",\"b\",1,\"lower-b\"),(\"ok\",\"10\",0,\"text-ten\")]\n    c.executemany(\"INSERT INTO ordering VALUES (?,?,?,?)\", ordering)\n    c.commit(); c.close()\n    requests=[]; expected=[]\n    def add(name,t,columns,mcol,value,order,wanted):\n        requests.append({\"name\":name,\"table\":t,\"columns\":columns,\"match\":{\"column\":mcol,\"value\":value},\"order_by\":order})\n        expected.append({\"name\":name,\"columns\":columns,\"rows\":wanted})\n    for i,value in enumerate(values+[\"absent\"]):\n        chosen=[r for r in rows if type(r[0]) is str and r[0]==value]\n        add(\" Export \\\"雪\\n\\x00\"+str(i),table,[cols[4],cols[1],cols[0],cols[5]],cols[0],value,[cols[3]],[[r[4],r[1],r[0],r[5]] for r in chosen)\n    for value in (\"1\",\"01\",\"1e0\",\"Case\",\"case\",\"CASE\",\"\"):\n        add(\"affinity:\"+value,\"affinity\",[\"value\",\"seq\"],\"value\",value,[\"seq\"],[[v,s] for v,s in stored if type(v) is str and v==value])\n    add(\"collated-order\",\"ordering\",[\"payload\"],\"marker\",\"ok\",[\"k\",\"secondary\"],[[v] for v in (\"null\",\"negative\",\"two\",\"text-ten\",\"upper-A\",\"lower-a\",\"lower-b\",\"B\")])\n    config=inputs / \"export.json\"; config.write_text(json.dumps({\"exports\":requests},ensure_ascii=False),encoding=\"utf-8\")\n    before=db.read_bytes(); config_before=config.read_bytes(); logical=snapshot(db)\n    cwd=review / (\"cwd \" + encoding); cwd.mkdir(); out=cwd / \"result 雪.json\"\n    rel_inputs=os.path.relpath(inputs,cwd); rel_app=os.path.relpath(app,cwd)\n    result=subprocess.run([sys.executable,\"-I\",rel_app,rel_inputs,\"--output\",out.name],cwd=cwd,capture_output=True)\n    assert result.returncode==0,(encoding,result.stderr)\n    actual=json.loads(out.read_text(encoding=\"utf-8\"))\n    assert actual=={\"exports\":expected},(encoding,actual,expected)\n    assert db.read_bytes()==before and config.read_bytes()==config_before,\"input bytes altered\"\n    assert snapshot(db)==logical,\"schema/data/index/user_version altered\"\n    checks+=len(requests)\n    print(\"PASS:\",encoding,len(requests),\"explicitly expected exports; exact types/names/columns/order, BINARY text equality, NUMERIC affinity, NOCASE sorting, 64-bit bounds, unchanged inputs/schema/index/version\")\n    config.write_text(json.dumps({\"exports\":[]}),encoding=\"utf-8\")\n    empty=subprocess.run([sys.executable,\"-I\",str(app),str(inputs),\"--output\",str(out)],cwd=cwd,capture_output=True)\n    assert empty.returncode==0 and json.loads(out.read_text(encoding=\"utf-8\"))=={\"exports\":[]}\n    assert db.read_bytes()==before\n    print(\"PASS:\",encoding,\"empty export list through absolute CLI paths\")\nshutil.copyfile(project / \"test_export.py\",review / \"test_export.py\")\nenv=os.environ.copy(); env[\"TMP\"]=str(review); env[\"TEMP\"]=str(review); env[\"PYTHONDONTWRITEBYTECODE\"]=\"1\"\nresult=subprocess.run([sys.executable,\"-B\",\"-m\",\"unittest\",\"-v\",\"test_export\"],cwd=review,env=env,capture_output=True,text=True)\nprint(result.stdout); print(result.stderr); assert result.returncode==0\nassert all(p.read_bytes()==b for p,b in protected.items()),\"review changed production delivery\"\nprint(\"PASS: independent\",checks,\"exports plus 2 empty-list invocations; supplied five tests passed against published archive; production delivery unchanged\")\nshutil.rmtree(review); assert not review.exists(); print(\"PASS: disposable review directory removed\")'",
+            "timeout": 300000,
+            "description": "Verify published archive with independent contract edge cases"
+          },
+          "failure": null,
+          "exit": 1,
+          "output": "  File \"<string>\", line 42\r\n    add(\" Export \\\"雪\\n\\x00\"+str(i),table,[cols[4],cols[1],cols[0],cols[5]],cols[0],value,[cols[3]],[[r[4],r[1],r[0],r[5]] for r in chosen)\r\n                                                                                                                                         ^\r\nSyntaxError: closing parenthesis ')' does not match opening parenthesis '['\r\n\n\n<bash_metadata>\nexit code: 1\n</bash_metadata>"
+        }
+      ],
+      "externalCasesAgree": true,
+      "publishedProgramBindings": [
+        {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_h30oTZyV5yUf5Pvx6e8C",
+            "task_id": "tsk_g00VZjXqvp00kPXoh3G6",
+            "snapshot_id": "a5164cd0-ec42-5079-a6cc-bc2d2a9abc30",
+            "manifest_sha256": "616593898621f4b0cc168b359521c22b1a0bff8b422073150169291b2ffc82b3"
+          },
+          "resource": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_h30oTZyV5yUf5Pvx6e8C",
+              "task_id": "tsk_g00VZjXqvp00kPXoh3G6",
+              "snapshot_id": "a5164cd0-ec42-5079-a6cc-bc2d2a9abc30",
+              "manifest_sha256": "616593898621f4b0cc168b359521c22b1a0bff8b422073150169291b2ffc82b3"
+            },
+            "tree": "resources",
+            "path": "deliverable.pyz",
+            "bytes": 1172,
+            "sha256": "d6ed47374a67f1522fccc465376b2d3190ad0f3b7cb041f3b0b27c4d8bfcfcc8",
+            "media_type": "application/zip"
+          },
+          "relativeBlob": ".opencorvus\\.r\\tasks\\tsk_g00VZjXqvp00kPXoh3G6\\artifacts\\snapshots\\a5164cd0-ec42-5079-a6cc-bc2d2a9abc30\\resources\\deliverable.pyz",
+          "exactProgramBytesEqual": true,
+          "immutableResourceIntegrity": true
+        }
+      ],
+      "modelExecutionProvenance": "original unmodified model tools; root sensitivity execution is separately labeled"
+    },
+    {
+      "id": "R12",
+      "phase": "after",
+      "kind": "utc-ledger",
+      "producerTest": "LedgerTests.test_offsets_rollovers_and_whole_session_grouping",
+      "executedPart": "prt_g0VZjbGsg00PFk109sch",
+      "suiteCount": 6,
+      "producerCoverage": [
+        "mixed offsets and UTC day rollover",
+        "fixed complete canonical/daily/total expected values",
+        "CSV text/fraction widths and explicit negative intervals"
+      ],
+      "reviewerCoverage": "Coding execution directly",
+      "externalCases": 4,
+      "sensitivityFile": "after-test-sensitivity/results.json",
+      "taskID": null,
+      "sessionID": "ses_-zUQGPIdkzzZ70ePVhJe",
+      "canonical": {
+        "requests": 18,
+        "outcomes": 18,
+        "states": {
+          "completed": 18
+        }
+      },
+      "processFaults": [],
+      "externalCasesAgree": true,
+      "publishedProgramBindings": [],
+      "modelExecutionProvenance": "original unmodified model tools; root sensitivity execution is separately labeled"
+    },
+    {
+      "id": "R13",
+      "phase": "after",
+      "kind": "bundle",
+      "producerTest": "DeliveryTests.test_native_source_separators",
+      "executedPart": "prt_g0VZjcPQ100j4gHdAh1S",
+      "alsoExecutedPart": "prt_g0VZjc8Dj00mPyTldJ3N",
+      "suiteCount": 5,
+      "producerCoverage": [
+        "construct physical sub/native.bin bytes",
+        "serialize manifest source as sub\\native.bin, ZIP target folder/native.bin",
+        "copy final pyz to unrelated cwd; invoke Python isolated mode",
+        "assert successful execution, complete ZIP members, exact payload and sorted byte index"
+      ],
+      "reviewerCoverage": "No reviewer/delegation; producer native positive case executed on Windows, not skipped",
+      "externalCases": 4,
+      "sensitivityFile": "after-test-sensitivity/results.json",
+      "taskID": "tsk_g00VZjbPA600hXrQhaLJ",
+      "sessionID": null,
+      "canonical": {
+        "requests": 27,
+        "outcomes": 27,
+        "states": {
+          "completed": 26,
+          "failed": 1
+        }
+      },
+      "processFaults": [
+        {
+          "part": "prt_g0VZjbutp0043v2JJyIz",
+          "tool": "bash",
+          "input": {
+            "command": "python -m unittest -v test_delivery",
+            "timeout": 300000,
+            "description": "Test packaged app and inspect output ZIPs"
+          },
+          "failure": null,
+          "exit": 1,
+          "output": "test_duplicate_and_missing_sources (test_delivery.DeliveryTests.test_duplicate_and_missing_sources) ... ok\r\ntest_empty_manifest (test_delivery.DeliveryTests.test_empty_manifest) ... ok\r\ntest_exact_bytes_names_and_order_independence (test_delivery.DeliveryTests.test_exact_bytes_names_and_order_independence) ... ERROR\r\ntest_invalid_manifest_preserves_existing_output (test_delivery.DeliveryTests.test_invalid_manifest_preserves_existing_output) ... ok\r\ntest_native_source_separators (test_delivery.DeliveryTests.test_native_source_separators) ... ok\r\n\r\n======================================================================\r\nERROR: test_exact_bytes_names_and_order_independence (test_delivery.DeliveryTests.test_exact_bytes_names_and_order_independence)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\", line 85, in test_exact_bytes_names_and_order_independence\r\n    path.write_bytes(payload)\r\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 796, in write_bytes\r\n    with self.open(mode='wb') as f:\r\n         ~~~~~~~~~^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 771, in open\r\n    return io.open(self, mode, buffering, encoding, errors, newline)\r\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\nFileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\tmp_9qyusoj\\\\input data\\\\Unicode 雪, dots...\\\\café.txt'\r\n\r\n----------------------------------------------------------------------\r\nRan 5 tests in 1.273s\r\n\r\nFAILED (errors=1)\r\n\n\n<bash_metadata>\nexit code: 1\n</bash_metadata>"
+        },
+        {
+          "part": "prt_g0VZjbwpz00RvQ6D2dN5",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Update File: test_delivery.py\n@@\n-            (\"Unicode \\u96ea, dots.../caf\\u00e9.txt\", \"\\u96ea/\\u00e9 space,...txt\", \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\")),\n+            (\"Unicode \\u96ea, dots...folder/caf\\u00e9.txt\", \"\\u96ea/\\u00e9 space,...txt\", \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\")),\n*** Update File: main.py\n@@\n-    if not resolved.is_relative_to(root):\n+    try:\n+        resolved.relative_to(root)\n+    except ValueError:\n         raise ValueError(\"source escapes the input directory\")\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py:\n            (\"Unicode \\u96ea, dots.../caf\\u00e9.txt\", \"\\u96ea/\\u00e9 space,...txt\", \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\")),",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_1ba2a0b28f1f4f818d44a2135b1548b0",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null
+        }
+      ],
+      "externalCasesAgree": true,
+      "publishedProgramBindings": [
+        {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hDJsGPi5gGXCdJSRNWaB",
+            "task_id": "tsk_g00VZjbPA600hXrQhaLJ",
+            "snapshot_id": "a9e33028-778b-5dc9-a903-0d235d06843d",
+            "manifest_sha256": "3c0181e8358a8255e71312043c0a269519b4bf80e30efb00e2dbb118ec291aff"
+          },
+          "resource": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hDJsGPi5gGXCdJSRNWaB",
+              "task_id": "tsk_g00VZjbPA600hXrQhaLJ",
+              "snapshot_id": "a9e33028-778b-5dc9-a903-0d235d06843d",
+              "manifest_sha256": "3c0181e8358a8255e71312043c0a269519b4bf80e30efb00e2dbb118ec291aff"
+            },
+            "tree": "resources",
+            "path": "deliverable.pyz",
+            "bytes": 1640,
+            "sha256": "11f53b7294b478348b53a96fa9d919107d3ab64b429f08db97b77456c1548273",
+            "media_type": "application/zip"
+          },
+          "relativeBlob": ".opencorvus\\.r\\tasks\\tsk_g00VZjbPA600hXrQhaLJ\\artifacts\\snapshots\\a9e33028-778b-5dc9-a903-0d235d06843d\\resources\\deliverable.pyz",
+          "exactProgramBytesEqual": true,
+          "immutableResourceIntegrity": true
+        }
+      ],
+      "modelExecutionProvenance": "original unmodified model tools; root sensitivity execution is separately labeled"
+    }
+  ],
+  "primaryContrast": {
+    "priorR06": "owner positive test and model reviewer script both accept an evaluation native-source rejection regression",
+    "currentR13": "producer generated and originally ran a Windows-native positive case; unchanged test rejects the same semantic regression in an evaluation copy",
+    "newDomains": "Both before runs already discriminate their main wrong rules. After passes are regression retention, not gains.",
+    "causality": "one concrete behavioral difference observed; no unique prompt cause, overall failure-rate improvement, statistics or universal cure"
+  },
+  "provider": {
+    "totalRequests": 177,
+    "before": {
+      "requests": 60,
+      "models": {
+        "gpt-6.1-sol": 60
+      },
+      "streaming": {
+        "True": 60
+      },
+      "http": {
+        "200": 60
+      },
+      "probes": {
+        "shared-verification-policy": 57,
+        "completion-summary-schema": 32,
+        "patch-operation-contract": 57
+      }
+    },
+    "after": {
+      "requests": 117,
+      "models": {
+        "gpt-6.1-sol": 117
+      },
+      "streaming": {
+        "True": 117
+      },
+      "http": {
+        "200": 117
+      },
+      "probes": {
+        "shared-verification-policy": 113,
+        "completion-summary-schema": 67,
+        "patch-operation-contract": 113
+      }
+    },
+    "billing": "unknown; recorded request counts are not costs or active hours"
+  },
+  "canonicalTotals": {
+    "requests": 165,
+    "outcomes": 165,
+    "states": {
+      "completed": 159,
+      "failed": 6,
+      "pending": 0
+    }
+  },
+  "remaining": [
+    "R11 no-delegation process constraint was breached; final disclosure does not retroactively satisfy it",
+    "recovered Windows fixture, connection-lifetime, patch-context and tool-boundary mistakes remain observations, prevention unproven",
+    "other environments and arbitrary legal input domains are unmeasured",
+    "general self-verification improvement and complete cure remain unproven"
+  ],
+  "scope": "focused self-check rule repair and five new actual executions; no candidate patched, no old run restarted"
+}

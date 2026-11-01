@@ -1,0 +1,932 @@
+[
+  {
+    "requestID": "prt_g0VZjVe9Q00ehYMQUrRs",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_932bbf5f7c8e4fd2aa3a844588153cac",
+      "tool": "read",
+      "input": {
+        "filePath": "."
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_01e93a9595423a11016ae750ede35481919516d3e8ebf69fbb"
+        }
+      },
+      "time": {
+        "start": 1793544429856
+      }
+    },
+    "outcomeID": "prt_hm48GaPbpqEaP4FtO5qj",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger</path>\n<type>directory</type>\n<entries>\n.git/\n.gitattributes\n.gitignore\n.opencorvus/\nCONTRACT.md\nmain.py\nsample/\n\n(7 entries)\n</entries>",
+      "title": "",
+      "metadata": {
+        "preview": ".git/\n.gitattributes\n.gitignore\n.opencorvus/\nCONTRACT.md\nmain.py\nsample/",
+        "truncated": false,
+        "loaded": [],
+        "readType": "directory",
+        "offset": 1,
+        "lines": 7,
+        "totalLines": 7
+      },
+      "time": {
+        "end": 1793544430243
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjVfCJ00XMhYzlfvn",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_3e6614627bba44c28b1ee29d78527e54",
+      "tool": "read",
+      "input": {
+        "filePath": "CONTRACT.md"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_084987304893b773016ae750f1fcd4819192e6554cfbd48d10"
+        }
+      },
+      "time": {
+        "start": 1793544433879
+      }
+    },
+    "outcomeID": "prt_huaxTmrzByKp5enPF0Pn",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\CONTRACT.md</path>\n<type>file</type>\n<content>1: Repair the UTC session-ledger report project. Deliver deliverable.pyz,\n2: maintainable source and concise tested handoff. Python 3 standard library only.\n3: Invocation: python deliverable.pyz INPUT_DIRECTORY --output RESULT_JSON\n4: INPUT_DIRECTORY contains UTF-8 sessions.csv with named columns session,started_at,ended_at.\n5: Column reordering, extra metadata, CSV quoting, CRLF/LF are legal. session is distinct,\n6: exact nonempty text, including numeric-looking IDs, punctuation, whitespace or Unicode.\n7: Each timestamp is YYYY-MM-DDTHH:MM:SS with optional 1-6 fractional digits followed by\n8: Z or a numeric +/-HH:MM offset; it denotes an aware instant. Convert both instants to\n9: UTC before ordering, subtraction or date grouping; never strip an offset as decoration.\n10: For each input row emit {session:EXACT_TEXT,start_utc:CANONICAL,end_utc:CANONICAL,\n11: seconds:NUMBER,start_utc_date:YYYY-MM-DD} in original input order. CANONICAL is exactly\n12: YYYY-MM-DDTHH:MM:SS.ffffffZ with six fractional digits. Group whole session durations\n13: by their start UTC date (do not split midnight-spanning sessions), sorted by date.\n14: Exit0 and JSON {sessions:[...],daily:[{date:DATE,sessions:INTEGER,seconds:NUMBER},...],\n15: total_seconds:NUMBER}. Numeric tolerance is 1e-8 absolute. Zero durations are legal.\n16: For the first row whose end instant precedes its start, exit2 and JSON\n17: {error:{code:NEGATIVE_INTERVAL,session:EXACT_TEXT}} instead of a successful report.\n18: Local clock labels can run backwards while elapsed UTC time is positive; equivalent\n19: offset spellings represent the same instant. Preserve session text independently of\n20: timestamp normalization. The final zipapp runs from arbitrary cwd with Python/inputs.\n\n(End of file - total 20 lines)\n</content>",
+      "title": "CONTRACT.md",
+      "metadata": {
+        "preview": "Repair the UTC session-ledger report project. Deliver deliverable.pyz,\nmaintainable source and concise tested handoff. Python 3 standard library only.\nInvocation: python deliverable.pyz INPUT_DIRECTORY --output RESULT_JSON\nINPUT_DIRECTORY contains UTF-8 sessions.csv with named columns session,started_at,ended_at.\nColumn reordering, extra metadata, CSV quoting, CRLF/LF are legal. session is distinct,\nexact nonempty text, including numeric-looking IDs, punctuation, whitespace or Unicode.\nEach timestamp is YYYY-MM-DDTHH:MM:SS with optional 1-6 fractional digits followed by\nZ or a numeric +/-HH:MM offset; it denotes an aware instant. Convert both instants to\nUTC before ordering, subtraction or date grouping; never strip an offset as decoration.\nFor each input row emit {session:EXACT_TEXT,start_utc:CANONICAL,end_utc:CANONICAL,\nseconds:NUMBER,start_utc_date:YYYY-MM-DD} in original input order. CANONICAL is exactly\nYYYY-MM-DDTHH:MM:SS.ffffffZ with six fractional digits. Group whole session durations\nby their start UTC date (do not split midnight-spanning sessions), sorted by date.\nExit0 and JSON {sessions:[...],daily:[{date:DATE,sessions:INTEGER,seconds:NUMBER},...],\ntotal_seconds:NUMBER}. Numeric tolerance is 1e-8 absolute. Zero durations are legal.\nFor the first row whose end instant precedes its start, exit2 and JSON\n{error:{code:NEGATIVE_INTERVAL,session:EXACT_TEXT}} instead of a successful report.\nLocal clock labels can run backwards while elapsed UTC time is positive; equivalent\noffset spellings represent the same instant. Preserve session text independently of\ntimestamp normalization. The final zipapp runs from arbitrary cwd with Python/inputs.",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 20,
+        "totalLines": 20
+      },
+      "time": {
+        "end": 1793544434361
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjVgT300gno9UugV7",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_1b558a864bac44e2a8bbcedf6b7fe2fd",
+      "tool": "read",
+      "input": {
+        "filePath": "main.py"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_039e76b42b75ba3f016ae750f6d3bc81918b910d453b4fa6be"
+        }
+      },
+      "time": {
+        "start": 1793544438761
+      }
+    },
+    "outcomeID": "prt_hYLh0goP3lweoQWZsHOH",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\main.py</path>\n<type>file</type>\n<content>1: import argparse,csv,json\n2: from datetime import datetime\n3: from pathlib import Path\n4: p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();rows=[];daily={}\n5: with open(Path(a.input)/\"sessions.csv\",encoding=\"utf-8\",newline=\"\") as f:\n6:     for r in csv.DictReader(f):\n7:         start=datetime.fromisoformat(r[\"started_at\"][:19]);end=datetime.fromisoformat(r[\"ended_at\"][:19]);seconds=(end-start).total_seconds()\n8:         if seconds<0:Path(a.output).write_text(json.dumps(dict(error=dict(code=\"NEGATIVE_INTERVAL\",session=r[\"session\"]))),encoding=\"utf-8\");raise SystemExit(2)\n9:         day=start.date().isoformat();rows.append(dict(session=r[\"session\"],start_utc=start.isoformat(timespec=\"microseconds\")+\"Z\",end_utc=end.isoformat(timespec=\"microseconds\")+\"Z\",seconds=seconds,start_utc_date=day));bucket=daily.setdefault(day,dict(date=day,sessions=0,seconds=0));bucket[\"sessions\"]+=1;bucket[\"seconds\"]+=seconds\n10: Path(a.output).write_text(json.dumps(dict(sessions=rows,daily=[daily[k] for k in sorted(daily)],total_seconds=sum(r[\"seconds\"] for r in rows)),ensure_ascii=False),encoding=\"utf-8\")\n\n(End of file - total 10 lines)\n</content>",
+      "title": "main.py",
+      "metadata": {
+        "preview": "import argparse,csv,json\nfrom datetime import datetime\nfrom pathlib import Path\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();rows=[];daily={}\nwith open(Path(a.input)/\"sessions.csv\",encoding=\"utf-8\",newline=\"\") as f:\n    for r in csv.DictReader(f):\n        start=datetime.fromisoformat(r[\"started_at\"][:19]);end=datetime.fromisoformat(r[\"ended_at\"][:19]);seconds=(end-start).total_seconds()\n        if seconds<0:Path(a.output).write_text(json.dumps(dict(error=dict(code=\"NEGATIVE_INTERVAL\",session=r[\"session\"]))),encoding=\"utf-8\");raise SystemExit(2)\n        day=start.date().isoformat();rows.append(dict(session=r[\"session\"],start_utc=start.isoformat(timespec=\"microseconds\")+\"Z\",end_utc=end.isoformat(timespec=\"microseconds\")+\"Z\",seconds=seconds,start_utc_date=day));bucket=daily.setdefault(day,dict(date=day,sessions=0,seconds=0));bucket[\"sessions\"]+=1;bucket[\"seconds\"]+=seconds\nPath(a.output).write_text(json.dumps(dict(sessions=rows,daily=[daily[k] for k in sorted(daily)],total_seconds=sum(r[\"seconds\"] for r in rows)),ensure_ascii=False),encoding=\"utf-8\")",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 10,
+        "totalLines": 10
+      },
+      "time": {
+        "end": 1793544439167
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjVhGn00erV10jNyg",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_70a15e06ea5b45319c96a0cc298a50da",
+      "tool": "glob",
+      "input": {
+        "pattern": "**/AGENTS.md"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_04ca16cc74f937d3016ae750f9edcc8191b7b52c58a71077ab"
+        }
+      },
+      "time": {
+        "start": 1793544441845
+      }
+    },
+    "outcomeID": "prt_hLEUjUtR1OIVZpMndtVT",
+    "outcome": {
+      "outcome": "completed",
+      "output": "No files found",
+      "title": "",
+      "metadata": {
+        "count": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544442520
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjViIR00pvfDOZBfY",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_41e29da7af274b8ea8f054a24bb8d62d",
+      "tool": "glob",
+      "input": {
+        "pattern": "**/CLAUDE.md"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0e8882bd67f2f6f7016ae750fde4208191950d7324a6d0fe00"
+        }
+      },
+      "time": {
+        "start": 1793544445791
+      }
+    },
+    "outcomeID": "prt_hp4zS8IdoI2soAFNhtBZ",
+    "outcome": {
+      "outcome": "completed",
+      "output": "No files found",
+      "title": "",
+      "metadata": {
+        "count": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544446280
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjVjKD00X8ENN3Pm1",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_92d513a9e36e410db737904ec7e3bae8",
+      "tool": "read",
+      "input": {
+        "filePath": "sample"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0f0215c25af41987016ae75101d74c819193b3f050ec27303c"
+        }
+      },
+      "time": {
+        "start": 1793544449745
+      }
+    },
+    "outcomeID": "prt_h1Yfxv3RFDnB8Mpx6hVE",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\sample</path>\n<type>directory</type>\n<entries>\nsessions.csv\n\n(1 entries)\n</entries>",
+      "title": "sample",
+      "metadata": {
+        "preview": "sessions.csv",
+        "truncated": false,
+        "loaded": [],
+        "readType": "directory",
+        "offset": 1,
+        "lines": 1,
+        "totalLines": 1
+      },
+      "time": {
+        "end": 1793544450554
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjVkkw00sKPs1B3bP",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_864a1523eea04511861de355a7cdad35",
+      "tool": "bash",
+      "input": {
+        "command": "git status --short",
+        "description": "Check initial workspace for existing changes"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0124a31e2c718c96016ae751075db081918bd1a8379a9ebfe0"
+        }
+      },
+      "time": {
+        "start": 1793544455246
+      }
+    },
+    "outcomeID": "prt_hEOSaRyLvimVnnPHEykg",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_h7U9Qz9WOPx9BV87ktaR",
+      "title": "Check initial workspace for existing changes",
+      "metadata": {
+        "refused": false,
+        "command": "git status --short",
+        "output": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 48,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Check initial workspace for existing changes",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544456032
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjVpR2004p7X4EkDh",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_43b10b9338344445b0baaca98d9f5868",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: main.py\n@@\n-import argparse,csv,json\n-from datetime import datetime\n+import argparse\n+import csv\n+import json\n+import re\n+from datetime import datetime, timezone\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();rows=[];daily={}\n-with open(Path(a.input)/\"sessions.csv\",encoding=\"utf-8\",newline=\"\") as f:\n-    for r in csv.DictReader(f):\n-        start=datetime.fromisoformat(r[\"started_at\"][:19]);end=datetime.fromisoformat(r[\"ended_at\"][:19]);seconds=(end-start).total_seconds()\n-        if seconds<0:Path(a.output).write_text(json.dumps(dict(error=dict(code=\"NEGATIVE_INTERVAL\",session=r[\"session\"]))),encoding=\"utf-8\");raise SystemExit(2)\n-        day=start.date().isoformat();rows.append(dict(session=r[\"session\"],start_utc=start.isoformat(timespec=\"microseconds\")+\"Z\",end_utc=end.isoformat(timespec=\"microseconds\")+\"Z\",seconds=seconds,start_utc_date=day));bucket=daily.setdefault(day,dict(date=day,sessions=0,seconds=0));bucket[\"sessions\"]+=1;bucket[\"seconds\"]+=seconds\n-Path(a.output).write_text(json.dumps(dict(sessions=rows,daily=[daily[k] for k in sorted(daily)],total_seconds=sum(r[\"seconds\"] for r in rows)),ensure_ascii=False),encoding=\"utf-8\")\n+\n+\n+TIMESTAMP = re.compile(\n+    r\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\"\n+    r\"(?:\\.[0-9]{1,6})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])\"\n+)\n+\n+\n+def parse_timestamp(value):\n+    if TIMESTAMP.fullmatch(value) is None:\n+        raise ValueError(\"Invalid timestamp: {!r}\".format(value))\n+    return datetime.fromisoformat(value.replace(\"Z\", \"+00:00\")).astimezone(timezone.utc)\n+\n+\n+def canonical(value):\n+    return value.isoformat(timespec=\"microseconds\").replace(\"+00:00\", \"Z\")\n+\n+\n+def build_report(input_directory):\n+    sessions = []\n+    daily = {}\n+    total_microseconds = 0\n+    with (Path(input_directory) / \"sessions.csv\").open(\n+        encoding=\"utf-8\", newline=\"\"\n+    ) as source:\n+        reader = csv.DictReader(source)\n+        if not {\"session\", \"started_at\", \"ended_at\"}.issubset(reader.fieldnames or []):\n+            raise ValueError(\"sessions.csv must contain session, started_at and ended_at columns\")\n+        for row in reader:\n+            start = parse_timestamp(row[\"started_at\"])\n+            end = parse_timestamp(row[\"ended_at\"])\n+            if end < start:\n+                return {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": row[\"session\"]}}, 2\n+            elapsed = end - start\n+            microseconds = (\n+                (elapsed.days * 86400 + elapsed.seconds) * 1000000\n+                + elapsed.microseconds\n+            )\n+            day = start.date().isoformat()\n+            sessions.append({\n+                \"session\": row[\"session\"],\n+                \"start_utc\": canonical(start),\n+                \"end_utc\": canonical(end),\n+                \"seconds\": microseconds / 1000000,\n+                \"start_utc_date\": day,\n+            })\n+            bucket = daily.setdefault(day, {\"sessions\": 0, \"microseconds\": 0})\n+            bucket[\"sessions\"] += 1\n+            bucket[\"microseconds\"] += microseconds\n+            total_microseconds += microseconds\n+    return {\n+        \"sessions\": sessions,\n+        \"daily\": [\n+            {\"date\": day, \"sessions\": daily[day][\"sessions\"],\n+             \"seconds\": daily[day][\"microseconds\"] / 1000000}\n+            for day in sorted(daily)\n+        ],\n+        \"total_seconds\": total_microseconds / 1000000,\n+    }, 0\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=\"Report session durations in UTC.\")\n+    parser.add_argument(\"input\", help=\"Directory containing sessions.csv\")\n+    parser.add_argument(\"--output\", required=True, help=\"Destination JSON file\")\n+    args = parser.parse_args()\n+    report, status = build_report(args.input)\n+    Path(args.output).write_text(\n+        json.dumps(report, ensure_ascii=False, indent=2) + \"\\n\", encoding=\"utf-8\"\n+    )\n+    return status\n+\n+\n+if __name__ == \"__main__\":\n+    raise SystemExit(main())\n*** Add File: build.py\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def main():\n+    root = Path(__file__).resolve().parent\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.write(root / \"main.py\", \"__main__.py\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: test_ledger.py\n+import csv\n+import json\n+from pathlib import Path\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+\n+\n+ARCHIVE = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n+\n+\n+class LedgerTests(unittest.TestCase):\n+    def run_ledger(self, rows, columns=None, line_ending=\"\\n\", relative=False):\n+        columns = columns or [\"session\", \"started_at\", \"ended_at\"]\n+        with tempfile.TemporaryDirectory() as directory:\n+            cwd = Path(directory)\n+            inputs = cwd / \"input data\"\n+            inputs.mkdir()\n+            with (inputs / \"sessions.csv\").open(\"w\", encoding=\"utf-8\", newline=\"\") as source:\n+                writer = csv.DictWriter(source, fieldnames=columns, lineterminator=line_ending)\n+                writer.writeheader()\n+                writer.writerows(rows)\n+            output = cwd / \"result report.json\"\n+            output.write_text(\"stale output\", encoding=\"utf-8\")\n+            result = subprocess.run(\n+                [sys.executable, str(ARCHIVE),\n+                 inputs.name if relative else str(inputs), \"--output\",\n+                 output.name if relative else str(output)],\n+                cwd=cwd, capture_output=True, text=True,\n+            )\n+            self.assertIn(result.returncode, (0, 2), result.stderr)\n+            return result.returncode, json.loads(output.read_text(encoding=\"utf-8\"))\n+\n+    def test_utc_semantics_and_csv_variations(self):\n+        rows = [\n+            {\"session\": ' 001, \"雪\"\\nline\\r\\n ',\n+             \"started_at\": \"2024-01-02T00:30:00.123456+02:00\",\n+             \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\", \"metadata\": \"ignored, text\"},\n+            {\"session\": \"   \", \"started_at\": \"2024-01-01T23:30:00-02:00\",\n+             \"ended_at\": \"2024-01-02T01:30:00Z\", \"metadata\": \"\"},\n+            {\"session\": \"00001\", \"started_at\": \"2024-01-01T23:59:59.9Z\",\n+             \"ended_at\": \"2024-01-02T00:00:00.000001+00:00\", \"metadata\": \"x\"},\n+            {\"session\": \"a/b:!?\", \"started_at\": \"2024-01-01T00:00:00.1-00:00\",\n+             \"ended_at\": \"2024-01-01T00:00:00.100000Z\", \"metadata\": \"x\"},\n+        ]\n+        expected_sessions = [\n+            {\"session\": rows[0][\"session\"], \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n+             \"end_utc\": \"2024-01-01T22:00:00.123457Z\"},\n+        ]\n+        # A backward local clock with a positive UTC duration.\n+        rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n+        expected_sessions = [\n+            {\"session\": rows[0][\"session\"], \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n+             \"end_utc\": \"2024-01-01T23:00:00.123457Z\", \"seconds\": 1800.000001,\n+             \"start_utc_date\": \"2024-01-01\"},\n+            {\"session\": \"   \", \"start_utc\": \"2024-01-02T01:30:00.000000Z\",\n+             \"end_utc\": \"2024-01-02T01:30:00.000000Z\", \"seconds\": 0,\n+             \"start_utc_date\": \"2024-01-02\"},\n+            {\"session\": \"00001\", \"start_utc\": \"2024-01-01T23:59:59.900000Z\",\n+             \"end_utc\": \"2024-01-02T00:00:00.000001Z\", \"seconds\": 0.100001,\n+             \"start_utc_date\": \"2024-01-01\"},\n+            {\"session\": \"a/b:!?\", \"start_utc\": \"2024-01-01T00:00:00.100000Z\",\n+             \"end_utc\": \"2024-01-01T00:00:00.100000Z\", \"seconds\": 0,\n+             \"start_utc_date\": \"2024-01-01\"},\n+        ]\n+        for ending in (\"\\n\", \"\\r\\n\"):\n+            with self.subTest(ending=ending):\n+                status, report = self.run_ledger(\n+                    rows, [\"metadata\", \"ended_at\", \"session\", \"started_at\"], ending, True\n+                )\n+                self.assertEqual(status, 0)\n+                self.assertEqual(report, {\n+                    \"sessions\": expected_sessions,\n+                    \"daily\": [{\"date\": \"2024-01-01\", \"sessions\": 3, \"seconds\": 1800.100002},\n+                              {\"date\": \"2024-01-02\", \"sessions\": 1, \"seconds\": 0}],\n+                    \"total_seconds\": 1800.100002,\n+                })\n+\n+    def test_first_negative_uses_instants_and_exact_id(self):\n+        rows = [\n+            {\"session\": \"valid\", \"started_at\": \"2024-01-01T01:00:00+02:00\",\n+             \"ended_at\": \"2024-01-01T00:00:00Z\"},\n+            {\"session\": ' 002, \"负\" ', \"started_at\": \"2024-01-01T00:00:00Z\",\n+             \"ended_at\": \"2024-01-01T01:00:00+02:00\"},\n+            {\"session\": \"later\", \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n+             \"ended_at\": \"2024-01-01T00:00:00Z\"},\n+        ]\n+        status, report = self.run_ledger(rows)\n+        self.assertEqual(status, 2)\n+        self.assertEqual(report, {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": rows[1][\"session\"]}})\n+\n+    def test_microsecond_negative(self):\n+        status, report = self.run_ledger([\n+            {\"session\": \"1\", \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n+             \"ended_at\": \"2024-01-01T00:00:00Z\"}\n+        ])\n+        self.assertEqual(status, 2)\n+        self.assertEqual(report, {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": \"1\"}})\n+\n+    def test_empty_ledger(self):\n+        self.assertEqual(self.run_ledger([]), (0, {\"sessions\": [], \"daily\": [], \"total_seconds\": 0}))\n+\n+    def test_fraction_lengths_and_nonhour_offsets(self):\n+        rows = [\n+            {\"session\": str(digits),\n+             \"started_at\": \"2000-03-01T00:00:00.\" + \"1\" * digits + \"+05:45\",\n+             \"ended_at\": \"2000-02-29T18:15:01.\" + \"1\" * digits + \"Z\"}\n+            for digits in range(1, 7)\n+        ]\n+        status, report = self.run_ledger(rows)\n+        self.assertEqual(status, 0)\n+        for digits, session in enumerate(report[\"sessions\"], 1):\n+            fraction = (\"1\" * digits).ljust(6, \"0\")\n+            self.assertEqual(session, {\n+                \"session\": str(digits),\n+                \"start_utc\": \"2000-02-29T18:15:00.\" + fraction + \"Z\",\n+                \"end_utc\": \"2000-02-29T18:15:01.\" + fraction + \"Z\",\n+                \"seconds\": 1, \"start_utc_date\": \"2000-02-29\",\n+            })\n+        self.assertEqual(report[\"daily\"], [{\"date\": \"2000-02-29\", \"sessions\": 6, \"seconds\": 6}])\n+        self.assertEqual(report[\"total_seconds\"], 6)\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0fe69a8f540f30e8016ae7511955808191b249a39f4833d948"
+        }
+      },
+      "time": {
+        "start": 1793544473232
+      }
+    },
+    "outcomeID": "prt_hzr0Tvx34rTHxzFUcI2F",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hcTDaCwIhZsqA58UNzCE",
+      "title": "Success. Updated the following files:\nM main.py\nA build.py\nA test_ledger.py",
+      "metadata": {
+        "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\main.py\n@@ -1,10 +1,89 @@\n-import argparse,csv,json\r\n-from datetime import datetime\r\n-from pathlib import Path\r\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();rows=[];daily={}\r\n-with open(Path(a.input)/\"sessions.csv\",encoding=\"utf-8\",newline=\"\") as f:\r\n-    for r in csv.DictReader(f):\r\n-        start=datetime.fromisoformat(r[\"started_at\"][:19]);end=datetime.fromisoformat(r[\"ended_at\"][:19]);seconds=(end-start).total_seconds()\r\n-        if seconds<0:Path(a.output).write_text(json.dumps(dict(error=dict(code=\"NEGATIVE_INTERVAL\",session=r[\"session\"]))),encoding=\"utf-8\");raise SystemExit(2)\r\n-        day=start.date().isoformat();rows.append(dict(session=r[\"session\"],start_utc=start.isoformat(timespec=\"microseconds\")+\"Z\",end_utc=end.isoformat(timespec=\"microseconds\")+\"Z\",seconds=seconds,start_utc_date=day));bucket=daily.setdefault(day,dict(date=day,sessions=0,seconds=0));bucket[\"sessions\"]+=1;bucket[\"seconds\"]+=seconds\r\n-Path(a.output).write_text(json.dumps(dict(sessions=rows,daily=[daily[k] for k in sorted(daily)],total_seconds=sum(r[\"seconds\"] for r in rows)),ensure_ascii=False),encoding=\"utf-8\")\r\n+import argparse\n+import csv\n+import json\n+import re\n+from datetime import datetime, timezone\n+from pathlib import Path\n+\n+\n+TIMESTAMP = re.compile(\n+    r\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\"\n+    r\"(?:\\.[0-9]{1,6})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])\"\n+)\n+\n+\n+def parse_timestamp(value):\n+    if TIMESTAMP.fullmatch(value) is None:\n+        raise ValueError(\"Invalid timestamp: {!r}\".format(value))\n+    return datetime.fromisoformat(value.replace(\"Z\", \"+00:00\")).astimezone(timezone.utc)\n+\n+\n+def canonical(value):\n+    return value.isoformat(timespec=\"microseconds\").replace(\"+00:00\", \"Z\")\n+\n+\n+def build_report(input_directory):\n+    sessions = []\n+    daily = {}\n+    total_microseconds = 0\n+    with (Path(input_directory) / \"sessions.csv\").open(\n+        encoding=\"utf-8\", newline=\"\"\n+    ) as source:\n+        reader = csv.DictReader(source)\n+        if not {\"session\", \"started_at\", \"ended_at\"}.issubset(reader.fieldnames or []):\n+            raise ValueError(\n+                \"sessions.csv must contain session, started_at and ended_at columns\"\n+            )\n+        for row in reader:\n+            start = parse_timestamp(row[\"started_at\"])\n+            end = parse_timestamp(row[\"ended_at\"])\n+            if end < start:\n+                return {\n+                    \"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": row[\"session\"]}\n+                }, 2\n+            elapsed = end - start\n+            microseconds = (\n+                elapsed.days * 86400 + elapsed.seconds\n+            ) * 1000000 + elapsed.microseconds\n+            day = start.date().isoformat()\n+            sessions.append(\n+                {\n+                    \"session\": row[\"session\"],\n+                    \"start_utc\": canonical(start),\n+                    \"end_utc\": canonical(end),\n+                    \"seconds\": microseconds / 1000000,\n+                    \"start_utc_date\": day,\n+                }\n+            )\n+            bucket = daily.setdefault(day, {\"sessions\": 0, \"microseconds\": 0})\n+            bucket[\"sessions\"] += 1\n+            bucket[\"microseconds\"] += microseconds\n+            total_microseconds += microseconds\n+    return {\n+        \"sessions\": sessions,\n+        \"daily\": [\n+            {\n+                \"date\": day,\n+                \"sessions\": daily[day][\"sessions\"],\n+                \"seconds\": daily[day][\"microseconds\"] / 1000000,\n+            }\n+            for day in sorted(daily)\n+        ],\n+        \"total_seconds\": total_microseconds / 1000000,\n+    }, 0\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=\"Report session durations in UTC.\")\n+    parser.add_argument(\"input\", help=\"Directory containing sessions.csv\")\n+    parser.add_argument(\"--output\", required=True, help=\"Destination JSON file\")\n+    args = parser.parse_args()\n+    report, status = build_report(args.input)\n+    Path(args.output).write_text(\n+        json.dumps(report, ensure_ascii=False, indent=2) + \"\\n\", encoding=\"utf-8\"\n+    )\n+    return status\n+\n+\n+if __name__ == \"__main__\":\n+    raise SystemExit(main())\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\build.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\build.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\build.py\n@@ -0,0 +1,12 @@\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def main():\n+    root = Path(__file__).resolve().parent\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.write(root / \"main.py\", \"__main__.py\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n@@ -0,0 +1,211 @@\n+import csv\n+import json\n+from pathlib import Path\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+\n+\n+ARCHIVE = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n+\n+\n+class LedgerTests(unittest.TestCase):\n+    def run_ledger(self, rows, columns=None, line_ending=\"\\n\", relative=False):\n+        columns = columns or [\"session\", \"started_at\", \"ended_at\"]\n+        with tempfile.TemporaryDirectory() as directory:\n+            cwd = Path(directory)\n+            inputs = cwd / \"input data\"\n+            inputs.mkdir()\n+            with (inputs / \"sessions.csv\").open(\n+                \"w\", encoding=\"utf-8\", newline=\"\"\n+            ) as source:\n+                writer = csv.DictWriter(\n+                    source, fieldnames=columns, lineterminator=line_ending\n+                )\n+                writer.writeheader()\n+                writer.writerows(rows)\n+            output = cwd / \"result report.json\"\n+            output.write_text(\"stale output\", encoding=\"utf-8\")\n+            result = subprocess.run(\n+                [\n+                    sys.executable,\n+                    str(ARCHIVE),\n+                    inputs.name if relative else str(inputs),\n+                    \"--output\",\n+                    output.name if relative else str(output),\n+                ],\n+                cwd=cwd,\n+                capture_output=True,\n+                text=True,\n+            )\n+            self.assertIn(result.returncode, (0, 2), result.stderr)\n+            return result.returncode, json.loads(output.read_text(encoding=\"utf-8\"))\n+\n+    def test_utc_semantics_and_csv_variations(self):\n+        rows = [\n+            {\n+                \"session\": ' 001, \"雪\"\\nline\\r\\n ',\n+                \"started_at\": \"2024-01-02T00:30:00.123456+02:00\",\n+                \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\",\n+                \"metadata\": \"ignored, text\",\n+            },\n+            {\n+                \"session\": \"   \",\n+                \"started_at\": \"2024-01-01T23:30:00-02:00\",\n+                \"ended_at\": \"2024-01-02T01:30:00Z\",\n+                \"metadata\": \"\",\n+            },\n+            {\n+                \"session\": \"00001\",\n+                \"started_at\": \"2024-01-01T23:59:59.9Z\",\n+                \"ended_at\": \"2024-01-02T00:00:00.000001+00:00\",\n+                \"metadata\": \"x\",\n+            },\n+            {\n+                \"session\": \"a/b:!?\",\n+                \"started_at\": \"2024-01-01T00:00:00.1-00:00\",\n+                \"ended_at\": \"2024-01-01T00:00:00.100000Z\",\n+                \"metadata\": \"x\",\n+            },\n+        ]\n+        expected_sessions = [\n+            {\n+                \"session\": rows[0][\"session\"],\n+                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n+                \"end_utc\": \"2024-01-01T22:00:00.123457Z\",\n+            },\n+        ]\n+        # A backward local clock with a positive UTC duration.\n+        rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n+        expected_sessions = [\n+            {\n+                \"session\": rows[0][\"session\"],\n+                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n+                \"end_utc\": \"2024-01-01T23:00:00.123457Z\",\n+                \"seconds\": 1800.000001,\n+                \"start_utc_date\": \"2024-01-01\",\n+            },\n+            {\n+                \"session\": \"   \",\n+                \"start_utc\": \"2024-01-02T01:30:00.000000Z\",\n+                \"end_utc\": \"2024-01-02T01:30:00.000000Z\",\n+                \"seconds\": 0,\n+                \"start_utc_date\": \"2024-01-02\",\n+            },\n+            {\n+                \"session\": \"00001\",\n+                \"start_utc\": \"2024-01-01T23:59:59.900000Z\",\n+                \"end_utc\": \"2024-01-02T00:00:00.000001Z\",\n+                \"seconds\": 0.100001,\n+                \"start_utc_date\": \"2024-01-01\",\n+            },\n+            {\n+                \"session\": \"a/b:!?\",\n+                \"start_utc\": \"2024-01-01T00:00:00.100000Z\",\n+                \"end_utc\": \"2024-01-01T00:00:00.100000Z\",\n+                \"seconds\": 0,\n+                \"start_utc_date\": \"2024-01-01\",\n+            },\n+        ]\n+        for ending in (\"\\n\", \"\\r\\n\"):\n+            with self.subTest(ending=ending):\n+                status, report = self.run_ledger(\n+                    rows,\n+                    [\"metadata\", \"ended_at\", \"session\", \"started_at\"],\n+                    ending,\n+                    True,\n+                )\n+                self.assertEqual(status, 0)\n+                self.assertEqual(\n+                    report,\n+                    {\n+                        \"sessions\": expected_sessions,\n+                        \"daily\": [\n+                            {\n+                                \"date\": \"2024-01-01\",\n+                                \"sessions\": 3,\n+                                \"seconds\": 1800.100002,\n+                            },\n+                            {\"date\": \"2024-01-02\", \"sessions\": 1, \"seconds\": 0},\n+                        ],\n+                        \"total_seconds\": 1800.100002,\n+                    },\n+                )\n+\n+    def test_first_negative_uses_instants_and_exact_id(self):\n+        rows = [\n+            {\n+                \"session\": \"valid\",\n+                \"started_at\": \"2024-01-01T01:00:00+02:00\",\n+                \"ended_at\": \"2024-01-01T00:00:00Z\",\n+            },\n+            {\n+                \"session\": ' 002, \"负\" ',\n+                \"started_at\": \"2024-01-01T00:00:00Z\",\n+                \"ended_at\": \"2024-01-01T01:00:00+02:00\",\n+            },\n+            {\n+                \"session\": \"later\",\n+                \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n+                \"ended_at\": \"2024-01-01T00:00:00Z\",\n+            },\n+        ]\n+        status, report = self.run_ledger(rows)\n+        self.assertEqual(status, 2)\n+        self.assertEqual(\n+            report,\n+            {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": rows[1][\"session\"]}},\n+        )\n+\n+    def test_microsecond_negative(self):\n+        status, report = self.run_ledger(\n+            [\n+                {\n+                    \"session\": \"1\",\n+                    \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n+                    \"ended_at\": \"2024-01-01T00:00:00Z\",\n+                }\n+            ]\n+        )\n+        self.assertEqual(status, 2)\n+        self.assertEqual(\n+            report, {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": \"1\"}}\n+        )\n+\n+    def test_empty_ledger(self):\n+        self.assertEqual(\n+            self.run_ledger([]), (0, {\"sessions\": [], \"daily\": [], \"total_seconds\": 0})\n+        )\n+\n+    def test_fraction_lengths_and_nonhour_offsets(self):\n+        rows = [\n+            {\n+                \"session\": str(digits),\n+                \"started_at\": \"2000-03-01T00:00:00.\" + \"1\" * digits + \"+05:45\",\n+                \"ended_at\": \"2000-02-29T18:15:01.\" + \"1\" * digits + \"Z\",\n+            }\n+            for digits in range(1, 7)\n+        ]\n+        status, report = self.run_ledger(rows)\n+        self.assertEqual(status, 0)\n+        for digits, session in enumerate(report[\"sessions\"], 1):\n+            fraction = (\"1\" * digits).ljust(6, \"0\")\n+            self.assertEqual(\n+                session,\n+                {\n+                    \"session\": str(digits),\n+                    \"start_utc\": \"2000-02-29T18:15:00.\" + fraction + \"Z\",\n+                    \"end_utc\": \"2000-02-29T18:15:01.\" + fraction + \"Z\",\n+                    \"seconds\": 1,\n+                    \"start_utc_date\": \"2000-02-29\",\n+                },\n+            )\n+        self.assertEqual(\n+            report[\"daily\"], [{\"date\": \"2000-02-29\", \"sessions\": 6, \"seconds\": 6}]\n+        )\n+        self.assertEqual(report[\"total_seconds\"], 6)\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n\n",
+        "files": [
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\main.py",
+            "relativePath": "main.py",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\main.py\n@@ -1,10 +1,89 @@\n-import argparse,csv,json\r\n-from datetime import datetime\r\n-from pathlib import Path\r\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();rows=[];daily={}\r\n-with open(Path(a.input)/\"sessions.csv\",encoding=\"utf-8\",newline=\"\") as f:\r\n-    for r in csv.DictReader(f):\r\n-        start=datetime.fromisoformat(r[\"started_at\"][:19]);end=datetime.fromisoformat(r[\"ended_at\"][:19]);seconds=(end-start).total_seconds()\r\n-        if seconds<0:Path(a.output).write_text(json.dumps(dict(error=dict(code=\"NEGATIVE_INTERVAL\",session=r[\"session\"]))),encoding=\"utf-8\");raise SystemExit(2)\r\n-        day=start.date().isoformat();rows.append(dict(session=r[\"session\"],start_utc=start.isoformat(timespec=\"microseconds\")+\"Z\",end_utc=end.isoformat(timespec=\"microseconds\")+\"Z\",seconds=seconds,start_utc_date=day));bucket=daily.setdefault(day,dict(date=day,sessions=0,seconds=0));bucket[\"sessions\"]+=1;bucket[\"seconds\"]+=seconds\r\n-Path(a.output).write_text(json.dumps(dict(sessions=rows,daily=[daily[k] for k in sorted(daily)],total_seconds=sum(r[\"seconds\"] for r in rows)),ensure_ascii=False),encoding=\"utf-8\")\r\n+import argparse\n+import csv\n+import json\n+import re\n+from datetime import datetime, timezone\n+from pathlib import Path\n+\n+\n+TIMESTAMP = re.compile(\n+    r\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\"\n+    r\"(?:\\.[0-9]{1,6})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])\"\n+)\n+\n+\n+def parse_timestamp(value):\n+    if TIMESTAMP.fullmatch(value) is None:\n+        raise ValueError(\"Invalid timestamp: {!r}\".format(value))\n+    return datetime.fromisoformat(value.replace(\"Z\", \"+00:00\")).astimezone(timezone.utc)\n+\n+\n+def canonical(value):\n+    return value.isoformat(timespec=\"microseconds\").replace(\"+00:00\", \"Z\")\n+\n+\n+def build_report(input_directory):\n+    sessions = []\n+    daily = {}\n+    total_microseconds = 0\n+    with (Path(input_directory) / \"sessions.csv\").open(\n+        encoding=\"utf-8\", newline=\"\"\n+    ) as source:\n+        reader = csv.DictReader(source)\n+        if not {\"session\", \"started_at\", \"ended_at\"}.issubset(reader.fieldnames or []):\n+            raise ValueError(\n+                \"sessions.csv must contain session, started_at and ended_at columns\"\n+            )\n+        for row in reader:\n+            start = parse_timestamp(row[\"started_at\"])\n+            end = parse_timestamp(row[\"ended_at\"])\n+            if end < start:\n+                return {\n+                    \"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": row[\"session\"]}\n+                }, 2\n+            elapsed = end - start\n+            microseconds = (\n+                elapsed.days * 86400 + elapsed.seconds\n+            ) * 1000000 + elapsed.microseconds\n+            day = start.date().isoformat()\n+            sessions.append(\n+                {\n+                    \"session\": row[\"session\"],\n+                    \"start_utc\": canonical(start),\n+                    \"end_utc\": canonical(end),\n+                    \"seconds\": microseconds / 1000000,\n+                    \"start_utc_date\": day,\n+                }\n+            )\n+            bucket = daily.setdefault(day, {\"sessions\": 0, \"microseconds\": 0})\n+            bucket[\"sessions\"] += 1\n+            bucket[\"microseconds\"] += microseconds\n+            total_microseconds += microseconds\n+    return {\n+        \"sessions\": sessions,\n+        \"daily\": [\n+            {\n+                \"date\": day,\n+                \"sessions\": daily[day][\"sessions\"],\n+                \"seconds\": daily[day][\"microseconds\"] / 1000000,\n+            }\n+            for day in sorted(daily)\n+        ],\n+        \"total_seconds\": total_microseconds / 1000000,\n+    }, 0\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=\"Report session durations in UTC.\")\n+    parser.add_argument(\"input\", help=\"Directory containing sessions.csv\")\n+    parser.add_argument(\"--output\", required=True, help=\"Destination JSON file\")\n+    args = parser.parse_args()\n+    report, status = build_report(args.input)\n+    Path(args.output).write_text(\n+        json.dumps(report, ensure_ascii=False, indent=2) + \"\\n\", encoding=\"utf-8\"\n+    )\n+    return status\n+\n+\n+if __name__ == \"__main__\":\n+    raise SystemExit(main())\n",
+            "before": "import argparse,csv,json\r\nfrom datetime import datetime\r\nfrom pathlib import Path\r\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();rows=[];daily={}\r\nwith open(Path(a.input)/\"sessions.csv\",encoding=\"utf-8\",newline=\"\") as f:\r\n    for r in csv.DictReader(f):\r\n        start=datetime.fromisoformat(r[\"started_at\"][:19]);end=datetime.fromisoformat(r[\"ended_at\"][:19]);seconds=(end-start).total_seconds()\r\n        if seconds<0:Path(a.output).write_text(json.dumps(dict(error=dict(code=\"NEGATIVE_INTERVAL\",session=r[\"session\"]))),encoding=\"utf-8\");raise SystemExit(2)\r\n        day=start.date().isoformat();rows.append(dict(session=r[\"session\"],start_utc=start.isoformat(timespec=\"microseconds\")+\"Z\",end_utc=end.isoformat(timespec=\"microseconds\")+\"Z\",seconds=seconds,start_utc_date=day));bucket=daily.setdefault(day,dict(date=day,sessions=0,seconds=0));bucket[\"sessions\"]+=1;bucket[\"seconds\"]+=seconds\r\nPath(a.output).write_text(json.dumps(dict(sessions=rows,daily=[daily[k] for k in sorted(daily)],total_seconds=sum(r[\"seconds\"] for r in rows)),ensure_ascii=False),encoding=\"utf-8\")\r\n",
+            "after": "import argparse\nimport csv\nimport json\nimport re\nfrom datetime import datetime, timezone\nfrom pathlib import Path\n\n\nTIMESTAMP = re.compile(\n    r\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\"\n    r\"(?:\\.[0-9]{1,6})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])\"\n)\n\n\ndef parse_timestamp(value):\n    if TIMESTAMP.fullmatch(value) is None:\n        raise ValueError(\"Invalid timestamp: {!r}\".format(value))\n    return datetime.fromisoformat(value.replace(\"Z\", \"+00:00\")).astimezone(timezone.utc)\n\n\ndef canonical(value):\n    return value.isoformat(timespec=\"microseconds\").replace(\"+00:00\", \"Z\")\n\n\ndef build_report(input_directory):\n    sessions = []\n    daily = {}\n    total_microseconds = 0\n    with (Path(input_directory) / \"sessions.csv\").open(\n        encoding=\"utf-8\", newline=\"\"\n    ) as source:\n        reader = csv.DictReader(source)\n        if not {\"session\", \"started_at\", \"ended_at\"}.issubset(reader.fieldnames or []):\n            raise ValueError(\n                \"sessions.csv must contain session, started_at and ended_at columns\"\n            )\n        for row in reader:\n            start = parse_timestamp(row[\"started_at\"])\n            end = parse_timestamp(row[\"ended_at\"])\n            if end < start:\n                return {\n                    \"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": row[\"session\"]}\n                }, 2\n            elapsed = end - start\n            microseconds = (\n                elapsed.days * 86400 + elapsed.seconds\n            ) * 1000000 + elapsed.microseconds\n            day = start.date().isoformat()\n            sessions.append(\n                {\n                    \"session\": row[\"session\"],\n                    \"start_utc\": canonical(start),\n                    \"end_utc\": canonical(end),\n                    \"seconds\": microseconds / 1000000,\n                    \"start_utc_date\": day,\n                }\n            )\n            bucket = daily.setdefault(day, {\"sessions\": 0, \"microseconds\": 0})\n            bucket[\"sessions\"] += 1\n            bucket[\"microseconds\"] += microseconds\n            total_microseconds += microseconds\n    return {\n        \"sessions\": sessions,\n        \"daily\": [\n            {\n                \"date\": day,\n                \"sessions\": daily[day][\"sessions\"],\n                \"seconds\": daily[day][\"microseconds\"] / 1000000,\n            }\n            for day in sorted(daily)\n        ],\n        \"total_seconds\": total_microseconds / 1000000,\n    }, 0\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=\"Report session durations in UTC.\")\n    parser.add_argument(\"input\", help=\"Directory containing sessions.csv\")\n    parser.add_argument(\"--output\", required=True, help=\"Destination JSON file\")\n    args = parser.parse_args()\n    report, status = build_report(args.input)\n    Path(args.output).write_text(\n        json.dumps(report, ensure_ascii=False, indent=2) + \"\\n\", encoding=\"utf-8\"\n    )\n    return status\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n",
+            "additions": 89,
+            "deletions": 10
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\build.py",
+            "relativePath": "build.py",
+            "type": "add",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\build.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\build.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\build.py\n@@ -0,0 +1,12 @@\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def main():\n+    root = Path(__file__).resolve().parent\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.write(root / \"main.py\", \"__main__.py\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n",
+            "before": "",
+            "after": "from pathlib import Path\nfrom zipfile import ZIP_DEFLATED, ZipFile\n\n\ndef main():\n    root = Path(__file__).resolve().parent\n    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n        archive.write(root / \"main.py\", \"__main__.py\")\n\n\nif __name__ == \"__main__\":\n    main()\n",
+            "additions": 12,
+            "deletions": 0
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py",
+            "relativePath": "test_ledger.py",
+            "type": "add",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n@@ -0,0 +1,211 @@\n+import csv\n+import json\n+from pathlib import Path\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+\n+\n+ARCHIVE = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n+\n+\n+class LedgerTests(unittest.TestCase):\n+    def run_ledger(self, rows, columns=None, line_ending=\"\\n\", relative=False):\n+        columns = columns or [\"session\", \"started_at\", \"ended_at\"]\n+        with tempfile.TemporaryDirectory() as directory:\n+            cwd = Path(directory)\n+            inputs = cwd / \"input data\"\n+            inputs.mkdir()\n+            with (inputs / \"sessions.csv\").open(\n+                \"w\", encoding=\"utf-8\", newline=\"\"\n+            ) as source:\n+                writer = csv.DictWriter(\n+                    source, fieldnames=columns, lineterminator=line_ending\n+                )\n+                writer.writeheader()\n+                writer.writerows(rows)\n+            output = cwd / \"result report.json\"\n+            output.write_text(\"stale output\", encoding=\"utf-8\")\n+            result = subprocess.run(\n+                [\n+                    sys.executable,\n+                    str(ARCHIVE),\n+                    inputs.name if relative else str(inputs),\n+                    \"--output\",\n+                    output.name if relative else str(output),\n+                ],\n+                cwd=cwd,\n+                capture_output=True,\n+                text=True,\n+            )\n+            self.assertIn(result.returncode, (0, 2), result.stderr)\n+            return result.returncode, json.loads(output.read_text(encoding=\"utf-8\"))\n+\n+    def test_utc_semantics_and_csv_variations(self):\n+        rows = [\n+            {\n+                \"session\": ' 001, \"雪\"\\nline\\r\\n ',\n+                \"started_at\": \"2024-01-02T00:30:00.123456+02:00\",\n+                \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\",\n+                \"metadata\": \"ignored, text\",\n+            },\n+            {\n+                \"session\": \"   \",\n+                \"started_at\": \"2024-01-01T23:30:00-02:00\",\n+                \"ended_at\": \"2024-01-02T01:30:00Z\",\n+                \"metadata\": \"\",\n+            },\n+            {\n+                \"session\": \"00001\",\n+                \"started_at\": \"2024-01-01T23:59:59.9Z\",\n+                \"ended_at\": \"2024-01-02T00:00:00.000001+00:00\",\n+                \"metadata\": \"x\",\n+            },\n+            {\n+                \"session\": \"a/b:!?\",\n+                \"started_at\": \"2024-01-01T00:00:00.1-00:00\",\n+                \"ended_at\": \"2024-01-01T00:00:00.100000Z\",\n+                \"metadata\": \"x\",\n+            },\n+        ]\n+        expected_sessions = [\n+            {\n+                \"session\": rows[0][\"session\"],\n+                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n+                \"end_utc\": \"2024-01-01T22:00:00.123457Z\",\n+            },\n+        ]\n+        # A backward local clock with a positive UTC duration.\n+        rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n+        expected_sessions = [\n+            {\n+                \"session\": rows[0][\"session\"],\n+                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n+                \"end_utc\": \"2024-01-01T23:00:00.123457Z\",\n+                \"seconds\": 1800.000001,\n+                \"start_utc_date\": \"2024-01-01\",\n+            },\n+            {\n+                \"session\": \"   \",\n+                \"start_utc\": \"2024-01-02T01:30:00.000000Z\",\n+                \"end_utc\": \"2024-01-02T01:30:00.000000Z\",\n+                \"seconds\": 0,\n+                \"start_utc_date\": \"2024-01-02\",\n+            },\n+            {\n+                \"session\": \"00001\",\n+                \"start_utc\": \"2024-01-01T23:59:59.900000Z\",\n+                \"end_utc\": \"2024-01-02T00:00:00.000001Z\",\n+                \"seconds\": 0.100001,\n+                \"start_utc_date\": \"2024-01-01\",\n+            },\n+            {\n+                \"session\": \"a/b:!?\",\n+                \"start_utc\": \"2024-01-01T00:00:00.100000Z\",\n+                \"end_utc\": \"2024-01-01T00:00:00.100000Z\",\n+                \"seconds\": 0,\n+                \"start_utc_date\": \"2024-01-01\",\n+            },\n+        ]\n+        for ending in (\"\\n\", \"\\r\\n\"):\n+            with self.subTest(ending=ending):\n+                status, report = self.run_ledger(\n+                    rows,\n+                    [\"metadata\", \"ended_at\", \"session\", \"started_at\"],\n+                    ending,\n+                    True,\n+                )\n+                self.assertEqual(status, 0)\n+                self.assertEqual(\n+                    report,\n+                    {\n+                        \"sessions\": expected_sessions,\n+                        \"daily\": [\n+                            {\n+                                \"date\": \"2024-01-01\",\n+                                \"sessions\": 3,\n+                                \"seconds\": 1800.100002,\n+                            },\n+                            {\"date\": \"2024-01-02\", \"sessions\": 1, \"seconds\": 0},\n+                        ],\n+                        \"total_seconds\": 1800.100002,\n+                    },\n+                )\n+\n+    def test_first_negative_uses_instants_and_exact_id(self):\n+        rows = [\n+            {\n+                \"session\": \"valid\",\n+                \"started_at\": \"2024-01-01T01:00:00+02:00\",\n+                \"ended_at\": \"2024-01-01T00:00:00Z\",\n+            },\n+            {\n+                \"session\": ' 002, \"负\" ',\n+                \"started_at\": \"2024-01-01T00:00:00Z\",\n+                \"ended_at\": \"2024-01-01T01:00:00+02:00\",\n+            },\n+            {\n+                \"session\": \"later\",\n+                \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n+                \"ended_at\": \"2024-01-01T00:00:00Z\",\n+            },\n+        ]\n+        status, report = self.run_ledger(rows)\n+        self.assertEqual(status, 2)\n+        self.assertEqual(\n+            report,\n+            {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": rows[1][\"session\"]}},\n+        )\n+\n+    def test_microsecond_negative(self):\n+        status, report = self.run_ledger(\n+            [\n+                {\n+                    \"session\": \"1\",\n+                    \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n+                    \"ended_at\": \"2024-01-01T00:00:00Z\",\n+                }\n+            ]\n+        )\n+        self.assertEqual(status, 2)\n+        self.assertEqual(\n+            report, {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": \"1\"}}\n+        )\n+\n+    def test_empty_ledger(self):\n+        self.assertEqual(\n+            self.run_ledger([]), (0, {\"sessions\": [], \"daily\": [], \"total_seconds\": 0})\n+        )\n+\n+    def test_fraction_lengths_and_nonhour_offsets(self):\n+        rows = [\n+            {\n+                \"session\": str(digits),\n+                \"started_at\": \"2000-03-01T00:00:00.\" + \"1\" * digits + \"+05:45\",\n+                \"ended_at\": \"2000-02-29T18:15:01.\" + \"1\" * digits + \"Z\",\n+            }\n+            for digits in range(1, 7)\n+        ]\n+        status, report = self.run_ledger(rows)\n+        self.assertEqual(status, 0)\n+        for digits, session in enumerate(report[\"sessions\"], 1):\n+            fraction = (\"1\" * digits).ljust(6, \"0\")\n+            self.assertEqual(\n+                session,\n+                {\n+                    \"session\": str(digits),\n+                    \"start_utc\": \"2000-02-29T18:15:00.\" + fraction + \"Z\",\n+                    \"end_utc\": \"2000-02-29T18:15:01.\" + fraction + \"Z\",\n+                    \"seconds\": 1,\n+                    \"start_utc_date\": \"2000-02-29\",\n+                },\n+            )\n+        self.assertEqual(\n+            report[\"daily\"], [{\"date\": \"2000-02-29\", \"sessions\": 6, \"seconds\": 6}]\n+        )\n+        self.assertEqual(report[\"total_seconds\"], 6)\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n",
+            "before": "",
+            "after": "import csv\nimport json\nfrom pathlib import Path\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\n\n\nARCHIVE = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n\n\nclass LedgerTests(unittest.TestCase):\n    def run_ledger(self, rows, columns=None, line_ending=\"\\n\", relative=False):\n        columns = columns or [\"session\", \"started_at\", \"ended_at\"]\n        with tempfile.TemporaryDirectory() as directory:\n            cwd = Path(directory)\n            inputs = cwd / \"input data\"\n            inputs.mkdir()\n            with (inputs / \"sessions.csv\").open(\n                \"w\", encoding=\"utf-8\", newline=\"\"\n            ) as source:\n                writer = csv.DictWriter(\n                    source, fieldnames=columns, lineterminator=line_ending\n                )\n                writer.writeheader()\n                writer.writerows(rows)\n            output = cwd / \"result report.json\"\n            output.write_text(\"stale output\", encoding=\"utf-8\")\n            result = subprocess.run(\n                [\n                    sys.executable,\n                    str(ARCHIVE),\n                    inputs.name if relative else str(inputs),\n                    \"--output\",\n                    output.name if relative else str(output),\n                ],\n                cwd=cwd,\n                capture_output=True,\n                text=True,\n            )\n            self.assertIn(result.returncode, (0, 2), result.stderr)\n            return result.returncode, json.loads(output.read_text(encoding=\"utf-8\"))\n\n    def test_utc_semantics_and_csv_variations(self):\n        rows = [\n            {\n                \"session\": ' 001, \"雪\"\\nline\\r\\n ',\n                \"started_at\": \"2024-01-02T00:30:00.123456+02:00\",\n                \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\",\n                \"metadata\": \"ignored, text\",\n            },\n            {\n                \"session\": \"   \",\n                \"started_at\": \"2024-01-01T23:30:00-02:00\",\n                \"ended_at\": \"2024-01-02T01:30:00Z\",\n                \"metadata\": \"\",\n            },\n            {\n                \"session\": \"00001\",\n                \"started_at\": \"2024-01-01T23:59:59.9Z\",\n                \"ended_at\": \"2024-01-02T00:00:00.000001+00:00\",\n                \"metadata\": \"x\",\n            },\n            {\n                \"session\": \"a/b:!?\",\n                \"started_at\": \"2024-01-01T00:00:00.1-00:00\",\n                \"ended_at\": \"2024-01-01T00:00:00.100000Z\",\n                \"metadata\": \"x\",\n            },\n        ]\n        expected_sessions = [\n            {\n                \"session\": rows[0][\"session\"],\n                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n                \"end_utc\": \"2024-01-01T22:00:00.123457Z\",\n            },\n        ]\n        # A backward local clock with a positive UTC duration.\n        rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n        expected_sessions = [\n            {\n                \"session\": rows[0][\"session\"],\n                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n                \"end_utc\": \"2024-01-01T23:00:00.123457Z\",\n                \"seconds\": 1800.000001,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n            {\n                \"session\": \"   \",\n                \"start_utc\": \"2024-01-02T01:30:00.000000Z\",\n                \"end_utc\": \"2024-01-02T01:30:00.000000Z\",\n                \"seconds\": 0,\n                \"start_utc_date\": \"2024-01-02\",\n            },\n            {\n                \"session\": \"00001\",\n                \"start_utc\": \"2024-01-01T23:59:59.900000Z\",\n                \"end_utc\": \"2024-01-02T00:00:00.000001Z\",\n                \"seconds\": 0.100001,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n            {\n                \"session\": \"a/b:!?\",\n                \"start_utc\": \"2024-01-01T00:00:00.100000Z\",\n                \"end_utc\": \"2024-01-01T00:00:00.100000Z\",\n                \"seconds\": 0,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n        ]\n        for ending in (\"\\n\", \"\\r\\n\"):\n            with self.subTest(ending=ending):\n                status, report = self.run_ledger(\n                    rows,\n                    [\"metadata\", \"ended_at\", \"session\", \"started_at\"],\n                    ending,\n                    True,\n                )\n                self.assertEqual(status, 0)\n                self.assertEqual(\n                    report,\n                    {\n                        \"sessions\": expected_sessions,\n                        \"daily\": [\n                            {\n                                \"date\": \"2024-01-01\",\n                                \"sessions\": 3,\n                                \"seconds\": 1800.100002,\n                            },\n                            {\"date\": \"2024-01-02\", \"sessions\": 1, \"seconds\": 0},\n                        ],\n                        \"total_seconds\": 1800.100002,\n                    },\n                )\n\n    def test_first_negative_uses_instants_and_exact_id(self):\n        rows = [\n            {\n                \"session\": \"valid\",\n                \"started_at\": \"2024-01-01T01:00:00+02:00\",\n                \"ended_at\": \"2024-01-01T00:00:00Z\",\n            },\n            {\n                \"session\": ' 002, \"负\" ',\n                \"started_at\": \"2024-01-01T00:00:00Z\",\n                \"ended_at\": \"2024-01-01T01:00:00+02:00\",\n            },\n            {\n                \"session\": \"later\",\n                \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n                \"ended_at\": \"2024-01-01T00:00:00Z\",\n            },\n        ]\n        status, report = self.run_ledger(rows)\n        self.assertEqual(status, 2)\n        self.assertEqual(\n            report,\n            {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": rows[1][\"session\"]}},\n        )\n\n    def test_microsecond_negative(self):\n        status, report = self.run_ledger(\n            [\n                {\n                    \"session\": \"1\",\n                    \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n                    \"ended_at\": \"2024-01-01T00:00:00Z\",\n                }\n            ]\n        )\n        self.assertEqual(status, 2)\n        self.assertEqual(\n            report, {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": \"1\"}}\n        )\n\n    def test_empty_ledger(self):\n        self.assertEqual(\n            self.run_ledger([]), (0, {\"sessions\": [], \"daily\": [], \"total_seconds\": 0})\n        )\n\n    def test_fraction_lengths_and_nonhour_offsets(self):\n        rows = [\n            {\n                \"session\": str(digits),\n                \"started_at\": \"2000-03-01T00:00:00.\" + \"1\" * digits + \"+05:45\",\n                \"ended_at\": \"2000-02-29T18:15:01.\" + \"1\" * digits + \"Z\",\n            }\n            for digits in range(1, 7)\n        ]\n        status, report = self.run_ledger(rows)\n        self.assertEqual(status, 0)\n        for digits, session in enumerate(report[\"sessions\"], 1):\n            fraction = (\"1\" * digits).ljust(6, \"0\")\n            self.assertEqual(\n                session,\n                {\n                    \"session\": str(digits),\n                    \"start_utc\": \"2000-02-29T18:15:00.\" + fraction + \"Z\",\n                    \"end_utc\": \"2000-02-29T18:15:01.\" + fraction + \"Z\",\n                    \"seconds\": 1,\n                    \"start_utc_date\": \"2000-02-29\",\n                },\n            )\n        self.assertEqual(\n            report[\"daily\"], [{\"date\": \"2000-02-29\", \"sessions\": 6, \"seconds\": 6}]\n        )\n        self.assertEqual(report[\"total_seconds\"], 6)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "additions": 211,
+            "deletions": 0
+          }
+        ],
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544524626
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjW40l00OVqtdjZoU",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_f5099323e1984e0ca465c458c1ca9b7a",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: test_ledger.py\n@@\n-             \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\", \"metadata\": \"ignored, text\"},\n+             \"ended_at\": \"2024-01-01T23:00:00.123457+00:00\", \"metadata\": \"ignored, text\"},\n@@\n-        expected_sessions = [\n-            {\"session\": rows[0][\"session\"], \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n-             \"end_utc\": \"2024-01-01T22:00:00.123457Z\"},\n-        ]\n-        # A backward local clock with a positive UTC duration.\n-        rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n         expected_sessions = [\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0e1fa13e6606dd41016ae7515164108191b8cc26c854483aeb"
+        }
+      },
+      "time": {
+        "start": 1793544529263
+      }
+    },
+    "outcomeID": "prt_hcFFhLA0xC6YhIYpzftb",
+    "outcome": {
+      "outcome": "failed",
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py:\n             \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\", \"metadata\": \"ignored, text\"},",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_f5099323e1984e0ca465c458c1ca9b7a",
+          "toolName": "apply_patch"
+        }
+      },
+      "time": {
+        "end": 1793544531976
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjW5bv00gVze5nyG6",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_3730a62917e44f1ea2d00926b96a1675",
+      "tool": "read",
+      "input": {
+        "filePath": "test_ledger.py",
+        "limit": 95
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_03db0f18b1c0e6c4016ae751577e3081919bd6ee2e64c97ef7"
+        }
+      },
+      "time": {
+        "start": 1793544535411
+      }
+    },
+    "outcomeID": "prt_h8Jan5Y74inNHhFP7OB2",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py</path>\n<type>file</type>\n<content>1: import csv\n2: import json\n3: from pathlib import Path\n4: import subprocess\n5: import sys\n6: import tempfile\n7: import unittest\n8: \n9: \n10: ARCHIVE = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n11: \n12: \n13: class LedgerTests(unittest.TestCase):\n14:     def run_ledger(self, rows, columns=None, line_ending=\"\\n\", relative=False):\n15:         columns = columns or [\"session\", \"started_at\", \"ended_at\"]\n16:         with tempfile.TemporaryDirectory() as directory:\n17:             cwd = Path(directory)\n18:             inputs = cwd / \"input data\"\n19:             inputs.mkdir()\n20:             with (inputs / \"sessions.csv\").open(\n21:                 \"w\", encoding=\"utf-8\", newline=\"\"\n22:             ) as source:\n23:                 writer = csv.DictWriter(\n24:                     source, fieldnames=columns, lineterminator=line_ending\n25:                 )\n26:                 writer.writeheader()\n27:                 writer.writerows(rows)\n28:             output = cwd / \"result report.json\"\n29:             output.write_text(\"stale output\", encoding=\"utf-8\")\n30:             result = subprocess.run(\n31:                 [\n32:                     sys.executable,\n33:                     str(ARCHIVE),\n34:                     inputs.name if relative else str(inputs),\n35:                     \"--output\",\n36:                     output.name if relative else str(output),\n37:                 ],\n38:                 cwd=cwd,\n39:                 capture_output=True,\n40:                 text=True,\n41:             )\n42:             self.assertIn(result.returncode, (0, 2), result.stderr)\n43:             return result.returncode, json.loads(output.read_text(encoding=\"utf-8\"))\n44: \n45:     def test_utc_semantics_and_csv_variations(self):\n46:         rows = [\n47:             {\n48:                 \"session\": ' 001, \"雪\"\\nline\\r\\n ',\n49:                 \"started_at\": \"2024-01-02T00:30:00.123456+02:00\",\n50:                 \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\",\n51:                 \"metadata\": \"ignored, text\",\n52:             },\n53:             {\n54:                 \"session\": \"   \",\n55:                 \"started_at\": \"2024-01-01T23:30:00-02:00\",\n56:                 \"ended_at\": \"2024-01-02T01:30:00Z\",\n57:                 \"metadata\": \"\",\n58:             },\n59:             {\n60:                 \"session\": \"00001\",\n61:                 \"started_at\": \"2024-01-01T23:59:59.9Z\",\n62:                 \"ended_at\": \"2024-01-02T00:00:00.000001+00:00\",\n63:                 \"metadata\": \"x\",\n64:             },\n65:             {\n66:                 \"session\": \"a/b:!?\",\n67:                 \"started_at\": \"2024-01-01T00:00:00.1-00:00\",\n68:                 \"ended_at\": \"2024-01-01T00:00:00.100000Z\",\n69:                 \"metadata\": \"x\",\n70:             },\n71:         ]\n72:         expected_sessions = [\n73:             {\n74:                 \"session\": rows[0][\"session\"],\n75:                 \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n76:                 \"end_utc\": \"2024-01-01T22:00:00.123457Z\",\n77:             },\n78:         ]\n79:         # A backward local clock with a positive UTC duration.\n80:         rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n81:         expected_sessions = [\n82:             {\n83:                 \"session\": rows[0][\"session\"],\n84:                 \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n85:                 \"end_utc\": \"2024-01-01T23:00:00.123457Z\",\n86:                 \"seconds\": 1800.000001,\n87:                 \"start_utc_date\": \"2024-01-01\",\n88:             },\n89:             {\n90:                 \"session\": \"   \",\n91:                 \"start_utc\": \"2024-01-02T01:30:00.000000Z\",\n92:                 \"end_utc\": \"2024-01-02T01:30:00.000000Z\",\n93:                 \"seconds\": 0,\n94:                 \"start_utc_date\": \"2024-01-02\",\n95:             },\n\n(Showing lines 1-95 of 211. Use offset=96 to continue.)\n</content>",
+      "title": "test_ledger.py",
+      "metadata": {
+        "preview": "import csv\nimport json\nfrom pathlib import Path\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\n\n\nARCHIVE = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n\n\nclass LedgerTests(unittest.TestCase):\n    def run_ledger(self, rows, columns=None, line_ending=\"\\n\", relative=False):\n        columns = columns or [\"session\", \"started_at\", \"ended_at\"]\n        with tempfile.TemporaryDirectory() as directory:\n            cwd = Path(directory)\n            inputs = cwd / \"input data\"\n            inputs.mkdir()\n            with (inputs / \"sessions.csv\").open(",
+        "truncated": true,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 95,
+        "totalLines": 211
+      },
+      "time": {
+        "end": 1793544535834
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjW6il00AHTvBDZ5n",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_d565d60ba02d41079a64fee5c31b6d1f",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: test_ledger.py\n@@\n-                \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\",\n+                \"ended_at\": \"2024-01-01T23:00:00.123457+00:00\",\n@@\n-        expected_sessions = [\n-            {\n-                \"session\": rows[0][\"session\"],\n-                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n-                \"end_utc\": \"2024-01-01T22:00:00.123457Z\",\n-            },\n-        ]\n-        # A backward local clock with a positive UTC duration.\n-        rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n         expected_sessions = [\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_076a46fa0fa8ab22016ae7515bcd308191a2a8967b9eb2b427"
+        }
+      },
+      "time": {
+        "start": 1793544539679
+      }
+    },
+    "outcomeID": "prt_hzu07YKbHqiF2swdFjWG",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_h6kE60q6A3wVaPRr7aDW",
+      "title": "Success. Updated the following files:\nM test_ledger.py",
+      "metadata": {
+        "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n@@ -46,9 +46,9 @@\n rows = [\n     {\n         \"session\": ' 001, \"雪\"\\nline\\r\\n ',\n         \"started_at\": \"2024-01-02T00:30:00.123456+02:00\",\n-        \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\",\n+        \"ended_at\": \"2024-01-01T23:00:00.123457+00:00\",\n         \"metadata\": \"ignored, text\",\n     },\n     {\n         \"session\": \"   \",\n@@ -72,17 +72,8 @@\n expected_sessions = [\n     {\n         \"session\": rows[0][\"session\"],\n         \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n-        \"end_utc\": \"2024-01-01T22:00:00.123457Z\",\n-    },\n-]\n-# A backward local clock with a positive UTC duration.\n-rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n-expected_sessions = [\n-    {\n-        \"session\": rows[0][\"session\"],\n-        \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n         \"end_utc\": \"2024-01-01T23:00:00.123457Z\",\n         \"seconds\": 1800.000001,\n         \"start_utc_date\": \"2024-01-01\",\n     },\n\n",
+        "files": [
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py",
+            "relativePath": "test_ledger.py",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n@@ -46,9 +46,9 @@\n rows = [\n     {\n         \"session\": ' 001, \"雪\"\\nline\\r\\n ',\n         \"started_at\": \"2024-01-02T00:30:00.123456+02:00\",\n-        \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\",\n+        \"ended_at\": \"2024-01-01T23:00:00.123457+00:00\",\n         \"metadata\": \"ignored, text\",\n     },\n     {\n         \"session\": \"   \",\n@@ -72,17 +72,8 @@\n expected_sessions = [\n     {\n         \"session\": rows[0][\"session\"],\n         \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n-        \"end_utc\": \"2024-01-01T22:00:00.123457Z\",\n-    },\n-]\n-# A backward local clock with a positive UTC duration.\n-rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n-expected_sessions = [\n-    {\n-        \"session\": rows[0][\"session\"],\n-        \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n         \"end_utc\": \"2024-01-01T23:00:00.123457Z\",\n         \"seconds\": 1800.000001,\n         \"start_utc_date\": \"2024-01-01\",\n     },\n",
+            "before": "import csv\nimport json\nfrom pathlib import Path\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\n\n\nARCHIVE = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n\n\nclass LedgerTests(unittest.TestCase):\n    def run_ledger(self, rows, columns=None, line_ending=\"\\n\", relative=False):\n        columns = columns or [\"session\", \"started_at\", \"ended_at\"]\n        with tempfile.TemporaryDirectory() as directory:\n            cwd = Path(directory)\n            inputs = cwd / \"input data\"\n            inputs.mkdir()\n            with (inputs / \"sessions.csv\").open(\n                \"w\", encoding=\"utf-8\", newline=\"\"\n            ) as source:\n                writer = csv.DictWriter(\n                    source, fieldnames=columns, lineterminator=line_ending\n                )\n                writer.writeheader()\n                writer.writerows(rows)\n            output = cwd / \"result report.json\"\n            output.write_text(\"stale output\", encoding=\"utf-8\")\n            result = subprocess.run(\n                [\n                    sys.executable,\n                    str(ARCHIVE),\n                    inputs.name if relative else str(inputs),\n                    \"--output\",\n                    output.name if relative else str(output),\n                ],\n                cwd=cwd,\n                capture_output=True,\n                text=True,\n            )\n            self.assertIn(result.returncode, (0, 2), result.stderr)\n            return result.returncode, json.loads(output.read_text(encoding=\"utf-8\"))\n\n    def test_utc_semantics_and_csv_variations(self):\n        rows = [\n            {\n                \"session\": ' 001, \"雪\"\\nline\\r\\n ',\n                \"started_at\": \"2024-01-02T00:30:00.123456+02:00\",\n                \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\",\n                \"metadata\": \"ignored, text\",\n            },\n            {\n                \"session\": \"   \",\n                \"started_at\": \"2024-01-01T23:30:00-02:00\",\n                \"ended_at\": \"2024-01-02T01:30:00Z\",\n                \"metadata\": \"\",\n            },\n            {\n                \"session\": \"00001\",\n                \"started_at\": \"2024-01-01T23:59:59.9Z\",\n                \"ended_at\": \"2024-01-02T00:00:00.000001+00:00\",\n                \"metadata\": \"x\",\n            },\n            {\n                \"session\": \"a/b:!?\",\n                \"started_at\": \"2024-01-01T00:00:00.1-00:00\",\n                \"ended_at\": \"2024-01-01T00:00:00.100000Z\",\n                \"metadata\": \"x\",\n            },\n        ]\n        expected_sessions = [\n            {\n                \"session\": rows[0][\"session\"],\n                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n                \"end_utc\": \"2024-01-01T22:00:00.123457Z\",\n            },\n        ]\n        # A backward local clock with a positive UTC duration.\n        rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n        expected_sessions = [\n            {\n                \"session\": rows[0][\"session\"],\n                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n                \"end_utc\": \"2024-01-01T23:00:00.123457Z\",\n                \"seconds\": 1800.000001,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n            {\n                \"session\": \"   \",\n                \"start_utc\": \"2024-01-02T01:30:00.000000Z\",\n                \"end_utc\": \"2024-01-02T01:30:00.000000Z\",\n                \"seconds\": 0,\n                \"start_utc_date\": \"2024-01-02\",\n            },\n            {\n                \"session\": \"00001\",\n                \"start_utc\": \"2024-01-01T23:59:59.900000Z\",\n                \"end_utc\": \"2024-01-02T00:00:00.000001Z\",\n                \"seconds\": 0.100001,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n            {\n                \"session\": \"a/b:!?\",\n                \"start_utc\": \"2024-01-01T00:00:00.100000Z\",\n                \"end_utc\": \"2024-01-01T00:00:00.100000Z\",\n                \"seconds\": 0,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n        ]\n        for ending in (\"\\n\", \"\\r\\n\"):\n            with self.subTest(ending=ending):\n                status, report = self.run_ledger(\n                    rows,\n                    [\"metadata\", \"ended_at\", \"session\", \"started_at\"],\n                    ending,\n                    True,\n                )\n                self.assertEqual(status, 0)\n                self.assertEqual(\n                    report,\n                    {\n                        \"sessions\": expected_sessions,\n                        \"daily\": [\n                            {\n                                \"date\": \"2024-01-01\",\n                                \"sessions\": 3,\n                                \"seconds\": 1800.100002,\n                            },\n                            {\"date\": \"2024-01-02\", \"sessions\": 1, \"seconds\": 0},\n                        ],\n                        \"total_seconds\": 1800.100002,\n                    },\n                )\n\n    def test_first_negative_uses_instants_and_exact_id(self):\n        rows = [\n            {\n                \"session\": \"valid\",\n                \"started_at\": \"2024-01-01T01:00:00+02:00\",\n                \"ended_at\": \"2024-01-01T00:00:00Z\",\n            },\n            {\n                \"session\": ' 002, \"负\" ',\n                \"started_at\": \"2024-01-01T00:00:00Z\",\n                \"ended_at\": \"2024-01-01T01:00:00+02:00\",\n            },\n            {\n                \"session\": \"later\",\n                \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n                \"ended_at\": \"2024-01-01T00:00:00Z\",\n            },\n        ]\n        status, report = self.run_ledger(rows)\n        self.assertEqual(status, 2)\n        self.assertEqual(\n            report,\n            {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": rows[1][\"session\"]}},\n        )\n\n    def test_microsecond_negative(self):\n        status, report = self.run_ledger(\n            [\n                {\n                    \"session\": \"1\",\n                    \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n                    \"ended_at\": \"2024-01-01T00:00:00Z\",\n                }\n            ]\n        )\n        self.assertEqual(status, 2)\n        self.assertEqual(\n            report, {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": \"1\"}}\n        )\n\n    def test_empty_ledger(self):\n        self.assertEqual(\n            self.run_ledger([]), (0, {\"sessions\": [], \"daily\": [], \"total_seconds\": 0})\n        )\n\n    def test_fraction_lengths_and_nonhour_offsets(self):\n        rows = [\n            {\n                \"session\": str(digits),\n                \"started_at\": \"2000-03-01T00:00:00.\" + \"1\" * digits + \"+05:45\",\n                \"ended_at\": \"2000-02-29T18:15:01.\" + \"1\" * digits + \"Z\",\n            }\n            for digits in range(1, 7)\n        ]\n        status, report = self.run_ledger(rows)\n        self.assertEqual(status, 0)\n        for digits, session in enumerate(report[\"sessions\"], 1):\n            fraction = (\"1\" * digits).ljust(6, \"0\")\n            self.assertEqual(\n                session,\n                {\n                    \"session\": str(digits),\n                    \"start_utc\": \"2000-02-29T18:15:00.\" + fraction + \"Z\",\n                    \"end_utc\": \"2000-02-29T18:15:01.\" + fraction + \"Z\",\n                    \"seconds\": 1,\n                    \"start_utc_date\": \"2000-02-29\",\n                },\n            )\n        self.assertEqual(\n            report[\"daily\"], [{\"date\": \"2000-02-29\", \"sessions\": 6, \"seconds\": 6}]\n        )\n        self.assertEqual(report[\"total_seconds\"], 6)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "after": "import csv\nimport json\nfrom pathlib import Path\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\n\n\nARCHIVE = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n\n\nclass LedgerTests(unittest.TestCase):\n    def run_ledger(self, rows, columns=None, line_ending=\"\\n\", relative=False):\n        columns = columns or [\"session\", \"started_at\", \"ended_at\"]\n        with tempfile.TemporaryDirectory() as directory:\n            cwd = Path(directory)\n            inputs = cwd / \"input data\"\n            inputs.mkdir()\n            with (inputs / \"sessions.csv\").open(\n                \"w\", encoding=\"utf-8\", newline=\"\"\n            ) as source:\n                writer = csv.DictWriter(\n                    source, fieldnames=columns, lineterminator=line_ending\n                )\n                writer.writeheader()\n                writer.writerows(rows)\n            output = cwd / \"result report.json\"\n            output.write_text(\"stale output\", encoding=\"utf-8\")\n            result = subprocess.run(\n                [\n                    sys.executable,\n                    str(ARCHIVE),\n                    inputs.name if relative else str(inputs),\n                    \"--output\",\n                    output.name if relative else str(output),\n                ],\n                cwd=cwd,\n                capture_output=True,\n                text=True,\n            )\n            self.assertIn(result.returncode, (0, 2), result.stderr)\n            return result.returncode, json.loads(output.read_text(encoding=\"utf-8\"))\n\n    def test_utc_semantics_and_csv_variations(self):\n        rows = [\n            {\n                \"session\": ' 001, \"雪\"\\nline\\r\\n ',\n                \"started_at\": \"2024-01-02T00:30:00.123456+02:00\",\n                \"ended_at\": \"2024-01-01T23:00:00.123457+00:00\",\n                \"metadata\": \"ignored, text\",\n            },\n            {\n                \"session\": \"   \",\n                \"started_at\": \"2024-01-01T23:30:00-02:00\",\n                \"ended_at\": \"2024-01-02T01:30:00Z\",\n                \"metadata\": \"\",\n            },\n            {\n                \"session\": \"00001\",\n                \"started_at\": \"2024-01-01T23:59:59.9Z\",\n                \"ended_at\": \"2024-01-02T00:00:00.000001+00:00\",\n                \"metadata\": \"x\",\n            },\n            {\n                \"session\": \"a/b:!?\",\n                \"started_at\": \"2024-01-01T00:00:00.1-00:00\",\n                \"ended_at\": \"2024-01-01T00:00:00.100000Z\",\n                \"metadata\": \"x\",\n            },\n        ]\n        expected_sessions = [\n            {\n                \"session\": rows[0][\"session\"],\n                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n                \"end_utc\": \"2024-01-01T23:00:00.123457Z\",\n                \"seconds\": 1800.000001,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n            {\n                \"session\": \"   \",\n                \"start_utc\": \"2024-01-02T01:30:00.000000Z\",\n                \"end_utc\": \"2024-01-02T01:30:00.000000Z\",\n                \"seconds\": 0,\n                \"start_utc_date\": \"2024-01-02\",\n            },\n            {\n                \"session\": \"00001\",\n                \"start_utc\": \"2024-01-01T23:59:59.900000Z\",\n                \"end_utc\": \"2024-01-02T00:00:00.000001Z\",\n                \"seconds\": 0.100001,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n            {\n                \"session\": \"a/b:!?\",\n                \"start_utc\": \"2024-01-01T00:00:00.100000Z\",\n                \"end_utc\": \"2024-01-01T00:00:00.100000Z\",\n                \"seconds\": 0,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n        ]\n        for ending in (\"\\n\", \"\\r\\n\"):\n            with self.subTest(ending=ending):\n                status, report = self.run_ledger(\n                    rows,\n                    [\"metadata\", \"ended_at\", \"session\", \"started_at\"],\n                    ending,\n                    True,\n                )\n                self.assertEqual(status, 0)\n                self.assertEqual(\n                    report,\n                    {\n                        \"sessions\": expected_sessions,\n                        \"daily\": [\n                            {\n                                \"date\": \"2024-01-01\",\n                                \"sessions\": 3,\n                                \"seconds\": 1800.100002,\n                            },\n                            {\"date\": \"2024-01-02\", \"sessions\": 1, \"seconds\": 0},\n                        ],\n                        \"total_seconds\": 1800.100002,\n                    },\n                )\n\n    def test_first_negative_uses_instants_and_exact_id(self):\n        rows = [\n            {\n                \"session\": \"valid\",\n                \"started_at\": \"2024-01-01T01:00:00+02:00\",\n                \"ended_at\": \"2024-01-01T00:00:00Z\",\n            },\n            {\n                \"session\": ' 002, \"负\" ',\n                \"started_at\": \"2024-01-01T00:00:00Z\",\n                \"ended_at\": \"2024-01-01T01:00:00+02:00\",\n            },\n            {\n                \"session\": \"later\",\n                \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n                \"ended_at\": \"2024-01-01T00:00:00Z\",\n            },\n        ]\n        status, report = self.run_ledger(rows)\n        self.assertEqual(status, 2)\n        self.assertEqual(\n            report,\n            {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": rows[1][\"session\"]}},\n        )\n\n    def test_microsecond_negative(self):\n        status, report = self.run_ledger(\n            [\n                {\n                    \"session\": \"1\",\n                    \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n                    \"ended_at\": \"2024-01-01T00:00:00Z\",\n                }\n            ]\n        )\n        self.assertEqual(status, 2)\n        self.assertEqual(\n            report, {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": \"1\"}}\n        )\n\n    def test_empty_ledger(self):\n        self.assertEqual(\n            self.run_ledger([]), (0, {\"sessions\": [], \"daily\": [], \"total_seconds\": 0})\n        )\n\n    def test_fraction_lengths_and_nonhour_offsets(self):\n        rows = [\n            {\n                \"session\": str(digits),\n                \"started_at\": \"2000-03-01T00:00:00.\" + \"1\" * digits + \"+05:45\",\n                \"ended_at\": \"2000-02-29T18:15:01.\" + \"1\" * digits + \"Z\",\n            }\n            for digits in range(1, 7)\n        ]\n        status, report = self.run_ledger(rows)\n        self.assertEqual(status, 0)\n        for digits, session in enumerate(report[\"sessions\"], 1):\n            fraction = (\"1\" * digits).ljust(6, \"0\")\n            self.assertEqual(\n                session,\n                {\n                    \"session\": str(digits),\n                    \"start_utc\": \"2000-02-29T18:15:00.\" + fraction + \"Z\",\n                    \"end_utc\": \"2000-02-29T18:15:01.\" + fraction + \"Z\",\n                    \"seconds\": 1,\n                    \"start_utc_date\": \"2000-02-29\",\n                },\n            )\n        self.assertEqual(\n            report[\"daily\"], [{\"date\": \"2000-02-29\", \"sessions\": 6, \"seconds\": 6}]\n        )\n        self.assertEqual(report[\"total_seconds\"], 6)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "additions": 1,
+            "deletions": 10
+          }
+        ],
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544543325
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjW8ht00i272fNMNa",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_9d0743329f8f45c1a482bedfc951ea29",
+      "tool": "bash",
+      "input": {
+        "command": "ls",
+        "description": "Verify project location before building archive"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0f50beb49034026c016ae75163612c81919d320974a86d1643"
+        }
+      },
+      "time": {
+        "start": 1793544547313
+      }
+    },
+    "outcomeID": "prt_hTro5DBerAApuiS3OCn5",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hpOI3gByiY6MnG8ziuP5",
+      "title": "Verify project location before building archive",
+      "metadata": {
+        "refused": false,
+        "command": "ls",
+        "output": "CONTRACT.md\nbuild.py\nmain.py\nsample\ntest_ledger.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 51,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Verify project location before building archive",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544548338
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjWAC50066HyCMPEI",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_8d1298235c1d4f9197055d6b7386ccba",
+      "tool": "read",
+      "input": {
+        "filePath": "sample/sessions.csv"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_058e7cfc73be46ae016ae75169228881918a5ac9a792e26618"
+        }
+      },
+      "time": {
+        "start": 1793544553029
+      }
+    },
+    "outcomeID": "prt_hmEr8sDmIuCX82h0sNgU",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\sample\\sessions.csv</path>\n<type>file</type>\n<content>1: session,started_at,ended_at\n2: A,2026-04-01T10:00:00Z,2026-04-01T10:01:30Z\n3: B,2026-04-01T11:00:00Z,2026-04-01T11:00:30Z\n\n(End of file - total 3 lines)\n</content>",
+      "title": "sample\\sessions.csv",
+      "metadata": {
+        "preview": "session,started_at,ended_at\nA,2026-04-01T10:00:00Z,2026-04-01T10:01:30Z\nB,2026-04-01T11:00:00Z,2026-04-01T11:00:30Z",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 3,
+        "totalLines": 3
+      },
+      "time": {
+        "end": 1793544554089
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjWBTo00XnY2XXS0H",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_3d41a9994c7946e4860201897ba0bf92",
+      "tool": "bash",
+      "input": {
+        "command": "python build.py",
+        "description": "Build standalone zipapp from repaired source"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_056ad6efd4857cdd016ae7516e11788191bd5d98efbdd512f1"
+        }
+      },
+      "time": {
+        "start": 1793544557972
+      }
+    },
+    "outcomeID": "prt_hfobp8gXnR2GGaZXUnEt",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hKhjBgU30zva5L3e0BD0",
+      "title": "Build standalone zipapp from repaired source",
+      "metadata": {
+        "refused": false,
+        "command": "python build.py",
+        "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 0,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Build standalone zipapp from repaired source",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544559002
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjWCvg00rJo3cX4Nq",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_7fd4d55a1732419ea298710af5b3b8db",
+      "tool": "bash",
+      "input": {
+        "command": "python -m unittest -v",
+        "description": "Test final archive using external working directories"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0b772ecf0c2f2556016ae75173a08c81919c69c13cc017a44b"
+        }
+      },
+      "time": {
+        "start": 1793544563544
+      }
+    },
+    "outcomeID": "prt_hyOS07m6alYGmyum9evw",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hY50k3nXMYZH0a7SdO7C",
+      "title": "Test final archive using external working directories",
+      "metadata": {
+        "refused": false,
+        "command": "python -m unittest -v",
+        "output": "test_empty_ledger (test_ledger.LedgerTests.test_empty_ledger) ... ok\r\ntest_first_negative_uses_instants_and_exact_id (test_ledger.LedgerTests.test_first_negative_uses_instants_and_exact_id) ... ok\r\ntest_fraction_lengths_and_nonhour_offsets (test_ledger.LedgerTests.test_fraction_lengths_and_nonhour_offsets) ... ok\r\ntest_microsecond_negative (test_ledger.LedgerTests.test_microsecond_negative) ... ok\r\ntest_utc_semantics_and_csv_variations (test_ledger.LedgerTests.test_utc_semantics_and_csv_variations) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 5 tests in 0.923s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 615,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Test final archive using external working directories",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544565821
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjWFuI00TANusJYY3",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_34d40a7fd84b4b0aa3a3d5e4a6b12c37",
+      "tool": "read",
+      "input": {
+        "filePath": "main.py"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0de2bea54e6cbbe3016ae7517f1900819196ba2cf559d153f5"
+        }
+      },
+      "time": {
+        "start": 1793544574990
+      }
+    },
+    "outcomeID": "prt_hyD3FBh1ELps4noWmR1r",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\main.py</path>\n<type>file</type>\n<content>1: import argparse\n2: import csv\n3: import json\n4: import re\n5: from datetime import datetime, timezone\n6: from pathlib import Path\n7: \n8: \n9: TIMESTAMP = re.compile(\n10:     r\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\"\n11:     r\"(?:\\.[0-9]{1,6})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])\"\n12: )\n13: \n14: \n15: def parse_timestamp(value):\n16:     if TIMESTAMP.fullmatch(value) is None:\n17:         raise ValueError(\"Invalid timestamp: {!r}\".format(value))\n18:     return datetime.fromisoformat(value.replace(\"Z\", \"+00:00\")).astimezone(timezone.utc)\n19: \n20: \n21: def canonical(value):\n22:     return value.isoformat(timespec=\"microseconds\").replace(\"+00:00\", \"Z\")\n23: \n24: \n25: def build_report(input_directory):\n26:     sessions = []\n27:     daily = {}\n28:     total_microseconds = 0\n29:     with (Path(input_directory) / \"sessions.csv\").open(\n30:         encoding=\"utf-8\", newline=\"\"\n31:     ) as source:\n32:         reader = csv.DictReader(source)\n33:         if not {\"session\", \"started_at\", \"ended_at\"}.issubset(reader.fieldnames or []):\n34:             raise ValueError(\n35:                 \"sessions.csv must contain session, started_at and ended_at columns\"\n36:             )\n37:         for row in reader:\n38:             start = parse_timestamp(row[\"started_at\"])\n39:             end = parse_timestamp(row[\"ended_at\"])\n40:             if end < start:\n41:                 return {\n42:                     \"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": row[\"session\"]}\n43:                 }, 2\n44:             elapsed = end - start\n45:             microseconds = (\n46:                 elapsed.days * 86400 + elapsed.seconds\n47:             ) * 1000000 + elapsed.microseconds\n48:             day = start.date().isoformat()\n49:             sessions.append(\n50:                 {\n51:                     \"session\": row[\"session\"],\n52:                     \"start_utc\": canonical(start),\n53:                     \"end_utc\": canonical(end),\n54:                     \"seconds\": microseconds / 1000000,\n55:                     \"start_utc_date\": day,\n56:                 }\n57:             )\n58:             bucket = daily.setdefault(day, {\"sessions\": 0, \"microseconds\": 0})\n59:             bucket[\"sessions\"] += 1\n60:             bucket[\"microseconds\"] += microseconds\n61:             total_microseconds += microseconds\n62:     return {\n63:         \"sessions\": sessions,\n64:         \"daily\": [\n65:             {\n66:                 \"date\": day,\n67:                 \"sessions\": daily[day][\"sessions\"],\n68:                 \"seconds\": daily[day][\"microseconds\"] / 1000000,\n69:             }\n70:             for day in sorted(daily)\n71:         ],\n72:         \"total_seconds\": total_microseconds / 1000000,\n73:     }, 0\n74: \n75: \n76: def main():\n77:     parser = argparse.ArgumentParser(description=\"Report session durations in UTC.\")\n78:     parser.add_argument(\"input\", help=\"Directory containing sessions.csv\")\n79:     parser.add_argument(\"--output\", required=True, help=\"Destination JSON file\")\n80:     args = parser.parse_args()\n81:     report, status = build_report(args.input)\n82:     Path(args.output).write_text(\n83:         json.dumps(report, ensure_ascii=False, indent=2) + \"\\n\", encoding=\"utf-8\"\n84:     )\n85:     return status\n86: \n87: \n88: if __name__ == \"__main__\":\n89:     raise SystemExit(main())\n\n(End of file - total 89 lines)\n</content>",
+      "title": "main.py",
+      "metadata": {
+        "preview": "import argparse\nimport csv\nimport json\nimport re\nfrom datetime import datetime, timezone\nfrom pathlib import Path\n\n\nTIMESTAMP = re.compile(\n    r\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\"\n    r\"(?:\\.[0-9]{1,6})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])\"\n)\n\n\ndef parse_timestamp(value):\n    if TIMESTAMP.fullmatch(value) is None:\n        raise ValueError(\"Invalid timestamp: {!r}\".format(value))\n    return datetime.fromisoformat(value.replace(\"Z\", \"+00:00\")).astimezone(timezone.utc)\n\n",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 89,
+        "totalLines": 89
+      },
+      "time": {
+        "end": 1793544575507
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjWHTy00kFFUt3xWT",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_1baa8ad5a4864609bcf015fb02aa8900",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: test_ledger.py\n@@\n import json\n from pathlib import Path\n+import shutil\n@@\n             output = cwd / \"result report.json\"\n             output.write_text(\"stale output\", encoding=\"utf-8\")\n+            executable = cwd / \"standalone.pyz\"\n+            shutil.copyfile(ARCHIVE, executable)\n@@\n-                    str(ARCHIVE),\n+                    str(executable),\n@@\n-    def test_empty_ledger(self):\n+    def test_year_boundary_and_sorted_days(self):\n+        status, report = self.run_ledger([\n+            {\"session\": \"later\", \"started_at\": \"2025-01-01T12:00:00-12:00\",\n+             \"ended_at\": \"2025-01-02T14:00:00+14:00\"},\n+            {\"session\": \"earlier\", \"started_at\": \"2025-01-01T00:00:00+14:00\",\n+             \"ended_at\": \"2025-01-02T10:00:00Z\"},\n+        ])\n+        self.assertEqual(status, 0)\n+        self.assertEqual(report, {\n+            \"sessions\": [\n+                {\"session\": \"later\", \"start_utc\": \"2025-01-02T00:00:00.000000Z\",\n+                 \"end_utc\": \"2025-01-02T00:00:00.000000Z\", \"seconds\": 0,\n+                 \"start_utc_date\": \"2025-01-02\"},\n+                {\"session\": \"earlier\", \"start_utc\": \"2024-12-31T10:00:00.000000Z\",\n+                 \"end_utc\": \"2025-01-02T10:00:00.000000Z\", \"seconds\": 172800,\n+                 \"start_utc_date\": \"2024-12-31\"},\n+            ],\n+            \"daily\": [{\"date\": \"2024-12-31\", \"sessions\": 1, \"seconds\": 172800},\n+                      {\"date\": \"2025-01-02\", \"sessions\": 1, \"seconds\": 0}],\n+            \"total_seconds\": 172800,\n+        })\n+\n+    def test_supplied_sample(self):\n+        with (ARCHIVE.parent / \"sample\" / \"sessions.csv\").open(\n+            encoding=\"utf-8\", newline=\"\"\n+        ) as source:\n+            rows = list(csv.DictReader(source))\n+        status, report = self.run_ledger(rows)\n+        self.assertEqual(status, 0)\n+        self.assertEqual(report, {\n+            \"sessions\": [\n+                {\"session\": \"A\", \"start_utc\": \"2026-04-01T10:00:00.000000Z\",\n+                 \"end_utc\": \"2026-04-01T10:01:30.000000Z\", \"seconds\": 90,\n+                 \"start_utc_date\": \"2026-04-01\"},\n+                {\"session\": \"B\", \"start_utc\": \"2026-04-01T11:00:00.000000Z\",\n+                 \"end_utc\": \"2026-04-01T11:00:30.000000Z\", \"seconds\": 30,\n+                 \"start_utc_date\": \"2026-04-01\"},\n+            ],\n+            \"daily\": [{\"date\": \"2026-04-01\", \"sessions\": 2, \"seconds\": 120}],\n+            \"total_seconds\": 120,\n+        })\n+\n+    def test_empty_ledger(self):\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_03e742ed9ba92c42016ae751852c3c8191b23741c0d24c449f"
+        }
+      },
+      "time": {
+        "start": 1793544581046
+      }
+    },
+    "outcomeID": "prt_hCMkdwQpQ0DpOjC3IDMu",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hoX9TL1NgQ1dyYsQBFwI",
+      "title": "Success. Updated the following files:\nM test_ledger.py",
+      "metadata": {
+        "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n@@ -1,7 +1,8 @@\n import csv\n import json\n from pathlib import Path\n+import shutil\n import subprocess\n import sys\n import tempfile\n import unittest\n@@ -26,12 +27,14 @@\n                 writer.writeheader()\n                 writer.writerows(rows)\n             output = cwd / \"result report.json\"\n             output.write_text(\"stale output\", encoding=\"utf-8\")\n+            executable = cwd / \"standalone.pyz\"\n+            shutil.copyfile(ARCHIVE, executable)\n             result = subprocess.run(\n                 [\n                     sys.executable,\n-                    str(ARCHIVE),\n+                    str(executable),\n                     inputs.name if relative else str(inputs),\n                     \"--output\",\n                     output.name if relative else str(output),\n                 ],\n@@ -163,8 +166,82 @@\n         self.assertEqual(\n             report, {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": \"1\"}}\n         )\n \n+    def test_year_boundary_and_sorted_days(self):\n+        status, report = self.run_ledger(\n+            [\n+                {\n+                    \"session\": \"later\",\n+                    \"started_at\": \"2025-01-01T12:00:00-12:00\",\n+                    \"ended_at\": \"2025-01-02T14:00:00+14:00\",\n+                },\n+                {\n+                    \"session\": \"earlier\",\n+                    \"started_at\": \"2025-01-01T00:00:00+14:00\",\n+                    \"ended_at\": \"2025-01-02T10:00:00Z\",\n+                },\n+            ]\n+        )\n+        self.assertEqual(status, 0)\n+        self.assertEqual(\n+            report,\n+            {\n+                \"sessions\": [\n+                    {\n+                        \"session\": \"later\",\n+                        \"start_utc\": \"2025-01-02T00:00:00.000000Z\",\n+                        \"end_utc\": \"2025-01-02T00:00:00.000000Z\",\n+                        \"seconds\": 0,\n+                        \"start_utc_date\": \"2025-01-02\",\n+                    },\n+                    {\n+                        \"session\": \"earlier\",\n+                        \"start_utc\": \"2024-12-31T10:00:00.000000Z\",\n+                        \"end_utc\": \"2025-01-02T10:00:00.000000Z\",\n+                        \"seconds\": 172800,\n+                        \"start_utc_date\": \"2024-12-31\",\n+                    },\n+                ],\n+                \"daily\": [\n+                    {\"date\": \"2024-12-31\", \"sessions\": 1, \"seconds\": 172800},\n+                    {\"date\": \"2025-01-02\", \"sessions\": 1, \"seconds\": 0},\n+                ],\n+                \"total_seconds\": 172800,\n+            },\n+        )\n+\n+    def test_supplied_sample(self):\n+        with (ARCHIVE.parent / \"sample\" / \"sessions.csv\").open(\n+            encoding=\"utf-8\", newline=\"\"\n+        ) as source:\n+            rows = list(csv.DictReader(source))\n+        status, report = self.run_ledger(rows)\n+        self.assertEqual(status, 0)\n+        self.assertEqual(\n+            report,\n+            {\n+                \"sessions\": [\n+                    {\n+                        \"session\": \"A\",\n+                        \"start_utc\": \"2026-04-01T10:00:00.000000Z\",\n+                        \"end_utc\": \"2026-04-01T10:01:30.000000Z\",\n+                        \"seconds\": 90,\n+                        \"start_utc_date\": \"2026-04-01\",\n+                    },\n+                    {\n+                        \"session\": \"B\",\n+                        \"start_utc\": \"2026-04-01T11:00:00.000000Z\",\n+                        \"end_utc\": \"2026-04-01T11:00:30.000000Z\",\n+                        \"seconds\": 30,\n+                        \"start_utc_date\": \"2026-04-01\",\n+                    },\n+                ],\n+                \"daily\": [{\"date\": \"2026-04-01\", \"sessions\": 2, \"seconds\": 120}],\n+                \"total_seconds\": 120,\n+            },\n+        )\n+\n     def test_empty_ledger(self):\n         self.assertEqual(\n             self.run_ledger([]), (0, {\"sessions\": [], \"daily\": [], \"total_seconds\": 0})\n         )\n\n",
+        "files": [
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py",
+            "relativePath": "test_ledger.py",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py\n@@ -1,7 +1,8 @@\n import csv\n import json\n from pathlib import Path\n+import shutil\n import subprocess\n import sys\n import tempfile\n import unittest\n@@ -26,12 +27,14 @@\n                 writer.writeheader()\n                 writer.writerows(rows)\n             output = cwd / \"result report.json\"\n             output.write_text(\"stale output\", encoding=\"utf-8\")\n+            executable = cwd / \"standalone.pyz\"\n+            shutil.copyfile(ARCHIVE, executable)\n             result = subprocess.run(\n                 [\n                     sys.executable,\n-                    str(ARCHIVE),\n+                    str(executable),\n                     inputs.name if relative else str(inputs),\n                     \"--output\",\n                     output.name if relative else str(output),\n                 ],\n@@ -163,8 +166,82 @@\n         self.assertEqual(\n             report, {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": \"1\"}}\n         )\n \n+    def test_year_boundary_and_sorted_days(self):\n+        status, report = self.run_ledger(\n+            [\n+                {\n+                    \"session\": \"later\",\n+                    \"started_at\": \"2025-01-01T12:00:00-12:00\",\n+                    \"ended_at\": \"2025-01-02T14:00:00+14:00\",\n+                },\n+                {\n+                    \"session\": \"earlier\",\n+                    \"started_at\": \"2025-01-01T00:00:00+14:00\",\n+                    \"ended_at\": \"2025-01-02T10:00:00Z\",\n+                },\n+            ]\n+        )\n+        self.assertEqual(status, 0)\n+        self.assertEqual(\n+            report,\n+            {\n+                \"sessions\": [\n+                    {\n+                        \"session\": \"later\",\n+                        \"start_utc\": \"2025-01-02T00:00:00.000000Z\",\n+                        \"end_utc\": \"2025-01-02T00:00:00.000000Z\",\n+                        \"seconds\": 0,\n+                        \"start_utc_date\": \"2025-01-02\",\n+                    },\n+                    {\n+                        \"session\": \"earlier\",\n+                        \"start_utc\": \"2024-12-31T10:00:00.000000Z\",\n+                        \"end_utc\": \"2025-01-02T10:00:00.000000Z\",\n+                        \"seconds\": 172800,\n+                        \"start_utc_date\": \"2024-12-31\",\n+                    },\n+                ],\n+                \"daily\": [\n+                    {\"date\": \"2024-12-31\", \"sessions\": 1, \"seconds\": 172800},\n+                    {\"date\": \"2025-01-02\", \"sessions\": 1, \"seconds\": 0},\n+                ],\n+                \"total_seconds\": 172800,\n+            },\n+        )\n+\n+    def test_supplied_sample(self):\n+        with (ARCHIVE.parent / \"sample\" / \"sessions.csv\").open(\n+            encoding=\"utf-8\", newline=\"\"\n+        ) as source:\n+            rows = list(csv.DictReader(source))\n+        status, report = self.run_ledger(rows)\n+        self.assertEqual(status, 0)\n+        self.assertEqual(\n+            report,\n+            {\n+                \"sessions\": [\n+                    {\n+                        \"session\": \"A\",\n+                        \"start_utc\": \"2026-04-01T10:00:00.000000Z\",\n+                        \"end_utc\": \"2026-04-01T10:01:30.000000Z\",\n+                        \"seconds\": 90,\n+                        \"start_utc_date\": \"2026-04-01\",\n+                    },\n+                    {\n+                        \"session\": \"B\",\n+                        \"start_utc\": \"2026-04-01T11:00:00.000000Z\",\n+                        \"end_utc\": \"2026-04-01T11:00:30.000000Z\",\n+                        \"seconds\": 30,\n+                        \"start_utc_date\": \"2026-04-01\",\n+                    },\n+                ],\n+                \"daily\": [{\"date\": \"2026-04-01\", \"sessions\": 2, \"seconds\": 120}],\n+                \"total_seconds\": 120,\n+            },\n+        )\n+\n     def test_empty_ledger(self):\n         self.assertEqual(\n             self.run_ledger([]), (0, {\"sessions\": [], \"daily\": [], \"total_seconds\": 0})\n         )\n",
+            "before": "import csv\nimport json\nfrom pathlib import Path\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\n\n\nARCHIVE = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n\n\nclass LedgerTests(unittest.TestCase):\n    def run_ledger(self, rows, columns=None, line_ending=\"\\n\", relative=False):\n        columns = columns or [\"session\", \"started_at\", \"ended_at\"]\n        with tempfile.TemporaryDirectory() as directory:\n            cwd = Path(directory)\n            inputs = cwd / \"input data\"\n            inputs.mkdir()\n            with (inputs / \"sessions.csv\").open(\n                \"w\", encoding=\"utf-8\", newline=\"\"\n            ) as source:\n                writer = csv.DictWriter(\n                    source, fieldnames=columns, lineterminator=line_ending\n                )\n                writer.writeheader()\n                writer.writerows(rows)\n            output = cwd / \"result report.json\"\n            output.write_text(\"stale output\", encoding=\"utf-8\")\n            result = subprocess.run(\n                [\n                    sys.executable,\n                    str(ARCHIVE),\n                    inputs.name if relative else str(inputs),\n                    \"--output\",\n                    output.name if relative else str(output),\n                ],\n                cwd=cwd,\n                capture_output=True,\n                text=True,\n            )\n            self.assertIn(result.returncode, (0, 2), result.stderr)\n            return result.returncode, json.loads(output.read_text(encoding=\"utf-8\"))\n\n    def test_utc_semantics_and_csv_variations(self):\n        rows = [\n            {\n                \"session\": ' 001, \"雪\"\\nline\\r\\n ',\n                \"started_at\": \"2024-01-02T00:30:00.123456+02:00\",\n                \"ended_at\": \"2024-01-01T23:00:00.123457+00:00\",\n                \"metadata\": \"ignored, text\",\n            },\n            {\n                \"session\": \"   \",\n                \"started_at\": \"2024-01-01T23:30:00-02:00\",\n                \"ended_at\": \"2024-01-02T01:30:00Z\",\n                \"metadata\": \"\",\n            },\n            {\n                \"session\": \"00001\",\n                \"started_at\": \"2024-01-01T23:59:59.9Z\",\n                \"ended_at\": \"2024-01-02T00:00:00.000001+00:00\",\n                \"metadata\": \"x\",\n            },\n            {\n                \"session\": \"a/b:!?\",\n                \"started_at\": \"2024-01-01T00:00:00.1-00:00\",\n                \"ended_at\": \"2024-01-01T00:00:00.100000Z\",\n                \"metadata\": \"x\",\n            },\n        ]\n        expected_sessions = [\n            {\n                \"session\": rows[0][\"session\"],\n                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n                \"end_utc\": \"2024-01-01T23:00:00.123457Z\",\n                \"seconds\": 1800.000001,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n            {\n                \"session\": \"   \",\n                \"start_utc\": \"2024-01-02T01:30:00.000000Z\",\n                \"end_utc\": \"2024-01-02T01:30:00.000000Z\",\n                \"seconds\": 0,\n                \"start_utc_date\": \"2024-01-02\",\n            },\n            {\n                \"session\": \"00001\",\n                \"start_utc\": \"2024-01-01T23:59:59.900000Z\",\n                \"end_utc\": \"2024-01-02T00:00:00.000001Z\",\n                \"seconds\": 0.100001,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n            {\n                \"session\": \"a/b:!?\",\n                \"start_utc\": \"2024-01-01T00:00:00.100000Z\",\n                \"end_utc\": \"2024-01-01T00:00:00.100000Z\",\n                \"seconds\": 0,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n        ]\n        for ending in (\"\\n\", \"\\r\\n\"):\n            with self.subTest(ending=ending):\n                status, report = self.run_ledger(\n                    rows,\n                    [\"metadata\", \"ended_at\", \"session\", \"started_at\"],\n                    ending,\n                    True,\n                )\n                self.assertEqual(status, 0)\n                self.assertEqual(\n                    report,\n                    {\n                        \"sessions\": expected_sessions,\n                        \"daily\": [\n                            {\n                                \"date\": \"2024-01-01\",\n                                \"sessions\": 3,\n                                \"seconds\": 1800.100002,\n                            },\n                            {\"date\": \"2024-01-02\", \"sessions\": 1, \"seconds\": 0},\n                        ],\n                        \"total_seconds\": 1800.100002,\n                    },\n                )\n\n    def test_first_negative_uses_instants_and_exact_id(self):\n        rows = [\n            {\n                \"session\": \"valid\",\n                \"started_at\": \"2024-01-01T01:00:00+02:00\",\n                \"ended_at\": \"2024-01-01T00:00:00Z\",\n            },\n            {\n                \"session\": ' 002, \"负\" ',\n                \"started_at\": \"2024-01-01T00:00:00Z\",\n                \"ended_at\": \"2024-01-01T01:00:00+02:00\",\n            },\n            {\n                \"session\": \"later\",\n                \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n                \"ended_at\": \"2024-01-01T00:00:00Z\",\n            },\n        ]\n        status, report = self.run_ledger(rows)\n        self.assertEqual(status, 2)\n        self.assertEqual(\n            report,\n            {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": rows[1][\"session\"]}},\n        )\n\n    def test_microsecond_negative(self):\n        status, report = self.run_ledger(\n            [\n                {\n                    \"session\": \"1\",\n                    \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n                    \"ended_at\": \"2024-01-01T00:00:00Z\",\n                }\n            ]\n        )\n        self.assertEqual(status, 2)\n        self.assertEqual(\n            report, {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": \"1\"}}\n        )\n\n    def test_empty_ledger(self):\n        self.assertEqual(\n            self.run_ledger([]), (0, {\"sessions\": [], \"daily\": [], \"total_seconds\": 0})\n        )\n\n    def test_fraction_lengths_and_nonhour_offsets(self):\n        rows = [\n            {\n                \"session\": str(digits),\n                \"started_at\": \"2000-03-01T00:00:00.\" + \"1\" * digits + \"+05:45\",\n                \"ended_at\": \"2000-02-29T18:15:01.\" + \"1\" * digits + \"Z\",\n            }\n            for digits in range(1, 7)\n        ]\n        status, report = self.run_ledger(rows)\n        self.assertEqual(status, 0)\n        for digits, session in enumerate(report[\"sessions\"], 1):\n            fraction = (\"1\" * digits).ljust(6, \"0\")\n            self.assertEqual(\n                session,\n                {\n                    \"session\": str(digits),\n                    \"start_utc\": \"2000-02-29T18:15:00.\" + fraction + \"Z\",\n                    \"end_utc\": \"2000-02-29T18:15:01.\" + fraction + \"Z\",\n                    \"seconds\": 1,\n                    \"start_utc_date\": \"2000-02-29\",\n                },\n            )\n        self.assertEqual(\n            report[\"daily\"], [{\"date\": \"2000-02-29\", \"sessions\": 6, \"seconds\": 6}]\n        )\n        self.assertEqual(report[\"total_seconds\"], 6)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "after": "import csv\nimport json\nfrom pathlib import Path\nimport shutil\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\n\n\nARCHIVE = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n\n\nclass LedgerTests(unittest.TestCase):\n    def run_ledger(self, rows, columns=None, line_ending=\"\\n\", relative=False):\n        columns = columns or [\"session\", \"started_at\", \"ended_at\"]\n        with tempfile.TemporaryDirectory() as directory:\n            cwd = Path(directory)\n            inputs = cwd / \"input data\"\n            inputs.mkdir()\n            with (inputs / \"sessions.csv\").open(\n                \"w\", encoding=\"utf-8\", newline=\"\"\n            ) as source:\n                writer = csv.DictWriter(\n                    source, fieldnames=columns, lineterminator=line_ending\n                )\n                writer.writeheader()\n                writer.writerows(rows)\n            output = cwd / \"result report.json\"\n            output.write_text(\"stale output\", encoding=\"utf-8\")\n            executable = cwd / \"standalone.pyz\"\n            shutil.copyfile(ARCHIVE, executable)\n            result = subprocess.run(\n                [\n                    sys.executable,\n                    str(executable),\n                    inputs.name if relative else str(inputs),\n                    \"--output\",\n                    output.name if relative else str(output),\n                ],\n                cwd=cwd,\n                capture_output=True,\n                text=True,\n            )\n            self.assertIn(result.returncode, (0, 2), result.stderr)\n            return result.returncode, json.loads(output.read_text(encoding=\"utf-8\"))\n\n    def test_utc_semantics_and_csv_variations(self):\n        rows = [\n            {\n                \"session\": ' 001, \"雪\"\\nline\\r\\n ',\n                \"started_at\": \"2024-01-02T00:30:00.123456+02:00\",\n                \"ended_at\": \"2024-01-01T23:00:00.123457+00:00\",\n                \"metadata\": \"ignored, text\",\n            },\n            {\n                \"session\": \"   \",\n                \"started_at\": \"2024-01-01T23:30:00-02:00\",\n                \"ended_at\": \"2024-01-02T01:30:00Z\",\n                \"metadata\": \"\",\n            },\n            {\n                \"session\": \"00001\",\n                \"started_at\": \"2024-01-01T23:59:59.9Z\",\n                \"ended_at\": \"2024-01-02T00:00:00.000001+00:00\",\n                \"metadata\": \"x\",\n            },\n            {\n                \"session\": \"a/b:!?\",\n                \"started_at\": \"2024-01-01T00:00:00.1-00:00\",\n                \"ended_at\": \"2024-01-01T00:00:00.100000Z\",\n                \"metadata\": \"x\",\n            },\n        ]\n        expected_sessions = [\n            {\n                \"session\": rows[0][\"session\"],\n                \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n                \"end_utc\": \"2024-01-01T23:00:00.123457Z\",\n                \"seconds\": 1800.000001,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n            {\n                \"session\": \"   \",\n                \"start_utc\": \"2024-01-02T01:30:00.000000Z\",\n                \"end_utc\": \"2024-01-02T01:30:00.000000Z\",\n                \"seconds\": 0,\n                \"start_utc_date\": \"2024-01-02\",\n            },\n            {\n                \"session\": \"00001\",\n                \"start_utc\": \"2024-01-01T23:59:59.900000Z\",\n                \"end_utc\": \"2024-01-02T00:00:00.000001Z\",\n                \"seconds\": 0.100001,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n            {\n                \"session\": \"a/b:!?\",\n                \"start_utc\": \"2024-01-01T00:00:00.100000Z\",\n                \"end_utc\": \"2024-01-01T00:00:00.100000Z\",\n                \"seconds\": 0,\n                \"start_utc_date\": \"2024-01-01\",\n            },\n        ]\n        for ending in (\"\\n\", \"\\r\\n\"):\n            with self.subTest(ending=ending):\n                status, report = self.run_ledger(\n                    rows,\n                    [\"metadata\", \"ended_at\", \"session\", \"started_at\"],\n                    ending,\n                    True,\n                )\n                self.assertEqual(status, 0)\n                self.assertEqual(\n                    report,\n                    {\n                        \"sessions\": expected_sessions,\n                        \"daily\": [\n                            {\n                                \"date\": \"2024-01-01\",\n                                \"sessions\": 3,\n                                \"seconds\": 1800.100002,\n                            },\n                            {\"date\": \"2024-01-02\", \"sessions\": 1, \"seconds\": 0},\n                        ],\n                        \"total_seconds\": 1800.100002,\n                    },\n                )\n\n    def test_first_negative_uses_instants_and_exact_id(self):\n        rows = [\n            {\n                \"session\": \"valid\",\n                \"started_at\": \"2024-01-01T01:00:00+02:00\",\n                \"ended_at\": \"2024-01-01T00:00:00Z\",\n            },\n            {\n                \"session\": ' 002, \"负\" ',\n                \"started_at\": \"2024-01-01T00:00:00Z\",\n                \"ended_at\": \"2024-01-01T01:00:00+02:00\",\n            },\n            {\n                \"session\": \"later\",\n                \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n                \"ended_at\": \"2024-01-01T00:00:00Z\",\n            },\n        ]\n        status, report = self.run_ledger(rows)\n        self.assertEqual(status, 2)\n        self.assertEqual(\n            report,\n            {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": rows[1][\"session\"]}},\n        )\n\n    def test_microsecond_negative(self):\n        status, report = self.run_ledger(\n            [\n                {\n                    \"session\": \"1\",\n                    \"started_at\": \"2024-01-01T00:00:00.000001Z\",\n                    \"ended_at\": \"2024-01-01T00:00:00Z\",\n                }\n            ]\n        )\n        self.assertEqual(status, 2)\n        self.assertEqual(\n            report, {\"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": \"1\"}}\n        )\n\n    def test_year_boundary_and_sorted_days(self):\n        status, report = self.run_ledger(\n            [\n                {\n                    \"session\": \"later\",\n                    \"started_at\": \"2025-01-01T12:00:00-12:00\",\n                    \"ended_at\": \"2025-01-02T14:00:00+14:00\",\n                },\n                {\n                    \"session\": \"earlier\",\n                    \"started_at\": \"2025-01-01T00:00:00+14:00\",\n                    \"ended_at\": \"2025-01-02T10:00:00Z\",\n                },\n            ]\n        )\n        self.assertEqual(status, 0)\n        self.assertEqual(\n            report,\n            {\n                \"sessions\": [\n                    {\n                        \"session\": \"later\",\n                        \"start_utc\": \"2025-01-02T00:00:00.000000Z\",\n                        \"end_utc\": \"2025-01-02T00:00:00.000000Z\",\n                        \"seconds\": 0,\n                        \"start_utc_date\": \"2025-01-02\",\n                    },\n                    {\n                        \"session\": \"earlier\",\n                        \"start_utc\": \"2024-12-31T10:00:00.000000Z\",\n                        \"end_utc\": \"2025-01-02T10:00:00.000000Z\",\n                        \"seconds\": 172800,\n                        \"start_utc_date\": \"2024-12-31\",\n                    },\n                ],\n                \"daily\": [\n                    {\"date\": \"2024-12-31\", \"sessions\": 1, \"seconds\": 172800},\n                    {\"date\": \"2025-01-02\", \"sessions\": 1, \"seconds\": 0},\n                ],\n                \"total_seconds\": 172800,\n            },\n        )\n\n    def test_supplied_sample(self):\n        with (ARCHIVE.parent / \"sample\" / \"sessions.csv\").open(\n            encoding=\"utf-8\", newline=\"\"\n        ) as source:\n            rows = list(csv.DictReader(source))\n        status, report = self.run_ledger(rows)\n        self.assertEqual(status, 0)\n        self.assertEqual(\n            report,\n            {\n                \"sessions\": [\n                    {\n                        \"session\": \"A\",\n                        \"start_utc\": \"2026-04-01T10:00:00.000000Z\",\n                        \"end_utc\": \"2026-04-01T10:01:30.000000Z\",\n                        \"seconds\": 90,\n                        \"start_utc_date\": \"2026-04-01\",\n                    },\n                    {\n                        \"session\": \"B\",\n                        \"start_utc\": \"2026-04-01T11:00:00.000000Z\",\n                        \"end_utc\": \"2026-04-01T11:00:30.000000Z\",\n                        \"seconds\": 30,\n                        \"start_utc_date\": \"2026-04-01\",\n                    },\n                ],\n                \"daily\": [{\"date\": \"2026-04-01\", \"sessions\": 2, \"seconds\": 120}],\n                \"total_seconds\": 120,\n            },\n        )\n\n    def test_empty_ledger(self):\n        self.assertEqual(\n            self.run_ledger([]), (0, {\"sessions\": [], \"daily\": [], \"total_seconds\": 0})\n        )\n\n    def test_fraction_lengths_and_nonhour_offsets(self):\n        rows = [\n            {\n                \"session\": str(digits),\n                \"started_at\": \"2000-03-01T00:00:00.\" + \"1\" * digits + \"+05:45\",\n                \"ended_at\": \"2000-02-29T18:15:01.\" + \"1\" * digits + \"Z\",\n            }\n            for digits in range(1, 7)\n        ]\n        status, report = self.run_ledger(rows)\n        self.assertEqual(status, 0)\n        for digits, session in enumerate(report[\"sessions\"], 1):\n            fraction = (\"1\" * digits).ljust(6, \"0\")\n            self.assertEqual(\n                session,\n                {\n                    \"session\": str(digits),\n                    \"start_utc\": \"2000-02-29T18:15:00.\" + fraction + \"Z\",\n                    \"end_utc\": \"2000-02-29T18:15:01.\" + fraction + \"Z\",\n                    \"seconds\": 1,\n                    \"start_utc_date\": \"2000-02-29\",\n                },\n            )\n        self.assertEqual(\n            report[\"daily\"], [{\"date\": \"2000-02-29\", \"sessions\": 6, \"seconds\": 6}]\n        )\n        self.assertEqual(report[\"total_seconds\"], 6)\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "additions": 78,
+            "deletions": 1
+          }
+        ],
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544592654
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjWLsw00vAW8GCxbt",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_83d9db8599214615bb16a9526cbbe341",
+      "tool": "bash",
+      "input": {
+        "command": "python -m unittest -v",
+        "description": "Verify copied archive against seven contract tests"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_000621b05ede0642016ae751960d4c81919666a5b233902347"
+        }
+      },
+      "time": {
+        "start": 1793544597970
+      }
+    },
+    "outcomeID": "prt_haw2TiyzPG0LjssQQNC8",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hwqzmMcocuGXwumZkJk5",
+      "title": "Verify copied archive against seven contract tests",
+      "metadata": {
+        "refused": false,
+        "command": "python -m unittest -v",
+        "output": "test_empty_ledger (test_ledger.LedgerTests.test_empty_ledger) ... ok\r\ntest_first_negative_uses_instants_and_exact_id (test_ledger.LedgerTests.test_first_negative_uses_instants_and_exact_id) ... ok\r\ntest_fraction_lengths_and_nonhour_offsets (test_ledger.LedgerTests.test_fraction_lengths_and_nonhour_offsets) ... ok\r\ntest_microsecond_negative (test_ledger.LedgerTests.test_microsecond_negative) ... ok\r\ntest_supplied_sample (test_ledger.LedgerTests.test_supplied_sample) ... ok\r\ntest_utc_semantics_and_csv_variations (test_ledger.LedgerTests.test_utc_semantics_and_csv_variations) ... ok\r\ntest_year_boundary_and_sorted_days (test_ledger.LedgerTests.test_year_boundary_and_sorted_days) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 7 tests in 1.946s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 795,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Verify copied archive against seven contract tests",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544601192
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjWNYq001hcUJIQpE",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_8cf82dafe72f429c82e0497949014e38",
+      "tool": "bash",
+      "input": {
+        "command": "git diff --check",
+        "description": "Check tracked changes for whitespace errors"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_06ce9d4a204c2c36016ae7519c84108191ac94b9bb14c3c05d"
+        }
+      },
+      "time": {
+        "start": 1793544604412
+      }
+    },
+    "outcomeID": "prt_hDqBiMcNsoQLU3028zoH",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hY4iRtnL53RREu2upL3e",
+      "title": "Check tracked changes for whitespace errors",
+      "metadata": {
+        "refused": false,
+        "command": "git diff --check",
+        "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 100,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Check tracked changes for whitespace errors",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544605226
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjWObc00jad0btpSu",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_3d5534b93a28496d8e1e6b1b5a01009f",
+      "tool": "bash",
+      "input": {
+        "command": "git diff -- main.py",
+        "description": "Review repaired timestamp and report implementation"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_096797aa739e52d0016ae751a0873881919d7444e0007778bd"
+        }
+      },
+      "time": {
+        "start": 1793544608428
+      }
+    },
+    "outcomeID": "prt_hdJksm4k5OcMaTeXFTZV",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hfvcVnFghpnPXmGkqiXx",
+      "title": "Review repaired timestamp and report implementation",
+      "metadata": {
+        "refused": false,
+        "command": "git diff -- main.py",
+        "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\ndiff --git a/main.py b/main.py\nindex 176363d..6a2459f 100644\n--- a/main.py\n+++ b/main.py\n@@ -1,10 +1,89 @@\n-import argparse,csv,json\n-from datetime import datetime\n+import argparse\n+import csv\n+import json\n+import re\n+from datetime import datetime, timezone\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();rows=[];daily={}\n-with open(Path(a.input)/\"sessions.csv\",encoding=\"utf-8\",newline=\"\") as f:\n-    for r in csv.DictReader(f):\n-        start=datetime.fromisoformat(r[\"started_at\"][:19]);end=datetime.fromisoformat(r[\"ended_at\"][:19]);seconds=(end-start).total_seconds()\n-        if seconds<0:Path(a.output).write_text(json.dumps(dict(error=dict(code=\"NEGATIVE_INTERVAL\",session=r[\"session\"]))),encoding=\"utf-8\");raise SystemExit(2)\n-        day=start.date().isoformat();rows.append(dict(session=r[\"session\"],start_utc=start.isoformat(timespec=\"microseconds\")+\"Z\",end_utc=end.isoformat(timespec=\"microseconds\")+\"Z\",seconds=seconds,start_utc_date=day));bucket=daily.setdefault(day,dict(date=day,sessions=0,seconds=0));bucket[\"sessions\"]+=1;bucket[\"seconds\"]+=seconds\n-Path(a.output).write_text(json.dumps(dict(sessions=rows,daily=[daily[k] for k in sorted(daily)],total_seconds=sum(r[\"seconds\"] for r in rows)),ensure_ascii=False),encoding=\"utf-8\")\n+\n+\n+TIMESTAMP = re.compile(\n+    r\"[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}\"\n+    r\"(?:\\.[0-9]{1,6})?(?:Z|[+-](?:[01][0-9]|2[0-3]):[0-5][0-9])\"\n+)\n+\n+\n+def parse_timestamp(value):\n+    if TIMESTAMP.fullmatch(value) is None:\n+        raise ValueError(\"Invalid timestamp: {!r}\".format(value))\n+    return datetime.fromisoformat(value.replace(\"Z\", \"+00:00\")).astimezone(timezone.utc)\n+\n+\n+def canonical(value):\n+    return value.isoformat(timespec=\"microseconds\").replace(\"+00:00\", \"Z\")\n+\n+\n+def build_report(input_directory):\n+    sessions = []\n+    daily = {}\n+    total_microseconds = 0\n+    with (Path(input_directory) / \"sessions.csv\").open(\n+        encoding=\"utf-8\", newline=\"\"\n+    ) as source:\n+        reader = csv.DictReader(source)\n+        if not {\"session\", \"started_at\", \"ended_at\"}.issubset(reader.fieldnames or []):\n+            raise ValueError(\n+                \"sessions.csv must contain session, started_at and ended_at columns\"\n+            )\n+        for row in reader:\n+            start = parse_timestamp(row[\"started_at\"])\n+            end = parse_timestamp(row[\"ended_at\"])\n+            if end < start:\n+                return {\n+                    \"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": row[\"session\"]}\n+                }, 2\n+            elapsed = end - start\n+            microseconds = (\n+                elapsed.days * 86400 + elapsed.seconds\n+            ) * 1000000 + elapsed.microseconds\n+            day = start.date().isoformat()\n+            sessions.append(\n+                {\n+                    \"session\": row[\"session\"],\n+                    \"start_utc\": canonical(start),\n+                    \"end_utc\": canonical(end),\n+                    \"seconds\": microseconds / 1000000,\n+                    \"start_utc_date\": day,\n+                }\n+            )\n+            bucket = daily.setdefault(day, {\"sessions\": 0, \"microseconds\": 0})\n+            bucket[\"sessions\"] += 1\n+            bucket[\"microseconds\"] += microseconds\n+            total_microseconds += microseconds\n+    return {\n+        \"sessions\": sessions,\n+        \"daily\": [\n+            {\n+                \"date\": day,\n+                \"sessions\": daily[day][\"sessions\"],\n+                \"seconds\": daily[day][\"microseconds\"] / 1000000,\n+            }\n+            for day in sorted(daily)\n+        ],\n+        \"total_seconds\": total_microseconds / 1000000,\n+    }, 0\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=\"Report session durations in UTC.\")\n+    parser.add_argument(\"input\", help=\"Directory containing sessions.csv\")\n+    parser.add_argument(\"--output\", required=True, help=\"Destination JSON file\")\n+    args = parser.parse_args()\n+    report, status = build_report(args.input)\n+    Path(args.output).write_text(\n+        json.dumps(report, ensure_ascii=False, indent=2) + \"\\n\", encoding=\"utf-8\"\n+    )\n+    return status\n+\n+\n+if __name__ == \"__main__\":\n+    raise SystemExit(main())\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 4383,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Review repaired timestamp and report implementation",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544609407
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjWPpY00M5CPUIC6U",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_68a2a52358be41c38b1d5d25a56ce15e",
+      "tool": "memory",
+      "input": {
+        "action": "write",
+        "title": "UTC ledger build and packaged regression tests",
+        "content": "UTC ledger uses only Python standard library. Build final deliverable.pyz with `python build.py`; build.py resolves main.py relative to itself and embeds it as __main__.py. Run `python -m unittest -v`: test_ledger.py copies final archive alone into temporary external working directories and invokes it via subprocess with absolute/relative paths. Seven tests cover sample, CSV LF/CRLF/reordered metadata and exact Unicode/quoted/whitespace session IDs, offset conversion, fractions 1–6 digits, microsecond negatives and first negative, empty ledger, midnight/year/leap-date behavior and daily sorting. main.py normalizes aware endpoints to UTC and aggregates integer microseconds before JSON conversion.",
+        "kind": "fact"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0facb27c1c4aaffb016ae751a540a08191a3fa78f7067f9d43"
+        }
+      },
+      "time": {
+        "start": 1793544613136
+      }
+    },
+    "outcomeID": "prt_h03QIxxXEvV5TWFyfEgj",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_h99Pjz27uQgsX2pgiufK",
+      "title": "Saved: UTC ledger build and packaged regression tests",
+      "metadata": {
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544621169
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjWT0R00REE4Uq8um",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_5f751da606fc49c8a8a4386033a2c23a",
+      "tool": "bash",
+      "input": {
+        "command": "git status --short",
+        "description": "Confirm final deliverables and preserved unrelated files"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0503c0ff8ac1ffea016ae751b1736c8191b6f75660c08b9772"
+        }
+      },
+      "time": {
+        "start": 1793544625343
+      }
+    },
+    "outcomeID": "prt_hT84JvC7NEqgFCkp7K0t",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hw1OCqWKI6vVT3WID9OS",
+      "title": "Confirm final deliverables and preserved unrelated files",
+      "metadata": {
+        "refused": false,
+        "command": "git status --short",
+        "output": " M main.py\n?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? __pycache__/\n?? build.py\n?? deliverable.pyz\n?? test_ledger.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 124,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Confirm final deliverables and preserved unrelated files",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544626538
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjWUjl008ptyrg3fv",
+    "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_2039695d8164431bb7ee00b3d9b3128e",
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"import shutil; shutil.rmtree('__pycache__')\"",
+        "description": "Remove generated test bytecode cache directory"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0d1ab06b1f65cd50016ae751b81d5c819187259c80d31e3892"
+        }
+      },
+      "time": {
+        "start": 1793544631997
+      }
+    },
+    "outcomeID": "prt_hWiI24685HoZO2u7lFcb",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hpwepV4qaJM4Yx0zVZoC",
+      "title": "Remove generated test bytecode cache directory",
+      "metadata": {
+        "refused": false,
+        "command": "python -c \"import shutil; shutil.rmtree('__pycache__')\"",
+        "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 0,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Remove generated test bytecode cache directory",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793544632920
+      }
+    }
+  }
+]

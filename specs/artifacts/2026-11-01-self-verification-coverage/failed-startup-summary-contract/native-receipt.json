@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "C:\\Users\\hengu\\.bun\\bin\\bun.EXE",
+    "run",
+    "script/delivery-verification-scope-real.ts"
+  ],
+  "exit": 1,
+  "stdout": "[delivery-scope] status=execution_failed result=D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\failed-startup-summary-contract\\trial\\result.json\n",
+  "stderr": "",
+  "scope": "fixture-only startup aggregation contract, not Provider/E2E model evidence"
+}

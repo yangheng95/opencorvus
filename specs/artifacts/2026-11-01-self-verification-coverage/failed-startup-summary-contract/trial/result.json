@@ -1,0 +1,25 @@
+{
+  "phase": "failed-startup-summary-contract",
+  "model": "openai/gpt-6.1-sol",
+  "maxRequests": 1,
+  "inactivityMs": 180000,
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-DqsmlD\\runner-29524-P0k9Fw\\runtime-root\\tmp\\opencorvus-delivery-scope-LGu4Hs",
+  "startedAt": 1793544887164,
+  "cases": [],
+  "requests": [],
+  "endedAt": 1793544887167,
+  "status": "execution_failed",
+  "consumerScope": "Per-case registered inputs and independently derived outputs; completion is not universal contract certification",
+  "registeredCasesAgree": false,
+  "error": {
+    "name": "Error",
+    "message": "ENOENT: no such file or directory, open 'D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\failed-startup-summary-contract\\unconfigured-source\\models.json'"
+  },
+  "cleanup": {
+    "errors": [
+      "Error: ENOENT: no such file or directory, open 'D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\failed-startup-summary-contract\\unconfigured-source\\models.json'"
+    ],
+    "pairedCopiesRetired": false,
+    "sourceBytesPreserved": false
+  }
+}

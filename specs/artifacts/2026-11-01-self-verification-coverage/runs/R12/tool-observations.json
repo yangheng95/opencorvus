@@ -1,0 +1,122 @@
+[
+  {
+    "id": "prt_g0VZjancq00xGR49zDy6",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git status --short",
+      "description": "Check pre-existing changes before repairing project"
+    },
+    "exit": 0,
+    "output": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjb54v00Jp0P54PO6",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "ls",
+      "description": "Verify project directory before generating zipapp"
+    },
+    "exit": 0,
+    "output": "CONTRACT.md\nbuild.py\nmain.py\nsample\ntest_ledger.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjb64M00p6yovGLcZ",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python build.py",
+      "description": "Build complete standalone zipapp from maintained source"
+    },
+    "exit": 0,
+    "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjb7AJ00yu7lHrrwO",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -m unittest -v test_ledger",
+      "description": "Test delivered zipapp from isolated working directories"
+    },
+    "exit": 0,
+    "output": "test_daily_sorted_not_input_sorted_and_multiday_duration (test_ledger.LedgerTests.test_daily_sorted_not_input_sorted_and_multiday_duration) ... ok\r\ntest_empty_ledger (test_ledger.LedgerTests.test_empty_ledger) ... ok\r\ntest_first_negative_uses_utc_and_exact_session (test_ledger.LedgerTests.test_first_negative_uses_utc_and_exact_session) ... ok\r\ntest_offsets_rollovers_and_whole_session_grouping (test_ledger.LedgerTests.test_offsets_rollovers_and_whole_session_grouping) ... ok\r\ntest_subsecond_negative (test_ledger.LedgerTests.test_subsecond_negative) ... ok\r\ntest_text_csv_variations_and_fraction_widths (test_ledger.LedgerTests.test_text_csv_variations_and_fraction_widths) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 6 tests in 0.828s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjb9rL00V0UJoYRUh",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git diff --check",
+      "description": "Check patch whitespace and formatting errors"
+    },
+    "exit": 0,
+    "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjbAng00nJmDBHrfI",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git diff -- main.py",
+      "description": "Review UTC repair against original implementation"
+    },
+    "exit": 0,
+    "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\ndiff --git a/main.py b/main.py\nindex 176363d..0140d4b 100644\n--- a/main.py\n+++ b/main.py\n@@ -1,10 +1,76 @@\n-import argparse,csv,json\n-from datetime import datetime\n+import argparse\n+import csv\n+import json\n+from datetime import datetime, timezone\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();rows=[];daily={}\n-with open(Path(a.input)/\"sessions.csv\",encoding=\"utf-8\",newline=\"\") as f:\n-    for r in csv.DictReader(f):\n-        start=datetime.fromisoformat(r[\"started_at\"][:19]);end=datetime.fromisoformat(r[\"ended_at\"][:19]);seconds=(end-start).total_seconds()\n-        if seconds<0:Path(a.output).write_text(json.dumps(dict(error=dict(code=\"NEGATIVE_INTERVAL\",session=r[\"session\"]))),encoding=\"utf-8\");raise SystemExit(2)\n-        day=start.date().isoformat();rows.append(dict(session=r[\"session\"],start_utc=start.isoformat(timespec=\"microseconds\")+\"Z\",end_utc=end.isoformat(timespec=\"microseconds\")+\"Z\",seconds=seconds,start_utc_date=day));bucket=daily.setdefault(day,dict(date=day,sessions=0,seconds=0));bucket[\"sessions\"]+=1;bucket[\"seconds\"]+=seconds\n-Path(a.output).write_text(json.dumps(dict(sessions=rows,daily=[daily[k] for k in sorted(daily)],total_seconds=sum(r[\"seconds\"] for r in rows)),ensure_ascii=False),encoding=\"utf-8\")\n+\n+\n+def parse_utc(value):\n+    return datetime.fromisoformat(value.replace(\"Z\", \"+00:00\")).astimezone(timezone.utc)\n+\n+\n+def canonical(value):\n+    return value.isoformat(timespec=\"microseconds\").replace(\"+00:00\", \"Z\")\n+\n+\n+def build_report(input_directory):\n+    rows = []\n+    daily = {}\n+    total_microseconds = 0\n+    with (Path(input_directory) / \"sessions.csv\").open(\n+        encoding=\"utf-8\", newline=\"\"\n+    ) as source:\n+        for row in csv.DictReader(source):\n+            start = parse_utc(row[\"started_at\"])\n+            end = parse_utc(row[\"ended_at\"])\n+            if end < start:\n+                return {\n+                    \"error\": {\"code\": \"NEGATIVE_INTERVAL\", \"session\": row[\"session\"]}\n+                }, 2\n+            elapsed = end - start\n+            microseconds = (\n+                elapsed.days * 86400 + elapsed.seconds\n+            ) * 1_000_000 + elapsed.microseconds\n+            day = start.date().isoformat()\n+            rows.append(\n+                {\n+                    \"session\": row[\"session\"],\n+                    \"start_utc\": canonical(start),\n+                    \"end_utc\": canonical(end),\n+                    \"seconds\": microseconds / 1_000_000,\n+                    \"start_utc_date\": day,\n+                }\n+            )\n+            bucket = daily.setdefault(day, {\"sessions\": 0, \"microseconds\": 0})\n+            bucket[\"sessions\"] += 1\n+            bucket[\"microseconds\"] += microseconds\n+            total_microseconds += microseconds\n+\n+    return {\n+        \"sessions\": rows,\n+        \"daily\": [\n+            {\n+                \"date\": day,\n+                \"sessions\": daily[day][\"sessions\"],\n+                \"seconds\": daily[day][\"microseconds\"] / 1_000_000,\n+            }\n+            for day in sorted(daily)\n+        ],\n+        \"total_seconds\": total_microseconds / 1_000_000,\n+    }, 0\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=\"Report session durations in UTC.\")\n+    parser.add_argument(\"input\", help=\"Directory containing sessions.csv\")\n+    parser.add_argument(\"--output\", required=True, help=\"Destination JSON file\")\n+    args = parser.parse_args()\n+    report, status = build_report(args.input)\n+    Path(args.output).write_text(\n+        json.dumps(report, ensure_ascii=False), encoding=\"utf-8\"\n+    )\n+    return status\n+\n+\n+if __name__ == \"__main__\":\n+    raise SystemExit(main())\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjbCVN00iS7dmDAO1",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -m zipfile -l deliverable.pyz",
+      "description": "Inspect final zipapp entry point and contents"
+    },
+    "exit": 0,
+    "output": "File Name                                             Modified             Size\r\n__main__.py                                    2026-11-01 23:08:48         2421\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjbF6r00Zwqyeo4YL",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python build.py",
+      "description": "Refresh final archive from reviewed source"
+    },
+    "exit": 0,
+    "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjbGsg00PFk109sch",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "python -m unittest -v test_ledger",
+      "description": "Reverify final rebuilt artifact against contract cases"
+    },
+    "exit": 0,
+    "output": "test_daily_sorted_not_input_sorted_and_multiday_duration (test_ledger.LedgerTests.test_daily_sorted_not_input_sorted_and_multiday_duration) ... ok\r\ntest_empty_ledger (test_ledger.LedgerTests.test_empty_ledger) ... ok\r\ntest_first_negative_uses_utc_and_exact_session (test_ledger.LedgerTests.test_first_negative_uses_utc_and_exact_session) ... ok\r\ntest_offsets_rollovers_and_whole_session_grouping (test_ledger.LedgerTests.test_offsets_rollovers_and_whole_session_grouping) ... ok\r\ntest_subsecond_negative (test_ledger.LedgerTests.test_subsecond_negative) ... ok\r\ntest_text_csv_variations_and_fraction_widths (test_ledger.LedgerTests.test_text_csv_variations_and_fraction_widths) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 6 tests in 0.760s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  },
+  {
+    "id": "prt_g0VZjbL4B007lYch5acH",
+    "tool": "bash",
+    "status": "completed",
+    "input": {
+      "command": "git status --short",
+      "description": "Confirm final delivery files and preserved unrelated changes"
+    },
+    "exit": 0,
+    "output": " M main.py\n?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? __pycache__/\n?? build.py\n?? deliverable.pyz\n?? test_ledger.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+    "failure": null
+  }
+]

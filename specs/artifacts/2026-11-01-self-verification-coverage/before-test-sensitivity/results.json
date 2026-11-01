@@ -1,0 +1,42 @@
+[
+  {
+    "kind": "query-export",
+    "source": "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\before\\query-export-delivered",
+    "fault": "Return raw SQL identifiers, preserving all other behavior",
+    "changedNodes": 1,
+    "testBytesEqual": true,
+    "argv": [
+      "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "test_export.ExportTests.test_identifier_value_and_order_boundaries"
+    ],
+    "cwd": "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\before-test-sensitivity\\query-export",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "test_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries) ... FAIL\n\n======================================================================\nFAIL: test_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\before-test-sensitivity\\query-export\\test_export.py\", line 102, in test_identifier_value_and_order_boundaries\n    self.run_export(requests, {\"exports\": expected})\n  File \"D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\before-test-sensitivity\\query-export\\test_export.py\", line 45, in run_export\n    self.assertEqual(process.returncode, 0, process.stderr)\nAssertionError: 1 != 0 : Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\query export q5xnsc94\\unrelated cwd\\standalone.pyz\\__main__.py\", line 38, in <module>\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\query export q5xnsc94\\unrelated cwd\\standalone.pyz\\__main__.py\", line 35, in main\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\query export q5xnsc94\\unrelated cwd\\standalone.pyz\\__main__.py\", line 23, in export_database\nsqlite3.OperationalError: near \"order\": syntax error\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.262s\n\nFAILED (failures=1)\n",
+    "scope": "Root executed an evaluation fault copy using unchanged producer tests; original model execution is separately bound by its original tool receipt"
+  },
+  {
+    "kind": "utc-ledger",
+    "source": "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\before\\utc-ledger-delivered",
+    "fault": "Relabel local clock as UTC instead of converting the instant",
+    "changedNodes": 1,
+    "testBytesEqual": true,
+    "argv": [
+      "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "test_ledger.LedgerTests.test_utc_semantics_and_csv_variations"
+    ],
+    "cwd": "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\before-test-sensitivity\\utc-ledger",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "test_utc_semantics_and_csv_variations (test_ledger.LedgerTests.test_utc_semantics_and_csv_variations) ... \n  test_utc_semantics_and_csv_variations (test_ledger.LedgerTests.test_utc_semantics_and_csv_variations) (ending='\\n') ... FAIL\n  test_utc_semantics_and_csv_variations (test_ledger.LedgerTests.test_utc_semantics_and_csv_variations) (ending='\\r\\n') ... FAIL\n\n======================================================================\nFAIL: test_utc_semantics_and_csv_variations (test_ledger.LedgerTests.test_utc_semantics_and_csv_variations) (ending='\\n')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\before-test-sensitivity\\utc-ledger\\test_ledger.py\", line 113, in test_utc_semantics_and_csv_variations\n    self.assertEqual(status, 0)\nAssertionError: 2 != 0\n\n======================================================================\nFAIL: test_utc_semantics_and_csv_variations (test_ledger.LedgerTests.test_utc_semantics_and_csv_variations) (ending='\\r\\n')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\before-test-sensitivity\\utc-ledger\\test_ledger.py\", line 113, in test_utc_semantics_and_csv_variations\n    self.assertEqual(status, 0)\nAssertionError: 2 != 0\n\n----------------------------------------------------------------------\nRan 1 test in 0.237s\n\nFAILED (failures=2)\n",
+    "scope": "Root executed an evaluation fault copy using unchanged producer tests; original model execution is separately bound by its original tool receipt"
+  }
+]

@@ -105,6 +105,10 @@ describe("shared execution verification contract", () => {
       "share a validator only when those contracts agree",
       "Independently establish why a value is permitted or rejected",
       "contract-permitted distinctions between roles and equivalent representations through the final consumer",
+      "identify a plausible wrong rule that the selected checks would still accept",
+      "actual fixture construction and serialization, the final-entry invocation, and an independently grounded assertion",
+      "strengthen the producer's own checks for material gaps",
+      "Attribute checks to their actual author, executor and time",
     ])
       expect(VERIFICATION_DISCIPLINE).toContain(clause)
   })

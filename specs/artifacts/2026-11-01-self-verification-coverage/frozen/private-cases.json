@@ -1,0 +1,460 @@
+{
+  "query-export": [
+    {
+      "name": "ordinary-identifiers",
+      "tables": [
+        {
+          "name": "events",
+          "columns": [
+            "seq",
+            "team",
+            "amount"
+          ],
+          "rows": [
+            [
+              "001",
+              "red",
+              7
+            ],
+            [
+              "002",
+              "blue",
+              9
+            ],
+            [
+              "003",
+              "red",
+              11
+            ]
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "name": "red rows",
+          "table": "events",
+          "columns": [
+            "seq",
+            "amount"
+          ],
+          "match": {
+            "column": "team",
+            "value": "red"
+          },
+          "order_by": [
+            "seq"
+          ]
+        }
+      ],
+      "expected": {
+        "exports": [
+          {
+            "name": "red rows",
+            "columns": [
+              "seq",
+              "amount"
+            ],
+            "rows": [
+              [
+                "001",
+                7
+              ],
+              [
+                "003",
+                11
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "quoted-keyword-unicode-identifiers",
+      "tables": [
+        {
+          "name": "group",
+          "columns": [
+            "select",
+            "team name",
+            "a\"b"
+          ],
+          "rows": [
+            [
+              "001",
+              "x",
+              "keep"
+            ],
+            [
+              "002",
+              "y",
+              "skip"
+            ]
+          ]
+        },
+        {
+          "name": "数据 名",
+          "columns": [
+            "编号",
+            "值"
+          ],
+          "rows": [
+            [
+              "b",
+              "文"
+            ],
+            [
+              "a",
+              "中"
+            ]
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "name": " 01 ",
+          "table": "group",
+          "columns": [
+            "select",
+            "a\"b"
+          ],
+          "match": {
+            "column": "team name",
+            "value": "x"
+          },
+          "order_by": [
+            "select"
+          ]
+        },
+        {
+          "name": "数据",
+          "table": "数据 名",
+          "columns": [
+            "编号",
+            "值"
+          ],
+          "match": {
+            "column": "值",
+            "value": "中"
+          },
+          "order_by": [
+            "编号"
+          ]
+        }
+      ],
+      "expected": {
+        "exports": [
+          {
+            "name": " 01 ",
+            "columns": [
+              "select",
+              "a\"b"
+            ],
+            "rows": [
+              [
+                "001",
+                "keep"
+              ]
+            ]
+          },
+          {
+            "name": "数据",
+            "columns": [
+              "编号",
+              "值"
+            ],
+            "rows": [
+              [
+                "a",
+                "中"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "literal-text-and-case",
+      "tables": [
+        {
+          "name": "items",
+          "columns": [
+            "code",
+            "note",
+            "kind"
+          ],
+          "rows": [
+            [
+              "001",
+              "O'Reilly",
+              "key"
+            ],
+            [
+              "002",
+              "' OR 1=1 --",
+              "key"
+            ],
+            [
+              "003",
+              "normal",
+              "other"
+            ],
+            [
+              "004",
+              "CODE",
+              "case"
+            ],
+            [
+              "005",
+              "code",
+              "case"
+            ]
+          ]
+        }
+      ],
+      "requests": [
+        {
+          "name": "apostrophe",
+          "table": "items",
+          "columns": [
+            "code",
+            "note"
+          ],
+          "match": {
+            "column": "note",
+            "value": "O'Reilly"
+          },
+          "order_by": [
+            "code"
+          ]
+        },
+        {
+          "name": "literal SQL",
+          "table": "items",
+          "columns": [
+            "code",
+            "note"
+          ],
+          "match": {
+            "column": "note",
+            "value": "' OR 1=1 --"
+          },
+          "order_by": [
+            "code"
+          ]
+        },
+        {
+          "name": "case",
+          "table": "items",
+          "columns": [
+            "code",
+            "note"
+          ],
+          "match": {
+            "column": "note",
+            "value": "code"
+          },
+          "order_by": [
+            "code"
+          ]
+        }
+      ],
+      "expected": {
+        "exports": [
+          {
+            "name": "apostrophe",
+            "columns": [
+              "code",
+              "note"
+            ],
+            "rows": [
+              [
+                "001",
+                "O'Reilly"
+              ]
+            ]
+          },
+          {
+            "name": "literal SQL",
+            "columns": [
+              "code",
+              "note"
+            ],
+            "rows": [
+              [
+                "002",
+                "' OR 1=1 --"
+              ]
+            ]
+          },
+          {
+            "name": "case",
+            "columns": [
+              "code",
+              "note"
+            ],
+            "rows": [
+              [
+                "005",
+                "code"
+              ]
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "utc-ledger": [
+    {
+      "name": "ordinary-z",
+      "rows": [
+        {
+          "session": "A",
+          "started_at": "2026-04-01T10:00:00Z",
+          "ended_at": "2026-04-01T10:01:30Z"
+        },
+        {
+          "session": "B",
+          "started_at": "2026-04-01T11:00:00Z",
+          "ended_at": "2026-04-01T11:00:30Z"
+        }
+      ],
+      "expected": {
+        "sessions": [
+          {
+            "session": "A",
+            "start_utc": "2026-04-01T10:00:00.000000Z",
+            "end_utc": "2026-04-01T10:01:30.000000Z",
+            "seconds": 90,
+            "start_utc_date": "2026-04-01"
+          },
+          {
+            "session": "B",
+            "start_utc": "2026-04-01T11:00:00.000000Z",
+            "end_utc": "2026-04-01T11:00:30.000000Z",
+            "seconds": 30,
+            "start_utc_date": "2026-04-01"
+          }
+        ],
+        "daily": [
+          {
+            "date": "2026-04-01",
+            "sessions": 2,
+            "seconds": 120
+          }
+        ],
+        "total_seconds": 120
+      },
+      "exit": 0,
+      "csv": "session,started_at,ended_at\nA,2026-04-01T10:00:00Z,2026-04-01T10:01:30Z\nB,2026-04-01T11:00:00Z,2026-04-01T11:00:30Z\n"
+    },
+    {
+      "name": "equivalent-offsets-and-local-reversal",
+      "rows": [
+        {
+          "session": "001",
+          "started_at": "2026-04-02T00:30:00+02:00",
+          "ended_at": "2026-04-01T22:35:00Z"
+        },
+        {
+          "session": "A",
+          "started_at": "2026-04-01T17:30:00-05:00",
+          "ended_at": "2026-04-01T22:35:00+00:00"
+        }
+      ],
+      "expected": {
+        "sessions": [
+          {
+            "session": "001",
+            "start_utc": "2026-04-01T22:30:00.000000Z",
+            "end_utc": "2026-04-01T22:35:00.000000Z",
+            "seconds": 300,
+            "start_utc_date": "2026-04-01"
+          },
+          {
+            "session": "A",
+            "start_utc": "2026-04-01T22:30:00.000000Z",
+            "end_utc": "2026-04-01T22:35:00.000000Z",
+            "seconds": 300,
+            "start_utc_date": "2026-04-01"
+          }
+        ],
+        "daily": [
+          {
+            "date": "2026-04-01",
+            "sessions": 2,
+            "seconds": 600
+          }
+        ],
+        "total_seconds": 600
+      },
+      "exit": 0,
+      "csv": "metadata,ended_at,started_at,session\r\n\"extra, \"\"行\"\"\n值\",2026-04-01T22:35:00Z,2026-04-02T00:30:00+02:00,001\r\n\"extra, \"\"行\"\"\n值\",2026-04-01T22:35:00+00:00,2026-04-01T17:30:00-05:00,A\r\n"
+    },
+    {
+      "name": "utc-midnight-fractional-and-text-id",
+      "rows": [
+        {
+          "session": " 组,\n",
+          "started_at": "2026-04-01T23:59:59.500000Z",
+          "ended_at": "2026-04-02T00:00:00.250000+00:00"
+        },
+        {
+          "session": "02",
+          "started_at": "2026-04-02T05:30:00+05:30",
+          "ended_at": "2026-04-02T00:00:02Z"
+        }
+      ],
+      "expected": {
+        "sessions": [
+          {
+            "session": " 组,\n",
+            "start_utc": "2026-04-01T23:59:59.500000Z",
+            "end_utc": "2026-04-02T00:00:00.250000Z",
+            "seconds": 0.75,
+            "start_utc_date": "2026-04-01"
+          },
+          {
+            "session": "02",
+            "start_utc": "2026-04-02T00:00:00.000000Z",
+            "end_utc": "2026-04-02T00:00:02.000000Z",
+            "seconds": 2,
+            "start_utc_date": "2026-04-02"
+          }
+        ],
+        "daily": [
+          {
+            "date": "2026-04-01",
+            "sessions": 1,
+            "seconds": 0.75
+          },
+          {
+            "date": "2026-04-02",
+            "sessions": 1,
+            "seconds": 2
+          }
+        ],
+        "total_seconds": 2.75
+      },
+      "exit": 0,
+      "csv": "metadata,ended_at,started_at,session\r\n\"extra, \"\"行\"\"\n值\",2026-04-02T00:00:00.250000+00:00,2026-04-01T23:59:59.500000Z,\" 组,\n\"\r\n\"extra, \"\"行\"\"\n值\",2026-04-02T00:00:02Z,2026-04-02T05:30:00+05:30,02\r\n"
+    },
+    {
+      "name": "negative-instant-error",
+      "rows": [
+        {
+          "session": "bad",
+          "started_at": "2026-04-02T00:00:00Z",
+          "ended_at": "2026-04-01T19:59:00-04:00"
+        }
+      ],
+      "expected": {
+        "error": {
+          "code": "NEGATIVE_INTERVAL",
+          "session": "bad"
+        }
+      },
+      "exit": 2,
+      "csv": "session,started_at,ended_at\nbad,2026-04-02T00:00:00Z,2026-04-01T19:59:00-04:00\n"
+    }
+  ]
+}

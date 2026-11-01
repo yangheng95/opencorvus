@@ -1,0 +1,25 @@
+{
+  "phase": "selfcheck-before",
+  "model": "openai/gpt-6.1-sol",
+  "maxRequests": 140,
+  "inactivityMs": 180000,
+  "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-M4nlQP\\runner-13260-wN7DjB\\runtime-root\\tmp\\opencorvus-delivery-scope-7s5Ql2",
+  "startedAt": 1793543970065,
+  "cases": [],
+  "requests": [],
+  "endedAt": 1793543970076,
+  "status": "execution_failed",
+  "consumerScope": "Per-case registered inputs and independently derived outputs; completion is not universal contract certification",
+  "registeredCasesAgree": true,
+  "error": {
+    "name": "Error",
+    "message": "ENOENT: no such file or directory, open 'C:\\Users\\hengu\\.local\\share\\opencorvus\\models.json'"
+  },
+  "cleanup": {
+    "errors": [
+      "Error: ENOENT: no such file or directory, open 'C:\\Users\\hengu\\.local\\share\\opencorvus\\models.json'"
+    ],
+    "pairedCopiesRetired": false,
+    "sourceBytesPreserved": false
+  }
+}

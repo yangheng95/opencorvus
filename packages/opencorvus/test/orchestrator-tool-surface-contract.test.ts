@@ -179,6 +179,9 @@ test("exposes scope-based completion judgment on the actual public management To
       expect(completion?.shape.summary?.description).toContain(
         "Validate acceptance and rejection classifications against the original field-specific contracts",
       )
+      expect(completion?.shape.summary?.description).toContain(
+        "Bind producer self-check coverage to actually constructed inputs, executed final-entry checks and distinguishing assertions",
+      )
     },
   })
 })

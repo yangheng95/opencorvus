@@ -1,0 +1,28 @@
+{
+  "registeredAt": "2026-11-01T14:55:40.762232+00:00",
+  "beforeRequests": 60,
+  "beforeUnusedBudgetRetired": 80,
+  "afterMaxActualRequests": 180,
+  "orderedRuns": [
+    {
+      "id": "R11",
+      "kind": "query-export",
+      "entry": "task"
+    },
+    {
+      "id": "R12",
+      "kind": "utc-ledger",
+      "entry": "coding"
+    },
+    {
+      "id": "R13",
+      "kind": "bundle",
+      "entry": "task"
+    }
+  ],
+  "newTaskPublicAndPrototypesUnchanged": true,
+  "bundlePublicAndPrototypeEqualOriginalR06": true,
+  "reason": "Both new-domain baselines already exercise key distinctions; they measure regression only. Add one fresh R06-contract regression to inspect producer-native-source self-testing directly; original candidates remain unchanged.",
+  "method": "same sole runner; changed shared semantic-discrimination and evidence-attribution discipline; declared-case aggregation repaired; no private feedback",
+  "causalLimit": "small sample, temporal and random differences; no unique prompt causality or overall failure-rate gain"
+}

@@ -1,0 +1,59 @@
+[
+  {
+    "kind": "query-export",
+    "fault": "Return unquoted SQL identifiers; all other logic retained",
+    "changedNodes": 1,
+    "testBytesEqual": true,
+    "argv": [
+      "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "test_export.ExportContractTests.test_identifiers_values_order_and_types"
+    ],
+    "cwd": "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after-test-sensitivity\\query-export",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "test_identifiers_values_order_and_types (test_export.ExportContractTests.test_identifiers_values_order_and_types) ... FAIL\n\n======================================================================\nFAIL: test_identifiers_values_order_and_types (test_export.ExportContractTests.test_identifiers_values_order_and_types)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after-test-sensitivity\\query-export\\test_export.py\", line 106, in test_identifiers_values_order_and_types\n    self.run_exports(requests, expected)\n  File \"D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after-test-sensitivity\\query-export\\test_export.py\", line 53, in run_exports\n    self.assertEqual(completed.returncode, 0, completed.stderr)\nAssertionError: 1 != 0 : Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\query export edwl4eiu\\unrelated cwd\\standalone.pyz\\__main__.py\", line 41, in <module>\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\query export edwl4eiu\\unrelated cwd\\standalone.pyz\\__main__.py\", line 37, in main\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\query export edwl4eiu\\unrelated cwd\\standalone.pyz\\__main__.py\", line 23, in export_rows\nsqlite3.OperationalError: near \"order\": syntax error\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.142s\n\nFAILED (failures=1)\n",
+    "scope": "Root sensitivity qualification only; original successful model execution remains its own original Tool receipt"
+  },
+  {
+    "kind": "utc-ledger",
+    "fault": "Relabel local clock as UTC rather than converting",
+    "changedNodes": 1,
+    "testBytesEqual": true,
+    "argv": [
+      "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "test_ledger.LedgerTests.test_offsets_rollovers_and_whole_session_grouping"
+    ],
+    "cwd": "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after-test-sensitivity\\utc-ledger",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "test_offsets_rollovers_and_whole_session_grouping (test_ledger.LedgerTests.test_offsets_rollovers_and_whole_session_grouping) ... FAIL\n\n======================================================================\nFAIL: test_offsets_rollovers_and_whole_session_grouping (test_ledger.LedgerTests.test_offsets_rollovers_and_whole_session_grouping)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after-test-sensitivity\\utc-ledger\\test_ledger.py\", line 117, in test_offsets_rollovers_and_whole_session_grouping\n    self.assert_report(rows, expected)\n  File \"D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after-test-sensitivity\\utc-ledger\\test_ledger.py\", line 56, in assert_report\n    self.assertEqual(status, 0)\nAssertionError: 2 != 0\n\n----------------------------------------------------------------------\nRan 1 test in 0.117s\n\nFAILED (failures=1)\n",
+    "scope": "Root sensitivity qualification only; original successful model execution remains its own original Tool receipt"
+  },
+  {
+    "kind": "bundle",
+    "fault": "Reject legal backslash source values, preserving ZIP target rules",
+    "changedNodes": 1,
+    "testBytesEqual": true,
+    "argv": [
+      "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "-B",
+      "-m",
+      "unittest",
+      "-v",
+      "test_delivery.DeliveryTests.test_native_source_separators"
+    ],
+    "cwd": "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after-test-sensitivity\\bundle",
+    "exit": 1,
+    "stdout": "",
+    "stderr": "test_native_source_separators (test_delivery.DeliveryTests.test_native_source_separators) ... FAIL\n\n======================================================================\nFAIL: test_native_source_separators (test_delivery.DeliveryTests.test_native_source_separators)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after-test-sensitivity\\bundle\\test_delivery.py\", line 107, in test_native_source_separators\n    self.inspect(self.run_app(), {\"folder/native.bin\": b\"native\\x00\\xff\"})\n                 ^^^^^^^^^^^^^^\n  File \"D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after-test-sensitivity\\bundle\\test_delivery.py\", line 41, in run_app\n    self.assertEqual(result.returncode, 0, result.stderr)\nAssertionError: 2 != 0 : b'error: evaluation-only native source rejection\\r\\n'\n\n----------------------------------------------------------------------\nRan 1 test in 0.115s\n\nFAILED (failures=1)\n",
+    "scope": "Root sensitivity qualification only; original successful model execution remains its own original Tool receipt"
+  }
+]

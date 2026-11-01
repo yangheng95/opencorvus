@@ -1,0 +1,1046 @@
+{
+  "phase": "before",
+  "status": "completed",
+  "cleanup": {
+    "errors": [],
+    "pairedCopiesRetired": true,
+    "sourceBytesPreserved": true
+  },
+  "provider": {
+    "requests": 60,
+    "models": {
+      "gpt-6.1-sol": 60
+    },
+    "streaming": {
+      "True": 60
+    },
+    "http": {
+      "200": 60
+    },
+    "probes": {
+      "shared-verification-policy": 57,
+      "completion-summary-schema": 32,
+      "patch-operation-contract": 57
+    }
+  },
+  "runs": [
+    {
+      "kind": "query-export",
+      "entry": "task",
+      "taskID": "tsk_g00VZjU1kW00TlEcoBgt",
+      "sessionID": null,
+      "startedAt": 1793544043158,
+      "settledAt": 1793544416461,
+      "requestsBefore": 2,
+      "requestsAfter": 35,
+      "lifecycle": {
+        "taskID": "tsk_g00VZjU1kW00TlEcoBgt",
+        "epoch": 1,
+        "openedEventID": "pev_g0VZjU1xr00QxuXemsKJ",
+        "openedAt": 1793544043912,
+        "status": "completed",
+        "terminalEventID": "pev_g0VZjVaP000ENX8GB69c",
+        "terminalAt": 1793544413768
+      },
+      "grade": {
+        "case": "query-export",
+        "passed": true,
+        "scope": "external registered consumption, not model self-verification evidence",
+        "results": [
+          {
+            "name": "ordinary-identifiers",
+            "argv": [
+              "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "-I",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\original-delivered.pyz",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\0\\input",
+              "--output",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\0\\result.json"
+            ],
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\0",
+            "expected": {
+              "exports": [
+                {
+                  "name": "red rows",
+                  "columns": [
+                    "seq",
+                    "amount"
+                  ],
+                  "rows": [
+                    [
+                      "001",
+                      7
+                    ],
+                    [
+                      "003",
+                      11
+                    ]
+                  ]
+                }
+              ]
+            },
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "actual": {
+              "exports": [
+                {
+                  "name": "red rows",
+                  "columns": [
+                    "seq",
+                    "amount"
+                  ],
+                  "rows": [
+                    [
+                      "001",
+                      7
+                    ],
+                    [
+                      "003",
+                      11
+                    ]
+                  ]
+                }
+              ]
+            },
+            "passed": true,
+            "source_before": {
+              "schema": [
+                [
+                  "index",
+                  "preserve index 0",
+                  "events",
+                  "CREATE INDEX \"preserve index 0\" ON \"events\"(\"seq\")"
+                ],
+                [
+                  "table",
+                  "events",
+                  "events",
+                  "CREATE TABLE \"events\" (\"seq\",\"team\",\"amount\")"
+                ]
+              ],
+              "rows": {
+                "events": [
+                  [
+                    "001",
+                    "red",
+                    7
+                  ],
+                  [
+                    "002",
+                    "blue",
+                    9
+                  ],
+                  [
+                    "003",
+                    "red",
+                    11
+                  ]
+                ]
+              },
+              "version": [
+                [
+                  7
+                ]
+              ],
+              "integrity": [
+                [
+                  "ok"
+                ]
+              ]
+            },
+            "source_after": {
+              "schema": [
+                [
+                  "index",
+                  "preserve index 0",
+                  "events",
+                  "CREATE INDEX \"preserve index 0\" ON \"events\"(\"seq\")"
+                ],
+                [
+                  "table",
+                  "events",
+                  "events",
+                  "CREATE TABLE \"events\" (\"seq\",\"team\",\"amount\")"
+                ]
+              ],
+              "rows": {
+                "events": [
+                  [
+                    "001",
+                    "red",
+                    7
+                  ],
+                  [
+                    "002",
+                    "blue",
+                    9
+                  ],
+                  [
+                    "003",
+                    "red",
+                    11
+                  ]
+                ]
+              },
+              "version": [
+                [
+                  7
+                ]
+              ],
+              "integrity": [
+                [
+                  "ok"
+                ]
+              ]
+            },
+            "source_preserved": true
+          },
+          {
+            "name": "quoted-keyword-unicode-identifiers",
+            "argv": [
+              "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "-I",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\original-delivered.pyz",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\1\\input",
+              "--output",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\1\\result.json"
+            ],
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\1",
+            "expected": {
+              "exports": [
+                {
+                  "name": " 01 ",
+                  "columns": [
+                    "select",
+                    "a\"b"
+                  ],
+                  "rows": [
+                    [
+                      "001",
+                      "keep"
+                    ]
+                  ]
+                },
+                {
+                  "name": "数据",
+                  "columns": [
+                    "编号",
+                    "值"
+                  ],
+                  "rows": [
+                    [
+                      "a",
+                      "中"
+                    ]
+                  ]
+                }
+              ]
+            },
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "actual": {
+              "exports": [
+                {
+                  "name": " 01 ",
+                  "columns": [
+                    "select",
+                    "a\"b"
+                  ],
+                  "rows": [
+                    [
+                      "001",
+                      "keep"
+                    ]
+                  ]
+                },
+                {
+                  "name": "数据",
+                  "columns": [
+                    "编号",
+                    "值"
+                  ],
+                  "rows": [
+                    [
+                      "a",
+                      "中"
+                    ]
+                  ]
+                }
+              ]
+            },
+            "passed": true,
+            "source_before": {
+              "schema": [
+                [
+                  "index",
+                  "preserve index 0",
+                  "group",
+                  "CREATE INDEX \"preserve index 0\" ON \"group\"(\"select\")"
+                ],
+                [
+                  "index",
+                  "preserve index 1",
+                  "数据 名",
+                  "CREATE INDEX \"preserve index 1\" ON \"数据 名\"(\"编号\")"
+                ],
+                [
+                  "table",
+                  "group",
+                  "group",
+                  "CREATE TABLE \"group\" (\"select\",\"team name\",\"a\"\"b\")"
+                ],
+                [
+                  "table",
+                  "数据 名",
+                  "数据 名",
+                  "CREATE TABLE \"数据 名\" (\"编号\",\"值\")"
+                ]
+              ],
+              "rows": {
+                "group": [
+                  [
+                    "001",
+                    "x",
+                    "keep"
+                  ],
+                  [
+                    "002",
+                    "y",
+                    "skip"
+                  ]
+                ],
+                "数据 名": [
+                  [
+                    "b",
+                    "文"
+                  ],
+                  [
+                    "a",
+                    "中"
+                  ]
+                ]
+              },
+              "version": [
+                [
+                  7
+                ]
+              ],
+              "integrity": [
+                [
+                  "ok"
+                ]
+              ]
+            },
+            "source_after": {
+              "schema": [
+                [
+                  "index",
+                  "preserve index 0",
+                  "group",
+                  "CREATE INDEX \"preserve index 0\" ON \"group\"(\"select\")"
+                ],
+                [
+                  "index",
+                  "preserve index 1",
+                  "数据 名",
+                  "CREATE INDEX \"preserve index 1\" ON \"数据 名\"(\"编号\")"
+                ],
+                [
+                  "table",
+                  "group",
+                  "group",
+                  "CREATE TABLE \"group\" (\"select\",\"team name\",\"a\"\"b\")"
+                ],
+                [
+                  "table",
+                  "数据 名",
+                  "数据 名",
+                  "CREATE TABLE \"数据 名\" (\"编号\",\"值\")"
+                ]
+              ],
+              "rows": {
+                "group": [
+                  [
+                    "001",
+                    "x",
+                    "keep"
+                  ],
+                  [
+                    "002",
+                    "y",
+                    "skip"
+                  ]
+                ],
+                "数据 名": [
+                  [
+                    "b",
+                    "文"
+                  ],
+                  [
+                    "a",
+                    "中"
+                  ]
+                ]
+              },
+              "version": [
+                [
+                  7
+                ]
+              ],
+              "integrity": [
+                [
+                  "ok"
+                ]
+              ]
+            },
+            "source_preserved": true
+          },
+          {
+            "name": "literal-text-and-case",
+            "argv": [
+              "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "-I",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\original-delivered.pyz",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\2\\input",
+              "--output",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\2\\result.json"
+            ],
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-zidu5zkv\\2",
+            "expected": {
+              "exports": [
+                {
+                  "name": "apostrophe",
+                  "columns": [
+                    "code",
+                    "note"
+                  ],
+                  "rows": [
+                    [
+                      "001",
+                      "O'Reilly"
+                    ]
+                  ]
+                },
+                {
+                  "name": "literal SQL",
+                  "columns": [
+                    "code",
+                    "note"
+                  ],
+                  "rows": [
+                    [
+                      "002",
+                      "' OR 1=1 --"
+                    ]
+                  ]
+                },
+                {
+                  "name": "case",
+                  "columns": [
+                    "code",
+                    "note"
+                  ],
+                  "rows": [
+                    [
+                      "005",
+                      "code"
+                    ]
+                  ]
+                }
+              ]
+            },
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "actual": {
+              "exports": [
+                {
+                  "name": "apostrophe",
+                  "columns": [
+                    "code",
+                    "note"
+                  ],
+                  "rows": [
+                    [
+                      "001",
+                      "O'Reilly"
+                    ]
+                  ]
+                },
+                {
+                  "name": "literal SQL",
+                  "columns": [
+                    "code",
+                    "note"
+                  ],
+                  "rows": [
+                    [
+                      "002",
+                      "' OR 1=1 --"
+                    ]
+                  ]
+                },
+                {
+                  "name": "case",
+                  "columns": [
+                    "code",
+                    "note"
+                  ],
+                  "rows": [
+                    [
+                      "005",
+                      "code"
+                    ]
+                  ]
+                }
+              ]
+            },
+            "passed": true,
+            "source_before": {
+              "schema": [
+                [
+                  "index",
+                  "preserve index 0",
+                  "items",
+                  "CREATE INDEX \"preserve index 0\" ON \"items\"(\"code\")"
+                ],
+                [
+                  "table",
+                  "items",
+                  "items",
+                  "CREATE TABLE \"items\" (\"code\",\"note\",\"kind\")"
+                ]
+              ],
+              "rows": {
+                "items": [
+                  [
+                    "001",
+                    "O'Reilly",
+                    "key"
+                  ],
+                  [
+                    "002",
+                    "' OR 1=1 --",
+                    "key"
+                  ],
+                  [
+                    "003",
+                    "normal",
+                    "other"
+                  ],
+                  [
+                    "004",
+                    "CODE",
+                    "case"
+                  ],
+                  [
+                    "005",
+                    "code",
+                    "case"
+                  ]
+                ]
+              },
+              "version": [
+                [
+                  7
+                ]
+              ],
+              "integrity": [
+                [
+                  "ok"
+                ]
+              ]
+            },
+            "source_after": {
+              "schema": [
+                [
+                  "index",
+                  "preserve index 0",
+                  "items",
+                  "CREATE INDEX \"preserve index 0\" ON \"items\"(\"code\")"
+                ],
+                [
+                  "table",
+                  "items",
+                  "items",
+                  "CREATE TABLE \"items\" (\"code\",\"note\",\"kind\")"
+                ]
+              ],
+              "rows": {
+                "items": [
+                  [
+                    "001",
+                    "O'Reilly",
+                    "key"
+                  ],
+                  [
+                    "002",
+                    "' OR 1=1 --",
+                    "key"
+                  ],
+                  [
+                    "003",
+                    "normal",
+                    "other"
+                  ],
+                  [
+                    "004",
+                    "CODE",
+                    "case"
+                  ],
+                  [
+                    "005",
+                    "code",
+                    "case"
+                  ]
+                ]
+              },
+              "version": [
+                [
+                  7
+                ]
+              ],
+              "integrity": [
+                [
+                  "ok"
+                ]
+              ]
+            },
+            "source_preserved": true
+          }
+        ]
+      },
+      "canonical": {
+        "requests": 32,
+        "outcomes": 32,
+        "states": {
+          "completed": 30,
+          "failed": 2
+        }
+      },
+      "toolStates": {
+        "completed": 30,
+        "error": 2
+      },
+      "issues": [
+        {
+          "part": "prt_g0VZjUDnD00rKcd9NAXx",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Update File: main.py\n@@\n-import argparse,json,sqlite3\n+\"\"\"Export explicitly named SQLite columns without interpreting input as SQL.\"\"\"\n+\n+import argparse\n+import json\n+import sqlite3\n+from contextlib import closing\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input);c=sqlite3.connect(root/\"source.db\");results=[]\n-for r in json.loads((root/\"export.json\").read_text(encoding=\"utf-8\"))[\"exports\"]:\n-    sql=\"SELECT \"+\",\".join(r[\"columns\"])+\" FROM \"+r[\"table\"]+\" WHERE \"+r[\"match\"][\"column\"]+\" = '\"+r[\"match\"][\"value\"]+\"' ORDER BY \",\".join(r[\"order_by\"])\n-    results.append(dict(name=r[\"name\"],columns=r[\"columns\"],rows=[list(row) for row in c.execute(sql)]))\n-c.close();Path(a.output).write_text(json.dumps(dict(exports=results),ensure_ascii=False),encoding=\"utf-8\")\n+\n+\n+def quote_identifier(name):\n+    \"\"\"Quote one identifier (not a dotted path or SQL expression).\"\"\"\n+    return '\"' + name.replace('\"', '\"\"') + '\"'\n+\n+\n+def export_database(root):\n+    requests = json.loads((root / \"export.json\").read_text(encoding=\"utf-8\"))\n+    uri = (root / \"source.db\").resolve().as_uri() + \"?mode=ro\"\n+    results = []\n+    with closing(sqlite3.connect(uri, uri=True)) as connection:\n+        # Hold a consistent read snapshot across all requested exports.\n+        connection.execute(\"BEGIN\")\n+        for request in requests[\"exports\"]:\n+            columns = \", \".join(map(quote_identifier, request[\"columns\"]))\n+            table = quote_identifier(request[\"table\"])\n+            match = quote_identifier(request[\"match\"][\"column\"])\n+            order = \", \".join(\n+                quote_identifier(column) + \" ASC\"\n+                for column in request[\"order_by\"]\n+            )\n+            # Unary + removes column affinity without changing its value/type.\n+            # Thus integer 1 is not text '1', and NOCASE column declarations\n+            # cannot override the explicitly selected BINARY comparison.\n+            sql = (\n+                f\"SELECT {columns} FROM {table} \"\n+                f\"WHERE +{match} COLLATE BINARY = ? ORDER BY {order}\"\n+            )\n+            rows = connection.execute(sql, (request[\"match\"][\"value\"],)).fetchall()\n+            results.append({\n+                \"name\": request[\"name\"],\n+                \"columns\": request[\"columns\"],\n+                \"rows\": [list(row) for row in rows],\n+            })\n+    return {\"exports\": results}\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", type=Path)\n+    parser.add_argument(\"--output\", required=True, type=Path)\n+    args = parser.parse_args()\n+    database = args.input / \"source.db\"\n+    if (args.output.resolve() == database.resolve() or\n+            (args.output.exists() and database.exists() and\n+             args.output.samefile(database))):\n+        parser.error(\"output must not overwrite source.db\")\n+    result = export_database(args.input)\n+    args.output.write_text(json.dumps(result, ensure_ascii=False), encoding=\"utf-8\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: build.py\n+\"\"\"Build the standalone zipapp: python build.py.\"\"\"\n+\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def main():\n+    root = Path(__file__).resolve().parent\n+    source = (root / \"main.py\").read_bytes()\n+    compile(source, \"__main__.py\", \"exec\")\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.writestr(\"__main__.py\", source)\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: test_export.py\n+\"\"\"Black-box contract tests against the delivered archive, using only stdlib.\"\"\"\n+\n+import json\n+from pathlib import Path\n+import sqlite3\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+\n+\n+APP = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n+\n+\n+class ExportTests(unittest.TestCase):\n+    def setUp(self):\n+        self.temp = tempfile.TemporaryDirectory(prefix=\"query export \")\n+        self.addCleanup(self.temp.cleanup)\n+        self.root = Path(self.temp.name)\n+        self.inputs = self.root / \"input # Unicode 雪\"\n+        self.inputs.mkdir()\n+        self.cwd = self.root / \"unrelated cwd\"\n+        self.cwd.mkdir()\n+        self.db = self.inputs / \"source.db\"\n+\n+    def run_export(self, requests, expected):\n+        (self.inputs / \"export.json\").write_text(\n+            json.dumps({\"exports\": requests}, ensure_ascii=False), encoding=\"utf-8\"\n+        )\n+        before = self.db.read_bytes()\n+        with sqlite3.connect(self.db) as connection:\n+            logical_before = list(connection.iterdump())\n+        output = self.root / \"result 雪.json\"\n+        process = subprocess.run(\n+            [sys.executable, str(APP), str(self.inputs), \"--output\", str(output)],\n+            cwd=self.cwd, capture_output=True, text=True,\n+        )\n+        self.assertEqual(process.returncode, 0, process.stderr)\n+        self.assertEqual(json.loads(output.read_text(encoding=\"utf-8\")), expected)\n+        self.assertEqual(self.db.read_bytes(), before)\n+        with sqlite3.connect(self.db) as connection:\n+            self.assertEqual(list(connection.iterdump()), logical_before)\n+            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), (73,))\n+\n+    def test_identifier_value_and_order_boundaries(self):\n+        # Fixed DDL and literal expected rows are independent of exporter quoting.\n+        with sqlite3.connect(self.db) as connection:\n+            connection.executescript('''\n+                CREATE TABLE \"select 雪;--\" (\n+                    \"a\"\"b\" TEXT COLLATE NOCASE, \"order\" INTEGER,\n+                    \"x.y\" TEXT, \"NULL\" INTEGER, \"rank desc\" INTEGER);\n+                CREATE INDEX \"index odd\" ON \"select 雪;--\" (\"order\");\n+                PRAGMA user_version=73;\n+            ''')\n+            connection.executemany('INSERT INTO \"select 雪;--\" VALUES (?,?,?,?,?)', [\n+                (\"O'Reilly\", 2, \"second\", None, 1),\n+                (\"O'Reilly\", 1, \"later\", 8, 2),\n+                (\"O'Reilly\", 1, \"first 雪\", 0, 1),\n+                (\"o'reilly\", 0, \"wrong case\", 9, 0),\n+                (\"' OR 1=1 --\", 3, \"literal\", -7, 0),\n+                (\"001\", 4, \"zeroes\", None, 0),\n+                (\"\", 5, \"empty\", 1, 0),\n+                (\"a\\x00b\", 6, \"nul text\", 2, 0),\n+            ])\n+        requests = []\n+        expected = []\n+        for name, value, rows in [\n+            (' name \" 雪 ', \"O'Reilly\", [[\"first 雪\", 0, 1], [\"later\", 8, 1], [\"second\", None, 2]]),\n+            (\"sql\", \"' OR 1=1 --\", [[\"literal\", -7, 3]]),\n+            (\"numeric\", \"001\", [[\"zeroes\", None, 4]]),\n+            (\"empty\", \"\", [[\"empty\", 1, 5]]),\n+            (\"nul\", \"a\\x00b\", [[\"nul text\", 2, 6]]),\n+            (\"missing\", \"absent\", []),\n+        ]:\n+            columns = [\"x.y\", \"NULL\", \"order\"]\n+            requests.append({\"name\": name, \"table\": \"select 雪;--\", \"columns\": columns,\n+                             \"match\": {\"column\": 'a\"b', \"value\": value},\n+                             \"order_by\": [\"order\", \"rank desc\"]})\n+            expected.append({\"name\": name, \"columns\": columns, \"rows\": rows})\n+        self.run_export(requests, {\"exports\": expected})\n+\n+    def test_text_equality_types_and_sqlite_sorting(self):\n+        with sqlite3.connect(self.db) as connection:\n+            connection.executescript('''\n+                CREATE TABLE data (value, sortkey, payload);\n+                CREATE TABLE numeric_data (value NUMERIC);\n+                INSERT INTO numeric_data VALUES (1), ('1x'), (NULL);\n+                PRAGMA user_version=73;\n+            ''')\n+            connection.executemany(\"INSERT INTO data VALUES (?,?,?)\", [\n+                (\"1\", \"10\", \"text10\"), (\"1\", 10, \"int10\"),\n+                (\"1\", None, \"null\"), (\"1\", -2, \"negative\"),\n+                (\"1\", \"2\", \"text2\"), (1, 0, \"integer must not match\"),\n+                (\"01\", 0, \"leading zero\"), (None, 0, \"null must not match\"),\n+            ])\n+        requests = [\n+            {\"name\": \"types\", \"table\": \"data\", \"columns\": [\"payload\", \"sortkey\", \"value\"],\n+             \"match\": {\"column\": \"value\", \"value\": \"1\"}, \"order_by\": [\"sortkey\"]},\n+            {\"name\": \"affinity\", \"table\": \"numeric_data\", \"columns\": [\"value\"],\n+             \"match\": {\"column\": \"value\", \"value\": \"01\"}, \"order_by\": [\"value\"]},\n+        ]\n+        self.run_export(requests, {\"exports\": [\n+            {\"name\": \"types\", \"columns\": [\"payload\", \"sortkey\", \"value\"], \"rows\": [\n+                [\"null\", None, \"1\"], [\"negative\", -2, \"1\"], [\"int10\", 10, \"1\"],\n+                [\"text10\", \"10\", \"1\"], [\"text2\", \"2\", \"1\"]]},\n+            {\"name\": \"affinity\", \"columns\": [\"value\"], \"rows\": []},\n+        ]})\n+\n+    def test_empty_exports(self):\n+        with sqlite3.connect(self.db) as connection:\n+            connection.execute(\"PRAGMA user_version=73\")\n+        self.run_export([], {\"exports\": []})\n+\n+    def test_output_cannot_replace_database(self):\n+        with sqlite3.connect(self.db) as connection:\n+            connection.execute(\"CREATE TABLE data (value TEXT)\")\n+        before = self.db.read_bytes()\n+        process = subprocess.run(\n+            [sys.executable, str(APP), str(self.inputs), \"--output\", str(self.db)],\n+            cwd=self.cwd, capture_output=True,\n+        )\n+        self.assertNotEqual(process.returncode, 0)\n+        self.assertEqual(self.db.read_bytes(), before)\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\query-export\\main.py:\nimport argparse,json,sqlite3\nfrom pathlib import Path\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input);c=sqlite3.connect(root/\"source.db\");results=[]\nfor r in json.loads((root/\"export.json\").read_text(encoding=\"utf-8\"))[\"exports\"]:\n    sql=\"SELECT \"+\",\".join(r[\"columns\"])+\" FROM \"+r[\"table\"]+\" WHERE \"+r[\"match\"][\"column\"]+\" = '\"+r[\"match\"][\"value\"]+\"' ORDER BY \",\".join(r[\"order_by\"])\n    results.append(dict(name=r[\"name\"],columns=r[\"columns\"],rows=[list(row) for row in c.execute(sql)]))\nc.close();Path(a.output).write_text(json.dumps(dict(exports=results),ensure_ascii=False),encoding=\"utf-8\")",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_f6b4167ed06b49a4872ab8b4b8261588",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null
+        },
+        {
+          "part": "prt_g0VZjUfeX00Nl43pnte8",
+          "tool": "bash",
+          "input": {
+            "command": "python -m unittest -v test_export",
+            "description": "Runs packaged exporter against contract boundary cases"
+          },
+          "failure": null,
+          "exit": 1,
+          "output": "test_empty_exports (test_export.ExportTests.test_empty_exports) ... ERROR\r\ntest_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries) ... ERROR\r\ntest_output_cannot_replace_database (test_export.ExportTests.test_output_cannot_replace_database) ... ERROR\r\ntest_text_equality_types_and_sqlite_sorting (test_export.ExportTests.test_text_equality_types_and_sqlite_sorting) ... ERROR\r\n\r\n======================================================================\r\nERROR: test_empty_exports (test_export.ExportTests.test_empty_exports)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 98mrb9f1\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 98mrb9f1\\\\input # Unicode 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_identifier_value_and_order_boundaries (test_export.ExportTests.test_identifier_value_and_order_boundaries)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 6c47g5x_\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export 6c47g5x_\\\\input # Unicode 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_output_cannot_replace_database (test_export.ExportTests.test_output_cannot_replace_database)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export t5mix1m6\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export t5mix1m6\\\\input # Unicode 雪\\\\source.db'\r\n\r\n======================================================================\r\nERROR: test_text_equality_types_and_sqlite_sorting (test_export.ExportTests.test_text_equality_types_and_sqlite_sorting)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export k__6wklb\\\\input # Unicode 雪\\\\source.db'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-pZkrYN\\\\runner-22560-nzGysX\\\\runtime-root\\\\tmp\\\\query export k__6wklb\\\\input # Unicode 雪\\\\source.db'\r\n\r\n----------------------------------------------------------------------\r\nRan 4 tests in 1.259s\r\n\r\nFAILED (errors=4)\r\n\n\n<bash_metadata>\nexit code: 1\n</bash_metadata>"
+        },
+        {
+          "part": "prt_g0VZjV17d00hSs1RaDRx",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Update File: test_export.py\n@@\n         with closing(sqlite3.connect(self.db)) as connection, connection:\n             logical_before = list(connection.iterdump())\n+            version_before = connection.execute(\"PRAGMA user_version\").fetchone()\n@@\n-            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), (73,))\n+            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), version_before)\n@@\n     def test_empty_exports(self):\n@@\n         self.run_export([], {\"exports\": []})\n+\n+    def test_supplied_sample(self):\n+        sample = APP.parent / \"sample\"\n+        shutil.copyfile(sample / \"source.db\", self.db)\n+        requests = json.loads((sample / \"export.json\").read_text(encoding=\"utf-8\"))\n+        self.run_export(requests[\"exports\"], {\"exports\": [\n+            {\"name\": \"red rows\", \"columns\": [\"seq\", \"amount\"],\n+             \"rows\": [[\"001\", 7], [\"003\", 11]]},\n+        ]})\n*** Add File: HANDOFF.md\n+# SQLite query-export handoff\n+\n+Run with Python 3 (standard library only):\n+\n+```text\n+python deliverable.pyz INPUT_DIRECTORY --output RESULT_JSON\n+```\n+\n+`INPUT_DIRECTORY` supplies `source.db` and UTF-8 `export.json` as specified in\n+`CONTRACT.md`. Paths can be absolute or relative to the caller's working directory.\n+The archive is self-contained; the source files are not needed at runtime.\n+\n+## Repair\n+\n+- `main.py`: readable CLI/export functions, double-quoted identifiers with embedded\n+  quotes escaped, bound match values, explicit BINARY comparison with column affinity\n+  removed, and native ascending SQLite ordering. INTEGER values are not silently\n+  coerced to matching text. JSON preserves export/column order and cell types.\n+- Database opened with a read-only SQLite URI and one consistent read transaction;\n+  the connection is explicitly closed. Output cannot alias the source database.\n+- `build.py`: rebuilds `deliverable.pyz` from `main.py`, independent of build cwd.\n+- `test_export.py`: black-box regression tests with literal expected outputs.\n+\n+## Rebuild and test\n+\n+```text\n+python build.py\n+python -m unittest -v test_export\n+```\n+\n+Tested on Windows with Python 3.14: six tests exercise the supplied sample,\n+quoted/Unicode/SQL-looking identifiers, apostrophes and SQL-looking values,\n+NOCASE override, exact numeric-looking text versus INTEGER, NULLs, integer limits,\n+multi-column ordering, empty exports/results, exact names and column ordering,\n+and refusal to overwrite the database. Each export runs a copied archive without\n+adjacent source files from an unrelated working directory. Checks compare complete\n+decoded JSON against fixed expected values and compare database bytes, logical\n+schema/data/index dumps, and user_version before and after.\n+\n+Inputs are assumed to meet CONTRACT.md; this is not a general input-validation tool.\n+Results are materialized in memory. No third-party dependencies or delegation used.\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\query-export\\test_export.py:\n            self.assertEqual(connection.execute(\"PRAGMA user_version\").fetchone(), (73,))",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_16303c7ec4244a20a4813aaaec3de656",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null
+        }
+      ],
+      "publishedProgramBindings": [
+        {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hM3VpqiQARk22GsYOIxY",
+            "task_id": "tsk_g00VZjU1kW00TlEcoBgt",
+            "snapshot_id": "eca06228-8500-5cab-acd5-e08e84198e0c",
+            "manifest_sha256": "afd0505c8e610d9dce238efe7e07fc601a51115e5b7af4fbd3b4be48f7f1ed9d"
+          },
+          "resource": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hM3VpqiQARk22GsYOIxY",
+              "task_id": "tsk_g00VZjU1kW00TlEcoBgt",
+              "snapshot_id": "eca06228-8500-5cab-acd5-e08e84198e0c",
+              "manifest_sha256": "afd0505c8e610d9dce238efe7e07fc601a51115e5b7af4fbd3b4be48f7f1ed9d"
+            },
+            "tree": "resources",
+            "path": "deliverable.pyz",
+            "bytes": 1121,
+            "sha256": "a7e321514928f5b4ddb3f9235a0e7734589036bed03ea3ecfa5aaf7d1500a982",
+            "media_type": "application/zip"
+          },
+          "relativeBlob": ".opencorvus\\.r\\tasks\\tsk_g00VZjU1kW00TlEcoBgt\\artifacts\\snapshots\\eca06228-8500-5cab-acd5-e08e84198e0c\\resources\\deliverable.pyz",
+          "exactProgramBytesEqual": true,
+          "immutableResourceIntegrity": true
+        }
+      ],
+      "completionTools": [
+        {
+          "part": "prt_g0VZjVX1I00msej66t0U",
+          "input": {
+            "summary": "Repaired the SQLite exporter directly without delegation, committed the scoped repair as ad1710d, and published deliverable.pyz, main.py, build.py, test_export.py and HANDOFF.md. Final rebuilt zipapp passed six black-box tests on Windows/Python 3.14, including the supplied sample and contract-derived cases with literal expected JSON: unusual and quoted identifiers, SQL-looking values, apostrophes, Unicode, BINARY case sensitivity, numeric-looking text versus INTEGER without affinity coercion, NULL and integer limits, ascending multi-column and mixed-type SQLite ordering, export/column/name preservation, empty results/exports and database-overwrite refusal. Tests consume isolated copies of the final archive from unrelated working directories without adjacent source, compare exact decoded output values, and compare source database bytes, logical schema/data/index dumps and user_version before/after. Initial test-fixture connection cleanup errors were repaired by explicit connection closure; final suite passes. Uses Python standard library only. Maintains read-only database access and bound values separately from quoted identifiers. Valid contract inputs are assumed and results are materialized in memory. Existing unrelated untracked project/runtime files were preserved.",
+            "evidence_locators": [
+              {
+                "source": "session",
+                "session_id": "ses_-zUQGVxG7zz6bbXjbB05"
+              },
+              {
+                "source": "task_artifact_snapshot",
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hM3VpqiQARk22GsYOIxY",
+                  "task_id": "tsk_g00VZjU1kW00TlEcoBgt",
+                  "snapshot_id": "eca06228-8500-5cab-acd5-e08e84198e0c",
+                  "manifest_sha256": "afd0505c8e610d9dce238efe7e07fc601a51115e5b7af4fbd3b4be48f7f1ed9d"
+                }
+              }
+            ],
+            "deliverable_artifact_locators": [
+              {
+                "source": "task_artifact_snapshot",
+                "snapshot": {
+                  "schema_version": 2,
+                  "project_id": "prj_hM3VpqiQARk22GsYOIxY",
+                  "task_id": "tsk_g00VZjU1kW00TlEcoBgt",
+                  "snapshot_id": "eca06228-8500-5cab-acd5-e08e84198e0c",
+                  "manifest_sha256": "afd0505c8e610d9dce238efe7e07fc601a51115e5b7af4fbd3b4be48f7f1ed9d"
+                }
+              }
+            ],
+            "accepted_delivery_slice_revision_ids": [],
+            "workflow_id": null,
+            "action": "complete_task"
+          },
+          "output": "Task tsk_g00VZjU1kW00TlEcoBgt completed: Repaired the SQLite exporter directly without delegation, committed the scoped repair as ad1710d, and published deliverable.pyz, main.py, build.py, test_export.py and HANDOFF.md. Final rebuilt zipapp passed six black-box tests on Windows/Python 3.14, including the supplied sample and contract-derived cases with literal expected JSON: unusual and quoted identifiers, SQL-looking values, apostrophes, Unicode, BINARY case sensitivity, numeric-looking text versus INTEGER without affinity coercion, NULL and integer limits, ascending multi-column and mixed-type SQLite ordering, export/column/name preservation, empty results/exports and database-overwrite refusal. Tests consume isolated copies of the final archive from unrelated working directories without adjacent source, compare exact decoded output values, and compare source database bytes, logical schema/data/index dumps and user_version before/after. Initial test-fixture connection cleanup errors were repaired by explicit connection closure; final suite passes. Uses Python standard library only. Maintains read-only database access and bound values separately from quoted identifiers. Valid contract inputs are assumed and results are materialized in memory. Existing unrelated untracked project/runtime files were preserved.."
+        }
+      ]
+    },
+    {
+      "kind": "utc-ledger",
+      "entry": "coding",
+      "taskID": null,
+      "sessionID": "ses_-zUQGUOpDzzgGK8wu2PX",
+      "startedAt": 1793544417680,
+      "settledAt": 1793544655829,
+      "requestsBefore": 35,
+      "requestsAfter": 60,
+      "lifecycle": null,
+      "grade": {
+        "case": "utc-ledger",
+        "passed": true,
+        "scope": "external registered consumption, not model self-verification evidence",
+        "results": [
+          {
+            "name": "ordinary-z",
+            "argv": [
+              "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "-I",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\original-delivered.pyz",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\0\\input",
+              "--output",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\0\\result.json"
+            ],
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\0",
+            "expected": {
+              "sessions": [
+                {
+                  "session": "A",
+                  "start_utc": "2026-04-01T10:00:00.000000Z",
+                  "end_utc": "2026-04-01T10:01:30.000000Z",
+                  "seconds": 90,
+                  "start_utc_date": "2026-04-01"
+                },
+                {
+                  "session": "B",
+                  "start_utc": "2026-04-01T11:00:00.000000Z",
+                  "end_utc": "2026-04-01T11:00:30.000000Z",
+                  "seconds": 30,
+                  "start_utc_date": "2026-04-01"
+                }
+              ],
+              "daily": [
+                {
+                  "date": "2026-04-01",
+                  "sessions": 2,
+                  "seconds": 120
+                }
+              ],
+              "total_seconds": 120
+            },
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "actual": {
+              "sessions": [
+                {
+                  "session": "A",
+                  "start_utc": "2026-04-01T10:00:00.000000Z",
+                  "end_utc": "2026-04-01T10:01:30.000000Z",
+                  "seconds": 90,
+                  "start_utc_date": "2026-04-01"
+                },
+                {
+                  "session": "B",
+                  "start_utc": "2026-04-01T11:00:00.000000Z",
+                  "end_utc": "2026-04-01T11:00:30.000000Z",
+                  "seconds": 30,
+                  "start_utc_date": "2026-04-01"
+                }
+              ],
+              "daily": [
+                {
+                  "date": "2026-04-01",
+                  "sessions": 2,
+                  "seconds": 120
+                }
+              ],
+              "total_seconds": 120
+            },
+            "passed": true
+          },
+          {
+            "name": "equivalent-offsets-and-local-reversal",
+            "argv": [
+              "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "-I",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\original-delivered.pyz",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\1\\input",
+              "--output",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\1\\result.json"
+            ],
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\1",
+            "expected": {
+              "sessions": [
+                {
+                  "session": "001",
+                  "start_utc": "2026-04-01T22:30:00.000000Z",
+                  "end_utc": "2026-04-01T22:35:00.000000Z",
+                  "seconds": 300,
+                  "start_utc_date": "2026-04-01"
+                },
+                {
+                  "session": "A",
+                  "start_utc": "2026-04-01T22:30:00.000000Z",
+                  "end_utc": "2026-04-01T22:35:00.000000Z",
+                  "seconds": 300,
+                  "start_utc_date": "2026-04-01"
+                }
+              ],
+              "daily": [
+                {
+                  "date": "2026-04-01",
+                  "sessions": 2,
+                  "seconds": 600
+                }
+              ],
+              "total_seconds": 600
+            },
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "actual": {
+              "sessions": [
+                {
+                  "session": "001",
+                  "start_utc": "2026-04-01T22:30:00.000000Z",
+                  "end_utc": "2026-04-01T22:35:00.000000Z",
+                  "seconds": 300,
+                  "start_utc_date": "2026-04-01"
+                },
+                {
+                  "session": "A",
+                  "start_utc": "2026-04-01T22:30:00.000000Z",
+                  "end_utc": "2026-04-01T22:35:00.000000Z",
+                  "seconds": 300,
+                  "start_utc_date": "2026-04-01"
+                }
+              ],
+              "daily": [
+                {
+                  "date": "2026-04-01",
+                  "sessions": 2,
+                  "seconds": 600
+                }
+              ],
+              "total_seconds": 600
+            },
+            "passed": true
+          },
+          {
+            "name": "utc-midnight-fractional-and-text-id",
+            "argv": [
+              "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "-I",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\original-delivered.pyz",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\2\\input",
+              "--output",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\2\\result.json"
+            ],
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\2",
+            "expected": {
+              "sessions": [
+                {
+                  "session": " 组,\n",
+                  "start_utc": "2026-04-01T23:59:59.500000Z",
+                  "end_utc": "2026-04-02T00:00:00.250000Z",
+                  "seconds": 0.75,
+                  "start_utc_date": "2026-04-01"
+                },
+                {
+                  "session": "02",
+                  "start_utc": "2026-04-02T00:00:00.000000Z",
+                  "end_utc": "2026-04-02T00:00:02.000000Z",
+                  "seconds": 2,
+                  "start_utc_date": "2026-04-02"
+                }
+              ],
+              "daily": [
+                {
+                  "date": "2026-04-01",
+                  "sessions": 1,
+                  "seconds": 0.75
+                },
+                {
+                  "date": "2026-04-02",
+                  "sessions": 1,
+                  "seconds": 2
+                }
+              ],
+              "total_seconds": 2.75
+            },
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "actual": {
+              "sessions": [
+                {
+                  "session": " 组,\n",
+                  "start_utc": "2026-04-01T23:59:59.500000Z",
+                  "end_utc": "2026-04-02T00:00:00.250000Z",
+                  "seconds": 0.75,
+                  "start_utc_date": "2026-04-01"
+                },
+                {
+                  "session": "02",
+                  "start_utc": "2026-04-02T00:00:00.000000Z",
+                  "end_utc": "2026-04-02T00:00:02.000000Z",
+                  "seconds": 2,
+                  "start_utc_date": "2026-04-02"
+                }
+              ],
+              "daily": [
+                {
+                  "date": "2026-04-01",
+                  "sessions": 1,
+                  "seconds": 0.75
+                },
+                {
+                  "date": "2026-04-02",
+                  "sessions": 1,
+                  "seconds": 2
+                }
+              ],
+              "total_seconds": 2.75
+            },
+            "passed": true
+          },
+          {
+            "name": "negative-instant-error",
+            "argv": [
+              "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+              "-I",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\original-delivered.pyz",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\3\\input",
+              "--output",
+              "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\3\\result.json"
+            ],
+            "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\oc-selfcheck-consumer-1tnej043\\3",
+            "expected": {
+              "error": {
+                "code": "NEGATIVE_INTERVAL",
+                "session": "bad"
+              }
+            },
+            "exit": 2,
+            "stdout": "",
+            "stderr": "",
+            "actual": {
+              "error": {
+                "code": "NEGATIVE_INTERVAL",
+                "session": "bad"
+              }
+            },
+            "passed": true
+          }
+        ]
+      },
+      "canonical": {
+        "requests": 23,
+        "outcomes": 23,
+        "states": {
+          "completed": 22,
+          "failed": 1
+        }
+      },
+      "toolStates": {
+        "completed": 22,
+        "error": 1
+      },
+      "issues": [
+        {
+          "part": "prt_g0VZjW40l00OVqtdjZoU",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Update File: test_ledger.py\n@@\n-             \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\", \"metadata\": \"ignored, text\"},\n+             \"ended_at\": \"2024-01-01T23:00:00.123457+00:00\", \"metadata\": \"ignored, text\"},\n@@\n-        expected_sessions = [\n-            {\"session\": rows[0][\"session\"], \"start_utc\": \"2024-01-01T22:30:00.123456Z\",\n-             \"end_utc\": \"2024-01-01T22:00:00.123457Z\"},\n-        ]\n-        # A backward local clock with a positive UTC duration.\n-        rows[0][\"ended_at\"] = \"2024-01-01T23:00:00.123457+00:00\"\n         expected_sessions = [\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-pZkrYN\\runner-22560-nzGysX\\runtime-root\\tmp\\opencorvus-delivery-scope-DtV7HD\\utc-ledger\\test_ledger.py:\n             \"ended_at\": \"2024-01-01T23:00:00.123457+01:00\", \"metadata\": \"ignored, text\"},",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_f5099323e1984e0ca465c458c1ca9b7a",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null
+        }
+      ],
+      "publishedProgramBindings": [],
+      "completionTools": []
+    }
+  ]
+}

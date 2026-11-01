@@ -1,0 +1,1165 @@
+[
+  {
+    "requestID": "prt_g0VZjbSGY00RjB0awcJh",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_220f8e8f002b4536b269098ed2894d55",
+      "tool": "read",
+      "input": {
+        "filePath": "."
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_09e70b6ef7e199db016ae7565646008191a04475e1d3a2c763"
+        }
+      },
+      "time": {
+        "start": 1793545814138
+      }
+    },
+    "outcomeID": "prt_higUYgedwnrtyZz7Kci3",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle</path>\n<type>directory</type>\n<entries>\n.git/\n.gitattributes\n.gitignore\n.opencorvus/\nCONTRACT.md\nmain.py\nsample/\n\n(7 entries)\n</entries>",
+      "title": "",
+      "metadata": {
+        "preview": ".git/\n.gitattributes\n.gitignore\n.opencorvus/\nCONTRACT.md\nmain.py\nsample/",
+        "truncated": false,
+        "loaded": [],
+        "readType": "directory",
+        "offset": 1,
+        "lines": 7,
+        "totalLines": 7
+      },
+      "time": {
+        "end": 1793545814619
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjbTD800UYq9I81as",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_a128d9cd866c4061a191cf787ed60dd7",
+      "tool": "read",
+      "input": {
+        "filePath": "CONTRACT.md"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_08f80bbbaeb7c860016ae75659e5708191a156707a14f7d27a"
+        }
+      },
+      "time": {
+        "start": 1793545817770
+      }
+    },
+    "outcomeID": "prt_hEaoWlX9XiZdlc4WEojz",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\CONTRACT.md</path>\n<type>file</type>\n<content>1: Repair this manifest-driven file delivery project. Deliver deliverable.pyz,\n2: maintainable source and a concise tested handoff; Python 3 standard library only.\n3: Invocation: python deliverable.pyz INPUT_DIRECTORY --output OUTPUT_ZIP\n4: INPUT_DIRECTORY contains manifest.json {files:[{source:RELATIVE_PATH,target:ZIP_PATH},...]}.\n5: Source paths are relative to that directory; targets are distinct relative forward-slash\n6: ZIP paths; all paths are nonempty and contain no traversal/absolute components.\n7: Legal names include Unicode, spaces, dots and commas; nested paths and duplicate source\n8: basenames in different directories are supported. Inputs may be binary, empty or text.\n9: Copy the exact bytes of every specified source to its exact target, without text decoding.\n10: The ZIP also contains _bundle_index.json {files:[{path:TARGET,bytes:INTEGER},...]} sorted\n11: by target Unicode order. Other payload files must not be included; directory entries are\n12: allowed. manifest order does not affect the delivered logical tree or sorted index.\n13: The zipapp must run from an arbitrary working directory with only its own archive,\n14: Python and the supplied inputs. Verify the actual resulting ZIP, not just zipapp exit.\n\n(End of file - total 14 lines)\n</content>",
+      "title": "CONTRACT.md",
+      "metadata": {
+        "preview": "Repair this manifest-driven file delivery project. Deliver deliverable.pyz,\nmaintainable source and a concise tested handoff; Python 3 standard library only.\nInvocation: python deliverable.pyz INPUT_DIRECTORY --output OUTPUT_ZIP\nINPUT_DIRECTORY contains manifest.json {files:[{source:RELATIVE_PATH,target:ZIP_PATH},...]}.\nSource paths are relative to that directory; targets are distinct relative forward-slash\nZIP paths; all paths are nonempty and contain no traversal/absolute components.\nLegal names include Unicode, spaces, dots and commas; nested paths and duplicate source\nbasenames in different directories are supported. Inputs may be binary, empty or text.\nCopy the exact bytes of every specified source to its exact target, without text decoding.\nThe ZIP also contains _bundle_index.json {files:[{path:TARGET,bytes:INTEGER},...]} sorted\nby target Unicode order. Other payload files must not be included; directory entries are\nallowed. manifest order does not affect the delivered logical tree or sorted index.\nThe zipapp must run from an arbitrary working directory with only its own archive,\nPython and the supplied inputs. Verify the actual resulting ZIP, not just zipapp exit.",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 14,
+        "totalLines": 14
+      },
+      "time": {
+        "end": 1793545818234
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjbUN900dms5FyDU7",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_857f9fa4ec284d6191955a3f387b00d7",
+      "tool": "read",
+      "input": {
+        "filePath": "main.py"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_04a28bda42d9b29e016ae7565e61808191ba5e880153b08600"
+        }
+      },
+      "time": {
+        "start": 1793545822235
+      }
+    },
+    "outcomeID": "prt_hwh9xIK4N5M6iAebDopl",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py</path>\n<type>file</type>\n<content>1: import argparse,json,zipfile\n2: from pathlib import Path\n3: p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args()\n4: root=Path(a.input);index=[]\n5: with zipfile.ZipFile(a.output,\"w\") as z:\n6:     for row in json.loads((root/\"manifest.json\").read_text())[\"files\"]:\n7:         text=(root/row[\"source\"]).read_text();target=Path(row[\"target\"]).name\n8:         z.writestr(target,text);index.append(dict(path=target,bytes=len(text)))\n9:     z.writestr(\"_bundle_index.json\",json.dumps(dict(files=index)))\n\n(End of file - total 9 lines)\n</content>",
+      "title": "main.py",
+      "metadata": {
+        "preview": "import argparse,json,zipfile\nfrom pathlib import Path\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args()\nroot=Path(a.input);index=[]\nwith zipfile.ZipFile(a.output,\"w\") as z:\n    for row in json.loads((root/\"manifest.json\").read_text())[\"files\"]:\n        text=(root/row[\"source\"]).read_text();target=Path(row[\"target\"]).name\n        z.writestr(target,text);index.append(dict(path=target,bytes=len(text)))\n    z.writestr(\"_bundle_index.json\",json.dumps(dict(files=index)))",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 9,
+        "totalLines": 9
+      },
+      "time": {
+        "end": 1793545822725
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjbVsC00uuXLbk7KU",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_3aeb7d013049473e92a3fb7e0ab7addd",
+      "tool": "glob",
+      "input": {
+        "pattern": "**/AGENTS.md"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_03193806822f0bde016ae7566422208191a328f98788623330"
+        }
+      },
+      "time": {
+        "start": 1793545828004
+      }
+    },
+    "outcomeID": "prt_hcFLkYA7bXWiIkRpiM8K",
+    "outcome": {
+      "outcome": "completed",
+      "output": "No files found",
+      "title": "",
+      "metadata": {
+        "count": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1793545828640
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjbWzB00QvACx8JyX",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_5b1d35b2b09a4f82a8fb4a40f1364537",
+      "tool": "bash",
+      "input": {
+        "command": "git status --short",
+        "description": "Check existing changes before repairing project"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_06b9b0899e8b70c5016ae756686be8819184451feebc382996"
+        }
+      },
+      "time": {
+        "start": 1793545832281
+      }
+    },
+    "outcomeID": "prt_h0u90stRVDhXGrk4WWpE",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hzXDXIVfkbSlgs2sR3eZ",
+      "title": "Check existing changes before repairing project",
+      "metadata": {
+        "refused": false,
+        "command": "git status --short",
+        "output": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 48,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Check existing changes before repairing project",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793545833154
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjbcki00e06eQX6DD",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_a50884a52e634e55a3dfbb158d9610e9",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: main.py\n@@\n-import argparse,json,zipfile\n-from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args()\n-root=Path(a.input);index=[]\n-with zipfile.ZipFile(a.output,\"w\") as z:\n-    for row in json.loads((root/\"manifest.json\").read_text())[\"files\"]:\n-        text=(root/row[\"source\"]).read_text();target=Path(row[\"target\"]).name\n-        z.writestr(target,text);index.append(dict(path=target,bytes=len(text)))\n-    z.writestr(\"_bundle_index.json\",json.dumps(dict(files=index)))\n+\"\"\"Copy manifest-selected files into a ZIP without interpreting payload bytes.\"\"\"\n+\n+import argparse\n+import json\n+import ntpath\n+import os\n+from pathlib import Path\n+import tempfile\n+import zipfile\n+\n+\n+INDEX_PATH = \"_bundle_index.json\"\n+\n+\n+def source_path(root, value):\n+    \"\"\"Sources use filesystem paths, not ZIP destination syntax.\"\"\"\n+    if not isinstance(value, str) or not value or \"\\x00\" in value:\n+        raise ValueError(\"source must be a nonempty path\")\n+    path = Path(value)\n+    if path.is_absolute() or ntpath.splitdrive(value)[0]:\n+        raise ValueError(\"source must be relative\")\n+    if any(part == \"..\" for part in path.parts):\n+        raise ValueError(\"source must not contain traversal\")\n+    resolved = (root / path).resolve()\n+    if not resolved.is_relative_to(root):\n+        raise ValueError(\"source escapes the input directory\")\n+    if not resolved.is_file():\n+        raise ValueError(\"source is not a file: \" + value)\n+    return resolved\n+\n+\n+def target_path(value):\n+    if not isinstance(value, str) or not value or \"\\x00\" in value:\n+        raise ValueError(\"target must be a nonempty path\")\n+    if \"\\\\\" in value or ntpath.splitdrive(value)[0]:\n+        raise ValueError(\"target must be a relative forward-slash path\")\n+    if any(part in (\"\", \".\", \"..\") for part in value.split(\"/\")):\n+        raise ValueError(\"target contains an absolute, empty or traversal component\")\n+    if value == INDEX_PATH:\n+        raise ValueError(\"target is reserved for the bundle index\")\n+    return value\n+\n+\n+def load_entries(root):\n+    manifest = json.loads((root / \"manifest.json\").read_text(encoding=\"utf-8\"))\n+    if not isinstance(manifest, dict) or not isinstance(manifest.get(\"files\"), list):\n+        raise ValueError(\"manifest must contain a files array\")\n+    entries = []\n+    seen = set()\n+    for row in manifest[\"files\"]:\n+        if not isinstance(row, dict) or \"source\" not in row or \"target\" not in row:\n+            raise ValueError(\"each file requires source and target\")\n+        target = target_path(row[\"target\"])\n+        if target in seen:\n+            raise ValueError(\"duplicate target: \" + target)\n+        seen.add(target)\n+        entries.append((target, source_path(root, row[\"source\"])))\n+    return sorted(entries)\n+\n+\n+def bundle(input_directory, output_zip):\n+    root = Path(input_directory).resolve()\n+    entries = load_entries(root)\n+    output = Path(output_zip).resolve()\n+    # Build alongside the destination, then replace only after successful copying.\n+    # This also avoids truncating a source if the destination names that source.\n+    fd, temporary = tempfile.mkstemp(prefix=\".bundle-\", suffix=\".zip\", dir=output.parent)\n+    os.close(fd)\n+    try:\n+        index = []\n+        with zipfile.ZipFile(temporary, \"w\", compression=zipfile.ZIP_DEFLATED) as archive:\n+            for target, source in entries:\n+                size = 0\n+                with source.open(\"rb\") as incoming, archive.open(target, \"w\", force_zip64=True) as outgoing:\n+                    while True:\n+                        chunk = incoming.read(1024 * 1024)\n+                        if not chunk:\n+                            break\n+                        outgoing.write(chunk)\n+                        size += len(chunk)\n+                index.append({\"path\": target, \"bytes\": size})\n+            archive.writestr(INDEX_PATH, json.dumps({\"files\": index}, ensure_ascii=False).encode(\"utf-8\"))\n+        os.replace(temporary, output)\n+    finally:\n+        if os.path.exists(temporary):\n+            os.unlink(temporary)\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", help=\"directory containing manifest.json\")\n+    parser.add_argument(\"--output\", required=True, help=\"destination ZIP file\")\n+    args = parser.parse_args()\n+    try:\n+        bundle(args.input, args.output)\n+    except (OSError, ValueError, zipfile.BadZipFile) as error:\n+        parser.exit(2, \"error: {}\\n\".format(error))\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: build.py\n+\"\"\"Rebuild the standalone archive using only the Python standard library.\"\"\"\n+\n+from pathlib import Path\n+import tempfile\n+import zipapp\n+\n+\n+def main():\n+    project = Path(__file__).resolve().parent\n+    with tempfile.TemporaryDirectory() as directory:\n+        entry = Path(directory) / \"__main__.py\"\n+        entry.write_bytes((project / \"main.py\").read_bytes())\n+        zipapp.create_archive(directory, target=project / \"deliverable.pyz\", compressed=True)\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: test_delivery.py\n+\"\"\"Black-box tests consume the final archive and inspect the resulting ZIP.\"\"\"\n+\n+import json\n+import os\n+from pathlib import Path\n+import shutil\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+import zipfile\n+\n+\n+PROJECT = Path(__file__).resolve().parent\n+\n+\n+class DeliveryTests(unittest.TestCase):\n+    def setUp(self):\n+        self.temporary = tempfile.TemporaryDirectory()\n+        self.addCleanup(self.temporary.cleanup)\n+        self.root = Path(self.temporary.name)\n+        self.inputs = self.root / \"input data\"\n+        self.inputs.mkdir()\n+        self.cwd = self.root / \"unrelated cwd\"\n+        self.cwd.mkdir()\n+        self.app = self.cwd / \"standalone.pyz\"\n+        shutil.copyfile(PROJECT / \"deliverable.pyz\", self.app)\n+\n+    def manifest(self, rows):\n+        (self.inputs / \"manifest.json\").write_text(\n+            json.dumps({\"files\": rows}, ensure_ascii=False), encoding=\"utf-8\")\n+\n+    def run_app(self, output=\"result.zip\", success=True):\n+        result = subprocess.run(\n+            [sys.executable, \"-I\", str(self.app), \"../input data\", \"--output\", output],\n+            cwd=self.cwd, capture_output=True)\n+        if success:\n+            self.assertEqual(result.returncode, 0, result.stderr)\n+        else:\n+            self.assertNotEqual(result.returncode, 0)\n+        return self.cwd / output\n+\n+    def inspect(self, output, expected):\n+        with zipfile.ZipFile(output) as archive:\n+            names = archive.namelist()\n+            self.assertEqual(len(names), len(set(names)))\n+            self.assertEqual(set(names), set(expected) | {\"_bundle_index.json\"})\n+            self.assertIsNone(archive.testzip())\n+            actual = {name: archive.read(name) for name in expected}\n+            self.assertEqual(actual, expected)\n+            index = json.loads(archive.read(\"_bundle_index.json\"))\n+            self.assertEqual(index, {\"files\": [\n+                {\"path\": name, \"bytes\": len(expected[name])} for name in sorted(expected)]})\n+            return actual, index\n+\n+    def test_exact_bytes_names_and_order_independence(self):\n+        fixtures = [\n+            (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n+            (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n+            (\"Unicode \\u96ea, dots.../caf\\u00e9.txt\", \"\\u96ea/\\u00e9 space,...txt\", \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\")),\n+            (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n+            (\"z.txt\", \"Z\", b\"z\"),\n+            (\"a.txt\", \"a\", b\"a\"),\n+            (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n+        ]\n+        rows = []\n+        expected = {}\n+        for source, target, payload in fixtures:\n+            path = self.inputs / source\n+            path.parent.mkdir(parents=True, exist_ok=True)\n+            path.write_bytes(payload)\n+            rows.append({\"source\": source, \"target\": target})\n+            expected[target] = payload\n+        (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n+        self.manifest(rows)\n+        first = self.inspect(self.run_app(), expected)\n+        self.manifest(list(reversed(rows)))\n+        second = self.inspect(self.run_app(\"reordered.zip\"), expected)\n+        self.assertEqual(first, second)\n+\n+    def test_empty_manifest(self):\n+        self.manifest([])\n+        self.inspect(self.run_app(), {})\n+\n+    @unittest.skipUnless(os.name == \"nt\", \"Windows-native source representation\")\n+    def test_native_source_separators(self):\n+        (self.inputs / \"sub\").mkdir()\n+        (self.inputs / \"sub\" / \"native.bin\").write_bytes(b\"native\\x00\\xff\")\n+        self.manifest([{\"source\": \"sub\\\\native.bin\", \"target\": \"folder/native.bin\"}])\n+        self.inspect(self.run_app(), {\"folder/native.bin\": b\"native\\x00\\xff\"})\n+\n+    def test_invalid_manifest_preserves_existing_output(self):\n+        (self.inputs / \"file\").write_bytes(b\"data\")\n+        for target in (\"../escape\", \"/absolute\", \"a\\\\b\", \"_bundle_index.json\", \"a/../b\"):\n+            with self.subTest(target=target):\n+                self.manifest([{\"source\": \"file\", \"target\": target}])\n+                output = self.cwd / \"result.zip\"\n+                output.write_bytes(b\"existing\")\n+                self.run_app(success=False)\n+                self.assertEqual(output.read_bytes(), b\"existing\")\n+\n+    def test_duplicate_and_missing_sources(self):\n+        (self.inputs / \"file\").write_bytes(b\"data\")\n+        for rows in (\n+            [{\"source\": \"file\", \"target\": \"same\"}] * 2,\n+            [{\"source\": \"missing\", \"target\": \"valid\"}],\n+            [{\"source\": \"../outside\", \"target\": \"valid\"}],\n+        ):\n+            self.manifest(rows)\n+            self.run_app(success=False)\n+            self.assertFalse((self.cwd / \"result.zip\").exists())\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0f59b1ae15565982016ae7567e942c8191a6fd44f14215ce20"
+        }
+      },
+      "time": {
+        "start": 1793545854448
+      }
+    },
+    "outcomeID": "prt_hZE2r3uEsp5EmN6cZATi",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_he2GplQEPPP2vffue6Da",
+      "title": "Success. Updated the following files:\nM main.py\nA build.py\nA test_delivery.py",
+      "metadata": {
+        "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n@@ -1,9 +1,111 @@\n-import argparse,json,zipfile\r\n-from pathlib import Path\r\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args()\r\n-root=Path(a.input);index=[]\r\n-with zipfile.ZipFile(a.output,\"w\") as z:\r\n-    for row in json.loads((root/\"manifest.json\").read_text())[\"files\"]:\r\n-        text=(root/row[\"source\"]).read_text();target=Path(row[\"target\"]).name\r\n-        z.writestr(target,text);index.append(dict(path=target,bytes=len(text)))\r\n-    z.writestr(\"_bundle_index.json\",json.dumps(dict(files=index)))\r\n+\"\"\"Copy manifest-selected files into a ZIP without interpreting payload bytes.\"\"\"\n+\n+import argparse\n+import json\n+import ntpath\n+import os\n+from pathlib import Path\n+import tempfile\n+import zipfile\n+\n+\n+INDEX_PATH = \"_bundle_index.json\"\n+\n+\n+def source_path(root, value):\n+    \"\"\"Sources use filesystem paths, not ZIP destination syntax.\"\"\"\n+    if not isinstance(value, str) or not value or \"\\x00\" in value:\n+        raise ValueError(\"source must be a nonempty path\")\n+    path = Path(value)\n+    if path.is_absolute() or ntpath.splitdrive(value)[0]:\n+        raise ValueError(\"source must be relative\")\n+    if any(part == \"..\" for part in path.parts):\n+        raise ValueError(\"source must not contain traversal\")\n+    resolved = (root / path).resolve()\n+    if not resolved.is_relative_to(root):\n+        raise ValueError(\"source escapes the input directory\")\n+    if not resolved.is_file():\n+        raise ValueError(\"source is not a file: \" + value)\n+    return resolved\n+\n+\n+def target_path(value):\n+    if not isinstance(value, str) or not value or \"\\x00\" in value:\n+        raise ValueError(\"target must be a nonempty path\")\n+    if \"\\\\\" in value or ntpath.splitdrive(value)[0]:\n+        raise ValueError(\"target must be a relative forward-slash path\")\n+    if any(part in (\"\", \".\", \"..\") for part in value.split(\"/\")):\n+        raise ValueError(\"target contains an absolute, empty or traversal component\")\n+    if value == INDEX_PATH:\n+        raise ValueError(\"target is reserved for the bundle index\")\n+    return value\n+\n+\n+def load_entries(root):\n+    manifest = json.loads((root / \"manifest.json\").read_text(encoding=\"utf-8\"))\n+    if not isinstance(manifest, dict) or not isinstance(manifest.get(\"files\"), list):\n+        raise ValueError(\"manifest must contain a files array\")\n+    entries = []\n+    seen = set()\n+    for row in manifest[\"files\"]:\n+        if not isinstance(row, dict) or \"source\" not in row or \"target\" not in row:\n+            raise ValueError(\"each file requires source and target\")\n+        target = target_path(row[\"target\"])\n+        if target in seen:\n+            raise ValueError(\"duplicate target: \" + target)\n+        seen.add(target)\n+        entries.append((target, source_path(root, row[\"source\"])))\n+    return sorted(entries)\n+\n+\n+def bundle(input_directory, output_zip):\n+    root = Path(input_directory).resolve()\n+    entries = load_entries(root)\n+    output = Path(output_zip).resolve()\n+    # Build alongside the destination, then replace only after successful copying.\n+    # This also avoids truncating a source if the destination names that source.\n+    fd, temporary = tempfile.mkstemp(\n+        prefix=\".bundle-\", suffix=\".zip\", dir=output.parent\n+    )\n+    os.close(fd)\n+    try:\n+        index = []\n+        with zipfile.ZipFile(\n+            temporary, \"w\", compression=zipfile.ZIP_DEFLATED\n+        ) as archive:\n+            for target, source in entries:\n+                size = 0\n+                with (\n+                    source.open(\"rb\") as incoming,\n+                    archive.open(target, \"w\", force_zip64=True) as outgoing,\n+                ):\n+                    while True:\n+                        chunk = incoming.read(1024 * 1024)\n+                        if not chunk:\n+                            break\n+                        outgoing.write(chunk)\n+                        size += len(chunk)\n+                index.append({\"path\": target, \"bytes\": size})\n+            archive.writestr(\n+                INDEX_PATH,\n+                json.dumps({\"files\": index}, ensure_ascii=False).encode(\"utf-8\"),\n+            )\n+        os.replace(temporary, output)\n+    finally:\n+        if os.path.exists(temporary):\n+            os.unlink(temporary)\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", help=\"directory containing manifest.json\")\n+    parser.add_argument(\"--output\", required=True, help=\"destination ZIP file\")\n+    args = parser.parse_args()\n+    try:\n+        bundle(args.input, args.output)\n+    except (OSError, ValueError, zipfile.BadZipFile) as error:\n+        parser.exit(2, \"error: {}\\n\".format(error))\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\build.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\build.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\build.py\n@@ -0,0 +1,19 @@\n+\"\"\"Rebuild the standalone archive using only the Python standard library.\"\"\"\n+\n+from pathlib import Path\n+import tempfile\n+import zipapp\n+\n+\n+def main():\n+    project = Path(__file__).resolve().parent\n+    with tempfile.TemporaryDirectory() as directory:\n+        entry = Path(directory) / \"__main__.py\"\n+        entry.write_bytes((project / \"main.py\").read_bytes())\n+        zipapp.create_archive(\n+            directory, target=project / \"deliverable.pyz\", compressed=True\n+        )\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n@@ -0,0 +1,135 @@\n+\"\"\"Black-box tests consume the final archive and inspect the resulting ZIP.\"\"\"\n+\n+import json\n+import os\n+from pathlib import Path\n+import shutil\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+import zipfile\n+\n+\n+PROJECT = Path(__file__).resolve().parent\n+\n+\n+class DeliveryTests(unittest.TestCase):\n+    def setUp(self):\n+        self.temporary = tempfile.TemporaryDirectory()\n+        self.addCleanup(self.temporary.cleanup)\n+        self.root = Path(self.temporary.name)\n+        self.inputs = self.root / \"input data\"\n+        self.inputs.mkdir()\n+        self.cwd = self.root / \"unrelated cwd\"\n+        self.cwd.mkdir()\n+        self.app = self.cwd / \"standalone.pyz\"\n+        shutil.copyfile(PROJECT / \"deliverable.pyz\", self.app)\n+\n+    def manifest(self, rows):\n+        (self.inputs / \"manifest.json\").write_text(\n+            json.dumps({\"files\": rows}, ensure_ascii=False), encoding=\"utf-8\"\n+        )\n+\n+    def run_app(self, output=\"result.zip\", success=True):\n+        result = subprocess.run(\n+            [sys.executable, \"-I\", str(self.app), \"../input data\", \"--output\", output],\n+            cwd=self.cwd,\n+            capture_output=True,\n+        )\n+        if success:\n+            self.assertEqual(result.returncode, 0, result.stderr)\n+        else:\n+            self.assertNotEqual(result.returncode, 0)\n+        return self.cwd / output\n+\n+    def inspect(self, output, expected):\n+        with zipfile.ZipFile(output) as archive:\n+            names = archive.namelist()\n+            self.assertEqual(len(names), len(set(names)))\n+            self.assertEqual(set(names), set(expected) | {\"_bundle_index.json\"})\n+            self.assertIsNone(archive.testzip())\n+            actual = {name: archive.read(name) for name in expected}\n+            self.assertEqual(actual, expected)\n+            index = json.loads(archive.read(\"_bundle_index.json\"))\n+            self.assertEqual(\n+                index,\n+                {\n+                    \"files\": [\n+                        {\"path\": name, \"bytes\": len(expected[name])}\n+                        for name in sorted(expected)\n+                    ]\n+                },\n+            )\n+            return actual, index\n+\n+    def test_exact_bytes_names_and_order_independence(self):\n+        fixtures = [\n+            (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n+            (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n+            (\n+                \"Unicode \\u96ea, dots.../caf\\u00e9.txt\",\n+                \"\\u96ea/\\u00e9 space,...txt\",\n+                \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\"),\n+            ),\n+            (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n+            (\"z.txt\", \"Z\", b\"z\"),\n+            (\"a.txt\", \"a\", b\"a\"),\n+            (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n+        ]\n+        rows = []\n+        expected = {}\n+        for source, target, payload in fixtures:\n+            path = self.inputs / source\n+            path.parent.mkdir(parents=True, exist_ok=True)\n+            path.write_bytes(payload)\n+            rows.append({\"source\": source, \"target\": target})\n+            expected[target] = payload\n+        (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n+        self.manifest(rows)\n+        first = self.inspect(self.run_app(), expected)\n+        self.manifest(list(reversed(rows)))\n+        second = self.inspect(self.run_app(\"reordered.zip\"), expected)\n+        self.assertEqual(first, second)\n+\n+    def test_empty_manifest(self):\n+        self.manifest([])\n+        self.inspect(self.run_app(), {})\n+\n+    @unittest.skipUnless(os.name == \"nt\", \"Windows-native source representation\")\n+    def test_native_source_separators(self):\n+        (self.inputs / \"sub\").mkdir()\n+        (self.inputs / \"sub\" / \"native.bin\").write_bytes(b\"native\\x00\\xff\")\n+        self.manifest([{\"source\": \"sub\\\\native.bin\", \"target\": \"folder/native.bin\"}])\n+        self.inspect(self.run_app(), {\"folder/native.bin\": b\"native\\x00\\xff\"})\n+\n+    def test_invalid_manifest_preserves_existing_output(self):\n+        (self.inputs / \"file\").write_bytes(b\"data\")\n+        for target in (\n+            \"../escape\",\n+            \"/absolute\",\n+            \"a\\\\b\",\n+            \"_bundle_index.json\",\n+            \"a/../b\",\n+        ):\n+            with self.subTest(target=target):\n+                self.manifest([{\"source\": \"file\", \"target\": target}])\n+                output = self.cwd / \"result.zip\"\n+                output.write_bytes(b\"existing\")\n+                self.run_app(success=False)\n+                self.assertEqual(output.read_bytes(), b\"existing\")\n+\n+    def test_duplicate_and_missing_sources(self):\n+        (self.inputs / \"file\").write_bytes(b\"data\")\n+        for rows in (\n+            [{\"source\": \"file\", \"target\": \"same\"}] * 2,\n+            [{\"source\": \"missing\", \"target\": \"valid\"}],\n+            [{\"source\": \"../outside\", \"target\": \"valid\"}],\n+        ):\n+            self.manifest(rows)\n+            self.run_app(success=False)\n+            self.assertFalse((self.cwd / \"result.zip\").exists())\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n\n",
+        "files": [
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py",
+            "relativePath": "main.py",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n@@ -1,9 +1,111 @@\n-import argparse,json,zipfile\r\n-from pathlib import Path\r\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args()\r\n-root=Path(a.input);index=[]\r\n-with zipfile.ZipFile(a.output,\"w\") as z:\r\n-    for row in json.loads((root/\"manifest.json\").read_text())[\"files\"]:\r\n-        text=(root/row[\"source\"]).read_text();target=Path(row[\"target\"]).name\r\n-        z.writestr(target,text);index.append(dict(path=target,bytes=len(text)))\r\n-    z.writestr(\"_bundle_index.json\",json.dumps(dict(files=index)))\r\n+\"\"\"Copy manifest-selected files into a ZIP without interpreting payload bytes.\"\"\"\n+\n+import argparse\n+import json\n+import ntpath\n+import os\n+from pathlib import Path\n+import tempfile\n+import zipfile\n+\n+\n+INDEX_PATH = \"_bundle_index.json\"\n+\n+\n+def source_path(root, value):\n+    \"\"\"Sources use filesystem paths, not ZIP destination syntax.\"\"\"\n+    if not isinstance(value, str) or not value or \"\\x00\" in value:\n+        raise ValueError(\"source must be a nonempty path\")\n+    path = Path(value)\n+    if path.is_absolute() or ntpath.splitdrive(value)[0]:\n+        raise ValueError(\"source must be relative\")\n+    if any(part == \"..\" for part in path.parts):\n+        raise ValueError(\"source must not contain traversal\")\n+    resolved = (root / path).resolve()\n+    if not resolved.is_relative_to(root):\n+        raise ValueError(\"source escapes the input directory\")\n+    if not resolved.is_file():\n+        raise ValueError(\"source is not a file: \" + value)\n+    return resolved\n+\n+\n+def target_path(value):\n+    if not isinstance(value, str) or not value or \"\\x00\" in value:\n+        raise ValueError(\"target must be a nonempty path\")\n+    if \"\\\\\" in value or ntpath.splitdrive(value)[0]:\n+        raise ValueError(\"target must be a relative forward-slash path\")\n+    if any(part in (\"\", \".\", \"..\") for part in value.split(\"/\")):\n+        raise ValueError(\"target contains an absolute, empty or traversal component\")\n+    if value == INDEX_PATH:\n+        raise ValueError(\"target is reserved for the bundle index\")\n+    return value\n+\n+\n+def load_entries(root):\n+    manifest = json.loads((root / \"manifest.json\").read_text(encoding=\"utf-8\"))\n+    if not isinstance(manifest, dict) or not isinstance(manifest.get(\"files\"), list):\n+        raise ValueError(\"manifest must contain a files array\")\n+    entries = []\n+    seen = set()\n+    for row in manifest[\"files\"]:\n+        if not isinstance(row, dict) or \"source\" not in row or \"target\" not in row:\n+            raise ValueError(\"each file requires source and target\")\n+        target = target_path(row[\"target\"])\n+        if target in seen:\n+            raise ValueError(\"duplicate target: \" + target)\n+        seen.add(target)\n+        entries.append((target, source_path(root, row[\"source\"])))\n+    return sorted(entries)\n+\n+\n+def bundle(input_directory, output_zip):\n+    root = Path(input_directory).resolve()\n+    entries = load_entries(root)\n+    output = Path(output_zip).resolve()\n+    # Build alongside the destination, then replace only after successful copying.\n+    # This also avoids truncating a source if the destination names that source.\n+    fd, temporary = tempfile.mkstemp(\n+        prefix=\".bundle-\", suffix=\".zip\", dir=output.parent\n+    )\n+    os.close(fd)\n+    try:\n+        index = []\n+        with zipfile.ZipFile(\n+            temporary, \"w\", compression=zipfile.ZIP_DEFLATED\n+        ) as archive:\n+            for target, source in entries:\n+                size = 0\n+                with (\n+                    source.open(\"rb\") as incoming,\n+                    archive.open(target, \"w\", force_zip64=True) as outgoing,\n+                ):\n+                    while True:\n+                        chunk = incoming.read(1024 * 1024)\n+                        if not chunk:\n+                            break\n+                        outgoing.write(chunk)\n+                        size += len(chunk)\n+                index.append({\"path\": target, \"bytes\": size})\n+            archive.writestr(\n+                INDEX_PATH,\n+                json.dumps({\"files\": index}, ensure_ascii=False).encode(\"utf-8\"),\n+            )\n+        os.replace(temporary, output)\n+    finally:\n+        if os.path.exists(temporary):\n+            os.unlink(temporary)\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", help=\"directory containing manifest.json\")\n+    parser.add_argument(\"--output\", required=True, help=\"destination ZIP file\")\n+    args = parser.parse_args()\n+    try:\n+        bundle(args.input, args.output)\n+    except (OSError, ValueError, zipfile.BadZipFile) as error:\n+        parser.exit(2, \"error: {}\\n\".format(error))\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n",
+            "before": "import argparse,json,zipfile\r\nfrom pathlib import Path\r\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args()\r\nroot=Path(a.input);index=[]\r\nwith zipfile.ZipFile(a.output,\"w\") as z:\r\n    for row in json.loads((root/\"manifest.json\").read_text())[\"files\"]:\r\n        text=(root/row[\"source\"]).read_text();target=Path(row[\"target\"]).name\r\n        z.writestr(target,text);index.append(dict(path=target,bytes=len(text)))\r\n    z.writestr(\"_bundle_index.json\",json.dumps(dict(files=index)))\r\n",
+            "after": "\"\"\"Copy manifest-selected files into a ZIP without interpreting payload bytes.\"\"\"\n\nimport argparse\nimport json\nimport ntpath\nimport os\nfrom pathlib import Path\nimport tempfile\nimport zipfile\n\n\nINDEX_PATH = \"_bundle_index.json\"\n\n\ndef source_path(root, value):\n    \"\"\"Sources use filesystem paths, not ZIP destination syntax.\"\"\"\n    if not isinstance(value, str) or not value or \"\\x00\" in value:\n        raise ValueError(\"source must be a nonempty path\")\n    path = Path(value)\n    if path.is_absolute() or ntpath.splitdrive(value)[0]:\n        raise ValueError(\"source must be relative\")\n    if any(part == \"..\" for part in path.parts):\n        raise ValueError(\"source must not contain traversal\")\n    resolved = (root / path).resolve()\n    if not resolved.is_relative_to(root):\n        raise ValueError(\"source escapes the input directory\")\n    if not resolved.is_file():\n        raise ValueError(\"source is not a file: \" + value)\n    return resolved\n\n\ndef target_path(value):\n    if not isinstance(value, str) or not value or \"\\x00\" in value:\n        raise ValueError(\"target must be a nonempty path\")\n    if \"\\\\\" in value or ntpath.splitdrive(value)[0]:\n        raise ValueError(\"target must be a relative forward-slash path\")\n    if any(part in (\"\", \".\", \"..\") for part in value.split(\"/\")):\n        raise ValueError(\"target contains an absolute, empty or traversal component\")\n    if value == INDEX_PATH:\n        raise ValueError(\"target is reserved for the bundle index\")\n    return value\n\n\ndef load_entries(root):\n    manifest = json.loads((root / \"manifest.json\").read_text(encoding=\"utf-8\"))\n    if not isinstance(manifest, dict) or not isinstance(manifest.get(\"files\"), list):\n        raise ValueError(\"manifest must contain a files array\")\n    entries = []\n    seen = set()\n    for row in manifest[\"files\"]:\n        if not isinstance(row, dict) or \"source\" not in row or \"target\" not in row:\n            raise ValueError(\"each file requires source and target\")\n        target = target_path(row[\"target\"])\n        if target in seen:\n            raise ValueError(\"duplicate target: \" + target)\n        seen.add(target)\n        entries.append((target, source_path(root, row[\"source\"])))\n    return sorted(entries)\n\n\ndef bundle(input_directory, output_zip):\n    root = Path(input_directory).resolve()\n    entries = load_entries(root)\n    output = Path(output_zip).resolve()\n    # Build alongside the destination, then replace only after successful copying.\n    # This also avoids truncating a source if the destination names that source.\n    fd, temporary = tempfile.mkstemp(\n        prefix=\".bundle-\", suffix=\".zip\", dir=output.parent\n    )\n    os.close(fd)\n    try:\n        index = []\n        with zipfile.ZipFile(\n            temporary, \"w\", compression=zipfile.ZIP_DEFLATED\n        ) as archive:\n            for target, source in entries:\n                size = 0\n                with (\n                    source.open(\"rb\") as incoming,\n                    archive.open(target, \"w\", force_zip64=True) as outgoing,\n                ):\n                    while True:\n                        chunk = incoming.read(1024 * 1024)\n                        if not chunk:\n                            break\n                        outgoing.write(chunk)\n                        size += len(chunk)\n                index.append({\"path\": target, \"bytes\": size})\n            archive.writestr(\n                INDEX_PATH,\n                json.dumps({\"files\": index}, ensure_ascii=False).encode(\"utf-8\"),\n            )\n        os.replace(temporary, output)\n    finally:\n        if os.path.exists(temporary):\n            os.unlink(temporary)\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"input\", help=\"directory containing manifest.json\")\n    parser.add_argument(\"--output\", required=True, help=\"destination ZIP file\")\n    args = parser.parse_args()\n    try:\n        bundle(args.input, args.output)\n    except (OSError, ValueError, zipfile.BadZipFile) as error:\n        parser.exit(2, \"error: {}\\n\".format(error))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+            "additions": 111,
+            "deletions": 9
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\build.py",
+            "relativePath": "build.py",
+            "type": "add",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\build.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\build.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\build.py\n@@ -0,0 +1,19 @@\n+\"\"\"Rebuild the standalone archive using only the Python standard library.\"\"\"\n+\n+from pathlib import Path\n+import tempfile\n+import zipapp\n+\n+\n+def main():\n+    project = Path(__file__).resolve().parent\n+    with tempfile.TemporaryDirectory() as directory:\n+        entry = Path(directory) / \"__main__.py\"\n+        entry.write_bytes((project / \"main.py\").read_bytes())\n+        zipapp.create_archive(\n+            directory, target=project / \"deliverable.pyz\", compressed=True\n+        )\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n",
+            "before": "",
+            "after": "\"\"\"Rebuild the standalone archive using only the Python standard library.\"\"\"\n\nfrom pathlib import Path\nimport tempfile\nimport zipapp\n\n\ndef main():\n    project = Path(__file__).resolve().parent\n    with tempfile.TemporaryDirectory() as directory:\n        entry = Path(directory) / \"__main__.py\"\n        entry.write_bytes((project / \"main.py\").read_bytes())\n        zipapp.create_archive(\n            directory, target=project / \"deliverable.pyz\", compressed=True\n        )\n\n\nif __name__ == \"__main__\":\n    main()\n",
+            "additions": 19,
+            "deletions": 0
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py",
+            "relativePath": "test_delivery.py",
+            "type": "add",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n@@ -0,0 +1,135 @@\n+\"\"\"Black-box tests consume the final archive and inspect the resulting ZIP.\"\"\"\n+\n+import json\n+import os\n+from pathlib import Path\n+import shutil\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+import zipfile\n+\n+\n+PROJECT = Path(__file__).resolve().parent\n+\n+\n+class DeliveryTests(unittest.TestCase):\n+    def setUp(self):\n+        self.temporary = tempfile.TemporaryDirectory()\n+        self.addCleanup(self.temporary.cleanup)\n+        self.root = Path(self.temporary.name)\n+        self.inputs = self.root / \"input data\"\n+        self.inputs.mkdir()\n+        self.cwd = self.root / \"unrelated cwd\"\n+        self.cwd.mkdir()\n+        self.app = self.cwd / \"standalone.pyz\"\n+        shutil.copyfile(PROJECT / \"deliverable.pyz\", self.app)\n+\n+    def manifest(self, rows):\n+        (self.inputs / \"manifest.json\").write_text(\n+            json.dumps({\"files\": rows}, ensure_ascii=False), encoding=\"utf-8\"\n+        )\n+\n+    def run_app(self, output=\"result.zip\", success=True):\n+        result = subprocess.run(\n+            [sys.executable, \"-I\", str(self.app), \"../input data\", \"--output\", output],\n+            cwd=self.cwd,\n+            capture_output=True,\n+        )\n+        if success:\n+            self.assertEqual(result.returncode, 0, result.stderr)\n+        else:\n+            self.assertNotEqual(result.returncode, 0)\n+        return self.cwd / output\n+\n+    def inspect(self, output, expected):\n+        with zipfile.ZipFile(output) as archive:\n+            names = archive.namelist()\n+            self.assertEqual(len(names), len(set(names)))\n+            self.assertEqual(set(names), set(expected) | {\"_bundle_index.json\"})\n+            self.assertIsNone(archive.testzip())\n+            actual = {name: archive.read(name) for name in expected}\n+            self.assertEqual(actual, expected)\n+            index = json.loads(archive.read(\"_bundle_index.json\"))\n+            self.assertEqual(\n+                index,\n+                {\n+                    \"files\": [\n+                        {\"path\": name, \"bytes\": len(expected[name])}\n+                        for name in sorted(expected)\n+                    ]\n+                },\n+            )\n+            return actual, index\n+\n+    def test_exact_bytes_names_and_order_independence(self):\n+        fixtures = [\n+            (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n+            (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n+            (\n+                \"Unicode \\u96ea, dots.../caf\\u00e9.txt\",\n+                \"\\u96ea/\\u00e9 space,...txt\",\n+                \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\"),\n+            ),\n+            (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n+            (\"z.txt\", \"Z\", b\"z\"),\n+            (\"a.txt\", \"a\", b\"a\"),\n+            (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n+        ]\n+        rows = []\n+        expected = {}\n+        for source, target, payload in fixtures:\n+            path = self.inputs / source\n+            path.parent.mkdir(parents=True, exist_ok=True)\n+            path.write_bytes(payload)\n+            rows.append({\"source\": source, \"target\": target})\n+            expected[target] = payload\n+        (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n+        self.manifest(rows)\n+        first = self.inspect(self.run_app(), expected)\n+        self.manifest(list(reversed(rows)))\n+        second = self.inspect(self.run_app(\"reordered.zip\"), expected)\n+        self.assertEqual(first, second)\n+\n+    def test_empty_manifest(self):\n+        self.manifest([])\n+        self.inspect(self.run_app(), {})\n+\n+    @unittest.skipUnless(os.name == \"nt\", \"Windows-native source representation\")\n+    def test_native_source_separators(self):\n+        (self.inputs / \"sub\").mkdir()\n+        (self.inputs / \"sub\" / \"native.bin\").write_bytes(b\"native\\x00\\xff\")\n+        self.manifest([{\"source\": \"sub\\\\native.bin\", \"target\": \"folder/native.bin\"}])\n+        self.inspect(self.run_app(), {\"folder/native.bin\": b\"native\\x00\\xff\"})\n+\n+    def test_invalid_manifest_preserves_existing_output(self):\n+        (self.inputs / \"file\").write_bytes(b\"data\")\n+        for target in (\n+            \"../escape\",\n+            \"/absolute\",\n+            \"a\\\\b\",\n+            \"_bundle_index.json\",\n+            \"a/../b\",\n+        ):\n+            with self.subTest(target=target):\n+                self.manifest([{\"source\": \"file\", \"target\": target}])\n+                output = self.cwd / \"result.zip\"\n+                output.write_bytes(b\"existing\")\n+                self.run_app(success=False)\n+                self.assertEqual(output.read_bytes(), b\"existing\")\n+\n+    def test_duplicate_and_missing_sources(self):\n+        (self.inputs / \"file\").write_bytes(b\"data\")\n+        for rows in (\n+            [{\"source\": \"file\", \"target\": \"same\"}] * 2,\n+            [{\"source\": \"missing\", \"target\": \"valid\"}],\n+            [{\"source\": \"../outside\", \"target\": \"valid\"}],\n+        ):\n+            self.manifest(rows)\n+            self.run_app(success=False)\n+            self.assertFalse((self.cwd / \"result.zip\").exists())\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n",
+            "before": "",
+            "after": "\"\"\"Black-box tests consume the final archive and inspect the resulting ZIP.\"\"\"\n\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\nimport zipfile\n\n\nPROJECT = Path(__file__).resolve().parent\n\n\nclass DeliveryTests(unittest.TestCase):\n    def setUp(self):\n        self.temporary = tempfile.TemporaryDirectory()\n        self.addCleanup(self.temporary.cleanup)\n        self.root = Path(self.temporary.name)\n        self.inputs = self.root / \"input data\"\n        self.inputs.mkdir()\n        self.cwd = self.root / \"unrelated cwd\"\n        self.cwd.mkdir()\n        self.app = self.cwd / \"standalone.pyz\"\n        shutil.copyfile(PROJECT / \"deliverable.pyz\", self.app)\n\n    def manifest(self, rows):\n        (self.inputs / \"manifest.json\").write_text(\n            json.dumps({\"files\": rows}, ensure_ascii=False), encoding=\"utf-8\"\n        )\n\n    def run_app(self, output=\"result.zip\", success=True):\n        result = subprocess.run(\n            [sys.executable, \"-I\", str(self.app), \"../input data\", \"--output\", output],\n            cwd=self.cwd,\n            capture_output=True,\n        )\n        if success:\n            self.assertEqual(result.returncode, 0, result.stderr)\n        else:\n            self.assertNotEqual(result.returncode, 0)\n        return self.cwd / output\n\n    def inspect(self, output, expected):\n        with zipfile.ZipFile(output) as archive:\n            names = archive.namelist()\n            self.assertEqual(len(names), len(set(names)))\n            self.assertEqual(set(names), set(expected) | {\"_bundle_index.json\"})\n            self.assertIsNone(archive.testzip())\n            actual = {name: archive.read(name) for name in expected}\n            self.assertEqual(actual, expected)\n            index = json.loads(archive.read(\"_bundle_index.json\"))\n            self.assertEqual(\n                index,\n                {\n                    \"files\": [\n                        {\"path\": name, \"bytes\": len(expected[name])}\n                        for name in sorted(expected)\n                    ]\n                },\n            )\n            return actual, index\n\n    def test_exact_bytes_names_and_order_independence(self):\n        fixtures = [\n            (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n            (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n            (\n                \"Unicode \\u96ea, dots.../caf\\u00e9.txt\",\n                \"\\u96ea/\\u00e9 space,...txt\",\n                \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\"),\n            ),\n            (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n            (\"z.txt\", \"Z\", b\"z\"),\n            (\"a.txt\", \"a\", b\"a\"),\n            (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n        ]\n        rows = []\n        expected = {}\n        for source, target, payload in fixtures:\n            path = self.inputs / source\n            path.parent.mkdir(parents=True, exist_ok=True)\n            path.write_bytes(payload)\n            rows.append({\"source\": source, \"target\": target})\n            expected[target] = payload\n        (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n        self.manifest(rows)\n        first = self.inspect(self.run_app(), expected)\n        self.manifest(list(reversed(rows)))\n        second = self.inspect(self.run_app(\"reordered.zip\"), expected)\n        self.assertEqual(first, second)\n\n    def test_empty_manifest(self):\n        self.manifest([])\n        self.inspect(self.run_app(), {})\n\n    @unittest.skipUnless(os.name == \"nt\", \"Windows-native source representation\")\n    def test_native_source_separators(self):\n        (self.inputs / \"sub\").mkdir()\n        (self.inputs / \"sub\" / \"native.bin\").write_bytes(b\"native\\x00\\xff\")\n        self.manifest([{\"source\": \"sub\\\\native.bin\", \"target\": \"folder/native.bin\"}])\n        self.inspect(self.run_app(), {\"folder/native.bin\": b\"native\\x00\\xff\"})\n\n    def test_invalid_manifest_preserves_existing_output(self):\n        (self.inputs / \"file\").write_bytes(b\"data\")\n        for target in (\n            \"../escape\",\n            \"/absolute\",\n            \"a\\\\b\",\n            \"_bundle_index.json\",\n            \"a/../b\",\n        ):\n            with self.subTest(target=target):\n                self.manifest([{\"source\": \"file\", \"target\": target}])\n                output = self.cwd / \"result.zip\"\n                output.write_bytes(b\"existing\")\n                self.run_app(success=False)\n                self.assertEqual(output.read_bytes(), b\"existing\")\n\n    def test_duplicate_and_missing_sources(self):\n        (self.inputs / \"file\").write_bytes(b\"data\")\n        for rows in (\n            [{\"source\": \"file\", \"target\": \"same\"}] * 2,\n            [{\"source\": \"missing\", \"target\": \"valid\"}],\n            [{\"source\": \"../outside\", \"target\": \"valid\"}],\n        ):\n            self.manifest(rows)\n            self.run_app(success=False)\n            self.assertFalse((self.cwd / \"result.zip\").exists())\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "additions": 135,
+            "deletions": 0
+          }
+        ],
+        "truncated": false
+      },
+      "time": {
+        "end": 1793545901277
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjbs4P00llZq6HlSu",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_63d12d9434da48fc8c3ab41af7997c72",
+      "tool": "bash",
+      "input": {
+        "command": "python build.py",
+        "description": "Build standalone deliverable from repaired source"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_05e72ae031ef4f00016ae756b97a48819196e0c1f95312812a"
+        }
+      },
+      "time": {
+        "start": 1793545913329
+      }
+    },
+    "outcomeID": "prt_hGhSiBP4mCyzxsEqfONV",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_heL9U4KMnSrbUrH2zrNV",
+      "title": "Build standalone deliverable from repaired source",
+      "metadata": {
+        "refused": false,
+        "command": "python build.py",
+        "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 0,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Build standalone deliverable from repaired source",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793545914552
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjbutp0043v2JJyIz",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_1bdb9c1f5b5047ee92fb8702340434ca",
+      "tool": "bash",
+      "input": {
+        "command": "python -m unittest -v test_delivery",
+        "timeout": 300000,
+        "description": "Test packaged app and inspect output ZIPs"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_02e865354cf99f9e016ae756c457408191b9f601a263bc8b88"
+        }
+      },
+      "time": {
+        "start": 1793545924205
+      }
+    },
+    "outcomeID": "prt_hWtAezyt76jV5Fcxfg31",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hTP1UhA94UtQtBrZ2eqq",
+      "title": "Test packaged app and inspect output ZIPs",
+      "metadata": {
+        "refused": false,
+        "command": "python -m unittest -v test_delivery",
+        "output": "test_duplicate_and_missing_sources (test_delivery.DeliveryTests.test_duplicate_and_missing_sources) ... ok\r\ntest_empty_manifest (test_delivery.DeliveryTests.test_empty_manifest) ... ok\r\ntest_exact_bytes_names_and_order_independence (test_delivery.DeliveryTests.test_exact_bytes_names_and_order_independence) ... ERROR\r\ntest_invalid_manifest_preserves_existing_output (test_delivery.DeliveryTests.test_invalid_manifest_preserves_existing_output) ... ok\r\ntest_native_source_separators (test_delivery.DeliveryTests.test_native_source_separators) ... ok\r\n\r\n======================================================================\r\nERROR: test_exact_bytes_names_and_order_independence (test_delivery.DeliveryTests.test_exact_bytes_names_and_order_independence)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\", line 85, in test_exact_bytes_names_and_order_independence\r\n    path.write_bytes(payload)\r\n    ~~~~~~~~~~~~~~~~^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 796, in write_bytes\r\n    with self.open(mode='wb') as f:\r\n         ~~~~~~~~~^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\pathlib\\__init__.py\", line 771, in open\r\n    return io.open(self, mode, buffering, encoding, errors, newline)\r\n           ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\nFileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-337Exm\\\\runner-15472-b7RLzN\\\\runtime-root\\\\tmp\\\\tmp_9qyusoj\\\\input data\\\\Unicode 雪, dots...\\\\café.txt'\r\n\r\n----------------------------------------------------------------------\r\nRan 5 tests in 1.273s\r\n\r\nFAILED (errors=1)\r\n\n\n<bash_metadata>\nexit code: 1\n</bash_metadata>",
+        "output_bytes": 1838,
+        "exit": 1,
+        "pid": null,
+        "background": false,
+        "description": "Test packaged app and inspect output ZIPs",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793545926957
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjbwpz00RvQ6D2dN5",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_1ba2a0b28f1f4f818d44a2135b1548b0",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: test_delivery.py\n@@\n-            (\"Unicode \\u96ea, dots.../caf\\u00e9.txt\", \"\\u96ea/\\u00e9 space,...txt\", \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\")),\n+            (\"Unicode \\u96ea, dots...folder/caf\\u00e9.txt\", \"\\u96ea/\\u00e9 space,...txt\", \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\")),\n*** Update File: main.py\n@@\n-    if not resolved.is_relative_to(root):\n+    try:\n+        resolved.relative_to(root)\n+    except ValueError:\n         raise ValueError(\"source escapes the input directory\")\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_002287d9399374d6016ae756cbcaec8191830796037978ef48"
+        }
+      },
+      "time": {
+        "start": 1793545931655
+      }
+    },
+    "outcomeID": "prt_hCcJFzTOvFUV5mLlamvP",
+    "outcome": {
+      "outcome": "failed",
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py:\n            (\"Unicode \\u96ea, dots.../caf\\u00e9.txt\", \"\\u96ea/\\u00e9 space,...txt\", \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\")),",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_1ba2a0b28f1f4f818d44a2135b1548b0",
+          "toolName": "apply_patch"
+        }
+      },
+      "time": {
+        "end": 1793545934566
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjbyqu00QoQfwGCiA",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_d16262ddcba64ae7b94bcb55849f2fc6",
+      "tool": "read",
+      "input": {
+        "filePath": "test_delivery.py",
+        "offset": 60,
+        "limit": 45
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_08f180134fca525f016ae756d38674819187f5a2762faceeb4"
+        }
+      },
+      "time": {
+        "start": 1793545939400
+      }
+    },
+    "outcomeID": "prt_h346ZD24VxfkyLpCpDvj",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py</path>\n<type>file</type>\n<content>60:                         for name in sorted(expected)\n61:                     ]\n62:                 },\n63:             )\n64:             return actual, index\n65: \n66:     def test_exact_bytes_names_and_order_independence(self):\n67:         fixtures = [\n68:             (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n69:             (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n70:             (\n71:                 \"Unicode \\u96ea, dots.../caf\\u00e9.txt\",\n72:                 \"\\u96ea/\\u00e9 space,...txt\",\n73:                 \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\"),\n74:             ),\n75:             (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n76:             (\"z.txt\", \"Z\", b\"z\"),\n77:             (\"a.txt\", \"a\", b\"a\"),\n78:             (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n79:         ]\n80:         rows = []\n81:         expected = {}\n82:         for source, target, payload in fixtures:\n83:             path = self.inputs / source\n84:             path.parent.mkdir(parents=True, exist_ok=True)\n85:             path.write_bytes(payload)\n86:             rows.append({\"source\": source, \"target\": target})\n87:             expected[target] = payload\n88:         (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n89:         self.manifest(rows)\n90:         first = self.inspect(self.run_app(), expected)\n91:         self.manifest(list(reversed(rows)))\n92:         second = self.inspect(self.run_app(\"reordered.zip\"), expected)\n93:         self.assertEqual(first, second)\n94: \n95:     def test_empty_manifest(self):\n96:         self.manifest([])\n97:         self.inspect(self.run_app(), {})\n98: \n99:     @unittest.skipUnless(os.name == \"nt\", \"Windows-native source representation\")\n100:     def test_native_source_separators(self):\n101:         (self.inputs / \"sub\").mkdir()\n102:         (self.inputs / \"sub\" / \"native.bin\").write_bytes(b\"native\\x00\\xff\")\n103:         self.manifest([{\"source\": \"sub\\\\native.bin\", \"target\": \"folder/native.bin\"}])\n104:         self.inspect(self.run_app(), {\"folder/native.bin\": b\"native\\x00\\xff\"})\n\n(Showing lines 60-104 of 135. Use offset=105 to continue.)\n</content>",
+      "title": "test_delivery.py",
+      "metadata": {
+        "preview": "                        for name in sorted(expected)\n                    ]\n                },\n            )\n            return actual, index\n\n    def test_exact_bytes_names_and_order_independence(self):\n        fixtures = [\n            (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n            (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n            (\n                \"Unicode \\u96ea, dots.../caf\\u00e9.txt\",\n                \"\\u96ea/\\u00e9 space,...txt\",\n                \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\"),\n            ),\n            (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n            (\"z.txt\", \"Z\", b\"z\"),\n            (\"a.txt\", \"a\", b\"a\"),\n            (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n        ]",
+        "truncated": true,
+        "loaded": [],
+        "readType": "text",
+        "offset": 60,
+        "lines": 45,
+        "totalLines": 135
+      },
+      "time": {
+        "end": 1793545940106
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjc1i200l9Vz8ngq5",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_f08eb8e13e384fb382d9ee0a5ef27626",
+      "tool": "read",
+      "input": {
+        "filePath": "main.py",
+        "limit": 140
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0b76472008ebeb54016ae756de82a88191a32ef44fd89b653a"
+        }
+      },
+      "time": {
+        "start": 1793545950382
+      }
+    },
+    "outcomeID": "prt_hcX108UbB3HYkpvtw66k",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py</path>\n<type>file</type>\n<content>1: \"\"\"Copy manifest-selected files into a ZIP without interpreting payload bytes.\"\"\"\n2: \n3: import argparse\n4: import json\n5: import ntpath\n6: import os\n7: from pathlib import Path\n8: import tempfile\n9: import zipfile\n10: \n11: \n12: INDEX_PATH = \"_bundle_index.json\"\n13: \n14: \n15: def source_path(root, value):\n16:     \"\"\"Sources use filesystem paths, not ZIP destination syntax.\"\"\"\n17:     if not isinstance(value, str) or not value or \"\\x00\" in value:\n18:         raise ValueError(\"source must be a nonempty path\")\n19:     path = Path(value)\n20:     if path.is_absolute() or ntpath.splitdrive(value)[0]:\n21:         raise ValueError(\"source must be relative\")\n22:     if any(part == \"..\" for part in path.parts):\n23:         raise ValueError(\"source must not contain traversal\")\n24:     resolved = (root / path).resolve()\n25:     if not resolved.is_relative_to(root):\n26:         raise ValueError(\"source escapes the input directory\")\n27:     if not resolved.is_file():\n28:         raise ValueError(\"source is not a file: \" + value)\n29:     return resolved\n30: \n31: \n32: def target_path(value):\n33:     if not isinstance(value, str) or not value or \"\\x00\" in value:\n34:         raise ValueError(\"target must be a nonempty path\")\n35:     if \"\\\\\" in value or ntpath.splitdrive(value)[0]:\n36:         raise ValueError(\"target must be a relative forward-slash path\")\n37:     if any(part in (\"\", \".\", \"..\") for part in value.split(\"/\")):\n38:         raise ValueError(\"target contains an absolute, empty or traversal component\")\n39:     if value == INDEX_PATH:\n40:         raise ValueError(\"target is reserved for the bundle index\")\n41:     return value\n42: \n43: \n44: def load_entries(root):\n45:     manifest = json.loads((root / \"manifest.json\").read_text(encoding=\"utf-8\"))\n46:     if not isinstance(manifest, dict) or not isinstance(manifest.get(\"files\"), list):\n47:         raise ValueError(\"manifest must contain a files array\")\n48:     entries = []\n49:     seen = set()\n50:     for row in manifest[\"files\"]:\n51:         if not isinstance(row, dict) or \"source\" not in row or \"target\" not in row:\n52:             raise ValueError(\"each file requires source and target\")\n53:         target = target_path(row[\"target\"])\n54:         if target in seen:\n55:             raise ValueError(\"duplicate target: \" + target)\n56:         seen.add(target)\n57:         entries.append((target, source_path(root, row[\"source\"])))\n58:     return sorted(entries)\n59: \n60: \n61: def bundle(input_directory, output_zip):\n62:     root = Path(input_directory).resolve()\n63:     entries = load_entries(root)\n64:     output = Path(output_zip).resolve()\n65:     # Build alongside the destination, then replace only after successful copying.\n66:     # This also avoids truncating a source if the destination names that source.\n67:     fd, temporary = tempfile.mkstemp(\n68:         prefix=\".bundle-\", suffix=\".zip\", dir=output.parent\n69:     )\n70:     os.close(fd)\n71:     try:\n72:         index = []\n73:         with zipfile.ZipFile(\n74:             temporary, \"w\", compression=zipfile.ZIP_DEFLATED\n75:         ) as archive:\n76:             for target, source in entries:\n77:                 size = 0\n78:                 with (\n79:                     source.open(\"rb\") as incoming,\n80:                     archive.open(target, \"w\", force_zip64=True) as outgoing,\n81:                 ):\n82:                     while True:\n83:                         chunk = incoming.read(1024 * 1024)\n84:                         if not chunk:\n85:                             break\n86:                         outgoing.write(chunk)\n87:                         size += len(chunk)\n88:                 index.append({\"path\": target, \"bytes\": size})\n89:             archive.writestr(\n90:                 INDEX_PATH,\n91:                 json.dumps({\"files\": index}, ensure_ascii=False).encode(\"utf-8\"),\n92:             )\n93:         os.replace(temporary, output)\n94:     finally:\n95:         if os.path.exists(temporary):\n96:             os.unlink(temporary)\n97: \n98: \n99: def main():\n100:     parser = argparse.ArgumentParser(description=__doc__)\n101:     parser.add_argument(\"input\", help=\"directory containing manifest.json\")\n102:     parser.add_argument(\"--output\", required=True, help=\"destination ZIP file\")\n103:     args = parser.parse_args()\n104:     try:\n105:         bundle(args.input, args.output)\n106:     except (OSError, ValueError, zipfile.BadZipFile) as error:\n107:         parser.exit(2, \"error: {}\\n\".format(error))\n108: \n109: \n110: if __name__ == \"__main__\":\n111:     main()\n\n(End of file - total 111 lines)\n</content>",
+      "title": "main.py",
+      "metadata": {
+        "preview": "\"\"\"Copy manifest-selected files into a ZIP without interpreting payload bytes.\"\"\"\n\nimport argparse\nimport json\nimport ntpath\nimport os\nfrom pathlib import Path\nimport tempfile\nimport zipfile\n\n\nINDEX_PATH = \"_bundle_index.json\"\n\n\ndef source_path(root, value):\n    \"\"\"Sources use filesystem paths, not ZIP destination syntax.\"\"\"\n    if not isinstance(value, str) or not value or \"\\x00\" in value:\n        raise ValueError(\"source must be a nonempty path\")\n    path = Path(value)\n    if path.is_absolute() or ntpath.splitdrive(value)[0]:",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 111,
+        "totalLines": 111
+      },
+      "time": {
+        "end": 1793545951185
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjc3Xg00zfUdLcWet",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_d4e1c208237748849b76a464066e671f",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: test_delivery.py\n@@\n-                \"Unicode \\u96ea, dots.../caf\\u00e9.txt\",\n+                \"Unicode \\u96ea, dots...folder/caf\\u00e9.txt\",\n*** Update File: main.py\n@@\n-    if not resolved.is_relative_to(root):\n+    try:\n+        resolved.relative_to(root)\n+    except ValueError:\n         raise ValueError(\"source escapes the input directory\")\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0e26bbb5d6661388016ae756e598948191ba96c8cb72da72d4"
+        }
+      },
+      "time": {
+        "start": 1793545957428
+      }
+    },
+    "outcomeID": "prt_hNnOuPiL7P6zxOOPIqQU",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hKU17biywTHP4B4FYVuO",
+      "title": "Success. Updated the following files:\nM test_delivery.py\nM main.py",
+      "metadata": {
+        "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n@@ -67,9 +67,9 @@\n fixtures = [\n     (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n     (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n     (\n-        \"Unicode \\u96ea, dots.../caf\\u00e9.txt\",\n+        \"Unicode \\u96ea, dots...folder/caf\\u00e9.txt\",\n         \"\\u96ea/\\u00e9 space,...txt\",\n         \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\"),\n     ),\n     (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n@@ -21,9 +21,11 @@\n     raise ValueError(\"source must be relative\")\n if any(part == \"..\" for part in path.parts):\n     raise ValueError(\"source must not contain traversal\")\n resolved = (root / path).resolve()\n-if not resolved.is_relative_to(root):\n+try:\n+    resolved.relative_to(root)\n+except ValueError:\n     raise ValueError(\"source escapes the input directory\")\n if not resolved.is_file():\n     raise ValueError(\"source is not a file: \" + value)\n return resolved\n\n",
+        "files": [
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py",
+            "relativePath": "test_delivery.py",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n@@ -67,9 +67,9 @@\n fixtures = [\n     (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n     (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n     (\n-        \"Unicode \\u96ea, dots.../caf\\u00e9.txt\",\n+        \"Unicode \\u96ea, dots...folder/caf\\u00e9.txt\",\n         \"\\u96ea/\\u00e9 space,...txt\",\n         \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\"),\n     ),\n     (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n",
+            "before": "\"\"\"Black-box tests consume the final archive and inspect the resulting ZIP.\"\"\"\n\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\nimport zipfile\n\n\nPROJECT = Path(__file__).resolve().parent\n\n\nclass DeliveryTests(unittest.TestCase):\n    def setUp(self):\n        self.temporary = tempfile.TemporaryDirectory()\n        self.addCleanup(self.temporary.cleanup)\n        self.root = Path(self.temporary.name)\n        self.inputs = self.root / \"input data\"\n        self.inputs.mkdir()\n        self.cwd = self.root / \"unrelated cwd\"\n        self.cwd.mkdir()\n        self.app = self.cwd / \"standalone.pyz\"\n        shutil.copyfile(PROJECT / \"deliverable.pyz\", self.app)\n\n    def manifest(self, rows):\n        (self.inputs / \"manifest.json\").write_text(\n            json.dumps({\"files\": rows}, ensure_ascii=False), encoding=\"utf-8\"\n        )\n\n    def run_app(self, output=\"result.zip\", success=True):\n        result = subprocess.run(\n            [sys.executable, \"-I\", str(self.app), \"../input data\", \"--output\", output],\n            cwd=self.cwd,\n            capture_output=True,\n        )\n        if success:\n            self.assertEqual(result.returncode, 0, result.stderr)\n        else:\n            self.assertNotEqual(result.returncode, 0)\n        return self.cwd / output\n\n    def inspect(self, output, expected):\n        with zipfile.ZipFile(output) as archive:\n            names = archive.namelist()\n            self.assertEqual(len(names), len(set(names)))\n            self.assertEqual(set(names), set(expected) | {\"_bundle_index.json\"})\n            self.assertIsNone(archive.testzip())\n            actual = {name: archive.read(name) for name in expected}\n            self.assertEqual(actual, expected)\n            index = json.loads(archive.read(\"_bundle_index.json\"))\n            self.assertEqual(\n                index,\n                {\n                    \"files\": [\n                        {\"path\": name, \"bytes\": len(expected[name])}\n                        for name in sorted(expected)\n                    ]\n                },\n            )\n            return actual, index\n\n    def test_exact_bytes_names_and_order_independence(self):\n        fixtures = [\n            (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n            (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n            (\n                \"Unicode \\u96ea, dots.../caf\\u00e9.txt\",\n                \"\\u96ea/\\u00e9 space,...txt\",\n                \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\"),\n            ),\n            (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n            (\"z.txt\", \"Z\", b\"z\"),\n            (\"a.txt\", \"a\", b\"a\"),\n            (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n        ]\n        rows = []\n        expected = {}\n        for source, target, payload in fixtures:\n            path = self.inputs / source\n            path.parent.mkdir(parents=True, exist_ok=True)\n            path.write_bytes(payload)\n            rows.append({\"source\": source, \"target\": target})\n            expected[target] = payload\n        (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n        self.manifest(rows)\n        first = self.inspect(self.run_app(), expected)\n        self.manifest(list(reversed(rows)))\n        second = self.inspect(self.run_app(\"reordered.zip\"), expected)\n        self.assertEqual(first, second)\n\n    def test_empty_manifest(self):\n        self.manifest([])\n        self.inspect(self.run_app(), {})\n\n    @unittest.skipUnless(os.name == \"nt\", \"Windows-native source representation\")\n    def test_native_source_separators(self):\n        (self.inputs / \"sub\").mkdir()\n        (self.inputs / \"sub\" / \"native.bin\").write_bytes(b\"native\\x00\\xff\")\n        self.manifest([{\"source\": \"sub\\\\native.bin\", \"target\": \"folder/native.bin\"}])\n        self.inspect(self.run_app(), {\"folder/native.bin\": b\"native\\x00\\xff\"})\n\n    def test_invalid_manifest_preserves_existing_output(self):\n        (self.inputs / \"file\").write_bytes(b\"data\")\n        for target in (\n            \"../escape\",\n            \"/absolute\",\n            \"a\\\\b\",\n            \"_bundle_index.json\",\n            \"a/../b\",\n        ):\n            with self.subTest(target=target):\n                self.manifest([{\"source\": \"file\", \"target\": target}])\n                output = self.cwd / \"result.zip\"\n                output.write_bytes(b\"existing\")\n                self.run_app(success=False)\n                self.assertEqual(output.read_bytes(), b\"existing\")\n\n    def test_duplicate_and_missing_sources(self):\n        (self.inputs / \"file\").write_bytes(b\"data\")\n        for rows in (\n            [{\"source\": \"file\", \"target\": \"same\"}] * 2,\n            [{\"source\": \"missing\", \"target\": \"valid\"}],\n            [{\"source\": \"../outside\", \"target\": \"valid\"}],\n        ):\n            self.manifest(rows)\n            self.run_app(success=False)\n            self.assertFalse((self.cwd / \"result.zip\").exists())\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "after": "\"\"\"Black-box tests consume the final archive and inspect the resulting ZIP.\"\"\"\n\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\nimport zipfile\n\n\nPROJECT = Path(__file__).resolve().parent\n\n\nclass DeliveryTests(unittest.TestCase):\n    def setUp(self):\n        self.temporary = tempfile.TemporaryDirectory()\n        self.addCleanup(self.temporary.cleanup)\n        self.root = Path(self.temporary.name)\n        self.inputs = self.root / \"input data\"\n        self.inputs.mkdir()\n        self.cwd = self.root / \"unrelated cwd\"\n        self.cwd.mkdir()\n        self.app = self.cwd / \"standalone.pyz\"\n        shutil.copyfile(PROJECT / \"deliverable.pyz\", self.app)\n\n    def manifest(self, rows):\n        (self.inputs / \"manifest.json\").write_text(\n            json.dumps({\"files\": rows}, ensure_ascii=False), encoding=\"utf-8\"\n        )\n\n    def run_app(self, output=\"result.zip\", success=True):\n        result = subprocess.run(\n            [sys.executable, \"-I\", str(self.app), \"../input data\", \"--output\", output],\n            cwd=self.cwd,\n            capture_output=True,\n        )\n        if success:\n            self.assertEqual(result.returncode, 0, result.stderr)\n        else:\n            self.assertNotEqual(result.returncode, 0)\n        return self.cwd / output\n\n    def inspect(self, output, expected):\n        with zipfile.ZipFile(output) as archive:\n            names = archive.namelist()\n            self.assertEqual(len(names), len(set(names)))\n            self.assertEqual(set(names), set(expected) | {\"_bundle_index.json\"})\n            self.assertIsNone(archive.testzip())\n            actual = {name: archive.read(name) for name in expected}\n            self.assertEqual(actual, expected)\n            index = json.loads(archive.read(\"_bundle_index.json\"))\n            self.assertEqual(\n                index,\n                {\n                    \"files\": [\n                        {\"path\": name, \"bytes\": len(expected[name])}\n                        for name in sorted(expected)\n                    ]\n                },\n            )\n            return actual, index\n\n    def test_exact_bytes_names_and_order_independence(self):\n        fixtures = [\n            (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n            (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n            (\n                \"Unicode \\u96ea, dots...folder/caf\\u00e9.txt\",\n                \"\\u96ea/\\u00e9 space,...txt\",\n                \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\"),\n            ),\n            (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n            (\"z.txt\", \"Z\", b\"z\"),\n            (\"a.txt\", \"a\", b\"a\"),\n            (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n        ]\n        rows = []\n        expected = {}\n        for source, target, payload in fixtures:\n            path = self.inputs / source\n            path.parent.mkdir(parents=True, exist_ok=True)\n            path.write_bytes(payload)\n            rows.append({\"source\": source, \"target\": target})\n            expected[target] = payload\n        (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n        self.manifest(rows)\n        first = self.inspect(self.run_app(), expected)\n        self.manifest(list(reversed(rows)))\n        second = self.inspect(self.run_app(\"reordered.zip\"), expected)\n        self.assertEqual(first, second)\n\n    def test_empty_manifest(self):\n        self.manifest([])\n        self.inspect(self.run_app(), {})\n\n    @unittest.skipUnless(os.name == \"nt\", \"Windows-native source representation\")\n    def test_native_source_separators(self):\n        (self.inputs / \"sub\").mkdir()\n        (self.inputs / \"sub\" / \"native.bin\").write_bytes(b\"native\\x00\\xff\")\n        self.manifest([{\"source\": \"sub\\\\native.bin\", \"target\": \"folder/native.bin\"}])\n        self.inspect(self.run_app(), {\"folder/native.bin\": b\"native\\x00\\xff\"})\n\n    def test_invalid_manifest_preserves_existing_output(self):\n        (self.inputs / \"file\").write_bytes(b\"data\")\n        for target in (\n            \"../escape\",\n            \"/absolute\",\n            \"a\\\\b\",\n            \"_bundle_index.json\",\n            \"a/../b\",\n        ):\n            with self.subTest(target=target):\n                self.manifest([{\"source\": \"file\", \"target\": target}])\n                output = self.cwd / \"result.zip\"\n                output.write_bytes(b\"existing\")\n                self.run_app(success=False)\n                self.assertEqual(output.read_bytes(), b\"existing\")\n\n    def test_duplicate_and_missing_sources(self):\n        (self.inputs / \"file\").write_bytes(b\"data\")\n        for rows in (\n            [{\"source\": \"file\", \"target\": \"same\"}] * 2,\n            [{\"source\": \"missing\", \"target\": \"valid\"}],\n            [{\"source\": \"../outside\", \"target\": \"valid\"}],\n        ):\n            self.manifest(rows)\n            self.run_app(success=False)\n            self.assertFalse((self.cwd / \"result.zip\").exists())\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "additions": 1,
+            "deletions": 1
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py",
+            "relativePath": "main.py",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\main.py\n@@ -21,9 +21,11 @@\n     raise ValueError(\"source must be relative\")\n if any(part == \"..\" for part in path.parts):\n     raise ValueError(\"source must not contain traversal\")\n resolved = (root / path).resolve()\n-if not resolved.is_relative_to(root):\n+try:\n+    resolved.relative_to(root)\n+except ValueError:\n     raise ValueError(\"source escapes the input directory\")\n if not resolved.is_file():\n     raise ValueError(\"source is not a file: \" + value)\n return resolved\n",
+            "before": "\"\"\"Copy manifest-selected files into a ZIP without interpreting payload bytes.\"\"\"\n\nimport argparse\nimport json\nimport ntpath\nimport os\nfrom pathlib import Path\nimport tempfile\nimport zipfile\n\n\nINDEX_PATH = \"_bundle_index.json\"\n\n\ndef source_path(root, value):\n    \"\"\"Sources use filesystem paths, not ZIP destination syntax.\"\"\"\n    if not isinstance(value, str) or not value or \"\\x00\" in value:\n        raise ValueError(\"source must be a nonempty path\")\n    path = Path(value)\n    if path.is_absolute() or ntpath.splitdrive(value)[0]:\n        raise ValueError(\"source must be relative\")\n    if any(part == \"..\" for part in path.parts):\n        raise ValueError(\"source must not contain traversal\")\n    resolved = (root / path).resolve()\n    if not resolved.is_relative_to(root):\n        raise ValueError(\"source escapes the input directory\")\n    if not resolved.is_file():\n        raise ValueError(\"source is not a file: \" + value)\n    return resolved\n\n\ndef target_path(value):\n    if not isinstance(value, str) or not value or \"\\x00\" in value:\n        raise ValueError(\"target must be a nonempty path\")\n    if \"\\\\\" in value or ntpath.splitdrive(value)[0]:\n        raise ValueError(\"target must be a relative forward-slash path\")\n    if any(part in (\"\", \".\", \"..\") for part in value.split(\"/\")):\n        raise ValueError(\"target contains an absolute, empty or traversal component\")\n    if value == INDEX_PATH:\n        raise ValueError(\"target is reserved for the bundle index\")\n    return value\n\n\ndef load_entries(root):\n    manifest = json.loads((root / \"manifest.json\").read_text(encoding=\"utf-8\"))\n    if not isinstance(manifest, dict) or not isinstance(manifest.get(\"files\"), list):\n        raise ValueError(\"manifest must contain a files array\")\n    entries = []\n    seen = set()\n    for row in manifest[\"files\"]:\n        if not isinstance(row, dict) or \"source\" not in row or \"target\" not in row:\n            raise ValueError(\"each file requires source and target\")\n        target = target_path(row[\"target\"])\n        if target in seen:\n            raise ValueError(\"duplicate target: \" + target)\n        seen.add(target)\n        entries.append((target, source_path(root, row[\"source\"])))\n    return sorted(entries)\n\n\ndef bundle(input_directory, output_zip):\n    root = Path(input_directory).resolve()\n    entries = load_entries(root)\n    output = Path(output_zip).resolve()\n    # Build alongside the destination, then replace only after successful copying.\n    # This also avoids truncating a source if the destination names that source.\n    fd, temporary = tempfile.mkstemp(\n        prefix=\".bundle-\", suffix=\".zip\", dir=output.parent\n    )\n    os.close(fd)\n    try:\n        index = []\n        with zipfile.ZipFile(\n            temporary, \"w\", compression=zipfile.ZIP_DEFLATED\n        ) as archive:\n            for target, source in entries:\n                size = 0\n                with (\n                    source.open(\"rb\") as incoming,\n                    archive.open(target, \"w\", force_zip64=True) as outgoing,\n                ):\n                    while True:\n                        chunk = incoming.read(1024 * 1024)\n                        if not chunk:\n                            break\n                        outgoing.write(chunk)\n                        size += len(chunk)\n                index.append({\"path\": target, \"bytes\": size})\n            archive.writestr(\n                INDEX_PATH,\n                json.dumps({\"files\": index}, ensure_ascii=False).encode(\"utf-8\"),\n            )\n        os.replace(temporary, output)\n    finally:\n        if os.path.exists(temporary):\n            os.unlink(temporary)\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"input\", help=\"directory containing manifest.json\")\n    parser.add_argument(\"--output\", required=True, help=\"destination ZIP file\")\n    args = parser.parse_args()\n    try:\n        bundle(args.input, args.output)\n    except (OSError, ValueError, zipfile.BadZipFile) as error:\n        parser.exit(2, \"error: {}\\n\".format(error))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+            "after": "\"\"\"Copy manifest-selected files into a ZIP without interpreting payload bytes.\"\"\"\n\nimport argparse\nimport json\nimport ntpath\nimport os\nfrom pathlib import Path\nimport tempfile\nimport zipfile\n\n\nINDEX_PATH = \"_bundle_index.json\"\n\n\ndef source_path(root, value):\n    \"\"\"Sources use filesystem paths, not ZIP destination syntax.\"\"\"\n    if not isinstance(value, str) or not value or \"\\x00\" in value:\n        raise ValueError(\"source must be a nonempty path\")\n    path = Path(value)\n    if path.is_absolute() or ntpath.splitdrive(value)[0]:\n        raise ValueError(\"source must be relative\")\n    if any(part == \"..\" for part in path.parts):\n        raise ValueError(\"source must not contain traversal\")\n    resolved = (root / path).resolve()\n    try:\n        resolved.relative_to(root)\n    except ValueError:\n        raise ValueError(\"source escapes the input directory\")\n    if not resolved.is_file():\n        raise ValueError(\"source is not a file: \" + value)\n    return resolved\n\n\ndef target_path(value):\n    if not isinstance(value, str) or not value or \"\\x00\" in value:\n        raise ValueError(\"target must be a nonempty path\")\n    if \"\\\\\" in value or ntpath.splitdrive(value)[0]:\n        raise ValueError(\"target must be a relative forward-slash path\")\n    if any(part in (\"\", \".\", \"..\") for part in value.split(\"/\")):\n        raise ValueError(\"target contains an absolute, empty or traversal component\")\n    if value == INDEX_PATH:\n        raise ValueError(\"target is reserved for the bundle index\")\n    return value\n\n\ndef load_entries(root):\n    manifest = json.loads((root / \"manifest.json\").read_text(encoding=\"utf-8\"))\n    if not isinstance(manifest, dict) or not isinstance(manifest.get(\"files\"), list):\n        raise ValueError(\"manifest must contain a files array\")\n    entries = []\n    seen = set()\n    for row in manifest[\"files\"]:\n        if not isinstance(row, dict) or \"source\" not in row or \"target\" not in row:\n            raise ValueError(\"each file requires source and target\")\n        target = target_path(row[\"target\"])\n        if target in seen:\n            raise ValueError(\"duplicate target: \" + target)\n        seen.add(target)\n        entries.append((target, source_path(root, row[\"source\"])))\n    return sorted(entries)\n\n\ndef bundle(input_directory, output_zip):\n    root = Path(input_directory).resolve()\n    entries = load_entries(root)\n    output = Path(output_zip).resolve()\n    # Build alongside the destination, then replace only after successful copying.\n    # This also avoids truncating a source if the destination names that source.\n    fd, temporary = tempfile.mkstemp(\n        prefix=\".bundle-\", suffix=\".zip\", dir=output.parent\n    )\n    os.close(fd)\n    try:\n        index = []\n        with zipfile.ZipFile(\n            temporary, \"w\", compression=zipfile.ZIP_DEFLATED\n        ) as archive:\n            for target, source in entries:\n                size = 0\n                with (\n                    source.open(\"rb\") as incoming,\n                    archive.open(target, \"w\", force_zip64=True) as outgoing,\n                ):\n                    while True:\n                        chunk = incoming.read(1024 * 1024)\n                        if not chunk:\n                            break\n                        outgoing.write(chunk)\n                        size += len(chunk)\n                index.append({\"path\": target, \"bytes\": size})\n            archive.writestr(\n                INDEX_PATH,\n                json.dumps({\"files\": index}, ensure_ascii=False).encode(\"utf-8\"),\n            )\n        os.replace(temporary, output)\n    finally:\n        if os.path.exists(temporary):\n            os.unlink(temporary)\n\n\ndef main():\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"input\", help=\"directory containing manifest.json\")\n    parser.add_argument(\"--output\", required=True, help=\"destination ZIP file\")\n    args = parser.parse_args()\n    try:\n        bundle(args.input, args.output)\n    except (OSError, ValueError, zipfile.BadZipFile) as error:\n        parser.exit(2, \"error: {}\\n\".format(error))\n\n\nif __name__ == \"__main__\":\n    main()\n",
+            "additions": 3,
+            "deletions": 1
+          }
+        ],
+        "truncated": false
+      },
+      "time": {
+        "end": 1793545960199
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjc5cJ00rrbXg0LH3",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_e576fcce553b4e56b1c87637a2ab4ddd",
+      "tool": "bash",
+      "input": {
+        "command": "python build.py",
+        "description": "Rebuild archive after source portability adjustment"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0155614d9d65e799016ae756ed89e48191823563e16eba9d01"
+        }
+      },
+      "time": {
+        "start": 1793545965403
+      }
+    },
+    "outcomeID": "prt_heujonNqo50OXpbsMcwJ",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hypEoBEjdTC41MITqwXk",
+      "title": "Rebuild archive after source portability adjustment",
+      "metadata": {
+        "refused": false,
+        "command": "python build.py",
+        "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 0,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Rebuild archive after source portability adjustment",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793545966939
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjc8Dj00mPyTldJ3N",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_5183a78364cf43cbbd4317f223969017",
+      "tool": "bash",
+      "input": {
+        "command": "python -m unittest -v test_delivery",
+        "timeout": 300000,
+        "description": "Verify isolated archive against all regression cases"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_079a087908e71ae3016ae756f780e08191bda12af70c13a219"
+        }
+      },
+      "time": {
+        "start": 1793545975411
+      }
+    },
+    "outcomeID": "prt_h3AK8aWzl7SNVZtaANWR",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hCvLtqksuW1nNaYFGRdc",
+      "title": "Verify isolated archive against all regression cases",
+      "metadata": {
+        "refused": false,
+        "command": "python -m unittest -v test_delivery",
+        "output": "test_duplicate_and_missing_sources (test_delivery.DeliveryTests.test_duplicate_and_missing_sources) ... ok\r\ntest_empty_manifest (test_delivery.DeliveryTests.test_empty_manifest) ... ok\r\ntest_exact_bytes_names_and_order_independence (test_delivery.DeliveryTests.test_exact_bytes_names_and_order_independence) ... ok\r\ntest_invalid_manifest_preserves_existing_output (test_delivery.DeliveryTests.test_invalid_manifest_preserves_existing_output) ... ok\r\ntest_native_source_separators (test_delivery.DeliveryTests.test_native_source_separators) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 5 tests in 1.512s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 651,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Verify isolated archive against all regression cases",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793545978712
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcAG600L8SaMuZQr",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_a987cc49b23b44cbbe46150993eb05be",
+      "tool": "bash",
+      "input": {
+        "command": "git diff -- main.py",
+        "description": "Review exact production diff before delivery"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_00e88af21166dc35016ae756ff69f48191ab6422f4c18837ea"
+        }
+      },
+      "time": {
+        "start": 1793545983246
+      }
+    },
+    "outcomeID": "prt_hOSO1UlhyakJO0XP4eq3",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hESTRZvCYd8arqLUTlIP",
+      "title": "Review exact production diff before delivery",
+      "metadata": {
+        "refused": false,
+        "command": "git diff -- main.py",
+        "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\ndiff --git a/main.py b/main.py\nindex 5a5b3e1..9d0f372 100644\n--- a/main.py\n+++ b/main.py\n@@ -1,9 +1,113 @@\n-import argparse,json,zipfile\n+\"\"\"Copy manifest-selected files into a ZIP without interpreting payload bytes.\"\"\"\n+\n+import argparse\n+import json\n+import ntpath\n+import os\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args()\n-root=Path(a.input);index=[]\n-with zipfile.ZipFile(a.output,\"w\") as z:\n-    for row in json.loads((root/\"manifest.json\").read_text())[\"files\"]:\n-        text=(root/row[\"source\"]).read_text();target=Path(row[\"target\"]).name\n-        z.writestr(target,text);index.append(dict(path=target,bytes=len(text)))\n-    z.writestr(\"_bundle_index.json\",json.dumps(dict(files=index)))\n+import tempfile\n+import zipfile\n+\n+\n+INDEX_PATH = \"_bundle_index.json\"\n+\n+\n+def source_path(root, value):\n+    \"\"\"Sources use filesystem paths, not ZIP destination syntax.\"\"\"\n+    if not isinstance(value, str) or not value or \"\\x00\" in value:\n+        raise ValueError(\"source must be a nonempty path\")\n+    path = Path(value)\n+    if path.is_absolute() or ntpath.splitdrive(value)[0]:\n+        raise ValueError(\"source must be relative\")\n+    if any(part == \"..\" for part in path.parts):\n+        raise ValueError(\"source must not contain traversal\")\n+    resolved = (root / path).resolve()\n+    try:\n+        resolved.relative_to(root)\n+    except ValueError:\n+        raise ValueError(\"source escapes the input directory\")\n+    if not resolved.is_file():\n+        raise ValueError(\"source is not a file: \" + value)\n+    return resolved\n+\n+\n+def target_path(value):\n+    if not isinstance(value, str) or not value or \"\\x00\" in value:\n+        raise ValueError(\"target must be a nonempty path\")\n+    if \"\\\\\" in value or ntpath.splitdrive(value)[0]:\n+        raise ValueError(\"target must be a relative forward-slash path\")\n+    if any(part in (\"\", \".\", \"..\") for part in value.split(\"/\")):\n+        raise ValueError(\"target contains an absolute, empty or traversal component\")\n+    if value == INDEX_PATH:\n+        raise ValueError(\"target is reserved for the bundle index\")\n+    return value\n+\n+\n+def load_entries(root):\n+    manifest = json.loads((root / \"manifest.json\").read_text(encoding=\"utf-8\"))\n+    if not isinstance(manifest, dict) or not isinstance(manifest.get(\"files\"), list):\n+        raise ValueError(\"manifest must contain a files array\")\n+    entries = []\n+    seen = set()\n+    for row in manifest[\"files\"]:\n+        if not isinstance(row, dict) or \"source\" not in row or \"target\" not in row:\n+            raise ValueError(\"each file requires source and target\")\n+        target = target_path(row[\"target\"])\n+        if target in seen:\n+            raise ValueError(\"duplicate target: \" + target)\n+        seen.add(target)\n+        entries.append((target, source_path(root, row[\"source\"])))\n+    return sorted(entries)\n+\n+\n+def bundle(input_directory, output_zip):\n+    root = Path(input_directory).resolve()\n+    entries = load_entries(root)\n+    output = Path(output_zip).resolve()\n+    # Build alongside the destination, then replace only after successful copying.\n+    # This also avoids truncating a source if the destination names that source.\n+    fd, temporary = tempfile.mkstemp(\n+        prefix=\".bundle-\", suffix=\".zip\", dir=output.parent\n+    )\n+    os.close(fd)\n+    try:\n+        index = []\n+        with zipfile.ZipFile(\n+            temporary, \"w\", compression=zipfile.ZIP_DEFLATED\n+        ) as archive:\n+            for target, source in entries:\n+                size = 0\n+                with (\n+                    source.open(\"rb\") as incoming,\n+                    archive.open(target, \"w\", force_zip64=True) as outgoing,\n+                ):\n+                    while True:\n+                        chunk = incoming.read(1024 * 1024)\n+                        if not chunk:\n+                            break\n+                        outgoing.write(chunk)\n+                        size += len(chunk)\n+                index.append({\"path\": target, \"bytes\": size})\n+            archive.writestr(\n+                INDEX_PATH,\n+                json.dumps({\"files\": index}, ensure_ascii=False).encode(\"utf-8\"),\n+            )\n+        os.replace(temporary, output)\n+    finally:\n+        if os.path.exists(temporary):\n+            os.unlink(temporary)\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", help=\"directory containing manifest.json\")\n+    parser.add_argument(\"--output\", required=True, help=\"destination ZIP file\")\n+    args = parser.parse_args()\n+    try:\n+        bundle(args.input, args.output)\n+    except (OSError, ValueError, zipfile.BadZipFile) as error:\n+        parser.exit(2, \"error: {}\\n\".format(error))\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 4955,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Review exact production diff before delivery",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793545984758
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcBzX00bIbr5wq6F",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_73fdfd5b42314086922cefcb036ec70b",
+      "tool": "bash",
+      "input": {
+        "command": "git status --short",
+        "description": "Identify task deliverables and preserve unrelated files"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0c505d5e1057332a016ae7570605988191b6cfe9f1b631ce6b"
+        }
+      },
+      "time": {
+        "start": 1793545989907
+      }
+    },
+    "outcomeID": "prt_huEgrfDJ6k0fXLPf7395",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_h2env4L9Zy7rJIuiUxj2",
+      "title": "Identify task deliverables and preserve unrelated files",
+      "metadata": {
+        "refused": false,
+        "command": "git status --short",
+        "output": " M main.py\n?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? __pycache__/\n?? build.py\n?? deliverable.pyz\n?? test_delivery.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 126,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Identify task deliverables and preserve unrelated files",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793545990969
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcDcq00iC1QweFy7",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_0741fac3c2e842689d3092a2241ae9fc",
+      "tool": "bash",
+      "input": {
+        "command": "git log -3 --oneline",
+        "description": "Inspect repository commit message style"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0f476fff594770e2016ae7570c50b08191b8ab5d8ecd316937"
+        }
+      },
+      "time": {
+        "start": 1793545996188
+      }
+    },
+    "outcomeID": "prt_hxl0oT5se7vc2Xry5OxP",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hhvdSHpL6jUXpjTtr0VU",
+      "title": "Inspect repository commit message style",
+      "metadata": {
+        "refused": false,
+        "command": "git log -3 --oneline",
+        "output": "8bb70a9 test: initialize delivery prototype\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 44,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Inspect repository commit message style",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793545997097
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcJXR00adXwtYnk1",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_7099df33638242ddb0ab5b35078babc8",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: test_delivery.py\n@@\n             (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n+            (\"bmp.txt\", \"\\ue000.txt\", b\"BMP ordering boundary\"),\n@@\n         (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n+        rows.append({\"source\": \"first/same.bin\", \"target\": \"second copy.bin\"})\n+        expected[\"second copy.bin\"] = fixtures[0][2]\n*** Add File: HANDOFF.md\n+# Manifest delivery handoff\n+\n+Run with Python and the archive only; no third-party packages or project files are needed:\n+\n+```sh\n+python deliverable.pyz INPUT_DIRECTORY --output OUTPUT_ZIP\n+```\n+\n+The input directory must contain UTF-8 `manifest.json`. Source paths use the host\n+filesystem's syntax; ZIP targets use forward slashes. The destination's parent\n+directory must already exist. `_bundle_index.json` is reserved for the generated\n+index, so it cannot also be a payload target.\n+\n+`main.py` validates the manifest, streams source bytes into their full target\n+paths, and records actual copied byte lengths. Payloads and the index are sorted\n+by target Unicode order. Unlisted files are excluded. Output is built in a\n+temporary file and replaced only after successful copying.\n+\n+Rebuild and verify from the project directory:\n+\n+```sh\n+python build.py\n+python -m unittest -v test_delivery\n+```\n+\n+Verification: five tests passed on Windows with Python 3.14. Tests invoke an\n+isolated copy of the final archive from an unrelated working directory, then\n+read the resulting ZIP with the standard library. Assertions cover exact member\n+sets and bytes, binary data larger than a copy chunk, empty files/manifests,\n+Unicode (including supplementary-plane ordering), spaces/dots/commas, nesting,\n+duplicate source basenames, one source mapped to multiple targets, native\n+Windows source separators, exclusion of unlisted files, sorted byte-count\n+indexes, and equivalent logical output after reversing manifest order. Invalid\n+paths, duplicate targets and missing sources are rejected; pre-existing output\n+is preserved on invalid input. Tests were authored and executed directly,\n+without delegation. Other operating systems were not executed in this run.\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_01786e12c5ddf55c016ae7572313588191b1ad8ee49835d98f"
+        }
+      },
+      "time": {
+        "start": 1793546018917
+      }
+    },
+    "outcomeID": "prt_hiRleQB1itoHvgwFHAYr",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hqc2raQ9nYMqLTAjbS7R",
+      "title": "Success. Updated the following files:\nM test_delivery.py\nA HANDOFF.md",
+      "metadata": {
+        "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n@@ -75,8 +75,9 @@\n     (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n     (\"z.txt\", \"Z\", b\"z\"),\n     (\"a.txt\", \"a\", b\"a\"),\n     (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n+    (\"bmp.txt\", \"\\ue000.txt\", b\"BMP ordering boundary\"),\n ]\n rows = []\n expected = {}\n for source, target, payload in fixtures:\n@@ -85,8 +86,10 @@\n     path.write_bytes(payload)\n     rows.append({\"source\": source, \"target\": target})\n     expected[target] = payload\n (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n+rows.append({\"source\": \"first/same.bin\", \"target\": \"second copy.bin\"})\n+expected[\"second copy.bin\"] = fixtures[0][2]\n self.manifest(rows)\n first = self.inspect(self.run_app(), expected)\n self.manifest(list(reversed(rows)))\n second = self.inspect(self.run_app(\"reordered.zip\"), expected)\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\HANDOFF.md\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\HANDOFF.md\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\HANDOFF.md\n@@ -0,0 +1,36 @@\n+# Manifest delivery handoff\n+\n+Run with Python and the archive only; no third-party packages or project files are needed:\n+\n+```sh\n+python deliverable.pyz INPUT_DIRECTORY --output OUTPUT_ZIP\n+```\n+\n+The input directory must contain UTF-8 `manifest.json`. Source paths use the host\n+filesystem's syntax; ZIP targets use forward slashes. The destination's parent\n+directory must already exist. `_bundle_index.json` is reserved for the generated\n+index, so it cannot also be a payload target.\n+\n+`main.py` validates the manifest, streams source bytes into their full target\n+paths, and records actual copied byte lengths. Payloads and the index are sorted\n+by target Unicode order. Unlisted files are excluded. Output is built in a\n+temporary file and replaced only after successful copying.\n+\n+Rebuild and verify from the project directory:\n+\n+```sh\n+python build.py\n+python -m unittest -v test_delivery\n+```\n+\n+Verification: five tests passed on Windows with Python 3.14. Tests invoke an\n+isolated copy of the final archive from an unrelated working directory, then\n+read the resulting ZIP with the standard library. Assertions cover exact member\n+sets and bytes, binary data larger than a copy chunk, empty files/manifests,\n+Unicode (including supplementary-plane ordering), spaces/dots/commas, nesting,\n+duplicate source basenames, one source mapped to multiple targets, native\n+Windows source separators, exclusion of unlisted files, sorted byte-count\n+indexes, and equivalent logical output after reversing manifest order. Invalid\n+paths, duplicate targets and missing sources are rejected; pre-existing output\n+is preserved on invalid input. Tests were authored and executed directly,\n+without delegation. Other operating systems were not executed in this run.\n\n",
+        "files": [
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py",
+            "relativePath": "test_delivery.py",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\test_delivery.py\n@@ -75,8 +75,9 @@\n     (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n     (\"z.txt\", \"Z\", b\"z\"),\n     (\"a.txt\", \"a\", b\"a\"),\n     (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n+    (\"bmp.txt\", \"\\ue000.txt\", b\"BMP ordering boundary\"),\n ]\n rows = []\n expected = {}\n for source, target, payload in fixtures:\n@@ -85,8 +86,10 @@\n     path.write_bytes(payload)\n     rows.append({\"source\": source, \"target\": target})\n     expected[target] = payload\n (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n+rows.append({\"source\": \"first/same.bin\", \"target\": \"second copy.bin\"})\n+expected[\"second copy.bin\"] = fixtures[0][2]\n self.manifest(rows)\n first = self.inspect(self.run_app(), expected)\n self.manifest(list(reversed(rows)))\n second = self.inspect(self.run_app(\"reordered.zip\"), expected)\n",
+            "before": "\"\"\"Black-box tests consume the final archive and inspect the resulting ZIP.\"\"\"\n\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\nimport zipfile\n\n\nPROJECT = Path(__file__).resolve().parent\n\n\nclass DeliveryTests(unittest.TestCase):\n    def setUp(self):\n        self.temporary = tempfile.TemporaryDirectory()\n        self.addCleanup(self.temporary.cleanup)\n        self.root = Path(self.temporary.name)\n        self.inputs = self.root / \"input data\"\n        self.inputs.mkdir()\n        self.cwd = self.root / \"unrelated cwd\"\n        self.cwd.mkdir()\n        self.app = self.cwd / \"standalone.pyz\"\n        shutil.copyfile(PROJECT / \"deliverable.pyz\", self.app)\n\n    def manifest(self, rows):\n        (self.inputs / \"manifest.json\").write_text(\n            json.dumps({\"files\": rows}, ensure_ascii=False), encoding=\"utf-8\"\n        )\n\n    def run_app(self, output=\"result.zip\", success=True):\n        result = subprocess.run(\n            [sys.executable, \"-I\", str(self.app), \"../input data\", \"--output\", output],\n            cwd=self.cwd,\n            capture_output=True,\n        )\n        if success:\n            self.assertEqual(result.returncode, 0, result.stderr)\n        else:\n            self.assertNotEqual(result.returncode, 0)\n        return self.cwd / output\n\n    def inspect(self, output, expected):\n        with zipfile.ZipFile(output) as archive:\n            names = archive.namelist()\n            self.assertEqual(len(names), len(set(names)))\n            self.assertEqual(set(names), set(expected) | {\"_bundle_index.json\"})\n            self.assertIsNone(archive.testzip())\n            actual = {name: archive.read(name) for name in expected}\n            self.assertEqual(actual, expected)\n            index = json.loads(archive.read(\"_bundle_index.json\"))\n            self.assertEqual(\n                index,\n                {\n                    \"files\": [\n                        {\"path\": name, \"bytes\": len(expected[name])}\n                        for name in sorted(expected)\n                    ]\n                },\n            )\n            return actual, index\n\n    def test_exact_bytes_names_and_order_independence(self):\n        fixtures = [\n            (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n            (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n            (\n                \"Unicode \\u96ea, dots...folder/caf\\u00e9.txt\",\n                \"\\u96ea/\\u00e9 space,...txt\",\n                \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\"),\n            ),\n            (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n            (\"z.txt\", \"Z\", b\"z\"),\n            (\"a.txt\", \"a\", b\"a\"),\n            (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n        ]\n        rows = []\n        expected = {}\n        for source, target, payload in fixtures:\n            path = self.inputs / source\n            path.parent.mkdir(parents=True, exist_ok=True)\n            path.write_bytes(payload)\n            rows.append({\"source\": source, \"target\": target})\n            expected[target] = payload\n        (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n        self.manifest(rows)\n        first = self.inspect(self.run_app(), expected)\n        self.manifest(list(reversed(rows)))\n        second = self.inspect(self.run_app(\"reordered.zip\"), expected)\n        self.assertEqual(first, second)\n\n    def test_empty_manifest(self):\n        self.manifest([])\n        self.inspect(self.run_app(), {})\n\n    @unittest.skipUnless(os.name == \"nt\", \"Windows-native source representation\")\n    def test_native_source_separators(self):\n        (self.inputs / \"sub\").mkdir()\n        (self.inputs / \"sub\" / \"native.bin\").write_bytes(b\"native\\x00\\xff\")\n        self.manifest([{\"source\": \"sub\\\\native.bin\", \"target\": \"folder/native.bin\"}])\n        self.inspect(self.run_app(), {\"folder/native.bin\": b\"native\\x00\\xff\"})\n\n    def test_invalid_manifest_preserves_existing_output(self):\n        (self.inputs / \"file\").write_bytes(b\"data\")\n        for target in (\n            \"../escape\",\n            \"/absolute\",\n            \"a\\\\b\",\n            \"_bundle_index.json\",\n            \"a/../b\",\n        ):\n            with self.subTest(target=target):\n                self.manifest([{\"source\": \"file\", \"target\": target}])\n                output = self.cwd / \"result.zip\"\n                output.write_bytes(b\"existing\")\n                self.run_app(success=False)\n                self.assertEqual(output.read_bytes(), b\"existing\")\n\n    def test_duplicate_and_missing_sources(self):\n        (self.inputs / \"file\").write_bytes(b\"data\")\n        for rows in (\n            [{\"source\": \"file\", \"target\": \"same\"}] * 2,\n            [{\"source\": \"missing\", \"target\": \"valid\"}],\n            [{\"source\": \"../outside\", \"target\": \"valid\"}],\n        ):\n            self.manifest(rows)\n            self.run_app(success=False)\n            self.assertFalse((self.cwd / \"result.zip\").exists())\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "after": "\"\"\"Black-box tests consume the final archive and inspect the resulting ZIP.\"\"\"\n\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\nimport zipfile\n\n\nPROJECT = Path(__file__).resolve().parent\n\n\nclass DeliveryTests(unittest.TestCase):\n    def setUp(self):\n        self.temporary = tempfile.TemporaryDirectory()\n        self.addCleanup(self.temporary.cleanup)\n        self.root = Path(self.temporary.name)\n        self.inputs = self.root / \"input data\"\n        self.inputs.mkdir()\n        self.cwd = self.root / \"unrelated cwd\"\n        self.cwd.mkdir()\n        self.app = self.cwd / \"standalone.pyz\"\n        shutil.copyfile(PROJECT / \"deliverable.pyz\", self.app)\n\n    def manifest(self, rows):\n        (self.inputs / \"manifest.json\").write_text(\n            json.dumps({\"files\": rows}, ensure_ascii=False), encoding=\"utf-8\"\n        )\n\n    def run_app(self, output=\"result.zip\", success=True):\n        result = subprocess.run(\n            [sys.executable, \"-I\", str(self.app), \"../input data\", \"--output\", output],\n            cwd=self.cwd,\n            capture_output=True,\n        )\n        if success:\n            self.assertEqual(result.returncode, 0, result.stderr)\n        else:\n            self.assertNotEqual(result.returncode, 0)\n        return self.cwd / output\n\n    def inspect(self, output, expected):\n        with zipfile.ZipFile(output) as archive:\n            names = archive.namelist()\n            self.assertEqual(len(names), len(set(names)))\n            self.assertEqual(set(names), set(expected) | {\"_bundle_index.json\"})\n            self.assertIsNone(archive.testzip())\n            actual = {name: archive.read(name) for name in expected}\n            self.assertEqual(actual, expected)\n            index = json.loads(archive.read(\"_bundle_index.json\"))\n            self.assertEqual(\n                index,\n                {\n                    \"files\": [\n                        {\"path\": name, \"bytes\": len(expected[name])}\n                        for name in sorted(expected)\n                    ]\n                },\n            )\n            return actual, index\n\n    def test_exact_bytes_names_and_order_independence(self):\n        fixtures = [\n            (\"first/same.bin\", \"nested/alpha, one.bin\", bytes(range(256)) * 5000),\n            (\"second/same.bin\", \"nested/deeper/empty.file\", b\"\"),\n            (\n                \"Unicode \\u96ea, dots...folder/caf\\u00e9.txt\",\n                \"\\u96ea/\\u00e9 space,...txt\",\n                \"\\u96ea\\r\\ncaf\\u00e9\\n\".encode(\"utf-8\"),\n            ),\n            (\"hidden/.payload\", \".hidden/...dots\", b\"\\x00\\xff\\xfe\\r\\n\"),\n            (\"z.txt\", \"Z\", b\"z\"),\n            (\"a.txt\", \"a\", b\"a\"),\n            (\"astral.txt\", \"\\U0001f600.txt\", b\"astral\"),\n            (\"bmp.txt\", \"\\ue000.txt\", b\"BMP ordering boundary\"),\n        ]\n        rows = []\n        expected = {}\n        for source, target, payload in fixtures:\n            path = self.inputs / source\n            path.parent.mkdir(parents=True, exist_ok=True)\n            path.write_bytes(payload)\n            rows.append({\"source\": source, \"target\": target})\n            expected[target] = payload\n        (self.inputs / \"unlisted.txt\").write_bytes(b\"must not ship\")\n        rows.append({\"source\": \"first/same.bin\", \"target\": \"second copy.bin\"})\n        expected[\"second copy.bin\"] = fixtures[0][2]\n        self.manifest(rows)\n        first = self.inspect(self.run_app(), expected)\n        self.manifest(list(reversed(rows)))\n        second = self.inspect(self.run_app(\"reordered.zip\"), expected)\n        self.assertEqual(first, second)\n\n    def test_empty_manifest(self):\n        self.manifest([])\n        self.inspect(self.run_app(), {})\n\n    @unittest.skipUnless(os.name == \"nt\", \"Windows-native source representation\")\n    def test_native_source_separators(self):\n        (self.inputs / \"sub\").mkdir()\n        (self.inputs / \"sub\" / \"native.bin\").write_bytes(b\"native\\x00\\xff\")\n        self.manifest([{\"source\": \"sub\\\\native.bin\", \"target\": \"folder/native.bin\"}])\n        self.inspect(self.run_app(), {\"folder/native.bin\": b\"native\\x00\\xff\"})\n\n    def test_invalid_manifest_preserves_existing_output(self):\n        (self.inputs / \"file\").write_bytes(b\"data\")\n        for target in (\n            \"../escape\",\n            \"/absolute\",\n            \"a\\\\b\",\n            \"_bundle_index.json\",\n            \"a/../b\",\n        ):\n            with self.subTest(target=target):\n                self.manifest([{\"source\": \"file\", \"target\": target}])\n                output = self.cwd / \"result.zip\"\n                output.write_bytes(b\"existing\")\n                self.run_app(success=False)\n                self.assertEqual(output.read_bytes(), b\"existing\")\n\n    def test_duplicate_and_missing_sources(self):\n        (self.inputs / \"file\").write_bytes(b\"data\")\n        for rows in (\n            [{\"source\": \"file\", \"target\": \"same\"}] * 2,\n            [{\"source\": \"missing\", \"target\": \"valid\"}],\n            [{\"source\": \"../outside\", \"target\": \"valid\"}],\n        ):\n            self.manifest(rows)\n            self.run_app(success=False)\n            self.assertFalse((self.cwd / \"result.zip\").exists())\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "additions": 3,
+            "deletions": 0
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\HANDOFF.md",
+            "relativePath": "HANDOFF.md",
+            "type": "add",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\HANDOFF.md\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\HANDOFF.md\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\HANDOFF.md\n@@ -0,0 +1,36 @@\n+# Manifest delivery handoff\n+\n+Run with Python and the archive only; no third-party packages or project files are needed:\n+\n+```sh\n+python deliverable.pyz INPUT_DIRECTORY --output OUTPUT_ZIP\n+```\n+\n+The input directory must contain UTF-8 `manifest.json`. Source paths use the host\n+filesystem's syntax; ZIP targets use forward slashes. The destination's parent\n+directory must already exist. `_bundle_index.json` is reserved for the generated\n+index, so it cannot also be a payload target.\n+\n+`main.py` validates the manifest, streams source bytes into their full target\n+paths, and records actual copied byte lengths. Payloads and the index are sorted\n+by target Unicode order. Unlisted files are excluded. Output is built in a\n+temporary file and replaced only after successful copying.\n+\n+Rebuild and verify from the project directory:\n+\n+```sh\n+python build.py\n+python -m unittest -v test_delivery\n+```\n+\n+Verification: five tests passed on Windows with Python 3.14. Tests invoke an\n+isolated copy of the final archive from an unrelated working directory, then\n+read the resulting ZIP with the standard library. Assertions cover exact member\n+sets and bytes, binary data larger than a copy chunk, empty files/manifests,\n+Unicode (including supplementary-plane ordering), spaces/dots/commas, nesting,\n+duplicate source basenames, one source mapped to multiple targets, native\n+Windows source separators, exclusion of unlisted files, sorted byte-count\n+indexes, and equivalent logical output after reversing manifest order. Invalid\n+paths, duplicate targets and missing sources are rejected; pre-existing output\n+is preserved on invalid input. Tests were authored and executed directly,\n+without delegation. Other operating systems were not executed in this run.\n",
+            "before": "",
+            "after": "# Manifest delivery handoff\n\nRun with Python and the archive only; no third-party packages or project files are needed:\n\n```sh\npython deliverable.pyz INPUT_DIRECTORY --output OUTPUT_ZIP\n```\n\nThe input directory must contain UTF-8 `manifest.json`. Source paths use the host\nfilesystem's syntax; ZIP targets use forward slashes. The destination's parent\ndirectory must already exist. `_bundle_index.json` is reserved for the generated\nindex, so it cannot also be a payload target.\n\n`main.py` validates the manifest, streams source bytes into their full target\npaths, and records actual copied byte lengths. Payloads and the index are sorted\nby target Unicode order. Unlisted files are excluded. Output is built in a\ntemporary file and replaced only after successful copying.\n\nRebuild and verify from the project directory:\n\n```sh\npython build.py\npython -m unittest -v test_delivery\n```\n\nVerification: five tests passed on Windows with Python 3.14. Tests invoke an\nisolated copy of the final archive from an unrelated working directory, then\nread the resulting ZIP with the standard library. Assertions cover exact member\nsets and bytes, binary data larger than a copy chunk, empty files/manifests,\nUnicode (including supplementary-plane ordering), spaces/dots/commas, nesting,\nduplicate source basenames, one source mapped to multiple targets, native\nWindows source separators, exclusion of unlisted files, sorted byte-count\nindexes, and equivalent logical output after reversing manifest order. Invalid\npaths, duplicate targets and missing sources are rejected; pre-existing output\nis preserved on invalid input. Tests were authored and executed directly,\nwithout delegation. Other operating systems were not executed in this run.\n",
+            "additions": 36,
+            "deletions": 0
+          }
+        ],
+        "truncated": false
+      },
+      "time": {
+        "end": 1793546035315
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcPQ100j4gHdAh1S",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_5a251d1f61784d21a3e5a0979b7ec165",
+      "tool": "bash",
+      "input": {
+        "command": "python -m unittest -v test_delivery",
+        "description": "Recheck archive with expanded positive input coverage"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_01c86f2dc7eb1024016ae75739a6708191a9f14c2da26b44a5"
+        }
+      },
+      "time": {
+        "start": 1793546041521
+      }
+    },
+    "outcomeID": "prt_h3t2gMlqNq7uzjto0Bf5",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hw0VGr0K3ORPwTXBIGSm",
+      "title": "Recheck archive with expanded positive input coverage",
+      "metadata": {
+        "refused": false,
+        "command": "python -m unittest -v test_delivery",
+        "output": "test_duplicate_and_missing_sources (test_delivery.DeliveryTests.test_duplicate_and_missing_sources) ... ok\r\ntest_empty_manifest (test_delivery.DeliveryTests.test_empty_manifest) ... ok\r\ntest_exact_bytes_names_and_order_independence (test_delivery.DeliveryTests.test_exact_bytes_names_and_order_independence) ... ok\r\ntest_invalid_manifest_preserves_existing_output (test_delivery.DeliveryTests.test_invalid_manifest_preserves_existing_output) ... ok\r\ntest_native_source_separators (test_delivery.DeliveryTests.test_native_source_separators) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 5 tests in 1.569s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 651,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Recheck archive with expanded positive input coverage",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793546044486
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcS7500GuemknTGi",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_0b2c139e8d524efb8163b2d6e8b338b6",
+      "tool": "bash",
+      "input": {
+        "command": "python -c \"from pathlib import Path; import zipfile; p=Path('.'); z=zipfile.ZipFile('deliverable.pyz'); assert z.namelist()==['__main__.py'], z.namelist(); assert z.read('__main__.py')==(p/'main.py').read_bytes(); assert z.testzip() is None; print('Archive contains only the exact current application source; ZIP integrity checked.')\"",
+        "description": "Verify archive contains exact repaired application source"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_03300ca1dfe26e10016ae7574405b88191877e42e58916a420"
+        }
+      },
+      "time": {
+        "start": 1793546051879
+      }
+    },
+    "outcomeID": "prt_hugHlY6Cwq965yKFS8TA",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hKGFn6L4618pUXgwMlSF",
+      "title": "Verify archive contains exact repaired application source",
+      "metadata": {
+        "refused": false,
+        "command": "python -c \"from pathlib import Path; import zipfile; p=Path('.'); z=zipfile.ZipFile('deliverable.pyz'); assert z.namelist()==['__main__.py'], z.namelist(); assert z.read('__main__.py')==(p/'main.py').read_bytes(); assert z.testzip() is None; print('Archive contains only the exact current application source; ZIP integrity checked.')\"",
+        "output": "Archive contains only the exact current application source; ZIP integrity checked.\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 84,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Verify archive contains exact repaired application source",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793546055500
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcWrq00bEE4YJPRe",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_e477ca487cc64bedb67b54bf723ff021",
+      "tool": "read",
+      "input": {
+        "filePath": "build.py"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0dbfda5b64ced13c016ae757564a3481919a3ee224436b2cb3"
+        }
+      },
+      "time": {
+        "start": 1793546070154
+      }
+    },
+    "outcomeID": "prt_hH4kg74vJtkA08Blpnp9",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-337Exm\\runner-15472-b7RLzN\\runtime-root\\tmp\\opencorvus-delivery-scope-SFFo5R\\bundle\\build.py</path>\n<type>file</type>\n<content>1: \"\"\"Rebuild the standalone archive using only the Python standard library.\"\"\"\n2: \n3: from pathlib import Path\n4: import tempfile\n5: import zipapp\n6: \n7: \n8: def main():\n9:     project = Path(__file__).resolve().parent\n10:     with tempfile.TemporaryDirectory() as directory:\n11:         entry = Path(directory) / \"__main__.py\"\n12:         entry.write_bytes((project / \"main.py\").read_bytes())\n13:         zipapp.create_archive(\n14:             directory, target=project / \"deliverable.pyz\", compressed=True\n15:         )\n16: \n17: \n18: if __name__ == \"__main__\":\n19:     main()\n\n(End of file - total 19 lines)\n</content>",
+      "title": "build.py",
+      "metadata": {
+        "preview": "\"\"\"Rebuild the standalone archive using only the Python standard library.\"\"\"\n\nfrom pathlib import Path\nimport tempfile\nimport zipapp\n\n\ndef main():\n    project = Path(__file__).resolve().parent\n    with tempfile.TemporaryDirectory() as directory:\n        entry = Path(directory) / \"__main__.py\"\n        entry.write_bytes((project / \"main.py\").read_bytes())\n        zipapp.create_archive(\n            directory, target=project / \"deliverable.pyz\", compressed=True\n        )\n\n\nif __name__ == \"__main__\":\n    main()",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 19,
+        "totalLines": 19
+      },
+      "time": {
+        "end": 1793546070690
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcYlv00uZDCizSLG",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_61c386f865284f40bf43e172b957ddf9",
+      "tool": "bash",
+      "input": {
+        "command": "git add -- main.py build.py test_delivery.py deliverable.pyz HANDOFF.md",
+        "description": "Stage only repaired app and requested deliverables"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0b12a39e87419b39016ae7575d9f008191a84840aa7282280a"
+        }
+      },
+      "time": {
+        "start": 1793546077475
+      }
+    },
+    "outcomeID": "prt_ha3VwL4tXkvAADMDbo0F",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_h2rnqfP7VAPkEzwh2iw5",
+      "title": "Stage only repaired app and requested deliverables",
+      "metadata": {
+        "refused": false,
+        "command": "git add -- main.py build.py test_delivery.py deliverable.pyz HANDOFF.md",
+        "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'HANDOFF.md', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'build.py', LF will be replaced by CRLF the next time Git touches it\nwarning: in the working copy of 'test_delivery.py', LF will be replaced by CRLF the next time Git touches it\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 413,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Stage only repaired app and requested deliverables",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793546078836
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcaMS00X6AjiE6BZ",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_13197e1c5fa045b78d0771222603ebf2",
+      "tool": "bash",
+      "input": {
+        "command": "git diff --cached --stat",
+        "description": "Confirm scoped commit contains only delivery files"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0322bebbb48d6b10016ae75763bb3c819184639f457c3def63"
+        }
+      },
+      "time": {
+        "start": 1793546083584
+      }
+    },
+    "outcomeID": "prt_hqf61B68Uhf5eVCBEAkZ",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hZY8E9Ooxije2EiTdqt5",
+      "title": "Confirm scoped commit contains only delivery files",
+      "metadata": {
+        "refused": false,
+        "command": "git diff --cached --stat",
+        "output": " HANDOFF.md       |  36 +++++++++++++++\n build.py         |  19 ++++++++\n deliverable.pyz  | Bin 0 -> 1640 bytes\n main.py          | 120 +++++++++++++++++++++++++++++++++++++++++++----\n test_delivery.py | 138 +++++++++++++++++++++++++++++++++++++++++++++++++++++++\n 5 files changed, 305 insertions(+), 8 deletions(-)\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 317,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Confirm scoped commit contains only delivery files",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793546084443
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcc9I003QQ2GxgY0",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_f9939292737546fa9634ec1cc8c88042",
+      "tool": "bash",
+      "input": {
+        "command": "git commit -m \"fix: preserve manifest payload bytes and full ZIP targets\"",
+        "description": "Commit repaired delivery with reproducible build and tests"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_08611311fa7baf57016ae7576a85a081919c605098cba83616"
+        }
+      },
+      "time": {
+        "start": 1793546090456
+      }
+    },
+    "outcomeID": "prt_hQP49AmWjHGdNDi1KpAp",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hk6wNN7KWgZ8B8vwEjQb",
+      "title": "Commit repaired delivery with reproducible build and tests",
+      "metadata": {
+        "refused": false,
+        "command": "git commit -m \"fix: preserve manifest payload bytes and full ZIP targets\"",
+        "output": "[master fc445c3] fix: preserve manifest payload bytes and full ZIP targets\n 5 files changed, 305 insertions(+), 8 deletions(-)\n create mode 100644 HANDOFF.md\n create mode 100644 build.py\n create mode 100644 deliverable.pyz\n create mode 100644 test_delivery.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 260,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Commit repaired delivery with reproducible build and tests",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793546092261
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcdWz00xs71retjb",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_9c58c790158142a18d52d5ac46ad9471",
+      "tool": "bash",
+      "input": {
+        "command": "git status --short",
+        "description": "Verify committed scope and preserve pre-existing untracked files"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_015a9c0795c0ac0a016ae7576fe95881919ed2055fad87a232"
+        }
+      },
+      "time": {
+        "start": 1793546095769
+      }
+    },
+    "outcomeID": "prt_hNf4bmcZyQQtMj5HChBt",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hejPWbqYvpgfvKadtuhF",
+      "title": "Verify committed scope and preserve pre-existing untracked files",
+      "metadata": {
+        "refused": false,
+        "command": "git status --short",
+        "output": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? __pycache__/\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 64,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Verify committed scope and preserve pre-existing untracked files",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793546097184
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjcf5l00TSqRv6dCs",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_509a48d30a5743128b83844fd70ee1cc",
+      "tool": "artifact_snapshot",
+      "input": {
+        "files": [
+          {
+            "path": "deliverable.pyz",
+            "media_type": "application/zip"
+          },
+          {
+            "path": "main.py",
+            "media_type": "text/x-python"
+          },
+          {
+            "path": "build.py",
+            "media_type": "text/x-python"
+          },
+          {
+            "path": "test_delivery.py",
+            "media_type": "text/x-python"
+          },
+          {
+            "path": "HANDOFF.md",
+            "media_type": "text/markdown"
+          }
+        ]
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0ff98545636db0d1016ae75775de5c8191bfb65fc76bd804a1"
+        }
+      },
+      "time": {
+        "start": 1793546101769
+      }
+    },
+    "outcomeID": "prt_howQlxUAKvvtJWT4upsU",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_htDI0V19KHuYAnMLqjl1",
+      "title": "Published Artifact snapshot (5 files)",
+      "metadata": {
+        "truncated": false,
+        "snapshotID": "a9e33028-778b-5dc9-a903-0d235d06843d",
+        "resources": 5
+      },
+      "time": {
+        "end": 1793546103318
+      }
+    }
+  },
+  {
+    "requestID": "prt_g0VZjciq9001A7Yrb3HJ",
+    "sessionID": "ses_-zUQGOZrRzzsuwUK9x2e",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_6aecafee8bb94b6fa08cd0edae857954",
+      "tool": "manage_task",
+      "input": {
+        "summary": "Repaired and delivered deliverable.pyz, maintainable implementation, reproducible build script, black-box regression tests and concise tested handoff. The final archive was executed in isolation from an unrelated working directory; five tests passed on Windows/Python 3.14, inspecting actual output ZIP member completeness, exact bytes, full nested targets, Unicode ordering including BMP/supplementary-plane boundary, empty data, binary data exceeding a copy chunk, source basename collisions, source reuse, native Windows source separators, manifest-order invariance and sorted byte-count index. Negative cases cover invalid paths, reserved index target, duplicate targets and missing sources, including preservation of existing output. Archive inspection confirmed only __main__.py and exact equality with current main.py. Changes committed as fc445c3; pre-existing unrelated untracked files preserved. Work and checks performed directly without delegation as requested; no independent reviewer or other-OS run is claimed. Published all five requested reusable delivery files.",
+        "evidence_locators": [
+          {
+            "source": "session",
+            "session_id": "ses_-zUQGOZrRzzsuwUK9x2e"
+          }
+        ],
+        "deliverable_artifact_locators": [
+          {
+            "source": "task_artifact_snapshot",
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hDJsGPi5gGXCdJSRNWaB",
+              "task_id": "tsk_g00VZjbPA600hXrQhaLJ",
+              "snapshot_id": "a9e33028-778b-5dc9-a903-0d235d06843d",
+              "manifest_sha256": "3c0181e8358a8255e71312043c0a269519b4bf80e30efb00e2dbb118ec291aff"
+            }
+          }
+        ],
+        "accepted_delivery_slice_revision_ids": [],
+        "workflow_id": null,
+        "action": "complete_task"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_01a09424b994775a016ae7578454f08191955552781677b335"
+        }
+      },
+      "time": {
+        "start": 1793546116177
+      }
+    },
+    "outcomeID": "prt_hVQjIoKTesvhit37l2SS",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hORUvANNq6fyPjfKMe1S",
+      "title": "Task Completed",
+      "metadata": {
+        "opencorvusToolResultControl": {
+          "kind": "immediate_park"
+        }
+      },
+      "time": {
+        "end": 1793546127610
+      }
+    }
+  }
+]

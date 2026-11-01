@@ -1,0 +1,31 @@
+{
+  "sessions": [
+    {
+      "session": " 组,\n",
+      "start_utc": "2026-04-01T23:59:59.500000Z",
+      "end_utc": "2026-04-02T00:00:00.250000Z",
+      "seconds": 0.75,
+      "start_utc_date": "2026-04-01"
+    },
+    {
+      "session": "02",
+      "start_utc": "2026-04-02T00:00:00.000000Z",
+      "end_utc": "2026-04-02T00:00:02.000000Z",
+      "seconds": 2.0,
+      "start_utc_date": "2026-04-02"
+    }
+  ],
+  "daily": [
+    {
+      "date": "2026-04-01",
+      "sessions": 1,
+      "seconds": 0.75
+    },
+    {
+      "date": "2026-04-02",
+      "sessions": 1,
+      "seconds": 2.0
+    }
+  ],
+  "total_seconds": 2.75
+}

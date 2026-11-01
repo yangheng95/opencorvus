@@ -1,0 +1,39 @@
+{
+  "head": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after\\bundle-delivered",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit": 0,
+    "stdout": "fc445c3490f82bd8f0cb0e14b214cb4e5252b55e\n",
+    "stderr": ""
+  },
+  "status": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after\\bundle-delivered",
+      "status",
+      "--short"
+    ],
+    "exit": 0,
+    "stdout": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? __pycache__/\n",
+    "stderr": ""
+  },
+  "log": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\self-verification-coverage-e2e-20261101\\after\\bundle-delivered",
+      "log",
+      "-3",
+      "--format=%H %s"
+    ],
+    "exit": 0,
+    "stdout": "fc445c3490f82bd8f0cb0e14b214cb4e5252b55e fix: preserve manifest payload bytes and full ZIP targets\n8bb70a9bfea84db0e5b30c70673d82fc457567a6 test: initialize delivery prototype\n",
+    "stderr": ""
+  }
+}
