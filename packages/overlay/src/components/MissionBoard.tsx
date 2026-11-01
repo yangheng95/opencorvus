@@ -8,6 +8,7 @@ import {
   type MissionRecord,
 } from "../services/mission"
 import { missionBoardStore, reloadMissionBoard } from "../services/mission-board"
+import { workLedgerProject } from "../services/work-ledger"
 import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/project-directory"
 import { detailStamp, relativeTime } from "../utils/time"
 import { t } from "../utils/i18n"
@@ -69,6 +70,7 @@ function taskStatusLabel(task: MissionTask): string {
 function missionDirectoryLabel(directory: string): string {
   return projectLedgerDisplayName({
     directory,
+    customName: workLedgerProject(directory)?.title,
     unknownName: t("task.project.unknown"),
     implicitProjectName: t("work_ledger.implicit_project"),
   })

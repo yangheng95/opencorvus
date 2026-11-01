@@ -573,10 +573,12 @@ body {
 }
 
 .mission-create-form__expert-squad-list .oc-checkbox {
+  flex-shrink: 0;
   align-items: flex-start;
 }
 
 .mission-create-form__expert-squad-list .oc-button {
+  flex-shrink: 0;
   justify-content: flex-start;
 }
 

@@ -7,6 +7,7 @@ import {
   type ExpertSquadOption,
 } from "../services/expert-squad"
 import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/project-directory"
+import { workLedgerProject } from "../services/work-ledger"
 import { formatErrorDetails } from "../services/diagnostics"
 import { localeTag, t } from "../utils/i18n"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
@@ -124,6 +125,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         value: directory,
         label: projectLedgerDisplayName({
           directory,
+          customName: workLedgerProject(directory)?.title,
           unknownName: t("task.project.unknown"),
           implicitProjectName: t("work_ledger.implicit_project"),
         }),

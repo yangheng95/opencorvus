@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [重命名项目的统一显示](records/2026-11/2026-11-02-project-names.md)：现项目名称读取、旧目录检索与真实手动草稿目标。
+
 - [项目选择中的查找](records/2026-11/2026-11-02-project-discovery.md)：大量项目中的名称/路径搜索、明确选值与草稿保全。
 
 - [多项目选择的身份线索](records/2026-11/2026-11-02-project-choice-reading.md)：同名项目选择、当前目录与真实页面复核。

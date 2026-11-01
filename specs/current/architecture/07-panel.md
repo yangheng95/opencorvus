@@ -2723,6 +2723,13 @@ label as well as its visible second line. The selected directory remains visible
 the filter or project field and is associated with its control. Cards retain
 parent-directory context; implicit project names use the existing ledger suffix.
 Canonical directory values continue to own filtering and creation targets.
+Board project choices, creation fields and Mission cards read custom project names
+from the existing reactive work-ledger project reader, as the chat home does.
+Search covers that current display name and the original directory; a project
+rename never changes the filtering or creation target's directory identity.
+Expert-squad choice rows and their install action retain their natural content
+height within the creation list's bounded scroll region. Long squad descriptions
+wrap within their own row rather than compressing into adjacent choices.
 An explicit board project filter supplies the creation dialog's default project;
 the all-projects view retains the current workspace default. Users can change
 that selection in the dialog without changing their request draft.

@@ -1,0 +1,326 @@
+{
+  "batch": 885,
+  "at": "2026-11-01T23:08:44.096Z",
+  "singleAgent": true,
+  "realDevUI": true,
+  "ownedPorts": [
+    38589,
+    38590,
+    38591
+  ],
+  "images": 23,
+  "manualReview": true,
+  "uiAutomationTests": "none added, modified or run",
+  "schema": 9,
+  "tables": 92,
+  "phases": [
+    {
+      "at": "2026-11-01T22:55:32.978Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258693,
+      "current": 258695,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52935,
+          "after": 52936
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52877,
+          "after": 52878
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4145987,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-B6mbMiSX.js"
+    },
+    {
+      "at": "2026-11-01T23:02:11.321Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258695,
+      "current": 258766,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 50589,
+          "after": 50601
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 50589,
+          "after": 50601
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6653,
+          "after": 6657
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6653,
+          "after": 6657
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 19959,
+          "after": 19971
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52936,
+          "after": 52949
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52878,
+          "after": 52891
+        },
+        {
+          "table": "session",
+          "before": 130,
+          "after": 131
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3744395,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BoAY54cW.js"
+    },
+    {
+      "at": "2026-11-01T23:07:50.441Z",
+      "kind": "final",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258766,
+      "current": 258768,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52949,
+          "after": 52950
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52891,
+          "after": 52892
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3402225,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-rfyQogTc.js"
+    }
+  ],
+  "checks": {
+    "ui-build-after": {
+      "code": 0,
+      "startedAt": 1793573758664,
+      "closedAt": 1793573833061
+    },
+    "ui-build-final": {
+      "code": 0,
+      "startedAt": 1793574148242,
+      "closedAt": 1793574200800
+    },
+    "overlay-typecheck": {
+      "code": 0,
+      "startedAt": 1793573772681,
+      "closedAt": 1793573803275
+    },
+    "focused-checks": {
+      "code": 0,
+      "startedAt": 1793573772695,
+      "closedAt": 1793573786358
+    },
+    "final-focused-checks": {
+      "code": 0,
+      "startedAt": 1793574196959,
+      "closedAt": 1793574208009
+    }
+  },
+  "draft": {
+    "missionID": "86ad149ea7d1af98",
+    "sessionID": "ses_-zUQEUGDwzzyYWN7sziU",
+    "projectName": "Project journey 773",
+    "boardLane": "backlog",
+    "status": 200,
+    "title": "项目名称验收885（未执行）",
+    "requestMatched": true,
+    "directoryMatched": true,
+    "persisted": {
+      "at": "2026-11-01T23:07:14.652Z",
+      "phase": "final",
+      "persistedSession": "ses_-zUQEUGDwzzyYWN7sziU",
+      "projectID": "prj_hFmj1f6BXMBemXaPwm5n",
+      "kind": "mission",
+      "missionID": "86ad149ea7d1af98",
+      "title": "项目名称验收885（未执行）",
+      "pendingRequestMatched": true,
+      "directoryMatched": true,
+      "realProjectNamesMatched": 3
+    }
+  },
+  "squadLayout": {
+    "before": {
+      "height": 240,
+      "items": [
+        {
+          "flexShrink": "1",
+          "height": 36.8125,
+          "label": "AdvancedBuilt-in advanced software ",
+          "labelHeight": 56,
+          "minHeight": "24px",
+          "scrollHeight": 56
+        },
+        {
+          "flexShrink": "1",
+          "height": 36.796875,
+          "label": "BaseCompact outcome delivery throug",
+          "labelHeight": 56,
+          "minHeight": "24px",
+          "scrollHeight": 56
+        },
+        {
+          "flexShrink": "1",
+          "height": 36.796875,
+          "label": "DynamicAutomatically compose Task-l",
+          "labelHeight": 56,
+          "minHeight": "24px",
+          "scrollHeight": 56
+        },
+        {
+          "flexShrink": "1",
+          "height": 36.796875,
+          "label": "Research StudioA research planning,",
+          "labelHeight": 56,
+          "minHeight": "24px",
+          "scrollHeight": 56
+        },
+        {
+          "flexShrink": "1",
+          "height": 36.796875,
+          "label": "Generate Expert SquadsEvidence-led ",
+          "labelHeight": 56,
+          "minHeight": "24px",
+          "scrollHeight": 56
+        },
+        {
+          "flexShrink": "1",
+          "height": 24,
+          "label": "Install more Expert Squads",
+          "minHeight": "24px",
+          "scrollHeight": 22
+        }
+      ],
+      "scrollHeight": 240
+    },
+    "final": {
+      "height": 240,
+      "items": [
+        {
+          "flexShrink": "0",
+          "height": 56,
+          "label": "AdvancedBuilt-in advanced software ",
+          "labelHeight": 56,
+          "scrollHeight": 56
+        },
+        {
+          "flexShrink": "0",
+          "height": 56,
+          "label": "BaseCompact outcome delivery throug",
+          "labelHeight": 56,
+          "scrollHeight": 56
+        },
+        {
+          "flexShrink": "0",
+          "height": 56,
+          "label": "DynamicAutomatically compose Task-l",
+          "labelHeight": 56,
+          "scrollHeight": 56
+        },
+        {
+          "flexShrink": "0",
+          "height": 56,
+          "label": "Research StudioA research planning,",
+          "labelHeight": 56,
+          "scrollHeight": 56
+        },
+        {
+          "flexShrink": "0",
+          "height": 56,
+          "label": "Generate Expert SquadsEvidence-led ",
+          "labelHeight": 56,
+          "scrollHeight": 56
+        },
+        {
+          "flexShrink": "0",
+          "height": 24,
+          "label": "Install more Expert Squads",
+          "scrollHeight": 22
+        }
+      ],
+      "scrollHeight": 336
+    }
+  },
+  "physicalClose": {
+    "before": {
+      "childCloseCode": 0,
+      "outerToolSessionID": "not retained after context truncation; original runner close receipt read"
+    },
+    "after": {
+      "originalToolSession": 12229,
+      "code": 0
+    },
+    "final": {
+      "originalToolSession": 78779,
+      "code": 0
+    },
+    "allPublicShutdown": 200,
+    "pairedCopiesRetired": 6
+  },
+  "limitations": [
+    "Long custom names retain the existing menu ellipsis and original full selected input value.",
+    "Package-owned squad names and descriptions retain their original content.",
+    "Single-stage model quota 0; this UI and metadata acceptance used no model requests.",
+    "Intermediate scroll and failure screenshots are retained and identified in actions.csv."
+  ]
+}
