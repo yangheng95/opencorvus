@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [常用操作阅读](records/2026-11/2026-11-02-routine-operation-reading.md)：产物、协调与子任务操作的真实名称和来源。
+
 - [持续目标长文本表单](records/2026-11/2026-11-02-goal-form-reading.md)：目标与完成依据的内容增高、草稿和校验。
 
 - [持续目标操作可读性](records/2026-11/2026-11-02-goal-operation-reading.md)：真实Goal工具名和目录读取身份。

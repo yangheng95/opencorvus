@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [常用操作阅读](2026-11-02-routine-operation-reading/README.md)：真实Mission、Task与成员操作和来源截图。
+
 - [持续目标长文本表单](2026-11-02-goal-form-reading/README.md)：目标与依据草稿、双语、长文滚动和校验实页。
 
 - [持续目标操作可读性](2026-11-02-goal-operation-reading/README.md)：真实877 Goal历史的中英文操作与来源预览。

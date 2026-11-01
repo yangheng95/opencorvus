@@ -2522,6 +2522,12 @@ failure facts continue to use the canonical Tool record. Continuous Goal names
 match their actual create/get/update-first Tool declarations. A completed read
 uses its validated producer-owned readType to distinguish directory name/icon
 from file reading; request paths do not establish the resource type.
+Registry entries use the declared Tool IDs and share the same normalization at
+registration and lookup. Routine Task/Mission coordination, Artifact catalog
+operations and child-Task evidence use this same presentation owner. Labels
+describe the operation rather than infer its outcome: Artifact publication saves
+work evidence, selection records a semantic source, and checklist management
+covers reading and writing. A saved interactive artifact keeps its authored title.
 When an execution run
 contains multiple operations, its complete Sources group occupies a separate
 row: the latest operation must not appear paired with the first Source. Single

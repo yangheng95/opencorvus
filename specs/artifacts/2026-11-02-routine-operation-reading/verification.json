@@ -1,0 +1,133 @@
+{
+  "scope": 880,
+  "sourceCommit": "b87c5b64505b83a636dcb88c4ad32e362eb5e161",
+  "actualCLI": true,
+  "hiddenOwnedPages": true,
+  "userWindowsUntouched": true,
+  "providerMaximumRequests": {
+    "before": 0,
+    "after": 0
+  },
+  "nativeOriginalHandles": {
+    "before": {
+      "handle": 39218,
+      "exitCode": 0
+    },
+    "after": {
+      "handle": 40203,
+      "exitCode": 0
+    }
+  },
+  "before": {
+    "at": "2026-11-01T20:11:40.100Z",
+    "kind": "before",
+    "schema": 9,
+    "tables": 92,
+    "originals": 258669,
+    "current": 258671,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52923,
+        "after": 52924
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52865,
+        "after": 52866
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 229,
+    "projects": 100,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1260,
+    "reserveMs": 4414559,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-CkimZRe3.js"
+  },
+  "after": {
+    "at": "2026-11-01T20:20:17.396Z",
+    "kind": "after",
+    "schema": 9,
+    "tables": 92,
+    "originals": 258671,
+    "current": 258673,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52924,
+        "after": 52925
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52866,
+        "after": 52867
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 229,
+    "projects": 100,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1260,
+    "reserveMs": 3845124,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-Od53X_nA.js"
+  },
+  "checks": {
+    "finalBuild": 0,
+    "typecheck": 0,
+    "auxiliary": 0
+  },
+  "buildInvocationCorrection": {
+    "firstFinalAttempt": 1,
+    "repeatedUsingSavedScript": 0
+  },
+  "manualCopyPaste": {
+    "characters": 8113,
+    "fields": 6,
+    "artifactType": "base/test-report",
+    "schemaVersion": 1,
+    "sourceReadReferences": 15,
+    "draftCleared": true,
+    "messageSent": false
+  },
+  "screenshots": [
+    "01-before-mission-operation-en.jpg",
+    "02-before-member-artifacts-en.jpg",
+    "03-after-mission-actions-en.jpg",
+    "04-after-mission-expanded-en.jpg",
+    "05-after-mission-inputs-en.jpg",
+    "06-after-mission-inputs-zh.jpg",
+    "07-after-mission-state-zh.jpg",
+    "08-after-task-artifacts-zh.jpg",
+    "09-after-member-artifacts-zh.jpg",
+    "10-after-member-source-zh.jpg",
+    "11-after-member-raw-input-zh.jpg",
+    "12-after-member-raw-input-en.jpg",
+    "13-after-real-copy-paste-en.jpg",
+    "14-after-task-read-en.jpg"
+  ],
+  "manualVisualReview": true,
+  "uiAutomatedTestsRun": 0,
+  "limitations": [
+    "28 new labels share one display owner; only retained real operations available in Mission801/Task801/base-tester were visually reviewed.",
+    "No new model request or scheduling/terminal-state acceptance was performed.",
+    "Screenshot03 is the initial bottom capture; screenshot04 reached the initial user message. Neither substitutes for the expanded capability view05/06.",
+    "Clipboard API readback retained an earlier owned draft; actual native copy/paste produced the correct original JSON."
+  ]
+}

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [常用操作阅读](2026-11-02-routine-operation-reading.md)：共享显示目录和双语真实历史验收。
+
 - [持续目标长文本表单](2026-11-02-goal-form-reading.md)：复用公共输入组件、真实表单阅读与取消。
 
 - [持续目标操作可读性](2026-11-02-goal-operation-reading.md)：真实声明、读取类型和实页复核。
