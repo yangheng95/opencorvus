@@ -1,0 +1,20 @@
+{
+  "requests": 7,
+  "models": [
+    "gpt-6.1-sol"
+  ],
+  "streaming": true,
+  "http_statuses": [
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200
+  ],
+  "response_reader_states": [
+    "awaiting_binding"
+  ],
+  "exhausted": false
+}

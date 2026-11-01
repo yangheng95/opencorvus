@@ -1,0 +1,11 @@
+order_id,team,currency,status,amount
+A01,North,CNY,paid,10.10
+A02,North,CNY,paid,20.20
+A03,North,CNY,refunded,-5.05
+A04,South,CNY,paid,40.01
+A05,South,CNY,cancelled,999.99
+A06,South,USD,paid,0.10
+A07,South,USD,paid,0.20
+A08,North,USD,refunded,-1.25
+A09,North,CNY, paid ,0.04
+A10,South,CNY,paid,3.99

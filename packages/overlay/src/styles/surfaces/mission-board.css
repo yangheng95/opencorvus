@@ -29,7 +29,7 @@ body {
   height: auto;
   min-height: var(--ui-panel-header-height);
   max-height: none;
-  padding: var(--ui-gap-3xl) var(--ui-gap-3xl) var(--ui-gap-xl);
+  padding: var(--ui-gap-lg) var(--ui-gap-xl);
 }
 
 .mission-board__heading,
@@ -46,7 +46,7 @@ body {
 
 .mission-board__heading > div {
   flex-direction: column;
-  gap: var(--ui-gap-sm);
+  gap: var(--ui-gap-3xs);
 }
 
 .mission-board__heading h1,
@@ -71,7 +71,8 @@ body {
   flex: 0 0 auto;
   align-items: center;
   gap: var(--ui-gap-md);
-  padding: 0 var(--ui-gap-3xl) var(--ui-gap-xl);
+  padding: 0 var(--ui-gap-xl) var(--ui-gap-lg);
+  border-bottom: var(--oc-border-width) solid var(--divider-soft);
   flex-wrap: wrap;
 }
 
@@ -85,7 +86,7 @@ body {
 
 .mission-board__error {
   flex: 0 0 auto;
-  margin: 0 var(--ui-gap-3xl) var(--ui-gap-xl);
+  margin: var(--ui-gap-lg) var(--ui-gap-xl);
 }
 
 .mission-board__state {
@@ -117,9 +118,9 @@ body {
   min-width: 0;
   min-height: 0;
   grid-template-columns: repeat(5, minmax(calc(160px * var(--ui-scale)), 1fr));
-  gap: var(--ui-gap-lg);
+  gap: var(--ui-gap-md);
   overflow: auto;
-  padding: 0 var(--ui-gap-3xl) var(--ui-gap-3xl);
+  padding: var(--ui-gap-lg) var(--ui-gap-xl) var(--ui-gap-xl);
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb) transparent;
 }

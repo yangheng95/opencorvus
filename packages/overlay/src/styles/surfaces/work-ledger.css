@@ -71,7 +71,7 @@
   display: grid;
   grid-template-columns: calc(20px * var(--ui-scale)) minmax(0, 1fr);
   gap: var(--ui-gap-md);
-  min-height: calc(34px * var(--ui-scale));
+  min-height: var(--oc-density-control-height);
   font-size: var(--ui-font-body);
 }
 
@@ -128,13 +128,13 @@
   column-gap: var(--ui-left-rail-row-label-gap);
   padding-inline-start: var(--ui-left-rail-row-control-inline-inset);
   border: 0;
-  min-height: calc(34px * var(--ui-scale));
-  border-radius: var(--oc-radius-large);
+  min-height: var(--oc-density-navigation-row);
+  border-radius: var(--oc-radius-soft);
   padding-inline-end: calc(var(--ui-left-rail-project-action-half-size) - (var(--work-row-action-size) / 2));
 }
 
 .work-ledger-recents {
-  margin-block: var(--ui-gap-4xl) var(--ui-gap-xl);
+  margin-block: var(--ui-gap-xl) var(--ui-gap-lg);
 }
 
 .work-ledger-recents .work-ledger-one-list {

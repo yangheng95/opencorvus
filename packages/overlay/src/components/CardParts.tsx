@@ -209,6 +209,9 @@ function CitationAwareBodyParts(props: PartCollectionProps) {
 }
 
 function toolIdentityDetail(tool: ToolDisplayModel): string {
+  // Incomplete streamed arguments belong to the expanded payload, not the
+  // invocation identity. The existing pending status describes this phase.
+  if (tool.status === "pending") return ""
   return tool.detail.toLowerCase() === tool.label.toLowerCase() ? "" : tool.detail
 }
 

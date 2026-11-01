@@ -60,13 +60,12 @@
   --ui-font-weight-medium: 500;
   --ui-font-weight-strong: 600;
 
-  /* OC means OpenCorvus. Text actions use the compact Codex button rhythm
-   * without coupling form fields or circular icon controls to that height. */
+  /* Desktop controls share a compact rhythm while retaining pointer targets. */
   --oc-density-button-height: calc(30px * var(--ui-scale, 1));
-  --oc-density-control-height: calc(34px * var(--ui-scale, 1));
-  --oc-density-icon-button: calc(32px * var(--ui-scale, 1));
+  --oc-density-control-height: calc(32px * var(--ui-scale, 1));
+  --oc-density-icon-button: calc(30px * var(--ui-scale, 1));
   --oc-density-chip-height: calc(24px * var(--ui-scale, 1));
-  --oc-density-navigation-row: calc(32px * var(--ui-scale, 1));
+  --oc-density-navigation-row: calc(30px * var(--ui-scale, 1));
   --oc-border-width: 1px;
 
   /* Motion scale — transition tokens plus named animation cycle tokens.
@@ -144,7 +143,7 @@
   --ui-breakpoint-md: 760px;
   --ui-breakpoint-lg: 900px;
   --ui-breakpoint-xl: 1200px;
-  --oc-header-height: calc(48px * var(--ui-scale, 1));
+  --oc-header-height: calc(44px * var(--ui-scale, 1));
   --oc-header-padding-x: calc(6px * var(--ui-scale, 1));
   --oc-header-padding-y: 0;
   --oc-header-gap: calc(6px * var(--ui-scale, 1));
@@ -185,7 +184,7 @@
    * colour, spacing, and containment rather than another one-pixel tier.
    * Interactive Artifact content owns its internal typography separately;
    * the surrounding OpenCorvus chrome still consumes this scale. */
-  --ui-font-page: calc(28px * var(--ui-scale));
+  --ui-font-page: calc(24px * var(--ui-scale));
   --ui-font-emphasis: calc(16px * var(--ui-scale));
   --ui-font-body: calc(14px * var(--ui-scale));
   --ui-font-code: calc(13px * var(--ui-scale));
@@ -199,10 +198,10 @@
   --ui-line-height-flat: 1;
   --ui-line-height-tight: 1.35;
   --ui-line-height-normal: 1.5;
-  --ui-line-height-reading: 1.68;
+  --ui-line-height-reading: 1.6;
 
   --ui-titlebar-height: calc(36px * var(--ui-scale));
-  --ui-panel-header-height: calc(48px * var(--ui-scale));
+  --ui-panel-header-height: calc(44px * var(--ui-scale));
   --ui-workspace-contextbar-height: var(--ui-panel-header-height);
   /* UI (User Interface) Workbench contour uses wider low-alpha coverage so
      its diagonal stays continuous at fractional desktop display scales while
@@ -243,7 +242,7 @@
   --ui-chat-priority-width: calc(640px * var(--ui-scale));
   --ui-chat-min-width: calc(500px * var(--ui-scale));
   --ui-chat-header-padding-x: calc(16px * var(--ui-scale));
-  --ui-composer-content-inset: var(--ui-gap-2xl);
+  --ui-composer-content-inset: var(--ui-gap-xl);
   --ui-workbench-panel-min-width: calc(280px * var(--ui-scale));
   --ui-runtime-environment-panel-width: calc(300px * var(--ui-scale));
   --ui-runtime-environment-anchor-shift: calc(var(--ui-header-control-height) + var(--oc-header-gap));

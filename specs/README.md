@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [紧凑面板与统一对齐](records/2026-11/2026-11-01-compact-panel.md)：真实截图定位、统一桌面密度与双语面板复核。
+
 - [尺寸观察通知因果](records/2026-11/2026-11-01-resize-delivery-causality.md)：会话切换的真实回调记录及正式构建复验。
 
 - [Goal 操作搜索](records/2026-11/2026-11-01-goal-command-discovery.md)：首页、预算/暂停检索与表单实页体验。

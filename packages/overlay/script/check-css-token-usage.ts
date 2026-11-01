@@ -71,7 +71,7 @@ const RETIRED_TYPOGRAPHY_ALIASES = new Set([
   "--work-row-line-height",
 ])
 const TYPOGRAPHY_ROLE_VALUES = new Map([
-  ["--ui-font-page", "calc(28px * var(--ui-scale))"],
+  ["--ui-font-page", "calc(24px * var(--ui-scale))"],
   ["--ui-font-emphasis", "calc(16px * var(--ui-scale))"],
   ["--ui-font-body", "calc(14px * var(--ui-scale))"],
   ["--ui-font-code", "calc(13px * var(--ui-scale))"],
@@ -79,7 +79,7 @@ const TYPOGRAPHY_ROLE_VALUES = new Map([
   ["--ui-line-height-flat", "1"],
   ["--ui-line-height-tight", "1.35"],
   ["--ui-line-height-normal", "1.5"],
-  ["--ui-line-height-reading", "1.68"],
+  ["--ui-line-height-reading", "1.6"],
 ])
 const TYPOGRAPHY_FAMILY_VALUES = new Map([
   ["--font", '"Geist Variable", "Noto Sans SC Variable"'],

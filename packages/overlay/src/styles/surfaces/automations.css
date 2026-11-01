@@ -68,23 +68,28 @@
   width: 100%;
 }
 
+.automations-filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-sm) var(--ui-gap-xl);
+  margin-top: var(--ui-gap-md);
+}
+
 .automations-filter.oc-segmented {
   display: flex;
   width: max-content;
-  margin-top: var(--ui-gap-xl);
+  margin: 0;
   padding: 0;
   gap: var(--ui-gap-sm);
   border: 0;
   background: transparent;
 }
 
-.automations-scope-filter.oc-segmented {
-  margin-top: var(--ui-gap-md);
-}
-
 .automations-rows {
   display: grid;
-  margin-top: var(--ui-gap-3xl);
+  margin-top: var(--ui-gap-lg);
 }
 
 .automation-list-row {
@@ -99,8 +104,8 @@
   width: 100%;
   min-width: 0;
   gap: var(--ui-gap-lg);
-  min-height: calc(60px * var(--ui-scale));
-  padding: var(--ui-gap-lg) calc(42px * var(--ui-scale)) var(--ui-gap-lg) 0;
+  min-height: calc(44px * var(--ui-scale));
+  padding: var(--ui-gap-md) calc(42px * var(--ui-scale)) var(--ui-gap-md) 0;
   border: 0;
   border-radius: 0;
   box-shadow: none;
@@ -175,14 +180,14 @@
 
 .automation-suggestions {
   display: grid;
-  gap: var(--ui-gap-lg);
-  margin-top: var(--ui-gap-2xl);
-  padding-top: var(--ui-gap-2xl);
+  gap: var(--ui-gap-xs);
+  margin-top: var(--ui-gap-lg);
+  padding-top: var(--ui-gap-lg);
   border-top: var(--oc-border-width) solid color-mix(in srgb, var(--divider-soft) 80%, transparent);
 }
 
 .automation-suggestions h2 {
-  margin: 0 0 var(--ui-gap-lg);
+  margin: 0 0 var(--ui-gap-xs);
   color: var(--text-strong);
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
@@ -197,10 +202,13 @@
   align-items: start;
   width: 100%;
   height: auto;
-  gap: var(--ui-gap-lg);
-  padding: var(--ui-gap-lg);
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-md) 0;
   min-height: 0;
   justify-content: stretch;
+  white-space: normal;
+  text-align: start;
+  line-height: var(--ui-line-height-normal);
 }
 
 .automation-suggestion.oc-button:is(:hover, :focus-visible) {
@@ -217,11 +225,12 @@
 .automation-suggestion > span {
   display: grid;
   min-width: 0;
-  gap: var(--ui-gap-sm);
+  gap: var(--ui-gap-3xs);
 }
 
 .automation-suggestion__title {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(calc(140px * var(--ui-scale)), 1fr) minmax(0, 2fr);
   align-items: baseline;
   min-width: 0;
   gap: var(--ui-gap-lg);
@@ -266,8 +275,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--ui-gap-2xl);
-  padding-bottom: var(--ui-gap-2xl);
+  gap: var(--ui-gap-lg);
+  padding-bottom: var(--ui-gap-lg);
   border-bottom: var(--oc-border-width) solid var(--border);
 }
 
@@ -441,13 +450,13 @@
 
 .automation-form {
   display: grid;
-  gap: var(--ui-gap-2xl);
+  gap: var(--ui-gap-lg);
 }
 
 .automation-form-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--ui-gap-xl);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ui-gap-lg) var(--ui-gap-xl);
   min-inline-size: 0;
   margin: 0;
   padding: 0;
@@ -463,6 +472,12 @@
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--ui-gap-xl);
   min-width: 0;
+}
+
+@container settings-content (max-width: 640px) {
+  .automation-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .automation-session-target {

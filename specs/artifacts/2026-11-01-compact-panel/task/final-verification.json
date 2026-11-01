@@ -1,0 +1,473 @@
+{
+  "task_session": "ses_-zUQH4qBczzrHUFQ3HGh",
+  "delivery": {
+    "results": [
+      {
+        "team": "North",
+        "currency": "CNY",
+        "net_amount": "25.29"
+      },
+      {
+        "team": "North",
+        "currency": "USD",
+        "net_amount": "-1.25"
+      },
+      {
+        "team": "South",
+        "currency": "CNY",
+        "net_amount": "44.00"
+      },
+      {
+        "team": "South",
+        "currency": "USD",
+        "net_amount": "0.30"
+      }
+    ],
+    "report": "REPORT.md"
+  },
+  "download_bytes_equal": true,
+  "orders_records": 10,
+  "functional_checker": {
+    "ok": true,
+    "actual": {
+      "North/CNY": "25.29",
+      "North/USD": "-1.25",
+      "South/CNY": "44.00",
+      "South/USD": "0.30"
+    },
+    "csv_rows": [
+      {
+        "team": "North",
+        "currency": "CNY",
+        "net_amount": "25.29"
+      },
+      {
+        "team": "North",
+        "currency": "USD",
+        "net_amount": "-1.25"
+      },
+      {
+        "team": "South",
+        "currency": "CNY",
+        "net_amount": "44.00"
+      },
+      {
+        "team": "South",
+        "currency": "USD",
+        "net_amount": "0.30"
+      }
+    ],
+    "report_chars": 2941
+  },
+  "messages": [
+    {
+      "id": "msg_66e4de55-0a21-43f3-94ed-69747587d1d5",
+      "role": "user",
+      "modelID": null,
+      "finish": null,
+      "completed": null,
+      "tools": [],
+      "text_chars": 342
+    },
+    {
+      "id": "msg_g0VZiv9uB00Bx1iALTqu",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535738024,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 93
+    },
+    {
+      "id": "msg_g0VZivB1B0016dXAphDM",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535741006,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivBnL00G9f9VNb8I",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535746389,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivDC500JWQ4ToWdf",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535749539,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivE0k0003po1vImf",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535757312,
+      "tools": [
+        {
+          "name": "bash",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivG2E00vW1NS2J88",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535771242,
+      "tools": [
+        {
+          "name": "apply_patch",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 188
+    },
+    {
+      "id": "msg_g0VZivJej00vf197Tzwj",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535781648,
+      "tools": [
+        {
+          "name": "bash",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivMMp00K8cdj2wAs",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535785519,
+      "tools": [
+        {
+          "name": "bash",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivNN500w21G63UzO",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535810923,
+      "tools": [
+        {
+          "name": "apply_patch",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivTys00PtDriGlt4",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535814840,
+      "tools": [
+        {
+          "name": "apply_patch",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivV0400ooMfjOByc",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535820407,
+      "tools": [
+        {
+          "name": "bash",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivWRm00vSaHMSm4Q",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535864399,
+      "tools": [
+        {
+          "name": "apply_patch",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 132
+    },
+    {
+      "id": "msg_g0VZivhtZ00o6m7Bx3g5",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535868925,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivj6300Dv4Z27A1p",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535872405,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivjyk00NvtBTXfKh",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793535876091,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZivkvx00Ut2DL3Zm8",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "stop",
+      "completed": 1793535885531,
+      "tools": [],
+      "text_chars": 747
+    },
+    {
+      "id": "msg_8fe3e25c-f097-4cc9-b928-e9449a5809a6",
+      "role": "user",
+      "modelID": null,
+      "finish": null,
+      "completed": null,
+      "tools": [],
+      "text_chars": 217
+    },
+    {
+      "id": "msg_g0VZixIyW00Sk1F6h8ac",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793536250796,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 52
+    },
+    {
+      "id": "msg_g0VZixKPt00Nv4Dju1Z6",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793536255351,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZixLbC000KsufAiqD",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793536259140,
+      "tools": [
+        {
+          "name": "bash",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZixMaG00WVn0QIssH",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793536267644,
+      "tools": [
+        {
+          "name": "apply_patch",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZixOnV00HdEUEq7Wr",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793536271234,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZixPjN003bRSmaSdJ",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "stop",
+      "completed": 1793536278376,
+      "tools": [],
+      "text_chars": 119
+    },
+    {
+      "id": "msg_7623067a-59a0-4f42-9a90-fa377b2d5cbd",
+      "role": "user",
+      "modelID": null,
+      "finish": null,
+      "completed": null,
+      "tools": [],
+      "text_chars": 253
+    },
+    {
+      "id": "msg_g0VZj0THe001U8Uxr8g5",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793537005739,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 70
+    },
+    {
+      "id": "msg_g0VZj0UoD00XVViUSa0T",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793537009235,
+      "tools": [
+        {
+          "name": "read",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZj0Vid00VWmSHBopp",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793537015310,
+      "tools": [
+        {
+          "name": "apply_patch",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZj0XIW00cjdMgK1Fe",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "tool-calls",
+      "completed": 1793537023254,
+      "tools": [
+        {
+          "name": "bash",
+          "status": "completed"
+        }
+      ],
+      "text_chars": 0
+    },
+    {
+      "id": "msg_g0VZj0ZMf008vb7y2g8H",
+      "role": "assistant",
+      "modelID": "gpt-6.1-sol",
+      "finish": "stop",
+      "completed": 1793537029154,
+      "tools": [],
+      "text_chars": 223
+    }
+  ],
+  "provider": {
+    "requests": 6,
+    "models": [
+      "gpt-6.1-sol"
+    ],
+    "streaming": true,
+    "http_statuses": [
+      200,
+      200,
+      200,
+      200,
+      200,
+      200
+    ],
+    "reader_states": [
+      "awaiting_binding"
+    ],
+    "exhausted": false
+  }
+}

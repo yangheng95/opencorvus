@@ -114,3 +114,14 @@
   font-size: var(--ui-font-body);
   font-weight: var(--ui-font-weight-strong);
 }
+
+.chat-header #taskStatus {
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
+  border-radius: var(--oc-radius-pill);
+  background: var(--subtle-2);
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  font-weight: var(--ui-font-weight-body);
+  line-height: var(--ui-line-height-tight);
+  white-space: nowrap;
+}

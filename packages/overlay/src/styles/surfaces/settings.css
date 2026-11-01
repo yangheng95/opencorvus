@@ -7,11 +7,8 @@
 
 /* ──────────────────────────────────────────────────────────
    PRIMITIVE LAYER — `.s-*` single-source contract for every
-   settings panel. VSCode/JetBrains visual style: flat, no card
-   border, hover via the dialog's settings-surface-hover wash,
-   hierarchy expressed through `--ui-font-weight-*` + the
-   text-strong / text-soft / text-muted triad, not a settings-only
-   font-size scale. The shared typography tokens own size hierarchy.
+   settings panel. Groups use one quiet surface and aligned header/body
+   insets; dense rows keep the shared type and control scales.
 
    Migration map: settings-specific legacy row wrappers converge on
    .s-row, group wrappers converge on .s-group, and settings-owned
@@ -158,7 +155,7 @@
 .s-panel {
   display: flex;
   flex-direction: column;
-  gap: var(--ui-gap-4xl);
+  gap: var(--ui-gap-xl);
   min-width: 0;
 }
 
@@ -168,6 +165,21 @@
   flex-direction: column;
   gap: var(--ui-gap-md);
   min-width: 0;
+}
+
+.s-group {
+  gap: 0;
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-large);
+  background: var(--surface);
+}
+
+.s-group > .s-section-head {
+  padding: var(--ui-gap-lg) var(--ui-gap-xl);
+}
+
+.s-group > .s-group-body {
+  padding-inline: var(--ui-gap-xl);
 }
 
 .s-section-head {
@@ -184,7 +196,7 @@
   flex: 1;
   min-width: 0;
   display: grid;
-  gap: var(--ui-gap-sm);
+  gap: var(--ui-gap-xs);
 }
 
 .s-section-title {
@@ -237,8 +249,8 @@
   justify-content: space-between;
   gap: var(--ui-gap-md);
   min-width: 0;
-  min-height: calc(60px * var(--ui-scale));
-  padding: var(--ui-gap-lg) 0;
+  min-height: calc(44px * var(--ui-scale));
+  padding: var(--ui-gap-md) 0;
   border: 0 solid transparent;
   border-radius: 0;
   background: transparent;
@@ -299,7 +311,7 @@ button.s-row:focus-visible {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--ui-gap-xs);
+  gap: var(--ui-gap-3xs);
 }
 
 .s-row-title {
@@ -312,7 +324,7 @@ button.s-row:focus-visible {
 
 .s-row-desc {
   font-size: var(--ui-font-body);
-  color: var(--text-soft);
+  color: var(--text-muted);
   line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
 }
@@ -1298,7 +1310,7 @@ button.s-row:focus-visible {
 /* ── Settings page + sidebar nav ─────────────────────────── */
 
 .config-page {
-  --settings-content-width: calc(880px * var(--ui-scale));
+  --settings-content-width: calc(800px * var(--ui-scale));
   --settings-surface-base: var(--surface);
   --settings-surface-hover: color-mix(in srgb, var(--surface-hover) 82%, var(--surface));
   --settings-surface-muted: color-mix(in srgb, var(--surface-hover) 58%, var(--surface));
@@ -1333,8 +1345,8 @@ button.s-row:focus-visible {
   flex-direction: column;
   width: clamp(calc(208px * var(--ui-scale)), 18cqw, calc(260px * var(--ui-scale)));
   min-width: calc(208px * var(--ui-scale));
-  padding: var(--ui-gap-xl) var(--ui-gap-xl) var(--ui-gap-2xl);
-  border-right: 0 solid transparent;
+  padding: var(--ui-gap-lg) var(--ui-gap-lg) var(--ui-gap-xl);
+  border-right: var(--oc-border-width) solid var(--divider-soft);
   background: var(--rail-surface);
   overflow-y: auto;
   flex-shrink: 0;
@@ -1343,16 +1355,18 @@ button.s-row:focus-visible {
 .config-back-button.oc-button {
   justify-content: flex-start;
   width: 100%;
-  margin-bottom: var(--ui-gap-2xl);
+  margin-bottom: var(--ui-gap-lg);
 }
 
 .config-search.search-field {
-  margin-bottom: var(--ui-gap-3xl);
+  margin-bottom: var(--ui-gap-lg);
 }
 
 .config-nav-group-title {
-  margin: var(--ui-gap-md) var(--ui-gap-xl) var(--ui-gap-xs);
+  margin: var(--ui-gap-lg) 0 var(--ui-gap-xs);
+  padding-inline: calc(var(--ui-gap-md) + var(--oc-icon-size-medium) + var(--ui-gap-md)) var(--ui-gap-md);
   color: var(--text-muted);
+  font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-medium);
   line-height: var(--ui-line-height-tight);
 }
@@ -1364,8 +1378,8 @@ button.s-row:focus-visible {
 
 /* The shared rail owns layout; Settings keeps its compact row density. */
 .config-sidebar .oc-tabs[data-layout="rail"] .oc-tab {
-  min-height: calc(32px * var(--ui-scale));
-  padding: var(--ui-gap-xs);
+  min-height: var(--oc-density-navigation-row);
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
   border: none;
 }
 
@@ -1392,16 +1406,16 @@ button.s-row:focus-visible {
 }
 
 .config-sidebar .oc-tab[data-selected] {
-  --oc-tab-bg: var(--ui-list-selected-bg);
-  --oc-tab-color: var(--text-strong);
+  --oc-tab-bg: var(--accent-dim);
+  --oc-tab-color: var(--accent);
 
   background: var(--oc-tab-bg);
-  color: var(--text-strong);
+  color: var(--oc-tab-color);
   font-weight: var(--ui-font-weight-medium);
 }
 
 .config-sidebar .oc-tab[data-selected]:is(:hover, :focus-visible, [data-highlighted]) {
-  --oc-tab-bg: var(--ui-list-selected-hover-bg);
+  --oc-tab-bg: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .config-sidebar .oc-tab[data-selected]::before {
@@ -1409,8 +1423,8 @@ button.s-row:focus-visible {
 }
 
 .config-nav-icon {
-  width: calc(18px * var(--ui-scale));
-  height: calc(18px * var(--ui-scale));
+  width: var(--oc-icon-size-medium);
+  height: var(--oc-icon-size-medium);
   flex-shrink: 0;
   opacity: var(--ui-opacity-dim);
 }
@@ -1451,19 +1465,17 @@ button.s-row:focus-visible {
 
 /* ── Settings content panel + resizer ────────────────────── */
 
-/* Content panel: scrollable region to the right of the sidebar nav. The
-   wide horizontal padding and max-width child create the centered Codex
-   settings column instead of a full-width form sheet. */
+/* Content and heading use one inset and bounded column. */
 .config-content {
   position: relative;
   flex: 1;
   min-width: 0;
   min-height: 0;
   overflow-y: auto;
-  padding: var(--ui-gap-4xl);
+  padding: var(--ui-gap-3xl);
   border-top-left-radius: var(--oc-radius-large);
   border-left: var(--oc-border-width) solid color-mix(in srgb, var(--divider-soft) 76%, transparent);
-  background: var(--chat-canvas);
+  background: var(--bg);
   container-name: settings-content;
   container-type: inline-size;
 }
@@ -1471,7 +1483,7 @@ button.s-row:focus-visible {
 .config-page-title {
   width: 100%;
   max-width: var(--settings-content-width);
-  margin: 0 auto var(--ui-gap-3xl);
+  margin: 0 auto var(--ui-gap-2xl);
   color: var(--text-strong);
   font-size: var(--ui-font-page);
   font-weight: var(--ui-font-weight-strong);
@@ -1555,7 +1567,7 @@ button.s-row:focus-visible {
   padding: 0 0 var(--ui-gap-md);
   display: flex;
   flex-direction: column;
-  gap: var(--ui-gap-4xl);
+  gap: var(--ui-gap-2xl);
   border: 0 solid transparent;
   border-top: none;
   border-radius: 0;
@@ -3229,7 +3241,7 @@ button.s-row:focus-visible {
   box-sizing: border-box;
   grid-template-areas: "main summary actions";
   min-height: 0;
-  padding-block: var(--ui-gap-lg);
+  padding-block: var(--ui-gap-md);
   row-gap: 0;
 }
 #configDialog .config-tab-panel[data-config-panel="providers"] .s-row.provider-catalog-row:has(.provider-row-key) {

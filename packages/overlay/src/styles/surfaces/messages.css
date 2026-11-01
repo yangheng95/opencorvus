@@ -1077,7 +1077,7 @@
   align-items: flex-start;
   gap: var(--ui-gap-xs) var(--ui-gap-md);
   min-width: 0;
-  margin-block: var(--ui-gap-sm);
+  margin-block: var(--ui-gap-3xs);
 }
 
 .msg-sources__remaining,

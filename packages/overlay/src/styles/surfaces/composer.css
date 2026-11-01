@@ -1,8 +1,8 @@
 /* Composer stack: one geometry owner for the outside attachment strip and
    the rounded input shell. */
 .chat-composer-stack {
-  --chat-composer-min-height: calc(112px * var(--ui-scale));
-  --chat-textarea-height: calc(56px * var(--ui-scale));
+  --chat-composer-min-height: calc(104px * var(--ui-scale));
+  --chat-textarea-height: calc(42px * var(--ui-scale));
   --chat-composer-action-size: var(--oc-density-icon-button);
   --chat-compose-scale: 1;
 
@@ -11,7 +11,7 @@
   gap: var(--ui-gap-sm);
   width: min(100%, var(--conversation-message-content-width));
   max-width: 100%;
-  margin: var(--ui-gap-xl) auto var(--ui-gap-2xl);
+  margin: var(--ui-gap-lg) auto var(--ui-gap-xl);
   flex-shrink: 0;
   container-type: inline-size;
 }
@@ -169,7 +169,7 @@
   border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 76%, transparent);
   border-radius: var(--oc-radius-large);
   background: var(--surface-strong);
-  box-shadow: none;
+  box-shadow: var(--shadow-md);
   flex-shrink: 0;
 }
 

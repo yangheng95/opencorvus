@@ -21,26 +21,26 @@
   --text-on-danger: #ffffff;
   /* Static frosted backdrop. Reading surfaces remain opaque; chrome uses
      the shared translucent material rather than sampling moving content. */
-  --bg: #f3f3f3;
+  --bg: #f3f4f7;
   --surface: #ffffff;
-  --surface-hover: #f2f2ef;
-  --surface-inset: #eeefed;
+  --surface-hover: #f1f3f7;
+  --surface-inset: #f2f4f8;
   --surface-strong: #ffffff;
-  --rail-surface: #fafafa;
+  --rail-surface: #f7f8fa;
   --chat-canvas: #ffffff;
   --workspace-ambient-fill: transparent;
   --body-bg: var(--bg);
-  --chrome: #f3f3f3;
+  --chrome: #f3f4f7;
   --border: rgb(32 32 32 / 0.1);
   --border-hover: rgb(32 32 32 / 0.3);
   --border-strong: rgb(32 32 32 / 0.2);
   --ui-focused-popup-border: var(--oc-border-width) solid var(--border-strong);
   --ui-focused-popup-shadow: var(--shadow-lg);
   --ui-focused-popup-scrim: color-mix(in srgb, var(--text-strong) 14%, transparent);
-  --text: #292929;
-  --text-strong: #202020;
-  --text-soft: #53534f;
-  --text-muted: #686864;
+  --text: #2b303b;
+  --text-strong: #202530;
+  --text-soft: #555e70;
+  --text-muted: #687286;
   --accent: #0969da;
   --accent-dim: color-mix(in srgb, var(--accent) 7%, transparent);
   --accent-hover: #0757b3;

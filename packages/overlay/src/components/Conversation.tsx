@@ -1028,7 +1028,9 @@ export function Conversation(props: {
                   : t("chat.home_prompt_global")}
               </h1>
               <p class="chat-home-prompt__subtitle">
-                <span>{t("chat.home_subtitle")}</span>
+                {t("chat.home_subtitle")}
+              </p>
+              <div class="chat-home-actions">
                 <Button
                   type="button"
                   variant="outline"
@@ -1056,7 +1058,7 @@ export function Conversation(props: {
                     {t("explorer.browse_project_files")}
                   </Button>
                 </Show>
-              </p>
+              </div>
             </div>
           </Portal>
         )}

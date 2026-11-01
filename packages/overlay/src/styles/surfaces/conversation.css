@@ -23,7 +23,7 @@
   scrollbar-gutter: stable;
   /* Virtua owns item resize compensation across this complete scrollport. */
   overflow-anchor: none;
-  padding-block: var(--ui-gap-4xl) var(--conversation-composer-block-size);
+  padding-block: var(--ui-gap-xl) var(--conversation-composer-block-size);
   scroll-padding-block-end: calc(var(--conversation-composer-block-size) + var(--conversation-edge-fade-size));
   padding-inline: var(--conversation-message-start-inset) var(--conversation-message-end-inset);
   display: flex;
@@ -138,10 +138,10 @@
   grid-template-rows: auto auto auto auto;
   align-content: start;
   justify-items: stretch;
-  row-gap: var(--ui-gap-2xl);
+  row-gap: var(--ui-gap-lg);
   min-width: 0;
   min-height: 0;
-  padding-block: clamp(var(--ui-gap-4xl), 18vh, calc(180px * var(--ui-scale))) var(--ui-gap-4xl);
+  padding-block: calc(64px * var(--ui-scale)) var(--ui-gap-3xl);
   box-sizing: border-box;
   overflow-y: auto;
   overscroll-behavior-y: contain;
@@ -158,18 +158,21 @@
 
 .chat-home-prompt {
   display: grid;
-  justify-items: center;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: var(--ui-gap-xl);
+  justify-items: start;
   pointer-events: none;
   color: var(--text-strong);
 }
 
 .chat-home-prompt__title {
+  grid-column: 1;
   min-width: 0;
   width: 100%;
   max-width: 100%;
   margin: 0;
-  padding-inline: calc(var(--ui-composer-content-inset) + var(--oc-border-width));
-  text-align: center;
+  padding-inline: 0;
+  text-align: start;
   text-wrap: balance;
   overflow-wrap: anywhere;
   font-size: var(--ui-font-page);
@@ -179,18 +182,22 @@
 }
 
 .chat-home-prompt__subtitle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: var(--ui-gap-md);
-  justify-self: center;
-  text-align: center;
-  margin: var(--ui-gap-md) 0 var(--ui-gap-md);
-  padding-inline: calc(var(--ui-composer-content-inset) + var(--oc-border-width));
+  grid-column: 1;
+  margin: var(--ui-gap-xs) 0 0;
+  text-align: start;
   font-size: var(--ui-font-body);
   line-height: var(--ui-line-height-normal);
   color: var(--text-soft);
+}
+
+.chat-home-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ui-gap-sm);
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
 }
 
 .chat-home-action {
@@ -208,21 +215,27 @@
 }
 
 .chat-home-suggestions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) auto;
   align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--ui-gap-md);
+  gap: var(--ui-gap-sm);
 }
 
 .chat-home-suggestion.oc-button {
-  --oc-button-height: var(--oc-density-control-height);
+  --oc-button-height: auto;
   --oc-button-padding-x: var(--ui-gap-lg);
   --oc-button-border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-pill);
+  --oc-button-bg: var(--surface);
+  border-radius: var(--oc-radius-soft);
   --oc-button-color: var(--text-soft);
   justify-content: flex-start;
   min-width: 0;
+  min-height: calc(40px * var(--ui-scale));
+  padding-block: var(--ui-gap-md);
+  white-space: normal;
+  text-align: start;
+  align-self: stretch;
+  line-height: var(--ui-line-height-tight);
   font-weight: var(--ui-font-weight-body);
 }
 
@@ -230,8 +243,25 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--oc-density-icon-button);
+  width: var(--oc-icon-size-medium);
   flex: 0 0 auto;
+  color: var(--text-muted);
+}
+
+@container chat-workbench (max-width: 640px) {
+  .chat-home-prompt {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .chat-home-actions {
+    grid-column: 1;
+    grid-row: auto;
+    margin-top: var(--ui-gap-lg);
+  }
+
+  .chat-home-suggestions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .chat-home-notice {
@@ -791,11 +821,11 @@
 }
 
 .conversation-artifact-summary__header {
-  min-height: calc(56px * var(--ui-scale));
+  min-height: var(--ui-panel-header-height);
   display: flex;
   align-items: center;
   gap: var(--ui-gap-lg);
-  padding: var(--ui-gap-lg) var(--ui-gap-lg);
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
   box-sizing: border-box;
   border-block-end: var(--oc-border-width) solid var(--divider-soft);
 }
@@ -805,8 +835,8 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  width: calc(36px * var(--ui-scale));
-  height: calc(36px * var(--ui-scale));
+  width: var(--oc-density-icon-button);
+  height: var(--oc-density-icon-button);
   border-radius: var(--oc-radius-soft);
   color: var(--text-muted);
   background: var(--surface-inset);
@@ -916,10 +946,9 @@
   padding-block: var(--ui-gap-xs) var(--ui-gap-sm);
 }
 
-.conversation-artifact-summary__artifact,
-.conversation-artifact-summary__file {
+.conversation-artifact-summary__artifact {
   width: 100%;
-  min-height: calc(35px * var(--ui-scale));
+  min-height: var(--oc-density-control-height);
   display: flex;
   align-items: center;
   gap: var(--ui-gap-lg);
@@ -928,6 +957,19 @@
   border: 0;
   border-radius: 0;
   text-align: start;
+}
+
+.conversation-artifact-summary__file.oc-file-row {
+  --oc-file-row-height: var(--oc-density-navigation-row);
+  --oc-file-row-padding-start: var(--ui-gap-lg);
+  --oc-file-row-padding-end: var(--ui-gap-lg);
+
+  display: grid;
+  border-radius: 0;
+}
+
+.conversation-artifact-summary > .empty-hint {
+  padding: var(--ui-gap-sm) var(--ui-gap-lg);
 }
 
 /* __file carries .oc-file-row and takes --hover-wash from that primitive.

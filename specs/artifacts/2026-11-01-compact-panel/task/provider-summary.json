@@ -1,0 +1,31 @@
+{
+  "requests": 17,
+  "models": [
+    "gpt-6.1-sol"
+  ],
+  "streaming": true,
+  "http_statuses": [
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200,
+    200
+  ],
+  "response_reader_states": [
+    "awaiting_binding"
+  ],
+  "reader_boundary": "awaiting_binding means source-reader EOF was not instrumented by this serve-mode plugin; public completed messages and independent output checker establish task completion",
+  "exhausted": false
+}

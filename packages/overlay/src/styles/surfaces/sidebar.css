@@ -1,7 +1,7 @@
 /* Sidebar surface — owns the rail column's shell + header controls. */
 
 .sidebar {
-  --sidebar-static-nav-row-height: calc(36px * var(--ui-scale));
+  --sidebar-static-nav-row-height: var(--oc-density-navigation-row);
 
   width: var(--ui-sidebar-width);
   min-width: min(100%, var(--ui-rail-min-width));
@@ -71,7 +71,7 @@ body .sidebar-header.oc-surface-header {
 }
 
 .sidebar-codex-primary-nav {
-  padding-block: var(--ui-gap-md) var(--ui-gap-xl);
+  padding-block: var(--ui-gap-sm) var(--ui-gap-md);
 }
 
 .sidebar-codex-primary-row {

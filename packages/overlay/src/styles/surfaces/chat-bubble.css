@@ -53,7 +53,7 @@
 }
 
 .chat-bubble {
-  --conversation-transcript-run-gap: calc(12px * var(--ui-scale));
+  --conversation-transcript-run-gap: var(--ui-gap-md);
 
   position: relative;
   display: flex;
@@ -75,7 +75,7 @@
 
 .chat-bubble-row[data-role="user"]:not([data-participant-author]) .chat-bubble {
   overflow: hidden;
-  padding: var(--ui-gap-xl) var(--ui-gap-xl) var(--ui-gap-xl);
+  padding: var(--ui-gap-lg);
   border: var(--oc-border-width) solid var(--conversation-card-edge);
   border-radius: var(--oc-radius-large);
   background: var(--conversation-card-background);

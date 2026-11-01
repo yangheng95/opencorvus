@@ -939,20 +939,22 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
               onValueChange={setSearch}
               disabled={Boolean(busyAction())}
             />
-            <SegmentedControl
-              class="automations-filter"
-              options={filterOptions()}
-              value={filter()}
-              ariaLabel={t("automations.filter_label")}
-              onChange={setFilter}
-            />
-            <SegmentedControl
-              class="automations-filter automations-scope-filter"
-              options={scopeFilterOptions()}
-              value={scopeFilter()}
-              ariaLabel={t("automations.scope_filter_label")}
-              onChange={setScopeFilter}
-            />
+            <div class="automations-filters">
+              <SegmentedControl
+                class="automations-filter"
+                options={filterOptions()}
+                value={filter()}
+                ariaLabel={t("automations.filter_label")}
+                onChange={setFilter}
+              />
+              <SegmentedControl
+                class="automations-filter"
+                options={scopeFilterOptions()}
+                value={scopeFilter()}
+                ariaLabel={t("automations.scope_filter_label")}
+                onChange={setScopeFilter}
+              />
+            </div>
             <Show when={!loading()} fallback={<SettingsEmpty>{t("common.loading")}</SettingsEmpty>}>
               <Show
                 when={filteredAutomations().length > 0}
