@@ -27,6 +27,7 @@ import {
   setComposerQuotation,
   clearComposerDraft,
   composerSubmission,
+  sameComposerDraftRevision,
   type ComposerDraftRevision,
 } from "../services/composer-draft"
 import { quotedPrompt, type Quotation } from "../services/quotation"
@@ -189,6 +190,17 @@ export function SideChatPanel(props: {
     }
   }
   createEffect(on(sourceKey, () => void loadSessions()))
+  function currentDraftRequest(request: SideChatRequest): SideChatRequest {
+    const current = props.request
+    return current?.sourceDraft && request.sourceDraft &&
+      current.source.sessionID === request.source.sessionID &&
+      current.source.directory === request.source.directory &&
+      current.source.authority?.revision === request.source.authority?.revision &&
+      current.intent === request.intent && current.prompt === request.prompt &&
+      current.quotation === request.quotation &&
+      sameComposerDraftRevision(current.sourceDraft, request.sourceDraft)
+      ? current : request
+  }
   async function create(request?: SideChatRequest) {
     if (fileEditorReserved()) return
     const source = request?.source ?? props.source
@@ -206,12 +218,15 @@ export function SideChatPanel(props: {
       setSelected(created.id)
       if (request?.quotation) setComposerQuotation(key(), request.quotation)
       if (request?.prompt) setComposerDraft(key(), request.prompt)
-      if (request) props.consumeRequest(request)
+      if (request) props.consumeRequest(currentDraftRequest(request))
       queueMicrotask(() => {
         if (owns()) textarea?.focus()
       })
     } catch (error) {
-      if (owns()) report(error)
+      if (owns()) {
+        if (request) attemptedRequest = currentDraftRequest(request)
+        report(error)
+      }
     } finally {
       if (owns()) setCreating(false)
     }

@@ -1397,6 +1397,13 @@ consumer clears only that unchanged revision. Creation failure, panel retirement
 and reload retain the main input; retrying an older request preserves newer
 source prose while placing the requested question in its new side draft. Text
 selection and ordinary Side opening retain their existing quotation semantics.
+Repeated main submissions of the same complete source draft revision join the
+existing Side creation. Its successful consumer retires the latest matching
+request wrapper; a failed creation marks that wrapper as attempted and waits for
+an explicit retry. A fresh main submission after failure or the Side Retry action
+can try again. Different author revisions and source/authority scopes retain
+independent intent. The complete revision comparison is shared with accepted
+draft consumption; matching question text alone cannot join requests.
 Removing a quotation returns keyboard focus to that same composer's existing
 enabled, connected and visible textarea while retaining its draft text. Main
 and Side inputs own this synchronous handoff; hidden or inert controls and a

@@ -243,16 +243,20 @@ export function captureComposerDraftRevision(key: string | null | undefined): Co
   } : undefined
 }
 
+/** Match complete author revisions, including their scope and retained request identity. */
+export function sameComposerDraftRevision(a: ComposerDraftRevision, b: ComposerDraftRevision): boolean {
+  return a.key === b.key && a.entry.updated === b.entry.updated && a.entry.text === b.entry.text &&
+    a.entry.quotation?.text === b.entry.quotation?.text &&
+    a.entry.quotation?.sessionID === b.entry.quotation?.sessionID &&
+    a.entry.quotation?.messageID === b.entry.quotation?.messageID &&
+    a.entry.submission?.messageID === b.entry.submission?.messageID &&
+    a.entry.submission?.text === b.entry.submission?.text
+}
+
 /** Consume only the unchanged author's record after its real acceptance receipt. */
 export function clearComposerDraftRevision(revision: ComposerDraftRevision): boolean {
   const current = composerDraftStore.drafts[revision.key]
-  const prior = revision.entry
-  if (!current || current.updated !== prior.updated || current.text !== prior.text ||
-    current.quotation?.text !== prior.quotation?.text ||
-    current.quotation?.sessionID !== prior.quotation?.sessionID ||
-    current.quotation?.messageID !== prior.quotation?.messageID ||
-    current.submission?.messageID !== prior.submission?.messageID ||
-    current.submission?.text !== prior.submission?.text) return false
+  if (!current || !sameComposerDraftRevision(revision, { key: revision.key, entry: current })) return false
   clearComposerDraft(revision.key)
   return true
 }

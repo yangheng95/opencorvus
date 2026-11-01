@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Side Chat 连续操作](records/2026-11/2026-11-01-side-chat-request-ownership.md)：真实双击、作者版本与创建请求归属。
+
 - [/side 原稿交接](records/2026-11/2026-11-01-side-chat-draft-handoff.md)：真实创建失败保留、确认交接与旧重试保护新输入。
 
 - [主输入发送接受与草稿归属](records/2026-11/2026-11-01-composer-send-acceptance.md)：真实失败保留、首次模型时序、幂等重试及新稿保护。

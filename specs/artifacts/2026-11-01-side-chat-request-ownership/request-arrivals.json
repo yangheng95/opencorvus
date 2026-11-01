@@ -1,0 +1,99 @@
+{
+  "requests": [
+    {
+      "at": "2026-11-01T10:54:58.331Z",
+      "phase": "before",
+      "label": "completed",
+      "sourceSessionID": "ses_-zUQHTPMIzzxbzoV1SqG",
+      "createRequests": 2,
+      "requests": [
+        {
+          "id": 83,
+          "at": "2026-11-01T10:45:14.249Z",
+          "method": "POST",
+          "path": "/session/ses_-zUQHTPMIzzxbzoV1SqG/side-chat"
+        },
+        {
+          "id": 86,
+          "at": "2026-11-01T10:45:14.352Z",
+          "method": "POST",
+          "path": "/session/ses_-zUQHTPMIzzxbzoV1SqG/side-chat"
+        }
+      ]
+    },
+    {
+      "at": "2026-11-01T10:54:58.364Z",
+      "phase": "after",
+      "label": "completed",
+      "sourceSessionID": "ses_-zUQHRpo3zzRaoxrFxhl",
+      "createRequests": 9,
+      "requests": [
+        {
+          "id": 78,
+          "at": "2026-11-01T10:51:15.667Z",
+          "method": "POST",
+          "path": "/session/ses_-zUQHRpo3zzRaoxrFxhl/side-chat"
+        },
+        {
+          "id": 92,
+          "at": "2026-11-01T10:51:25.893Z",
+          "method": "POST",
+          "path": "/session/ses_-zUQHRpo3zzRaoxrFxhl/side-chat"
+        },
+        {
+          "id": 93,
+          "at": "2026-11-01T10:51:25.934Z",
+          "method": "POST",
+          "path": "/session/ses_-zUQHRpo3zzRaoxrFxhl/side-chat"
+        },
+        {
+          "id": 120,
+          "at": "2026-11-01T10:52:13.379Z",
+          "method": "POST",
+          "path": "/session/ses_-zUQHRpo3zzRaoxrFxhl/side-chat"
+        },
+        {
+          "id": 157,
+          "at": "2026-11-01T10:52:56.243Z",
+          "method": "POST",
+          "path": "/session/ses_-zUQHRpo3zzRaoxrFxhl/side-chat"
+        },
+        {
+          "id": 158,
+          "at": "2026-11-01T10:52:56.289Z",
+          "method": "POST",
+          "path": "/session/ses_-zUQHRpo3zzRaoxrFxhl/side-chat"
+        },
+        {
+          "id": 173,
+          "at": "2026-11-01T10:53:17.368Z",
+          "method": "POST",
+          "path": "/session/ses_-zUQHRpo3zzRaoxrFxhl/side-chat"
+        },
+        {
+          "id": 189,
+          "at": "2026-11-01T10:53:27.483Z",
+          "method": "POST",
+          "path": "/session/ses_-zUQHRpo3zzRaoxrFxhl/side-chat"
+        },
+        {
+          "id": 223,
+          "at": "2026-11-01T10:54:00.440Z",
+          "method": "POST",
+          "path": "/session/ses_-zUQHRpo3zzRaoxrFxhl/side-chat"
+        }
+      ]
+    }
+  ],
+  "failurePairs": [
+    {
+      "firstErrorAt": "2026-11-01T10:51:25.899Z",
+      "nextClickArrivedAt": "2026-11-01T10:51:25.934Z"
+    },
+    {
+      "firstErrorAt": "2026-11-01T10:52:56.247Z",
+      "nextClickArrivedAt": "2026-11-01T10:52:56.289Z"
+    }
+  ],
+  "interpretation": "Both rapid failure pairs completed their first real 500 before the next click arrived. Each next click is an explicit failed-operation retry; the successful double-clicks each committed one Side."
+}

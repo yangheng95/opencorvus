@@ -13,12 +13,24 @@ import {
   pruneComposerDraftRecords,
   setComposerDraftStore,
   setComposerDraft,
+  sameComposerDraftRevision,
   workspaceComposerDraftKey,
 } from "../src/services/composer-draft"
 
 afterEach(() => setComposerDraftStore("drafts", reconcile({})))
 
 describe("composer draft records", () => {
+  test("matches independent snapshots of the same complete author revision", () => {
+    setComposerDraftStore("drafts", reconcile({ source: {
+      text: "author question", updated: 100,
+      quotation: { text: "exact reference", sessionID: "ses_source", messageID: "msg_source" },
+      submission: { messageID: "msg_request", text: "submitted question" },
+    } }))
+    const first = captureComposerDraftRevision("source")!
+    const second = captureComposerDraftRevision("source")!
+    expect(sameComposerDraftRevision(first, second)).toBe(true)
+  })
+
   test("confirmed handoff retains the target question and consumes its unchanged source command", () => {
     setComposerDraftStore("drafts", reconcile({ source: { text: "/side author question", updated: 100 } }))
     const source = captureComposerDraftRevision("source")!
