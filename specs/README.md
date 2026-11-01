@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [侧边栏当前工作定位](records/2026-11/2026-11-01-sidebar-current-location.md)：主动展开当前路径、精确焦点、保留手动折叠及双语实页。
+
 - [文件工作区连续操作](records/2026-11/2026-11-01-file-workspace-review.md)：统一列表、方向键、滚轮与测量就绪焦点及真实草稿保护。
 
 - [语言选项与命令发现](records/2026-11/2026-11-01-locale-choice-discovery.md)：统一支持目录、当前名称与自称、两入口切换和持久化。

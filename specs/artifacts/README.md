@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [侧边栏当前工作定位](2026-11-01-sidebar-current-location/README.md)：实际折叠、定位、中文提示与数据保全证据。
+
 - [文件工作区连续操作](2026-11-01-file-workspace-review/README.md)：23张原图、失败候选、首次屏外聚焦、滚轮及原草稿。
 
 - [语言选项与命令发现](2026-11-01-locale-choice-discovery/README.md)：16张实图、双语切换、4项纯解析测试及数据保全。

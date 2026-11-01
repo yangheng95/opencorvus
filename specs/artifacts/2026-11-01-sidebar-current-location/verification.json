@@ -1,0 +1,187 @@
+{
+  "at": "2026-11-01T05:05:57.942Z",
+  "scope": "Explicit current work location in the existing sidebar",
+  "singleAgent": true,
+  "userWindowsTouched": false,
+  "userServiceTouched": false,
+  "isolatedPorts": [
+    38518,
+    38519,
+    38520
+  ],
+  "schema": 9,
+  "tables": 92,
+  "initialRows": 234517,
+  "finalRows": 234523,
+  "cases": [
+    {
+      "kind": "before",
+      "uiEntry": "main-DTsRoIV5.js",
+      "originalRows": 234517,
+      "finalRows": 234519,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48093,
+          "after": 48094
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48035,
+          "after": 48036
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 62,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 2998144,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "kind": "after",
+      "uiEntry": "main-ByPqZRvr.js",
+      "originalRows": 234519,
+      "finalRows": 234521,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48094,
+          "after": 48095
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48036,
+          "after": 48037
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 62,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 2612382,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "kind": "after2",
+      "uiEntry": "main-ByPqZRvr.js",
+      "originalRows": 234521,
+      "finalRows": 234523,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48095,
+          "after": 48096
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48037,
+          "after": 48038
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 62,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 2223725,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ],
+  "originalGoals": 9,
+  "originalGoalPublicFactsPreserved": true,
+  "goalReadbackAfterManualReview": true,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1180,
+  "checks": {
+    "types-after2": 0,
+    "i18n-after2": 0,
+    "ui-build-after2": 0
+  },
+  "automatedUITests": 0,
+  "manualScreenshots": [
+    "01-before-current-work-hidden.jpg",
+    "02-before-organization-menu.jpg",
+    "03-before-manually-revealed-work.jpg",
+    "04-after-locate-ready.jpg",
+    "05-after-located-current-work.jpg",
+    "06-after-selection-preserves-collapse.jpg",
+    "07-after-keyboard-locates-collapsed-work.jpg",
+    "08-after-one-list-before-locate.jpg",
+    "09-after-one-list-located.jpg",
+    "10-after-one-list-nested-task.jpg",
+    "11-after-project-nested-task.jpg",
+    "12-after-pinned-nested-task.jpg",
+    "13-after-chinese-located-task.jpg",
+    "14-after-project-context.jpg",
+    "15-after-unrepresented-project.jpg",
+    "16-final-project-task.jpg",
+    "17-final-one-list-keyboard.jpg",
+    "18-final-unavailable-guidance-en.jpg",
+    "19-final-unavailable-guidance-zh.jpg",
+    "20-final-project-guidance-action.jpg",
+    "21-final-chinese-task.jpg",
+    "22-final-current-task-context.jpg"
+  ],
+  "finalBuildScreenshots": [
+    "16-final-project-task.jpg",
+    "17-final-one-list-keyboard.jpg",
+    "18-final-unavailable-guidance-en.jpg",
+    "19-final-unavailable-guidance-zh.jpg",
+    "20-final-project-guidance-action.jpg",
+    "21-final-chinese-task.jpg",
+    "22-final-current-task-context.jpg"
+  ],
+  "manualCoverage": [
+    "pointer, Enter and Space location",
+    "project selection preserves manual collapse",
+    "outer project prefix and one-list item prefix",
+    "nested Task in project, one-list and pinned partitions",
+    "original project pin/unpin round trip",
+    "project-only context and unavailable target",
+    "English and Chinese final guidance"
+  ],
+  "limits": [
+    "Current dataset has at most three top-level items per Project; a Project group with more than five items was not manually exercised.",
+    "Authority/focus invalidation was reviewed in code; race fault injection was not performed."
+  ],
+  "releaseCreated": false
+}

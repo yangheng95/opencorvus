@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [侧边栏当前工作定位](2026-11-01-sidebar-current-location.md)：普通/单列表/置顶及嵌套Task的真实主动定位。
+
 - [文件工作区连续操作](2026-11-01-file-workspace-review.md)：方向浏览、真实虚拟列表/滚轮根因与完整复验。
 
 - [语言选项与命令发现](2026-11-01-locale-choice-discovery.md)：命令/设置同源、双语发现与原ID保持。

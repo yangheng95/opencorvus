@@ -12,6 +12,8 @@ export interface LedgerListProps<T> {
   emptyLabel: string
   retryLabel?: string
   onRetry?: () => void
+  revealItem?: T
+  onRevealReady?: () => void
   children: (item: T) => JSX.Element
 }
 
@@ -64,7 +66,12 @@ export function LedgerList<T>(props: LedgerListProps<T>) {
         </div>
       </Show>
       <Show when={props.items.length > 0}>
-        <ProgressiveList items={props.items} dataUi="ledger-progressive-list">
+        <ProgressiveList
+          items={props.items}
+          dataUi="ledger-progressive-list"
+          revealItem={props.revealItem}
+          onRevealReady={props.onRevealReady}
+        >
           {(item) => props.children(item)}
         </ProgressiveList>
       </Show>

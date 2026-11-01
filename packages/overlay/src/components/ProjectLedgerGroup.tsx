@@ -49,7 +49,17 @@ export function createProjectLedgerGroupCollapseState() {
     })
   }
 
-  return { isCollapsed, toggle }
+  function expand(directory: string): void {
+    const key = projectDirectoryKey(directory)
+    setCollapsedDirectories((current) => {
+      if (!current[key]) return current
+      const next = { ...current }
+      delete next[key]
+      return next
+    })
+  }
+
+  return { isCollapsed, toggle, expand }
 }
 
 function projectLedgerGroupBodyElementID(directory: string, dataUi: string | undefined): string {

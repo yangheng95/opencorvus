@@ -824,6 +824,8 @@ function WorkLedgerProjectGroupView(props: {
   onArchiveChat: WorkLedgerProps["onArchiveChat"]
   showProjectHeader?: boolean
   anonymousProjectHeader?: boolean
+  revealItem?: RenderWorkLedgerTopLevelItemRow
+  onRevealReady?: () => void
 }) {
   const collapsed = () => props.directoryCollapse.isCollapsed(props.group.directory)
   const renderRows = () => (
@@ -831,6 +833,8 @@ function WorkLedgerProjectGroupView(props: {
       items={props.group.items}
       initialVisibleCount={props.showProjectHeader === false ? 8 : 5}
       class="work-ledger-rows"
+      revealItem={props.revealItem}
+      onRevealReady={props.onRevealReady}
     >
       {(row) => (
         <WorkLedgerRowView
@@ -904,6 +908,7 @@ export function WorkLedger(props: WorkLedgerProps) {
   let loadedRows: WorkLedgerRow[] = []
   let startGlobalChatAfterCreateMenuClose = false
   let projectsScrollRef!: HTMLDivElement
+  let disposed = false
   let projectPinFocusSequence = 0
   const [projectPinFocus, setProjectPinFocus] = createSignal<{
     sequence: number
@@ -1072,6 +1077,7 @@ export function WorkLedger(props: WorkLedgerProps) {
   })
 
   onCleanup(() => {
+    disposed = true
     loadSequence += 1
     controller?.abort()
     organizationPreferenceOwner.invalidate()
@@ -1142,6 +1148,129 @@ export function WorkLedger(props: WorkLedgerProps) {
     if (props.primarySurface !== "conversation") return false
     if (row.kind === "task") return props.selectedTaskID === row.id
     return props.selectedSessionID === row.id || ("sessionID" in row && props.selectedSessionID === row.sessionID)
+  }
+
+  const currentLocation = createMemo(() => {
+    const directory = activeProjectDirectory()
+    const group = groups.find((item) => projectDirectoryKey(item.directory) === projectDirectoryKey(directory))
+    if (!group) return null
+    for (const row of group.items) {
+      const child = row.kind === "mission" ? row.tasks.find(selected) : undefined
+      if (child || selected(row)) {
+        return {
+          directory: group.directory,
+          parentRowKey: rowKey(row),
+          rowKey: rowKey(child ?? row),
+          pinned: isPinnedProjectGroup(group),
+        }
+      }
+    }
+    if (props.primarySurface === "conversation" && (props.selectedTaskID || props.selectedSessionID)) return null
+    if (!isPinnedProjectGroup(group) && settingsStore.workLedgerOrganization === "one-list") return null
+    return {
+      directory: group.directory,
+      parentRowKey: undefined,
+      rowKey: undefined,
+      pinned: isPinnedProjectGroup(group),
+    }
+  })
+  const locationContext = () =>
+    JSON.stringify([
+      captureApiAuthority().revision,
+      activeProjectDirectory(),
+      props.primarySurface,
+      props.selectedTaskID,
+      props.selectedSessionID,
+      settingsStore.workLedgerOrganization,
+      settingsStore.workLedgerSort,
+    ])
+  const [locateRequest, setLocateRequest] = createSignal<{
+    context: string
+    authority: ApiAuthority
+    target: NonNullable<ReturnType<typeof currentLocation>>
+    origin: HTMLButtonElement
+  } | null>(null)
+
+  createEffect(() => {
+    const request = locateRequest()
+    if (!request) return
+    const target = currentLocation()
+    if (
+      loading() ||
+      error() ||
+      request.context !== locationContext() ||
+      !target ||
+      target.directory !== request.target.directory ||
+      target.rowKey !== request.target.rowKey ||
+      target.pinned !== request.target.pinned
+    )
+      setLocateRequest(null)
+  })
+
+  function finishLocate(): void {
+    const request = locateRequest()
+    if (!request || disposed) return
+    if (
+      !isApiAuthorityCurrent(request.authority) ||
+      request.context !== locationContext() ||
+      loading() ||
+      error() ||
+      (document.activeElement !== request.origin && document.activeElement !== document.body)
+    ) {
+      setLocateRequest(null)
+      return
+    }
+    const region = projectsScrollRef?.querySelector<HTMLElement>(
+      request.target.pinned ? '[data-ui="work-ledger-pinned-groups"]' : '[data-ui="ledger-list"]',
+    )
+    let target: HTMLElement | null = null
+    if (request.target.rowKey) {
+      const row = Array.from(region?.querySelectorAll<HTMLElement>('[data-ui="work-ledger-row"]') ?? []).find(
+        (element) => element.dataset.rowKey === request.target.rowKey,
+      )
+      target = row?.querySelector<HTMLElement>(".work-row-main") ?? null
+    } else {
+      const group = Array.from(
+        region?.querySelectorAll<HTMLElement>(".project-group[data-project-directory]") ?? [],
+      ).find(
+        (element) =>
+          projectDirectoryKey(element.dataset.projectDirectory ?? "") === projectDirectoryKey(request.target.directory),
+      )
+      target = group?.querySelector<HTMLElement>('[data-ui="project-group-toggle"]') ?? null
+    }
+    if (
+      !target?.isConnected ||
+      target.matches(":disabled") ||
+      target.getClientRects().length === 0 ||
+      target.closest('[hidden], [inert], [aria-hidden="true"]')
+    )
+      return
+    target.focus()
+    if (document.activeElement === target) setLocateRequest(null)
+  }
+
+  function locateCurrentWork(origin: HTMLButtonElement): void {
+    const target = currentLocation()
+    if (!target || loading() || error()) return
+    setLocateRequest({ target, origin, authority: captureApiAuthority(), context: locationContext() })
+    directoryCollapse.expand(target.directory)
+    queueMicrotask(finishLocate)
+  }
+
+  const revealGroup = () => {
+    const request = locateRequest()
+    if (!request || request.target.pinned) return undefined
+    return settingsStore.workLedgerOrganization === "by-project"
+      ? unpinnedGroups().find(
+          (group) => projectDirectoryKey(group.directory) === projectDirectoryKey(request.target.directory),
+        )
+      : oneListGroups[0]
+  }
+
+  function revealRow(group: WorkLedgerGroup): RenderWorkLedgerTopLevelItemRow | undefined {
+    const request = locateRequest()
+    if (!request?.target.parentRowKey) return undefined
+    return group.items.find((row) => rowKey(row) === request.target.parentRowKey)
   }
 
   function selectRow(row: WorkLedgerItemRow): void {
@@ -1253,6 +1382,8 @@ export function WorkLedger(props: WorkLedgerProps) {
       onArchiveChat={props.onArchiveChat}
       showProjectHeader={showProjectHeader}
       anonymousProjectHeader={anonymousProjectHeader}
+      revealItem={dataUi === "work-ledger-recents" ? undefined : revealRow(group)}
+      onRevealReady={finishLocate}
     />
   )
 
@@ -1269,18 +1400,44 @@ export function WorkLedger(props: WorkLedgerProps) {
           />
         </div>
       </div>
-      <div ref={projectsScrollRef} class="work-ledger-projects-scroll" id="workLedgerProjectsScroll" data-ui="work-ledger-projects-scroll">
+      <div
+        ref={projectsScrollRef}
+        class="work-ledger-projects-scroll"
+        id="workLedgerProjectsScroll"
+        data-ui="work-ledger-projects-scroll"
+      >
         <Show when={pinnedProjects().length > 0}>
           <div class="work-ledger-section-title oc-section-heading">{t("work_ledger.pinned")}</div>
           <div class="work-ledger-pinned-groups" data-ui="work-ledger-pinned-groups">
             <For each={pinnedProjects()}>
-              {(group) => projectGroupView(group, "work-ledger-pinned-project-group", true, isImplicitProjectDirectory(group.directory))}
+              {(group) =>
+                projectGroupView(
+                  group,
+                  "work-ledger-pinned-project-group",
+                  true,
+                  isImplicitProjectDirectory(group.directory),
+                )
+              }
             </For>
           </div>
         </Show>
         <div class="work-ledger-projects-toolbar" data-ui="work-ledger-projects-toolbar">
           <div class="work-ledger-section-title oc-section-heading">{t("work_ledger.title")}</div>
           <div class="work-ledger-projects-toolbar-actions">
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              tone="neutral"
+              data-chrome="icon-action"
+              data-ui="work-ledger-locate-current"
+              title={t(currentLocation() ? "work_ledger.locate_current" : "work_ledger.locate_unavailable")}
+              aria-label={t("work_ledger.locate_current")}
+              disabled={loading() || Boolean(error()) || !currentLocation()}
+              onClick={(event) => locateCurrentWork(event.currentTarget)}
+            >
+              <Icon name="locate-current" />
+            </Button>
             <DropdownMenu.Root placement="bottom-start" gutter={6} fitViewport>
               <DropdownMenu.Trigger
                 as={Button}
@@ -1472,6 +1629,8 @@ export function WorkLedger(props: WorkLedgerProps) {
           emptyLabel={t("work_ledger.empty")}
           retryLabel={t("common.retry")}
           onRetry={() => void reload()}
+          revealItem={revealGroup()}
+          onRevealReady={finishLocate}
         >
           {(group) =>
             projectGroupView(

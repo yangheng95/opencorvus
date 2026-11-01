@@ -3020,6 +3020,19 @@ remains presentation-owned: selecting a descendant neither collapses nor
 expands the Project, while an already visible selected Mission child keeps its
 Mission drawer open after pointer and keyboard focus leave.
 
+The Projects toolbar provides an explicit localized `Locate current work`
+action. It derives the target from the current ledger projection and the same
+selection predicate, opens only its required Project and progressive-list
+ancestors, and focuses the actual selected row in Pinned or Projects. Nested
+Tasks retain their canonical Mission ancestor. Project-only views target their
+existing Project header; an unrepresented target disables the action. Recents
+does not serve as a second target. The existing collapse/list owners remain the
+only expansion facts, and ordinary selection retains the collapse contract
+above. The transient request expires on API authority, directory, selection,
+organization or sort changes, loading, error, target retirement or unmount;
+focus acquired by another control wins. Locating changes presentation and native
+focus/visibility only, with no navigation, persisted mutation or model request.
+
 The selected durable item owns one declarative Conversation header identity.
 Its title sits beside one Kobalte ellipsis menu containing exactly Pin/Unpin,
 Rename, and Archive, and the menu delegates to the same Work Ledger/domain
