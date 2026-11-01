@@ -1,0 +1,254 @@
+{
+  "at": "2026-11-01T05:34:00.494Z",
+  "scope": "Scheduled authoring draft entry, project search and retained multi-selection, read-only target identity",
+  "singleAgent": true,
+  "userWindowsTouched": false,
+  "userServiceTouched": false,
+  "isolatedPorts": [
+    38521,
+    38522
+  ],
+  "schema": 9,
+  "tables": 92,
+  "initialRows": 234523,
+  "finalRows": 234537,
+  "cases": [
+    {
+      "kind": "before",
+      "uiEntry": "main-ByPqZRvr.js",
+      "originalRows": 234523,
+      "finalRows": 234532,
+      "changes": [
+        {
+          "table": "automation_fire",
+          "before": 2,
+          "after": 3
+        },
+        {
+          "table": "automation_project_target",
+          "before": 0,
+          "after": 4
+        },
+        {
+          "table": "automation",
+          "before": 5,
+          "after": 7
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48096,
+          "after": 48097
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48038,
+          "after": 48039
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 62,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 3020854,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "kind": "after",
+      "uiEntry": "main-D-dJxxLr.js",
+      "originalRows": 234532,
+      "finalRows": 234537,
+      "changes": [
+        {
+          "table": "automation_project_target",
+          "before": 4,
+          "after": 6
+        },
+        {
+          "table": "automation",
+          "before": 7,
+          "after": 8
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48097,
+          "after": 48098
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48039,
+          "after": 48040
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 62,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 2507429,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ],
+  "originalGoals": 9,
+  "originalGoalPublicFactsPreserved": true,
+  "goalReadbackAfterManualReview": true,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1180,
+  "checks": {
+    "types-final": 0,
+    "i18n-after": 0,
+    "ui-build-after": 0
+  },
+  "definitionCheckpoints": {
+    "before": {
+      "id": "atm_g0VZhCcWe0007YAwbWFW",
+      "revisionId": "atm_g0VZhCfoO00jpJeMAxhp",
+      "name": "项目目标筛选验收860 BEFORE",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hU2x5qELOWzhTRNnVUxn",
+          "prj_h1LNzctnkMfyYf3ccSFP"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "status": "paused",
+      "nextRun": 4071258000000,
+      "lastRun": null,
+      "originalDefinitionsPreserved": 2
+    },
+    "after-enter": {
+      "id": "atm_g0VZhCcWe0007YAwbWFW",
+      "revisionId": "atm_g0VZhCfoO00jpJeMAxhp",
+      "name": "项目目标筛选验收860 BEFORE",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hU2x5qELOWzhTRNnVUxn",
+          "prj_h1LNzctnkMfyYf3ccSFP"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "status": "paused",
+      "nextRun": 4071258000000,
+      "lastRun": null,
+      "originalDefinitionsPreserved": 2
+    },
+    "after-cancel": {
+      "id": "atm_g0VZhCcWe0007YAwbWFW",
+      "revisionId": "atm_g0VZhCfoO00jpJeMAxhp",
+      "name": "项目目标筛选验收860 BEFORE",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hU2x5qELOWzhTRNnVUxn",
+          "prj_h1LNzctnkMfyYf3ccSFP"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "status": "paused",
+      "nextRun": 4071258000000,
+      "lastRun": null,
+      "originalDefinitionsPreserved": 2
+    },
+    "after": {
+      "id": "atm_g0VZhCcWe0007YAwbWFW",
+      "revisionId": "atm_g0VZhExRb00EjCX5i7L1",
+      "name": "项目目标筛选验收860 AFTER",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hU2x5qELOWzhTRNnVUxn",
+          "prj_h1LNzctnkMfyYf3ccSFP"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "status": "paused",
+      "nextRun": 4071258000000,
+      "lastRun": null,
+      "originalDefinitionsPreserved": 2
+    },
+    "after-final": {
+      "id": "atm_g0VZhCcWe0007YAwbWFW",
+      "revisionId": "atm_g0VZhExRb00EjCX5i7L1",
+      "name": "项目目标筛选验收860 AFTER",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hU2x5qELOWzhTRNnVUxn",
+          "prj_h1LNzctnkMfyYf3ccSFP"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "status": "paused",
+      "nextRun": 4071258000000,
+      "lastRun": null,
+      "originalDefinitionsPreserved": 2
+    }
+  },
+  "automatedUITests": 0,
+  "removedDisplayCopyTestFiles": 1,
+  "manualScreenshots": [
+    "01-before-new-automation.jpg",
+    "02-before-header-resets-authored-draft.jpg",
+    "03-before-project-picker.jpg",
+    "04-before-saved-paused-project-targets.jpg",
+    "05-after-detail-shows-targets.jpg",
+    "06-after-filter-preserves-hidden-selection.jpg",
+    "07-after-keyboard-visible-selection.jpg",
+    "08-after-hidden-project-retained.jpg",
+    "09-after-clear-preserves-two-targets.jpg",
+    "10-after-empty-search-retains-selection.jpg",
+    "11-after-reopen-original-edit.jpg",
+    "12-after-saved-target-identities.jpg",
+    "13-after-create-draft-controls.jpg",
+    "14-after-chinese-target-summary.jpg",
+    "15-after-chinese-search-selection.jpg",
+    "16-after-chinese-empty-search.jpg",
+    "17-after-final-chinese-targets.jpg"
+  ],
+  "candidateScreenshots": [
+    "05-after-detail-shows-targets.jpg",
+    "06-after-filter-preserves-hidden-selection.jpg",
+    "07-after-keyboard-visible-selection.jpg",
+    "08-after-hidden-project-retained.jpg",
+    "09-after-clear-preserves-two-targets.jpg",
+    "10-after-empty-search-retains-selection.jpg",
+    "11-after-reopen-original-edit.jpg",
+    "12-after-saved-target-identities.jpg",
+    "13-after-create-draft-controls.jpg",
+    "14-after-chinese-target-summary.jpg",
+    "15-after-chinese-search-selection.jpg",
+    "16-after-chinese-empty-search.jpg",
+    "17-after-final-chinese-targets.jpg"
+  ],
+  "limits": [
+    "Missing discovered project identity rendering was reviewed in code; no project-deletion scenario was introduced.",
+    "Execution and race fault injection were outside this presentation change; no model run was submitted."
+  ],
+  "releaseCreated": false
+}

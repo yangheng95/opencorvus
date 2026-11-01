@@ -1237,6 +1237,20 @@ Authoring failures focus the current Feedback after render, preserving the
 entered fields and existing edit snapshot. Background list reads do not acquire
 that form focus. Initialization keeps all original project/model diagnostics
 in Details while retaining list-load failure identity when applicable.
+
+Scheduled authoring exposes its own Save, Cancel and Back controls; the page
+header's New automation action belongs to list and read-only detail views, so
+it cannot reset the active authoring form. Project targeting searches the current
+discovery inventory through the existing multi-term metadata matcher, including
+the canonical localized ledger label, original name, directory and Project ID.
+The existing selected-directory owner retains hidden selections while the
+controlled Listbox edits only its current visible subset. Localized result and
+selection counts, empty feedback and search keyboard handoff use the existing
+SearchField/Listbox primitives. Search Enter keeps authoring in place, and
+Escape clears its query. Read-only Project-scoped details display every saved
+target ID through its discovered name/directory, retaining the original ID when
+discovery cannot name it. Search and presentation do not alter target identity,
+revision admission, recurrence, execution mode or scheduling.
 Explicit return to the list starts its existing foreground read; row selection
 and deletion stay unavailable while that read is in progress. The form's list
 back button consumes the same owner, so reopening follows the latest definition.

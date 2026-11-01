@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [计划任务作者与项目目标](2026-11-01-scheduled-target-review/README.md)：17张原图、原版本取消/保存、目标ID及数据保全回执。
+
 - [侧边栏当前工作定位](2026-11-01-sidebar-current-location/README.md)：实际折叠、定位、中文提示与数据保全证据。
 
 - [文件工作区连续操作](2026-11-01-file-workspace-review/README.md)：23张原图、失败候选、首次屏外聚焦、滚轮及原草稿。

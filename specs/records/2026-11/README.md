@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [计划任务作者与项目目标](2026-11-01-scheduled-target-review.md)：62项目检索、隐藏选择保留、远期定义及双语实页。
+
 - [侧边栏当前工作定位](2026-11-01-sidebar-current-location.md)：普通/单列表/置顶及嵌套Task的真实主动定位。
 
 - [文件工作区连续操作](2026-11-01-file-workspace-review.md)：方向浏览、真实虚拟列表/滚轮根因与完整复验。

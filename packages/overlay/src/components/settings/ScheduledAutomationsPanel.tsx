@@ -35,6 +35,8 @@ import { loadProviderInfo } from "../../services/config-load"
 import { connectedModelOptions, type ConnectedModelOption } from "../../services/llm"
 import { closeConfigDialog } from "../../services/config-dialog-control"
 import { localeTag, t } from "../../utils/i18n"
+import { projectLedgerDisplayName } from "../../utils/project-directory"
+import { matchesSearchTerms } from "../../services/text-search"
 import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { AutoGrowTextarea } from "../ui/AutoGrowTextarea"
 import { Badge, type BadgeTone } from "../ui/Badge"
@@ -142,6 +144,15 @@ function reasoningLabel(value: string): string {
   return value ? value.charAt(0).toUpperCase() + value.slice(1) : t("automations.reasoning_default")
 }
 
+function projectOptionLabel(project: DiscoveredProject): string {
+  return projectLedgerDisplayName({
+    directory: project.directory,
+    customName: project.name,
+    unknownName: t("task.project.unknown"),
+    implicitProjectName: t("work_ledger.implicit_project_row"),
+  })
+}
+
 function selectOption<T extends string>(options: SelectOption<T>[], value: T): SelectOption<T> {
   return options.find((option) => option.value === value) ?? options[0]
 }
@@ -217,6 +228,17 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const [prompt, setPrompt] = createSignal("")
   const [scope, setScope] = createSignal<AutomationScope>("global")
   const [selectedProjectDirectories, setSelectedProjectDirectories] = createSignal<string[]>([])
+  const [projectSearch, setProjectSearch] = createSignal("")
+  const visibleProjects = createMemo(() =>
+    projects().filter((project) =>
+      matchesSearchTerms(projectSearch(), [projectOptionLabel(project), project.name, project.directory, project.id]),
+    ),
+  )
+  const visibleSelectedProjects = createMemo(() =>
+    visibleProjects()
+      .filter((project) => selectedProjectDirectories().includes(project.directory))
+      .map((project) => project.directory),
+  )
   const [executionMode, setExecutionMode] = createSignal<AutomationExecutionMode>("local")
   const [preset, setPreset] = createSignal<AutomationRecurrencePreset>("daily")
   const [time, setTime] = createSignal("09:00")
@@ -238,8 +260,13 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   let listElement: HTMLElement | undefined
   let detailBackButton: HTMLButtonElement | undefined
   let formNameInput: HTMLInputElement | undefined
+  let projectListElement: HTMLUListElement | undefined
   let errorFeedbackElement: HTMLDivElement | undefined
   const selected = createMemo(() => automations().find((automation) => automation.id === selectedID()) ?? null)
+  const detailProjectIDs = createMemo(() => {
+    const target = selected()?.target
+    return target?.scope === "project" ? target.projectIds : []
+  })
   const selectedRunState = createMemo(() => {
     const state = runState()
     return state.automationID === selectedID()
@@ -373,6 +400,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     const zone = recurrence?.timeZone ?? browserTimeZone()
     const calendar = recurrence ?? automationRecurrenceDefaults(zone)
     setName(automation?.name ?? "")
+    setProjectSearch("")
     setPrompt(automation?.prompt ?? "")
     setScope(automation?.target.scope ?? "global")
     setSelectedProjectDirectories(
@@ -503,6 +531,15 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setError(null)
     setScope(nextScope)
     if (nextScope === "session") setExecutionMode("local")
+  }
+
+  function applyProjectSelection(next: Set<string>): void {
+    setError(null)
+    const visible = new Set(visibleProjects().map((project) => project.directory))
+    setSelectedProjectDirectories((current) => [
+      ...current.filter((directory) => !visible.has(directory)),
+      ...[...next].filter((directory) => visible.has(directory)),
+    ])
   }
 
   function beginEdit(): void {
@@ -763,7 +800,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       <div class="automations-page-intro">
         <p>{t("automations.subtitle")}</p>
         <div class="automations-page-actions">
-          <Show when={!initialLoadError()}>
+          <Show when={!initialLoadError() && !showForm()}>
           <Button
             type="button"
             variant="solid"
@@ -1102,6 +1139,25 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         </div>
                       </div>
 
+                      <Show when={detailProjectIDs().length > 0}>
+                        <section class="automation-target-summary">
+                          <h4>{t("automations.project_targets")}</h4>
+                          <ul class="automation-target-summary-list">
+                            <For each={detailProjectIDs()}>
+                              {(id) => {
+                                const project = () => projects().find((item) => item.id === id)
+                                return (
+                                  <li>
+                                    <strong>{project() ? projectOptionLabel(project()!) : id}</strong>
+                                    <Show when={project()}>{(value) => <small>{value().directory}</small>}</Show>
+                                  </li>
+                                )
+                              }}
+                            </For>
+                          </ul>
+                        </section>
+                      </Show>
+
                       <section class="automation-prompt">
                         <h4>{t("automations.prompt")}</h4>
                         <p>{automation().prompt}</p>
@@ -1300,20 +1356,49 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                   <Show when={scope() === "project"}>
                     <div class="automation-project-targets automation-field-wide">
                       <strong>{t("automations.project_targets")}</strong>
+                      <SearchField
+                        clearable
+                        value={projectSearch()}
+                        placeholder={t("automations.project_search")}
+                        onValueChange={setProjectSearch}
+                        disabled={Boolean(busyAction())}
+                        onKeyDown={(event) => {
+                          if (event.key === "Enter") {
+                            event.preventDefault()
+                            return
+                          }
+                          if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return
+                          const options = projectListElement?.isConnected
+                            ? projectListElement.querySelectorAll<HTMLElement>('[role="option"]:not([aria-disabled="true"])')
+                            : undefined
+                          const target = event.key === "ArrowDown" ? options?.[0] : options?.[options.length - 1]
+                          if (!target) return
+                          event.preventDefault()
+                          target.focus()
+                        }}
+                      />
+                      <span class="automations-muted" role="status" aria-live="polite">
+                        {t("automations.project_results", {
+                          visible: visibleProjects().length.toLocaleString(localeTag()),
+                          total: projects().length.toLocaleString(localeTag()),
+                          selected: selectedProjectDirectories().length.toLocaleString(localeTag()),
+                        })}
+                      </span>
+                      <Show when={visibleProjects().length > 0} fallback={
+                        <span class="automations-muted">{t(projects().length > 0 ? "automations.project_search_empty" : "automations.project_targets_empty")}</span>
+                      }>
                       <ListboxRoot<DiscoveredProject>
+                        ref={projectListElement}
                         class="automation-project-target-list"
                         density="rich"
                         aria-label={t("automations.project_targets")}
-                        options={projects()}
+                        options={visibleProjects()}
                         optionValue={(project) => project.directory}
-                        optionTextValue={(project) => project.name}
-                        value={selectedProjectDirectories()}
+                        optionTextValue={projectOptionLabel}
+                        value={visibleSelectedProjects()}
                         selectionMode="multiple"
                         selectionBehavior="toggle"
-                        onChange={(next) => {
-                          setError(null)
-                          setSelectedProjectDirectories([...next])
-                        }}
+                        onChange={applyProjectSelection}
                         renderItem={(node) => {
                           const project = node.rawValue
                           return (
@@ -1328,15 +1413,13 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                                 </Show>
                               </span>
                               <span>
-                                <strong>{project.name}</strong>
-                                <small>{project.directory}</small>
+                                <strong>{projectOptionLabel(project)}</strong>
+                                <small title={project.directory}>{project.directory}</small>
                               </span>
                             </ListboxItem>
                           )
                         }}
                       />
-                      <Show when={projects().length === 0}>
-                        <span class="automations-muted">{t("automations.project_targets_empty")}</span>
                       </Show>
                     </div>
                     <TextField.Root>
