@@ -888,9 +888,27 @@ Automatic Project allocation transfers the current draft from its global launche
 key to its admitted Project key through the same draft-store operation used for
 Project-to-Session creation. Each transfer reads the latest source record and
 retains its text and existing quotation, with other scopes preserved. An
-independently authored destination retains both records. Successful dispatch
-clears the admitted input without leaving the sent text in the global launcher.
-Persisted draft format and submission identity boundaries retain their contracts.
+independently authored destination retains both records. Ordinary first-send
+Session creation uses the same transfer, notifying the admitted Session scope
+before its view is hydrated. Dispatch captures the admitted draft revision and
+retains the original input and attachments until durable acceptance. A validated
+real user Message with the exact Session/Message identity, or the successful
+Session response, acknowledges that input. Mission wake and Task follow-up use
+their existing successful acceptance responses before loading their views.
+Acceptance consumes only the unchanged authored text, quotation, attachment
+references and draft revision; a late receipt preserves newer input. Failures
+before acceptance retain the input for explicit retry; failures after acceptance
+identify that the message was received while keeping the original diagnostics.
+Session and Mission retries retain the existing draft submission identity for
+the exact serialized request content, including files and model. The existing
+submission.text stores that content identity; draft.text remains author prose.
+Before a Session dispatch without an explicit model, the request reads its exact
+Session's effective configuration through the existing config owner. Passive
+view projection completion cannot change the identity of an unchanged retry.
+An unresolved model retains the preparation error and authored input.
+No persisted fields or storage version change. Confirmed Stop retires its matching
+retry identity while preserving unaccepted prose. Task's existing message contract
+has no caller identity, so unknown-result Task retries do not claim this guarantee.
 
 The registered file owner exposes its existing dirty memo for browser exit.
 Only dirty pages register cancellable beforeunload confirmation. Actual page

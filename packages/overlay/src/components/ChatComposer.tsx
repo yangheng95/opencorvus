@@ -60,7 +60,9 @@ import {
   nextComposerTextareaKeyboardHeight,
 } from "./composer-resizer"
 import {
-  clearComposerDraft,
+  captureComposerDraftRevision,
+  clearComposerDraftRevision,
+  type ComposerDraftRevision,
   composerDraftText,
   normalizeComposerDraftKey,
   setComposerDraft,
@@ -131,6 +133,14 @@ export interface ChatAttachment {
   size: number
 }
 
+function sameAttachmentReferences(left: readonly ChatAttachment[], right: readonly ChatAttachment[]): boolean {
+  return left.length === right.length && left.every((item, index) => {
+    const other = right[index]!
+    return item.kind === other.kind && item.sha === other.sha && item.mime === other.mime &&
+      item.url === other.url && item.filename === other.filename && item.size === other.size
+  })
+}
+
 export type { ExpertSquadOption } from "../services/expert-squad"
 
 interface ComposerIntentOption<T extends string> {
@@ -148,6 +158,12 @@ export interface ComposerSkillOption {
 export interface ComposerSubmitDirectives {
   expertSquadIDs: string[]
   missionSkillNames: string[]
+}
+
+export interface ComposerSubmissionCallbacks {
+  onScope: (draftKey: string, selectionEpoch: number) => void
+  onDispatch: () => void
+  onAccepted: () => void
 }
 
 export interface ChatComposerProps {
@@ -171,7 +187,7 @@ export interface ChatComposerProps {
     attachments: ChatAttachment[],
     webSearch: boolean,
     directives: ComposerSubmitDirectives,
-    markDispatched: () => void,
+    submission: ComposerSubmissionCallbacks,
     authority: ApiAuthority,
   ) => void | Promise<void>
   /** Resolve and activate the Project that owns a real attachment upload. */
@@ -606,6 +622,10 @@ export function ChatComposer(props: ChatComposerProps) {
   const setAttachments = (next: ChatAttachment[] | ((prev: ChatAttachment[]) => ChatAttachment[])) => {
     const nextValue =
       typeof next === "function" ? (next as (prev: ChatAttachment[]) => ChatAttachment[])(attachments()) : next
+    if (!sameAttachmentReferences(nextValue, attachments())) {
+      const draft = composerDraftText(props.draftKey)
+      if (draft) setComposerDraft(props.draftKey, draft)
+    }
     setChatAttachments(nextValue)
   }
   const [dragover, setDragover] = createSignal(false)
@@ -613,7 +633,7 @@ export function ChatComposer(props: ChatComposerProps) {
   const [caretPosition, setCaretPosition] = createSignal(0)
   const [dismissedMentionQueryKey, setDismissedMentionQueryKey] = createSignal("")
   const [highlightedMentionKey, setHighlightedMentionKey] = createSignal("")
-  const [submissionError, setSubmissionError] = createSignal<{ cause: unknown }>()
+  const [submissionError, setSubmissionError] = createSignal<{ cause: unknown; accepted: boolean }>()
   createEffect(
     on(
       () => props.draftKey,
@@ -622,6 +642,7 @@ export function ChatComposer(props: ChatComposerProps) {
   )
   const [submitting, setSubmitting] = createSignal(false)
   let submissionGeneration = 0
+  onCleanup(() => { submissionGeneration += 1 })
   createEffect(
     on(
       () => captureApiAuthority().revision,
@@ -1088,14 +1109,21 @@ export function ChatComposer(props: ChatComposerProps) {
     if (uploadingCount() > 0) return
     if (!composerEnabled()) return
     if (!modelAvailable() && !localCommand()) return
-    const trimmed = text().trim()
+    const authoredText = text()
+    const trimmed = authoredText.trim()
     if (!trimmed) return
-    const sentAttachments = [...attachments()]
+    const sentAttachments = attachments().map((attachment) => ({ ...attachment }))
     const submittedDraftKey = props.draftKey
     const authority = captureApiAuthority()
     const generation = ++submissionGeneration
     const owns = () => generation === submissionGeneration && isApiAuthorityCurrent(authority)
-    const quotation = composerQuotation(submittedDraftKey)
+    const quote = composerQuotation(submittedDraftKey)
+    const quotation = quote ? { ...quote } : undefined
+    let scope = { key: normalizeComposerDraftKey(submittedDraftKey), epoch: boardStore.selectEpoch }
+    let dispatched = false
+    let accepted = false
+    let revision: ComposerDraftRevision | undefined
+    const ownsScope = () => owns() && normalizeComposerDraftKey(props.draftKey) === scope.key && boardStore.selectEpoch === scope.epoch
     setSubmissionError(undefined)
     setSubmitting(true)
     try {
@@ -1108,29 +1136,46 @@ export function ChatComposer(props: ChatComposerProps) {
       }
       if (command?.kind === "side" && props.onSideChat) {
         await props.onSideChat(command.text)
-        if (!owns()) return
+        if (!ownsScope()) return
         writeDraftText("")
         return
       }
       const directives = resolveComposerMentionDirectives(trimmed, mentionCatalog())
-      let dispatched = false
-      const markDispatched = () => {
-        if (!owns()) return
-        if (dispatched) return
-        dispatched = true
-        setText("")
-        setCaretPosition(0)
-        resetMentionInteraction()
-        clearComposerDraft(submittedDraftKey)
-        setAttachments([])
-        if (textareaRef) {
-          textareaRef.value = ""
-          try {
-            textareaRef.setSelectionRange(0, 0)
-          } catch {
-            /* selection APIs may throw if the element has been detached */
+      const submission: ComposerSubmissionCallbacks = {
+        onScope: (key, epoch) => {
+          if (!owns()) throw new DOMException("Composer submission retired", "AbortError")
+          scope = { key: normalizeComposerDraftKey(key), epoch }
+        },
+        onDispatch: () => {
+          if (!owns() || normalizeComposerDraftKey(props.draftKey) !== scope.key)
+            throw new DOMException("Composer submission source superseded", "AbortError")
+          scope.epoch = boardStore.selectEpoch
+          const currentQuotation = composerQuotation(scope.key)
+          if (
+            composerDraftText(scope.key) === authoredText &&
+            currentQuotation?.text === quotation?.text &&
+            currentQuotation?.sessionID === quotation?.sessionID &&
+            currentQuotation?.messageID === quotation?.messageID &&
+            sameAttachmentReferences(attachments(), sentAttachments)
+          ) revision = captureComposerDraftRevision(scope.key)
+          dispatched = true
+        },
+        onAccepted: () => {
+          if (!dispatched || accepted) return
+          accepted = true
+          if (!isApiAuthorityCurrent(authority) || !revision || revision.entry.text !== authoredText) return
+          const current = ownsScope()
+          if (current && !sameAttachmentReferences(attachments(), sentAttachments)) return
+          if (!clearComposerDraftRevision(revision)) return
+          if (!current) return
+          writeText("")
+          setCaretPosition(0)
+          resetMentionInteraction()
+          setAttachments([])
+          if (textareaRef?.isConnected) {
+            try { textareaRef.setSelectionRange(0, 0) } catch { /* detached native input */ }
           }
-        }
+        },
       }
       await props.onSubmit(
         quotedPrompt(trimmed, quotation),
@@ -1140,19 +1185,15 @@ export function ChatComposer(props: ChatComposerProps) {
           expertSquadIDs: directives.squadIDs,
           missionSkillNames: directives.missionSkillNames,
         },
-        markDispatched,
+        submission,
         authority,
       )
       if (!dispatched) throw new Error("Composer submission completed without crossing the dispatch boundary")
     } catch (error) {
-      if (!owns()) return
+      if (!ownsScope()) return
       if (error instanceof DOMException && error.name === "AbortError") return
       console.error("[ChatComposer] submit failed", error)
-      if (quotation && !composerDraftText(submittedDraftKey) && !composerQuotation(submittedDraftKey)) {
-        setComposerDraft(submittedDraftKey, trimmed)
-        setComposerQuotation(submittedDraftKey, quotation)
-      }
-      setSubmissionError({ cause: error })
+      setSubmissionError({ cause: error, accepted })
     } finally {
       if (owns()) setSubmitting(false)
     }
@@ -1558,7 +1599,7 @@ export function ChatComposer(props: ChatComposerProps) {
         {(failure) => (
           <Feedback
             tone="error"
-            title={t("chat.send_failed_title")}
+            title={t(failure().accepted ? "chat.send_accepted_title" : "chat.send_failed_title")}
             details={
               failure().cause instanceof ComposerMentionDirectiveError ? undefined : submitErrorMessage(failure().cause)
             }
@@ -1576,7 +1617,7 @@ export function ChatComposer(props: ChatComposerProps) {
           >
             {failure().cause instanceof ComposerMentionDirectiveError
               ? submitErrorMessage(failure().cause)
-              : t("chat.send_failed_inline")}
+              : t(failure().accepted ? "chat.send_accepted_inline" : "chat.send_failed_inline")}
           </Feedback>
         )}
       </Show>

@@ -846,6 +846,8 @@
   "chat.send_label": "发送",
   "chat.send_failed": "发送失败：{{error}}",
   "chat.send_failed_title": "发送失败",
+  "chat.send_accepted_title": "消息已接收",
+  "chat.send_accepted_inline": "消息已接收，但响应状态尚未确认。请查看对话后再继续。",
   "chat.send_title": "发送消息（Enter 发送，Shift+Enter 换行）",
   "chat.stop_label": "停止",
   "chat.stop_title": "中止当前生成并停止任务执行。",

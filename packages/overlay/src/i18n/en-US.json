@@ -846,6 +846,8 @@
   "chat.send_label": "Send",
   "chat.send_failed": "Send failed: {{error}}",
   "chat.send_failed_title": "Send failed",
+  "chat.send_accepted_title": "Message received",
+  "chat.send_accepted_inline": "Your message was received, but the response status could not be confirmed. Check the conversation before continuing.",
   "chat.send_title": "Send message (Enter to send, Shift+Enter for newline)",
   "chat.stop_label": "Stop",
   "chat.stop_title": "Stop generation and halt task execution.",

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [主输入发送接受与草稿归属](records/2026-11/2026-11-01-composer-send-acceptance.md)：真实失败保留、首次模型时序、幂等重试及新稿保护。
+
 - [附件文本与原件保留](records/2026-11/2026-11-01-composer-text-review.md)：源码类型、YAML核对与真实发送发现的共享回收根因。
 
 - [文件空状态与首页标题](records/2026-11/2026-11-01-project-file-empty-layout.md)：未选项目提示/操作范围、同名标题均衡换行与真实新建。

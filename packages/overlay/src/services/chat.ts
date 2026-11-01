@@ -14,13 +14,16 @@ import {
   setChatAttachments,
   type ChatAbortTarget,
   type ChatRequestState,
+  acknowledgeChatRequestMessage,
 } from "../store/messages"
 import { boardStore, loadBoard, loadTasks, activeTaskID, activeSessionID } from "../store/board"
 import { appStore, setConnectionStatus } from "../store/app"
 import { workspaceMode, beginWorkspaceSelection } from "./workspace"
 import { currentOpenCorvusModel, currentOpenCorvusPromptModel, selectTask } from "./task"
 import { setSessionExpertSquadActive } from "./expert-squad"
-import { ingestPersistedConversationMessage } from "./tree-writer"
+import { ingestPersistedConversationMessage, projectedConversationMessageFacts } from "./tree-writer"
+import { composerSubmission, forgetComposerSubmission } from "./composer-draft"
+import { getSessionConfig } from "./config"
 import { conversationSourceDirectory } from "./conversation"
 import { taskOwningDirectory } from "./task-directory"
 import { directoryScopedPath, taskScopedPath } from "./task-path"
@@ -178,6 +181,8 @@ export async function stopChatRequest(): Promise<boolean> {
 
   abortChatRequest()
   await abortChatTargetRemote(request.target, request.authority)
+  if (isApiAuthorityCurrent(request.authority) && request.composerDraftKey && request.messageID)
+    forgetComposerSubmission(request.composerDraftKey, request.messageID)
   return true
 }
 
@@ -227,6 +232,8 @@ export async function promptSessionMessage(input: {
   promptProfile?: string
   model?: { providerID: string; modelID: string }
   onDispatch?: () => void
+  onAccepted?: () => void
+  composerDraftKey?: string
 }): Promise<any> {
   const authority = input.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
@@ -248,10 +255,9 @@ export async function promptSessionMessage(input: {
     setChatRequest(request)
     if (mission) {
       const model = input.model ? `${input.model.providerID}/${input.model.modelID}` : currentOpenCorvusModel()
-      input.onDispatch?.()
       return await wakeMission({
         authority,
-        requestID,
+        ...(input.composerDraftKey ? {} : { requestID }),
         missionID: mission.missionID,
         directory: mission.directory,
         productPillar: mission.productPillar,
@@ -259,15 +265,40 @@ export async function promptSessionMessage(input: {
         attachments: input.attachments,
         model,
         signal: controller.signal,
+        composerDraftKey: input.composerDraftKey,
+        onDispatch: (messageID) => {
+          input.onDispatch?.()
+          setChatRequest({ ...request, messageID, composerDraftKey: input.composerDraftKey })
+        },
+        onAccepted: input.onAccepted,
       })
     }
     if (input.promptProfile) {
       await setSessionExpertSquadActive(input.sessionID, input.promptProfile, input.directory, authority)
     }
+    let model = input.model
+    if (!model) {
+      const saved = await getSessionConfig({ sessionID: input.sessionID, directory: input.directory, authority })
+      const reference = saved.config.model
+      const slash = typeof reference === "string" && reference.trim() === reference ? reference.indexOf("/") : -1
+      if (slash <= 0 || slash === reference!.length - 1)
+        throw new Error(`Session model is unresolved: ${input.sessionID}`)
+      model = { providerID: reference!.slice(0, slash), modelID: reference!.slice(slash + 1) }
+    }
     assertApiAuthorityCurrent(authority)
     if (controller.signal.aborted) throw controller.signal.reason ?? new DOMException("Chat request aborted", "AbortError")
     if (!ownsProjection()) throw new DOMException("Chat request source superseded", "AbortError")
+    const body = {
+      parts: sessionPromptParts(input.text, input.attachments ?? [], input.metadata ?? {}),
+      model,
+    }
+    const messageID = input.composerDraftKey
+      ? composerSubmission(input.composerDraftKey, JSON.stringify(body)).messageID
+      : `msg_${requestID}`
     input.onDispatch?.()
+    setChatRequest({ ...request, messageID, composerDraftKey: input.composerDraftKey, onAccepted: input.onAccepted })
+    const accepted = projectedConversationMessageFacts([input.sessionID]).find((message) => message.id === messageID && message.role === "user")
+    if (accepted) acknowledgeChatRequestMessage({ id: accepted.id, sessionID: accepted.sessionID, role: accepted.role })
     const result = await apiJson(
       directoryScopedPath(`session/${encodeURIComponent(input.sessionID)}/message`, input.directory, "session prompt"),
       {
@@ -275,13 +306,13 @@ export async function promptSessionMessage(input: {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messageID: `msg_${requestID}`,
-          parts: sessionPromptParts(input.text, input.attachments ?? [], input.metadata ?? {}),
-          model: input.model ?? currentOpenCorvusPromptModel(),
+          messageID,
+          ...body,
         }),
         signal: controller.signal,
       },
     )
+    input.onAccepted?.()
     if (ownsProjection()) ingestPersistedConversationMessage(result)
     return result
   } catch (error) {
@@ -304,7 +335,7 @@ export async function panelMessage(
   attachmentsOrMeta: any[] | Record<string, any> = [],
   metadata: any = {},
   onDispatch?: () => void,
-  options: { authority?: ApiAuthority } = {},
+  options: { authority?: ApiAuthority; onAccepted?: () => void; composerDraftKey?: string } = {},
 ): Promise<any> {
   const authority = options.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
@@ -333,6 +364,8 @@ export async function panelMessage(
       promptProfile,
       model: currentOpenCorvusPromptModel(),
       onDispatch,
+      onAccepted: options.onAccepted,
+      composerDraftKey: options.composerDraftKey,
     })
   }
 
@@ -380,6 +413,7 @@ export async function panelMessage(
       }),
       signal: controller.signal,
     })
+    options.onAccepted?.()
     // Server returned the persisted user Message + parts. Project them
     // through tree-writer immediately so the user sees their bubble before
     // the SSE round-trip lands; messageStore live ingestion is retired.

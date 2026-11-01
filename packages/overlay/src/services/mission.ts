@@ -30,6 +30,7 @@ import {
   type TaskCancellationRequestBody as TaskCancellationRequestBodyValue,
 } from "@opencorvus-ai/transport-protocol"
 import { apiJson, ApiError, serverSettledRequest, type ApiAuthority } from "./api"
+import { composerSubmission } from "./composer-draft"
 import { downloadProjectArchive } from "./project-archive"
 import type { BoardSource } from "../store/board"
 import type { WorkLedgerStreamEvent } from "./sse"
@@ -81,6 +82,9 @@ export type MissionWakeInput = MissionWakeBody & {
   /** Project directory that owns the Mission session and wake request. */
   directory: string
   signal?: AbortSignal
+  composerDraftKey?: string
+  onDispatch?: (requestID: string | undefined) => void
+  onAccepted?: () => void
 }
 
 export type MissionWakeResult = MissionWakeResponse
@@ -252,7 +256,7 @@ export async function wakeMission(input: MissionWakeInput): Promise<MissionWakeR
   if (!directory) throw new Error("wakeMission: directory is required")
   const text = input.text.trim()
   if (!text) throw new Error("wakeMission: text is required")
-  const body = {
+  const body: MissionWakeBody = {
     text,
     ...(input.requestID !== undefined ? { requestID: input.requestID } : {}),
     productPillar: input.productPillar,
@@ -269,8 +273,11 @@ export async function wakeMission(input: MissionWakeInput): Promise<MissionWakeR
         }
       : {}),
   } satisfies MissionWakeBody
+  if (input.composerDraftKey && input.requestID === undefined)
+    body.requestID = composerSubmission(input.composerDraftKey, JSON.stringify(body)).messageID
   const params = new URLSearchParams({ directory })
-  return await apiJson<MissionWakeResponse>(
+  input.onDispatch?.(body.requestID)
+  const result = await apiJson<MissionWakeResponse>(
     `mission/wake?${params.toString()}`,
     serverSettledRequest({
       authority: input.authority,
@@ -280,6 +287,8 @@ export async function wakeMission(input: MissionWakeInput): Promise<MissionWakeR
       signal: input.signal,
     }),
   )
+  input.onAccepted?.()
+  return result
 }
 
 export async function createMissionDraft(input: MissionDraftInput): Promise<MissionCreateDraftResponse> {

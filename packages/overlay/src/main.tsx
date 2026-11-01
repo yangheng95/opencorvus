@@ -2857,8 +2857,10 @@ function OverlayRoot() {
               }),
             }
           }}
-          onSubmit={async (text, attachments, webSearch, directives, markDispatched, authority) => {
+          onSubmit={async (text, attachments, webSearch, directives, submission, authority) => {
             assertApiAuthorityCurrent(authority)
+            const sourceDraftKey = panelComposerDraftKey()
+            submission.onScope(sourceDraftKey, boardStore.selectEpoch)
             const submittedIntent = { ...composerIntent() }
             const submittedWithoutProject = !activeDirectory().trim()
             const submitRoute = resolveComposerSubmitRoute(directives)
@@ -2869,13 +2871,22 @@ function OverlayRoot() {
               try {
                 const admission = await requestWorkspaceSelection()
                 assertApiAuthorityCurrent(authority)
-                if (admission.kind === "unchanged") return
+                if (admission.kind === "unchanged") throw new DOMException("Mission submission cancelled", "AbortError")
                 const selectionEpoch = admission.epoch
-                const { directory, model } = await resolveGlobalComposerSubmissionContext(selectionEpoch, authority)
+                submission.onScope(sourceDraftKey, selectionEpoch)
+                let context: Awaited<ReturnType<typeof resolveGlobalComposerSubmissionContext>>
+                try {
+                  context = await resolveGlobalComposerSubmissionContext(selectionEpoch, authority)
+                } finally {
+                  if (isApiAuthorityCurrent(authority) && ownsWorkspaceSelection(selectionEpoch)) {
+                    moveComposerDraft(sourceDraftKey, panelComposerDraftKey())
+                    submission.onScope(panelComposerDraftKey(), selectionEpoch)
+                  }
+                }
+                const { directory, model } = context
                 if (!ownsWorkspaceSelection(selectionEpoch))
                   throw new DOMException("Mission submission superseded", "AbortError")
                 resetCenterWorkbenchToPrimaryPanel("mission")
-                markDispatched()
                 const result = await wakeMission({
                   authority,
                   directory,
@@ -2884,6 +2895,9 @@ function OverlayRoot() {
                   model,
                   productPillar: intentRoute.productPillar,
                   expertSquadIDs: submitRoute.kind === "mission" ? submitRoute.expertSquadIDs : undefined,
+                  composerDraftKey: panelComposerDraftKey(),
+                  onDispatch: submission.onDispatch,
+                  onAccepted: submission.onAccepted,
                 })
                 if (!isApiAuthorityCurrent(authority)) return result
                 await openMissionSession(result, directory, selectionEpoch, authority)
@@ -2903,8 +2917,9 @@ function OverlayRoot() {
               try {
                 const admission = await requestWorkspaceSelection()
                 assertApiAuthorityCurrent(authority)
-                if (admission.kind === "unchanged") return
+                if (admission.kind === "unchanged") throw new DOMException("Conversation submission cancelled", "AbortError")
                 const selectionEpoch = admission.epoch
+                submission.onScope(sourceDraftKey, selectionEpoch)
                 resetCenterWorkbenchToPrimaryPanel("chat")
                 const directory = activeDirectory().trim()
                 const experience = intentRoute.kind === "conversation" ? intentRoute.experience : undefined
@@ -2916,6 +2931,8 @@ function OverlayRoot() {
                     directory,
                     experience,
                     model: appStore.composerModel || undefined,
+                    composerDraftKey: sourceDraftKey,
+                    onSessionCreated: (id) => submission.onScope(workspaceComposerDraftKey("", id, ""), selectionEpoch),
                   })
                 } else
                   await createGlobalConversationSession({
@@ -2923,6 +2940,8 @@ function OverlayRoot() {
                     selectionEpoch,
                     experience,
                     model: appStore.composerModel || undefined,
+                    composerDraftKey: sourceDraftKey,
+                    onSessionCreated: (id) => submission.onScope(workspaceComposerDraftKey("", id, ""), selectionEpoch),
                   })
                 assertApiAuthorityCurrent(authority)
                 if (!ownsWorkspaceSelection(selectionEpoch))
@@ -2933,7 +2952,11 @@ function OverlayRoot() {
                     rememberProjectComposerIntent(createdDirectory, submittedIntent),
                   )
                 }
-                const result = await panelMessage(text, attachments, metadata, markDispatched, { authority })
+                const result = await panelMessage(text, attachments, metadata, submission.onDispatch, {
+                  authority,
+                  composerDraftKey: panelComposerDraftKey(),
+                  onAccepted: submission.onAccepted,
+                })
                 if (!isApiAuthorityCurrent(authority)) return result
                 const source = boardStore.selectedSource
                 if (
@@ -2950,7 +2973,11 @@ function OverlayRoot() {
               }
             }
             const refreshMissionLedger = isMissionSessionSource()
-            const result = await panelMessage(text, attachments, metadata, markDispatched, { authority })
+            const result = await panelMessage(text, attachments, metadata, submission.onDispatch, {
+              authority,
+              composerDraftKey: panelComposerDraftKey(),
+              onAccepted: submission.onAccepted,
+            })
             if (!isApiAuthorityCurrent(authority)) return result
             if (refreshMissionLedger) setMissionSharedRefreshToken((value) => value + 1)
             return result

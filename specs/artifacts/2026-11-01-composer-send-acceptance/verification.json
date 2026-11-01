@@ -1,0 +1,611 @@
+{
+  "at": "2026-11-01T09:27:29.377Z",
+  "singleAgent": true,
+  "userWindowsUntouched": true,
+  "isolatedDevelopmentUI": true,
+  "schema": 9,
+  "tables": 92,
+  "persistentFormatChanged": false,
+  "manualScreenshots": [
+    "01-before-original.jpg",
+    "02-before-authored-input.jpg",
+    "03-before-rejected-empty-input.jpg",
+    "04-before-project-draft-empty.jpg",
+    "05-candidate-original-input.jpg",
+    "06-rejected-input-retained-en.jpg",
+    "07-rejected-http-details-en.jpg",
+    "08-restored-original-dialog.jpg",
+    "09-accepted-running-new-draft.jpg",
+    "10-completed-sources-new-draft.jpg",
+    "11-final-original-input-zh.jpg",
+    "12-final-rejected-input-retained-zh.jpg",
+    "13-final-accepted-new-draft.jpg",
+    "14-final-sources-original-zh.jpg",
+    "15-final-reloaded-new-draft.jpg",
+    "16-final-project-scope.jpg",
+    "17-final-returned-session-draft.jpg"
+  ],
+  "positiveTests": 23,
+  "expectations": 55,
+  "checks": [
+    {
+      "label": "types-delivery",
+      "exitCode": 0,
+      "startedAt": 1793525498712,
+      "closedAt": 1793525517997
+    },
+    {
+      "label": "i18n-after",
+      "exitCode": 0,
+      "startedAt": 1793524306900,
+      "closedAt": 1793524310226
+    },
+    {
+      "label": "ui-build-delivery",
+      "exitCode": 0,
+      "startedAt": 1793525498725,
+      "closedAt": 1793525554633
+    },
+    {
+      "label": "unit-drafts",
+      "exitCode": 0,
+      "startedAt": 1793524306870,
+      "closedAt": 1793524311895
+    },
+    {
+      "label": "unit-transport-delivery",
+      "exitCode": 0,
+      "startedAt": 1793525498705,
+      "closedAt": 1793525502454
+    },
+    {
+      "label": "docs-final",
+      "exitCode": 0,
+      "startedAt": 1793525667739,
+      "closedAt": 1793525674744
+    }
+  ],
+  "cases": [
+    {
+      "at": "2026-11-01T09:00:46.181Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 237113,
+      "current": 237179,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 46325,
+          "after": 46337
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 46325,
+          "after": 46337
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6091,
+          "after": 6093
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6091,
+          "after": 6093
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18273,
+          "after": 18279
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48607,
+          "after": 48620
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48549,
+          "after": 48562
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5893,
+          "after": 5895
+        },
+        {
+          "table": "memory_chunk",
+          "before": 75,
+          "after": 76
+        },
+        {
+          "table": "memory_file",
+          "before": 75,
+          "after": 76
+        },
+        {
+          "table": "project",
+          "before": 77,
+          "after": 78
+        },
+        {
+          "table": "session",
+          "before": 108,
+          "after": 109
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 207,
+      "projects": 77,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1187,
+      "reserveMs": 4107518,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-mQQga4p6.js",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "maximumRequests": 0,
+      "requestOutcomes": [],
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "port": 38535
+    },
+    {
+      "at": "2026-11-01T09:20:22.052Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 237179,
+      "current": 237991,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 46337,
+          "after": 46494
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 46337,
+          "after": 46494
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6093,
+          "after": 6117
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6093,
+          "after": 6117
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18279,
+          "after": 18351
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48620,
+          "after": 48779
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48562,
+          "after": 48721
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5895,
+          "after": 5919
+        },
+        {
+          "table": "memory_chunk",
+          "before": 76,
+          "after": 77
+        },
+        {
+          "table": "memory_file",
+          "before": 76,
+          "after": 77
+        },
+        {
+          "table": "message",
+          "before": 778,
+          "after": 781
+        },
+        {
+          "table": "part",
+          "before": 2209,
+          "after": 2217
+        },
+        {
+          "table": "permission_execution_result",
+          "before": 185,
+          "after": 186
+        },
+        {
+          "table": "permission_ledger",
+          "before": 941,
+          "after": 946
+        },
+        {
+          "table": "permission_policy",
+          "before": 43,
+          "after": 44
+        },
+        {
+          "table": "project",
+          "before": 78,
+          "after": 79
+        },
+        {
+          "table": "protocol_event",
+          "before": 2279,
+          "after": 2284
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 767,
+          "after": 769
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 767,
+          "after": 769
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 802,
+          "after": 805
+        },
+        {
+          "table": "session",
+          "before": 109,
+          "after": 110
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 605,
+          "after": 606
+        },
+        {
+          "table": "tool_part_request",
+          "before": 605,
+          "after": 606
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793520440105,
+          "reacquiredAt": 1793524615463,
+          "releasedAt": 1793524624120,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793520435539,
+          "reacquiredAt": 1793524621117,
+          "releasedAt": 1793524624780,
+          "ownedByRuntime": true
+        }
+      ],
+      "sourceDatabasePreserved": true,
+      "attachments": 209,
+      "projects": 78,
+      "filesystemExclusions": 0,
+      "requests": 3,
+      "cumulativeRequests": 1190,
+      "reserveMs": 2674850,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CztqQIaB.js",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "maximumRequests": 6,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "port": 38536
+    },
+    {
+      "at": "2026-11-01T09:26:04.913Z",
+      "kind": "after2",
+      "schema": 9,
+      "tables": 92,
+      "originals": 237991,
+      "current": 238803,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 46494,
+          "after": 46651
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 46494,
+          "after": 46651
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6117,
+          "after": 6141
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6117,
+          "after": 6141
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 18351,
+          "after": 18423
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48779,
+          "after": 48938
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48721,
+          "after": 48880
+        },
+        {
+          "table": "event_occurrence",
+          "before": 5919,
+          "after": 5943
+        },
+        {
+          "table": "memory_chunk",
+          "before": 77,
+          "after": 78
+        },
+        {
+          "table": "memory_file",
+          "before": 77,
+          "after": 78
+        },
+        {
+          "table": "message",
+          "before": 781,
+          "after": 784
+        },
+        {
+          "table": "part",
+          "before": 2217,
+          "after": 2225
+        },
+        {
+          "table": "permission_execution_result",
+          "before": 186,
+          "after": 187
+        },
+        {
+          "table": "permission_ledger",
+          "before": 946,
+          "after": 951
+        },
+        {
+          "table": "permission_policy",
+          "before": 44,
+          "after": 45
+        },
+        {
+          "table": "project",
+          "before": 79,
+          "after": 80
+        },
+        {
+          "table": "protocol_event",
+          "before": 2284,
+          "after": 2289
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 769,
+          "after": 771
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 769,
+          "after": 771
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 805,
+          "after": 808
+        },
+        {
+          "table": "session",
+          "before": 110,
+          "after": 111
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 606,
+          "after": 607
+        },
+        {
+          "table": "tool_part_request",
+          "before": 606,
+          "after": 607
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793524624120,
+          "reacquiredAt": 1793525065258,
+          "releasedAt": 1793525067560,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793524624780,
+          "reacquiredAt": 1793525061094,
+          "releasedAt": 1793525064467,
+          "ownedByRuntime": true
+        }
+      ],
+      "sourceDatabasePreserved": true,
+      "attachments": 213,
+      "projects": 79,
+      "filesystemExclusions": 0,
+      "requests": 3,
+      "cumulativeRequests": 1193,
+      "reserveMs": 2308975,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-C643JuC6.js",
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "maximumRequests": 6,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "port": 38537
+    }
+  ],
+  "originalGoals": 9,
+  "totalModelRequests": 6,
+  "cumulativeRequests": 1193,
+  "retiredPairedCopies": 6,
+  "absoluteDeadline": 1793527454260,
+  "finalFormalRead": {
+    "at": "2026-11-01T09:24:35.259Z",
+    "sessionID": "ses_-zUQHnh1CzzNu2ppVia3",
+    "messageID": "msg_4cdcaaf2-93ea-411c-9cc8-0b1d12836eb4",
+    "attempts": 2,
+    "identicalRequestBodies": true,
+    "userMessages": 1,
+    "completedReads": 1,
+    "exactValue": "恢复输入原值865",
+    "requests": 3,
+    "requestsAllSol": true,
+    "reads": [
+      {
+        "tool": "read",
+        "status": "completed",
+        "input": {
+          "filePath": "/attachment/prj_hHNbdEsZHHTZvHHD3tNL/55d970ee08283a79a88122237540c6fb64c4c66af98c5326e049b2301fd7a8ac.txt"
+        },
+        "output": "<path>C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-01\\composer-send-acceptance-865-after2\\send-recovery-865-after2\\.opencorvus\\.r\\project\\attachments\\e7e89991275a66c0c5dc49338b93f8eccafb716f446eb4812cfbfb723c4e4e32\\55d970ee08283a79a88122237540c6fb64c4c66af98c5326e049b2301fd7a8ac.txt</path>\n<type>file</type>\n<content>1: recovery: 恢复输入原值865\n\n(End of file - total 1 lines)\n</content>",
+        "metadata": {
+          "preview": "recovery: 恢复输入原值865",
+          "truncated": false,
+          "loaded": [],
+          "readType": "text",
+          "offset": 1,
+          "lines": 1,
+          "totalLines": 1
+        }
+      }
+    ],
+    "texts": [
+      "恢复输入原值865"
+    ],
+    "fullRequestProof": {
+      "at": "2026-11-01T09:25:08.672Z",
+      "attempts": 2,
+      "exactFullRequestBodies": true,
+      "messageID": "msg_4cdcaaf2-93ea-411c-9cc8-0b1d12836eb4",
+      "model": {
+        "providerID": "openai",
+        "modelID": "gpt-6.1-sol"
+      },
+      "parts": 2,
+      "firstSentAt": "2026-11-01T09:24:04.480Z",
+      "retriedAt": "2026-11-01T09:24:19.764Z"
+    },
+    "originalBytesAfterRetirement": true
+  },
+  "firstCandidate": {
+    "stableIdentityPassed": false,
+    "identicalRequestBodies": false,
+    "rootCause": "First-send view model was cleared during Session selection; passive config projection was still in flight. Final dispatch reads canonical Session config when no explicit model was supplied."
+  },
+  "coverageLimits": [
+    "Task unknown-result idempotent retry requires a caller identity in its public message contract and is outside this batch.",
+    "Mission and Stop focused tests are pure transport/data tests; their real execution matrix and the post-acceptance network-error UI were not exercised here.",
+    "Attachments retain their existing volatile navigation lifetime; newly authored text draft persistence was verified by actual reload and scope changes."
+  ],
+  "deliveryServiceAddition": {
+    "scope": "Existing Mission chat request owner binds the actual wake requestID for confirmed Stop; no Session/UI behavior change.",
+    "positiveTransportTest": true,
+    "uiAcceptanceBundle": "main-C643JuC6.js",
+    "deliveryBundle": "main-D2WqW_LM.js"
+  }
+}

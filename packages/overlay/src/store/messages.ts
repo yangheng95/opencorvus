@@ -11,6 +11,9 @@ export interface ChatRequestState {
   requestID: string
   controller: AbortController
   target: ChatAbortTarget
+  messageID?: string
+  composerDraftKey?: string
+  onAccepted?: () => void
 }
 
 export type SseConnectionStatus = "idle" | "connecting" | "connected" | "reconnecting"
@@ -29,6 +32,14 @@ export function setSseStatus(status: SseConnectionStatus): void {
 
 export function setChatRequest(req: ChatRequestState | null): void {
   setStore("chatRequest", req)
+}
+
+/** Only an exact, real user Message can acknowledge the owning Session request. */
+export function acknowledgeChatRequestMessage(info: { id?: unknown; sessionID?: unknown; role?: unknown }): void {
+  const request = store.chatRequest
+  if (info.role !== "user" || !request?.messageID || request.target.kind !== "session" ||
+    request.messageID !== info.id || request.target.sessionID !== info.sessionID) return
+  request.onAccepted?.()
 }
 
 export function abortChatRequest(): void {

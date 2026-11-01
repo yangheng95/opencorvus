@@ -38,6 +38,7 @@ import {
   unlinkChildFromParent,
 } from "../store/card-tree-stats"
 import { boardStore, setBoardProjectionHandler, setBoardStore } from "../store/board"
+import { acknowledgeChatRequestMessage } from "../store/messages"
 import { agentStageLabel, normalizeAgentRole, roleLabel } from "../utils/message"
 import { assistantMessageFailure, messageFailurePresentation, conversationMessageHasDisplayContent, isBoundaryMessagePart, isCardBodyMessagePart, messagePartHasDisplayContent } from "../utils/message-part"
 import { conversationMessageDisplayStage, isDelegatedContextMessage, type MessageOrigin } from "../utils/message-origin"
@@ -900,7 +901,10 @@ export function applyEvent(event: any): void {
 
   // ── Message stream ──
   if (type === "message.moved") return applyVisibleCardTreeEvent(() => handleMessageMoved(event))
-  if (type === "message.updated") return applyVisibleCardTreeEvent(() => handleMessageUpdated(event))
+  if (type === "message.updated") return applyVisibleCardTreeEvent(() => {
+    handleMessageUpdated(event)
+    acknowledgeChatRequestMessage(propsOf(event).info)
+  })
   if (type === "message.part.updated") return applyVisibleCardTreeEvent(() => handlePartUpdated(event))
   if (type === "message.removed") return applyVisibleCardTreeEvent(() => handleMessageRemoved(event))
   if (type === "message.part.removed") return applyVisibleCardTreeEvent(() => handlePartRemoved(event))

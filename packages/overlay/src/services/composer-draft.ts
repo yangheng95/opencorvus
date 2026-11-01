@@ -224,7 +224,51 @@ export function clearComposerDraft(key: string | null | undefined): void {
   setComposerDraft(key, "")
 }
 
-/** Retain one request identity across transport retries, including panel reopen/reload. */
+export interface ComposerDraftRevision {
+  key: string
+  entry: ComposerDraftEntry
+}
+
+/** Capture the actual record owned by a request, without another persisted draft. */
+export function captureComposerDraftRevision(key: string | null | undefined): ComposerDraftRevision | undefined {
+  const normalized = normalizeComposerDraftKey(key)
+  const entry = composerDraftStore.drafts[normalized]
+  return entry ? {
+    key: normalized,
+    entry: {
+      ...entry,
+      ...(entry.quotation ? { quotation: { ...entry.quotation } } : {}),
+      ...(entry.submission ? { submission: { ...entry.submission } } : {}),
+    },
+  } : undefined
+}
+
+/** Consume only the unchanged author's record after its real acceptance receipt. */
+export function clearComposerDraftRevision(revision: ComposerDraftRevision): boolean {
+  const current = composerDraftStore.drafts[revision.key]
+  const prior = revision.entry
+  if (!current || current.updated !== prior.updated || current.text !== prior.text ||
+    current.quotation?.text !== prior.quotation?.text ||
+    current.quotation?.sessionID !== prior.quotation?.sessionID ||
+    current.quotation?.messageID !== prior.quotation?.messageID ||
+    current.submission?.messageID !== prior.submission?.messageID ||
+    current.submission?.text !== prior.submission?.text) return false
+  clearComposerDraft(revision.key)
+  return true
+}
+
+/** A confirmed operator cancellation retires its retry identity, preserving prose. */
+export function forgetComposerSubmission(key: string, messageID: string): void {
+  const current = composerDraftStore.drafts[key]
+  if (current?.submission?.messageID !== messageID) return
+  const { submission, ...entry } = current
+  writeComposerDraftRecords(pruneComposerDraftRecords({
+    ...composerDraftStore.drafts,
+    [key]: { ...entry, updated: Date.now() },
+  }))
+}
+
+/** Retain one identity for exact serialized request content across transport retries. */
 export function composerSubmission(key: string, text: string): { messageID: string; text: string } {
   const current = composerDraftStore.drafts[key]
   if (current?.submission?.text === text) return current.submission

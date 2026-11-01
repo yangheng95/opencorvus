@@ -288,6 +288,7 @@ async function createConversationSessionFromPath(options: {
   signal?: AbortSignal
   body?: Record<string, unknown>
   composerDraftKey?: string
+  onSessionCreated?: (sessionID: string) => void
 }): Promise<string> {
   const authority = options.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
@@ -312,6 +313,7 @@ async function createConversationSessionFromPath(options: {
   assertNotAborted(options.signal)
   if (options.composerDraftKey)
     moveComposerDraft(options.composerDraftKey, workspaceComposerDraftKey("", sessionIDFromResponse(response), ""))
+  options.onSessionCreated?.(sessionIDFromResponse(response))
   setSessionRow(response.session)
   try {
     return await selectConversationSession({
@@ -338,6 +340,7 @@ export async function createConversationSession(options: {
   experience: ConversationExperience
   model?: string
   composerDraftKey?: string
+  onSessionCreated?: (sessionID: string) => void
   signal?: AbortSignal
 }): Promise<string> {
   const directory = options.directory.trim()
@@ -351,6 +354,7 @@ export async function createConversationSession(options: {
     signal: options.signal,
     body: options.model?.trim() ? { model: options.model.trim() } : {},
     composerDraftKey: options.composerDraftKey,
+    onSessionCreated: options.onSessionCreated,
   })
 }
 
@@ -360,6 +364,7 @@ export async function createGlobalConversationSession(options: {
   experience: ConversationExperience
   model?: string
   composerDraftKey?: string
+  onSessionCreated?: (sessionID: string) => void
   signal?: AbortSignal
 }): Promise<string> {
   const model = options.model?.trim()
@@ -371,6 +376,7 @@ export async function createGlobalConversationSession(options: {
     signal: options.signal,
     body: model ? { model } : {},
     composerDraftKey: options.composerDraftKey,
+    onSessionCreated: options.onSessionCreated,
   })
 }
 
