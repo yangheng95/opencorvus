@@ -1,0 +1,131 @@
+{
+  "purpose": "Discover the original supported language actions using their displayed current-language names, native names and canonical IDs",
+  "delegation": "single agent",
+  "implementation": "One existing i18n descriptor registry supplies supported IDs/types and localized options to Appearance and the command palette",
+  "currentBuild": "main-DqgM6m1u.js",
+  "manualUI": {
+    "screenshots": 16,
+    "personallyViewed": true,
+    "englishAndChinese": true,
+    "queries": [
+      "Chinese",
+      "language Chinese",
+      "英语",
+      "English",
+      "英语 en-US",
+      "中文 zh-CN"
+    ],
+    "canonicalLanguageValues": [
+      "en-US",
+      "zh-CN"
+    ],
+    "sameLabelsInBothConsumers": true,
+    "languageCommandsAndSettingsBothApplied": true,
+    "draft": "LOCALE857_DRAFT_KEEP",
+    "draftPreservedAcrossLanguageAndSettings": true,
+    "newSameOriginPageRetainsChinese": true,
+    "unsentDraftCleared": true,
+    "workSearchStillLoadingInScreenshots": [
+      5,
+      8,
+      9
+    ]
+  },
+  "pureDataTests": 4,
+  "pureDataAssertions": 4,
+  "cases": {
+    "before": {
+      "data": {
+        "at": "2026-11-01T03:21:06.420Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234499,
+        "current": 234499,
+        "changes": [],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 3320968,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-mPTc0h-C.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "after": {
+      "data": {
+        "at": "2026-11-01T03:33:39.010Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234499,
+        "current": 234499,
+        "changes": [],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 2643286,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-DqgM6m1u.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    }
+  },
+  "checks": {
+    "unit-after": 0,
+    "types-after": 0,
+    "i18n-after": 0,
+    "ui-build-after": 0,
+    "docs-delivery": 0
+  },
+  "originalGoals": 9,
+  "originalGoalsPreserved": true,
+  "modelRequests": 0,
+  "cumulativeRequests": 1180,
+  "pairedCopiesRetired": 4,
+  "automatedUITests": 0,
+  "projectFileCoverage": {
+    "projects": 62,
+    "excludedProjects": 0,
+    "protectedBusinessFiles": "Every original file captured in each project snapshot",
+    "gitIdentity": "HEAD, ref, index and status",
+    "runtimeMetadataOutsideByteSnapshot": [
+      ".opencorvus",
+      ".git internals"
+    ]
+  },
+  "coverageLimits": [
+    "No unregistered language or arbitrary cross-language synonym matching",
+    "Native titlebar toggle, operating-system regional settings and app restart not replayed",
+    "No model execution, Goal mutation, Message submission or project-file edit"
+  ],
+  "userWindowAndDatabase": "Not operated or accessed"
+}

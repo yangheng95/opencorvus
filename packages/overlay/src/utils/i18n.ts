@@ -4,8 +4,19 @@
 
 import { appStore, setLocaleState, setI18nReady } from "../store/app"
 
-const SUPPORTED_LOCALES = ["zh-CN", "en-US"] as const
-export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number]
+const LOCALE_OPTIONS = [
+  { value: "en-US", labelKey: "settings.language.en_us", nativeLabel: "English (US)" },
+  { value: "zh-CN", labelKey: "settings.language.zh_cn", nativeLabel: "简体中文" },
+] as const
+export type SupportedLocale = (typeof LOCALE_OPTIONS)[number]["value"]
+const SUPPORTED_LOCALES = LOCALE_OPTIONS.map((option) => option.value)
+
+export function localeOptions(): Array<{ value: SupportedLocale; label: string }> {
+  return LOCALE_OPTIONS.map(({ value, labelKey, nativeLabel }) => {
+    const label = t(labelKey)
+    return { value, label: label === nativeLabel ? label : `${label} · ${nativeLabel}` }
+  })
+}
 
 // Module-level state (
 let messages: Record<string, any> = {}

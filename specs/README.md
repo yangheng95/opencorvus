@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [语言选项与命令发现](records/2026-11/2026-11-01-locale-choice-discovery.md)：统一支持目录、当前名称与自称、两入口切换和持久化。
+
 - [持续目标入口与会话切换](records/2026-11/2026-11-01-goal-header-entry.md)：已有对话文字入口、当前投影读取就绪、草稿和只读实测。
 
 - [文件工作台查找与焦点归属](records/2026-11/2026-11-01-file-workbench-find.md)：文件内查找、原草稿与编辑历史、当前区域快捷键。

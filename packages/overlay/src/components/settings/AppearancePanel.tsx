@@ -3,7 +3,7 @@ import { createSignal } from "solid-js"
 import { settingsStore } from "../../store/settings"
 import { applyThemePreference } from "../../services/theme-preference"
 import { themeOptionsForCurrentHost } from "../../services/theme-registry"
-import { t } from "../../utils/i18n"
+import { localeOptions, t } from "../../utils/i18n"
 import { applyLocalePreference } from "../../services/locale-preference"
 import { SelectField } from "../ui/SelectField"
 import { SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
@@ -76,10 +76,7 @@ export default function AppearancePanel() {
           align="center"
           actions={
             <SelectField
-              options={[
-                { value: "en-US", label: t("settings.language.en_us") },
-                { value: "zh-CN", label: t("settings.language.zh_cn") },
-              ]}
+              options={localeOptions()}
               value={settingsStore.locale}
               ariaLabel={t("settings.language")}
               testid="settings-appearance-locale"

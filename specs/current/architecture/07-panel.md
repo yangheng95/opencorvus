@@ -1415,6 +1415,15 @@ page through its existing explicit activation. They do not change a preference
 or imply full-text search of every setting. Direct locale and theme commands
 retain their existing separate action semantics.
 
+Appearance and direct locale commands share the supported-language descriptors
+in `utils/i18n.ts`. That same registry supplies the loader's supported IDs and
+the existing `SupportedLocale` type. Both controls render the current-language
+name together with the language's self-name when those strings differ. Commands
+also expose the canonical locale ID and use their existing metadata term search,
+so a displayed name can discover the same language action across these surfaces.
+Language selection still uses the one `applyLocalePreference` operation; the
+runtime default-language policy and titlebar toggle semantics remain unchanged.
+
 Command palette ledger selections close the settings page through that same
 reveal lifecycle after file departure is approved and before selecting the
 exact Mission, Task or conversation.

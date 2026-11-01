@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [语言选项与命令发现](2026-11-01-locale-choice-discovery/README.md)：16张实图、双语切换、4项纯解析测试及数据保全。
+
 - [持续目标入口与读取](2026-11-01-goal-header-entry/README.md)：23张实图、即时切换详情/创建、草稿/预算/只读和完整数据保全。
 
 - [文件工作台查找](2026-11-01-file-workbench-find/README.md)：15张实图、草稿/撤销/重开与当前区域快捷键。

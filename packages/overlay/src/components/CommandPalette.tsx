@@ -34,7 +34,7 @@ import {
 } from "../services/work-ledger"
 import { openConfigDialog } from "../services/config-dialog-control"
 import { CONFIG_SECTIONS, configSectionSearchText } from "../store/dialog"
-import { t } from "../utils/i18n"
+import { localeOptions, t } from "../utils/i18n"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { useDisclosure } from "../solid/disclosure"
@@ -65,14 +65,6 @@ const COMMAND_PALETTE_LISTBOX_ID = "commandPaletteListbox"
 const RECENT_COMMAND_LIMIT = 9
 const LEDGER_PAGE_SIZE = 12
 const SEARCH_DELAY_MS = 150
-
-// `id` is the canonical theme value (matches `data-theme` and
-// settings.theme); `slug` is the underscore-safe suffix used by the
-// `cmdk.theme.*` translation family.
-const LOCALES: Array<{ id: string; label: string }> = [
-  { id: "en-US", label: "English (US)" },
-  { id: "zh-CN", label: "中文 (简体)" },
-]
 
 type PaletteLedgerRow = WorkLedgerProjectRow | WorkLedgerChatRow | WorkLedgerTaskRow | WorkLedgerMissionRow
 type LedgerSearch = { query: string; authority: ApiAuthority; controller: AbortController }
@@ -253,15 +245,16 @@ export function CommandPalette(props: {
       })
     }
 
-    for (const loc of LOCALES) {
+    for (const loc of localeOptions()) {
       cmds.push({
-        id: `locale:${loc.id}`,
+        id: `locale:${loc.value}`,
         label: `${t("cmdk.locale_prefix")}: ${loc.label}`,
+        hint: loc.value,
         group: t("cmdk.group.commands"),
-        keywords: `locale language ${loc.id}`,
+        keywords: `locale language ${loc.value}`,
         icon: "web-search",
         run: async () => {
-          await applyLocalePreference(loc.id)
+          await applyLocalePreference(loc.value)
         },
       })
     }

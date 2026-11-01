@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { supportedLocaleFromRuntime } from "../src/utils/i18n"
+import { sanitizeLocale, supportedLocaleFromRuntime, UnsupportedLocaleError } from "../src/utils/i18n"
 
 describe("first-open runtime locale selection", () => {
   test("maps Chinese runtime locale variants to Chinese", () => {
@@ -12,5 +12,17 @@ describe("first-open runtime locale selection", () => {
     expect(
       ["en-US", "fr-FR", "ja-JP", "yue-HK", "", undefined].map((locale) => supportedLocaleFromRuntime(locale)),
     ).toEqual(["en-US", "en-US", "en-US", "en-US", "en-US", "en-US"])
+  })
+})
+
+describe("explicit locale selection", () => {
+  test("normalizes supported IDs and regional variants to the declared language", () => {
+    expect([" en-US ", "zh-CN", "en-GB", "zh-Hans-CN"].map(sanitizeLocale)).toEqual([
+      "en-US", "zh-CN", "en-US", "zh-CN",
+    ])
+  })
+
+  test("reports an unsupported explicit language as UnsupportedLocaleError", () => {
+    expect(() => sanitizeLocale("de-DE")).toThrow(UnsupportedLocaleError)
   })
 })
