@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [0.1.41发布](records/2026-11/2026-11-01-release-0.1.41.md)：已提交增量、CI修复、原生/官网与失败候选清退。
+
 - [模型自产测试的语义覆盖](records/2026-11/2026-11-01-self-verification-coverage.md)：原漏测敏感性、共享修复及新领域修前修后真实自验。
 
 - [审阅阅读空间](records/2026-11/2026-11-01-review-content-space.md)：按真实文件内容分配空间及独立滚动复核。

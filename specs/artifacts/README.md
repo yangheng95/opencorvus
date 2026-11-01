@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [0.1.41发布](2026-11-01-release-0.1.41/README.md)：CI、Intel预检、原生/官网及公网回读证据。
+
 - [模型自产测试的语义覆盖](2026-11-01-self-verification-coverage/README.md)：原程序漏测敏感性、新领域真实运行和逐次故障。
 
 - [审阅阅读空间](2026-11-01-review-content-space/README.md)：真实单/多文件布局与阅读原图。

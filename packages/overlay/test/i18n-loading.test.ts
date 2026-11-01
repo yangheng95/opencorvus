@@ -7,41 +7,44 @@ afterEach(() => {
 })
 
 describe("locale data loading", () => {
-  test("reports the requested locale URL and HTTP failure", async () => {
-    globalThis.fetch = (async () => new Response("missing", { status: 404 })) as typeof fetch
-    const url = new URL("../src/i18n/zh-CN.json", import.meta.url).href
-    await expect(loadAllLocales()).rejects.toThrow(`Failed to load locale zh-CN: HTTP 404 ${url}`)
-  })
+  for (const locale of ["en-US", "zh-CN"]) {
+    const url = new URL(`../src/i18n/${locale}.json`, import.meta.url).href
+    const reply = (failure: () => Response) => {
+      globalThis.fetch = (async (input: RequestInfo | URL) =>
+        String(input) === url ? failure() : Response.json({ contract: { value: "loaded catalog" } })) as typeof fetch
+    }
 
-  test("retains the parse cause and resource address for invalid JSON", async () => {
-    globalThis.fetch = (async () => new Response("invalid")) as typeof fetch
-    const result = await loadAllLocales().catch((error: Error) => error)
-    expect(result).toBeInstanceOf(Error)
-    expect((result as Error).message).toBe(
-      `Failed to load locale zh-CN: invalid JSON from ${new URL("../src/i18n/zh-CN.json", import.meta.url).href}`,
-    )
-    expect((result as Error).cause).toBeInstanceOf(SyntaxError)
-  })
+    test(`reports the ${locale} resource and HTTP failure`, async () => {
+      reply(() => new Response("missing", { status: 404 }))
+      await expect(loadAllLocales()).rejects.toThrow(`Failed to load locale ${locale}: HTTP 404 ${url}`)
+    })
 
-  test("reports an invalid catalog shape", async () => {
-    globalThis.fetch = (async () => Response.json([])) as typeof fetch
-    await expect(loadAllLocales()).rejects.toThrow(
-      `Failed to load locale zh-CN: expected JSON object from ${new URL("../src/i18n/zh-CN.json", import.meta.url).href}`,
-    )
-  })
+    test(`retains the ${locale} JSON parse cause and resource`, async () => {
+      reply(() => new Response("invalid"))
+      const result = await loadAllLocales().catch((error: Error) => error)
+      expect(result).toBeInstanceOf(Error)
+      expect((result as Error).message).toBe(`Failed to load locale ${locale}: invalid JSON from ${url}`)
+      expect((result as Error).cause).toBeInstanceOf(SyntaxError)
+    })
+
+    test(`reports the ${locale} catalog shape error`, async () => {
+      reply(() => Response.json([]))
+      await expect(loadAllLocales()).rejects.toThrow(`Failed to load locale ${locale}: expected JSON object from ${url}`)
+    })
+  }
 
   test("loads catalogs relative to the executing module and publishes their values", async () => {
     const urls: string[] = []
     globalThis.fetch = (async (input: RequestInfo | URL) => {
       urls.push(String(input))
-      return Response.json({ welcome: { headline: "OpenCorvus" } })
+      return Response.json({ contract: { value: "loaded catalog" } })
     }) as typeof fetch
     await loadAllLocales()
-    expect(urls).toEqual(
-      ["zh-CN", "en-US"].map((locale) => new URL(`../src/i18n/${locale}.json`, import.meta.url).href),
+    expect(new Set(urls)).toEqual(
+      new Set(["zh-CN", "en-US"].map((locale) => new URL(`../src/i18n/${locale}.json`, import.meta.url).href)),
     )
-    expect(t("welcome.headline")).toBe("OpenCorvus")
+    expect(t("contract.value")).toBe("loaded catalog")
     await loadAllLocales()
-    expect(t("welcome.headline")).toBe("OpenCorvus")
+    expect(t("contract.value")).toBe("loaded catalog")
   })
 })

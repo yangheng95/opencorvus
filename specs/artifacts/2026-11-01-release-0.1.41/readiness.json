@@ -1,0 +1,45 @@
+{
+  "verifiedAt": "2026-11-01T15:51:30.052Z",
+  "version": "0.1.41",
+  "date": "2026-11-01",
+  "historyEntries": 77,
+  "locales": [
+    "zh-CN",
+    "en-US"
+  ],
+  "originalHead": "8cf60e69d249d2a3c872ea08c403ad0e0b9eae69",
+  "frozenInstall": "bun install v1.4.0 (34cbb9a40)\r\nResolving dependencies\r\nResolved, downloaded and extracted [15]\r\n\r\n$ husky\r\n\r\nChecked 1659 installs across 1905 packages (no changes) [1147.00ms]\r\n",
+  "audit": "bun audit v1.4.0 (34cbb9a40)\r\n\r\nNo vulnerabilities found (checked 1732 packages) [520.00ms]\r\n",
+  "localeDataContract": "$ bun ../opencorvus/script/prepare-test-process-supervisor.ts\r\nD:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor\\target\\runtime-2fcefc824ef4377b\\published\\opencorvus-process-supervisor.exe\r\n$ bun run script/run-unit-tests.ts \"test/i18n-loading.test.ts\"\r\nbun test v1.4.0 (34cbb9a40)\r\n\r\ntest\\i18n-loading.test.ts:\r\n(pass) locale data loading > reports the en-US resource and HTTP failure [2.40ms]\r\n(pass) locale data loading > retains the en-US JSON parse cause and resource [1.29ms]\r\n(pass) locale data loading > reports the en-US catalog shape error [0.16ms]\r\n(pass) locale data loading > reports the zh-CN resource and HTTP failure [0.04ms]\r\n(pass) locale data loading > retains the zh-CN JSON parse cause and resource [0.06ms]\r\n(pass) locale data loading > reports the zh-CN catalog shape error [0.04ms]\r\n(pass) locale data loading > loads catalogs relative to the executing module and publishes their values [2.26ms]\r\n\r\n 7 pass\r\n 0 fail\r\n 13 expect() calls\r\nRan 7 tests across 1 file. [217.00ms]\r\n",
+  "exactVersionAndChangelogContract": "bun test v1.4.0 (34cbb9a40)\r\n\r\nscript\\sync-version.test.ts:\r\n(pass) release version metadata > projects stable, canonical beta, and compact product versions to GitHub release metadata [0.20ms]\r\n(pass) release version metadata > maps aligned and drifted dispatch versions to exact source-check terminal results [69.10ms]\r\n(pass) Tauri release projection > projects a stable version and replaces endpoint drift with the single stable channel [0.51ms]\r\n\r\npackages\\util\\test\\changelog.test.ts:\r\n(pass) authored release history > projects localized standalone heading levels while preserving fenced literal headings [1.10ms]\r\n(pass) authored release history > normalizes compact and numbered beta versions and orders the complete history [0.23ms]\r\n(pass) authored release history > publishes the exact authored dated content and its version history link [0.22ms]\r\n(pass) authored release history > reports the missing dated version as a typed publication error [0.19ms]\r\n(pass) authored release history > reports duplicate canonical identities as a typed error [0.14ms]\r\n(pass) authored release history > reports impossible calendar dates as a typed error [0.06ms]\r\n(pass) authored release history > retains literal headings inside fenced code examples in the authored body [0.08ms]\r\n(pass) authored release history > reports a dated section without written content as a typed error [0.18ms]\r\n(pass) authored release history > extracts independently authored bodies for both interface languages [0.14ms]\r\n(pass) authored release history > reports the exact missing language as a typed error [0.06ms]\r\n(pass) authored release history > reports empty localized content as a written-content error [0.07ms]\r\n(pass) authored release history > reports duplicate languages as a typed format error [0.15ms]\r\n\r\n 15 pass\r\n 0 fail\r\n 21 expect() calls\r\nRan 15 tests across 2 files. [838.00ms]\r\n",
+  "backend": {
+    "files": [
+      "[1/8] DONE test/attachment-publication-retention.test.ts exit=0 duration=7.11s",
+      "[2/8] DONE test/config-project-event.test.ts exit=0 duration=5.46s",
+      "[3/8] DONE test/server/attachment-capture-identity.test.ts exit=0 duration=13.79s",
+      "[4/8] DONE test/tool-result-attachment-provider-projection.test.ts exit=0 duration=5.33s",
+      "[5/8] DONE test/config-global-project-validation.test.ts exit=0 duration=13.43s",
+      "[6/8] DONE test/config-peer-convergence.test.ts exit=0 duration=31.21s",
+      "[7/8] DONE test/mcp/configure-credential-order.test.ts exit=0 duration=17.46s",
+      "[8/8] DONE test/memory/project-memory.test.ts exit=0 duration=43.04s"
+    ],
+    "passed": 70,
+    "failed": 0,
+    "assertions": 256
+  },
+  "generation": {
+    "exitCode": 0,
+    "additionalDeclaredGeneratedChanges": [],
+    "scope": "Version projection only; SDK package metadata changed to41, generated API and payload source unchanged"
+  },
+  "checks": {
+    "docs": "352 operations /26 groups",
+    "architecture": "20 documents",
+    "version": "0.1.41"
+  },
+  "scope": "Focused data/transport/backend contracts only, not all backend files or UI automation. Existing real QA evidence remains scoped to its original sources and samples.",
+  "operatorCorrections": [
+    "Initial bare Bun path selectors additionally matched tmp/gallery-project/script/sync-version.test.ts; corrected to explicit ./ paths, original two files15pass/21 assertions.",
+    "Two supplemental history-summary expressions guessed a return property incorrectly; actual ChangelogEntry[] and entry.notes were then read and used. No release identity or product modification resulted."
+  ]
+}

@@ -4,6 +4,62 @@
 
 ## 未发布
 
+## 0.1.41 - 2026-11-01
+
+### zh-CN
+
+#### 新增
+
+- 项目首页和全局命令提供文件入口；文件列表支持方向键浏览、准确滚动和当前工作定位，Markdown 预览可直接查找。
+- Review 可独立查看工具记录的原始文件比较；少量文件收拢清单空间，多文件仍可单独滚动阅读。
+- 持续目标可从会话头部和命令搜索发现，预算详情说明自动轮次、模型请求、用量归属及继续执行的关系。
+
+#### 调整
+
+- 统一桌面紧凑字号、控件与面板对齐，恢复首页输入区居中；图片、Office 和交互产物使用应用内普通预览窗。
+- 命令、模型、Provider 和计划任务支持更清晰的多词查找与项目识别，语言选择保留本地化名称和原生语言名称。
+- 完善 agent 的验证指引：按原始输入合同检查合法值，区分策略质量与可行性，并将自产测试的覆盖声明绑定到实际执行和最终交付消费。相关真实样本只证明各自验证范围。
+
+#### 修复
+
+- 发送输入保留到真实消息接受后再清理；失败重试、重复 Side Chat 创建、主稿交接及 Mission 停止沿同一请求身份处理，保护后续新稿。
+- 保留已发布附件原件，统一文本类型识别；同名附件、历史来源和媒体显示更易区分，上传限制在等待期间即可说明。
+- 修复同名产物下载、当前工作表导出及 Notebook、演示媒体的文件身份和 Markdown 引用编码；项目文件链接只解码一次，来源阅读保留原文件与定位。
+- 项目转换时暂停旧读取，计划任务保留规范项目身份、作者和未显示的选择；项目配置事件与会话配置事件分别发布。
+- 修正语言资源加载测试对并发顺序的过期假设，并在 Windows 持续集成检出前启用 Git 长路径支持，保留完整证据文件。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 9，保留用户数据和既有自动迁移；仅交付已提交改动，研究结果与未完成的真实执行矩阵不代表全部功能验收。
+- macOS 仍为 ad hoc 签名，未经过 Apple 公证。未公开失败候选的草稿、标签及对应发布运行会清退，历史更新日志、Git 提交和成功版本保留。
+
+### en-US
+
+#### Added
+
+- Open project files from Home or global commands. Browse file lists with arrow keys, preserve scrolling and locate current work; search directly in Markdown previews.
+- Inspect original tool-recorded file comparisons separately in Review. Short file inventories reclaim reading space while longer inventories retain independent scrolling.
+- Discover continuous goals from conversation headers and command search. Budget details explain automatic turns, model requests, usage attribution and continuation.
+
+#### Changed
+
+- Align compact desktop typography, controls and panels, and center the Home composer again. Images, Office files and interactive artifacts open in ordinary in-app preview windows.
+- Improve multi-term search and project identification in commands, model and Provider selection, and scheduled tasks. Language choices show localized and native names.
+- Refine agent verification guidance around contract-permitted inputs, comparative quality and feasibility, and evidence that self-checks actually exercised the final deliverable. Real evaluation samples establish their stated scope only.
+
+#### Fixed
+
+- Retain input until durable message acceptance. Bind failed retries, repeated Side Chat creation, main-draft handoff and Mission stop to their actual request identities while preserving newer drafts.
+- Retain published attachment originals and share text-type recognition. Distinguish duplicate filenames, historical sources and media, and report upload limits while uploads are pending.
+- Preserve download identities for same-name artifacts, current spreadsheet exports and Notebook/presentation media references. Encode Markdown media references correctly, decode project file links once and retain source identity and location.
+- Suspend stale readers during project conversion. Preserve canonical project identity, authorship and hidden selections in scheduled tasks, and publish project configuration events separately from Session configuration events.
+- Correct stale locale-loading tests that assumed concurrent request order, and enable Git long-path support before Windows CI checkout while retaining complete evidence files.
+
+#### Upgrade impact and known limitations
+
+- Database version remains 9, retaining user data and existing automatic migrations. Include committed changes only; research results and unfinished real execution matrices do not establish acceptance of every product capability.
+- macOS remains ad hoc signed without Apple notarization. Unpublished failed candidates have their drafts, tags and associated publication runs removed; historical changelogs, Git commits and successful versions remain.
+
 ## 0.1.40 - 2026-10-31
 
 ### zh-CN
