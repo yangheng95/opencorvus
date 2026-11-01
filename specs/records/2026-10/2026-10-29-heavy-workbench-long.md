@@ -1092,3 +1092,10 @@ Recall：用户要完整重型任务的实质质量，不再接受工程文件�
 - 原report-only首次native0/21.2966秒，数值和两真实PNG已生成并view。PDF实际渲染发现原writer把Markdown管道表/整段JSON作为正文，24行无法清晰横向比较；只修同一PDF writer为真实表格/逐项质量表/原图，显式pdf-only入口重渲染既有报告，不重report中的结构对照/图/任何数值。首PDF及四页渲染保留。首次prepare路径误写cases/L01，而原合同在根public，native3在读取合同前结束；原argv/结果保，仅按README准确根路径重接同一次必要验收，不当作者或候选失败。
 - 原full prepare已实际结束exit4：24真实trace均verified、无artifact_error；14质量8pass/6fail，三selected L2RE.03051163129/.02593014695/.36803703815，wave初值/左右边界亦失败。原exit1额外使E-full-clean-retraining fail；total=null/study_complete=false/solution_reproduced=false/good=false、175研究项未独评，不新开整审/候选。report-only首native0，pdf-only只2次布局native0/3.2835与3.3368秒，未重复原科学阶段。最终四页及两原图实际view；Poppler系统字体发现告警有记录，英文数字/表/图可读。
 - 完整14.54GB原ZIP和全部权重/优化器/逐尝试/closure/环境外部保；仓库native-matrix-terminal-20261101逐成员scope仅约4.7MB科学投影，原native失败绑定与报告修订分列，不冒完整运行或成功cold。canonical locator改为original_matrix_terminal_quality_failed_report_repaired，owner/native/active为空；旧Docker接续指针退休，原ID不再启动。本轮没有新Codex/OC结果，海运既有比较不改；九合同仅库存、有效小时0/10、十题目标仍未达。
+
+### 原产物反查L01文献与质量合同：只读调查Recall（2026-11-01）
+
+- 用户仍要求“查真实产物看质量，反推评价方法的问题”。原矩阵终态已交2eea216bf，不重任何训练/原prepare/算法/组件或整审。本轮只比随包原论文/上游addendum、本题公开TASK/profile/quality-policy及原真实结果，保存具体证据；不实施新评分线/题版/候选，不改变原失败。
+- 深度/影响：原三解失败是真实数值结论，但原1%是事前教学目标，不能据“有成熟论文”推定在缩窄的本题优化合同中已可达。直接来源核验为原PDF第5页Table1、第8页Table2（pypdf实际抽取，第8页实际渲染并view）；原wave Table2 NNCG L2RE1.27e-2，Table1 hybrid5.52e-2、reaction1.92e-2，均不是本题1%的通过证书。不同网格不能把论文数字直接送本题checker判分，亦不证明本题不可能达到1%。
+- 公共契约/数据：原文跨4宽度/5seed/多LR/切换点；addendum选优为L2RE，Figures3/7最佳width200及每问题不同seed，GD/NNCG追加2000步。本题固定width100、seed345选择/训练loss、只convection追加200步、不同评价网格。TASK/SOURCE已披露派生范围，quality-policy明确可达pending；缺口是没有证据把独立1%教学目标与这个更窄协议相连。旧report补交/14机器质量只使失败可见，不修复这一效度缺口。
+- 定义/调用面已核public/profile.solution_selection/selection、quality-policy.targets/basis及check_l01.maximum/collect；本轮均不修改。只新增一份来源/原事实对照调查并更新索引，文档检查/范围提交/正常merge审全部待推/hook/push。产品调度/UI/schema/Provider/凭据/用户进程与新数值实验均不适用；统计/因果未知明示。不得将此次调查包装成新任务已就绪、作者根治或模型表现提高。

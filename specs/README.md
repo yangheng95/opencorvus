@@ -149,7 +149,7 @@
 
 - [H05横向对照与难度升级](records/2026-10/2026-10-29-heavy-workbench-cross-system.md)：两方旧标准100开发点、独立清洁复跑及天花板证据。
 
-- [数小时长程任务资格](records/2026-10/2026-10-29-heavy-workbench-long.md)：[L01原24配置终态](artifacts/2026-10-29-heavy-workbench-long/evaluator/l01-whole-case/native-matrix-terminal-20261101/README.md)保原报告失败与后补论文；同checker14质量8通过6失败，三解均未达1%，没有新候选/重型资格。
+- [数小时长程任务资格](records/2026-10/2026-10-29-heavy-workbench-long.md)：[L01原24配置终态](artifacts/2026-10-29-heavy-workbench-long/evaluator/l01-whole-case/native-matrix-terminal-20261101/README.md)保原失败与后补论文；[文献/质量合同核查](artifacts/2026-10-29-heavy-workbench-long/evaluator/l01-whole-case/contract-calibration-20261101/README.md)确认统一1%尚无对应可达证据。旧线/原结果不改，无新候选或重型资格。
 
 - [文件附件与跨项目输入体验](records/2026-10/2026-10-29-attachment-workspace-journey.md)：真实文件选择、核对与暂存附件/独立草稿的归属调查。
 

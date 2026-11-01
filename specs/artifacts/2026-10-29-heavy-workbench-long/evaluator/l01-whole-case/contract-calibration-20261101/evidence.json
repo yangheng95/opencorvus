@@ -1,0 +1,262 @@
+{
+  "at": "2026-11-01T00:21:22.643917+00:00",
+  "scope": "source/contract calibration audit only; no native training, solver, checker or candidate execution",
+  "paper_source": {
+    "path": "public/paper/paper.pdf",
+    "title": "Challenges in Training PINNs: A Loss Landscape Perspective",
+    "authors": "Rathore et al.",
+    "year": 2024,
+    "url": "https://proceedings.mlr.press/v235/rathore24a.html",
+    "license_and_upstream": "public/SOURCE.md; CC BY4.0 paper, fixed frontier-evals commit for supplied materials"
+  },
+  "table1": {
+    "pdf_page": 5,
+    "reported_hybrid_rows": [
+      "Adam+L-BFGS consistently provides a smaller loss and",
+      "Adam+L-BFGS 5.95e-6 4.19e-3 3.26e-6 1.92e-2 1.12e-3 5.52e-2"
+    ]
+  },
+  "table2": {
+    "pdf_page": 8,
+    "reported_rows": [
+      "Adam+L-BFGS 5.95e-6 4.19e-3 5.26e-6 1.92e-2 1.12e-3 5.52e-2",
+      "Adam+L-BFGS+NNCG 3.63e-7 1.94e-3 2.89e-7 9.92e-3 6.13e-5 1.27e-2",
+      "Adam+L-BFGS+GD 5.95e-6 4.19e-3 5.26e-6 1.92e-2 1.12e-3 5.52e-2"
+    ]
+  },
+  "addendum_source": "public/paper/addendum.md",
+  "addendum_lines": [
+    "width with the smallest L2RE is used.",
+    "- A network width of 200 worked the best for all three PDEs.",
+    "- Best seeds: 345 (convection), 456 (reaction), 567 (wave)",
+    "- In section 7.3, training was continued for an additional 2000 steps for each"
+  ],
+  "current_contract": {
+    "task": "public/TASK.md",
+    "profile": "public/profile.json",
+    "solution_selection": {
+      "seed": 345,
+      "candidates": "eligible terminal base configurations for each PDE at seed345, plus registered convection continuations",
+      "metric": "independently recomputed terminal train total loss",
+      "ties": "lexicographically smallest config ID, exact loss ties only",
+      "eligible_terminal_states": [
+        "max_updates",
+        "gradient_converged",
+        "finite_plateau",
+        "optimizer_stalled"
+      ],
+      "all_ineligible": "null; solution_reproduced cannot be true",
+      "same_checkpoint": "all quality components for one PDE use the single selected final numeric export"
+    },
+    "continuation_parent_selection": {
+      "problem": "convection",
+      "seed": 345,
+      "method": "hybrid",
+      "metric": "terminal train total loss",
+      "ties": "smaller Adam learning rate",
+      "eligible_terminal_states": [
+        "max_updates",
+        "gradient_converged",
+        "finite_plateau",
+        "optimizer_stalled"
+      ],
+      "all_ineligible": "dependency_incomplete; no alternate parent"
+    },
+    "continuations": [
+      {
+        "id": "convection-gd-continuation-0.0001",
+        "method": "gd",
+        "updates": 200,
+        "parameter": "learning_rate",
+        "value": 0.0001,
+        "parent": "profile.selection"
+      },
+      {
+        "id": "convection-gd-continuation-0.001",
+        "method": "gd",
+        "updates": 200,
+        "parameter": "learning_rate",
+        "value": 0.001,
+        "parent": "profile.selection"
+      },
+      {
+        "id": "convection-nncg-continuation-0.01",
+        "method": "nncg",
+        "updates": 200,
+        "parameter": "damping",
+        "value": 0.01,
+        "parent": "profile.selection"
+      },
+      {
+        "id": "convection-nncg-continuation-0.1",
+        "method": "nncg",
+        "updates": 200,
+        "parameter": "damping",
+        "value": 0.1,
+        "parent": "profile.selection"
+      },
+      {
+        "id": "convection-nncg-continuation-1.0",
+        "method": "nncg",
+        "updates": 200,
+        "parameter": "damping",
+        "value": 1.0,
+        "parent": "profile.selection",
+        "provenance": "additional damping sensitivity from pre-freeze feasibility; not an original-paper parameter or candidate result"
+      }
+    ],
+    "quality_basis": "Prospective target was written in evaluator/l01-whole-case/BUILD-PLAN before the first new existing-weight evaluation; this JSON representation was created later, not backdated. Nonblind author development; no candidate result used.",
+    "quality_status": "proposed_unfrozen_registered_optimizer_reachability_pending",
+    "quality_targets": {
+      "convection": {
+        "l2re": 0.01,
+        "evaluation_residual_rmse": 0.01,
+        "constraint_families.initial_value.rmse": 0.01,
+        "constraint_families.periodic_value.rmse": 0.01
+      },
+      "reaction": {
+        "l2re": 0.01,
+        "evaluation_residual_rmse": 0.01,
+        "constraint_families.initial_value.rmse": 0.01,
+        "constraint_families.periodic_value.rmse": 0.01
+      },
+      "wave": {
+        "l2re": 0.01,
+        "evaluation_residual_rmse": 0.01,
+        "constraint_families.initial_value.rmse": 0.01,
+        "constraint_families.initial_velocity.rmse": 0.01,
+        "constraint_families.boundary_left.rmse": 0.01,
+        "constraint_families.boundary_right.rmse": 0.01
+      }
+    }
+  },
+  "actual_quality": {
+    "L01-R-convection-solution-error": {
+      "status": "verified_fail",
+      "selected_id": "convection-nncg-continuation-0.1",
+      "metric": "l2re",
+      "observed": 0.030511631290084395,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/convection-nncg-continuation-0.1/final.npz"
+    },
+    "L01-R-convection-evaluation-physics": {
+      "status": "verified_pass",
+      "selected_id": "convection-nncg-continuation-0.1",
+      "metric": "evaluation_residual_rmse",
+      "observed": 0.0006024731116190487,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/convection-nncg-continuation-0.1/final.npz"
+    },
+    "L01-R-convection-initial_value": {
+      "status": "verified_pass",
+      "selected_id": "convection-nncg-continuation-0.1",
+      "metric": "constraint_families.initial_value.rmse",
+      "observed": 0.0005014780379834395,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/convection-nncg-continuation-0.1/final.npz"
+    },
+    "L01-R-convection-periodic_value": {
+      "status": "verified_pass",
+      "selected_id": "convection-nncg-continuation-0.1",
+      "metric": "constraint_families.periodic_value.rmse",
+      "observed": 0.007773369496111535,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/convection-nncg-continuation-0.1/final.npz"
+    },
+    "L01-R-reaction-solution-error": {
+      "status": "verified_fail",
+      "selected_id": "reaction-hybrid-s345-lr1e-03",
+      "metric": "l2re",
+      "observed": 0.02593014695433741,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/reaction-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-reaction-evaluation-physics": {
+      "status": "verified_pass",
+      "selected_id": "reaction-hybrid-s345-lr1e-03",
+      "metric": "evaluation_residual_rmse",
+      "observed": 0.0011598519231253899,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/reaction-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-reaction-initial_value": {
+      "status": "verified_pass",
+      "selected_id": "reaction-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.initial_value.rmse",
+      "observed": 0.001135092175550009,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/reaction-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-reaction-periodic_value": {
+      "status": "verified_pass",
+      "selected_id": "reaction-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.periodic_value.rmse",
+      "observed": 0.0001932285321523995,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/reaction-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-solution-error": {
+      "status": "verified_fail",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "l2re",
+      "observed": 0.3680370381491192,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-evaluation-physics": {
+      "status": "verified_pass",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "evaluation_residual_rmse",
+      "observed": 0.00529847677783807,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-initial_value": {
+      "status": "verified_fail",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.initial_value.rmse",
+      "observed": 0.02982112488484944,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-initial_velocity": {
+      "status": "verified_pass",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.initial_velocity.rmse",
+      "observed": 0.0017796396595299861,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-boundary_left": {
+      "status": "verified_fail",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.boundary_left.rmse",
+      "observed": 0.10236587134865703,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-boundary_right": {
+      "status": "verified_fail",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.boundary_right.rmse",
+      "observed": 0.11063934015698051,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    }
+  },
+  "inference": "The paper is not an attainability witness for the derived fixed-width/seed/selection/budget contract at its independent 1% target. Different grids preclude directly grading paper numbers. No proof of impossibility follows. Original thresholds and failures remain."
+}

@@ -2,6 +2,8 @@
 
 最新[原24配置终态与报告修复](native-matrix-terminal-20261101/README.md)：原训练已自然exit1并完整封存，报告补交native0；同checker确认24实际trace，14质量8通过/6失败，三个所选解均未达事前1%目标。原native与科学失败不回写；未新独审/候选/冻结。下文活跃PID与待终态描述是历史阶段，最新locator优先。
 
+[文献与质量合同核查](contract-calibration-20261101/README.md)进一步对照原PDF第5/8页与派生协议：原wave NNCG报告1.27%不能为本题统一1%提供可达见证；更窄搜索/续训与不同网格也不能直接套原论文数字评分。原线和失败不改，本次没有新数值实验。
+
 [实施前Recall/影响面](BUILD-PLAN.md)登记科学目标与每个新增实验。唯一完整研究源在reference-source，由build_reference.py封原public与当前维护的Torch/NumPy primitive到新项目。默认执行原19基础+5续训，真实初始化/共享前缀/计数/closure、状态保存、显式恢复/新进程对照、谱/PCG、论文PDF/图和复建均有源码；源码不等于这些环节已全数通过。
 
 [本轮真实结果](first-scientific-results/README.md)包括已有权重重算、原reaction自然终态、真实新NNCG移植、实际同架构结构控制和两张已view_image的图。结构控制证明容量，却不属于旧Xavier优化器轨迹，不能加入旧合法选择、冒充已解决固定优化合同或候选分。
