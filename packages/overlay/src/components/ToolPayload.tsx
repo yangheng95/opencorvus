@@ -2,7 +2,7 @@ import { createEffect, createMemo, createSignal, createUniqueId, For, on, onClea
 import { conversationUiStore, setToolPayloadDisplayState, toolPayloadDisplayState } from "../store/conversation-ui"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { captureTextReadingAnchor, resolveTextReadingTop } from "../utils/conversation-reading-anchor"
-import { t } from "../utils/i18n"
+import { t, tc } from "../utils/i18n"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { Feedback } from "./ui/Feedback"
@@ -28,7 +28,7 @@ function PayloadValue(props: { value: unknown; depth: number; stateKey: string; 
         <details class="msg-tool-object" open={open()} onToggle={(event) => {
           if (open() !== event.currentTarget.open) setToolPayloadDisplayState(key(), { expanded: event.currentTarget.open })
         }}>
-          <summary>{t(Array.isArray(props.value) ? "tool.items" : "tool.fields", { count: items().length })}</summary>
+          <summary>{tc(Array.isArray(props.value) ? "tool.items" : "tool.fields", items().length)}</summary>
           <Show when={open()}>
             <dl>
               <For each={items().slice(0, limit())}>

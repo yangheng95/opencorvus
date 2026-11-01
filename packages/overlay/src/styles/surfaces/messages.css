@@ -126,6 +126,8 @@
 }
 
 .msg-tool-payload {
+  container-type: inline-size;
+  container-name: tool-payload;
   display: grid;
   gap: var(--ui-gap-sm);
   min-width: 0;
@@ -213,6 +215,12 @@
 .msg-tool-field:has(> dd > .msg-tool-object) {
   grid-template-columns: minmax(0, 1fr);
   gap: var(--ui-gap-xs);
+}
+@container tool-payload (width < 40em) {
+  .msg-tool-field {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--ui-gap-xs);
+  }
 }
 .msg-tool-value:is([data-type="number"], [data-type="boolean"]) {
   font-family: var(--mono);

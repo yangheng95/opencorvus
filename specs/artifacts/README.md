@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [工具结构化内容阅读](2026-11-02-tool-payload-reading/README.md)：同一真实Task与成员的字段、计数和复制截图。
+
 - [常用操作阅读](2026-11-02-routine-operation-reading/README.md)：真实Mission、Task与成员操作和来源截图。
 
 - [持续目标长文本表单](2026-11-02-goal-form-reading/README.md)：目标与依据草稿、双语、长文滚动和校验实页。

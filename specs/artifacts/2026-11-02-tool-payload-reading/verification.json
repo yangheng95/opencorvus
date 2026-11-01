@@ -1,0 +1,152 @@
+{
+  "scope": 881,
+  "sourceCommit": "a86511ea513b9279f42505a3ec28e1d6eee0eb21",
+  "actualCLI": true,
+  "hiddenOwnedPages": true,
+  "userWindowsUntouched": true,
+  "providerMaximumRequests": {
+    "before": 0,
+    "after": 0
+  },
+  "nativeOriginalHandles": {
+    "before": {
+      "handle": 6517,
+      "exitCode": 0
+    },
+    "after": {
+      "handle": 57074,
+      "exitCode": 0
+    }
+  },
+  "before": {
+    "at": "2026-11-01T20:31:00.393Z",
+    "kind": "before",
+    "schema": 9,
+    "tables": 92,
+    "originals": 258673,
+    "current": 258675,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52925,
+        "after": 52926
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52867,
+        "after": 52868
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 229,
+    "projects": 100,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1260,
+    "reserveMs": 4401794,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-Od53X_nA.js"
+  },
+  "after": {
+    "at": "2026-11-01T20:38:27.368Z",
+    "kind": "after",
+    "schema": 9,
+    "tables": 92,
+    "originals": 258675,
+    "current": 258677,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52926,
+        "after": 52927
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52868,
+        "after": 52869
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 229,
+    "projects": 100,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1260,
+    "reserveMs": 3937376,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-B2xPlHX1.js"
+  },
+  "checks": {
+    "nodeBuild": 0,
+    "typecheck": 0,
+    "auxiliary": 0
+  },
+  "manualGeometry": {
+    "beforeNarrow": {
+      "payloadWidth": 327,
+      "keyWidth": 84,
+      "keyHeight": 33,
+      "lineHeight": 16.5,
+      "columns": "84.2656px 204.734px"
+    },
+    "afterNarrow": {
+      "payloadWidth": 327,
+      "keyWidth": 301,
+      "keyHeight": 17,
+      "lineHeight": 16.5,
+      "columns": "301px"
+    },
+    "afterDockMaximum": {
+      "payloadWidth": 420,
+      "columns": "394px"
+    },
+    "afterWideMain": {
+      "payloadWidth": 747,
+      "columns": "201.875px 507.125px",
+      "observedKey": "complete",
+      "observedValue": "true"
+    }
+  },
+  "manualCopyPaste": {
+    "characters": 8113,
+    "fields": 6,
+    "artifactType": "base/test-report",
+    "sourceReadReferences": 15,
+    "draftCleared": true,
+    "messageSent": false
+  },
+  "screenshots": [
+    "01-before-single-count-en.jpg",
+    "02-before-narrow-fields-en.jpg",
+    "03-after-single-count-en.jpg",
+    "04-after-narrow-fields-en.jpg",
+    "05-after-wide-fields-en.jpg",
+    "06-after-nested-sources-en.jpg",
+    "07-after-raw-input-en.jpg",
+    "08-after-copy-paste-en.jpg",
+    "09-after-nested-tail-en.jpg",
+    "10-after-wide-main-en.jpg",
+    "11-after-wide-main-zh.jpg",
+    "12-after-narrow-fields-zh.jpg",
+    "13-after-source-preview-zh.jpg"
+  ],
+  "manualVisualReview": true,
+  "uiAutomatedTestsRun": 0,
+  "limitations": [
+    "05 reached the allowed dock maximum but remained below 40em; 10 is the actual wide two-column evidence.",
+    "No Provider request, live streaming input or every other ToolPayload call site was individually exercised.",
+    "Zero arrays, one-field objects, one-item arrays and multi-field/item structures are present in real records; zero-field objects were not separately viewed."
+  ]
+}

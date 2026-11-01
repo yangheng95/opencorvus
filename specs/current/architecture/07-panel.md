@@ -1645,6 +1645,12 @@ running or empty-result information. Expanded live input keeps the existing boun
 payload viewport and native internal scrolling; completed/nonlive full expansion
 retains its full-height contract. Existing active tail previews and their Copy
 values retain their current limits, separately from complete persisted arguments.
+Structured payload fields respond to their own named inline-size container:
+below 40em, each original key precedes its value on a separate line; wider
+payloads retain the side-by-side comparison. Nested object rows keep their
+existing single-column structure. Object and array counts use the shared plural
+locale contract. Field identities, values, raw copying, nested disclosure state
+and the bounded/full-height reading contract remain owned by the same payload.
 Deferred Tool state reads keep failure feedback inside their own disclosure.
 The common Part accessor checks resource loading and error before reading its
 value; the existing completed-state marker is only an identity/status projection.
