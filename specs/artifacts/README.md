@@ -168,7 +168,7 @@
 
 - [2026-10-29-text-encoding-journey](2026-10-29-text-encoding-journey/README.md)：Unicode原文乱码修复、双语错误、真实JSON和五份下载核验。
 
-- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：[SQLite真实完整源码对照](2026-10-29-heavy-workbench-long/cases/sqlite-safe-import/real-pair-20261101/README.md)两原冻结消费0/60pass与同输入嵌套恢复缺口分列；原project/source/native原件保。旧月结等结果不改，无总100/整体排名/重型或有效小时资格，总体十题继续。
+- [长程任务资格与便宜实验](2026-10-29-heavy-workbench-long/README.md)：[SQLite真实对照](2026-10-29-heavy-workbench-long/cases/sqlite-safe-import/real-pair-20261101/README.md)原结果/恢复缺口保；[Wasmi完整题准备](2026-10-29-heavy-workbench-long/cases/wasmi-coredump/README.md)原参考跨实例资源归属实测失败，未建可达见证、候选0，不充模型结果或十题/小时。
 
 - [2026-10-29-text-attachment-history](2026-10-29-text-attachment-history/README.md)：23张真实发送/历史回看原图、指定模型流式请求、原件下载与数据/运行结算。
 

@@ -1,5 +1,7 @@
 # 工程题包库存与重型评估有效性缺口
 
+[Wasmi完整任务准备](wasmi-coredump/README.md)原reference跨实例资源归属真实失败，未建立全题可达见证，候选0；不是新的模型成绩或十题资格，不补作者解/删合同救通过。
+
 [SQLite安全导入真实Codex/OC](sqlite-safe-import/real-pair-20261101/README.md)已自然终态并先封后测：冻结0/60pass分别保留，原无条件恢复保证的共同嵌套缺口另列。原pair闭合不补候选，无总100/重型资格；十题继续。
 
 新[完整April月结真实对照](month-end-package/real-pair-20261101/README.md)已实际运行自然fresh Codex和原生OpenCorvus，完整原件先封/原源码真实重建/实际XLSX同消费/完整内容与图均已交。原冻结双4属于工资表示误拒，后验修复双0保阶段，未强造总100或整体质量胜负；数小时/有效小时及十题目标仍未达，不计下表完成率，心跳ACTIVE。

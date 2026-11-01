@@ -1,0 +1,49 @@
+{
+  "scope": "Independent stdlib read of the original actual binary; no new VM execution or source patch",
+  "decoded_objects": 19,
+  "cross_instance_actual": [
+    {
+      "function": 0,
+      "prefix": [
+        79,
+        85,
+        84,
+        33
+      ],
+      "global_value": 22
+    },
+    {
+      "function": 1,
+      "prefix": [
+        79,
+        85,
+        84,
+        33
+      ],
+      "global_value": 22
+    }
+  ],
+  "cross_instance_expected": [
+    {
+      "function": 0,
+      "prefix": [
+        73,
+        78,
+        78,
+        33
+      ],
+      "global_value": 11
+    },
+    {
+      "function": 1,
+      "prefix": [
+        79,
+        85,
+        84,
+        33
+      ],
+      "global_value": 22
+    }
+  ],
+  "cross_instance_matches": false
+}

@@ -1,0 +1,16 @@
+{
+  "registered_at": "2026-11-01T12:28:44.482414+00:00",
+  "task": "wasmi-trap-coredumps",
+  "task_source_commit": "0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea",
+  "base_repository": "https://github.com/wasmi-labs/wasmi",
+  "base_commit": "e1f76e285b9ad68a952b7cf5297bbb7ab91e6028",
+  "selected_before_reference_or_private_tests_read": true,
+  "selection_evidence": "Original113 metadata, priorSQLite/GQL prompts, this turn GQL/Wasmi/Bandit prompts; no model scores/trajectories/solutions/tests for this task",
+  "reason": "Whole VM configuration/trap/error/typed-frame/reentrant stack/memory/global/binary consumption feature, rather than a standalone encoder",
+  "plan": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/wasmi-coredump/BUILD-PLAN.md",
+  "candidate_started": false,
+  "model_calls": 0,
+  "automatic_candidate_launch_allowed": false,
+  "effective_candidate_hours_qualified": false,
+  "official_score": false
+}

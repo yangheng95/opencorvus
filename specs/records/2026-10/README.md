@@ -135,7 +135,7 @@
 
 - [2026-10-29-heavy-workbench-cross-system.md](2026-10-29-heavy-workbench-cross-system.md)：同一H05旧题两方真实业务交付、清洁复跑、升级触发及小时级要求。
 
-- [2026-10-29-heavy-workbench-long.md](2026-10-29-heavy-workbench-long.md)：SQLite真实Codex/OC已自然终态、先封原件再同源码消费；双0/60pass与共同嵌套全回滚缺口分列，无总100。月结等旧pair不重开，十题/有效小时0/10、心跳ACTIVE、通用行为根治未证。
+- [2026-10-29-heavy-workbench-long.md](2026-10-29-heavy-workbench-long.md)：SQLite真实结果已封/保存；Wasmi原参考跨实例资源归属真实失败、候选尚未启动，准备不充新模型成果。旧pair不重开，十题/有效小时0/10、心跳ACTIVE、通用行为根治未证。
 
 - [2026-10-29-attachment-workspace-journey.md](2026-10-29-attachment-workspace-journey.md)：跨项目文件附加、内容核对与草稿作用域实页调查。
 

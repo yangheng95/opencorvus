@@ -1,0 +1,186 @@
+ Downloading crates ...
+  Downloaded anes v0.1.6
+  Downloaded oorandom v11.1.5
+  Downloaded windows-link v0.2.1
+  Downloaded aho-corasick v1.1.4
+  Downloaded tinytemplate v1.2.1
+  Downloaded clap_builder v4.5.59
+  Downloaded zerocopy-derive v0.8.39
+  Downloaded clap v4.5.59
+  Downloaded criterion v0.5.1
+  Downloaded ciborium v0.2.2
+  Downloaded itoa v1.0.17
+  Downloaded anstyle v1.0.13
+  Downloaded once_cell v1.21.3
+  Downloaded ciborium-io v0.2.2
+  Downloaded ciborium-ll v0.2.2
+  Downloaded clap_lex v1.0.0
+  Downloaded criterion-plot v0.5.0
+  Downloaded either v1.15.0
+  Downloaded assert_matches v1.5.0
+  Downloaded winapi-util v0.1.11
+  Downloaded cfg-if v1.0.4
+  Downloaded num-traits v0.2.19
+  Downloaded same-file v1.0.6
+  Downloaded walkdir v2.5.0
+  Downloaded autocfg v1.5.0
+  Downloaded cast v0.3.0
+  Downloaded is-terminal v0.4.17
+  Downloaded itertools v0.10.5
+  Downloaded half v2.7.1
+  Downloaded zmij v1.0.21
+  Downloaded serde_json v1.0.149
+  Downloaded regex v1.12.3
+  Downloaded zerocopy v0.8.39
+  Downloaded regex-syntax v0.8.9
+  Downloaded regex-automata v0.4.14
+  Downloaded windows-sys v0.61.2
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.44
+   Compiling unicode-ident v1.0.24
+   Compiling serde_core v1.0.228
+   Compiling zerocopy v0.8.39
+   Compiling windows-link v0.2.1
+   Compiling memchr v2.8.0
+   Compiling zmij v1.0.21
+   Compiling serde v1.0.228
+   Compiling autocfg v1.5.0
+   Compiling serde_json v1.0.149
+   Compiling leb128fmt v0.1.0
+   Compiling windows-sys v0.61.2
+   Compiling cfg-if v1.0.4
+   Compiling wasm-encoder v0.245.1
+   Compiling libm v0.2.16
+   Compiling regex-syntax v0.8.9
+   Compiling either v1.15.0
+   Compiling num-traits v0.2.19
+   Compiling itoa v1.0.17
+   Compiling ciborium-io v0.2.2
+   Compiling anstyle v1.0.13
+   Compiling bumpalo v3.19.1
+   Compiling unicode-width v0.2.2
+   Compiling clap_lex v1.0.0
+   Compiling itertools v0.10.5
+   Compiling wast v245.0.1
+   Compiling bitflags v2.11.0
+   Compiling clap_builder v4.5.59
+   Compiling winapi-util v0.1.11
+   Compiling wasmi_core v2.0.0-beta.2 (D:\opencorvus-benchmark-runs\wasmi-coredump-pair-20261101\reference-source\crates\core)
+   Compiling syn v2.0.116
+   Compiling same-file v1.0.6
+   Compiling cast v0.3.0
+   Compiling regex-automata v0.4.14
+   Compiling walkdir v2.5.0
+   Compiling wasmparser v0.228.0
+   Compiling is-terminal v0.4.17
+   Compiling wasmi_ir v2.0.0-beta.2 (D:\opencorvus-benchmark-runs\wasmi-coredump-pair-20261101\reference-source\crates\ir)
+   Compiling criterion-plot v0.5.0
+   Compiling spin v0.9.8
+   Compiling wasmi_collections v2.0.0-beta.2 (D:\opencorvus-benchmark-runs\wasmi-coredump-pair-20261101\reference-source\crates\collections)
+   Compiling anes v0.1.6
+   Compiling clap v4.5.59
+   Compiling oorandom v11.1.5
+   Compiling once_cell v1.21.3
+   Compiling regex v1.12.3
+   Compiling assert_matches v1.5.0
+   Compiling zerocopy-derive v0.8.39
+   Compiling serde_derive v1.0.228
+   Compiling wat v1.245.1
+   Compiling wasmi v2.0.0-beta.2 (D:\opencorvus-benchmark-runs\wasmi-coredump-pair-20261101\reference-source\crates\wasmi)
+   Compiling tinytemplate v1.2.1
+   Compiling half v2.7.1
+   Compiling ciborium-ll v0.2.2
+   Compiling ciborium v0.2.2
+warning: associated function `new` is never used
+   --> crates\wasmi\src\engine\code_map.rs:808:12
+    |
+807 | impl CompiledFuncEntity {
+    | ----------------------- associated function in this implementation
+808 |     pub fn new(len_stack_slots: u16, ops: &[u8]) -> Self {
+    |            ^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling criterion v0.5.1
+warning: `wasmi` (lib) generated 1 warning
+error[E0433]: cannot find `ErrorKind` in `wasmi`
+   --> crates\wasmi\tests\benchmark_coredump_contract.rs:920:16
+    |
+920 |         wasmi::ErrorKind::TrapCode(code) => format!("wasm_trap:{code:?}"),
+    |                ^^^^^^^^^ could not find `ErrorKind` in `wasmi`
+    |
+help: consider importing this enum
+    |
+  1 + use std::io::ErrorKind;
+    |
+help: if you import `ErrorKind`, refer to it directly
+    |
+920 -         wasmi::ErrorKind::TrapCode(code) => format!("wasm_trap:{code:?}"),
+920 +         ErrorKind::TrapCode(code) => format!("wasm_trap:{code:?}"),
+    |
+
+error[E0433]: cannot find `ErrorKind` in `wasmi`
+   --> crates\wasmi\tests\benchmark_coredump_contract.rs:921:16
+    |
+921 |         wasmi::ErrorKind::Message(message) => format!("host_message:{message}"),
+    |                ^^^^^^^^^ could not find `ErrorKind` in `wasmi`
+    |
+help: consider importing this enum
+    |
+  1 + use std::io::ErrorKind;
+    |
+help: if you import `ErrorKind`, refer to it directly
+    |
+921 -         wasmi::ErrorKind::Message(message) => format!("host_message:{message}"),
+921 +         ErrorKind::Message(message) => format!("host_message:{message}"),
+    |
+
+error[E0433]: cannot find `ErrorKind` in `wasmi`
+   --> crates\wasmi\tests\benchmark_coredump_contract.rs:922:16
+    |
+922 |         wasmi::ErrorKind::Wasm(_) | wasmi::ErrorKind::Wat(_) => "module_decode_error".into(),
+    |                ^^^^^^^^^ could not find `ErrorKind` in `wasmi`
+    |
+help: consider importing this enum
+    |
+  1 + use std::io::ErrorKind;
+    |
+help: if you import `ErrorKind`, refer to it directly
+    |
+922 -         wasmi::ErrorKind::Wasm(_) | wasmi::ErrorKind::Wat(_) => "module_decode_error".into(),
+922 +         ErrorKind::Wasm(_) | wasmi::ErrorKind::Wat(_) => "module_decode_error".into(),
+    |
+
+error[E0433]: cannot find `ErrorKind` in `wasmi`
+   --> crates\wasmi\tests\benchmark_coredump_contract.rs:922:44
+    |
+922 |         wasmi::ErrorKind::Wasm(_) | wasmi::ErrorKind::Wat(_) => "module_decode_error".into(),
+    |                                            ^^^^^^^^^ could not find `ErrorKind` in `wasmi`
+    |
+help: consider importing this enum
+    |
+  1 + use std::io::ErrorKind;
+    |
+help: if you import `ErrorKind`, refer to it directly
+    |
+922 -         wasmi::ErrorKind::Wasm(_) | wasmi::ErrorKind::Wat(_) => "module_decode_error".into(),
+922 +         wasmi::ErrorKind::Wasm(_) | ErrorKind::Wat(_) => "module_decode_error".into(),
+    |
+
+warning: unused variable: `frame`
+   --> crates\wasmi\tests\benchmark_coredump_contract.rs:559:9
+    |
+559 |     for frame in frames {
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_frame`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `frame`
+   --> crates\wasmi\tests\benchmark_coredump_contract.rs:846:9
+    |
+846 |     for frame in frames {
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_frame`
+
+For more information about this error, try `rustc --explain E0433`.
+warning: `wasmi` (test "benchmark_coredump_contract") generated 2 warnings
+error: could not compile `wasmi` (test "benchmark_coredump_contract") due to 4 previous errors; 2 warnings emitted

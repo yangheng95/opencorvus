@@ -1,0 +1,54 @@
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded bitflags v2.11.0
+  Downloaded foldhash v0.1.5
+  Downloaded equivalent v1.0.2
+  Downloaded bumpalo v3.19.1
+  Downloaded wat v1.245.1
+  Downloaded hashbrown v0.16.1
+  Downloaded indexmap v2.13.0
+  Downloaded hashbrown v0.15.5
+  Downloaded leb128fmt v0.1.0
+  Downloaded quote v1.0.44
+  Downloaded serde v1.0.228
+  Downloaded spin v0.9.8
+  Downloaded string-interner v0.19.0
+  Downloaded serde_derive v1.0.228
+  Downloaded serde_core v1.0.228
+  Downloaded unicode-ident v1.0.24
+  Downloaded proc-macro2 v1.0.106
+  Downloaded memchr v2.8.0
+  Downloaded wasm-encoder v0.245.1
+  Downloaded libm v0.2.16
+  Downloaded wast v245.0.1
+  Downloaded wasmparser v0.245.1
+  Downloaded unicode-width v0.2.2
+  Downloaded wasmparser v0.228.0
+  Downloaded syn v2.0.116
+   Compiling libm v0.2.16
+    Checking leb128fmt v0.1.0
+   Compiling wasmi_ir v2.0.0-beta.2 (D:\opencorvus-benchmark-runs\wasmi-coredump-pair-20261101\reference-source\crates\ir)
+    Checking memchr v2.8.0
+   Compiling wasmparser v0.228.0
+    Checking bumpalo v3.19.1
+    Checking unicode-width v0.2.2
+    Checking bitflags v2.11.0
+    Checking wasmi_collections v2.0.0-beta.2 (D:\opencorvus-benchmark-runs\wasmi-coredump-pair-20261101\reference-source\crates\collections)
+    Checking spin v0.9.8
+    Checking wasm-encoder v0.245.1
+    Checking wast v245.0.1
+    Checking wasmi_core v2.0.0-beta.2 (D:\opencorvus-benchmark-runs\wasmi-coredump-pair-20261101\reference-source\crates\core)
+    Checking wat v1.245.1
+    Checking wasmi v2.0.0-beta.2 (D:\opencorvus-benchmark-runs\wasmi-coredump-pair-20261101\reference-source\crates\wasmi)
+warning: associated function `new` is never used
+   --> crates\wasmi\src\engine\code_map.rs:808:12
+    |
+807 | impl CompiledFuncEntity {
+    | ----------------------- associated function in this implementation
+808 |     pub fn new(len_stack_slots: u16, ops: &[u8]) -> Self {
+    |            ^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `wasmi` (lib) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 18.20s

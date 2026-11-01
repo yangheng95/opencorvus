@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-11-01T12:36:01.415689+00:00",
+  "argv": [
+    "C:/Users/hengu/.cargo/bin/cargo.exe",
+    "test",
+    "--locked",
+    "-p",
+    "wasmi",
+    "--test",
+    "benchmark_coredump_contract",
+    "--features",
+    "portable-dispatch",
+    "--",
+    "--test-threads=1",
+    "--nocapture"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\wasmi-coredump-pair-20261101\\reference-source",
+  "reference_implementation_modified": false,
+  "scope": "Same original actual acceptance after correcting root consumer tool failure; no model/candidate or new author algorithm",
+  "ended_at": "2026-11-01T12:36:04.341291+00:00",
+  "native_exit": 101
+}

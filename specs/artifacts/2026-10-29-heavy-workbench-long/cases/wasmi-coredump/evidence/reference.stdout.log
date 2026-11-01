@@ -1,0 +1,30 @@
+
+running 20 tests
+test complete_error_response_contracts ... ok
+test complete_zero_resource_module_state ... ok
+test coredump_captures_f32_f64_globals ... ok
+test coredump_captures_f32_f64_locals ... ok
+test coredump_captures_i32_i64_locals ... ok
+test coredump_captures_i64_global ... ok
+test coredump_captures_memory_contents ... ok
+test coredump_captures_mutable_global_current_value ... ok
+test coredump_custom_executable_name ... ok
+test coredump_default_executable_name ... ok
+test coredump_excludes_host_function_frames ... ok
+test coredump_instance_references_memory_and_globals ... ok
+test coredump_multiple_memories ... ok
+test coredump_nested_calls_youngest_to_oldest ... ok
+test coredump_nested_frame_locals ... ok
+test coredump_on_integer_division_by_zero ... ok
+test coredump_on_memory_out_of_bounds ... ok
+test coredump_produces_valid_wasm_with_required_sections ... ok
+test coredump_single_frame_unreachable ... ok
+test cross_instance_reentry_complete_state ... FAILED
+
+failures:
+
+failures:
+    cross_instance_reentry_complete_state
+
+test result: FAILED. 19 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+

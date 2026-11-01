@@ -1,0 +1,44 @@
+{
+  "registered_at": "2026-11-01T12:33:01.926114+00:00",
+  "original_test_functions": 22,
+  "current_functions": [
+    "coredump_produces_valid_wasm_with_required_sections",
+    "coredump_default_executable_name",
+    "coredump_custom_executable_name",
+    "coredump_single_frame_unreachable",
+    "coredump_nested_calls_youngest_to_oldest",
+    "coredump_nested_frame_locals",
+    "coredump_captures_i32_i64_locals",
+    "coredump_captures_f32_f64_locals",
+    "coredump_captures_memory_contents",
+    "coredump_captures_mutable_global_current_value",
+    "coredump_captures_i64_global",
+    "coredump_captures_f32_f64_globals",
+    "coredump_on_integer_division_by_zero",
+    "coredump_on_memory_out_of_bounds",
+    "coredump_excludes_host_function_frames",
+    "coredump_instance_references_memory_and_globals",
+    "coredump_multiple_memories",
+    "complete_error_response_contracts",
+    "complete_zero_resource_module_state",
+    "cross_instance_reentry_complete_state"
+  ],
+  "replaced_original_functions": [
+    "coredump_disabled_by_default",
+    "coredump_not_generated_for_non_trap_errors",
+    "coredump_not_generated_for_host_error",
+    "coredump_module_without_memory",
+    "coredump_module_without_globals"
+  ],
+  "meaning": "Same original API requests/positive WAT outcomes; three absence-only tests replaced by complete actual error response contracts, two resource-absence tests replaced by complete zero-resource-module state. Redundant operand-stack absence assertions removed; parser still consumes every encoded operand. Added prospective actual standard validator/raw-binary retention and cross-instance reentry public contract; reference unchanged.",
+  "candidate_started": false,
+  "reference_behavior_observed": false,
+  "pre_execution_quote_correction": "Generated Rust WAT literal escaping fixed before the first compile; pre-fix source retained. A precise patch context miss was an unexecuted root tool issue.",
+  "first_compile_outcome": {
+    "native_exit": 101,
+    "functions_executed": 0,
+    "root_cause": "Root consumer guessed wasmi::ErrorKind; original public lib.rs exposes wasmi::errors::ErrorKind. Four E0433 errors are one module-path mistake, not four VM defects.",
+    "correction": "Only correct public error-module path; remove two empty loops left by deletion of redundant absence assertions. Original implementation and all fixed inputs/expected states unchanged."
+  },
+  "corrected_at": "2026-11-01T12:36:01.338382+00:00"
+}

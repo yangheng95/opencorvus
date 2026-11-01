@@ -1194,3 +1194,11 @@ Recall：用户要完整重型任务的实质质量，不再接受工程文件�
 - 普通原有insert/upsert/count/transform/update/delete及物理integrity同输入均符。root首观察直接rename有index的列，原base要求先drop该index，两原程序正确TransformError/native1并未执行边界；原脚本/DB/log保，仅按原契约修观察后两native0，0只指observer结束而state失败照列。一次helpers读路径错也保，非候选/共享调度异常。
 - OCcanonical94tool request/outcome全终态90completed/4failed/pending0；97actual Provider均gpt-6.1-sol/streamtrue/200，usage9,408,371recorded tokens（task9,374,685/preflight33,686/cache-read9,161,344），内部cost0不冒免费。Codexactualmodel/usage未知，不作同模型/资源因果。先封后正常dispose runtimeDisposed/credentialsRemoved true，62289/30468/22608/16848退休不再请求/重开，源auth/models不动。
 - 当前唯一sqlite-safe-import-pair-20261101/current.json phase=paired_completed_quality_decomposed_shared_atomicity_gap_no_heavy_qualification，active候选/eval null，自动新候选/重复review false。本pair已完成真实结果，不重checker/作者研究/新candidate/机械版凑资格。未审全base回归/任意SQL与崩溃并发/统计成熟/有效候选小时仍未知；总十题0/10、心跳ACTIVE20min，继续新的完整深度任务。通用verification原则已落、行为改善/根治仍未证。
+
+### 新完整Wasmi任务可达性未就绪：真实原参考跨实例失败（2026-11-01）
+
+- SQLite原pair/所有旧对象不重开。先按113metadata和原prompt选择wasmi-trap-coredumps，原task0b9fabbb63b9104d678fe965e1632f2dd9eaa2ea/base e1f76e285b9ad68a952b7cf5297bbb7ab91e6028，选前不读其私有答案/测试/模型分数。BUILD-PLAN在准备/私料读取前落；原源码ZIP6387955bytes/332成员及原task/ref/tests保在wasmi-coredump-pair-20261101。
+- 原ref准确apply未改实现，自有CargoHome/target、Cargo/rustc1.98.1与锁文件、事前portable-dispatch native库check0。原22函数的5个absence-only测试改为2个完整Error响应/零资源状态合同，保17原正向功能，删除冗余空operand断言，再事前增加原合同跨实例重入、标准wasmparser与原bytes保，共20函数，非官方22成绩。首consumer猜错wasmi::ErrorKind（真实public wasmi::errors::ErrorKind）编译101/0函数；只修工具原验收首次实跑19pass1fail/native101，原错/首源ZIP保。
+- outer/inner两真实Wasm实例经host重入，原二进制Wasm标准valid且帧0/1保；但内层期待INN!/global11，被映射成OUT!/global22，外层OUT!/22正确。原reference只输出当前outer的一个module/instance资源表并拼接inner stack，frame实例引用0不能保inner身份。独立stdlib读取同原19dump确认，不再次执行VM。不是按索引表顺序/metadata名字造失败，不证明整个DeepSWE或题目不可实现。
+- root独立reader首版漏data offset表达式0x0B结束opcode，multiple-memory段解析失败；原VM bytes经成熟validator已valid。仅修reader重读原件0，原脚本和tool错误保；一次诊断exec缺__file__的NameError和precompile WAT引号修/patch context miss保，均非候选/生产共享事故。
+- current phase=original_reference_full_contract_failed_no_candidate_started、active候选/eval null、model0/自动launchfalse。未建立原完整可达见证，不补reference/缩合同/加作者算法或开模型冒公平对照；本准备不计十题/小时/新模型结果。用户当轮问结果，已直答有真实SQLite对照但十题未达、Wasmi当前只有准备。总十题/有效小时0/10、心跳ACTIVE20min和通用行为根治未证不改。

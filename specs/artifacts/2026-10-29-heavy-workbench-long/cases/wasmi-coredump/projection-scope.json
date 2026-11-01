@@ -1,0 +1,149 @@
+{
+  "external_root": "D:\\opencorvus-benchmark-runs\\wasmi-coredump-pair-20261101",
+  "full_workspace_included": false,
+  "external_retention": [
+    "original6.38MB source ZIP/332 members and whole original task/tests/solution",
+    "unchanged reference source plus injected consumer, entire Cargo target/cache/runtime",
+    "all19 actual raw Wasm dumps and first/corrected original execution logs",
+    "first generated source/prequote source and original tool outputs"
+  ],
+  "members": [
+    {
+      "path": "BUILD-PLAN.md",
+      "bytes": 8494
+    },
+    {
+      "path": "evaluator/adaptation.diff",
+      "bytes": 10908
+    },
+    {
+      "path": "evaluator/coredump_contract.rs",
+      "bytes": 33414
+    },
+    {
+      "path": "evaluator/read_actual_dumps.py",
+      "bytes": 5535
+    },
+    {
+      "path": "evaluator/registration.json",
+      "bytes": 2517
+    },
+    {
+      "path": "evidence/assessment.json",
+      "bytes": 1653
+    },
+    {
+      "path": "evidence/corrected-consumer-source.zip",
+      "bytes": 10333
+    },
+    {
+      "path": "evidence/cross-instance-original.wasm",
+      "bytes": 65660
+    },
+    {
+      "path": "evidence/first-compile/execution.json",
+      "bytes": 1103
+    },
+    {
+      "path": "evidence/first-compile/stderr.log",
+      "bytes": 6912
+    },
+    {
+      "path": "evidence/first-compile/stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/first-consumer-source.zip",
+      "bytes": 12966
+    },
+    {
+      "path": "evidence/independent-decoded.json",
+      "bytes": 18270
+    },
+    {
+      "path": "evidence/independent-verdict.json",
+      "bytes": 815
+    },
+    {
+      "path": "evidence/maintenance-observations.json",
+      "bytes": 771
+    },
+    {
+      "path": "evidence/native-reference-check.json",
+      "bytes": 908
+    },
+    {
+      "path": "evidence/native-reference-check.stderr.log",
+      "bytes": 2145
+    },
+    {
+      "path": "evidence/native-reference-check.stdout.log",
+      "bytes": 0
+    },
+    {
+      "path": "evidence/original-reference-apply.json",
+      "bytes": 281
+    },
+    {
+      "path": "evidence/reference.execution.json",
+      "bytes": 672
+    },
+    {
+      "path": "evidence/reference.stderr.log",
+      "bytes": 1799
+    },
+    {
+      "path": "evidence/reference.stdout.log",
+      "bytes": 1150
+    },
+    {
+      "path": "inputs/registration.json",
+      "bytes": 943
+    },
+    {
+      "path": "inputs/TASK.original.md",
+      "bytes": 3158
+    },
+    {
+      "path": "LICENSE-APACHE",
+      "bytes": 10842
+    },
+    {
+      "path": "LICENSE-MIT",
+      "bytes": 1062
+    },
+    {
+      "path": "README.md",
+      "bytes": 4679
+    },
+    {
+      "path": "TASK-SOURCE-LICENSE",
+      "bytes": 11357
+    },
+    {
+      "path": "tools/prepare_consumer.py",
+      "bytes": 7680
+    },
+    {
+      "path": "tools/prepare_native.py",
+      "bytes": 2049
+    },
+    {
+      "path": "tools/prepare_originals.py",
+      "bytes": 3074
+    },
+    {
+      "path": "tools/read_actual_dumps-before-offset-end-fix.py",
+      "bytes": 5520
+    },
+    {
+      "path": "tools/run_corrected_consumer.py",
+      "bytes": 2759
+    },
+    {
+      "path": "tools/run_reference_consumer.py",
+      "bytes": 3268
+    }
+  ],
+  "scope": "Exact original objects and task-specific consumer/analysis projection; source/runtime completeness and functional quality are distinct."
+}

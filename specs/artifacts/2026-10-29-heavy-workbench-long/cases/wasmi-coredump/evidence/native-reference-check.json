@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "C:\\Users\\hengu\\.cargo\\bin\\cargo.exe",
+    "check",
+    "--locked",
+    "-p",
+    "wasmi",
+    "--lib",
+    "--features",
+    "portable-dispatch"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\wasmi-coredump-pair-20261101\\reference-source",
+  "declared_env": {
+    "CARGO_HOME": "D:\\opencorvus-benchmark-runs\\wasmi-coredump-pair-20261101\\runtime\\cargo-home",
+    "CARGO_TARGET_DIR": "D:\\opencorvus-benchmark-runs\\wasmi-coredump-pair-20261101\\private-build\\reference",
+    "CARGO_TERM_COLOR": "never"
+  },
+  "started_at": "2026-11-01T12:30:03.957718+00:00",
+  "scope": "Only library compilation and dependency readiness; not feature execution/model work/effective hours. Portable dispatch is a prospective native-Windows runtime choice for both future candidates, not source patching.",
+  "ended_at": "2026-11-01T12:30:22.323748+00:00",
+  "native_exit": 0
+}

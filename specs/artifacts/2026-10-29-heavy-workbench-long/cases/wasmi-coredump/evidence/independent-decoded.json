@@ -1,0 +1,916 @@
+[
+  {
+    "name": "complete_zero_resource_module_state.wasm",
+    "bytes": 80,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_captures_f32_f64_globals.wasm",
+    "bytes": 105,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": [
+            0,
+            1
+          ]
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [
+        {
+          "type": "f32",
+          "bits": 1078523331,
+          "mutable": 1
+        },
+        {
+          "type": "f64",
+          "bits": 4613303445313851803,
+          "mutable": 1
+        }
+      ],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_captures_f32_f64_locals.wasm",
+    "bytes": 94,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [
+                {
+                  "type": "f32",
+                  "bits": 1069547520
+                },
+                {
+                  "type": "f64",
+                  "bits": 4612811918334230528
+                }
+              ],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_captures_i32_i64_locals.wasm",
+    "bytes": 94,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [
+                {
+                  "type": "i32",
+                  "value": 10
+                },
+                {
+                  "type": "i64",
+                  "value": 99
+                },
+                {
+                  "type": "i32",
+                  "value": 42
+                },
+                {
+                  "type": "i64",
+                  "value": 1234567890123
+                }
+              ],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_captures_i64_global.wasm",
+    "bytes": 94,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": [
+            0
+          ]
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [
+        {
+          "type": "i64",
+          "value": 78187493520,
+          "mutable": 1
+        }
+      ],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_captures_memory_contents.wasm",
+    "bytes": 65634,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [
+            0
+          ],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [
+        {
+          "flags": 0,
+          "initial": 1,
+          "maximum": null
+        }
+      ],
+      "globals": [],
+      "data": [
+        {
+          "memory": 0,
+          "offset": 0,
+          "length": 65536
+        }
+      ],
+      "executable_name": "",
+      "memory_prefixes": [
+        [
+          239,
+          190,
+          173,
+          222
+        ]
+      ]
+    }
+  },
+  {
+    "name": "coredump_captures_mutable_global_current_value.wasm",
+    "bytes": 90,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": [
+            0
+          ]
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [
+        {
+          "type": "i32",
+          "value": 99,
+          "mutable": 1
+        }
+      ],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_custom_executable_name.wasm",
+    "bytes": 91,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [],
+      "data": [],
+      "executable_name": "my-app.wasm",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_default_executable_name.wasm",
+    "bytes": 80,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_excludes_host_function_frames.wasm",
+    "bytes": 86,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 2,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            },
+            {
+              "instance": 0,
+              "function": 1,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_instance_references_memory_and_globals.wasm",
+    "bytes": 65649,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [
+            0
+          ],
+          "globals": [
+            0,
+            1
+          ]
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [
+        {
+          "flags": 0,
+          "initial": 1,
+          "maximum": null
+        }
+      ],
+      "globals": [
+        {
+          "type": "i32",
+          "value": 10,
+          "mutable": 1
+        },
+        {
+          "type": "i64",
+          "value": 20,
+          "mutable": 1
+        }
+      ],
+      "data": [
+        {
+          "memory": 0,
+          "offset": 0,
+          "length": 65536
+        }
+      ],
+      "executable_name": "",
+      "memory_prefixes": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  {
+    "name": "coredump_multiple_memories.wasm",
+    "bytes": 196717,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [
+            0,
+            1
+          ],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [
+        {
+          "flags": 0,
+          "initial": 1,
+          "maximum": null
+        },
+        {
+          "flags": 0,
+          "initial": 2,
+          "maximum": null
+        }
+      ],
+      "globals": [],
+      "data": [
+        {
+          "memory": 0,
+          "offset": 0,
+          "length": 65536
+        },
+        {
+          "memory": 1,
+          "offset": 0,
+          "length": 131072
+        }
+      ],
+      "executable_name": "",
+      "memory_prefixes": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  {
+    "name": "coredump_nested_calls_youngest_to_oldest.wasm",
+    "bytes": 92,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 2,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            },
+            {
+              "instance": 0,
+              "function": 1,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            },
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_nested_frame_locals.wasm",
+    "bytes": 93,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 1,
+              "code_offset": 0,
+              "locals": [
+                {
+                  "type": "i64",
+                  "value": 999
+                }
+              ],
+              "operands": []
+            },
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [
+                {
+                  "type": "i32",
+                  "value": 7
+                },
+                {
+                  "type": "i32",
+                  "value": 42
+                }
+              ],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_on_integer_division_by_zero.wasm",
+    "bytes": 80,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_on_memory_out_of_bounds.wasm",
+    "bytes": 65634,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [
+            0
+          ],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [
+        {
+          "flags": 0,
+          "initial": 1,
+          "maximum": null
+        }
+      ],
+      "globals": [],
+      "data": [
+        {
+          "memory": 0,
+          "offset": 0,
+          "length": 65536
+        }
+      ],
+      "executable_name": "",
+      "memory_prefixes": [
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    }
+  },
+  {
+    "name": "coredump_produces_valid_wasm_with_required_sections.wasm",
+    "bytes": 80,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "coredump_single_frame_unreachable.wasm",
+    "bytes": 80,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [],
+          "globals": []
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [],
+      "globals": [],
+      "data": [],
+      "executable_name": "",
+      "memory_prefixes": []
+    }
+  },
+  {
+    "name": "cross_instance_reentry_complete_state.wasm",
+    "bytes": 65660,
+    "decoded": {
+      "modules": [
+        ""
+      ],
+      "instances": [
+        {
+          "module": 0,
+          "memories": [
+            0
+          ],
+          "globals": [
+            0
+          ]
+        }
+      ],
+      "stacks": [
+        {
+          "thread": "main",
+          "frames": [
+            {
+              "instance": 0,
+              "function": 0,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            },
+            {
+              "instance": 0,
+              "function": 1,
+              "code_offset": 0,
+              "locals": [],
+              "operands": []
+            }
+          ]
+        }
+      ],
+      "memory_types": [
+        {
+          "flags": 0,
+          "initial": 1,
+          "maximum": null
+        }
+      ],
+      "globals": [
+        {
+          "type": "i32",
+          "value": 22,
+          "mutable": 1
+        }
+      ],
+      "data": [
+        {
+          "memory": 0,
+          "offset": 0,
+          "length": 65536
+        }
+      ],
+      "executable_name": "reentry-app",
+      "memory_prefixes": [
+        [
+          79,
+          85,
+          84,
+          33
+        ]
+      ]
+    }
+  }
+]

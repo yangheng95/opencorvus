@@ -1,0 +1,34 @@
+warning: associated function `new` is never used
+   --> crates\wasmi\src\engine\code_map.rs:808:12
+    |
+807 | impl CompiledFuncEntity {
+    | ----------------------- associated function in this implementation
+808 |     pub fn new(len_stack_slots: u16, ops: &[u8]) -> Self {
+    |            ^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `wasmi` (lib) generated 1 warning
+   Compiling wasmi v2.0.0-beta.2 (D:\opencorvus-benchmark-runs\wasmi-coredump-pair-20261101\reference-source\crates\wasmi)
+warning: field `stack_values` is never read
+   --> crates\wasmi\tests\benchmark_coredump_contract.rs:226:5
+    |
+221 | struct FrameEntry {
+    |        ---------- field in this struct
+...
+226 |     stack_values: Vec<CoredumpValue>,
+    |     ^^^^^^^^^^^^
+    |
+    = note: `FrameEntry` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `wasmi` (test "benchmark_coredump_contract") generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.44s
+     Running tests\benchmark_coredump_contract.rs (D:\opencorvus-benchmark-runs\wasmi-coredump-pair-20261101\private-build\reference\debug\deps\benchmark_coredump_contract-5ba50aeefc966c8a.exe)
+
+thread 'cross_instance_reentry_complete_state' (27116) panicked at crates\wasmi\tests\benchmark_coredump_contract.rs:973:5:
+assertion `left == right` failed
+  left: [([79, 85, 84, 33], I32(22)), ([79, 85, 84, 33], I32(22))]
+ right: [([73, 78, 78, 33], I32(11)), ([79, 85, 84, 33], I32(22))]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p wasmi --test benchmark_coredump_contract`

@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-11-01T12:34:03.523376+00:00",
+  "argv": [
+    "C:/Users/hengu/.cargo/bin/cargo.exe",
+    "test",
+    "--locked",
+    "-p",
+    "wasmi",
+    "--test",
+    "benchmark_coredump_contract",
+    "--features",
+    "portable-dispatch",
+    "--",
+    "--test-threads=1",
+    "--nocapture"
+  ],
+  "cwd": "D:\\opencorvus-benchmark-runs\\wasmi-coredump-pair-20261101\\reference-source",
+  "declared_env": {
+    "CARGO_HOME": "D:\\opencorvus-benchmark-runs\\wasmi-coredump-pair-20261101\\runtime\\cargo-home",
+    "CARGO_TARGET_DIR": "D:\\opencorvus-benchmark-runs\\wasmi-coredump-pair-20261101\\private-build\\reference",
+    "CARGO_TERM_COLOR": "never",
+    "WASMI_DUMP_OUTPUT": "D:\\opencorvus-benchmark-runs\\wasmi-coredump-pair-20261101\\reference-consumption\\actual-dumps"
+  },
+  "reference_implementation_modified": false,
+  "scope": "Original implementation plus the separately registered external consumer only; first actual feature execution, not a model result or official score",
+  "ended_at": "2026-11-01T12:34:28.647227+00:00",
+  "native_exit": 101
+}
