@@ -1,0 +1,22 @@
+{
+  "started_at": "2026-11-01T00:00:03.974625+00:00",
+  "finished_at": "2026-11-01T00:00:25.270796+00:00",
+  "argv": [
+    "D:/opencorvus-benchmark-runs/native-science-l01-20261031/Scripts/python.exe",
+    "-u",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\finish_study.py",
+    "--project",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project",
+    "--inputs",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results",
+    "--analysis",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\analysis-segments\\18416"
+  ],
+  "native_exit": 0,
+  "seconds": 21.29617239999061,
+  "original_native_exit": 1,
+  "scope": "delivery repair only; no original native success or cold retraining claim"
+}

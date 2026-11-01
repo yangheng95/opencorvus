@@ -1,0 +1,43 @@
+{
+  "problem": "convection",
+  "component": "total",
+  "device": "cuda",
+  "torch": "2.7.1+cu128",
+  "independent_numpy": {
+    "problem": "convection",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 1.5358777517962098e-07,
+    "constraint_loss": 8.61394276931974e-06,
+    "total_loss": 8.76753054449936e-06,
+    "residual_rmse": 0.0005542342017227392,
+    "evaluation_residual_loss": 1.8148692511197072e-07,
+    "evaluation_residual_rmse": 0.000602473111619051,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 1.257401112898483e-07,
+        "rmse": 0.0005014780379834162
+      },
+      "periodic_value": {
+        "count": 101,
+        "loss": 3.0212636661534417e-05,
+        "rmse": 0.00777336949611099
+      }
+    },
+    "l2re": 0.030511631290084402,
+    "parameter_count": 20601
+  },
+  "gradient_inf": 1.6796443756636722e-05,
+  "gradient_l2": 6.989497721016484e-05,
+  "directional_gradient": 1.6029852128524314e-07,
+  "finite_difference_directional_gradient": 1.6031948819438934e-07,
+  "hvp_l2": 742.8381556032438,
+  "finite_difference_hvp_relative_error": 1.88194638080412e-11,
+  "checks": {
+    "scalar_matches_independent_numpy": true,
+    "directional_gradient_matches_finite_difference": true,
+    "hvp_matches_finite_difference": true
+  }
+}

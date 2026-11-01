@@ -1,0 +1,192 @@
+[
+  {
+    "phase": "adam",
+    "parent_pid": 18416,
+    "argv": [
+      "D:\\opencorvus-benchmark-runs\\native-science-l01-20261031\\Scripts\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\run_study.py",
+      "--inputs",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\analysis-segments\\18416\\recovery\\adam",
+      "--device",
+      "cuda",
+      "--recovery-state",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-adam-s345-lr1e-04\\adam\\state-500.pt",
+      "--recovery-until",
+      "600",
+      "--recovery-expected",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-adam-s345-lr1e-04\\adam\\accepted-600.npz"
+    ],
+    "started_at": "2026-10-31T23:43:16.428483+00:00",
+    "finished_at": "2026-10-31T23:43:32.929829+00:00",
+    "seconds": 16.50124759999744,
+    "native_exit": 0,
+    "stdout": "",
+    "stderr": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\run_study.py:39: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).\n  parameters=tuple(torch.tensor(v,dtype=torch.float64,device=a.device,requires_grad=True) for v in state['parameters'])\n",
+    "restoration_result": {
+      "status": "verified",
+      "maximum_parameter_error": 0.0,
+      "absolute_loss_difference": 0.0,
+      "native_pid": 27092,
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\run_study.py",
+        "--inputs",
+        "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\analysis-segments\\18416\\recovery\\adam",
+        "--device",
+        "cuda",
+        "--recovery-state",
+        "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-adam-s345-lr1e-04\\adam\\state-500.pt",
+        "--recovery-until",
+        "600",
+        "--recovery-expected",
+        "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-adam-s345-lr1e-04\\adam\\accepted-600.npz"
+      ],
+      "original_context": {
+        "spec": {
+          "id": "convection-adam-s345-lr1e-04",
+          "problem": "convection",
+          "seed": 345,
+          "method": "adam",
+          "adam_learning_rate": 0.0001,
+          "max_updates": 41000,
+          "adam_updates_before_switch": null,
+          "stratum": "cross_problem"
+        },
+        "original_initial": "work/results/init/seed345.npz",
+        "inputs": "inputs",
+        "created_pid": 18416
+      },
+      "actual_phase": {
+        "method": "adam",
+        "status": "max_updates",
+        "reason": "registered update limit",
+        "failure_code": null,
+        "attempts": 600,
+        "accepted_updates": 600,
+        "costs": {
+          "closure_calls": 0,
+          "gradient_calls": 600,
+          "hvp_calls": 0,
+          "lbfgs_native_iterations": 0,
+          "loss_calls": 1200
+        },
+        "started_at": "2026-10-31T23:43:28.309672+00:00",
+        "finished_at": "2026-10-31T23:43:31.051323+00:00",
+        "native_pid": 27092,
+        "seconds": 2.741699999998673,
+        "resume_from_saved_at": "2026-10-31T05:07:06.337052+00:00"
+      },
+      "source_state": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-adam-s345-lr1e-04\\adam\\state-500.pt",
+      "expected_uninterrupted": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-adam-s345-lr1e-04\\adam\\accepted-600.npz",
+      "scope": "new process restores saved optimizer/RNG and performs only the remaining comparison updates"
+    }
+  },
+  {
+    "phase": "lbfgs",
+    "parent_pid": 18416,
+    "argv": [
+      "D:\\opencorvus-benchmark-runs\\native-science-l01-20261031\\Scripts\\python.exe",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\run_study.py",
+      "--inputs",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\analysis-segments\\18416\\recovery\\lbfgs",
+      "--device",
+      "cuda",
+      "--recovery-state",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-hybrid-s345-lr1e-03\\lbfgs\\state-100.pt",
+      "--recovery-until",
+      "120",
+      "--recovery-expected",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-hybrid-s345-lr1e-03\\lbfgs\\accepted-120.npz"
+    ],
+    "started_at": "2026-10-31T23:43:32.938336+00:00",
+    "finished_at": "2026-10-31T23:43:41.138473+00:00",
+    "seconds": 8.200938800000586,
+    "native_exit": 0,
+    "stdout": "",
+    "stderr": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\run_study.py:39: UserWarning: To copy construct from a tensor, it is recommended to use sourceTensor.detach().clone() or sourceTensor.detach().clone().requires_grad_(True), rather than torch.tensor(sourceTensor).\n  parameters=tuple(torch.tensor(v,dtype=torch.float64,device=a.device,requires_grad=True) for v in state['parameters'])\n",
+    "restoration_result": {
+      "status": "verified",
+      "maximum_parameter_error": 0.0,
+      "absolute_loss_difference": 0.0,
+      "native_pid": 31136,
+      "argv": [
+        "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\run_study.py",
+        "--inputs",
+        "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\analysis-segments\\18416\\recovery\\lbfgs",
+        "--device",
+        "cuda",
+        "--recovery-state",
+        "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-hybrid-s345-lr1e-03\\lbfgs\\state-100.pt",
+        "--recovery-until",
+        "120",
+        "--recovery-expected",
+        "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-hybrid-s345-lr1e-03\\lbfgs\\accepted-120.npz"
+      ],
+      "original_context": {
+        "spec": {
+          "id": "convection-hybrid-s345-lr1e-03",
+          "problem": "convection",
+          "seed": 345,
+          "method": "hybrid",
+          "adam_learning_rate": 0.001,
+          "max_updates": 41000,
+          "adam_updates_before_switch": 11000,
+          "stratum": "learning_rate_sensitivity"
+        },
+        "original_initial": "work/results/init/seed345.npz",
+        "inputs": "inputs",
+        "created_pid": 18416,
+        "completed_phases": [
+          {
+            "method": "adam",
+            "status": "max_updates",
+            "reason": "actual shared Adam prefix",
+            "attempts": 11000,
+            "accepted_updates": 11000,
+            "shared_config": "convection-adam-s345-lr1e-03"
+          }
+        ],
+        "prior_trace": [
+          {
+            "path": "work/results/runs/convection-adam-s345-lr1e-03/adam/attempts.jsonl",
+            "through": 11000,
+            "shared": "convection-adam-s345-lr1e-03"
+          }
+        ],
+        "switch": "work/results/runs/convection-hybrid-s345-lr1e-03/switch.npz"
+      },
+      "actual_phase": {
+        "method": "lbfgs",
+        "status": "max_updates",
+        "reason": "registered update limit",
+        "failure_code": null,
+        "attempts": 120,
+        "accepted_updates": 120,
+        "costs": {
+          "closure_calls": 243,
+          "gradient_calls": 11483,
+          "hvp_calls": 0,
+          "lbfgs_native_iterations": 120,
+          "loss_calls": 22603
+        },
+        "started_at": "2026-10-31T23:43:37.019946+00:00",
+        "finished_at": "2026-10-31T23:43:39.612350+00:00",
+        "native_pid": 31136,
+        "seconds": 2.5931595000001835,
+        "resume_from_saved_at": "2026-10-31T20:59:16.708680+00:00"
+      },
+      "source_state": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-hybrid-s345-lr1e-03\\lbfgs\\state-100.pt",
+      "expected_uninterrupted": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\runs\\convection-hybrid-s345-lr1e-03\\lbfgs\\accepted-120.npz",
+      "scope": "new process restores saved optimizer/RNG and performs only the remaining comparison updates"
+    }
+  }
+]

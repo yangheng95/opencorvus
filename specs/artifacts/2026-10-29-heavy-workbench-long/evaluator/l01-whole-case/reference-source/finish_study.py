@@ -37,6 +37,10 @@ def finish_study(project,inputs,out,profile,manifest,observations,parent,device,
             t=time.perf_counter();started=e.utc();p=subprocess.run(argv,capture_output=True,text=True)
             item={'phase':phase,'parent_pid':os.getpid(),'argv':argv,'started_at':started,'finished_at':e.utc(),'seconds':time.perf_counter()-t,'native_exit':p.returncode,'stdout':p.stdout,'stderr':p.stderr,'restoration_result':json.loads((analysis/'recovery'/phase/'recovery.json').read_text()) if (analysis/'recovery'/phase/'recovery.json').exists() else None};recovery.append(item)
         e.write_json(diagnostics/'actual-new-process-recovery.json',recovery)
+    publish_report(project,inputs,out,analysis,profile,manifest,observations,full)
+
+def publish_report(project,inputs,out,analysis,profile,manifest,observations,full):
+    """Publish the existing completed analysis without running its diagnostics again."""
     make_report(project,inputs,analysis,profile,manifest,observations,full)
     if full:
         for p in analysis.iterdir():
@@ -128,9 +132,85 @@ Use the captured complete source/requirements, public inputs, run_study.py comma
     (out/'paper.md').write_text(paper,encoding='utf-8')
     (out/'reproduction.md').write_text('Run from the captured project: python run_study.py --inputs inputs --output NEW_RESULTS --device cuda. Default executes the complete registered matrix; --only ID is a partial clean execution and cannot stand in for it. --resume OWN_STATE --only ORIGINAL_ID --output NEW_FORK preserves old source/state and explicitly forks saved optimizer/RNG. Compare original actual receipts and manifests. Figures are generated from this output only. Reading old weights is not clean retraining. See original errors/unexecuted records before claiming completion.\n',encoding='utf-8')
     e.write_json(out/'references.json',[{'title':'Challenges in Training PINNs: A Loss Landscape Perspective','authors':'Rathore et al.','year':2024,'url':'https://proceedings.mlr.press/v235/rathore24a.html','source':'supplied original PDF/Markdown and SOURCE.md, third-party CC BY4.0; no original-author endorsement'}])
-    styles=getSampleStyleSheet();story=[]
+    write_pdf(paper,rows,selected,structure,out)
+
+def write_pdf(paper,rows,selected,structure,out,publication_error=None):
+    """Render the existing numerical report; no fitting, optimization or evaluation."""
+    import html
+    from reportlab.lib import colors
+    from reportlab.lib.styles import getSampleStyleSheet,ParagraphStyle
+    from reportlab.platypus import SimpleDocTemplate,Paragraph,Spacer,Table,TableStyle,Image,PageBreak
+    styles=getSampleStyleSheet();styles.add(ParagraphStyle(name='Cell',fontName='Helvetica',fontSize=7,leading=9))
+    styles['BodyText'].spaceAfter=7
+    story=[]
+    def para(text,style='BodyText'):return Paragraph(html.escape(str(text)),styles[style])
+    def table(data,widths):
+        item=Table([[para(v,'Cell') for v in row] for row in data],colWidths=widths,repeatRows=1,hAlign='LEFT')
+        item.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#e9eef4')),('VALIGN',(0,0),(-1,-1),'TOP'),('BOTTOMPADDING',(0,0),(-1,-1),5),('TOPPADDING',(0,0),(-1,-1),5),('LINEBELOW',(0,0),(-1,0),.5,colors.grey),('LINEBELOW',(0,1),(-1,-1),.2,colors.lightgrey)]))
+        story.extend([item,Spacer(1,12)])
+    if publication_error:
+        story.append(para('Publication repair: the original study recorded '+publication_error['type']+': '+publication_error['error']+'. This PDF was published afterward from retained results; no optimization was rerun.'))
+    special=None
     for line in paper.splitlines():
-        if not line:story.append(Spacer(1,5));continue
-        style=styles['Heading1' if line.startswith('# ') else 'Heading2' if line.startswith('## ') else 'BodyText']
-        story.append(Paragraph(__import__('html').escape(line.lstrip('# ')),style))
-    SimpleDocTemplate(str(out/'paper.pdf')).build(story)
+        if line.startswith('# '):story.append(para(line[2:],'Title'));continue
+        if line.startswith('## '):
+            special=line[3:];story.append(para(special,'Heading2'))
+            if special=='Actual registered results':
+                data=[['Configuration','State','Updates','Closures','HVPs','Train loss','L2RE']]
+                for row in rows:
+                    data.append([row['config_id'],row['status'],row['accepted_updates'],row['closure_calls'],row['hvp_calls'],format(float(row['train_loss']),'.5g') if row['train_loss'] is not None else 'unavailable',format(float(row['l2re']),'.5g') if row['l2re'] is not None else 'unavailable'])
+                table(data,[205,67,43,48,43,52,52])
+            elif special=='Same-final quality':
+                data=[['Problem / selected final','Measure','Observed','Target','Result']]
+                for problem,value in selected.items():
+                    m=value['metrics'];items=[('relative solution L2RE',m['l2re']),('evaluation residual RMSE',m['evaluation_residual_rmse'])]+[(k+' RMSE',v['rmse']) for k,v in m['constraint_families'].items()]
+                    for label,observed in items:data.append([problem+' / '+value['config_id'],label,format(observed,'.7g'),'<= 0.01','PASS' if observed<=.01 else 'FAIL'])
+                table(data,[205,140,65,50,50])
+            elif special=='Independent representation and physical-prior controls':
+                data=[['Problem','L2RE','Evaluation residual','Old-profile eligible']]
+                for value in structure:data.append([value['problem'],format(value['metrics']['l2re'],'.7g'),format(value['metrics']['evaluation_residual_rmse'],'.7g'),'No'])
+                if len(data)>1:table(data,[120,100,160,130])
+            continue
+        if not line or line.startswith('|'):continue
+        if any(line.startswith(problem+': {') for problem in ('convection','reaction','wave')):continue
+        story.append(para(line))
+    story.extend([PageBreak(),para('Actual training trajectories','Heading1'),Image(str(out/'figures/actual-training.png'),width=530,height=159),Spacer(1,14),para('Actual selected fields and absolute errors','Heading1'),Image(str(out/'figures/actual-selected-solutions.png'),width=530,height=448.5)])
+    SimpleDocTemplate(str(out/'paper.pdf'),leftMargin=36,rightMargin=36,topMargin=36,bottomMargin=36).build(story)
+
+def report_only():
+    """Explicit delivery repair after a terminal study; never resumes optimization."""
+    import argparse
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--project',type=Path,required=True)
+    p.add_argument('--inputs',type=Path,required=True)
+    p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--analysis',type=Path,required=True)
+    p.add_argument('--pdf-only',action='store_true',help='render the already published tables and figures only')
+    a=p.parse_args();project=a.project.resolve();out=a.output.resolve();analysis=a.analysis.resolve()
+    if not out.is_relative_to(project) or not analysis.is_relative_to(out/'analysis-segments'):
+        raise ValueError('report publication requires the original owned analysis directory')
+    def read(path):return json.loads(path.read_text(encoding='utf-8'))
+    profile=read(a.inputs/'profile.json');manifest=read(out/'manifest.json')
+    if any(r['status'] in ('incomplete','dependency_incomplete') for r in manifest['runs']):
+        raise ValueError('report-only requires every registered configuration to be terminal')
+    specs={s['id']:s for s in profile['base_configurations']+profile['continuations']}
+    if set(specs)!={r['config_id'] for r in manifest['runs']}:
+        raise ValueError('report-only requires the complete unchanged registration')
+    if a.pdf_only:
+        import csv
+        with (analysis/'summary.csv').open(encoding='utf-8',newline='') as f:rows=list(csv.DictReader(f))
+        selected=read(analysis/'selected-quality.json')['selected']
+        structure=read(analysis/'structure-controls/actual-results.json')
+        error=read(out/'study-error.json') if (out/'study-error.json').is_file() else None
+        write_pdf((analysis/'paper.md').read_text(encoding='utf-8'),rows,selected,structure,analysis,error)
+        shutil.copy2(analysis/'paper.pdf',out/'paper.pdf')
+        e.write_json(analysis/'pdf-publication.json',{'at':e.utc(),'native_pid':os.getpid(),'argv':sys.argv,'scope':'render existing report only; original numbers, figures and native failure retained'})
+        return
+    observations={}
+    for row in manifest['runs']:
+        final=project/row['checkpoints']['final']
+        observations[row['config_id']]={'metrics':read(final.parent/'metrics.json'),'status':row['status'],'final':final}
+    publish_report(project,a.inputs.resolve(),out,analysis,profile,manifest,observations,True)
+    e.write_json(analysis/'report-publication.json',{'at':e.utc(),'native_pid':os.getpid(),'argv':sys.argv,'scope':'report publication only; original native exit and completed optimization/diagnostics remain unchanged'})
+
+if __name__=='__main__':report_only()

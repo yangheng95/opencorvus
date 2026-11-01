@@ -1,0 +1,43 @@
+{
+  "problem": "reaction",
+  "component": "total",
+  "device": "cuda",
+  "torch": "2.7.1+cu128",
+  "independent_numpy": {
+    "problem": "reaction",
+    "residual_points": 10000,
+    "constraint_count": 358,
+    "evaluation_points": 8385,
+    "residual_loss": 4.999282353178956e-07,
+    "constraint_loss": 4.6773556607136124e-07,
+    "total_loss": 9.67663801389257e-07,
+    "residual_rmse": 0.000999928232742626,
+    "evaluation_residual_loss": 6.726282417888305e-07,
+    "evaluation_residual_rmse": 0.0011598519231253881,
+    "constraint_families": {
+      "initial_value": {
+        "count": 257,
+        "loss": 6.442171234974306e-07,
+        "rmse": 0.0011350921755500128
+      },
+      "periodic_value": {
+        "count": 101,
+        "loss": 1.8668632818887325e-08,
+        "rmse": 0.00019322853215240923
+      }
+    },
+    "l2re": 0.025930146954337405,
+    "parameter_count": 20601
+  },
+  "gradient_inf": 8.14668004551728e-06,
+  "gradient_l2": 6.690926217098207e-05,
+  "directional_gradient": 3.198136056631424e-07,
+  "finite_difference_directional_gradient": 3.19813391258073e-07,
+  "hvp_l2": 9.055962506758728,
+  "finite_difference_hvp_relative_error": 9.596831335642817e-11,
+  "checks": {
+    "scalar_matches_independent_numpy": true,
+    "directional_gradient_matches_finite_difference": true,
+    "hvp_matches_finite_difference": true
+  }
+}

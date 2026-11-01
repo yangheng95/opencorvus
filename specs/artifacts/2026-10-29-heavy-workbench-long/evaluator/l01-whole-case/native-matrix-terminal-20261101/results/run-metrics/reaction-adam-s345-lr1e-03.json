@@ -1,0 +1,26 @@
+{
+  "problem": "reaction",
+  "residual_points": 10000,
+  "constraint_count": 358,
+  "evaluation_points": 8385,
+  "residual_loss": 1.7857792739522315e-06,
+  "constraint_loss": 3.2757733591603256e-06,
+  "total_loss": 5.061552633112557e-06,
+  "residual_rmse": 0.0018898567532764125,
+  "evaluation_residual_loss": 2.3009349834995405e-06,
+  "evaluation_residual_rmse": 0.0021451969529623803,
+  "constraint_families": {
+    "initial_value": {
+      "count": 257,
+      "loss": 4.444703687580665e-06,
+      "rmse": 0.002981510921523067
+    },
+    "periodic_value": {
+      "count": 101,
+      "loss": 3.013664838729301e-07,
+      "rmse": 0.0007763587880264255
+    }
+  },
+  "l2re": 0.05871656407983432,
+  "parameter_count": 20601
+}

@@ -1,0 +1,34 @@
+Traceback (most recent call last):
+  File "D:\opencorvus-benchmark-runs\l01-full-case-20261031\author-project\run_study.py", line 171, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "D:\opencorvus-benchmark-runs\l01-full-case-20261031\author-project\run_study.py", line 166, in main
+    finish_study(PROJECT,inputs,out,profile,manifest,observations,parent,a.device,not a.only)
+  File "D:\opencorvus-benchmark-runs\l01-full-case-20261031\author-project\finish_study.py", line 40, in finish_study
+    make_report(project,inputs,analysis,profile,manifest,observations,full)
+  File "D:\opencorvus-benchmark-runs\l01-full-case-20261031\author-project\finish_study.py", line 48, in make_report
+    import matplotlib
+  File "D:\opencorvus-benchmark-runs\native-science-l01-20261031\Lib\site-packages\matplotlib\__init__.py", line 1007, in <module>
+    rcParams._update_raw(_rc_params_in_file(matplotlib_fname()))
+                                            ^^^^^^^^^^^^^^^^^^
+  File "D:\opencorvus-benchmark-runs\native-science-l01-20261031\Lib\site-packages\matplotlib\__init__.py", line 633, in matplotlib_fname
+    for fname in gen_candidates():
+                 ^^^^^^^^^^^^^^^^
+  File "D:\opencorvus-benchmark-runs\native-science-l01-20261031\Lib\site-packages\matplotlib\__init__.py", line 630, in gen_candidates
+    yield os.path.join(get_configdir(), 'matplotlibrc')
+                       ^^^^^^^^^^^^^^^
+  File "D:\opencorvus-benchmark-runs\native-science-l01-20261031\Lib\site-packages\matplotlib\__init__.py", line 340, in wrapper
+    ret = func(**kwargs)
+          ^^^^^^^^^^^^^^
+  File "D:\opencorvus-benchmark-runs\native-science-l01-20261031\Lib\site-packages\matplotlib\__init__.py", line 576, in get_configdir
+    return _get_config_or_cache_dir(_get_xdg_config_dir)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\opencorvus-benchmark-runs\native-science-l01-20261031\Lib\site-packages\matplotlib\__init__.py", line 528, in _get_config_or_cache_dir
+    configdir = Path.home() / ".matplotlib"
+                ^^^^^^^^^^^
+  File "C:\Users\hengu\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1202, in home
+    return cls("~").expanduser()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hengu\.cache\codex-runtimes\codex-primary-runtime\dependencies\python\Lib\pathlib.py", line 1406, in expanduser
+    raise RuntimeError("Could not determine home directory.")
+RuntimeError: Could not determine home directory.

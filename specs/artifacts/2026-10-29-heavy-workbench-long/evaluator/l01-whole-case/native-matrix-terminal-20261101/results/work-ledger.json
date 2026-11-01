@@ -1,0 +1,362 @@
+[
+  {
+    "config_id": "convection-lbfgs-s345-lrnone",
+    "phase_receipts": [
+      "work/results/runs/convection-lbfgs-s345-lrnone/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 83632,
+      "gradient_calls": 165632,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 41000,
+      "loss_calls": 206632
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-adam-s345-lr1e-04",
+    "phase_receipts": [
+      "work/results/runs/convection-adam-s345-lr1e-04/adam/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 41000,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 82000
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-hybrid-s345-lr1e-04",
+    "phase_receipts": [
+      "work/results/runs/convection-hybrid-s345-lr1e-04/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": "convection-adam-s345-lr1e-04",
+    "logical_costs": {
+      "closure_calls": 63039,
+      "gradient_calls": 134039,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 30000,
+      "loss_calls": 175039
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "reaction-adam-s345-lr1e-03",
+    "phase_receipts": [
+      "work/results/runs/reaction-adam-s345-lr1e-03/adam/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 41000,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 82000
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "reaction-lbfgs-s345-lrnone",
+    "phase_receipts": [
+      "work/results/runs/reaction-lbfgs-s345-lrnone/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 117998,
+      "gradient_calls": 199998,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 41000,
+      "loss_calls": 240998
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "reaction-hybrid-s345-lr1e-03",
+    "phase_receipts": [
+      "work/results/runs/reaction-hybrid-s345-lr1e-03/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": "reaction-adam-s345-lr1e-03",
+    "logical_costs": {
+      "closure_calls": 84327,
+      "gradient_calls": 155327,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 30000,
+      "loss_calls": 196327
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "wave-adam-s345-lr1e-03",
+    "phase_receipts": [
+      "work/results/runs/wave-adam-s345-lr1e-03/adam/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 41000,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 82000
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "wave-lbfgs-s345-lrnone",
+    "phase_receipts": [
+      "work/results/runs/wave-lbfgs-s345-lrnone/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 83124,
+      "gradient_calls": 165124,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 41000,
+      "loss_calls": 206124
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "wave-hybrid-s345-lr1e-03",
+    "phase_receipts": [
+      "work/results/runs/wave-hybrid-s345-lr1e-03/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": "wave-adam-s345-lr1e-03",
+    "logical_costs": {
+      "closure_calls": 61818,
+      "gradient_calls": 132818,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 30000,
+      "loss_calls": 173818
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-adam-s456-lr1e-04",
+    "phase_receipts": [
+      "work/results/runs/convection-adam-s456-lr1e-04/adam/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 41000,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 82000
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-lbfgs-s456-lrnone",
+    "phase_receipts": [
+      "work/results/runs/convection-lbfgs-s456-lrnone/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 83282,
+      "gradient_calls": 165282,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 41000,
+      "loss_calls": 206282
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-hybrid-s456-lr1e-04",
+    "phase_receipts": [
+      "work/results/runs/convection-hybrid-s456-lr1e-04/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": "convection-adam-s456-lr1e-04",
+    "logical_costs": {
+      "closure_calls": 61861,
+      "gradient_calls": 132861,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 30000,
+      "loss_calls": 173861
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-adam-s567-lr1e-04",
+    "phase_receipts": [
+      "work/results/runs/convection-adam-s567-lr1e-04/adam/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 41000,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 82000
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-lbfgs-s567-lrnone",
+    "phase_receipts": [
+      "work/results/runs/convection-lbfgs-s567-lrnone/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 83497,
+      "gradient_calls": 165497,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 41000,
+      "loss_calls": 206497
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-hybrid-s567-lr1e-04",
+    "phase_receipts": [
+      "work/results/runs/convection-hybrid-s567-lr1e-04/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": "convection-adam-s567-lr1e-04",
+    "logical_costs": {
+      "closure_calls": 65241,
+      "gradient_calls": 136241,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 30000,
+      "loss_calls": 177241
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-adam-s345-lr1e-03",
+    "phase_receipts": [
+      "work/results/runs/convection-adam-s345-lr1e-03/adam/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 41000,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 82000
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-hybrid-s345-lr1e-03",
+    "phase_receipts": [
+      "work/results/runs/convection-hybrid-s345-lr1e-03/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": "convection-adam-s345-lr1e-03",
+    "logical_costs": {
+      "closure_calls": 61987,
+      "gradient_calls": 132987,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 30000,
+      "loss_calls": 173987
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-adam-s345-lr1e-02",
+    "phase_receipts": [
+      "work/results/runs/convection-adam-s345-lr1e-02/adam/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 41000,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 82000
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-hybrid-s345-lr1e-02",
+    "phase_receipts": [
+      "work/results/runs/convection-hybrid-s345-lr1e-02/lbfgs/execution.json"
+    ],
+    "shared_prefix_config": "convection-adam-s345-lr1e-02",
+    "logical_costs": {
+      "closure_calls": 62197,
+      "gradient_calls": 133197,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 30000,
+      "loss_calls": 174197
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-gd-continuation-0.0001",
+    "phase_receipts": [
+      "work/results/runs/convection-gd-continuation-0.0001/gd/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 200,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 400
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-gd-continuation-0.001",
+    "phase_receipts": [
+      "work/results/runs/convection-gd-continuation-0.001/gd/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 200,
+      "hvp_calls": 0,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 400
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-nncg-continuation-0.01",
+    "phase_receipts": [
+      "work/results/runs/convection-nncg-continuation-0.01/nncg/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 1,
+      "hvp_calls": 421,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 2
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-nncg-continuation-0.1",
+    "phase_receipts": [
+      "work/results/runs/convection-nncg-continuation-0.1/nncg/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 200,
+      "hvp_calls": 48276,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 600
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  },
+  {
+    "config_id": "convection-nncg-continuation-1.0",
+    "phase_receipts": [
+      "work/results/runs/convection-nncg-continuation-1.0/nncg/execution.json"
+    ],
+    "shared_prefix_config": null,
+    "logical_costs": {
+      "closure_calls": 0,
+      "gradient_calls": 200,
+      "hvp_calls": 21702,
+      "lbfgs_native_iterations": 0,
+      "loss_calls": 600
+    },
+    "meaning": "shared actual prefix is referenced, never billed twice in physical wall/cost totals"
+  }
+]

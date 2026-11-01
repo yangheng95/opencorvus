@@ -1,0 +1,32 @@
+{
+  "at": "2026-11-01T00:06:02.4958797Z",
+  "root": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031",
+  "phase": "original_matrix_terminal_quality_failed_report_repaired",
+  "active_locator": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-study\\active.json",
+  "owner_launch": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-owner-launch.json",
+  "owner_pid": null,
+  "author_project": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project",
+  "formal_source": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-study\\pre-execution-source.zip",
+  "old_reaction_terminal": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\reaction-completion\\closure-addendum.json",
+  "transfer_terminal": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\reaction-transfer\\owner-terminal.json",
+  "whole_case_frozen": false,
+  "candidate_score": null,
+  "do_not_restart": "All original registered cells are terminal. No original owner, matrix, completed ID, old Docker or L02/L06 process may be restarted.",
+  "repair_receipt": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\publication-repair\\repair-terminal.json",
+  "pending_continuation": null,
+  "environment_block": null,
+  "native_pid": null,
+  "native_evidence": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-study\\native-remaining-registered-cells",
+  "active_native": null,
+  "report_repair": "D:/opencorvus-benchmark-runs/l01-full-case-20261031/report-publication-repair/terminal.json",
+  "full_prepare": "D:/opencorvus-benchmark-runs/l01-full-case-20261031/report-publication-repair/original-full-prepare-corrected-path/assessment.json",
+  "quality": {
+    "passed": 8,
+    "failed": 6,
+    "all_three_solution_targets": false,
+    "total": null,
+    "study_complete": false,
+    "solution_reproduced": false,
+    "heavy_qualification": false
+  }
+}

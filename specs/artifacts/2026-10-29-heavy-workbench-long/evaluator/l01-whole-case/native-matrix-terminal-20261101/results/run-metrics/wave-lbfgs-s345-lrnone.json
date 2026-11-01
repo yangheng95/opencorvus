@@ -1,0 +1,36 @@
+{
+  "problem": "wave",
+  "residual_points": 10000,
+  "constraint_count": 716,
+  "evaluation_points": 8385,
+  "residual_loss": 1.9822536357651487e-05,
+  "constraint_loss": 0.01948365091928604,
+  "total_loss": 0.019503473455643693,
+  "residual_rmse": 0.006296433332872109,
+  "evaluation_residual_loss": 2.7764664684934955e-05,
+  "evaluation_residual_rmse": 0.007451800411301279,
+  "constraint_families": {
+    "initial_value": {
+      "count": 257,
+      "loss": 0.05265480071111847,
+      "rmse": 0.32451440865119835
+    },
+    "initial_velocity": {
+      "count": 257,
+      "loss": 6.634084221900262e-05,
+      "rmse": 0.01151875359741692
+    },
+    "boundary_left": {
+      "count": 101,
+      "loss": 0.002505996773949454,
+      "rmse": 0.07079543451310195
+    },
+    "boundary_right": {
+      "count": 101,
+      "loss": 0.0014639109389324688,
+      "rmse": 0.054109351112954014
+    }
+  },
+  "l2re": 0.4669517683128822,
+  "parameter_count": 20601
+}

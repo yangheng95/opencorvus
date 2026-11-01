@@ -1,5 +1,7 @@
 # 评估侧材料：不得交给候选
 
+最新[L01原矩阵终态](l01-whole-case/native-matrix-terminal-20261101/README.md)：24配置终态/原报告阶段exit1保留，报告后补成功；同checker14质量8通过6失败，三解误差均未达1%。没有新整审、候选或重型资格；下文运行中描述仅历史。
+
 `original-paperbench-rubric.json`是固定上游原件，1963叶；原有层级权重保留，不将叶数当权重，不将派生分数称官方成绩。上游来源、许可见包内来源清单及public/SOURCE.md。
 
 `qualification/`是评估者的真实数值/环境资格，不是受测agent答卷：

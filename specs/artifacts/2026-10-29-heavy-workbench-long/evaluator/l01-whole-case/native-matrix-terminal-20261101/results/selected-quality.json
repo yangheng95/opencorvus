@@ -1,0 +1,128 @@
+{
+  "target": {
+    "l2re": 0.01,
+    "evaluation_residual_rmse": 0.01,
+    "each_condition_rmse": 0.01
+  },
+  "selected": {
+    "convection": {
+      "config_id": "convection-nncg-continuation-0.1",
+      "metrics": {
+        "problem": "convection",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 1.5358777517962098e-07,
+        "constraint_loss": 8.61394276931974e-06,
+        "total_loss": 8.76753054449936e-06,
+        "residual_rmse": 0.0005542342017227392,
+        "evaluation_residual_loss": 1.8148692511197072e-07,
+        "evaluation_residual_rmse": 0.000602473111619051,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 1.257401112898483e-07,
+            "rmse": 0.0005014780379834162
+          },
+          "periodic_value": {
+            "count": 101,
+            "loss": 3.0212636661534417e-05,
+            "rmse": 0.00777336949611099
+          }
+        },
+        "l2re": 0.030511631290084402,
+        "parameter_count": 20601
+      },
+      "target_components": {
+        "relative_solution": false,
+        "evaluation_residual": true,
+        "initial_value": true,
+        "periodic_value": true
+      }
+    },
+    "reaction": {
+      "config_id": "reaction-hybrid-s345-lr1e-03",
+      "metrics": {
+        "problem": "reaction",
+        "residual_points": 10000,
+        "constraint_count": 358,
+        "evaluation_points": 8385,
+        "residual_loss": 4.999282353178956e-07,
+        "constraint_loss": 4.6773556607136124e-07,
+        "total_loss": 9.67663801389257e-07,
+        "residual_rmse": 0.000999928232742626,
+        "evaluation_residual_loss": 6.726282417888305e-07,
+        "evaluation_residual_rmse": 0.0011598519231253881,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 6.442171234974306e-07,
+            "rmse": 0.0011350921755500128
+          },
+          "periodic_value": {
+            "count": 101,
+            "loss": 1.8668632818887325e-08,
+            "rmse": 0.00019322853215240923
+          }
+        },
+        "l2re": 0.025930146954337405,
+        "parameter_count": 20601
+      },
+      "target_components": {
+        "relative_solution": false,
+        "evaluation_residual": true,
+        "initial_value": true,
+        "periodic_value": true
+      }
+    },
+    "wave": {
+      "config_id": "wave-hybrid-s345-lr1e-03",
+      "metrics": {
+        "problem": "wave",
+        "residual_points": 10000,
+        "constraint_count": 716,
+        "evaluation_points": 8385,
+        "residual_loss": 6.7935271093551925e-06,
+        "constraint_loss": 0.001762616811359936,
+        "total_loss": 0.0017694103384692913,
+        "residual_rmse": 0.0036860621561105537,
+        "evaluation_residual_loss": 1.4036928082645263e-05,
+        "evaluation_residual_rmse": 0.005298476777838186,
+        "constraint_families": {
+          "initial_value": {
+            "count": 257,
+            "loss": 0.0004446497446988937,
+            "rmse": 0.029821124884849455
+          },
+          "initial_velocity": {
+            "count": 257,
+            "loss": 1.5835586588862937e-06,
+            "rmse": 0.0017796396595301499
+          },
+          "boundary_left": {
+            "count": 101,
+            "loss": 0.005239385808484918,
+            "rmse": 0.1023658713486572
+          },
+          "boundary_right": {
+            "count": 101,
+            "loss": 0.006120531795186017,
+            "rmse": 0.11063934015698049
+          }
+        },
+        "l2re": 0.36803703814911914,
+        "parameter_count": 20601
+      },
+      "target_components": {
+        "relative_solution": false,
+        "evaluation_residual": true,
+        "initial_value": false,
+        "initial_velocity": true,
+        "boundary_left": false,
+        "boundary_right": false
+      }
+    }
+  },
+  "all_three_solution_targets": false,
+  "scope": "actual author results; numerical outcomes do not by themselves certify methods/full-study/provenance"
+}

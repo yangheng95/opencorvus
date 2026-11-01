@@ -1,0 +1,424 @@
+{
+  "at": "2026-11-01T08:04:10.542596+08:00",
+  "meaning": "declared scientific projection, not a full workspace or all native bytes",
+  "members": [
+    {
+      "path": "current-reference-locator.json",
+      "bytes": 1938
+    },
+    {
+      "path": "diagnostics/actual-new-process-recovery.json",
+      "bytes": 9178
+    },
+    {
+      "path": "diagnostics/convection-numeric.json",
+      "bytes": 1402
+    },
+    {
+      "path": "diagnostics/parent-constraint-spectrum.json",
+      "bytes": 2797
+    },
+    {
+      "path": "diagnostics/parent-residual-spectrum.json",
+      "bytes": 2788
+    },
+    {
+      "path": "diagnostics/parent-total-spectrum.json",
+      "bytes": 2773
+    },
+    {
+      "path": "diagnostics/reaction-numeric.json",
+      "bytes": 1397
+    },
+    {
+      "path": "diagnostics/same-system-pcg.json",
+      "bytes": 57417
+    },
+    {
+      "path": "diagnostics/wave-numeric.json",
+      "bytes": 1666
+    },
+    {
+      "path": "original-full-checker/actual-facts.json",
+      "bytes": 188957
+    },
+    {
+      "path": "original-full-checker/assessment.json",
+      "bytes": 126607
+    },
+    {
+      "path": "original-full-checker/binding.json",
+      "bytes": 71545
+    },
+    {
+      "path": "original-native/execution-started.json",
+      "bytes": 1256
+    },
+    {
+      "path": "original-native/execution.json",
+      "bytes": 1311
+    },
+    {
+      "path": "original-native/first-retained.json",
+      "bytes": 119
+    },
+    {
+      "path": "original-native/owner-source.py",
+      "bytes": 5622
+    },
+    {
+      "path": "original-native/owner-terminal.json",
+      "bytes": 184
+    },
+    {
+      "path": "original-native/runtime-packages.json",
+      "bytes": 657
+    },
+    {
+      "path": "original-native/stderr.txt",
+      "bytes": 2559
+    },
+    {
+      "path": "original-native/stdout.txt",
+      "bytes": 3819
+    },
+    {
+      "path": "publication-repair/finish_study.before.py",
+      "bytes": 16184
+    },
+    {
+      "path": "publication-repair/finish_study.pdf-v2.py",
+      "bytes": 22571
+    },
+    {
+      "path": "publication-repair/finish_study.report-v1.py",
+      "bytes": 18285
+    },
+    {
+      "path": "publication-repair/first-facility-path-error.json",
+      "bytes": 454
+    },
+    {
+      "path": "publication-repair/maintenance-observations.json",
+      "bytes": 597
+    },
+    {
+      "path": "publication-repair/paper.v1.pdf",
+      "bytes": 10777
+    },
+    {
+      "path": "publication-repair/paper.v2.pdf",
+      "bytes": 627191
+    },
+    {
+      "path": "publication-repair/pdf-final-terminal.json",
+      "bytes": 958
+    },
+    {
+      "path": "publication-repair/pdf-final.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "publication-repair/pdf-terminal.json",
+      "bytes": 958
+    },
+    {
+      "path": "publication-repair/pdf.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "publication-repair/prepare-argv.json",
+      "bytes": 1088
+    },
+    {
+      "path": "publication-repair/prepare-corrected-argv.json",
+      "bytes": 1073
+    },
+    {
+      "path": "publication-repair/prepare-corrected-terminal.json",
+      "bytes": 181
+    },
+    {
+      "path": "publication-repair/prepare-corrected.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "publication-repair/prepare-corrected.stdout.txt",
+      "bytes": 418
+    },
+    {
+      "path": "publication-repair/prepare-terminal.json",
+      "bytes": 175
+    },
+    {
+      "path": "publication-repair/prepare.stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "publication-repair/prepare.stdout.txt",
+      "bytes": 433
+    },
+    {
+      "path": "publication-repair/project_terminal_evidence.py",
+      "bytes": 3710
+    },
+    {
+      "path": "publication-repair/render_pdf_only.py",
+      "bytes": 2017
+    },
+    {
+      "path": "publication-repair/render_pdf_only_v2.py",
+      "bytes": 2033
+    },
+    {
+      "path": "publication-repair/repair_report.py",
+      "bytes": 2923
+    },
+    {
+      "path": "publication-repair/started.json",
+      "bytes": 2536
+    },
+    {
+      "path": "publication-repair/stderr.txt",
+      "bytes": 0
+    },
+    {
+      "path": "publication-repair/stdout.txt",
+      "bytes": 0
+    },
+    {
+      "path": "publication-repair/terminal.json",
+      "bytes": 951
+    },
+    {
+      "path": "README.md",
+      "bytes": 4967
+    },
+    {
+      "path": "results/figures/actual-selected-solutions.png",
+      "bytes": 292229
+    },
+    {
+      "path": "results/figures/actual-training.png",
+      "bytes": 198794
+    },
+    {
+      "path": "results/manifest.json",
+      "bytes": 21099
+    },
+    {
+      "path": "results/paper.md",
+      "bytes": 12085
+    },
+    {
+      "path": "results/paper.pdf",
+      "bytes": 627417
+    },
+    {
+      "path": "results/references.json",
+      "bytes": 327
+    },
+    {
+      "path": "results/reproduction.md",
+      "bytes": 550
+    },
+    {
+      "path": "results/run-metrics/convection-adam-s345-lr1e-02.json",
+      "bytes": 742
+    },
+    {
+      "path": "results/run-metrics/convection-adam-s345-lr1e-03.json",
+      "bytes": 746
+    },
+    {
+      "path": "results/run-metrics/convection-adam-s345-lr1e-04.json",
+      "bytes": 741
+    },
+    {
+      "path": "results/run-metrics/convection-adam-s456-lr1e-04.json",
+      "bytes": 744
+    },
+    {
+      "path": "results/run-metrics/convection-adam-s567-lr1e-04.json",
+      "bytes": 739
+    },
+    {
+      "path": "results/run-metrics/convection-gd-continuation-0.0001.json",
+      "bytes": 716
+    },
+    {
+      "path": "results/run-metrics/convection-gd-continuation-0.001.json",
+      "bytes": 733
+    },
+    {
+      "path": "results/run-metrics/convection-hybrid-s345-lr1e-02.json",
+      "bytes": 744
+    },
+    {
+      "path": "results/run-metrics/convection-hybrid-s345-lr1e-03.json",
+      "bytes": 751
+    },
+    {
+      "path": "results/run-metrics/convection-hybrid-s345-lr1e-04.json",
+      "bytes": 754
+    },
+    {
+      "path": "results/run-metrics/convection-hybrid-s456-lr1e-04.json",
+      "bytes": 756
+    },
+    {
+      "path": "results/run-metrics/convection-hybrid-s567-lr1e-04.json",
+      "bytes": 753
+    },
+    {
+      "path": "results/run-metrics/convection-lbfgs-s345-lrnone.json",
+      "bytes": 715
+    },
+    {
+      "path": "results/run-metrics/convection-lbfgs-s456-lrnone.json",
+      "bytes": 745
+    },
+    {
+      "path": "results/run-metrics/convection-lbfgs-s567-lrnone.json",
+      "bytes": 741
+    },
+    {
+      "path": "results/run-metrics/convection-nncg-continuation-0.01.json",
+      "bytes": 751
+    },
+    {
+      "path": "results/run-metrics/convection-nncg-continuation-0.1.json",
+      "bytes": 749
+    },
+    {
+      "path": "results/run-metrics/convection-nncg-continuation-1.0.json",
+      "bytes": 753
+    },
+    {
+      "path": "results/run-metrics/reaction-adam-s345-lr1e-03.json",
+      "bytes": 750
+    },
+    {
+      "path": "results/run-metrics/reaction-hybrid-s345-lr1e-03.json",
+      "bytes": 750
+    },
+    {
+      "path": "results/run-metrics/reaction-lbfgs-s345-lrnone.json",
+      "bytes": 750
+    },
+    {
+      "path": "results/run-metrics/wave-adam-s345-lr1e-03.json",
+      "bytes": 981
+    },
+    {
+      "path": "results/run-metrics/wave-hybrid-s345-lr1e-03.json",
+      "bytes": 996
+    },
+    {
+      "path": "results/run-metrics/wave-lbfgs-s345-lrnone.json",
+      "bytes": 989
+    },
+    {
+      "path": "results/selected-quality.json",
+      "bytes": 4193
+    },
+    {
+      "path": "results/structure-controls.json",
+      "bytes": 12197
+    },
+    {
+      "path": "results/study-error.json",
+      "bytes": 2722
+    },
+    {
+      "path": "results/summary.csv",
+      "bytes": 2909
+    },
+    {
+      "path": "results/work-ledger.json",
+      "bytes": 11958
+    },
+    {
+      "path": "visual/pdf-pages/page-1.png",
+      "bytes": 266478
+    },
+    {
+      "path": "visual/pdf-pages/page-2.png",
+      "bytes": 302140
+    },
+    {
+      "path": "visual/pdf-pages/page-3.png",
+      "bytes": 401035
+    },
+    {
+      "path": "visual/pdf-pages/page-4.png",
+      "bytes": 213153
+    },
+    {
+      "path": "visual/pdf-pages-approved/page-1.png",
+      "bytes": 268772
+    },
+    {
+      "path": "visual/pdf-pages-approved/page-2.png",
+      "bytes": 234981
+    },
+    {
+      "path": "visual/pdf-pages-approved/page-3.png",
+      "bytes": 161494
+    },
+    {
+      "path": "visual/pdf-pages-approved/page-4.png",
+      "bytes": 465395
+    }
+  ],
+  "projected_bytes": 4722989,
+  "external_closed_objects": [
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-study\\native-remaining-registered-cells\\native-originals.zip",
+      "bytes": 14542623805,
+      "members": 1757,
+      "uncompressed_bytes": 16478929254
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-study\\native-remaining-registered-cells\\pre-execution-source.zip",
+      "bytes": 2492378,
+      "members": 41,
+      "uncompressed_bytes": 3640724
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\report-publication-repair\\report-repair-source.zip",
+      "bytes": 2501756,
+      "members": 41,
+      "uncompressed_bytes": 3642825
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\report-publication-repair\\pdf-repair-source.zip",
+      "bytes": 2503057,
+      "members": 41,
+      "uncompressed_bytes": 3647111
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\report-publication-repair\\pdf-final-source.zip",
+      "bytes": 2503053,
+      "members": 41,
+      "uncompressed_bytes": 3647138
+    },
+    {
+      "path": "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\local-transition\\first-segment-receipt-v2.zip",
+      "bytes": 5507,
+      "members": 6,
+      "uncompressed_bytes": 14335
+    }
+  ],
+  "external_only": [
+    "all optimizer .pt states, complete original NPZ vectors and attempt/closure traces",
+    "original source/input assets and all environment/wheel/cache bytes",
+    "full checker extraction and unreviewed assignment"
+  ],
+  "original_native_exit": 1,
+  "report_repair_exit": 0,
+  "full_prepare_exit": 4,
+  "score": null,
+  "heavy_qualification": false,
+  "manifest_scope": "all regular repository files except this self-describing scope.json; original provenance retained in copied receipts and projection source"
+}

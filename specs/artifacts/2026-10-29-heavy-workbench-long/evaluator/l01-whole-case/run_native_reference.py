@@ -20,6 +20,8 @@ def main():
     freeze=subprocess.run([str(a.python),'-m','pip','freeze'],capture_output=True,text=True,encoding='utf-8');save(a.out/'runtime-packages.json',{'argv':[str(a.python),'-m','pip','freeze'],'exit_code':freeze.returncode,'stdout':freeze.stdout,'stderr':freeze.stderr})
     argv=[str(a.python),'-u','-B',str(project/'run_study.py'),'--inputs',str(project/'inputs'),'--output',str(results),'--device','cuda','--continue-study']
     env={k:os.environ[k] for k in ('SystemRoot','WINDIR','PATH','TEMP','TMP') if k in os.environ}
+    matplotlib_config=project/'work/matplotlib-config';matplotlib_config.mkdir(parents=True,exist_ok=True)
+    env['MPLCONFIGDIR']=str(matplotlib_config)
     env.update(OMP_NUM_THREADS='4',MKL_NUM_THREADS='4',OPENBLAS_NUM_THREADS='4',CUDA_VISIBLE_DEVICES='0',PYTHONNOUSERSITE='1',PYTHONIOENCODING='utf-8')
     started=now();timer=time.perf_counter();execution_id='native-'+uuid.uuid4().hex
     with (a.out/'stdout.txt').open('wb') as stdout,(a.out/'stderr.txt').open('wb') as stderr:

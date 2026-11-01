@@ -1,0 +1,641 @@
+{
+  "format": "heavy-pinn-study/1",
+  "benchmark": "HeavyWorkBench-Long/0.2.0-dev",
+  "case": "L01",
+  "runs": [
+    {
+      "config_id": "convection-adam-s345-lr1e-04",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-adam-s345-lr1e-04/final.npz"
+      },
+      "trace": "work/results/runs/convection-adam-s345-lr1e-04/attempts.jsonl",
+      "receipt": "work/results/runs/convection-adam-s345-lr1e-04/execution.json"
+    },
+    {
+      "config_id": "convection-lbfgs-s345-lrnone",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "lbfgs": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 83632,
+        "gradient_calls": 165632,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 41000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-lbfgs-s345-lrnone/final.npz"
+      },
+      "trace": "work/results/runs/convection-lbfgs-s345-lrnone/attempts.jsonl",
+      "receipt": "work/results/runs/convection-lbfgs-s345-lrnone/execution.json"
+    },
+    {
+      "config_id": "convection-hybrid-s345-lr1e-04",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000
+        }
+      },
+      "costs": {
+        "closure_calls": 63039,
+        "gradient_calls": 134039,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": "work/results/runs/convection-hybrid-s345-lr1e-04/switch.npz",
+        "final": "work/results/runs/convection-hybrid-s345-lr1e-04/final.npz"
+      },
+      "trace": "work/results/runs/convection-hybrid-s345-lr1e-04/attempts.jsonl",
+      "receipt": "work/results/runs/convection-hybrid-s345-lr1e-04/execution.json"
+    },
+    {
+      "config_id": "reaction-adam-s345-lr1e-03",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": null,
+        "final": "work/results/runs/reaction-adam-s345-lr1e-03/final.npz"
+      },
+      "trace": "work/results/runs/reaction-adam-s345-lr1e-03/attempts.jsonl",
+      "receipt": "work/results/runs/reaction-adam-s345-lr1e-03/execution.json"
+    },
+    {
+      "config_id": "reaction-lbfgs-s345-lrnone",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "lbfgs": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 117998,
+        "gradient_calls": 199998,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 41000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": null,
+        "final": "work/results/runs/reaction-lbfgs-s345-lrnone/final.npz"
+      },
+      "trace": "work/results/runs/reaction-lbfgs-s345-lrnone/attempts.jsonl",
+      "receipt": "work/results/runs/reaction-lbfgs-s345-lrnone/execution.json"
+    },
+    {
+      "config_id": "reaction-hybrid-s345-lr1e-03",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000
+        }
+      },
+      "costs": {
+        "closure_calls": 84327,
+        "gradient_calls": 155327,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": "work/results/runs/reaction-hybrid-s345-lr1e-03/switch.npz",
+        "final": "work/results/runs/reaction-hybrid-s345-lr1e-03/final.npz"
+      },
+      "trace": "work/results/runs/reaction-hybrid-s345-lr1e-03/attempts.jsonl",
+      "receipt": "work/results/runs/reaction-hybrid-s345-lr1e-03/execution.json"
+    },
+    {
+      "config_id": "wave-adam-s345-lr1e-03",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": null,
+        "final": "work/results/runs/wave-adam-s345-lr1e-03/final.npz"
+      },
+      "trace": "work/results/runs/wave-adam-s345-lr1e-03/attempts.jsonl",
+      "receipt": "work/results/runs/wave-adam-s345-lr1e-03/execution.json"
+    },
+    {
+      "config_id": "wave-lbfgs-s345-lrnone",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "lbfgs": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 83124,
+        "gradient_calls": 165124,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 41000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": null,
+        "final": "work/results/runs/wave-lbfgs-s345-lrnone/final.npz"
+      },
+      "trace": "work/results/runs/wave-lbfgs-s345-lrnone/attempts.jsonl",
+      "receipt": "work/results/runs/wave-lbfgs-s345-lrnone/execution.json"
+    },
+    {
+      "config_id": "wave-hybrid-s345-lr1e-03",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000
+        }
+      },
+      "costs": {
+        "closure_calls": 61818,
+        "gradient_calls": 132818,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": "work/results/runs/wave-hybrid-s345-lr1e-03/switch.npz",
+        "final": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+      },
+      "trace": "work/results/runs/wave-hybrid-s345-lr1e-03/attempts.jsonl",
+      "receipt": "work/results/runs/wave-hybrid-s345-lr1e-03/execution.json"
+    },
+    {
+      "config_id": "convection-adam-s456-lr1e-04",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed456.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-adam-s456-lr1e-04/final.npz"
+      },
+      "trace": "work/results/runs/convection-adam-s456-lr1e-04/attempts.jsonl",
+      "receipt": "work/results/runs/convection-adam-s456-lr1e-04/execution.json"
+    },
+    {
+      "config_id": "convection-lbfgs-s456-lrnone",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "lbfgs": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 83282,
+        "gradient_calls": 165282,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 41000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed456.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-lbfgs-s456-lrnone/final.npz"
+      },
+      "trace": "work/results/runs/convection-lbfgs-s456-lrnone/attempts.jsonl",
+      "receipt": "work/results/runs/convection-lbfgs-s456-lrnone/execution.json"
+    },
+    {
+      "config_id": "convection-hybrid-s456-lr1e-04",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000
+        }
+      },
+      "costs": {
+        "closure_calls": 61861,
+        "gradient_calls": 132861,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed456.npz",
+        "switch": "work/results/runs/convection-hybrid-s456-lr1e-04/switch.npz",
+        "final": "work/results/runs/convection-hybrid-s456-lr1e-04/final.npz"
+      },
+      "trace": "work/results/runs/convection-hybrid-s456-lr1e-04/attempts.jsonl",
+      "receipt": "work/results/runs/convection-hybrid-s456-lr1e-04/execution.json"
+    },
+    {
+      "config_id": "convection-adam-s567-lr1e-04",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed567.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-adam-s567-lr1e-04/final.npz"
+      },
+      "trace": "work/results/runs/convection-adam-s567-lr1e-04/attempts.jsonl",
+      "receipt": "work/results/runs/convection-adam-s567-lr1e-04/execution.json"
+    },
+    {
+      "config_id": "convection-lbfgs-s567-lrnone",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "lbfgs": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 83497,
+        "gradient_calls": 165497,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 41000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed567.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-lbfgs-s567-lrnone/final.npz"
+      },
+      "trace": "work/results/runs/convection-lbfgs-s567-lrnone/attempts.jsonl",
+      "receipt": "work/results/runs/convection-lbfgs-s567-lrnone/execution.json"
+    },
+    {
+      "config_id": "convection-hybrid-s567-lr1e-04",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000
+        }
+      },
+      "costs": {
+        "closure_calls": 65241,
+        "gradient_calls": 136241,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed567.npz",
+        "switch": "work/results/runs/convection-hybrid-s567-lr1e-04/switch.npz",
+        "final": "work/results/runs/convection-hybrid-s567-lr1e-04/final.npz"
+      },
+      "trace": "work/results/runs/convection-hybrid-s567-lr1e-04/attempts.jsonl",
+      "receipt": "work/results/runs/convection-hybrid-s567-lr1e-04/execution.json"
+    },
+    {
+      "config_id": "convection-adam-s345-lr1e-03",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-adam-s345-lr1e-03/final.npz"
+      },
+      "trace": "work/results/runs/convection-adam-s345-lr1e-03/attempts.jsonl",
+      "receipt": "work/results/runs/convection-adam-s345-lr1e-03/execution.json"
+    },
+    {
+      "config_id": "convection-hybrid-s345-lr1e-03",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000
+        }
+      },
+      "costs": {
+        "closure_calls": 61987,
+        "gradient_calls": 132987,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": "work/results/runs/convection-hybrid-s345-lr1e-03/switch.npz",
+        "final": "work/results/runs/convection-hybrid-s345-lr1e-03/final.npz"
+      },
+      "trace": "work/results/runs/convection-hybrid-s345-lr1e-03/attempts.jsonl",
+      "receipt": "work/results/runs/convection-hybrid-s345-lr1e-03/execution.json"
+    },
+    {
+      "config_id": "convection-adam-s345-lr1e-02",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-adam-s345-lr1e-02/final.npz"
+      },
+      "trace": "work/results/runs/convection-adam-s345-lr1e-02/attempts.jsonl",
+      "receipt": "work/results/runs/convection-adam-s345-lr1e-02/execution.json"
+    },
+    {
+      "config_id": "convection-hybrid-s345-lr1e-02",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": null,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000
+        }
+      },
+      "costs": {
+        "closure_calls": 62197,
+        "gradient_calls": 133197,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "checkpoints": {
+        "initial": "work/results/init/seed345.npz",
+        "switch": "work/results/runs/convection-hybrid-s345-lr1e-02/switch.npz",
+        "final": "work/results/runs/convection-hybrid-s345-lr1e-02/final.npz"
+      },
+      "trace": "work/results/runs/convection-hybrid-s345-lr1e-02/attempts.jsonl",
+      "receipt": "work/results/runs/convection-hybrid-s345-lr1e-02/execution.json"
+    },
+    {
+      "config_id": "convection-gd-continuation-0.0001",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": "convection-hybrid-s345-lr1e-03",
+      "phases": {
+        "gd": {
+          "attempts": 200,
+          "accepted_updates": 200
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 200,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/runs/convection-gd-continuation-0.0001/initial.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-gd-continuation-0.0001/final.npz"
+      },
+      "trace": "work/results/runs/convection-gd-continuation-0.0001/attempts.jsonl",
+      "receipt": "work/results/runs/convection-gd-continuation-0.0001/execution.json"
+    },
+    {
+      "config_id": "convection-gd-continuation-0.001",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": "convection-hybrid-s345-lr1e-03",
+      "phases": {
+        "gd": {
+          "attempts": 200,
+          "accepted_updates": 200
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 200,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/runs/convection-gd-continuation-0.001/initial.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-gd-continuation-0.001/final.npz"
+      },
+      "trace": "work/results/runs/convection-gd-continuation-0.001/attempts.jsonl",
+      "receipt": "work/results/runs/convection-gd-continuation-0.001/execution.json"
+    },
+    {
+      "config_id": "convection-nncg-continuation-0.01",
+      "status": "algorithm_failure",
+      "reason": "pcg_iteration_limit",
+      "parent_id": "convection-hybrid-s345-lr1e-03",
+      "phases": {
+        "nncg": {
+          "attempts": 1,
+          "accepted_updates": 0
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 1,
+        "hvp_calls": 421,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/runs/convection-nncg-continuation-0.01/initial.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-nncg-continuation-0.01/final.npz"
+      },
+      "trace": "work/results/runs/convection-nncg-continuation-0.01/attempts.jsonl",
+      "receipt": "work/results/runs/convection-nncg-continuation-0.01/execution.json",
+      "failure_code": "pcg_iteration_limit"
+    },
+    {
+      "config_id": "convection-nncg-continuation-0.1",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": "convection-hybrid-s345-lr1e-03",
+      "phases": {
+        "nncg": {
+          "attempts": 200,
+          "accepted_updates": 200
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 200,
+        "hvp_calls": 48276,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/runs/convection-nncg-continuation-0.1/initial.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-nncg-continuation-0.1/final.npz"
+      },
+      "trace": "work/results/runs/convection-nncg-continuation-0.1/attempts.jsonl",
+      "receipt": "work/results/runs/convection-nncg-continuation-0.1/execution.json"
+    },
+    {
+      "config_id": "convection-nncg-continuation-1.0",
+      "status": "max_updates",
+      "reason": "registered update limit",
+      "parent_id": "convection-hybrid-s345-lr1e-03",
+      "phases": {
+        "nncg": {
+          "attempts": 200,
+          "accepted_updates": 200
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 200,
+        "hvp_calls": 21702,
+        "lbfgs_native_iterations": 0
+      },
+      "checkpoints": {
+        "initial": "work/results/runs/convection-nncg-continuation-1.0/initial.npz",
+        "switch": null,
+        "final": "work/results/runs/convection-nncg-continuation-1.0/final.npz"
+      },
+      "trace": "work/results/runs/convection-nncg-continuation-1.0/attempts.jsonl",
+      "receipt": "work/results/runs/convection-nncg-continuation-1.0/execution.json"
+    }
+  ],
+  "solution_checkpoints": {
+    "convection": "convection-nncg-continuation-0.1",
+    "reaction": "reaction-hybrid-s345-lr1e-03",
+    "wave": "wave-hybrid-s345-lr1e-03"
+  }
+}

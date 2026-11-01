@@ -1,0 +1,4942 @@
+{
+  "native": {
+    "execution_id": "native-5d7352cd889f49dfa42c4c4025b3846b",
+    "backend": "windows-native",
+    "pid": 16256,
+    "exit_code": 1,
+    "started_at": "2026-10-31T05:06:46.942899+00:00",
+    "finished_at": "2026-10-31T23:43:42.115812+00:00",
+    "cmd": [
+      "D:\\opencorvus-benchmark-runs\\native-science-l01-20261031\\Scripts\\python.exe",
+      "-u",
+      "-B",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\run_study.py",
+      "--inputs",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results",
+      "--device",
+      "cuda",
+      "--continue-study"
+    ],
+    "scope": "full"
+  },
+  "previous_native": [
+    {
+      "execution_id": "historical-314b41b67cf044698ab6e76ef84c63f07b83bf6f7c816ae972301d4b73c34c1e",
+      "backend": "historical-container",
+      "pid": 1,
+      "exit_code": 0,
+      "started_at": "2026-10-30T20:58:58.917559724Z",
+      "finished_at": "2026-10-30T22:29:37.66285893Z",
+      "cmd": [
+        "python",
+        "-u",
+        "-B",
+        "/project/run_study.py",
+        "--inputs",
+        "/project/inputs",
+        "--output",
+        "/project/work/results",
+        "--device",
+        "cuda",
+        "--only",
+        "convection-lbfgs-s345-lrnone"
+      ]
+    }
+  ],
+  "artifact": {
+    "format": "heavy-pinn-artifact-check/1",
+    "artifact_contract_checked": true,
+    "training_attestation": "not_performed; requires controlled full clean retraining and independent source/trace review",
+    "study_complete": "unassessed",
+    "solution_reproduced": "unassessed",
+    "registered_runs": 24,
+    "continuation_parent": "convection-hybrid-s345-lr1e-03",
+    "solution_checkpoints": {
+      "convection": "convection-nncg-continuation-0.1",
+      "reaction": "reaction-hybrid-s345-lr1e-03",
+      "wave": "wave-hybrid-s345-lr1e-03"
+    },
+    "observations": {
+      "convection-adam-s345-lr1e-04": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 7.689647884994914e-05,
+          "constraint_loss": 0.002429894628730078,
+          "total_loss": 0.0025067911075800273,
+          "residual_rmse": 0.012401328868306746,
+          "evaluation_residual_loss": 0.0001000170520386719,
+          "evaluation_residual_rmse": 0.01414334133355141,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 4.652896568932142e-05,
+              "rmse": 0.009646653895452186
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 0.00849449834557636,
+              "rmse": 0.13034184551076727
+            }
+          },
+          "l2re": 0.7434243060294078,
+          "parameter_count": 20601
+        }
+      },
+      "convection-lbfgs-s345-lrnone": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 3.983937762679793e-05,
+          "constraint_loss": 0.0017498371047968662,
+          "total_loss": 0.0017896764824236642,
+          "residual_rmse": 0.00892629571847112,
+          "evaluation_residual_loss": 7.497765147076947e-05,
+          "evaluation_residual_rmse": 0.012245623828190173,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 2.487923216493481e-05,
+              "rmse": 0.007053967984749407
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 0.006139086345058315,
+              "rmse": 0.11080691625578536
+            }
+          },
+          "l2re": 0.6116751009888883,
+          "parameter_count": 20601
+        }
+      },
+      "convection-hybrid-s345-lr1e-04": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 2.3811409393406559e-07,
+          "constraint_loss": 2.752626245115159e-05,
+          "total_loss": 2.7764376545085657e-05,
+          "residual_rmse": 0.0006900928835078153,
+          "evaluation_residual_loss": 2.737676715075343e-07,
+          "evaluation_residual_rmse": 0.0007399563115583707,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 1.349211551937444e-07,
+              "rmse": 0.000519463483208867
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 9.722502198641068e-05,
+              "rmse": 0.013944534555617888
+            }
+          },
+          "l2re": 0.051382167207529215,
+          "parameter_count": 20601
+        }
+      },
+      "reaction-adam-s345-lr1e-03": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "reaction",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 1.7857792739522315e-06,
+          "constraint_loss": 3.2757733591603294e-06,
+          "total_loss": 5.061552633112561e-06,
+          "residual_rmse": 0.0018898567532764125,
+          "evaluation_residual_loss": 2.3009349834995417e-06,
+          "evaluation_residual_rmse": 0.0021451969529623807,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 4.444703687580668e-06,
+              "rmse": 0.002981510921523068
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 3.0136648387293464e-07,
+              "rmse": 0.0007763587880264313
+            }
+          },
+          "l2re": 0.058716564079834326,
+          "parameter_count": 20601
+        }
+      },
+      "reaction-lbfgs-s345-lrnone": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "reaction",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 8.212731872734791e-07,
+          "constraint_loss": 4.5142977046908295e-07,
+          "total_loss": 1.2727029577425622e-06,
+          "residual_rmse": 0.0012816186541038477,
+          "evaluation_residual_loss": 9.75365675248015e-07,
+          "evaluation_residual_rmse": 0.001396685845312406,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 6.245288392436207e-07,
+              "rmse": 0.00111761249030567
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 1.096976378535823e-08,
+              "rmse": 0.00014811997694678616
+            }
+          },
+          "l2re": 0.03201871388522498,
+          "parameter_count": 20601
+        }
+      },
+      "reaction-hybrid-s345-lr1e-03": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "reaction",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 4.999282353178976e-07,
+          "constraint_loss": 4.6773556607135764e-07,
+          "total_loss": 9.676638013892552e-07,
+          "residual_rmse": 0.000999928232742628,
+          "evaluation_residual_loss": 6.726282417888327e-07,
+          "evaluation_residual_rmse": 0.0011598519231253899,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 6.442171234974264e-07,
+              "rmse": 0.001135092175550009
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 1.8668632818885442e-08,
+              "rmse": 0.0001932285321523995
+            }
+          },
+          "l2re": 0.02593014695433741,
+          "parameter_count": 20601
+        }
+      },
+      "wave-adam-s345-lr1e-03": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "wave",
+          "residual_points": 10000,
+          "constraint_count": 716,
+          "evaluation_points": 8385,
+          "residual_loss": 0.01415838835776393,
+          "constraint_loss": 0.013830630671054183,
+          "total_loss": 0.02798901902881811,
+          "residual_rmse": 0.16827589463594558,
+          "evaluation_residual_loss": 0.01481358176422685,
+          "evaluation_residual_rmse": 0.17212542963912594,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 0.022822218436064752,
+              "rmse": 0.2136455870644875
+            },
+            "initial_velocity": {
+              "count": 257,
+              "loss": 0.012878391843785806,
+              "rmse": 0.16048920115562795
+            },
+            "boundary_left": {
+              "count": 101,
+              "loss": 0.0031476722133698285,
+              "rmse": 0.07934320655695519
+            },
+            "boundary_right": {
+              "count": 101,
+              "loss": 0.004057027970325234,
+              "rmse": 0.0900780547117358
+            }
+          },
+          "l2re": 0.47447261723716383,
+          "parameter_count": 20601
+        }
+      },
+      "wave-lbfgs-s345-lrnone": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "wave",
+          "residual_points": 10000,
+          "constraint_count": 716,
+          "evaluation_points": 8385,
+          "residual_loss": 1.9822536357650762e-05,
+          "constraint_loss": 0.01948365091928604,
+          "total_loss": 0.019503473455643693,
+          "residual_rmse": 0.006296433332871994,
+          "evaluation_residual_loss": 2.7764664684936794e-05,
+          "evaluation_residual_rmse": 0.007451800411301526,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 0.05265480071111847,
+              "rmse": 0.32451440865119835
+            },
+            "initial_velocity": {
+              "count": 257,
+              "loss": 6.63408422189946e-05,
+              "rmse": 0.011518753597416224
+            },
+            "boundary_left": {
+              "count": 101,
+              "loss": 0.0025059967739494557,
+              "rmse": 0.07079543451310198
+            },
+            "boundary_right": {
+              "count": 101,
+              "loss": 0.0014639109389324688,
+              "rmse": 0.054109351112954014
+            }
+          },
+          "l2re": 0.4669517683128822,
+          "parameter_count": 20601
+        }
+      },
+      "wave-hybrid-s345-lr1e-03": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "wave",
+          "residual_points": 10000,
+          "constraint_count": 716,
+          "evaluation_points": 8385,
+          "residual_loss": 6.793527109355293e-06,
+          "constraint_loss": 0.001762616811359934,
+          "total_loss": 0.0017694103384692892,
+          "residual_rmse": 0.003686062156110581,
+          "evaluation_residual_loss": 1.403692808264465e-05,
+          "evaluation_residual_rmse": 0.00529847677783807,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 0.00044464974469889335,
+              "rmse": 0.02982112488484944
+            },
+            "initial_velocity": {
+              "count": 257,
+              "loss": 1.5835586588860023e-06,
+              "rmse": 0.0017796396595299861
+            },
+            "boundary_left": {
+              "count": 101,
+              "loss": 0.0052393858084849015,
+              "rmse": 0.10236587134865703
+            },
+            "boundary_right": {
+              "count": 101,
+              "loss": 0.0061205317951860206,
+              "rmse": 0.11063934015698051
+            }
+          },
+          "l2re": 0.3680370381491192,
+          "parameter_count": 20601
+        }
+      },
+      "convection-adam-s456-lr1e-04": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 1.9608706922877033e-05,
+          "constraint_loss": 0.0026950850841424147,
+          "total_loss": 0.0027146937910652916,
+          "residual_rmse": 0.00626238084483482,
+          "evaluation_residual_loss": 2.513756669046369e-05,
+          "evaluation_residual_rmse": 0.007090495989768796,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 6.232214956801268e-05,
+              "rmse": 0.011164421128568438
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 0.009394293739445597,
+              "rmse": 0.13707146850782329
+            }
+          },
+          "l2re": 0.7746128874670785,
+          "parameter_count": 20601
+        }
+      },
+      "convection-lbfgs-s456-lrnone": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 9.866690096402861e-05,
+          "constraint_loss": 0.000646534271381024,
+          "total_loss": 0.0007452011723450526,
+          "residual_rmse": 0.01404755501601817,
+          "evaluation_residual_loss": 0.00023496725240929468,
+          "evaluation_residual_rmse": 0.021677972802330695,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 7.184827121562714e-06,
+              "rmse": 0.0037907326789323233
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 0.0022733937483580694,
+              "rmse": 0.06742987095283617
+            }
+          },
+          "l2re": 0.30020894844414664,
+          "parameter_count": 20601
+        }
+      },
+      "convection-hybrid-s456-lr1e-04": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 1.0146740303285224e-07,
+          "constraint_loss": 3.707382307656507e-06,
+          "total_loss": 3.8088497106893594e-06,
+          "residual_rmse": 0.0004504828587923235,
+          "evaluation_residual_loss": 1.2821265746954727e-07,
+          "evaluation_residual_rmse": 0.0005063845524293712,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 2.68766747279807e-08,
+              "rmse": 0.00023184768589736108
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 1.307262931421721e-05,
+              "rmse": 0.005113243454837098
+            }
+          },
+          "l2re": 0.014923391260723312,
+          "parameter_count": 20601
+        }
+      },
+      "convection-adam-s567-lr1e-04": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 3.003389348352319e-05,
+          "constraint_loss": 0.003162694940057199,
+          "total_loss": 0.0031927288335407223,
+          "residual_rmse": 0.0077503410871423185,
+          "evaluation_residual_loss": 8.900682781755938e-05,
+          "evaluation_residual_rmse": 0.01334217582087415,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 8.368770602443415e-05,
+              "rmse": 0.01293736495770558
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 0.010997396515764334,
+              "rmse": 0.14830641601606004
+            }
+          },
+          "l2re": 0.813075178234727,
+          "parameter_count": 20601
+        }
+      },
+      "convection-lbfgs-s567-lrnone": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 1.6127664939505716e-05,
+          "constraint_loss": 0.0018484971511572867,
+          "total_loss": 0.0018646248160967924,
+          "residual_rmse": 0.005679377596093733,
+          "evaluation_residual_loss": 8.241269270115484e-05,
+          "evaluation_residual_rmse": 0.01283843391548633,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 3.1069007728040535e-05,
+              "rmse": 0.00788276699237527
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 0.0064730420309723,
+              "rmse": 0.11378085982248771
+            }
+          },
+          "l2re": 0.6325420558604921,
+          "parameter_count": 20601
+        }
+      },
+      "convection-hybrid-s567-lr1e-04": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 1.0612321585382356e-07,
+          "constraint_loss": 1.7629851968575529e-06,
+          "total_loss": 1.8691084127113764e-06,
+          "residual_rmse": 0.00046070210734014134,
+          "evaluation_residual_loss": 1.3125163266295445e-07,
+          "evaluation_residual_rmse": 0.0005123507249198628,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 2.801440319193013e-08,
+              "rmse": 0.00023670404809352175
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 6.177712859947306e-06,
+              "rmse": 0.0035150285517893893
+            }
+          },
+          "l2re": 0.010019228931106221,
+          "parameter_count": 20601
+        }
+      },
+      "convection-adam-s345-lr1e-03": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 6.12104445194763e-06,
+          "constraint_loss": 0.00036942285928052033,
+          "total_loss": 0.000375543903732468,
+          "residual_rmse": 0.0034988696608898224,
+          "evaluation_residual_loss": 7.352409877302703e-06,
+          "evaluation_residual_rmse": 0.003834686395861519,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 1.0783500638827525e-05,
+              "rmse": 0.004644028561244542
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 0.0012820002372103722,
+              "rmse": 0.05063596028931163
+            }
+          },
+          "l2re": 0.2934211862380217,
+          "parameter_count": 20601
+        }
+      },
+      "convection-hybrid-s345-lr1e-03": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 8.011320868842573e-07,
+          "constraint_loss": 1.0508632792784142e-05,
+          "total_loss": 1.13097648796684e-05,
+          "residual_rmse": 0.0012658057409288815,
+          "evaluation_residual_loss": 9.294230002808445e-07,
+          "evaluation_residual_rmse": 0.0013633950273349573,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 1.911710479910036e-07,
+              "rmse": 0.0006183381728326395
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 3.676197604438648e-05,
+              "rmse": 0.008574610900138441
+            }
+          },
+          "l2re": 0.034352771876578335,
+          "parameter_count": 20601
+        }
+      },
+      "convection-adam-s345-lr1e-02": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 1.9340488780137915e-17,
+          "constraint_loss": 0.17877097754874974,
+          "total_loss": 0.17877097754874977,
+          "residual_rmse": 6.219403312237905e-09,
+          "evaluation_residual_loss": 4.8413332740738924e-17,
+          "evaluation_residual_rmse": 9.840054140170056e-09,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 0.24902727611849187,
+              "rmse": 0.7057298011540846
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 5.2220939850623675e-20,
+              "rmse": 3.231746891407917e-10
+            }
+          },
+          "l2re": 0.9999998814554626,
+          "parameter_count": 20601
+        }
+      },
+      "convection-hybrid-s345-lr1e-02": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 1.3161931410840194e-05,
+          "constraint_loss": 0.0018674462763136135,
+          "total_loss": 0.0018806082077244537,
+          "residual_rmse": 0.0051306785927088035,
+          "evaluation_residual_loss": 1.5086186215327452e-05,
+          "evaluation_residual_rmse": 0.005492938414970161,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 3.067107214022653e-05,
+              "rmse": 0.007832122591000032
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 0.006541220805744905,
+              "rmse": 0.11437850152668469
+            }
+          },
+          "l2re": 0.6354986582609297,
+          "parameter_count": 20601
+        }
+      },
+      "convection-gd-continuation-0.0001": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 1.0924347197798983,
+          "constraint_loss": 3.215553575331769,
+          "total_loss": 4.3079882951116675,
+          "residual_rmse": 1.4781303865220403,
+          "evaluation_residual_loss": 1.5341492252322277,
+          "evaluation_residual_rmse": 1.751655916686966,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 4.473173348866123,
+              "rmse": 2.991044415874202
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 0.01547157732851274,
+              "rmse": 0.17590666461798848
+            }
+          },
+          "l2re": 4.326319859261342,
+          "parameter_count": 20601
+        }
+      },
+      "convection-gd-continuation-0.001": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 0.004365184607188921,
+          "constraint_loss": 0.178971209229757,
+          "total_loss": 0.18333639383694594,
+          "residual_rmse": 0.09343644478669895,
+          "evaluation_residual_loss": 0.005213257676369508,
+          "evaluation_residual_rmse": 0.10211030972795555,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 0.24930619652908886,
+              "rmse": 0.7061249132116624
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 3.923536283631522e-09,
+              "rmse": 8.85837037341691e-05
+            }
+          },
+          "l2re": 1.000024977382766,
+          "parameter_count": 20601
+        }
+      },
+      "convection-nncg-continuation-0.01": {
+        "status": "algorithm_failure",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 8.011320868842573e-07,
+          "constraint_loss": 1.0508632792784142e-05,
+          "total_loss": 1.13097648796684e-05,
+          "residual_rmse": 0.0012658057409288815,
+          "evaluation_residual_loss": 9.294230002808445e-07,
+          "evaluation_residual_rmse": 0.0013633950273349573,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 1.911710479910036e-07,
+              "rmse": 0.0006183381728326395
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 3.676197604438648e-05,
+              "rmse": 0.008574610900138441
+            }
+          },
+          "l2re": 0.034352771876578335,
+          "parameter_count": 20601
+        }
+      },
+      "convection-nncg-continuation-0.1": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 1.535877751796163e-07,
+          "constraint_loss": 8.613942769320943e-06,
+          "total_loss": 8.767530544500559e-06,
+          "residual_rmse": 0.0005542342017227308,
+          "evaluation_residual_loss": 1.8148692511196935e-07,
+          "evaluation_residual_rmse": 0.0006024731116190487,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 1.2574011128986e-07,
+              "rmse": 0.0005014780379834395
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 3.0212636661538652e-05,
+              "rmse": 0.007773369496111535
+            }
+          },
+          "l2re": 0.030511631290084395,
+          "parameter_count": 20601
+        }
+      },
+      "convection-nncg-continuation-1.0": {
+        "status": "max_updates",
+        "metrics": {
+          "problem": "convection",
+          "residual_points": 10000,
+          "constraint_count": 358,
+          "evaluation_points": 8385,
+          "residual_loss": 3.985725602506809e-07,
+          "constraint_loss": 1.009184247799528e-05,
+          "total_loss": 1.0490415038245962e-05,
+          "residual_rmse": 0.0008928298384918382,
+          "evaluation_residual_loss": 4.928556035192962e-07,
+          "evaluation_residual_rmse": 0.0009928298983403916,
+          "constraint_families": {
+            "initial_value": {
+              "count": 257,
+              "loss": 1.852166202759489e-07,
+              "rmse": 0.0006086322703832732
+            },
+            "periodic_value": {
+              "count": 101,
+              "loss": 3.529979144268704e-05,
+              "rmse": 0.008402355793786292
+            }
+          },
+          "l2re": 0.03374552294796272,
+          "parameter_count": 20601
+        }
+      }
+    }
+  },
+  "trace": {
+    "convection-adam-s345-lr1e-04": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 0.002495996392374561,
+          "gradient_inf_before": 0.4373092743916001,
+          "at": "2026-10-31T05:24:40.574235+00:00",
+          "accepted_after": 41000,
+          "loss_after": 0.002506791107580026,
+          "step_inf": 9.639927659099712e-05,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 41000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 82000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 1067.3533229000004
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-lbfgs-s345-lrnone": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "lbfgs": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 0.001789762503045189,
+          "gradient_inf_before": 0.006764537607423099,
+          "at": "2026-10-30T22:29:30.338340+00:00",
+          "native_iterations": 41000,
+          "native_t": 1.0,
+          "native_directional_derivative": -1.1403184487725339e-07,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 0.001789762503045189,
+              "alpha": 0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -1.1403184487725339e-07,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 0.0017896764824236282,
+              "alpha": 0.9999999999999308,
+              "delta_inf": 0.001436472990013371,
+              "gradient_dot_direction": -5.7817272440772124e-08,
+              "direction_consistency_inf": 4.360661137736699e-16
+            }
+          ],
+          "gradient_inf_after": 0.002400016605082711,
+          "accepted_after": 41000,
+          "loss_after": 0.0017896764824236282,
+          "step_inf": 0.001436472990013371,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 83632,
+            "gradient_calls": 165632,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 41000,
+            "loss_calls": 206632
+          },
+          "costs_increment": {
+            "closure_calls": 2,
+            "gradient_calls": 4,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 5
+          },
+          "elapsed_seconds": 5428.646476821974
+        }
+      },
+      "costs": {
+        "closure_calls": 83632,
+        "gradient_calls": 165632,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 41000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-hybrid-s345-lr1e-04": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 11000,
+          "accepted_before": 10999,
+          "loss_before": 0.007227037804618269,
+          "gradient_inf_before": 0.0697353049749915,
+          "at": "2026-10-31T05:11:21.824254+00:00",
+          "accepted_after": 11000,
+          "loss_after": 0.007228029617070662,
+          "step_inf": 0.00010442918186351346,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 11000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 22000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 268.60135269999955,
+          "shared_prefix_source": "convection-adam-s345-lr1e-04"
+        },
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 30000,
+          "accepted_before": 29999,
+          "loss_before": 2.776438465595081e-05,
+          "gradient_inf_before": 2.8249343144934498e-05,
+          "at": "2026-10-31T06:27:23.559623+00:00",
+          "native_iterations": 30000,
+          "native_t": 0.25994354061659297,
+          "native_directional_derivative": -6.240136584269606e-11,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 2.776438465595081e-05,
+              "alpha": 0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -6.240136584269606e-11,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 2.776444231575567e-05,
+              "alpha": 0.999999999998504,
+              "delta_inf": 2.8477951434124904e-05,
+              "gradient_dot_direction": 1.7777421354648638e-10,
+              "direction_consistency_inf": 3.001520540901921e-16
+            },
+            {
+              "trial": 2,
+              "loss": 2.7764376545084864e-05,
+              "alpha": 0.2599435406188251,
+              "delta_inf": 7.402659525368449e-06,
+              "gradient_dot_direction": 9.300492849271048e-17,
+              "direction_consistency_inf": 2.2217494211979006e-16
+            }
+          ],
+          "gradient_inf_after": 2.0659167939144057e-05,
+          "accepted_after": 30000,
+          "loss_after": 2.7764376545084864e-05,
+          "step_inf": 7.402659525368449e-06,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 63039,
+            "gradient_calls": 134039,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 30000,
+            "loss_calls": 175039
+          },
+          "costs_increment": {
+            "closure_calls": 3,
+            "gradient_calls": 5,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 6
+          },
+          "elapsed_seconds": 3760.9260251000005
+        }
+      },
+      "costs": {
+        "closure_calls": 63039,
+        "gradient_calls": 134039,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "reaction-adam-s345-lr1e-03": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 5.213098647686465e-06,
+          "gradient_inf_before": 0.003339182242009504,
+          "at": "2026-10-31T06:45:25.864820+00:00",
+          "accepted_after": 41000,
+          "loss_after": 5.061552633112544e-06,
+          "step_inf": 3.149389926326851e-05,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 41000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 82000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 1080.1599080999986
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "reaction-lbfgs-s345-lrnone": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "lbfgs": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 1.272703701016821e-06,
+          "gradient_inf_before": 6.9651587629533575e-06,
+          "at": "2026-10-31T08:24:19.151855+00:00",
+          "native_iterations": 41000,
+          "native_t": 0.06999615420210414,
+          "native_directional_derivative": -2.1237180639370052e-11,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 1.272703701016821e-06,
+              "alpha": 0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -2.1237180639370052e-11,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 1.2728342454239145e-06,
+              "alpha": 0.9999999999992403,
+              "delta_inf": 8.629066610432723e-05,
+              "gradient_dot_direction": 2.824143806023062e-10,
+              "direction_consistency_inf": 1.383713022634625e-16
+            },
+            {
+              "trial": 2,
+              "loss": 1.2727029577425706e-06,
+              "alpha": 0.06999615420135419,
+              "delta_inf": 6.040014770780644e-06,
+              "gradient_dot_direction": 4.0285111809444774e-17,
+              "direction_consistency_inf": 1.1899372952912587e-16
+            }
+          ],
+          "gradient_inf_after": 1.6800730997846756e-05,
+          "accepted_after": 41000,
+          "loss_after": 1.2727029577425706e-06,
+          "step_inf": 6.040014770780644e-06,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 117998,
+            "gradient_calls": 199998,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 41000,
+            "loss_calls": 240998
+          },
+          "costs_increment": {
+            "closure_calls": 3,
+            "gradient_calls": 5,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 6
+          },
+          "elapsed_seconds": 5932.2944068
+        }
+      },
+      "costs": {
+        "closure_calls": 117998,
+        "gradient_calls": 199998,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 41000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "reaction-hybrid-s345-lr1e-03": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 11000,
+          "accepted_before": 10999,
+          "loss_before": 0.07373542138566985,
+          "gradient_inf_before": 0.06367652392833345,
+          "at": "2026-10-31T06:32:16.323717+00:00",
+          "accepted_after": 11000,
+          "loss_after": 0.0736527209449046,
+          "step_inf": 0.0006353863221552625,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 11000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 22000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 290.6425694999998,
+          "shared_prefix_source": "reaction-adam-s345-lr1e-03"
+        },
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 30000,
+          "accepted_before": 29999,
+          "loss_before": 9.676641660029971e-07,
+          "gradient_inf_before": 5.5183995168756405e-06,
+          "at": "2026-10-31T09:36:53.101420+00:00",
+          "native_iterations": 30000,
+          "native_t": 0.020386359351610595,
+          "native_directional_derivative": -3.577234556812561e-11,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 9.676641660029971e-07,
+              "alpha": 0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -3.577234556812561e-11,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 9.685061366612512e-07,
+              "alpha": 1.0000000000000242,
+              "delta_inf": 0.00021767325081128996,
+              "gradient_dot_direction": 1.7201089223328854e-09,
+              "direction_consistency_inf": 9.904186845655083e-17
+            },
+            {
+              "trial": 2,
+              "loss": 9.676638013892658e-07,
+              "alpha": 0.020386359351548373,
+              "delta_inf": 4.437565112258568e-06,
+              "gradient_dot_direction": 2.097601929937566e-15,
+              "direction_consistency_inf": 9.46018276261622e-17
+            }
+          ],
+          "gradient_inf_after": 8.14668004551728e-06,
+          "accepted_after": 30000,
+          "loss_after": 9.676638013892658e-07,
+          "step_inf": 4.437565112258568e-06,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 84327,
+            "gradient_calls": 155327,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 30000,
+            "loss_calls": 196327
+          },
+          "costs_increment": {
+            "closure_calls": 3,
+            "gradient_calls": 5,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 6
+          },
+          "elapsed_seconds": 4351.8664064
+        }
+      },
+      "costs": {
+        "closure_calls": 84327,
+        "gradient_calls": 155327,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "wave-adam-s345-lr1e-03": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 0.119448637062966,
+          "gradient_inf_before": 16.114227635946428,
+          "at": "2026-10-31T10:16:36.384488+00:00",
+          "accepted_after": 41000,
+          "loss_after": 0.027989019028818143,
+          "step_inf": 0.0033970989498532528,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 41000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 82000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 2381.081078799998
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "wave-lbfgs-s345-lrnone": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "lbfgs": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 0.019503487151784207,
+          "gradient_inf_before": 0.00370292419125862,
+          "at": "2026-10-31T13:04:25.559119+00:00",
+          "native_iterations": 41000,
+          "native_t": 1.0,
+          "native_directional_derivative": -3.105906871011928e-08,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 0.019503487151784207,
+              "alpha": -0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -3.105906871011928e-08,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 0.019503473455643648,
+              "alpha": 0.999999999999944,
+              "delta_inf": 0.00017280509392303411,
+              "gradient_dot_direction": 4.442448656382763e-09,
+              "direction_consistency_inf": 4.1805480518325444e-16
+            }
+          ],
+          "gradient_inf_after": 0.002463190794424557,
+          "accepted_after": 41000,
+          "loss_after": 0.019503473455643648,
+          "step_inf": 0.00017280509392303411,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 83124,
+            "gradient_calls": 165124,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 41000,
+            "loss_calls": 206124
+          },
+          "costs_increment": {
+            "closure_calls": 2,
+            "gradient_calls": 4,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 5
+          },
+          "elapsed_seconds": 10068.330610099998
+        }
+      },
+      "costs": {
+        "closure_calls": 83124,
+        "gradient_calls": 165124,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 41000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "wave-hybrid-s345-lr1e-03": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 11000,
+          "accepted_before": 10999,
+          "loss_before": 0.017382945462923936,
+          "gradient_inf_before": 0.004898724282234087,
+          "at": "2026-10-31T09:47:37.009217+00:00",
+          "accepted_after": 11000,
+          "loss_after": 0.01737976655033638,
+          "step_inf": 0.00028824671709171135,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 11000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 22000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 641.7061070999989,
+          "shared_prefix_source": "wave-adam-s345-lr1e-03"
+        },
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 30000,
+          "accepted_before": 29999,
+          "loss_before": 0.0017694169257427231,
+          "gradient_inf_before": 0.00041083731830021154,
+          "at": "2026-10-31T15:13:27.375878+00:00",
+          "native_iterations": 30000,
+          "native_t": 1.0,
+          "native_directional_derivative": -8.881519809861355e-09,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 0.0017694169257427231,
+              "alpha": -0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -8.881519809861355e-09,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 0.0017694103384692898,
+              "alpha": 1.0000000000009086,
+              "delta_inf": 1.687228667224261e-05,
+              "gradient_dot_direction": -4.293058871388272e-09,
+              "direction_consistency_inf": 1.99530469187012e-16
+            }
+          ],
+          "gradient_inf_after": 0.0005637547038855656,
+          "accepted_after": 30000,
+          "loss_after": 0.0017694103384692898,
+          "step_inf": 1.687228667224261e-05,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 61818,
+            "gradient_calls": 132818,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 30000,
+            "loss_calls": 173818
+          },
+          "costs_increment": {
+            "closure_calls": 2,
+            "gradient_calls": 4,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 5
+          },
+          "elapsed_seconds": 7740.114583500006
+        }
+      },
+      "costs": {
+        "closure_calls": 61818,
+        "gradient_calls": 132818,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-adam-s456-lr1e-04": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 0.002714732198710173,
+          "gradient_inf_before": 0.013297606181559191,
+          "at": "2026-10-31T15:32:00.526669+00:00",
+          "accepted_after": 41000,
+          "loss_after": 0.0027146937910652903,
+          "step_inf": 0.00011398715727084507,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 41000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 82000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 1110.7122785999964
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-lbfgs-s456-lrnone": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "lbfgs": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 0.0007457058254108594,
+          "gradient_inf_before": 0.01048439896662263,
+          "at": "2026-10-31T16:57:51.064897+00:00",
+          "native_iterations": 41000,
+          "native_t": 0.361698946554897,
+          "native_directional_derivative": -2.799236926138852e-06,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 0.0007457058254108594,
+              "alpha": -0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -2.799236926138852e-06,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 0.0007467607061169012,
+              "alpha": 1.0000000000001383,
+              "delta_inf": 0.0017913386143186827,
+              "gradient_dot_direction": 4.875224713796766e-06,
+              "direction_consistency_inf": 3.7192200274399623e-16
+            },
+            {
+              "trial": 2,
+              "loss": 0.0007452011723450436,
+              "alpha": 0.36169894655485846,
+              "delta_inf": 0.0006479252897220178,
+              "gradient_dot_direction": 1.889843338879286e-09,
+              "direction_consistency_inf": 4.543891304886749e-16
+            }
+          ],
+          "gradient_inf_after": 0.02128082101070238,
+          "accepted_after": 41000,
+          "loss_after": 0.0007452011723450436,
+          "step_inf": 0.0006479252897220178,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 83282,
+            "gradient_calls": 165282,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 41000,
+            "loss_calls": 206282
+          },
+          "costs_increment": {
+            "closure_calls": 3,
+            "gradient_calls": 5,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 6
+          },
+          "elapsed_seconds": 5149.092273300004
+        }
+      },
+      "costs": {
+        "closure_calls": 83282,
+        "gradient_calls": 165282,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 41000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-hybrid-s456-lr1e-04": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 11000,
+          "accepted_before": 10999,
+          "loss_before": 0.009233515778580526,
+          "gradient_inf_before": 0.07468733950205418,
+          "at": "2026-10-31T15:18:47.124847+00:00",
+          "accepted_after": 11000,
+          "loss_after": 0.009181605110581473,
+          "step_inf": 0.0001399438589215693,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 11000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 22000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 317.30827419999696,
+          "shared_prefix_source": "convection-adam-s456-lr1e-04"
+        },
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 30000,
+          "accepted_before": 29999,
+          "loss_before": 3.8088508570670647e-06,
+          "gradient_inf_before": 1.7219702254258785e-05,
+          "at": "2026-10-31T17:59:43.466027+00:00",
+          "native_iterations": 30000,
+          "native_t": 1.0,
+          "native_directional_derivative": -1.93560621745771e-12,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 3.8088508570670647e-06,
+              "alpha": 0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -1.93560621745771e-12,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 3.808849710688475e-06,
+              "alpha": 0.9999999999982832,
+              "delta_inf": 1.6474405813982074e-05,
+              "gradient_dot_direction": -3.5516646105003354e-13,
+              "direction_consistency_inf": 4.195159370172681e-16
+            }
+          ],
+          "gradient_inf_after": 2.0540460595274147e-05,
+          "accepted_after": 30000,
+          "loss_after": 3.808849710688475e-06,
+          "step_inf": 1.6474405813982074e-05,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 61861,
+            "gradient_calls": 132861,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 30000,
+            "loss_calls": 173861
+          },
+          "costs_increment": {
+            "closure_calls": 2,
+            "gradient_calls": 4,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 5
+          },
+          "elapsed_seconds": 3710.605683499998
+        }
+      },
+      "costs": {
+        "closure_calls": 61861,
+        "gradient_calls": 132861,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-adam-s567-lr1e-04": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 0.003192620905320666,
+          "gradient_inf_before": 0.08270155316013007,
+          "at": "2026-10-31T18:16:36.323920+00:00",
+          "accepted_after": 41000,
+          "loss_after": 0.00319272883354072,
+          "step_inf": 9.813674689407303e-05,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 41000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 82000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 1010.7581407999969
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-lbfgs-s567-lrnone": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "lbfgs": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 0.0018646310067708962,
+          "gradient_inf_before": 0.0003140292838057757,
+          "at": "2026-10-31T19:39:59.703421+00:00",
+          "native_iterations": 41000,
+          "native_t": 1.0,
+          "native_directional_derivative": -8.641646524199179e-09,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 0.0018646310067708962,
+              "alpha": -0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -8.641646524199179e-09,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 0.0018646248160967688,
+              "alpha": 0.999999999999858,
+              "delta_inf": 0.00045625624454181946,
+              "gradient_dot_direction": -3.737944255860639e-09,
+              "direction_consistency_inf": 5.388383153299287e-16
+            }
+          ],
+          "gradient_inf_after": 0.0006755643204370467,
+          "accepted_after": 41000,
+          "loss_after": 0.0018646248160967688,
+          "step_inf": 0.00045625624454181946,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 83497,
+            "gradient_calls": 165497,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 41000,
+            "loss_calls": 206497
+          },
+          "costs_increment": {
+            "closure_calls": 2,
+            "gradient_calls": 4,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 5
+          },
+          "elapsed_seconds": 5001.0165442
+        }
+      },
+      "costs": {
+        "closure_calls": 83497,
+        "gradient_calls": 165497,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 41000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-hybrid-s567-lr1e-04": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 11000,
+          "accepted_before": 10999,
+          "loss_before": 0.00818614231391234,
+          "gradient_inf_before": 0.0006233414407816273,
+          "at": "2026-10-31T18:04:28.031819+00:00",
+          "accepted_after": 11000,
+          "loss_after": 0.008185769551712501,
+          "step_inf": 7.820327056246024e-05,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 11000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 22000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 282.46590789999755,
+          "shared_prefix_source": "convection-adam-s567-lr1e-04"
+        },
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 30000,
+          "accepted_before": 29999,
+          "loss_before": 1.8691114141781926e-06,
+          "gradient_inf_before": 1.205994226734854e-05,
+          "at": "2026-10-31T20:43:49.618238+00:00",
+          "native_iterations": 30000,
+          "native_t": 0.1059271674011063,
+          "native_directional_derivative": -5.6673701813408915e-11,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 1.8691114141781926e-06,
+              "alpha": 0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -5.6673701813408915e-11,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 1.8693220874267788e-06,
+              "alpha": 0.9999999999992661,
+              "delta_inf": 0.00022671713784427894,
+              "gradient_dot_direction": 4.778232689948455e-10,
+              "direction_consistency_inf": 3.245084864884895e-16
+            },
+            {
+              "trial": 2,
+              "loss": 1.8691084127114618e-06,
+              "alpha": 0.10592716740164591,
+              "delta_inf": 2.401550421327059e-05,
+              "gradient_dot_direction": 1.0016732756489688e-15,
+              "direction_consistency_inf": 2.272638101877755e-16
+            }
+          ],
+          "gradient_inf_after": 2.9233435742216123e-05,
+          "accepted_after": 30000,
+          "loss_after": 1.8691084127114618e-06,
+          "step_inf": 2.401550421327059e-05,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 65241,
+            "gradient_calls": 136241,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 30000,
+            "loss_calls": 177241
+          },
+          "costs_increment": {
+            "closure_calls": 3,
+            "gradient_calls": 5,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 6
+          },
+          "elapsed_seconds": 3828.191214599996
+        }
+      },
+      "costs": {
+        "closure_calls": 65241,
+        "gradient_calls": 136241,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-adam-s345-lr1e-03": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 0.0003724658938898139,
+          "gradient_inf_before": 0.05643314606533136,
+          "at": "2026-10-31T20:59:06.065934+00:00",
+          "accepted_after": 41000,
+          "loss_after": 0.0003755439037324677,
+          "step_inf": 0.00047700976524511773,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 41000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 82000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 914.4848663999946
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-hybrid-s345-lr1e-03": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 11000,
+          "accepted_before": 10999,
+          "loss_before": 0.004354842925715469,
+          "gradient_inf_before": 0.5993770810625731,
+          "at": "2026-10-31T20:47:55.815442+00:00",
+          "accepted_after": 11000,
+          "loss_after": 0.004411149077285905,
+          "step_inf": 0.0006353428272364292,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 11000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 22000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 244.23411669999768,
+          "shared_prefix_source": "convection-adam-s345-lr1e-03"
+        },
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 30000,
+          "accepted_before": 29999,
+          "loss_before": 1.13129130666896e-05,
+          "gradient_inf_before": 0.0013973210032457337,
+          "at": "2026-10-31T21:55:17.233249+00:00",
+          "native_iterations": 30000,
+          "native_t": 1.0,
+          "native_directional_derivative": -4.9854285318246844e-09,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 1.13129130666896e-05,
+              "alpha": 0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -4.9854285318246844e-09,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 1.1309764879673272e-05,
+              "alpha": 0.9999999999991657,
+              "delta_inf": 0.0003465230150192511,
+              "gradient_dot_direction": -1.319725498976051e-09,
+              "direction_consistency_inf": 4.909809538100607e-16
+            }
+          ],
+          "gradient_inf_after": 0.001485182636768056,
+          "accepted_after": 30000,
+          "loss_after": 1.1309764879673272e-05,
+          "step_inf": 0.0003465230150192511,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 61987,
+            "gradient_calls": 132987,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 30000,
+            "loss_calls": 173987
+          },
+          "costs_increment": {
+            "closure_calls": 2,
+            "gradient_calls": 4,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 5
+          },
+          "elapsed_seconds": 3370.2423765999993
+        }
+      },
+      "costs": {
+        "closure_calls": 61987,
+        "gradient_calls": 132987,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-adam-s345-lr1e-02": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 41000,
+          "accepted_updates": 41000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 41000,
+          "accepted_before": 40999,
+          "loss_before": 0.1787709647244302,
+          "gradient_inf_before": 0.00014682062339034578,
+          "at": "2026-10-31T22:10:33.550800+00:00",
+          "accepted_after": 41000,
+          "loss_after": 0.17877097754874982,
+          "step_inf": 1.0769769292345854e-05,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 41000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 82000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 914.5080080000043
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 41000,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-hybrid-s345-lr1e-02": {
+      "status": "verified",
+      "line_count": 41000,
+      "phases": {
+        "adam": {
+          "attempts": 11000,
+          "accepted_updates": 11000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        },
+        "lbfgs": {
+          "attempts": 30000,
+          "accepted_updates": 30000,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "adam": {
+          "phase": "adam",
+          "attempt": 11000,
+          "accepted_before": 10999,
+          "loss_before": 0.0054755935278335294,
+          "gradient_inf_before": 2.1889918082967057,
+          "at": "2026-10-31T21:59:26.375141+00:00",
+          "accepted_after": 11000,
+          "loss_after": 0.005571823599612007,
+          "step_inf": 0.0008181119391397207,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 11000,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 22000
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 247.33328930000425,
+          "shared_prefix_source": "convection-adam-s345-lr1e-02"
+        },
+        "lbfgs": {
+          "phase": "lbfgs",
+          "attempt": 30000,
+          "accepted_before": 29999,
+          "loss_before": 0.0018806095781574007,
+          "gradient_inf_before": 0.0007773773770391136,
+          "at": "2026-10-31T23:06:46.358776+00:00",
+          "native_iterations": 30000,
+          "native_t": 0.4233157102401772,
+          "native_directional_derivative": -6.431747995681028e-09,
+          "closures": [
+            {
+              "trial": 0,
+              "loss": 0.0018806095781574007,
+              "alpha": 0.0,
+              "delta_inf": 0.0,
+              "gradient_dot_direction": -6.431747995681028e-09,
+              "direction_consistency_inf": 0.0
+            },
+            {
+              "trial": 1,
+              "loss": 0.0018806108438370432,
+              "alpha": 0.9999999999990209,
+              "delta_inf": 0.0008881789771191251,
+              "gradient_dot_direction": 9.238590437621395e-09,
+              "direction_consistency_inf": 1.4688771032833614e-15
+            },
+            {
+              "trial": 2,
+              "loss": 0.0018806082077244305,
+              "alpha": 0.4233157102394924,
+              "delta_inf": 0.00037598011451933644,
+              "gradient_dot_direction": 1.6903461545038471e-12,
+              "direction_consistency_inf": 1.0033884530538661e-15
+            }
+          ],
+          "gradient_inf_after": 0.001169132273935592,
+          "accepted_after": 30000,
+          "loss_after": 0.0018806082077244305,
+          "step_inf": 0.00037598011451933644,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 62197,
+            "gradient_calls": 133197,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 30000,
+            "loss_calls": 174197
+          },
+          "costs_increment": {
+            "closure_calls": 3,
+            "gradient_calls": 5,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 1,
+            "loss_calls": 6
+          },
+          "elapsed_seconds": 3371.9175101
+        }
+      },
+      "costs": {
+        "closure_calls": 62197,
+        "gradient_calls": 133197,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 30000
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-gd-continuation-0.0001": {
+      "status": "verified",
+      "line_count": 200,
+      "phases": {
+        "gd": {
+          "attempts": 200,
+          "accepted_updates": 200,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "gd": {
+          "phase": "gd",
+          "attempt": 200,
+          "accepted_before": 199,
+          "loss_before": 4.36636839989016,
+          "gradient_inf_before": 3.58698551559882,
+          "at": "2026-10-31T23:06:52.649240+00:00",
+          "step_size": 0.0001,
+          "accepted_after": 200,
+          "loss_after": 4.307988295111667,
+          "step_inf": 0.0003586985515598995,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 200,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 400
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 4.431754299992463
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 200,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-gd-continuation-0.001": {
+      "status": "verified",
+      "line_count": 200,
+      "phases": {
+        "gd": {
+          "attempts": 200,
+          "accepted_updates": 200,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "gd": {
+          "phase": "gd",
+          "attempt": 200,
+          "accepted_before": 199,
+          "loss_before": 0.18336006454651907,
+          "gradient_inf_before": 0.0460359742554748,
+          "at": "2026-10-31T23:06:57.328291+00:00",
+          "step_size": 0.001,
+          "accepted_after": 200,
+          "loss_after": 0.18333639383694497,
+          "step_inf": 4.603597425547473e-05,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 200,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 400
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 0,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 4.340428900002735
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 200,
+        "hvp_calls": 0,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-nncg-continuation-0.01": {
+      "status": "verified",
+      "line_count": 1,
+      "phases": {
+        "nncg": {
+          "attempts": 1,
+          "accepted_updates": 0,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 1,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "nncg": {
+          "phase": "nncg",
+          "attempt": 1,
+          "accepted_before": 0,
+          "loss_before": 1.1309764879673272e-05,
+          "gradient_inf_before": 0.001485182636768056,
+          "at": "2026-10-31T23:06:57.689508+00:00",
+          "sketch_refresh": {
+            "seed": 20261029,
+            "rank": 20,
+            "delta": 1.5381961185763397e-10,
+            "nu": 1.5381961185763397e-10,
+            "lambda": [
+              165114.3849281003,
+              26218.73377570082,
+              22474.321900665997,
+              9527.524892670512,
+              7695.539783944906,
+              5357.663978924823,
+              4442.352392866114,
+              2353.5528482942564,
+              1601.5181761840217,
+              1298.2698754961816,
+              567.7994113312208,
+              474.3694207421139,
+              456.1776686241011,
+              315.58211094814214,
+              190.00630581800266,
+              171.56570492570134,
+              125.12528598034342,
+              73.87669629614827,
+              60.16523001775337,
+              46.52133347561244
+            ]
+          },
+          "pcg": {
+            "status": "pcg_iteration_limit",
+            "iterations": 200,
+            "explicit_relative_residual": 0.02654008371871018,
+            "history": [
+              {
+                "iteration": 1,
+                "curvature": 2.1863897946477672e-05,
+                "recursive_relative_residual": 0.39236884916396575,
+                "explicit_relative_residual": 0.39236884916396464
+              },
+              {
+                "iteration": 2,
+                "curvature": 7.102042369650017e-05,
+                "recursive_relative_residual": 1.2213943411787722,
+                "explicit_relative_residual": 1.2213943411787673
+              },
+              {
+                "iteration": 3,
+                "curvature": 8.185994657907703e-05,
+                "recursive_relative_residual": 1.6767946904502065,
+                "explicit_relative_residual": 1.6767946904501976
+              },
+              {
+                "iteration": 4,
+                "curvature": 7.099195471940902e-05,
+                "recursive_relative_residual": 0.7790523168733459,
+                "explicit_relative_residual": 0.7790523168733364
+              },
+              {
+                "iteration": 5,
+                "curvature": 8.69564054172063e-05,
+                "recursive_relative_residual": 0.3337377254526359,
+                "explicit_relative_residual": 0.33373772545264696
+              },
+              {
+                "iteration": 6,
+                "curvature": 0.00012345309764296106,
+                "recursive_relative_residual": 0.8574814960608781,
+                "explicit_relative_residual": 0.8574814960609085
+              },
+              {
+                "iteration": 7,
+                "curvature": 1.1409280363898769e-05,
+                "recursive_relative_residual": 0.21993799225810365,
+                "explicit_relative_residual": 0.2199379922581235
+              },
+              {
+                "iteration": 8,
+                "curvature": 1.5515175291418618e-05,
+                "recursive_relative_residual": 0.49275506186537055,
+                "explicit_relative_residual": 0.4927550618653661
+              },
+              {
+                "iteration": 9,
+                "curvature": 8.592422236386507e-06,
+                "recursive_relative_residual": 0.5745033024592061,
+                "explicit_relative_residual": 0.5745033024591951
+              },
+              {
+                "iteration": 10,
+                "curvature": 2.575455745583838e-05,
+                "recursive_relative_residual": 0.2906890614262749,
+                "explicit_relative_residual": 0.29068906142627854
+              },
+              {
+                "iteration": 11,
+                "curvature": 9.41042417428017e-06,
+                "recursive_relative_residual": 0.5718381401760421,
+                "explicit_relative_residual": 0.5718381401760791
+              },
+              {
+                "iteration": 12,
+                "curvature": 6.479042072714034e-06,
+                "recursive_relative_residual": 0.3149051751855701,
+                "explicit_relative_residual": 0.31490517518557953
+              },
+              {
+                "iteration": 13,
+                "curvature": 5.6975220191274e-06,
+                "recursive_relative_residual": 0.32110864762403185,
+                "explicit_relative_residual": 0.3211086476240418
+              },
+              {
+                "iteration": 14,
+                "curvature": 3.5952413814770197e-06,
+                "recursive_relative_residual": 0.5283774811863446,
+                "explicit_relative_residual": 0.5283774811863006
+              },
+              {
+                "iteration": 15,
+                "curvature": 4.9004291258329665e-06,
+                "recursive_relative_residual": 0.2674638611723757,
+                "explicit_relative_residual": 0.2674638611722724
+              },
+              {
+                "iteration": 16,
+                "curvature": 4.999782722653957e-06,
+                "recursive_relative_residual": 0.38151232908836985,
+                "explicit_relative_residual": 0.3815123290885298
+              },
+              {
+                "iteration": 17,
+                "curvature": 2.380106845579717e-06,
+                "recursive_relative_residual": 0.3186669206314378,
+                "explicit_relative_residual": 0.318666920631238
+              },
+              {
+                "iteration": 18,
+                "curvature": 2.413125285695413e-06,
+                "recursive_relative_residual": 0.37426192212465725,
+                "explicit_relative_residual": 0.3742619221245086
+              },
+              {
+                "iteration": 19,
+                "curvature": 2.814945547115979e-06,
+                "recursive_relative_residual": 0.8274329417741931,
+                "explicit_relative_residual": 0.827432941774743
+              },
+              {
+                "iteration": 20,
+                "curvature": 8.651602341569935e-06,
+                "recursive_relative_residual": 0.3412012456824062,
+                "explicit_relative_residual": 0.3412012456826845
+              },
+              {
+                "iteration": 21,
+                "curvature": 6.539226962693281e-05,
+                "recursive_relative_residual": 0.7647247049398151,
+                "explicit_relative_residual": 0.764724704939586
+              },
+              {
+                "iteration": 22,
+                "curvature": 1.6154918003325512e-06,
+                "recursive_relative_residual": 0.8315811196857762,
+                "explicit_relative_residual": 0.8315811196858921
+              },
+              {
+                "iteration": 23,
+                "curvature": 8.807600517877654e-05,
+                "recursive_relative_residual": 0.8325843898747188,
+                "explicit_relative_residual": 0.8325843898748062
+              },
+              {
+                "iteration": 24,
+                "curvature": 7.802349291955744e-06,
+                "recursive_relative_residual": 0.30694794127353797,
+                "explicit_relative_residual": 0.3069479412733775
+              },
+              {
+                "iteration": 25,
+                "curvature": 8.472986938753626e-07,
+                "recursive_relative_residual": 0.39441163648969607,
+                "explicit_relative_residual": 0.394411636489628
+              },
+              {
+                "iteration": 26,
+                "curvature": 2.7039249257631184e-06,
+                "recursive_relative_residual": 0.6380317447930791,
+                "explicit_relative_residual": 0.6380317447930199
+              },
+              {
+                "iteration": 27,
+                "curvature": 1.3682235644382122e-05,
+                "recursive_relative_residual": 0.5293931026104363,
+                "explicit_relative_residual": 0.5293931026104587
+              },
+              {
+                "iteration": 28,
+                "curvature": 7.2755519182232446e-06,
+                "recursive_relative_residual": 0.4340500425003788,
+                "explicit_relative_residual": 0.43405004250038726
+              },
+              {
+                "iteration": 29,
+                "curvature": 1.6053363988397436e-06,
+                "recursive_relative_residual": 0.11456608961436124,
+                "explicit_relative_residual": 0.11456608961425058
+              },
+              {
+                "iteration": 30,
+                "curvature": 2.402637518010514e-07,
+                "recursive_relative_residual": 0.8776432211329774,
+                "explicit_relative_residual": 0.8776432211331213
+              },
+              {
+                "iteration": 31,
+                "curvature": 7.155798992513513e-06,
+                "recursive_relative_residual": 0.3225993089006893,
+                "explicit_relative_residual": 0.32259930890053834
+              },
+              {
+                "iteration": 32,
+                "curvature": 1.7341585413564625e-06,
+                "recursive_relative_residual": 0.3044885667409423,
+                "explicit_relative_residual": 0.3044885667411768
+              },
+              {
+                "iteration": 33,
+                "curvature": 1.5104905302998493e-05,
+                "recursive_relative_residual": 0.11563416791227002,
+                "explicit_relative_residual": 0.11563416791213744
+              },
+              {
+                "iteration": 34,
+                "curvature": 1.736609725166827e-07,
+                "recursive_relative_residual": 0.7384576260734494,
+                "explicit_relative_residual": 0.7384576260736092
+              },
+              {
+                "iteration": 35,
+                "curvature": 4.381902126734927e-06,
+                "recursive_relative_residual": 0.2372553322215821,
+                "explicit_relative_residual": 0.23725533222146267
+              },
+              {
+                "iteration": 36,
+                "curvature": 2.0569357413909244e-06,
+                "recursive_relative_residual": 0.39866672443331364,
+                "explicit_relative_residual": 0.39866672443341505
+              },
+              {
+                "iteration": 37,
+                "curvature": 2.1845973136226825e-05,
+                "recursive_relative_residual": 0.40330923849069017,
+                "explicit_relative_residual": 0.4033092384909888
+              },
+              {
+                "iteration": 38,
+                "curvature": 3.0415099994627717e-05,
+                "recursive_relative_residual": 0.08986358610630765,
+                "explicit_relative_residual": 0.08986358610650223
+              },
+              {
+                "iteration": 39,
+                "curvature": 3.31236231774965e-07,
+                "recursive_relative_residual": 0.7415647265827813,
+                "explicit_relative_residual": 0.7415647265826983
+              },
+              {
+                "iteration": 40,
+                "curvature": 9.012402848661799e-05,
+                "recursive_relative_residual": 0.8828647891202124,
+                "explicit_relative_residual": 0.8828647891202444
+              },
+              {
+                "iteration": 41,
+                "curvature": 1.2121585089419e-05,
+                "recursive_relative_residual": 0.18756761953385157,
+                "explicit_relative_residual": 0.18756761953428192
+              },
+              {
+                "iteration": 42,
+                "curvature": 4.924771220953805e-07,
+                "recursive_relative_residual": 0.6924567217759191,
+                "explicit_relative_residual": 0.6924567217756004
+              },
+              {
+                "iteration": 43,
+                "curvature": 1.542069956462499e-05,
+                "recursive_relative_residual": 0.35588493827796247,
+                "explicit_relative_residual": 0.3558849382780036
+              },
+              {
+                "iteration": 44,
+                "curvature": 1.4253958208314484e-06,
+                "recursive_relative_residual": 0.7783198463659371,
+                "explicit_relative_residual": 0.7783198463663047
+              },
+              {
+                "iteration": 45,
+                "curvature": 1.2026889696140543e-06,
+                "recursive_relative_residual": 0.16857645588995224,
+                "explicit_relative_residual": 0.16857645589017364
+              },
+              {
+                "iteration": 46,
+                "curvature": 3.9971880800403426e-07,
+                "recursive_relative_residual": 0.4269558784674344,
+                "explicit_relative_residual": 0.42695587846749156
+              },
+              {
+                "iteration": 47,
+                "curvature": 7.269437695514987e-05,
+                "recursive_relative_residual": 0.2770228880794717,
+                "explicit_relative_residual": 0.2770228880791554
+              },
+              {
+                "iteration": 48,
+                "curvature": 8.919393171728096e-07,
+                "recursive_relative_residual": 0.390579052657278,
+                "explicit_relative_residual": 0.39057905265760073
+              },
+              {
+                "iteration": 49,
+                "curvature": 2.630456631653944e-07,
+                "recursive_relative_residual": 0.05584429158397225,
+                "explicit_relative_residual": 0.05584429158511821
+              },
+              {
+                "iteration": 50,
+                "curvature": 4.6303138140576915e-08,
+                "recursive_relative_residual": 1.5383810305207057,
+                "explicit_relative_residual": 1.5383810305194352
+              },
+              {
+                "iteration": 51,
+                "curvature": 2.5858775171045065e-05,
+                "recursive_relative_residual": 1.026500394141076,
+                "explicit_relative_residual": 1.0265003941398838
+              },
+              {
+                "iteration": 52,
+                "curvature": 3.635291273828179e-05,
+                "recursive_relative_residual": 0.1439598431189706,
+                "explicit_relative_residual": 0.1439598431197293
+              },
+              {
+                "iteration": 53,
+                "curvature": 2.0389080914139045e-07,
+                "recursive_relative_residual": 0.4081847032722338,
+                "explicit_relative_residual": 0.40818470327219186
+              },
+              {
+                "iteration": 54,
+                "curvature": 1.700202922249858e-05,
+                "recursive_relative_residual": 0.4306323988828629,
+                "explicit_relative_residual": 0.43063239888280225
+              },
+              {
+                "iteration": 55,
+                "curvature": 3.971864417293663e-05,
+                "recursive_relative_residual": 0.26081630990395577,
+                "explicit_relative_residual": 0.26081630990379645
+              },
+              {
+                "iteration": 56,
+                "curvature": 1.641754457629835e-05,
+                "recursive_relative_residual": 0.029964762475873503,
+                "explicit_relative_residual": 0.029964762475605086
+              },
+              {
+                "iteration": 57,
+                "curvature": 1.487355464025271e-08,
+                "recursive_relative_residual": 1.3207207394316465,
+                "explicit_relative_residual": 1.3207207394331935
+              },
+              {
+                "iteration": 58,
+                "curvature": 2.546231750251607e-06,
+                "recursive_relative_residual": 0.22632629164588813,
+                "explicit_relative_residual": 0.2263262916440909
+              },
+              {
+                "iteration": 59,
+                "curvature": 1.8529993266340556e-08,
+                "recursive_relative_residual": 0.21220429206665728,
+                "explicit_relative_residual": 0.2122042920659707
+              },
+              {
+                "iteration": 60,
+                "curvature": 4.786253201121155e-06,
+                "recursive_relative_residual": 0.025404266331345092,
+                "explicit_relative_residual": 0.025404266331562078
+              },
+              {
+                "iteration": 61,
+                "curvature": 9.248767030531102e-08,
+                "recursive_relative_residual": 0.13291864914863516,
+                "explicit_relative_residual": 0.13291864914885557
+              },
+              {
+                "iteration": 62,
+                "curvature": 1.549719910583183e-06,
+                "recursive_relative_residual": 0.09143431975847356,
+                "explicit_relative_residual": 0.09143431975857277
+              },
+              {
+                "iteration": 63,
+                "curvature": 7.542694516459133e-08,
+                "recursive_relative_residual": 0.3222345059711092,
+                "explicit_relative_residual": 0.32223450597108655
+              },
+              {
+                "iteration": 64,
+                "curvature": 2.080446943673071e-06,
+                "recursive_relative_residual": 1.1216178095654032,
+                "explicit_relative_residual": 1.1216178095662426
+              },
+              {
+                "iteration": 65,
+                "curvature": 1.688805998503353e-06,
+                "recursive_relative_residual": 0.17891014290487617,
+                "explicit_relative_residual": 0.1789101429050907
+              },
+              {
+                "iteration": 66,
+                "curvature": 3.847468367811996e-05,
+                "recursive_relative_residual": 0.05148584919897802,
+                "explicit_relative_residual": 0.05148584919856084
+              },
+              {
+                "iteration": 67,
+                "curvature": 3.314258984583229e-08,
+                "recursive_relative_residual": 0.06337565614922104,
+                "explicit_relative_residual": 0.06337565614924151
+              },
+              {
+                "iteration": 68,
+                "curvature": 3.3000833796692864e-07,
+                "recursive_relative_residual": 0.14462995746160714,
+                "explicit_relative_residual": 0.1446299574622124
+              },
+              {
+                "iteration": 69,
+                "curvature": 5.4044765331254113e-05,
+                "recursive_relative_residual": 0.1011763503387401,
+                "explicit_relative_residual": 0.10117635033924612
+              },
+              {
+                "iteration": 70,
+                "curvature": 2.446742398163954e-06,
+                "recursive_relative_residual": 0.02936850523447928,
+                "explicit_relative_residual": 0.029368505234807666
+              },
+              {
+                "iteration": 71,
+                "curvature": 8.442184136972523e-08,
+                "recursive_relative_residual": 0.12876056625496995,
+                "explicit_relative_residual": 0.12876056625372412
+              },
+              {
+                "iteration": 72,
+                "curvature": 3.939522487468294e-08,
+                "recursive_relative_residual": 0.8799386284290565,
+                "explicit_relative_residual": 0.8799386284304528
+              },
+              {
+                "iteration": 73,
+                "curvature": 2.243136389156454e-06,
+                "recursive_relative_residual": 0.028476599638291133,
+                "explicit_relative_residual": 0.028476599638013265
+              },
+              {
+                "iteration": 74,
+                "curvature": 1.7865773891713828e-07,
+                "recursive_relative_residual": 0.12388982353035786,
+                "explicit_relative_residual": 0.1238898235286942
+              },
+              {
+                "iteration": 75,
+                "curvature": 2.376656335428851e-07,
+                "recursive_relative_residual": 0.3663048291713753,
+                "explicit_relative_residual": 0.3663048291700078
+              },
+              {
+                "iteration": 76,
+                "curvature": 7.928863652802437e-07,
+                "recursive_relative_residual": 0.19199556741897275,
+                "explicit_relative_residual": 0.1919955674190983
+              },
+              {
+                "iteration": 77,
+                "curvature": 3.347964506059784e-07,
+                "recursive_relative_residual": 0.06866055057329458,
+                "explicit_relative_residual": 0.06866055057376945
+              },
+              {
+                "iteration": 78,
+                "curvature": 2.9003522150898846e-08,
+                "recursive_relative_residual": 0.09237273630638969,
+                "explicit_relative_residual": 0.09237273630626457
+              },
+              {
+                "iteration": 79,
+                "curvature": 1.1751866316792701e-07,
+                "recursive_relative_residual": 0.13415957540136422,
+                "explicit_relative_residual": 0.13415957540130236
+              },
+              {
+                "iteration": 80,
+                "curvature": 1.0658941485505513e-06,
+                "recursive_relative_residual": 0.10567032147006343,
+                "explicit_relative_residual": 0.10567032146989117
+              },
+              {
+                "iteration": 81,
+                "curvature": 1.746612959206475e-05,
+                "recursive_relative_residual": 0.08424073961040274,
+                "explicit_relative_residual": 0.0842407396104296
+              },
+              {
+                "iteration": 82,
+                "curvature": 2.8604967673617914e-07,
+                "recursive_relative_residual": 0.026388175310366965,
+                "explicit_relative_residual": 0.02638817530974093
+              },
+              {
+                "iteration": 83,
+                "curvature": 8.423739399550067e-08,
+                "recursive_relative_residual": 0.028671176741785816,
+                "explicit_relative_residual": 0.028671176741221435
+              },
+              {
+                "iteration": 84,
+                "curvature": 3.3368889990058925e-07,
+                "recursive_relative_residual": 0.05468611803352864,
+                "explicit_relative_residual": 0.05468611803440861
+              },
+              {
+                "iteration": 85,
+                "curvature": 2.186538550852083e-06,
+                "recursive_relative_residual": 0.07629307309412368,
+                "explicit_relative_residual": 0.07629307309510933
+              },
+              {
+                "iteration": 86,
+                "curvature": 1.9983084007767026e-07,
+                "recursive_relative_residual": 0.02640158469146483,
+                "explicit_relative_residual": 0.026401584692515526
+              },
+              {
+                "iteration": 87,
+                "curvature": 9.534324422284016e-08,
+                "recursive_relative_residual": 0.0546139296023842,
+                "explicit_relative_residual": 0.054613929600721305
+              },
+              {
+                "iteration": 88,
+                "curvature": 4.246800726634432e-07,
+                "recursive_relative_residual": 0.023088013058015784,
+                "explicit_relative_residual": 0.02308801305790569
+              },
+              {
+                "iteration": 89,
+                "curvature": 2.510187253719578e-08,
+                "recursive_relative_residual": 0.4273190732644225,
+                "explicit_relative_residual": 0.42731907326540447
+              },
+              {
+                "iteration": 90,
+                "curvature": 7.784117394388959e-07,
+                "recursive_relative_residual": 0.010365061466209387,
+                "explicit_relative_residual": 0.0103650614661628
+              },
+              {
+                "iteration": 91,
+                "curvature": 1.5426315599485884e-08,
+                "recursive_relative_residual": 0.06143719075753533,
+                "explicit_relative_residual": 0.061437190756394165
+              },
+              {
+                "iteration": 92,
+                "curvature": 3.174986334703232e-08,
+                "recursive_relative_residual": 0.01854308493276834,
+                "explicit_relative_residual": 0.018543084932713227
+              },
+              {
+                "iteration": 93,
+                "curvature": 8.79895394700085e-08,
+                "recursive_relative_residual": 0.023389332577272486,
+                "explicit_relative_residual": 0.023389332577412453
+              },
+              {
+                "iteration": 94,
+                "curvature": 4.146884700455137e-07,
+                "recursive_relative_residual": 0.010548506157604276,
+                "explicit_relative_residual": 0.010548506158042018
+              },
+              {
+                "iteration": 95,
+                "curvature": 1.7113300195561884e-08,
+                "recursive_relative_residual": 0.06228326320894403,
+                "explicit_relative_residual": 0.06228326320876068
+              },
+              {
+                "iteration": 96,
+                "curvature": 4.76383279916962e-07,
+                "recursive_relative_residual": 0.4309110794970793,
+                "explicit_relative_residual": 0.4309110794965212
+              },
+              {
+                "iteration": 97,
+                "curvature": 6.646061568283136e-07,
+                "recursive_relative_residual": 0.043619123735213525,
+                "explicit_relative_residual": 0.04361912373592214
+              },
+              {
+                "iteration": 98,
+                "curvature": 2.9009240862803086e-07,
+                "recursive_relative_residual": 0.06667059335464748,
+                "explicit_relative_residual": 0.06667059335547426
+              },
+              {
+                "iteration": 99,
+                "curvature": 2.856508340890668e-07,
+                "recursive_relative_residual": 0.07496710996481379,
+                "explicit_relative_residual": 0.07496710996553248
+              },
+              {
+                "iteration": 100,
+                "curvature": 1.9681748884119022e-07,
+                "recursive_relative_residual": 0.03228349342389326,
+                "explicit_relative_residual": 0.032283493422884106
+              },
+              {
+                "iteration": 101,
+                "curvature": 8.760834686398153e-09,
+                "recursive_relative_residual": 0.09528350164535246,
+                "explicit_relative_residual": 0.09528350164574524
+              },
+              {
+                "iteration": 102,
+                "curvature": 3.802683564328946e-07,
+                "recursive_relative_residual": 0.07402692484068574,
+                "explicit_relative_residual": 0.07402692484118664
+              },
+              {
+                "iteration": 103,
+                "curvature": 1.709879977736128e-06,
+                "recursive_relative_residual": 0.04737497244711944,
+                "explicit_relative_residual": 0.047374972447694244
+              },
+              {
+                "iteration": 104,
+                "curvature": 6.304855644225259e-08,
+                "recursive_relative_residual": 0.14824496173679808,
+                "explicit_relative_residual": 0.14824496173591972
+              },
+              {
+                "iteration": 105,
+                "curvature": 1.205648493188313e-07,
+                "recursive_relative_residual": 0.00908487180717934,
+                "explicit_relative_residual": 0.009084871807587231
+              },
+              {
+                "iteration": 106,
+                "curvature": 7.252198303312588e-10,
+                "recursive_relative_residual": 0.272523073068441,
+                "explicit_relative_residual": 0.27252307306870643
+              },
+              {
+                "iteration": 107,
+                "curvature": 6.880240062208777e-07,
+                "recursive_relative_residual": 0.012009966034175125,
+                "explicit_relative_residual": 0.0120099660337765
+              },
+              {
+                "iteration": 108,
+                "curvature": 1.920653251974086e-08,
+                "recursive_relative_residual": 0.00482536903801788,
+                "explicit_relative_residual": 0.004825369038369965
+              },
+              {
+                "iteration": 109,
+                "curvature": 2.2809916143027452e-08,
+                "recursive_relative_residual": 0.015324366957916802,
+                "explicit_relative_residual": 0.015324366957877693
+              },
+              {
+                "iteration": 110,
+                "curvature": 3.011851227500033e-08,
+                "recursive_relative_residual": 0.04574588287005064,
+                "explicit_relative_residual": 0.04574588286994873
+              },
+              {
+                "iteration": 111,
+                "curvature": 5.642451242534353e-07,
+                "recursive_relative_residual": 0.012174789666671295,
+                "explicit_relative_residual": 0.012174789666929737
+              },
+              {
+                "iteration": 112,
+                "curvature": 1.5225860837671283e-08,
+                "recursive_relative_residual": 0.06345767526298102,
+                "explicit_relative_residual": 0.06345767526255665
+              },
+              {
+                "iteration": 113,
+                "curvature": 6.491762805154213e-06,
+                "recursive_relative_residual": 0.04730433786726424,
+                "explicit_relative_residual": 0.04730433786729034
+              },
+              {
+                "iteration": 114,
+                "curvature": 8.103425081480855e-08,
+                "recursive_relative_residual": 0.023580396724490717,
+                "explicit_relative_residual": 0.0235803967246067
+              },
+              {
+                "iteration": 115,
+                "curvature": 3.952250558737293e-09,
+                "recursive_relative_residual": 0.0708350560104133,
+                "explicit_relative_residual": 0.07083505601044796
+              },
+              {
+                "iteration": 116,
+                "curvature": 1.0387379701010148e-06,
+                "recursive_relative_residual": 0.08951078776643795,
+                "explicit_relative_residual": 0.08951078776561021
+              },
+              {
+                "iteration": 117,
+                "curvature": 1.6700830774213108e-07,
+                "recursive_relative_residual": 0.02705412890965106,
+                "explicit_relative_residual": 0.02705412891024458
+              },
+              {
+                "iteration": 118,
+                "curvature": 1.1091503318968538e-08,
+                "recursive_relative_residual": 0.01434970389973627,
+                "explicit_relative_residual": 0.014349703899074612
+              },
+              {
+                "iteration": 119,
+                "curvature": 6.752712272672801e-09,
+                "recursive_relative_residual": 0.05616183737834931,
+                "explicit_relative_residual": 0.056161837377702
+              },
+              {
+                "iteration": 120,
+                "curvature": 5.430830413629416e-07,
+                "recursive_relative_residual": 0.08388300743793563,
+                "explicit_relative_residual": 0.08388300743746553
+              },
+              {
+                "iteration": 121,
+                "curvature": 4.233836062242535e-07,
+                "recursive_relative_residual": 0.03807578139863079,
+                "explicit_relative_residual": 0.03807578139908928
+              },
+              {
+                "iteration": 122,
+                "curvature": 7.951187262542859e-08,
+                "recursive_relative_residual": 0.014170814793688044,
+                "explicit_relative_residual": 0.014170814793273192
+              },
+              {
+                "iteration": 123,
+                "curvature": 9.467901718677115e-09,
+                "recursive_relative_residual": 0.015885069281160135,
+                "explicit_relative_residual": 0.01588506928143413
+              },
+              {
+                "iteration": 124,
+                "curvature": 6.494034125630743e-07,
+                "recursive_relative_residual": 0.004790043095480519,
+                "explicit_relative_residual": 0.004790043095396382
+              },
+              {
+                "iteration": 125,
+                "curvature": 1.8768740981542424e-09,
+                "recursive_relative_residual": 0.03524460256133486,
+                "explicit_relative_residual": 0.03524460256144984
+              },
+              {
+                "iteration": 126,
+                "curvature": 2.138472472754914e-08,
+                "recursive_relative_residual": 0.04725269622994339,
+                "explicit_relative_residual": 0.04725269622958949
+              },
+              {
+                "iteration": 127,
+                "curvature": 3.809690739133809e-07,
+                "recursive_relative_residual": 0.0439098268073714,
+                "explicit_relative_residual": 0.04390982680719506
+              },
+              {
+                "iteration": 128,
+                "curvature": 1.0606035524584486e-06,
+                "recursive_relative_residual": 0.025446288959140046,
+                "explicit_relative_residual": 0.02544628895938625
+              },
+              {
+                "iteration": 129,
+                "curvature": 5.714401942190904e-07,
+                "recursive_relative_residual": 0.010245172423862373,
+                "explicit_relative_residual": 0.010245172423493744
+              },
+              {
+                "iteration": 130,
+                "curvature": 2.4411946149582435e-08,
+                "recursive_relative_residual": 0.036446185169998827,
+                "explicit_relative_residual": 0.03644618516984841
+              },
+              {
+                "iteration": 131,
+                "curvature": 6.393477499532385e-08,
+                "recursive_relative_residual": 0.015631875581046124,
+                "explicit_relative_residual": 0.015631875581388097
+              },
+              {
+                "iteration": 132,
+                "curvature": 1.4769157696141143e-08,
+                "recursive_relative_residual": 0.007453252231625207,
+                "explicit_relative_residual": 0.007453252231661866
+              },
+              {
+                "iteration": 133,
+                "curvature": 1.6905960773148661e-09,
+                "recursive_relative_residual": 0.032650378408035315,
+                "explicit_relative_residual": 0.032650378407995215
+              },
+              {
+                "iteration": 134,
+                "curvature": 2.612569951736333e-08,
+                "recursive_relative_residual": 0.03867607244441887,
+                "explicit_relative_residual": 0.03867607244444885
+              },
+              {
+                "iteration": 135,
+                "curvature": 1.347709175734936e-07,
+                "recursive_relative_residual": 0.03876667489469667,
+                "explicit_relative_residual": 0.03876667489483721
+              },
+              {
+                "iteration": 136,
+                "curvature": 6.183037965471512e-07,
+                "recursive_relative_residual": 0.0201229901214517,
+                "explicit_relative_residual": 0.020122990121517026
+              },
+              {
+                "iteration": 137,
+                "curvature": 4.423997878174584e-08,
+                "recursive_relative_residual": 0.005711136477319214,
+                "explicit_relative_residual": 0.005711136477849444
+              },
+              {
+                "iteration": 138,
+                "curvature": 1.6201564341648355e-08,
+                "recursive_relative_residual": 0.01921091418773569,
+                "explicit_relative_residual": 0.019210914187351432
+              },
+              {
+                "iteration": 139,
+                "curvature": 1.5350412737137765e-08,
+                "recursive_relative_residual": 0.031455345406442375,
+                "explicit_relative_residual": 0.031455345406273066
+              },
+              {
+                "iteration": 140,
+                "curvature": 1.224455848776931e-06,
+                "recursive_relative_residual": 0.008058614672071737,
+                "explicit_relative_residual": 0.008058614672221628
+              },
+              {
+                "iteration": 141,
+                "curvature": 5.333084693310761e-08,
+                "recursive_relative_residual": 0.012346527531751257,
+                "explicit_relative_residual": 0.01234652753156524
+              },
+              {
+                "iteration": 142,
+                "curvature": 6.263268294933388e-09,
+                "recursive_relative_residual": 0.05287791104502771,
+                "explicit_relative_residual": 0.05287791104520464
+              },
+              {
+                "iteration": 143,
+                "curvature": 2.236700117305092e-07,
+                "recursive_relative_residual": 0.007580272268471198,
+                "explicit_relative_residual": 0.007580272268444493
+              },
+              {
+                "iteration": 144,
+                "curvature": 4.940995481481702e-09,
+                "recursive_relative_residual": 0.03814968847619804,
+                "explicit_relative_residual": 0.03814968847611856
+              },
+              {
+                "iteration": 145,
+                "curvature": 5.367047740411726e-07,
+                "recursive_relative_residual": 0.09864884433774684,
+                "explicit_relative_residual": 0.09864884433799886
+              },
+              {
+                "iteration": 146,
+                "curvature": 6.944278541249706e-08,
+                "recursive_relative_residual": 0.03312990958402543,
+                "explicit_relative_residual": 0.03312990958380759
+              },
+              {
+                "iteration": 147,
+                "curvature": 1.9883693993009966e-08,
+                "recursive_relative_residual": 0.011482810502037697,
+                "explicit_relative_residual": 0.011482810501774191
+              },
+              {
+                "iteration": 148,
+                "curvature": 3.917521059850141e-09,
+                "recursive_relative_residual": 0.19523454842871016,
+                "explicit_relative_residual": 0.19523454842944182
+              },
+              {
+                "iteration": 149,
+                "curvature": 1.309106831821687e-07,
+                "recursive_relative_residual": 0.010395169037345227,
+                "explicit_relative_residual": 0.010395169036558453
+              },
+              {
+                "iteration": 150,
+                "curvature": 2.222726248116424e-11,
+                "recursive_relative_residual": 0.009854946286036606,
+                "explicit_relative_residual": 0.009854946286004466
+              },
+              {
+                "iteration": 151,
+                "curvature": 2.3130823403915692e-09,
+                "recursive_relative_residual": 0.08829815745475847,
+                "explicit_relative_residual": 0.08829815745487672
+              },
+              {
+                "iteration": 152,
+                "curvature": 1.264235298162213e-06,
+                "recursive_relative_residual": 0.1029439634937575,
+                "explicit_relative_residual": 0.10294396349370777
+              },
+              {
+                "iteration": 153,
+                "curvature": 7.687884126190262e-08,
+                "recursive_relative_residual": 0.007078027817564584,
+                "explicit_relative_residual": 0.007078027817575064
+              },
+              {
+                "iteration": 154,
+                "curvature": 3.4901629113195446e-08,
+                "recursive_relative_residual": 0.010538643802813242,
+                "explicit_relative_residual": 0.01053864380242946
+              },
+              {
+                "iteration": 155,
+                "curvature": 9.085336262707834e-11,
+                "recursive_relative_residual": 0.05091638661149703,
+                "explicit_relative_residual": 0.05091638661153617
+              },
+              {
+                "iteration": 156,
+                "curvature": 8.21569359240856e-07,
+                "recursive_relative_residual": 0.04873440169659896,
+                "explicit_relative_residual": 0.04873440169663058
+              },
+              {
+                "iteration": 157,
+                "curvature": 1.6283303434382258e-06,
+                "recursive_relative_residual": 0.023232879217968787,
+                "explicit_relative_residual": 0.02323287921801647
+              },
+              {
+                "iteration": 158,
+                "curvature": 3.3770049561680956e-07,
+                "recursive_relative_residual": 0.02952253713570301,
+                "explicit_relative_residual": 0.02952253713560676
+              },
+              {
+                "iteration": 159,
+                "curvature": 7.627767357410423e-07,
+                "recursive_relative_residual": 0.03621447277915049,
+                "explicit_relative_residual": 0.036214472779237325
+              },
+              {
+                "iteration": 160,
+                "curvature": 7.486858109431637e-08,
+                "recursive_relative_residual": 0.0034775306309125817,
+                "explicit_relative_residual": 0.0034775306307780777
+              },
+              {
+                "iteration": 161,
+                "curvature": 7.875205974840809e-10,
+                "recursive_relative_residual": 0.021524521062712985,
+                "explicit_relative_residual": 0.021524521063051416
+              },
+              {
+                "iteration": 162,
+                "curvature": 6.33074836746105e-08,
+                "recursive_relative_residual": 0.01669234749204713,
+                "explicit_relative_residual": 0.01669234749214052
+              },
+              {
+                "iteration": 163,
+                "curvature": 2.7885026439907778e-08,
+                "recursive_relative_residual": 0.005041148473920823,
+                "explicit_relative_residual": 0.005041148473751202
+              },
+              {
+                "iteration": 164,
+                "curvature": 7.178533568974339e-10,
+                "recursive_relative_residual": 0.027619217508625442,
+                "explicit_relative_residual": 0.027619217509140957
+              },
+              {
+                "iteration": 165,
+                "curvature": 2.6361010589333424e-08,
+                "recursive_relative_residual": 0.0123533755773963,
+                "explicit_relative_residual": 0.012353375577866161
+              },
+              {
+                "iteration": 166,
+                "curvature": 8.453758612730243e-09,
+                "recursive_relative_residual": 0.05422880922202654,
+                "explicit_relative_residual": 0.05422880922371983
+              },
+              {
+                "iteration": 167,
+                "curvature": 1.5105972192722862e-07,
+                "recursive_relative_residual": 0.0364619497040245,
+                "explicit_relative_residual": 0.03646194970340286
+              },
+              {
+                "iteration": 168,
+                "curvature": 1.4951363977640124e-06,
+                "recursive_relative_residual": 0.0700274958744276,
+                "explicit_relative_residual": 0.07002749587174124
+              },
+              {
+                "iteration": 169,
+                "curvature": 8.068483098108567e-09,
+                "recursive_relative_residual": 0.06560015634397642,
+                "explicit_relative_residual": 0.06560015634647874
+              },
+              {
+                "iteration": 170,
+                "curvature": 1.9817153279978115e-09,
+                "recursive_relative_residual": 0.03713143514756229,
+                "explicit_relative_residual": 0.03713143514500406
+              },
+              {
+                "iteration": 171,
+                "curvature": 6.774001717018561e-09,
+                "recursive_relative_residual": 0.007902728310677185,
+                "explicit_relative_residual": 0.007902728308246613
+              },
+              {
+                "iteration": 172,
+                "curvature": 1.856635087461961e-09,
+                "recursive_relative_residual": 0.0485335936721216,
+                "explicit_relative_residual": 0.04853359367408801
+              },
+              {
+                "iteration": 173,
+                "curvature": 2.0615561801213489e-07,
+                "recursive_relative_residual": 0.12379025666042677,
+                "explicit_relative_residual": 0.12379025666311294
+              },
+              {
+                "iteration": 174,
+                "curvature": 1.338537433420322e-08,
+                "recursive_relative_residual": 0.0614962207837199,
+                "explicit_relative_residual": 0.06149622078164203
+              },
+              {
+                "iteration": 175,
+                "curvature": 3.7517336236370216e-09,
+                "recursive_relative_residual": 0.0900797831573348,
+                "explicit_relative_residual": 0.09007978315630295
+              },
+              {
+                "iteration": 176,
+                "curvature": 3.096803041203807e-08,
+                "recursive_relative_residual": 0.0399966370050048,
+                "explicit_relative_residual": 0.0399966370047268
+              },
+              {
+                "iteration": 177,
+                "curvature": 1.1335076249770558e-06,
+                "recursive_relative_residual": 0.019129538812579405,
+                "explicit_relative_residual": 0.019129538813426366
+              },
+              {
+                "iteration": 178,
+                "curvature": 1.1305900276100679e-07,
+                "recursive_relative_residual": 0.052100191936760125,
+                "explicit_relative_residual": 0.0521001919375277
+              },
+              {
+                "iteration": 179,
+                "curvature": 1.6715724912140745e-07,
+                "recursive_relative_residual": 0.008549405766707584,
+                "explicit_relative_residual": 0.008549405766888655
+              },
+              {
+                "iteration": 180,
+                "curvature": 1.1299673942786333e-08,
+                "recursive_relative_residual": 0.0031061178162939008,
+                "explicit_relative_residual": 0.0031061178142900306
+              },
+              {
+                "iteration": 181,
+                "curvature": 2.3983618434831153e-10,
+                "recursive_relative_residual": 0.021905435786884385,
+                "explicit_relative_residual": 0.021905435789415343
+              },
+              {
+                "iteration": 182,
+                "curvature": 8.776395943275766e-08,
+                "recursive_relative_residual": 0.027662331895492078,
+                "explicit_relative_residual": 0.027662331898252193
+              },
+              {
+                "iteration": 183,
+                "curvature": 3.461645522680511e-08,
+                "recursive_relative_residual": 0.06639874848104844,
+                "explicit_relative_residual": 0.06639874847882697
+              },
+              {
+                "iteration": 184,
+                "curvature": 1.3856555343761334e-07,
+                "recursive_relative_residual": 0.012600552250911282,
+                "explicit_relative_residual": 0.012600552249612923
+              },
+              {
+                "iteration": 185,
+                "curvature": 6.4400607805479236e-09,
+                "recursive_relative_residual": 0.03906717287830553,
+                "explicit_relative_residual": 0.039067172880330105
+              },
+              {
+                "iteration": 186,
+                "curvature": 2.430375791949812e-08,
+                "recursive_relative_residual": 0.027845996772158887,
+                "explicit_relative_residual": 0.027845996773016555
+              },
+              {
+                "iteration": 187,
+                "curvature": 2.0086532559558386e-07,
+                "recursive_relative_residual": 0.03500136118922234,
+                "explicit_relative_residual": 0.03500136118642583
+              },
+              {
+                "iteration": 188,
+                "curvature": 5.83138119723687e-08,
+                "recursive_relative_residual": 0.018162995804112923,
+                "explicit_relative_residual": 0.018162995803074927
+              },
+              {
+                "iteration": 189,
+                "curvature": 3.049340885322597e-07,
+                "recursive_relative_residual": 0.026135079994519413,
+                "explicit_relative_residual": 0.02613507999687471
+              },
+              {
+                "iteration": 190,
+                "curvature": 8.460166700722868e-09,
+                "recursive_relative_residual": 0.004335874389025514,
+                "explicit_relative_residual": 0.004335874392193716
+              },
+              {
+                "iteration": 191,
+                "curvature": 1.0947273940849936e-09,
+                "recursive_relative_residual": 0.04146601062197705,
+                "explicit_relative_residual": 0.041466010619382244
+              },
+              {
+                "iteration": 192,
+                "curvature": 1.262000865030822e-09,
+                "recursive_relative_residual": 0.006943744805536148,
+                "explicit_relative_residual": 0.006943744807206137
+              },
+              {
+                "iteration": 193,
+                "curvature": 1.369623621193888e-10,
+                "recursive_relative_residual": 0.012007415802525168,
+                "explicit_relative_residual": 0.012007415803630038
+              },
+              {
+                "iteration": 194,
+                "curvature": 1.6159546531012473e-07,
+                "recursive_relative_residual": 0.006630937860465269,
+                "explicit_relative_residual": 0.006630937860783456
+              },
+              {
+                "iteration": 195,
+                "curvature": 1.1415113421558396e-09,
+                "recursive_relative_residual": 0.1314494692605855,
+                "explicit_relative_residual": 0.1314494692595972
+              },
+              {
+                "iteration": 196,
+                "curvature": 5.201518754738551e-07,
+                "recursive_relative_residual": 0.07261037300165411,
+                "explicit_relative_residual": 0.07261037300099571
+              },
+              {
+                "iteration": 197,
+                "curvature": 6.000360923695623e-07,
+                "recursive_relative_residual": 0.024557518253226877,
+                "explicit_relative_residual": 0.024557518252493412
+              },
+              {
+                "iteration": 198,
+                "curvature": 1.2397013092225496e-07,
+                "recursive_relative_residual": 0.0017097733973903532,
+                "explicit_relative_residual": 0.0017097733978459686
+              },
+              {
+                "iteration": 199,
+                "curvature": 2.5149329123277953e-11,
+                "recursive_relative_residual": 0.017045862642392526,
+                "explicit_relative_residual": 0.01704586264161235
+              },
+              {
+                "iteration": 200,
+                "curvature": 4.487686417971063e-09,
+                "recursive_relative_residual": 0.026540083718231126,
+                "explicit_relative_residual": 0.02654008371871018
+              }
+            ]
+          },
+          "accepted_after": 0,
+          "loss_after": 1.1309764879673272e-05,
+          "step_inf": 0.0,
+          "plateau": 0,
+          "status": "algorithm_failure",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 421,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 421,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 2
+          },
+          "elapsed_seconds": 13.042535399988992
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 1,
+        "hvp_calls": 421,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-nncg-continuation-0.1": {
+      "status": "verified",
+      "line_count": 200,
+      "phases": {
+        "nncg": {
+          "attempts": 200,
+          "accepted_updates": 200,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "nncg": {
+          "phase": "nncg",
+          "attempt": 200,
+          "accepted_before": 199,
+          "loss_before": 8.773906075395738e-06,
+          "gradient_inf_before": 1.6907052222769057e-05,
+          "at": "2026-10-31T23:31:30.449944+00:00",
+          "pcg": {
+            "status": "converged",
+            "iterations": 112,
+            "explicit_relative_residual": 9.219398641017004e-09,
+            "history": [
+              {
+                "iteration": 1,
+                "curvature": 1.3835231359453827e-10,
+                "recursive_relative_residual": 128.98734498228245,
+                "explicit_relative_residual": 128.98734498228265
+              },
+              {
+                "iteration": 2,
+                "curvature": 1.4336216486948684e-05,
+                "recursive_relative_residual": 149.2100247076005,
+                "explicit_relative_residual": 149.2100247076009
+              },
+              {
+                "iteration": 3,
+                "curvature": 5.07238918497114e-06,
+                "recursive_relative_residual": 92.04630366795371,
+                "explicit_relative_residual": 92.0463036679528
+              },
+              {
+                "iteration": 4,
+                "curvature": 5.091549658785892e-06,
+                "recursive_relative_residual": 16.263825403842183,
+                "explicit_relative_residual": 16.26382540384158
+              },
+              {
+                "iteration": 5,
+                "curvature": 1.4207230847062394e-06,
+                "recursive_relative_residual": 4.66612098614719,
+                "explicit_relative_residual": 4.6661209861465816
+              },
+              {
+                "iteration": 6,
+                "curvature": 1.3384873136580325e-07,
+                "recursive_relative_residual": 0.2994498548563609,
+                "explicit_relative_residual": 0.29944985485636344
+              },
+              {
+                "iteration": 7,
+                "curvature": 8.819925408885422e-09,
+                "recursive_relative_residual": 0.2217985972942081,
+                "explicit_relative_residual": 0.22179859729373264
+              },
+              {
+                "iteration": 8,
+                "curvature": 6.404997088880566e-10,
+                "recursive_relative_residual": 0.12540885841891414,
+                "explicit_relative_residual": 0.1254088584178165
+              },
+              {
+                "iteration": 9,
+                "curvature": 1.7308416034591882e-10,
+                "recursive_relative_residual": 0.08505850523749488,
+                "explicit_relative_residual": 0.08505850523820932
+              },
+              {
+                "iteration": 10,
+                "curvature": 9.646900401267411e-11,
+                "recursive_relative_residual": 0.060752776664472596,
+                "explicit_relative_residual": 0.060752776665591667
+              },
+              {
+                "iteration": 11,
+                "curvature": 2.1657386952690423e-11,
+                "recursive_relative_residual": 0.03104920976742064,
+                "explicit_relative_residual": 0.03104920976633325
+              },
+              {
+                "iteration": 12,
+                "curvature": 5.90338905818655e-12,
+                "recursive_relative_residual": 0.017227710316047865,
+                "explicit_relative_residual": 0.017227710315555367
+              },
+              {
+                "iteration": 13,
+                "curvature": 3.5514114806540345e-12,
+                "recursive_relative_residual": 0.010939040017610403,
+                "explicit_relative_residual": 0.010939040017781294
+              },
+              {
+                "iteration": 14,
+                "curvature": 1.1237991733454954e-12,
+                "recursive_relative_residual": 0.011397554587108989,
+                "explicit_relative_residual": 0.011397554587746443
+              },
+              {
+                "iteration": 15,
+                "curvature": 5.407376012976506e-13,
+                "recursive_relative_residual": 0.011145524545459279,
+                "explicit_relative_residual": 0.011145524544971221
+              },
+              {
+                "iteration": 16,
+                "curvature": 3.262002595590179e-13,
+                "recursive_relative_residual": 0.0050435148344120245,
+                "explicit_relative_residual": 0.0050435148344156406
+              },
+              {
+                "iteration": 17,
+                "curvature": 2.3436691780577513e-13,
+                "recursive_relative_residual": 0.00736789828679556,
+                "explicit_relative_residual": 0.007367898287243459
+              },
+              {
+                "iteration": 18,
+                "curvature": 3.9477631653933604e-13,
+                "recursive_relative_residual": 0.006504947942894911,
+                "explicit_relative_residual": 0.006504947942640248
+              },
+              {
+                "iteration": 19,
+                "curvature": 6.390882750885748e-12,
+                "recursive_relative_residual": 0.008030201380402812,
+                "explicit_relative_residual": 0.008030201381544606
+              },
+              {
+                "iteration": 20,
+                "curvature": 1.239729014448556e-13,
+                "recursive_relative_residual": 0.005551347726945713,
+                "explicit_relative_residual": 0.005551347726517289
+              },
+              {
+                "iteration": 21,
+                "curvature": 5.789458172686748e-14,
+                "recursive_relative_residual": 0.007689020088837571,
+                "explicit_relative_residual": 0.0076890200897041456
+              },
+              {
+                "iteration": 22,
+                "curvature": 1.513543426190222e-12,
+                "recursive_relative_residual": 0.009703389822785109,
+                "explicit_relative_residual": 0.009703389823589738
+              },
+              {
+                "iteration": 23,
+                "curvature": 7.259939580354175e-13,
+                "recursive_relative_residual": 0.005245895634244817,
+                "explicit_relative_residual": 0.0052458956327622805
+              },
+              {
+                "iteration": 24,
+                "curvature": 5.670041666704443e-14,
+                "recursive_relative_residual": 0.014851372293992719,
+                "explicit_relative_residual": 0.014851372295727793
+              },
+              {
+                "iteration": 25,
+                "curvature": 2.0560888013701228e-13,
+                "recursive_relative_residual": 0.015443554509768307,
+                "explicit_relative_residual": 0.01544355450884678
+              },
+              {
+                "iteration": 26,
+                "curvature": 2.8620345479022743e-12,
+                "recursive_relative_residual": 0.0182589653770866,
+                "explicit_relative_residual": 0.018258965374895655
+              },
+              {
+                "iteration": 27,
+                "curvature": 1.057265774904983e-12,
+                "recursive_relative_residual": 0.005565582335261838,
+                "explicit_relative_residual": 0.005565582336143767
+              },
+              {
+                "iteration": 28,
+                "curvature": 2.2606147448251925e-13,
+                "recursive_relative_residual": 0.005956770898276458,
+                "explicit_relative_residual": 0.005956770897840674
+              },
+              {
+                "iteration": 29,
+                "curvature": 2.254666470564769e-12,
+                "recursive_relative_residual": 0.006943115403213444,
+                "explicit_relative_residual": 0.00694311540261909
+              },
+              {
+                "iteration": 30,
+                "curvature": 2.2021023596735212e-13,
+                "recursive_relative_residual": 0.008922520721075787,
+                "explicit_relative_residual": 0.008922520722011672
+              },
+              {
+                "iteration": 31,
+                "curvature": 1.5774407009465968e-13,
+                "recursive_relative_residual": 0.0029645740662944523,
+                "explicit_relative_residual": 0.0029645740637614547
+              },
+              {
+                "iteration": 32,
+                "curvature": 8.481325814767487e-15,
+                "recursive_relative_residual": 0.006276252661236772,
+                "explicit_relative_residual": 0.006276252664024327
+              },
+              {
+                "iteration": 33,
+                "curvature": 3.0680880805613877e-13,
+                "recursive_relative_residual": 0.004041236482764922,
+                "explicit_relative_residual": 0.004041236485533929
+              },
+              {
+                "iteration": 34,
+                "curvature": 3.35823589586151e-13,
+                "recursive_relative_residual": 0.0012547507236410496,
+                "explicit_relative_residual": 0.0012547507215687147
+              },
+              {
+                "iteration": 35,
+                "curvature": 3.123231539567309e-15,
+                "recursive_relative_residual": 0.0019618691808171627,
+                "explicit_relative_residual": 0.0019618691820172387
+              },
+              {
+                "iteration": 36,
+                "curvature": 5.281534112238841e-14,
+                "recursive_relative_residual": 0.0013034219610730737,
+                "explicit_relative_residual": 0.0013034219623923166
+              },
+              {
+                "iteration": 37,
+                "curvature": 5.0998382184379694e-15,
+                "recursive_relative_residual": 0.0023753020476797097,
+                "explicit_relative_residual": 0.002375302046608167
+              },
+              {
+                "iteration": 38,
+                "curvature": 4.1765303356547774e-15,
+                "recursive_relative_residual": 0.0009354021497088339,
+                "explicit_relative_residual": 0.0009354021510315836
+              },
+              {
+                "iteration": 39,
+                "curvature": 6.87048490928979e-14,
+                "recursive_relative_residual": 0.001001567421279722,
+                "explicit_relative_residual": 0.0010015674229696683
+              },
+              {
+                "iteration": 40,
+                "curvature": 2.841602584066469e-15,
+                "recursive_relative_residual": 0.0010705655993787056,
+                "explicit_relative_residual": 0.0010705655989580712
+              },
+              {
+                "iteration": 41,
+                "curvature": 3.0171163564173447e-15,
+                "recursive_relative_residual": 0.00023020624486704656,
+                "explicit_relative_residual": 0.00023020624428020915
+              },
+              {
+                "iteration": 42,
+                "curvature": 6.925390690239029e-16,
+                "recursive_relative_residual": 0.001133005136469551,
+                "explicit_relative_residual": 0.00113300513651704
+              },
+              {
+                "iteration": 43,
+                "curvature": 6.5639413651232584e-15,
+                "recursive_relative_residual": 0.0007894721359934491,
+                "explicit_relative_residual": 0.0007894721364183408
+              },
+              {
+                "iteration": 44,
+                "curvature": 4.682367197603375e-16,
+                "recursive_relative_residual": 0.0006905111218659609,
+                "explicit_relative_residual": 0.0006905111213244942
+              },
+              {
+                "iteration": 45,
+                "curvature": 3.025199645730959e-16,
+                "recursive_relative_residual": 0.0006916946592624756,
+                "explicit_relative_residual": 0.0006916946590182948
+              },
+              {
+                "iteration": 46,
+                "curvature": 4.432724062192829e-15,
+                "recursive_relative_residual": 0.00015974220376883955,
+                "explicit_relative_residual": 0.00015974220364805343
+              },
+              {
+                "iteration": 47,
+                "curvature": 1.3052154424727106e-16,
+                "recursive_relative_residual": 0.0002852141363625537,
+                "explicit_relative_residual": 0.00028521413588368717
+              },
+              {
+                "iteration": 48,
+                "curvature": 4.007918947729799e-15,
+                "recursive_relative_residual": 0.001090967083061787,
+                "explicit_relative_residual": 0.0010909670816202906
+              },
+              {
+                "iteration": 49,
+                "curvature": 9.165245834156262e-16,
+                "recursive_relative_residual": 0.0005165504199010957,
+                "explicit_relative_residual": 0.0005165504178162395
+              },
+              {
+                "iteration": 50,
+                "curvature": 3.741144392576021e-16,
+                "recursive_relative_residual": 0.00052287161610929,
+                "explicit_relative_residual": 0.000522871618333107
+              },
+              {
+                "iteration": 51,
+                "curvature": 1.9450131169080268e-17,
+                "recursive_relative_residual": 0.0004910914298153857,
+                "explicit_relative_residual": 0.0004910914308821442
+              },
+              {
+                "iteration": 52,
+                "curvature": 8.989699088203409e-16,
+                "recursive_relative_residual": 5.124375926484809e-05,
+                "explicit_relative_residual": 5.124375846154841e-05
+              },
+              {
+                "iteration": 53,
+                "curvature": 1.8345296804681526e-18,
+                "recursive_relative_residual": 0.0005498205544716471,
+                "explicit_relative_residual": 0.0005498205552351095
+              },
+              {
+                "iteration": 54,
+                "curvature": 1.2606883749238651e-16,
+                "recursive_relative_residual": 5.11448842250645e-05,
+                "explicit_relative_residual": 5.1144885163864756e-05
+              },
+              {
+                "iteration": 55,
+                "curvature": 5.826670681033692e-16,
+                "recursive_relative_residual": 7.140461835234469e-05,
+                "explicit_relative_residual": 7.140461659945346e-05
+              },
+              {
+                "iteration": 56,
+                "curvature": 1.528651866259106e-18,
+                "recursive_relative_residual": 9.029824067645089e-05,
+                "explicit_relative_residual": 9.029824244698135e-05
+              },
+              {
+                "iteration": 57,
+                "curvature": 8.613901851005235e-17,
+                "recursive_relative_residual": 1.4094696488835052e-05,
+                "explicit_relative_residual": 1.409469513798963e-05
+              },
+              {
+                "iteration": 58,
+                "curvature": 7.483600257245292e-19,
+                "recursive_relative_residual": 0.00019139002653414136,
+                "explicit_relative_residual": 0.00019139002739600582
+              },
+              {
+                "iteration": 59,
+                "curvature": 2.6039555420143072e-17,
+                "recursive_relative_residual": 1.4222725652781113e-05,
+                "explicit_relative_residual": 1.4222724617693963e-05
+              },
+              {
+                "iteration": 60,
+                "curvature": 2.352350373329618e-17,
+                "recursive_relative_residual": 1.9248128289062722e-05,
+                "explicit_relative_residual": 1.9248128416263127e-05
+              },
+              {
+                "iteration": 61,
+                "curvature": 1.4508998601063026e-17,
+                "recursive_relative_residual": 5.476866785886378e-05,
+                "explicit_relative_residual": 5.476866728231471e-05
+              },
+              {
+                "iteration": 62,
+                "curvature": 5.676367906283667e-18,
+                "recursive_relative_residual": 9.921730703276249e-06,
+                "explicit_relative_residual": 9.921730304471355e-06
+              },
+              {
+                "iteration": 63,
+                "curvature": 3.7517297582303197e-19,
+                "recursive_relative_residual": 7.074584092499087e-05,
+                "explicit_relative_residual": 7.074584220422125e-05
+              },
+              {
+                "iteration": 64,
+                "curvature": 2.3299029798592838e-17,
+                "recursive_relative_residual": 8.441254261448866e-05,
+                "explicit_relative_residual": 8.44125446159017e-05
+              },
+              {
+                "iteration": 65,
+                "curvature": 5.927028452889043e-17,
+                "recursive_relative_residual": 3.81273623628932e-05,
+                "explicit_relative_residual": 3.81273646228252e-05
+              },
+              {
+                "iteration": 66,
+                "curvature": 8.29032240070142e-19,
+                "recursive_relative_residual": 4.700064148557733e-05,
+                "explicit_relative_residual": 4.700064092640197e-05
+              },
+              {
+                "iteration": 67,
+                "curvature": 3.585857458013407e-18,
+                "recursive_relative_residual": 8.684830922434693e-05,
+                "explicit_relative_residual": 8.684830733103587e-05
+              },
+              {
+                "iteration": 68,
+                "curvature": 1.5299881645121624e-18,
+                "recursive_relative_residual": 3.1422936709704385e-06,
+                "explicit_relative_residual": 3.1422928392300117e-06
+              },
+              {
+                "iteration": 69,
+                "curvature": 3.0442210078150713e-20,
+                "recursive_relative_residual": 4.5909065607071036e-05,
+                "explicit_relative_residual": 4.590906646464041e-05
+              },
+              {
+                "iteration": 70,
+                "curvature": 1.8282180472798006e-17,
+                "recursive_relative_residual": 5.960137076424868e-05,
+                "explicit_relative_residual": 5.9601372095069336e-05
+              },
+              {
+                "iteration": 71,
+                "curvature": 4.120124611442934e-17,
+                "recursive_relative_residual": 4.589577854407831e-05,
+                "explicit_relative_residual": 4.589578008707327e-05
+              },
+              {
+                "iteration": 72,
+                "curvature": 4.501136314536754e-19,
+                "recursive_relative_residual": 1.870608572821073e-05,
+                "explicit_relative_residual": 1.870608564749393e-05
+              },
+              {
+                "iteration": 73,
+                "curvature": 5.686915168400231e-21,
+                "recursive_relative_residual": 5.0347346854493465e-06,
+                "explicit_relative_residual": 5.03473460778437e-06
+              },
+              {
+                "iteration": 74,
+                "curvature": 1.3951558190763846e-17,
+                "recursive_relative_residual": 3.411299063244756e-06,
+                "explicit_relative_residual": 3.411298317357798e-06
+              },
+              {
+                "iteration": 75,
+                "curvature": 6.0358457552742145e-21,
+                "recursive_relative_residual": 3.3805378636365756e-05,
+                "explicit_relative_residual": 3.380537906545678e-05
+              },
+              {
+                "iteration": 76,
+                "curvature": 1.8200148974177438e-19,
+                "recursive_relative_residual": 9.777838292115751e-06,
+                "explicit_relative_residual": 9.777837295390146e-06
+              },
+              {
+                "iteration": 77,
+                "curvature": 8.794577150426942e-20,
+                "recursive_relative_residual": 8.555714316407553e-07,
+                "explicit_relative_residual": 8.555727236608145e-07
+              },
+              {
+                "iteration": 78,
+                "curvature": 1.2913313682571817e-21,
+                "recursive_relative_residual": 5.048450346660479e-06,
+                "explicit_relative_residual": 5.048449322194388e-06
+              },
+              {
+                "iteration": 79,
+                "curvature": 4.956151961466608e-20,
+                "recursive_relative_residual": 2.066605065807056e-06,
+                "explicit_relative_residual": 2.06660512354198e-06
+              },
+              {
+                "iteration": 80,
+                "curvature": 1.1418089513301815e-19,
+                "recursive_relative_residual": 2.795652618408196e-06,
+                "explicit_relative_residual": 2.7956538706357714e-06
+              },
+              {
+                "iteration": 81,
+                "curvature": 4.3162644543786194e-19,
+                "recursive_relative_residual": 2.0302274010649567e-06,
+                "explicit_relative_residual": 2.03022934382325e-06
+              },
+              {
+                "iteration": 82,
+                "curvature": 6.870996730546004e-20,
+                "recursive_relative_residual": 6.151749678369596e-07,
+                "explicit_relative_residual": 6.151737159207256e-07
+              },
+              {
+                "iteration": 83,
+                "curvature": 5.422283270834581e-21,
+                "recursive_relative_residual": 8.599472842772448e-07,
+                "explicit_relative_residual": 8.599467410258322e-07
+              },
+              {
+                "iteration": 84,
+                "curvature": 3.71414743419517e-20,
+                "recursive_relative_residual": 1.043544976407678e-06,
+                "explicit_relative_residual": 1.0435466166768405e-06
+              },
+              {
+                "iteration": 85,
+                "curvature": 1.3193698211282884e-20,
+                "recursive_relative_residual": 1.6613039911425995e-06,
+                "explicit_relative_residual": 1.6613060696722517e-06
+              },
+              {
+                "iteration": 86,
+                "curvature": 2.0484124547867514e-19,
+                "recursive_relative_residual": 2.589735198634027e-06,
+                "explicit_relative_residual": 2.5897348689645573e-06
+              },
+              {
+                "iteration": 87,
+                "curvature": 2.3102213069280625e-19,
+                "recursive_relative_residual": 6.580238139448624e-07,
+                "explicit_relative_residual": 6.580251666044655e-07
+              },
+              {
+                "iteration": 88,
+                "curvature": 7.89988013103625e-21,
+                "recursive_relative_residual": 1.1278280258595182e-06,
+                "explicit_relative_residual": 1.1278276122845876e-06
+              },
+              {
+                "iteration": 89,
+                "curvature": 3.0539271873355214e-19,
+                "recursive_relative_residual": 9.373920136124375e-07,
+                "explicit_relative_residual": 9.373933568237595e-07
+              },
+              {
+                "iteration": 90,
+                "curvature": 7.345351300183242e-22,
+                "recursive_relative_residual": 4.502020575365052e-06,
+                "explicit_relative_residual": 4.502019951277549e-06
+              },
+              {
+                "iteration": 91,
+                "curvature": 4.5827676521803665e-21,
+                "recursive_relative_residual": 2.311374283745177e-06,
+                "explicit_relative_residual": 2.3113755721165516e-06
+              },
+              {
+                "iteration": 92,
+                "curvature": 4.841782594304042e-21,
+                "recursive_relative_residual": 2.2037197288150355e-07,
+                "explicit_relative_residual": 2.203680483309994e-07
+              },
+              {
+                "iteration": 93,
+                "curvature": 1.9887206728298846e-22,
+                "recursive_relative_residual": 5.477367150818938e-07,
+                "explicit_relative_residual": 5.47739602117291e-07
+              },
+              {
+                "iteration": 94,
+                "curvature": 2.7358331361699093e-22,
+                "recursive_relative_residual": 1.5083161715824914e-06,
+                "explicit_relative_residual": 1.5083205506058052e-06
+              },
+              {
+                "iteration": 95,
+                "curvature": 4.901511803112003e-21,
+                "recursive_relative_residual": 4.6361174899735085e-07,
+                "explicit_relative_residual": 4.636082119783727e-07
+              },
+              {
+                "iteration": 96,
+                "curvature": 3.685870574898482e-22,
+                "recursive_relative_residual": 4.301212652483453e-07,
+                "explicit_relative_residual": 4.3012495431391614e-07
+              },
+              {
+                "iteration": 97,
+                "curvature": 2.8248364488899107e-22,
+                "recursive_relative_residual": 8.050278284072191e-08,
+                "explicit_relative_residual": 8.050043266408714e-08
+              },
+              {
+                "iteration": 98,
+                "curvature": 4.182220172321002e-23,
+                "recursive_relative_residual": 2.9189919861118146e-07,
+                "explicit_relative_residual": 2.919002181194373e-07
+              },
+              {
+                "iteration": 99,
+                "curvature": 2.3782354945283564e-21,
+                "recursive_relative_residual": 5.320670609876917e-07,
+                "explicit_relative_residual": 5.320700704704153e-07
+              },
+              {
+                "iteration": 100,
+                "curvature": 2.08823684268584e-20,
+                "recursive_relative_residual": 3.542594892116437e-07,
+                "explicit_relative_residual": 3.542605257484166e-07
+              },
+              {
+                "iteration": 101,
+                "curvature": 1.2938052061081655e-20,
+                "recursive_relative_residual": 2.5177560583565935e-07,
+                "explicit_relative_residual": 2.517773365445305e-07
+              },
+              {
+                "iteration": 102,
+                "curvature": 1.2198692027609713e-21,
+                "recursive_relative_residual": 1.418670158954201e-07,
+                "explicit_relative_residual": 1.4186739958065824e-07
+              },
+              {
+                "iteration": 103,
+                "curvature": 3.2292967050760978e-21,
+                "recursive_relative_residual": 1.1417175557659777e-07,
+                "explicit_relative_residual": 1.1417066712429322e-07
+              },
+              {
+                "iteration": 104,
+                "curvature": 4.979506477665982e-23,
+                "recursive_relative_residual": 4.0253967100369206e-08,
+                "explicit_relative_residual": 4.0253487141662776e-08
+              },
+              {
+                "iteration": 105,
+                "curvature": 9.070818553878752e-23,
+                "recursive_relative_residual": 4.146387481197083e-08,
+                "explicit_relative_residual": 4.1465088242351455e-08
+              },
+              {
+                "iteration": 106,
+                "curvature": 6.764829058395776e-24,
+                "recursive_relative_residual": 7.916655109172261e-08,
+                "explicit_relative_residual": 7.916715082134766e-08
+              },
+              {
+                "iteration": 107,
+                "curvature": 1.126559634219325e-22,
+                "recursive_relative_residual": 1.677844507591333e-08,
+                "explicit_relative_residual": 1.677633602306365e-08
+              },
+              {
+                "iteration": 108,
+                "curvature": 8.803104656736835e-25,
+                "recursive_relative_residual": 1.398695414926472e-07,
+                "explicit_relative_residual": 1.3987178808835006e-07
+              },
+              {
+                "iteration": 109,
+                "curvature": 1.0264453145672765e-23,
+                "recursive_relative_residual": 2.0757078183367456e-08,
+                "explicit_relative_residual": 2.0756413159721803e-08
+              },
+              {
+                "iteration": 110,
+                "curvature": 1.0427770289467928e-23,
+                "recursive_relative_residual": 5.028023020958841e-08,
+                "explicit_relative_residual": 5.0277442730671475e-08
+              },
+              {
+                "iteration": 111,
+                "curvature": 2.8937397062939365e-23,
+                "recursive_relative_residual": 6.358597248594443e-08,
+                "explicit_relative_residual": 6.358198543871809e-08
+              },
+              {
+                "iteration": 112,
+                "curvature": 1.1397645348511074e-23,
+                "recursive_relative_residual": 9.215663330363504e-09,
+                "explicit_relative_residual": 9.219398641017004e-09
+              }
+            ]
+          },
+          "gtd": -6.379457123904111e-09,
+          "armijo_trials": [
+            {
+              "alpha": 1.0,
+              "loss": 8.767530544499706e-06,
+              "bound": 8.773268129683348e-06
+            }
+          ],
+          "step_size": 1.0,
+          "accepted_after": 200,
+          "loss_after": 8.767530544499706e-06,
+          "step_inf": 0.0001363145408710409,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 200,
+            "hvp_calls": 48276,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 600
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 225,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 3
+          },
+          "elapsed_seconds": 1466.209114000012
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 200,
+        "hvp_calls": 48276,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    },
+    "convection-nncg-continuation-1.0": {
+      "status": "verified",
+      "line_count": 200,
+      "phases": {
+        "nncg": {
+          "attempts": 200,
+          "accepted_updates": 200,
+          "terminal_checks": 0,
+          "zero_or_failed_attempts": 0,
+          "plateau_count": 0
+        }
+      },
+      "last_rows": {
+        "nncg": {
+          "phase": "nncg",
+          "attempt": 200,
+          "accepted_before": 199,
+          "loss_before": 1.0492410032414245e-05,
+          "gradient_inf_before": 1.670987041125236e-05,
+          "at": "2026-10-31T23:42:46.973604+00:00",
+          "pcg": {
+            "status": "converged",
+            "iterations": 51,
+            "explicit_relative_residual": 4.323022584714775e-09,
+            "history": [
+              {
+                "iteration": 1,
+                "curvature": 2.001858623535983e-09,
+                "recursive_relative_residual": 0.9847090455876392,
+                "explicit_relative_residual": 0.9847090455874192
+              },
+              {
+                "iteration": 2,
+                "curvature": 3.471127549783235e-08,
+                "recursive_relative_residual": 0.6346778711090512,
+                "explicit_relative_residual": 0.6346778711085803
+              },
+              {
+                "iteration": 3,
+                "curvature": 6.13511733904847e-11,
+                "recursive_relative_residual": 0.2185740654740093,
+                "explicit_relative_residual": 0.2185740654733083
+              },
+              {
+                "iteration": 4,
+                "curvature": 1.449044144787148e-11,
+                "recursive_relative_residual": 0.0038058326921774697,
+                "explicit_relative_residual": 0.003805832692540901
+              },
+              {
+                "iteration": 5,
+                "curvature": 1.1045710528107333e-12,
+                "recursive_relative_residual": 0.02089698207400508,
+                "explicit_relative_residual": 0.020896982074603138
+              },
+              {
+                "iteration": 6,
+                "curvature": 2.5802320563327726e-13,
+                "recursive_relative_residual": 0.048009085650823013,
+                "explicit_relative_residual": 0.048009085651230875
+              },
+              {
+                "iteration": 7,
+                "curvature": 1.0701858198984942e-12,
+                "recursive_relative_residual": 0.013545430133951477,
+                "explicit_relative_residual": 0.013545430133921899
+              },
+              {
+                "iteration": 8,
+                "curvature": 2.3843877132251716e-12,
+                "recursive_relative_residual": 0.01912818381384079,
+                "explicit_relative_residual": 0.019128183813638348
+              },
+              {
+                "iteration": 9,
+                "curvature": 1.7257993313758777e-12,
+                "recursive_relative_residual": 0.01578892155456973,
+                "explicit_relative_residual": 0.01578892155438353
+              },
+              {
+                "iteration": 10,
+                "curvature": 4.433750421801123e-13,
+                "recursive_relative_residual": 0.008391644958591958,
+                "explicit_relative_residual": 0.008391644958174588
+              },
+              {
+                "iteration": 11,
+                "curvature": 3.8244434410018615e-13,
+                "recursive_relative_residual": 0.012231929334249297,
+                "explicit_relative_residual": 0.012231929334493297
+              },
+              {
+                "iteration": 12,
+                "curvature": 5.2690255978998906e-14,
+                "recursive_relative_residual": 0.006379959068203117,
+                "explicit_relative_residual": 0.006379959067813918
+              },
+              {
+                "iteration": 13,
+                "curvature": 9.817900678782539e-15,
+                "recursive_relative_residual": 0.0020257093942449354,
+                "explicit_relative_residual": 0.0020257093938393224
+              },
+              {
+                "iteration": 14,
+                "curvature": 9.627721987197845e-15,
+                "recursive_relative_residual": 0.0019013094958621984,
+                "explicit_relative_residual": 0.0019013094954723859
+              },
+              {
+                "iteration": 15,
+                "curvature": 2.1133410285239966e-15,
+                "recursive_relative_residual": 0.000899180144930835,
+                "explicit_relative_residual": 0.00089918014507338
+              },
+              {
+                "iteration": 16,
+                "curvature": 5.310112570497461e-16,
+                "recursive_relative_residual": 0.00027222209600845485,
+                "explicit_relative_residual": 0.00027222209598212266
+              },
+              {
+                "iteration": 17,
+                "curvature": 4.696637412761524e-15,
+                "recursive_relative_residual": 0.00019152165455367854,
+                "explicit_relative_residual": 0.00019152165413567542
+              },
+              {
+                "iteration": 18,
+                "curvature": 8.664741841180224e-17,
+                "recursive_relative_residual": 0.00053161342137134,
+                "explicit_relative_residual": 0.000531613422565172
+              },
+              {
+                "iteration": 19,
+                "curvature": 9.760393466384941e-17,
+                "recursive_relative_residual": 7.920121316078522e-05,
+                "explicit_relative_residual": 7.920121257570911e-05
+              },
+              {
+                "iteration": 20,
+                "curvature": 2.0079531993672533e-17,
+                "recursive_relative_residual": 0.00022258826473480587,
+                "explicit_relative_residual": 0.000222588263130639
+              },
+              {
+                "iteration": 21,
+                "curvature": 2.5698085897573152e-17,
+                "recursive_relative_residual": 0.00016492697564113063,
+                "explicit_relative_residual": 0.00016492697780849945
+              },
+              {
+                "iteration": 22,
+                "curvature": 1.0130128376244104e-17,
+                "recursive_relative_residual": 8.091084541731662e-05,
+                "explicit_relative_residual": 8.091084374774424e-05
+              },
+              {
+                "iteration": 23,
+                "curvature": 6.8668469186564064e-18,
+                "recursive_relative_residual": 4.0912699027177516e-05,
+                "explicit_relative_residual": 4.0912698681337494e-05
+              },
+              {
+                "iteration": 24,
+                "curvature": 1.4050324422814023e-17,
+                "recursive_relative_residual": 3.7076638994698966e-05,
+                "explicit_relative_residual": 3.7076639634144176e-05
+              },
+              {
+                "iteration": 25,
+                "curvature": 4.5445160899189525e-17,
+                "recursive_relative_residual": 3.8584099413681255e-05,
+                "explicit_relative_residual": 3.858409985248746e-05
+              },
+              {
+                "iteration": 26,
+                "curvature": 3.4241200989872914e-18,
+                "recursive_relative_residual": 2.9641814088752874e-05,
+                "explicit_relative_residual": 2.964181370168934e-05
+              },
+              {
+                "iteration": 27,
+                "curvature": 1.3063925738198107e-18,
+                "recursive_relative_residual": 1.2747679844444309e-05,
+                "explicit_relative_residual": 1.2747680544926472e-05
+              },
+              {
+                "iteration": 28,
+                "curvature": 1.5155444718297973e-18,
+                "recursive_relative_residual": 8.130357816734008e-06,
+                "explicit_relative_residual": 8.130357706220711e-06
+              },
+              {
+                "iteration": 29,
+                "curvature": 6.713014234374879e-19,
+                "recursive_relative_residual": 4.566691189454479e-06,
+                "explicit_relative_residual": 4.566690857338687e-06
+              },
+              {
+                "iteration": 30,
+                "curvature": 5.870025165230262e-19,
+                "recursive_relative_residual": 1.591949256728647e-05,
+                "explicit_relative_residual": 1.5919492914039207e-05
+              },
+              {
+                "iteration": 31,
+                "curvature": 7.95250190796434e-18,
+                "recursive_relative_residual": 2.1090489261122572e-05,
+                "explicit_relative_residual": 2.109048963335768e-05
+              },
+              {
+                "iteration": 32,
+                "curvature": 9.765160361176104e-19,
+                "recursive_relative_residual": 2.97877773239632e-06,
+                "explicit_relative_residual": 2.9787770960761822e-06
+              },
+              {
+                "iteration": 33,
+                "curvature": 4.650429876024807e-20,
+                "recursive_relative_residual": 7.844590958460713e-06,
+                "explicit_relative_residual": 7.844591431956977e-06
+              },
+              {
+                "iteration": 34,
+                "curvature": 6.241779956845957e-19,
+                "recursive_relative_residual": 2.988129331665388e-06,
+                "explicit_relative_residual": 2.98812915686936e-06
+              },
+              {
+                "iteration": 35,
+                "curvature": 3.1559379892143603e-20,
+                "recursive_relative_residual": 3.882725559035102e-06,
+                "explicit_relative_residual": 3.882725565749203e-06
+              },
+              {
+                "iteration": 36,
+                "curvature": 9.318200263604769e-21,
+                "recursive_relative_residual": 1.345739951239104e-06,
+                "explicit_relative_residual": 1.345739262605213e-06
+              },
+              {
+                "iteration": 37,
+                "curvature": 4.982499921725623e-21,
+                "recursive_relative_residual": 2.2874307332350757e-06,
+                "explicit_relative_residual": 2.287431504587808e-06
+              },
+              {
+                "iteration": 38,
+                "curvature": 4.4895955202894626e-21,
+                "recursive_relative_residual": 1.1756043959707971e-06,
+                "explicit_relative_residual": 1.1756051718367024e-06
+              },
+              {
+                "iteration": 39,
+                "curvature": 2.034970466480983e-20,
+                "recursive_relative_residual": 3.9909681578164487e-07,
+                "explicit_relative_residual": 3.990961663399242e-07
+              },
+              {
+                "iteration": 40,
+                "curvature": 4.0008221932894377e-22,
+                "recursive_relative_residual": 1.794908669194805e-06,
+                "explicit_relative_residual": 1.7949085322337635e-06
+              },
+              {
+                "iteration": 41,
+                "curvature": 2.6481923968657662e-21,
+                "recursive_relative_residual": 1.1456186508734244e-07,
+                "explicit_relative_residual": 1.1456106368742837e-07
+              },
+              {
+                "iteration": 42,
+                "curvature": 8.873975633788452e-23,
+                "recursive_relative_residual": 5.004377930140264e-07,
+                "explicit_relative_residual": 5.004389830149739e-07
+              },
+              {
+                "iteration": 43,
+                "curvature": 8.861255051790379e-21,
+                "recursive_relative_residual": 4.77390019189978e-07,
+                "explicit_relative_residual": 4.773914694278792e-07
+              },
+              {
+                "iteration": 44,
+                "curvature": 8.15846765009518e-22,
+                "recursive_relative_residual": 2.466148235245461e-07,
+                "explicit_relative_residual": 2.4661654958546615e-07
+              },
+              {
+                "iteration": 45,
+                "curvature": 1.9752527655769707e-21,
+                "recursive_relative_residual": 3.629827514758587e-07,
+                "explicit_relative_residual": 3.629811266436274e-07
+              },
+              {
+                "iteration": 46,
+                "curvature": 1.6241445254312911e-22,
+                "recursive_relative_residual": 3.253082861062221e-07,
+                "explicit_relative_residual": 3.2530688356581527e-07
+              },
+              {
+                "iteration": 47,
+                "curvature": 1.9371859622195999e-22,
+                "recursive_relative_residual": 7.664938223818467e-08,
+                "explicit_relative_residual": 7.665134325990897e-08
+              },
+              {
+                "iteration": 48,
+                "curvature": 4.019330215647013e-24,
+                "recursive_relative_residual": 2.6748060093827797e-08,
+                "explicit_relative_residual": 2.674800634317877e-08
+              },
+              {
+                "iteration": 49,
+                "curvature": 2.0319355747755035e-24,
+                "recursive_relative_residual": 9.094170941970632e-08,
+                "explicit_relative_residual": 9.094172042885416e-08
+              },
+              {
+                "iteration": 50,
+                "curvature": 6.264903859081261e-24,
+                "recursive_relative_residual": 1.036640080958859e-08,
+                "explicit_relative_residual": 1.0366215406901931e-08
+              },
+              {
+                "iteration": 51,
+                "curvature": 2.6799593423419416e-24,
+                "recursive_relative_residual": 4.324428688087368e-09,
+                "explicit_relative_residual": 4.323022584714775e-09
+              }
+            ]
+          },
+          "gtd": -1.9962870791383133e-09,
+          "armijo_trials": [
+            {
+              "alpha": 1.0,
+              "loss": 1.049041503824489e-05,
+              "bound": 1.0492210403706331e-05
+            }
+          ],
+          "step_size": 1.0,
+          "accepted_after": 200,
+          "loss_after": 1.049041503824489e-05,
+          "step_inf": 1.6705678291262238e-05,
+          "plateau": 0,
+          "status": "max_updates",
+          "costs_total": {
+            "closure_calls": 0,
+            "gradient_calls": 200,
+            "hvp_calls": 21702,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 600
+          },
+          "costs_increment": {
+            "closure_calls": 0,
+            "gradient_calls": 1,
+            "hvp_calls": 103,
+            "lbfgs_native_iterations": 0,
+            "loss_calls": 3
+          },
+          "elapsed_seconds": 672.4489059999905
+        }
+      },
+      "costs": {
+        "closure_calls": 0,
+        "gradient_calls": 200,
+        "hvp_calls": 21702,
+        "lbfgs_native_iterations": 0
+      },
+      "scope": "necessary self-consistency; source/actual method remains independently reviewed"
+    }
+  },
+  "quality": {
+    "L01-R-convection-solution-error": {
+      "status": "verified_fail",
+      "selected_id": "convection-nncg-continuation-0.1",
+      "metric": "l2re",
+      "observed": 0.030511631290084395,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/convection-nncg-continuation-0.1/final.npz"
+    },
+    "L01-R-convection-evaluation-physics": {
+      "status": "verified_pass",
+      "selected_id": "convection-nncg-continuation-0.1",
+      "metric": "evaluation_residual_rmse",
+      "observed": 0.0006024731116190487,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/convection-nncg-continuation-0.1/final.npz"
+    },
+    "L01-R-convection-initial_value": {
+      "status": "verified_pass",
+      "selected_id": "convection-nncg-continuation-0.1",
+      "metric": "constraint_families.initial_value.rmse",
+      "observed": 0.0005014780379834395,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/convection-nncg-continuation-0.1/final.npz"
+    },
+    "L01-R-convection-periodic_value": {
+      "status": "verified_pass",
+      "selected_id": "convection-nncg-continuation-0.1",
+      "metric": "constraint_families.periodic_value.rmse",
+      "observed": 0.007773369496111535,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/convection-nncg-continuation-0.1/final.npz"
+    },
+    "L01-R-reaction-solution-error": {
+      "status": "verified_fail",
+      "selected_id": "reaction-hybrid-s345-lr1e-03",
+      "metric": "l2re",
+      "observed": 0.02593014695433741,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/reaction-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-reaction-evaluation-physics": {
+      "status": "verified_pass",
+      "selected_id": "reaction-hybrid-s345-lr1e-03",
+      "metric": "evaluation_residual_rmse",
+      "observed": 0.0011598519231253899,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/reaction-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-reaction-initial_value": {
+      "status": "verified_pass",
+      "selected_id": "reaction-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.initial_value.rmse",
+      "observed": 0.001135092175550009,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/reaction-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-reaction-periodic_value": {
+      "status": "verified_pass",
+      "selected_id": "reaction-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.periodic_value.rmse",
+      "observed": 0.0001932285321523995,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/reaction-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-solution-error": {
+      "status": "verified_fail",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "l2re",
+      "observed": 0.3680370381491192,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-evaluation-physics": {
+      "status": "verified_pass",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "evaluation_residual_rmse",
+      "observed": 0.00529847677783807,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-initial_value": {
+      "status": "verified_fail",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.initial_value.rmse",
+      "observed": 0.02982112488484944,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-initial_velocity": {
+      "status": "verified_pass",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.initial_velocity.rmse",
+      "observed": 0.0017796396595299861,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-boundary_left": {
+      "status": "verified_fail",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.boundary_left.rmse",
+      "observed": 0.10236587134865703,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    },
+    "L01-R-wave-boundary_right": {
+      "status": "verified_fail",
+      "selected_id": "wave-hybrid-s345-lr1e-03",
+      "metric": "constraint_families.boundary_right.rmse",
+      "observed": 0.11063934015698051,
+      "maximum": 0.01,
+      "comparison": "<=",
+      "checkpoint": "work/results/runs/wave-hybrid-s345-lr1e-03/final.npz"
+    }
+  },
+  "prerequisites": {
+    "L01-E-full-clean-retraining": {
+      "status": "verified_fail",
+      "detail": "original native, full registry and trace consistency; actual algorithms require independent source review"
+    },
+    "L01-A-authoritative-grid": {
+      "status": "ready_for_review",
+      "detail": "captured public data independently matches exact registered arrays; candidate data use still needs source review"
+    }
+  },
+  "source_training_attestation": "requires the single independent whole-case review; self traces alone do not attest optimization"
+}

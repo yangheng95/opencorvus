@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "D:/opencorvus-benchmark-runs/native-science-l01-20261031/Scripts/python.exe",
+    "-u",
+    "-B",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\finish_study.py",
+    "--project",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project",
+    "--inputs",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\inputs",
+    "--output",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results",
+    "--analysis",
+    "D:\\opencorvus-benchmark-runs\\l01-full-case-20261031\\author-project\\work\\results\\analysis-segments\\18416",
+    "--pdf-only"
+  ],
+  "started_at": "2026-11-01T00:03:12.358284+00:00",
+  "finished_at": "2026-11-01T00:03:15.695135+00:00",
+  "native_exit": 0,
+  "seconds": 3.336849600003916,
+  "scope": "PDF layout only; no redraw, structural control, training, numerical or recovery computation"
+}

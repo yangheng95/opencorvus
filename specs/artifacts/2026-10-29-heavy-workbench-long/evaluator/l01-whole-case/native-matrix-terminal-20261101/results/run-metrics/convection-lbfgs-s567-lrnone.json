@@ -1,0 +1,26 @@
+{
+  "problem": "convection",
+  "residual_points": 10000,
+  "constraint_count": 358,
+  "evaluation_points": 8385,
+  "residual_loss": 1.6127664939505753e-05,
+  "constraint_loss": 0.0018484971511572882,
+  "total_loss": 0.001864624816096794,
+  "residual_rmse": 0.00567937759609374,
+  "evaluation_residual_loss": 8.241269270115495e-05,
+  "evaluation_residual_rmse": 0.01283843391548634,
+  "constraint_families": {
+    "initial_value": {
+      "count": 257,
+      "loss": 3.106900772804086e-05,
+      "rmse": 0.007882766992375312
+    },
+    "periodic_value": {
+      "count": 101,
+      "loss": 0.006473042030972305,
+      "rmse": 0.11378085982248776
+    }
+  },
+  "l2re": 0.6325420558604921,
+  "parameter_count": 20601
+}
