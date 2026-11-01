@@ -115,6 +115,11 @@ or runnable model availability.
 Composer model groups retain each connected catalog option's canonical label
 beside its fully-qualified ID. The visible list and literal search consume that
 same option; search covers model label, model ID, provider ID and provider label.
+The model selector and Provider discovery match every whitespace-separated query
+term literally across each candidate's existing metadata fields, in any order.
+The shared metadata matcher retains canonical option IDs and list ordering;
+blank input retains all candidates. Provider rows keep their existing field
+scope, including model IDs only where the row already supplies them.
 Listbox typeahead uses that visible model label for prefix navigation. Selection
 and persistence continue to use the fully-qualified model ID.
 
@@ -4217,6 +4222,12 @@ errors and completion callbacks. Pagination retains accepted rows by kind:id.
 Local commands remain usable while work records load or fail. Loading, empty
 results and failed reads have distinct UI states; failures expose the original
 diagnostic and a current-query retry beside the results.
+
+Local command discovery uses the same metadata-term matcher as the model and
+Provider selectors: every whitespace-separated term matches the candidate's
+label, hint or authored keywords, in any order. Work Ledger requests and its
+child-row relevance keep their original complete-substring query contract.
+Content, source, log and table searches retain their literal-text semantics.
 
 Filtering precedes group headings and numeric shortcuts. Ctrl+1 through Ctrl+9
 select those same currently listed work items. When a completed continuation or

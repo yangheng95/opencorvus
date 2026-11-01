@@ -24,7 +24,7 @@ import { connectedModelOptions, providerAccountUsageCapability, providerLabel } 
 import { localeTag, t, tc } from "../utils/i18n"
 import { Button } from "./ui/Button"
 import { SearchField } from "./ui/SearchField"
-import { matchesSearchParts } from "../services/text-search"
+import { matchesSearchTerms } from "../services/text-search"
 import { selectComposerModel } from "../services/composer-model"
 
 interface ModelParts {
@@ -330,7 +330,7 @@ export function ComposerModelSelector() {
       .map((group) => ({
         ...group,
         models: group.models.filter((option) =>
-          matchesSearchParts(search, [option.id, option.label, group.providerID, group.providerName]),
+          matchesSearchTerms(search, [option.id, option.label, group.providerID, group.providerName]),
         ),
       }))
       .filter((group) => group.models.length > 0)

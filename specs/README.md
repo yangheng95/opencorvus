@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [命令、模型与Provider多词查找](records/2026-11/2026-11-01-multi-term-metadata-search.md)：跨真实元数据组合筛选、字面内容边界与双语实页。
+
 - [全局导航与目标发现](records/2026-11/2026-11-01-workspace-navigation-review.md)：全局Goal命令、同一表单与中英文真实导航。
 
 - [应用内普通预览窗](records/2026-11/2026-11-01-in-app-preview-dialogs.md)：默认展开、图片弹窗、稳定编辑器与实际窗口连续性修复。

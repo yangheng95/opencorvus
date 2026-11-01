@@ -1,0 +1,123 @@
+{
+  "purpose": "Combine literal query terms across a candidate’s existing command, model or Provider metadata",
+  "delegation": "single agent",
+  "implementation": "One metadata matcher across three existing discovery consumers; original content substring matcher retained for its distinct role",
+  "currentBuild": "main-B5pEdU0R.js",
+  "manualUI": {
+    "screenshots": 21,
+    "personallyViewed": true,
+    "commands": [
+      "settings general",
+      "GENERAL settings",
+      "budget goal",
+      "打开 目标"
+    ],
+    "modelQuery": "openai sol",
+    "matchingModels": [
+      "openai/gpt-5.6-sol",
+      "openai/gpt-6-sol",
+      "openai/gpt-6.1-sol"
+    ],
+    "refinedQuery": "Sol openai 6.1",
+    "selectedCanonicalModel": "openai/gpt-6.1-sol",
+    "providerQueries": [
+      "openai connected",
+      "CONNECTED OpenAI",
+      "已连接 openai"
+    ],
+    "sameOriginalProvider": true,
+    "modelClearRestores": 12,
+    "providerClearRestores": 227,
+    "goalFormDraft": "META854_DRAFT_KEEP",
+    "unsentDraftCleared": true,
+    "englishAndChinese": true
+  },
+  "originalGoals": 9,
+  "originalGoalsPreserved": true,
+  "originalRows": 234309,
+  "pureDataTests": 9,
+  "pureDataAssertions": 10,
+  "cases": {
+    "before": {
+      "data": {
+        "at": "2026-11-01T01:37:45.121Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234309,
+        "current": 234309,
+        "changes": [],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 3406943,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BTGhDWow.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    },
+    "after": {
+      "data": {
+        "at": "2026-11-01T01:46:19.544Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 234309,
+        "current": 234309,
+        "changes": [],
+        "allOriginalBusinessRowsPreserved": true,
+        "sourceDatabasePreserved": true,
+        "attachments": 140,
+        "projects": 62,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1180,
+        "reserveMs": 2892555,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-B5pEdU0R.js"
+      },
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCopies": 2
+    }
+  },
+  "checks": {
+    "unit-after": 0,
+    "types-after": 0,
+    "i18n-after": 0,
+    "ui-build-after": 0,
+    "docs-delivery": 0
+  },
+  "modelRequests": 0,
+  "cumulativeRequests": 1180,
+  "pairedCopiesRetired": 4,
+  "uiAutomationTests": 0,
+  "coverageLimits": [
+    "Content, source, log, table and Work Ledger substring semantics retained; no separate full UI replay of those paths",
+    "Builtin Provider filtering uses its existing visible metadata, without new model-ID lookup",
+    "No model execution, new Goal or Provider configuration"
+  ],
+  "userWindowAndDatabase": "Not operated or accessed"
+}

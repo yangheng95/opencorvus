@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [元数据多词筛选](2026-11-01-multi-term-metadata-search/README.md)：21张实图、9项纯数据测试与完整数据保全。
+
 - [全局导航与目标发现](2026-11-01-workspace-navigation-review/README.md)：17张实图、原目标/消息与数据保全。
 
 - [应用内普通预览窗](2026-11-01-in-app-preview-dialogs/README.md)：27张实图、原件/当前编辑下载和数据保全。

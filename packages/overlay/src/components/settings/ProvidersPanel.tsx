@@ -23,7 +23,7 @@ import {
   validateProviderFormApi,
   type ProviderFormValues,
 } from "../../services/provider-form"
-import { matchesSearchParts } from "../../services/text-search"
+import { matchesSearchTerms } from "../../services/text-search"
 import { activeDirectory } from "../../services/workspace"
 import {
   authenticateSelectedProvider,
@@ -563,7 +563,7 @@ export default function ProvidersPanel() {
   }
 
   function providerMatchesSearch(parts: Array<unknown>): boolean {
-    return matchesSearchParts(providerSearch(), parts)
+    return matchesSearchTerms(providerSearch(), parts)
   }
 
   function resetForm() {

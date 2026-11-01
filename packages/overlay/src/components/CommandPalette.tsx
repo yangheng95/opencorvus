@@ -2,7 +2,7 @@
 //
 // Cmd+K / Ctrl+K modal that exposes the operator's most-used actions
 // (task switching, settings navigation, theme/locale, logs) in a single
-// fuzzy-searchable surface. Mounted once at app boot; visibility driven
+// searchable surface. Mounted once at app boot; visibility driven
 // by an internal signal flipped by the global keyboard hotkey.
 //
 // Command sources:
@@ -10,10 +10,10 @@
 //   * Settings sections (CONFIG_SECTIONS -> openConfigDialog)
 //   * Theme switcher (settingsStore.theme + applyTheme)
 //   * Locale switcher
-//   * New Task (focus composer)
+//   * New chat and the current page's continuous goal
 //
 // Search uses the existing Work Ledger query and cursor. Local commands use
-// case-insensitive substrings. The shared Combobox owns active descendant,
+// case-insensitive terms across their metadata. The shared Combobox owns active descendant,
 // listbox option semantics, and keyboard navigation.
 
 import { Show, createEffect, createMemo, createSignal, on, onCleanup, onMount } from "solid-js"
@@ -21,7 +21,7 @@ import { applyLocalePreference } from "../services/locale-preference"
 import { applyThemePreference } from "../services/theme-preference"
 import { themeOptionsForCurrentHost } from "../services/theme-registry"
 import { activeDirectory, browseDirectory, closeProject } from "../services/workspace"
-import { matchesSearchParts } from "../services/text-search"
+import { matchesSearchParts, matchesSearchTerms } from "../services/text-search"
 import { conversationExperienceIcon, conversationExperienceLabel } from "../services/conversation-experience"
 import {
   loadWorkLedger,
@@ -384,7 +384,7 @@ export function CommandPalette(props: {
   })
 
   function commandMatches(command: Command, inputValue: string): boolean {
-    return matchesSearchParts(inputValue, [`${command.label} ${command.hint || ""} ${command.keywords || ""}`])
+    return matchesSearchTerms(inputValue, [command.label, command.hint, command.keywords])
   }
 
   function close() {

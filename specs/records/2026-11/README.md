@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [命令、模型与Provider多词查找](2026-11-01-multi-term-metadata-search.md)：同候选多词匹配、真实模型选择与Provider身份。
+
 - [全局导航与目标发现](2026-11-01-workspace-navigation-review.md)：Ctrl+K目标入口、草稿保留与原目标归属。
 
 - [应用内普通预览窗](2026-11-01-in-app-preview-dialogs.md)：普通窗口、图片/Office/表格实测与浮层归属。
