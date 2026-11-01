@@ -1,4 +1,4 @@
-/** Real Session/Task execution. See the November delivery-verification-scope Recall. */
+/** Real Session/Task execution. See the November outcome-quality-repair Recall. */
 import assert from "node:assert/strict"
 import fs from "node:fs/promises"
 import os from "node:os"
@@ -13,6 +13,7 @@ import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
 import { assertCopiedOAuthAccess, CredentialRedactor, RealProviderAudit } from "./real-provider-audit"
 import { VERIFICATION_DISCIPLINE } from "../src/prompt/fragments/verification-discipline"
 import { CompleteTaskInputSchema } from "../src/orchestrator/task-lifecycle-input"
+import APPLY_PATCH_DESCRIPTION from "../src/tool/apply_patch.txt"
 
 const prefix = "DELIVERY_SCOPE_"
 assert.equal(process.env[`${prefix}ALLOW_REAL_PROVIDER`], "1", "Explicit Provider authority is required")
@@ -30,6 +31,7 @@ const python = path.resolve(required("PYTHON"))
 const maxRequests = Number(required("MAX_REQUESTS"))
 assert(Number.isSafeInteger(maxRequests) && maxRequests > 0 && maxRequests <= 120)
 const checker = path.resolve(import.meta.dir, "../../../script/benchmark/delivery_verification_scope.py")
+const workflowChecker = path.resolve(import.meta.dir, "../../../script/benchmark/delivery_workflow_cases.py")
 const supervisor = prepareTestProcessSupervisor()
 const isolated = await bootstrapIsolatedTestRuntime("runner")
 applyIsolatedTestUserEnvironment(isolated)
@@ -55,7 +57,7 @@ process.env.OPENCORVUS_TEST_PROCESS_ROOT = root
 process.env.OPENCORVUS_CONFIG_CONTENT = JSON.stringify({ permission_mode: "full_access", model, small_model: model })
 process.env.OPENCORVUS_TASK_PROCESS_MODE = "native"
 const inactivityMs = 180_000
-const report: Record<string, any> = { phase, model, maxRequests, inactivityMs, root, cases: [] }
+const report: Record<string, any> = { phase, model, maxRequests, inactivityMs, root, startedAt: Date.now(), cases: [] }
 let cleanup: (() => Promise<void>) | undefined
 let failure: unknown
 let audit: RealProviderAudit | undefined
@@ -83,6 +85,7 @@ try {
       probes: [
         { id: "shared-verification-policy", text: VERIFICATION_DISCIPLINE },
         { id: "completion-summary-schema", text: CompleteTaskInputSchema.shape.summary.description! },
+        { id: "patch-operation-contract", text: APPLY_PATCH_DESCRIPTION },
       ],
     }),
   )
@@ -167,13 +170,22 @@ try {
     inactivityMs,
     activity: SessionStatus.getActivity,
   })
-  for (const [kind, entry] of [
-    ["csv", "coding"],
-    ["json", "task"],
-  ] as const) {
+  const cases =
+    phase === "baseline"
+      ? ([
+          ["coding", "coding"],
+          ["task", "task"],
+        ] as const)
+      : ([
+          ["coding", "coding"],
+          ["bundle", "task"],
+          ["stock", "task"],
+        ] as const)
+  for (const [kind, entry] of cases) {
+    const consumer = kind === "coding" || kind === "task" ? checker : workflowChecker
     const project = path.join(root, kind)
     const setup = JSON.parse(
-      execFileSync(python, [checker, "setup", kind, project], { encoding: "utf8", windowsHide: true }),
+      execFileSync(python, [consumer, "setup", kind, project], { encoding: "utf8", windowsHide: true }),
     )
     for (const args of [
       ["init"],
@@ -183,8 +195,16 @@ try {
       ["commit", "-m", "test: initialize delivery prototype"],
     ])
       execFileSync("git", args, { cwd: project, stdio: "ignore", windowsHide: true })
-    const prompt = `Turn the supplied development prototype into the reusable program specified by CONTRACT.md. The sample is a development example. Deliver the complete deliverable.pyz and source with a concise delivery report. Work directly in this project without delegation.\n\n${setup.contract}`
-    const row: Record<string, any> = { kind, entry, project, prompt }
+    const subject = kind === "coding" || kind === "task" ? "forecasting/replenishment " : ""
+    const prompt = `Repair the supplied ${subject}project according to CONTRACT.md. Deliver the complete deliverable.pyz, maintainable source and concise handoff. Work directly in this project without delegation.\n\n${setup.contract}`
+    const row: Record<string, any> = {
+      kind,
+      entry,
+      project,
+      prompt,
+      startedAt: Date.now(),
+      requestsBefore: audit.requests.length,
+    }
     report.cases.push(row)
     let sessionID: string | undefined
     let taskID: string | undefined
@@ -277,10 +297,15 @@ try {
     }
     assert(settled, `${kind}: DELIVERY_SCOPE_INACTIVITY`)
     await responsePromise
+    row.settledAt = Date.now()
+    row.requestsAfter = audit.requests.length
+    // Preserve the complete naturally delivered project, including Git, before consumption.
+    const delivered = path.join(output, `${kind}-delivered`)
+    await fs.cp(project, delivered, { recursive: true })
     const gradeDirectory = path.join(output, `${kind}-consumer`)
     try {
       row.grade = JSON.parse(
-        execFileSync(python, [checker, "grade", kind, project, "--output", gradeDirectory], {
+        execFileSync(python, [consumer, "grade", kind, delivered, "--output", gradeDirectory], {
           encoding: "utf8",
           windowsHide: true,
         }),
@@ -290,10 +315,6 @@ try {
       const gradeFile = path.join(gradeDirectory, "grade.json")
       row.grade = JSON.parse(await fs.readFile(gradeFile, "utf8"))
     }
-    await fs.cp(project, path.join(output, `${kind}-delivered`), {
-      recursive: true,
-      filter: (source) => ![".git", ".opencorvus"].includes(path.basename(source)),
-    })
     process.stdout.write(
       `[delivery-scope] ${phase}/${kind} passed=${row.grade.passed} requests=${audit.requests.length}\n`,
     )
@@ -305,6 +326,17 @@ try {
   const cleanupErrors: string[] = []
   try {
     await cleanup?.()
+  } catch (error) {
+    cleanupErrors.push(String(error))
+  }
+  // Closed SQLite bytes preserve canonical task/tool facts alongside projected traces.
+  try {
+    const candidates = await fs.readdir(path.join(runtimeRoot, "data"), { recursive: true })
+    for (const name of candidates.filter((name) => /\.(db|sqlite|sqlite3)$/.test(name))) {
+      const target = path.join(output, "storage", name)
+      await fs.mkdir(path.dirname(target), { recursive: true })
+      await fs.copyFile(path.join(runtimeRoot, "data", name), target)
+    }
   } catch (error) {
     cleanupErrors.push(String(error))
   }
@@ -320,6 +352,7 @@ try {
     }
   }
   report.requests = audit?.requests ?? []
+  report.endedAt = Date.now()
   report.status =
     failure || cleanupErrors.length
       ? "failed"

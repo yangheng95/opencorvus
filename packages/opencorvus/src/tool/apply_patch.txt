@@ -31,3 +31,5 @@ It is important to remember:
 
 - You must include a header with your intended action (Add/Delete/Update)
 - You must prefix new lines with `+` even when creating a new file
+- All file sections are verified against the current files before any writes; they are not sequential edits to an intermediate file state. Add File creates a path that does not already exist. Replace existing contents with Update File rather than Delete File followed by Add File for the same path.
+- Put changes to the same file in one Update File section, with multiple hunks when needed. Use the actual current lines as context. If context does not match, read the affected region and construct the corrected contextual update.

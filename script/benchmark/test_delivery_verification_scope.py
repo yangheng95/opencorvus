@@ -1,33 +1,31 @@
-"""Positive contracts for the fixed external business oracle."""
-import csv
-import io
+"""Positive business oracle and actual zipapp-consumer contracts."""
 import json
+from pathlib import Path
+import tempfile
 import unittest
-
-from delivery_verification_scope import cases, csv_text, json_kind, same_json
-
+import zipapp
+from delivery_verification_scope import cases, grade, same_value
 
 class DeliveryVerificationScopeTest(unittest.TestCase):
-    def test_csv_writer_preserves_legal_field_values(self):
-        fields = [[" A,\"组\"\nZ ", "-2.30", "a\nb"]]
-        parsed = list(csv.reader(io.StringIO(csv_text(["customer", "amount", "extra"], fields), newline="")))
-        self.assertEqual(parsed, [["customer", "amount", "extra"], *fields])
+    def test_explicit_losses_and_quantities(self):
+        self.assertEqual(cases()[0]["expected"]["plan"][0]["order"],9)
+        self.assertEqual(cases()[3]["expected"]["validation_mse"],dict(last=3250,open=1000,weekday=0))
+        self.assertEqual(same_value({"x":500/7},{"x":71.42857142857143}),True)
 
-    def test_fixed_oracle_has_explicit_business_results(self):
-        csv_cases = {name: expected for name, _, expected in cases("csv")}
-        self.assertEqual(csv_cases["exact-money"], {"totals": [{"customer": "Ledger", "amount": "10000000000000000.00"}, {"customer": "Small", "amount": "0.01"}]})
-        json_cases = {name: expected for name, _, expected in cases("json")}
-        self.assertEqual(json_cases["escaped-members"], {"/a~1b/~0key": 1, "/~01": "literal", "//": True})
-        self.assertEqual(json_cases["root-empty"], {"": {}})
+    def test_actual_packaged_correct_selection_error_and_plan_error(self):
+        # Fixed raw-input lookup validates the consumer, not a reusable forecast solution.
+        lookup={f["files"]["train.csv"]:f["expected"] for f in cases()}
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory); app=root/"app"; app.mkdir()
+            source="import json,sys\nfrom pathlib import Path\nlookup="+repr(lookup)+"\na=sys.argv\nresult=lookup[(Path(a[1])/'train.csv').read_bytes().decode('utf-8')]\n"
+            for name, mutation, expected in [("correct","",True),("wrong-selection","result['selected']='last'\n",False),("wrong-plan","result['plan'][0]['order']+=100\n",False)]:
+                (app/"__main__.py").write_text(source+mutation+"Path(a[3]).write_text(json.dumps(result),encoding='utf-8')\n",encoding="utf-8")
+                zipapp.create_archive(app,root/"deliverable.pyz")
+                report=grade("coding",root,root/name)
+                self.assertEqual(report["passed"],expected)
+                self.assertEqual(len(report["results"]),6)
+                if name=="wrong-selection":
+                    self.assertEqual([r["released_plan"] for r in report["results"]],[True]*6)
+                    self.assertEqual([r["selection"] for r in report["results"]],[False]*6)
 
-    def test_json_inputs_keep_distinct_scalar_types(self):
-        source = next(content for name, content, _ in cases("json") if name == "array-and-types")
-        self.assertEqual([type(value).__name__ for value in json.loads(source)[:4]], ["NoneType", "bool", "int", "str"])
-
-    def test_consumer_compares_json_semantics(self):
-        self.assertEqual([json_kind(value) for value in [None, False, 0, 0.0, "0", [], {}]], ["null", "boolean", "number", "number", "string", "array", "object"])
-        self.assertEqual(same_json({"b": [1.0, False], "a": {}}, {"a": {}, "b": [1, False]}), True)
-
-
-if __name__ == "__main__":
-    unittest.main()
+if __name__=="__main__": unittest.main()

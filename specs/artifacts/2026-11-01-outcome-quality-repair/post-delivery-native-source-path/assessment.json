@@ -1,0 +1,128 @@
+{
+  "registration": {
+    "registeredAt": "2026-11-01T13:18:19.324792+00:00",
+    "type": "post-delivery contract probe, not original pool or new model trial",
+    "reason": "Only ZIP target paths were specified as forward-slash; source paths are native relative filesystem paths under declared Windows runtime",
+    "source_proof": [
+      {
+        "source": "left\\a.bin",
+        "resolved": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\inputs\\left\\a.bin",
+        "source_bytes_match": true
+      },
+      {
+        "source": "right\\a.bin",
+        "resolved": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\inputs\\right\\a.bin",
+        "source_bytes_match": true
+      },
+      {
+        "source": "empty",
+        "resolved": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\inputs\\empty",
+        "source_bytes_match": true
+      }
+    ],
+    "expected_native": 0
+  },
+  "results": [
+    {
+      "label": "original-delivered",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\original-delivered.pyz",
+        "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\inputs",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\original-delivered.zip"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "error: paths must be relative and use forward slashes\n",
+      "expected": {
+        "payload": {
+          "delivery/raw/a.bin": "AP8NCgA=",
+          "other/a.bin": "b3RoZXINCg==",
+          "empty": ""
+        },
+        "index": {
+          "files": [
+            {
+              "path": "delivery/raw/a.bin",
+              "bytes": 5
+            },
+            {
+              "path": "empty",
+              "bytes": 0
+            },
+            {
+              "path": "other/a.bin",
+              "bytes": 7
+            }
+          ]
+        }
+      },
+      "passed": false
+    },
+    {
+      "label": "pre-model-correct-witness",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\pre-model-correct-witness.pyz",
+        "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\inputs",
+        "--output",
+        "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\pre-model-correct-witness.zip"
+      ],
+      "cwd": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "expected": {
+        "payload": {
+          "delivery/raw/a.bin": "AP8NCgA=",
+          "other/a.bin": "b3RoZXINCg==",
+          "empty": ""
+        },
+        "index": {
+          "files": [
+            {
+              "path": "delivery/raw/a.bin",
+              "bytes": 5
+            },
+            {
+              "path": "empty",
+              "bytes": 0
+            },
+            {
+              "path": "other/a.bin",
+              "bytes": 7
+            }
+          ]
+        }
+      },
+      "actual": {
+        "payload": {
+          "delivery/raw/a.bin": "AP8NCgA=",
+          "other/a.bin": "b3RoZXINCg==",
+          "empty": ""
+        },
+        "index": {
+          "files": [
+            {
+              "path": "delivery/raw/a.bin",
+              "bytes": 5
+            },
+            {
+              "path": "empty",
+              "bytes": 0
+            },
+            {
+              "path": "other/a.bin",
+              "bytes": 7
+            }
+          ]
+        }
+      },
+      "passed": true
+    }
+  ]
+}

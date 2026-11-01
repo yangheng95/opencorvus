@@ -1,0 +1,208 @@
+{
+  "bundle": [
+    {
+      "name": "nested-binary",
+      "entries": [
+        {
+          "source": "left/a.bin",
+          "target": "delivery/raw/a.bin",
+          "base64": "AP8NCgA="
+        },
+        {
+          "source": "right/a.bin",
+          "target": "other/a.bin",
+          "base64": "b3RoZXINCg=="
+        },
+        {
+          "source": "empty",
+          "target": "empty",
+          "base64": ""
+        }
+      ]
+    },
+    {
+      "name": "unicode-order",
+      "entries": [
+        {
+          "source": "资料/a,b.txt",
+          "target": "交付/含 空格.txt",
+          "base64": "57K+56GuDQrlrZfnrKY="
+        },
+        {
+          "source": "meta",
+          "target": "z/final.txt",
+          "base64": "ZW5k"
+        }
+      ]
+    },
+    {
+      "name": "reversed-manifest",
+      "entries": [
+        {
+          "source": "two",
+          "target": "z.txt",
+          "base64": "c2Vjb25k"
+        },
+        {
+          "source": "one",
+          "target": "a.txt",
+          "base64": "Zmlyc3Q="
+        }
+      ]
+    }
+  ],
+  "stock": [
+    {
+      "name": "success",
+      "csv": "item,delta,unit_cost_cents\nWidget,-3,120\nNew,6,200\nWidget,2,130\n",
+      "initial": [
+        [
+          "Other",
+          4,
+          50
+        ],
+        [
+          "Widget",
+          10,
+          100
+        ]
+      ],
+      "stock": [
+        [
+          "New",
+          6,
+          200
+        ],
+        [
+          "Other",
+          4,
+          50
+        ],
+        [
+          "Widget",
+          9,
+          130
+        ]
+      ],
+      "events": [
+        [
+          "Widget",
+          10,
+          7
+        ],
+        [
+          "New",
+          null,
+          6
+        ],
+        [
+          "Widget",
+          7,
+          9
+        ]
+      ],
+      "report": {
+        "success": true,
+        "processed": 3
+      },
+      "exit": 0
+    },
+    {
+      "name": "quoted-reordered",
+      "csv": "note,unit_cost_cents,item,delta\r\n\"extra, \"\"行\"\"\n值\",120,\"A,\"\"组\"\"\nZ\",-3\r\n\"extra, \"\"行\"\"\n值\",200,\"新,品\",6\r\n\"extra, \"\"行\"\"\n值\",130,\"A,\"\"组\"\"\nZ\",2\r\n",
+      "initial": [
+        [
+          "A,\"组\"\nZ",
+          10,
+          100
+        ],
+        [
+          "Other",
+          4,
+          50
+        ]
+      ],
+      "stock": [
+        [
+          "A,\"组\"\nZ",
+          9,
+          130
+        ],
+        [
+          "Other",
+          4,
+          50
+        ],
+        [
+          "新,品",
+          6,
+          200
+        ]
+      ],
+      "events": [
+        [
+          "A,\"组\"\nZ",
+          10,
+          7
+        ],
+        [
+          "新,品",
+          null,
+          6
+        ],
+        [
+          "A,\"组\"\nZ",
+          7,
+          9
+        ]
+      ],
+      "report": {
+        "success": true,
+        "processed": 3
+      },
+      "exit": 0
+    },
+    {
+      "name": "atomic-error",
+      "csv": "note,unit_cost_cents,item,delta\r\n\"extra, \"\"行\"\"\n值\",120,\"A,\"\"组\"\"\nZ\",-3\r\n\"extra, \"\"行\"\"\n值\",200,\"新,品\",6\r\n\"extra, \"\"行\"\"\n值\",130,\"A,\"\"组\"\"\nZ\",-99\r\n",
+      "initial": [
+        [
+          "A,\"组\"\nZ",
+          10,
+          100
+        ],
+        [
+          "Other",
+          4,
+          50
+        ]
+      ],
+      "stock": [
+        [
+          "A,\"组\"\nZ",
+          10,
+          100
+        ],
+        [
+          "Other",
+          4,
+          50
+        ]
+      ],
+      "events": [],
+      "report": {
+        "success": false,
+        "error": {
+          "code": "INSUFFICIENT_STOCK",
+          "record": 3,
+          "item": "A,\"组\"\nZ"
+        }
+      },
+      "exit": 2
+    }
+  ],
+  "contracts": {
+    "bundle": "Repair this manifest-driven file delivery project. Deliver deliverable.pyz,\nmaintainable source and a concise tested handoff; Python 3 standard library only.\nInvocation: python deliverable.pyz INPUT_DIRECTORY --output OUTPUT_ZIP\nINPUT_DIRECTORY contains manifest.json {files:[{source:RELATIVE_PATH,target:ZIP_PATH},...]}.\nSource paths are relative to that directory; targets are distinct relative forward-slash\nZIP paths; all paths are nonempty and contain no traversal/absolute components.\nLegal names include Unicode, spaces, dots and commas; nested paths and duplicate source\nbasenames in different directories are supported. Inputs may be binary, empty or text.\nCopy the exact bytes of every specified source to its exact target, without text decoding.\nThe ZIP also contains _bundle_index.json {files:[{path:TARGET,bytes:INTEGER},...]} sorted\nby target Unicode order. Other payload files must not be included; directory entries are\nallowed. manifest order does not affect the delivered logical tree or sorted index.\nThe zipapp must run from an arbitrary working directory with only its own archive,\nPython and the supplied inputs. Verify the actual resulting ZIP, not just zipapp exit.\n",
+    "stock": "Repair this SQLite stock-batch import project. Deliver deliverable.pyz,\nmaintainable source and concise tested handoff; Python 3 standard library only.\nInvocation: python deliverable.pyz INPUT_CSV --db DATABASE --output REPORT_JSON\nCSV is UTF-8 with named item,delta,unit_cost_cents columns, reordered/extra metadata\ncolumns and all legal CSV quoting/CRLF/LF supported. item is exact nonempty Unicode\ntext including quotes, commas and embedded newlines; delta is signed integer, cost\nnonnegative integer. Apply rows in order in one atomic transaction. Existing stock rows\nadd delta and replace cost; new rows start quantity zero plus delta. Every resulting\nquantity must be nonnegative. On success exit 0 and JSON {success:true,processed:N}.\nOn the first insufficient-stock record, roll back the entire batch, exit 2 and JSON\n{success:false,error:{code:\"INSUFFICIENT_STOCK\",record:ONE_BASED_DATA_RECORD,item:TEXT}}.\nThe existing SQLite schema has stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL\nCHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL). Preserve all user tables, indexes,\ntriggers, prior rows and their semantics; execute ordinary INSERT/UPDATE so existing\naudit triggers record actual changes. No replacement of the database or stock table.\nConsume the exact supplied DB path and persist success across physical reopening.\nProvide the real packaged CLI and test both success and explicit atomic-error behavior.\n"
+  }
+}

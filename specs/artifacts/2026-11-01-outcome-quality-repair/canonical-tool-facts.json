@@ -1,0 +1,108 @@
+[
+  {
+    "phase": "baseline",
+    "kind": "coding",
+    "session_ids": [
+      "ses_-zUQGwRSbzz50BBsjvo6"
+    ],
+    "request_count": 33,
+    "outcome_count": 33,
+    "pending": [],
+    "outcome_keys": [
+      "outcome",
+      "output",
+      "title",
+      "metadata",
+      "time"
+    ],
+    "outcome_statuses": {
+      "completed": 31,
+      "failed": 2
+    }
+  },
+  {
+    "phase": "baseline",
+    "kind": "task",
+    "session_ids": [
+      "ses_-zUQGv08dzzoLsy3s3Yk",
+      "ses_-zUQGuzIzzzbGJSRUJRD"
+    ],
+    "request_count": 21,
+    "outcome_count": 21,
+    "pending": [],
+    "outcome_keys": [
+      "outcome",
+      "output",
+      "title",
+      "metadata",
+      "time"
+    ],
+    "outcome_statuses": {
+      "completed": 19,
+      "failed": 2
+    }
+  },
+  {
+    "phase": "after",
+    "kind": "coding",
+    "session_ids": [
+      "ses_-zUQGtLGLzztUzaTmtpj"
+    ],
+    "request_count": 24,
+    "outcome_count": 24,
+    "pending": [],
+    "outcome_keys": [
+      "outcome",
+      "output",
+      "title",
+      "metadata",
+      "time"
+    ],
+    "outcome_statuses": {
+      "completed": 24
+    }
+  },
+  {
+    "phase": "after",
+    "kind": "bundle",
+    "session_ids": [
+      "ses_-zUQGsEhizzmsm1a5oPI",
+      "ses_-zUQGsDvOzzyqV9qyodB"
+    ],
+    "request_count": 24,
+    "outcome_count": 24,
+    "pending": [],
+    "outcome_keys": [
+      "outcome",
+      "resultAttemptID",
+      "title",
+      "metadata",
+      "time"
+    ],
+    "outcome_statuses": {
+      "completed": 24
+    }
+  },
+  {
+    "phase": "after",
+    "kind": "stock",
+    "session_ids": [
+      "ses_-zUQGrHk1zzIhFmJ7BOK",
+      "ses_-zUQGrGqozzrNVeuLpfp"
+    ],
+    "request_count": 26,
+    "outcome_count": 26,
+    "pending": [],
+    "outcome_keys": [
+      "outcome",
+      "resultAttemptID",
+      "title",
+      "metadata",
+      "time"
+    ],
+    "outcome_statuses": {
+      "completed": 25,
+      "failed": 1
+    }
+  }
+]

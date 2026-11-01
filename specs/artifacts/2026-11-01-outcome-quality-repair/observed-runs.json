@@ -1,0 +1,584 @@
+{
+  "runs": [
+    {
+      "phase": "baseline",
+      "kind": "coding",
+      "entry": "coding",
+      "sessionID": "ses_-zUQGwRSbzz50BBsjvo6",
+      "taskID": null,
+      "startedAt": null,
+      "settledAt": null,
+      "lifecycle": null,
+      "requestsBefore": null,
+      "requestsAfter": null,
+      "tool_count": 33,
+      "tool_states": {
+        "completed": 31,
+        "error": 2
+      },
+      "issues": [
+        {
+          "part_id": "prt_g0VZj3nfN00Qm1jtZfW1",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Delete File: main.py\n*** Add File: main.py\n+import argparse\n+import csv\n+import json\n+from dataclasses import dataclass\n+from datetime import date\n+from fractions import Fraction\n+from pathlib import Path\n+\n+\n+STRATEGIES = (\"last\", \"open\", \"weekday\")\n+\n+\n+@dataclass(frozen=True)\n+class Observation:\n+    date: date\n+    item: str\n+    is_open: int\n+    demand: int = 0\n+\n+\n+@dataclass(frozen=True)\n+class Model:\n+    last: int\n+    open_mean: Fraction\n+    weekday_means: dict\n+\n+    def predict(self, strategy, row):\n+        if strategy == \"last\":\n+            return Fraction(self.last)\n+        if strategy == \"open\":\n+            return self.open_mean if row.is_open else Fraction(0)\n+        if strategy == \"weekday\":\n+            return self.weekday_means[row.date.weekday()]\n+        raise ValueError(f\"Unknown strategy: {strategy}\")\n+\n+\n+def read_csv(path, required):\n+    with path.open(encoding=\"utf-8\", newline=\"\") as stream:\n+        reader = csv.DictReader(stream)\n+        if reader.fieldnames is None or not set(required) <= set(reader.fieldnames):\n+            raise ValueError(f\"{path}: required columns are {', '.join(required)}\")\n+        rows = []\n+        for row in reader:\n+            if any(row[column] is None for column in required):\n+                raise ValueError(f\"{path}:{reader.line_num}: incomplete record\")\n+            if not row[\"item\"]:\n+                raise ValueError(f\"{path}:{reader.line_num}: empty item\")\n+            rows.append(row)\n+        return rows\n+\n+\n+def nonnegative_integer(value):\n+    number = int(value)\n+    if number < 0:\n+        raise ValueError(f\"Expected nonnegative integer, got {value!r}\")\n+    return number\n+\n+\n+def read_observations(path, labeled):\n+    columns = [\"date\", \"item\", \"is_open\"] + ([\"demand\"] if labeled else [])\n+    observations = []\n+    seen = set()\n+    for row in read_csv(path, columns):\n+        if row[\"is_open\"] not in (\"0\", \"1\"):\n+            raise ValueError(f\"{path}: is_open must be 0 or 1\")\n+        observation = Observation(\n+            date.fromisoformat(row[\"date\"]), row[\"item\"], int(row[\"is_open\"]),\n+            nonnegative_integer(row[\"demand\"]) if labeled else 0,\n+        )\n+        key = (observation.date, observation.item)\n+        if key in seen:\n+            raise ValueError(f\"{path}: duplicate date/item {key!r}\")\n+        seen.add(key)\n+        observations.append(observation)\n+    return observations\n+\n+\n+def fit(train):\n+    histories = {}\n+    for row in train:\n+        histories.setdefault(row.item, []).append(row)\n+    models = {}\n+    for item, history in histories.items():\n+        weekdays = {day: [] for day in range(7)}\n+        opened = []\n+        for row in history:\n+            weekdays[row.date.weekday()].append(row.demand)\n+            if row.is_open:\n+                opened.append(row.demand)\n+        if not opened or any(not values for values in weekdays.values()):\n+            raise ValueError(f\"{item!r}: training needs seven weekdays and an open row\")\n+        models[item] = Model(\n+            max(history, key=lambda row: row.date).demand,\n+            Fraction(sum(opened), len(opened)),\n+            {day: Fraction(sum(values), len(values)) for day, values in weekdays.items()},\n+        )\n+    return models\n+\n+\n+def json_number(value):\n+    return value.numerator if value.denominator == 1 else float(value)\n+\n+\n+def run(root):\n+    root = Path(root)\n+    models = fit(read_observations(root / \"train.csv\", labeled=True))\n+    validation = read_observations(root / \"validation.csv\", labeled=True)\n+    future = read_observations(root / \"future.csv\", labeled=False)\n+    inventory = {}\n+    for row in read_csv(root / \"inventory.csv\", [\"item\", \"stock\", \"buffer\"]):\n+        if row[\"item\"] in inventory:\n+            raise ValueError(f\"Duplicate inventory item: {row['item']!r}\")\n+        inventory[row[\"item\"]] = (\n+            nonnegative_integer(row[\"stock\"]), nonnegative_integer(row[\"buffer\"])\n+        )\n+    if not validation:\n+        raise ValueError(\"validation.csv needs at least one row to define MSE\")\n+    for row in validation + future:\n+        if row.item not in models or row.item not in inventory:\n+            raise ValueError(f\"{row.item!r}: training and inventory are required\")\n+    scores = {\n+        name: sum((models[row.item].predict(name, row) - row.demand) ** 2\n+                  for row in validation) / len(validation)\n+        for name in STRATEGIES\n+    }\n+    selected = min(STRATEGIES, key=lambda name: (scores[name], name))\n+    plan = []\n+    for row in sorted(future, key=lambda row: (row.date, row.item)):\n+        forecast = models[row.item].predict(selected, row)\n+        stock, buffer = inventory[row.item]\n+        order = max(Fraction(0), forecast + buffer - stock)\n+        plan.append(dict(date=row.date.isoformat(), item=row.item,\n+                         forecast=json_number(forecast), order=json_number(order)))\n+    return dict(selected=selected,\n+                validation_mse={name: json_number(score) for name, score in scores.items()},\n+                plan=plan)\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=\"Select a forecast and plan replenishment\")\n+    parser.add_argument(\"input\", type=Path)\n+    parser.add_argument(\"--output\", required=True, type=Path)\n+    args = parser.parse_args()\n+    result = run(args.input)\n+    args.output.write_text(json.dumps(result, ensure_ascii=False, allow_nan=False, indent=2)\n+                           + \"\\n\", encoding=\"utf-8\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: build_release.py\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def main():\n+    root = Path(__file__).resolve().parent\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.write(root / \"main.py\", \"main.py\")\n+        archive.writestr(\"__main__.py\", \"from main import main\\n\\nmain()\\n\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Add File target already exists: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\coding\\main.py",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_9ccf08d003ab4580a27eff621e0247f3",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null,
+          "time": {
+            "start": 1793537793249,
+            "end": 1793537813107
+          }
+        },
+        {
+          "part_id": "prt_g0VZj4P7a0004AMf1zZd",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Update File: test_release.py\n@@\n import random\n+import shutil\n@@\n                         if varied:\n                             record.update(metadata='ignored, \"quoted\"\\nmetadata', demand_hint=999999)\n@@\n     def test_empty_future(self):\n         train = [(f\"2026-01-{5 + i:02}\", \"A\", 1, 0) for i in range(7)]\n         self.exercise(train, [(\"2026-01-19\", \"A\", 0, 0)], [], [(\"A\", 0, 0)])\n+\n+    def test_relocated_standalone_archive(self):\n+        with tempfile.TemporaryDirectory(prefix=\"standalone release \") as directory:\n+            root = Path(directory)\n+            shutil.copyfile(ARCHIVE, root / \"deliverable.pyz\")\n+            shutil.copytree(ROOT / \"sample\", root / \"input data\")\n+            result = subprocess.run(\n+                [sys.executable, \"-I\", \"deliverable.pyz\", \"input data\", \"--output\", \"result.json\"],\n+                cwd=root, capture_output=True, text=True, encoding=\"utf-8\", timeout=30,\n+            )\n+            self.assertEqual(result.returncode, 0, result.stderr)\n+            actual = json.loads((root / \"result.json\").read_text(encoding=\"utf-8\"))\n+            self.assertEqual(actual[\"selected\"], \"open\")\n+            self.assertEqual(actual[\"validation_mse\"][\"open\"], 0)\n+            self.assertEqual([row[\"forecast\"] for row in actual[\"plan\"]], [10, 20, 0, 0, 10, 20])\n+            self.assertEqual([row[\"order\"] for row in actual[\"plan\"]], [9, 16, 0, 0, 9, 16])\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\coding\\test_release.py:\n                        if varied:\n                            record.update(metadata='ignored, \"quoted\"\\nmetadata', demand_hint=999999)",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_b05b586a04c24f0ba977e9c1112242dd",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null,
+          "time": {
+            "start": 1793537937226,
+            "end": 1793537943282
+          }
+        }
+      ],
+      "artifact_diagnostic_only": false,
+      "consumer": {
+        "passed": true,
+        "results": [
+          {
+            "name": "opening-change/plain",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "opening-change/quoted",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "opening-change/reordered",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "weekday-pattern/plain",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "weekday-pattern/quoted",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "weekday-pattern/reordered",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "phase": "baseline",
+      "kind": "task",
+      "entry": "task",
+      "sessionID": null,
+      "taskID": "tsk_g00VZj4zbS00mRzJ3Ogh",
+      "startedAt": null,
+      "settledAt": null,
+      "lifecycle": null,
+      "requestsBefore": null,
+      "requestsAfter": null,
+      "tool_count": 21,
+      "tool_states": {
+        "completed": 19,
+        "error": 2
+      },
+      "issues": [
+        {
+          "part_id": "prt_g0VZj5E2W00tp17m0Kbv",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Delete File: main.py\n*** Add File: main.py\n+\"\"\"Training-only demand selection and independent replenishment scenarios.\"\"\"\n+\n+import argparse\n+import csv\n+import json\n+from collections import defaultdict\n+from datetime import date\n+from fractions import Fraction\n+from pathlib import Path\n+\n+STRATEGIES = (\"last\", \"open\", \"weekday\")\n+\n+\n+def read_rows(path, columns):\n+    \"\"\"Read named CSV fields without normalizing item text or quoted newlines.\"\"\"\n+    with path.open(encoding=\"utf-8\", newline=\"\") as stream:\n+        reader = csv.DictReader(stream)\n+        if not set(columns).issubset(reader.fieldnames or ()):\n+            raise ValueError(f\"{path}: missing required columns\")\n+        rows = []\n+        for row in reader:\n+            record = {key: row[key] for key in columns}\n+            if not record[\"item\"]:\n+                raise ValueError(f\"{path}: empty item\")\n+            if \"date\" in record:\n+                record[\"date\"] = date.fromisoformat(record[\"date\"])\n+            for key in (\"demand\", \"stock\", \"buffer\", \"is_open\"):\n+                if key in record:\n+                    record[key] = int(record[key])\n+                    if record[key] < 0 or (key == \"is_open\" and record[key] > 1):\n+                        raise ValueError(f\"{path}: invalid {key}\")\n+            rows.append(record)\n+        return rows\n+\n+\n+def fit(train):\n+    \"\"\"Build exact per-item sufficient statistics from training rows only.\"\"\"\n+    grouped = defaultdict(list)\n+    for row in train:\n+        grouped[row[\"item\"]].append(row)\n+    models = {}\n+    for item, rows in grouped.items():\n+        weekdays = defaultdict(list)\n+        opened = []\n+        for row in rows:\n+            weekdays[row[\"date\"].weekday()].append(row[\"demand\"])\n+            if row[\"is_open\"]:\n+                opened.append(row[\"demand\"])\n+        if len(weekdays) != 7 or not opened:\n+            raise ValueError(f\"Incomplete training coverage for {item!r}\")\n+        models[item] = {\n+            \"last\": Fraction(max(rows, key=lambda row: row[\"date\"])[\"demand\"]),\n+            \"open\": Fraction(sum(opened), len(opened)),\n+            \"weekday\": {day: Fraction(sum(values), len(values))\n+                        for day, values in weekdays.items()},\n+        }\n+    return models\n+\n+\n+def predict(models, strategy, row):\n+    model = models[row[\"item\"]]\n+    if strategy == \"weekday\":\n+        return model[\"weekday\"][row[\"date\"].weekday()]\n+    if strategy == \"open\" and not row[\"is_open\"]:\n+        return Fraction(0)\n+    return model[strategy]\n+\n+\n+def number(value):\n+    \"\"\"Keep integral results integral; round rationals only at the JSON boundary.\"\"\"\n+    return value.numerator if value.denominator == 1 else float(value)\n+\n+\n+def run(root):\n+    root = Path(root)\n+    models = fit(read_rows(root / \"train.csv\", (\"date\", \"item\", \"is_open\", \"demand\")))\n+    validation = read_rows(root / \"validation.csv\", (\"date\", \"item\", \"is_open\", \"demand\"))\n+    if not validation:\n+        raise ValueError(\"Validation must contain at least one row to define MSE\")\n+    losses = {\n+        name: sum(((predict(models, name, row) - row[\"demand\"]) ** 2\n+                   for row in validation), Fraction(0)) / len(validation)\n+        for name in STRATEGIES\n+    }\n+    selected = min(STRATEGIES, key=lambda name: (losses[name], name))\n+    inventory = {row[\"item\"]: row for row in\n+                 read_rows(root / \"inventory.csv\", (\"item\", \"stock\", \"buffer\"))}\n+    plan = []\n+    for row in read_rows(root / \"future.csv\", (\"date\", \"item\", \"is_open\")):\n+        forecast = predict(models, selected, row)\n+        stock = inventory[row[\"item\"]]\n+        order = max(Fraction(0), forecast + stock[\"buffer\"] - stock[\"stock\"])\n+        plan.append(dict(date=row[\"date\"].isoformat(), item=row[\"item\"],\n+                         forecast=number(forecast), order=number(order)))\n+    return dict(selected=selected,\n+                validation_mse={name: number(losses[name]) for name in STRATEGIES},\n+                plan=sorted(plan, key=lambda row: (row[\"date\"], row[\"item\"])))\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", type=Path)\n+    parser.add_argument(\"--output\", type=Path, required=True)\n+    args = parser.parse_args()\n+    result = run(args.input)\n+    args.output.write_text(json.dumps(result, ensure_ascii=False, allow_nan=False,\n+                                      indent=2) + \"\\n\", encoding=\"utf-8\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: build_release.py\n+\"\"\"Build the self-contained standard-library zip application beside this script.\"\"\"\n+\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def build():\n+    root = Path(__file__).resolve().parent\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.writestr(\"__main__.py\", \"from main import main\\nmain()\\n\")\n+        archive.write(root / \"main.py\", \"main.py\")\n+\n+\n+if __name__ == \"__main__\":\n+    build()\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Add File target already exists: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\main.py",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_b15db370550c435e93c49022cc615e04",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null,
+          "time": {
+            "start": 1793538132956,
+            "end": 1793538150558
+          }
+        },
+        {
+          "part_id": "prt_g0VZj5JXN004Om8ZYtzP",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Update File: main.py\n@@\n-import argparse, json\n-from datetime import date\n-from pathlib import Path\n-def read(p):\n-    lines=p.read_text(encoding=\"utf-8\").splitlines(); names=lines[0].split(\",\")\n-    return [dict(zip(names,line.split(\",\"))) for line in lines[1:]]\n-def predict(name,rows,row):\n-    h=[r for r in rows if r[\"item\"]==row[\"item\"]]\n-    if name==\"last\": return float(max(h,key=lambda r:r[\"date\"])[\"demand\"])\n-    if name==\"open\":\n-        v=[float(r[\"demand\"]) for r in h if r[\"is_open\"]==\"1\"]\n-        return sum(v)/len(v) if row[\"is_open\"]==\"1\" else 0\n-    v=[float(r[\"demand\"]) for r in h if date.fromisoformat(r[\"date\"]).weekday()==date.fromisoformat(row[\"date\"]).weekday()]\n-    return sum(v)/len(v)\n-def run(root):\n-    train=read(root/\"train.csv\")\n-    # Development diagnostics currently evaluate training rows.\n-    scores={n:sum((predict(n,train,r)-float(r[\"demand\"]))**2 for r in train)/len(train) for n in [\"last\",\"open\",\"weekday\"]}\n-    selected=min(scores,key=lambda n:(scores[n],n))\n-    release=json.loads((root/\"release.json\").read_text())[\"strategy\"]\n-    inventory={r[\"item\"]:r for r in read(root/\"inventory.csv\")}; plan=[]\n-    for r in read(root/\"future.csv\"):\n-        v=predict(release,train,r); s=inventory[r[\"item\"]]\n-        plan.append(dict(date=r[\"date\"],item=r[\"item\"],forecast=v,order=max(0,v+float(s[\"buffer\"])-float(s[\"stock\"])))))\n-    return dict(selected=selected,validation_mse=scores,plan=sorted(plan,key=lambda r:(r[\"date\"],r[\"item\"])))\n-if __name__==\"__main__\":\n-    p=argparse.ArgumentParser(); p.add_argument(\"input\"); p.add_argument(\"--output\",required=True); a=p.parse_args()\n-    Path(a.output).write_text(json.dumps(run(Path(a.input)),ensure_ascii=False),encoding=\"utf-8\")\n+\"\"\"Training-only demand selection and independent replenishment scenarios.\"\"\"\n+\n+import argparse\n+import csv\n+import json\n+from collections import defaultdict\n+from datetime import date\n+from fractions import Fraction\n+from pathlib import Path\n+\n+STRATEGIES = (\"last\", \"open\", \"weekday\")\n+\n+\n+def read_rows(path, columns):\n+    \"\"\"Read named fields without normalizing item text or quoted newlines.\"\"\"\n+    with path.open(encoding=\"utf-8\", newline=\"\") as stream:\n+        reader = csv.DictReader(stream)\n+        if not set(columns).issubset(reader.fieldnames or ()):\n+            raise ValueError(f\"{path}: missing required columns\")\n+        rows = []\n+        for row in reader:\n+            record = {key: row[key] for key in columns}\n+            if not record[\"item\"]:\n+                raise ValueError(f\"{path}: empty item\")\n+            if \"date\" in record:\n+                record[\"date\"] = date.fromisoformat(record[\"date\"])\n+            for key in (\"demand\", \"stock\", \"buffer\", \"is_open\"):\n+                if key in record:\n+                    record[key] = int(record[key])\n+                    if record[key] < 0 or (key == \"is_open\" and record[key] > 1):\n+                        raise ValueError(f\"{path}: invalid {key}\")\n+            rows.append(record)\n+        return rows\n+\n+\n+def fit(train):\n+    \"\"\"Build exact per-item statistics from training rows only.\"\"\"\n+    grouped = defaultdict(list)\n+    for row in train:\n+        grouped[row[\"item\"]].append(row)\n+    models = {}\n+    for item, rows in grouped.items():\n+        weekdays = defaultdict(list)\n+        opened = []\n+        for row in rows:\n+            weekdays[row[\"date\"].weekday()].append(row[\"demand\"])\n+            if row[\"is_open\"]:\n+                opened.append(row[\"demand\"])\n+        if len(weekdays) != 7 or not opened:\n+            raise ValueError(f\"Incomplete training coverage for {item!r}\")\n+        models[item] = {\n+            \"last\": Fraction(max(rows, key=lambda row: row[\"date\"])[\"demand\"]),\n+            \"open\": Fraction(sum(opened), len(opened)),\n+            \"weekday\": {day: Fraction(sum(values), len(values))\n+                        for day, values in weekdays.items()},\n+        }\n+    return models\n+\n+\n+def predict(models, strategy, row):\n+    model = models[row[\"item\"]]\n+    if strategy == \"weekday\":\n+        return model[\"weekday\"][row[\"date\"].weekday()]\n+    if strategy == \"open\" and not row[\"is_open\"]:\n+        return Fraction(0)\n+    return model[strategy]\n+\n+\n+def number(value):\n+    \"\"\"Round rational results only at the JSON boundary.\"\"\"\n+    return value.numerator if value.denominator == 1 else float(value)\n+\n+\n+def run(root):\n+    root = Path(root)\n+    models = fit(read_rows(root / \"train.csv\", (\"date\", \"item\", \"is_open\", \"demand\")))\n+    validation = read_rows(root / \"validation.csv\", (\"date\", \"item\", \"is_open\", \"demand\"))\n+    if not validation:\n+        raise ValueError(\"Validation must contain at least one row to define MSE\")\n+    losses = {\n+        name: sum(((predict(models, name, row) - row[\"demand\"]) ** 2\n+                   for row in validation), Fraction(0)) / len(validation)\n+        for name in STRATEGIES\n+    }\n+    selected = min(STRATEGIES, key=lambda name: (losses[name], name))\n+    inventory = {row[\"item\"]: row for row in\n+                 read_rows(root / \"inventory.csv\", (\"item\", \"stock\", \"buffer\"))}\n+    plan = []\n+    for row in read_rows(root / \"future.csv\", (\"date\", \"item\", \"is_open\")):\n+        forecast = predict(models, selected, row)\n+        stock = inventory[row[\"item\"]]\n+        order = max(Fraction(0), forecast + stock[\"buffer\"] - stock[\"stock\"])\n+        plan.append(dict(date=row[\"date\"].isoformat(), item=row[\"item\"],\n+                         forecast=number(forecast), order=number(order)))\n+    return dict(selected=selected,\n+                validation_mse={name: number(losses[name]) for name in STRATEGIES},\n+                plan=sorted(plan, key=lambda row: (row[\"date\"], row[\"item\"])))\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", type=Path)\n+    parser.add_argument(\"--output\", type=Path, required=True)\n+    args = parser.parse_args()\n+    result = run(args.input)\n+    args.output.write_text(json.dumps(result, ensure_ascii=False, allow_nan=False,\n+                                      indent=2) + \"\\n\", encoding=\"utf-8\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: build_release.py\n+\"\"\"Build the self-contained standard-library zip application beside this script.\"\"\"\n+\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def build():\n+    root = Path(__file__).resolve().parent\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.writestr(\"__main__.py\", \"from main import main\\nmain()\\n\")\n+        archive.write(root / \"main.py\", \"main.py\")\n+\n+\n+if __name__ == \"__main__\":\n+    build()\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\main.py:\nimport argparse, json\nfrom datetime import date\nfrom pathlib import Path\ndef read(p):\n    lines=p.read_text(encoding=\"utf-8\").splitlines(); names=lines[0].split(\",\")\n    return [dict(zip(names,line.split(\",\"))) for line in lines[1:]]\ndef predict(name,rows,row):\n    h=[r for r in rows if r[\"item\"]==row[\"item\"]]\n    if name==\"last\": return float(max(h,key=lambda r:r[\"date\"])[\"demand\"])\n    if name==\"open\":\n        v=[float(r[\"demand\"]) for r in h if r[\"is_open\"]==\"1\"]\n        return sum(v)/len(v) if row[\"is_open\"]==\"1\" else 0\n    v=[float(r[\"demand\"]) for r in h if date.fromisoformat(r[\"date\"]).weekday()==date.fromisoformat(row[\"date\"]).weekday()]\n    return sum(v)/len(v)\ndef run(root):\n    train=read(root/\"train.csv\")\n    # Development diagnostics currently evaluate training rows.\n    scores={n:sum((predict(n,train,r)-float(r[\"demand\"]))**2 for r in train)/len(train) for n in [\"last\",\"open\",\"weekday\"]}\n    selected=min(scores,key=lambda n:(scores[n],n))\n    release=json.loads((root/\"release.json\").read_text())[\"strategy\"]\n    inventory={r[\"item\"]:r for r in read(root/\"inventory.csv\")}; plan=[]\n    for r in read(root/\"future.csv\"):\n        v=predict(release,train,r); s=inventory[r[\"item\"]]\n        plan.append(dict(date=r[\"date\"],item=r[\"item\"],forecast=v,order=max(0,v+float(s[\"buffer\"])-float(s[\"stock\"])))))\n    return dict(selected=selected,validation_mse=scores,plan=sorted(plan,key=lambda r:(r[\"date\"],r[\"item\"])))\nif __name__==\"__main__\":\n    p=argparse.ArgumentParser(); p.add_argument(\"input\"); p.add_argument(\"--output\",required=True); a=p.parse_args()\n    Path(a.output).write_text(json.dumps(run(Path(a.input)),ensure_ascii=False),encoding=\"utf-8\")",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_bf0d86a558ce4c169e9ab51db618f3b8",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null,
+          "time": {
+            "start": 1793538154089,
+            "end": 1793538176393
+          }
+        },
+        {
+          "part_id": "prt_g0VZj5gDV00Ckih1VDJP",
+          "tool": "bash",
+          "input": {
+            "command": "python -m unittest test_release -v",
+            "timeout": 300000,
+            "description": "Validate packaged release against independent expected results"
+          },
+          "failure": null,
+          "exit": 1,
+          "output": "...11506 bytes truncated...\n\nThe tool call succeeded but the output was truncated. Full output saved to: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\.opencorvus\\.r\\tasks\\tsk_g00VZj4zbS00mRzJ3Ogh\\sessions\\ses_-zUQGuzIzzzbGJSRUJRD\\tool-output\\tool_g0VZj5gj4005humMXMa\nUse Read with offset/limit to view the required sections.\n\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=5)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=6)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=7)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=8)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=9)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=10)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=11)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=12)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=13)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=14)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=15)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=16)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=17)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=18)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=19)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=20)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=21)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=22)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=23)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=24)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=25)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=26)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=27)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=28)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=29)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=30)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=31)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=32)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=33)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=34)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=35)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=36)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=37)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=38)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nERROR: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases) (trial=39)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 210, in test_generated_contract_cases\r\n    actual = self.case(\r\n        train, validation, future, inventory, \"\\n\" if trial % 2 else \"\\r\\n\"\r\n    )\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 105, in case\r\n    writer.writerows(\r\n    ~~~~~~~~~~~~~~~~^\r\n        dict(r, metadata='ignored,\"text\"\\nnext') for r in rows\r\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n    )\r\n    ^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 228, in writerows\r\n    return self.writer.writerows(map(self._dict_to_list, rowdicts))\r\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\csv.py\", line 220, in _dict_to_list\r\n    raise ValueError(\"dict contains fields not in fieldnames: \"\r\n                     + \", \".join([repr(x) for x in wrong_fields]))\r\nValueError: dict contains fields not in fieldnames: 'demand'\r\n\r\n======================================================================\r\nFAIL: test_generated_contract_cases (test_release.ReleaseTests.test_generated_contract_cases)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-HWO0HT\\runner-32360-cs8ynb\\runtime-root\\tmp\\opencorvus-delivery-scope-arqPL3\\task\\test_release.py\", line 214, in test_generated_contract_cases\r\n    self.assertTrue(winners)\r\n    ~~~~~~~~~~~~~~~^^^^^^^^^\r\nAssertionError: set() is not true\r\n\r\n----------------------------------------------------------------------\r\nRan 4 tests in 1.028s\r\n\r\nFAILED (failures=1, errors=40)\r\n\n\n<bash_metadata>\nexit code: 1\n</bash_metadata>",
+          "time": {
+            "start": 1793538241269,
+            "end": 1793538243240
+          }
+        }
+      ],
+      "artifact_diagnostic_only": true,
+      "consumer": {
+        "passed": true,
+        "results": [
+          {
+            "name": "opening-change/plain",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "opening-change/quoted",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "opening-change/reordered",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "weekday-pattern/plain",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "weekday-pattern/quoted",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "weekday-pattern/reordered",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "phase": "after",
+      "kind": "coding",
+      "entry": "coding",
+      "sessionID": "ses_-zUQGtLGLzztUzaTmtpj",
+      "taskID": null,
+      "startedAt": 1793538472780,
+      "settledAt": 1793538734185,
+      "lifecycle": null,
+      "requestsBefore": 2,
+      "requestsAfter": 28,
+      "tool_count": 24,
+      "tool_states": {
+        "completed": 24
+      },
+      "issues": [],
+      "artifact_diagnostic_only": false,
+      "consumer": {
+        "passed": true,
+        "results": [
+          {
+            "name": "opening-change/plain",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "opening-change/quoted",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "opening-change/reordered",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "weekday-pattern/plain",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "weekday-pattern/quoted",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          },
+          {
+            "name": "weekday-pattern/reordered",
+            "exit": 0,
+            "passed": true,
+            "execution": true,
+            "selection": true,
+            "quality_measurement": true,
+            "released_plan": true,
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "phase": "after",
+      "kind": "bundle",
+      "entry": "task",
+      "sessionID": null,
+      "taskID": "tsk_g00VZj7l5b00HL9EHhy9",
+      "startedAt": 1793538735760,
+      "settledAt": 1793538960327,
+      "lifecycle": {
+        "taskID": "tsk_g00VZj7l5b00HL9EHhy9",
+        "epoch": 1,
+        "openedEventID": "pev_g0VZj7lIw00VaHsJE8hE",
+        "openedAt": 1793538736655,
+        "status": "completed",
+        "terminalEventID": "pev_g0VZj8h7i0082mSlIgYR",
+        "terminalAt": 1793538957450
+      },
+      "requestsBefore": 28,
+      "requestsAfter": 53,
+      "tool_count": 24,
+      "tool_states": {
+        "completed": 24
+      },
+      "issues": [],
+      "artifact_diagnostic_only": false,
+      "consumer": {
+        "passed": true,
+        "results": [
+          {
+            "name": "nested-binary",
+            "exit": 0,
+            "passed": true,
+            "execution": null,
+            "selection": null,
+            "quality_measurement": null,
+            "released_plan": null,
+            "error": null
+          },
+          {
+            "name": "unicode-order",
+            "exit": 0,
+            "passed": true,
+            "execution": null,
+            "selection": null,
+            "quality_measurement": null,
+            "released_plan": null,
+            "error": null
+          },
+          {
+            "name": "reversed-manifest",
+            "exit": 0,
+            "passed": true,
+            "execution": null,
+            "selection": null,
+            "quality_measurement": null,
+            "released_plan": null,
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "phase": "after",
+      "kind": "stock",
+      "entry": "task",
+      "sessionID": null,
+      "taskID": "tsk_g00VZj8i3400dTaAvK8t",
+      "startedAt": 1793538962229,
+      "settledAt": 1793539161541,
+      "lifecycle": {
+        "taskID": "tsk_g00VZj8i3400dTaAvK8t",
+        "epoch": 1,
+        "openedEventID": "pev_g0VZj8iGc00C0P4Enh25",
+        "openedAt": 1793538963294,
+        "status": "completed",
+        "terminalEventID": "pev_g0VZj9XPJ00E0xEoaVn6",
+        "terminalAt": 1793539158945
+      },
+      "requestsBefore": 53,
+      "requestsAfter": 80,
+      "tool_count": 26,
+      "tool_states": {
+        "completed": 25,
+        "error": 1
+      },
+      "issues": [
+        {
+          "part_id": "prt_g0VZj91N0001HkEXTF7x",
+          "tool": "bash",
+          "input": {
+            "command": "python -m unittest -v test_importer",
+            "description": "Test packaged importer success rollback and preservation"
+          },
+          "failure": null,
+          "exit": 1,
+          "output": "test_first_insufficient_record_rolls_back_stock_and_audit (test_importer.PackagedImporterTests.test_first_insufficient_record_rolls_back_stock_and_audit) ... ERROR\r\ntest_header_only_is_empty_success (test_importer.PackagedImporterTests.test_header_only_is_empty_success) ... ERROR\r\ntest_late_invalid_input_rolls_back (test_importer.PackagedImporterTests.test_late_invalid_input_rolls_back) ... ERROR\r\ntest_new_item_cannot_start_negative (test_importer.PackagedImporterTests.test_new_item_cannot_start_negative) ... ERROR\r\ntest_standard_header_and_legal_quoted_fields (test_importer.PackagedImporterTests.test_standard_header_and_legal_quoted_fields) ... ERROR\r\ntest_success_persistence_order_and_trigger_semantics (test_importer.PackagedImporterTests.test_success_persistence_order_and_trigger_semantics) ... ERROR\r\n\r\n======================================================================\r\nERROR: test_first_insufficient_record_rolls_back_stock_and_audit (test_importer.PackagedImporterTests.test_first_insufficient_record_rolls_back_stock_and_audit)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmpkxrayfm3\\\\actual stock.sqlite'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmpkxrayfm3\\\\actual stock.sqlite'\r\n\r\n======================================================================\r\nERROR: test_header_only_is_empty_success (test_importer.PackagedImporterTests.test_header_only_is_empty_success)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmpa1eccl7i\\\\actual stock.sqlite'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmpa1eccl7i\\\\actual stock.sqlite'\r\n\r\n======================================================================\r\nERROR: test_late_invalid_input_rolls_back (test_importer.PackagedImporterTests.test_late_invalid_input_rolls_back)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmpmbikdyor\\\\actual stock.sqlite'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmpmbikdyor\\\\actual stock.sqlite'\r\n\r\n======================================================================\r\nERROR: test_new_item_cannot_start_negative (test_importer.PackagedImporterTests.test_new_item_cannot_start_negative)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmp2t1m9d0w\\\\actual stock.sqlite'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmp2t1m9d0w\\\\actual stock.sqlite'\r\n\r\n======================================================================\r\nERROR: test_standard_header_and_legal_quoted_fields (test_importer.PackagedImporterTests.test_standard_header_and_legal_quoted_fields)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmpkcf_a6tq\\\\actual stock.sqlite'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmpkcf_a6tq\\\\actual stock.sqlite'\r\n\r\n======================================================================\r\nERROR: test_success_persistence_order_and_trigger_semantics (test_importer.PackagedImporterTests.test_success_persistence_order_and_trigger_semantics)\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 701, in _rmtree_unsafe\r\n    os.unlink(fullname)\r\n    ~~~~~~~~~^^^^^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmpkel0is7g\\\\actual stock.sqlite'\r\n\r\nDuring handling of the above exception, another exception occurred:\r\n\r\nTraceback (most recent call last):\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 975, in cleanup\r\n    self._rmtree(self.name, ignore_errors=self._ignore_cleanup_errors)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 955, in _rmtree\r\n    _shutil.rmtree(name, onexc=onexc)\r\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 852, in rmtree\r\n    _rmtree_impl(path, dir_fd, onexc)\r\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\shutil.py\", line 705, in _rmtree_unsafe\r\n    onexc(os.unlink, fullname, err)\r\n    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"C:\\Python314\\Lib\\tempfile.py\", line 930, in onexc\r\n    _os.unlink(path)\r\n    ~~~~~~~~~~^^^^^^\r\nPermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\opencorvus-test-run-udRM1g\\\\runner-32400-C43mZt\\\\runtime-root\\\\tmp\\\\tmpkel0is7g\\\\actual stock.sqlite'\r\n\r\n----------------------------------------------------------------------\r\nRan 6 tests in 2.376s\r\n\r\nFAILED (errors=6)\r\n\n\n<bash_metadata>\nexit code: 1\n</bash_metadata>",
+          "time": {
+            "start": 1793539037566,
+            "end": 1793539041062
+          }
+        },
+        {
+          "part_id": "prt_g0VZj93V300h2ChoyJM0",
+          "tool": "apply_patch",
+          "input": {
+            "patchText": "*** Begin Patch\n*** Update File: test_importer.py\n@@\n import csv\n+from contextlib import closing\n@@\n-        with sqlite3.connect(self.db) as db:\n+        with closing(sqlite3.connect(self.db)) as db:\n@@\n             db.executemany(\"INSERT INTO stock VALUES (?,?,?)\", [\n                 (SPECIAL, 5, 100), (\"untouched\", 9, 80), (\"ordinary\", 2, 10)\n             ])\n+            db.commit()\n@@\n-        with sqlite3.connect(self.db) as db:\n+        with closing(sqlite3.connect(self.db)) as db:\n*** End Patch"
+          },
+          "failure": {
+            "kind": "tool-execution",
+            "name": "Error",
+            "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\opencorvus-delivery-scope-o897bB\\stock\\test_importer.py:\n            db.executemany(\"INSERT INTO stock VALUES (?,?,?)\", [\n                (SPECIAL, 5, 100), (\"untouched\", 9, 80), (\"ordinary\", 2, 10)\n            ])",
+            "originSite": "session.processor.tool-error",
+            "classification": "tool-execution",
+            "data": {
+              "toolCallId": "call_972a3937f7a44b4eabf6a4674ae718e4",
+              "toolName": "apply_patch"
+            }
+          },
+          "exit": null,
+          "output": null,
+          "time": {
+            "start": 1793539045753,
+            "end": 1793539047141
+          }
+        }
+      ],
+      "artifact_diagnostic_only": false,
+      "consumer": {
+        "passed": true,
+        "results": [
+          {
+            "name": "success",
+            "exit": 0,
+            "passed": true,
+            "execution": null,
+            "selection": null,
+            "quality_measurement": null,
+            "released_plan": null,
+            "error": null
+          },
+          {
+            "name": "quoted-reordered",
+            "exit": 0,
+            "passed": true,
+            "execution": null,
+            "selection": null,
+            "quality_measurement": null,
+            "released_plan": null,
+            "error": null
+          },
+          {
+            "name": "atomic-error",
+            "exit": 2,
+            "passed": true,
+            "execution": null,
+            "selection": null,
+            "quality_measurement": null,
+            "released_plan": null,
+            "error": null
+          }
+        ]
+      }
+    }
+  ],
+  "baseline": {
+    "status": "failed",
+    "error": {
+      "name": "AssertionError",
+      "message": "E2E_REQUEST_BUDGET_EXHAUSTED"
+    },
+    "cleanup": {
+      "errors": [],
+      "pairedCopiesRetired": true,
+      "sourceBytesPreserved": true
+    },
+    "requests": 60,
+    "models": {
+      "gpt-6.1-sol": 60
+    },
+    "streaming": {
+      "True": 60
+    },
+    "http": {
+      "200": 59,
+      "504": 1
+    },
+    "probes": {
+      "shared-verification-policy": 57,
+      "completion-summary-schema": 22,
+      "patch-operation-contract": 0
+    }
+  },
+  "after": {
+    "status": "passed",
+    "error": null,
+    "cleanup": {
+      "errors": [],
+      "pairedCopiesRetired": true,
+      "sourceBytesPreserved": true
+    },
+    "requests": 80,
+    "models": {
+      "gpt-6.1-sol": 80
+    },
+    "streaming": {
+      "True": 80
+    },
+    "http": {
+      "200": 80
+    },
+    "probes": {
+      "shared-verification-policy": 76,
+      "completion-summary-schema": 50,
+      "patch-operation-contract": 76
+    }
+  }
+}

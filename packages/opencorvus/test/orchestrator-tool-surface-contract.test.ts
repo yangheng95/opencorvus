@@ -172,6 +172,10 @@ test("exposes scope-based completion judgment on the actual public management To
       expect(completion?.shape.summary?.description).toContain(
         "supported input scope to independent correctness evidence and actual final-deliverable consumption",
       )
+      expect(management.description).toContain("measured outcome quality and the strategy actually delivered")
+      expect(completion?.shape.summary?.description).toContain(
+        "measured quality, the selected strategy, and its actual released execution",
+      )
     },
   })
 })

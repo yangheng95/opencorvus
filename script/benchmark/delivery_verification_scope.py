@@ -1,6 +1,7 @@
-"""Fixed business cases and an external final-zipapp consumer; no model calls."""
+"""Current finite quality/delivery regression; external final-program consumer, no model calls."""
 import argparse
 import csv
+from datetime import date, timedelta
 import io
 import json
 from pathlib import Path
@@ -8,156 +9,164 @@ import subprocess
 import sys
 import tempfile
 
+CONTRACT = """Repair the demand-forecast/replenishment prototype; release deliverable.pyz,
+maintainable source, and a concise handoff with actual validation results.
+Python 3 standard library only. Invocation from any working directory:
+  python deliverable.pyz INPUT_DIRECTORY --output OUTPUT_JSON
+INPUT_DIRECTORY contains train.csv, validation.csv, future.csv, inventory.csv (UTF-8 CSV).
+train/validation: date,item,is_open,demand; future: date,item,is_open;
+inventory: item,stock,buffer. Dates are ISO dates; is_open is 0 or 1;
+demand/stock/buffer are nonnegative integers. Item names are exact nonempty Unicode text.
+Required named columns may be reordered; extra metadata columns, legal CSV quoting
+and CRLF/LF are supported. Future/validation items all have training and inventory.
+Each item has all seven weekdays in training and at least one open observation;
+dates are unique per item in each split. Compare all three supplied strategies:
+  weekday: mean training demand for the item's weekday, including closed observations;
+  open: mean demand over the item's open training observations if is_open=1, else zero;
+  last: demand on that item's latest training date, independent of is_open.
+Apply training-only predictors to the separate validation rows. Choose globally lowest
+mean squared error (MSE), equally weighted across validation rows; exact ties choose
+the lexicographically first strategy name. Never train on validation/future labels.
+The released forecast must execute the selected strategy, replacing stale release metadata.
+For each future row, order=max(0,forecast+buffer-stock); rows are independent planning
+scenarios, with no inventory carry. Include every future row, sorted by date then item.
+Write JSON {selected:STRATEGY,validation_mse:{last:NUMBER,open:NUMBER,weekday:NUMBER},
+plan:[{date:DATE,item:EXACT_TEXT,forecast:NUMBER,order:NUMBER},...]}.
+Numbers may be integer/float with 1e-8 absolute error. Validation losses, selection and
+actual released predictions/quantities must agree. Existing prototype/scores/config
+are development material, not acceptance evidence.
+"""
 
-CONTRACTS = {
-    "csv": """Deliver a reusable Python 3 standard-library command line program as deliverable.pyz.
-Usage: python deliverable.pyz INPUT --output OUTPUT
-INPUT is a UTF-8 standard comma-separated CSV with a header. Required named columns are
-customer and amount; additional columns are metadata. customer is a nonempty text value;
-amount is a signed decimal with at most two fractional places. Sum all amounts by the
-exact customer value. Write UTF-8 JSON {"totals":[{"customer":NAME,"amount":DECIMAL_STRING},...]}
-sorted by customer in Unicode code-point order, amounts with exactly two fractional places.
-The input can contain any legal records satisfying that contract, including zero data records.
-The delivered archive must work from an arbitrary working directory using Python alone.
-""",
-    "json": """Deliver a reusable Python 3 standard-library command line program as deliverable.pyz.
-Usage: python deliverable.pyz INPUT --output OUTPUT
-INPUT is any UTF-8 JSON value. Flatten it to a JSON object mapping RFC 6901 JSON Pointer
-strings to leaf values. Object member names use RFC 6901 escaping; array indices use decimal
-positions. Scalars and empty containers are leaves; the root pointer is the empty string.
-Preserve exact string values and JSON scalar types. Write the mapping as UTF-8 JSON.
-The delivered archive must work from an arbitrary working directory using Python alone.
-""",
-}
+PROTOTYPE = '''import argparse, json
+from datetime import date
+from pathlib import Path
+def read(p):
+    lines=p.read_text(encoding="utf-8").splitlines(); names=lines[0].split(",")
+    return [dict(zip(names,line.split(","))) for line in lines[1:]]
+def predict(name,rows,row):
+    h=[r for r in rows if r["item"]==row["item"]]
+    if name=="last": return float(max(h,key=lambda r:r["date"])["demand"])
+    if name=="open":
+        v=[float(r["demand"]) for r in h if r["is_open"]=="1"]
+        return sum(v)/len(v) if row["is_open"]=="1" else 0
+    v=[float(r["demand"]) for r in h if date.fromisoformat(r["date"]).weekday()==date.fromisoformat(row["date"]).weekday()]
+    return sum(v)/len(v)
+def run(root):
+    train=read(root/"train.csv")
+    # Development diagnostics currently evaluate training rows.
+    scores={n:sum((predict(n,train,r)-float(r["demand"]))**2 for r in train)/len(train) for n in ["last","open","weekday"]}
+    selected=min(scores,key=lambda n:(scores[n],n))
+    release=json.loads((root/"release.json").read_text())["strategy"]
+    inventory={r["item"]:r for r in read(root/"inventory.csv")}; plan=[]
+    for r in read(root/"future.csv"):
+        v=predict(release,train,r); s=inventory[r["item"]]
+        plan.append(dict(date=r["date"],item=r["item"],forecast=v,order=max(0,v+float(s["buffer"])-float(s["stock"]))))
+    return dict(selected=selected,validation_mse=scores,plan=sorted(plan,key=lambda r:(r["date"],r["item"])))
+if __name__=="__main__":
+    p=argparse.ArgumentParser(); p.add_argument("input"); p.add_argument("--output",required=True); a=p.parse_args()
+    Path(a.output).write_text(json.dumps(run(Path(a.input)),ensure_ascii=False),encoding="utf-8")
+'''
 
-PROTOTYPES = {
-    "csv": '''import argparse, json
-p = argparse.ArgumentParser()
-p.add_argument("input")
-p.add_argument("--output", required=True)
-a = p.parse_args()
-totals = {}
-for line in open(a.input, encoding="utf-8").read().splitlines()[1:]:
-    name, amount = line.split(",")
-    totals[name] = totals.get(name, 0.0) + float(amount)
-json.dump({"totals": [{"customer": k, "amount": f"{v:.2f}"} for k,v in sorted(totals.items())]}, open(a.output,"w",encoding="utf-8"))
-''',
-    "json": '''import argparse, json
-p = argparse.ArgumentParser()
-p.add_argument("input")
-p.add_argument("--output", required=True)
-a = p.parse_args()
-result = {}
-def visit(value, pointer):
-    if isinstance(value, dict):
-        for key, item in value.items():
-            visit(item, pointer + "/" + key)
-    else:
-        result[pointer] = value
-visit(json.load(open(a.input, encoding="utf-8")), "")
-json.dump(result, open(a.output,"w",encoding="utf-8"))
-''',
-}
-
-
-def csv_text(columns, rows, newline="\r\n"):
+def csv_text(columns, rows, newline="\n"):
     stream = io.StringIO(newline="")
-    writer = csv.writer(stream, lineterminator=newline)
-    writer.writerow(columns)
+    writer = csv.DictWriter(stream, fieldnames=columns, lineterminator=newline)
+    writer.writeheader()
     writer.writerows(rows)
     return stream.getvalue()
 
+def case(scenario, representation):
+    # Expected values come from explicit generating business facts, never candidate code.
+    names = ["Alpha", "Beta"] if representation == "plain" else [' A,"组"\nZ ', "Zoë"]
+    rows = {key: [] for key in ["train", "validation", "future", "inventory"]}
+    base = date(2026, 1, 5)
+    for item, factor in zip(names, [1, 2]):
+        for day in range(14):
+            weekday = day % 7
+            opened = int(weekday != 6) if scenario == "opening-change" else 1
+            demand = 10*factor*opened if scenario == "opening-change" else (weekday+1)*10*factor
+            rows["train"].append(dict(date=str(base+timedelta(days=day)),item=item,is_open=opened,demand=demand))
+        for day in range(7):
+            opened = int(day != 0) if scenario == "opening-change" else 1
+            demand = 10*factor*opened if scenario == "opening-change" else (day+1)*10*factor
+            rows["validation"].append(dict(date=str(base+timedelta(days=14+day)),item=item,is_open=opened,demand=demand))
+        for day in range(3):
+            rows["future"].append(dict(date=str(base+timedelta(days=21+day)),item=item,is_open=int(day != 1)))
+        rows["inventory"].append(dict(item=item,stock=3*factor,buffer=2))
+    losses, selected = ({"last":1500/7,"open":0,"weekday":500/7},"open") if scenario == "opening-change" else ({"last":3250,"open":1000,"weekday":0},"weekday")
+    plan = []
+    for item, factor in zip(names, [1, 2]):
+        for day in range(3):
+            value = 10*factor*int(day != 1) if scenario == "opening-change" else (day+1)*10*factor
+            plan.append(dict(date=str(base+timedelta(days=21+day)),item=item,forecast=value,order=max(0,value+2-3*factor)))
+    fields = {"train":["date","item","is_open","demand"],"validation":["date","item","is_open","demand"],"future":["date","item","is_open"],"inventory":["item","stock","buffer"]}
+    files = {}
+    for name, records in rows.items():
+        columns = fields[name]
+        if representation == "reordered":
+            columns = ["note",*reversed(columns)]
+            records = [dict(record,note='meta, "值"\nline') for record in reversed(records)]
+        files[name+".csv"] = csv_text(columns,records,"\r\n" if representation != "plain" else "\n")
+    files["release.json"] = json.dumps({"strategy":"last"})
+    return dict(name=scenario+"/"+representation,files=files,expected=dict(selected=selected,validation_mse=losses,plan=sorted(plan,key=lambda r:(r["date"],r["item"]))))
 
-def csv_expected(*pairs):
-    return {"totals": [{"customer": k, "amount": v} for k, v in pairs]}
-
-
-def cases(kind):
-    # Expected values are fixed business results, not produced by the candidate or its parser.
-    if kind == "csv":
-        return [
-            ("development", "customer,amount\nAda,1.25\nBo,2.00\nAda,0.75\n", csv_expected(("Ada", "2.00"), ("Bo", "2.00"))),
-            ("quoted-records", csv_text(["customer", "amount"], [["Li, Mei", "1.10"], ['A "Team"', "2.20"], ["two\nlines", "3.30"]]), csv_expected(('A "Team"', "2.20"), ("Li, Mei", "1.10"), ("two\nlines", "3.30"))),
-            ("named-columns", csv_text(["note", "amount", "customer"], [["meta", "3.25", "Zoë"], ["x,y", "-1.25", "Zoë"], ["", "0", "中文"]]), csv_expected(("Zoë", "2.00"), ("中文", "0.00"))),
-            ("empty", csv_text(["customer", "amount"] , []), csv_expected()),
-            ("exact-money", csv_text(["customer", "amount"], [["Ledger", "9999999999999999.99"], ["Ledger", "0.01"], ["Small", "-0.01"], ["Small", "0.02"]], "\n"), csv_expected(("Ledger", "10000000000000000.00"), ("Small", "0.01"))),
-            ("combined", csv_text(["amount", "customer", "extra"], [["12.30", " A,\"组\"\nZ ", "a\nb"], ["-2.30", " A,\"组\"\nZ ", ""], ["0", "é", "metadata"]]), csv_expected((" A,\"组\"\nZ ", "10.00"), ("é", "0.00"))),
-        ]
-    return [
-        ("development", '{"service":{"port":8080,"name":"api"}}', {"/service/port": 8080, "/service/name": "api"}),
-        ("escaped-members", '{"a/b":{"~key":1},"~1":"literal","":{"":true}}', {"/a~1b/~0key": 1, "/~01": "literal", "//": True}),
-        ("array-and-types", '[null,false,0,"0",{"items":[1,2]}]', {"/0": None, "/1": False, "/2": 0, "/3": "0", "/4/items/0": 1, "/4/items/1": 2}),
-        ("empty-containers", '{"a":{},"b":[],"c":[{},[]]}', {"/a": {}, "/b": [], "/c/0": {}, "/c/1": []}),
-        ("root-scalar", '"text\\n中文"', {"": "text\n中文"}),
-        ("root-empty", '{}', {"": {}}),
-        ("combined", '{"组/~":[{"":[]},[true,{"x/y~z":"行\\n值"}]],"n":-12.5}', {"/组~1~0/0/": [], "/组~1~0/1/0": True, "/组~1~0/1/1/x~1y~0z": "行\n值", "/n": -12.5}),
-    ]
-
+def cases():
+    return [case(s,r) for s in ["opening-change","weekday-pattern"] for r in ["plain","quoted","reordered"]]
 
 def setup(kind, project):
-    project.mkdir(parents=True, exist_ok=True)
-    (project / "main.py").write_text(PROTOTYPES[kind], encoding="utf-8")
-    (project / "CONTRACT.md").write_text(CONTRACTS[kind], encoding="utf-8")
-    name, content, expected = cases(kind)[0]
-    (project / f"sample.{kind}").write_bytes(content.encode("utf-8"))
-    (project / "sample.expected.json").write_text(json.dumps(expected, ensure_ascii=False), encoding="utf-8")
-    return {"case": kind, "contract": CONTRACTS[kind], "sample": name}
+    project.mkdir(parents=True,exist_ok=True)
+    (project/"main.py").write_text(PROTOTYPE,encoding="utf-8")
+    (project/"CONTRACT.md").write_text(CONTRACT,encoding="utf-8")
+    sample=project/"sample"; sample.mkdir()
+    for name, content in cases()[0]["files"].items():
+        (sample/name).write_bytes(content.encode("utf-8"))
+    (project/"historical-score.json").write_text('{"strategy":"last","mse":0,"scope":"old development extract"}',encoding="utf-8")
+    return dict(case=kind,contract=CONTRACT)
 
-
-def json_kind(value):
-    if value is None:
-        return "null"
-    if isinstance(value, bool):
-        return "boolean"
-    if isinstance(value, (int, float)):
-        return "number"
-    return {str: "string", list: "array", dict: "object"}[type(value)]
-
-
-def same_json(actual, expected):
-    if json_kind(actual) != json_kind(expected):
-        return False
-    if isinstance(expected, dict):
-        return actual.keys() == expected.keys() and all(same_json(actual[key], value) for key, value in expected.items())
-    if isinstance(expected, list):
-        return len(actual) == len(expected) and all(same_json(a, b) for a, b in zip(actual, expected))
-    return actual == expected
-
+def same_value(actual, expected):
+    if isinstance(expected,dict):
+        return isinstance(actual,dict) and actual.keys()==expected.keys() and all(same_value(actual[k],v) for k,v in expected.items())
+    if isinstance(expected,list):
+        return isinstance(actual,list) and len(actual)==len(expected) and all(same_value(a,b) for a,b in zip(actual,expected))
+    if isinstance(expected,(int,float)):
+        return type(actual) in (int,float) and abs(actual-expected)<=1e-8
+    return type(actual) is type(expected) and actual==expected
 
 def grade(kind, project, output):
-    output.mkdir(parents=True, exist_ok=True)
-    archive = project / "deliverable.pyz"
-    results = []
-    # Consumer files and cwd are outside the producing project, created only after settlement.
-    with tempfile.TemporaryDirectory(prefix="oc-final-consumer-") as directory:
-        consumer = Path(directory)
-        for name, content, expected in cases(kind):
-            source = consumer / f"input {name}.{kind}"
-            target = consumer / f"result {name}.json"
-            source.write_bytes(content.encode("utf-8"))
-            argv = [sys.executable, "-I", str(archive.resolve()), str(source), "--output", str(target)]
+    output.mkdir(parents=True,exist_ok=True); results=[]
+    with tempfile.TemporaryDirectory(prefix="oc-outcome-consumer-") as directory:
+        consumer=Path(directory); archive=consumer/"delivered program.pyz"
+        if (project/"deliverable.pyz").is_file():
+            archive.write_bytes((project/"deliverable.pyz").read_bytes())
+        for index, fixture in enumerate(cases()):
+            data=consumer/f"input {index}"; data.mkdir()
+            preserved=output/str(index); preserved.mkdir()
+            for name, content in fixture["files"].items():
+                (data/name).write_bytes(content.encode("utf-8")); (preserved/name).write_bytes(content.encode("utf-8"))
+            target=consumer/f"result {index}.json"
+            argv=[sys.executable,"-I",str(archive),str(data),"--output",str(target)]
+            row=dict(name=fixture["name"],argv=argv,cwd=str(consumer),expected=fixture["expected"])
             try:
-                completed = subprocess.run(argv, cwd=consumer, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=30)
-                actual_text = target.read_text(encoding="utf-8") if target.is_file() else None
-                actual = json.loads(actual_text) if actual_text is not None else None
-                passed = completed.returncode == 0 and actual_text is not None and same_json(actual, expected)
-                result = {"name": name, "argv": argv, "cwd": str(consumer), "exit": completed.returncode, "stdout": completed.stdout, "stderr": completed.stderr, "actual": actual, "expected": expected, "passed": passed}
-            except (OSError, ValueError, subprocess.TimeoutExpired) as error:
-                result = {"name": name, "argv": argv, "cwd": str(consumer), "expected": expected, "passed": False, "error": str(error)}
-            (output / f"{name}.input.{kind}").write_bytes(content.encode("utf-8"))
-            results.append(result)
-    report = {"case": kind, "passed": all(row["passed"] for row in results), "results": results}
-    (output / "grade.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+                done=subprocess.run(argv,cwd=consumer,capture_output=True,text=True,encoding="utf-8",errors="replace",timeout=30)
+                actual=json.loads(target.read_text(encoding="utf-8")) if target.is_file() else None
+                row.update(exit=done.returncode,stdout=done.stdout,stderr=done.stderr,actual=actual)
+                row["execution"]=done.returncode==0 and isinstance(actual,dict)
+                row["selection"]=row["execution"] and actual.get("selected")==fixture["expected"]["selected"]
+                row["quality_measurement"]=row["execution"] and same_value(actual.get("validation_mse"),fixture["expected"]["validation_mse"])
+                row["released_plan"]=row["execution"] and same_value(actual.get("plan"),fixture["expected"]["plan"])
+                row["passed"]=row["execution"] and same_value(actual,fixture["expected"])
+            except (OSError,ValueError,subprocess.TimeoutExpired) as error:
+                row.update(passed=False,error=str(error))
+            results.append(row)
+    report=dict(case=kind,passed=all(r["passed"] for r in results),results=results)
+    (output/"grade.json").write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding="utf-8")
     return report
 
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=["setup", "grade"])
-    parser.add_argument("kind", choices=CONTRACTS)
-    parser.add_argument("project", type=Path)
-    parser.add_argument("--output", type=Path)
-    args = parser.parse_args()
-    result = setup(args.kind, args.project) if args.action == "setup" else grade(args.kind, args.project, args.output)
-    print(json.dumps(result, ensure_ascii=True))
-    sys.exit(0 if args.action == "setup" or result["passed"] else 1)
+if __name__=="__main__":
+    p=argparse.ArgumentParser(description=__doc__); p.add_argument("action",choices=["setup","grade","freeze"])
+    p.add_argument("kind",choices=["coding","task"]); p.add_argument("project",type=Path); p.add_argument("--output",type=Path); a=p.parse_args()
+    if a.action=="freeze":
+        a.project.mkdir(parents=True,exist_ok=True)
+        (a.project/"fixed-cases.json").write_text(json.dumps(cases(),ensure_ascii=False,indent=2),encoding="utf-8")
+        result={"frozen":6}
+    else: result=setup(a.kind,a.project) if a.action=="setup" else grade(a.kind,a.project,a.output)
+    print(json.dumps(result,ensure_ascii=True)); sys.exit(0 if a.action!="grade" or result["passed"] else 1)

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [结果质量选择与交付修复](records/2026-11/2026-11-01-outcome-quality-repair.md)：共享执行/完成合同修复及真实Session、Task前后端到端消费。
 - [紧凑面板与统一对齐](records/2026-11/2026-11-01-compact-panel.md)：真实截图定位、统一桌面密度与双语面板复核。
 
 - [尺寸观察通知因果](records/2026-11/2026-11-01-resize-delivery-causality.md)：会话切换的真实回调记录及正式构建复验。

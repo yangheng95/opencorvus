@@ -1,0 +1,23 @@
+{
+  "registeredAt": "2026-11-01T13:18:19.324792+00:00",
+  "type": "post-delivery contract probe, not original pool or new model trial",
+  "reason": "Only ZIP target paths were specified as forward-slash; source paths are native relative filesystem paths under declared Windows runtime",
+  "source_proof": [
+    {
+      "source": "left\\a.bin",
+      "resolved": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\inputs\\left\\a.bin",
+      "source_bytes_match": true
+    },
+    {
+      "source": "right\\a.bin",
+      "resolved": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\inputs\\right\\a.bin",
+      "source_bytes_match": true
+    },
+    {
+      "source": "empty",
+      "resolved": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\post-delivery-native-source-path\\inputs\\empty",
+      "source_bytes_match": true
+    }
+  ],
+  "expected_native": 0
+}

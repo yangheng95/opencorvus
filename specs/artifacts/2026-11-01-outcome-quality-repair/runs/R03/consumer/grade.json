@@ -1,0 +1,678 @@
+{
+  "case": "coding",
+  "passed": true,
+  "results": [
+    {
+      "name": "opening-change/plain",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\delivered program.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\input 0",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\result 0.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3",
+      "expected": {
+        "selected": "open",
+        "validation_mse": {
+          "last": 214.28571428571428,
+          "open": 0,
+          "weekday": 71.42857142857143
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": "Alpha",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Beta",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Alpha",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Beta",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Alpha",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Beta",
+            "forecast": 20,
+            "order": 16
+          }
+        ]
+      },
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "selected": "open",
+        "validation_mse": {
+          "last": 214.28571428571428,
+          "open": 0,
+          "weekday": 71.42857142857143
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": "Alpha",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Beta",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Alpha",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Beta",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Alpha",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Beta",
+            "forecast": 20,
+            "order": 16
+          }
+        ]
+      },
+      "execution": true,
+      "selection": true,
+      "quality_measurement": true,
+      "released_plan": true,
+      "passed": true
+    },
+    {
+      "name": "opening-change/quoted",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\delivered program.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\input 1",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\result 1.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3",
+      "expected": {
+        "selected": "open",
+        "validation_mse": {
+          "last": 214.28571428571428,
+          "open": 0,
+          "weekday": 71.42857142857143
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Zoë",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-28",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          }
+        ]
+      },
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "selected": "open",
+        "validation_mse": {
+          "last": 214.28571428571428,
+          "open": 0,
+          "weekday": 71.42857142857143
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Zoë",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-28",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          }
+        ]
+      },
+      "execution": true,
+      "selection": true,
+      "quality_measurement": true,
+      "released_plan": true,
+      "passed": true
+    },
+    {
+      "name": "opening-change/reordered",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\delivered program.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\input 2",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\result 2.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3",
+      "expected": {
+        "selected": "open",
+        "validation_mse": {
+          "last": 214.28571428571428,
+          "open": 0,
+          "weekday": 71.42857142857143
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Zoë",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-28",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          }
+        ]
+      },
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "selected": "open",
+        "validation_mse": {
+          "last": 214.28571428571428,
+          "open": 0,
+          "weekday": 71.42857142857143
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Zoë",
+            "forecast": 0,
+            "order": 0
+          },
+          {
+            "date": "2026-01-28",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          }
+        ]
+      },
+      "execution": true,
+      "selection": true,
+      "quality_measurement": true,
+      "released_plan": true,
+      "passed": true
+    },
+    {
+      "name": "weekday-pattern/plain",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\delivered program.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\input 3",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\result 3.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3",
+      "expected": {
+        "selected": "weekday",
+        "validation_mse": {
+          "last": 3250,
+          "open": 1000,
+          "weekday": 0
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": "Alpha",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Beta",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Alpha",
+            "forecast": 20,
+            "order": 19
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Beta",
+            "forecast": 40,
+            "order": 36
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Alpha",
+            "forecast": 30,
+            "order": 29
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Beta",
+            "forecast": 60,
+            "order": 56
+          }
+        ]
+      },
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "selected": "weekday",
+        "validation_mse": {
+          "last": 3250,
+          "open": 1000,
+          "weekday": 0
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": "Alpha",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Beta",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Alpha",
+            "forecast": 20,
+            "order": 19
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Beta",
+            "forecast": 40,
+            "order": 36
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Alpha",
+            "forecast": 30,
+            "order": 29
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Beta",
+            "forecast": 60,
+            "order": 56
+          }
+        ]
+      },
+      "execution": true,
+      "selection": true,
+      "quality_measurement": true,
+      "released_plan": true,
+      "passed": true
+    },
+    {
+      "name": "weekday-pattern/quoted",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\delivered program.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\input 4",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\result 4.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3",
+      "expected": {
+        "selected": "weekday",
+        "validation_mse": {
+          "last": 3250,
+          "open": 1000,
+          "weekday": 0
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 20,
+            "order": 19
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Zoë",
+            "forecast": 40,
+            "order": 36
+          },
+          {
+            "date": "2026-01-28",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 30,
+            "order": 29
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Zoë",
+            "forecast": 60,
+            "order": 56
+          }
+        ]
+      },
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "selected": "weekday",
+        "validation_mse": {
+          "last": 3250,
+          "open": 1000,
+          "weekday": 0
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 20,
+            "order": 19
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Zoë",
+            "forecast": 40,
+            "order": 36
+          },
+          {
+            "date": "2026-01-28",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 30,
+            "order": 29
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Zoë",
+            "forecast": 60,
+            "order": 56
+          }
+        ]
+      },
+      "execution": true,
+      "selection": true,
+      "quality_measurement": true,
+      "released_plan": true,
+      "passed": true
+    },
+    {
+      "name": "weekday-pattern/reordered",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\delivered program.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\input 5",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3\\result 5.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-udRM1g\\runner-32400-C43mZt\\runtime-root\\tmp\\oc-outcome-consumer-ptiaiwx3",
+      "expected": {
+        "selected": "weekday",
+        "validation_mse": {
+          "last": 3250,
+          "open": 1000,
+          "weekday": 0
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 20,
+            "order": 19
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Zoë",
+            "forecast": 40,
+            "order": 36
+          },
+          {
+            "date": "2026-01-28",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 30,
+            "order": 29
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Zoë",
+            "forecast": 60,
+            "order": 56
+          }
+        ]
+      },
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "selected": "weekday",
+        "validation_mse": {
+          "last": 3250,
+          "open": 1000,
+          "weekday": 0
+        },
+        "plan": [
+          {
+            "date": "2026-01-26",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 10,
+            "order": 9
+          },
+          {
+            "date": "2026-01-26",
+            "item": "Zoë",
+            "forecast": 20,
+            "order": 16
+          },
+          {
+            "date": "2026-01-27",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 20,
+            "order": 19
+          },
+          {
+            "date": "2026-01-27",
+            "item": "Zoë",
+            "forecast": 40,
+            "order": 36
+          },
+          {
+            "date": "2026-01-28",
+            "item": " A,\"组\"\nZ ",
+            "forecast": 30,
+            "order": 29
+          },
+          {
+            "date": "2026-01-28",
+            "item": "Zoë",
+            "forecast": 60,
+            "order": 56
+          }
+        ]
+      },
+      "execution": true,
+      "selection": true,
+      "quality_measurement": true,
+      "released_plan": true,
+      "passed": true
+    }
+  ]
+}

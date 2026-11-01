@@ -86,4 +86,15 @@ describe("shared execution verification contract", () => {
     ])
       expect(VERIFICATION_DISCIPLINE).toContain(clause)
   })
+
+  test("defines evidence-based quality selection and released-strategy verification", () => {
+    for (const clause of [
+      "Prefer mature format readers and existing project primitives",
+      "Separate feasibility, threshold compliance, and comparative outcome quality.",
+      "Keep training, strategy selection, and final evaluation data appropriately separated",
+      "make the released configuration and final entry point actually execute that choice",
+      "compare the released outputs with independently established expectations",
+    ])
+      expect(VERIFICATION_DISCIPLINE).toContain(clause)
+  })
 })

@@ -62,3 +62,6 @@ specs/artifacts/2026-10-29-glib-production-repair/*.log -text -whitespace
 
 # Preserve legal-input serialization and native receipts for the delivery-scope trials.
 specs/artifacts/2026-11-01-delivery-verification-scope/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Keep actual multi-task input serialization, native receipts and source projections intact.
+specs/artifacts/2026-11-01-outcome-quality-repair/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

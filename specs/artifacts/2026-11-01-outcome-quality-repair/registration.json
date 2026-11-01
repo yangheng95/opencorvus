@@ -1,0 +1,21 @@
+{
+  "finalSurface": "exact delivered zipapp outside source project with independent inputs/expected values",
+  "createdAt": "2026-11-01T12:55:26.4732130Z",
+  "legalCases": 6,
+  "model": "openai/gpt-6.1-sol",
+  "phases": [
+    "baseline",
+    "after"
+  ],
+  "phase": "registered_before_baseline",
+  "baselineMaxRequests": 60,
+  "baselineProduct": "9d94e8f4",
+  "maxRequestsTotal": 120,
+  "case": "forecast-selection-release",
+  "tenTaskGoalResumed": false,
+  "entries": [
+    "coding",
+    "task"
+  ],
+  "heartbeat": "PAUSED"
+}

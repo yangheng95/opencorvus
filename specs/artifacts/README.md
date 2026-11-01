@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [结果质量与多任务端到端故障](2026-11-01-outcome-quality-repair/README.md)：每次真实工具故障、独立交付消费、原源码和运行器限制。
 - [紧凑面板与统一对齐](2026-11-01-compact-panel/README.md)：真实页面修改前后原图与视觉复核。
 
 - [尺寸观察通知因果](2026-11-01-resize-delivery-causality/README.md)：被动回调、原图及正式页面证据。

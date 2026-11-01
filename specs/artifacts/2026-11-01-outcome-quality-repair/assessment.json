@@ -1,0 +1,74 @@
+{
+  "createdAt": "2026-11-01T13:26:00.729523+00:00",
+  "executions": 5,
+  "distinctWorkflows": 3,
+  "naturallyCompleted": 4,
+  "budgetInterrupted": 1,
+  "allPromisedContractsSatisfied": false,
+  "unresolvedDeliveryFault": "R04-F01 native Windows source path rejected by ZIP-target validator",
+  "processFaults": 7,
+  "failedToolOutcomes": 5,
+  "failedDevelopmentTestCommands": 2,
+  "providerHttp504": 1,
+  "acceptanceBudgetInterruptions": 1,
+  "verificationRulesImplemented": true,
+  "behavioralRootCureProven": false,
+  "modelRequests": 140,
+  "model": "gpt-6.1-sol",
+  "streamingRequests": 140,
+  "http200": 139,
+  "http504": 1,
+  "heartbeat": "PAUSED",
+  "originals": [
+    {
+      "run": "R01",
+      "originalProject": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\baseline\\coding-delivered",
+      "completeArchive": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\complete-project-archives\\R01-project.zip",
+      "archiveBytes": 59108,
+      "completeMembers": 90,
+      "projectedFiles": 14,
+      "sourceProjection": "specs\\artifacts\\2026-11-01-outcome-quality-repair\\runs\\R01\\source-and-deliverable.zip",
+      "interrupted": false
+    },
+    {
+      "run": "R02",
+      "originalProject": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\baseline\\task-interrupted",
+      "completeArchive": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\complete-project-archives\\R02-project.zip",
+      "archiveBytes": 119464,
+      "completeMembers": 168,
+      "projectedFiles": 14,
+      "sourceProjection": "specs\\artifacts\\2026-11-01-outcome-quality-repair\\runs\\R02\\source-and-deliverable.zip",
+      "interrupted": true
+    },
+    {
+      "run": "R03",
+      "originalProject": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\after\\coding-delivered",
+      "completeArchive": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\complete-project-archives\\R03-project.zip",
+      "archiveBytes": 58918,
+      "completeMembers": 90,
+      "projectedFiles": 14,
+      "sourceProjection": "specs\\artifacts\\2026-11-01-outcome-quality-repair\\runs\\R03\\source-and-deliverable.zip",
+      "interrupted": false
+    },
+    {
+      "run": "R04",
+      "originalProject": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\after\\bundle-delivered",
+      "completeArchive": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\complete-project-archives\\R04-project.zip",
+      "archiveBytes": 110256,
+      "completeMembers": 171,
+      "projectedFiles": 12,
+      "sourceProjection": "specs\\artifacts\\2026-11-01-outcome-quality-repair\\runs\\R04\\source-and-deliverable.zip",
+      "interrupted": false
+    },
+    {
+      "run": "R05",
+      "originalProject": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\after\\stock-delivered",
+      "completeArchive": "D:\\opencorvus-benchmark-runs\\outcome-quality-selection-e2e-20261101\\complete-project-archives\\R05-project.zip",
+      "archiveBytes": 112567,
+      "completeMembers": 152,
+      "projectedFiles": 10,
+      "sourceProjection": "specs\\artifacts\\2026-11-01-outcome-quality-repair\\runs\\R05\\source-and-deliverable.zip",
+      "interrupted": false
+    }
+  ]
+}

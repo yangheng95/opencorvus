@@ -1,0 +1,16 @@
+{
+  "heartbeat": "PAUSED",
+  "faultReports": "per run, raw tool failures vs business outcomes vs harness issues distinct",
+  "entries": [
+    "coding/forecast",
+    "Task/bundle",
+    "Task/stock"
+  ],
+  "finalArtifactDiagnostic": "6/6 after runtime disposal, not task completion",
+  "maxRequestsTotal": 180,
+  "afterMaxRequests": 120,
+  "createdAt": "2026-11-01T13:07:41.5745078Z",
+  "baselineActualRequests": 60,
+  "phase": "after_registered_before_requests",
+  "baselineTask": "interrupted_by_acceptance_request_cap_not_natural_completion"
+}
