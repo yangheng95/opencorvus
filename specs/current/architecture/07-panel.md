@@ -694,6 +694,10 @@ Review layout follows its actual panel width through the existing CSS container
 primitive. Narrow panels place the file scope above a full-width wrapping diff,
 retaining independently scrollable panes and original keyboard selection. Wider
 panels retain the side-by-side comparison and file collection.
+The narrow file inventory follows its actual content height up to forty percent
+of the workspace; the diff takes the remaining height. A short inventory does
+not reserve an empty fixed share, while overflowing file rows retain their
+existing bounded list scrollport and the diff keeps its separate reading owner.
 
 Tree-writer retains actual qualification/control facts in the existing Message
 owner, with a readonly transient snapshot for the reducer. Full history validates

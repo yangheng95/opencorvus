@@ -1,0 +1,924 @@
+{
+  "kind": "Read-only observations of manually operated real pages; no UI assertions or screenshot comparisons",
+  "observations": [
+    {
+      "label": "before-single",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 344,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 344.1875,
+        "overflowY": "hidden",
+        "scrollHeight": 344,
+        "width": 368,
+        "x": 906,
+        "y": 369.8125
+      },
+      "diffBody": {
+        "clientHeight": 257,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 257.1875,
+        "overflowY": "auto",
+        "scrollHeight": 257,
+        "width": 368,
+        "x": 906,
+        "y": 456.8125
+      },
+      "files": {
+        "clientHeight": 228,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 229.4375,
+        "overflowY": "hidden",
+        "scrollHeight": 228,
+        "width": 368,
+        "x": 906,
+        "y": 140.375
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 122,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 122.4375,
+        "overflowY": "auto",
+        "scrollHeight": 122,
+        "width": 368,
+        "x": 906,
+        "y": 246.375
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "goal-quickstart.zh-CN.mddocsAddedLines unknown"
+        }
+      ],
+      "url": "http://localhost:38555/ui/?sessionID=ses_-zUQGti3Bzzuo3DYqpww&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-11-01%5Cgoal-runtime-870-after%5Cgoal-runtime-870-after&experience=work",
+      "workspace": {
+        "clientHeight": 574,
+        "fontSize": "12px",
+        "gridRows": "229.438px 344.188px",
+        "height": 574.625,
+        "overflowY": "hidden",
+        "scrollHeight": 574,
+        "width": 368,
+        "x": 906,
+        "y": 139.375
+      }
+    },
+    {
+      "label": "before-single-expanded",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 344,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 344.1875,
+        "overflowY": "hidden",
+        "scrollHeight": 344,
+        "width": 368,
+        "x": 906,
+        "y": 369.8125
+      },
+      "diffBody": {
+        "clientHeight": 257,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 257.1875,
+        "overflowY": "auto",
+        "scrollHeight": 4361,
+        "width": 368,
+        "x": 906,
+        "y": 456.8125
+      },
+      "files": {
+        "clientHeight": 228,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 229.4375,
+        "overflowY": "hidden",
+        "scrollHeight": 228,
+        "width": 368,
+        "x": 906,
+        "y": 140.375
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 122,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 122.4375,
+        "overflowY": "auto",
+        "scrollHeight": 122,
+        "width": 368,
+        "x": 906,
+        "y": 246.375
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "goal-quickstart.zh-CN.mddocsAddedLines unknown"
+        }
+      ],
+      "url": "http://localhost:38555/ui/?sessionID=ses_-zUQGti3Bzzuo3DYqpww&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-11-01%5Cgoal-runtime-870-after%5Cgoal-runtime-870-after&experience=work",
+      "workspace": {
+        "clientHeight": 574,
+        "fontSize": "12px",
+        "gridRows": "229.438px 344.188px",
+        "height": 574.625,
+        "overflowY": "hidden",
+        "scrollHeight": 574,
+        "width": 368,
+        "x": 906,
+        "y": 139.375
+      }
+    },
+    {
+      "label": "before-three",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 366,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 366,
+        "overflowY": "hidden",
+        "scrollHeight": 366,
+        "width": 368,
+        "x": 906,
+        "y": 348
+      },
+      "diffBody": {
+        "clientHeight": 279,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 279,
+        "overflowY": "auto",
+        "scrollHeight": 941,
+        "width": 368,
+        "x": 906,
+        "y": 435
+      },
+      "files": {
+        "clientHeight": 243,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 244,
+        "overflowY": "hidden",
+        "scrollHeight": 243,
+        "width": 368,
+        "x": 906,
+        "y": 104
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 137,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 137,
+        "overflowY": "auto",
+        "scrollHeight": 137,
+        "width": 368,
+        "x": 906,
+        "y": 210
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "invoice.pyModified+22-1"
+        },
+        {
+          "height": 30,
+          "label": "test_invoice.pyAdded+48-0"
+        },
+        {
+          "height": 30,
+          "label": "verification_report.mdAdded+27-0"
+        }
+      ],
+      "url": "http://localhost:38555/ui/?taskID=tsk_g00VZHNpHv00U1GVjV5r",
+      "workspace": {
+        "clientHeight": 610,
+        "fontSize": "12px",
+        "gridRows": "244px 366px",
+        "height": 611,
+        "overflowY": "hidden",
+        "scrollHeight": 610,
+        "width": 368,
+        "x": 906,
+        "y": 103
+      }
+    },
+    {
+      "label": "before-three-narrow",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 366,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 366,
+        "overflowY": "hidden",
+        "scrollHeight": 366,
+        "width": 312,
+        "x": 962,
+        "y": 348
+      },
+      "diffBody": {
+        "clientHeight": 279,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 279,
+        "overflowY": "auto",
+        "scrollHeight": 1106,
+        "width": 312,
+        "x": 962,
+        "y": 435
+      },
+      "files": {
+        "clientHeight": 243,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 244,
+        "overflowY": "hidden",
+        "scrollHeight": 243,
+        "width": 312,
+        "x": 962,
+        "y": 104
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 113,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 113,
+        "overflowY": "auto",
+        "scrollHeight": 119,
+        "width": 312,
+        "x": 962,
+        "y": 234
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "invoice.pyModified+22-1"
+        },
+        {
+          "height": 30,
+          "label": "test_invoice.pyAdded+48-0"
+        },
+        {
+          "height": 30,
+          "label": "verification_report.mdAdded+27-0"
+        }
+      ],
+      "url": "http://localhost:38555/ui/?taskID=tsk_g00VZHNpHv00U1GVjV5r",
+      "workspace": {
+        "clientHeight": 610,
+        "fontSize": "12px",
+        "gridRows": "244px 366px",
+        "height": 611,
+        "overflowY": "hidden",
+        "scrollHeight": 610,
+        "width": 312,
+        "x": 962,
+        "y": 103
+      }
+    },
+    {
+      "label": "after-single",
+      "intermediateFailure": true,
+      "diff": {
+        "clientHeight": 467,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 466.625,
+        "overflowY": "hidden",
+        "scrollHeight": 467,
+        "width": 368,
+        "x": 906,
+        "y": 247.375
+      },
+      "diffBody": {
+        "clientHeight": 380,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 379.625,
+        "overflowY": "auto",
+        "scrollHeight": 380,
+        "width": 368,
+        "x": 906,
+        "y": 334.375
+      },
+      "files": {
+        "clientHeight": 106,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 107,
+        "overflowY": "hidden",
+        "scrollHeight": 106,
+        "width": 368,
+        "x": 906,
+        "y": 140.375
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 0,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 0,
+        "overflowY": "auto",
+        "scrollHeight": 59,
+        "width": 368,
+        "x": 906,
+        "y": 246.375
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "goal-quickstart.zh-CN.mddocsAddedLines unknown"
+        }
+      ],
+      "url": "http://localhost:38556/ui/?sessionID=ses_-zUQGti3Bzzuo3DYqpww&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-11-01%5Cgoal-runtime-870-after%5Cgoal-runtime-870-after&experience=work",
+      "workspace": {
+        "clientHeight": 574,
+        "fontSize": "12px",
+        "gridRows": "107px 466.625px",
+        "height": 574.625,
+        "overflowY": "hidden",
+        "scrollHeight": 574,
+        "width": 368,
+        "x": 906,
+        "y": 139.375
+      }
+    },
+    {
+      "label": "final-single",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 407,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 407.4375,
+        "overflowY": "hidden",
+        "scrollHeight": 407,
+        "width": 368,
+        "x": 906,
+        "y": 306.5625
+      },
+      "diffBody": {
+        "clientHeight": 320,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 320.4375,
+        "overflowY": "auto",
+        "scrollHeight": 320,
+        "width": 368,
+        "x": 906,
+        "y": 393.5625
+      },
+      "files": {
+        "clientHeight": 165,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 166.1875,
+        "overflowY": "hidden",
+        "scrollHeight": 165,
+        "width": 368,
+        "x": 906,
+        "y": 140.375
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 59,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 59.1875,
+        "overflowY": "auto",
+        "scrollHeight": 59,
+        "width": 368,
+        "x": 906,
+        "y": 246.375
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "goal-quickstart.zh-CN.mddocsAddedLines unknown"
+        }
+      ],
+      "url": "http://localhost:38557/ui/?sessionID=ses_-zUQGti3Bzzuo3DYqpww&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-11-01%5Cgoal-runtime-870-after%5Cgoal-runtime-870-after&experience=work",
+      "workspace": {
+        "clientHeight": 574,
+        "fontSize": "12px",
+        "gridRows": "166.188px 407.438px",
+        "height": 574.625,
+        "overflowY": "hidden",
+        "scrollHeight": 574,
+        "width": 368,
+        "x": 906,
+        "y": 139.375
+      }
+    },
+    {
+      "label": "final-single-expanded",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 407,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 407.4375,
+        "overflowY": "hidden",
+        "scrollHeight": 407,
+        "width": 368,
+        "x": 906,
+        "y": 306.5625
+      },
+      "diffBody": {
+        "clientHeight": 320,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 320.4375,
+        "overflowY": "auto",
+        "scrollHeight": 4361,
+        "width": 368,
+        "x": 906,
+        "y": 393.5625
+      },
+      "files": {
+        "clientHeight": 165,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 166.1875,
+        "overflowY": "hidden",
+        "scrollHeight": 165,
+        "width": 368,
+        "x": 906,
+        "y": 140.375
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 59,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 59.1875,
+        "overflowY": "auto",
+        "scrollHeight": 59,
+        "width": 368,
+        "x": 906,
+        "y": 246.375
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "goal-quickstart.zh-CN.mddocsAddedLines unknown"
+        }
+      ],
+      "url": "http://localhost:38557/ui/?sessionID=ses_-zUQGti3Bzzuo3DYqpww&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-11-01%5Cgoal-runtime-870-after%5Cgoal-runtime-870-after&experience=work",
+      "workspace": {
+        "clientHeight": 574,
+        "fontSize": "12px",
+        "gridRows": "166.188px 407.438px",
+        "height": 574.625,
+        "overflowY": "hidden",
+        "scrollHeight": 574,
+        "width": 368,
+        "x": 906,
+        "y": 139.375
+      }
+    },
+    {
+      "label": "final-three",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 384,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 383.8125,
+        "overflowY": "hidden",
+        "scrollHeight": 384,
+        "width": 368,
+        "x": 906,
+        "y": 330.1875
+      },
+      "diffBody": {
+        "clientHeight": 297,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 296.8125,
+        "overflowY": "auto",
+        "scrollHeight": 941,
+        "width": 368,
+        "x": 906,
+        "y": 417.1875
+      },
+      "files": {
+        "clientHeight": 225,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 226.1875,
+        "overflowY": "hidden",
+        "scrollHeight": 225,
+        "width": 368,
+        "x": 906,
+        "y": 104
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 119,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 119.1875,
+        "overflowY": "auto",
+        "scrollHeight": 119,
+        "width": 368,
+        "x": 906,
+        "y": 210
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "invoice.pyModified+22-1"
+        },
+        {
+          "height": 30,
+          "label": "test_invoice.pyAdded+48-0"
+        },
+        {
+          "height": 30,
+          "label": "verification_report.mdAdded+27-0"
+        }
+      ],
+      "url": "http://localhost:38557/ui/?taskID=tsk_g00VZHNpHv00U1GVjV5r",
+      "workspace": {
+        "clientHeight": 610,
+        "fontSize": "12px",
+        "gridRows": "226.188px 383.812px",
+        "height": 611,
+        "overflowY": "hidden",
+        "scrollHeight": 610,
+        "width": 368,
+        "x": 906,
+        "y": 103
+      }
+    },
+    {
+      "label": "final-three-narrow",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 366,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 366,
+        "overflowY": "hidden",
+        "scrollHeight": 366,
+        "width": 312,
+        "x": 962,
+        "y": 348
+      },
+      "diffBody": {
+        "clientHeight": 279,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 279,
+        "overflowY": "auto",
+        "scrollHeight": 1106,
+        "width": 312,
+        "x": 962,
+        "y": 435
+      },
+      "files": {
+        "clientHeight": 243,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 244,
+        "overflowY": "hidden",
+        "scrollHeight": 243,
+        "width": 312,
+        "x": 962,
+        "y": 104
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 113,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 113,
+        "overflowY": "auto",
+        "scrollHeight": 119,
+        "width": 312,
+        "x": 962,
+        "y": 234
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "invoice.pyModified+22-1"
+        },
+        {
+          "height": 30,
+          "label": "test_invoice.pyAdded+48-0"
+        },
+        {
+          "height": 30,
+          "label": "verification_report.mdAdded+27-0"
+        }
+      ],
+      "url": "http://localhost:38557/ui/?taskID=tsk_g00VZHNpHv00U1GVjV5r",
+      "workspace": {
+        "clientHeight": 610,
+        "fontSize": "12px",
+        "gridRows": "244px 366px",
+        "height": 611,
+        "overflowY": "hidden",
+        "scrollHeight": 610,
+        "width": 312,
+        "x": 962,
+        "y": 103
+      }
+    },
+    {
+      "label": "final-filtered",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 420,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 419.8125,
+        "overflowY": "hidden",
+        "scrollHeight": 420,
+        "width": 312,
+        "x": 962,
+        "y": 294.1875
+      },
+      "diffBody": {
+        "clientHeight": 333,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 332.8125,
+        "overflowY": "auto",
+        "scrollHeight": 1216,
+        "width": 312,
+        "x": 962,
+        "y": 381.1875
+      },
+      "files": {
+        "clientHeight": 189,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 190.1875,
+        "overflowY": "hidden",
+        "scrollHeight": 189,
+        "width": 312,
+        "x": 962,
+        "y": 104
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 59,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 59.1875,
+        "overflowY": "auto",
+        "scrollHeight": 59,
+        "width": 312,
+        "x": 962,
+        "y": 234
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "verification_report.mdAdded+27-0"
+        }
+      ],
+      "url": "http://localhost:38557/ui/?taskID=tsk_g00VZHNpHv00U1GVjV5r",
+      "workspace": {
+        "clientHeight": 610,
+        "fontSize": "12px",
+        "gridRows": "190.188px 419.812px",
+        "height": 611,
+        "overflowY": "hidden",
+        "scrollHeight": 610,
+        "width": 312,
+        "x": 962,
+        "y": 103
+      }
+    },
+    {
+      "label": "final-wide",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 610,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 610,
+        "overflowY": "hidden",
+        "scrollHeight": 610,
+        "width": 416.4375,
+        "x": 556,
+        "y": 104
+      },
+      "diffBody": {
+        "clientHeight": 508,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 523,
+        "overflowY": "auto",
+        "scrollHeight": 611,
+        "width": 416.4375,
+        "x": 556,
+        "y": 191
+      },
+      "files": {
+        "clientHeight": 610,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 610,
+        "overflowY": "hidden",
+        "scrollHeight": 610,
+        "width": 301.5625,
+        "x": 972.4375,
+        "y": 104
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 480,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 480,
+        "overflowY": "auto",
+        "scrollHeight": 480,
+        "width": 300.5625,
+        "x": 973.4375,
+        "y": 234
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "invoice.pyModified+22-1"
+        },
+        {
+          "height": 30,
+          "label": "test_invoice.pyAdded+48-0"
+        },
+        {
+          "height": 30,
+          "label": "verification_report.mdAdded+27-0"
+        }
+      ],
+      "url": "http://localhost:38557/ui/?taskID=tsk_g00VZHNpHv00U1GVjV5r",
+      "workspace": {
+        "clientHeight": 610,
+        "fontSize": "12px",
+        "gridRows": "610px",
+        "height": 611,
+        "overflowY": "hidden",
+        "scrollHeight": 610,
+        "width": 718,
+        "x": 556,
+        "y": 103
+      }
+    },
+    {
+      "label": "final-zh-three",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 384,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 383.8125,
+        "overflowY": "hidden",
+        "scrollHeight": 384,
+        "width": 368,
+        "x": 906,
+        "y": 330.1875
+      },
+      "diffBody": {
+        "clientHeight": 297,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 296.8125,
+        "overflowY": "auto",
+        "scrollHeight": 941,
+        "width": 368,
+        "x": 906,
+        "y": 417.1875
+      },
+      "files": {
+        "clientHeight": 225,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 226.1875,
+        "overflowY": "hidden",
+        "scrollHeight": 225,
+        "width": 368,
+        "x": 906,
+        "y": 104
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 119,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 119.1875,
+        "overflowY": "auto",
+        "scrollHeight": 119,
+        "width": 368,
+        "x": 906,
+        "y": 210
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "invoice.py已修改+22-1"
+        },
+        {
+          "height": 30,
+          "label": "test_invoice.py新增+48-0"
+        },
+        {
+          "height": 30,
+          "label": "verification_report.md新增+27-0"
+        }
+      ],
+      "url": "http://localhost:38557/ui/?taskID=tsk_g00VZHNpHv00U1GVjV5r",
+      "workspace": {
+        "clientHeight": 610,
+        "fontSize": "12px",
+        "gridRows": "226.188px 383.812px",
+        "height": 611,
+        "overflowY": "hidden",
+        "scrollHeight": 610,
+        "width": 368,
+        "x": 906,
+        "y": 103
+      }
+    },
+    {
+      "label": "final-zh-single",
+      "intermediateFailure": false,
+      "diff": {
+        "clientHeight": 424,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 423.625,
+        "overflowY": "hidden",
+        "scrollHeight": 424,
+        "width": 368,
+        "x": 906,
+        "y": 290.375
+      },
+      "diffBody": {
+        "clientHeight": 337,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 336.625,
+        "overflowY": "auto",
+        "scrollHeight": 4345,
+        "width": 368,
+        "x": 906,
+        "y": 377.375
+      },
+      "files": {
+        "clientHeight": 165,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 166.1875,
+        "overflowY": "hidden",
+        "scrollHeight": 165,
+        "width": 368,
+        "x": 906,
+        "y": 124.1875
+      },
+      "font": "12px",
+      "list": {
+        "clientHeight": 59,
+        "fontSize": "12px",
+        "gridRows": "none",
+        "height": 59.1875,
+        "overflowY": "auto",
+        "scrollHeight": 59,
+        "width": 368,
+        "x": 906,
+        "y": 230.1875
+      },
+      "rows": [
+        {
+          "height": 30,
+          "label": "goal-quickstart.zh-CN.mddocs新增行数未知"
+        }
+      ],
+      "url": "http://localhost:38557/ui/?sessionID=ses_-zUQGti3Bzzuo3DYqpww&sessionKind=conversation&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-11-01%5Cgoal-runtime-870-after%5Cgoal-runtime-870-after&experience=work",
+      "workspace": {
+        "clientHeight": 590,
+        "fontSize": "12px",
+        "gridRows": "166.188px 423.625px",
+        "height": 590.8125,
+        "overflowY": "hidden",
+        "scrollHeight": 590,
+        "width": 368,
+        "x": 906,
+        "y": 123.1875
+      }
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [审阅阅读空间](2026-11-01-review-content-space.md)：少量文件收敛高度、多文件滚动与真实历史实页。
+
 - [文件审阅与继续操作](2026-11-01-file-review-continuation.md)：真实历史文件审阅和操作链路。
 
 - [输入语义边界根因修复](2026-11-01-contract-domain-repair.md)：解释归档漏验并修通用规则、检查器与真实多任务复验。

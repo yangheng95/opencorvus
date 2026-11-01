@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [审阅阅读空间](records/2026-11/2026-11-01-review-content-space.md)：按真实文件内容分配空间及独立滚动复核。
+
 - [文件审阅与继续操作](records/2026-11/2026-11-01-file-review-continuation.md)：真实交付、未知比较证据与原文件审阅。
 
 - [输入语义边界根因修复](records/2026-11/2026-11-01-contract-domain-repair.md)：合法输入分类、字段语义与不同任务的真实最终消费者复验。

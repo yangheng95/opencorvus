@@ -1,0 +1,182 @@
+{
+  "recordedAt": "2026-11-01T15:16:51.291Z",
+  "singleAgent": true,
+  "userWindowsOperated": false,
+  "uiAutomationTests": false,
+  "manualScreenshots": 16,
+  "intermediateFailureScreenshots": [
+    5
+  ],
+  "scope": "Real persisted Chat and completed Task; no new model tasks",
+  "cases": {
+    "singleSession": "ses_-zUQGti3Bzzuo3DYqpww",
+    "threeFileTask": "tsk_g00VZHNpHv00U1GVjV5r",
+    "actualLastRowSelection": {
+      "file": "verification_report.md",
+      "listClient": 113,
+      "listScroll": 119,
+      "listScrollTop": 6
+    }
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "port": 38555,
+      "uiEntry": "main-BmCoSWeo.js",
+      "originalRows": 249148,
+      "currentRows": 249150,
+      "schema": 9,
+      "tables": 92,
+      "projects": 91,
+      "attachments": 221,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "maximumRequests": 0,
+      "cumulativeModelRequests": 1227,
+      "nativeExit": 0,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCredentialAndCatalogFiles": 2,
+      "reserveMs": 3362140,
+      "sourcePreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "changedTables": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 50997,
+          "after": 50998
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 50939,
+          "after": 50940
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "port": 38556,
+      "uiEntry": "main-Cw9PGb-4.js",
+      "originalRows": 249150,
+      "currentRows": 249152,
+      "schema": 9,
+      "tables": 92,
+      "projects": 91,
+      "attachments": 221,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "maximumRequests": 0,
+      "cumulativeModelRequests": 1227,
+      "nativeExit": 0,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCredentialAndCatalogFiles": 2,
+      "reserveMs": 3147989,
+      "sourcePreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "changedTables": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 50998,
+          "after": 50999
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 50940,
+          "after": 50941
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "port": 38557,
+      "uiEntry": "main-CLBXjIhS.js",
+      "originalRows": 249152,
+      "currentRows": 249154,
+      "schema": 9,
+      "tables": 92,
+      "projects": 91,
+      "attachments": 221,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "maximumRequests": 0,
+      "cumulativeModelRequests": 1227,
+      "nativeExit": 0,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredCredentialAndCatalogFiles": 2,
+      "reserveMs": 2555600,
+      "sourcePreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "changedTables": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 50999,
+          "after": 51000
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 50941,
+          "after": 50942
+        }
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "label": "css-final",
+      "exit": 0,
+      "startedAt": 1793545574014,
+      "closedAt": 1793545580390
+    },
+    {
+      "label": "renderer-after",
+      "exit": 0,
+      "startedAt": 1793545362487,
+      "closedAt": 1793545365237
+    },
+    {
+      "label": "docs-final",
+      "exit": 0,
+      "startedAt": 1793545574044,
+      "closedAt": 1793545583317
+    },
+    {
+      "label": "ui-build-before",
+      "exit": 0,
+      "startedAt": 1793544982963,
+      "closedAt": 1793545058175
+    },
+    {
+      "label": "ui-build-after",
+      "exit": 0,
+      "startedAt": 1793545307750,
+      "closedAt": 1793545371505
+    },
+    {
+      "label": "ui-build-final",
+      "exit": 0,
+      "startedAt": 1793545521956,
+      "closedAt": 1793545604849
+    }
+  ],
+  "limits": [
+    "80+ row virtualized inventory not present in original real history",
+    "Native app host windows and mobile excluded"
+  ]
+}

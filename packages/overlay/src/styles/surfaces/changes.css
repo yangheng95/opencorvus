@@ -119,13 +119,17 @@
 @container file-review (width < 680px) {
   .changes-review-workspace {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: minmax(0, 2fr) minmax(0, 3fr);
+    grid-template-rows: fit-content(40%) minmax(0, 1fr);
   }
 
   .changes-file-pane {
     grid-row: 1;
     border-left: 0;
     border-bottom: var(--oc-border-width) solid var(--divider-soft);
+  }
+
+  .file-changes-view .changes-file-pane .changes-list {
+    flex-basis: auto;
   }
 
   .changes-diff-pane {
