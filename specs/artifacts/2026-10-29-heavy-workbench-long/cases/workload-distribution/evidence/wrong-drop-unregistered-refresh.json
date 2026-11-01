@@ -1,0 +1,13 @@
+{
+  "input": "Raw!E6 +1 project hour",
+  "before": 137,
+  "after": 138,
+  "delta": 1,
+  "department_delta": 1,
+  "project_delta": 1,
+  "capacity_change": {
+    "working_days": 20,
+    "person_nominal_h": 160,
+    "department_nominal_h": 640
+  }
+}

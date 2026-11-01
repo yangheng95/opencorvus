@@ -1,0 +1,1024 @@
+{
+  "numerical_tables": [
+    {
+      "table": "people",
+      "contract": "NUMERICAL_OR_POPULATION_MISMATCH",
+      "rows": 24,
+      "differences": [
+        {
+          "id": "Ellen Zhu",
+          "field": "project_h",
+          "expected": 145.0,
+          "actual": 0,
+          "contract": "VALUE_MISMATCH"
+        },
+        {
+          "id": "Ellen Zhu",
+          "field": "admin_h",
+          "expected": 10.0,
+          "actual": 0,
+          "contract": "VALUE_MISMATCH"
+        },
+        {
+          "id": "Ellen Zhu",
+          "field": "total_h",
+          "expected": 155.0,
+          "actual": 0,
+          "contract": "VALUE_MISMATCH"
+        }
+      ],
+      "extra_ids": [],
+      "duplicate_ids": [],
+      "numeric_errors": [
+        {
+          "id": "Alice Kim",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Alice Kim",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Alice Kim",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Alice Kim",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Alice Kim",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Alice Kim",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Brian Jones",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Brian Jones",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Brian Jones",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Brian Jones",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Brian Jones",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Brian Jones",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Carlos Rivera",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Carlos Rivera",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Carlos Rivera",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Carlos Rivera",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Carlos Rivera",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Carlos Rivera",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Dana Singh",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Dana Singh",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Dana Singh",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Dana Singh",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Dana Singh",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Dana Singh",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Farah Patel",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Farah Patel",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Farah Patel",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Farah Patel",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Farah Patel",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Farah Patel",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "George Lin",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "George Lin",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "George Lin",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "George Lin",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "George Lin",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "George Lin",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Hannah Brooks",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Hannah Brooks",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Hannah Brooks",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Hannah Brooks",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Hannah Brooks",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Hannah Brooks",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Isaac Turner",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Isaac Turner",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Isaac Turner",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Isaac Turner",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Isaac Turner",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Isaac Turner",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Jasmine Park",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Jasmine Park",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Jasmine Park",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Jasmine Park",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Jasmine Park",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Jasmine Park",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Kevin Nguyen",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Kevin Nguyen",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Kevin Nguyen",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Kevin Nguyen",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Kevin Nguyen",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Kevin Nguyen",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Leah Robinson",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Leah Robinson",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Leah Robinson",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Leah Robinson",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Leah Robinson",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Leah Robinson",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Marcus Chen",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Marcus Chen",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Marcus Chen",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Marcus Chen",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Marcus Chen",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Marcus Chen",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Nadia Green",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Nadia Green",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Nadia Green",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Nadia Green",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Nadia Green",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Nadia Green",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Omar Wallace",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Omar Wallace",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Omar Wallace",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Omar Wallace",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Omar Wallace",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Omar Wallace",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Priya Desai",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Priya Desai",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Priya Desai",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Priya Desai",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Priya Desai",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Priya Desai",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Quentin Hayes",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Quentin Hayes",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Quentin Hayes",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Quentin Hayes",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Quentin Hayes",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Quentin Hayes",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Rosa Delgado",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Rosa Delgado",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Rosa Delgado",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Rosa Delgado",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Rosa Delgado",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Rosa Delgado",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Trevor Shaw",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Trevor Shaw",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Trevor Shaw",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Trevor Shaw",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Trevor Shaw",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Trevor Shaw",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Victor Adams",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Victor Adams",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Victor Adams",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Victor Adams",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Victor Adams",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Victor Adams",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Will Smith",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Will Smith",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Will Smith",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Will Smith",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Will Smith",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Will Smith",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Xavier Cross",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Xavier Cross",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Xavier Cross",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Xavier Cross",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Xavier Cross",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Xavier Cross",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Yolanda Brinks",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Yolanda Brinks",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Yolanda Brinks",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Yolanda Brinks",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Yolanda Brinks",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Yolanda Brinks",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Zach Foster",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Zach Foster",
+          "field": "project_capacity_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Zach Foster",
+          "field": "project_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Zach Foster",
+          "field": "admin_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Zach Foster",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Zach Foster",
+          "field": "allocation",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Ellen Zhu",
+          "field": "project_h",
+          "absolute_error": 145.0
+        },
+        {
+          "id": "Ellen Zhu",
+          "field": "admin_h",
+          "absolute_error": 10.0
+        },
+        {
+          "id": "Ellen Zhu",
+          "field": "total_h",
+          "absolute_error": 155.0
+        }
+      ]
+    },
+    {
+      "table": "departments",
+      "contract": "MATCH",
+      "rows": 5,
+      "differences": [],
+      "extra_ids": [],
+      "duplicate_ids": [],
+      "numeric_errors": [
+        {
+          "id": "PMO",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "PMO",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "PMO",
+          "field": "utilization",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "IT",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "IT",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "IT",
+          "field": "utilization",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Professional Education",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Professional Education",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Professional Education",
+          "field": "utilization",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Research",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Research",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Research",
+          "field": "utilization",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Communications",
+          "field": "nominal_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Communications",
+          "field": "total_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Communications",
+          "field": "utilization",
+          "absolute_error": 0.0
+        }
+      ]
+    },
+    {
+      "table": "projects",
+      "contract": "NUMERICAL_OR_POPULATION_MISMATCH",
+      "rows": 9,
+      "differences": [
+        {
+          "id": "Website Redesign",
+          "field": "actual_h",
+          "expected": 279.0,
+          "actual": 226,
+          "contract": "VALUE_MISMATCH"
+        },
+        {
+          "id": "Website Redesign",
+          "field": "excess_h",
+          "expected": 79.0,
+          "actual": 26,
+          "contract": "VALUE_MISMATCH"
+        },
+        {
+          "id": "IT Implementation",
+          "field": "actual_h",
+          "expected": 432.0,
+          "actual": 384,
+          "contract": "VALUE_MISMATCH"
+        },
+        {
+          "id": "IT Implementation",
+          "field": "excess_h",
+          "expected": 57.0,
+          "actual": 9,
+          "contract": "VALUE_MISMATCH"
+        },
+        {
+          "id": "Customer Onboarding Platform",
+          "field": "actual_h",
+          "expected": 326.0,
+          "actual": 282,
+          "contract": "VALUE_MISMATCH"
+        },
+        {
+          "id": "Customer Onboarding Platform",
+          "field": "excess_h",
+          "expected": 26.0,
+          "actual": -18,
+          "contract": "VALUE_MISMATCH"
+        },
+        {
+          "id": "Customer Onboarding Platform",
+          "field": "status",
+          "expected": "over",
+          "actual": "within",
+          "contract": "VALUE_MISMATCH"
+        }
+      ],
+      "extra_ids": [],
+      "duplicate_ids": [],
+      "numeric_errors": [
+        {
+          "id": "Website Redesign",
+          "field": "budget_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Website Redesign",
+          "field": "actual_h",
+          "absolute_error": 53.0
+        },
+        {
+          "id": "Website Redesign",
+          "field": "excess_h",
+          "absolute_error": 53.0
+        },
+        {
+          "id": "App Center Retirement",
+          "field": "budget_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "App Center Retirement",
+          "field": "actual_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "App Center Retirement",
+          "field": "excess_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "IT Implementation",
+          "field": "budget_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "IT Implementation",
+          "field": "actual_h",
+          "absolute_error": 48.0
+        },
+        {
+          "id": "IT Implementation",
+          "field": "excess_h",
+          "absolute_error": 48.0
+        },
+        {
+          "id": "Customer Onboarding Platform",
+          "field": "budget_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Customer Onboarding Platform",
+          "field": "actual_h",
+          "absolute_error": 44.0
+        },
+        {
+          "id": "Customer Onboarding Platform",
+          "field": "excess_h",
+          "absolute_error": 44.0
+        },
+        {
+          "id": "Wrike Transition Initiative",
+          "field": "budget_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Wrike Transition Initiative",
+          "field": "actual_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Wrike Transition Initiative",
+          "field": "excess_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Adult Outpatient Pavilion Construction",
+          "field": "budget_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Adult Outpatient Pavilion Construction",
+          "field": "actual_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Adult Outpatient Pavilion Construction",
+          "field": "excess_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Annual Plan",
+          "field": "budget_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Annual Plan",
+          "field": "actual_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Annual Plan",
+          "field": "excess_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Pen Test Remediations",
+          "field": "budget_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Pen Test Remediations",
+          "field": "actual_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Pen Test Remediations",
+          "field": "excess_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Planned Giving Campaign",
+          "field": "budget_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Planned Giving Campaign",
+          "field": "actual_h",
+          "absolute_error": 0.0
+        },
+        {
+          "id": "Planned Giving Campaign",
+          "field": "excess_h",
+          "absolute_error": 0.0
+        }
+      ]
+    }
+  ],
+  "numerically_matches": false,
+  "score": null,
+  "scope": "Actual saved XLSX tables only. Does not certify report, refresh, visuals, professional judgment or hours."
+}

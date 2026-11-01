@@ -1,0 +1,34 @@
+[
+  {
+    "name": "reference",
+    "argv": [
+      "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\workload-distribution\\check_workbook.py",
+      "--source",
+      "D:\\opencorvus-benchmark-runs\\gdpval-workload-task-20261101\\public",
+      "--workbook",
+      "D:\\opencorvus-benchmark-runs\\gdpval-workload-task-20261101\\reference\\tracker.xlsx",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\gdpval-workload-task-20261101\\reference\\check.json"
+    ],
+    "started": "2026-11-01T01:13:52.826280+00:00",
+    "ended": "2026-11-01T01:13:53.589051+00:00",
+    "native_exit": 0
+  },
+  {
+    "name": "wrong-drop-unregistered",
+    "argv": [
+      "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+      "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\workload-distribution\\check_workbook.py",
+      "--source",
+      "D:\\opencorvus-benchmark-runs\\gdpval-workload-task-20261101\\public",
+      "--workbook",
+      "D:\\opencorvus-benchmark-runs\\gdpval-workload-task-20261101\\wrong-drop-unregistered\\tracker.xlsx",
+      "--output",
+      "D:\\opencorvus-benchmark-runs\\gdpval-workload-task-20261101\\wrong-drop-unregistered\\check.json"
+    ],
+    "started": "2026-11-01T01:13:53.589051+00:00",
+    "ended": "2026-11-01T01:13:54.311154+00:00",
+    "native_exit": 4
+  }
+]

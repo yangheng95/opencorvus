@@ -1,0 +1,18 @@
+{
+  "observed_at": "2026-11-01T01:15:32.377005+00:00",
+  "source": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-10-29-heavy-workbench-long\\cases\\workload-distribution\\build_reference.mjs",
+  "executed_copy": "D:\\opencorvus-benchmark-runs\\gdpval-workload-task-20261101\\build_reference.mjs",
+  "source_bytes_equal": true,
+  "python": "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "openpyxl": "3.1.5",
+  "builder_tool_exec_session": 93125,
+  "builder_controller_native_exit": 0,
+  "individual_builder_native_exit": "not separately captured; completed output and actual XLSX/refresh verified",
+  "builder_wall_seconds": null,
+  "reference": "reference/tracker.xlsx",
+  "wrong_programme": "drop-unregistered",
+  "checker_receipt": "actual-checker-commands.json",
+  "no_model_requests": true,
+  "heavy_qualification": false,
+  "independent_review": null
+}

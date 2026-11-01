@@ -1,0 +1,20 @@
+{
+  "task_id": "ce864f41-8584-49ba-b24f-9c9104b47bf0",
+  "revision": "11e7900cdcac61bc4daf59e65feb238acda98fbf",
+  "all_fields_equal": true,
+  "fields": [
+    "task_id",
+    "sector",
+    "occupation",
+    "prompt",
+    "reference_files",
+    "reference_file_urls",
+    "reference_file_hf_uris",
+    "deliverable_files",
+    "deliverable_file_urls",
+    "deliverable_file_hf_uris",
+    "rubric_pretty",
+    "rubric_json"
+  ],
+  "decoder": "pyarrow 26.0.0"
+}

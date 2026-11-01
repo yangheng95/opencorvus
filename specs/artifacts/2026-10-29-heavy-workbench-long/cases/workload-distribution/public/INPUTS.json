@@ -1,0 +1,31 @@
+{
+  "task_id": "ce864f41-8584-49ba-b24f-9c9104b47bf0",
+  "revision": "11e7900cdcac61bc4daf59e65feb238acda98fbf",
+  "files": [
+    {
+      "path": "public/TASK.original.txt",
+      "bytes": 2043,
+      "sha256": "0c89c326b54c83de9f9365aaf654737c8a968e0d9d0c24dde2c324584f5bcb0a",
+      "supply": "Captured original prompt supplied as a local file. No full dataset-row response is supplied to candidates."
+    },
+    {
+      "path": "public/WDTStakeholderRegistry.xlsx",
+      "url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/f27321058df020d263e13f2df3405742/WDTStakeholderRegistry.xlsx",
+      "bytes": 6512,
+      "sha256": "f27321058df020d263e13f2df3405742b443f4c0d00c0d720122ab2e97e45012"
+    },
+    {
+      "path": "public/WDTTimekeepingExport_1.xlsx",
+      "url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/2d3c529d2f8ece6a2d0834de35ebfc69/WDTTimekeepingExport_1.xlsx",
+      "bytes": 11172,
+      "sha256": "2d3c529d2f8ece6a2d0834de35ebfc69a7365bef57b7b79ab8786b30a66fffd2"
+    },
+    {
+      "path": "public/MarchBudget.xlsx",
+      "url": "https://huggingface.co/datasets/openai/gdpval/resolve/11e7900cdcac61bc4daf59e65feb238acda98fbf/reference_files/d1035b4983f75c6e25420e720565a1f9/MarchBudget.xlsx",
+      "bytes": 10923,
+      "sha256": "d1035b4983f75c6e25420e720565a1f9ab54f72ff67a38b755d90598cae993b9"
+    }
+  ],
+  "candidate_scope": "Only original prompt, original three inputs, public clarified TASK and declared runtime. No evaluator/expert material."
+}
