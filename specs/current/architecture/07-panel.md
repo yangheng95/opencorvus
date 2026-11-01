@@ -797,7 +797,8 @@ Loaded image MIME/base64 supplies the existing image viewer; mutable file paths
 do not enter the immutable attachment Blob cache. Loading, failure and retry
 remain in the current language. Other Markdown consumers and external/rooted
 image URLs retain their existing resource semantics.
-Source is the default for each newly selected resource. The existing editor stays
+New unranged Markdown identities default to Preview as defined above; other
+text resources default to Source. The existing editor stays
 mounted while hidden, retaining its selection and undo history; Preview uses the
 same asynchronous Markdown renderer as Document artifacts. Unsaved preview text
 is labelled and the original save/download/leave-draft authority remains in force.
@@ -2495,6 +2496,16 @@ the medium spacing tier. That scoped token controls adjacent message margins
 and quotation-to-tool spacing; the message border and padding still preserve
 the visible boundary. Source groups keep their own count, label, margin and
 chronological placement. Main and Side Chat retain their existing gap defaults.
+
+Tool presentation uses the single exact-ID name/icon registry in `utils/tool`.
+Compact operations, inline chips, raw Tool card titles, session dialogs and
+derived member activity use localized action names; authored titles and unknown
+extension IDs retain their identity. The raw Tool ID remains available on the
+name and in expanded input headings. Original arguments, results, status and
+failure facts continue to use the canonical Tool record. When an execution run
+contains multiple operations, its complete Sources group occupies a separate
+row: the latest operation must not appear paired with the first Source. Single
+operations retain the compact layout and all Sources retain their chronology.
 
 Both the main Conversation and selected Agent transcript use the same explicit
 content-change follow controller. A canonical transcript revision and the

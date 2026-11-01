@@ -1,0 +1,114 @@
+{
+  "at": "2026-11-01T17:23:54.355Z",
+  "singleAgent": true,
+  "uiAcceptance": "Manual interaction and visual review of real dev CLI /ui; no UI automated tests",
+  "phases": {
+    "before": {
+      "phase": "before",
+      "sessionID": "ses_-zUQFwhQIzzDtCnSCPjY",
+      "provider": "openai",
+      "model": "gpt-6.1-sol",
+      "requests": 7,
+      "actualSourceURLs": [
+        "https://docs.python.org/3/library/csv.html",
+        "https://docs.python.org/3/library/json.html"
+      ],
+      "actualSourceOwners": 2,
+      "documentCharacters": 405,
+      "documentRows": 2,
+      "readback": "completed",
+      "selection": "idle",
+      "schema": 9,
+      "tables": 92,
+      "protectedRows": 251392,
+      "resultRows": 253318,
+      "protectedProjects": 95,
+      "protectedAttachments": 223,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0,
+      "uiEntry": "main-Dj0-pzPZ.js",
+      "nativeExit": 0,
+      "shutdownHTTP": 200,
+      "credentialAndCatalogCopiesRetired": true,
+      "unusedRequestAllowanceRetired": 9,
+      "sourceCredentialAndCatalogUnchanged": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 3644968
+    },
+    "after": {
+      "phase": "after",
+      "sessionID": "ses_-zUQFsbQTzz6DkAoBl1a",
+      "provider": "openai",
+      "model": "gpt-6.1-sol",
+      "requests": 7,
+      "actualSourceURLs": [
+        "https://docs.python.org/3/library/csv.html",
+        "https://docs.python.org/3/library/json.html"
+      ],
+      "actualSourceOwners": 2,
+      "documentCharacters": 412,
+      "documentRows": 2,
+      "readback": "completed",
+      "selection": "idle",
+      "schema": 9,
+      "tables": 92,
+      "protectedRows": 253318,
+      "resultRows": 255244,
+      "protectedProjects": 96,
+      "protectedAttachments": 225,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0,
+      "uiEntry": "main-CctzHIFd.js",
+      "nativeExit": 0,
+      "shutdownHTTP": 200,
+      "credentialAndCatalogCopiesRetired": true,
+      "unusedRequestAllowanceRetired": 9,
+      "sourceCredentialAndCatalogUnchanged": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 3039795
+    }
+  },
+  "checks": {
+    "ui-build-after": {
+      "exit": 0,
+      "startedAt": 1793553254916,
+      "closedAt": 1793553325326
+    },
+    "display-checks": {
+      "exit": 0,
+      "startedAt": 1793553265524,
+      "closedAt": 1793553276747
+    },
+    "overlay-typecheck": {
+      "exit": 0,
+      "startedAt": 1793553578203,
+      "closedAt": 1793553592909
+    }
+  },
+  "manual": {
+    "sourceCopy": "https://docs.python.org/3/library/json.html",
+    "groupCopy": [
+      "https://docs.python.org/3/library/csv.html",
+      "https://docs.python.org/3/library/json.html"
+    ],
+    "sourceOpen": {
+      "destination": "https://docs.python.org/3/library/csv.html",
+      "title": "csv — CSV file reading and writing — Python 3.15.2 documentation",
+      "presentation": "Separate temporary tab in hidden validation browser; closed after verification"
+    },
+    "fileOpen": "reference-notes.md opened in the existing right workbench, Preview selected",
+    "history": "Existing review-handoff-793 base-developer transcript read without new model requests; action names, original command exit and error facts retained"
+  },
+  "knownRemaining": [
+    "The narrow Markdown preview table with long URL cells is difficult to read; screenshot 09 preserves the issue for the next iteration.",
+    "Original producer-authored successful Tool output and unknown extension identifiers retain their actual text."
+  ]
+}

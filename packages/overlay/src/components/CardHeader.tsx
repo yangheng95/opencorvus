@@ -1,5 +1,5 @@
 import { Show } from "solid-js"
-import { displayToolIconName } from "../utils/tool"
+import { displayToolIconName, displayToolLabel } from "../utils/tool"
 import {
   collapsedActivityPreviewText,
   collectLatestActivityText,
@@ -52,6 +52,7 @@ export function CardHeader(props: {
   onAgentCancel?: (sessionID: string) => Promise<void>
 }) {
   const iconName = () => leadingIconName(props.node)
+  const rawToolTitle = () => props.node.kind === "tool" && props.node.toolPart?.tool === props.node.title
   const collapsedActive = () =>
     !props.expanded && props.node.status !== "running" && isStageCard(props.node) && props.node.kind !== "tool"
   const collapsedPreview = () =>
@@ -76,7 +77,9 @@ export function CardHeader(props: {
       </Show>
       <span class="card__main">
         <span class="card__title-row">
-          <span class="card__title">{cardTitleText(props.node.title)}</span>
+          <span class="card__title" title={rawToolTitle() ? props.node.title : undefined}>
+            {rawToolTitle() ? displayToolLabel(props.node.title) : cardTitleText(props.node.title)}
+          </span>
           <Show when={props.node.subtitle}>
             <span class="card__subtitle" title={props.node.kind === "tool" ? undefined : props.node.subtitle}>
               {props.node.subtitle}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [执行与来源阅读](2026-11-02-execution-reading/README.md)：真实流式执行、网页/文件来源和成果截图。
+
 - [对话管理与真实继续执行](2026-11-01-session-management-live/README.md)：真实生命周期原图与模型交付证据。
 
 - [界面可理解性](2026-11-01-ui-comprehension/README.md)：真实中文与英文完整路径原图。

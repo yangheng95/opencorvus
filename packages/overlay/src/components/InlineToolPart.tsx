@@ -432,7 +432,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
           <span class="tool-icon" aria-hidden="true">
             <Icon name={icon()} />
           </span>
-          <span class="tool-name">{toolName()}</span>
+          <span class="tool-name" title={toolName()}>{display().label}</span>
           <Show when={detail()}>
             <span class="tool-detail" title={detail()}>
               {detail()}
@@ -463,7 +463,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
             <ToolPayload
               stateKey={payloadStateKey("input")}
               messageID={part().messageID}
-              label={t("tool.input")}
+              label={t("tool.input_for", { name: toolName() })}
               value={inputPayload()}
               live={status() === "pending"}
               collapsed

@@ -2634,6 +2634,13 @@ button.msg-source-chip .msg-source-chip__filename {
   flex-basis: 100%;
 }
 
+/* A run's latest operation cannot identify its first source. Keep aggregate
+   operations and their complete source group on separate rows. */
+.msg-execution-overview:has(> .msg-work-details[data-multiple-tools="true"]) > .msg-work-details,
+.msg-execution-overview:has(> .msg-work-details[data-multiple-tools="true"]) > .msg-sources {
+  flex-basis: 100%;
+}
+
 .msg-work-details__count {
   flex: none;
   padding-inline-end: var(--ui-gap-sm);

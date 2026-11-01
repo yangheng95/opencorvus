@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [执行与来源阅读](records/2026-11/2026-11-02-execution-reading.md)：真实操作、网页来源与文件成果的理解链路。
+
 - [对话管理与真实继续执行](records/2026-11/2026-11-01-session-management-live.md)：改名、归档只读、恢复及真实模型跟进。
 
 - [界面可理解性](records/2026-11/2026-11-01-ui-comprehension.md)：从导航、开始工作到阅读与归档的完整路径。

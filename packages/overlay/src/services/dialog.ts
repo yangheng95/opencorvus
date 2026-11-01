@@ -30,7 +30,7 @@ function renderSessionToolChip(part: any): string {
   const detail = display.detail ? `<span class="tool-detail">${escapeHtml(display.detail)}</span>` : ""
   return `<div class="msg-tool"${statusAttr}>
     <span class="tool-icon" aria-hidden="true">${iconHtml(display.icon)}</span>
-    <span class="tool-name">${escapeHtml(display.label)}</span>
+    <span class="tool-name" title="${escapeHtml(display.name)}">${escapeHtml(display.label)}</span>
     ${detail}
   </div>`
 }

@@ -213,7 +213,7 @@ function toolIdentityDetail(tool: ToolDisplayModel): string {
   // Incomplete streamed arguments belong to the expanded payload, not the
   // invocation identity. The existing pending status describes this phase.
   if (tool.status === "pending") return ""
-  return tool.detail.toLowerCase() === tool.label.toLowerCase() ? "" : tool.detail
+  return tool.detail.toLowerCase() === tool.name.toLowerCase() ? "" : tool.detail
 }
 
 function toolIdentitySummary(tool: ToolDisplayModel): string {
@@ -229,7 +229,7 @@ function ExecutionToolIdentity(props: { tool: ToolDisplayModel; commandCodeInSta
       <span class="msg-work-details__tool-icon" aria-hidden="true">
         <Icon name={props.tool.icon} size="compact" />
       </span>
-      <span class="msg-transcript-disclosure__label msg-work-details__tool-name">{props.tool.label}</span>
+      <span class="msg-transcript-disclosure__label msg-work-details__tool-name" title={props.tool.name}>{props.tool.label}</span>
       <Show when={detail()}>
         <span class="msg-work-details__tool-detail">{detail()}</span>
       </Show>
@@ -271,6 +271,7 @@ function ExecutionEventRun(props: PartCollectionProps) {
     <section
       class="msg-work-details"
       data-expanded={expanded() ? "true" : "false"}
+      data-multiple-tools={tools().length > 1 ? "true" : undefined}
       data-active={active() ? "true" : undefined}
     >
       <Button

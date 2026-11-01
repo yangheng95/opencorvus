@@ -356,24 +356,47 @@ export function shortRelativePath(p: string, base = ""): string {
   return rel || shortPath(p)
 }
 
-// ── Tool icon ──
+// Display names and icons share one exact-ID registry. Protocol names remain
+// available in disclosures and continue to drive argument/result parsing.
+const TOOL_PRESENTATIONS: { names: string[]; icon: IconName; label: string }[] = [
+  { names: ["read", "readfile"], icon: "file-document", label: "tool.action.read" },
+  { names: ["edit", "editfile", "applypatch"], icon: "edit", label: "tool.action.edit" },
+  { names: ["write", "writefile"], icon: "file-document", label: "tool.action.write" },
+  { names: ["bash", "shellcommand", "runcommand"], icon: "terminal", label: "tool.action.command" },
+  { names: ["grep", "searchcode"], icon: "search", label: "tool.action.search_code" },
+  { names: ["glob", "findfiles"], icon: "folder-open", label: "tool.action.find_files" },
+  { names: ["list"], icon: "folder-open", label: "tool.action.list" },
+  { names: ["webfetch"], icon: "file-document", label: "tool.action.webfetch" },
+  { names: ["websearch"], icon: "search", label: "tool.action.websearch" },
+  { names: ["externalcodesearch"], icon: "search", label: "tool.action.external_code_search" },
+  { names: ["agent", "spawnagent", "delegateagent"], icon: "avatar-assistant", label: "tool.action.delegate" },
+  { names: ["readagentmessage"], icon: "avatar-assistant", label: "tool.action.read_agent_message" },
+  { names: ["todo", "todoupdate", "updateplan"], icon: "tasks", label: "tool.action.todo" },
+  { names: ["question"], icon: "config-tool", label: "tool.action.question" },
+  { names: ["skill", "missionskill"], icon: "config-tool", label: "tool.action.skill" },
+  { names: ["memory"], icon: "file-document", label: "tool.action.memory" },
+  { names: ["schedule"], icon: "tasks", label: "tool.action.schedule" },
+  { names: ["planner"], icon: "tasks", label: "tool.action.planner" },
+  { names: ["wait"], icon: "config-tool", label: "tool.action.wait" },
+  { names: ["continuousgoalcreate"], icon: "tasks", label: "tool.action.goal_create" },
+  { names: ["continuousgoalget"], icon: "tasks", label: "tool.action.goal_get" },
+  { names: ["continuousgoalupdate"], icon: "tasks", label: "tool.action.goal_update" },
+]
+const toolPresentations = new Map(TOOL_PRESENTATIONS.flatMap((entry) => entry.names.map((name) => [name, entry] as const)))
 
 export function displayToolIconName(name: string): IconName {
-  const n = toolNameKey(name)
-  if (n === "read" || n === "readfile") return "file-document"
-  if (n === "edit" || n === "editfile" || n === "applypatch") return "edit"
-  if (n === "write" || n === "writefile") return "file-document"
-  if (n === "bash" || n === "shellcommand" || n === "runcommand") return "terminal"
-  if (n === "grep" || n === "searchcode") return "search"
-  if (n === "glob" || n === "findfiles") return "folder-open"
-  if (n === "agent" || n === "spawnagent") return "avatar-assistant"
-  if (n === "todo" || n === "todoupdate" || n === "updateplan") return "tasks"
-  return "config-tool"
+  return toolPresentations.get(toolNameKey(name))?.icon ?? "config-tool"
+}
+
+export function displayToolLabel(name: string): string {
+  const presentation = toolPresentations.get(toolNameKey(name))
+  return presentation ? t(presentation.label) : name
 }
 
 export type ToolDisplayStatus = "pending" | "running" | "completed" | "error"
 
 export interface ToolDisplayModel {
+  name: string
   icon: IconName
   label: string
   detail: string
@@ -518,14 +541,15 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
 }
 
 export function describeToolCall(name: string, input: unknown, state: unknown, base = ""): ToolDisplayModel {
-  const label = typeof name === "string" && name.trim() ? name.trim() : "tool"
+  const toolName = typeof name === "string" && name.trim() ? name.trim() : "tool"
   const status = normalizeToolStatus(record(state) ? (state as any).status : undefined)
   const cancelled = status === "error" && toolFailurePresentation(record(state) ? (state as any).failure : undefined).cancelled
-  const commandExitCode = completedCommandExitCode(label, state)
+  const commandExitCode = completedCommandExitCode(toolName, state)
   return {
-    icon: displayToolIconName(label),
-    label,
-    detail: displayToolDetail(label, input, state, base),
+    name: toolName,
+    icon: displayToolIconName(toolName),
+    label: displayToolLabel(toolName),
+    detail: displayToolDetail(toolName, input, state, base),
     status,
     cancelled,
     statusLabel: commandExitCode !== undefined
