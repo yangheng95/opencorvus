@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [尺寸观察通知因果](records/2026-11/2026-11-01-resize-delivery-causality.md)：会话切换的真实回调记录及正式构建复验。
+
 - [Goal 操作搜索](records/2026-11/2026-11-01-goal-command-discovery.md)：首页、预算/暂停检索与表单实页体验。
 
 - [Side Chat 连续操作](records/2026-11/2026-11-01-side-chat-request-ownership.md)：真实双击、作者版本与创建请求归属。

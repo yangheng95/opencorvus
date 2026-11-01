@@ -1,0 +1,639 @@
+{
+  "at": "2026-11-01T12:21:37.513Z",
+  "coverage": "Original native callbacks within 20ms before each recorded browser event; original unabridged bounded histories retained privately. Read-only attributes and browser-provided contentRect; no forced layout measurements or extra UI events.",
+  "events": [
+    {
+      "publication": "before-v2",
+      "event": 1,
+      "flushedAt": "2026-11-01T12:07:42.207Z",
+      "browserAt": 4034,
+      "notice": "ResizeObserver loop completed with undelivered notifications.",
+      "callbackRecords": [
+        {
+          "at": 4028.0999999940395,
+          "observer": 11,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 11,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px; visibility: hidden;",
+              "width": 760,
+              "height": 400
+            },
+            {
+              "target": 12,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 320px; visibility: hidden;",
+              "width": 760,
+              "height": 163.515625
+            }
+          ]
+        },
+        {
+          "at": 4028.9000000059605,
+          "observer": 11,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 11,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;"
+            },
+            {
+              "target": 12,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 400px;"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "publication": "before-v2",
+      "event": 2,
+      "flushedAt": "2026-11-01T12:07:42.207Z",
+      "browserAt": 4149.0999999940395,
+      "notice": "ResizeObserver loop completed with undelivered notifications.",
+      "callbackRecords": [
+        {
+          "at": 4144.5999999940395,
+          "observer": 11,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 15,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 1523.52px; visibility: hidden;",
+              "width": 760,
+              "height": 239.515625
+            }
+          ]
+        },
+        {
+          "at": 4147.70000000298,
+          "observer": 11,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 15,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 1523.52px;"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "publication": "before-v2",
+      "event": 3,
+      "flushedAt": "2026-11-01T12:07:42.207Z",
+      "browserAt": 4296.5999999940395,
+      "notice": "ResizeObserver loop completed with undelivered notifications.",
+      "callbackRecords": [
+        {
+          "at": 4294.70000000298,
+          "observer": 11,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 13,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 1763.03px;",
+              "width": 760,
+              "height": 284.609375
+            },
+            {
+              "target": 14,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 1889.03px;",
+              "width": 760,
+              "height": 309.03125
+            }
+          ]
+        },
+        {
+          "at": 4295,
+          "observer": 11,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 13,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 1763.03px;"
+            },
+            {
+              "target": 14,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 2047.64px;"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "publication": "before-v2",
+      "event": 4,
+      "flushedAt": "2026-11-01T12:07:42.207Z",
+      "browserAt": 4335.70000000298,
+      "notice": "ResizeObserver loop completed with undelivered notifications.",
+      "callbackRecords": [
+        {
+          "at": 4333.29999999702,
+          "observer": 4,
+          "source": "packages/overlay/src/components/Conversation.tsx:363",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 10,
+              "tag": "DIV",
+              "id": "",
+              "class": "conversation-virtual-window",
+              "style": "contain: size style; overflow-anchor: none; flex: 0 0 auto; position: relative; width: 100%; height: 2356.67px; pointer-events: inherit;",
+              "width": 760,
+              "height": 2356.671875
+            }
+          ]
+        },
+        {
+          "at": 4333.4000000059605,
+          "observer": 4,
+          "source": "packages/overlay/src/components/Conversation.tsx:363",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 10,
+              "tag": "DIV",
+              "id": "",
+              "class": "conversation-virtual-window",
+              "style": "contain: size style; overflow-anchor: none; flex: 0 0 auto; position: relative; width: 100%; height: 2356.67px; pointer-events: inherit;"
+            }
+          ]
+        },
+        {
+          "at": 4333.4000000059605,
+          "observer": 11,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 14,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 2047.64px;",
+              "width": 760,
+              "height": 691.28125
+            },
+            {
+              "target": 15,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 1523.52px;",
+              "width": 760,
+              "height": 274.546875
+            }
+          ]
+        },
+        {
+          "at": 4333.79999999702,
+          "observer": 11,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 14,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 2082.67px;"
+            },
+            {
+              "target": 15,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 1523.52px;"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "publication": "before-v2",
+      "event": 5,
+      "flushedAt": "2026-11-01T12:10:38.237Z",
+      "browserAt": 180078.09999999404,
+      "notice": "ResizeObserver loop completed with undelivered notifications.",
+      "callbackRecords": [
+        {
+          "at": 180067.29999999702,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 2,
+              "tag": "DIV",
+              "id": "chatScroll",
+              "class": "chat-scroll session-content",
+              "style": "--conversation-composer-block-size: 156px;"
+            }
+          ]
+        },
+        {
+          "at": 180075.79999999702,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px; visibility: hidden;",
+              "width": 760,
+              "height": 160
+            },
+            {
+              "target": 20,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 320px; visibility: hidden;",
+              "width": 760,
+              "height": 177.078125
+            }
+          ]
+        },
+        {
+          "at": 180075.90000000596,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;"
+            },
+            {
+              "target": 20,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 160px;"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "publication": "before-v2",
+      "event": 6,
+      "flushedAt": "2026-11-01T12:10:38.237Z",
+      "browserAt": 180258,
+      "notice": "ResizeObserver loop completed with undelivered notifications.",
+      "callbackRecords": [
+        {
+          "at": 180256.70000000298,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;",
+              "width": 760,
+              "height": 197.03125
+            },
+            {
+              "target": 20,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 160px;",
+              "width": 760,
+              "height": 188.59375
+            }
+          ]
+        },
+        {
+          "at": 180256.90000000596,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;"
+            },
+            {
+              "target": 20,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 197.031px;"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "publication": "before-v2",
+      "event": 7,
+      "flushedAt": "2026-11-01T12:11:09.093Z",
+      "browserAt": 210933.5,
+      "notice": "ResizeObserver loop completed with undelivered notifications.",
+      "callbackRecords": [
+        {
+          "at": 210932.40000000596,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;",
+              "width": 760,
+              "height": 272.546875
+            }
+          ]
+        },
+        {
+          "at": 210932.59999999404,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "publication": "before-v2",
+      "event": 8,
+      "flushedAt": "2026-11-01T12:11:09.093Z",
+      "browserAt": 210953.20000000298,
+      "notice": "ResizeObserver loop completed with undelivered notifications.",
+      "callbackRecords": [
+        {
+          "at": 210940.29999999702,
+          "observer": 4,
+          "source": "packages/overlay/src/components/Conversation.tsx:363",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 18,
+              "tag": "DIV",
+              "id": "",
+              "class": "conversation-virtual-window",
+              "style": "contain: size style; overflow-anchor: none; flex: 0 0 auto; position: relative; width: 100%; height: 461.141px; pointer-events: inherit;",
+              "width": 760,
+              "height": 461.140625
+            }
+          ]
+        },
+        {
+          "at": 210940.29999999702,
+          "observer": 4,
+          "source": "packages/overlay/src/components/Conversation.tsx:363",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 18,
+              "tag": "DIV",
+              "id": "",
+              "class": "conversation-virtual-window",
+              "style": "contain: size style; overflow-anchor: none; flex: 0 0 auto; position: relative; width: 100%; height: 461.141px; pointer-events: inherit;"
+            }
+          ]
+        },
+        {
+          "at": 210951.70000000298,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;",
+              "width": 760,
+              "height": 298.703125
+            }
+          ]
+        },
+        {
+          "at": 210951.79999999702,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "publication": "before-v2",
+      "event": 9,
+      "flushedAt": "2026-11-01T12:11:09.093Z",
+      "browserAt": 210996.70000000298,
+      "notice": "ResizeObserver loop completed with undelivered notifications.",
+      "callbackRecords": [
+        {
+          "at": 210995.59999999404,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;",
+              "width": 760,
+              "height": 325.1875
+            }
+          ]
+        },
+        {
+          "at": 210995.70000000298,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;"
+            }
+          ]
+        },
+        {
+          "at": 210995.79999999702,
+          "observer": 23,
+          "source": "node_modules/.bun/@codemirror+view@6.43.14/node_modules/@codemirror/view/dist/index.js:7203",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 26,
+              "tag": "DIV",
+              "id": "",
+              "class": "cm-scroller",
+              "style": "",
+              "width": 511.1875,
+              "height": 63
+            }
+          ]
+        },
+        {
+          "at": 210995.79999999702,
+          "observer": 23,
+          "source": "node_modules/.bun/@codemirror+view@6.43.14/node_modules/@codemirror/view/dist/index.js:7203",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 26,
+              "tag": "DIV",
+              "id": "",
+              "class": "cm-scroller",
+              "style": ""
+            }
+          ]
+        },
+        {
+          "at": 210995.79999999702,
+          "observer": 24,
+          "source": "packages/overlay/src/components/ui/CodeEditor.tsx:179",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 27,
+              "tag": "DIV",
+              "id": "",
+              "class": "file-editor-view",
+              "style": "",
+              "width": 511.1875,
+              "height": 63
+            }
+          ]
+        },
+        {
+          "at": 210995.79999999702,
+          "observer": 24,
+          "source": "packages/overlay/src/components/ui/CodeEditor.tsx:179",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 27,
+              "tag": "DIV",
+              "id": "",
+              "class": "file-editor-view",
+              "style": ""
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "publication": "before-v2",
+      "event": 10,
+      "flushedAt": "2026-11-01T12:11:17.083Z",
+      "browserAt": 218922.40000000596,
+      "notice": "ResizeObserver loop completed with undelivered notifications.",
+      "callbackRecords": [
+        {
+          "at": 218920.79999999702,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "begin",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;",
+              "width": 760,
+              "height": 197.03125
+            }
+          ]
+        },
+        {
+          "at": 218921,
+          "observer": 16,
+          "source": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+          "phase": "end",
+          "entries": [
+            {
+              "target": 19,
+              "tag": "DIV",
+              "id": "",
+              "class": "",
+              "style": "contain: layout style; position: absolute; width: 100%; left: 0px; top: 0px;"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

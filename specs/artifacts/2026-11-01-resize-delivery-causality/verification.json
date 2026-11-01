@@ -1,0 +1,538 @@
+{
+  "at": "2026-11-01T12:21:37.517Z",
+  "singleAgent": true,
+  "observationOnly": true,
+  "productChanges": false,
+  "userWindowsUntouched": true,
+  "isolatedDevelopmentUI": true,
+  "automatedUiTests": false,
+  "manualScreenshots": [
+    "01-before-restored-task-trace.jpg",
+    "02-before-cached-v1-after-publication.jpg",
+    "03-before2-complete-probe-task.jpg",
+    "04-before2-restored-session.jpg",
+    "05-before2-session-settled.jpg",
+    "06-before2-source-preview.jpg",
+    "07-before2-attachment-inline.jpg",
+    "08-before2-multiline-draft.jpg",
+    "09-before2-dock-draft.jpg",
+    "10-before2-draft-cleared-settled.jpg",
+    "11-production-restored-task.jpg",
+    "12-production-session-reading.jpg",
+    "13-production-dock-draft.jpg",
+    "14-production-goal-dialog.jpg",
+    "15-production-goal-help.jpg",
+    "16-production-goal-return.jpg",
+    "17-production-composer-return.jpg"
+  ],
+  "checks": [
+    {
+      "label": "probe-build-before",
+      "exitCode": 0,
+      "startedAt": 1793533731298,
+      "closedAt": 1793533796836
+    },
+    {
+      "label": "probe-build-before-v2",
+      "exitCode": 0,
+      "startedAt": 1793534332943,
+      "closedAt": 1793534390086
+    },
+    {
+      "label": "ui-build-production-current",
+      "exitCode": 0,
+      "startedAt": 1793535160756,
+      "closedAt": 1793535224437
+    },
+    {
+      "label": "ui-build-production-owned",
+      "exitCode": 0,
+      "startedAt": 1793535330751,
+      "closedAt": 1793535413075
+    },
+    {
+      "label": "types-current",
+      "exitCode": 0,
+      "startedAt": 1793535861830,
+      "closedAt": 1793535882780
+    },
+    {
+      "label": "i18n-current",
+      "exitCode": 0,
+      "startedAt": 1793535861842,
+      "closedAt": 1793535863561
+    },
+    {
+      "label": "docs-delivery",
+      "exitCode": 0,
+      "startedAt": 1793535774660,
+      "closedAt": 1793535781425
+    }
+  ],
+  "cases": [
+    {
+      "at": "2026-11-01T12:05:06.324Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 239592,
+      "current": 239597,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 49092,
+          "after": 49093
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 49034,
+          "after": 49035
+        },
+        {
+          "table": "memory_chunk",
+          "before": 83,
+          "after": 84
+        },
+        {
+          "table": "memory_file",
+          "before": 83,
+          "after": 84
+        },
+        {
+          "table": "project",
+          "before": 86,
+          "after": 87
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 217,
+      "projects": 86,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1193,
+      "reserveMs": 3581110,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CUC8feRV.js",
+      "port": 38544,
+      "businessCounts": {
+        "project": 87,
+        "session": 124,
+        "message": 784,
+        "part": 2225
+      },
+      "schemaObjectsPreserved": true,
+      "schemaObjectCount": 527,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "maximumRequests": 0,
+      "originalGoalFactsPreserved": true,
+      "originalGoals": 9,
+      "observedMutations": [
+        {
+          "at": "2026-11-01T11:53:48.812Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "at": "2026-11-01T11:53:51.645Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "at": "2026-11-01T11:53:52.227Z",
+          "method": "POST",
+          "path": "/log"
+        },
+        {
+          "at": "2026-11-01T12:01:18.678Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "at": "2026-11-01T12:01:20.324Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "at": "2026-11-01T12:01:20.882Z",
+          "method": "POST",
+          "path": "/log"
+        },
+        {
+          "at": "2026-11-01T12:04:09.550Z",
+          "method": "POST",
+          "path": "/shutdown"
+        }
+      ],
+      "windowErrorNotices": [
+        {
+          "at": "2026-11-01T11:53:52.229Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T11:53:52.229Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T11:53:52.229Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T11:53:52.229Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:01:20.884Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:01:20.884Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:01:20.884Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:01:20.884Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        }
+      ]
+    },
+    {
+      "at": "2026-11-01T12:13:48.432Z",
+      "kind": "before2",
+      "schema": 9,
+      "tables": 92,
+      "originals": 239597,
+      "current": 239602,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 49093,
+          "after": 49094
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 49035,
+          "after": 49036
+        },
+        {
+          "table": "memory_chunk",
+          "before": 84,
+          "after": 85
+        },
+        {
+          "table": "memory_file",
+          "before": 84,
+          "after": 85
+        },
+        {
+          "table": "project",
+          "before": 87,
+          "after": 88
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 217,
+      "projects": 87,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1193,
+      "reserveMs": 3044819,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DxKxD1_k.js",
+      "port": 38547,
+      "businessCounts": {
+        "project": 88,
+        "session": 124,
+        "message": 784,
+        "part": 2225
+      },
+      "schemaObjectsPreserved": true,
+      "schemaObjectCount": 527,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "maximumRequests": 0,
+      "originalGoalFactsPreserved": true,
+      "originalGoals": 9,
+      "observedMutations": [
+        {
+          "at": "2026-11-01T12:07:38.256Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "at": "2026-11-01T12:07:41.624Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "at": "2026-11-01T12:07:42.205Z",
+          "method": "POST",
+          "path": "/log"
+        },
+        {
+          "at": "2026-11-01T12:10:37.711Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "at": "2026-11-01T12:10:38.235Z",
+          "method": "POST",
+          "path": "/log"
+        },
+        {
+          "at": "2026-11-01T12:11:09.091Z",
+          "method": "POST",
+          "path": "/log"
+        },
+        {
+          "at": "2026-11-01T12:11:17.082Z",
+          "method": "POST",
+          "path": "/log"
+        },
+        {
+          "at": "2026-11-01T12:13:05.829Z",
+          "method": "POST",
+          "path": "/shutdown"
+        }
+      ],
+      "windowErrorNotices": [
+        {
+          "at": "2026-11-01T12:07:42.207Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:07:42.207Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:07:42.207Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:07:42.208Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:10:38.237Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:10:38.237Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:11:09.093Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:11:09.093Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:11:09.093Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:11:17.083Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        }
+      ]
+    },
+    {
+      "at": "2026-11-01T12:20:42.404Z",
+      "kind": "production",
+      "schema": 9,
+      "tables": 92,
+      "originals": 239602,
+      "current": 239607,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 49094,
+          "after": 49095
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 49036,
+          "after": 49037
+        },
+        {
+          "table": "memory_chunk",
+          "before": 85,
+          "after": 86
+        },
+        {
+          "table": "memory_file",
+          "before": 85,
+          "after": 86
+        },
+        {
+          "table": "project",
+          "before": 88,
+          "after": 89
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 217,
+      "projects": 88,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1193,
+      "reserveMs": 2616621,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DNRBKxif.js",
+      "port": 38546,
+      "businessCounts": {
+        "project": 89,
+        "session": 124,
+        "message": 784,
+        "part": 2225
+      },
+      "schemaObjectsPreserved": true,
+      "schemaObjectCount": 527,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "maximumRequests": 0,
+      "originalGoalFactsPreserved": true,
+      "originalGoals": 9,
+      "observedMutations": [
+        {
+          "at": "2026-11-01T12:18:00.035Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "at": "2026-11-01T12:18:04.717Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "at": "2026-11-01T12:18:05.281Z",
+          "method": "POST",
+          "path": "/log"
+        },
+        {
+          "at": "2026-11-01T12:18:47.842Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "at": "2026-11-01T12:18:49.424Z",
+          "method": "POST",
+          "path": "/global/transport/stream"
+        },
+        {
+          "at": "2026-11-01T12:18:49.973Z",
+          "method": "POST",
+          "path": "/log"
+        },
+        {
+          "at": "2026-11-01T12:20:14.031Z",
+          "method": "POST",
+          "path": "/shutdown"
+        }
+      ],
+      "windowErrorNotices": [
+        {
+          "at": "2026-11-01T12:18:05.284Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:18:05.284Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:18:05.284Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:18:05.284Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:18:49.974Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        },
+        {
+          "at": "2026-11-01T12:18:49.974Z",
+          "level": "debug",
+          "message": "ResizeObserver loop completed with undelivered notifications."
+        }
+      ]
+    }
+  ],
+  "totalModelRequests": 0,
+  "cumulativeRequests": 1193,
+  "retiredPairedCopies": 6,
+  "absoluteDeadline": 1793538230771,
+  "coverageLimits": [
+    "No model request or Goal creation/lifecycle mutation. Credential and complete model catalog projection is not a remote-model acceptance claim.",
+    "The passive build showed bounded delivery notifications associated with synchronous Virtua item measurement in the observed cases; it does not classify every possible ResizeObserver event or prove every layout correct.",
+    "Before v2 publication on the original service continued serving its cached v1 HTML. Screenshot02 and that failure are retained, and complete coverage was actually used only in fresh before2.",
+    "Screenshot04 is a loading intermediate frame. Screenshot07 is an inline attachment, not a dialog.",
+    "The final ordinary compressed build included another authorized compact-panel task's working UI/style changes; they are preserved and excluded from this commit. These screenshots do not certify that separate task's full scope.",
+    "The first Bun invocation returned usage with exit zero; it is excluded from successful build checks. Shared dist preparation failed before any service/auth admission, then was repaired using owned normal-build output; no scope restart or deadline extension."
+  ]
+}

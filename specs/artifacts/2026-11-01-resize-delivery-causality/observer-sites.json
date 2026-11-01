@@ -1,0 +1,211 @@
+{
+  "at": "2026-11-01T11:59:49.615Z",
+  "kind": "before",
+  "publication": "before-v2",
+  "sites": [
+    {
+      "file": "packages/overlay/src/main.tsx:3377",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/Conversation.tsx:363",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/Conversation.tsx:778",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/ChatComposer.tsx:600",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/BrowserPreviewPanel.tsx:904",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/ScreenshotBrowserPanel.tsx:278",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/RightDock.tsx:235",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/ConfigDialogHost.tsx:301",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/ImagePreview.tsx:276",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/ui/Dialog.tsx:286",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/ui/CodeEditor.tsx:179",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/PdfPreview.tsx:163",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/utils/dom-utils.ts:112",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/virtua@0.49.3+40d01f36754b4b16/node_modules/virtua/lib/solid/index.jsx:1075",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/ui/AutoGrowTextarea.tsx:67",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/ComposerMentionMenu.tsx:101",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/SourceParts.tsx:371",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/pdfjs-dist@5.4.394/node_modules/pdfjs-dist/web/pdf_viewer.mjs:7637",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/Card.tsx:166",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@codemirror+view@6.43.14/node_modules/@codemirror/view/dist/index.js:7203",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@codemirror+view@6.43.14/node_modules/@codemirror/view/dist/index.js:10392",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@solid-primitives+resize-observer@2.2.0+ee58d66d663bac7b/node_modules/@solid-primitives/resize-observer/dist/index.js:18",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@solid-primitives+resize-observer@2.2.0+ee58d66d663bac7b/node_modules/@solid-primitives/resize-observer/dist/index.js:123",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@floating-ui+dom@1.7.6/node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs:632",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/interactive-artifact/CandlestickArtifact.tsx:117",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/interactive-artifact/McpAppArtifact.tsx:586",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/interactive-artifact/MapArtifact.tsx:80",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/interactive-artifact/PresentationArtifact.tsx:57",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/interactive-artifact/NetworkArtifact.tsx:107",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/interactive-artifact/TerminalArtifact.tsx:99",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/interactive-artifact/TimelineArtifact.tsx:93",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/ToolPayload.tsx:89",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/lightweight-charts@5.2.0/node_modules/lightweight-charts/dist/lightweight-charts.production.mjs:7",
+      "kind": "before"
+    },
+    {
+      "file": "packages/overlay/src/components/interactive-artifact/inline-vega-view.ts:150",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@modelcontextprotocol+ext-apps@1.3.0+2fc24dd3415992d0/node_modules/@modelcontextprotocol/ext-apps/dist/src/app-bridge.js:39",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/cytoscape@3.34.0/node_modules/cytoscape/dist/cytoscape.esm.mjs:25913",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/fancy-canvas@2.1.0/node_modules/fancy-canvas/canvas-element-bitmap-size.mjs:191",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/fancy-canvas@2.1.0/node_modules/fancy-canvas/canvas-element-bitmap-size.mjs:221",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@google+model-viewer@4.3.1+9459c15c9e4c81b0/node_modules/@google/model-viewer/lib/model-viewer-base.js:242",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@univerjs+ui@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/ui/lib/es/index.js:1434",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@univerjs+ui@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/ui/lib/es/index.js:2878",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@univerjs+ui@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/ui/lib/es/index.js:3885",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@univerjs+ui@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/ui/lib/es/index.js:5477",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@univerjs+design@0.25.1+7492c01c6988791b/node_modules/@univerjs/design/lib/es/index.js:3958",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@univerjs+design@0.25.1+7492c01c6988791b/node_modules/@univerjs/design/lib/es/index.js:4330",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@univerjs+engine-render@0.25.1+8bb4a39dd9511e16/node_modules/@univerjs/engine-render/lib/es/index.js:24462",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@univerjs+sheets-ui@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/sheets-ui/lib/es/index.js:21545",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@univerjs+sheets-ui@0.25.1+fb6a3c66a95eaf3d/node_modules/@univerjs/sheets-ui/lib/es/index.js:22909",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@radix-ui+react-use-size@1.1.4+e14d3f224186685e/node_modules/@radix-ui/react-use-size/dist/index.mjs:12",
+      "kind": "before"
+    },
+    {
+      "file": "node_modules/.bun/@floating-ui+dom@1.8.0/node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs:642",
+      "kind": "before"
+    }
+  ],
+  "firstParty": 26,
+  "total": 50,
+  "traceOnly": true,
+  "noProductionSourceEdits": true
+}

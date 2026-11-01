@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [尺寸观察通知因果](2026-11-01-resize-delivery-causality/README.md)：被动回调、原图及正式页面证据。
+
 - [Goal 操作搜索](2026-11-01-goal-command-discovery/README.md)：真实首页、搜索与Goal表单原图。
 
 - [Side Chat 连续操作](2026-11-01-side-chat-request-ownership/README.md)：原图与正式请求/会话事实。
