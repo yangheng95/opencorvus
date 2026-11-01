@@ -5,7 +5,7 @@ import { apiRequest, ApiError, captureApiAuthority, assertApiAuthorityCurrent, t
 import { taskScopedPath } from "./task-path"
 import { taskOwningDirectory } from "./task-directory"
 import { toolFileChangesFromState } from "../utils/tool-file-changes"
-import { readDeferredToolPart } from "./tool-part"
+import { readToolPart } from "./tool-part"
 const BUILD_OBSERVATION_CONTENT_CHUNK_BYTES = 256 * 1024
 export interface DiffTarget {
   filePath: string
@@ -242,9 +242,9 @@ export async function resolveDiff(
     const receipt = change.evidence.receipts[0]
     if ("partID" in receipt && receipt.directory && receipt.deferredState) {
       const authority = captureApiAuthority()
-      const loaded = await readDeferredToolPart({
+      const loaded = await readToolPart({
         ...receipt,
-        ...receipt.deferredState,
+        integrity: receipt.deferredState,
         directory: receipt.directory,
         authority,
       })
@@ -299,6 +299,18 @@ export async function resolveDiff(
   )
   assertApiAuthorityCurrent(authority)
   return { ...change, before, after }
+}
+/** One original producer comparison, independent of any combined interval. */
+export async function readRecordedToolComparison(
+  receipt: Extract<FileChangeReceipt, { partID: string }> & { directory: string; fileIndex: number },
+): Promise<FileChange> {
+  const authority = captureApiAuthority()
+  const loaded = await readToolPart({ ...receipt, authority, integrity: receipt.deferredState })
+  const original = toolFileChangesFromState(loaded.state, receipt.directory, receipt).find((candidate) =>
+    candidate.evidence.receipts.some((source) => "partID" in source && source.fileIndex === receipt.fileIndex),
+  )
+  if (!original) throw new Error(`Recorded Tool comparison ${receipt.partID}:${receipt.fileIndex} is unavailable`)
+  return original
 }
 async function readObservedTextSide(input: {
   taskID: string

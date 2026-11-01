@@ -680,6 +680,12 @@ downloading the current disk file leaves the recorded comparison intact. Existin
 dirty-draft confirmation applies before changing files. The action and its error
 feedback stay bound to the visible source, comparison and API authority; missing
 current files retain the workbench's normal read-error contract.
+Incomplete Tool intervals expose their individual original comparisons through
+the recorded Session/Message/Part/file-index receipts. Each disclosure lazily
+uses the same bounded, authority-scoped completed Tool reader and shared diff
+renderer; deferred receipts retain their exact state-integrity validation.
+Individual endpoints, physical status and counts remain producer-owned and do
+not establish a combined interval or change the unknown aggregate totals.
 An open Review tab retains its mounted owner while other dock tools are selected,
 like the existing file explorer. The original selection, filter and reading state
 stay in that component; closing its tab releases the mount normally.

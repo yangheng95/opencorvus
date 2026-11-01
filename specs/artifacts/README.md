@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件审阅与继续操作](2026-11-01-file-review-continuation/README.md)：独立实页截图和数据保留证据。
+
 - [输入语义边界根因与真实复验](2026-11-01-contract-domain-repair/README.md)：旧归档漏验因果链、共享修复及不同任务逐次故障。
 
 - [Goal 真实预算与继续执行](2026-11-01-goal-live-budget-workflow/README.md)：真实截图、原请求、用量与文件证据。

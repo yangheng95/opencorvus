@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [文件审阅与继续操作](2026-11-01-file-review-continuation.md)：真实历史文件审阅和操作链路。
+
 - [输入语义边界根因修复](2026-11-01-contract-domain-repair.md)：解释归档漏验并修通用规则、检查器与真实多任务复验。
 
 - [Goal 真实预算与继续执行](2026-11-01-goal-live-budget-workflow.md)：当前流式模型、实页操作和持久化事实。

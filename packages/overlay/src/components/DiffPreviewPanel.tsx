@@ -23,6 +23,7 @@ import { Icon } from "./ui/Icon"
 import { Feedback } from "./ui/Feedback"
 import { t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
+import { RecordedToolComparisons } from "./RecordedToolComparisons"
 import type { JSX } from "solid-js"
 
 export interface DiffPreviewPanelProps {
@@ -81,10 +82,15 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
   const errorMessage = () => (change.error instanceof Error ? change.error.message : t("diff.load_failed"))
   const [opening, setOpening] = createSignal(false)
   const [openFailure, setOpenFailure] = createSignal<{ error: unknown } | null>(null)
-  createEffect(on(
-    () => [request()?.key, props.directory, boardStore.selectEpoch],
-    () => { setOpening(false); setOpenFailure(null) },
-  ))
+  createEffect(
+    on(
+      () => [request()?.key, props.directory, boardStore.selectEpoch],
+      () => {
+        setOpening(false)
+        setOpenFailure(null)
+      },
+    ),
+  )
 
   const openCurrentFile = async () => {
     const path = props.target?.filePath
@@ -93,8 +99,11 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
     const authority = captureApiAuthority()
     const key = request()?.key
     const epoch = boardStore.selectEpoch
-    const current = () => isApiAuthorityCurrent(authority) && boardStore.selectEpoch === epoch &&
-      props.directory.trim() === directory && request()?.key === key
+    const current = () =>
+      isApiAuthorityCurrent(authority) &&
+      boardStore.selectEpoch === epoch &&
+      props.directory.trim() === directory &&
+      request()?.key === key
     setOpening(true)
     setOpenFailure(null)
     try {
@@ -196,6 +205,16 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
                 }}
               >
                 <DiffView item={item()!} />
+                <Show
+                  when={
+                    item()!.evidence.kind === "incomplete" &&
+                    props.groups?.some(
+                      (group) => group.id === props.target?.groupID && group.observationKind === "tool_interval",
+                    )
+                  }
+                >
+                  <RecordedToolComparisons item={item()!} />
+                </Show>
               </div>
             </Show>
           </Show>

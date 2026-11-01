@@ -23,7 +23,7 @@ import {
   peekResourceObjectUrl,
   resolveResourceUrl,
 } from "../services/api"
-import { readDeferredToolPart } from "../services/tool-part"
+import { readToolPart } from "../services/tool-part"
 import { PreviewableImage } from "./ImagePreview"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
@@ -271,12 +271,10 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
       messageID,
       partID,
       directory,
-      outputBytes: deferred.outputBytes,
-      stateBytes: deferred.stateBytes,
-      stateSha256: deferred.stateSha256,
+      integrity: deferred,
     }
   }
-  const [persistedPart] = createResource(deferredSource, readDeferredToolPart)
+  const [persistedPart] = createResource(deferredSource, readToolPart)
   const part = () => (!persistedPart.loading && !persistedPart.error && persistedPart()) || props.part
   const state = () => part().state || {}
   const toolName = () => part().tool || "unknown"
@@ -482,7 +480,9 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
             <div class="msg-tool-state" role="status">
               {status() === "pending"
                 ? t("tool.receiving_input")
-                : shellProgressOutput().trim() ? display().statusLabel : t("tool.awaiting_result")}
+                : shellProgressOutput().trim()
+                  ? display().statusLabel
+                  : t("tool.awaiting_result")}
             </div>
           </Show>
           <Show when={display().commandExitCode !== undefined}>
@@ -574,7 +574,12 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
                   </section>
                 </Show>
                 <Show when={showPlainOutput()}>
-                  <ToolPayload stateKey={payloadStateKey("output")} messageID={part().messageID} label={t("tool.output")} value={output()} />
+                  <ToolPayload
+                    stateKey={payloadStateKey("output")}
+                    messageID={part().messageID}
+                    label={t("tool.output")}
+                    value={output()}
+                  />
                 </Show>
                 <Show when={shellProgressOutput().trim()}>
                   <ToolPayload

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件审阅与继续操作](records/2026-11/2026-11-01-file-review-continuation.md)：真实交付、未知比较证据与原文件审阅。
+
 - [输入语义边界根因修复](records/2026-11/2026-11-01-contract-domain-repair.md)：合法输入分类、字段语义与不同任务的真实最终消费者复验。
 
 - [Goal 真实预算与继续执行](records/2026-11/2026-11-01-goal-live-budget-workflow.md)：真实创建、预算用量、显式恢复与原文件交付。

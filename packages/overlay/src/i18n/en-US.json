@@ -1165,6 +1165,9 @@
   "diff.empty_unchanged": "No text differences in this recorded comparison.",
   "diff.select_file": "Select a file to view its diff.",
   "diff.open_current_file": "Open current file",
+  "diff.original_changes": "Original changes",
+  "diff.original_change": "Original change {{index}}",
+  "diff.original_changes_hint": "Inspect each original tool comparison separately. Their line counts are not combined.",
   "diff.open_current_file_hint": "Read, edit, or download the current file in the file workbench. The recorded comparison stays here.",
   "diff.open_current_file_failed": "The current file could not be opened.",
   "diff.show_unchanged": {

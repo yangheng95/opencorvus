@@ -1,18 +1,17 @@
 import { apiJson, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { directoryScopedPath } from "./task-path"
+import type { ConversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
 
-const DEFERRED_TOOL_PART_CACHE_LIMIT = 128
-const deferredToolPartCache = new Map<string, Promise<any>>()
+const TOOL_PART_CACHE_LIMIT = 128
+const toolPartCache = new Map<string, Promise<any>>()
 
-export type DeferredToolPartSource = {
+export type ToolPartSource = {
   authority: ApiAuthority
   sessionID: string
   messageID: string
   partID: string
   directory: string
-  outputBytes: number
-  stateBytes: number
-  stateSha256: string
+  integrity?: ConversationDeferredToolState
 }
 
 async function sha256Text(value: string): Promise<string> {
@@ -20,28 +19,28 @@ async function sha256Text(value: string): Promise<string> {
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("")
 }
 
-function deferredToolPartCacheKey(source: DeferredToolPartSource): string {
+function toolPartCacheKey(source: ToolPartSource): string {
   return [
     source.authority.revision,
     source.directory,
     source.sessionID,
     source.messageID,
     source.partID,
-    source.stateSha256,
+    source.integrity?.stateSha256 ?? "completed",
   ].join("\u0000")
 }
 
 /** Read the exact immutable Tool outcome shared by disclosures and historical comparisons. */
-export function readDeferredToolPart(source: DeferredToolPartSource): Promise<any> {
+export function readToolPart(source: ToolPartSource): Promise<any> {
   assertApiAuthorityCurrent(source.authority)
-  const key = deferredToolPartCacheKey(source)
-  const cached = deferredToolPartCache.get(key)
+  const key = toolPartCacheKey(source)
+  const cached = toolPartCache.get(key)
   if (cached) return cached
   const request = apiJson(
     directoryScopedPath(
       `session/${encodeURIComponent(source.sessionID)}/message/${encodeURIComponent(source.messageID)}/part/${encodeURIComponent(source.partID)}`,
       source.directory,
-      "deferred conversation Tool Part",
+      "recorded conversation Tool Part",
     ),
     { authority: source.authority },
   )
@@ -53,29 +52,37 @@ export function readDeferredToolPart(source: DeferredToolPartSource): Promise<an
         String(loaded.sessionID || "") !== source.sessionID ||
         String(loaded.messageID || "") !== source.messageID
       ) {
-        throw new Error(`Deferred Tool Part ${source.partID} returned drifted persisted identity`)
+        throw new Error(`Recorded Tool Part ${source.partID} returned drifted persisted identity`)
       }
-      const serializedState = JSON.stringify(loaded.state)
-      const stateBytes = new TextEncoder().encode(serializedState).byteLength
-      if (stateBytes !== source.stateBytes || (await sha256Text(serializedState)) !== source.stateSha256) {
-        throw new Error(`Deferred Tool Part ${source.partID} state changed during read`)
+      if (loaded.state?.status !== "completed") {
+        throw new Error(`Recorded Tool Part ${source.partID} has no completed outcome`)
       }
-      const output = loaded.state?.status === "completed" ? String(loaded.state.output || "") : ""
-      if (new TextEncoder().encode(output).byteLength !== source.outputBytes) {
-        throw new Error(`Deferred Tool Part ${source.partID} output changed during read`)
+      if (source.integrity) {
+        const serializedState = JSON.stringify(loaded.state)
+        const stateBytes = new TextEncoder().encode(serializedState).byteLength
+        if (
+          stateBytes !== source.integrity.stateBytes ||
+          (await sha256Text(serializedState)) !== source.integrity.stateSha256
+        ) {
+          throw new Error(`Deferred Tool Part ${source.partID} state changed during read`)
+        }
+        const output = String(loaded.state.output || "")
+        if (new TextEncoder().encode(output).byteLength !== source.integrity.outputBytes) {
+          throw new Error(`Deferred Tool Part ${source.partID} output changed during read`)
+        }
       }
       assertApiAuthorityCurrent(source.authority)
       return loaded
     })
     .catch((error) => {
-      if (deferredToolPartCache.get(key) === request) deferredToolPartCache.delete(key)
+      if (toolPartCache.get(key) === request) toolPartCache.delete(key)
       throw error
     })
-  deferredToolPartCache.set(key, request)
-  while (deferredToolPartCache.size > DEFERRED_TOOL_PART_CACHE_LIMIT) {
-    const oldest = deferredToolPartCache.keys().next().value
+  toolPartCache.set(key, request)
+  while (toolPartCache.size > TOOL_PART_CACHE_LIMIT) {
+    const oldest = toolPartCache.keys().next().value
     if (typeof oldest !== "string") break
-    deferredToolPartCache.delete(oldest)
+    toolPartCache.delete(oldest)
   }
   return request
 }

@@ -1,0 +1,213 @@
+{
+  "recordedAt": "2026-11-01T14:45:30.914Z",
+  "singleAgent": true,
+  "userWindowsOperated": false,
+  "uiAutomationTests": false,
+  "manualScreenshots": 14,
+  "intermediateFailureScreenshots": [
+    3,
+    4
+  ],
+  "originalSession": "ses_-zUQGti3Bzzuo3DYqpww",
+  "originalComparisons": [
+    {
+      "number": 1,
+      "status": "added",
+      "additions": 49,
+      "deletions": 0
+    },
+    {
+      "number": 2,
+      "status": "modified",
+      "additions": 62,
+      "deletions": 0,
+      "unchangedContextRevealed": 43
+    }
+  ],
+  "modelRequestScope": "Readback of the genuine 870 completed Goal delivery; zero new model requests in all 871 scopes",
+  "phases": [
+    {
+      "phase": "before",
+      "port": 38552,
+      "uiEntry": "main-B5wBZSQk.js",
+      "originalRows": 249142,
+      "currentRows": 249144,
+      "schema": 9,
+      "tables": 92,
+      "projects": 91,
+      "attachments": 221,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "maximumRequests": 0,
+      "cumulativeRequests": 1227,
+      "nativeExit": 0,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredPairedCopies": 2,
+      "reserveMs": 4184918,
+      "sourcePreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "changedTables": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 50994,
+          "after": 50995
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 50936,
+          "after": 50937
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "port": 38553,
+      "uiEntry": "main-ZsUnoWKx.js",
+      "originalRows": 249144,
+      "currentRows": 249146,
+      "schema": 9,
+      "tables": 92,
+      "projects": 91,
+      "attachments": 221,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "maximumRequests": 0,
+      "cumulativeRequests": 1227,
+      "nativeExit": 0,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredPairedCopies": 2,
+      "reserveMs": 3885796,
+      "sourcePreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "changedTables": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 50995,
+          "after": 50996
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 50937,
+          "after": 50938
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "port": 38554,
+      "uiEntry": "main-m3njh3k3.js",
+      "originalRows": 249146,
+      "currentRows": 249148,
+      "schema": 9,
+      "tables": 92,
+      "projects": 91,
+      "attachments": 221,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "maximumRequests": 0,
+      "cumulativeRequests": 1227,
+      "nativeExit": 0,
+      "publicShutdown": 200,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "retiredPairedCopies": 2,
+      "reserveMs": 3451806,
+      "sourcePreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "changedTables": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 50996,
+          "after": 50997
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 50938,
+          "after": 50939
+        }
+      ]
+    }
+  ],
+  "canonicalPartReads": [
+    {
+      "at": "2026-11-01T14:39:19.345Z",
+      "path": "/session/ses_-zUQGti3Bzzuo3DYqpww/message/msg_g0VZj6R5t00CKeJp7FvQ/part/prt_g0VZj6TCS00CAdqUG0Yc",
+      "method": "GET",
+      "fromRealBrowser": true,
+      "exactOwningDirectory": true
+    },
+    {
+      "at": "2026-11-01T14:39:34.072Z",
+      "path": "/session/ses_-zUQGti3Bzzuo3DYqpww/message/msg_g0VZj8aHw0014aQoX8PO/part/prt_g0VZj8cBB00qhyoThBtz",
+      "method": "GET",
+      "fromRealBrowser": true,
+      "exactOwningDirectory": true
+    }
+  ],
+  "checks": [
+    {
+      "label": "final-focused-contracts",
+      "exit": 0,
+      "startedAt": 1793544228036,
+      "closedAt": 1793544231619
+    },
+    {
+      "label": "final-types",
+      "exit": 0,
+      "startedAt": 1793543817676,
+      "closedAt": 1793543841911
+    },
+    {
+      "label": "final-i18n",
+      "exit": 0,
+      "startedAt": 1793543817629,
+      "closedAt": 1793543819320
+    },
+    {
+      "label": "final-renderer",
+      "exit": 0,
+      "startedAt": 1793543875894,
+      "closedAt": 1793543877913
+    },
+    {
+      "label": "docs-after",
+      "exit": 0,
+      "startedAt": 1793543541954,
+      "closedAt": 1793543550168
+    },
+    {
+      "label": "ui-build-before",
+      "exit": 0,
+      "startedAt": 1793543049854,
+      "closedAt": 1793543117029
+    },
+    {
+      "label": "ui-build-after",
+      "exit": 0,
+      "startedAt": 1793543525102,
+      "closedAt": 1793543586155
+    },
+    {
+      "label": "ui-build-final",
+      "exit": 0,
+      "startedAt": 1793543737337,
+      "closedAt": 1793543793646
+    }
+  ]
+}
