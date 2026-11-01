@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [计划项目身份连续性](2026-11-01-scheduled-project-identity.md)：旧目录400根因、规范ID作者与两客户端真实转换保存。
+
 - [计划任务作者与项目目标](2026-11-01-scheduled-target-review.md)：62项目检索、隐藏选择保留、远期定义及双语实页。
 
 - [侧边栏当前工作定位](2026-11-01-sidebar-current-location.md)：普通/单列表/置顶及嵌套Task的真实主动定位。

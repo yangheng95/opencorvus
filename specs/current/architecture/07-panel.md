@@ -1243,14 +1243,24 @@ header's New automation action belongs to list and read-only detail views, so
 it cannot reset the active authoring form. Project targeting searches the current
 discovery inventory through the existing multi-term metadata matcher, including
 the canonical localized ledger label, original name, directory and Project ID.
-The existing selected-directory owner retains hidden selections while the
-controlled Listbox edits only its current visible subset. Localized result and
+The form's single selected-target owner stores registered Project IDs and
+explicit pending directories for discovered locations that are not registered
+yet. Editing retains the saved IDs and their order even when a Project moves or
+its display metadata is unavailable. Only pending directories enter the existing
+identity resolver at Save; its unique ordered IDs form the existing public
+payload. Listbox identity deduplicates registered Project aliases by ID, retains
+unrepresented saved targets, and edits only its current visible subset. Localized result and
 selection counts, empty feedback and search keyboard handoff use the existing
 SearchField/Listbox primitives. Search Enter keeps authoring in place, and
 Escape clears its query. Read-only Project-scoped details display every saved
 target ID through its discovered name/directory, retaining the original ID when
 discovery cannot name it. Search and presentation do not alter target identity,
 revision admission, recurrence, execution mode or scheduling.
+After an accepted Project-scoped save, the same discovery reader refreshes
+display names and directories under its current authority/request owner. A
+metadata read failure reports that saving succeeded and offers a read-only
+retry, retaining any primary load error and all original diagnostics. It does
+not repeat the writer or reinterpret an ID through an obsolete directory.
 Explicit return to the list starts its existing foreground read; row selection
 and deletion stay unavailable while that read is in progress. The form's list
 back button consumes the same owner, so reopening follows the latest definition.

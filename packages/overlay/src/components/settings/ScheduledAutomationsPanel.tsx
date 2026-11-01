@@ -1,7 +1,7 @@
 import { Feedback } from "../ui/Feedback"
 import { createEffect, createMemo, createSignal, For, onCleanup, onMount, Show } from "solid-js"
 import { activeSessionID, rootTaskSessionID } from "../../store/board"
-import { ApiError } from "../../services/api"
+import { ApiError, captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
 import { formatErrorDetails } from "../../utils/error-details"
 import {
   automationTimeZoneOptions,
@@ -19,7 +19,6 @@ import {
   listAutomationRuns,
   listAutomations,
   pauseAutomation,
-  resolveAutomationProjectID,
   resumeAutomation,
   runAutomationNow,
   updateAutomation,
@@ -30,12 +29,13 @@ import {
   type AutomationRunView,
   type AutomationView,
 } from "../../services/automations"
+import { resolveAutomationProjectTargets, type AutomationProjectTarget } from "../../services/automation-project-targets"
 import { loadDiscoveredProjects, type DiscoveredProject } from "../../services/workspace"
 import { loadProviderInfo } from "../../services/config-load"
 import { connectedModelOptions, type ConnectedModelOption } from "../../services/llm"
 import { closeConfigDialog } from "../../services/config-dialog-control"
 import { localeTag, t } from "../../utils/i18n"
-import { projectLedgerDisplayName } from "../../utils/project-directory"
+import { projectDirectoryKey, projectLedgerDisplayName } from "../../utils/project-directory"
 import { matchesSearchTerms } from "../../services/text-search"
 import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { AutoGrowTextarea } from "../ui/AutoGrowTextarea"
@@ -55,6 +55,21 @@ type AutomationError = { messageKey: string; details?: string; retry?: () => voi
 type AutomationModelOption = ConnectedModelOption & { defaultModel?: boolean; retained?: boolean }
 type AutomationFilter = "all" | "active" | "paused"
 type AutomationScopeFilter = "all" | AutomationScope
+
+type AutomationProjectOption = { key: string; target: AutomationProjectTarget; project?: DiscoveredProject }
+
+function projectTargetKey(target: AutomationProjectTarget): string {
+  return target.kind === "project" ? `project:${target.projectID}` : `directory:${projectDirectoryKey(target.directory)}`
+}
+
+function projectChoiceLabel(option: AutomationProjectOption): string {
+  return option.project ? projectOptionLabel(option.project)
+    : option.target.kind === "project" ? option.target.projectID : option.target.directory
+}
+
+function projectChoiceDirectory(option: AutomationProjectOption): string | undefined {
+  return option.project?.directory ?? (option.target.kind === "directory" ? option.target.directory : undefined)
+}
 type AutomationMutationOwner =
   | { kind: "save"; id: string }
   | { kind: "action"; id: string; operation: "run" | "status" | "delete" }
@@ -227,17 +242,34 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   const [name, setName] = createSignal("")
   const [prompt, setPrompt] = createSignal("")
   const [scope, setScope] = createSignal<AutomationScope>("global")
-  const [selectedProjectDirectories, setSelectedProjectDirectories] = createSignal<string[]>([])
+  const [selectedProjectTargets, setSelectedProjectTargets] = createSignal<AutomationProjectTarget[]>([])
   const [projectSearch, setProjectSearch] = createSignal("")
+  const projectChoices = createMemo(() => {
+    const options = new Map<string, AutomationProjectOption>()
+    for (const project of projects()) {
+      const target: AutomationProjectTarget = project.id
+        ? { kind: "project", projectID: project.id }
+        : { kind: "directory", directory: project.directory }
+      const key = projectTargetKey(target)
+      if (!options.has(key)) options.set(key, { key, target, project })
+    }
+    for (const target of selectedProjectTargets()) {
+      const key = projectTargetKey(target)
+      if (!options.has(key)) options.set(key, { key, target })
+    }
+    return [...options.values()]
+  })
+  const selectedProjectKeys = createMemo(() => new Set(selectedProjectTargets().map(projectTargetKey)))
   const visibleProjects = createMemo(() =>
-    projects().filter((project) =>
-      matchesSearchTerms(projectSearch(), [projectOptionLabel(project), project.name, project.directory, project.id]),
+    projectChoices().filter((option) =>
+      matchesSearchTerms(projectSearch(), [projectChoiceLabel(option), option.project?.name, projectChoiceDirectory(option),
+        option.target.kind === "project" ? option.target.projectID : option.target.directory]),
     ),
   )
   const visibleSelectedProjects = createMemo(() =>
     visibleProjects()
-      .filter((project) => selectedProjectDirectories().includes(project.directory))
-      .map((project) => project.directory),
+      .filter((option) => selectedProjectKeys().has(option.key))
+      .map((option) => option.key),
   )
   const [executionMode, setExecutionMode] = createSignal<AutomationExecutionMode>("local")
   const [preset, setPreset] = createSignal<AutomationRecurrencePreset>("daily")
@@ -261,6 +293,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   let detailBackButton: HTMLButtonElement | undefined
   let formNameInput: HTMLInputElement | undefined
   let projectListElement: HTMLUListElement | undefined
+  let projectLoadSequence = 0
+  let disposed = false
   let errorFeedbackElement: HTMLDivElement | undefined
   const selected = createMemo(() => automations().find((automation) => automation.id === selectedID()) ?? null)
   const detailProjectIDs = createMemo(() => {
@@ -388,13 +422,6 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     if (target?.scope === "session") return target.sessionId
     return activeSessionID() || rootTaskSessionID()
   })
-  function projectDirectories(projectIDs: string[]): string[] {
-    const remaining = new Set(projectIDs)
-    return projects()
-      .filter((project) => Boolean(project.id) && remaining.delete(project.id!))
-      .map((project) => project.directory)
-  }
-
   function resetForm(automation?: AutomationView): void {
     const recurrence = automation ? parseAutomationRecurrence(automation.recurrence) : null
     const zone = recurrence?.timeZone ?? browserTimeZone()
@@ -403,8 +430,9 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     setProjectSearch("")
     setPrompt(automation?.prompt ?? "")
     setScope(automation?.target.scope ?? "global")
-    setSelectedProjectDirectories(
-      automation?.target.scope === "project" ? projectDirectories(automation.target.projectIds) : [],
+    setSelectedProjectTargets(
+      automation?.target.scope === "project"
+        ? automation.target.projectIds.map<AutomationProjectTarget>((projectID) => ({ kind: "project", projectID })) : [],
     )
     setExecutionMode(automation?.target.scope === "session" ? "local" : (automation?.executionMode ?? "local"))
     setPreset(recurrence?.preset ?? "daily")
@@ -535,10 +563,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
   function applyProjectSelection(next: Set<string>): void {
     setError(null)
-    const visible = new Set(visibleProjects().map((project) => project.directory))
-    setSelectedProjectDirectories((current) => [
-      ...current.filter((directory) => !visible.has(directory)),
-      ...[...next].filter((directory) => visible.has(directory)),
+    const visible = new Map(visibleProjects().map((option) => [option.key, option.target]))
+    setSelectedProjectTargets((current) => [
+      ...current.filter((target) => !visible.has(projectTargetKey(target))),
+      ...[...next].flatMap((key) => visible.has(key) ? [visible.get(key)!] : []),
     ])
   }
 
@@ -594,7 +622,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       prompt: prompt().trim(),
       scope: scope(),
       sessionID: sessionTargetID(),
-      projectDirectories: [...selectedProjectDirectories()],
+      projectTargets: [...selectedProjectTargets()],
       executionMode: executionMode(),
       recurrence: {
         preset: preset(),
@@ -611,7 +639,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       showFormError({ messageKey: "automations.error.session_required" })
       return
     }
-    if (form.scope === "project" && form.projectDirectories.length === 0) {
+    if (form.scope === "project" && form.projectTargets.length === 0) {
       showFormError({ messageKey: "automations.error.project_required" })
       return
     }
@@ -635,7 +663,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
           : form.scope === "project"
             ? {
                 scope: "project",
-                projectIds: [...new Set(await Promise.all(form.projectDirectories.map(resolveAutomationProjectID)))],
+                projectIds: await resolveAutomationProjectTargets(form.projectTargets),
               }
             : { scope: "global" }
       const base = {
@@ -664,6 +692,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
       setEditTarget(null)
       await load(preferredID)
       await loadRuns(preferredID)
+      if (form.scope === "project") await refreshSavedProjectChoices()
       focusAfterRender(() => detailBackButton)
     } catch (cause) {
       showFormError(automationFailure(cause,
@@ -726,11 +755,44 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     }
   }
 
+  async function loadProjectChoices(): Promise<boolean> {
+    const sequence = ++projectLoadSequence
+    const authority = captureApiAuthority()
+    const owns = () => !disposed && sequence === projectLoadSequence && isApiAuthorityCurrent(authority)
+    try {
+      const discovery = await loadDiscoveredProjects(authority)
+      if (!owns()) return false
+      setProjects(discovery.projects)
+      return true
+    } catch (cause) {
+      if (owns()) throw cause
+      return false
+    }
+  }
+
+  async function refreshSavedProjectChoices(): Promise<void> {
+    const previous = error()
+    try {
+      const applied = await loadProjectChoices()
+      if (applied && error() === previous && previous?.messageKey === "automations.error.project_details_refresh_failed")
+        setError(null)
+    } catch (cause) {
+      if (disposed) return
+      const current = error()
+      if (current && current.messageKey !== "automations.error.project_details_refresh_failed") {
+        setError({ ...current, details: [current.details, formatErrorDetails(cause)].filter(Boolean).join("\n\n"),
+          retry: () => void initializeHost() })
+      } else {
+        setError({ ...automationFailure(cause, "automations.error.project_details_refresh_failed"),
+          retry: () => void refreshSavedProjectChoices() })
+      }
+    }
+  }
+
   async function initializeHost(): Promise<void> {
     setError(null)
     const automationLoad = load()
-    const [projectResult, providerResult] = await Promise.allSettled([loadDiscoveredProjects(), loadProviderInfo()])
-    if (projectResult.status === "fulfilled") setProjects(projectResult.value.projects)
+    const [projectResult, providerResult] = await Promise.allSettled([loadProjectChoices(), loadProviderInfo()])
     await automationLoad
     const details = [
       ...(projectResult.status === "rejected" ? [formatErrorDetails(projectResult.reason)] : []),
@@ -790,6 +852,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     void initializeHost()
   })
   onCleanup(() => {
+    disposed = true
+    projectLoadSequence += 1
     if (dueRefreshTimer) clearTimeout(dueRefreshTimer)
     listRequest?.abort()
     runRequest?.abort()
@@ -1296,7 +1360,7 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         !name().trim() ||
                         !prompt().trim() ||
                         (scope() === "session" && !sessionTargetID()) ||
-                        (scope() === "project" && selectedProjectDirectories().length === 0)
+                        (scope() === "project" && selectedProjectTargets().length === 0)
                       }
                     >
                       {saving() ? t("common.saving") : t("common.save")}
@@ -1380,41 +1444,41 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                       <span class="automations-muted" role="status" aria-live="polite">
                         {t("automations.project_results", {
                           visible: visibleProjects().length.toLocaleString(localeTag()),
-                          total: projects().length.toLocaleString(localeTag()),
-                          selected: selectedProjectDirectories().length.toLocaleString(localeTag()),
+                          total: projectChoices().length.toLocaleString(localeTag()),
+                          selected: selectedProjectTargets().length.toLocaleString(localeTag()),
                         })}
                       </span>
                       <Show when={visibleProjects().length > 0} fallback={
-                        <span class="automations-muted">{t(projects().length > 0 ? "automations.project_search_empty" : "automations.project_targets_empty")}</span>
+                        <span class="automations-muted">{t(projectChoices().length > 0 ? "automations.project_search_empty" : "automations.project_targets_empty")}</span>
                       }>
-                      <ListboxRoot<DiscoveredProject>
+                      <ListboxRoot<AutomationProjectOption>
                         ref={projectListElement}
                         class="automation-project-target-list"
                         density="rich"
                         aria-label={t("automations.project_targets")}
                         options={visibleProjects()}
-                        optionValue={(project) => project.directory}
-                        optionTextValue={projectOptionLabel}
+                        optionValue={(option) => option.key}
+                        optionTextValue={projectChoiceLabel}
                         value={visibleSelectedProjects()}
                         selectionMode="multiple"
                         selectionBehavior="toggle"
                         onChange={applyProjectSelection}
                         renderItem={(node) => {
-                          const project = node.rawValue
+                          const option = node.rawValue
                           return (
                             <ListboxItem
                               item={node}
                               class="automation-project-target"
-                              data-selected={String(selectedProjectDirectories().includes(project.directory))}
+                              data-selected={String(selectedProjectKeys().has(option.key))}
                             >
                               <span class="automation-project-target__selection" aria-hidden="true">
-                                <Show when={selectedProjectDirectories().includes(project.directory)}>
+                                <Show when={selectedProjectKeys().has(option.key)}>
                                   <Icon name="check" size="compact" />
                                 </Show>
                               </span>
                               <span>
-                                <strong>{projectOptionLabel(project)}</strong>
-                                <small title={project.directory}>{project.directory}</small>
+                                <strong>{projectChoiceLabel(option)}</strong>
+                                <Show when={projectChoiceDirectory(option)}>{(directory) => <small title={directory()}>{directory()}</small>}</Show>
                               </span>
                             </ListboxItem>
                           )

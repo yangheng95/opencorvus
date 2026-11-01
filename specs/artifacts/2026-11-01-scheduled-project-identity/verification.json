@@ -1,0 +1,316 @@
+{
+  "at": "2026-11-01T06:23:14.785Z",
+  "scope": "Scheduled Project identity survives conversion in an already-open author form; mixed pending directories, refreshed metadata and cancelled edits",
+  "singleAgent": true,
+  "userWindowsTouched": false,
+  "userServiceTouched": false,
+  "isolatedPorts": [
+    38523,
+    38524
+  ],
+  "schema": 9,
+  "tables": 92,
+  "initialRows": 234537,
+  "finalRows": 234568,
+  "cases": [
+    {
+      "kind": "before",
+      "uiEntry": "main-D-dJxxLr.js",
+      "originalRows": 234537,
+      "finalRows": 234547,
+      "changes": [
+        {
+          "table": "automation_fire",
+          "before": 3,
+          "after": 4
+        },
+        {
+          "table": "automation_project_target",
+          "before": 6,
+          "after": 8
+        },
+        {
+          "table": "automation",
+          "before": 8,
+          "after": 10
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48098,
+          "after": 48099
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48040,
+          "after": 48041
+        },
+        {
+          "table": "memory_chunk",
+          "before": 62,
+          "after": 63
+        },
+        {
+          "table": "memory_file",
+          "before": 62,
+          "after": 63
+        },
+        {
+          "table": "project",
+          "before": 62,
+          "after": 63
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 62,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 2498160,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    },
+    {
+      "kind": "after",
+      "uiEntry": "main-L2I5a-bT.js",
+      "originalRows": 234547,
+      "finalRows": 234568,
+      "changes": [
+        {
+          "table": "automation_fire",
+          "before": 4,
+          "after": 5
+        },
+        {
+          "table": "automation_project_target",
+          "before": 8,
+          "after": 15
+        },
+        {
+          "table": "automation",
+          "before": 10,
+          "after": 13
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 48099,
+          "after": 48100
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 48041,
+          "after": 48042
+        },
+        {
+          "table": "memory_chunk",
+          "before": 63,
+          "after": 65
+        },
+        {
+          "table": "memory_file",
+          "before": 63,
+          "after": 65
+        },
+        {
+          "table": "project",
+          "before": 63,
+          "after": 67
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedAttachments": 140,
+      "protectedProjects": 63,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "retiredCopies": 2,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "deadlineReserveMs": 1566742,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      }
+    }
+  ],
+  "originalGoals": 9,
+  "originalGoalPublicFactsPreserved": true,
+  "goalReadbackAfterManualReview": true,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1180,
+  "checks": {
+    "project-target-contract": 0,
+    "types-final": 0,
+    "i18n-after": 0,
+    "ui-build-after": 0
+  },
+  "definitionCheckpoints": {
+    "before-original": {
+      "id": "atm_g0VZhKfyV00Q69ugUEr5",
+      "revisionId": "atm_g0VZhKg2200MuxolPX6c",
+      "name": "项目身份连续性861 BEFORE",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_h6cBMUC5tLVJ0n7PGide"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "status": "paused",
+      "nextRun": 4071258000000,
+      "lastRun": null
+    },
+    "before-failed": {
+      "id": "atm_g0VZhKfyV00Q69ugUEr5",
+      "revisionId": "atm_g0VZhKg2200MuxolPX6c",
+      "name": "项目身份连续性861 BEFORE",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_h6cBMUC5tLVJ0n7PGide"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "status": "paused",
+      "nextRun": 4071258000000,
+      "lastRun": null
+    },
+    "after-original": {
+      "id": "atm_g0VZhRp7v00kh0XfE6tO",
+      "revisionId": "atm_g0VZhRpzC00bKSRpQzjX",
+      "name": "项目身份连续性861 AFTER",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hYaUcgEXBuIunpVeN3Wo",
+          "prj_hVSHY3XQIg1dAjZpP3EQ"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "status": "paused",
+      "nextRun": 4071258000000,
+      "lastRun": null
+    },
+    "after-saved": {
+      "id": "atm_g0VZhRp7v00kh0XfE6tO",
+      "revisionId": "atm_g0VZhS3lU00K7o01BND3",
+      "name": "项目身份连续性861 AFTER EDITED",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hYaUcgEXBuIunpVeN3Wo",
+          "prj_hVSHY3XQIg1dAjZpP3EQ",
+          "prj_hW0f6N5hFm6iCFh4gcgb"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "status": "paused",
+      "nextRun": 4071258000000,
+      "lastRun": null
+    },
+    "after-cancelled": {
+      "id": "atm_g0VZhRp7v00kh0XfE6tO",
+      "revisionId": "atm_g0VZhS3lU00K7o01BND3",
+      "name": "项目身份连续性861 AFTER EDITED",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hYaUcgEXBuIunpVeN3Wo",
+          "prj_hVSHY3XQIg1dAjZpP3EQ",
+          "prj_hW0f6N5hFm6iCFh4gcgb"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "status": "paused",
+      "nextRun": 4071258000000,
+      "lastRun": null
+    },
+    "after-final": {
+      "id": "atm_g0VZhRp7v00kh0XfE6tO",
+      "revisionId": "atm_g0VZhS3lU00K7o01BND3",
+      "name": "项目身份连续性861 AFTER EDITED",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hYaUcgEXBuIunpVeN3Wo",
+          "prj_hVSHY3XQIg1dAjZpP3EQ",
+          "prj_hW0f6N5hFm6iCFh4gcgb"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "status": "paused",
+      "nextRun": 4071258000000,
+      "lastRun": null
+    }
+  },
+  "authorFacts": {
+    "at": "2026-11-01T06:21:21.235Z",
+    "originalGoals": 9,
+    "publicGoalFactsPreserved": true,
+    "sameAutomationID": true,
+    "savedTargetPrefixPreserved": true,
+    "explicitNewTarget": true,
+    "cancelPreservesExactRevision": true,
+    "originalProtectedDefinitions": 4,
+    "qaAutomationID": "atm_g0VZhRp7v00kh0XfE6tO",
+    "qaRevisionID": "atm_g0VZhS3lU00K7o01BND3",
+    "targets": [
+      "prj_hYaUcgEXBuIunpVeN3Wo",
+      "prj_hVSHY3XQIg1dAjZpP3EQ",
+      "prj_hW0f6N5hFm6iCFh4gcgb"
+    ],
+    "status": "paused",
+    "nextRun": 4071258000000,
+    "lastRun": null
+  },
+  "candidateConversion": {
+    "id": "prj_hYaUcgEXBuIunpVeN3Wo",
+    "originalInputPreserved": true,
+    "exactBeforeMoveFilesAndGitStatePreserved": true
+  },
+  "manualScreenshots": [
+    "01-before-open-author-target.jpg",
+    "02-before-owned-conversion-destination.jpg",
+    "03-before-save-after-conversion.jpg",
+    "04-before-directory-resolution-error.jpg",
+    "05-after-mixed-create-targets.jpg",
+    "06-after-open-editor-before-conversion.jpg",
+    "07-after-owned-conversion-destination.jpg",
+    "08-after-converted-editor-mixed-targets.jpg",
+    "09-after-save-current-project-details.jpg",
+    "10-after-stable-id-search-new-label.jpg",
+    "11-after-chinese-identity-selection.jpg",
+    "12-after-chinese-current-project-details.jpg"
+  ],
+  "candidateScreenshots": [
+    "05-after-mixed-create-targets.jpg",
+    "06-after-open-editor-before-conversion.jpg",
+    "07-after-owned-conversion-destination.jpg",
+    "08-after-converted-editor-mixed-targets.jpg",
+    "09-after-save-current-project-details.jpg",
+    "10-after-stable-id-search-new-label.jpg",
+    "11-after-chinese-identity-selection.jpg",
+    "12-after-chinese-current-project-details.jpg"
+  ],
+  "automatedUITests": 0,
+  "unverifiedLiveBranches": [
+    "Metadata refresh failure",
+    "Missing/deleted Project metadata",
+    "Registered Project aliases"
+  ]
+}
