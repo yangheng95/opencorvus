@@ -71,9 +71,10 @@ const RETIRED_TYPOGRAPHY_ALIASES = new Set([
   "--work-row-line-height",
 ])
 const TYPOGRAPHY_ROLE_VALUES = new Map([
-  ["--ui-font-page", "calc(24px * var(--ui-scale))"],
-  ["--ui-font-emphasis", "calc(16px * var(--ui-scale))"],
-  ["--ui-font-body", "calc(14px * var(--ui-scale))"],
+  ["--ui-font-page", "calc(22px * var(--ui-scale))"],
+  ["--ui-font-emphasis", "calc(15px * var(--ui-scale))"],
+  ["--ui-font-body", "calc(13px * var(--ui-scale))"],
+  ["--ui-font-secondary", "calc(12px * var(--ui-scale))"],
   ["--ui-font-code", "calc(13px * var(--ui-scale))"],
   ["--ui-font-caption", "calc(12px * var(--ui-scale))"],
   ["--ui-line-height-flat", "1"],
@@ -424,6 +425,7 @@ const FONT_SIZE_VALUES = new Set([
   "var(--ui-font-page)",
   "var(--ui-font-emphasis)",
   "var(--ui-font-body)",
+  "var(--ui-font-secondary)",
   "var(--ui-font-code)",
   "var(--ui-font-caption)",
   "inherit",

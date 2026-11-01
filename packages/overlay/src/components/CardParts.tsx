@@ -13,6 +13,7 @@ import { interactionRequestText, interactionResponseText } from "../utils/transc
 import {
   isCardRenderableMessagePartType,
   isNoActionDecisionToolPart,
+  isCollapsedExecutionMessagePart,
   executionDisclosureKey,
   partitionMessagePartRenderRuns,
   type MessagePartRenderRun,
@@ -256,8 +257,9 @@ function ExecutionEventRun(props: PartCollectionProps) {
   const number = (count: number) => count.toLocaleString(localeTag())
   const active = () => Boolean(props.streaming && activeCount() > 0)
   const summary = () => [
+    tools().length > 1 ? t("card.activity.tools", { count: number(tools().length) }) : "",
     latest()
-      ? toolIdentitySummary(latest()!)
+      ? tools().length > 1 ? latest()!.label : toolIdentitySummary(latest()!)
       : t("transcript.execution_patch", { count: props.parts.length }),
     pendingCount() ? t("tool.group_receiving_input", { count: number(pendingCount()) }) : "",
     runningCount() ? t("tool.group_running", { count: number(runningCount()) }) : "",
@@ -283,6 +285,9 @@ function ExecutionEventRun(props: PartCollectionProps) {
         title={summary()}
         onClick={() => setCardExpanded(key(), !expanded())}
       >
+        <Show when={tools().length > 1}>
+          <span class="msg-work-details__count">{t("card.activity.tools", { count: number(tools().length) })}</span>
+        </Show>
         <Show when={latest()} fallback={<span class="msg-transcript-disclosure__label">{summary()}</span>}>
           {(tool) => <ExecutionToolIdentity tool={tool()} />}
         </Show>
@@ -322,18 +327,22 @@ function ExecutionEventRun(props: PartCollectionProps) {
             {(part) => {
               const tool = createMemo(() => describeToolPart(part(), directory()))
               return (
-                <div class="msg-work-details__event" data-event-kind={workPartKind(part())}>
+                <div class="msg-work-details__event" data-event-kind={workPartKind(part())} data-message-id={part().messageID || undefined}>
                   <Show
                     when={tool()}
                     fallback={
-                      <RenderableCardPart
-                        part={part()}
-                        attachmentLabel={props.attachmentLabel}
-                        depth={props.depth}
-                        streaming={props.streaming}
-                        filePresentation={props.filePresentation}
-                        renderNestedCard={props.renderNestedCard}
-                      />
+                      <Show when={isConversationSourcePart(part())} fallback={
+                        <RenderableCardPart
+                          part={part()}
+                          attachmentLabel={props.attachmentLabel}
+                          depth={props.depth}
+                          streaming={props.streaming}
+                          filePresentation={props.filePresentation}
+                          renderNestedCard={props.renderNestedCard}
+                        />
+                      }>
+                        <SourceParts sources={[part()]} contextSources={props.contextSources} />
+                      </Show>
                     }
                   >
                     {(display) => (
@@ -376,12 +385,33 @@ function ExecutionEventRun(props: PartCollectionProps) {
   )
 }
 
-function ChronologicalCollapsedParts(props: PartCollectionProps & { runs: MessagePartRenderRun[] }) {
+function ExecutionOverview(props: PartCollectionProps) {
   return (
-    <Index each={props.runs}>
+    <div class="msg-execution-overview">
+      <ExecutionEventRun {...props} />
+      <Show when={sourceParts(props.parts).length > 0 && !cardExpanded(executionDisclosureKey(props.parts), false)}>
+        <SourceParts sources={sourceParts(props.parts)} contextSources={props.contextSources} />
+      </Show>
+    </div>
+  )
+}
+
+function ChronologicalCollapsedParts(props: PartCollectionProps & { runs: MessagePartRenderRun[] }) {
+  const runs = createMemo(() => {
+    const output: MessagePartRenderRun[] = []
+    for (const run of props.runs) {
+      const previous = output.at(-1)
+      if (previous?.kind === "execution" && run.kind === "body" && run.parts.every(isConversationSourcePart)) {
+        previous.parts.push(...run.parts)
+      } else output.push({ ...run, parts: [...run.parts] })
+    }
+    return output
+  })
+  return (
+    <Index each={runs()}>
       {(run) => (
         <Show when={run().kind === "execution"} fallback={<CitationAwareBodyParts {...props} parts={run().parts} />}>
-          <ExecutionEventRun {...props} parts={run().parts} />
+          <ExecutionOverview {...props} parts={run().parts} />
         </Show>
       )}
     </Index>
@@ -428,30 +458,64 @@ export function CardParts(props: Omit<PartCollectionProps, "contextSources" | "a
     ),
   )
   const streamingTextPart = createMemo(() => trailingLiveTextPart(displayParts(), props.streaming))
+  // Aggregate presentation only. Narrative, delegated context, artifacts and
+  // failures keep their persisted message boundaries and original renderer.
+  const displayRuns = createMemo(() => {
+    const groups: { runs: ReturnType<typeof partitionCardMessageRuns>; execution: boolean }[] = []
+    for (const run of runs()) {
+      const execution = Boolean(props.collapseWorkDetails) && !run.collapsedContext &&
+        run.parts.some(isCollapsedExecutionMessagePart) &&
+        run.parts.every((part) => isCollapsedExecutionMessagePart(part) || isConversationSourcePart(part)) &&
+        !(props.turnArtifacts || []).some((item) => item.messageID === run.messageID) &&
+        !(props.messageFailures || []).some((item) => item.messageID === run.messageID)
+      const previous = groups.at(-1)
+      if (execution && previous?.execution) previous.runs.push(run)
+      else groups.push({ runs: [run], execution })
+    }
+    return groups
+  })
   return (
-    <Index each={runs()}>
-      {(run) => (
-        <section class="card-message-run" data-message-id={run().messageID || undefined}>
-          <Show
-            when={run().collapsedContext}
-            fallback={<PartCollection {...props} contextSources={contextSources()} attachmentLabel={attachmentLabel} parts={run().parts} streamingTextPart={streamingTextPart()} />}
-          >
-            <DelegatedContextParts
+    <Index each={displayRuns()}>
+      {(group) => (
+        <Show
+          when={group().execution}
+          fallback={
+            <Index each={group().runs}>
+              {(run) => (
+                <section class="card-message-run" data-message-id={run().messageID || undefined}>
+                  <Show
+                    when={run().collapsedContext}
+                    fallback={<PartCollection {...props} contextSources={contextSources()} attachmentLabel={attachmentLabel} parts={run().parts} streamingTextPart={streamingTextPart()} />}
+                  >
+                    <DelegatedContextParts
+                      {...props}
+                      contextSources={contextSources()}
+                      attachmentLabel={attachmentLabel}
+                      parts={run().parts}
+                      streamingTextPart={streamingTextPart()}
+                      messageID={run().messageID}
+                    />
+                  </Show>
+                  <Key each={(props.messageFailures || []).filter((failure) => failure.messageID === run().messageID)} by="messageID">
+                    {(failure) => <AssistantMessageFailure {...failure()} />}
+                  </Key>
+                  <Index each={(props.turnArtifacts || []).filter((summary) => summary.messageID === run().messageID)}>
+                    {(summary) => <ConversationTurnArtifactSummary summary={summary()} />}
+                  </Index>
+                </section>
+              )}
+            </Index>
+          }
+        >
+          <div class="card-message-run">
+            <ExecutionOverview
               {...props}
               contextSources={contextSources()}
               attachmentLabel={attachmentLabel}
-              parts={run().parts}
-              streamingTextPart={streamingTextPart()}
-              messageID={run().messageID}
+              parts={group().runs.flatMap((run) => run.parts)}
             />
-          </Show>
-          <Key each={(props.messageFailures || []).filter((failure) => failure.messageID === run().messageID)} by="messageID">
-            {(failure) => <AssistantMessageFailure {...failure()} />}
-          </Key>
-          <Index each={(props.turnArtifacts || []).filter((summary) => summary.messageID === run().messageID)}>
-            {(summary) => <ConversationTurnArtifactSummary summary={summary()} />}
-          </Index>
-        </section>
+          </div>
+        </Show>
       )}
     </Index>
   )

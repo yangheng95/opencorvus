@@ -7,6 +7,7 @@
   gap: var(--ui-gap-sm);
   color: var(--text-soft);
   cursor: pointer;
+  min-height: var(--oc-density-chip-height);
 }
 
 .oc-radio-group {
@@ -87,8 +88,8 @@
 
 .oc-switch-control {
   position: relative;
-  width: calc(40px * var(--ui-scale));
-  height: calc(24px * var(--ui-scale));
+  width: calc(34px * var(--ui-scale));
+  height: calc(20px * var(--ui-scale));
   flex: 0 0 auto;
   border: 0 solid transparent;
   border-radius: var(--oc-radius-pill);
@@ -106,19 +107,19 @@
 
 .oc-switch-thumb {
   position: absolute;
-  top: calc(3px * var(--ui-scale));
-  left: calc(3px * var(--ui-scale));
-  width: calc(18px * var(--ui-scale));
-  height: calc(18px * var(--ui-scale));
+  top: calc(2px * var(--ui-scale));
+  left: calc(2px * var(--ui-scale));
+  width: calc(16px * var(--ui-scale));
+  height: calc(16px * var(--ui-scale));
   border-radius: var(--oc-radius-pill);
-  background: var(--surface);
+  background: color-mix(in srgb, var(--surface) 4%, white);
   box-shadow: 0 calc(1px * var(--ui-scale)) calc(2px * var(--ui-scale))
     color-mix(in srgb, var(--ui-shadow-tone) 14%, transparent);
   transition: transform var(--ui-duration-base) var(--ui-timing-standard);
 }
 
 .oc-switch-control[data-checked] .oc-switch-thumb {
-  transform: translateX(calc(16px * var(--ui-scale)));
+  transform: translateX(calc(14px * var(--ui-scale)));
 }
 
 :is(.oc-checkbox, .oc-switch, .oc-radio):focus-within :is(.oc-checkbox-control, .oc-switch-control, .oc-radio-control) {

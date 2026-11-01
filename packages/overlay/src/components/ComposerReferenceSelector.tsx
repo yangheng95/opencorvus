@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, For, onCleanup, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, For, onCleanup, Show, type JSX } from "solid-js"
 import type { VisibleComposerReferences } from "@opencorvus-ai/transport-protocol"
 import type { ExpertSquadMarketIndexItem, ExpertSquadOption } from "../services/expert-squad"
 import type { ComposerExpertSquadPackage } from "../services/composer-expert-squad-catalog"
@@ -35,6 +35,8 @@ interface ComposerReferenceGroup {
 }
 
 export interface ComposerReferenceSelectorProps {
+  contextLabel?: string
+  controls?: JSX.Element
   text: string
   onTextChange?: (text: string) => void
   skills: readonly ComposerReferenceSkillOption[]
@@ -241,6 +243,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
 
   function triggerLabel(): string {
     if (props.readOnly && props.activePackage) return props.activePackage.name
+    if (props.contextLabel) return props.contextLabel
     return t(props.readOnly ? "chat.references.view" : "chat.references.trigger")
   }
 
@@ -330,13 +333,21 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
       </div>
       <Popover.Portal>
         <Popover.Content class="composer-reference-popover">
+          <Show when={props.controls}>
+            <div class="composer-reference-controls">{props.controls}</div>
+          </Show>
           <Show when={props.readOnly}>
             <ComposerReferenceFeedback error={props.catalogError} onRetry={props.onCatalogRetry} />
           </Show>
           <div class="composer-reference-popover-heading">
-            <span class="oc-section-heading">
-              {t(props.readOnly ? "chat.references.context_title" : "chat.references.title")}
-            </span>
+            <div class="composer-reference-heading-line">
+              <span class="oc-section-heading">
+                {t(props.readOnly ? "chat.references.context_title" : "chat.references.title")}
+              </span>
+              <Show when={props.readOnly && props.contextLabel}>
+                <span class="composer-reference-context">{props.contextLabel}</span>
+              </Show>
+            </div>
             <span>
               {t(
                 props.readOnly
@@ -366,7 +377,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
               </div>
             )}
           </Show>
-          <Show when={props.readOnly}>
+          <Show when={props.readOnly && readOnlyOptions().length > 0}>
             <div class="composer-reference-popover-heading">
               <span class="oc-section-heading">
                 {t(

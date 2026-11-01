@@ -7,8 +7,8 @@
 
 /* ──────────────────────────────────────────────────────────
    PRIMITIVE LAYER — `.s-*` single-source contract for every
-   settings panel. Groups use one quiet surface and aligned header/body
-   insets; dense rows keep the shared type and control scales.
+   settings panel. Titles sit above inset groups; dense rows keep the
+   shared type and control scales without a second card header.
 
    Migration map: settings-specific legacy row wrappers converge on
    .s-row, group wrappers converge on .s-group, and settings-owned
@@ -168,18 +168,19 @@
 }
 
 .s-group {
-  gap: 0;
-  border: var(--oc-border-width) solid var(--border);
-  border-radius: var(--oc-radius-large);
-  background: var(--surface);
+  gap: var(--ui-gap-sm);
 }
 
 .s-group > .s-section-head {
-  padding: var(--ui-gap-lg) var(--ui-gap-xl);
+  padding: 0;
+  border: 0;
 }
 
-.s-group > .s-group-body {
-  padding-inline: var(--ui-gap-xl);
+.s-group:has(> .s-section-head) > .s-group-body {
+  padding-inline: var(--ui-gap-lg);
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-large);
+  background: var(--surface);
 }
 
 .s-section-head {
@@ -202,7 +203,7 @@
 .s-section-title {
   margin: 0;
   color: var(--text-strong);
-  font-size: var(--ui-font-body);
+  font-size: var(--ui-font-emphasis);
   font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-normal);
   letter-spacing: var(--ui-letter-spacing-normal);
@@ -220,7 +221,7 @@
 
 .s-section-description {
   color: var(--text-muted);
-  font-size: var(--ui-font-body);
+  font-size: var(--ui-font-secondary);
   line-height: var(--ui-line-height-normal);
 }
 
@@ -249,7 +250,7 @@
   justify-content: space-between;
   gap: var(--ui-gap-md);
   min-width: 0;
-  min-height: calc(44px * var(--ui-scale));
+  min-height: calc(40px * var(--ui-scale));
   padding: var(--ui-gap-md) 0;
   border: 0 solid transparent;
   border-radius: 0;
@@ -323,7 +324,7 @@ button.s-row:focus-visible {
 }
 
 .s-row-desc {
-  font-size: var(--ui-font-body);
+  font-size: var(--ui-font-secondary);
   color: var(--text-muted);
   line-height: var(--ui-line-height-normal);
   overflow-wrap: anywhere;
@@ -1310,7 +1311,7 @@ button.s-row:focus-visible {
 /* ── Settings page + sidebar nav ─────────────────────────── */
 
 .config-page {
-  --settings-content-width: calc(800px * var(--ui-scale));
+  --settings-content-width: calc(760px * var(--ui-scale));
   --settings-surface-base: var(--surface);
   --settings-surface-hover: color-mix(in srgb, var(--surface-hover) 82%, var(--surface));
   --settings-surface-muted: color-mix(in srgb, var(--surface-hover) 58%, var(--surface));
@@ -1343,9 +1344,9 @@ button.s-row:focus-visible {
 .config-sidebar {
   display: flex;
   flex-direction: column;
-  width: clamp(calc(208px * var(--ui-scale)), 18cqw, calc(260px * var(--ui-scale)));
+  width: calc(216px * var(--ui-scale));
   min-width: calc(208px * var(--ui-scale));
-  padding: var(--ui-gap-lg) var(--ui-gap-lg) var(--ui-gap-xl);
+  padding: var(--ui-gap-lg) var(--ui-gap-md) var(--ui-gap-xl);
   border-right: var(--oc-border-width) solid var(--divider-soft);
   background: var(--rail-surface);
   overflow-y: auto;
@@ -1363,24 +1364,30 @@ button.s-row:focus-visible {
 }
 
 .config-nav-group-title {
-  margin: var(--ui-gap-lg) 0 var(--ui-gap-xs);
-  padding-inline: calc(var(--ui-gap-md) + var(--oc-icon-size-medium) + var(--ui-gap-md)) var(--ui-gap-md);
+  margin: var(--ui-gap-xs) 0 var(--ui-gap-3xs);
+  padding-inline: var(--ui-gap-md);
   color: var(--text-muted);
-  font-size: var(--ui-font-caption);
-  font-weight: var(--ui-font-weight-medium);
+  font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-strong);
   line-height: var(--ui-line-height-tight);
 }
 
 .config-sidebar .oc-tabs {
-  flex: 1 1 auto;
-  min-height: 100%;
+  flex: 0 0 auto;
+  min-height: 0;
 }
 
 /* The shared rail owns layout; Settings keeps its compact row density. */
 .config-sidebar .oc-tabs[data-layout="rail"] .oc-tab {
   min-height: var(--oc-density-navigation-row);
-  padding: var(--ui-gap-xs) var(--ui-gap-md);
+  padding: var(--ui-gap-3xs) var(--ui-gap-md);
   border: none;
+  font-size: var(--ui-font-secondary);
+  font-weight: var(--ui-font-weight-body);
+}
+
+.config-sidebar .oc-tabs[data-layout="rail"] .oc-tab[data-selected] {
+  font-weight: var(--ui-font-weight-medium);
 }
 
 .config-sidebar .oc-tab {
@@ -1406,16 +1413,16 @@ button.s-row:focus-visible {
 }
 
 .config-sidebar .oc-tab[data-selected] {
-  --oc-tab-bg: var(--accent-dim);
-  --oc-tab-color: var(--accent);
+  --oc-tab-bg: var(--ui-list-selected-bg);
+  --oc-tab-color: var(--text-strong);
 
   background: var(--oc-tab-bg);
   color: var(--oc-tab-color);
-  font-weight: var(--ui-font-weight-medium);
 }
 
 .config-sidebar .oc-tab[data-selected]:is(:hover, :focus-visible, [data-highlighted]) {
-  --oc-tab-bg: color-mix(in srgb, var(--accent) 14%, transparent);
+  --oc-tab-bg: var(--ui-list-selected-hover-bg);
+  --oc-tab-color: var(--text-strong);
 }
 
 .config-sidebar .oc-tab[data-selected]::before {
@@ -1473,8 +1480,8 @@ button.s-row:focus-visible {
   min-height: 0;
   overflow-y: auto;
   padding: var(--ui-gap-3xl);
-  border-top-left-radius: var(--oc-radius-large);
-  border-left: var(--oc-border-width) solid color-mix(in srgb, var(--divider-soft) 76%, transparent);
+  border-top-left-radius: 0;
+  border-left: 0;
   background: var(--bg);
   container-name: settings-content;
   container-type: inline-size;
@@ -1483,7 +1490,7 @@ button.s-row:focus-visible {
 .config-page-title {
   width: 100%;
   max-width: var(--settings-content-width);
-  margin: 0 auto var(--ui-gap-2xl);
+  margin: 0 auto var(--ui-gap-xl);
   color: var(--text-strong);
   font-size: var(--ui-font-page);
   font-weight: var(--ui-font-weight-strong);

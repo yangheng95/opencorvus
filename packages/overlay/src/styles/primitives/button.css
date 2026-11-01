@@ -244,7 +244,7 @@
 .oc-button[data-variant="outline"]:not([data-tone="danger"]):hover,
 .oc-button[data-variant="outline"]:not([data-tone="danger"]):focus-visible {
   --oc-button-bg: var(--surface-hover);
-  --oc-button-border: var(--oc-border-width) solid var(--border-hover);
+  --oc-button-border: var(--oc-border-width) solid var(--border);
   --oc-button-shadow: none;
 }
 

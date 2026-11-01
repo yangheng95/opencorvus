@@ -90,8 +90,8 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--ui-gap-md);
-  min-height: calc(30px * var(--ui-scale));
-  padding: var(--ui-gap-sm) var(--ui-gap-md);
+  min-height: var(--oc-density-button-height);
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
   border-radius: var(--oc-radius-soft);
   color: var(--text-strong);
   font-size: var(--ui-font-body);

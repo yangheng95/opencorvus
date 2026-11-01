@@ -2603,6 +2603,45 @@ button.msg-source-chip .msg-source-chip__filename {
   max-height: min(calc(420px * var(--ui-scale)), calc(100vh - calc(120px * var(--ui-scale))));
 }
 
+.msg-execution-overview {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--ui-gap-xs) var(--ui-gap-lg);
+  min-width: 0;
+}
+
+.msg-execution-overview > .msg-work-details {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.msg-execution-overview:has(> .msg-work-details[data-expanded="true"]) > .msg-work-details {
+  flex-basis: 100%;
+}
+
+.msg-execution-overview > .msg-sources {
+  flex: 0 1 40%;
+  max-width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-block: 0;
+}
+
+.msg-execution-overview > .msg-sources:has(details[open]) {
+  flex-basis: 100%;
+}
+
+.msg-work-details__count {
+  flex: none;
+  padding-inline-end: var(--ui-gap-sm);
+  border-inline-end: var(--oc-border-width) solid var(--divider-soft);
+  color: var(--text-soft);
+  font-family: var(--font);
+}
+
 .msg-work-details > .oc-button[data-ui="work-details-toggle"] {
   --oc-button-height: var(--transcript-activity-row-height);
   --oc-button-padding-x: 0;

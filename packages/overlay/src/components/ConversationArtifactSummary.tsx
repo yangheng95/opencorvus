@@ -17,9 +17,10 @@ import { t, tc } from "../utils/i18n"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { FileRowContent } from "./ui/FileRow"
+import { Tooltip } from "./ui/Tooltip"
 import { ChangeLineStats } from "./DiffView"
 
-const DEFAULT_VISIBLE_FILE_COUNT = 3
+const DEFAULT_VISIBLE_FILE_COUNT = 5
 
 function persistedSourceGroups(): ChangeGroup[] {
   const board = boardStore.board as any
@@ -67,7 +68,6 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
             <Icon name="edit" size="medium" />
           </span>
           <div class="conversation-artifact-summary__identity">
-            <span class="conversation-artifact-summary__eyebrow">{t("chat.artifacts.files")}</span>
             <strong>{totals().files > 0 ? tc("files.changed", totals().files) : t("diff.unresolved_title")}</strong>
             <span
               class="conversation-artifact-summary__totals"
@@ -80,6 +80,16 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
               <ChangeLineStats additions={totals().additions} deletions={totals().deletions} />
             </span>
           </div>
+          <Show when={totals().hasUnresolvedChanges}>
+            <Tooltip.Root placement="top" fitViewport>
+              <Tooltip.Trigger as={Button} type="button" variant="ghost" size="sm" tone="neutral" class="conversation-artifact-summary__notice" aria-label={t("diff.unresolved_changes")}>
+                <Icon name="info-circle" size="medium" />
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content>{t("diff.unresolved_changes")}</Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
+          </Show>
           <Button
             type="button"
             variant="outline"
@@ -91,9 +101,6 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
             {t("chat.artifacts.review")}
           </Button>
         </header>
-        <Show when={totals().hasUnresolvedChanges}>
-          <p class="empty-hint">{t("diff.unresolved_changes")}</p>
-        </Show>
         <div class="conversation-artifact-summary__section">
           <div class="conversation-artifact-summary__files">
             <For each={visibleFiles()}>

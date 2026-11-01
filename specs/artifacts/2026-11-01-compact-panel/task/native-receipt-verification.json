@@ -1,0 +1,108 @@
+{
+  "ok": true,
+  "receipt": {
+    "results": [
+      {
+        "team": "North",
+        "currency": "CNY",
+        "net_amount": "25.29"
+      },
+      {
+        "team": "North",
+        "currency": "USD",
+        "net_amount": "-1.25"
+      },
+      {
+        "team": "South",
+        "currency": "CNY",
+        "net_amount": "44.00"
+      },
+      {
+        "team": "South",
+        "currency": "USD",
+        "net_amount": "0.30"
+      }
+    ],
+    "orders_total": 10,
+    "included_orders": 9,
+    "excluded_orders": 1,
+    "report": "REPORT.md"
+  },
+  "download_bytes": 376,
+  "download_bytes_equal": true,
+  "provider": {
+    "requests": 9,
+    "models": [
+      "gpt-6.1-sol"
+    ],
+    "streaming": true,
+    "http_statuses": [
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200
+    ],
+    "response_readers": [
+      {
+        "boundary": "provider-source-reader",
+        "state": "awaiting_binding",
+        "receivedAt": 1793539389190
+      },
+      {
+        "boundary": "provider-source-reader",
+        "state": "awaiting_binding",
+        "receivedAt": 1793539390140
+      },
+      {
+        "boundary": "provider-source-reader",
+        "state": "awaiting_binding",
+        "receivedAt": 1793539395480
+      },
+      {
+        "boundary": "provider-source-reader",
+        "state": "awaiting_binding",
+        "receivedAt": 1793539398970
+      },
+      {
+        "boundary": "provider-source-reader",
+        "state": "awaiting_binding",
+        "receivedAt": 1793539403327
+      },
+      {
+        "boundary": "provider-source-reader",
+        "state": "awaiting_binding",
+        "receivedAt": 1793539407129
+      },
+      {
+        "boundary": "provider-source-reader",
+        "state": "awaiting_binding",
+        "receivedAt": 1793539421301
+      },
+      {
+        "boundary": "provider-source-reader",
+        "state": "awaiting_binding",
+        "receivedAt": 1793539428184
+      },
+      {
+        "boundary": "provider-source-reader",
+        "state": "awaiting_binding",
+        "receivedAt": 1793539437918
+      }
+    ],
+    "exhausted": false
+  },
+  "session": "ses_-zUQH4qBczzrHUFQ3HGh",
+  "ui_checks": [
+    "real fourth turn submitted through /ui",
+    "six adjacent tool calls grouped",
+    "current execution expanded with original CSV output",
+    "three sources expanded",
+    "receipt.json opened in right dock",
+    "receipt.json downloaded through UI"
+  ]
+}

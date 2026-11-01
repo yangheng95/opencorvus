@@ -5,11 +5,11 @@
   display: inline-flex;
   align-items: center;
   min-height: var(--oc-segmented-height);
-  gap: var(--oc-segmented-gap);
-  padding: 0;
-  border: 0 solid transparent;
+  gap: 0;
+  padding: var(--oc-segmented-gap);
+  border: var(--oc-border-width) solid var(--divider-soft);
   border-radius: var(--oc-radius-soft);
-  background: transparent;
+  background: var(--surface-inset);
 }
 
 .oc-segmented[data-size="sm"] {
@@ -21,8 +21,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: var(--oc-segmented-height);
-  padding: 0 var(--oc-header-gap);
+  min-height: calc(var(--oc-segmented-height) - var(--oc-segmented-gap) * 2 - var(--oc-border-width) * 2);
+  padding: 0 var(--ui-gap-md);
   gap: var(--ui-gap-xs);
   border: var(--oc-border-width) solid transparent;
   border-radius: var(--oc-radius-soft);
@@ -46,9 +46,10 @@
 }
 
 .oc-segmented__item[data-pressed] {
-  background: var(--ui-list-selected-bg);
-  border-color: transparent;
+  background: var(--surface-strong);
+  border-color: var(--border);
   color: var(--text-strong);
+  box-shadow: 0 var(--oc-border-width) var(--oc-border-width) color-mix(in srgb, var(--ui-shadow-tone) 35%, transparent);
 }
 
 .oc-segmented__item:focus-visible {

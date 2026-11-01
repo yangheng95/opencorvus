@@ -273,32 +273,17 @@
   width: fit-content;
   max-width: 100%;
   min-width: 0;
-  min-height: calc(28px * var(--ui-scale));
+  min-height: var(--oc-density-chip-height);
   align-items: center;
   flex-wrap: nowrap;
   gap: var(--ui-gap-3xs);
-  margin-inline-start: var(--ui-gap-lg);
-  padding: var(--ui-gap-3xs);
-  border: var(--oc-border-width) solid color-mix(in srgb, var(--border) 66%, transparent);
+  margin-inline-start: 0;
+  padding: 0;
+  border: 0;
   border-radius: var(--oc-radius-soft);
-  background: color-mix(in srgb, var(--surface) 78%, transparent);
+  background: transparent;
   box-sizing: border-box;
   color: var(--text-muted);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(calc(-2px * var(--ui-scale)));
-  transition:
-    opacity var(--ui-duration-fast) var(--ui-timing-standard),
-    transform var(--ui-duration-fast) var(--ui-timing-standard);
-}
-
-.chat-bubble-shell:is(:hover, :focus-within) > .conversation-turn-control,
-.conversation-turn-control:has([aria-expanded="true"]) {
-  opacity: var(--ui-opacity-full);
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateY(0);
 }
 
 .conversation-turn-control__actions,

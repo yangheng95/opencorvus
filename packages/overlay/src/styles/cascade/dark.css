@@ -22,32 +22,32 @@
    ───────────────────────────────────────────────────────────── */
 
 :root[data-theme="dark"] {
-  --workspace-glass-bg: rgb(24 25 29 / 0.96);
+  --workspace-glass-bg: rgb(28 29 31 / 0.96);
   --workspace-glass-edge: rgb(255 255 255 / 0.08);
   color-scheme: dark;
   --text-on-accent: #000000;
   --text-on-strong: #000000;
   --text-on-danger: #000000;
-  --bg: #191b20;
-  --surface: #22252b;
-  --surface-hover: #2c3038;
-  --surface-inset: #252830;
-  --surface-strong: #252830;
-  --rail-surface: #17191e;
-  --chat-canvas: #1c1e24;
+  --bg: #181818;
+  --surface: #222222;
+  --surface-hover: #303030;
+  --surface-inset: #252525;
+  --surface-strong: #303030;
+  --rail-surface: #191b1d;
+  --chat-canvas: #181818;
   --workspace-ambient-fill: transparent;
   --body-bg: var(--bg);
-  --chrome: #17191e;
+  --chrome: #1e2024;
   --border: rgba(255, 255, 255, 0.1);
   --border-hover: rgba(255, 255, 255, 0.18);
   --border-strong: rgba(255, 255, 255, 0.24);
-  --ui-focused-popup-border: var(--oc-border-width) solid var(--border-strong);
+  --ui-focused-popup-border: var(--oc-border-width) solid var(--border);
   --ui-focused-popup-shadow: var(--shadow-lg);
   --ui-focused-popup-scrim: color-mix(in srgb, var(--text-strong) 14%, transparent);
-  --text: #d9dce5;
-  --text-strong: #f0f1f5;
-  --text-soft: #b8bdc9;
-  --text-muted: #9aa2b2;
+  --text: #dddde1;
+  --text-strong: #f5f5f7;
+  --text-soft: #b4b4bb;
+  --text-muted: #a0a0a8;
   --accent: #5b8def;
   --accent-dim: rgba(91, 141, 239, 0.12);
   --accent-hover: #4a7de0;
@@ -94,7 +94,7 @@
   --oc-syntax-deletion-text: #ffdcd7;
   --oc-syntax-deletion-bg: color-mix(in srgb, #f85149 15%, transparent);
 
-  --dialog-bg: #22252b;
+  --dialog-bg: #282828;
   --dialog-backdrop: rgba(0, 0, 0, 0.38);
   --ui-scrim: rgba(0, 0, 0, 0.38);
   --ui-shadow-tone: rgba(0, 0, 0, 0.32);
@@ -103,6 +103,6 @@
   --task-bar-bg: var(--chrome);
   --task-bar-backdrop-filter: none;
   --task-bar-border-color: var(--border);
-  --menu-panel-bg: rgb(32, 34, 38);
+  --menu-panel-bg: #282828;
   --divider-soft: rgba(255, 255, 255, 0.06);
 }

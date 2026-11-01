@@ -95,7 +95,9 @@ export default function GeneralPanel() {
       <Show when={!inSecureContext()}>
         <Feedback>{t("settings.insecure_context")}</Feedback>
       </Show>
-      <SettingsGroup title={t("settings.section.notifications")}>
+      <PermissionsSettingsGroup />
+
+      <SettingsGroup title={t("settings.title")}>
         <SettingsRow
           title={<label for="settings-desktop-notifications">{t("settings.desktop_notifications_label")}</label>}
           desc={t("settings.desktop_notifications_hint")}
@@ -115,11 +117,6 @@ export default function GeneralPanel() {
             {desktopNotificationError()}
           </Feedback>
         ) : null}
-      </SettingsGroup>
-
-      <PermissionsSettingsGroup />
-
-      <SettingsGroup title={t("settings.git_preferences")}>
         <SettingsRow
           title={<label for="settings-offer-git-init">{t("settings.offer_git_init")}</label>}
           desc={t("settings.offer_git_init_hint")}
@@ -150,9 +147,6 @@ export default function GeneralPanel() {
         <Show when={gitPreferenceError()}>
           <Feedback tone="error">{gitPreferenceError()}</Feedback>
         </Show>
-      </SettingsGroup>
-
-      <SettingsGroup title={t("settings.section.diagnostics")}>
         <SettingsRow
           title={t("settings.log_export_label")}
           desc={t("settings.log_export_hint")}
@@ -161,9 +155,9 @@ export default function GeneralPanel() {
           actions={
             <Button
               type="button"
-              variant="solid"
+              variant="outline"
               size="md"
-              tone="accent"
+              tone="neutral"
               data-ui="settings-log-export"
               disabled={logExporting() || !appStore.connected}
               onClick={handleLogExport}

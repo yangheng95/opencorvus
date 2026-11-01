@@ -12,7 +12,7 @@
 
 .native-menu-card {
   width: calc(208px * var(--ui-scale));
-  padding: var(--ui-gap-md);
+  padding: var(--ui-gap-xs);
   overflow: hidden;
   border: var(--oc-border-width) solid var(--border);
   border-radius: var(--oc-radius-large);
@@ -55,12 +55,12 @@
   color: inherit;
   font: inherit;
   width: 100%;
-  min-height: calc(34px * var(--ui-scale));
+  min-height: var(--oc-density-button-height);
   display: grid;
   grid-template-columns: calc(20px * var(--ui-scale)) minmax(0, 1fr) auto;
   align-items: center;
-  gap: var(--ui-gap-lg);
-  padding: 0 var(--ui-gap-lg);
+  gap: var(--ui-gap-md);
+  padding: var(--ui-gap-xs) var(--ui-gap-md);
   border: 0;
   border-radius: var(--oc-radius-soft);
   background: transparent;
@@ -102,7 +102,7 @@
 
 .native-menu-item__description {
   color: var(--text-muted);
-  font-size: var(--ui-font-caption);
+  font-size: var(--ui-font-secondary);
 }
 
 .native-menu-item__check {

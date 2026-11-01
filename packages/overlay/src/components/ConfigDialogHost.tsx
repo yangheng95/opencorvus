@@ -116,23 +116,11 @@ const CONFIG_NAV_GROUPS: Array<{ labelKey: string; tabs: ConfigTabDef[] }> = [
   },
   {
     labelKey: "settings.nav.product",
-    tabs: ["code", "work"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
-  },
-  {
-    labelKey: "settings.nav.missions_automation",
-    tabs: ["mission-skill", "scheduled"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
-  },
-  {
-    labelKey: "expert_squad.title",
-    tabs: ["expert-squad-install", "expert-squad"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
+    tabs: ["code", "work", "mission-skill", "scheduled"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
   },
   {
     labelKey: "settings.nav.shared_resources",
-    tabs: ["providers", "skill", "mcp", "channel"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
-  },
-  {
-    labelKey: "settings.nav.context",
-    tabs: ["memory"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
+    tabs: ["expert-squad-install", "expert-squad", "providers", "skill", "mcp", "channel", "memory"].map((id) => CONFIG_TAB_BY_ID.get(id as ConfigDialogTab)!),
   },
   {
     labelKey: "settings.nav.data",

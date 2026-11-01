@@ -81,10 +81,6 @@
   display: flex;
   width: max-content;
   margin: 0;
-  padding: 0;
-  gap: var(--ui-gap-sm);
-  border: 0;
-  background: transparent;
 }
 
 .automations-rows {
