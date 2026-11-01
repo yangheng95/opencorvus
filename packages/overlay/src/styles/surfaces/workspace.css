@@ -99,7 +99,7 @@ code .file-link:focus-visible {
    ───────────────────────────────────────────────────────────── */
 
 .workspace-main {
-  --conversation-agent-rail-width: calc(24px * var(--ui-scale));
+  --conversation-agent-rail-width: var(--oc-density-icon-button);
 
   flex: 1;
   min-width: 0;

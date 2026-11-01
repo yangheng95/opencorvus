@@ -24,6 +24,8 @@ import { Button } from "./ui/Button"
 import { t } from "../utils/i18n"
 import { isSubagentActivityRecord, subagentProgressCardID, subagentSessionIdentity } from "../utils/subagent-presentation"
 import { SubagentSessionIdentity } from "./SubagentSessionIdentity"
+import { distinctIdentitySuffix } from "../utils/identity-suffix"
+import { preciseStamp } from "../utils/time"
 
 const AGENT_RAIL_MINIMUM_VISIBLE_RECORDS = 3
 const AGENT_RAIL_PROXIMITY_DEPTH = 3
@@ -218,7 +220,7 @@ async function locateRecord(record: AgentActivityRecord, owner: AgentRailLocateO
 
 function AgentRailRow(props: {
   record: Accessor<AgentActivityRecord>
-  members: Accessor<readonly AgentActivityRecord[]>
+  records: Accessor<readonly AgentActivityRecord[]>
   proximity: Accessor<number | undefined>
   onPointerActivate: (record: AgentActivityRecord) => void
   onFocusActivate: (record: AgentActivityRecord) => void
@@ -226,14 +228,25 @@ function AgentRailRow(props: {
   onLocate: (record: AgentActivityRecord) => Promise<void>
 }) {
   const record = props.record
-  const identity = createMemo(() =>
-    isSubagentActivityRecord(record()) ? subagentSessionIdentity(record(), props.members()) : undefined,
-  )
+  const identity = createMemo(() => subagentSessionIdentity(record(), props.records()))
+  const occurrenceLabel = createMemo(() => {
+    const current = record()
+    const suffix = distinctIdentitySuffix(
+      current.id,
+      props.records().filter((peer) => peer.sessionID === current.sessionID).map((peer) => peer.id),
+    )
+    return suffix ? t("agent_rail.execution", { id: suffix }) : ""
+  })
+  const startedAtLabel = createMemo(() => {
+    const time = preciseStamp(record().startedAt)
+    return time ? t("agent_rail.started_at", { time }) : ""
+  })
   const accessibleLabel = () =>
-    t("agent_rail.view", {
-      agent: identity()?.label ?? record().agentID,
-      status: agentRailStatusLabel(record().status),
-    })
+    [
+      t("agent_rail.view", { agent: identity().label, status: agentRailStatusLabel(record().status) }),
+      occurrenceLabel(),
+      startedAtLabel(),
+    ].filter(Boolean).join(" · ")
   const proximity = () => {
     const value = props.proximity()
     return value === undefined ? undefined : String(value)
@@ -255,6 +268,7 @@ function AgentRailRow(props: {
           size="icon"
           tone="neutral"
           data-ui="conversation-agent-rail-locate"
+          data-execution-id={record().id}
           data-session-id={record().sessionID}
           data-target-message-id={record().targetMessageID || ""}
           data-rendered-card-id={
@@ -279,11 +293,13 @@ function AgentRailRow(props: {
           <Tooltip.Content class="conversation-agent-rail-tooltip" data-ui="conversation-agent-rail-tooltip">
             <div class="conversation-agent-rail-tooltip__header oc-section-heading">
               <strong>
-                <Show when={identity()} fallback={record().agentID}>
-                  {(member) => <SubagentSessionIdentity identity={member()} />}
-                </Show>
+                <SubagentSessionIdentity identity={identity()} />
+                <Show when={occurrenceLabel()}>{(label) => <span> · {label()}</span>}</Show>
               </strong>
               <span class="conversation-agent-rail-tooltip__status">{agentRailStatusLabel(record().status)}</span>
+              <Show when={startedAtLabel()}>
+                {(label) => <span class="conversation-agent-rail-tooltip__time">{label()}</span>}
+              </Show>
             </div>
           </Tooltip.Content>
         </Tooltip.Portal>
@@ -294,7 +310,6 @@ function AgentRailRow(props: {
 
 export function ConversationAgentRail(props: { onOpenSubagentConversation: (sessionID: string) => void }) {
   const records = createMemo(() => conversationAgentRecordsForSource(boardStore.selectedSource))
-  const members = createMemo(() => records().filter(isSubagentActivityRecord))
   const stacks = createMemo(() => buildAdjacentAgentRailStacks(records()))
   const hasVisibleRecords = createMemo(() => records().length >= AGENT_RAIL_MINIMUM_VISIBLE_RECORDS)
   const [pointerExecutionID, setPointerExecutionID] = createSignal<string | undefined>()
@@ -365,7 +380,7 @@ export function ConversationAgentRail(props: { onOpenSubagentConversation: (sess
                   {(record) => (
                     <AgentRailRow
                       record={record}
-                      members={members}
+                      records={records}
                       proximity={() => proximityForRecord(record())}
                       onPointerActivate={activatePointerRecord}
                       onFocusActivate={activateFocusedRecord}

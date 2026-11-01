@@ -2721,11 +2721,16 @@ are caption metadata and activity disclosures use the shared compact row height.
 The existing pane layout effect observes settings hydration and zoom so resolved
 widths follow the scale that the theme owner has applied.
 
-The compact Agent Rail uses the shared Kobalte Tooltip as its only hover and
-keyboard-focus detail surface. That Tooltip opens deterministically to the
-right of the active tick with an eight-pixel gutter and no placement fallback;
-its identity and bounded input preview remain viewport-constrained, while the
-same trigger continues to own stepped proximity and exact-card navigation.
+The compact execution Rail uses shared icon-button density for its pointer
+targets and visible resting ticks. It retains stepped proximity and exact-card
+navigation. Its only hover/focus detail surface is the shared Kobalte Tooltip,
+opening to the right with an eight-pixel gutter and no placement fallback.
+The short label preserves the actual Agent/Session identity, a distinguishing
+execution-ID suffix for reused Sessions, canonical status and localized start
+time. Session and execution suffixes share one exact-identity algorithm; they
+remain distinct entity types. Tooltip detail stays viewport-constrained and
+does not repeat delegated input. Larger navigation rows scroll within the Rail;
+record order, targets, load ownership and historical status remain unchanged.
 
 Dialog scrims share the modal layer; menu, popover and select content sit above
 that layer. Shared Kobalte presence attributes drive short entry/exit effects,

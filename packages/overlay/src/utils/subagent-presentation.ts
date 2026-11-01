@@ -4,6 +4,7 @@ import type { IconName } from "../components/ui/Icon"
 import { CONVERSATION_AGENT_ACTIVITY_LIMIT } from "@opencorvus-ai/transport-protocol"
 import { compareTimelineOrderKeys, requireTimelineOrderKey } from "./timeline-order"
 import { describeCurrentToolPart, type ToolDisplayStatus } from "./tool"
+import { distinctIdentitySuffix } from "./identity-suffix"
 
 const SUBAGENT_PROGRESS_CARD_PREFIX = "subagent-session:"
 const SUBAGENT_PROGRESS_GRID_PREFIX = "subagent-grid:"
@@ -111,14 +112,10 @@ export function subagentSessionIdentity(
   record: Pick<AgentActivityRecord, "sessionID" | "agentID">,
   records: readonly Pick<AgentActivityRecord, "sessionID" | "agentID">[],
 ): SubagentSessionIdentity {
-  const peers = records.filter((peer) => peer.agentID === record.agentID && peer.sessionID !== record.sessionID)
-  let length = Math.min(4, record.sessionID.length)
-  while (
-    length < record.sessionID.length &&
-    peers.some((peer) => peer.sessionID.endsWith(record.sessionID.slice(-length)))
+  const suffix = distinctIdentitySuffix(
+    record.sessionID,
+    records.filter((peer) => peer.agentID === record.agentID).map((peer) => peer.sessionID),
   )
-    length++
-  const suffix = peers.length ? record.sessionID.slice(-length) : ""
   return {
     sessionID: record.sessionID,
     agentID: record.agentID,

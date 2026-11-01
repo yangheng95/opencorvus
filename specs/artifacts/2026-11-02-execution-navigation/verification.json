@@ -1,0 +1,176 @@
+{
+  "scope": 882,
+  "sourceCommit": "5d06a2c4bfb00e261eb9420f061f35badbb0567e",
+  "actualCLI": true,
+  "hiddenOwnedPages": true,
+  "userWindowsUntouched": true,
+  "providerMaximumRequests": {
+    "before": 0,
+    "after": 0
+  },
+  "nativeOriginalHandles": {
+    "before": {
+      "handle": 98638,
+      "exitCode": 0
+    },
+    "after": {
+      "handle": 35005,
+      "exitCode": 0
+    }
+  },
+  "before": {
+    "at": "2026-11-01T20:59:45.592Z",
+    "kind": "before",
+    "schema": 9,
+    "tables": 92,
+    "originals": 258677,
+    "current": 258679,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52927,
+        "after": 52928
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52869,
+        "after": 52870
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 229,
+    "projects": 100,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1260,
+    "reserveMs": 4044407,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-B2xPlHX1.js"
+  },
+  "after": {
+    "at": "2026-11-01T21:13:40.611Z",
+    "kind": "after",
+    "schema": 9,
+    "tables": 92,
+    "originals": 258679,
+    "current": 258681,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52928,
+        "after": 52929
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52870,
+        "after": 52871
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 229,
+    "projects": 100,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1260,
+    "reserveMs": 3173827,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-DeBepK0O.js"
+  },
+  "publicNavigationContract": {
+    "httpStatus": 200,
+    "records": 6,
+    "sessions": 2,
+    "executionIDs": 6,
+    "canonicalIdentitiesStatusTimesAndTargetsPreserved": true
+  },
+  "checks": {
+    "nodeBuild": 0,
+    "identityDataContracts": {
+      "exitCode": 0,
+      "tests": 4,
+      "positiveOutputAssertions": 8
+    },
+    "typecheck": 0,
+    "auxiliary": 0
+  },
+  "manualGeometry": {
+    "before": {
+      "width": 20,
+      "height": 14,
+      "markerAlpha": 0.34,
+      "idleOpacity": 0.7
+    },
+    "after": {
+      "width": 24,
+      "height": 28,
+      "markerAlpha": 1,
+      "idleOpacity": 0.7
+    },
+    "nearBottomMemberHit": {
+      "x": 320,
+      "y": 376.5,
+      "openedSessionID": "ses_hqwMSLMHaC0ieJk4n982"
+    },
+    "restoredComposerHeight": 42,
+    "railWithSixRecords": {
+      "clientHeight": 659,
+      "scrollHeight": 659
+    }
+  },
+  "manualOccurrenceEvidence": {
+    "sessionID": "ses_-zUQWsTcezzNPfRFa33B",
+    "adjacentStartedAt": [
+      1793302972378,
+      1793302972379
+    ],
+    "distinctExecutionSuffixes": [
+      "8MGR",
+      "hbZ9"
+    ],
+    "displayedSecond": "03:42:52",
+    "firstLocatedCard": "orchestrator:session:ses_-zUQWsTcezzNPfRFa33B:message:msg_g0VZT7WPy00MAPWaUozU",
+    "secondLocatedCard": "orchestrator:session:ses_-zUQWsTcezzNPfRFa33B:message:msg_task-root-control_art_hlCLBIkghh11rrtZ10Hs_art_hlCLBIkghh11rrtZ10Hs",
+    "nearTimeLocatedCard": "orchestrator:session:ses_-zUQWsTcezzNPfRFa33B:message:msg_hrclTLKZ1AGoWFqf8MGR"
+  },
+  "screenshots": [
+    "01-before-resting-en.jpg",
+    "02-before-focused-en.jpg",
+    "03-before-first-locate-en.jpg",
+    "04-before-second-locate-en.jpg",
+    "05-before-member-source-en.jpg",
+    "06-after-resting-en.jpg",
+    "07-after-focused-first-en.jpg",
+    "08-after-first-locate-en.jpg",
+    "09-after-second-locate-en.jpg",
+    "10-after-close-time-first-en.jpg",
+    "11-after-close-time-second-en.jpg",
+    "12-after-close-time-locate-en.jpg",
+    "13-after-pointer-member-en.jpg",
+    "14-after-pointer-member-en.jpg",
+    "15-after-member-source-en.jpg",
+    "16-after-focused-zh.jpg",
+    "17-after-reduced-reading-area-zh.jpg",
+    "18-after-member-focused-zh.jpg"
+  ],
+  "manualVisualReview": true,
+  "uiAutomatedTestsRun": 0,
+  "limitations": [
+    "Six real navigation records fit the viewport; oversize navigation scrolling was not actually exercised.",
+    "17 reduced the message reading area through the real Composer resizer but the Rail stayed 659px high.",
+    "No live running/error/reconnect states, every theme/scale, other Task/Mission/Conversation pages or real screen-reader software were individually verified.",
+    "13 clicked outside the rounded button hit shape; 14 is the successful enlarged-target evidence.",
+    "Locating retains the existing card-level grouping; same-card occurrences do not gain a new per-Message scroll contract."
+  ]
+}

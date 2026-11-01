@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [执行记录导航](records/2026-11/2026-11-02-execution-navigation.md)：点击空间、真实身份与轮次时间。
+
 - [工具结构化内容阅读](records/2026-11/2026-11-02-tool-payload-reading.md)：窄栏字段排版、单复数与原始数据阅读。
 
 - [常用操作阅读](records/2026-11/2026-11-02-routine-operation-reading.md)：产物、协调与子任务操作的真实名称和来源。

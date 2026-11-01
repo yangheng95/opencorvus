@@ -372,7 +372,7 @@
     1.003 80%,
     1
   );
-  --conversation-agent-rail-tick-height: calc(14px * var(--ui-scale));
+  --conversation-agent-rail-tick-height: var(--oc-density-icon-button);
   --conversation-agent-rail-tick-gap: 0;
 
   position: absolute;
@@ -599,7 +599,7 @@
 
 .conversation-agent-rail .oc-button[data-ui="conversation-agent-rail-locate"]:hover,
 .conversation-agent-rail .oc-button[data-ui="conversation-agent-rail-locate"]:focus-visible {
-  --oc-button-bg: transparent;
+  --oc-button-bg: var(--surface-hover);
   --oc-button-border: var(--oc-border-width) solid transparent;
   --oc-button-color: var(--text-strong);
 }
@@ -621,12 +621,11 @@
   width: var(--conversation-agent-rail-marker-width);
   height: 2px;
   border-radius: var(--oc-radius-pill);
-  /* 34%: the resting ticks are wayfinding, not content — they should be
-   * discoverable when sought and invisible when reading. Status colors
-   * below keep their stronger presence. */
-  background: color-mix(in srgb, var(--text-muted) 34%, transparent);
+  /* Keep resting navigation discoverable; proximity and status still own
+   * emphasis while the shared button density owns the pointer target. */
+  background: var(--text-muted);
   opacity: var(--ui-opacity-full);
-  transform: scaleX(calc(0.4 + 0.6 * var(--conversation-agent-rail-marker-progress)));
+  transform: scaleX(calc(0.6 + 0.4 * var(--conversation-agent-rail-marker-progress)));
   transform-origin: center;
   transition:
     transform var(--conversation-agent-rail-marker-motion-duration) var(--conversation-agent-rail-marker-motion-easing),
@@ -746,10 +745,16 @@
   text-overflow: ellipsis;
 }
 
-.conversation-agent-rail-tooltip__status {
+.conversation-agent-rail-tooltip__status,
+.conversation-agent-rail-tooltip__time {
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
   font-weight: var(--ui-font-weight-body);
+}
+
+.conversation-agent-rail-tooltip__time {
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .conversation-agent-target--pulse {

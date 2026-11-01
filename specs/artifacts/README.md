@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [执行记录导航](2026-11-02-execution-navigation/README.md)：真实协调记录、成员及来源的双语手动复核。
+
 - [工具结构化内容阅读](2026-11-02-tool-payload-reading/README.md)：同一真实Task与成员的字段、计数和复制截图。
 
 - [常用操作阅读](2026-11-02-routine-operation-reading/README.md)：真实Mission、Task与成员操作和来源截图。
