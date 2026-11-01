@@ -378,9 +378,9 @@ const TOOL_PRESENTATIONS: { names: string[]; icon: IconName; label: string }[] =
   { names: ["schedule"], icon: "tasks", label: "tool.action.schedule" },
   { names: ["planner"], icon: "tasks", label: "tool.action.planner" },
   { names: ["wait"], icon: "config-tool", label: "tool.action.wait" },
-  { names: ["continuousgoalcreate"], icon: "tasks", label: "tool.action.goal_create" },
-  { names: ["continuousgoalget"], icon: "tasks", label: "tool.action.goal_get" },
-  { names: ["continuousgoalupdate"], icon: "tasks", label: "tool.action.goal_update" },
+  { names: ["createcontinuousgoal"], icon: "tasks", label: "tool.action.goal_create" },
+  { names: ["getcontinuousgoal"], icon: "tasks", label: "tool.action.goal_get" },
+  { names: ["updatecontinuousgoal"], icon: "tasks", label: "tool.action.goal_update" },
 ]
 const toolPresentations = new Map(TOOL_PRESENTATIONS.flatMap((entry) => entry.names.map((name) => [name, entry] as const)))
 
@@ -545,10 +545,15 @@ export function describeToolCall(name: string, input: unknown, state: unknown, b
   const status = normalizeToolStatus(record(state) ? (state as any).status : undefined)
   const cancelled = status === "error" && toolFailurePresentation(record(state) ? (state as any).failure : undefined).cancelled
   const commandExitCode = completedCommandExitCode(toolName, state)
+  const key = toolNameKey(toolName)
+  const readFacts = status === "completed" && (key === "read" || key === "readfile")
+    ? ReadToolResultFacts.safeParse(record(state) ? (state as any).metadata : undefined)
+    : undefined
+  const readsDirectory = readFacts?.success && readFacts.data.readType === "directory"
   return {
     name: toolName,
-    icon: displayToolIconName(toolName),
-    label: displayToolLabel(toolName),
+    icon: readsDirectory ? "folder-open" : displayToolIconName(toolName),
+    label: readsDirectory ? t("tool.action.read_directory") : displayToolLabel(toolName),
     detail: displayToolDetail(toolName, input, state, base),
     status,
     cancelled,

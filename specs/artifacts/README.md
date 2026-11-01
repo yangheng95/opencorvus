@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标操作可读性](2026-11-02-goal-operation-reading/README.md)：真实877 Goal历史的中英文操作与来源预览。
+
 - [默认页与保存任务](2026-11-02-startup-selection/README.md)：冷启动、保存Task、显式定位及Goal实页证据。
 
 - [Markdown 表格阅读](2026-11-02-table-reading/README.md)：真实生成文档及宽窄表格手动体验证据。

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [持续目标操作可读性](2026-11-02-goal-operation-reading.md)：真实声明、读取类型和实页复核。
+
 - [默认页与保存任务](2026-11-02-startup-selection.md)：真实导航意图、分页身份和开始工作。
 
 - [Markdown 表格阅读](2026-11-02-table-reading.md)：共享表格布局、原始内容与键盘阅读。

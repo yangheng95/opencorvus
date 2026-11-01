@@ -2513,7 +2513,11 @@ Compact operations, inline chips, raw Tool card titles, session dialogs and
 derived member activity use localized action names; authored titles and unknown
 extension IDs retain their identity. The raw Tool ID remains available on the
 name and in expanded input headings. Original arguments, results, status and
-failure facts continue to use the canonical Tool record. When an execution run
+failure facts continue to use the canonical Tool record. Continuous Goal names
+match their actual create/get/update-first Tool declarations. A completed read
+uses its validated producer-owned readType to distinguish directory name/icon
+from file reading; request paths do not establish the resource type.
+When an execution run
 contains multiple operations, its complete Sources group occupies a separate
 row: the latest operation must not appear paired with the first Source. Single
 operations retain the compact layout and all Sources retain their chronology.

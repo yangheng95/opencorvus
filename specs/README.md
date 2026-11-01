@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标操作可读性](records/2026-11/2026-11-02-goal-operation-reading.md)：真实Goal工具名和目录读取身份。
+
 - [默认页与保存任务](records/2026-11/2026-11-02-startup-selection.md)：启动项目、精确任务恢复与默认Goal入口。
 
 - [Markdown 表格阅读](records/2026-11/2026-11-02-table-reading.md)：窄文件面板、长网址与完整表格的可读性。

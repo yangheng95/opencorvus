@@ -1,0 +1,130 @@
+{
+  "at": "2026-11-01T18:55:52.713Z",
+  "purpose": "Manual review of retained real Goal operations and producer-owned directory identity",
+  "uiAutomation": false,
+  "screenshots": 14,
+  "before": {
+    "at": "2026-11-01T18:49:18.638Z",
+    "kind": "before",
+    "schema": 9,
+    "tables": 92,
+    "originals": 258659,
+    "current": 258661,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52918,
+        "after": 52919
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52860,
+        "after": 52861
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 229,
+    "projects": 100,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1260,
+    "reserveMs": 4407628,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-CWKdLhpS.js"
+  },
+  "after": {
+    "at": "2026-11-01T18:54:38.012Z",
+    "kind": "after",
+    "schema": 9,
+    "tables": 92,
+    "originals": 258661,
+    "current": 258663,
+    "changes": [
+      {
+        "table": "engine_control_activation_lease_grant",
+        "before": 52919,
+        "after": 52920
+      },
+      {
+        "table": "engine_control_activation_lease",
+        "before": 52861,
+        "after": 52862
+      }
+    ],
+    "allOriginalBusinessRowsPreserved": true,
+    "reusedExpiredCapacitySlots": [],
+    "sourceDatabasePreserved": true,
+    "attachments": 229,
+    "projects": 100,
+    "filesystemExclusions": 0,
+    "requests": 0,
+    "cumulativeRequests": 1260,
+    "reserveMs": 4081102,
+    "source": {
+      "catalogSameBytes": true,
+      "catalogSameMetadata": true,
+      "authSameMetadata": true
+    },
+    "uiEntry": "main-DA5cPY77.js"
+  },
+  "business": {
+    "at": "2026-11-01T18:51:43.399Z",
+    "kind": "after",
+    "sessionID": "ses_-zUQFZJOAzzdBf6RDQ2v",
+    "goalID": "pev_g0VZkQgjy00kTMNnWU1p",
+    "goalStatus": "complete",
+    "sessionStatus": "idle",
+    "turnBudget": 12,
+    "turnsAccepted": 1,
+    "tokensUsed": 383698,
+    "canonicalToolRecords": 10,
+    "canonicalDirectoryFacts": {
+      "readType": "directory",
+      "lines": 5,
+      "totalLines": 5
+    },
+    "canonicalGoalToolIDs": [
+      "get_continuous_goal",
+      "update_continuous_goal"
+    ],
+    "actualRequests": 0
+  },
+  "checks": {
+    "build": 0,
+    "overlayTypecheck": 0,
+    "i18nCssDocs": 0
+  },
+  "native": {
+    "before": {
+      "handle": 16872,
+      "code": 0
+    },
+    "after": {
+      "handle": 54928,
+      "code": 0
+    }
+  },
+  "preservation": {
+    "pairedCopiesRetired": 4,
+    "sourceAuthMetadata": true,
+    "sourceModelBytesAndMetadata": true,
+    "userDatabaseUsed": false,
+    "userWindowUsed": false
+  },
+  "manualIdentityObservation": {
+    "goalReadNameTooltip": "get_continuous_goal",
+    "goalUpdateInputHeading": "update_continuous_goal",
+    "directoryName": "Read directory / 读取目录",
+    "directoryCount": 5
+  },
+  "limitations": [
+    "create_continuous_goal had no real invocation in this retained Session; declaration alignment only.",
+    "Pending/error/binary read presentation was not individually exercised."
+  ]
+}
