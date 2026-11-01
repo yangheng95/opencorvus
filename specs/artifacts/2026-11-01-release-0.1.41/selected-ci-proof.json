@@ -1,0 +1,80 @@
+{
+  "runID": 41323690359,
+  "source": "59b3d7342139810f1f1cd52c752cc6f4570f1520",
+  "conclusion": "success",
+  "createdAt": "2026-11-01T15:55:57Z",
+  "updatedAt": "2026-11-01T16:07:22Z",
+  "elapsedSeconds": 685,
+  "platforms": [
+    {
+      "platform": "linux",
+      "jobID": 124900185546,
+      "proof": [
+        "2026-11-01T16:03:05.9322330Z opencorvus:test: [1/8] DONE test/attachment-publication-retention.test.ts exit=0 duration=2.10s",
+        "2026-11-01T16:03:07.7796144Z opencorvus:test: [2/8] DONE test/config-project-event.test.ts exit=0 duration=1.85s",
+        "2026-11-01T16:03:10.9795774Z opencorvus:test: [3/8] DONE test/server/attachment-capture-identity.test.ts exit=0 duration=3.20s",
+        "2026-11-01T16:03:12.7219062Z opencorvus:test: [4/8] DONE test/tool-result-attachment-provider-projection.test.ts exit=0 duration=1.74s",
+        "2026-11-01T16:03:16.5350335Z opencorvus:test: [5/8] DONE test/config-global-project-validation.test.ts exit=0 duration=3.81s",
+        "2026-11-01T16:03:31.8985156Z opencorvus:test: [6/8] DONE test/config-peer-convergence.test.ts exit=0 duration=15.36s",
+        "2026-11-01T16:03:38.5354959Z opencorvus:test: [7/8] DONE test/mcp/configure-credential-order.test.ts exit=0 duration=6.64s",
+        "2026-11-01T16:03:55.4213595Z opencorvus:test: [8/8] DONE test/memory/project-memory.test.ts exit=0 duration=16.89s"
+      ]
+    },
+    {
+      "platform": "macos",
+      "jobID": 124900185608,
+      "proof": [
+        "2026-11-01T16:05:14.2728350Z opencorvus:test: [1/8] DONE test/attachment-publication-retention.test.ts exit=0 duration=4.08s",
+        "2026-11-01T16:05:17.2544600Z opencorvus:test: [2/8] DONE test/config-project-event.test.ts exit=0 duration=2.98s",
+        "2026-11-01T16:05:22.5682850Z opencorvus:test: [3/8] DONE test/server/attachment-capture-identity.test.ts exit=0 duration=5.31s",
+        "2026-11-01T16:05:25.6846390Z opencorvus:test: [4/8] DONE test/tool-result-attachment-provider-projection.test.ts exit=0 duration=3.12s",
+        "2026-11-01T16:05:30.3450320Z opencorvus:test: [5/8] DONE test/config-global-project-validation.test.ts exit=0 duration=4.66s",
+        "2026-11-01T16:05:47.5650230Z opencorvus:test: [6/8] DONE test/config-peer-convergence.test.ts exit=0 duration=17.22s",
+        "2026-11-01T16:05:55.9167200Z opencorvus:test: [7/8] DONE test/mcp/configure-credential-order.test.ts exit=0 duration=8.35s",
+        "2026-11-01T16:06:19.3070110Z opencorvus:test: [8/8] DONE test/memory/project-memory.test.ts exit=0 duration=23.39s"
+      ]
+    },
+    {
+      "platform": "windows",
+      "jobID": 124900185580,
+      "proof": [
+        "2026-11-01T16:05:26.5145820Z opencorvus:test: [1/8] DONE test/attachment-publication-retention.test.ts exit=0 duration=4.12s",
+        "2026-11-01T16:05:29.9729231Z opencorvus:test: [2/8] DONE test/config-project-event.test.ts exit=0 duration=3.46s",
+        "2026-11-01T16:05:37.1336122Z opencorvus:test: [3/8] DONE test/server/attachment-capture-identity.test.ts exit=0 duration=7.16s",
+        "2026-11-01T16:05:40.3383937Z opencorvus:test: [4/8] DONE test/tool-result-attachment-provider-projection.test.ts exit=0 duration=3.20s",
+        "2026-11-01T16:05:48.6920001Z opencorvus:test: [5/8] DONE test/config-global-project-validation.test.ts exit=0 duration=8.35s",
+        "2026-11-01T16:06:15.3047195Z opencorvus:test: [6/8] DONE test/config-peer-convergence.test.ts exit=0 duration=26.61s",
+        "2026-11-01T16:06:31.7815389Z opencorvus:test: [7/8] DONE test/mcp/configure-credential-order.test.ts exit=0 duration=16.48s",
+        "2026-11-01T16:07:11.0337482Z opencorvus:test: [8/8] DONE test/memory/project-memory.test.ts exit=0 duration=39.25s"
+      ],
+      "checkout": [
+        {
+          "name": "Enable tracked long paths on Windows",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-01T16:00:31Z",
+          "completed_at": "2026-11-01T16:00:32Z"
+        },
+        {
+          "name": "Checkout repository",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-01T16:00:32Z",
+          "completed_at": "2026-11-01T16:02:05Z"
+        }
+      ]
+    }
+  ],
+  "localeLoader": [
+    "2026-11-01T16:02:59.7281290Z (pass) locale data loading > reports the en-US resource and HTTP failure [0.50ms]",
+    "2026-11-01T16:02:59.7281943Z (pass) locale data loading > retains the en-US JSON parse cause and resource [0.15ms]",
+    "2026-11-01T16:02:59.7282482Z (pass) locale data loading > reports the en-US catalog shape error [0.09ms]",
+    "2026-11-01T16:02:59.7283007Z (pass) locale data loading > reports the zh-CN resource and HTTP failure [0.03ms]",
+    "2026-11-01T16:02:59.7283406Z (pass) locale data loading > retains the zh-CN JSON parse cause and resource [0.03ms]",
+    "2026-11-01T16:02:59.7283741Z (pass) locale data loading > reports the zh-CN catalog shape error [0.02ms]",
+    "2026-11-01T16:02:59.7289688Z (pass) locale data loading > loads catalogs relative to the executing module and publishes their values [0.61ms]"
+  ],
+  "scope": "Eight focused backend files and actual service data tests; not full backend suite. Formal6f18 changes only changelog date and release receipt from this source."
+}

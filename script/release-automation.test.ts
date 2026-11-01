@@ -73,10 +73,10 @@ describe("automatic release lifecycle", () => {
 
   test("a rerun retains the original creation deadline and expires with an explicit error", () => {
     const deadline = releaseDeadline({ ...parent, run_attempt: 3, run_started_at: new Date(started + 25 * 60_000).toISOString() } as ActionsRun)
-    expect(deadline).toBe(started + 40 * 60_000)
-    expect(assertReleaseBudget(deadline, started + 30 * 60_000)).toBe(10 * 60_000)
-    expect(assertReleaseBudget(deadline, started + 39 * 60_000)).toBe(60_000)
-    expect(() => assertReleaseBudget(deadline, started + 40 * 60_000)).toThrow("The original release's 40-minute budget has expired")
+    expect(deadline).toBe(started + 60 * 60_000)
+    expect(assertReleaseBudget(deadline, started + 45 * 60_000)).toBe(15 * 60_000)
+    expect(assertReleaseBudget(deadline, started + 59 * 60_000)).toBe(60_000)
+    expect(() => assertReleaseBudget(deadline, started + 60 * 60_000)).toThrow("The original release's 60-minute budget has expired")
   })
 
   test("a failed website conclusion becomes the parent release error", async () => {
@@ -151,9 +151,9 @@ describe("automatic release lifecycle", () => {
     })
   })
 
-  test("both deadline owners settle queued aggregate jobs after minute 30", async () => {
+  test("both deadline owners settle queued aggregate jobs in the last twenty minutes", async () => {
     for (const [currentRunID, resultJob] of [[41, RELEASE_RESULT_JOB], [72, WEBSITE_RESULT_JOB]] as const) {
-      let now = started + 32 * 60_000
+      let now = started + 52 * 60_000
       let reads = 0
       await withAPI((_request, route) => {
         if (route === "actions/runs/41") return Response.json(parent)
@@ -168,7 +168,7 @@ describe("automatic release lifecycle", () => {
           now: () => now, sleep: async (milliseconds) => { now += milliseconds },
         })
         expect(result).toEqual({
-          releaseRunID: 41, currentRunID, elapsedMs: 32 * 60_000 + 10_000, budgetMs: 40 * 60_000,
+          releaseRunID: 41, currentRunID, elapsedMs: 52 * 60_000 + 10_000, budgetMs: 60 * 60_000,
         })
       })
     }

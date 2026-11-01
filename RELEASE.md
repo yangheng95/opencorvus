@@ -53,7 +53,7 @@ The workflow does all of the following in one pipeline:
 6. Reverify both owners and upload the verified files to the draft GitHub Release
 7. Publish the draft only after every independent Release asset uploads successfully
 8. Dispatch the existing website deployment owner and await its exact returned workflow run ID
-9. Require native publication, updater settlement, website activation, public readback and the final aggregate result to complete within the original 40-minute run budget
+9. Require native publication, updater settlement, website activation, public readback and the final aggregate result to complete within the original 60-minute run budget
 
 Early admission leaves an exact tag and empty draft if native compilation later
 fails. Re-run the complete failed-job set in the same workflow run with
@@ -75,7 +75,7 @@ set within the same run to reuse successful compilation and format artifacts. Se
 
 Native publication, the desktop update channel and website deployment are one automatic release scope for tag pushes, manual dispatch and the local release command. The website workflow retains its own signing-version counter and main-only production environment; its checkout verifies the exact release tag/source and parent run. The native workflow waits on the workflow ID returned by GitHub's 2026-03-10 dispatch API, so deployment failure fails the combined release. A same-run publication retry still executes website deployment even when the update channel is already current.
 
-`script/release-automation.ts` owns a 40-minute deadline measured from the original native workflow `created_at`. Queue time, retries and delegated website time share that budget; reruns do not reset it. Both workflows have deadline watchers and explicit final-result jobs, and publication/deployment boundaries recheck remaining time. Deadline watchers and long native compile/package jobs have 41-minute infrastructure ceilings so the shared policy can cancel an expired run itself. An expired run is cancelled and remains failed, with completed artifacts retained where their jobs already uploaded them. Deadline enforcement is not proof of performance: an actual successful native-plus-website run must record its elapsed time below the limit.
+`script/release-automation.ts` owns a 60-minute deadline measured from the original native workflow `created_at`. Queue time, retries and delegated website time share that budget; reruns do not reset it. Both workflows have deadline watchers and explicit final-result jobs, and publication/deployment boundaries recheck remaining time. Deadline watchers and long native compile/package jobs have 61-minute infrastructure ceilings so the shared policy can cancel an expired run itself. An expired run is cancelled and remains failed, with completed artifacts retained where their jobs already uploaded them. Deadline enforcement is not proof of performance: an actual successful native-plus-website run must record its elapsed time below the limit.
 
 ### Unattended handoff
 

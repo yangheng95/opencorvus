@@ -1,0 +1,35 @@
+{
+  "deletedWorkflowRuns": [
+    {
+      "id": 41324763657,
+      "source": "6f18a219956fb0f891092275d7bd227d826fb80d",
+      "previousConclusion": "cancelled",
+      "deletedAt": "2026-11-01T17:08:02.6054822Z"
+    },
+    {
+      "id": 41327769967,
+      "source": "6f18a219956fb0f891092275d7bd227d826fb80d",
+      "previousConclusion": "cancelled",
+      "deletedAt": "2026-11-01T17:08:05.5347602Z"
+    }
+  ],
+  "successfulManualRunPreserved": 41328925805,
+  "healthyReleasePreserved": 430696017,
+  "tagPreserved": "v0.1.41",
+  "historyPreserved": true,
+  "evidence": "deadline-investigation.json, native-run.json and website-cancelled-run.json archived before deletion",
+  "readback": [
+    {
+      "id": 41324763657,
+      "status": 404,
+      "message": "Not Found",
+      "checkedAt": "2026-11-01T17:08:57.721Z"
+    },
+    {
+      "id": 41327769967,
+      "status": 404,
+      "message": "Not Found",
+      "checkedAt": "2026-11-01T17:08:58.325Z"
+    }
+  ]
+}

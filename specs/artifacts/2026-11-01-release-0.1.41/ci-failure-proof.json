@@ -1,0 +1,20 @@
+{
+  "runID": 41319523201,
+  "source": "82fb466bb48eedc20e35ad89c55dff6cfb8878af",
+  "observed": {
+    "locale": [
+      "2026-11-01T15:14:11.3245871Z (fail) locale data loading > reports the requested locale URL and HTTP failure [0.80ms]",
+      "2026-11-01T15:14:11.3259045Z (fail) locale data loading > retains the parse cause and resource address for invalid JSON [0.46ms]",
+      "2026-11-01T15:14:11.3273049Z (fail) locale data loading > reports an invalid catalog shape [0.34ms]",
+      "2026-11-01T15:14:11.3286076Z (fail) locale data loading > loads catalogs relative to the executing module and publishes their values [0.64ms]"
+    ],
+    "windows": [
+      "2026-11-01T15:13:22.8457530Z ##[error]error: unable to create file specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/pilot-opencorvus-v04-native-20261031/submission/review/published-native/submission/native-complete/episode-a97d8a49becdcaef/cut-laboratory/worker/worker-started.json: Filename too long",
+      "2026-11-01T15:13:22.8467762Z ##[error]error: unable to create file specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/pilot-opencorvus-v04-native-20261031/submission/review/published-native/submission/native-complete/episode-a97d8a49becdcaef/cut-laboratory/worker/worker-terminal.json: Filename too long",
+      "2026-11-01T15:13:23.1808255Z ##[error]error: unable to create file specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/pilot-opencorvus-v04-native-20261031/submission/review/published-native/submission/native-original/episode-43cf4f35b1f55a2b/cut-laboratory/worker/worker-started.json: Filename too long"
+    ]
+  },
+  "repairedBy": "59b3d7342139810f1f1cd52c752cc6f4570f1520",
+  "validatedBy": 41323690359,
+  "scope": "CI preparation failures, not failed release candidates; full original job logs remain at their GitHub owners."
+}

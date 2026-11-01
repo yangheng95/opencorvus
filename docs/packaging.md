@@ -124,8 +124,8 @@ validation. Use the exact-platform debug workflow for native diagnosis; its arti
 cannot replace another release run's source-owned publication inputs.
 
 Native GUI upload uses compression level 0 because its installer/archive files are
-already compressed. Long native compile/package jobs have 41-minute infrastructure
-ceilings; canonical runs remain governed by the original 40-minute release deadline,
+already compressed. Long native compile/package jobs have 61-minute infrastructure
+ceilings; canonical runs remain governed by the original 60-minute release deadline,
 including queue, retries, upload and website work. Short setup and validation steps
 retain their bounded operational limits.
 

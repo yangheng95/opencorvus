@@ -1,0 +1,67 @@
+{
+  "verifiedAt": "2026-11-01T17:07:48.227Z",
+  "version": "0.1.41",
+  "nativeSource": "6f18a219956fb0f891092275d7bd227d826fb80d",
+  "nativeRunID": 41324763657,
+  "originalAutomaticConclusion": "cancelled at its original40-minute deadline; never rewritten as success",
+  "manualRecovery": {
+    "runID": 41328925805,
+    "source": "533d0f05b9e8ae4eb2d842f15afd0d270c24743d",
+    "createdAt": "2026-11-01T16:57:08Z",
+    "updatedAt": "2026-11-01T17:03:42Z",
+    "elapsedSeconds": 394,
+    "conclusion": "success",
+    "userAuthorization": "Manually finish publication first, then set the timeout to one hour",
+    "sourceResolution": [
+      "2026-11-01T16:57:45.2272296Z Resolved immutable website source 533d0f05b9e8ae4eb2d842f15afd0d270c24743d"
+    ],
+    "websiteInputPathsIdenticalToFrozenNativeSource": [
+      ".github",
+      "script",
+      "deploy",
+      "packages/web",
+      "packages/sdk",
+      "expert-squads",
+      "templates",
+      "CHANGELOG.md",
+      "package.json",
+      "bun.lock",
+      "packages/util",
+      "packages/opencorvus/src",
+      "packages/opencorvus/generated",
+      "packages/opencorvus/script",
+      "AGENTS.md"
+    ],
+    "deployment": [
+      "2026-11-01T17:03:16.5588785Z {\"publicationID\":22,\"publication\":{\"id\":22,\"catalogSha256\":\"effaa9c26ab3a5f177b663113900e97e4c6d967f9027f7fa69d16c35ebf4b16b\",\"total\":122,\"embeddedAlreadyAvailable\":5,\"bundledMarketImportable\":117,\"activatedAt\":\"2026-11-01T17:03:16.344Z\"}}"
+    ]
+  },
+  "publicAcceptance": {
+    "assets": 29,
+    "updaterPlatforms": 5,
+    "websiteDownloads": 18,
+    "releaseNotes": "GitHub body exact frozen root match; website and actual public Windows CLI English/Chinese notes visually reviewed",
+    "runtime": "Version0.1.41; isolated credential-free SDK-owned tree closed and temporary root retired"
+  },
+  "futureTimeout": {
+    "minutes": 60,
+    "infrastructureMinutes": 61,
+    "originalCreationTimeRetained": true,
+    "scope": "Future runs only; not a retroactive rewrite of cancelled40-minute runs",
+    "contracts": [
+      {
+        "file": "timeout-contracts.log",
+        "output": "bun test v1.4.0 (34cbb9a40)\r\n\r\nscript\\release-automation.test.ts:\r\n(pass) automatic release lifecycle > dispatches the exact website run after minute 30 and joins its successful completion [16.36ms]\r\n(pass) automatic release lifecycle > a rerun retains the original creation deadline and expires with an explicit error [0.15ms]\r\n(pass) automatic release lifecycle > a failed website conclusion becomes the parent release error [3.22ms]\r\n(pass) automatic release lifecycle > a missing dispatch receipt produces an explicit ambiguous-outcome error [3.29ms]\r\n(pass) automatic release lifecycle > the deadline owner cancels its current run when a job read crosses the shared limit [4.30ms]\r\n(pass) automatic release lifecycle > a delegated website observes cancellation of its exact parent [3.07ms]\r\n(pass) automatic release lifecycle > the terminal result closes the deadline watcher as soon as the release settles [2.43ms]\r\n(pass) automatic release lifecycle > a failed terminal job fails the deadline owner so failed-job reruns include it [2.33ms]\r\n(pass) automatic release lifecycle > both deadline owners settle queued aggregate jobs in the last twenty minutes [5.67ms]\r\n(pass) automatic release lifecycle > release cancellation terminates the recorded website run [4.86ms]\r\n(pass) automatic release lifecycle > API and run identity failures retain their typed error contracts [25.29ms]\r\n\r\n 11 pass\r\n 0 fail\r\n 25 expect() calls\r\nRan 11 tests across 1 file. [856.00ms]\r\n"
+      },
+      {
+        "file": "timeout-workflow-contracts.log",
+        "output": "bun test v1.4.0 (34cbb9a40)\r\n\r\nscript\\github-actions-workflow-contract.test.ts:\r\n(pass) GitHub Actions workflow contract > executes complete native and website outcome contracts under the shared deadline owners [234.36ms]\r\n\r\n 1 pass\r\n 27 filtered out\r\n 0 fail\r\n 17 expect() calls\r\nRan 1 test across 1 file. [1173.00ms]\r\n"
+      },
+      {
+        "file": "timeout-native-contracts.log",
+        "output": "bun test v1.4.0 (34cbb9a40)\r\n\r\nscript\\github-actions-workflow-contract.test.ts:\r\n(pass) GitHub Actions workflow contract > native packaging retains the shared deadline owner's full window through artifact upload [1.42ms]\r\n\r\n 1 pass\r\n 27 filtered out\r\n 0 fail\r\n 5 expect() calls\r\nRan 1 test across 1 file. [705.00ms]\r\n"
+      }
+    ]
+  },
+  "limitations": "Eight backend files through original three-platform checker, not full backend suite. No model conversation initiated and Provider transport was not instrumented. macOS ad hoc signing remains without Apple notarization.64 GitHub alerts separately attributed to one preserved research requirements-lock.txt; actual Bun audit1732 clean."
+}

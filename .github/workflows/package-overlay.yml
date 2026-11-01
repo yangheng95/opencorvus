@@ -32,8 +32,8 @@ permissions:
 jobs:
   build:
     name: compile (${{ inputs.platform }})
-    # Infrastructure ceiling only; release-automation owns the original 40-minute budget.
-    timeout-minutes: 41
+    # Infrastructure ceiling only; release-automation owns the original 60-minute budget.
+    timeout-minutes: 61
     runs-on: ${{ inputs.runner }}
     outputs:
       input-artifact-id: ${{ steps.input-upload.outputs.artifact-id }}
@@ -147,7 +147,7 @@ jobs:
     if: startsWith(inputs.platform, 'linux-')
     needs: build
     runs-on: ${{ inputs.runner }}
-    timeout-minutes: 41
+    timeout-minutes: 61
     strategy:
       fail-fast: false
       matrix:

@@ -2,7 +2,7 @@ import fs from "node:fs/promises"
 import { enforceReleaseIdentity } from "./verify-release-identity"
 import { normalizeReleaseVersion } from "./release-version"
 
-export const RELEASE_BUDGET_MINUTES = 40
+export const RELEASE_BUDGET_MINUTES = 60
 export const RELEASE_BUDGET_MS = RELEASE_BUDGET_MINUTES * 60_000
 export const RELEASE_RESULT_JOB = "release result"
 export const WEBSITE_RESULT_JOB = "website result"

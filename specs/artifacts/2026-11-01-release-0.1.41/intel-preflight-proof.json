@@ -1,0 +1,18 @@
+{
+  "runID": 41322768862,
+  "source": "8cf60e69d249d2a3c872ea08c403ad0e0b9eae69",
+  "conclusion": "success",
+  "createdAt": "2026-11-01T15:44:49Z",
+  "updatedAt": "2026-11-01T16:06:44Z",
+  "elapsedSeconds": 1315,
+  "jobID": 124896445072,
+  "proof": [
+    "2026-11-01T15:52:36.7771320Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "2026-11-01T16:03:28.7966810Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 10m 26s",
+    "2026-11-01T16:05:52.1955590Z ... Saving cache ..."
+  ],
+  "cacheID": 9836254425,
+  "cacheCreatedAt": "2026-11-01T16:06:38.881502Z",
+  "cacheBytes": 479335411,
+  "scope": "Actual exact-source dependency preflight and separately confirmed completed cache; official41 must rebuild all products from its own source"
+}

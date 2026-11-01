@@ -1,0 +1,12 @@
+{
+  "verifiedAt": "2026-11-01T16:09:38.791Z",
+  "openGitHubAlerts": 64,
+  "manifestPaths": [
+    "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/product-quality-audit-20261031/codex-final/requirements-lock.txt"
+  ],
+  "actualBunAudit": {
+    "packages": 1732,
+    "result": "No vulnerabilities found"
+  },
+  "scope": "All64 GitHub alerts refer to the retained Codex research candidate requirements-lock.txt. Product native/website checkouts exclude specs; that historical environment is not installed or rewritten by this release."
+}

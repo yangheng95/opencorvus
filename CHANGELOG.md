@@ -4,6 +4,18 @@
 
 ## 未发布
 
+### zh-CN
+
+#### 调整
+
+- 发布全流程总时限调整为 60 分钟，覆盖排队、重试、原生构建、自动更新和配对官网部署；重试仍从最初运行创建时间计时。
+
+### en-US
+
+#### Changed
+
+- Set the whole-release budget to 60 minutes, including queues, retries, native builds, desktop updates and the paired website deployment. Retries retain the original run creation time.
+
 ## 0.1.41 - 2026-11-02
 
 ### zh-CN

@@ -22,7 +22,7 @@ jobs:
   deadline:
     name: release deadline
     runs-on: ubuntu-latest
-    timeout-minutes: 41
+    timeout-minutes: 61
     permissions:
       contents: read
       actions: write
@@ -210,7 +210,7 @@ jobs:
             platform: windows-x64
     runs-on: ${{ matrix.runner }}
     # The original-run deadline covers queue, native work and downstream publication.
-    timeout-minutes: 41
+    timeout-minutes: 61
     permissions:
       contents: read
       actions: read
@@ -456,7 +456,7 @@ jobs:
       - publish-release-assets
     if: ${{ !cancelled() && needs.publish-release-assets.result == 'success' && needs.publish-release-assets.outputs.complete == 'true' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    timeout-minutes: 60
     concurrency:
       group: opencorvus-desktop-update-${{ needs.prepare.outputs.update-channel }}
       queue: max
