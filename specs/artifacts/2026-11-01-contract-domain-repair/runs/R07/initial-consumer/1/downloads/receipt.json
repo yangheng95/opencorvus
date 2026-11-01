@@ -1,0 +1,16 @@
+{
+  "files": [
+    {
+      "document_id": "A B+%?",
+      "output": "files/a b.bin",
+      "url": "http://127.0.0.1:58304/api/v1/documents/A%20B%2B%25%3F",
+      "bytes": 0
+    },
+    {
+      "document_id": "文#页",
+      "output": "文档/内容.bin",
+      "url": "http://127.0.0.1:58304/api/v1/documents/%E6%96%87%23%E9%A1%B5",
+      "bytes": 8
+    }
+  ]
+}

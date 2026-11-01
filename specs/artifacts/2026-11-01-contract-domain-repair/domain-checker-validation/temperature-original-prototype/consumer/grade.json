@@ -1,0 +1,210 @@
+{
+  "case": "temperature",
+  "passed": false,
+  "scope": "registered contract-derived cases only; no universal support certification",
+  "results": [
+    {
+      "name": "same-physical-temperature",
+      "expected": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "001",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          },
+          {
+            "sequence": "002",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          },
+          {
+            "sequence": "003",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 0,
+          "OK": 3,
+          "HIGH": 0
+        }
+      },
+      "contract_basis": "explicit original-unit bounds and Celsius conversion/calibration/threshold facts, independent decimal results",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\0\\inputs",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\0\\report.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\0",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\delivered.pyz\\__main__.py\", line 7, in <module>\nValueError: negative temperature\n",
+      "passed": false,
+      "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\oc-domain-consumer-4ntsk6_g\\\\0\\\\report.json'"
+    },
+    {
+      "name": "calibration-and-threshold-stages",
+      "expected": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "01",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 100,
+            "calibrated_c": 40,
+            "status": "HIGH"
+          },
+          {
+            "sequence": "02",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 0,
+            "calibrated_c": -10,
+            "status": "LOW"
+          },
+          {
+            "sequence": "03",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 20,
+            "calibrated_c": 0,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 1,
+          "OK": 1,
+          "HIGH": 1
+        }
+      },
+      "contract_basis": "explicit original-unit bounds and Celsius conversion/calibration/threshold facts, independent decimal results",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\1\\inputs",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\1\\report.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\1",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "01",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 212.0,
+            "calibrated_c": 96.0,
+            "status": "HIGH"
+          },
+          {
+            "sequence": "02",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 273.15,
+            "calibrated_c": 126.57499999999999,
+            "status": "HIGH"
+          },
+          {
+            "sequence": "03",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 68.0,
+            "calibrated_c": 24.0,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 0,
+          "OK": 1,
+          "HIGH": 2
+        }
+      },
+      "passed": false
+    },
+    {
+      "name": "absolute-zero-in-original-units",
+      "expected": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "a",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          },
+          {
+            "sequence": "b",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          },
+          {
+            "sequence": "c",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 0,
+          "OK": 3,
+          "HIGH": 0
+        }
+      },
+      "contract_basis": "explicit original-unit bounds and Celsius conversion/calibration/threshold facts, independent decimal results",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\2\\inputs",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\2\\report.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\2",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\delivered.pyz\\__main__.py\", line 7, in <module>\nValueError: negative temperature\n",
+      "passed": false,
+      "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\oc-domain-consumer-4ntsk6_g\\\\2\\\\report.json'"
+    },
+    {
+      "name": "below-absolute-zero-error",
+      "expected": {
+        "success": false,
+        "error": {
+          "code": "BELOW_ABSOLUTE_ZERO",
+          "sequence": "bad",
+          "sensor": "edge"
+        }
+      },
+      "contract_basis": "explicit original-unit bounds and Celsius conversion/calibration/threshold facts, independent decimal results",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\3\\inputs",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\3\\report.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\3",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-4ntsk6_g\\delivered.pyz\\__main__.py\", line 7, in <module>\nValueError: negative temperature\n",
+      "passed": false,
+      "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\oc-domain-consumer-4ntsk6_g\\\\3\\\\report.json'"
+    }
+  ]
+}

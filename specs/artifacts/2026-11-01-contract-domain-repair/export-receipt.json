@@ -1,0 +1,79 @@
+{
+  "exportedAt": "2026-11-01T14:19:46.187747+00:00",
+  "originalRoot": "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101",
+  "repositoryProjection": "D:\\myhexin-local\\opencorvus\\specs\\artifacts\\2026-11-01-contract-domain-repair",
+  "canonical": [
+    {
+      "run": "R06",
+      "sessions": [
+        "ses_-zUQGitBUzzJO1w8lUNd",
+        "ses_-zUQGisMazzwng0ulD5M",
+        "ses_hXoQ6IKDLogbefoz95sv"
+      ],
+      "requests": 53,
+      "outcomes": 53,
+      "states": {
+        "completed": 52,
+        "failed": 1
+      }
+    },
+    {
+      "run": "R07",
+      "sessions": [
+        "ses_-zUQGgcV6zz3a8uXX0gY",
+        "ses_-zUQGgbj5zzqQM6ox5lT"
+      ],
+      "requests": 20,
+      "outcomes": 20,
+      "states": {
+        "completed": 19,
+        "failed": 1
+      }
+    },
+    {
+      "run": "R08",
+      "sessions": [
+        "ses_-zUQGfYK9zzL1TFMvcI2"
+      ],
+      "requests": 21,
+      "outcomes": 21,
+      "states": {
+        "completed": 21
+      }
+    }
+  ],
+  "completeProjectArchives": [
+    {
+      "run": "R06",
+      "source": "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\live\\bundle-delivered",
+      "archive": "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\complete-project-archives\\R06-project.zip",
+      "zipBytes": 124687,
+      "members": 101,
+      "originalBytes": 824166,
+      "scope": "complete previously sealed delivered-project copy including Git and published resources; runtime/auth/models and external original production DB are not project members"
+    },
+    {
+      "run": "R07",
+      "source": "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\live\\download-delivered",
+      "archive": "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\complete-project-archives\\R07-project.zip",
+      "zipBytes": 114834,
+      "members": 85,
+      "originalBytes": 414228,
+      "scope": "complete previously sealed delivered-project copy including Git and published resources; runtime/auth/models and external original production DB are not project members"
+    },
+    {
+      "run": "R08",
+      "source": "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\live\\temperature-delivered",
+      "archive": "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\complete-project-archives\\R08-project.zip",
+      "zipBytes": 49467,
+      "members": 48,
+      "originalBytes": 192785,
+      "scope": "complete previously sealed delivered-project copy including Git and published resources; runtime/auth/models and external original production DB are not project members"
+    }
+  ],
+  "projectionMembers": 312,
+  "projectionBytes": 2667904,
+  "fullWorkspace": false,
+  "credentials": "not included; staged auth/models retired by original runner",
+  "newExecutions": 0
+}

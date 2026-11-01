@@ -1,0 +1,11 @@
+test_actual_http_files_and_temperature_cli_outputs (test_delivery_domain_cases.DomainConsumerTest.test_actual_http_files_and_temperature_cli_outputs) ... ok
+test_known_physical_equivalences_and_calibration_results (test_delivery_domain_cases.DomainConsumerTest.test_known_physical_equivalences_and_calibration_results) ... ok
+test_actual_packaged_correct_selection_error_and_plan_error (test_delivery_verification_scope.DeliveryVerificationScopeTest.test_actual_packaged_correct_selection_error_and_plan_error) ... ok
+test_explicit_losses_and_quantities (test_delivery_verification_scope.DeliveryVerificationScopeTest.test_explicit_losses_and_quantities) ... ok
+test_complete_correct_and_real_error_programmes (test_delivery_workflow_cases.WorkflowConsumerTest.test_complete_correct_and_real_error_programmes) ... ok
+test_json_boolean_and_number_roles_in_actual_outputs (test_delivery_workflow_cases.WorkflowConsumerTest.test_json_boolean_and_number_roles_in_actual_outputs) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 10.965s
+
+OK

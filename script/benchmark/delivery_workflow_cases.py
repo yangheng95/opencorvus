@@ -11,6 +11,8 @@ import sys
 import tempfile
 import zipfile
 
+from delivery_verification_scope import same_value
+
 CONTRACTS = {
     "bundle": """Repair this manifest-driven file delivery project. Deliver deliverable.pyz,
 maintainable source and a concise tested handoff; Python 3 standard library only.
@@ -77,7 +79,14 @@ def bundle_cases():
         ("unicode-order", [("资料/a,b.txt", "交付/含 空格.txt", "精确\r\n字符".encode()), ("meta", "z/final.txt", b"end")]),
         ("reversed-manifest", [("two", "z.txt", b"second"), ("one", "a.txt", b"first")]),
     ]
-    return [dict(name=name, entries=[dict(source=s,target=t,base64=base64.b64encode(b).decode()) for s,t,b in entries]) for name,entries in rows]
+    cases = [dict(name=name, entries=[dict(source=s,target=t,base64=base64.b64encode(b).decode()) for s,t,b in entries]) for name,entries in rows]
+    # Source fields belong to the native filesystem; ZIP targets have a distinct
+    # forward-slash contract. pathlib supplies the host's allowed representation.
+    native = dict(name="native-source-representation", entries=[
+        {**entry, "source": str(Path(entry["source"]))}
+        for entry in cases[0]["entries"]
+    ])
+    return [*cases, native]
 
 def stock_cases():
     result=[]
@@ -130,7 +139,13 @@ def grade(kind, project, output):
         for i, fixture in enumerate(fixtures):
             work=root/str(i);work.mkdir();saved=output/str(i);saved.mkdir();row=dict(name=fixture["name"])
             if kind=="bundle":
-                write_bundle_input(work,fixture);target=work/"result.zip";argv=[sys.executable,"-I",str(app),str(work),"--output",str(target)]
+                write_bundle_input(work,fixture)
+                row["source_admissibility"] = [dict(source=entry["source"],target=entry["target"],native_path=str(Path(entry["source"])),physical_bytes_match=(work/entry["source"]).read_bytes()==base64.b64decode(entry["base64"])) for entry in fixture["entries"]]
+                row["contract_basis"] = "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes"
+                for source in work.rglob("*"):
+                    if source.is_file():
+                        dest=saved/"inputs"/source.relative_to(work);dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(source.read_bytes())
+                target=work/"result.zip";argv=[sys.executable,"-I",str(app),str(work),"--output",str(target)]
             else:
                 data=work/"input.csv";data.write_bytes(fixture["csv"].encode());db=work/"inventory.db";seed(db,fixture["initial"]);before=snapshot(db)
                 (saved/"input.csv").write_bytes(data.read_bytes());(saved/"before.json").write_text(json.dumps(before,ensure_ascii=False,indent=2),encoding="utf-8")
@@ -145,11 +160,11 @@ def grade(kind, project, output):
                         index=json.loads(z.read("_bundle_index.json"))
                         expected={r["target"]:r["base64"] for r in fixture["entries"]}
                         expected_index=dict(files=[dict(path=n,bytes=len(base64.b64decode(b))) for n,b in sorted(expected.items())])
-                        row.update(actual=dict(payload=payload,index=index),expected=dict(payload=expected,index=expected_index),passed=done.returncode==0 and payload==expected and index==expected_index)
+                        row.update(actual=dict(payload=payload,index=index),expected=dict(payload=expected,index=expected_index),passed=done.returncode==0 and payload==expected and same_value(index,expected_index,abs_tol=0))
                 else:
                     after=snapshot(db);report=json.loads(target.read_text(encoding="utf-8"))
                     expected={**before,"stock":[tuple(r) for r in fixture["stock"]],"events":[tuple(r) for r in fixture["events"]]}
-                    row.update(actual=dict(database=after,report=report),expected=dict(database=expected,report=fixture["report"]),passed=done.returncode==fixture["exit"] and after==expected and report==fixture["report"])
+                    row.update(actual=dict(database=after,report=report),expected=dict(database=expected,report=fixture["report"]),passed=done.returncode==fixture["exit"] and after==expected and same_value(report,fixture["report"],abs_tol=0))
                     (saved/"inventory.db").write_bytes(db.read_bytes())
                 if target.is_file():(saved/target.name).write_bytes(target.read_bytes())
             except (OSError,ValueError,KeyError,zipfile.BadZipFile,subprocess.TimeoutExpired) as error:row.update(passed=False,error=str(error))

@@ -1,0 +1,261 @@
+{
+  "case": "bundle",
+  "passed": false,
+  "results": [
+    {
+      "name": "nested-binary",
+      "source_admissibility": [
+        {
+          "source": "left/a.bin",
+          "target": "delivery/raw/a.bin",
+          "native_path": "left\\a.bin",
+          "physical_bytes_match": true
+        },
+        {
+          "source": "right/a.bin",
+          "target": "other/a.bin",
+          "native_path": "right\\a.bin",
+          "physical_bytes_match": true
+        },
+        {
+          "source": "empty",
+          "target": "empty",
+          "native_path": "empty",
+          "physical_bytes_match": true
+        }
+      ],
+      "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\0",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\0\\result.zip"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\0",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "payload": {
+          "delivery/raw/a.bin": "AP8NCgA=",
+          "empty": "",
+          "other/a.bin": "b3RoZXINCg=="
+        },
+        "index": {
+          "files": [
+            {
+              "path": "delivery/raw/a.bin",
+              "bytes": 5
+            },
+            {
+              "path": "empty",
+              "bytes": 0
+            },
+            {
+              "path": "other/a.bin",
+              "bytes": 7
+            }
+          ]
+        }
+      },
+      "expected": {
+        "payload": {
+          "delivery/raw/a.bin": "AP8NCgA=",
+          "other/a.bin": "b3RoZXINCg==",
+          "empty": ""
+        },
+        "index": {
+          "files": [
+            {
+              "path": "delivery/raw/a.bin",
+              "bytes": 5
+            },
+            {
+              "path": "empty",
+              "bytes": 0
+            },
+            {
+              "path": "other/a.bin",
+              "bytes": 7
+            }
+          ]
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "unicode-order",
+      "source_admissibility": [
+        {
+          "source": "资料/a,b.txt",
+          "target": "交付/含 空格.txt",
+          "native_path": "资料\\a,b.txt",
+          "physical_bytes_match": true
+        },
+        {
+          "source": "meta",
+          "target": "z/final.txt",
+          "native_path": "meta",
+          "physical_bytes_match": true
+        }
+      ],
+      "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\1",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\1\\result.zip"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\1",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "payload": {
+          "z/final.txt": "ZW5k",
+          "交付/含 空格.txt": "57K+56GuDQrlrZfnrKY="
+        },
+        "index": {
+          "files": [
+            {
+              "path": "z/final.txt",
+              "bytes": 3
+            },
+            {
+              "path": "交付/含 空格.txt",
+              "bytes": 14
+            }
+          ]
+        }
+      },
+      "expected": {
+        "payload": {
+          "交付/含 空格.txt": "57K+56GuDQrlrZfnrKY=",
+          "z/final.txt": "ZW5k"
+        },
+        "index": {
+          "files": [
+            {
+              "path": "z/final.txt",
+              "bytes": 3
+            },
+            {
+              "path": "交付/含 空格.txt",
+              "bytes": 14
+            }
+          ]
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "reversed-manifest",
+      "source_admissibility": [
+        {
+          "source": "two",
+          "target": "z.txt",
+          "native_path": "two",
+          "physical_bytes_match": true
+        },
+        {
+          "source": "one",
+          "target": "a.txt",
+          "native_path": "one",
+          "physical_bytes_match": true
+        }
+      ],
+      "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\2",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\2\\result.zip"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\2",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "payload": {
+          "a.txt": "Zmlyc3Q=",
+          "z.txt": "c2Vjb25k"
+        },
+        "index": {
+          "files": [
+            {
+              "path": "a.txt",
+              "bytes": 5
+            },
+            {
+              "path": "z.txt",
+              "bytes": 6
+            }
+          ]
+        }
+      },
+      "expected": {
+        "payload": {
+          "z.txt": "c2Vjb25k",
+          "a.txt": "Zmlyc3Q="
+        },
+        "index": {
+          "files": [
+            {
+              "path": "a.txt",
+              "bytes": 5
+            },
+            {
+              "path": "z.txt",
+              "bytes": 6
+            }
+          ]
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "native-source-representation",
+      "source_admissibility": [
+        {
+          "source": "left\\a.bin",
+          "target": "delivery/raw/a.bin",
+          "native_path": "left\\a.bin",
+          "physical_bytes_match": true
+        },
+        {
+          "source": "right\\a.bin",
+          "target": "other/a.bin",
+          "native_path": "right\\a.bin",
+          "physical_bytes_match": true
+        },
+        {
+          "source": "empty",
+          "target": "empty",
+          "native_path": "empty",
+          "physical_bytes_match": true
+        }
+      ],
+      "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\3",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\3\\result.zip"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-p04eki_b\\3",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "error: paths must be relative and use forward slashes\n",
+      "passed": false,
+      "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\oc-workflow-consumer-p04eki_b\\\\3\\\\result.zip'"
+    }
+  ]
+}

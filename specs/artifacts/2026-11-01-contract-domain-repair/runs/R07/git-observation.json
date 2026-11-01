@@ -1,0 +1,39 @@
+{
+  "head": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\live\\download-delivered",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit": 0,
+    "stdout": "65e8e3e210b03867fbf877eaa6954550146acbcc\n",
+    "stderr": ""
+  },
+  "status": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\live\\download-delivered",
+      "status",
+      "--short"
+    ],
+    "exit": 0,
+    "stdout": " M main.py\n?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? HANDOFF.md\n?? __pycache__/\n?? build.py\n?? deliverable.pyz\n?? source.zip\n?? test_download.py\n",
+    "stderr": ""
+  },
+  "log": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\live\\download-delivered",
+      "log",
+      "-3",
+      "--format=%H %s"
+    ],
+    "exit": 0,
+    "stdout": "65e8e3e210b03867fbf877eaa6954550146acbcc test: initialize delivery prototype\n",
+    "stderr": ""
+  }
+}

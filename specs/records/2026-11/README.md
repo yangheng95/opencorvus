@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [输入语义边界根因修复](2026-11-01-contract-domain-repair.md)：解释归档漏验并修通用规则、检查器与真实多任务复验。
+
 - [Goal 真实预算与继续执行](2026-11-01-goal-live-budget-workflow.md)：当前流式模型、实页操作和持久化事实。
 
 - [结果质量选择与交付修复](2026-11-01-outcome-quality-repair.md)：正式策略、独立质量与真实最终程序的有限前后验收。

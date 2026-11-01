@@ -1,0 +1,932 @@
+[
+  {
+    "requestID": "prt_g0VZjJPTT00RFsFUBzLB",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_5f016ab80e1646099269f9920e2f9d29",
+      "tool": "read",
+      "input": {
+        "filePath": "."
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0a20a07116838b55016ae7458986bc8191b9bed0c3fc83575f"
+        }
+      },
+      "time": {
+        "start": 1793541513503
+      }
+    },
+    "requestedAt": 1793541513719,
+    "outcomeID": "prt_hhO7I8zTWwgpyfJCjHUi",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download</path>\n<type>directory</type>\n<entries>\n.git/\n.gitattributes\n.gitignore\n.opencorvus/\nCONTRACT.md\ndemo_server.py\nmain.py\nsample.jobs.json\n\n(8 entries)\n</entries>",
+      "title": "",
+      "metadata": {
+        "preview": ".git/\n.gitattributes\n.gitignore\n.opencorvus/\nCONTRACT.md\ndemo_server.py\nmain.py\nsample.jobs.json",
+        "truncated": false,
+        "loaded": [],
+        "readType": "directory",
+        "offset": 1,
+        "lines": 8,
+        "totalLines": 8
+      },
+      "time": {
+        "end": 1793541514265
+      }
+    },
+    "settledAt": 1793541514265
+  },
+  {
+    "requestID": "prt_g0VZjJQxM00qz7LXIBWi",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_d7470172c7524f7089a26a90f2fb3b66",
+      "tool": "read",
+      "input": {
+        "filePath": "CONTRACT.md"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0ab45df179966b33016ae7458f3498819183098061c141fd8e"
+        }
+      },
+      "time": {
+        "start": 1793541519200
+      }
+    },
+    "requestedAt": 1793541519577,
+    "outcomeID": "prt_h0OEPKUNaYkej3POw9m9",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\CONTRACT.md</path>\n<type>file</type>\n<content>1: Repair the batch document-download project. Deliver deliverable.pyz,\n2: maintainable source and a concise tested handoff. Python 3 standard library only.\n3: Invocation: python deliverable.pyz JOBS_JSON --output OUTPUT_DIRECTORY\n4: JOBS_JSON is UTF-8 JSON {base_url:HTTP_URL,jobs:[{document_id:TEXT,output:RELATIVE_PATH},...]}.\n5: The base URL includes an API path prefix, contains no query/fragment, and may end in '/'.\n6: For each job GET base_url (without its final slash) + '/documents/' + the document ID\n7: encoded as exactly one UTF-8 URL path segment. document_id is exact nonempty Unicode\n8: business text; slashes, percent signs, query/fragment characters and spaces are legal\n9: identifier data, not address syntax. Already percent-looking text remains literal data.\n10: The API returns HTTP200 JSON {document_id:EXACT_ID,content_base64:BASE64}. The public\n11: demo_server.py serves the sample; production inputs provide a reachable HTTP service.\n12: Decode the content and write exact bytes to the job's relative native filesystem path\n13: under OUTPUT_DIRECTORY, creating parent directories. Distinct output paths contain no\n14: absolute/traversal components and never equal receipt.json. Text and binary/empty payloads\n15: are supported. Source IDs and filesystem output paths belong to different contracts.\n16: Write receipt.json {files:[{document_id:ID,output:EXACT_ORIGINAL_OUTPUT_TEXT,url:ACTUAL_URL,\n17: bytes:INTEGER},...]} sorted by document_id. Exit 0 when all downloads are complete.\n18: The archive must work from a different cwd using only itself, Python, inputs and API.\n19: Preserve the base URL prefix, IDs, requested output names and exact response contents.\n\n(End of file - total 19 lines)\n</content>",
+      "title": "CONTRACT.md",
+      "metadata": {
+        "preview": "Repair the batch document-download project. Deliver deliverable.pyz,\nmaintainable source and a concise tested handoff. Python 3 standard library only.\nInvocation: python deliverable.pyz JOBS_JSON --output OUTPUT_DIRECTORY\nJOBS_JSON is UTF-8 JSON {base_url:HTTP_URL,jobs:[{document_id:TEXT,output:RELATIVE_PATH},...]}.\nThe base URL includes an API path prefix, contains no query/fragment, and may end in '/'.\nFor each job GET base_url (without its final slash) + '/documents/' + the document ID\nencoded as exactly one UTF-8 URL path segment. document_id is exact nonempty Unicode\nbusiness text; slashes, percent signs, query/fragment characters and spaces are legal\nidentifier data, not address syntax. Already percent-looking text remains literal data.\nThe API returns HTTP200 JSON {document_id:EXACT_ID,content_base64:BASE64}. The public\ndemo_server.py serves the sample; production inputs provide a reachable HTTP service.\nDecode the content and write exact bytes to the job's relative native filesystem path\nunder OUTPUT_DIRECTORY, creating parent directories. Distinct output paths contain no\nabsolute/traversal components and never equal receipt.json. Text and binary/empty payloads\nare supported. Source IDs and filesystem output paths belong to different contracts.\nWrite receipt.json {files:[{document_id:ID,output:EXACT_ORIGINAL_OUTPUT_TEXT,url:ACTUAL_URL,\nbytes:INTEGER},...]} sorted by document_id. Exit 0 when all downloads are complete.\nThe archive must work from a different cwd using only itself, Python, inputs and API.\nPreserve the base URL prefix, IDs, requested output names and exact response contents.",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 19,
+        "totalLines": 19
+      },
+      "time": {
+        "end": 1793541519705
+      }
+    },
+    "settledAt": 1793541519705
+  },
+  {
+    "requestID": "prt_g0VZjJRq700LsyZeJnQP",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_7a80e47bd40d4ba5847166c9c36419c2",
+      "tool": "read",
+      "input": {
+        "filePath": "main.py"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_01a69e7cf5fbda79016ae745929b8c81918858646485dc89ec"
+        }
+      },
+      "time": {
+        "start": 1793541522595
+      }
+    },
+    "requestedAt": 1793541522997,
+    "outcomeID": "prt_hhrYg84fic5joWvsVDjE",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py</path>\n<type>file</type>\n<content>1: import argparse,base64,json,urllib.request\n2: from pathlib import Path\n3: p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();cfg=json.loads(Path(a.input).read_text(encoding=\"utf-8\"));root=Path(a.output);root.mkdir(parents=True,exist_ok=True);files=[]\n4: for job in cfg[\"jobs\"]:\n5:     url=cfg[\"base_url\"].rstrip(\"/\")+\"/documents/\"+job[\"document_id\"]\n6:     data=json.load(urllib.request.urlopen(url));raw=base64.b64decode(data[\"content_base64\"])\n7:     target=root/job[\"output\"];target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)\n8:     files.append(dict(document_id=job[\"document_id\"],output=job[\"output\"],url=url,bytes=len(raw)))\n9: (root/\"receipt.json\").write_text(json.dumps(dict(files=sorted(files,key=lambda r:r[\"document_id\"])),ensure_ascii=False),encoding=\"utf-8\")\n\n(End of file - total 9 lines)\n</content>",
+      "title": "main.py",
+      "metadata": {
+        "preview": "import argparse,base64,json,urllib.request\nfrom pathlib import Path\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();cfg=json.loads(Path(a.input).read_text(encoding=\"utf-8\"));root=Path(a.output);root.mkdir(parents=True,exist_ok=True);files=[]\nfor job in cfg[\"jobs\"]:\n    url=cfg[\"base_url\"].rstrip(\"/\")+\"/documents/\"+job[\"document_id\"]\n    data=json.load(urllib.request.urlopen(url));raw=base64.b64decode(data[\"content_base64\"])\n    target=root/job[\"output\"];target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)\n    files.append(dict(document_id=job[\"document_id\"],output=job[\"output\"],url=url,bytes=len(raw)))\n(root/\"receipt.json\").write_text(json.dumps(dict(files=sorted(files,key=lambda r:r[\"document_id\"])),ensure_ascii=False),encoding=\"utf-8\")",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 9,
+        "totalLines": 9
+      },
+      "time": {
+        "end": 1793541523903
+      }
+    },
+    "settledAt": 1793541523903
+  },
+  {
+    "requestID": "prt_g0VZjJTHF00gUBk1IG90",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_e78f7747f126467aa491c069b96ecd5e",
+      "tool": "read",
+      "input": {
+        "filePath": "demo_server.py"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0433a3a715276d04016ae7459827448191915546295faed925"
+        }
+      },
+      "time": {
+        "start": 1793541528121
+      }
+    },
+    "requestedAt": 1793541528378,
+    "outcomeID": "prt_hNer7w8cVFnllw2jHh8F",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\demo_server.py</path>\n<type>file</type>\n<content>1: \"\"\"Public sample HTTP dependency; run python demo_server.py --port 0.\"\"\"\n2: import argparse,base64,json\n3: from http.server import BaseHTTPRequestHandler,ThreadingHTTPServer\n4: class Handler(BaseHTTPRequestHandler):\n5:     def do_GET(self):\n6:         if self.path!=\"/api/v1/documents/sample\":self.send_error(404);return\n7:         body=json.dumps(dict(document_id=\"sample\",content_base64=base64.b64encode(b\"sample document\\n\").decode())).encode()\n8:         self.send_response(200);self.send_header(\"Content-Type\",\"application/json\");self.send_header(\"Content-Length\",str(len(body)));self.end_headers();self.wfile.write(body)\n9:     def log_message(self,*args):pass\n10: if __name__==\"__main__\":\n11:     p=argparse.ArgumentParser();p.add_argument(\"--port\",type=int,default=0);a=p.parse_args();server=ThreadingHTTPServer((\"127.0.0.1\",a.port),Handler)\n12:     print(\"http://127.0.0.1:%s/api/v1\"%server.server_address[1],flush=True)\n13:     try:server.serve_forever()\n14:     finally:server.server_close()\n\n(End of file - total 14 lines)\n</content>",
+      "title": "demo_server.py",
+      "metadata": {
+        "preview": "\"\"\"Public sample HTTP dependency; run python demo_server.py --port 0.\"\"\"\nimport argparse,base64,json\nfrom http.server import BaseHTTPRequestHandler,ThreadingHTTPServer\nclass Handler(BaseHTTPRequestHandler):\n    def do_GET(self):\n        if self.path!=\"/api/v1/documents/sample\":self.send_error(404);return\n        body=json.dumps(dict(document_id=\"sample\",content_base64=base64.b64encode(b\"sample document\\n\").decode())).encode()\n        self.send_response(200);self.send_header(\"Content-Type\",\"application/json\");self.send_header(\"Content-Length\",str(len(body)));self.end_headers();self.wfile.write(body)\n    def log_message(self,*args):pass\nif __name__==\"__main__\":\n    p=argparse.ArgumentParser();p.add_argument(\"--port\",type=int,default=0);a=p.parse_args();server=ThreadingHTTPServer((\"127.0.0.1\",a.port),Handler)\n    print(\"http://127.0.0.1:%s/api/v1\"%server.server_address[1],flush=True)\n    try:server.serve_forever()\n    finally:server.server_close()",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 14,
+        "totalLines": 14
+      },
+      "time": {
+        "end": 1793541528667
+      }
+    },
+    "settledAt": 1793541528667
+  },
+  {
+    "requestID": "prt_g0VZjJUfW00i1E2ognAM",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_194ab8082354418cac33654057394c3a",
+      "tool": "read",
+      "input": {
+        "filePath": "sample.jobs.json"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_06b3376456a1c310016ae7459d7f54819196365f384250c091"
+        }
+      },
+      "time": {
+        "start": 1793541533470
+      }
+    },
+    "requestedAt": 1793541533755,
+    "outcomeID": "prt_h3WMAEmzk686KeYpydDm",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\sample.jobs.json</path>\n<type>file</type>\n<content>1: {\"base_url\": \"http://127.0.0.1:8765/api/v1\", \"jobs\": [{\"document_id\": \"sample\", \"output\": \"documents/sample.bin\"}]}\n\n(End of file - total 1 lines)\n</content>",
+      "title": "sample.jobs.json",
+      "metadata": {
+        "preview": "{\"base_url\": \"http://127.0.0.1:8765/api/v1\", \"jobs\": [{\"document_id\": \"sample\", \"output\": \"documents/sample.bin\"}]}",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 1,
+        "totalLines": 1
+      },
+      "time": {
+        "end": 1793541534181
+      }
+    },
+    "settledAt": 1793541534181
+  },
+  {
+    "requestID": "prt_g0VZjJYWK00dfJCubA4R",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_01c493ea5d724188a173e0a17e5857e6",
+      "tool": "bash",
+      "input": {
+        "command": "git status --short",
+        "description": "Check existing project changes before editing"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_057745d355cb65bf016ae745ac54788191a58218d3fadb1d72"
+        }
+      },
+      "time": {
+        "start": 1793541548276
+      }
+    },
+    "requestedAt": 1793541548701,
+    "outcomeID": "prt_hQm14H16ivUbV0T0HU69",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hCA4Q0KUFr2aTOnpti7M",
+      "title": "Check existing project changes before editing",
+      "metadata": {
+        "refused": false,
+        "command": "git status --short",
+        "output": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 48,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Check existing project changes before editing",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541549128
+      }
+    },
+    "settledAt": 1793541549128
+  },
+  {
+    "requestID": "prt_g0VZjJZxO00mDXr1lziG",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_6089947fb3b040c2b7d6d555faa1cbb4",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: main.py\n@@\n-import argparse,base64,json,urllib.request\n+\"\"\"Download document bytes without confusing business IDs with paths.\"\"\"\n+\n+import argparse\n+import base64\n+import json\n+import sys\n+import urllib.error\n+import urllib.parse\n+import urllib.request\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();cfg=json.loads(Path(a.input).read_text(encoding=\"utf-8\"));root=Path(a.output);root.mkdir(parents=True,exist_ok=True);files=[]\n-for job in cfg[\"jobs\"]:\n-    url=cfg[\"base_url\"].rstrip(\"/\")+\"/documents/\"+job[\"document_id\"]\n-    data=json.load(urllib.request.urlopen(url));raw=base64.b64decode(data[\"content_base64\"])\n-    target=root/job[\"output\"];target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)\n-    files.append(dict(document_id=job[\"document_id\"],output=job[\"output\"],url=url,bytes=len(raw)))\n-(root/\"receipt.json\").write_text(json.dumps(dict(files=sorted(files,key=lambda r:r[\"document_id\"])),ensure_ascii=False),encoding=\"utf-8\")\n+\n+\n+def download(config, root):\n+    \"\"\"Write all jobs, then publish the completion receipt.\n+\n+    IDs are opaque Unicode text. Only output names are filesystem paths;\n+    their original spelling is retained separately for the receipt.\n+    \"\"\"\n+    base_url = config[\"base_url\"]\n+    parts = urllib.parse.urlsplit(base_url)\n+    if parts.scheme not in (\"http\", \"https\") or not parts.netloc or parts.query or parts.fragment:\n+        raise ValueError(\"base_url must be an HTTP URL without query or fragment\")\n+    jobs = config[\"jobs\"]\n+    if not isinstance(jobs, list):\n+        raise ValueError(\"jobs must be a list\")\n+\n+    root = Path(root).resolve()\n+    prepared = []\n+    targets = set()\n+    for job in jobs:\n+        document_id, output = job[\"document_id\"], job[\"output\"]\n+        if not isinstance(document_id, str) or not document_id:\n+            raise ValueError(\"document_id must be nonempty text\")\n+        if not isinstance(output, str) or not output:\n+            raise ValueError(\"output must be a relative native filesystem path\")\n+        path = Path(output)\n+        target = (root / path).resolve()\n+        if (path.is_absolute() or path.drive or \"..\" in path.parts\n+                or root not in target.parents or target == root / \"receipt.json\"):\n+            raise ValueError(\"output must stay under the output directory and not be receipt.json\")\n+        if target in targets:\n+            raise ValueError(\"output paths must be distinct\")\n+        targets.add(target)\n+        # Never unquote first: a literal '%2F' ID must become '%252F'.\n+        url = base_url.removesuffix(\"/\") + \"/documents/\" + urllib.parse.quote(document_id, safe=\"\")\n+        prepared.append((document_id, output, target, url))\n+\n+    root.mkdir(parents=True, exist_ok=True)\n+    receipt = root / \"receipt.json\"\n+    # A failed rerun must not leave an old receipt claiming completion.\n+    receipt.unlink(missing_ok=True)\n+    files = []\n+    for document_id, output, target, url in prepared:\n+        with urllib.request.urlopen(url) as response:\n+            if response.status != 200:\n+                raise ValueError(\"document response must have HTTP status 200\")\n+            data = json.load(response)\n+        if data[\"document_id\"] != document_id:\n+            raise ValueError(\"response document_id does not match the requested ID\")\n+        raw = base64.b64decode(data[\"content_base64\"], validate=True)\n+        target.parent.mkdir(parents=True, exist_ok=True)\n+        target.write_bytes(raw)\n+        files.append(dict(document_id=document_id, output=output, url=url, bytes=len(raw)))\n+    receipt.write_text(\n+        json.dumps({\"files\": sorted(files, key=lambda item: item[\"document_id\"])},\n+                   ensure_ascii=False, indent=2) + \"\\n\",\n+        encoding=\"utf-8\",\n+    )\n+\n+\n+def main(argv=None):\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", help=\"UTF-8 jobs JSON file\")\n+    parser.add_argument(\"--output\", required=True, help=\"output directory\")\n+    args = parser.parse_args(argv)\n+    try:\n+        config = json.loads(Path(args.input).read_text(encoding=\"utf-8\"))\n+        download(config, args.output)\n+    except (OSError, ValueError, TypeError, KeyError, urllib.error.URLError) as error:\n+        print(\"Download failed: {}\".format(error), file=sys.stderr)\n+        return 1\n+    return 0\n+\n+\n+if __name__ == \"__main__\":\n+    sys.exit(main())\n*** Add File: build.py\n+\"\"\"Build a self-contained archive using only the Python standard library.\"\"\"\n+\n+from pathlib import Path\n+import tempfile\n+import zipapp\n+\n+\n+def build():\n+    project = Path(__file__).resolve().parent\n+    with tempfile.TemporaryDirectory() as directory:\n+        entry = Path(directory) / \"__main__.py\"\n+        entry.write_bytes((project / \"main.py\").read_bytes())\n+        zipapp.create_archive(directory, project / \"deliverable.pyz\")\n+\n+\n+if __name__ == \"__main__\":\n+    build()\n*** Add File: test_download.py\n+\"\"\"Black-box contract checks of the actual archive, from an isolated cwd.\"\"\"\n+\n+import base64\n+import json\n+import os\n+from pathlib import Path\n+import shutil\n+import subprocess\n+import sys\n+import tempfile\n+import threading\n+import unittest\n+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer\n+\n+from demo_server import Handler as DemoHandler\n+\n+\n+ARCHIVE = Path(__file__).resolve().parent / \"deliverable.pyz\"\n+\n+\n+class ArchiveTests(unittest.TestCase):\n+    def run_batch(self, handler, jobs, expected, suffix=\"\", prefix=\"/api/v1\"):\n+        server = ThreadingHTTPServer((\"127.0.0.1\", 0), handler)\n+        thread = threading.Thread(target=server.serve_forever, daemon=True)\n+        thread.start()\n+        try:\n+            with tempfile.TemporaryDirectory() as directory:\n+                cwd = Path(directory)\n+                shutil.copyfile(ARCHIVE, cwd / \"deliverable.pyz\")\n+                base = \"http://127.0.0.1:{}{}\".format(server.server_port, prefix)\n+                (cwd / \"jobs.json\").write_text(json.dumps({\n+                    \"base_url\": base + suffix, \"jobs\": jobs,\n+                }, ensure_ascii=False), encoding=\"utf-8\")\n+                result = subprocess.run(\n+                    [sys.executable, \"deliverable.pyz\", \"jobs.json\", \"--output\", \"output folder\"],\n+                    cwd=cwd, capture_output=True, text=True,\n+                    env={key: value for key, value in os.environ.items() if key != \"PYTHONPATH\"},\n+                    timeout=30,\n+                )\n+                self.assertEqual(result.returncode, 0, result.stderr)\n+                root = cwd / \"output folder\"\n+                receipt = json.loads((root / \"receipt.json\").read_text(encoding=\"utf-8\"))\n+                records = []\n+                for job, segment, payload in expected:\n+                    self.assertEqual((root / job[\"output\"]).read_bytes(), payload)\n+                    records.append(dict(document_id=job[\"document_id\"], output=job[\"output\"],\n+                                        url=base + \"/documents/\" + segment, bytes=len(payload)))\n+                self.assertEqual(receipt, {\"files\": sorted(records, key=lambda item: item[\"document_id\"])})\n+        finally:\n+            server.shutdown()\n+            server.server_close()\n+            thread.join()\n+\n+    def test_public_demo(self):\n+        job = dict(document_id=\"sample\", output=\"documents/sample.bin\")\n+        self.run_batch(DemoHandler, [job], [(job, \"sample\", b\"sample document\\n\")])\n+\n+    def test_identifier_and_output_domains(self):\n+        # Expected wire segments are literal fixtures, not computed by the downloader.\n+        fixtures = [\n+            (\"a/b\", \"a%2Fb\", b\"\\x00\\xff\\x80\\r\\n\"),\n+            (\"%2F\", \"%252F\", b\"literal percent\"),\n+            (\"what?x#y\", \"what%3Fx%23y\", b\"\"),\n+            (\" snow \\u96ea \", \"%20snow%20%E9%9B%AA%20\", \"Unicode payload \\u96ea\\n\".encode()),\n+            (\"../business\", \"..%2Fbusiness\", b\"legal source ID\"),\n+            (\"100%\", \"100%25\", bytes(range(256))),\n+            (\"a\\\\b\", \"a%5Cb\", b\"backslash source ID\"),\n+            (\".\", \".\", b\"dot business ID\"),\n+            (\"..\", \"..\", b\"two dots business ID\"),\n+        ]\n+        for suffix in (\"\", \"/\"):\n+            seen = []\n+            expected = []\n+            routes = {}\n+            for index, (identifier, segment, payload) in enumerate(fixtures):\n+                output = os.path.join(\"nested folder\", \"\\u96ea\", \"file {} %2F#.bin\".format(index))\n+                job = dict(document_id=identifier, output=output)\n+                expected.append((job, segment, payload))\n+                routes[\"/tenant/api/v2/documents/\" + segment] = (identifier, payload)\n+\n+            class Handler(BaseHTTPRequestHandler):\n+                def do_GET(self):\n+                    seen.append(self.path)\n+                    if self.path not in routes:\n+                        self.send_error(404)\n+                        return\n+                    identifier, payload = routes[self.path]\n+                    body = json.dumps(dict(document_id=identifier,\n+                                           content_base64=base64.b64encode(payload).decode())).encode()\n+                    self.send_response(200)\n+                    self.send_header(\"Content-Length\", str(len(body)))\n+                    self.end_headers()\n+                    self.wfile.write(body)\n+\n+                def log_message(self, *args):\n+                    pass\n+\n+            with self.subTest(trailing_slash=suffix):\n+                jobs = [item[0] for item in reversed(expected)]\n+                self.run_batch(Handler, jobs, expected, suffix, \"/tenant/api/v2\")\n+                self.assertEqual(seen, [\"/tenant/api/v2/documents/\" + item[1]\n+                                        for item in reversed(expected)])\n+\n+    def test_empty_batch(self):\n+        self.run_batch(DemoHandler, [], [])\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0d75cb431a097006016ae745b1a6188191bc55eba09a00445f"
+        }
+      },
+      "time": {
+        "start": 1793541553798
+      }
+    },
+    "requestedAt": 1793541597943,
+    "outcomeID": "prt_hWOn4x4oXPpRzQAOM6hQ",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hLSLggmocnngAOuLMyVj",
+      "title": "Success. Updated the following files:\nM main.py\nA build.py\nA test_download.py",
+      "metadata": {
+        "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n@@ -1,9 +1,108 @@\n-import argparse,base64,json,urllib.request\r\n-from pathlib import Path\r\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();cfg=json.loads(Path(a.input).read_text(encoding=\"utf-8\"));root=Path(a.output);root.mkdir(parents=True,exist_ok=True);files=[]\r\n-for job in cfg[\"jobs\"]:\r\n-    url=cfg[\"base_url\"].rstrip(\"/\")+\"/documents/\"+job[\"document_id\"]\r\n-    data=json.load(urllib.request.urlopen(url));raw=base64.b64decode(data[\"content_base64\"])\r\n-    target=root/job[\"output\"];target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)\r\n-    files.append(dict(document_id=job[\"document_id\"],output=job[\"output\"],url=url,bytes=len(raw)))\r\n-(root/\"receipt.json\").write_text(json.dumps(dict(files=sorted(files,key=lambda r:r[\"document_id\"])),ensure_ascii=False),encoding=\"utf-8\")\r\n+\"\"\"Download document bytes without confusing business IDs with paths.\"\"\"\n+\n+import argparse\n+import base64\n+import json\n+import sys\n+import urllib.error\n+import urllib.parse\n+import urllib.request\n+from pathlib import Path\n+\n+\n+def download(config, root):\n+    \"\"\"Write all jobs, then publish the completion receipt.\n+\n+    IDs are opaque Unicode text. Only output names are filesystem paths;\n+    their original spelling is retained separately for the receipt.\n+    \"\"\"\n+    base_url = config[\"base_url\"]\n+    parts = urllib.parse.urlsplit(base_url)\n+    if (\n+        parts.scheme not in (\"http\", \"https\")\n+        or not parts.netloc\n+        or parts.query\n+        or parts.fragment\n+    ):\n+        raise ValueError(\"base_url must be an HTTP URL without query or fragment\")\n+    jobs = config[\"jobs\"]\n+    if not isinstance(jobs, list):\n+        raise ValueError(\"jobs must be a list\")\n+\n+    root = Path(root).resolve()\n+    prepared = []\n+    targets = set()\n+    for job in jobs:\n+        document_id, output = job[\"document_id\"], job[\"output\"]\n+        if not isinstance(document_id, str) or not document_id:\n+            raise ValueError(\"document_id must be nonempty text\")\n+        if not isinstance(output, str) or not output:\n+            raise ValueError(\"output must be a relative native filesystem path\")\n+        path = Path(output)\n+        target = (root / path).resolve()\n+        if (\n+            path.is_absolute()\n+            or path.drive\n+            or \"..\" in path.parts\n+            or root not in target.parents\n+            or target == root / \"receipt.json\"\n+        ):\n+            raise ValueError(\n+                \"output must stay under the output directory and not be receipt.json\"\n+            )\n+        if target in targets:\n+            raise ValueError(\"output paths must be distinct\")\n+        targets.add(target)\n+        # Never unquote first: a literal '%2F' ID must become '%252F'.\n+        url = (\n+            base_url.removesuffix(\"/\")\n+            + \"/documents/\"\n+            + urllib.parse.quote(document_id, safe=\"\")\n+        )\n+        prepared.append((document_id, output, target, url))\n+\n+    root.mkdir(parents=True, exist_ok=True)\n+    receipt = root / \"receipt.json\"\n+    # A failed rerun must not leave an old receipt claiming completion.\n+    receipt.unlink(missing_ok=True)\n+    files = []\n+    for document_id, output, target, url in prepared:\n+        with urllib.request.urlopen(url) as response:\n+            if response.status != 200:\n+                raise ValueError(\"document response must have HTTP status 200\")\n+            data = json.load(response)\n+        if data[\"document_id\"] != document_id:\n+            raise ValueError(\"response document_id does not match the requested ID\")\n+        raw = base64.b64decode(data[\"content_base64\"], validate=True)\n+        target.parent.mkdir(parents=True, exist_ok=True)\n+        target.write_bytes(raw)\n+        files.append(\n+            dict(document_id=document_id, output=output, url=url, bytes=len(raw))\n+        )\n+    receipt.write_text(\n+        json.dumps(\n+            {\"files\": sorted(files, key=lambda item: item[\"document_id\"])},\n+            ensure_ascii=False,\n+            indent=2,\n+        )\n+        + \"\\n\",\n+        encoding=\"utf-8\",\n+    )\n+\n+\n+def main(argv=None):\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", help=\"UTF-8 jobs JSON file\")\n+    parser.add_argument(\"--output\", required=True, help=\"output directory\")\n+    args = parser.parse_args(argv)\n+    try:\n+        config = json.loads(Path(args.input).read_text(encoding=\"utf-8\"))\n+        download(config, args.output)\n+    except (OSError, ValueError, TypeError, KeyError, urllib.error.URLError) as error:\n+        print(\"Download failed: {}\".format(error), file=sys.stderr)\n+        return 1\n+    return 0\n+\n+\n+if __name__ == \"__main__\":\n+    sys.exit(main())\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n@@ -0,0 +1,17 @@\n+\"\"\"Build a self-contained archive using only the Python standard library.\"\"\"\n+\n+from pathlib import Path\n+import tempfile\n+import zipapp\n+\n+\n+def build():\n+    project = Path(__file__).resolve().parent\n+    with tempfile.TemporaryDirectory() as directory:\n+        entry = Path(directory) / \"__main__.py\"\n+        entry.write_bytes((project / \"main.py\").read_bytes())\n+        zipapp.create_archive(directory, project / \"deliverable.pyz\")\n+\n+\n+if __name__ == \"__main__\":\n+    build()\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\test_download.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\test_download.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\test_download.py\n@@ -0,0 +1,154 @@\n+\"\"\"Black-box contract checks of the actual archive, from an isolated cwd.\"\"\"\n+\n+import base64\n+import json\n+import os\n+from pathlib import Path\n+import shutil\n+import subprocess\n+import sys\n+import tempfile\n+import threading\n+import unittest\n+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer\n+\n+from demo_server import Handler as DemoHandler\n+\n+\n+ARCHIVE = Path(__file__).resolve().parent / \"deliverable.pyz\"\n+\n+\n+class ArchiveTests(unittest.TestCase):\n+    def run_batch(self, handler, jobs, expected, suffix=\"\", prefix=\"/api/v1\"):\n+        server = ThreadingHTTPServer((\"127.0.0.1\", 0), handler)\n+        thread = threading.Thread(target=server.serve_forever, daemon=True)\n+        thread.start()\n+        try:\n+            with tempfile.TemporaryDirectory() as directory:\n+                cwd = Path(directory)\n+                shutil.copyfile(ARCHIVE, cwd / \"deliverable.pyz\")\n+                base = \"http://127.0.0.1:{}{}\".format(server.server_port, prefix)\n+                (cwd / \"jobs.json\").write_text(\n+                    json.dumps(\n+                        {\n+                            \"base_url\": base + suffix,\n+                            \"jobs\": jobs,\n+                        },\n+                        ensure_ascii=False,\n+                    ),\n+                    encoding=\"utf-8\",\n+                )\n+                result = subprocess.run(\n+                    [\n+                        sys.executable,\n+                        \"deliverable.pyz\",\n+                        \"jobs.json\",\n+                        \"--output\",\n+                        \"output folder\",\n+                    ],\n+                    cwd=cwd,\n+                    capture_output=True,\n+                    text=True,\n+                    env={\n+                        key: value\n+                        for key, value in os.environ.items()\n+                        if key != \"PYTHONPATH\"\n+                    },\n+                    timeout=30,\n+                )\n+                self.assertEqual(result.returncode, 0, result.stderr)\n+                root = cwd / \"output folder\"\n+                receipt = json.loads(\n+                    (root / \"receipt.json\").read_text(encoding=\"utf-8\")\n+                )\n+                records = []\n+                for job, segment, payload in expected:\n+                    self.assertEqual((root / job[\"output\"]).read_bytes(), payload)\n+                    records.append(\n+                        dict(\n+                            document_id=job[\"document_id\"],\n+                            output=job[\"output\"],\n+                            url=base + \"/documents/\" + segment,\n+                            bytes=len(payload),\n+                        )\n+                    )\n+                self.assertEqual(\n+                    receipt,\n+                    {\"files\": sorted(records, key=lambda item: item[\"document_id\"])},\n+                )\n+        finally:\n+            server.shutdown()\n+            server.server_close()\n+            thread.join()\n+\n+    def test_public_demo(self):\n+        job = dict(document_id=\"sample\", output=\"documents/sample.bin\")\n+        self.run_batch(DemoHandler, [job], [(job, \"sample\", b\"sample document\\n\")])\n+\n+    def test_identifier_and_output_domains(self):\n+        # Expected wire segments are literal fixtures, not computed by the downloader.\n+        fixtures = [\n+            (\"a/b\", \"a%2Fb\", b\"\\x00\\xff\\x80\\r\\n\"),\n+            (\"%2F\", \"%252F\", b\"literal percent\"),\n+            (\"what?x#y\", \"what%3Fx%23y\", b\"\"),\n+            (\n+                \" snow \\u96ea \",\n+                \"%20snow%20%E9%9B%AA%20\",\n+                \"Unicode payload \\u96ea\\n\".encode(),\n+            ),\n+            (\"../business\", \"..%2Fbusiness\", b\"legal source ID\"),\n+            (\"100%\", \"100%25\", bytes(range(256))),\n+            (\"a\\\\b\", \"a%5Cb\", b\"backslash source ID\"),\n+            (\".\", \".\", b\"dot business ID\"),\n+            (\"..\", \"..\", b\"two dots business ID\"),\n+        ]\n+        for suffix in (\"\", \"/\"):\n+            seen = []\n+            expected = []\n+            routes = {}\n+            for index, (identifier, segment, payload) in enumerate(fixtures):\n+                output = os.path.join(\n+                    \"nested folder\", \"\\u96ea\", \"file {} %2F#.bin\".format(index)\n+                )\n+                job = dict(document_id=identifier, output=output)\n+                expected.append((job, segment, payload))\n+                routes[\"/tenant/api/v2/documents/\" + segment] = (identifier, payload)\n+\n+            class Handler(BaseHTTPRequestHandler):\n+                def do_GET(self):\n+                    seen.append(self.path)\n+                    if self.path not in routes:\n+                        self.send_error(404)\n+                        return\n+                    identifier, payload = routes[self.path]\n+                    body = json.dumps(\n+                        dict(\n+                            document_id=identifier,\n+                            content_base64=base64.b64encode(payload).decode(),\n+                        )\n+                    ).encode()\n+                    self.send_response(200)\n+                    self.send_header(\"Content-Length\", str(len(body)))\n+                    self.end_headers()\n+                    self.wfile.write(body)\n+\n+                def log_message(self, *args):\n+                    pass\n+\n+            with self.subTest(trailing_slash=suffix):\n+                jobs = [item[0] for item in reversed(expected)]\n+                self.run_batch(Handler, jobs, expected, suffix, \"/tenant/api/v2\")\n+                self.assertEqual(\n+                    seen,\n+                    [\n+                        \"/tenant/api/v2/documents/\" + item[1]\n+                        for item in reversed(expected)\n+                    ],\n+                )\n+\n+    def test_empty_batch(self):\n+        self.run_batch(DemoHandler, [], [])\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n\n",
+        "files": [
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py",
+            "relativePath": "main.py",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n@@ -1,9 +1,108 @@\n-import argparse,base64,json,urllib.request\r\n-from pathlib import Path\r\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();cfg=json.loads(Path(a.input).read_text(encoding=\"utf-8\"));root=Path(a.output);root.mkdir(parents=True,exist_ok=True);files=[]\r\n-for job in cfg[\"jobs\"]:\r\n-    url=cfg[\"base_url\"].rstrip(\"/\")+\"/documents/\"+job[\"document_id\"]\r\n-    data=json.load(urllib.request.urlopen(url));raw=base64.b64decode(data[\"content_base64\"])\r\n-    target=root/job[\"output\"];target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)\r\n-    files.append(dict(document_id=job[\"document_id\"],output=job[\"output\"],url=url,bytes=len(raw)))\r\n-(root/\"receipt.json\").write_text(json.dumps(dict(files=sorted(files,key=lambda r:r[\"document_id\"])),ensure_ascii=False),encoding=\"utf-8\")\r\n+\"\"\"Download document bytes without confusing business IDs with paths.\"\"\"\n+\n+import argparse\n+import base64\n+import json\n+import sys\n+import urllib.error\n+import urllib.parse\n+import urllib.request\n+from pathlib import Path\n+\n+\n+def download(config, root):\n+    \"\"\"Write all jobs, then publish the completion receipt.\n+\n+    IDs are opaque Unicode text. Only output names are filesystem paths;\n+    their original spelling is retained separately for the receipt.\n+    \"\"\"\n+    base_url = config[\"base_url\"]\n+    parts = urllib.parse.urlsplit(base_url)\n+    if (\n+        parts.scheme not in (\"http\", \"https\")\n+        or not parts.netloc\n+        or parts.query\n+        or parts.fragment\n+    ):\n+        raise ValueError(\"base_url must be an HTTP URL without query or fragment\")\n+    jobs = config[\"jobs\"]\n+    if not isinstance(jobs, list):\n+        raise ValueError(\"jobs must be a list\")\n+\n+    root = Path(root).resolve()\n+    prepared = []\n+    targets = set()\n+    for job in jobs:\n+        document_id, output = job[\"document_id\"], job[\"output\"]\n+        if not isinstance(document_id, str) or not document_id:\n+            raise ValueError(\"document_id must be nonempty text\")\n+        if not isinstance(output, str) or not output:\n+            raise ValueError(\"output must be a relative native filesystem path\")\n+        path = Path(output)\n+        target = (root / path).resolve()\n+        if (\n+            path.is_absolute()\n+            or path.drive\n+            or \"..\" in path.parts\n+            or root not in target.parents\n+            or target == root / \"receipt.json\"\n+        ):\n+            raise ValueError(\n+                \"output must stay under the output directory and not be receipt.json\"\n+            )\n+        if target in targets:\n+            raise ValueError(\"output paths must be distinct\")\n+        targets.add(target)\n+        # Never unquote first: a literal '%2F' ID must become '%252F'.\n+        url = (\n+            base_url.removesuffix(\"/\")\n+            + \"/documents/\"\n+            + urllib.parse.quote(document_id, safe=\"\")\n+        )\n+        prepared.append((document_id, output, target, url))\n+\n+    root.mkdir(parents=True, exist_ok=True)\n+    receipt = root / \"receipt.json\"\n+    # A failed rerun must not leave an old receipt claiming completion.\n+    receipt.unlink(missing_ok=True)\n+    files = []\n+    for document_id, output, target, url in prepared:\n+        with urllib.request.urlopen(url) as response:\n+            if response.status != 200:\n+                raise ValueError(\"document response must have HTTP status 200\")\n+            data = json.load(response)\n+        if data[\"document_id\"] != document_id:\n+            raise ValueError(\"response document_id does not match the requested ID\")\n+        raw = base64.b64decode(data[\"content_base64\"], validate=True)\n+        target.parent.mkdir(parents=True, exist_ok=True)\n+        target.write_bytes(raw)\n+        files.append(\n+            dict(document_id=document_id, output=output, url=url, bytes=len(raw))\n+        )\n+    receipt.write_text(\n+        json.dumps(\n+            {\"files\": sorted(files, key=lambda item: item[\"document_id\"])},\n+            ensure_ascii=False,\n+            indent=2,\n+        )\n+        + \"\\n\",\n+        encoding=\"utf-8\",\n+    )\n+\n+\n+def main(argv=None):\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", help=\"UTF-8 jobs JSON file\")\n+    parser.add_argument(\"--output\", required=True, help=\"output directory\")\n+    args = parser.parse_args(argv)\n+    try:\n+        config = json.loads(Path(args.input).read_text(encoding=\"utf-8\"))\n+        download(config, args.output)\n+    except (OSError, ValueError, TypeError, KeyError, urllib.error.URLError) as error:\n+        print(\"Download failed: {}\".format(error), file=sys.stderr)\n+        return 1\n+    return 0\n+\n+\n+if __name__ == \"__main__\":\n+    sys.exit(main())\n",
+            "before": "import argparse,base64,json,urllib.request\r\nfrom pathlib import Path\r\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();cfg=json.loads(Path(a.input).read_text(encoding=\"utf-8\"));root=Path(a.output);root.mkdir(parents=True,exist_ok=True);files=[]\r\nfor job in cfg[\"jobs\"]:\r\n    url=cfg[\"base_url\"].rstrip(\"/\")+\"/documents/\"+job[\"document_id\"]\r\n    data=json.load(urllib.request.urlopen(url));raw=base64.b64decode(data[\"content_base64\"])\r\n    target=root/job[\"output\"];target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)\r\n    files.append(dict(document_id=job[\"document_id\"],output=job[\"output\"],url=url,bytes=len(raw)))\r\n(root/\"receipt.json\").write_text(json.dumps(dict(files=sorted(files,key=lambda r:r[\"document_id\"])),ensure_ascii=False),encoding=\"utf-8\")\r\n",
+            "after": "\"\"\"Download document bytes without confusing business IDs with paths.\"\"\"\n\nimport argparse\nimport base64\nimport json\nimport sys\nimport urllib.error\nimport urllib.parse\nimport urllib.request\nfrom pathlib import Path\n\n\ndef download(config, root):\n    \"\"\"Write all jobs, then publish the completion receipt.\n\n    IDs are opaque Unicode text. Only output names are filesystem paths;\n    their original spelling is retained separately for the receipt.\n    \"\"\"\n    base_url = config[\"base_url\"]\n    parts = urllib.parse.urlsplit(base_url)\n    if (\n        parts.scheme not in (\"http\", \"https\")\n        or not parts.netloc\n        or parts.query\n        or parts.fragment\n    ):\n        raise ValueError(\"base_url must be an HTTP URL without query or fragment\")\n    jobs = config[\"jobs\"]\n    if not isinstance(jobs, list):\n        raise ValueError(\"jobs must be a list\")\n\n    root = Path(root).resolve()\n    prepared = []\n    targets = set()\n    for job in jobs:\n        document_id, output = job[\"document_id\"], job[\"output\"]\n        if not isinstance(document_id, str) or not document_id:\n            raise ValueError(\"document_id must be nonempty text\")\n        if not isinstance(output, str) or not output:\n            raise ValueError(\"output must be a relative native filesystem path\")\n        path = Path(output)\n        target = (root / path).resolve()\n        if (\n            path.is_absolute()\n            or path.drive\n            or \"..\" in path.parts\n            or root not in target.parents\n            or target == root / \"receipt.json\"\n        ):\n            raise ValueError(\n                \"output must stay under the output directory and not be receipt.json\"\n            )\n        if target in targets:\n            raise ValueError(\"output paths must be distinct\")\n        targets.add(target)\n        # Never unquote first: a literal '%2F' ID must become '%252F'.\n        url = (\n            base_url.removesuffix(\"/\")\n            + \"/documents/\"\n            + urllib.parse.quote(document_id, safe=\"\")\n        )\n        prepared.append((document_id, output, target, url))\n\n    root.mkdir(parents=True, exist_ok=True)\n    receipt = root / \"receipt.json\"\n    # A failed rerun must not leave an old receipt claiming completion.\n    receipt.unlink(missing_ok=True)\n    files = []\n    for document_id, output, target, url in prepared:\n        with urllib.request.urlopen(url) as response:\n            if response.status != 200:\n                raise ValueError(\"document response must have HTTP status 200\")\n            data = json.load(response)\n        if data[\"document_id\"] != document_id:\n            raise ValueError(\"response document_id does not match the requested ID\")\n        raw = base64.b64decode(data[\"content_base64\"], validate=True)\n        target.parent.mkdir(parents=True, exist_ok=True)\n        target.write_bytes(raw)\n        files.append(\n            dict(document_id=document_id, output=output, url=url, bytes=len(raw))\n        )\n    receipt.write_text(\n        json.dumps(\n            {\"files\": sorted(files, key=lambda item: item[\"document_id\"])},\n            ensure_ascii=False,\n            indent=2,\n        )\n        + \"\\n\",\n        encoding=\"utf-8\",\n    )\n\n\ndef main(argv=None):\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"input\", help=\"UTF-8 jobs JSON file\")\n    parser.add_argument(\"--output\", required=True, help=\"output directory\")\n    args = parser.parse_args(argv)\n    try:\n        config = json.loads(Path(args.input).read_text(encoding=\"utf-8\"))\n        download(config, args.output)\n    except (OSError, ValueError, TypeError, KeyError, urllib.error.URLError) as error:\n        print(\"Download failed: {}\".format(error), file=sys.stderr)\n        return 1\n    return 0\n\n\nif __name__ == \"__main__\":\n    sys.exit(main())\n",
+            "additions": 108,
+            "deletions": 9
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py",
+            "relativePath": "build.py",
+            "type": "add",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n@@ -0,0 +1,17 @@\n+\"\"\"Build a self-contained archive using only the Python standard library.\"\"\"\n+\n+from pathlib import Path\n+import tempfile\n+import zipapp\n+\n+\n+def build():\n+    project = Path(__file__).resolve().parent\n+    with tempfile.TemporaryDirectory() as directory:\n+        entry = Path(directory) / \"__main__.py\"\n+        entry.write_bytes((project / \"main.py\").read_bytes())\n+        zipapp.create_archive(directory, project / \"deliverable.pyz\")\n+\n+\n+if __name__ == \"__main__\":\n+    build()\n",
+            "before": "",
+            "after": "\"\"\"Build a self-contained archive using only the Python standard library.\"\"\"\n\nfrom pathlib import Path\nimport tempfile\nimport zipapp\n\n\ndef build():\n    project = Path(__file__).resolve().parent\n    with tempfile.TemporaryDirectory() as directory:\n        entry = Path(directory) / \"__main__.py\"\n        entry.write_bytes((project / \"main.py\").read_bytes())\n        zipapp.create_archive(directory, project / \"deliverable.pyz\")\n\n\nif __name__ == \"__main__\":\n    build()\n",
+            "additions": 17,
+            "deletions": 0
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\test_download.py",
+            "relativePath": "test_download.py",
+            "type": "add",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\test_download.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\test_download.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\test_download.py\n@@ -0,0 +1,154 @@\n+\"\"\"Black-box contract checks of the actual archive, from an isolated cwd.\"\"\"\n+\n+import base64\n+import json\n+import os\n+from pathlib import Path\n+import shutil\n+import subprocess\n+import sys\n+import tempfile\n+import threading\n+import unittest\n+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer\n+\n+from demo_server import Handler as DemoHandler\n+\n+\n+ARCHIVE = Path(__file__).resolve().parent / \"deliverable.pyz\"\n+\n+\n+class ArchiveTests(unittest.TestCase):\n+    def run_batch(self, handler, jobs, expected, suffix=\"\", prefix=\"/api/v1\"):\n+        server = ThreadingHTTPServer((\"127.0.0.1\", 0), handler)\n+        thread = threading.Thread(target=server.serve_forever, daemon=True)\n+        thread.start()\n+        try:\n+            with tempfile.TemporaryDirectory() as directory:\n+                cwd = Path(directory)\n+                shutil.copyfile(ARCHIVE, cwd / \"deliverable.pyz\")\n+                base = \"http://127.0.0.1:{}{}\".format(server.server_port, prefix)\n+                (cwd / \"jobs.json\").write_text(\n+                    json.dumps(\n+                        {\n+                            \"base_url\": base + suffix,\n+                            \"jobs\": jobs,\n+                        },\n+                        ensure_ascii=False,\n+                    ),\n+                    encoding=\"utf-8\",\n+                )\n+                result = subprocess.run(\n+                    [\n+                        sys.executable,\n+                        \"deliverable.pyz\",\n+                        \"jobs.json\",\n+                        \"--output\",\n+                        \"output folder\",\n+                    ],\n+                    cwd=cwd,\n+                    capture_output=True,\n+                    text=True,\n+                    env={\n+                        key: value\n+                        for key, value in os.environ.items()\n+                        if key != \"PYTHONPATH\"\n+                    },\n+                    timeout=30,\n+                )\n+                self.assertEqual(result.returncode, 0, result.stderr)\n+                root = cwd / \"output folder\"\n+                receipt = json.loads(\n+                    (root / \"receipt.json\").read_text(encoding=\"utf-8\")\n+                )\n+                records = []\n+                for job, segment, payload in expected:\n+                    self.assertEqual((root / job[\"output\"]).read_bytes(), payload)\n+                    records.append(\n+                        dict(\n+                            document_id=job[\"document_id\"],\n+                            output=job[\"output\"],\n+                            url=base + \"/documents/\" + segment,\n+                            bytes=len(payload),\n+                        )\n+                    )\n+                self.assertEqual(\n+                    receipt,\n+                    {\"files\": sorted(records, key=lambda item: item[\"document_id\"])},\n+                )\n+        finally:\n+            server.shutdown()\n+            server.server_close()\n+            thread.join()\n+\n+    def test_public_demo(self):\n+        job = dict(document_id=\"sample\", output=\"documents/sample.bin\")\n+        self.run_batch(DemoHandler, [job], [(job, \"sample\", b\"sample document\\n\")])\n+\n+    def test_identifier_and_output_domains(self):\n+        # Expected wire segments are literal fixtures, not computed by the downloader.\n+        fixtures = [\n+            (\"a/b\", \"a%2Fb\", b\"\\x00\\xff\\x80\\r\\n\"),\n+            (\"%2F\", \"%252F\", b\"literal percent\"),\n+            (\"what?x#y\", \"what%3Fx%23y\", b\"\"),\n+            (\n+                \" snow \\u96ea \",\n+                \"%20snow%20%E9%9B%AA%20\",\n+                \"Unicode payload \\u96ea\\n\".encode(),\n+            ),\n+            (\"../business\", \"..%2Fbusiness\", b\"legal source ID\"),\n+            (\"100%\", \"100%25\", bytes(range(256))),\n+            (\"a\\\\b\", \"a%5Cb\", b\"backslash source ID\"),\n+            (\".\", \".\", b\"dot business ID\"),\n+            (\"..\", \"..\", b\"two dots business ID\"),\n+        ]\n+        for suffix in (\"\", \"/\"):\n+            seen = []\n+            expected = []\n+            routes = {}\n+            for index, (identifier, segment, payload) in enumerate(fixtures):\n+                output = os.path.join(\n+                    \"nested folder\", \"\\u96ea\", \"file {} %2F#.bin\".format(index)\n+                )\n+                job = dict(document_id=identifier, output=output)\n+                expected.append((job, segment, payload))\n+                routes[\"/tenant/api/v2/documents/\" + segment] = (identifier, payload)\n+\n+            class Handler(BaseHTTPRequestHandler):\n+                def do_GET(self):\n+                    seen.append(self.path)\n+                    if self.path not in routes:\n+                        self.send_error(404)\n+                        return\n+                    identifier, payload = routes[self.path]\n+                    body = json.dumps(\n+                        dict(\n+                            document_id=identifier,\n+                            content_base64=base64.b64encode(payload).decode(),\n+                        )\n+                    ).encode()\n+                    self.send_response(200)\n+                    self.send_header(\"Content-Length\", str(len(body)))\n+                    self.end_headers()\n+                    self.wfile.write(body)\n+\n+                def log_message(self, *args):\n+                    pass\n+\n+            with self.subTest(trailing_slash=suffix):\n+                jobs = [item[0] for item in reversed(expected)]\n+                self.run_batch(Handler, jobs, expected, suffix, \"/tenant/api/v2\")\n+                self.assertEqual(\n+                    seen,\n+                    [\n+                        \"/tenant/api/v2/documents/\" + item[1]\n+                        for item in reversed(expected)\n+                    ],\n+                )\n+\n+    def test_empty_batch(self):\n+        self.run_batch(DemoHandler, [], [])\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n",
+            "before": "",
+            "after": "\"\"\"Black-box contract checks of the actual archive, from an isolated cwd.\"\"\"\n\nimport base64\nimport json\nimport os\nfrom pathlib import Path\nimport shutil\nimport subprocess\nimport sys\nimport tempfile\nimport threading\nimport unittest\nfrom http.server import BaseHTTPRequestHandler, ThreadingHTTPServer\n\nfrom demo_server import Handler as DemoHandler\n\n\nARCHIVE = Path(__file__).resolve().parent / \"deliverable.pyz\"\n\n\nclass ArchiveTests(unittest.TestCase):\n    def run_batch(self, handler, jobs, expected, suffix=\"\", prefix=\"/api/v1\"):\n        server = ThreadingHTTPServer((\"127.0.0.1\", 0), handler)\n        thread = threading.Thread(target=server.serve_forever, daemon=True)\n        thread.start()\n        try:\n            with tempfile.TemporaryDirectory() as directory:\n                cwd = Path(directory)\n                shutil.copyfile(ARCHIVE, cwd / \"deliverable.pyz\")\n                base = \"http://127.0.0.1:{}{}\".format(server.server_port, prefix)\n                (cwd / \"jobs.json\").write_text(\n                    json.dumps(\n                        {\n                            \"base_url\": base + suffix,\n                            \"jobs\": jobs,\n                        },\n                        ensure_ascii=False,\n                    ),\n                    encoding=\"utf-8\",\n                )\n                result = subprocess.run(\n                    [\n                        sys.executable,\n                        \"deliverable.pyz\",\n                        \"jobs.json\",\n                        \"--output\",\n                        \"output folder\",\n                    ],\n                    cwd=cwd,\n                    capture_output=True,\n                    text=True,\n                    env={\n                        key: value\n                        for key, value in os.environ.items()\n                        if key != \"PYTHONPATH\"\n                    },\n                    timeout=30,\n                )\n                self.assertEqual(result.returncode, 0, result.stderr)\n                root = cwd / \"output folder\"\n                receipt = json.loads(\n                    (root / \"receipt.json\").read_text(encoding=\"utf-8\")\n                )\n                records = []\n                for job, segment, payload in expected:\n                    self.assertEqual((root / job[\"output\"]).read_bytes(), payload)\n                    records.append(\n                        dict(\n                            document_id=job[\"document_id\"],\n                            output=job[\"output\"],\n                            url=base + \"/documents/\" + segment,\n                            bytes=len(payload),\n                        )\n                    )\n                self.assertEqual(\n                    receipt,\n                    {\"files\": sorted(records, key=lambda item: item[\"document_id\"])},\n                )\n        finally:\n            server.shutdown()\n            server.server_close()\n            thread.join()\n\n    def test_public_demo(self):\n        job = dict(document_id=\"sample\", output=\"documents/sample.bin\")\n        self.run_batch(DemoHandler, [job], [(job, \"sample\", b\"sample document\\n\")])\n\n    def test_identifier_and_output_domains(self):\n        # Expected wire segments are literal fixtures, not computed by the downloader.\n        fixtures = [\n            (\"a/b\", \"a%2Fb\", b\"\\x00\\xff\\x80\\r\\n\"),\n            (\"%2F\", \"%252F\", b\"literal percent\"),\n            (\"what?x#y\", \"what%3Fx%23y\", b\"\"),\n            (\n                \" snow \\u96ea \",\n                \"%20snow%20%E9%9B%AA%20\",\n                \"Unicode payload \\u96ea\\n\".encode(),\n            ),\n            (\"../business\", \"..%2Fbusiness\", b\"legal source ID\"),\n            (\"100%\", \"100%25\", bytes(range(256))),\n            (\"a\\\\b\", \"a%5Cb\", b\"backslash source ID\"),\n            (\".\", \".\", b\"dot business ID\"),\n            (\"..\", \"..\", b\"two dots business ID\"),\n        ]\n        for suffix in (\"\", \"/\"):\n            seen = []\n            expected = []\n            routes = {}\n            for index, (identifier, segment, payload) in enumerate(fixtures):\n                output = os.path.join(\n                    \"nested folder\", \"\\u96ea\", \"file {} %2F#.bin\".format(index)\n                )\n                job = dict(document_id=identifier, output=output)\n                expected.append((job, segment, payload))\n                routes[\"/tenant/api/v2/documents/\" + segment] = (identifier, payload)\n\n            class Handler(BaseHTTPRequestHandler):\n                def do_GET(self):\n                    seen.append(self.path)\n                    if self.path not in routes:\n                        self.send_error(404)\n                        return\n                    identifier, payload = routes[self.path]\n                    body = json.dumps(\n                        dict(\n                            document_id=identifier,\n                            content_base64=base64.b64encode(payload).decode(),\n                        )\n                    ).encode()\n                    self.send_response(200)\n                    self.send_header(\"Content-Length\", str(len(body)))\n                    self.end_headers()\n                    self.wfile.write(body)\n\n                def log_message(self, *args):\n                    pass\n\n            with self.subTest(trailing_slash=suffix):\n                jobs = [item[0] for item in reversed(expected)]\n                self.run_batch(Handler, jobs, expected, suffix, \"/tenant/api/v2\")\n                self.assertEqual(\n                    seen,\n                    [\n                        \"/tenant/api/v2/documents/\" + item[1]\n                        for item in reversed(expected)\n                    ],\n                )\n\n    def test_empty_batch(self):\n        self.run_batch(DemoHandler, [], [])\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "additions": 154,
+            "deletions": 0
+          }
+        ],
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541599639
+      }
+    },
+    "settledAt": 1793541599640
+  },
+  {
+    "requestID": "prt_g0VZjJoO600CD6jPxT92",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_73a61e1e83d44596bf2681506c8c53ed",
+      "tool": "bash",
+      "input": {
+        "command": "python build.py",
+        "description": "Build the standalone standard-library Python archive"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_018a1e5599d9f5cc016ae745e949b8819181ef074793ea7c10"
+        }
+      },
+      "time": {
+        "start": 1793541609270
+      }
+    },
+    "requestedAt": 1793541609460,
+    "outcomeID": "prt_hSMhzwWLaBvkiri4yztW",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hLqO29Da39xCaWeUFSyC",
+      "title": "Build the standalone standard-library Python archive",
+      "metadata": {
+        "refused": false,
+        "command": "python build.py",
+        "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 0,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Build the standalone standard-library Python archive",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541610298
+      }
+    },
+    "settledAt": 1793541610298
+  },
+  {
+    "requestID": "prt_g0VZjJq81009r1e4dX67",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_66cb6c9e1c844831bf1881d136a3d414",
+      "tool": "bash",
+      "input": {
+        "command": "python -m unittest -v test_download",
+        "timeout": 120000,
+        "description": "Test archive downloads and receipts from isolated directories"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0f6177fbbb45b6c0016ae745eff34c81918c44c4c541ce7ac4"
+        }
+      },
+      "time": {
+        "start": 1793541615961
+      }
+    },
+    "requestedAt": 1793541617112,
+    "outcomeID": "prt_hpRdapCzMFkCxMrdgCUE",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hU6uPXe2mvZoUzpF9Cyr",
+      "title": "Test archive downloads and receipts from isolated directories",
+      "metadata": {
+        "refused": false,
+        "command": "python -m unittest -v test_download",
+        "output": "test_empty_batch (test_download.ArchiveTests.test_empty_batch) ... ok\r\ntest_identifier_and_output_domains (test_download.ArchiveTests.test_identifier_and_output_domains) ... ok\r\ntest_public_demo (test_download.ArchiveTests.test_public_demo) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 3 tests in 2.676s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 352,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Test archive downloads and receipts from isolated directories",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541621389
+      }
+    },
+    "settledAt": 1793541621389
+  },
+  {
+    "requestID": "prt_g0VZjJyX200pHxau9Sg2",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_fc3997079a994183b71cd6eb75e12816",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: main.py\n@@\n-        url = base_url.removesuffix(\"/\") + \"/documents/\" + urllib.parse.quote(document_id, safe=\"\")\n+        prefix = base_url[:-1] if base_url.endswith(\"/\") else base_url\n+        url = prefix + \"/documents/\" + urllib.parse.quote(document_id, safe=\"\")\n@@\n-    receipt.unlink(missing_ok=True)\n+    if receipt.exists():\n+        receipt.unlink()\n*** Update File: build.py\n@@\n import zipapp\n+import zipfile\n@@\n         zipapp.create_archive(directory, project / \"deliverable.pyz\")\n+    with zipfile.ZipFile(project / \"source.zip\", \"w\", zipfile.ZIP_DEFLATED) as archive:\n+        for name in (\"main.py\", \"build.py\", \"test_download.py\", \"demo_server.py\",\n+                     \"sample.jobs.json\", \"CONTRACT.md\", \"HANDOFF.md\"):\n+            archive.write(project / name, name)\n*** Add File: HANDOFF.md\n+# Batch document downloader\n+\n+## Run\n+\n+Python 3, standard library only; no installation or third-party packages required.\n+\n+```sh\n+python deliverable.pyz JOBS_JSON --output OUTPUT_DIRECTORY\n+```\n+\n+Input and output paths are relative to the caller's working directory unless\n+absolute. The archive can be copied elsewhere and run without this source tree.\n+Production inputs must specify a reachable HTTP service using the documented API.\n+\n+## Repair\n+\n+- Preserve the API prefix and encode each exact Unicode document ID as one URL\n+  segment. Literal percent-looking text is encoded again, not interpreted.\n+- Keep native output paths separate from business IDs; preserve original output\n+  spelling in the receipt, create parents, and write decoded bytes unchanged.\n+- Validate response identity and Base64; write the sorted completion receipt only\n+  after all jobs succeed. Errors return nonzero and print a diagnostic to stderr.\n+- Downloads are sequential. A failed batch can leave files already downloaded;\n+  it does not roll them back. An old receipt is removed before downloading a\n+  validated batch so it cannot claim that a failed rerun completed.\n+\n+## Source and reproducible checks\n+\n+`source.zip` contains the source, original contract/demo/sample, this handoff,\n+and the black-box tests. `main.py` is the maintained implementation; `build.py`\n+packages it as `__main__.py` without external runtime files.\n+\n+```sh\n+python build.py\n+python -m unittest -v test_download\n+```\n+\n+Tested: all three test methods passed on the delivered archive. They copy the\n+archive into temporary directories, remove PYTHONPATH, and invoke the real CLI.\n+Checks include the public demo, an empty batch, prefixed URLs with and without a\n+trailing slash, slash/percent/query/fragment/space/backslash/Unicode/dot IDs,\n+binary/text/empty payloads, nested native paths with spaces and Unicode, observed\n+HTTP request targets, exact file bytes, and complete sorted receipt fields.\n+Fixture request targets are literal expectations independent of the downloader.\n+All test HTTP servers are shut down and closed after each run.\n+\n+The checks use local HTTP servers; no production service or exhaustive platform\n+matrix was tested. Output names follow the native filesystem rules of the host.\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_03c281ed2d24e7c9016ae746104c288191bef5ee558dfca8a8"
+        }
+      },
+      "time": {
+        "start": 1793541648264
+      }
+    },
+    "requestedAt": 1793541667991,
+    "outcomeID": "prt_hLQSDyvUPJa3iA5ZxdjY",
+    "outcome": {
+      "outcome": "failed",
+      "failure": {
+        "kind": "tool-execution",
+        "name": "Error",
+        "message": "apply_patch verification failed: Error: Failed to find expected lines in C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py:\n        url = base_url.removesuffix(\"/\") + \"/documents/\" + urllib.parse.quote(document_id, safe=\"\")",
+        "originSite": "session.processor.tool-error",
+        "classification": "tool-execution",
+        "data": {
+          "toolCallId": "call_fc3997079a994183b71cd6eb75e12816",
+          "toolName": "apply_patch"
+        }
+      },
+      "time": {
+        "end": 1793541668278
+      }
+    },
+    "settledAt": 1793541668278
+  },
+  {
+    "requestID": "prt_g0VZjK4wL00uSo199017",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_38123e549bff420c9590f9d2d2881d32",
+      "tool": "read",
+      "input": {
+        "filePath": "main.py"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0fd868bf6db20e34016ae74628e4788191a5686a218edcf32d"
+        }
+      },
+      "time": {
+        "start": 1793541672897
+      }
+    },
+    "requestedAt": 1793541673124,
+    "outcomeID": "prt_hfKMusP5v3nKExFLKnhI",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py</path>\n<type>file</type>\n<content>1: \"\"\"Download document bytes without confusing business IDs with paths.\"\"\"\n2: \n3: import argparse\n4: import base64\n5: import json\n6: import sys\n7: import urllib.error\n8: import urllib.parse\n9: import urllib.request\n10: from pathlib import Path\n11: \n12: \n13: def download(config, root):\n14:     \"\"\"Write all jobs, then publish the completion receipt.\n15: \n16:     IDs are opaque Unicode text. Only output names are filesystem paths;\n17:     their original spelling is retained separately for the receipt.\n18:     \"\"\"\n19:     base_url = config[\"base_url\"]\n20:     parts = urllib.parse.urlsplit(base_url)\n21:     if (\n22:         parts.scheme not in (\"http\", \"https\")\n23:         or not parts.netloc\n24:         or parts.query\n25:         or parts.fragment\n26:     ):\n27:         raise ValueError(\"base_url must be an HTTP URL without query or fragment\")\n28:     jobs = config[\"jobs\"]\n29:     if not isinstance(jobs, list):\n30:         raise ValueError(\"jobs must be a list\")\n31: \n32:     root = Path(root).resolve()\n33:     prepared = []\n34:     targets = set()\n35:     for job in jobs:\n36:         document_id, output = job[\"document_id\"], job[\"output\"]\n37:         if not isinstance(document_id, str) or not document_id:\n38:             raise ValueError(\"document_id must be nonempty text\")\n39:         if not isinstance(output, str) or not output:\n40:             raise ValueError(\"output must be a relative native filesystem path\")\n41:         path = Path(output)\n42:         target = (root / path).resolve()\n43:         if (\n44:             path.is_absolute()\n45:             or path.drive\n46:             or \"..\" in path.parts\n47:             or root not in target.parents\n48:             or target == root / \"receipt.json\"\n49:         ):\n50:             raise ValueError(\n51:                 \"output must stay under the output directory and not be receipt.json\"\n52:             )\n53:         if target in targets:\n54:             raise ValueError(\"output paths must be distinct\")\n55:         targets.add(target)\n56:         # Never unquote first: a literal '%2F' ID must become '%252F'.\n57:         url = (\n58:             base_url.removesuffix(\"/\")\n59:             + \"/documents/\"\n60:             + urllib.parse.quote(document_id, safe=\"\")\n61:         )\n62:         prepared.append((document_id, output, target, url))\n63: \n64:     root.mkdir(parents=True, exist_ok=True)\n65:     receipt = root / \"receipt.json\"\n66:     # A failed rerun must not leave an old receipt claiming completion.\n67:     receipt.unlink(missing_ok=True)\n68:     files = []\n69:     for document_id, output, target, url in prepared:\n70:         with urllib.request.urlopen(url) as response:\n71:             if response.status != 200:\n72:                 raise ValueError(\"document response must have HTTP status 200\")\n73:             data = json.load(response)\n74:         if data[\"document_id\"] != document_id:\n75:             raise ValueError(\"response document_id does not match the requested ID\")\n76:         raw = base64.b64decode(data[\"content_base64\"], validate=True)\n77:         target.parent.mkdir(parents=True, exist_ok=True)\n78:         target.write_bytes(raw)\n79:         files.append(\n80:             dict(document_id=document_id, output=output, url=url, bytes=len(raw))\n81:         )\n82:     receipt.write_text(\n83:         json.dumps(\n84:             {\"files\": sorted(files, key=lambda item: item[\"document_id\"])},\n85:             ensure_ascii=False,\n86:             indent=2,\n87:         )\n88:         + \"\\n\",\n89:         encoding=\"utf-8\",\n90:     )\n91: \n92: \n93: def main(argv=None):\n94:     parser = argparse.ArgumentParser(description=__doc__)\n95:     parser.add_argument(\"input\", help=\"UTF-8 jobs JSON file\")\n96:     parser.add_argument(\"--output\", required=True, help=\"output directory\")\n97:     args = parser.parse_args(argv)\n98:     try:\n99:         config = json.loads(Path(args.input).read_text(encoding=\"utf-8\"))\n100:         download(config, args.output)\n101:     except (OSError, ValueError, TypeError, KeyError, urllib.error.URLError) as error:\n102:         print(\"Download failed: {}\".format(error), file=sys.stderr)\n103:         return 1\n104:     return 0\n105: \n106: \n107: if __name__ == \"__main__\":\n108:     sys.exit(main())\n\n(End of file - total 108 lines)\n</content>",
+      "title": "main.py",
+      "metadata": {
+        "preview": "\"\"\"Download document bytes without confusing business IDs with paths.\"\"\"\n\nimport argparse\nimport base64\nimport json\nimport sys\nimport urllib.error\nimport urllib.parse\nimport urllib.request\nfrom pathlib import Path\n\n\ndef download(config, root):\n    \"\"\"Write all jobs, then publish the completion receipt.\n\n    IDs are opaque Unicode text. Only output names are filesystem paths;\n    their original spelling is retained separately for the receipt.\n    \"\"\"\n    base_url = config[\"base_url\"]\n    parts = urllib.parse.urlsplit(base_url)",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 108,
+        "totalLines": 108
+      },
+      "time": {
+        "end": 1793541673467
+      }
+    },
+    "settledAt": 1793541673467
+  },
+  {
+    "requestID": "prt_g0VZjK71u001kBNrcD2H",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_ed480fc1d28a46889204f8a778a4694d",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: main.py\n@@\n-        url = (\n-            base_url.removesuffix(\"/\")\n+        url = (\n+            (base_url[:-1] if base_url.endswith(\"/\") else base_url)\n@@\n-    receipt.unlink(missing_ok=True)\n+    if receipt.exists():\n+        receipt.unlink()\n*** Add File: HANDOFF.md\n+# Batch document downloader\n+\n+## Run\n+\n+Python 3, standard library only; no third-party packages required.\n+\n+```sh\n+python deliverable.pyz JOBS_JSON --output OUTPUT_DIRECTORY\n+```\n+\n+Input and output paths are relative to the caller's working directory unless\n+absolute. The archive can be copied elsewhere and run without this source tree.\n+Production inputs must specify a reachable HTTP service using the documented API.\n+\n+## Repair\n+\n+- Preserve the API prefix and encode each exact Unicode document ID as one URL\n+  segment. Literal percent-looking text is encoded again, not interpreted.\n+- Keep native output paths separate from business IDs; preserve original output\n+  spelling in the receipt, create parents, and write decoded bytes unchanged.\n+- Validate response identity and Base64; write the sorted completion receipt only\n+  after all jobs succeed. Errors return nonzero and print a diagnostic to stderr.\n+- Downloads are sequential. A failed batch can leave files already downloaded;\n+  it does not roll them back. An old receipt is removed before downloading a\n+  validated batch so it cannot claim that a failed rerun completed.\n+\n+## Source and reproducible checks\n+\n+`main.py` is the maintained implementation. `build.py` packages it as\n+`__main__.py` without external runtime files.\n+\n+```sh\n+python build.py\n+python -m unittest -v test_download\n+```\n+\n+Tested: all three test methods passed on the delivered archive. They copy the\n+archive into temporary directories, remove PYTHONPATH, and invoke the real CLI.\n+Checks include the public demo, an empty batch, prefixed URLs with and without a\n+trailing slash, slash/percent/query/fragment/space/backslash/Unicode/dot IDs,\n+binary/text/empty payloads, nested native paths with spaces and Unicode, observed\n+HTTP request targets, exact file bytes, and complete sorted receipt fields.\n+Fixture request targets are literal expectations independent of the downloader.\n+All test HTTP servers are shut down and closed after each run.\n+\n+The checks use local HTTP servers; no production service or exhaustive platform\n+matrix was tested. Output names follow the native filesystem rules of the host.\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0e081449be8bf212016ae74630f67881918803e2c986d72145"
+        }
+      },
+      "time": {
+        "start": 1793541680930
+      }
+    },
+    "requestedAt": 1793541687687,
+    "outcomeID": "prt_h05WWvFPmaUnuXkRoeYW",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hq2R9LoNW7HM2vLYc1tl",
+      "title": "Success. Updated the following files:\nM main.py\nA HANDOFF.md",
+      "metadata": {
+        "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n@@ -54,18 +54,19 @@\n         raise ValueError(\"output paths must be distinct\")\n     targets.add(target)\n     # Never unquote first: a literal '%2F' ID must become '%252F'.\n     url = (\n-        base_url.removesuffix(\"/\")\n+        (base_url[:-1] if base_url.endswith(\"/\") else base_url)\n         + \"/documents/\"\n         + urllib.parse.quote(document_id, safe=\"\")\n     )\n     prepared.append((document_id, output, target, url))\n \n root.mkdir(parents=True, exist_ok=True)\n receipt = root / \"receipt.json\"\n # A failed rerun must not leave an old receipt claiming completion.\n-receipt.unlink(missing_ok=True)\n+if receipt.exists():\n+    receipt.unlink()\n files = []\n for document_id, output, target, url in prepared:\n     with urllib.request.urlopen(url) as response:\n         if response.status != 200:\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n@@ -0,0 +1,47 @@\n+# Batch document downloader\n+\n+## Run\n+\n+Python 3, standard library only; no third-party packages required.\n+\n+```sh\n+python deliverable.pyz JOBS_JSON --output OUTPUT_DIRECTORY\n+```\n+\n+Input and output paths are relative to the caller's working directory unless\n+absolute. The archive can be copied elsewhere and run without this source tree.\n+Production inputs must specify a reachable HTTP service using the documented API.\n+\n+## Repair\n+\n+- Preserve the API prefix and encode each exact Unicode document ID as one URL\n+  segment. Literal percent-looking text is encoded again, not interpreted.\n+- Keep native output paths separate from business IDs; preserve original output\n+  spelling in the receipt, create parents, and write decoded bytes unchanged.\n+- Validate response identity and Base64; write the sorted completion receipt only\n+  after all jobs succeed. Errors return nonzero and print a diagnostic to stderr.\n+- Downloads are sequential. A failed batch can leave files already downloaded;\n+  it does not roll them back. An old receipt is removed before downloading a\n+  validated batch so it cannot claim that a failed rerun completed.\n+\n+## Source and reproducible checks\n+\n+`main.py` is the maintained implementation. `build.py` packages it as\n+`__main__.py` without external runtime files.\n+\n+```sh\n+python build.py\n+python -m unittest -v test_download\n+```\n+\n+Tested: all three test methods passed on the delivered archive. They copy the\n+archive into temporary directories, remove PYTHONPATH, and invoke the real CLI.\n+Checks include the public demo, an empty batch, prefixed URLs with and without a\n+trailing slash, slash/percent/query/fragment/space/backslash/Unicode/dot IDs,\n+binary/text/empty payloads, nested native paths with spaces and Unicode, observed\n+HTTP request targets, exact file bytes, and complete sorted receipt fields.\n+Fixture request targets are literal expectations independent of the downloader.\n+All test HTTP servers are shut down and closed after each run.\n+\n+The checks use local HTTP servers; no production service or exhaustive platform\n+matrix was tested. Output names follow the native filesystem rules of the host.\n\n",
+        "files": [
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py",
+            "relativePath": "main.py",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\main.py\n@@ -54,18 +54,19 @@\n         raise ValueError(\"output paths must be distinct\")\n     targets.add(target)\n     # Never unquote first: a literal '%2F' ID must become '%252F'.\n     url = (\n-        base_url.removesuffix(\"/\")\n+        (base_url[:-1] if base_url.endswith(\"/\") else base_url)\n         + \"/documents/\"\n         + urllib.parse.quote(document_id, safe=\"\")\n     )\n     prepared.append((document_id, output, target, url))\n \n root.mkdir(parents=True, exist_ok=True)\n receipt = root / \"receipt.json\"\n # A failed rerun must not leave an old receipt claiming completion.\n-receipt.unlink(missing_ok=True)\n+if receipt.exists():\n+    receipt.unlink()\n files = []\n for document_id, output, target, url in prepared:\n     with urllib.request.urlopen(url) as response:\n         if response.status != 200:\n",
+            "before": "\"\"\"Download document bytes without confusing business IDs with paths.\"\"\"\n\nimport argparse\nimport base64\nimport json\nimport sys\nimport urllib.error\nimport urllib.parse\nimport urllib.request\nfrom pathlib import Path\n\n\ndef download(config, root):\n    \"\"\"Write all jobs, then publish the completion receipt.\n\n    IDs are opaque Unicode text. Only output names are filesystem paths;\n    their original spelling is retained separately for the receipt.\n    \"\"\"\n    base_url = config[\"base_url\"]\n    parts = urllib.parse.urlsplit(base_url)\n    if (\n        parts.scheme not in (\"http\", \"https\")\n        or not parts.netloc\n        or parts.query\n        or parts.fragment\n    ):\n        raise ValueError(\"base_url must be an HTTP URL without query or fragment\")\n    jobs = config[\"jobs\"]\n    if not isinstance(jobs, list):\n        raise ValueError(\"jobs must be a list\")\n\n    root = Path(root).resolve()\n    prepared = []\n    targets = set()\n    for job in jobs:\n        document_id, output = job[\"document_id\"], job[\"output\"]\n        if not isinstance(document_id, str) or not document_id:\n            raise ValueError(\"document_id must be nonempty text\")\n        if not isinstance(output, str) or not output:\n            raise ValueError(\"output must be a relative native filesystem path\")\n        path = Path(output)\n        target = (root / path).resolve()\n        if (\n            path.is_absolute()\n            or path.drive\n            or \"..\" in path.parts\n            or root not in target.parents\n            or target == root / \"receipt.json\"\n        ):\n            raise ValueError(\n                \"output must stay under the output directory and not be receipt.json\"\n            )\n        if target in targets:\n            raise ValueError(\"output paths must be distinct\")\n        targets.add(target)\n        # Never unquote first: a literal '%2F' ID must become '%252F'.\n        url = (\n            base_url.removesuffix(\"/\")\n            + \"/documents/\"\n            + urllib.parse.quote(document_id, safe=\"\")\n        )\n        prepared.append((document_id, output, target, url))\n\n    root.mkdir(parents=True, exist_ok=True)\n    receipt = root / \"receipt.json\"\n    # A failed rerun must not leave an old receipt claiming completion.\n    receipt.unlink(missing_ok=True)\n    files = []\n    for document_id, output, target, url in prepared:\n        with urllib.request.urlopen(url) as response:\n            if response.status != 200:\n                raise ValueError(\"document response must have HTTP status 200\")\n            data = json.load(response)\n        if data[\"document_id\"] != document_id:\n            raise ValueError(\"response document_id does not match the requested ID\")\n        raw = base64.b64decode(data[\"content_base64\"], validate=True)\n        target.parent.mkdir(parents=True, exist_ok=True)\n        target.write_bytes(raw)\n        files.append(\n            dict(document_id=document_id, output=output, url=url, bytes=len(raw))\n        )\n    receipt.write_text(\n        json.dumps(\n            {\"files\": sorted(files, key=lambda item: item[\"document_id\"])},\n            ensure_ascii=False,\n            indent=2,\n        )\n        + \"\\n\",\n        encoding=\"utf-8\",\n    )\n\n\ndef main(argv=None):\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"input\", help=\"UTF-8 jobs JSON file\")\n    parser.add_argument(\"--output\", required=True, help=\"output directory\")\n    args = parser.parse_args(argv)\n    try:\n        config = json.loads(Path(args.input).read_text(encoding=\"utf-8\"))\n        download(config, args.output)\n    except (OSError, ValueError, TypeError, KeyError, urllib.error.URLError) as error:\n        print(\"Download failed: {}\".format(error), file=sys.stderr)\n        return 1\n    return 0\n\n\nif __name__ == \"__main__\":\n    sys.exit(main())\n",
+            "after": "\"\"\"Download document bytes without confusing business IDs with paths.\"\"\"\n\nimport argparse\nimport base64\nimport json\nimport sys\nimport urllib.error\nimport urllib.parse\nimport urllib.request\nfrom pathlib import Path\n\n\ndef download(config, root):\n    \"\"\"Write all jobs, then publish the completion receipt.\n\n    IDs are opaque Unicode text. Only output names are filesystem paths;\n    their original spelling is retained separately for the receipt.\n    \"\"\"\n    base_url = config[\"base_url\"]\n    parts = urllib.parse.urlsplit(base_url)\n    if (\n        parts.scheme not in (\"http\", \"https\")\n        or not parts.netloc\n        or parts.query\n        or parts.fragment\n    ):\n        raise ValueError(\"base_url must be an HTTP URL without query or fragment\")\n    jobs = config[\"jobs\"]\n    if not isinstance(jobs, list):\n        raise ValueError(\"jobs must be a list\")\n\n    root = Path(root).resolve()\n    prepared = []\n    targets = set()\n    for job in jobs:\n        document_id, output = job[\"document_id\"], job[\"output\"]\n        if not isinstance(document_id, str) or not document_id:\n            raise ValueError(\"document_id must be nonempty text\")\n        if not isinstance(output, str) or not output:\n            raise ValueError(\"output must be a relative native filesystem path\")\n        path = Path(output)\n        target = (root / path).resolve()\n        if (\n            path.is_absolute()\n            or path.drive\n            or \"..\" in path.parts\n            or root not in target.parents\n            or target == root / \"receipt.json\"\n        ):\n            raise ValueError(\n                \"output must stay under the output directory and not be receipt.json\"\n            )\n        if target in targets:\n            raise ValueError(\"output paths must be distinct\")\n        targets.add(target)\n        # Never unquote first: a literal '%2F' ID must become '%252F'.\n        url = (\n            (base_url[:-1] if base_url.endswith(\"/\") else base_url)\n            + \"/documents/\"\n            + urllib.parse.quote(document_id, safe=\"\")\n        )\n        prepared.append((document_id, output, target, url))\n\n    root.mkdir(parents=True, exist_ok=True)\n    receipt = root / \"receipt.json\"\n    # A failed rerun must not leave an old receipt claiming completion.\n    if receipt.exists():\n        receipt.unlink()\n    files = []\n    for document_id, output, target, url in prepared:\n        with urllib.request.urlopen(url) as response:\n            if response.status != 200:\n                raise ValueError(\"document response must have HTTP status 200\")\n            data = json.load(response)\n        if data[\"document_id\"] != document_id:\n            raise ValueError(\"response document_id does not match the requested ID\")\n        raw = base64.b64decode(data[\"content_base64\"], validate=True)\n        target.parent.mkdir(parents=True, exist_ok=True)\n        target.write_bytes(raw)\n        files.append(\n            dict(document_id=document_id, output=output, url=url, bytes=len(raw))\n        )\n    receipt.write_text(\n        json.dumps(\n            {\"files\": sorted(files, key=lambda item: item[\"document_id\"])},\n            ensure_ascii=False,\n            indent=2,\n        )\n        + \"\\n\",\n        encoding=\"utf-8\",\n    )\n\n\ndef main(argv=None):\n    parser = argparse.ArgumentParser(description=__doc__)\n    parser.add_argument(\"input\", help=\"UTF-8 jobs JSON file\")\n    parser.add_argument(\"--output\", required=True, help=\"output directory\")\n    args = parser.parse_args(argv)\n    try:\n        config = json.loads(Path(args.input).read_text(encoding=\"utf-8\"))\n        download(config, args.output)\n    except (OSError, ValueError, TypeError, KeyError, urllib.error.URLError) as error:\n        print(\"Download failed: {}\".format(error), file=sys.stderr)\n        return 1\n    return 0\n\n\nif __name__ == \"__main__\":\n    sys.exit(main())\n",
+            "additions": 3,
+            "deletions": 2
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md",
+            "relativePath": "HANDOFF.md",
+            "type": "add",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n@@ -0,0 +1,47 @@\n+# Batch document downloader\n+\n+## Run\n+\n+Python 3, standard library only; no third-party packages required.\n+\n+```sh\n+python deliverable.pyz JOBS_JSON --output OUTPUT_DIRECTORY\n+```\n+\n+Input and output paths are relative to the caller's working directory unless\n+absolute. The archive can be copied elsewhere and run without this source tree.\n+Production inputs must specify a reachable HTTP service using the documented API.\n+\n+## Repair\n+\n+- Preserve the API prefix and encode each exact Unicode document ID as one URL\n+  segment. Literal percent-looking text is encoded again, not interpreted.\n+- Keep native output paths separate from business IDs; preserve original output\n+  spelling in the receipt, create parents, and write decoded bytes unchanged.\n+- Validate response identity and Base64; write the sorted completion receipt only\n+  after all jobs succeed. Errors return nonzero and print a diagnostic to stderr.\n+- Downloads are sequential. A failed batch can leave files already downloaded;\n+  it does not roll them back. An old receipt is removed before downloading a\n+  validated batch so it cannot claim that a failed rerun completed.\n+\n+## Source and reproducible checks\n+\n+`main.py` is the maintained implementation. `build.py` packages it as\n+`__main__.py` without external runtime files.\n+\n+```sh\n+python build.py\n+python -m unittest -v test_download\n+```\n+\n+Tested: all three test methods passed on the delivered archive. They copy the\n+archive into temporary directories, remove PYTHONPATH, and invoke the real CLI.\n+Checks include the public demo, an empty batch, prefixed URLs with and without a\n+trailing slash, slash/percent/query/fragment/space/backslash/Unicode/dot IDs,\n+binary/text/empty payloads, nested native paths with spaces and Unicode, observed\n+HTTP request targets, exact file bytes, and complete sorted receipt fields.\n+Fixture request targets are literal expectations independent of the downloader.\n+All test HTTP servers are shut down and closed after each run.\n+\n+The checks use local HTTP servers; no production service or exhaustive platform\n+matrix was tested. Output names follow the native filesystem rules of the host.\n",
+            "before": "",
+            "after": "# Batch document downloader\n\n## Run\n\nPython 3, standard library only; no third-party packages required.\n\n```sh\npython deliverable.pyz JOBS_JSON --output OUTPUT_DIRECTORY\n```\n\nInput and output paths are relative to the caller's working directory unless\nabsolute. The archive can be copied elsewhere and run without this source tree.\nProduction inputs must specify a reachable HTTP service using the documented API.\n\n## Repair\n\n- Preserve the API prefix and encode each exact Unicode document ID as one URL\n  segment. Literal percent-looking text is encoded again, not interpreted.\n- Keep native output paths separate from business IDs; preserve original output\n  spelling in the receipt, create parents, and write decoded bytes unchanged.\n- Validate response identity and Base64; write the sorted completion receipt only\n  after all jobs succeed. Errors return nonzero and print a diagnostic to stderr.\n- Downloads are sequential. A failed batch can leave files already downloaded;\n  it does not roll them back. An old receipt is removed before downloading a\n  validated batch so it cannot claim that a failed rerun completed.\n\n## Source and reproducible checks\n\n`main.py` is the maintained implementation. `build.py` packages it as\n`__main__.py` without external runtime files.\n\n```sh\npython build.py\npython -m unittest -v test_download\n```\n\nTested: all three test methods passed on the delivered archive. They copy the\narchive into temporary directories, remove PYTHONPATH, and invoke the real CLI.\nChecks include the public demo, an empty batch, prefixed URLs with and without a\ntrailing slash, slash/percent/query/fragment/space/backslash/Unicode/dot IDs,\nbinary/text/empty payloads, nested native paths with spaces and Unicode, observed\nHTTP request targets, exact file bytes, and complete sorted receipt fields.\nFixture request targets are literal expectations independent of the downloader.\nAll test HTTP servers are shut down and closed after each run.\n\nThe checks use local HTTP servers; no production service or exhaustive platform\nmatrix was tested. Output names follow the native filesystem rules of the host.\n",
+            "additions": 47,
+            "deletions": 0
+          }
+        ],
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541688601
+      }
+    },
+    "settledAt": 1793541688602
+  },
+  {
+    "requestID": "prt_g0VZjKAds00X6wMUqs7Y",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_a7c3a300cd234a2abbb0dcf127b8d48d",
+      "tool": "read",
+      "input": {
+        "filePath": "build.py"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0b979834a83e2e18016ae7463edbbc8191b434b5ccf6c176da"
+        }
+      },
+      "time": {
+        "start": 1793541694816
+      }
+    },
+    "requestedAt": 1793541694902,
+    "outcomeID": "prt_hgPFr3sdFt92AUb4MKHz",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py</path>\n<type>file</type>\n<content>1: \"\"\"Build a self-contained archive using only the Python standard library.\"\"\"\n2: \n3: from pathlib import Path\n4: import tempfile\n5: import zipapp\n6: \n7: \n8: def build():\n9:     project = Path(__file__).resolve().parent\n10:     with tempfile.TemporaryDirectory() as directory:\n11:         entry = Path(directory) / \"__main__.py\"\n12:         entry.write_bytes((project / \"main.py\").read_bytes())\n13:         zipapp.create_archive(directory, project / \"deliverable.pyz\")\n14: \n15: \n16: if __name__ == \"__main__\":\n17:     build()\n\n(End of file - total 17 lines)\n</content>",
+      "title": "build.py",
+      "metadata": {
+        "preview": "\"\"\"Build a self-contained archive using only the Python standard library.\"\"\"\n\nfrom pathlib import Path\nimport tempfile\nimport zipapp\n\n\ndef build():\n    project = Path(__file__).resolve().parent\n    with tempfile.TemporaryDirectory() as directory:\n        entry = Path(directory) / \"__main__.py\"\n        entry.write_bytes((project / \"main.py\").read_bytes())\n        zipapp.create_archive(directory, project / \"deliverable.pyz\")\n\n\nif __name__ == \"__main__\":\n    build()",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 17,
+        "totalLines": 17
+      },
+      "time": {
+        "end": 1793541695523
+      }
+    },
+    "settledAt": 1793541695523
+  },
+  {
+    "requestID": "prt_g0VZjKBgh00U2pG2Q30E",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_53b3912c4ae949ac9fe6aac414bbf298",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: build.py\n@@\n import zipapp\n+import zipfile\n@@\n         zipapp.create_archive(directory, project / \"deliverable.pyz\")\n+    with zipfile.ZipFile(project / \"source.zip\", \"w\", zipfile.ZIP_DEFLATED) as archive:\n+        for name in (\"main.py\", \"build.py\", \"test_download.py\", \"demo_server.py\",\n+                     \"sample.jobs.json\", \"CONTRACT.md\", \"HANDOFF.md\"):\n+            archive.write(project / name, name)\n*** Update File: HANDOFF.md\n@@\n-`main.py` is the maintained implementation. `build.py` packages it as\n+`source.zip` contains the source, tests, original contract/demo/sample and this\n+handoff. `main.py` is the maintained implementation. `build.py` packages it as\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0b31e85cffe33997016ae74642da74819187b1618b549a0d9a"
+        }
+      },
+      "time": {
+        "start": 1793541698835
+      }
+    },
+    "requestedAt": 1793541701307,
+    "outcomeID": "prt_hkk0qqFCzSjWtafX0Nwd",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hsSd0v4ZMHlWSPcHJz29",
+      "title": "Success. Updated the following files:\nM build.py\nM HANDOFF.md",
+      "metadata": {
+        "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n@@ -2,16 +2,28 @@\n \n from pathlib import Path\n import tempfile\n import zipapp\n+import zipfile\n \n \n def build():\n     project = Path(__file__).resolve().parent\n     with tempfile.TemporaryDirectory() as directory:\n         entry = Path(directory) / \"__main__.py\"\n         entry.write_bytes((project / \"main.py\").read_bytes())\n         zipapp.create_archive(directory, project / \"deliverable.pyz\")\n+    with zipfile.ZipFile(project / \"source.zip\", \"w\", zipfile.ZIP_DEFLATED) as archive:\n+        for name in (\n+            \"main.py\",\n+            \"build.py\",\n+            \"test_download.py\",\n+            \"demo_server.py\",\n+            \"sample.jobs.json\",\n+            \"CONTRACT.md\",\n+            \"HANDOFF.md\",\n+        ):\n+            archive.write(project / name, name)\n \n \n if __name__ == \"__main__\":\n     build()\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n@@ -25,9 +25,10 @@\n   validated batch so it cannot claim that a failed rerun completed.\n \n ## Source and reproducible checks\n \n-`main.py` is the maintained implementation. `build.py` packages it as\n+`source.zip` contains the source, tests, original contract/demo/sample and this\n+handoff. `main.py` is the maintained implementation. `build.py` packages it as\n `__main__.py` without external runtime files.\n \n ```sh\n python build.py\n\n",
+        "files": [
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py",
+            "relativePath": "build.py",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\build.py\n@@ -2,16 +2,28 @@\n \n from pathlib import Path\n import tempfile\n import zipapp\n+import zipfile\n \n \n def build():\n     project = Path(__file__).resolve().parent\n     with tempfile.TemporaryDirectory() as directory:\n         entry = Path(directory) / \"__main__.py\"\n         entry.write_bytes((project / \"main.py\").read_bytes())\n         zipapp.create_archive(directory, project / \"deliverable.pyz\")\n+    with zipfile.ZipFile(project / \"source.zip\", \"w\", zipfile.ZIP_DEFLATED) as archive:\n+        for name in (\n+            \"main.py\",\n+            \"build.py\",\n+            \"test_download.py\",\n+            \"demo_server.py\",\n+            \"sample.jobs.json\",\n+            \"CONTRACT.md\",\n+            \"HANDOFF.md\",\n+        ):\n+            archive.write(project / name, name)\n \n \n if __name__ == \"__main__\":\n     build()\n",
+            "before": "\"\"\"Build a self-contained archive using only the Python standard library.\"\"\"\n\nfrom pathlib import Path\nimport tempfile\nimport zipapp\n\n\ndef build():\n    project = Path(__file__).resolve().parent\n    with tempfile.TemporaryDirectory() as directory:\n        entry = Path(directory) / \"__main__.py\"\n        entry.write_bytes((project / \"main.py\").read_bytes())\n        zipapp.create_archive(directory, project / \"deliverable.pyz\")\n\n\nif __name__ == \"__main__\":\n    build()\n",
+            "after": "\"\"\"Build a self-contained archive using only the Python standard library.\"\"\"\n\nfrom pathlib import Path\nimport tempfile\nimport zipapp\nimport zipfile\n\n\ndef build():\n    project = Path(__file__).resolve().parent\n    with tempfile.TemporaryDirectory() as directory:\n        entry = Path(directory) / \"__main__.py\"\n        entry.write_bytes((project / \"main.py\").read_bytes())\n        zipapp.create_archive(directory, project / \"deliverable.pyz\")\n    with zipfile.ZipFile(project / \"source.zip\", \"w\", zipfile.ZIP_DEFLATED) as archive:\n        for name in (\n            \"main.py\",\n            \"build.py\",\n            \"test_download.py\",\n            \"demo_server.py\",\n            \"sample.jobs.json\",\n            \"CONTRACT.md\",\n            \"HANDOFF.md\",\n        ):\n            archive.write(project / name, name)\n\n\nif __name__ == \"__main__\":\n    build()\n",
+            "additions": 12,
+            "deletions": 0
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md",
+            "relativePath": "HANDOFF.md",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\download\\HANDOFF.md\n@@ -25,9 +25,10 @@\n   validated batch so it cannot claim that a failed rerun completed.\n \n ## Source and reproducible checks\n \n-`main.py` is the maintained implementation. `build.py` packages it as\n+`source.zip` contains the source, tests, original contract/demo/sample and this\n+handoff. `main.py` is the maintained implementation. `build.py` packages it as\n `__main__.py` without external runtime files.\n \n ```sh\n python build.py\n",
+            "before": "# Batch document downloader\n\n## Run\n\nPython 3, standard library only; no third-party packages required.\n\n```sh\npython deliverable.pyz JOBS_JSON --output OUTPUT_DIRECTORY\n```\n\nInput and output paths are relative to the caller's working directory unless\nabsolute. The archive can be copied elsewhere and run without this source tree.\nProduction inputs must specify a reachable HTTP service using the documented API.\n\n## Repair\n\n- Preserve the API prefix and encode each exact Unicode document ID as one URL\n  segment. Literal percent-looking text is encoded again, not interpreted.\n- Keep native output paths separate from business IDs; preserve original output\n  spelling in the receipt, create parents, and write decoded bytes unchanged.\n- Validate response identity and Base64; write the sorted completion receipt only\n  after all jobs succeed. Errors return nonzero and print a diagnostic to stderr.\n- Downloads are sequential. A failed batch can leave files already downloaded;\n  it does not roll them back. An old receipt is removed before downloading a\n  validated batch so it cannot claim that a failed rerun completed.\n\n## Source and reproducible checks\n\n`main.py` is the maintained implementation. `build.py` packages it as\n`__main__.py` without external runtime files.\n\n```sh\npython build.py\npython -m unittest -v test_download\n```\n\nTested: all three test methods passed on the delivered archive. They copy the\narchive into temporary directories, remove PYTHONPATH, and invoke the real CLI.\nChecks include the public demo, an empty batch, prefixed URLs with and without a\ntrailing slash, slash/percent/query/fragment/space/backslash/Unicode/dot IDs,\nbinary/text/empty payloads, nested native paths with spaces and Unicode, observed\nHTTP request targets, exact file bytes, and complete sorted receipt fields.\nFixture request targets are literal expectations independent of the downloader.\nAll test HTTP servers are shut down and closed after each run.\n\nThe checks use local HTTP servers; no production service or exhaustive platform\nmatrix was tested. Output names follow the native filesystem rules of the host.\n",
+            "after": "# Batch document downloader\n\n## Run\n\nPython 3, standard library only; no third-party packages required.\n\n```sh\npython deliverable.pyz JOBS_JSON --output OUTPUT_DIRECTORY\n```\n\nInput and output paths are relative to the caller's working directory unless\nabsolute. The archive can be copied elsewhere and run without this source tree.\nProduction inputs must specify a reachable HTTP service using the documented API.\n\n## Repair\n\n- Preserve the API prefix and encode each exact Unicode document ID as one URL\n  segment. Literal percent-looking text is encoded again, not interpreted.\n- Keep native output paths separate from business IDs; preserve original output\n  spelling in the receipt, create parents, and write decoded bytes unchanged.\n- Validate response identity and Base64; write the sorted completion receipt only\n  after all jobs succeed. Errors return nonzero and print a diagnostic to stderr.\n- Downloads are sequential. A failed batch can leave files already downloaded;\n  it does not roll them back. An old receipt is removed before downloading a\n  validated batch so it cannot claim that a failed rerun completed.\n\n## Source and reproducible checks\n\n`source.zip` contains the source, tests, original contract/demo/sample and this\nhandoff. `main.py` is the maintained implementation. `build.py` packages it as\n`__main__.py` without external runtime files.\n\n```sh\npython build.py\npython -m unittest -v test_download\n```\n\nTested: all three test methods passed on the delivered archive. They copy the\narchive into temporary directories, remove PYTHONPATH, and invoke the real CLI.\nChecks include the public demo, an empty batch, prefixed URLs with and without a\ntrailing slash, slash/percent/query/fragment/space/backslash/Unicode/dot IDs,\nbinary/text/empty payloads, nested native paths with spaces and Unicode, observed\nHTTP request targets, exact file bytes, and complete sorted receipt fields.\nFixture request targets are literal expectations independent of the downloader.\nAll test HTTP servers are shut down and closed after each run.\n\nThe checks use local HTTP servers; no production service or exhaustive platform\nmatrix was tested. Output names follow the native filesystem rules of the host.\n",
+            "additions": 2,
+            "deletions": 1
+          }
+        ],
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541702484
+      }
+    },
+    "settledAt": 1793541702484
+  },
+  {
+    "requestID": "prt_g0VZjKEBr00T1FsXQ4Ak",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_ff2939309fd24d19812c52ad918d1c06",
+      "tool": "bash",
+      "input": {
+        "command": "python build.py",
+        "description": "Rebuild executable archive and reusable source bundle"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_03ce4eb7e173eac0016ae7464c827481919dc72127527a7eeb"
+        }
+      },
+      "time": {
+        "start": 1793541708455
+      }
+    },
+    "requestedAt": 1793541708891,
+    "outcomeID": "prt_hZjn7L0C1I6jqTYaddcA",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hZeDnZaNp8K1LLd8Jnad",
+      "title": "Rebuild executable archive and reusable source bundle",
+      "metadata": {
+        "refused": false,
+        "command": "python build.py",
+        "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 0,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Rebuild executable archive and reusable source bundle",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541709385
+      }
+    },
+    "settledAt": 1793541709386
+  },
+  {
+    "requestID": "prt_g0VZjKFKT000sxF3RPJZ",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_4f06891772ee462f9f2e46565836736a",
+      "tool": "bash",
+      "input": {
+        "command": "python -m unittest -v test_download",
+        "timeout": 120000,
+        "description": "Recheck final packaged executable against contract fixtures"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_09a496210d3c4171016ae74650d4fc81918c34f757ce0d11f9"
+        }
+      },
+      "time": {
+        "start": 1793541712833
+      }
+    },
+    "requestedAt": 1793541713446,
+    "outcomeID": "prt_h43nay4ZEgN1pOIAlVRZ",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hRvYjE5Nj0vnJSdSOIfE",
+      "title": "Recheck final packaged executable against contract fixtures",
+      "metadata": {
+        "refused": false,
+        "command": "python -m unittest -v test_download",
+        "output": "test_empty_batch (test_download.ArchiveTests.test_empty_batch) ... ok\r\ntest_identifier_and_output_domains (test_download.ArchiveTests.test_identifier_and_output_domains) ... ok\r\ntest_public_demo (test_download.ArchiveTests.test_public_demo) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 3 tests in 2.654s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 352,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Recheck final packaged executable against contract fixtures",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541716571
+      }
+    },
+    "settledAt": 1793541716571
+  },
+  {
+    "requestID": "prt_g0VZjKH5w00V2BTYNaEW",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_06da844d2ca441dc968a770ac01a150f",
+      "tool": "bash",
+      "input": {
+        "command": "python -c 'from pathlib import Path; import zipfile; p=Path(\".\"); a=zipfile.ZipFile(\"deliverable.pyz\"); assert a.namelist()==[\"__main__.py\"]; assert a.read(\"__main__.py\")==p.joinpath(\"main.py\").read_bytes(); s=zipfile.ZipFile(\"source.zip\"); assert s.testzip() is None; assert len(s.namelist())==7; [None if s.read(n)==p.joinpath(n).read_bytes() else (_ for _ in ()).throw(AssertionError(n)) for n in s.namelist()]; print(\"Executable entry matches maintained source; all seven source-bundle files match the project.\")'",
+        "description": "Verify executable contents and source bundle completeness"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0d3f8a651d1fbe17016ae7465784fc819189db47be634eda4b"
+        }
+      },
+      "time": {
+        "start": 1793541719620
+      }
+    },
+    "requestedAt": 1793541722331,
+    "outcomeID": "prt_h8cTJvW4pR7kOzGpv8E1",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hpvPKo4acr5gQPXG7tnm",
+      "title": "Verify executable contents and source bundle completeness",
+      "metadata": {
+        "refused": false,
+        "command": "python -c 'from pathlib import Path; import zipfile; p=Path(\".\"); a=zipfile.ZipFile(\"deliverable.pyz\"); assert a.namelist()==[\"__main__.py\"]; assert a.read(\"__main__.py\")==p.joinpath(\"main.py\").read_bytes(); s=zipfile.ZipFile(\"source.zip\"); assert s.testzip() is None; assert len(s.namelist())==7; [None if s.read(n)==p.joinpath(n).read_bytes() else (_ for _ in ()).throw(AssertionError(n)) for n in s.namelist()]; print(\"Executable entry matches maintained source; all seven source-bundle files match the project.\")'",
+        "output": "Executable entry matches maintained source; all seven source-bundle files match the project.\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 94,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Verify executable contents and source bundle completeness",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541722911
+      }
+    },
+    "settledAt": 1793541722911
+  },
+  {
+    "requestID": "prt_g0VZjKIjF00BNHOKElM2",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_d7b68d294b904c08be2b94af2a54e531",
+      "tool": "bash",
+      "input": {
+        "command": "git diff -- main.py",
+        "description": "Review final downloader changes for unintended edits"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0c809be1ce4ee180016ae7465deac881918c1d6f7138097742"
+        }
+      },
+      "time": {
+        "start": 1793541725901
+      }
+    },
+    "requestedAt": 1793541726488,
+    "outcomeID": "prt_h5uvaGiBHWBB82UoEAKs",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hmdE8kujWvsrRJFUJa66",
+      "title": "Review final downloader changes for unintended edits",
+      "metadata": {
+        "refused": false,
+        "command": "git diff -- main.py",
+        "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\ndiff --git a/main.py b/main.py\nindex 558f832..790b5ee 100644\n--- a/main.py\n+++ b/main.py\n@@ -1,9 +1,109 @@\n-import argparse,base64,json,urllib.request\n+\"\"\"Download document bytes without confusing business IDs with paths.\"\"\"\n+\n+import argparse\n+import base64\n+import json\n+import sys\n+import urllib.error\n+import urllib.parse\n+import urllib.request\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();cfg=json.loads(Path(a.input).read_text(encoding=\"utf-8\"));root=Path(a.output);root.mkdir(parents=True,exist_ok=True);files=[]\n-for job in cfg[\"jobs\"]:\n-    url=cfg[\"base_url\"].rstrip(\"/\")+\"/documents/\"+job[\"document_id\"]\n-    data=json.load(urllib.request.urlopen(url));raw=base64.b64decode(data[\"content_base64\"])\n-    target=root/job[\"output\"];target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(raw)\n-    files.append(dict(document_id=job[\"document_id\"],output=job[\"output\"],url=url,bytes=len(raw)))\n-(root/\"receipt.json\").write_text(json.dumps(dict(files=sorted(files,key=lambda r:r[\"document_id\"])),ensure_ascii=False),encoding=\"utf-8\")\n+\n+\n+def download(config, root):\n+    \"\"\"Write all jobs, then publish the completion receipt.\n+\n+    IDs are opaque Unicode text. Only output names are filesystem paths;\n+    their original spelling is retained separately for the receipt.\n+    \"\"\"\n+    base_url = config[\"base_url\"]\n+    parts = urllib.parse.urlsplit(base_url)\n+    if (\n+        parts.scheme not in (\"http\", \"https\")\n+        or not parts.netloc\n+        or parts.query\n+        or parts.fragment\n+    ):\n+        raise ValueError(\"base_url must be an HTTP URL without query or fragment\")\n+    jobs = config[\"jobs\"]\n+    if not isinstance(jobs, list):\n+        raise ValueError(\"jobs must be a list\")\n+\n+    root = Path(root).resolve()\n+    prepared = []\n+    targets = set()\n+    for job in jobs:\n+        document_id, output = job[\"document_id\"], job[\"output\"]\n+        if not isinstance(document_id, str) or not document_id:\n+            raise ValueError(\"document_id must be nonempty text\")\n+        if not isinstance(output, str) or not output:\n+            raise ValueError(\"output must be a relative native filesystem path\")\n+        path = Path(output)\n+        target = (root / path).resolve()\n+        if (\n+            path.is_absolute()\n+            or path.drive\n+            or \"..\" in path.parts\n+            or root not in target.parents\n+            or target == root / \"receipt.json\"\n+        ):\n+            raise ValueError(\n+                \"output must stay under the output directory and not be receipt.json\"\n+            )\n+        if target in targets:\n+            raise ValueError(\"output paths must be distinct\")\n+        targets.add(target)\n+        # Never unquote first: a literal '%2F' ID must become '%252F'.\n+        url = (\n+            (base_url[:-1] if base_url.endswith(\"/\") else base_url)\n+            + \"/documents/\"\n+            + urllib.parse.quote(document_id, safe=\"\")\n+        )\n+        prepared.append((document_id, output, target, url))\n+\n+    root.mkdir(parents=True, exist_ok=True)\n+    receipt = root / \"receipt.json\"\n+    # A failed rerun must not leave an old receipt claiming completion.\n+    if receipt.exists():\n+        receipt.unlink()\n+    files = []\n+    for document_id, output, target, url in prepared:\n+        with urllib.request.urlopen(url) as response:\n+            if response.status != 200:\n+                raise ValueError(\"document response must have HTTP status 200\")\n+            data = json.load(response)\n+        if data[\"document_id\"] != document_id:\n+            raise ValueError(\"response document_id does not match the requested ID\")\n+        raw = base64.b64decode(data[\"content_base64\"], validate=True)\n+        target.parent.mkdir(parents=True, exist_ok=True)\n+        target.write_bytes(raw)\n+        files.append(\n+            dict(document_id=document_id, output=output, url=url, bytes=len(raw))\n+        )\n+    receipt.write_text(\n+        json.dumps(\n+            {\"files\": sorted(files, key=lambda item: item[\"document_id\"])},\n+            ensure_ascii=False,\n+            indent=2,\n+        )\n+        + \"\\n\",\n+        encoding=\"utf-8\",\n+    )\n+\n+\n+def main(argv=None):\n+    parser = argparse.ArgumentParser(description=__doc__)\n+    parser.add_argument(\"input\", help=\"UTF-8 jobs JSON file\")\n+    parser.add_argument(\"--output\", required=True, help=\"output directory\")\n+    args = parser.parse_args(argv)\n+    try:\n+        config = json.loads(Path(args.input).read_text(encoding=\"utf-8\"))\n+        download(config, args.output)\n+    except (OSError, ValueError, TypeError, KeyError, urllib.error.URLError) as error:\n+        print(\"Download failed: {}\".format(error), file=sys.stderr)\n+        return 1\n+    return 0\n+\n+\n+if __name__ == \"__main__\":\n+    sys.exit(main())\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 4974,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Review final downloader changes for unintended edits",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541726817
+      }
+    },
+    "settledAt": 1793541726817
+  },
+  {
+    "requestID": "prt_g0VZjKLMZ00BxwK60bso",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_34dbf19f30344c34bb423bbaafc47bb5",
+      "tool": "artifact_snapshot",
+      "input": {
+        "files": [
+          {
+            "path": "deliverable.pyz",
+            "media_type": "application/zip"
+          },
+          {
+            "path": "source.zip",
+            "media_type": "application/zip"
+          },
+          {
+            "path": "HANDOFF.md",
+            "media_type": "text/markdown"
+          }
+        ]
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_019f6c2c05347ea8016ae74667e59c81919cb0d8c2528b3b29"
+        }
+      },
+      "time": {
+        "start": 1793541736027
+      }
+    },
+    "requestedAt": 1793541736429,
+    "outcomeID": "prt_hI7wog9zE5opGNE2ORxd",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hY4WZ49hIfilhaIYdOfy",
+      "title": "Published Artifact snapshot (3 files)",
+      "metadata": {
+        "truncated": false,
+        "snapshotID": "71e68db6-ce40-595e-a7a3-6898e0740ea2",
+        "resources": 3
+      },
+      "time": {
+        "end": 1793541736894
+      }
+    },
+    "settledAt": 1793541736894
+  },
+  {
+    "requestID": "prt_g0VZjKOJZ00oFUM0wkOG",
+    "messageID": "msg_hbhqojTff3ruGpGgWmMo",
+    "sessionID": "ses_-zUQGgbj5zzqQM6ox5lT",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_38b51dfbeec44414ad956ad443efa25b",
+      "tool": "manage_task",
+      "input": {
+        "summary": "Repaired the downloader directly without delegation and published deliverable.pyz, source.zip and HANDOFF.md. The final archive was rebuilt and exercised from isolated working directories against the public demo and independent literal HTTP-route fixtures. All three test methods passed, checking prefixed URLs with and without trailing slash, opaque Unicode and special-character document IDs including percent-looking text, native nested output paths, exact binary/text/empty contents, observed request targets and sorted complete receipt fields. Verified the archive entry matches main.py and every one of the seven source-bundle members matches the project. Local fixture servers were shut down and closed. Production services and an exhaustive platform matrix were not tested; partial files on failure are documented. Existing unrelated project files were preserved.",
+        "evidence_locators": [
+          {
+            "source": "session",
+            "session_id": "ses_-zUQGgbj5zzqQM6ox5lT"
+          }
+        ],
+        "deliverable_artifact_locators": [
+          {
+            "source": "task_artifact_snapshot",
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hIAzX5S1omh8zNGEaD4p",
+              "task_id": "tsk_g00VZjJNJk00aPMKO3pr",
+              "snapshot_id": "71e68db6-ce40-595e-a7a3-6898e0740ea2",
+              "manifest_sha256": "97c7ce8e2bafea559ea018ea39990caf56122cd8c04193c2afd7ce4b4a51373e"
+            }
+          }
+        ],
+        "accepted_delivery_slice_revision_ids": [],
+        "workflow_id": null,
+        "action": "complete_task"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0761dcb1c6e5a0c0016ae746736b3c8191ab741d4c96e1347c"
+        }
+      },
+      "time": {
+        "start": 1793541747373
+      }
+    },
+    "requestedAt": 1793541753865,
+    "outcomeID": "prt_hfPoupa4ahPXkKMyeTz0",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hf3ODQGffUywnmSmoTtI",
+      "title": "Task Completed",
+      "metadata": {
+        "opencorvusToolResultControl": {
+          "kind": "immediate_park"
+        }
+      },
+      "time": {
+        "end": 1793541755988
+      }
+    },
+    "settledAt": 1793541755989
+  }
+]

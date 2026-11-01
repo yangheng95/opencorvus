@@ -1,0 +1,140 @@
+{
+  "phase": "contract-domain",
+  "status": "completed",
+  "error": null,
+  "cleanup": {
+    "errors": [],
+    "pairedCopiesRetired": true,
+    "sourceBytesPreserved": true
+  },
+  "consumerScope": "Per-case registered inputs and independently derived outputs; completion is not universal contract certification",
+  "registeredCasesAgree": true,
+  "startedAt": 1793540954380,
+  "endedAt": 1793541976824,
+  "provider": {
+    "requests": 101,
+    "models": {
+      "gpt-6.1-sol": 101
+    },
+    "streaming": {
+      "True": 101
+    },
+    "http": {
+      "200": 101
+    },
+    "probes": {
+      "shared-verification-policy": 97,
+      "completion-summary-schema": 50,
+      "patch-operation-contract": 97
+    },
+    "errors": []
+  },
+  "runs": [
+    {
+      "kind": "bundle",
+      "entry": "task",
+      "taskID": "tsk_g00VZjH6bI00LSmU24SV",
+      "sessionID": null,
+      "startedAt": 1793540963463,
+      "settledAt": 1793541503002,
+      "requestsBefore": 2,
+      "requestsAfter": 57,
+      "lifecycle": {
+        "taskID": "tsk_g00VZjH6bI00LSmU24SV",
+        "epoch": 1,
+        "openedEventID": "pev_g0VZjH6p600LaY8YTyR7",
+        "openedAt": 1793540964296,
+        "status": "completed",
+        "terminalEventID": "pev_g0VZjJMVw00IgU4uHGzB",
+        "terminalAt": 1793541500417
+      },
+      "tool_count": 53,
+      "tool_states": {
+        "completed": 52,
+        "error": 1
+      },
+      "published_program_bindings": [
+        {
+          "attachmentUrl": "/attachment/prj_hD89pKITBK7vbKcWcP88/f84aa037fa61ee523ec5701fb880c8e4c3d96185b251b248fc565af93e024c1a.bin",
+          "blobWithinSealedProject": ".opencorvus\\.r\\project\\attachments\\be32d6f5417055664d7a6a4c8fb6cddaa2f69c45d75348d4667e6e138388222b\\f84aa037fa61ee523ec5701fb880c8e4c3d96185b251b248fc565af93e024c1a.bin",
+          "exactProgramBytesEqual": true,
+          "immutableAttachmentIntegrity": true
+        },
+        {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hD89pKITBK7vbKcWcP88",
+            "task_id": "tsk_g00VZjH6bI00LSmU24SV",
+            "snapshot_id": "265fa50f-fcd2-5d1c-a3e6-8d31463ed561",
+            "manifest_sha256": "71ce8763036430d0e16f3d1b6b866ee27831d86404d07b32e8e48366d0091ee7"
+          },
+          "resource": "deliverable.pyz",
+          "blobWithinSealedProject": ".opencorvus\\.r\\tasks\\tsk_g00VZjH6bI00LSmU24SV\\artifacts\\snapshots\\265fa50f-fcd2-5d1c-a3e6-8d31463ed561\\resources\\deliverable.pyz",
+          "exactProgramBytesEqual": true,
+          "immutableResourceIntegrity": true
+        }
+      ],
+      "processFaults": 1,
+      "registeredCasesAgree": true
+    },
+    {
+      "kind": "download",
+      "entry": "task",
+      "taskID": "tsk_g00VZjJNJk00aPMKO3pr",
+      "sessionID": null,
+      "startedAt": 1793541504422,
+      "settledAt": 1793541756728,
+      "requestsBefore": 57,
+      "requestsAfter": 78,
+      "lifecycle": {
+        "taskID": "tsk_g00VZjJNJk00aPMKO3pr",
+        "epoch": 1,
+        "openedEventID": "pev_g0VZjJNVN00JjfkrumWP",
+        "openedAt": 1793541505212,
+        "status": "completed",
+        "terminalEventID": "pev_g0VZjKQXu00PPDku2J5F",
+        "terminalAt": 1793541754220
+      },
+      "tool_count": 20,
+      "tool_states": {
+        "completed": 19,
+        "error": 1
+      },
+      "published_program_bindings": [
+        {
+          "snapshot": {
+            "schema_version": 2,
+            "project_id": "prj_hIAzX5S1omh8zNGEaD4p",
+            "task_id": "tsk_g00VZjJNJk00aPMKO3pr",
+            "snapshot_id": "71e68db6-ce40-595e-a7a3-6898e0740ea2",
+            "manifest_sha256": "97c7ce8e2bafea559ea018ea39990caf56122cd8c04193c2afd7ce4b4a51373e"
+          },
+          "resource": "deliverable.pyz",
+          "blobWithinSealedProject": ".opencorvus\\.r\\tasks\\tsk_g00VZjJNJk00aPMKO3pr\\artifacts\\snapshots\\71e68db6-ce40-595e-a7a3-6898e0740ea2\\resources\\deliverable.pyz",
+          "exactProgramBytesEqual": true,
+          "immutableResourceIntegrity": true
+        }
+      ],
+      "processFaults": 1,
+      "registeredCasesAgree": true
+    },
+    {
+      "kind": "temperature",
+      "entry": "coding",
+      "taskID": null,
+      "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+      "startedAt": 1793541759571,
+      "settledAt": 1793541975944,
+      "requestsBefore": 78,
+      "requestsAfter": 101,
+      "lifecycle": null,
+      "tool_count": 21,
+      "tool_states": {
+        "completed": 21
+      },
+      "published_program_bindings": [],
+      "processFaults": 0,
+      "registeredCasesAgree": true
+    }
+  ]
+}

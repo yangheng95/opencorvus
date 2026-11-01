@@ -1,0 +1,30 @@
+{
+  "registeredAt": "2026-11-01T13:49:14.170056+00:00",
+  "phase": "contract-domain",
+  "baseProductCommit": "2c37ede22057a8a3cdfecfb0524adfc4140cbdfc",
+  "model": "openai/gpt-6.1-sol",
+  "maxActualRequests": 180,
+  "cases": [
+    {
+      "kind": "bundle",
+      "entry": "task"
+    },
+    {
+      "kind": "download",
+      "entry": "task"
+    },
+    {
+      "kind": "temperature",
+      "entry": "coding"
+    }
+  ],
+  "bundlePublicAndPrototypeAndOperatorPromptEqualOriginal": true,
+  "privateCaseCounts": {
+    "bundle": 4,
+    "download": 3,
+    "temperature": 4
+  },
+  "rootCorrection": "role-specific admissibility authority plus independent input-domain coverage; no candidate hand patch",
+  "heartbeat": "PAUSED",
+  "oldCredentialsServicesBudgets": "retired, not reused"
+}

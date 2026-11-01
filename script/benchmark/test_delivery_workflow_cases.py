@@ -41,6 +41,20 @@ def validate(output):
     return results
 
 class WorkflowConsumerTest(unittest.TestCase):
+    def test_json_boolean_and_number_roles_in_actual_outputs(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory)
+            variants=[("bundle","bytes=len(raw)","bytes=(False if len(raw)==0 else len(raw))"),
+                      ("stock","result=dict(success=False","result=dict(success=0"),
+                      ("bundle","bytes=len(raw)","bytes=(len(raw)+1e-9)")]
+            for i,(kind,before,after) in enumerate(variants):
+                self.assertEqual(CORRECT[kind].count(before),1)
+                source=CORRECT[kind].replace(before,after)
+                project=root/str(i);code=project/"source";code.mkdir(parents=True)
+                (code/"__main__.py").write_text(source,encoding="utf-8");zipapp.create_archive(code,project/"deliverable.pyz")
+                report=grade(kind,project,project/"consumer")
+                self.assertEqual(report["passed"],False)
+
     def test_complete_correct_and_real_error_programmes(self):
         with tempfile.TemporaryDirectory() as directory:
             results=validate(Path(directory))

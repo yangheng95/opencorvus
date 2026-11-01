@@ -25,13 +25,21 @@ function required(name: string) {
 const authSource = path.resolve(required("AUTH_SOURCE"))
 const model = required("MODEL")
 const phase = required("PHASE")
-assert(["baseline", "after"].includes(phase))
+const cases: Array<{ kind: "bundle" | "download" | "temperature"; entry: "coding" | "task" }> = JSON.parse(
+  required("CASES"),
+)
+assert(cases.length > 0)
+assert(new Set(cases.map((row) => row.kind)).size === cases.length)
+for (const row of cases) {
+  assert(["bundle", "download", "temperature"].includes(row.kind))
+  assert(["coding", "task"].includes(row.entry))
+}
 const output = path.resolve(required("OUTPUT"))
 const python = path.resolve(required("PYTHON"))
 const maxRequests = Number(required("MAX_REQUESTS"))
-assert(Number.isSafeInteger(maxRequests) && maxRequests > 0 && maxRequests <= 120)
-const checker = path.resolve(import.meta.dir, "../../../script/benchmark/delivery_verification_scope.py")
+assert(Number.isSafeInteger(maxRequests) && maxRequests > 0)
 const workflowChecker = path.resolve(import.meta.dir, "../../../script/benchmark/delivery_workflow_cases.py")
+const domainChecker = path.resolve(import.meta.dir, "../../../script/benchmark/delivery_domain_cases.py")
 const supervisor = prepareTestProcessSupervisor()
 const isolated = await bootstrapIsolatedTestRuntime("runner")
 applyIsolatedTestUserEnvironment(isolated)
@@ -170,19 +178,8 @@ try {
     inactivityMs,
     activity: SessionStatus.getActivity,
   })
-  const cases =
-    phase === "baseline"
-      ? ([
-          ["coding", "coding"],
-          ["task", "task"],
-        ] as const)
-      : ([
-          ["coding", "coding"],
-          ["bundle", "task"],
-          ["stock", "task"],
-        ] as const)
-  for (const [kind, entry] of cases) {
-    const consumer = kind === "coding" || kind === "task" ? checker : workflowChecker
+  for (const { kind, entry } of cases) {
+    const consumer = kind === "bundle" ? workflowChecker : domainChecker
     const project = path.join(root, kind)
     const setup = JSON.parse(
       execFileSync(python, [consumer, "setup", kind, project], { encoding: "utf8", windowsHide: true }),
@@ -195,8 +192,7 @@ try {
       ["commit", "-m", "test: initialize delivery prototype"],
     ])
       execFileSync("git", args, { cwd: project, stdio: "ignore", windowsHide: true })
-    const subject = kind === "coding" || kind === "task" ? "forecasting/replenishment " : ""
-    const prompt = `Repair the supplied ${subject}project according to CONTRACT.md. Deliver the complete deliverable.pyz, maintainable source and concise handoff. Work directly in this project without delegation.\n\n${setup.contract}`
+    const prompt = `Repair the supplied project according to CONTRACT.md. Deliver the complete deliverable.pyz, maintainable source and concise handoff. Work directly in this project without delegation.\n\n${setup.contract}`
     const row: Record<string, any> = {
       kind,
       entry,
@@ -353,12 +349,10 @@ try {
   }
   report.requests = audit?.requests ?? []
   report.endedAt = Date.now()
-  report.status =
-    failure || cleanupErrors.length
-      ? "failed"
-      : report.cases.every((row: any) => row.grade?.passed)
-        ? "passed"
-        : "business_failed"
+  report.status = failure || cleanupErrors.length ? "execution_failed" : "completed"
+  report.consumerScope =
+    "Per-case registered inputs and independently derived outputs; completion is not universal contract certification"
+  report.registeredCasesAgree = report.cases.every((row: any) => row.grade?.passed)
   report.error =
     failure instanceof Error
       ? { name: failure.name, message: failure.message }
@@ -373,4 +367,4 @@ try {
   await write("result.json", report)
 }
 process.stdout.write(`[delivery-scope] status=${report.status} result=${path.join(output, "result.json")}\n`)
-process.exitCode = ["passed", "business_failed"].includes(report.status) ? 0 : 1
+process.exitCode = report.status === "completed" ? 0 : 1

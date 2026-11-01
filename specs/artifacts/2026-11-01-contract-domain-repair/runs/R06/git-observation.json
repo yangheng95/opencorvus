@@ -1,0 +1,39 @@
+{
+  "head": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\live\\bundle-delivered",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit": 0,
+    "stdout": "07276a5fa56d7df559eff9e5bab3c7408f9c1526\n",
+    "stderr": ""
+  },
+  "status": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\live\\bundle-delivered",
+      "status",
+      "--short"
+    ],
+    "exit": 0,
+    "stdout": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? __pycache__/\n",
+    "stderr": ""
+  },
+  "log": {
+    "argv": [
+      "git",
+      "-C",
+      "D:\\opencorvus-benchmark-runs\\contract-domain-repair-e2e-20261101\\live\\bundle-delivered",
+      "log",
+      "-3",
+      "--format=%H %s"
+    ],
+    "exit": 0,
+    "stdout": "07276a5fa56d7df559eff9e5bab3c7408f9c1526 fix: preserve manifest payload bytes and exact ZIP targets\n139b3fc61890333d6abe835be7026fc3d9809263 test: initialize delivery prototype\n",
+    "stderr": ""
+  }
+}

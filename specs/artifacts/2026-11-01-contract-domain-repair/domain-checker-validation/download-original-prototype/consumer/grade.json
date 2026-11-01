@@ -1,0 +1,147 @@
+{
+  "case": "download",
+  "passed": false,
+  "scope": "registered contract-derived cases only; no universal support certification",
+  "results": [
+    {
+      "name": "literal-reserved-identifiers",
+      "expected": {
+        "receipt": {
+          "files": [
+            {
+              "document_id": "%2F",
+              "output": "literal-percent.bin",
+              "url": "http://127.0.0.1:62918/api/v1/documents/%252F",
+              "bytes": 7
+            },
+            {
+              "document_id": "part/one",
+              "output": "nested/a.bin",
+              "url": "http://127.0.0.1:62918/api/v1/documents/part%2Fone",
+              "bytes": 5
+            }
+          ]
+        },
+        "payloads": {
+          "nested/a.bin": "AP8NCgA=",
+          "literal-percent.bin": "bGl0ZXJhbA=="
+        }
+      },
+      "contract_basis": "business ID is literal data; independent fixed UTF-8 URL wire paths; output uses native filesystem Path",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\0\\jobs.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\0\\downloads"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\0",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\delivered.pyz\\__main__.py\", line 6, in <module>\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 215, in urlopen\n    return opener.open(url, data, timeout)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 521, in open\n    response = meth(req, response)\n               ^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 630, in http_response\n    response = self.parent.error(\n               ^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 559, in error\n    return self._call_chain(*args)\n           ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 492, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 639, in http_error_default\n    raise HTTPError(req.full_url, code, msg, hdrs, fp)\nurllib.error.HTTPError: HTTP Error 404: Not Found\n",
+      "passed": false,
+      "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\oc-domain-consumer-jc_879ht\\\\0\\\\downloads\\\\receipt.json'",
+      "http_requests": [
+        {
+          "path": "/api/v1/documents/part/one",
+          "status": 404
+        }
+      ]
+    },
+    {
+      "name": "unicode-space-query-fragment",
+      "expected": {
+        "receipt": {
+          "files": [
+            {
+              "document_id": "A B+%?",
+              "output": "files/a b.bin",
+              "url": "http://127.0.0.1:62920/api/v1/documents/A%20B%2B%25%3F",
+              "bytes": 0
+            },
+            {
+              "document_id": "文#页",
+              "output": "文档/内容.bin",
+              "url": "http://127.0.0.1:62920/api/v1/documents/%E6%96%87%23%E9%A1%B5",
+              "bytes": 8
+            }
+          ]
+        },
+        "payloads": {
+          "files/a b.bin": "",
+          "文档/内容.bin": "5L2g5aW9DQo="
+        }
+      },
+      "contract_basis": "business ID is literal data; independent fixed UTF-8 URL wire paths; output uses native filesystem Path",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\1\\jobs.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\1\\downloads"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\1",
+      "exit": 1,
+      "stdout": "",
+      "stderr": "Traceback (most recent call last):\n  File \"<frozen runpy>\", line 198, in _run_module_as_main\n  File \"<frozen runpy>\", line 88, in _run_code\n  File \"C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\delivered.pyz\\__main__.py\", line 6, in <module>\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 215, in urlopen\n    return opener.open(url, data, timeout)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 515, in open\n    response = self._open(req, data)\n               ^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 532, in _open\n    result = self._call_chain(self.handle_open, protocol, protocol +\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 492, in _call_chain\n    result = func(*args)\n             ^^^^^^^^^^^\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 1373, in http_open\n    return self.do_open(http.client.HTTPConnection, req)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\urllib\\request.py\", line 1344, in do_open\n    h.request(req.get_method(), req.selector, req.data, headers,\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\http\\client.py\", line 1386, in request\n    self._send_request(method, url, body, headers, encode_chunked)\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\http\\client.py\", line 1397, in _send_request\n    self.putrequest(method, url, **skips)\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\http\\client.py\", line 1231, in putrequest\n    self._validate_path(url)\n  File \"C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\Lib\\http\\client.py\", line 1331, in _validate_path\n    raise InvalidURL(f\"URL can't contain control characters. {url!r} \"\nhttp.client.InvalidURL: URL can't contain control characters. '/api/v1/documents/A B+%?' (found at least ' ')\n",
+      "passed": false,
+      "error": "[Errno 2] No such file or directory: 'C:\\\\Users\\\\hengu\\\\AppData\\\\Local\\\\Temp\\\\oc-domain-consumer-jc_879ht\\\\1\\\\downloads\\\\receipt.json'",
+      "http_requests": []
+    },
+    {
+      "name": "native-output-representation",
+      "expected": {
+        "receipt": {
+          "files": [
+            {
+              "document_id": "plain",
+              "output": "本机\\data.bin",
+              "url": "http://127.0.0.1:62921/api/v1/documents/plain",
+              "bytes": 5
+            }
+          ]
+        },
+        "payloads": {
+          "本机\\data.bin": "AAECA/8="
+        }
+      },
+      "contract_basis": "business ID is literal data; independent fixed UTF-8 URL wire paths; output uses native filesystem Path",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\2\\jobs.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\2\\downloads"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-jc_879ht\\2",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "receipt": {
+          "files": [
+            {
+              "document_id": "plain",
+              "output": "本机\\data.bin",
+              "url": "http://127.0.0.1:62921/api/v1/documents/plain",
+              "bytes": 5
+            }
+          ]
+        },
+        "payloads": {
+          "本机\\data.bin": "AAECA/8="
+        }
+      },
+      "passed": true,
+      "http_requests": [
+        {
+          "path": "/api/v1/documents/plain",
+          "status": 200
+        }
+      ]
+    }
+  ]
+}

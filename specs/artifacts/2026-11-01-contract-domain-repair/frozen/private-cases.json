@@ -1,0 +1,259 @@
+{
+  "bundle": [
+    {
+      "name": "nested-binary",
+      "entries": [
+        {
+          "source": "left/a.bin",
+          "target": "delivery/raw/a.bin",
+          "base64": "AP8NCgA="
+        },
+        {
+          "source": "right/a.bin",
+          "target": "other/a.bin",
+          "base64": "b3RoZXINCg=="
+        },
+        {
+          "source": "empty",
+          "target": "empty",
+          "base64": ""
+        }
+      ]
+    },
+    {
+      "name": "unicode-order",
+      "entries": [
+        {
+          "source": "资料/a,b.txt",
+          "target": "交付/含 空格.txt",
+          "base64": "57K+56GuDQrlrZfnrKY="
+        },
+        {
+          "source": "meta",
+          "target": "z/final.txt",
+          "base64": "ZW5k"
+        }
+      ]
+    },
+    {
+      "name": "reversed-manifest",
+      "entries": [
+        {
+          "source": "two",
+          "target": "z.txt",
+          "base64": "c2Vjb25k"
+        },
+        {
+          "source": "one",
+          "target": "a.txt",
+          "base64": "Zmlyc3Q="
+        }
+      ]
+    },
+    {
+      "name": "native-source-representation",
+      "entries": [
+        {
+          "source": "left\\a.bin",
+          "target": "delivery/raw/a.bin",
+          "base64": "AP8NCgA="
+        },
+        {
+          "source": "right\\a.bin",
+          "target": "other/a.bin",
+          "base64": "b3RoZXINCg=="
+        },
+        {
+          "source": "empty",
+          "target": "empty",
+          "base64": ""
+        }
+      ]
+    }
+  ],
+  "download": [
+    {
+      "name": "literal-reserved-identifiers",
+      "trailing_slash": false,
+      "documents": [
+        {
+          "id": "part/one",
+          "wire": "/api/v1/documents/part%2Fone",
+          "output": "nested/a.bin",
+          "payload": "AP8NCgA="
+        },
+        {
+          "id": "%2F",
+          "wire": "/api/v1/documents/%252F",
+          "output": "literal-percent.bin",
+          "payload": "bGl0ZXJhbA=="
+        }
+      ]
+    },
+    {
+      "name": "unicode-space-query-fragment",
+      "trailing_slash": true,
+      "documents": [
+        {
+          "id": "A B+%?",
+          "wire": "/api/v1/documents/A%20B%2B%25%3F",
+          "output": "files/a b.bin",
+          "payload": ""
+        },
+        {
+          "id": "文#页",
+          "wire": "/api/v1/documents/%E6%96%87%23%E9%A1%B5",
+          "output": "文档/内容.bin",
+          "payload": "5L2g5aW9DQo="
+        }
+      ]
+    },
+    {
+      "name": "native-output-representation",
+      "trailing_slash": false,
+      "documents": [
+        {
+          "id": "plain",
+          "wire": "/api/v1/documents/plain",
+          "output": "本机\\data.bin",
+          "payload": "AAECA/8="
+        }
+      ]
+    }
+  ],
+  "temperature": [
+    {
+      "name": "same-physical-temperature",
+      "files": {
+        "sensors.csv": "metadata,high_c,low_c,offset_c,gain,sensor\r\n\"extra, \"\"行\"\"\n值\",50,-50,0,1,F\r\n",
+        "readings.csv": "metadata,unit,temperature,sensor,sequence\r\n\"extra, \"\"行\"\"\n值\",C,-40,F,001\r\n\"extra, \"\"行\"\"\n值\",F,-40,F,002\r\n\"extra, \"\"行\"\"\n值\",K,233.15,F,003\r\n"
+      },
+      "expected": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "001",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          },
+          {
+            "sequence": "002",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          },
+          {
+            "sequence": "003",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 0,
+          "OK": 3,
+          "HIGH": 0
+        }
+      },
+      "exit": 0
+    },
+    {
+      "name": "calibration-and-threshold-stages",
+      "files": {
+        "sensors.csv": "metadata,high_c,low_c,offset_c,gain,sensor\r\n\"extra, \"\"行\"\"\n值\",30,0,-10,0.5,\" 组,\"\"C\"\"\n\"\r\n",
+        "readings.csv": "metadata,unit,temperature,sensor,sequence\r\n\"extra, \"\"行\"\"\n值\",F,212,\" 组,\"\"C\"\"\n\",01\r\n\"extra, \"\"行\"\"\n值\",K,273.15,\" 组,\"\"C\"\"\n\",02\r\n\"extra, \"\"行\"\"\n值\",F,68,\" 组,\"\"C\"\"\n\",03\r\n"
+      },
+      "expected": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "01",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 100,
+            "calibrated_c": 40,
+            "status": "HIGH"
+          },
+          {
+            "sequence": "02",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 0,
+            "calibrated_c": -10,
+            "status": "LOW"
+          },
+          {
+            "sequence": "03",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 20,
+            "calibrated_c": 0,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 1,
+          "OK": 1,
+          "HIGH": 1
+        }
+      },
+      "exit": 0
+    },
+    {
+      "name": "absolute-zero-in-original-units",
+      "files": {
+        "sensors.csv": "sensor,gain,offset_c,low_c,high_c\nedge,1,0,-273.15,-200\n",
+        "readings.csv": "sequence,sensor,temperature,unit\na,edge,0,K\nb,edge,-459.67,F\nc,edge,-273.15,C\n"
+      },
+      "expected": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "a",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          },
+          {
+            "sequence": "b",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          },
+          {
+            "sequence": "c",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 0,
+          "OK": 3,
+          "HIGH": 0
+        }
+      },
+      "exit": 0
+    },
+    {
+      "name": "below-absolute-zero-error",
+      "files": {
+        "sensors.csv": "sensor,gain,offset_c,low_c,high_c\nedge,1,0,-300,100\n",
+        "readings.csv": "sequence,sensor,temperature,unit\nbad,edge,-1,K\n"
+      },
+      "expected": {
+        "success": false,
+        "error": {
+          "code": "BELOW_ABSOLUTE_ZERO",
+          "sequence": "bad",
+          "sensor": "edge"
+        }
+      },
+      "exit": 2
+    }
+  ]
+}

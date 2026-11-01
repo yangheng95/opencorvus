@@ -176,6 +176,9 @@ test("exposes scope-based completion judgment on the actual public management To
       expect(completion?.shape.summary?.description).toContain(
         "measured quality, the selected strategy, and its actual released execution",
       )
+      expect(completion?.shape.summary?.description).toContain(
+        "Validate acceptance and rejection classifications against the original field-specific contracts",
+      )
     },
   })
 })

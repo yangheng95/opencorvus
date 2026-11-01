@@ -1,0 +1,915 @@
+[
+  {
+    "requestID": "prt_g0VZjKTMg00eh468SgFW",
+    "messageID": "msg_g0VZjKRiV000CVljrnbW",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_9beadc303cdf47c498b019aab931775f",
+      "tool": "read",
+      "input": {
+        "filePath": "."
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_017f5c39256a25d2016ae74686d5708191aa5ead519aaf4fa3"
+        }
+      },
+      "time": {
+        "start": 1793541766786
+      }
+    },
+    "requestedAt": 1793541767210,
+    "outcomeID": "prt_hmbKz4vsyHWsDxPfHvBJ",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature</path>\n<type>directory</type>\n<entries>\n.git/\n.gitattributes\n.gitignore\n.opencorvus/\nCONTRACT.md\nmain.py\nsample/\n\n(7 entries)\n</entries>",
+      "title": "",
+      "metadata": {
+        "preview": ".git/\n.gitattributes\n.gitignore\n.opencorvus/\nCONTRACT.md\nmain.py\nsample/",
+        "truncated": false,
+        "loaded": [],
+        "readType": "directory",
+        "offset": 1,
+        "lines": 7,
+        "totalLines": 7
+      },
+      "time": {
+        "end": 1793541767375
+      }
+    },
+    "settledAt": 1793541767375
+  },
+  {
+    "requestID": "prt_g0VZjKUsq00KqnjyF2dk",
+    "messageID": "msg_g0VZjKTXY0088C5SpA6r",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_535742bb42364abdbac2177a2133eb22",
+      "tool": "read",
+      "input": {
+        "filePath": "CONTRACT.md"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0ec32bc2bf057f55016ae7468ca9e481918886e0775eda9b32"
+        }
+      },
+      "time": {
+        "start": 1793541772624
+      }
+    },
+    "requestedAt": 1793541772845,
+    "outcomeID": "prt_hqNX67DKhxpDZVHLZHVk",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\CONTRACT.md</path>\n<type>file</type>\n<content>1: Repair the calibrated temperature-monitoring report project. Deliver\n2: deliverable.pyz, maintainable source and concise tested handoff; Python 3 standard library.\n3: Invocation: python deliverable.pyz INPUT_DIRECTORY --output REPORT_JSON\n4: UTF-8 CSV files sensors.csv(sensor,gain,offset_c,low_c,high_c) and\n5: readings.csv(sequence,sensor,temperature,unit) have required named columns; reordered\n6: columns, extra metadata, legal quoting/CRLF/LF are supported. All decimal fields are\n7: finite base-10 decimals. sensor and sequence are exact nonempty text, including numeric-\n8: looking IDs, Unicode, punctuation and whitespace; sequences are distinct. Every reading\n9: has one matching sensor. gain is positive; low_c<=high_c, either bound may be negative.\n10: unit is C, F or K. Convert the original temperature to Celsius first:\n11:  C: value; F: (value-32)*5/9; K: value-273.15.\n12: Signed C/F values are valid down to absolute zero (-273.15 C or -459.67 F); Kelvin\n13: values must be >=0. Determine physical validity in the value's original unit, before\n14: calibration. Calibration is calibrated_c=celsius*gain+offset_c. Apply the sensor's\n15: Celsius thresholds to calibrated_c: below low_c=LOW, above high_c=HIGH, inclusive=OK.\n16: For valid input exit0 and JSON {success:true,readings:[{sequence:TEXT,sensor:TEXT,\n17: celsius:NUMBER,calibrated_c:NUMBER,status:LOW|OK|HIGH},...],counts:{LOW:N,OK:N,HIGH:N}}.\n18: Preserve reading order. Numeric output tolerance is 1e-8 absolute error.\n19: For the first reading below absolute zero exit2 and JSON {success:false,error:\n20: {code:BELOW_ABSOLUTE_ZERO,sequence:EXACT_TEXT,sensor:EXACT_TEXT}}. This is an explicit\n21: error contract, not a successful monitoring report. JSON booleans retain their type.\n22: Use the original units and calibration stages correctly; one numeric-domain guard\n23: cannot be copied between original values, converted values and calibrated thresholds.\n24: The final zipapp must work from arbitrary cwd using only Python and supplied inputs.\n\n(End of file - total 24 lines)\n</content>",
+      "title": "CONTRACT.md",
+      "metadata": {
+        "preview": "Repair the calibrated temperature-monitoring report project. Deliver\ndeliverable.pyz, maintainable source and concise tested handoff; Python 3 standard library.\nInvocation: python deliverable.pyz INPUT_DIRECTORY --output REPORT_JSON\nUTF-8 CSV files sensors.csv(sensor,gain,offset_c,low_c,high_c) and\nreadings.csv(sequence,sensor,temperature,unit) have required named columns; reordered\ncolumns, extra metadata, legal quoting/CRLF/LF are supported. All decimal fields are\nfinite base-10 decimals. sensor and sequence are exact nonempty text, including numeric-\nlooking IDs, Unicode, punctuation and whitespace; sequences are distinct. Every reading\nhas one matching sensor. gain is positive; low_c<=high_c, either bound may be negative.\nunit is C, F or K. Convert the original temperature to Celsius first:\n C: value; F: (value-32)*5/9; K: value-273.15.\nSigned C/F values are valid down to absolute zero (-273.15 C or -459.67 F); Kelvin\nvalues must be >=0. Determine physical validity in the value's original unit, before\ncalibration. Calibration is calibrated_c=celsius*gain+offset_c. Apply the sensor's\nCelsius thresholds to calibrated_c: below low_c=LOW, above high_c=HIGH, inclusive=OK.\nFor valid input exit0 and JSON {success:true,readings:[{sequence:TEXT,sensor:TEXT,\ncelsius:NUMBER,calibrated_c:NUMBER,status:LOW|OK|HIGH},...],counts:{LOW:N,OK:N,HIGH:N}}.\nPreserve reading order. Numeric output tolerance is 1e-8 absolute error.\nFor the first reading below absolute zero exit2 and JSON {success:false,error:\n{code:BELOW_ABSOLUTE_ZERO,sequence:EXACT_TEXT,sensor:EXACT_TEXT}}. This is an explicit",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 24,
+        "totalLines": 24
+      },
+      "time": {
+        "end": 1793541773015
+      }
+    },
+    "settledAt": 1793541773015
+  },
+  {
+    "requestID": "prt_g0VZjKVo700vsG4lpEda",
+    "messageID": "msg_g0VZjKUzz0061bYAyfxb",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_4e6687cda70c420382970595a4da066f",
+      "tool": "read",
+      "input": {
+        "filePath": "main.py"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_07d8ed2b96ab850a016ae7469036f481918efb562fdb162e1f"
+        }
+      },
+      "time": {
+        "start": 1793541776175
+      }
+    },
+    "requestedAt": 1793541776382,
+    "outcomeID": "prt_hhaScshVTd4sEUVeMQxG",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\main.py</path>\n<type>file</type>\n<content>1: import argparse,csv,json\n2: from pathlib import Path\n3: p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input)\n4: sensors={r[\"sensor\"]:r for r in csv.DictReader(open(root/\"sensors.csv\",encoding=\"utf-8\"))};rows=[];counts=dict(LOW=0,OK=0,HIGH=0)\n5: for row in csv.DictReader(open(root/\"readings.csv\",encoding=\"utf-8\")):\n6:     value=float(row[\"temperature\"])\n7:     if value<0:raise ValueError(\"negative temperature\")\n8:     sensor=sensors[row[\"sensor\"]];cal=value*float(sensor[\"gain\"])+float(sensor[\"offset_c\"])\n9:     status=\"LOW\" if cal<float(sensor[\"low_c\"]) else \"HIGH\" if cal>float(sensor[\"high_c\"]) else \"OK\";counts[status]+=1\n10:     rows.append(dict(sequence=row[\"sequence\"],sensor=row[\"sensor\"],celsius=value,calibrated_c=cal,status=status))\n11: Path(a.output).write_text(json.dumps(dict(success=True,readings=rows,counts=counts)),encoding=\"utf-8\")\n\n(End of file - total 11 lines)\n</content>",
+      "title": "main.py",
+      "metadata": {
+        "preview": "import argparse,csv,json\nfrom pathlib import Path\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input)\nsensors={r[\"sensor\"]:r for r in csv.DictReader(open(root/\"sensors.csv\",encoding=\"utf-8\"))};rows=[];counts=dict(LOW=0,OK=0,HIGH=0)\nfor row in csv.DictReader(open(root/\"readings.csv\",encoding=\"utf-8\")):\n    value=float(row[\"temperature\"])\n    if value<0:raise ValueError(\"negative temperature\")\n    sensor=sensors[row[\"sensor\"]];cal=value*float(sensor[\"gain\"])+float(sensor[\"offset_c\"])\n    status=\"LOW\" if cal<float(sensor[\"low_c\"]) else \"HIGH\" if cal>float(sensor[\"high_c\"]) else \"OK\";counts[status]+=1\n    rows.append(dict(sequence=row[\"sequence\"],sensor=row[\"sensor\"],celsius=value,calibrated_c=cal,status=status))\nPath(a.output).write_text(json.dumps(dict(success=True,readings=rows,counts=counts)),encoding=\"utf-8\")",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 11,
+        "totalLines": 11
+      },
+      "time": {
+        "end": 1793541776612
+      }
+    },
+    "settledAt": 1793541776612
+  },
+  {
+    "requestID": "prt_g0VZjKWvA00bYIZlhWI8",
+    "messageID": "msg_g0VZjKVw500satVqcGLQ",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_fa5f639c91e848ac9723112b01b54d7a",
+      "tool": "glob",
+      "input": {
+        "pattern": "**/AGENTS.md"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0ac55d10588f69bd016ae7469477548191a9a5208b021b4ff2"
+        }
+      },
+      "time": {
+        "start": 1793541780456
+      }
+    },
+    "requestedAt": 1793541780745,
+    "outcomeID": "prt_hadCk54l9QmnXc7NjLNj",
+    "outcome": {
+      "outcome": "completed",
+      "output": "No files found",
+      "title": "",
+      "metadata": {
+        "count": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541781426
+      }
+    },
+    "settledAt": 1793541781427
+  },
+  {
+    "requestID": "prt_g0VZjKYQK00tz7cSxsTX",
+    "messageID": "msg_g0VZjKXBW00r7sdrHmkL",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_5fbd238765c041eb942a36b22a914891",
+      "tool": "glob",
+      "input": {
+        "pattern": "**/CLAUDE.md"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_034ea394002e96b5016ae7469a43f48191b7c1ec88437dd556"
+        }
+      },
+      "time": {
+        "start": 1793541786232
+      }
+    },
+    "requestedAt": 1793541786447,
+    "outcomeID": "prt_hSvGHxW6EKY6rkO4ac7P",
+    "outcome": {
+      "outcome": "completed",
+      "output": "No files found",
+      "title": "",
+      "metadata": {
+        "count": 0,
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541786750
+      }
+    },
+    "settledAt": 1793541786750
+  },
+  {
+    "requestID": "prt_g0VZjKZh100w4tSzVmWV",
+    "messageID": "msg_g0VZjKYZN00SypVjkISk",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_63b9c45658d14de19d4ac33b46349407",
+      "tool": "bash",
+      "input": {
+        "command": "git status --short",
+        "description": "Check existing worktree changes before repair"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0b79156c2bb05dfb016ae7469f2644819182ebb0f1c27bbd4e"
+        }
+      },
+      "time": {
+        "start": 1793541791111
+      }
+    },
+    "requestedAt": 1793541791505,
+    "outcomeID": "prt_h9mtmt24FgBNCwNwSoSv",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hYRXRfm5fAfk8DBkG68c",
+      "title": "Check existing worktree changes before repair",
+      "metadata": {
+        "refused": false,
+        "command": "git status --short",
+        "output": "?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 48,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Check existing worktree changes before repair",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541791944
+      }
+    },
+    "settledAt": 1793541791944
+  },
+  {
+    "requestID": "prt_g0VZjKhHO002AuOYf2Xf",
+    "messageID": "msg_g0VZjKZvB00aunBJXvDj",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_4902ac3af1bb4983b9cc113df625acef",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Update File: main.py\n@@\n-import argparse,csv,json\n+import argparse\n+import csv\n+import json\n+from decimal import Decimal, localcontext\n+from fractions import Fraction\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input)\n-sensors={r[\"sensor\"]:r for r in csv.DictReader(open(root/\"sensors.csv\",encoding=\"utf-8\"))};rows=[];counts=dict(LOW=0,OK=0,HIGH=0)\n-for row in csv.DictReader(open(root/\"readings.csv\",encoding=\"utf-8\")):\n-    value=float(row[\"temperature\"])\n-    if value<0:raise ValueError(\"negative temperature\")\n-    sensor=sensors[row[\"sensor\"]];cal=value*float(sensor[\"gain\"])+float(sensor[\"offset_c\"])\n-    status=\"LOW\" if cal<float(sensor[\"low_c\"]) else \"HIGH\" if cal>float(sensor[\"high_c\"]) else \"OK\";counts[status]+=1\n-    rows.append(dict(sequence=row[\"sequence\"],sensor=row[\"sensor\"],celsius=value,calibrated_c=cal,status=status))\n-Path(a.output).write_text(json.dumps(dict(success=True,readings=rows,counts=counts)),encoding=\"utf-8\")\n+\n+\n+ABSOLUTE_ZERO = {\"C\": Fraction(\"-273.15\"), \"F\": Fraction(\"-459.67\"), \"K\": Fraction(0)}\n+\n+\n+def read_csv(path):\n+    with path.open(encoding=\"utf-8\", newline=\"\") as source:\n+        yield from csv.DictReader(source)\n+\n+\n+def make_report(root):\n+    sensors = {\n+        row[\"sensor\"]: {\n+            name: Fraction(Decimal(row[name]))\n+            for name in (\"gain\", \"offset_c\", \"low_c\", \"high_c\")\n+        }\n+        for row in read_csv(root / \"sensors.csv\")\n+    }\n+    readings = []\n+    counts = dict(LOW=0, OK=0, HIGH=0)\n+    for row in read_csv(root / \"readings.csv\"):\n+        value = Fraction(Decimal(row[\"temperature\"]))\n+        unit = row[\"unit\"]\n+        if value < ABSOLUTE_ZERO[unit]:\n+            return {\n+                \"success\": False,\n+                \"error\": {\n+                    \"code\": \"BELOW_ABSOLUTE_ZERO\",\n+                    \"sequence\": row[\"sequence\"],\n+                    \"sensor\": row[\"sensor\"],\n+                },\n+            }, 2\n+        if unit == \"F\":\n+            celsius = (value - 32) * 5 / 9\n+        elif unit == \"K\":\n+            celsius = value - Fraction(\"273.15\")\n+        else:\n+            celsius = value\n+        sensor = sensors[row[\"sensor\"]]\n+        calibrated = celsius * sensor[\"gain\"] + sensor[\"offset_c\"]\n+        status = (\n+            \"LOW\" if calibrated < sensor[\"low_c\"] else\n+            \"HIGH\" if calibrated > sensor[\"high_c\"] else \"OK\"\n+        )\n+        counts[status] += 1\n+        readings.append({\n+            \"sequence\": row[\"sequence\"],\n+            \"sensor\": row[\"sensor\"],\n+            \"celsius\": celsius,\n+            \"calibrated_c\": calibrated,\n+            \"status\": status,\n+        })\n+    return {\"success\": True, \"readings\": readings, \"counts\": counts}, 0\n+\n+\n+def encode_json(value):\n+    if isinstance(value, Fraction):\n+        # Precision scales with magnitude so even large numbers meet absolute tolerance.\n+        with localcontext() as context:\n+            context.prec = len(str(abs(value.numerator))) + 20\n+            return str(Decimal(value.numerator) / Decimal(value.denominator))\n+    if isinstance(value, dict):\n+        return \"{\" + \",\".join(\n+            json.dumps(key, ensure_ascii=False) + \":\" + encode_json(item)\n+            for key, item in value.items()\n+        ) + \"}\"\n+    if isinstance(value, list):\n+        return \"[\" + \",\".join(encode_json(item) for item in value) + \"]\"\n+    return json.dumps(value, ensure_ascii=False, allow_nan=False)\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(description=\"Produce a calibrated temperature report.\")\n+    parser.add_argument(\"input\", type=Path)\n+    parser.add_argument(\"--output\", type=Path, required=True)\n+    args = parser.parse_args()\n+    report, exit_code = make_report(args.input)\n+    args.output.write_text(encode_json(report) + \"\\n\", encoding=\"utf-8\")\n+    return exit_code\n+\n+\n+if __name__ == \"__main__\":\n+    raise SystemExit(main())\n*** Add File: build_zipapp.py\n+\"\"\"Build the standalone application: python build_zipapp.py.\"\"\"\n+\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def main():\n+    root = Path(__file__).resolve().parent\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.write(root / \"main.py\", \"__main__.py\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n*** Add File: test_deliverable.py\n+import csv\n+import json\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+from decimal import Decimal\n+from fractions import Fraction\n+from pathlib import Path\n+\n+\n+APP = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n+SENSOR_COLUMNS = [\"sensor\", \"gain\", \"offset_c\", \"low_c\", \"high_c\"]\n+READING_COLUMNS = [\"sequence\", \"sensor\", \"temperature\", \"unit\"]\n+\n+\n+class DeliverableTests(unittest.TestCase):\n+    def run_report(self, sensors, readings, flexible_csv=False, relative_paths=False):\n+        with tempfile.TemporaryDirectory() as temporary:\n+            cwd = Path(temporary)\n+            inputs = cwd / \"input data\"\n+            inputs.mkdir()\n+            for name, columns, records in (\n+                (\"sensors\", SENSOR_COLUMNS, sensors),\n+                (\"readings\", READING_COLUMNS, readings),\n+            ):\n+                fields = [\"metadata\"] + columns[::-1] if flexible_csv else columns\n+                with (inputs / (name + \".csv\")).open(\"w\", encoding=\"utf-8\", newline=\"\") as output:\n+                    writer = csv.DictWriter(\n+                        output, fieldnames=fields,\n+                        lineterminator=\"\\r\\n\" if flexible_csv else \"\\n\",\n+                    )\n+                    writer.writeheader()\n+                    for record in records:\n+                        row = dict(zip(columns, record))\n+                        if flexible_csv:\n+                            row[\"metadata\"] = 'unused,\"quoted\"\\nmetadata'\n+                        writer.writerow(row)\n+            report_path = cwd / \"output report.json\"\n+            result = subprocess.run(\n+                [sys.executable, str(APP),\n+                 \"input data\" if relative_paths else str(inputs), \"--output\",\n+                 \"output report.json\" if relative_paths else str(report_path)],\n+                cwd=cwd, capture_output=True, text=True,\n+            )\n+            self.assertEqual(result.stderr, \"\", result.stderr)\n+            report = json.loads(report_path.read_text(encoding=\"utf-8\"), parse_float=Decimal)\n+            return result.returncode, report\n+\n+    def assert_readings(self, actual, expected):\n+        self.assertEqual(len(actual), len(expected))\n+        for row, (sequence, sensor, celsius, calibrated, status) in zip(actual, expected):\n+            self.assertEqual(set(row), {\"sequence\", \"sensor\", \"celsius\", \"calibrated_c\", \"status\"})\n+            self.assertEqual((row[\"sequence\"], row[\"sensor\"], row[\"status\"]),\n+                             (sequence, sensor, status))\n+            for name, target in ((\"celsius\", celsius), (\"calibrated_c\", calibrated)):\n+                self.assertIsInstance(row[name], (int, Decimal))\n+                self.assertLessEqual(abs(Fraction(row[name]) - Fraction(target)), Fraction(\"1e-8\"))\n+\n+    def test_conversion_calibration_thresholds_and_order(self):\n+        code, report = self.run_report(\n+            [(\"a\", \"2\", \"-10\", \"-30\", \"30\")],\n+            [(\"03\", \"a\", \"-10\", \"C\"), (\"01\", \"a\", \"68\", \"F\"),\n+             (\"02\", \"a\", \"273.15\", \"K\"), (\"04\", \"a\", \"-11\", \"C\"),\n+             (\"05\", \"a\", \"294.15\", \"K\")],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assertIs(report[\"success\"], True)\n+        self.assert_readings(report[\"readings\"], [\n+            (\"03\", \"a\", \"-10\", \"-30\", \"OK\"), (\"01\", \"a\", \"20\", \"30\", \"OK\"),\n+            (\"02\", \"a\", \"0\", \"-10\", \"OK\"), (\"04\", \"a\", \"-11\", \"-32\", \"LOW\"),\n+            (\"05\", \"a\", \"21\", \"32\", \"HIGH\"),\n+        ])\n+        self.assertEqual(report[\"counts\"], {\"LOW\": 1, \"OK\": 3, \"HIGH\": 1})\n+\n+    def test_absolute_zero_is_inclusive_in_each_unit(self):\n+        code, report = self.run_report(\n+            [(\"cold\", \"2\", \"-1000\", \"-2000\", \"-1000\")],\n+            [(\"c\", \"cold\", \"-273.1500\", \"C\"), (\"f\", \"cold\", \"-459.67\", \"F\"),\n+             (\"k\", \"cold\", \"-0.000\", \"K\")],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(report[\"readings\"], [\n+            (unit, \"cold\", \"-273.15\", \"-1546.3\", \"OK\") for unit in (\"c\", \"f\", \"k\")\n+        ])\n+\n+    def test_first_invalid_reading_in_original_units(self):\n+        for unit, invalid in ((\"C\", \"-273.150000000000000001\"),\n+                              (\"F\", \"-459.670000000000000001\"), (\"K\", \"-1e-30\")):\n+            with self.subTest(unit=unit):\n+                identity = ' 001,雪\"\\r\\n '\n+                code, report = self.run_report(\n+                    [(identity, \"1\", \"10000\", \"-100\", \"100\")],\n+                    [(\"valid\", identity, \"0\", \"C\"), (identity, identity, invalid, unit),\n+                     (\"later\", identity, \"-9999\", \"C\")], flexible_csv=True,\n+                )\n+                self.assertEqual(code, 2)\n+                self.assertEqual(report, {\"success\": False, \"error\": {\n+                    \"code\": \"BELOW_ABSOLUTE_ZERO\", \"sequence\": identity, \"sensor\": identity,\n+                }})\n+                self.assertIs(report[\"success\"], False)\n+\n+    def test_exact_text_ids_csv_flexibility_and_relative_paths(self):\n+        ids = [\"001\", \"1\", \"雪,\\\"quoted\\\"\\nline\", \" \", \" x \"]\n+        code, report = self.run_report(\n+            [(sensor, \"1\", str(index), \"-100\", \"100\") for index, sensor in enumerate(ids)],\n+            [(sensor, sensor, \"32\", \"F\") for sensor in ids],\n+            flexible_csv=True, relative_paths=True,\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(report[\"readings\"], [\n+            (sensor, sensor, \"0\", str(index), \"OK\") for index, sensor in enumerate(ids)\n+        ])\n+        self.assertEqual(report[\"counts\"], {\"LOW\": 0, \"OK\": 5, \"HIGH\": 0})\n+\n+    def test_exact_decimal_comparison_and_repeating_conversion(self):\n+        code, report = self.run_report(\n+            [(\"a\", \"9\", \"-5\", \"0\", \"0\"),\n+             (\"b\", \"1\", \"0\", \"0.1\", \"0.1\")],\n+            [(\"equal\", \"a\", \"33\", \"F\"),\n+             (\"below\", \"b\", \"0.0999999999999999999999999999999\", \"C\"),\n+             (\"above\", \"b\", \"0.1000000000000000000000000000001\", \"C\")],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(report[\"readings\"], [\n+            (\"equal\", \"a\", Fraction(5, 9), \"0\", \"OK\"),\n+            (\"below\", \"b\", \"0.1\", \"0.1\", \"LOW\"),\n+            (\"above\", \"b\", \"0.1\", \"0.1\", \"HIGH\"),\n+        ])\n+\n+    def test_large_magnitude_absolute_precision(self):\n+        code, report = self.run_report(\n+            [(\"a\", \"1e50\", \"-1e51\", \"-1e100\", \"1e100\")],\n+            [(\"huge\", \"a\", \"33\", \"F\")],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(report[\"readings\"], [\n+            (\"huge\", \"a\", Fraction(5, 9), Fraction(5 * 10**50, 9) - 10**51, \"OK\"),\n+        ])\n+\n+    def test_empty_readings(self):\n+        code, report = self.run_report([], [])\n+        self.assertEqual(code, 0)\n+        self.assertEqual(report, {\"success\": True, \"readings\": [],\n+                                  \"counts\": {\"LOW\": 0, \"OK\": 0, \"HIGH\": 0}})\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_009ff12bb8643af5016ae746bc543c8191b05fb3144f66c085"
+        }
+      },
+      "time": {
+        "start": 1793541820274
+      }
+    },
+    "requestedAt": 1793541869257,
+    "outcomeID": "prt_hzpcuNQhBaXhMIbDaTOu",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_h7OLPVisI8AdeddGYnO7",
+      "title": "Success. Updated the following files:\nM main.py\nA build_zipapp.py\nA test_deliverable.py",
+      "metadata": {
+        "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\main.py\n@@ -1,11 +1,100 @@\n-import argparse,csv,json\r\n-from pathlib import Path\r\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input)\r\n-sensors={r[\"sensor\"]:r for r in csv.DictReader(open(root/\"sensors.csv\",encoding=\"utf-8\"))};rows=[];counts=dict(LOW=0,OK=0,HIGH=0)\r\n-for row in csv.DictReader(open(root/\"readings.csv\",encoding=\"utf-8\")):\r\n-    value=float(row[\"temperature\"])\r\n-    if value<0:raise ValueError(\"negative temperature\")\r\n-    sensor=sensors[row[\"sensor\"]];cal=value*float(sensor[\"gain\"])+float(sensor[\"offset_c\"])\r\n-    status=\"LOW\" if cal<float(sensor[\"low_c\"]) else \"HIGH\" if cal>float(sensor[\"high_c\"]) else \"OK\";counts[status]+=1\r\n-    rows.append(dict(sequence=row[\"sequence\"],sensor=row[\"sensor\"],celsius=value,calibrated_c=cal,status=status))\r\n-Path(a.output).write_text(json.dumps(dict(success=True,readings=rows,counts=counts)),encoding=\"utf-8\")\r\n+import argparse\n+import csv\n+import json\n+from decimal import Decimal, localcontext\n+from fractions import Fraction\n+from pathlib import Path\n+\n+\n+ABSOLUTE_ZERO = {\"C\": Fraction(\"-273.15\"), \"F\": Fraction(\"-459.67\"), \"K\": Fraction(0)}\n+\n+\n+def read_csv(path):\n+    with path.open(encoding=\"utf-8\", newline=\"\") as source:\n+        yield from csv.DictReader(source)\n+\n+\n+def make_report(root):\n+    sensors = {\n+        row[\"sensor\"]: {\n+            name: Fraction(Decimal(row[name]))\n+            for name in (\"gain\", \"offset_c\", \"low_c\", \"high_c\")\n+        }\n+        for row in read_csv(root / \"sensors.csv\")\n+    }\n+    readings = []\n+    counts = dict(LOW=0, OK=0, HIGH=0)\n+    for row in read_csv(root / \"readings.csv\"):\n+        value = Fraction(Decimal(row[\"temperature\"]))\n+        unit = row[\"unit\"]\n+        if value < ABSOLUTE_ZERO[unit]:\n+            return {\n+                \"success\": False,\n+                \"error\": {\n+                    \"code\": \"BELOW_ABSOLUTE_ZERO\",\n+                    \"sequence\": row[\"sequence\"],\n+                    \"sensor\": row[\"sensor\"],\n+                },\n+            }, 2\n+        if unit == \"F\":\n+            celsius = (value - 32) * 5 / 9\n+        elif unit == \"K\":\n+            celsius = value - Fraction(\"273.15\")\n+        else:\n+            celsius = value\n+        sensor = sensors[row[\"sensor\"]]\n+        calibrated = celsius * sensor[\"gain\"] + sensor[\"offset_c\"]\n+        status = (\n+            \"LOW\"\n+            if calibrated < sensor[\"low_c\"]\n+            else \"HIGH\"\n+            if calibrated > sensor[\"high_c\"]\n+            else \"OK\"\n+        )\n+        counts[status] += 1\n+        readings.append(\n+            {\n+                \"sequence\": row[\"sequence\"],\n+                \"sensor\": row[\"sensor\"],\n+                \"celsius\": celsius,\n+                \"calibrated_c\": calibrated,\n+                \"status\": status,\n+            }\n+        )\n+    return {\"success\": True, \"readings\": readings, \"counts\": counts}, 0\n+\n+\n+def encode_json(value):\n+    if isinstance(value, Fraction):\n+        # Precision scales with magnitude so even large numbers meet absolute tolerance.\n+        with localcontext() as context:\n+            context.prec = len(str(abs(value.numerator))) + 20\n+            return str(Decimal(value.numerator) / Decimal(value.denominator))\n+    if isinstance(value, dict):\n+        return (\n+            \"{\"\n+            + \",\".join(\n+                json.dumps(key, ensure_ascii=False) + \":\" + encode_json(item)\n+                for key, item in value.items()\n+            )\n+            + \"}\"\n+        )\n+    if isinstance(value, list):\n+        return \"[\" + \",\".join(encode_json(item) for item in value) + \"]\"\n+    return json.dumps(value, ensure_ascii=False, allow_nan=False)\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(\n+        description=\"Produce a calibrated temperature report.\"\n+    )\n+    parser.add_argument(\"input\", type=Path)\n+    parser.add_argument(\"--output\", type=Path, required=True)\n+    args = parser.parse_args()\n+    report, exit_code = make_report(args.input)\n+    args.output.write_text(encode_json(report) + \"\\n\", encoding=\"utf-8\")\n+    return exit_code\n+\n+\n+if __name__ == \"__main__\":\n+    raise SystemExit(main())\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\build_zipapp.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\build_zipapp.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\build_zipapp.py\n@@ -0,0 +1,14 @@\n+\"\"\"Build the standalone application: python build_zipapp.py.\"\"\"\n+\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def main():\n+    root = Path(__file__).resolve().parent\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.write(root / \"main.py\", \"__main__.py\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n\nIndex: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\test_deliverable.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\test_deliverable.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\test_deliverable.py\n@@ -0,0 +1,213 @@\n+import csv\n+import json\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+from decimal import Decimal\n+from fractions import Fraction\n+from pathlib import Path\n+\n+\n+APP = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n+SENSOR_COLUMNS = [\"sensor\", \"gain\", \"offset_c\", \"low_c\", \"high_c\"]\n+READING_COLUMNS = [\"sequence\", \"sensor\", \"temperature\", \"unit\"]\n+\n+\n+class DeliverableTests(unittest.TestCase):\n+    def run_report(self, sensors, readings, flexible_csv=False, relative_paths=False):\n+        with tempfile.TemporaryDirectory() as temporary:\n+            cwd = Path(temporary)\n+            inputs = cwd / \"input data\"\n+            inputs.mkdir()\n+            for name, columns, records in (\n+                (\"sensors\", SENSOR_COLUMNS, sensors),\n+                (\"readings\", READING_COLUMNS, readings),\n+            ):\n+                fields = [\"metadata\"] + columns[::-1] if flexible_csv else columns\n+                with (inputs / (name + \".csv\")).open(\n+                    \"w\", encoding=\"utf-8\", newline=\"\"\n+                ) as output:\n+                    writer = csv.DictWriter(\n+                        output,\n+                        fieldnames=fields,\n+                        lineterminator=\"\\r\\n\" if flexible_csv else \"\\n\",\n+                    )\n+                    writer.writeheader()\n+                    for record in records:\n+                        row = dict(zip(columns, record))\n+                        if flexible_csv:\n+                            row[\"metadata\"] = 'unused,\"quoted\"\\nmetadata'\n+                        writer.writerow(row)\n+            report_path = cwd / \"output report.json\"\n+            result = subprocess.run(\n+                [\n+                    sys.executable,\n+                    str(APP),\n+                    \"input data\" if relative_paths else str(inputs),\n+                    \"--output\",\n+                    \"output report.json\" if relative_paths else str(report_path),\n+                ],\n+                cwd=cwd,\n+                capture_output=True,\n+                text=True,\n+            )\n+            self.assertEqual(result.stderr, \"\", result.stderr)\n+            report = json.loads(\n+                report_path.read_text(encoding=\"utf-8\"), parse_float=Decimal\n+            )\n+            return result.returncode, report\n+\n+    def assert_readings(self, actual, expected):\n+        self.assertEqual(len(actual), len(expected))\n+        for row, (sequence, sensor, celsius, calibrated, status) in zip(\n+            actual, expected\n+        ):\n+            self.assertEqual(\n+                set(row), {\"sequence\", \"sensor\", \"celsius\", \"calibrated_c\", \"status\"}\n+            )\n+            self.assertEqual(\n+                (row[\"sequence\"], row[\"sensor\"], row[\"status\"]),\n+                (sequence, sensor, status),\n+            )\n+            for name, target in ((\"celsius\", celsius), (\"calibrated_c\", calibrated)):\n+                self.assertIsInstance(row[name], (int, Decimal))\n+                self.assertLessEqual(\n+                    abs(Fraction(row[name]) - Fraction(target)), Fraction(\"1e-8\")\n+                )\n+\n+    def test_conversion_calibration_thresholds_and_order(self):\n+        code, report = self.run_report(\n+            [(\"a\", \"2\", \"-10\", \"-30\", \"30\")],\n+            [\n+                (\"03\", \"a\", \"-10\", \"C\"),\n+                (\"01\", \"a\", \"68\", \"F\"),\n+                (\"02\", \"a\", \"273.15\", \"K\"),\n+                (\"04\", \"a\", \"-11\", \"C\"),\n+                (\"05\", \"a\", \"294.15\", \"K\"),\n+            ],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assertIs(report[\"success\"], True)\n+        self.assert_readings(\n+            report[\"readings\"],\n+            [\n+                (\"03\", \"a\", \"-10\", \"-30\", \"OK\"),\n+                (\"01\", \"a\", \"20\", \"30\", \"OK\"),\n+                (\"02\", \"a\", \"0\", \"-10\", \"OK\"),\n+                (\"04\", \"a\", \"-11\", \"-32\", \"LOW\"),\n+                (\"05\", \"a\", \"21\", \"32\", \"HIGH\"),\n+            ],\n+        )\n+        self.assertEqual(report[\"counts\"], {\"LOW\": 1, \"OK\": 3, \"HIGH\": 1})\n+\n+    def test_absolute_zero_is_inclusive_in_each_unit(self):\n+        code, report = self.run_report(\n+            [(\"cold\", \"2\", \"-1000\", \"-2000\", \"-1000\")],\n+            [\n+                (\"c\", \"cold\", \"-273.1500\", \"C\"),\n+                (\"f\", \"cold\", \"-459.67\", \"F\"),\n+                (\"k\", \"cold\", \"-0.000\", \"K\"),\n+            ],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(\n+            report[\"readings\"],\n+            [(unit, \"cold\", \"-273.15\", \"-1546.3\", \"OK\") for unit in (\"c\", \"f\", \"k\")],\n+        )\n+\n+    def test_first_invalid_reading_in_original_units(self):\n+        for unit, invalid in (\n+            (\"C\", \"-273.150000000000000001\"),\n+            (\"F\", \"-459.670000000000000001\"),\n+            (\"K\", \"-1e-30\"),\n+        ):\n+            with self.subTest(unit=unit):\n+                identity = ' 001,雪\"\\r\\n '\n+                code, report = self.run_report(\n+                    [(identity, \"1\", \"10000\", \"-100\", \"100\")],\n+                    [\n+                        (\"valid\", identity, \"0\", \"C\"),\n+                        (identity, identity, invalid, unit),\n+                        (\"later\", identity, \"-9999\", \"C\"),\n+                    ],\n+                    flexible_csv=True,\n+                )\n+                self.assertEqual(code, 2)\n+                self.assertEqual(\n+                    report,\n+                    {\n+                        \"success\": False,\n+                        \"error\": {\n+                            \"code\": \"BELOW_ABSOLUTE_ZERO\",\n+                            \"sequence\": identity,\n+                            \"sensor\": identity,\n+                        },\n+                    },\n+                )\n+                self.assertIs(report[\"success\"], False)\n+\n+    def test_exact_text_ids_csv_flexibility_and_relative_paths(self):\n+        ids = [\"001\", \"1\", '雪,\"quoted\"\\nline', \" \", \" x \"]\n+        code, report = self.run_report(\n+            [\n+                (sensor, \"1\", str(index), \"-100\", \"100\")\n+                for index, sensor in enumerate(ids)\n+            ],\n+            [(sensor, sensor, \"32\", \"F\") for sensor in ids],\n+            flexible_csv=True,\n+            relative_paths=True,\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(\n+            report[\"readings\"],\n+            [\n+                (sensor, sensor, \"0\", str(index), \"OK\")\n+                for index, sensor in enumerate(ids)\n+            ],\n+        )\n+        self.assertEqual(report[\"counts\"], {\"LOW\": 0, \"OK\": 5, \"HIGH\": 0})\n+\n+    def test_exact_decimal_comparison_and_repeating_conversion(self):\n+        code, report = self.run_report(\n+            [(\"a\", \"9\", \"-5\", \"0\", \"0\"), (\"b\", \"1\", \"0\", \"0.1\", \"0.1\")],\n+            [\n+                (\"equal\", \"a\", \"33\", \"F\"),\n+                (\"below\", \"b\", \"0.0999999999999999999999999999999\", \"C\"),\n+                (\"above\", \"b\", \"0.1000000000000000000000000000001\", \"C\"),\n+            ],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(\n+            report[\"readings\"],\n+            [\n+                (\"equal\", \"a\", Fraction(5, 9), \"0\", \"OK\"),\n+                (\"below\", \"b\", \"0.1\", \"0.1\", \"LOW\"),\n+                (\"above\", \"b\", \"0.1\", \"0.1\", \"HIGH\"),\n+            ],\n+        )\n+\n+    def test_large_magnitude_absolute_precision(self):\n+        code, report = self.run_report(\n+            [(\"a\", \"1e50\", \"-1e51\", \"-1e100\", \"1e100\")],\n+            [(\"huge\", \"a\", \"33\", \"F\")],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(\n+            report[\"readings\"],\n+            [\n+                (\"huge\", \"a\", Fraction(5, 9), Fraction(5 * 10**50, 9) - 10**51, \"OK\"),\n+            ],\n+        )\n+\n+    def test_empty_readings(self):\n+        code, report = self.run_report([], [])\n+        self.assertEqual(code, 0)\n+        self.assertEqual(\n+            report,\n+            {\"success\": True, \"readings\": [], \"counts\": {\"LOW\": 0, \"OK\": 0, \"HIGH\": 0}},\n+        )\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n\n",
+        "files": [
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\main.py",
+            "relativePath": "main.py",
+            "type": "update",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\main.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\main.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\main.py\n@@ -1,11 +1,100 @@\n-import argparse,csv,json\r\n-from pathlib import Path\r\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input)\r\n-sensors={r[\"sensor\"]:r for r in csv.DictReader(open(root/\"sensors.csv\",encoding=\"utf-8\"))};rows=[];counts=dict(LOW=0,OK=0,HIGH=0)\r\n-for row in csv.DictReader(open(root/\"readings.csv\",encoding=\"utf-8\")):\r\n-    value=float(row[\"temperature\"])\r\n-    if value<0:raise ValueError(\"negative temperature\")\r\n-    sensor=sensors[row[\"sensor\"]];cal=value*float(sensor[\"gain\"])+float(sensor[\"offset_c\"])\r\n-    status=\"LOW\" if cal<float(sensor[\"low_c\"]) else \"HIGH\" if cal>float(sensor[\"high_c\"]) else \"OK\";counts[status]+=1\r\n-    rows.append(dict(sequence=row[\"sequence\"],sensor=row[\"sensor\"],celsius=value,calibrated_c=cal,status=status))\r\n-Path(a.output).write_text(json.dumps(dict(success=True,readings=rows,counts=counts)),encoding=\"utf-8\")\r\n+import argparse\n+import csv\n+import json\n+from decimal import Decimal, localcontext\n+from fractions import Fraction\n+from pathlib import Path\n+\n+\n+ABSOLUTE_ZERO = {\"C\": Fraction(\"-273.15\"), \"F\": Fraction(\"-459.67\"), \"K\": Fraction(0)}\n+\n+\n+def read_csv(path):\n+    with path.open(encoding=\"utf-8\", newline=\"\") as source:\n+        yield from csv.DictReader(source)\n+\n+\n+def make_report(root):\n+    sensors = {\n+        row[\"sensor\"]: {\n+            name: Fraction(Decimal(row[name]))\n+            for name in (\"gain\", \"offset_c\", \"low_c\", \"high_c\")\n+        }\n+        for row in read_csv(root / \"sensors.csv\")\n+    }\n+    readings = []\n+    counts = dict(LOW=0, OK=0, HIGH=0)\n+    for row in read_csv(root / \"readings.csv\"):\n+        value = Fraction(Decimal(row[\"temperature\"]))\n+        unit = row[\"unit\"]\n+        if value < ABSOLUTE_ZERO[unit]:\n+            return {\n+                \"success\": False,\n+                \"error\": {\n+                    \"code\": \"BELOW_ABSOLUTE_ZERO\",\n+                    \"sequence\": row[\"sequence\"],\n+                    \"sensor\": row[\"sensor\"],\n+                },\n+            }, 2\n+        if unit == \"F\":\n+            celsius = (value - 32) * 5 / 9\n+        elif unit == \"K\":\n+            celsius = value - Fraction(\"273.15\")\n+        else:\n+            celsius = value\n+        sensor = sensors[row[\"sensor\"]]\n+        calibrated = celsius * sensor[\"gain\"] + sensor[\"offset_c\"]\n+        status = (\n+            \"LOW\"\n+            if calibrated < sensor[\"low_c\"]\n+            else \"HIGH\"\n+            if calibrated > sensor[\"high_c\"]\n+            else \"OK\"\n+        )\n+        counts[status] += 1\n+        readings.append(\n+            {\n+                \"sequence\": row[\"sequence\"],\n+                \"sensor\": row[\"sensor\"],\n+                \"celsius\": celsius,\n+                \"calibrated_c\": calibrated,\n+                \"status\": status,\n+            }\n+        )\n+    return {\"success\": True, \"readings\": readings, \"counts\": counts}, 0\n+\n+\n+def encode_json(value):\n+    if isinstance(value, Fraction):\n+        # Precision scales with magnitude so even large numbers meet absolute tolerance.\n+        with localcontext() as context:\n+            context.prec = len(str(abs(value.numerator))) + 20\n+            return str(Decimal(value.numerator) / Decimal(value.denominator))\n+    if isinstance(value, dict):\n+        return (\n+            \"{\"\n+            + \",\".join(\n+                json.dumps(key, ensure_ascii=False) + \":\" + encode_json(item)\n+                for key, item in value.items()\n+            )\n+            + \"}\"\n+        )\n+    if isinstance(value, list):\n+        return \"[\" + \",\".join(encode_json(item) for item in value) + \"]\"\n+    return json.dumps(value, ensure_ascii=False, allow_nan=False)\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(\n+        description=\"Produce a calibrated temperature report.\"\n+    )\n+    parser.add_argument(\"input\", type=Path)\n+    parser.add_argument(\"--output\", type=Path, required=True)\n+    args = parser.parse_args()\n+    report, exit_code = make_report(args.input)\n+    args.output.write_text(encode_json(report) + \"\\n\", encoding=\"utf-8\")\n+    return exit_code\n+\n+\n+if __name__ == \"__main__\":\n+    raise SystemExit(main())\n",
+            "before": "import argparse,csv,json\r\nfrom pathlib import Path\r\np=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input)\r\nsensors={r[\"sensor\"]:r for r in csv.DictReader(open(root/\"sensors.csv\",encoding=\"utf-8\"))};rows=[];counts=dict(LOW=0,OK=0,HIGH=0)\r\nfor row in csv.DictReader(open(root/\"readings.csv\",encoding=\"utf-8\")):\r\n    value=float(row[\"temperature\"])\r\n    if value<0:raise ValueError(\"negative temperature\")\r\n    sensor=sensors[row[\"sensor\"]];cal=value*float(sensor[\"gain\"])+float(sensor[\"offset_c\"])\r\n    status=\"LOW\" if cal<float(sensor[\"low_c\"]) else \"HIGH\" if cal>float(sensor[\"high_c\"]) else \"OK\";counts[status]+=1\r\n    rows.append(dict(sequence=row[\"sequence\"],sensor=row[\"sensor\"],celsius=value,calibrated_c=cal,status=status))\r\nPath(a.output).write_text(json.dumps(dict(success=True,readings=rows,counts=counts)),encoding=\"utf-8\")\r\n",
+            "after": "import argparse\nimport csv\nimport json\nfrom decimal import Decimal, localcontext\nfrom fractions import Fraction\nfrom pathlib import Path\n\n\nABSOLUTE_ZERO = {\"C\": Fraction(\"-273.15\"), \"F\": Fraction(\"-459.67\"), \"K\": Fraction(0)}\n\n\ndef read_csv(path):\n    with path.open(encoding=\"utf-8\", newline=\"\") as source:\n        yield from csv.DictReader(source)\n\n\ndef make_report(root):\n    sensors = {\n        row[\"sensor\"]: {\n            name: Fraction(Decimal(row[name]))\n            for name in (\"gain\", \"offset_c\", \"low_c\", \"high_c\")\n        }\n        for row in read_csv(root / \"sensors.csv\")\n    }\n    readings = []\n    counts = dict(LOW=0, OK=0, HIGH=0)\n    for row in read_csv(root / \"readings.csv\"):\n        value = Fraction(Decimal(row[\"temperature\"]))\n        unit = row[\"unit\"]\n        if value < ABSOLUTE_ZERO[unit]:\n            return {\n                \"success\": False,\n                \"error\": {\n                    \"code\": \"BELOW_ABSOLUTE_ZERO\",\n                    \"sequence\": row[\"sequence\"],\n                    \"sensor\": row[\"sensor\"],\n                },\n            }, 2\n        if unit == \"F\":\n            celsius = (value - 32) * 5 / 9\n        elif unit == \"K\":\n            celsius = value - Fraction(\"273.15\")\n        else:\n            celsius = value\n        sensor = sensors[row[\"sensor\"]]\n        calibrated = celsius * sensor[\"gain\"] + sensor[\"offset_c\"]\n        status = (\n            \"LOW\"\n            if calibrated < sensor[\"low_c\"]\n            else \"HIGH\"\n            if calibrated > sensor[\"high_c\"]\n            else \"OK\"\n        )\n        counts[status] += 1\n        readings.append(\n            {\n                \"sequence\": row[\"sequence\"],\n                \"sensor\": row[\"sensor\"],\n                \"celsius\": celsius,\n                \"calibrated_c\": calibrated,\n                \"status\": status,\n            }\n        )\n    return {\"success\": True, \"readings\": readings, \"counts\": counts}, 0\n\n\ndef encode_json(value):\n    if isinstance(value, Fraction):\n        # Precision scales with magnitude so even large numbers meet absolute tolerance.\n        with localcontext() as context:\n            context.prec = len(str(abs(value.numerator))) + 20\n            return str(Decimal(value.numerator) / Decimal(value.denominator))\n    if isinstance(value, dict):\n        return (\n            \"{\"\n            + \",\".join(\n                json.dumps(key, ensure_ascii=False) + \":\" + encode_json(item)\n                for key, item in value.items()\n            )\n            + \"}\"\n        )\n    if isinstance(value, list):\n        return \"[\" + \",\".join(encode_json(item) for item in value) + \"]\"\n    return json.dumps(value, ensure_ascii=False, allow_nan=False)\n\n\ndef main():\n    parser = argparse.ArgumentParser(\n        description=\"Produce a calibrated temperature report.\"\n    )\n    parser.add_argument(\"input\", type=Path)\n    parser.add_argument(\"--output\", type=Path, required=True)\n    args = parser.parse_args()\n    report, exit_code = make_report(args.input)\n    args.output.write_text(encode_json(report) + \"\\n\", encoding=\"utf-8\")\n    return exit_code\n\n\nif __name__ == \"__main__\":\n    raise SystemExit(main())\n",
+            "additions": 100,
+            "deletions": 11
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\build_zipapp.py",
+            "relativePath": "build_zipapp.py",
+            "type": "add",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\build_zipapp.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\build_zipapp.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\build_zipapp.py\n@@ -0,0 +1,14 @@\n+\"\"\"Build the standalone application: python build_zipapp.py.\"\"\"\n+\n+from pathlib import Path\n+from zipfile import ZIP_DEFLATED, ZipFile\n+\n+\n+def main():\n+    root = Path(__file__).resolve().parent\n+    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n+        archive.write(root / \"main.py\", \"__main__.py\")\n+\n+\n+if __name__ == \"__main__\":\n+    main()\n",
+            "before": "",
+            "after": "\"\"\"Build the standalone application: python build_zipapp.py.\"\"\"\n\nfrom pathlib import Path\nfrom zipfile import ZIP_DEFLATED, ZipFile\n\n\ndef main():\n    root = Path(__file__).resolve().parent\n    with ZipFile(root / \"deliverable.pyz\", \"w\", compression=ZIP_DEFLATED) as archive:\n        archive.write(root / \"main.py\", \"__main__.py\")\n\n\nif __name__ == \"__main__\":\n    main()\n",
+            "additions": 14,
+            "deletions": 0
+          },
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\test_deliverable.py",
+            "relativePath": "test_deliverable.py",
+            "type": "add",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\test_deliverable.py\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\test_deliverable.py\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\test_deliverable.py\n@@ -0,0 +1,213 @@\n+import csv\n+import json\n+import subprocess\n+import sys\n+import tempfile\n+import unittest\n+from decimal import Decimal\n+from fractions import Fraction\n+from pathlib import Path\n+\n+\n+APP = Path(__file__).resolve().with_name(\"deliverable.pyz\")\n+SENSOR_COLUMNS = [\"sensor\", \"gain\", \"offset_c\", \"low_c\", \"high_c\"]\n+READING_COLUMNS = [\"sequence\", \"sensor\", \"temperature\", \"unit\"]\n+\n+\n+class DeliverableTests(unittest.TestCase):\n+    def run_report(self, sensors, readings, flexible_csv=False, relative_paths=False):\n+        with tempfile.TemporaryDirectory() as temporary:\n+            cwd = Path(temporary)\n+            inputs = cwd / \"input data\"\n+            inputs.mkdir()\n+            for name, columns, records in (\n+                (\"sensors\", SENSOR_COLUMNS, sensors),\n+                (\"readings\", READING_COLUMNS, readings),\n+            ):\n+                fields = [\"metadata\"] + columns[::-1] if flexible_csv else columns\n+                with (inputs / (name + \".csv\")).open(\n+                    \"w\", encoding=\"utf-8\", newline=\"\"\n+                ) as output:\n+                    writer = csv.DictWriter(\n+                        output,\n+                        fieldnames=fields,\n+                        lineterminator=\"\\r\\n\" if flexible_csv else \"\\n\",\n+                    )\n+                    writer.writeheader()\n+                    for record in records:\n+                        row = dict(zip(columns, record))\n+                        if flexible_csv:\n+                            row[\"metadata\"] = 'unused,\"quoted\"\\nmetadata'\n+                        writer.writerow(row)\n+            report_path = cwd / \"output report.json\"\n+            result = subprocess.run(\n+                [\n+                    sys.executable,\n+                    str(APP),\n+                    \"input data\" if relative_paths else str(inputs),\n+                    \"--output\",\n+                    \"output report.json\" if relative_paths else str(report_path),\n+                ],\n+                cwd=cwd,\n+                capture_output=True,\n+                text=True,\n+            )\n+            self.assertEqual(result.stderr, \"\", result.stderr)\n+            report = json.loads(\n+                report_path.read_text(encoding=\"utf-8\"), parse_float=Decimal\n+            )\n+            return result.returncode, report\n+\n+    def assert_readings(self, actual, expected):\n+        self.assertEqual(len(actual), len(expected))\n+        for row, (sequence, sensor, celsius, calibrated, status) in zip(\n+            actual, expected\n+        ):\n+            self.assertEqual(\n+                set(row), {\"sequence\", \"sensor\", \"celsius\", \"calibrated_c\", \"status\"}\n+            )\n+            self.assertEqual(\n+                (row[\"sequence\"], row[\"sensor\"], row[\"status\"]),\n+                (sequence, sensor, status),\n+            )\n+            for name, target in ((\"celsius\", celsius), (\"calibrated_c\", calibrated)):\n+                self.assertIsInstance(row[name], (int, Decimal))\n+                self.assertLessEqual(\n+                    abs(Fraction(row[name]) - Fraction(target)), Fraction(\"1e-8\")\n+                )\n+\n+    def test_conversion_calibration_thresholds_and_order(self):\n+        code, report = self.run_report(\n+            [(\"a\", \"2\", \"-10\", \"-30\", \"30\")],\n+            [\n+                (\"03\", \"a\", \"-10\", \"C\"),\n+                (\"01\", \"a\", \"68\", \"F\"),\n+                (\"02\", \"a\", \"273.15\", \"K\"),\n+                (\"04\", \"a\", \"-11\", \"C\"),\n+                (\"05\", \"a\", \"294.15\", \"K\"),\n+            ],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assertIs(report[\"success\"], True)\n+        self.assert_readings(\n+            report[\"readings\"],\n+            [\n+                (\"03\", \"a\", \"-10\", \"-30\", \"OK\"),\n+                (\"01\", \"a\", \"20\", \"30\", \"OK\"),\n+                (\"02\", \"a\", \"0\", \"-10\", \"OK\"),\n+                (\"04\", \"a\", \"-11\", \"-32\", \"LOW\"),\n+                (\"05\", \"a\", \"21\", \"32\", \"HIGH\"),\n+            ],\n+        )\n+        self.assertEqual(report[\"counts\"], {\"LOW\": 1, \"OK\": 3, \"HIGH\": 1})\n+\n+    def test_absolute_zero_is_inclusive_in_each_unit(self):\n+        code, report = self.run_report(\n+            [(\"cold\", \"2\", \"-1000\", \"-2000\", \"-1000\")],\n+            [\n+                (\"c\", \"cold\", \"-273.1500\", \"C\"),\n+                (\"f\", \"cold\", \"-459.67\", \"F\"),\n+                (\"k\", \"cold\", \"-0.000\", \"K\"),\n+            ],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(\n+            report[\"readings\"],\n+            [(unit, \"cold\", \"-273.15\", \"-1546.3\", \"OK\") for unit in (\"c\", \"f\", \"k\")],\n+        )\n+\n+    def test_first_invalid_reading_in_original_units(self):\n+        for unit, invalid in (\n+            (\"C\", \"-273.150000000000000001\"),\n+            (\"F\", \"-459.670000000000000001\"),\n+            (\"K\", \"-1e-30\"),\n+        ):\n+            with self.subTest(unit=unit):\n+                identity = ' 001,雪\"\\r\\n '\n+                code, report = self.run_report(\n+                    [(identity, \"1\", \"10000\", \"-100\", \"100\")],\n+                    [\n+                        (\"valid\", identity, \"0\", \"C\"),\n+                        (identity, identity, invalid, unit),\n+                        (\"later\", identity, \"-9999\", \"C\"),\n+                    ],\n+                    flexible_csv=True,\n+                )\n+                self.assertEqual(code, 2)\n+                self.assertEqual(\n+                    report,\n+                    {\n+                        \"success\": False,\n+                        \"error\": {\n+                            \"code\": \"BELOW_ABSOLUTE_ZERO\",\n+                            \"sequence\": identity,\n+                            \"sensor\": identity,\n+                        },\n+                    },\n+                )\n+                self.assertIs(report[\"success\"], False)\n+\n+    def test_exact_text_ids_csv_flexibility_and_relative_paths(self):\n+        ids = [\"001\", \"1\", '雪,\"quoted\"\\nline', \" \", \" x \"]\n+        code, report = self.run_report(\n+            [\n+                (sensor, \"1\", str(index), \"-100\", \"100\")\n+                for index, sensor in enumerate(ids)\n+            ],\n+            [(sensor, sensor, \"32\", \"F\") for sensor in ids],\n+            flexible_csv=True,\n+            relative_paths=True,\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(\n+            report[\"readings\"],\n+            [\n+                (sensor, sensor, \"0\", str(index), \"OK\")\n+                for index, sensor in enumerate(ids)\n+            ],\n+        )\n+        self.assertEqual(report[\"counts\"], {\"LOW\": 0, \"OK\": 5, \"HIGH\": 0})\n+\n+    def test_exact_decimal_comparison_and_repeating_conversion(self):\n+        code, report = self.run_report(\n+            [(\"a\", \"9\", \"-5\", \"0\", \"0\"), (\"b\", \"1\", \"0\", \"0.1\", \"0.1\")],\n+            [\n+                (\"equal\", \"a\", \"33\", \"F\"),\n+                (\"below\", \"b\", \"0.0999999999999999999999999999999\", \"C\"),\n+                (\"above\", \"b\", \"0.1000000000000000000000000000001\", \"C\"),\n+            ],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(\n+            report[\"readings\"],\n+            [\n+                (\"equal\", \"a\", Fraction(5, 9), \"0\", \"OK\"),\n+                (\"below\", \"b\", \"0.1\", \"0.1\", \"LOW\"),\n+                (\"above\", \"b\", \"0.1\", \"0.1\", \"HIGH\"),\n+            ],\n+        )\n+\n+    def test_large_magnitude_absolute_precision(self):\n+        code, report = self.run_report(\n+            [(\"a\", \"1e50\", \"-1e51\", \"-1e100\", \"1e100\")],\n+            [(\"huge\", \"a\", \"33\", \"F\")],\n+        )\n+        self.assertEqual(code, 0)\n+        self.assert_readings(\n+            report[\"readings\"],\n+            [\n+                (\"huge\", \"a\", Fraction(5, 9), Fraction(5 * 10**50, 9) - 10**51, \"OK\"),\n+            ],\n+        )\n+\n+    def test_empty_readings(self):\n+        code, report = self.run_report([], [])\n+        self.assertEqual(code, 0)\n+        self.assertEqual(\n+            report,\n+            {\"success\": True, \"readings\": [], \"counts\": {\"LOW\": 0, \"OK\": 0, \"HIGH\": 0}},\n+        )\n+\n+\n+if __name__ == \"__main__\":\n+    unittest.main()\n",
+            "before": "",
+            "after": "import csv\nimport json\nimport subprocess\nimport sys\nimport tempfile\nimport unittest\nfrom decimal import Decimal\nfrom fractions import Fraction\nfrom pathlib import Path\n\n\nAPP = Path(__file__).resolve().with_name(\"deliverable.pyz\")\nSENSOR_COLUMNS = [\"sensor\", \"gain\", \"offset_c\", \"low_c\", \"high_c\"]\nREADING_COLUMNS = [\"sequence\", \"sensor\", \"temperature\", \"unit\"]\n\n\nclass DeliverableTests(unittest.TestCase):\n    def run_report(self, sensors, readings, flexible_csv=False, relative_paths=False):\n        with tempfile.TemporaryDirectory() as temporary:\n            cwd = Path(temporary)\n            inputs = cwd / \"input data\"\n            inputs.mkdir()\n            for name, columns, records in (\n                (\"sensors\", SENSOR_COLUMNS, sensors),\n                (\"readings\", READING_COLUMNS, readings),\n            ):\n                fields = [\"metadata\"] + columns[::-1] if flexible_csv else columns\n                with (inputs / (name + \".csv\")).open(\n                    \"w\", encoding=\"utf-8\", newline=\"\"\n                ) as output:\n                    writer = csv.DictWriter(\n                        output,\n                        fieldnames=fields,\n                        lineterminator=\"\\r\\n\" if flexible_csv else \"\\n\",\n                    )\n                    writer.writeheader()\n                    for record in records:\n                        row = dict(zip(columns, record))\n                        if flexible_csv:\n                            row[\"metadata\"] = 'unused,\"quoted\"\\nmetadata'\n                        writer.writerow(row)\n            report_path = cwd / \"output report.json\"\n            result = subprocess.run(\n                [\n                    sys.executable,\n                    str(APP),\n                    \"input data\" if relative_paths else str(inputs),\n                    \"--output\",\n                    \"output report.json\" if relative_paths else str(report_path),\n                ],\n                cwd=cwd,\n                capture_output=True,\n                text=True,\n            )\n            self.assertEqual(result.stderr, \"\", result.stderr)\n            report = json.loads(\n                report_path.read_text(encoding=\"utf-8\"), parse_float=Decimal\n            )\n            return result.returncode, report\n\n    def assert_readings(self, actual, expected):\n        self.assertEqual(len(actual), len(expected))\n        for row, (sequence, sensor, celsius, calibrated, status) in zip(\n            actual, expected\n        ):\n            self.assertEqual(\n                set(row), {\"sequence\", \"sensor\", \"celsius\", \"calibrated_c\", \"status\"}\n            )\n            self.assertEqual(\n                (row[\"sequence\"], row[\"sensor\"], row[\"status\"]),\n                (sequence, sensor, status),\n            )\n            for name, target in ((\"celsius\", celsius), (\"calibrated_c\", calibrated)):\n                self.assertIsInstance(row[name], (int, Decimal))\n                self.assertLessEqual(\n                    abs(Fraction(row[name]) - Fraction(target)), Fraction(\"1e-8\")\n                )\n\n    def test_conversion_calibration_thresholds_and_order(self):\n        code, report = self.run_report(\n            [(\"a\", \"2\", \"-10\", \"-30\", \"30\")],\n            [\n                (\"03\", \"a\", \"-10\", \"C\"),\n                (\"01\", \"a\", \"68\", \"F\"),\n                (\"02\", \"a\", \"273.15\", \"K\"),\n                (\"04\", \"a\", \"-11\", \"C\"),\n                (\"05\", \"a\", \"294.15\", \"K\"),\n            ],\n        )\n        self.assertEqual(code, 0)\n        self.assertIs(report[\"success\"], True)\n        self.assert_readings(\n            report[\"readings\"],\n            [\n                (\"03\", \"a\", \"-10\", \"-30\", \"OK\"),\n                (\"01\", \"a\", \"20\", \"30\", \"OK\"),\n                (\"02\", \"a\", \"0\", \"-10\", \"OK\"),\n                (\"04\", \"a\", \"-11\", \"-32\", \"LOW\"),\n                (\"05\", \"a\", \"21\", \"32\", \"HIGH\"),\n            ],\n        )\n        self.assertEqual(report[\"counts\"], {\"LOW\": 1, \"OK\": 3, \"HIGH\": 1})\n\n    def test_absolute_zero_is_inclusive_in_each_unit(self):\n        code, report = self.run_report(\n            [(\"cold\", \"2\", \"-1000\", \"-2000\", \"-1000\")],\n            [\n                (\"c\", \"cold\", \"-273.1500\", \"C\"),\n                (\"f\", \"cold\", \"-459.67\", \"F\"),\n                (\"k\", \"cold\", \"-0.000\", \"K\"),\n            ],\n        )\n        self.assertEqual(code, 0)\n        self.assert_readings(\n            report[\"readings\"],\n            [(unit, \"cold\", \"-273.15\", \"-1546.3\", \"OK\") for unit in (\"c\", \"f\", \"k\")],\n        )\n\n    def test_first_invalid_reading_in_original_units(self):\n        for unit, invalid in (\n            (\"C\", \"-273.150000000000000001\"),\n            (\"F\", \"-459.670000000000000001\"),\n            (\"K\", \"-1e-30\"),\n        ):\n            with self.subTest(unit=unit):\n                identity = ' 001,雪\"\\r\\n '\n                code, report = self.run_report(\n                    [(identity, \"1\", \"10000\", \"-100\", \"100\")],\n                    [\n                        (\"valid\", identity, \"0\", \"C\"),\n                        (identity, identity, invalid, unit),\n                        (\"later\", identity, \"-9999\", \"C\"),\n                    ],\n                    flexible_csv=True,\n                )\n                self.assertEqual(code, 2)\n                self.assertEqual(\n                    report,\n                    {\n                        \"success\": False,\n                        \"error\": {\n                            \"code\": \"BELOW_ABSOLUTE_ZERO\",\n                            \"sequence\": identity,\n                            \"sensor\": identity,\n                        },\n                    },\n                )\n                self.assertIs(report[\"success\"], False)\n\n    def test_exact_text_ids_csv_flexibility_and_relative_paths(self):\n        ids = [\"001\", \"1\", '雪,\"quoted\"\\nline', \" \", \" x \"]\n        code, report = self.run_report(\n            [\n                (sensor, \"1\", str(index), \"-100\", \"100\")\n                for index, sensor in enumerate(ids)\n            ],\n            [(sensor, sensor, \"32\", \"F\") for sensor in ids],\n            flexible_csv=True,\n            relative_paths=True,\n        )\n        self.assertEqual(code, 0)\n        self.assert_readings(\n            report[\"readings\"],\n            [\n                (sensor, sensor, \"0\", str(index), \"OK\")\n                for index, sensor in enumerate(ids)\n            ],\n        )\n        self.assertEqual(report[\"counts\"], {\"LOW\": 0, \"OK\": 5, \"HIGH\": 0})\n\n    def test_exact_decimal_comparison_and_repeating_conversion(self):\n        code, report = self.run_report(\n            [(\"a\", \"9\", \"-5\", \"0\", \"0\"), (\"b\", \"1\", \"0\", \"0.1\", \"0.1\")],\n            [\n                (\"equal\", \"a\", \"33\", \"F\"),\n                (\"below\", \"b\", \"0.0999999999999999999999999999999\", \"C\"),\n                (\"above\", \"b\", \"0.1000000000000000000000000000001\", \"C\"),\n            ],\n        )\n        self.assertEqual(code, 0)\n        self.assert_readings(\n            report[\"readings\"],\n            [\n                (\"equal\", \"a\", Fraction(5, 9), \"0\", \"OK\"),\n                (\"below\", \"b\", \"0.1\", \"0.1\", \"LOW\"),\n                (\"above\", \"b\", \"0.1\", \"0.1\", \"HIGH\"),\n            ],\n        )\n\n    def test_large_magnitude_absolute_precision(self):\n        code, report = self.run_report(\n            [(\"a\", \"1e50\", \"-1e51\", \"-1e100\", \"1e100\")],\n            [(\"huge\", \"a\", \"33\", \"F\")],\n        )\n        self.assertEqual(code, 0)\n        self.assert_readings(\n            report[\"readings\"],\n            [\n                (\"huge\", \"a\", Fraction(5, 9), Fraction(5 * 10**50, 9) - 10**51, \"OK\"),\n            ],\n        )\n\n    def test_empty_readings(self):\n        code, report = self.run_report([], [])\n        self.assertEqual(code, 0)\n        self.assertEqual(\n            report,\n            {\"success\": True, \"readings\": [], \"counts\": {\"LOW\": 0, \"OK\": 0, \"HIGH\": 0}},\n        )\n\n\nif __name__ == \"__main__\":\n    unittest.main()\n",
+            "additions": 213,
+            "deletions": 0
+          }
+        ],
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541871135
+      }
+    },
+    "settledAt": 1793541871135
+  },
+  {
+    "requestID": "prt_g0VZjKvlY0018PGXhAu7",
+    "messageID": "msg_g0VZjKuWg00WhUjEJclF",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_4e3a870014e043148ee403235034a90b",
+      "tool": "bash",
+      "input": {
+        "command": "ls",
+        "description": "Verify project destination before building zipapp"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0752ad0e2c026d7d016ae746f4033881918473986507df1bc5"
+        }
+      },
+      "time": {
+        "start": 1793541875960
+      }
+    },
+    "requestedAt": 1793541876064,
+    "outcomeID": "prt_hkEdGJR4GsrojlKKGDUO",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hoJrzIxE6iKiBt1jfKVL",
+      "title": "Verify project destination before building zipapp",
+      "metadata": {
+        "refused": false,
+        "command": "ls",
+        "output": "CONTRACT.md\nbuild_zipapp.py\nmain.py\nsample\ntest_deliverable.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 63,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Verify project destination before building zipapp",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541876334
+      }
+    },
+    "settledAt": 1793541876334
+  },
+  {
+    "requestID": "prt_g0VZjKwrX00xAC1nZEi1",
+    "messageID": "msg_g0VZjKvsc00HwZzH32YU",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_210520f724b24d54abbc0d2a02c2ad59",
+      "tool": "bash",
+      "input": {
+        "command": "python build_zipapp.py",
+        "description": "Build standalone zipapp from repaired source"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_06f774c279e2995b016ae746f838d081918a80c99743882773"
+        }
+      },
+      "time": {
+        "start": 1793541880175
+      }
+    },
+    "requestedAt": 1793541880582,
+    "outcomeID": "prt_hqPp7juNBDrgtjDBz9qY",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hCAph9t5U9Ws6vXFJzgi",
+      "title": "Build standalone zipapp from repaired source",
+      "metadata": {
+        "refused": false,
+        "command": "python build_zipapp.py",
+        "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 0,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Build standalone zipapp from repaired source",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541880971
+      }
+    },
+    "settledAt": 1793541880972
+  },
+  {
+    "requestID": "prt_g0VZjKy3a00xseqddp6D",
+    "messageID": "msg_g0VZjKx5M00gu1YHqplb",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_4ae74997287c4c2c97f3459eef0fdd57",
+      "tool": "bash",
+      "input": {
+        "command": "python -m unittest -v test_deliverable",
+        "description": "Test final packaged application across contract boundaries"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_09170a1f0edec484016ae746fcc6288191b98f4c488011d291"
+        }
+      },
+      "time": {
+        "start": 1793541884766
+      }
+    },
+    "requestedAt": 1793541885513,
+    "outcomeID": "prt_hOeWaX0GwkEWKkp2DhdN",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hBzmUV05weSA6zPSVgKN",
+      "title": "Test final packaged application across contract boundaries",
+      "metadata": {
+        "refused": false,
+        "command": "python -m unittest -v test_deliverable",
+        "output": "test_absolute_zero_is_inclusive_in_each_unit (test_deliverable.DeliverableTests.test_absolute_zero_is_inclusive_in_each_unit) ... ok\r\ntest_conversion_calibration_thresholds_and_order (test_deliverable.DeliverableTests.test_conversion_calibration_thresholds_and_order) ... ok\r\ntest_empty_readings (test_deliverable.DeliverableTests.test_empty_readings) ... ok\r\ntest_exact_decimal_comparison_and_repeating_conversion (test_deliverable.DeliverableTests.test_exact_decimal_comparison_and_repeating_conversion) ... ok\r\ntest_exact_text_ids_csv_flexibility_and_relative_paths (test_deliverable.DeliverableTests.test_exact_text_ids_csv_flexibility_and_relative_paths) ... ok\r\ntest_first_invalid_reading_in_original_units (test_deliverable.DeliverableTests.test_first_invalid_reading_in_original_units) ... ok\r\ntest_large_magnitude_absolute_precision (test_deliverable.DeliverableTests.test_large_magnitude_absolute_precision) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 7 tests in 2.464s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 1029,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Test final packaged application across contract boundaries",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541888613
+      }
+    },
+    "settledAt": 1793541888613
+  },
+  {
+    "requestID": "prt_g0VZjL02r00EGzri2COB",
+    "messageID": "msg_g0VZjKz5T00ZgtLKlO34",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_a7217891ca634844bf46ca8b6239444a",
+      "tool": "read",
+      "input": {
+        "filePath": "sample"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0a97bcc3b1d778c9016ae74704732c8191ae2969dfd5c36ce1"
+        }
+      },
+      "time": {
+        "start": 1793541892409
+      }
+    },
+    "requestedAt": 1793541892633,
+    "outcomeID": "prt_hbSfunY5oNIQPls4tskx",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\sample</path>\n<type>directory</type>\n<entries>\nreadings.csv\nsensors.csv\n\n(2 entries)\n</entries>",
+      "title": "sample",
+      "metadata": {
+        "preview": "readings.csv\nsensors.csv",
+        "truncated": false,
+        "loaded": [],
+        "readType": "directory",
+        "offset": 1,
+        "lines": 2,
+        "totalLines": 2
+      },
+      "time": {
+        "end": 1793541892977
+      }
+    },
+    "settledAt": 1793541892977
+  },
+  {
+    "requestID": "prt_g0VZjL17I00jAwnnUP7c",
+    "messageID": "msg_g0VZjL0DQ00plcFyz8xc",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_49d5afc443e54b0c85b0d61c90b1f24c",
+      "tool": "bash",
+      "input": {
+        "command": "git diff --check",
+        "description": "Check patch whitespace and formatting errors"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0cc0abfc18d4aeaa016ae747088ce48191adef0a11e35c4925"
+        }
+      },
+      "time": {
+        "start": 1793541896528
+      }
+    },
+    "requestedAt": 1793541897083,
+    "outcomeID": "prt_hNwVuHV6damCynf8R6dF",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hbbZ8eQsdheEDHrHg6ox",
+      "title": "Check patch whitespace and formatting errors",
+      "metadata": {
+        "refused": false,
+        "command": "git diff --check",
+        "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 100,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Check patch whitespace and formatting errors",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541897586
+      }
+    },
+    "settledAt": 1793541897586
+  },
+  {
+    "requestID": "prt_g0VZjL24U001JzRrGop0",
+    "messageID": "msg_g0VZjL1Pf00jp60tPkdg",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_6ddd03f1318040e69cf1d61370ac4471",
+      "tool": "bash",
+      "input": {
+        "command": "git diff -- main.py",
+        "description": "Review repaired processing and serialization source diff"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0d23122475c882b1016ae7470c39a4819192784fd640ba6e95"
+        }
+      },
+      "time": {
+        "start": 1793541900198
+      }
+    },
+    "requestedAt": 1793541901319,
+    "outcomeID": "prt_hxmb7qm0eYBSFW0WUbvH",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hBiuLeo7gHmna7lU9Uam",
+      "title": "Review repaired processing and serialization source diff",
+      "metadata": {
+        "refused": false,
+        "command": "git diff -- main.py",
+        "output": "warning: in the working copy of 'main.py', LF will be replaced by CRLF the next time Git touches it\ndiff --git a/main.py b/main.py\nindex 25f2b2e..b747e7c 100644\n--- a/main.py\n+++ b/main.py\n@@ -1,11 +1,100 @@\n-import argparse,csv,json\n+import argparse\n+import csv\n+import json\n+from decimal import Decimal, localcontext\n+from fractions import Fraction\n from pathlib import Path\n-p=argparse.ArgumentParser();p.add_argument(\"input\");p.add_argument(\"--output\",required=True);a=p.parse_args();root=Path(a.input)\n-sensors={r[\"sensor\"]:r for r in csv.DictReader(open(root/\"sensors.csv\",encoding=\"utf-8\"))};rows=[];counts=dict(LOW=0,OK=0,HIGH=0)\n-for row in csv.DictReader(open(root/\"readings.csv\",encoding=\"utf-8\")):\n-    value=float(row[\"temperature\"])\n-    if value<0:raise ValueError(\"negative temperature\")\n-    sensor=sensors[row[\"sensor\"]];cal=value*float(sensor[\"gain\"])+float(sensor[\"offset_c\"])\n-    status=\"LOW\" if cal<float(sensor[\"low_c\"]) else \"HIGH\" if cal>float(sensor[\"high_c\"]) else \"OK\";counts[status]+=1\n-    rows.append(dict(sequence=row[\"sequence\"],sensor=row[\"sensor\"],celsius=value,calibrated_c=cal,status=status))\n-Path(a.output).write_text(json.dumps(dict(success=True,readings=rows,counts=counts)),encoding=\"utf-8\")\n+\n+\n+ABSOLUTE_ZERO = {\"C\": Fraction(\"-273.15\"), \"F\": Fraction(\"-459.67\"), \"K\": Fraction(0)}\n+\n+\n+def read_csv(path):\n+    with path.open(encoding=\"utf-8\", newline=\"\") as source:\n+        yield from csv.DictReader(source)\n+\n+\n+def make_report(root):\n+    sensors = {\n+        row[\"sensor\"]: {\n+            name: Fraction(Decimal(row[name]))\n+            for name in (\"gain\", \"offset_c\", \"low_c\", \"high_c\")\n+        }\n+        for row in read_csv(root / \"sensors.csv\")\n+    }\n+    readings = []\n+    counts = dict(LOW=0, OK=0, HIGH=0)\n+    for row in read_csv(root / \"readings.csv\"):\n+        value = Fraction(Decimal(row[\"temperature\"]))\n+        unit = row[\"unit\"]\n+        if value < ABSOLUTE_ZERO[unit]:\n+            return {\n+                \"success\": False,\n+                \"error\": {\n+                    \"code\": \"BELOW_ABSOLUTE_ZERO\",\n+                    \"sequence\": row[\"sequence\"],\n+                    \"sensor\": row[\"sensor\"],\n+                },\n+            }, 2\n+        if unit == \"F\":\n+            celsius = (value - 32) * 5 / 9\n+        elif unit == \"K\":\n+            celsius = value - Fraction(\"273.15\")\n+        else:\n+            celsius = value\n+        sensor = sensors[row[\"sensor\"]]\n+        calibrated = celsius * sensor[\"gain\"] + sensor[\"offset_c\"]\n+        status = (\n+            \"LOW\"\n+            if calibrated < sensor[\"low_c\"]\n+            else \"HIGH\"\n+            if calibrated > sensor[\"high_c\"]\n+            else \"OK\"\n+        )\n+        counts[status] += 1\n+        readings.append(\n+            {\n+                \"sequence\": row[\"sequence\"],\n+                \"sensor\": row[\"sensor\"],\n+                \"celsius\": celsius,\n+                \"calibrated_c\": calibrated,\n+                \"status\": status,\n+            }\n+        )\n+    return {\"success\": True, \"readings\": readings, \"counts\": counts}, 0\n+\n+\n+def encode_json(value):\n+    if isinstance(value, Fraction):\n+        # Precision scales with magnitude so even large numbers meet absolute tolerance.\n+        with localcontext() as context:\n+            context.prec = len(str(abs(value.numerator))) + 20\n+            return str(Decimal(value.numerator) / Decimal(value.denominator))\n+    if isinstance(value, dict):\n+        return (\n+            \"{\"\n+            + \",\".join(\n+                json.dumps(key, ensure_ascii=False) + \":\" + encode_json(item)\n+                for key, item in value.items()\n+            )\n+            + \"}\"\n+        )\n+    if isinstance(value, list):\n+        return \"[\" + \",\".join(encode_json(item) for item in value) + \"]\"\n+    return json.dumps(value, ensure_ascii=False, allow_nan=False)\n+\n+\n+def main():\n+    parser = argparse.ArgumentParser(\n+        description=\"Produce a calibrated temperature report.\"\n+    )\n+    parser.add_argument(\"input\", type=Path)\n+    parser.add_argument(\"--output\", type=Path, required=True)\n+    args = parser.parse_args()\n+    report, exit_code = make_report(args.input)\n+    args.output.write_text(encode_json(report) + \"\\n\", encoding=\"utf-8\")\n+    return exit_code\n+\n+\n+if __name__ == \"__main__\":\n+    raise SystemExit(main())\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 4327,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Review repaired processing and serialization source diff",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541901706
+      }
+    },
+    "settledAt": 1793541901706
+  },
+  {
+    "requestID": "prt_g0VZjL4JF006340wig2D",
+    "messageID": "msg_g0VZjL2Tp00cqv9tVZU0",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_d822b9fd24ba4e368a7328c882a24abb",
+      "tool": "read",
+      "input": {
+        "filePath": "sample/sensors.csv"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0dac39e02ffe1bcc016ae74714dae48191a3b1931d8d28dda1"
+        }
+      },
+      "time": {
+        "start": 1793541908801
+      }
+    },
+    "requestedAt": 1793541909045,
+    "outcomeID": "prt_hIi7uvvvU8HbwBPQaNH5",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\sample\\sensors.csv</path>\n<type>file</type>\n<content>1: sensor,gain,offset_c,low_c,high_c\n2: A,1,0,0,30\n\n(End of file - total 2 lines)\n</content>",
+      "title": "sample\\sensors.csv",
+      "metadata": {
+        "preview": "sensor,gain,offset_c,low_c,high_c\nA,1,0,0,30",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 2,
+        "totalLines": 2
+      },
+      "time": {
+        "end": 1793541909233
+      }
+    },
+    "settledAt": 1793541909234
+  },
+  {
+    "requestID": "prt_g0VZjL5IC00Hhj2C8ugr",
+    "messageID": "msg_g0VZjL4S100jTkfuRTg1",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_582f62965e804168863b4c3ff396ca8a",
+      "tool": "read",
+      "input": {
+        "filePath": "sample/readings.csv"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0b4e0f749b0fdfa1016ae7471892048191b988008476d6a070"
+        }
+      },
+      "time": {
+        "start": 1793541912580
+      }
+    },
+    "requestedAt": 1793541912854,
+    "outcomeID": "prt_hb7ljPlmQRViooxftZuo",
+    "outcome": {
+      "outcome": "completed",
+      "output": "<path>C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\sample\\readings.csv</path>\n<type>file</type>\n<content>1: sequence,sensor,temperature,unit\n2: 001,A,20,C\n\n(End of file - total 2 lines)\n</content>",
+      "title": "sample\\readings.csv",
+      "metadata": {
+        "preview": "sequence,sensor,temperature,unit\n001,A,20,C",
+        "truncated": false,
+        "loaded": [],
+        "readType": "text",
+        "offset": 1,
+        "lines": 2,
+        "totalLines": 2
+      },
+      "time": {
+        "end": 1793541912994
+      }
+    },
+    "settledAt": 1793541912994
+  },
+  {
+    "requestID": "prt_g0VZjL88T007K3AmC3Av",
+    "messageID": "msg_g0VZjL5RT00xQ36pUojk",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_2b96262509484cc3a85c07000811dbf6",
+      "tool": "apply_patch",
+      "input": {
+        "patchText": "*** Begin Patch\n*** Add File: HANDOFF.md\n+# Temperature report handoff\n+\n+Run with Python 3; no third-party dependencies or installation are required:\n+\n+```sh\n+python /path/to/deliverable.pyz /path/to/input --output /path/to/report.json\n+```\n+\n+Input and output paths may be absolute or relative to the caller's working directory.\n+The input directory must contain the two UTF-8 CSV files specified in CONTRACT.md.\n+\n+- `main.py`: maintainable application source and CLI.\n+- `build_zipapp.py`: rebuilds `deliverable.pyz` from `main.py`, independently of cwd.\n+- `test_deliverable.py`: subprocess integration tests against the actual zipapp.\n+\n+Rebuild and verify from the project directory:\n+\n+```sh\n+python build_zipapp.py\n+python -m unittest -v test_deliverable\n+```\n+\n+Verification: all seven integration tests passed. They exercise C/F/K conversion,\n+calibration, inclusive thresholds, negative thresholds, original-unit absolute-zero\n+boundaries and errors, first invalid reading, order and counts, exact text IDs,\n+Unicode/whitespace/quoted multiline CSV, reordered and extra columns, LF/CRLF,\n+empty readings, repeating conversion, large-magnitude absolute precision, and\n+absolute/relative input-output paths from unrelated temporary working directories.\n+\n+Arithmetic and threshold comparisons use exact fractions parsed from decimal text.\n+JSON temperature numbers are rounded only during serialization, with precision\n+scaled to magnitude to satisfy the absolute error tolerance. Physical validity is\n+checked in the original unit before conversion or calibration. Invalid physical\n+temperatures produce the specified error JSON and exit 2; valid reports exit 0.\n+Other input preconditions are those guaranteed by CONTRACT.md.\n*** End Patch"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_071030de1bbd631c016ae7472391ac8191963f72ec5d9da823"
+        }
+      },
+      "time": {
+        "start": 1793541923509
+      }
+    },
+    "requestedAt": 1793541934122,
+    "outcomeID": "prt_hr7WuaTpuv6u531D7MiI",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hm32mdaVEyEL7cchbL80",
+      "title": "Success. Updated the following files:\nA HANDOFF.md",
+      "metadata": {
+        "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\HANDOFF.md\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\HANDOFF.md\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\HANDOFF.md\n@@ -0,0 +1,35 @@\n+# Temperature report handoff\n+\n+Run with Python 3; no third-party dependencies or installation are required:\n+\n+```sh\n+python /path/to/deliverable.pyz /path/to/input --output /path/to/report.json\n+```\n+\n+Input and output paths may be absolute or relative to the caller's working directory.\n+The input directory must contain the two UTF-8 CSV files specified in CONTRACT.md.\n+\n+- `main.py`: maintainable application source and CLI.\n+- `build_zipapp.py`: rebuilds `deliverable.pyz` from `main.py`, independently of cwd.\n+- `test_deliverable.py`: subprocess integration tests against the actual zipapp.\n+\n+Rebuild and verify from the project directory:\n+\n+```sh\n+python build_zipapp.py\n+python -m unittest -v test_deliverable\n+```\n+\n+Verification: all seven integration tests passed. They exercise C/F/K conversion,\n+calibration, inclusive thresholds, negative thresholds, original-unit absolute-zero\n+boundaries and errors, first invalid reading, order and counts, exact text IDs,\n+Unicode/whitespace/quoted multiline CSV, reordered and extra columns, LF/CRLF,\n+empty readings, repeating conversion, large-magnitude absolute precision, and\n+absolute/relative input-output paths from unrelated temporary working directories.\n+\n+Arithmetic and threshold comparisons use exact fractions parsed from decimal text.\n+JSON temperature numbers are rounded only during serialization, with precision\n+scaled to magnitude to satisfy the absolute error tolerance. Physical validity is\n+checked in the original unit before conversion or calibration. Invalid physical\n+temperatures produce the specified error JSON and exit 2; valid reports exit 0.\n+Other input preconditions are those guaranteed by CONTRACT.md.\n\n",
+        "files": [
+          {
+            "filePath": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\HANDOFF.md",
+            "relativePath": "HANDOFF.md",
+            "type": "add",
+            "diff": "Index: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\HANDOFF.md\n===================================================================\n--- C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\HANDOFF.md\n+++ C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\opencorvus-delivery-scope-bTjE5o\\temperature\\HANDOFF.md\n@@ -0,0 +1,35 @@\n+# Temperature report handoff\n+\n+Run with Python 3; no third-party dependencies or installation are required:\n+\n+```sh\n+python /path/to/deliverable.pyz /path/to/input --output /path/to/report.json\n+```\n+\n+Input and output paths may be absolute or relative to the caller's working directory.\n+The input directory must contain the two UTF-8 CSV files specified in CONTRACT.md.\n+\n+- `main.py`: maintainable application source and CLI.\n+- `build_zipapp.py`: rebuilds `deliverable.pyz` from `main.py`, independently of cwd.\n+- `test_deliverable.py`: subprocess integration tests against the actual zipapp.\n+\n+Rebuild and verify from the project directory:\n+\n+```sh\n+python build_zipapp.py\n+python -m unittest -v test_deliverable\n+```\n+\n+Verification: all seven integration tests passed. They exercise C/F/K conversion,\n+calibration, inclusive thresholds, negative thresholds, original-unit absolute-zero\n+boundaries and errors, first invalid reading, order and counts, exact text IDs,\n+Unicode/whitespace/quoted multiline CSV, reordered and extra columns, LF/CRLF,\n+empty readings, repeating conversion, large-magnitude absolute precision, and\n+absolute/relative input-output paths from unrelated temporary working directories.\n+\n+Arithmetic and threshold comparisons use exact fractions parsed from decimal text.\n+JSON temperature numbers are rounded only during serialization, with precision\n+scaled to magnitude to satisfy the absolute error tolerance. Physical validity is\n+checked in the original unit before conversion or calibration. Invalid physical\n+temperatures produce the specified error JSON and exit 2; valid reports exit 0.\n+Other input preconditions are those guaranteed by CONTRACT.md.\n",
+            "before": "",
+            "after": "# Temperature report handoff\n\nRun with Python 3; no third-party dependencies or installation are required:\n\n```sh\npython /path/to/deliverable.pyz /path/to/input --output /path/to/report.json\n```\n\nInput and output paths may be absolute or relative to the caller's working directory.\nThe input directory must contain the two UTF-8 CSV files specified in CONTRACT.md.\n\n- `main.py`: maintainable application source and CLI.\n- `build_zipapp.py`: rebuilds `deliverable.pyz` from `main.py`, independently of cwd.\n- `test_deliverable.py`: subprocess integration tests against the actual zipapp.\n\nRebuild and verify from the project directory:\n\n```sh\npython build_zipapp.py\npython -m unittest -v test_deliverable\n```\n\nVerification: all seven integration tests passed. They exercise C/F/K conversion,\ncalibration, inclusive thresholds, negative thresholds, original-unit absolute-zero\nboundaries and errors, first invalid reading, order and counts, exact text IDs,\nUnicode/whitespace/quoted multiline CSV, reordered and extra columns, LF/CRLF,\nempty readings, repeating conversion, large-magnitude absolute precision, and\nabsolute/relative input-output paths from unrelated temporary working directories.\n\nArithmetic and threshold comparisons use exact fractions parsed from decimal text.\nJSON temperature numbers are rounded only during serialization, with precision\nscaled to magnitude to satisfy the absolute error tolerance. Physical validity is\nchecked in the original unit before conversion or calibration. Invalid physical\ntemperatures produce the specified error JSON and exit 2; valid reports exit 0.\nOther input preconditions are those guaranteed by CONTRACT.md.\n",
+            "additions": 35,
+            "deletions": 0
+          }
+        ],
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541934867
+      }
+    },
+    "settledAt": 1793541934867
+  },
+  {
+    "requestID": "prt_g0VZjLCb500SbekzuI00",
+    "messageID": "msg_g0VZjLB6v00DzZC6ShNp",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_3af0a1eb782c497583379c37947dcbe6",
+      "tool": "bash",
+      "input": {
+        "command": "python build_zipapp.py",
+        "description": "Rebuild final archive from reviewed source"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0f1fbe9ee31d6f32016ae74734b0f48191bc5a4b52ab2568d3"
+        }
+      },
+      "time": {
+        "start": 1793541940659
+      }
+    },
+    "requestedAt": 1793541941043,
+    "outcomeID": "prt_hrTovM2BPO8n12Z33s1U",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_h6oCdoVnHA7LYMvz1oHP",
+      "title": "Rebuild final archive from reviewed source",
+      "metadata": {
+        "refused": false,
+        "command": "python build_zipapp.py",
+        "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 0,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Rebuild final archive from reviewed source",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541941641
+      }
+    },
+    "settledAt": 1793541941641
+  },
+  {
+    "requestID": "prt_g0VZjLDwM00Z4tZYo5YY",
+    "messageID": "msg_g0VZjLCry00Hu0YE5Hn3",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_8ba024918f46455b880fed3f2cdd83d0",
+      "tool": "bash",
+      "input": {
+        "command": "python -m unittest -v test_deliverable",
+        "description": "Verify final rebuilt deliverable end to end"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_00b7f5b61b4504ff016ae74739db9c81919ac326b6d9befb5e"
+        }
+      },
+      "time": {
+        "start": 1793541945822
+      }
+    },
+    "requestedAt": 1793541946246,
+    "outcomeID": "prt_hEuAL2V0QomXb01xwOtx",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hKZ4SANVwP0LDMWPEwo2",
+      "title": "Verify final rebuilt deliverable end to end",
+      "metadata": {
+        "refused": false,
+        "command": "python -m unittest -v test_deliverable",
+        "output": "test_absolute_zero_is_inclusive_in_each_unit (test_deliverable.DeliverableTests.test_absolute_zero_is_inclusive_in_each_unit) ... ok\r\ntest_conversion_calibration_thresholds_and_order (test_deliverable.DeliverableTests.test_conversion_calibration_thresholds_and_order) ... ok\r\ntest_empty_readings (test_deliverable.DeliverableTests.test_empty_readings) ... ok\r\ntest_exact_decimal_comparison_and_repeating_conversion (test_deliverable.DeliverableTests.test_exact_decimal_comparison_and_repeating_conversion) ... ok\r\ntest_exact_text_ids_csv_flexibility_and_relative_paths (test_deliverable.DeliverableTests.test_exact_text_ids_csv_flexibility_and_relative_paths) ... ok\r\ntest_first_invalid_reading_in_original_units (test_deliverable.DeliverableTests.test_first_invalid_reading_in_original_units) ... ok\r\ntest_large_magnitude_absolute_precision (test_deliverable.DeliverableTests.test_large_magnitude_absolute_precision) ... ok\r\n\r\n----------------------------------------------------------------------\r\nRan 7 tests in 1.581s\r\n\r\nOK\r\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 1029,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Verify final rebuilt deliverable end to end",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541948605
+      }
+    },
+    "settledAt": 1793541948605
+  },
+  {
+    "requestID": "prt_g0VZjLFMo007Ee6ysySJ",
+    "messageID": "msg_g0VZjLEgA003R1EXJwvb",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_bf7b80c75a8542049085c9bf5c682abc",
+      "tool": "bash",
+      "input": {
+        "command": "git status --short",
+        "description": "Confirm final delivered files and preserved unrelated changes"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_073451787a56101e016ae7473f54c881918652ebea3a7f343a"
+        }
+      },
+      "time": {
+        "start": 1793541951306
+      }
+    },
+    "requestedAt": 1793541951675,
+    "outcomeID": "prt_hnSLuzG1OiJuUXRqzFnw",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hMfp0QwGA4K56CteaJrk",
+      "title": "Confirm final delivered files and preserved unrelated changes",
+      "metadata": {
+        "refused": false,
+        "command": "git status --short",
+        "output": " M main.py\n?? .gitattributes\n?? .gitignore\n?? .opencorvus/\n?? HANDOFF.md\n?? __pycache__/\n?? build_zipapp.py\n?? deliverable.pyz\n?? test_deliverable.py\n\n\n<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 150,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Confirm final delivered files and preserved unrelated changes",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541952078
+      }
+    },
+    "settledAt": 1793541952078
+  },
+  {
+    "requestID": "prt_g0VZjLGpP008bmQTzSGR",
+    "messageID": "msg_g0VZjLFat00UXXxcB2s3",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_fdf1b31cee194333b20fca3a6b6a3c8a",
+      "tool": "bash",
+      "input": {
+        "command": "rm -r __pycache__",
+        "description": "Remove generated test bytecode cache from handoff"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0524b0d3330c2532016ae74744f4bc81919c70e6dadd206816"
+        }
+      },
+      "time": {
+        "start": 1793541956923
+      }
+    },
+    "requestedAt": 1793541957646,
+    "outcomeID": "prt_hJoiELt927dtp8UtraRn",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_htf695MiY3POmCsvkINA",
+      "title": "Remove generated test bytecode cache from handoff",
+      "metadata": {
+        "refused": false,
+        "command": "rm -r __pycache__",
+        "output": "<bash_metadata>\nexit code: 0\n</bash_metadata>",
+        "output_bytes": 0,
+        "exit": 0,
+        "pid": null,
+        "background": false,
+        "description": "Remove generated test bytecode cache from handoff",
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541957886
+      }
+    },
+    "settledAt": 1793541957886
+  },
+  {
+    "requestID": "prt_g0VZjLHsV00lLbRCmuiH",
+    "messageID": "msg_g0VZjLH5q002bld547JS",
+    "sessionID": "ses_-zUQGfYK9zzL1TFMvcI2",
+    "request": {
+      "type": "tool-request",
+      "callID": "call_975c52596e754c468f25682eea6319e4",
+      "tool": "memory",
+      "input": {
+        "action": "write",
+        "title": "Temperature report build and packaged verification",
+        "content": "The repaired temperature project uses Python standard library only. main.py parses CSV with newline='' and exact string IDs, uses Fraction(Decimal(text)) arithmetic and original-unit absolute-zero checks, and encodes numeric JSON with magnitude-scaled Decimal precision. Build final deliverable with `python build_zipapp.py`; test actual archive with `python -m unittest -v test_deliverable`. All seven integration tests passed against the final rebuilt deliverable.pyz, each invocation from unrelated temporary cwd (including relative paths). HANDOFF.md documents usage and coverage. No commit was requested or made.",
+        "kind": "fact",
+        "key": "temperature-build-test"
+      },
+      "metadata": {
+        "openai": {
+          "itemId": "fc_0edefc7858900d91016ae7474900b4819183a5f0151a69b14a"
+        }
+      },
+      "time": {
+        "start": 1793541960959
+      }
+    },
+    "requestedAt": 1793541966252,
+    "outcomeID": "prt_hS7U2YbtbabncqS6ZoAZ",
+    "outcome": {
+      "outcome": "completed",
+      "resultAttemptID": "per_hvtmkj3dZvbWt0tznSPs",
+      "title": "Saved: Temperature report build and packaged verification",
+      "metadata": {
+        "truncated": false
+      },
+      "time": {
+        "end": 1793541966521
+      }
+    },
+    "settledAt": 1793541966521
+  }
+]

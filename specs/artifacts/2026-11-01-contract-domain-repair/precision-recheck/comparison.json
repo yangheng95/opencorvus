@@ -1,0 +1,1558 @@
+{
+  "R06-final-exact": {
+    "case": "bundle",
+    "passed": true,
+    "results": [
+      {
+        "name": "nested-binary",
+        "source_admissibility": [
+          {
+            "source": "left/a.bin",
+            "target": "delivery/raw/a.bin",
+            "native_path": "left\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "right/a.bin",
+            "target": "other/a.bin",
+            "native_path": "right\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "empty",
+            "target": "empty",
+            "native_path": "empty",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\0",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\0\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\0",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "empty": "",
+            "other/a.bin": "b3RoZXINCg=="
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": 0
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "other/a.bin": "b3RoZXINCg==",
+            "empty": ""
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": 0
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "passed": true
+      },
+      {
+        "name": "unicode-order",
+        "source_admissibility": [
+          {
+            "source": "资料/a,b.txt",
+            "target": "交付/含 空格.txt",
+            "native_path": "资料\\a,b.txt",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "meta",
+            "target": "z/final.txt",
+            "native_path": "meta",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\1",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\1\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\1",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "z/final.txt": "ZW5k",
+            "交付/含 空格.txt": "57K+56GuDQrlrZfnrKY="
+          },
+          "index": {
+            "files": [
+              {
+                "path": "z/final.txt",
+                "bytes": 3
+              },
+              {
+                "path": "交付/含 空格.txt",
+                "bytes": 14
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "交付/含 空格.txt": "57K+56GuDQrlrZfnrKY=",
+            "z/final.txt": "ZW5k"
+          },
+          "index": {
+            "files": [
+              {
+                "path": "z/final.txt",
+                "bytes": 3
+              },
+              {
+                "path": "交付/含 空格.txt",
+                "bytes": 14
+              }
+            ]
+          }
+        },
+        "passed": true
+      },
+      {
+        "name": "reversed-manifest",
+        "source_admissibility": [
+          {
+            "source": "two",
+            "target": "z.txt",
+            "native_path": "two",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "one",
+            "target": "a.txt",
+            "native_path": "one",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\2",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\2\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\2",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "a.txt": "Zmlyc3Q=",
+            "z.txt": "c2Vjb25k"
+          },
+          "index": {
+            "files": [
+              {
+                "path": "a.txt",
+                "bytes": 5
+              },
+              {
+                "path": "z.txt",
+                "bytes": 6
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "z.txt": "c2Vjb25k",
+            "a.txt": "Zmlyc3Q="
+          },
+          "index": {
+            "files": [
+              {
+                "path": "a.txt",
+                "bytes": 5
+              },
+              {
+                "path": "z.txt",
+                "bytes": 6
+              }
+            ]
+          }
+        },
+        "passed": true
+      },
+      {
+        "name": "native-source-representation",
+        "source_admissibility": [
+          {
+            "source": "left\\a.bin",
+            "target": "delivery/raw/a.bin",
+            "native_path": "left\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "right\\a.bin",
+            "target": "other/a.bin",
+            "native_path": "right\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "empty",
+            "target": "empty",
+            "native_path": "empty",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\3",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\3\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-dzd7j5lq\\3",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "empty": "",
+            "other/a.bin": "b3RoZXINCg=="
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": 0
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "other/a.bin": "b3RoZXINCg==",
+            "empty": ""
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": 0
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "passed": true
+      }
+    ]
+  },
+  "wrong-boolean-bytes": {
+    "case": "bundle",
+    "passed": false,
+    "results": [
+      {
+        "name": "nested-binary",
+        "source_admissibility": [
+          {
+            "source": "left/a.bin",
+            "target": "delivery/raw/a.bin",
+            "native_path": "left\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "right/a.bin",
+            "target": "other/a.bin",
+            "native_path": "right\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "empty",
+            "target": "empty",
+            "native_path": "empty",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\0",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\0\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\0",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "other/a.bin": "b3RoZXINCg==",
+            "empty": ""
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": false
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "other/a.bin": "b3RoZXINCg==",
+            "empty": ""
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": 0
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "passed": false
+      },
+      {
+        "name": "unicode-order",
+        "source_admissibility": [
+          {
+            "source": "资料/a,b.txt",
+            "target": "交付/含 空格.txt",
+            "native_path": "资料\\a,b.txt",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "meta",
+            "target": "z/final.txt",
+            "native_path": "meta",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\1",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\1\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\1",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "交付/含 空格.txt": "57K+56GuDQrlrZfnrKY=",
+            "z/final.txt": "ZW5k"
+          },
+          "index": {
+            "files": [
+              {
+                "path": "z/final.txt",
+                "bytes": 3
+              },
+              {
+                "path": "交付/含 空格.txt",
+                "bytes": 14
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "交付/含 空格.txt": "57K+56GuDQrlrZfnrKY=",
+            "z/final.txt": "ZW5k"
+          },
+          "index": {
+            "files": [
+              {
+                "path": "z/final.txt",
+                "bytes": 3
+              },
+              {
+                "path": "交付/含 空格.txt",
+                "bytes": 14
+              }
+            ]
+          }
+        },
+        "passed": true
+      },
+      {
+        "name": "reversed-manifest",
+        "source_admissibility": [
+          {
+            "source": "two",
+            "target": "z.txt",
+            "native_path": "two",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "one",
+            "target": "a.txt",
+            "native_path": "one",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\2",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\2\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\2",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "z.txt": "c2Vjb25k",
+            "a.txt": "Zmlyc3Q="
+          },
+          "index": {
+            "files": [
+              {
+                "path": "a.txt",
+                "bytes": 5
+              },
+              {
+                "path": "z.txt",
+                "bytes": 6
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "z.txt": "c2Vjb25k",
+            "a.txt": "Zmlyc3Q="
+          },
+          "index": {
+            "files": [
+              {
+                "path": "a.txt",
+                "bytes": 5
+              },
+              {
+                "path": "z.txt",
+                "bytes": 6
+              }
+            ]
+          }
+        },
+        "passed": true
+      },
+      {
+        "name": "native-source-representation",
+        "source_admissibility": [
+          {
+            "source": "left\\a.bin",
+            "target": "delivery/raw/a.bin",
+            "native_path": "left\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "right\\a.bin",
+            "target": "other/a.bin",
+            "native_path": "right\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "empty",
+            "target": "empty",
+            "native_path": "empty",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\3",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\3\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-s5iyyl_k\\3",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "other/a.bin": "b3RoZXINCg==",
+            "empty": ""
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": false
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "other/a.bin": "b3RoZXINCg==",
+            "empty": ""
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": 0
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "passed": false
+      }
+    ]
+  },
+  "wrong-success-number": {
+    "case": "stock",
+    "passed": false,
+    "results": [
+      {
+        "name": "success",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\0\\input.csv",
+          "--db",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\0\\inventory.db",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\0\\report.json"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\0",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "database": {
+            "schema": [
+              [
+                "index",
+                "cost_index",
+                "stock",
+                "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+              ],
+              [
+                "index",
+                "sqlite_autoindex_stock_1",
+                "stock",
+                null
+              ],
+              [
+                "table",
+                "sqlite_sequence",
+                "sqlite_sequence",
+                "CREATE TABLE sqlite_sequence(name,seq)"
+              ],
+              [
+                "table",
+                "stock",
+                "stock",
+                "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+              ],
+              [
+                "table",
+                "stock_events",
+                "stock_events",
+                "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+              ],
+              [
+                "table",
+                "user_notes",
+                "user_notes",
+                "CREATE TABLE user_notes(value TEXT)"
+              ],
+              [
+                "trigger",
+                "stock_insert",
+                "stock",
+                "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+              ],
+              [
+                "trigger",
+                "stock_update",
+                "stock",
+                "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+              ]
+            ],
+            "stock": [
+              [
+                "New",
+                6,
+                200
+              ],
+              [
+                "Other",
+                4,
+                50
+              ],
+              [
+                "Widget",
+                9,
+                130
+              ]
+            ],
+            "events": [
+              [
+                "Widget",
+                10,
+                7
+              ],
+              [
+                "New",
+                null,
+                6
+              ],
+              [
+                "Widget",
+                7,
+                9
+              ]
+            ],
+            "notes": [
+              [
+                "preserve me"
+              ]
+            ],
+            "integrity": [
+              [
+                "ok"
+              ]
+            ]
+          },
+          "report": {
+            "success": true,
+            "processed": 3
+          }
+        },
+        "expected": {
+          "database": {
+            "schema": [
+              [
+                "index",
+                "cost_index",
+                "stock",
+                "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+              ],
+              [
+                "index",
+                "sqlite_autoindex_stock_1",
+                "stock",
+                null
+              ],
+              [
+                "table",
+                "sqlite_sequence",
+                "sqlite_sequence",
+                "CREATE TABLE sqlite_sequence(name,seq)"
+              ],
+              [
+                "table",
+                "stock",
+                "stock",
+                "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+              ],
+              [
+                "table",
+                "stock_events",
+                "stock_events",
+                "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+              ],
+              [
+                "table",
+                "user_notes",
+                "user_notes",
+                "CREATE TABLE user_notes(value TEXT)"
+              ],
+              [
+                "trigger",
+                "stock_insert",
+                "stock",
+                "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+              ],
+              [
+                "trigger",
+                "stock_update",
+                "stock",
+                "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+              ]
+            ],
+            "stock": [
+              [
+                "New",
+                6,
+                200
+              ],
+              [
+                "Other",
+                4,
+                50
+              ],
+              [
+                "Widget",
+                9,
+                130
+              ]
+            ],
+            "events": [
+              [
+                "Widget",
+                10,
+                7
+              ],
+              [
+                "New",
+                null,
+                6
+              ],
+              [
+                "Widget",
+                7,
+                9
+              ]
+            ],
+            "notes": [
+              [
+                "preserve me"
+              ]
+            ],
+            "integrity": [
+              [
+                "ok"
+              ]
+            ]
+          },
+          "report": {
+            "success": true,
+            "processed": 3
+          }
+        },
+        "passed": true
+      },
+      {
+        "name": "quoted-reordered",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\1\\input.csv",
+          "--db",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\1\\inventory.db",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\1\\report.json"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\1",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "database": {
+            "schema": [
+              [
+                "index",
+                "cost_index",
+                "stock",
+                "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+              ],
+              [
+                "index",
+                "sqlite_autoindex_stock_1",
+                "stock",
+                null
+              ],
+              [
+                "table",
+                "sqlite_sequence",
+                "sqlite_sequence",
+                "CREATE TABLE sqlite_sequence(name,seq)"
+              ],
+              [
+                "table",
+                "stock",
+                "stock",
+                "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+              ],
+              [
+                "table",
+                "stock_events",
+                "stock_events",
+                "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+              ],
+              [
+                "table",
+                "user_notes",
+                "user_notes",
+                "CREATE TABLE user_notes(value TEXT)"
+              ],
+              [
+                "trigger",
+                "stock_insert",
+                "stock",
+                "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+              ],
+              [
+                "trigger",
+                "stock_update",
+                "stock",
+                "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+              ]
+            ],
+            "stock": [
+              [
+                "A,\"组\"\nZ",
+                9,
+                130
+              ],
+              [
+                "Other",
+                4,
+                50
+              ],
+              [
+                "新,品",
+                6,
+                200
+              ]
+            ],
+            "events": [
+              [
+                "A,\"组\"\nZ",
+                10,
+                7
+              ],
+              [
+                "新,品",
+                null,
+                6
+              ],
+              [
+                "A,\"组\"\nZ",
+                7,
+                9
+              ]
+            ],
+            "notes": [
+              [
+                "preserve me"
+              ]
+            ],
+            "integrity": [
+              [
+                "ok"
+              ]
+            ]
+          },
+          "report": {
+            "success": true,
+            "processed": 3
+          }
+        },
+        "expected": {
+          "database": {
+            "schema": [
+              [
+                "index",
+                "cost_index",
+                "stock",
+                "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+              ],
+              [
+                "index",
+                "sqlite_autoindex_stock_1",
+                "stock",
+                null
+              ],
+              [
+                "table",
+                "sqlite_sequence",
+                "sqlite_sequence",
+                "CREATE TABLE sqlite_sequence(name,seq)"
+              ],
+              [
+                "table",
+                "stock",
+                "stock",
+                "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+              ],
+              [
+                "table",
+                "stock_events",
+                "stock_events",
+                "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+              ],
+              [
+                "table",
+                "user_notes",
+                "user_notes",
+                "CREATE TABLE user_notes(value TEXT)"
+              ],
+              [
+                "trigger",
+                "stock_insert",
+                "stock",
+                "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+              ],
+              [
+                "trigger",
+                "stock_update",
+                "stock",
+                "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+              ]
+            ],
+            "stock": [
+              [
+                "A,\"组\"\nZ",
+                9,
+                130
+              ],
+              [
+                "Other",
+                4,
+                50
+              ],
+              [
+                "新,品",
+                6,
+                200
+              ]
+            ],
+            "events": [
+              [
+                "A,\"组\"\nZ",
+                10,
+                7
+              ],
+              [
+                "新,品",
+                null,
+                6
+              ],
+              [
+                "A,\"组\"\nZ",
+                7,
+                9
+              ]
+            ],
+            "notes": [
+              [
+                "preserve me"
+              ]
+            ],
+            "integrity": [
+              [
+                "ok"
+              ]
+            ]
+          },
+          "report": {
+            "success": true,
+            "processed": 3
+          }
+        },
+        "passed": true
+      },
+      {
+        "name": "atomic-error",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\2\\input.csv",
+          "--db",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\2\\inventory.db",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\2\\report.json"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-1h_1c59l\\2",
+        "exit": 2,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "database": {
+            "schema": [
+              [
+                "index",
+                "cost_index",
+                "stock",
+                "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+              ],
+              [
+                "index",
+                "sqlite_autoindex_stock_1",
+                "stock",
+                null
+              ],
+              [
+                "table",
+                "sqlite_sequence",
+                "sqlite_sequence",
+                "CREATE TABLE sqlite_sequence(name,seq)"
+              ],
+              [
+                "table",
+                "stock",
+                "stock",
+                "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+              ],
+              [
+                "table",
+                "stock_events",
+                "stock_events",
+                "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+              ],
+              [
+                "table",
+                "user_notes",
+                "user_notes",
+                "CREATE TABLE user_notes(value TEXT)"
+              ],
+              [
+                "trigger",
+                "stock_insert",
+                "stock",
+                "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+              ],
+              [
+                "trigger",
+                "stock_update",
+                "stock",
+                "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+              ]
+            ],
+            "stock": [
+              [
+                "A,\"组\"\nZ",
+                10,
+                100
+              ],
+              [
+                "Other",
+                4,
+                50
+              ]
+            ],
+            "events": [],
+            "notes": [
+              [
+                "preserve me"
+              ]
+            ],
+            "integrity": [
+              [
+                "ok"
+              ]
+            ]
+          },
+          "report": {
+            "success": 0,
+            "error": {
+              "code": "INSUFFICIENT_STOCK",
+              "record": 3,
+              "item": "A,\"组\"\nZ"
+            }
+          }
+        },
+        "expected": {
+          "database": {
+            "schema": [
+              [
+                "index",
+                "cost_index",
+                "stock",
+                "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+              ],
+              [
+                "index",
+                "sqlite_autoindex_stock_1",
+                "stock",
+                null
+              ],
+              [
+                "table",
+                "sqlite_sequence",
+                "sqlite_sequence",
+                "CREATE TABLE sqlite_sequence(name,seq)"
+              ],
+              [
+                "table",
+                "stock",
+                "stock",
+                "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+              ],
+              [
+                "table",
+                "stock_events",
+                "stock_events",
+                "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+              ],
+              [
+                "table",
+                "user_notes",
+                "user_notes",
+                "CREATE TABLE user_notes(value TEXT)"
+              ],
+              [
+                "trigger",
+                "stock_insert",
+                "stock",
+                "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+              ],
+              [
+                "trigger",
+                "stock_update",
+                "stock",
+                "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+              ]
+            ],
+            "stock": [
+              [
+                "A,\"组\"\nZ",
+                10,
+                100
+              ],
+              [
+                "Other",
+                4,
+                50
+              ]
+            ],
+            "events": [],
+            "notes": [
+              [
+                "preserve me"
+              ]
+            ],
+            "integrity": [
+              [
+                "ok"
+              ]
+            ]
+          },
+          "report": {
+            "success": false,
+            "error": {
+              "code": "INSUFFICIENT_STOCK",
+              "record": 3,
+              "item": "A,\"组\"\nZ"
+            }
+          }
+        },
+        "passed": false
+      }
+    ]
+  },
+  "wrong-fractional-bytes": {
+    "case": "bundle",
+    "passed": false,
+    "results": [
+      {
+        "name": "nested-binary",
+        "source_admissibility": [
+          {
+            "source": "left/a.bin",
+            "target": "delivery/raw/a.bin",
+            "native_path": "left\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "right/a.bin",
+            "target": "other/a.bin",
+            "native_path": "right\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "empty",
+            "target": "empty",
+            "native_path": "empty",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\0",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\0\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\0",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "other/a.bin": "b3RoZXINCg==",
+            "empty": ""
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5.000000001
+              },
+              {
+                "path": "empty",
+                "bytes": 1e-09
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7.000000001
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "other/a.bin": "b3RoZXINCg==",
+            "empty": ""
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": 0
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "passed": false
+      },
+      {
+        "name": "unicode-order",
+        "source_admissibility": [
+          {
+            "source": "资料/a,b.txt",
+            "target": "交付/含 空格.txt",
+            "native_path": "资料\\a,b.txt",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "meta",
+            "target": "z/final.txt",
+            "native_path": "meta",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\1",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\1\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\1",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "交付/含 空格.txt": "57K+56GuDQrlrZfnrKY=",
+            "z/final.txt": "ZW5k"
+          },
+          "index": {
+            "files": [
+              {
+                "path": "z/final.txt",
+                "bytes": 3.000000001
+              },
+              {
+                "path": "交付/含 空格.txt",
+                "bytes": 14.000000001
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "交付/含 空格.txt": "57K+56GuDQrlrZfnrKY=",
+            "z/final.txt": "ZW5k"
+          },
+          "index": {
+            "files": [
+              {
+                "path": "z/final.txt",
+                "bytes": 3
+              },
+              {
+                "path": "交付/含 空格.txt",
+                "bytes": 14
+              }
+            ]
+          }
+        },
+        "passed": false
+      },
+      {
+        "name": "reversed-manifest",
+        "source_admissibility": [
+          {
+            "source": "two",
+            "target": "z.txt",
+            "native_path": "two",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "one",
+            "target": "a.txt",
+            "native_path": "one",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\2",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\2\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\2",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "z.txt": "c2Vjb25k",
+            "a.txt": "Zmlyc3Q="
+          },
+          "index": {
+            "files": [
+              {
+                "path": "a.txt",
+                "bytes": 5.000000001
+              },
+              {
+                "path": "z.txt",
+                "bytes": 6.000000001
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "z.txt": "c2Vjb25k",
+            "a.txt": "Zmlyc3Q="
+          },
+          "index": {
+            "files": [
+              {
+                "path": "a.txt",
+                "bytes": 5
+              },
+              {
+                "path": "z.txt",
+                "bytes": 6
+              }
+            ]
+          }
+        },
+        "passed": false
+      },
+      {
+        "name": "native-source-representation",
+        "source_admissibility": [
+          {
+            "source": "left\\a.bin",
+            "target": "delivery/raw/a.bin",
+            "native_path": "left\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "right\\a.bin",
+            "target": "other/a.bin",
+            "native_path": "right\\a.bin",
+            "physical_bytes_match": true
+          },
+          {
+            "source": "empty",
+            "target": "empty",
+            "native_path": "empty",
+            "physical_bytes_match": true
+          }
+        ],
+        "contract_basis": "source: native filesystem Path; target: original forward-slash ZIP contract; contents: independently supplied bytes",
+        "argv": [
+          "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-I",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\delivered.pyz",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\3",
+          "--output",
+          "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\3\\result.zip"
+        ],
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-e5ox504c\\3",
+        "exit": 0,
+        "stdout": "",
+        "stderr": "",
+        "actual": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "other/a.bin": "b3RoZXINCg==",
+            "empty": ""
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5.000000001
+              },
+              {
+                "path": "empty",
+                "bytes": 1e-09
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7.000000001
+              }
+            ]
+          }
+        },
+        "expected": {
+          "payload": {
+            "delivery/raw/a.bin": "AP8NCgA=",
+            "other/a.bin": "b3RoZXINCg==",
+            "empty": ""
+          },
+          "index": {
+            "files": [
+              {
+                "path": "delivery/raw/a.bin",
+                "bytes": 5
+              },
+              {
+                "path": "empty",
+                "bytes": 0
+              },
+              {
+                "path": "other/a.bin",
+                "bytes": 7
+              }
+            ]
+          }
+        },
+        "passed": false
+      }
+    ]
+  }
+}

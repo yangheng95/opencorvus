@@ -1,0 +1,75 @@
+{
+  "schema": [
+    [
+      "index",
+      "cost_index",
+      "stock",
+      "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+    ],
+    [
+      "index",
+      "sqlite_autoindex_stock_1",
+      "stock",
+      null
+    ],
+    [
+      "table",
+      "sqlite_sequence",
+      "sqlite_sequence",
+      "CREATE TABLE sqlite_sequence(name,seq)"
+    ],
+    [
+      "table",
+      "stock",
+      "stock",
+      "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+    ],
+    [
+      "table",
+      "stock_events",
+      "stock_events",
+      "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+    ],
+    [
+      "table",
+      "user_notes",
+      "user_notes",
+      "CREATE TABLE user_notes(value TEXT)"
+    ],
+    [
+      "trigger",
+      "stock_insert",
+      "stock",
+      "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+    ],
+    [
+      "trigger",
+      "stock_update",
+      "stock",
+      "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+    ]
+  ],
+  "stock": [
+    [
+      "Other",
+      4,
+      50
+    ],
+    [
+      "Widget",
+      10,
+      100
+    ]
+  ],
+  "events": [],
+  "notes": [
+    [
+      "preserve me"
+    ]
+  ],
+  "integrity": [
+    [
+      "ok"
+    ]
+  ]
+}

@@ -97,4 +97,15 @@ describe("shared execution verification contract", () => {
     ])
       expect(VERIFICATION_DISCIPLINE).toContain(clause)
   })
+
+  test("derives allowed input domains from each interface role", () => {
+    for (const clause of [
+      "Treat input admissibility as a correctness claim.",
+      "identify each value's role and the contract authority at each boundary",
+      "share a validator only when those contracts agree",
+      "Independently establish why a value is permitted or rejected",
+      "contract-permitted distinctions between roles and equivalent representations through the final consumer",
+    ])
+      expect(VERIFICATION_DISCIPLINE).toContain(clause)
+  })
 })

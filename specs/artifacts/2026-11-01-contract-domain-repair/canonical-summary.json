@@ -1,0 +1,40 @@
+[
+  {
+    "run": "R06",
+    "sessions": [
+      "ses_-zUQGitBUzzJO1w8lUNd",
+      "ses_-zUQGisMazzwng0ulD5M",
+      "ses_hXoQ6IKDLogbefoz95sv"
+    ],
+    "requests": 53,
+    "outcomes": 53,
+    "states": {
+      "completed": 52,
+      "failed": 1
+    }
+  },
+  {
+    "run": "R07",
+    "sessions": [
+      "ses_-zUQGgcV6zz3a8uXX0gY",
+      "ses_-zUQGgbj5zzqQM6ox5lT"
+    ],
+    "requests": 20,
+    "outcomes": 20,
+    "states": {
+      "completed": 19,
+      "failed": 1
+    }
+  },
+  {
+    "run": "R08",
+    "sessions": [
+      "ses_-zUQGfYK9zzL1TFMvcI2"
+    ],
+    "requests": 21,
+    "outcomes": 21,
+    "states": {
+      "completed": 21
+    }
+  }
+]

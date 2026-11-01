@@ -1,0 +1,117 @@
+{
+  "bad_bundle_before": {
+    "passed": true,
+    "results": [
+      {
+        "name": "nested-binary",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "unicode-order",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "reversed-manifest",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "native-source-representation",
+        "exit": 0,
+        "passed": true
+      }
+    ]
+  },
+  "bad_stock_before": {
+    "passed": true,
+    "results": [
+      {
+        "name": "success",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "quoted-reordered",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "atomic-error",
+        "exit": 2,
+        "passed": true
+      }
+    ]
+  },
+  "bad_bundle_after": {
+    "passed": false,
+    "results": [
+      {
+        "name": "nested-binary",
+        "exit": 0,
+        "passed": false
+      },
+      {
+        "name": "unicode-order",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "reversed-manifest",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "native-source-representation",
+        "exit": 0,
+        "passed": false
+      }
+    ]
+  },
+  "bad_stock_after": {
+    "passed": false,
+    "results": [
+      {
+        "name": "success",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "quoted-reordered",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "atomic-error",
+        "exit": 2,
+        "passed": false
+      }
+    ]
+  },
+  "R06_final_recheck": {
+    "passed": true,
+    "results": [
+      {
+        "name": "nested-binary",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "unicode-order",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "reversed-manifest",
+        "exit": 0,
+        "passed": true
+      },
+      {
+        "name": "native-source-representation",
+        "exit": 0,
+        "passed": true
+      }
+    ]
+  }
+}

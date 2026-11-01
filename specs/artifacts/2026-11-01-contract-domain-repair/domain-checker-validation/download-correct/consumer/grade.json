@@ -1,0 +1,202 @@
+{
+  "case": "download",
+  "passed": true,
+  "scope": "registered contract-derived cases only; no universal support certification",
+  "results": [
+    {
+      "name": "literal-reserved-identifiers",
+      "expected": {
+        "receipt": {
+          "files": [
+            {
+              "document_id": "%2F",
+              "output": "literal-percent.bin",
+              "url": "http://127.0.0.1:62897/api/v1/documents/%252F",
+              "bytes": 7
+            },
+            {
+              "document_id": "part/one",
+              "output": "nested/a.bin",
+              "url": "http://127.0.0.1:62897/api/v1/documents/part%2Fone",
+              "bytes": 5
+            }
+          ]
+        },
+        "payloads": {
+          "nested/a.bin": "AP8NCgA=",
+          "literal-percent.bin": "bGl0ZXJhbA=="
+        }
+      },
+      "contract_basis": "business ID is literal data; independent fixed UTF-8 URL wire paths; output uses native filesystem Path",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\0\\jobs.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\0\\downloads"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\0",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "receipt": {
+          "files": [
+            {
+              "document_id": "%2F",
+              "output": "literal-percent.bin",
+              "url": "http://127.0.0.1:62897/api/v1/documents/%252F",
+              "bytes": 7
+            },
+            {
+              "document_id": "part/one",
+              "output": "nested/a.bin",
+              "url": "http://127.0.0.1:62897/api/v1/documents/part%2Fone",
+              "bytes": 5
+            }
+          ]
+        },
+        "payloads": {
+          "nested/a.bin": "AP8NCgA=",
+          "literal-percent.bin": "bGl0ZXJhbA=="
+        }
+      },
+      "passed": true,
+      "http_requests": [
+        {
+          "path": "/api/v1/documents/part%2Fone",
+          "status": 200
+        },
+        {
+          "path": "/api/v1/documents/%252F",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "unicode-space-query-fragment",
+      "expected": {
+        "receipt": {
+          "files": [
+            {
+              "document_id": "A B+%?",
+              "output": "files/a b.bin",
+              "url": "http://127.0.0.1:62900/api/v1/documents/A%20B%2B%25%3F",
+              "bytes": 0
+            },
+            {
+              "document_id": "文#页",
+              "output": "文档/内容.bin",
+              "url": "http://127.0.0.1:62900/api/v1/documents/%E6%96%87%23%E9%A1%B5",
+              "bytes": 8
+            }
+          ]
+        },
+        "payloads": {
+          "files/a b.bin": "",
+          "文档/内容.bin": "5L2g5aW9DQo="
+        }
+      },
+      "contract_basis": "business ID is literal data; independent fixed UTF-8 URL wire paths; output uses native filesystem Path",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\1\\jobs.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\1\\downloads"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\1",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "receipt": {
+          "files": [
+            {
+              "document_id": "A B+%?",
+              "output": "files/a b.bin",
+              "url": "http://127.0.0.1:62900/api/v1/documents/A%20B%2B%25%3F",
+              "bytes": 0
+            },
+            {
+              "document_id": "文#页",
+              "output": "文档/内容.bin",
+              "url": "http://127.0.0.1:62900/api/v1/documents/%E6%96%87%23%E9%A1%B5",
+              "bytes": 8
+            }
+          ]
+        },
+        "payloads": {
+          "files/a b.bin": "",
+          "文档/内容.bin": "5L2g5aW9DQo="
+        }
+      },
+      "passed": true,
+      "http_requests": [
+        {
+          "path": "/api/v1/documents/A%20B%2B%25%3F",
+          "status": 200
+        },
+        {
+          "path": "/api/v1/documents/%E6%96%87%23%E9%A1%B5",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "native-output-representation",
+      "expected": {
+        "receipt": {
+          "files": [
+            {
+              "document_id": "plain",
+              "output": "本机\\data.bin",
+              "url": "http://127.0.0.1:62906/api/v1/documents/plain",
+              "bytes": 5
+            }
+          ]
+        },
+        "payloads": {
+          "本机\\data.bin": "AAECA/8="
+        }
+      },
+      "contract_basis": "business ID is literal data; independent fixed UTF-8 URL wire paths; output uses native filesystem Path",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\2\\jobs.json",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\2\\downloads"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-domain-consumer-3zvh7v4p\\2",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "receipt": {
+          "files": [
+            {
+              "document_id": "plain",
+              "output": "本机\\data.bin",
+              "url": "http://127.0.0.1:62906/api/v1/documents/plain",
+              "bytes": 5
+            }
+          ]
+        },
+        "payloads": {
+          "本机\\data.bin": "AAECA/8="
+        }
+      },
+      "passed": true,
+      "http_requests": [
+        {
+          "path": "/api/v1/documents/plain",
+          "status": 200
+        }
+      ]
+    }
+  ]
+}

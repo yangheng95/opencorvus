@@ -1,0 +1,638 @@
+{
+  "case": "stock",
+  "passed": true,
+  "results": [
+    {
+      "name": "success",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\0\\input.csv",
+        "--db",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\0\\inventory.db",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\0\\report.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\0",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "database": {
+          "schema": [
+            [
+              "index",
+              "cost_index",
+              "stock",
+              "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+            ],
+            [
+              "index",
+              "sqlite_autoindex_stock_1",
+              "stock",
+              null
+            ],
+            [
+              "table",
+              "sqlite_sequence",
+              "sqlite_sequence",
+              "CREATE TABLE sqlite_sequence(name,seq)"
+            ],
+            [
+              "table",
+              "stock",
+              "stock",
+              "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "stock_events",
+              "stock_events",
+              "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+            ],
+            [
+              "table",
+              "user_notes",
+              "user_notes",
+              "CREATE TABLE user_notes(value TEXT)"
+            ],
+            [
+              "trigger",
+              "stock_insert",
+              "stock",
+              "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+            ],
+            [
+              "trigger",
+              "stock_update",
+              "stock",
+              "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+            ]
+          ],
+          "stock": [
+            [
+              "New",
+              6,
+              200
+            ],
+            [
+              "Other",
+              4,
+              50
+            ],
+            [
+              "Widget",
+              9,
+              130
+            ]
+          ],
+          "events": [
+            [
+              "Widget",
+              10,
+              7
+            ],
+            [
+              "New",
+              null,
+              6
+            ],
+            [
+              "Widget",
+              7,
+              9
+            ]
+          ],
+          "notes": [
+            [
+              "preserve me"
+            ]
+          ],
+          "integrity": [
+            [
+              "ok"
+            ]
+          ]
+        },
+        "report": {
+          "success": true,
+          "processed": 3
+        }
+      },
+      "expected": {
+        "database": {
+          "schema": [
+            [
+              "index",
+              "cost_index",
+              "stock",
+              "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+            ],
+            [
+              "index",
+              "sqlite_autoindex_stock_1",
+              "stock",
+              null
+            ],
+            [
+              "table",
+              "sqlite_sequence",
+              "sqlite_sequence",
+              "CREATE TABLE sqlite_sequence(name,seq)"
+            ],
+            [
+              "table",
+              "stock",
+              "stock",
+              "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "stock_events",
+              "stock_events",
+              "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+            ],
+            [
+              "table",
+              "user_notes",
+              "user_notes",
+              "CREATE TABLE user_notes(value TEXT)"
+            ],
+            [
+              "trigger",
+              "stock_insert",
+              "stock",
+              "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+            ],
+            [
+              "trigger",
+              "stock_update",
+              "stock",
+              "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+            ]
+          ],
+          "stock": [
+            [
+              "New",
+              6,
+              200
+            ],
+            [
+              "Other",
+              4,
+              50
+            ],
+            [
+              "Widget",
+              9,
+              130
+            ]
+          ],
+          "events": [
+            [
+              "Widget",
+              10,
+              7
+            ],
+            [
+              "New",
+              null,
+              6
+            ],
+            [
+              "Widget",
+              7,
+              9
+            ]
+          ],
+          "notes": [
+            [
+              "preserve me"
+            ]
+          ],
+          "integrity": [
+            [
+              "ok"
+            ]
+          ]
+        },
+        "report": {
+          "success": true,
+          "processed": 3
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "quoted-reordered",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\1\\input.csv",
+        "--db",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\1\\inventory.db",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\1\\report.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\1",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "database": {
+          "schema": [
+            [
+              "index",
+              "cost_index",
+              "stock",
+              "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+            ],
+            [
+              "index",
+              "sqlite_autoindex_stock_1",
+              "stock",
+              null
+            ],
+            [
+              "table",
+              "sqlite_sequence",
+              "sqlite_sequence",
+              "CREATE TABLE sqlite_sequence(name,seq)"
+            ],
+            [
+              "table",
+              "stock",
+              "stock",
+              "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "stock_events",
+              "stock_events",
+              "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+            ],
+            [
+              "table",
+              "user_notes",
+              "user_notes",
+              "CREATE TABLE user_notes(value TEXT)"
+            ],
+            [
+              "trigger",
+              "stock_insert",
+              "stock",
+              "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+            ],
+            [
+              "trigger",
+              "stock_update",
+              "stock",
+              "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+            ]
+          ],
+          "stock": [
+            [
+              "A,\"组\"\nZ",
+              9,
+              130
+            ],
+            [
+              "Other",
+              4,
+              50
+            ],
+            [
+              "新,品",
+              6,
+              200
+            ]
+          ],
+          "events": [
+            [
+              "A,\"组\"\nZ",
+              10,
+              7
+            ],
+            [
+              "新,品",
+              null,
+              6
+            ],
+            [
+              "A,\"组\"\nZ",
+              7,
+              9
+            ]
+          ],
+          "notes": [
+            [
+              "preserve me"
+            ]
+          ],
+          "integrity": [
+            [
+              "ok"
+            ]
+          ]
+        },
+        "report": {
+          "success": true,
+          "processed": 3
+        }
+      },
+      "expected": {
+        "database": {
+          "schema": [
+            [
+              "index",
+              "cost_index",
+              "stock",
+              "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+            ],
+            [
+              "index",
+              "sqlite_autoindex_stock_1",
+              "stock",
+              null
+            ],
+            [
+              "table",
+              "sqlite_sequence",
+              "sqlite_sequence",
+              "CREATE TABLE sqlite_sequence(name,seq)"
+            ],
+            [
+              "table",
+              "stock",
+              "stock",
+              "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "stock_events",
+              "stock_events",
+              "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+            ],
+            [
+              "table",
+              "user_notes",
+              "user_notes",
+              "CREATE TABLE user_notes(value TEXT)"
+            ],
+            [
+              "trigger",
+              "stock_insert",
+              "stock",
+              "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+            ],
+            [
+              "trigger",
+              "stock_update",
+              "stock",
+              "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+            ]
+          ],
+          "stock": [
+            [
+              "A,\"组\"\nZ",
+              9,
+              130
+            ],
+            [
+              "Other",
+              4,
+              50
+            ],
+            [
+              "新,品",
+              6,
+              200
+            ]
+          ],
+          "events": [
+            [
+              "A,\"组\"\nZ",
+              10,
+              7
+            ],
+            [
+              "新,品",
+              null,
+              6
+            ],
+            [
+              "A,\"组\"\nZ",
+              7,
+              9
+            ]
+          ],
+          "notes": [
+            [
+              "preserve me"
+            ]
+          ],
+          "integrity": [
+            [
+              "ok"
+            ]
+          ]
+        },
+        "report": {
+          "success": true,
+          "processed": 3
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "atomic-error",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\2\\input.csv",
+        "--db",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\2\\inventory.db",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\2\\report.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\oc-workflow-consumer-tls101xx\\2",
+      "exit": 2,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "database": {
+          "schema": [
+            [
+              "index",
+              "cost_index",
+              "stock",
+              "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+            ],
+            [
+              "index",
+              "sqlite_autoindex_stock_1",
+              "stock",
+              null
+            ],
+            [
+              "table",
+              "sqlite_sequence",
+              "sqlite_sequence",
+              "CREATE TABLE sqlite_sequence(name,seq)"
+            ],
+            [
+              "table",
+              "stock",
+              "stock",
+              "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "stock_events",
+              "stock_events",
+              "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+            ],
+            [
+              "table",
+              "user_notes",
+              "user_notes",
+              "CREATE TABLE user_notes(value TEXT)"
+            ],
+            [
+              "trigger",
+              "stock_insert",
+              "stock",
+              "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+            ],
+            [
+              "trigger",
+              "stock_update",
+              "stock",
+              "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+            ]
+          ],
+          "stock": [
+            [
+              "A,\"组\"\nZ",
+              10,
+              100
+            ],
+            [
+              "Other",
+              4,
+              50
+            ]
+          ],
+          "events": [],
+          "notes": [
+            [
+              "preserve me"
+            ]
+          ],
+          "integrity": [
+            [
+              "ok"
+            ]
+          ]
+        },
+        "report": {
+          "success": 0,
+          "error": {
+            "code": "INSUFFICIENT_STOCK",
+            "record": 3,
+            "item": "A,\"组\"\nZ"
+          }
+        }
+      },
+      "expected": {
+        "database": {
+          "schema": [
+            [
+              "index",
+              "cost_index",
+              "stock",
+              "CREATE INDEX cost_index ON stock(unit_cost_cents)"
+            ],
+            [
+              "index",
+              "sqlite_autoindex_stock_1",
+              "stock",
+              null
+            ],
+            [
+              "table",
+              "sqlite_sequence",
+              "sqlite_sequence",
+              "CREATE TABLE sqlite_sequence(name,seq)"
+            ],
+            [
+              "table",
+              "stock",
+              "stock",
+              "CREATE TABLE stock(item TEXT PRIMARY KEY,quantity INTEGER NOT NULL CHECK(quantity>=0),unit_cost_cents INTEGER NOT NULL)"
+            ],
+            [
+              "table",
+              "stock_events",
+              "stock_events",
+              "CREATE TABLE stock_events(seq INTEGER PRIMARY KEY AUTOINCREMENT,item TEXT,before_quantity INTEGER,after_quantity INTEGER)"
+            ],
+            [
+              "table",
+              "user_notes",
+              "user_notes",
+              "CREATE TABLE user_notes(value TEXT)"
+            ],
+            [
+              "trigger",
+              "stock_insert",
+              "stock",
+              "CREATE TRIGGER stock_insert AFTER INSERT ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,NULL,new.quantity);END"
+            ],
+            [
+              "trigger",
+              "stock_update",
+              "stock",
+              "CREATE TRIGGER stock_update AFTER UPDATE ON stock BEGIN INSERT INTO stock_events(item,before_quantity,after_quantity) VALUES(new.item,old.quantity,new.quantity);END"
+            ]
+          ],
+          "stock": [
+            [
+              "A,\"组\"\nZ",
+              10,
+              100
+            ],
+            [
+              "Other",
+              4,
+              50
+            ]
+          ],
+          "events": [],
+          "notes": [
+            [
+              "preserve me"
+            ]
+          ],
+          "integrity": [
+            [
+              "ok"
+            ]
+          ]
+        },
+        "report": {
+          "success": false,
+          "error": {
+            "code": "INSUFFICIENT_STOCK",
+            "record": 3,
+            "item": "A,\"组\"\nZ"
+          }
+        }
+      },
+      "passed": true
+    }
+  ]
+}

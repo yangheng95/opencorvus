@@ -1,0 +1,277 @@
+{
+  "case": "temperature",
+  "passed": true,
+  "scope": "registered contract-derived cases only; no universal support certification",
+  "results": [
+    {
+      "name": "same-physical-temperature",
+      "expected": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "001",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          },
+          {
+            "sequence": "002",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          },
+          {
+            "sequence": "003",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 0,
+          "OK": 3,
+          "HIGH": 0
+        }
+      },
+      "contract_basis": "explicit original-unit bounds and Celsius conversion/calibration/threshold facts, independent decimal results",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\0\\inputs",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\0\\report.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\0",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "001",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          },
+          {
+            "sequence": "002",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          },
+          {
+            "sequence": "003",
+            "sensor": "F",
+            "celsius": -40,
+            "calibrated_c": -40,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 0,
+          "OK": 3,
+          "HIGH": 0
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "calibration-and-threshold-stages",
+      "expected": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "01",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 100,
+            "calibrated_c": 40,
+            "status": "HIGH"
+          },
+          {
+            "sequence": "02",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 0,
+            "calibrated_c": -10,
+            "status": "LOW"
+          },
+          {
+            "sequence": "03",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 20,
+            "calibrated_c": 0,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 1,
+          "OK": 1,
+          "HIGH": 1
+        }
+      },
+      "contract_basis": "explicit original-unit bounds and Celsius conversion/calibration/threshold facts, independent decimal results",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\1\\inputs",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\1\\report.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\1",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "01",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 100,
+            "calibrated_c": 40,
+            "status": "HIGH"
+          },
+          {
+            "sequence": "02",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 0,
+            "calibrated_c": -10,
+            "status": "LOW"
+          },
+          {
+            "sequence": "03",
+            "sensor": " 组,\"C\"\n",
+            "celsius": 20,
+            "calibrated_c": 0,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 1,
+          "OK": 1,
+          "HIGH": 1
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "absolute-zero-in-original-units",
+      "expected": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "a",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          },
+          {
+            "sequence": "b",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          },
+          {
+            "sequence": "c",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 0,
+          "OK": 3,
+          "HIGH": 0
+        }
+      },
+      "contract_basis": "explicit original-unit bounds and Celsius conversion/calibration/threshold facts, independent decimal results",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\2\\inputs",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\2\\report.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\2",
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "success": true,
+        "readings": [
+          {
+            "sequence": "a",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          },
+          {
+            "sequence": "b",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          },
+          {
+            "sequence": "c",
+            "sensor": "edge",
+            "celsius": -273.15,
+            "calibrated_c": -273.15,
+            "status": "OK"
+          }
+        ],
+        "counts": {
+          "LOW": 0,
+          "OK": 3,
+          "HIGH": 0
+        }
+      },
+      "passed": true
+    },
+    {
+      "name": "below-absolute-zero-error",
+      "expected": {
+        "success": false,
+        "error": {
+          "code": "BELOW_ABSOLUTE_ZERO",
+          "sequence": "bad",
+          "sensor": "edge"
+        }
+      },
+      "contract_basis": "explicit original-unit bounds and Celsius conversion/calibration/threshold facts, independent decimal results",
+      "argv": [
+        "C:\\Users\\hengu\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+        "-I",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\delivered.pyz",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\3\\inputs",
+        "--output",
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\3\\report.json"
+      ],
+      "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-XLnNJr\\runner-9312-MhKylz\\runtime-root\\tmp\\oc-domain-consumer-qrkkuiad\\3",
+      "exit": 2,
+      "stdout": "",
+      "stderr": "",
+      "actual": {
+        "success": false,
+        "error": {
+          "code": "BELOW_ABSOLUTE_ZERO",
+          "sequence": "bad",
+          "sensor": "edge"
+        }
+      },
+      "passed": true
+    }
+  ]
+}

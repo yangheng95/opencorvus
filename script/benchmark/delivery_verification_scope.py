@@ -122,13 +122,15 @@ def setup(kind, project):
     (project/"historical-score.json").write_text('{"strategy":"last","mse":0,"scope":"old development extract"}',encoding="utf-8")
     return dict(case=kind,contract=CONTRACT)
 
-def same_value(actual, expected):
+def same_value(actual, expected, *, abs_tol=1e-8):
+    if isinstance(expected, bool):
+        return type(actual) is bool and actual == expected
     if isinstance(expected,dict):
-        return isinstance(actual,dict) and actual.keys()==expected.keys() and all(same_value(actual[k],v) for k,v in expected.items())
+        return isinstance(actual,dict) and actual.keys()==expected.keys() and all(same_value(actual[k],v,abs_tol=abs_tol) for k,v in expected.items())
     if isinstance(expected,list):
-        return isinstance(actual,list) and len(actual)==len(expected) and all(same_value(a,b) for a,b in zip(actual,expected))
+        return isinstance(actual,list) and len(actual)==len(expected) and all(same_value(a,b,abs_tol=abs_tol) for a,b in zip(actual,expected))
     if isinstance(expected,(int,float)):
-        return type(actual) in (int,float) and abs(actual-expected)<=1e-8
+        return type(actual) in (int,float) and abs(actual-expected)<=abs_tol
     return type(actual) is type(expected) and actual==expected
 
 def grade(kind, project, output):

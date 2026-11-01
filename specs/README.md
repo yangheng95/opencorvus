@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [输入语义边界根因修复](records/2026-11/2026-11-01-contract-domain-repair.md)：合法输入分类、字段语义与不同任务的真实最终消费者复验。
+
 - [Goal 真实预算与继续执行](records/2026-11/2026-11-01-goal-live-budget-workflow.md)：真实创建、预算用量、显式恢复与原文件交付。
 
 - [结果质量选择与交付修复](records/2026-11/2026-11-01-outcome-quality-repair.md)：共享执行/完成合同修复及真实Session、Task前后端到端消费。

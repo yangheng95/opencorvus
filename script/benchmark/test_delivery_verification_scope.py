@@ -11,6 +11,8 @@ class DeliveryVerificationScopeTest(unittest.TestCase):
         self.assertEqual(cases()[0]["expected"]["plan"][0]["order"],9)
         self.assertEqual(cases()[3]["expected"]["validation_mse"],dict(last=3250,open=1000,weekday=0))
         self.assertEqual(same_value({"x":500/7},{"x":71.42857142857143}),True)
+        self.assertEqual(same_value({"success":True,"count":0},{"success":True,"count":0}),True)
+        self.assertEqual(same_value({"success":False},{"success":False}),True)
 
     def test_actual_packaged_correct_selection_error_and_plan_error(self):
         # Fixed raw-input lookup validates the consumer, not a reusable forecast solution.

@@ -65,3 +65,8 @@ specs/artifacts/2026-11-01-delivery-verification-scope/** -text whitespace=blank
 
 # Keep actual multi-task input serialization, native receipts and source projections intact.
 specs/artifacts/2026-11-01-outcome-quality-repair/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve role-specific native inputs, published resources and original execution receipts.
+specs/artifacts/2026-11-01-contract-domain-repair/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# These already-executed witness sources retain the native writer's doubled CR bytes.
+specs/artifacts/2026-11-01-contract-domain-repair/typed-wrong-programmes/*/source/__main__.py -whitespace
