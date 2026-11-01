@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Markdown 表格阅读](records/2026-11/2026-11-02-table-reading.md)：窄文件面板、长网址与完整表格的可读性。
+
 - [执行与来源阅读](records/2026-11/2026-11-02-execution-reading.md)：真实操作、网页来源与文件成果的理解链路。
 
 - [对话管理与真实继续执行](records/2026-11/2026-11-01-session-management-live.md)：改名、归档只读、恢复及真实模型跟进。

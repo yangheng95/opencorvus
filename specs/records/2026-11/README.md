@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [Markdown 表格阅读](2026-11-02-table-reading.md)：共享表格布局、原始内容与键盘阅读。
+
 - [执行与来源阅读](2026-11-02-execution-reading.md)：操作显示、来源原文和成果衔接。
 
 - [对话管理与真实继续执行](2026-11-01-session-management-live.md)：原身份/草稿/产物与恢复后实际发送。

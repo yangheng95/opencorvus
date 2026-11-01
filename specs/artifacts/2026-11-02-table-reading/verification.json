@@ -1,0 +1,383 @@
+{
+  "at": "2026-11-01T18:02:09.411Z",
+  "singleAgent": true,
+  "acceptance": "Real dev CLI /ui with manual interaction, actual screenshots and human visual review; no UI automated tests",
+  "phases": {
+    "before": {
+      "uiEntry": "main-CctzHIFd.js",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 255244,
+      "resultRows": 255249,
+      "protectedProjects": 97,
+      "protectedAttachments": 227,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0,
+      "nativeExit": 0,
+      "publicShutdown": 200,
+      "physicalAndOutputSettled": true,
+      "providerRequests": 0,
+      "cumulativePriorModelRequests": 1249,
+      "pairedCopiesRetired": true,
+      "sourceUnchanged": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 3212828,
+      "visualDisposition": "Baseline"
+    },
+    "after": {
+      "uiEntry": "main-CMHXHt1c.js",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 255249,
+      "resultRows": 255251,
+      "protectedProjects": 98,
+      "protectedAttachments": 227,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0,
+      "nativeExit": 0,
+      "publicShutdown": 200,
+      "physicalAndOutputSettled": true,
+      "providerRequests": 0,
+      "cumulativePriorModelRequests": 1249,
+      "pairedCopiesRetired": true,
+      "sourceUnchanged": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 2641414,
+      "visualDisposition": "Reading improved; alignment failure retained"
+    },
+    "alignment-after": {
+      "uiEntry": "main-D9X9cQOM.js",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 255251,
+      "resultRows": 255253,
+      "protectedProjects": 98,
+      "protectedAttachments": 227,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0,
+      "nativeExit": 0,
+      "publicShutdown": 200,
+      "physicalAndOutputSettled": true,
+      "providerRequests": 0,
+      "cumulativePriorModelRequests": 1249,
+      "pairedCopiesRetired": true,
+      "sourceUnchanged": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 1981695,
+      "visualDisposition": "Final manual review passed"
+    }
+  },
+  "checks": {
+    "ui-build-after": {
+      "exit": 0,
+      "startedAt": 1793554791087,
+      "closedAt": 1793554847226
+    },
+    "display-checks": {
+      "exit": 0,
+      "startedAt": 1793554801328,
+      "closedAt": 1793554810761
+    },
+    "ui-build-alignment": {
+      "exit": 0,
+      "startedAt": 1793555383235,
+      "closedAt": 1793555441458
+    },
+    "display-checks-alignment": {
+      "exit": 0,
+      "startedAt": 1793555393644,
+      "closedAt": 1793555403142
+    }
+  },
+  "observations": {
+    "realDocument": {
+      "source": "Existing actual GPT-6.1 Sol delivery 875-after, read without new model execution",
+      "before": {
+        "client": 354,
+        "scroll": 435,
+        "columns": [
+          66.25,
+          240.484375,
+          127.28125
+        ],
+        "rowHeights": [
+          100.96875,
+          100.46875
+        ]
+      },
+      "after": {
+        "client": 354,
+        "scroll": 354,
+        "columns": [
+          104.234375,
+          109.28125,
+          139.484375
+        ],
+        "rowHeights": [
+          65.78125,
+          65.28125
+        ]
+      },
+      "downloadedCharacters": 412,
+      "openedLink": {
+        "url": "https://docs.python.org/3/library/csv.html",
+        "title": "csv — CSV file reading and writing — Python 3.15.2 documentation"
+      }
+    },
+    "finalCases": [
+      {
+        "cells": [
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TH",
+            "text": "项目"
+          },
+          {
+            "actual": "-webkit-right",
+            "align": "right",
+            "tag": "TH",
+            "text": "数量"
+          },
+          {
+            "actual": "-webkit-center",
+            "align": "center",
+            "tag": "TH",
+            "text": "状态"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "来源"
+          },
+          {
+            "actual": "-webkit-right",
+            "align": "right",
+            "tag": "TD",
+            "text": "2"
+          },
+          {
+            "actual": "-webkit-center",
+            "align": "center",
+            "tag": "TD",
+            "text": "已读取"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "文档"
+          },
+          {
+            "actual": "-webkit-right",
+            "align": "right",
+            "tag": "TD",
+            "text": "1"
+          },
+          {
+            "actual": "-webkit-center",
+            "align": "center",
+            "tag": "TD",
+            "text": "已交付"
+          }
+        ],
+        "client": 271,
+        "code": [],
+        "height": 93.78125,
+        "scroll": 271
+      },
+      {
+        "cells": [
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TH",
+            "text": "原题名"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TH",
+            "text": "准确 URL"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TH",
+            "text": "用途"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "csv — CSV file reading and writing"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "https://docs.python.org/3/library/csv.html"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "查阅表格记录读写与分隔规则。"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "json — JSON encoder and decoder"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "https://docs.python.org/3/library/json.html"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "查阅结构化记录的编码和解码。"
+          }
+        ],
+        "client": 354,
+        "code": [],
+        "height": 164.15625,
+        "scroll": 354
+      },
+      {
+        "cells": [
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TH",
+            "text": "名称"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TH",
+            "text": "原始身份"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TH",
+            "text": "说明"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "消息"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "msg_876_abcdefghijklmnopqrstuvwxyz_0123456789"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "连续身份保真，按原字符复制。"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "文件"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "docs/source-reading-reference-notes.zh-CN.md"
+          },
+          {
+            "actual": "left",
+            "align": null,
+            "tag": "TD",
+            "text": "文件名与打开目标不重写。"
+          }
+        ],
+        "client": 354,
+        "code": [
+          {
+            "text": "msg_876_abcdefghijklmnopqrstuvwxyz_0123456789",
+            "wrap": "normal"
+          },
+          {
+            "text": "docs/source-reading-reference-notes.zh-CN.md",
+            "wrap": "normal"
+          }
+        ],
+        "height": 164.15625,
+        "scroll": 538
+      }
+    ],
+    "wideKeyboard": {
+      "active": "TABLE",
+      "table": [
+        {
+          "cells": [
+            "末列876-A",
+            "末列876-B"
+          ],
+          "client": 354,
+          "left": 577,
+          "scroll": 931
+        }
+      ]
+    },
+    "nativeTabExit": "TABLE to BODY observed after Tab",
+    "pointerReturn": {
+      "scrollLeft": 0,
+      "client": 354,
+      "scroll": 931
+    },
+    "existingMain": {
+      "session": "ses_-zUQG6lTSzzVntjong5Z",
+      "tableWidth": 181,
+      "numericValues": [
+        3,
+        3,
+        2
+      ],
+      "numericAlignment": "native right"
+    },
+    "existingMember": {
+      "session": "ses_hqwMSLMHaC0ieJk4n982",
+      "headers": [
+        "验收项",
+        "独立观察与结论"
+      ],
+      "client": 338,
+      "scroll": 423,
+      "pointerEnd": 85
+    },
+    "finalSourceClipboard": "https://docs.python.org/3/library/json.html"
+  },
+  "limits": [
+    "Desktop validation; no tablet/mobile claim.",
+    "Long inline code and genuinely wide tables keep local horizontal scrolling so every original character and column remains available.",
+    "First after is retained as a visual alignment failure; final success belongs to a separate occurrence."
+  ]
+}

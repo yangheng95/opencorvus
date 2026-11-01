@@ -21,8 +21,6 @@
 .md-content th,
 .md-content td {
   padding: var(--ui-gap-xs) var(--ui-gap-md);
-  text-align: left;
-  vertical-align: top;
   border-bottom: var(--oc-border-width) solid var(--border);
 }
 .md-content thead th {
@@ -298,9 +296,22 @@
 .md-content td,
 .msg-text th,
 .msg-text td {
+  min-inline-size: 12ch;
   border: var(--oc-border-width) solid var(--border);
   padding: var(--ui-gap-sm) var(--ui-gap-lg);
+  vertical-align: top;
+}
+.md-content :is(th, td):not([align]),
+.msg-text :is(th, td):not([align]) {
   text-align: left;
+}
+.md-content table a:not(code a),
+.msg-text table a:not(code a) {
+  overflow-wrap: anywhere;
+}
+.md-content table code,
+.msg-text table code {
+  overflow-wrap: normal;
 }
 .md-content table:focus-visible,
 .msg-text table:focus-visible {

@@ -1879,6 +1879,12 @@ numbers do not imply attachment-upload order or a conversation-wide index.
 Native Markdown tables share one intrinsic-width policy within a bounded local
 horizontal scroll surface. Headers keep Chinese, Japanese and Korean (CJK) character sequences together to
 provide their intrinsic column width, while body cells retain normal wrapping.
+Cells retain a 12ch minimum reading width in the current table font; content
+may require wider columns. Ordinary links can wrap long URLs within their cell,
+while inline code keeps its original normal wrapping and complete identity.
+Cells align at the top so multiline rows remain easy to follow across columns.
+The default left alignment applies only to cells without an authored alignment;
+native Markdown column alignment remains effective for headers and body cells.
 Long headers remain reachable through the same local horizontal scroll surface.
 The existing Marked renderer emits focusable native
 tables and delegates header/body cells and rows to its standard primitives;
