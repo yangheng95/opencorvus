@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [0.1.42 发布证据](2026-11-02-release-0.1.42/README.md)：原生、官网、自动更新及中英文日志。
+
 - [笔记本阅读验收](2026-11-02-notebook-reading/README.md)：原代码单元、输出、语言和应用内展开。
 
 - [代码预览密度验收](2026-11-02-code-preview-density/README.md)：真实长短文件、内部滚动和展开收起截图。
