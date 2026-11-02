@@ -717,6 +717,9 @@ An empty filtered result has contextual neutral feedback and one action to clear
 the existing search, status and non-text filters. The same local reset serves
 scope changes and exact Review focus. Selection resumes through its existing
 effect; an empty filter never asks the user to select an unavailable file.
+Explicitly clearing those filters returns keyboard focus to the connected file
+list so navigation and search can continue after the empty-state action unmounts.
+Scope changes and exact Review focus keep the shared reset as a pure state reset.
 Incomplete Tool intervals expose their individual original comparisons through
 the recorded Session/Message/Part/file-index receipts. Each disclosure lazily
 uses the same bounded, authority-scoped completed Tool reader and shared diff

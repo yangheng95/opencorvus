@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [筛选恢复焦点验收](2026-11-03-filter-recovery-focus/README.md)：键盘清除与后续列表/搜索操作的人工复核。
+
 - [审阅筛选状态与恢复验收](2026-11-03-change-status-meaning/README.md)：中英类型说明、无匹配恢复与已知分类实页。
 
 - [文件修改记录入口验收](2026-11-03-file-review-orientation/README.md)：历史修改路径与当前文件的真实页面复核。

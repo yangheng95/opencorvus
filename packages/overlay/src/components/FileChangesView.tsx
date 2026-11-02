@@ -205,6 +205,10 @@ export function FileChangesView(props: FileChangesViewProps) {
     setStatusFilter("all")
     setHideNonTextFiles(false)
   }
+  const clearFilters = () => {
+    resetFilters()
+    if (listEl?.isConnected) listEl.focus()
+  }
 
   createEffect(
     on(
@@ -458,7 +462,7 @@ export function FileChangesView(props: FileChangesViewProps) {
               fallback={
                 <div class="changes-filter-empty">
                   <Feedback tone="neutral" actions={
-                    <Button type="button" variant="outline" size="sm" tone="neutral" onClick={resetFilters}>
+                    <Button type="button" variant="outline" size="sm" tone="neutral" onClick={clearFilters}>
                       {t("files.clear_filters")}
                     </Button>
                   }>

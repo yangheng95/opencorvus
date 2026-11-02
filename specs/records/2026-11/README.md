@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [清除筛选后的键盘焦点](2026-11-03-filter-recovery-focus.md)：清除、列表选择与搜索往返实页检查。
+
 - [审阅筛选的状态与恢复](2026-11-03-change-status-meaning.md)：共享状态标签与真实筛选恢复验收。
 
 - [文件修改记录的入口与语义](2026-11-03-file-review-orientation.md)：聊天文件汇总和审阅入口的实页调查。

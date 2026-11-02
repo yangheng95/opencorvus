@@ -1,0 +1,127 @@
+{
+  "at": "2026-11-02T19:59:18.867Z",
+  "scope": "914 explicit empty-filter recovery keyboard focus",
+  "manualReview": "Eleven real page screenshots manually inspected. 01 reproduces lost focus; 02–07 and 09–11 are settled final checks. 08 captures intermediate project loading only. Arrow keys move focus; Enter confirms the selected file. No UI automation tests.",
+  "screenshots": [
+    "01-before-clear-focus.jpg",
+    "02-after-clear-focus-en.jpg",
+    "03-after-arrow-selection-en.jpg",
+    "04-after-confirm-summary-en.jpg",
+    "05-after-search-return-en.jpg",
+    "06-combined-empty-en.jpg",
+    "07-after-clear-focus-zh.jpg",
+    "08-other-project-zh.jpg",
+    "09-other-project-settled-zh.jpg",
+    "10-exact-path-focus-zh.jpg",
+    "11-exact-reset-zh.jpg"
+  ],
+  "authVerification": {
+    "at": "2026-11-02T19:51:56.281Z",
+    "route": "/global/providers/openai/account-usage",
+    "httpStatus": 200,
+    "accepted": true,
+    "usageKind": "rate_limits",
+    "error": null,
+    "credentialType": "oauth",
+    "credentialExpiresAt": "2026-11-11T16:15:41.053Z",
+    "sourceModifiedAt": "2026-11-01T16:15:41.072Z",
+    "modelRequests": 0
+  },
+  "publicReads": {
+    "checkpoints": 4,
+    "missionRecordsPerCheckpoint": 15,
+    "taskStatesAndRootSessionsPerCheckpoint": 4,
+    "mailbox": 24,
+    "fileReads": 12
+  },
+  "qualifications": [
+    {
+      "at": "2026-11-02T19:54:35.269Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 271260,
+      "current": 271262,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55402,
+          "after": 55403
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55344,
+          "after": 55345
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 263,
+      "projects": 101,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1309,
+      "reserveMs": 4078402,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CEVJSsQU.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2
+    },
+    {
+      "at": "2026-11-02T19:58:15.052Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 271262,
+      "current": 271264,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55403,
+          "after": 55404
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55345,
+          "after": 55346
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 263,
+      "projects": 101,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1309,
+      "reserveMs": 3843640,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-B9OOQFwN.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2
+    }
+  ],
+  "typecheck": 0,
+  "uiBuild": 0,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1309
+}
