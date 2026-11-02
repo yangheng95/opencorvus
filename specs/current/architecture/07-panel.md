@@ -4011,6 +4011,15 @@ Presentation uses Reveal.js embedded mode with the official theme contract
 mapped to OpenCorvus semantic tokens. The declared aspect ratio owns compact
 stage geometry, keyboard navigation belongs only to a focused deck, and a
 container observer calls Reveal `layout()` after pane or workspace resizing.
+The same owner projects the current interface language onto native navigation,
+jump, pause and help controls. Shortcut descriptions use the public registry's
+native key identities; existing help action cells are updated by those same
+identities, independently of their previous language. Author titles, slides and
+notes remain original. Page-position names use the deck's own current/total
+facts and locale number formatting. A local observer watches only direct native
+panel additions and number-link replacements, while locale changes update the
+same mounted instance. Its observer retires before deck destruction, and a late
+initialization result cannot attach it to a retired owner.
 Render-backed PowerPoint slides contain the exact OfficeCLI image without a
 second semantic overlay. Canonical attachments referenced by a durable
 `interactive_artifact.payload` are part of AttachmentStore's live-reference

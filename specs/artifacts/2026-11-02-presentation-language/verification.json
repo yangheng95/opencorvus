@@ -1,0 +1,472 @@
+{
+  "at": "2026-11-02T10:27:53.173Z",
+  "goal": "progress; active; single agent",
+  "screenshots": [
+    "01-before-presentation-en.jpg",
+    "02-before-presentation-zh.jpg",
+    "03-before-paused-zh.jpg",
+    "04-before-jump-zh.jpg",
+    "05-before-help-zh.jpg",
+    "06-before-help-lower-zh.jpg",
+    "07-after-presentation-en.jpg",
+    "08-after-next-en.jpg",
+    "09-after-paused-en.jpg",
+    "10-after-paused-zh.jpg",
+    "11-after-jump-zh.jpg",
+    "12-after-jump-result-zh.jpg",
+    "13-after-help-zh.jpg",
+    "14-after-help-lower-zh.jpg",
+    "15-after-help-lower-en.jpg",
+    "16-after-help-en.jpg",
+    "17-after-expanded-en.jpg",
+    "18-after-restored-en.jpg"
+  ],
+  "phases": [
+    {
+      "qualification": {
+        "at": "2026-11-02T10:06:05.928Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259674,
+        "current": 259676,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53148,
+            "after": 53149
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 53090,
+            "after": 53091
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 4072231,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-B4hJK0E9.js"
+      },
+      "originalHandle": 91428,
+      "retirement": {
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "publicShutdown": 200,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "nativeExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 4072231,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      }
+    },
+    {
+      "qualification": {
+        "at": "2026-11-02T10:23:30.751Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259676,
+        "current": 259678,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53149,
+            "after": 53150
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 53091,
+            "after": 53092
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 3031867,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-D6CoG6LT.js"
+      },
+      "originalHandle": 39767,
+      "retirement": {
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "publicShutdown": 200,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "nativeExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 3031867,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      }
+    }
+  ],
+  "checks": {
+    "overlay-typecheck": {
+      "label": "overlay-typecheck",
+      "startedAt": 1793614148184,
+      "closedAt": 1793614173106,
+      "code": 0,
+      "signal": null,
+      "childPID": 33360
+    },
+    "focused-checks": {
+      "label": "focused-checks",
+      "startedAt": 1793614148184,
+      "closedAt": 1793614161166,
+      "code": 0,
+      "signal": null,
+      "childPID": 20592
+    },
+    "ui-build-after": {
+      "label": "ui-build-after",
+      "startedAt": 1793614148220,
+      "closedAt": 1793614216022,
+      "code": 0,
+      "signal": null,
+      "childPID": 8020
+    }
+  },
+  "artifact": {
+    "id": "art_g0VZeNzM200K4cN4yN5K",
+    "title": "Presentation849",
+    "slides": 2,
+    "originalPayloadExact": true,
+    "originalMessagesExact": 6
+  },
+  "originalMissionRecordsExact": 15,
+  "originalCompleteTaskStatusesExact": 4,
+  "actualDomObservations": {
+    "before-cn": [
+      {
+        "controls": [
+          {
+            "class": "navigate-left enabled",
+            "name": "previous slide"
+          },
+          {
+            "class": "navigate-right",
+            "name": "next slide"
+          },
+          {
+            "class": "navigate-up",
+            "name": "above slide"
+          },
+          {
+            "class": "navigate-down",
+            "name": "below slide"
+          }
+        ],
+        "counter": "\n\t\t\t\t\t2\n\t\t\t\t\t/\n\t\t\t\t\t2\n\t\t\t\t\t",
+        "headers": [
+          "KEY",
+          "ACTION"
+        ],
+        "helpTitle": "Keyboard Shortcuts",
+        "resume": "Resume presentation",
+        "roleDescription": "slide deck",
+        "rows": [
+          [],
+          [
+            "N  ,  SPACE",
+            "Next slide"
+          ],
+          [
+            "P  ,  Shift SPACE",
+            "Previous slide"
+          ],
+          [
+            "←  ,  H",
+            "Navigate left"
+          ],
+          [
+            "→  ,  L",
+            "Navigate right"
+          ],
+          [
+            "↑  ,  K",
+            "Navigate up"
+          ],
+          [
+            "↓  ,  J",
+            "Navigate down"
+          ],
+          [
+            "Alt + ←/↑/→/↓",
+            "Navigate without fragments"
+          ],
+          [
+            "Shift + ←/↑/→/↓",
+            "Jump to first/last slide"
+          ],
+          [
+            "B  ,  .",
+            "Pause"
+          ],
+          [
+            "F",
+            "Fullscreen"
+          ],
+          [
+            "G",
+            "Jump to slide"
+          ],
+          [
+            "ESC, O",
+            "Slide overview"
+          ]
+        ],
+        "slide": "slide849-1",
+        "slideRole": "slide"
+      }
+    ],
+    "after-paused-en": [
+      {
+        "paused": true,
+        "position": "Slide 2 of 2",
+        "resume": "Resume presentation",
+        "roleDescription": "Slide deck",
+        "slide": "slide849-1"
+      }
+    ],
+    "after-paused-zh": [
+      {
+        "paused": true,
+        "position": "第 2 页，共 2 页",
+        "resume": "继续演示",
+        "roleDescription": "演示文稿",
+        "slide": "slide849-1"
+      }
+    ],
+    "after-jump-zh": [
+      {
+        "name": "跳转到幻灯片",
+        "placeholder": "跳转到幻灯片",
+        "value": ""
+      }
+    ],
+    "after-help-zh": [
+      {
+        "controls": [
+          {
+            "class": "navigate-left",
+            "name": "上一页"
+          },
+          {
+            "class": "navigate-right enabled",
+            "name": "下一页"
+          },
+          {
+            "class": "navigate-up",
+            "name": "向上翻页"
+          },
+          {
+            "class": "navigate-down",
+            "name": "向下翻页"
+          }
+        ],
+        "headers": [
+          "按键",
+          "操作"
+        ],
+        "helpScroll": 293,
+        "helpTitle": "键盘快捷键",
+        "position": "第 1 页，共 2 页",
+        "roleDescription": "演示文稿",
+        "rows": [
+          [],
+          [
+            "N  ,  SPACE",
+            "下一页"
+          ],
+          [
+            "P  ,  Shift SPACE",
+            "上一页"
+          ],
+          [
+            "←  ,  H",
+            "向左翻页"
+          ],
+          [
+            "→  ,  L",
+            "向右翻页"
+          ],
+          [
+            "↑  ,  K",
+            "向上翻页"
+          ],
+          [
+            "↓  ,  J",
+            "向下翻页"
+          ],
+          [
+            "Alt + ←/↑/→/↓",
+            "翻页并跳过分步内容"
+          ],
+          [
+            "Shift + ←/↑/→/↓",
+            "跳到第一页或最后一页"
+          ],
+          [
+            "B  ,  .",
+            "暂停或恢复演示"
+          ],
+          [
+            "F",
+            "全屏显示"
+          ],
+          [
+            "G",
+            "跳转到幻灯片"
+          ],
+          [
+            "ESC, O",
+            "幻灯片概览"
+          ]
+        ],
+        "slide": "slide849-0"
+      }
+    ],
+    "after-help-en": [
+      {
+        "headers": [
+          "Key",
+          "Action"
+        ],
+        "helpScroll": 293,
+        "helpTitle": "Keyboard shortcuts",
+        "position": "Slide 1 of 2",
+        "roleDescription": "Slide deck",
+        "rows": [
+          [],
+          [
+            "N  ,  SPACE",
+            "Next slide"
+          ],
+          [
+            "P  ,  Shift SPACE",
+            "Previous slide"
+          ],
+          [
+            "←  ,  H",
+            "Navigate left"
+          ],
+          [
+            "→  ,  L",
+            "Navigate right"
+          ],
+          [
+            "↑  ,  K",
+            "Navigate up"
+          ],
+          [
+            "↓  ,  J",
+            "Navigate down"
+          ],
+          [
+            "Alt + ←/↑/→/↓",
+            "Navigate without fragments"
+          ],
+          [
+            "Shift + ←/↑/→/↓",
+            "Jump to first or last slide"
+          ],
+          [
+            "B  ,  .",
+            "Pause or resume presentation"
+          ],
+          [
+            "F",
+            "Fullscreen"
+          ],
+          [
+            "G",
+            "Jump to slide"
+          ],
+          [
+            "ESC, O",
+            "Slide overview"
+          ]
+        ],
+        "slide": "slide849-0"
+      }
+    ],
+    "after-expanded-en": [
+      {
+        "frame": {
+          "height": 624,
+          "width": 1120,
+          "x": 80,
+          "y": 48
+        },
+        "fullscreenElement": null,
+        "image": [
+          {
+            "alt": "同名原件 1",
+            "complete": true,
+            "naturalHeight": 128,
+            "naturalWidth": 128
+          }
+        ],
+        "popover": true,
+        "position": "Slide 1 of 2",
+        "roleDescription": "Slide deck",
+        "slide": "slide849-0"
+      }
+    ],
+    "after-restored-en": [
+      {
+        "paused": false,
+        "popover": false,
+        "position": "Slide 1 of 2",
+        "roleDescription": "Slide deck",
+        "slide": "slide849-0"
+      }
+    ]
+  },
+  "localeFields": 40,
+  "library": "reveal.js 6.0.1",
+  "technicalSources": [
+    "https://revealjs.com/config/",
+    "https://revealjs.com/api/",
+    "https://revealjs.com/creating-plugins/"
+  ],
+  "limitations": [
+    "Only original two horizontal image-backed slides and default navigation keyboard profile visually covered",
+    "Other aspect ratios, sizes, themes, languages, vertical slides, fragments, overview and explicit browser fullscreen not covered",
+    "Initialization-time unmount, errors, disconnects, connection rotation and downloads not covered",
+    "No new model request or release; continuous Goal remains active"
+  ]
+}
