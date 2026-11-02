@@ -1,0 +1,37 @@
+{
+  "verifiedAt": "2026-11-02T10:14:49.678Z",
+  "version": "0.1.42",
+  "date": "2026-11-02",
+  "historyEntries": 78,
+  "locales": [
+    "zh-CN",
+    "en-US"
+  ],
+  "checks": {
+    "version": "aligned0.1.42",
+    "versionAndNotes": {
+      "tests": 15,
+      "assertions": 21
+    },
+    "backend": {
+      "files": 2,
+      "tests": 8,
+      "assertions": 68,
+      "output": "$ bun script/run-tests.ts test/work-ledger-search.test.ts test/work-ledger-mission-request.test.ts\r\n   Compiling proc-macro2 v1.0.106\r\n   Compiling quote v1.0.45\r\n   Compiling unicode-ident v1.0.24\r\n   Compiling serde_core v1.0.228\r\n   Compiling windows_x86_64_msvc v0.52.6\r\n   Compiling zmij v1.0.21\r\n   Compiling serde v1.0.228\r\n   Compiling serde_json v1.0.150\r\n   Compiling itoa v1.0.18\r\n   Compiling memchr v2.8.0\r\n   Compiling windows-targets v0.52.6\r\n   Compiling windows-sys v0.59.0\r\n   Compiling syn v2.0.117\r\n   Compiling serde_derive v1.0.228\r\n   Compiling opencorvus-process-supervisor v0.1.42 (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\native\\process-supervisor)\r\n    Finished `dev` profile [unoptimized + debuginfo] target(s) in 14.10s\r\n[1/2] START test/work-ledger-search.test.ts\r\nbun test v1.4.0 (34cbb9a40) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) current Project names select exact Chat, Work, Mission and Task rows before pagination [7336.84ms]\r\n(pass) the public selected reader keeps exact active and archived Chat, Work, Mission and Task identities [5896.95ms]\r\n(pass) canonical Work experience searches preserve active, archived, Project and cursor identities after renaming [3751.76ms]\r\n(pass) search finds an older real conversation beyond the recent page and preserves its exact identity [1874.49ms]\r\n(pass) literal search preserves percent, underscore, backslash, Chinese and ASCII case matching [1638.03ms]\r\n(pass) the same search returns exact global and directory-scoped Project results [3224.11ms]\r\n(pass) kind search follows the canonical cursor and includes Mission child Tasks [3587.33ms]\r\n\r\n 7 pass\r\n 0 fail\r\n 46 expect() calls\r\nRan 7 tests across 1 file. [34.29s]\r\n[1/2] DONE test/work-ledger-search.test.ts exit=0 duration=35.25s\r\n[2/2] START test/work-ledger-mission-request.test.ts\r\nbun test v1.4.0 (34cbb9a40) 1x PARALLEL\r\n\r\ntest\\isolated-test-entry.test.ts:\r\n(pass) current Mission requests and titles survive active, archived and cold selected reads in their own Project [4316.83ms]\r\n\r\n 1 pass\r\n 0 fail\r\n 22 expect() calls\r\nRan 1 test across 1 file. [6.68s]\r\n[2/2] DONE test/work-ledger-mission-request.test.ts exit=0 duration=6.95s\r\n"
+    },
+    "generation": {
+      "exitCode": 0,
+      "declaredChanges": []
+    },
+    "install": "1659 installs /1905 packages; no changes",
+    "audit": "bun audit v1.4.0 (34cbb9a40)\r\n\r\nNo vulnerabilities found (checked 1732 packages) [532.00ms]\r\n",
+    "docs": "352 operations /26 groups",
+    "architecture": "20 documents"
+  },
+  "scope": "Focused original data/transport checker; not whole backend suite or UI automation",
+  "preflight": {
+    "runID": 41426702065,
+    "source": "4687b57064191376b21bd07307b6e75432be9567",
+    "status": "pending"
+  }
+}

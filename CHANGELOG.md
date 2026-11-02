@@ -4,17 +4,57 @@
 
 ## 未发布
 
+## 0.1.42 - 2026-11-02
+
 ### zh-CN
+
+#### 新增
+
+- 多步任务提供宽列表、看板切换和状态导航，支持按原请求、结果及子任务查找，并从卡片直接打开对应子任务。
+- 项目选择支持按名称和路径查找；归档及全局工作检索使用项目当前名称，保留原目录和工作身份。
 
 #### 调整
 
+- 优化执行记录、工具操作、来源分组和交付文件的可读名称，完整原始标识可展开查看；Markdown 表格、长目标输入和只读代码预览更便于阅读。
+- 定时任务明确显示时间语境；Notebook 标明阅读模式，代码单元查找及应用内展开保留原内容。
 - 发布全流程总时限调整为 60 分钟，覆盖排队、重试、原生构建、自动更新和配对官网部署；重试仍从最初运行创建时间计时。
+
+#### 修复
+
+- 默认页按真实保存的工作和项目恢复；保存任务不在活动列表首屏时仍精确读取，明确启动与网址定位保持优先。
+- 多步任务的新建和编辑保护未保存文字，校验提示跟随当前语言；保存草稿后可直达该草稿，筛选条件保留。
+- 归档多步任务可阅读原始请求；任务完成进度、失败或取消结果、受阻事项分别按真实数据呈现，避免把执行结束当作任务完成。
+- 浮动选项和作品菜单保留正确的对话框归属；同名项目、文件预览与交付记录更易辨认，原文件和快照身份保持。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 9，保留用户数据和既有自动迁移。新增请求文本为公开工作记录的可选字段；本版不改变任务调度或模型权限。
+- macOS 仍为临时签名，未经过 Apple 公证。界面体验及聚焦测试仅证明各自验证范围，不代表全部模型任务或后台测试已通过。
 
 ### en-US
 
+#### Added
+
+- Switch between a wide Mission list and board, navigate by status, search saved requests, results and child Tasks, and open the corresponding child Task directly from a card.
+- Search project choices by name or path. Archived and global work searches use current project names while retaining original directories and work identities.
+
 #### Changed
 
+- Improve readable names for execution records, tool operations, grouped sources and delivered files, with full original identifiers available in details. Make Markdown tables, long Goal fields and read-only code previews easier to read.
+- Clarify scheduled-task time context and Notebook reading mode. Code-cell search and in-app expansion retain original content.
 - Set the whole-release budget to 60 minutes, including queues, retries, native builds, desktop updates and the paired website deployment. Retries retain the original run creation time.
+
+#### Fixed
+
+- Restore the default page from the actual saved work and project. Read saved Tasks precisely even outside the first active-list page, preserving explicit launch and URL navigation intent.
+- Protect unsaved Mission creation and editing text, keep validation feedback in the current language, and open saved drafts directly while retaining filters.
+- Read original requests in archived Missions. Present completed progress, failed or cancelled outcomes and unmet requirements from their actual data, distinguishing execution termination from Task completion.
+- Keep floating choices and artifact menus within their owning dialogs. Distinguish same-name projects, file previews and delivery records while preserving original file and snapshot identities.
+
+#### Upgrade impact and known limitations
+
+- Database version remains 9, retaining user data and existing automatic migrations. Request text is an optional public work-record field; this release does not change Task scheduling or model permissions.
+- macOS remains ad hoc signed without Apple notarization. Manual interface reviews and focused tests establish their stated scope, rather than acceptance of every model task or backend test.
 
 ## 0.1.41 - 2026-11-02
 
