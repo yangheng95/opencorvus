@@ -4,6 +4,18 @@
 
 ## 未发布
 
+### zh-CN
+
+#### 修复
+
+- 压缩助手的每次请求显示现有配置的步骤上限、已完成和剩余步骤；保存工作笔记后仍保留真实执行进度，帮助在原有余量内完成普通摘要。真实摘要校验及工具耗尽错误保持。
+
+### en-US
+
+#### Fixed
+
+- Show the compaction helper's configured step allowance, completed steps and remaining steps in each request. Saved working notes retain actual execution progress so the helper can plan its ordinary summary within the existing allowance. Genuine-summary validation and explicit exhaustion errors remain authoritative.
+
 ## 0.1.42 - 2026-11-02
 
 ### zh-CN

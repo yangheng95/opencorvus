@@ -279,7 +279,7 @@ test("fitted evidence preserves the initially visible original source inventory"
   const afterRead = working.project([
     { role: "assistant", content: [{ type: "tool-call", toolCallId: options.toolCallId, toolName: CompactionEvidenceReader.TOOL_NAME, input }] },
     { role: "tool", content: [{ type: "tool-result", toolCallId: options.toolCallId, toolName: CompactionEvidenceReader.TOOL_NAME, output: { type: "text", value: output.output } }] },
-  ])
+  ], 1)
   expect(ids(afterRead)).toEqual(ids(initial))
   expect(RequestBudget.estimate({ ...request, messages: afterRead }).totalTokensEst).toBeLessThanOrEqual(19_000)
 })

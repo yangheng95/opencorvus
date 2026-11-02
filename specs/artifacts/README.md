@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Issues61/62证据](2026-11-03-issues-61-62/README.md)：聚焦流式/持久化合同及明确的实际验收范围。
+
 - [Office继续交付验收](2026-11-03-office-followup/README.md)：原会话错误历史、继续输入、项目文件与实际下载。
 
 - [Excel 文件交付与跟进验收](2026-11-02-office-workflow/README.md)：真实 Sol、原生工作簿、逐表预览与同一会话修改。

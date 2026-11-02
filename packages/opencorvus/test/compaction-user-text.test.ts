@@ -288,7 +288,7 @@ test("working notes preserve the genuine selection exchange and enforce the shar
       ],
     },
   ]
-  working.project(frames)
+  working.project(frames, 1)
   const notes = "Retained original user authorization source; complete the summary."
   const saved = (await working.noteTool.execute!({ notes }, options("notes_1"))) as { output: string }
   const noteFrames: ModelMessage[] = [
@@ -310,7 +310,7 @@ test("working notes preserve the genuine selection exchange and enforce the shar
       ],
     },
   ]
-  expect(working.project([...frames, ...noteFrames])).toEqual([...base, ...frames, ...noteFrames])
+  expect(working.project([...frames, ...noteFrames], 2)).toEqual([...base, ...frames, ...noteFrames])
   const huge = user("msg_huge", "Long original user text. ".repeat(20_000))
   const tool = CompactionUserText.create([huge], working.fitExchange)
   await expect(

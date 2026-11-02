@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Issues61/62修复](records/2026-11/2026-11-03-issues-61-62.md)：同任务证据交付、压缩步骤进度及共享恢复审计。
+
 - [Office中断后继续交付](records/2026-11/2026-11-03-office-followup.md)：原会话恢复、项目文件及真实下载验收。
 
 - [Excel交付与跟进流程](records/2026-11/2026-11-02-office-workflow.md)：真实Sol工作、规范Excel文件与继续修改验收。

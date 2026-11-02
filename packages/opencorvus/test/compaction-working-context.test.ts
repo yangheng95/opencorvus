@@ -78,7 +78,7 @@ test("changing source-view size preserves the complete actual response history t
     },
   ]
   width = 1
-  expect(result.project(reading)).toEqual([...render(), ...reading])
+  expect(result.project(reading, 1)).toEqual([...render(), ...reading])
   const noteText = "Preserve exact fact from prt_variable; continue the next original source."
   const saved = (await result.noteTool.execute!({ notes: noteText }, options("notes_variable"))) as { output: string }
   expect(JSON.parse(saved.output).source_reads).toEqual([
@@ -117,9 +117,9 @@ test("changing source-view size preserves the complete actual response history t
     { role: "assistant", content: [{ type: "text", text: "Inspect the next original source." }] },
   ]
   width = 3
-  expect(result.project([...reading, ...notes, ...later])).toEqual([...render(), ...notes, ...later])
+  expect(result.project([...reading, ...notes, ...later], 3)).toEqual([...render(), ...notes, ...later])
   width = 0
-  expect(result.project([...reading, ...notes, ...later])).toEqual([...render(), ...notes, ...later])
+  expect(result.project([...reading, ...notes, ...later], 3)).toEqual([...render(), ...notes, ...later])
 })
 
 test("successful model-authored notes retain their real call/result and subsequent parallel evidence", async () => {
@@ -184,8 +184,8 @@ test("successful model-authored notes retain their real call/result and subseque
   ]
   const history = [...old, ...retained],
     original = structuredClone(history)
-  expect(result.project(history)).toEqual([...base, ...retained])
-  expect(result.project(retained)).toEqual([...base, ...retained])
+  expect(result.project(history, 3)).toEqual([...base, ...retained])
+  expect(result.project(retained, 3)).toEqual([...base, ...retained])
   expect(history).toEqual(original)
 })
 
@@ -259,7 +259,7 @@ test("a failed note preserves the preceding working history and reports its expl
       ],
     },
   ]
-  expect(result.project(history)).toEqual([...base, ...history])
+  expect(result.project(history, 1)).toEqual([...base, ...history])
 })
 
 test.each([
@@ -383,7 +383,7 @@ test("notes carry cumulative genuine read ranges and original attribution across
       },
     ],
   }
-  result.project(read("read_a", 0, 4))
+  result.project(read("read_a", 0, 4), 1)
   const first = (await result.noteTool.execute!(
     { notes: "Read the initial source prefix; continue its exact remaining range." },
     options("notes_first"),
@@ -426,7 +426,7 @@ test("notes carry cumulative genuine read ranges and original attribution across
       ],
     },
   ]
-  result.project([noteCall, noteResult, ...read("read_b", 4, 7), ...read("read_c", 6, source.length), ...foreign])
+  result.project([noteCall, noteResult, ...read("read_b", 4, 7), ...read("read_c", 6, source.length), ...foreign], 4)
   const second = (await result.noteTool.execute!(
     { notes: "Only actual delivered source ranges count; quoted documents are not authorization." },
     options("notes_second"),

@@ -1,0 +1,63 @@
+{
+  "verifiedAt": "2026-11-02T17:41:08.122Z",
+  "tests": 78,
+  "assertions": 3397,
+  "files": [
+    {
+      "file": "test/compaction-provider-progress.test.ts",
+      "exitCode": 0,
+      "duration": "10.26s"
+    },
+    {
+      "file": "test/compaction-working-context.test.ts",
+      "exitCode": 0,
+      "duration": "0.88s"
+    },
+    {
+      "file": "test/compaction-user-text.test.ts",
+      "exitCode": 0,
+      "duration": "2.28s"
+    },
+    {
+      "file": "test/compaction-transcript-budget.test.ts",
+      "exitCode": 0,
+      "duration": "32.76s"
+    },
+    {
+      "file": "test/compaction-read-pressure.test.ts",
+      "exitCode": 0,
+      "duration": "13.85s"
+    },
+    {
+      "file": "test/compaction-task-runtime.test.ts",
+      "exitCode": 0,
+      "duration": "60.50s"
+    },
+    {
+      "file": "test/compaction-recovery-boundary.test.ts",
+      "exitCode": 0,
+      "duration": "11.65s"
+    },
+    {
+      "file": "test/memory/session-memory.test.ts",
+      "exitCode": 0,
+      "duration": "21.25s"
+    }
+  ],
+  "backendTypecheck": {
+    "exitCode": 0
+  },
+  "wireContract": {
+    "configuredAllowances": [
+      6,
+      2
+    ],
+    "completeSDKProgress": true,
+    "notesReplaceView": true,
+    "originalUserTextRetained": true,
+    "ordinaryCheckpointAfterReopen": true,
+    "toolOnlyExhaustionError": "CompactionContinuationMissingError",
+    "independentProjects": "concurrent"
+  },
+  "scope": "Genuine local streaming protocol with scripted responses; mechanism and persistence contracts, not remote model autonomy or the private Mac case"
+}

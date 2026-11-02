@@ -541,7 +541,8 @@ describe("Session MEMORY.MD compaction checkpoint", () => {
               "- next: inspect release evidence",
             ].join("\n"),
           )
-          expect(SessionCompaction.buildPrompt({ context: [], runtime: nextCompactionContext })).toContain(
+          expect(SessionCompaction.buildPrompt({ context: [], runtime: nextCompactionContext,
+            progress: { completedSteps: 0, stepLimit: 20 } })).toContain(
             "Exclude credentials, application programming interface (API) keys, tokens, passwords, private keys, and other secrets.",
           )
           const storedMessages = await Session.messages({ sessionID: session.id })

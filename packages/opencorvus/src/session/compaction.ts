@@ -705,11 +705,22 @@ export namespace SessionCompaction {
     return text
   }
 
-  export function buildPrompt(input: { context: string[]; runtime: string; dispatchAnchor?: DispatchAnchorReference }) {
+  export function buildPrompt(input: {
+    context: string[]
+    runtime: string
+    dispatchAnchor?: DispatchAnchorReference
+    progress: { completedSteps: number; stepLimit: number }
+  }) {
     const dispatchAnchorBlock = input.dispatchAnchor ? renderDispatchAnchorReference(input.dispatchAnchor) : undefined
     return [
       dispatchAnchorBlock,
       "Write a concise natural-language continuation summary as an ordinary assistant message.",
+      `<compaction-provider-progress>${JSON.stringify({
+        completedSteps: input.progress.completedSteps,
+        stepLimit: input.progress.stepLimit,
+        remainingSteps: Math.max(0, input.progress.stepLimit - input.progress.completedSteps),
+      })}</compaction-provider-progress>`,
+      "This is the helper's existing configured Provider-step allowance, including evidence reads, user-text retention, working notes and the ordinary summary. Completed steps come from the SDK, even when saved notes replace earlier read history. It is not a business budget or action authorization. Plan the remaining work so the ordinary summary fits this allowance; prioritize current user authority, current work and materially unresolved evidence, retain exact references for resolved history and preserve uncertainty for unread sources.",
       "Preserve concrete requirements, stable identifiers and references, completed work, unresolved blockers, and useful next actions.",
       "Consolidate the current Session MEMORY.MD with the durable conversation evidence into one self-contained continuation summary. Exclude credentials, application programming interface (API) keys, tokens, passwords, private keys, and other secrets.",
       "Inline text and JSON fields carry their complete indicated values; original_user_excerpt identifies a selected range rather than the complete archived field. A compaction_evidence_reference identifies an omitted field; its optional preview or digest is not the complete source. Read omitted user text through ReadCompactionEvidence(field=text) before summarizing its requirements. Retrieve relevant omitted Tool input, output, failure and metadata fields by their exact Part IDs.",
@@ -1008,6 +1019,7 @@ export namespace SessionCompaction {
     const config = await EffectiveConfig.effective({ sessionID: input.sessionID })
     const agent = await HelperAgentRegistry.get("compaction", { config })
     if (!agent.steps) throw new Error("Compaction helper must declare a positive provider-step limit")
+    const stepLimit = agent.steps
     const model = input.model
       ? await Provider.getModel(input.model.providerID, input.model.modelID, { config })
       : await resolveAgentModel(agent.name, { sessionID: input.sessionID })
@@ -1169,16 +1181,17 @@ export namespace SessionCompaction {
       selectedHead: selected.head,
       focus: input.focus ?? compactionPart?.focus,
     })
-    const promptText = buildPrompt({
+    const promptText = (completedSteps: number) => buildPrompt({
       context: compacting.context,
       runtime,
       dispatchAnchor,
+      progress: { completedSteps, stepLimit },
     })
     await CompactionEvidenceReader.assertSources(selected.head)
     const transcript = createCompactionTranscript(selected.head, msg)
     const working = CompactionWorkingContext.create({
-      render: (request, maxTokens, expandFields) =>
-        transcript.render({ ...request, promptText, maxTokens, expandFields }),
+      render: (request, maxTokens, expandFields, completedSteps) =>
+        transcript.render({ ...request, promptText: promptText(completedSteps), maxTokens, expandFields }),
     })
     const tools = {
       [CompactionEvidenceReader.TOOL_NAME]: processRuntime.prepareProviderTool({
@@ -1208,11 +1221,11 @@ export namespace SessionCompaction {
       sessionID: input.sessionID,
       tools,
       system: [],
-      messages: transcript.render({ system: [], tools: {}, promptText, maxTokens: 0 }),
+      messages: transcript.render({ system: [], tools: {}, promptText: promptText(0), maxTokens: 0 }),
       prepareMessages: working.prepare,
-      prepareStep: (step) => ({ messages: working.project(step.responseMessages) }),
+      prepareStep: (step) => ({ messages: working.project(step.responseMessages, step.steps.length) }),
       model,
-      stopWhen: [({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready", isStepCount(agent.steps)],
+      stopWhen: [({ steps }) => compactionStepDisposition(steps.at(-1)) === "summary_ready", isStepCount(stepLimit)],
     })
 
     if (result === "compact") {

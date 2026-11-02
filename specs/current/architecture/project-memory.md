@@ -68,6 +68,15 @@ Project memory has three explicitly scoped authorities:
    these mechanisms; it does not establish model quality or operating-system
    power-loss recovery.
 
+   Every compaction request renders the helper registry's configured Provider-step
+   limit together with completed and remaining steps. The initial projection has
+   zero completed steps; each streamed SDK prepareStep supplies its actual
+   steps.length through the same transcript renderer. Working-note replacement
+   changes the request view without resetting this progress. The existing stop
+   condition uses that same configured limit. Tools, ordinary-summary validation,
+   source authority and control settlement retain their current contracts; the
+   displayed allowance is neither a business budget nor action authorization.
+
    Ordinary model replay and the compaction transcript use the same attributed
    assistant diagnostics from canonical Message fields: Message/Session/parent
    identity, accepted input batch, timestamps, finish/summary state, main error,

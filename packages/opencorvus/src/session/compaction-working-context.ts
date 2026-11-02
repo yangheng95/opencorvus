@@ -100,7 +100,7 @@ export namespace CompactionWorkingContext {
   }
 
   export function create(input: {
-    render: (request: LLM.PreparedRequest, maxTokens: number, expandFields: boolean) => ModelMessage[]
+    render: (request: LLM.PreparedRequest, maxTokens: number, expandFields: boolean, completedSteps: number) => ModelMessage[]
   }) {
     let request: LLM.PreparedRequest | undefined
     let remainingReadTokens = 0
@@ -147,7 +147,7 @@ export namespace CompactionWorkingContext {
       toModelOutput: ({ output }) => ({ type: "text", value: output.output }),
     })
 
-    function project(responseMessages: ModelMessage[]) {
+    function project(responseMessages: ModelMessage[], completedSteps: number) {
       const envelope = required()
       // The SDK supplies accumulated genuine assistant/Tool responses separately
       // from its evolving prepared message view. Source rendering may change size.
@@ -181,6 +181,7 @@ export namespace CompactionWorkingContext {
         envelope,
         Math.max(sourceFloorTokens, envelope.capacityTokens - tailTokens - workspace.responseTokens - workspace.readTokens),
         true,
+        completedSteps,
       )
       const projected = [...base, ...tail]
       currentMessages = projected
@@ -198,7 +199,7 @@ export namespace CompactionWorkingContext {
       fitExchange,
       prepare(envelope: LLM.PreparedRequest) {
         request = envelope
-        const minimum = input.render(envelope, 0, false)
+        const minimum = input.render(envelope, 0, false, 0)
         workspace = ContextBudget.compactionWorkspace({
           ...envelope,
           minimumTokens: RequestBudget.estimate({ ...envelope, messages: minimum }).totalTokensEst,
@@ -209,9 +210,10 @@ export namespace CompactionWorkingContext {
           envelope,
           Math.max(0, envelope.capacityTokens - workspace.responseTokens - workspace.readTokens),
           false,
+          0,
         )
         sourceFloorTokens = RequestBudget.estimate({ ...envelope, messages: inventory }).totalTokensEst
-        return project([])
+        return project([], 0)
       },
       project,
       fitPage: ((page, options) => {
