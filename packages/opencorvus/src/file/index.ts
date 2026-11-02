@@ -808,6 +808,9 @@ export namespace File {
             result.dirs.push(dir + "/")
           }
         }
+        // Parallel enumeration order must not decide equal-score search windows.
+        result.files.sort()
+        result.dirs.sort()
         cache = result
         return cache
       }
@@ -1831,14 +1834,16 @@ export namespace File {
     }
     if (!query) {
       if (kind === "file") return result.files.slice(0, limit)
-      return sortHiddenLast(result.dirs.toSorted()).slice(0, limit)
+      return sortHiddenLast(result.dirs).slice(0, limit)
     }
 
     const items =
-      kind === "file" ? result.files : kind === "directory" ? result.dirs : [...result.files, ...result.dirs]
+      kind === "file" ? result.files : kind === "directory" ? result.dirs : [...result.files, ...result.dirs].sort()
 
     const searchLimit = kind === "directory" && !preferHidden ? limit * 20 : limit
-    const sorted = fuzzysort.go(query, items, { key: searchKey, limit: searchLimit }).map((r) => r.obj)
+    const sorted = Array.from(fuzzysort.go(query, items, { key: searchKey, limit: searchLimit }))
+      .sort((a, b) => b.score - a.score || (a.obj < b.obj ? -1 : a.obj > b.obj ? 1 : 0))
+      .map((r) => r.obj)
     const output = kind === "directory" ? sortHiddenLast(sorted).slice(0, limit) : sorted
 
     log.info("search", { query, kind, results: output.length })

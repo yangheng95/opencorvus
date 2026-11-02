@@ -1047,6 +1047,16 @@ identity, including the directory suffix. Windows native and portable separators
 therefore match the same file; POSIX literal backslashes retain their identity.
 Hidden-directory preference consumes that same matching projection. The index,
 API result paths and file-opening authority remain the original sources.
+The completed shared file index orders its original file and directory paths
+before publication. Combined file/directory candidates use the same path order.
+Its fuzzy candidates therefore have deterministic input order for equal-score
+bounded windows, independent of parallel scan arrival. Returned fuzzy results
+keep higher matching scores first and use original path order to resolve equal
+scores. File windows retain their prefix when requesting an additional result.
+Directory results then apply their existing hidden-directory preference. Empty
+queries consume that same index order and preference. Matching scores and original identities retain their existing
+contract; this does not replace score ranking with alphabetical browsing or
+promise identical ordering across host platforms.
 A successful parent listing retires
 unavailable child directory namespaces across expanded paths, cached children,
 errors, loading and existing read tokens; it does not cover `..` siblings of an

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [共享文件搜索顺序](records/2026-11/2026-11-02-file-search-order.md)：候选扫描、稳定窗口及原路径身份调查。
+
 - [文件搜索结果范围](records/2026-11/2026-11-02-file-search-limit.md)：真实大目录搜索、返回上限和文件导航调查。
 
 - [收件箱筛选批量操作](records/2026-11/2026-11-02-mailbox-search-selection.md)：搜索选择的操作入口、取消及全局已读范围。

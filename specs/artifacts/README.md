@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [共享文件搜索顺序验收](2026-11-02-file-search-order/README.md)：重复搜索、同分自然顺序及真实文件交互截图。
+
 - [文件搜索范围验收](2026-11-02-file-search-limit/README.md)：大目录、有界结果、原文件打开与范围提示实图。
 
 - [收件箱筛选选择验收](2026-11-02-mailbox-search-selection/README.md)：筛选勾选、批量确认与取消的实页截图。

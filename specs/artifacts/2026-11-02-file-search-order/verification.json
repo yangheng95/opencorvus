@@ -1,0 +1,331 @@
+{
+  "at": "2026-11-02T14:16:09.922Z",
+  "manualVisualReview": {
+    "screenshots": 15,
+    "ports": [
+      38647,
+      38648,
+      38649
+    ],
+    "ownedTabs": [
+      218,
+      219,
+      220
+    ],
+    "allTabsClosed": true,
+    "uiAutomationTests": 0,
+    "finalScreenshots": [
+      10,
+      11,
+      12,
+      13,
+      14,
+      15
+    ],
+    "uiReusedFrom": "906/ui-after; frontend source unchanged"
+  },
+  "phases": {
+    "before": {
+      "at": "2026-11-02T13:50:03.446Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259698,
+      "current": 259700,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53160,
+          "after": 53161
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53102,
+          "after": 53103
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4292832,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BMjfZzvo.js"
+    },
+    "after": {
+      "at": "2026-11-02T13:59:50.538Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259700,
+      "current": 259702,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53161,
+          "after": 53162
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53103,
+          "after": 53104
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3705695,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BMjfZzvo.js"
+    },
+    "final": {
+      "at": "2026-11-02T14:13:00.927Z",
+      "kind": "final",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259702,
+      "current": 259704,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53162,
+          "after": 53163
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53104,
+          "after": 53105
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 2914614,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BMjfZzvo.js"
+    }
+  },
+  "ordering": {
+    "before": {
+      "initial": {
+        "distinct": {
+          "80": 8,
+          "81": 8,
+          "200": 8
+        },
+        "windows": 24,
+        "wholeFileSet": 132,
+        "emptyFiles": 140,
+        "directories": 5,
+        "exact": [
+          "keyboard-review-858\\entry-079.txt"
+        ],
+        "minimumRequestMs": 90.29729999999995,
+        "maximumRequestMs": 912.3011
+      },
+      "final": {
+        "distinct": {
+          "80": 8,
+          "81": 8,
+          "200": 8
+        },
+        "windows": 24,
+        "wholeFileSet": 132,
+        "emptyFiles": 140,
+        "directories": 5,
+        "exact": [
+          "keyboard-review-858\\entry-079.txt"
+        ],
+        "minimumRequestMs": 90.9386999999997,
+        "maximumRequestMs": 646.9833
+      }
+    },
+    "after": {
+      "initial": {
+        "distinct": {
+          "80": 1,
+          "81": 1,
+          "200": 1
+        },
+        "windows": 24,
+        "wholeFileSet": 132,
+        "emptyFiles": 140,
+        "directories": 5,
+        "exact": [
+          "keyboard-review-858\\entry-079.txt"
+        ],
+        "minimumRequestMs": 92.38080000000014,
+        "maximumRequestMs": 996.1582
+      },
+      "final": {
+        "distinct": {
+          "80": 1,
+          "81": 1,
+          "200": 1
+        },
+        "windows": 24,
+        "wholeFileSet": 132,
+        "emptyFiles": 140,
+        "directories": 5,
+        "exact": [
+          "keyboard-review-858\\entry-079.txt"
+        ],
+        "minimumRequestMs": 90.6286,
+        "maximumRequestMs": 620.22
+      }
+    },
+    "final": {
+      "initial": {
+        "distinct": {
+          "80": 1,
+          "81": 1,
+          "200": 1
+        },
+        "windows": 24,
+        "wholeFileSet": 132,
+        "emptyFiles": 140,
+        "directories": 5,
+        "exact": [
+          "keyboard-review-858\\entry-079.txt"
+        ],
+        "minimumRequestMs": 78.73039999999992,
+        "maximumRequestMs": 1000.644
+      },
+      "final": {
+        "distinct": {
+          "80": 1,
+          "81": 1,
+          "200": 1
+        },
+        "windows": 24,
+        "wholeFileSet": 132,
+        "emptyFiles": 140,
+        "directories": 5,
+        "exact": [
+          "keyboard-review-858\\entry-079.txt"
+        ],
+        "minimumRequestMs": 91.58589999999958,
+        "maximumRequestMs": 885.8725
+      }
+    }
+  },
+  "finalContract": {
+    "query": "entry",
+    "type": "file",
+    "stablePerLimitRequests": 16,
+    "limits": [
+      80,
+      81,
+      200
+    ],
+    "completeOriginalFileSet": 132,
+    "first80EqualToPrefixOf81": true,
+    "scoreRanking": "higher fuzzy score, then original path for ties",
+    "allOriginalIdentitiesPreserved": true
+  },
+  "native": {
+    "before": {
+      "label": "native-before",
+      "startedAt": 1793627227536,
+      "closedAt": 1793627365983,
+      "code": 0,
+      "signal": null,
+      "childPID": 30344,
+      "originalHandleConsumed": true,
+      "publicShutdown": 200,
+      "physicalOutputAndRequestSettled": true,
+      "pairedCopiesRetired": 2
+    },
+    "after": {
+      "label": "native-after",
+      "startedAt": 1793627773143,
+      "closedAt": 1793627953123,
+      "code": 0,
+      "signal": null,
+      "childPID": 3408,
+      "originalHandleConsumed": true,
+      "publicShutdown": 200,
+      "physicalOutputAndRequestSettled": true,
+      "pairedCopiesRetired": 2
+    },
+    "final": {
+      "label": "native-final",
+      "startedAt": 1793628596867,
+      "closedAt": 1793628744240,
+      "code": 0,
+      "signal": null,
+      "childPID": 15828,
+      "originalHandleConsumed": true,
+      "publicShutdown": 200,
+      "physicalOutputAndRequestSettled": true,
+      "pairedCopiesRetired": 2
+    }
+  },
+  "preservation": {
+    "allOriginalBusinessRowsAndThreeSourceDatabases": true,
+    "projectFilesAndGit": 100,
+    "attachmentsExactBytes": 229,
+    "completeMailboxResponses": 24,
+    "unread": 24,
+    "completeMissions": 15,
+    "completeTaskStatuses": 4,
+    "snapshotCount": 6
+  },
+  "checkHistory": {
+    "tests-before": 1,
+    "tests-before-specific-query": 1,
+    "tests-after": 0,
+    "tests-canonical-only": 1,
+    "tests-final": 0,
+    "core-typecheck-final": 2,
+    "tests-final-array": 0,
+    "core-typecheck-final-array": 0
+  },
+  "finalChecks": {
+    "tests-final-array": 0,
+    "core-typecheck-final-array": 0,
+    "docs-final": 0
+  },
+  "finalPositiveTests": {
+    "passed": 3,
+    "failed": 0,
+    "positiveExpectCalls": 17
+  },
+  "modelRequests": 0,
+  "cumulativeModelRequests": 1260,
+  "limits": [
+    "Windows desktop System dark theme, English; no new UI copy",
+    "Large directory performance not benchmarked",
+    "No cross-platform identical order claim",
+    "Scan failure/cancellation and native-process restart not exercised",
+    "Instance recreation tested through the actual File runtime",
+    "Debug CLI shared callsite audited; no separate CLI end-to-end run",
+    "No new model execution"
+  ]
+}
