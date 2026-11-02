@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [多步任务的列表阅读与状态导航](records/2026-11/2026-11-02-mission-list-reading.md)：默认宽列表、同一看板视图与局部状态跳转。
+
 - [任务看板的可见内容搜索](records/2026-11/2026-11-02-mission-board-search.md)：原请求、结果和子任务检索及相关预览。
 
 - [已归档多步任务的原请求阅读](records/2026-11/2026-11-02-archived-mission-context.md)：当前工作读取器统一归档标题和已保存请求。

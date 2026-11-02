@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [多步任务列表阅读与状态导航](2026-11-02-mission-list-reading/README.md)：布局/焦点/筛选和旧数据保全证据。
+
 - [任务看板可见内容搜索](2026-11-02-mission-board-search/README.md)：真实检索/项目筛选/预览和旧数据保全。
 
 - [已归档多步任务原请求阅读](2026-11-02-archived-mission-context/README.md)：实页中英文阅读及当前请求保全证据。

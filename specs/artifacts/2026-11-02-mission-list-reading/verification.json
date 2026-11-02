@@ -1,0 +1,788 @@
+{
+  "at": "2026-11-02T05:19:22.010Z",
+  "checks": {
+    "overlay-typecheck": {
+      "label": "overlay-typecheck",
+      "startedAt": 1793595855926,
+      "closedAt": 1793595885708,
+      "code": 0,
+      "signal": null,
+      "childPID": 32168
+    },
+    "focused-checks": {
+      "label": "focused-checks",
+      "startedAt": 1793595855925,
+      "closedAt": 1793595870204,
+      "code": 0,
+      "signal": null,
+      "childPID": 24256
+    },
+    "ui-build-after": {
+      "label": "ui-build-after",
+      "startedAt": 1793595855941,
+      "closedAt": 1793595923320,
+      "code": 0,
+      "signal": null,
+      "childPID": 16708
+    },
+    "final-focused-checks": {
+      "label": "final-focused-checks",
+      "startedAt": 1793596076505,
+      "closedAt": 1793596088086,
+      "code": 0,
+      "signal": null,
+      "childPID": 1764
+    },
+    "ui-build-final": {
+      "label": "ui-build-final",
+      "startedAt": 1793596076506,
+      "closedAt": 1793596135109,
+      "code": 0,
+      "signal": null,
+      "childPID": 15128
+    },
+    "reviewed-overlay-typecheck": {
+      "label": "reviewed-overlay-typecheck",
+      "startedAt": 1793596410553,
+      "closedAt": 1793596437712,
+      "code": 0,
+      "signal": null,
+      "childPID": 27356
+    },
+    "reviewed-focused-checks": {
+      "label": "reviewed-focused-checks",
+      "startedAt": 1793596410562,
+      "closedAt": 1793596421804,
+      "code": 0,
+      "signal": null,
+      "childPID": 7560
+    },
+    "ui-build-reviewed": {
+      "label": "ui-build-reviewed",
+      "startedAt": 1793596410553,
+      "closedAt": 1793596483487,
+      "code": 0,
+      "signal": null,
+      "childPID": 5152
+    }
+  },
+  "qualifications": {
+    "before": {
+      "at": "2026-11-02T05:03:05.248Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259466,
+      "current": 259468,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53099,
+          "after": 53100
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53041,
+          "after": 53042
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4426402,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DcnaJLIA.js"
+    },
+    "after": {
+      "at": "2026-11-02T05:07:33.366Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259468,
+      "current": 259470,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53100,
+          "after": 53101
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53042,
+          "after": 53043
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4145838,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-D0-ipAY3.js"
+    },
+    "final": {
+      "at": "2026-11-02T05:12:58.535Z",
+      "kind": "final",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259470,
+      "current": 259472,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53101,
+          "after": 53102
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53043,
+          "after": 53044
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3820561,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-aoUawGnf.js"
+    },
+    "reviewed": {
+      "at": "2026-11-02T05:18:04.190Z",
+      "kind": "reviewed",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259472,
+      "current": 259474,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53102,
+          "after": 53103
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53044,
+          "after": 53045
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3515200,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CZh4CzLl.js"
+    }
+  },
+  "closures": {
+    "before": {
+      "originalExecHandle": 2179,
+      "originalExecConsumedExit": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "maximumRequests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4426402,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "physical": {
+        "native": {
+          "occurrence": "mission-list-reading-895-before-a003dd32-6fb7-4963-9875-33ad1822df4d",
+          "outcome": "settled",
+          "host": {
+            "pid": 25624,
+            "processInstanceID": "win32:639291925107721681",
+            "occurrenceID": "b94f220d-b970-491c-8dd5-5bff3a9c47a5"
+          },
+          "target": {
+            "pid": 15992,
+            "processInstanceID": "win32:639291925115105443",
+            "occurrenceID": "0abd4b6a-91c1-44e9-a512-6c6fd8415995"
+          },
+          "observedAtUtc": "2026-11-02T05:02:28.629Z",
+          "deadlineAt": 1793600175031,
+          "terminal": {
+            "occurrenceID": "mission-list-reading-895-before-a003dd32-6fb7-4963-9875-33ad1822df4d",
+            "pid": 15992,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-11-02T05:02:28.6665324Z"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 25624,
+              "processInstanceID": "win32:639291925107721681",
+              "occurrenceID": "b94f220d-b970-491c-8dd5-5bff3a9c47a5"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 15992,
+              "processInstanceID": "win32:639291925115105443",
+              "occurrenceID": "0abd4b6a-91c1-44e9-a512-6c6fd8415995"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "observedAtUtc": "2026-11-02T05:02:29.9730666Z"
+      }
+    },
+    "after": {
+      "originalExecHandle": 84263,
+      "originalExecConsumedExit": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "maximumRequests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4145838,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-11-02T05:07:09.2245969Z"
+        },
+        "observedAtUtc": "2026-11-02T05:07:10.5165663Z",
+        "native": {
+          "occurrence": "mission-list-reading-895-after-842b2d50-f63a-45fa-8d9d-dd6fb80a7c47",
+          "outcome": "settled",
+          "host": {
+            "pid": 33344,
+            "processInstanceID": "win32:639291927611757104",
+            "occurrenceID": "72b0fec3-a9e7-4f16-878a-3eacd26449b4"
+          },
+          "target": {
+            "pid": 10840,
+            "processInstanceID": "win32:639291927618614306",
+            "occurrenceID": "66d619ae-ac73-4d31-80f1-da32e9b89625"
+          },
+          "observedAtUtc": "2026-11-02T05:07:09.193Z",
+          "deadlineAt": 1793600175031,
+          "terminal": {
+            "occurrenceID": "mission-list-reading-895-after-842b2d50-f63a-45fa-8d9d-dd6fb80a7c47",
+            "pid": 10840,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 33344,
+              "processInstanceID": "win32:639291927611757104",
+              "occurrenceID": "72b0fec3-a9e7-4f16-878a-3eacd26449b4"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 10840,
+              "processInstanceID": "win32:639291927618614306",
+              "occurrenceID": "66d619ae-ac73-4d31-80f1-da32e9b89625"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      }
+    },
+    "final": {
+      "originalExecHandle": 27485,
+      "originalExecConsumedExit": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "maximumRequests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3820561,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "physical": {
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 23680,
+              "processInstanceID": "win32:639291929695326657",
+              "occurrenceID": "da91a449-e752-42f0-a688-7ad0ffcfb6ca"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 17156,
+              "processInstanceID": "win32:639291929702205336",
+              "occurrenceID": "b96f5c59-a55c-44b4-af24-0a8eceb2eaac"
+            }
+          }
+        ],
+        "native": {
+          "occurrence": "mission-list-reading-895-final-bf80cd28-d0d3-4fb4-a7c5-f0666cd85b99",
+          "outcome": "settled",
+          "host": {
+            "pid": 23680,
+            "processInstanceID": "win32:639291929695326657",
+            "occurrenceID": "da91a449-e752-42f0-a688-7ad0ffcfb6ca"
+          },
+          "target": {
+            "pid": 17156,
+            "processInstanceID": "win32:639291929702205336",
+            "occurrenceID": "b96f5c59-a55c-44b4-af24-0a8eceb2eaac"
+          },
+          "observedAtUtc": "2026-11-02T05:12:34.47Z",
+          "deadlineAt": 1793600175031,
+          "terminal": {
+            "occurrenceID": "mission-list-reading-895-final-bf80cd28-d0d3-4fb4-a7c5-f0666cd85b99",
+            "pid": 17156,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-11-02T05:12:35.7700735Z",
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-11-02T05:12:34.5020675Z"
+        }
+      }
+    },
+    "reviewed": {
+      "originalExecHandle": 94405,
+      "originalExecConsumedExit": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "requests": 0,
+      "maximumRequests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3515200,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "physical": {
+        "observedAtUtc": "2026-11-02T05:17:41.1362542Z",
+        "launcher": {
+          "observedAtUtc": "2026-11-02T05:17:39.8629371Z",
+          "originalChildExit": 0
+        },
+        "native": {
+          "occurrence": "mission-list-reading-895-reviewed-66e91926-c070-45e0-bd38-18096686f9e3",
+          "outcome": "settled",
+          "host": {
+            "pid": 3584,
+            "processInstanceID": "win32:639291933225371733",
+            "occurrenceID": "fdafea01-c71e-47c0-9687-a4bd30c634de"
+          },
+          "target": {
+            "pid": 31776,
+            "processInstanceID": "win32:639291933232339716",
+            "occurrenceID": "60032dcc-6ff3-4e49-b1eb-e81e0990e7a0"
+          },
+          "observedAtUtc": "2026-11-02T05:17:39.831Z",
+          "deadlineAt": 1793600175031,
+          "terminal": {
+            "occurrenceID": "mission-list-reading-895-reviewed-66e91926-c070-45e0-bd38-18096686f9e3",
+            "pid": 31776,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 3584,
+              "processInstanceID": "win32:639291933225371733",
+              "occurrenceID": "fdafea01-c71e-47c0-9687-a4bd30c634de"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 31776,
+              "processInstanceID": "win32:639291933232339716",
+              "occurrenceID": "60032dcc-6ff3-4e49-b1eb-e81e0990e7a0"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "reader": {
+    "status": 200,
+    "records": 13,
+    "maximumTasks": 2,
+    "exactOriginalRecords": [
+      "after",
+      "final",
+      "reviewed"
+    ],
+    "missionID": "0249bbe6c48d8cce",
+    "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+    "draftMissionID": "ead8ffac0ee1e2ae",
+    "originalTaskOrder": [
+      "客户原件复核与阻塞确认",
+      "订单精确计算与汇总交付"
+    ]
+  },
+  "layoutObservations": {
+    "before": {
+      "cards": [
+        {
+          "title": "输入保全验收888（未执行）",
+          "titleHeight": 32.375,
+          "width": 170
+        },
+        {
+          "title": "表单校验验收886（未执行）",
+          "titleHeight": 32.375,
+          "width": 170
+        },
+        {
+          "title": "项目名称验收885（未执行）",
+          "titleHeight": 32.375,
+          "width": 170
+        },
+        {
+          "title": "会话问候确认",
+          "titleHeight": 16.1875,
+          "width": 170
+        },
+        {
+          "title": "搜索选择保全800",
+          "titleHeight": 16.1875,
+          "width": 170
+        },
+        {
+          "title": "状态展示草稿740",
+          "titleHeight": 16.1875,
+          "width": 170
+        },
+        {
+          "title": "在当前隔离项目完成一个有限代码任务，名称“协调差异验收793”。只修复 counter.py 的 next_serial(value)，让 next_se...",
+          "titleHeight": 32.375,
+          "width": 170
+        },
+        {
+          "title": "@squad(\"base\") 请在当前隔离项目完成两个可独立验收的结果。第一项：实际读取 orders.csv，精确计算每行 quantity × uni...",
+          "titleHeight": 32.375,
+          "width": 170
+        },
+        {
+          "title": "批准后提交801",
+          "titleHeight": 16.1875,
+          "width": 170
+        },
+        {
+          "title": "在当前 checkpoint-qa-795 独立项目创建并完成一个有限代码 Task，命名“检查点保全795”。先读取 README.md 和真实 Git...",
+          "titleHeight": 32.375,
+          "width": 170
+        },
+        {
+          "title": "在当前隔离项目中修复 invoice.py 的 sum_due(rows)。输入为 (quantity 整数, unit_price 十进制字符串) 的列...",
+          "titleHeight": 32.375,
+          "width": 170
+        },
+        {
+          "title": "验证当前项目已完成的 invoice.py 与 test_invoice.py：实际运行现有 Python unittest，并独立核对 [(3,\"0.1...",
+          "titleHeight": 32.375,
+          "width": 170
+        },
+        {
+          "title": "在当前隔离项目中修复 invoice.py 的 sum_due(rows)。输入为 (quantity 整数, unit_price 十进制字符串) 的列...",
+          "titleHeight": 32.375,
+          "width": 170
+        }
+      ],
+      "layout": null,
+      "scroll": 0
+    },
+    "firstAfter": {
+      "cards": [
+        {
+          "title": "输入保全验收888（未执行）",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "表单校验验收886（未执行）",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "项目名称验收885（未执行）",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "会话问候确认",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "搜索选择保全800",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "状态展示草稿740",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "在当前隔离项目完成一个有限代码任务，名称“协调差异验收793”。只修复 counter.py 的 next_serial(value)，让 next_se...",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "@squad(\"base\") 请在当前隔离项目完成两个可独立验收的结果。第一项：实际读取 orders.csv，精确计算每行 quantity × uni...",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "批准后提交801",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "在当前 checkpoint-qa-795 独立项目创建并完成一个有限代码 Task，命名“检查点保全795”。先读取 README.md 和真实 Git...",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "在当前隔离项目中修复 invoice.py 的 sum_due(rows)。输入为 (quantity 整数, unit_price 十进制字符串) 的列...",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "验证当前项目已完成的 invoice.py 与 test_invoice.py：实际运行现有 Python unittest，并独立核对 [(3,\"0.1...",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "在当前隔离项目中修复 invoice.py 的 sum_due(rows)。输入为 (quantity 整数, unit_price 十进制字符串) 的列...",
+          "titleHeight": 16.1875,
+          "width": 920
+        }
+      ],
+      "layout": "list",
+      "scroll": 0
+    },
+    "finalKeyboard": {
+      "active": "missionBoardLane-attention",
+      "attention": 199.671875,
+      "layout": "list",
+      "localScroll": 881,
+      "viewport": 199.390625,
+      "windowScroll": 0
+    },
+    "reviewed": {
+      "active": "missionBoardLane-attention",
+      "cards": [
+        {
+          "title": "输入保全验收888（未执行）",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "表单校验验收886（未执行）",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "项目名称验收885（未执行）",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "会话问候确认",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "搜索选择保全800",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "状态展示草稿740",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "在当前隔离项目完成一个有限代码任务，名称“协调差异验收793”。只修复 counter.py 的 next_serial(value)，让 next_se...",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "@squad(\"base\") 请在当前隔离项目完成两个可独立验收的结果。第一项：实际读取 orders.csv，精确计算每行 quantity × uni...",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "批准后提交801",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "在当前 checkpoint-qa-795 独立项目创建并完成一个有限代码 Task，命名“检查点保全795”。先读取 README.md 和真实 Git...",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "在当前隔离项目中修复 invoice.py 的 sum_due(rows)。输入为 (quantity 整数, unit_price 十进制字符串) 的列...",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "验证当前项目已完成的 invoice.py 与 test_invoice.py：实际运行现有 Python unittest，并独立核对 [(3,\"0.1...",
+          "titleHeight": 16.1875,
+          "width": 920
+        },
+        {
+          "title": "在当前隔离项目中修复 invoice.py 的 sum_due(rows)。输入为 (quantity 整数, unit_price 十进制字符串) 的列...",
+          "titleHeight": 16.1875,
+          "width": 920
+        }
+      ],
+      "headingTop": 199.671875,
+      "layout": "list",
+      "localScroll": 881,
+      "viewportTop": 199.390625,
+      "windowScroll": 0
+    }
+  },
+  "manualVisualReview": {
+    "method": "Real hidden CUA tabs, production CLI /ui, manual interactions and individual screenshots; final saved originals 20 and 21 viewed independently.",
+    "screenshots": [
+      "01-before-board-en.jpg",
+      "02-before-blocked.jpg",
+      "03-after-default-list-en.jpg",
+      "04-final-default-list-en.jpg",
+      "05-final-keyboard-attention-en.jpg",
+      "06-final-blocked-expanded-en.jpg",
+      "07-final-completed-jump-en.jpg",
+      "08-final-request-search-en.jpg",
+      "09-final-original-request-en.jpg",
+      "10-final-edit-request-en.jpg",
+      "11-final-board-keeps-filters-en.jpg",
+      "12-final-empty-intersection-en.jpg",
+      "13-final-list-zh.jpg",
+      "14-final-board-zh.jpg",
+      "15-reviewed-default-en.jpg",
+      "16-reviewed-filtered-list-en.jpg",
+      "17-reviewed-editor-copy-en.jpg",
+      "18-reviewed-board-en.jpg",
+      "19-reviewed-empty-en.jpg",
+      "20-reviewed-default-zh.jpg",
+      "21-reviewed-attention-expanded-zh.jpg",
+      "22-reviewed-editor-zh.jpg",
+      "23-reviewed-original-request-zh.jpg"
+    ],
+    "observed": [
+      "Default List, same original 13 records and canonical counts 6/1/1/0/5",
+      "Fixed title/time and project/path rows, original request and result previews, 920px cards vs original 170px",
+      "Keyboard Attention and mouse Completed jump; corresponding heading focused and window scroll 0",
+      "Original blocked criterion expanded in English and Chinese with separate open action",
+      "Search original request, open original 888 Session and return with query/List preserved",
+      "Original editor open/cancel only, current English and Chinese help, native in-app dialog",
+      "Project773 plus query886 preserved across Board/List, cross-project original request produces clear empty result; Reset filters",
+      "Filtered List contains the matching group; all zero counts remain visible and disabled, Board retains five lanes",
+      "English and Chinese titles, view controls, status counts, date strings and original content"
+    ]
+  },
+  "limits": {
+    "uiAutomationTests": false,
+    "modelRequests": 0,
+    "cumulativeRequests": 1260,
+    "schema": 9,
+    "tables": 92,
+    "allPhasesUseOriginalDeadline": 1793600175031,
+    "desktopViewport": [
+      1280,
+      720
+    ],
+    "notClaimed": [
+      "Real model execution in this pure UI batch",
+      "Three or more child Tasks in a Mission",
+      "New creation/save/start/delete/archive/restore mutations",
+      "Offline/loading failure visuals or additional screen sizes",
+      "Restoring title text already truncated in the stored source",
+      "All other pages or all Mission-form terminology finished"
+    ]
+  }
+}

@@ -25,6 +25,7 @@ import { Feedback } from "./ui/Feedback"
 import { appStore } from "../store/app"
 import { MissionDraftEditDialog, type MissionDraftEditTarget } from "./MissionDraftEditDialog"
 import { Disclosure } from "./ui/Disclosure"
+import { SegmentedControl } from "./ui/SegmentedControl"
 
 const MISSION_TASK_PREVIEW_LIMIT = 3
 
@@ -305,6 +306,7 @@ function MissionBoardCard(props: {
 
 export function MissionBoard(props: MissionBoardProps) {
   const [search, setSearch] = createSignal("")
+  const [layout, setLayout] = createSignal<"list" | "board">("list")
   const [projectDirectory, setProjectDirectory] = createSignal("")
   const [createOpen, setCreateOpen] = createSignal(false)
   const [pendingAction, setPendingAction] = createSignal<{ kind: "dispatch" | "delete"; missionID: string } | null>(
@@ -313,6 +315,8 @@ export function MissionBoard(props: MissionBoardProps) {
   const [actionError, setActionError] = createSignal("")
   const [editingDraft, setEditingDraft] = createSignal<MissionDraftEditTarget | null>(null)
   let searchInput: HTMLInputElement | undefined
+  let lanesElement: HTMLDivElement | undefined
+  const laneHeadings: Partial<Record<MissionBoardLane, HTMLHeadingElement>> = {}
   let actionGeneration = 0
   const projectContextID = createUniqueId()
   const searchHintID = createUniqueId()
@@ -356,6 +360,22 @@ export function MissionBoard(props: MissionBoardProps) {
   }
   const laneMissions = (lane: MissionBoardLane) => visibleMissions().filter((mission) => mission.boardLane === lane)
 
+  function changeLayout(next: "list" | "board"): void {
+    setLayout(next)
+    queueMicrotask(() => lanesElement?.scrollTo({ top: 0, left: 0 }))
+  }
+
+  function jumpToLane(lane: MissionBoardLane): void {
+    const heading = laneHeadings[lane]
+    const viewport = lanesElement
+    if (!viewport || !heading || !viewport.contains(heading)) return
+    viewport.scrollTo({
+      top: Math.max(0, heading.getBoundingClientRect().top - viewport.getBoundingClientRect().top + viewport.scrollTop),
+      left: 0,
+    })
+    heading.focus({ preventScroll: true })
+  }
+
   async function dispatchMission(mission: MissionRecord): Promise<void> {
     if (pendingAction()) return
     const generation = ++actionGeneration
@@ -397,7 +417,7 @@ export function MissionBoard(props: MissionBoardProps) {
   }
 
   return (
-    <section class="mission-board" data-ui="mission-board" aria-labelledby="missionBoardTitle">
+    <section class="mission-board" data-ui="mission-board" data-layout={layout()} aria-labelledby="missionBoardTitle">
       <header class="mission-board__header">
         <div class="mission-board__heading">
           <div>
@@ -461,6 +481,17 @@ export function MissionBoard(props: MissionBoardProps) {
           ariaLabel={t("mission_board.project_filter")}
           ariaDescribedBy={projectDirectory() ? projectContextID : undefined}
           disallowEmptySelection
+        />
+        <SegmentedControl<"list" | "board">
+          class="mission-board__layout"
+          size="sm"
+          ariaLabel={t("mission_board.layout_label")}
+          value={layout()}
+          options={[
+            { value: "list", label: t("mission_board.layout.list") },
+            { value: "board", label: t("mission_board.layout.board") },
+          ]}
+          onChange={changeLayout}
         />
         <Button
           type="button"
@@ -565,13 +596,43 @@ export function MissionBoard(props: MissionBoardProps) {
               </div>
             }
           >
-            <div class="mission-board__lanes" data-ui="mission-board-lanes">
+            <Show when={layout() === "list"}>
+              <nav class="mission-board__status-navigation" aria-label={t("mission_board.status_navigation")}>
+                <For each={MISSION_BOARD_LANES}>
+                  {(lane) => (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      tone="neutral"
+                      aria-label={t("mission_board.jump_to_status", {
+                        status: t(`mission_board.lane.${lane}`),
+                        count: laneMissions(lane).length.toLocaleString(localeTag()),
+                      })}
+                      disabled={laneMissions(lane).length === 0}
+                      onClick={() => jumpToLane(lane)}
+                    >
+                      {t(`mission_board.lane.${lane}`)}
+                      <Badge size="sm" tone="muted">{laneMissions(lane).length.toLocaleString(localeTag())}</Badge>
+                    </Button>
+                  )}
+                </For>
+              </nav>
+            </Show>
+            <div ref={lanesElement} class="mission-board__lanes" data-ui="mission-board-lanes">
               <For each={MISSION_BOARD_LANES}>
                 {(lane) => (
-                  <section class="mission-board-lane" data-lane={lane} aria-labelledby={`missionBoardLane-${lane}`}>
+                  <section
+                    class="mission-board-lane"
+                    data-lane={lane}
+                    data-empty={laneMissions(lane).length === 0 ? "true" : undefined}
+                    aria-labelledby={`missionBoardLane-${lane}`}
+                  >
                     <header class="mission-board-lane__header">
                       <span class="mission-board-lane__indicator" aria-hidden="true" />
-                      <h2 id={`missionBoardLane-${lane}`}>{t(`mission_board.lane.${lane}`)}</h2>
+                      <h2 ref={(element) => { laneHeadings[lane] = element }} id={`missionBoardLane-${lane}`} tabIndex={-1}>
+                        {t(`mission_board.lane.${lane}`)}
+                      </h2>
                       <Badge size="sm" tone="muted">
                         {laneMissions(lane).length.toLocaleString(localeTag())}
                       </Badge>

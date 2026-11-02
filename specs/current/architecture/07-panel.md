@@ -2752,11 +2752,21 @@ header shares the Dock's opaque content canvas. Shared empty hints provide
 low-specificity typography defaults so each panel can own its content inset
 without a late cascade override.
 
-The Mission board separates page creation from search/project filters. Its
-canonical five lane order and Mission/Task projections remain unchanged; lanes
-use quiet headings and independently scrollable content instead of full-height
-framed containers. Cards lead with the Mission title and retain identity, time,
-project and execution details beneath it. Mailbox uses the shared Feedback and
+The Missions page separates creation from search/project filters. It defaults
+to a wide List grouped in the canonical five-state order; the existing shared
+SegmentedControl also offers the five-column Board. Both presentations use the
+same lane/card tree, Mission/Task projections, filters and actions. The view is
+ephemeral page state, with no separate preference or persistent format. Switching
+views resets only the local content scroll while retaining search and project.
+List groups share one local scroll region; its status navigation shows filtered
+counts, disables empty destinations and scrolls/focuses the corresponding heading
+without changing page selection, URL or window scroll. Board lanes retain their
+independent scrolling and empty lanes. List shows only groups containing filtered
+records; zero counts remain visible in its navigation. List titles and child Task names wrap; request/result
+previews are bounded to three lines. Draft controls and blocked-outcome disclosure
+remain siblings of the card's primary open action in both views. Cards lead with
+the Mission title and retain identity, time, project and execution details.
+Mailbox uses the shared Feedback and
 neutral navigation selection while retaining unread and attention facts.
 Project choices retain directory identity: Mission board filters and creation
 menus show the existing compact parent label with wrapping and the full original
