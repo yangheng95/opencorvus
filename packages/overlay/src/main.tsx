@@ -1165,11 +1165,12 @@ function missionBoardProjectDirectories(): string[] {
   return [...new Set([...(currentDirectory ? [currentDirectory] : []), ...workLedgerProjectDirectories()])]
 }
 
-async function createMissionBoardDraft(input: MissionManualCreateRequest): Promise<void> {
+async function createMissionBoardDraft(input: MissionManualCreateRequest): Promise<MissionRecord> {
   const authority = captureApiAuthority()
-  await createMissionDraft({ ...input, authority })
-  if (!isApiAuthorityCurrent(authority)) return
+  const created = await createMissionDraft({ ...input, authority })
+  assertApiAuthorityCurrent(authority)
   setMissionSharedRefreshToken((value) => value + 1)
+  return created
 }
 
 async function createMissionBoardWithAI(input: MissionCreateRequest): Promise<void> {

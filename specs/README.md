@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [创建意图与草稿保存结果](records/2026-11/2026-11-02-mission-create-feedback.md)：明确立即开始与先存草稿，保留筛选并可直达已保存工作。
+
 - [多步任务的列表阅读与状态导航](records/2026-11/2026-11-02-mission-list-reading.md)：默认宽列表、同一看板视图与局部状态跳转。
 
 - [任务看板的可见内容搜索](records/2026-11/2026-11-02-mission-board-search.md)：原请求、结果和子任务检索及相关预览。

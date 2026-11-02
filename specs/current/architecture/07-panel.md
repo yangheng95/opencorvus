@@ -1254,6 +1254,22 @@ apply. Item pin reads the Session in that exact Project; Project pin remains a
 global operation naming its Project directly. AI creation and explicit dispatch
 retain execution-model admission.
 
+Creation describes its two existing outcomes as Start now and Save a draft,
+with mode-specific help associated with the submit action. The request field
+and placeholder are shared by both modes and the same request label is used
+by draft editing. Saving and starting use their own existing busy labels;
+switching modes retains authored fields and the existing validation/context.
+Manual creation returns its existing committed MissionRecord through the main
+binding. The Missions page retains only a saved Mission identity and captured
+API authority as an ephemeral acknowledgement. It shows inline success outside
+the search/project results, with an Open Mission action derived from that exact
+identity in the existing complete Mission reader. Search/project values stay
+unchanged and the existing navigation owns opening. A pending/failed reader
+does not rewrite the committed save; the action waits for its canonical record.
+Retired API authority invalidates the acknowledgement, and explicit dismissal
+removes it. There is no second record snapshot, forced navigation, persistence,
+new loading owner or diagnostic-log substitute for visible success.
+
 Mission creation failures preserve the entered fields and focus the existing
 inline Feedback into view. Its current-language summary identifies the submitted
 creation mode; the original diagnostic remains in expandable Details. Changing

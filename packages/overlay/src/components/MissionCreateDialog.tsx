@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, For, on, onCleanup, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, Show } from "solid-js"
 import type { ProductPillar } from "@opencorvus-ai/transport-protocol"
 import {
   loadExpertSquadCatalog,
@@ -77,6 +77,7 @@ function mergeSquadOptions(
 }
 
 export function MissionCreateDialog(props: MissionCreateDialogProps) {
+  const modeHelpID = createUniqueId()
   const [mode, setMode] = createSignal<MissionCreateMode>("ai")
   const [title, setTitle] = createSignal("")
   const [request, setRequest] = createSignal("")
@@ -591,6 +592,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             size="md"
             tone="neutral"
             data-ui="mission-create-submit"
+            aria-describedby={modeHelpID}
             disabled={Boolean(prerequisiteMessage()) || submitting()}
             title={prerequisiteMessage() || undefined}
           >
@@ -598,7 +600,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
               <Icon name="loading" size="compact" />
             </Show>
             {submitting()
-              ? t("mission_board.create.submitting")
+              ? mode() === "manual" ? t("common.saving") : t("mission_board.create.dispatching")
               : mode() === "manual"
                 ? t("mission_board.create.manual_action")
                 : t("mission_board.create.ai_action")}
@@ -622,18 +624,22 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             {t("mission_board.unsaved.message")}
           </Feedback>
         </Show>
-        <SegmentedControl
-          class="mission-create-form__mode"
-          value={mode()}
-          options={modeOptions()}
-          ariaLabel={t("mission_board.create.mode")}
-          onChange={(nextMode) => {
-            if (submitting()) return
-            setMode(nextMode)
-            setError(undefined)
-            setSubmitAttempted(false)
-          }}
-        />
+        <div class="mission-create-form__mode">
+          <SegmentedControl
+            value={mode()}
+            options={modeOptions()}
+            ariaLabel={t("mission_board.create.mode")}
+            onChange={(nextMode) => {
+              if (submitting()) return
+              setMode(nextMode)
+              setError(undefined)
+              setSubmitAttempted(false)
+            }}
+          />
+          <p class="mission-create-form__context-status" id={modeHelpID}>
+            {t(mode() === "manual" ? "mission_board.create.manual_help" : "mission_board.create.ai_help")}
+          </p>
+        </div>
 
         <Show when={mode() === "manual"}>
           <TextField.Root as="label" class="mission-create-form__title" invalid={titleInvalid()}>
@@ -659,7 +665,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
 
         <TextField.Root as="label" class="mission-create-form__request" invalid={requestInvalid()}>
           <TextField.Label>
-            {mode() === "manual" ? t("mission_board.create.description") : t("mission_board.create.ai_prompt")}
+            {t("mission_board.create.description")}
           </TextField.Label>
           <AutoGrowTextarea
             ref={(element) => {
@@ -672,11 +678,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             required
             aria-required="true"
             value={request()}
-            placeholder={
-              mode() === "manual"
-                ? t("mission_board.create.description_placeholder")
-                : t("mission_board.create.ai_placeholder")
-            }
+            placeholder={t("mission_board.create.description_placeholder")}
             data-ui="mission-create-request"
             onInput={(event) => setRequest(event.currentTarget.value)}
           />

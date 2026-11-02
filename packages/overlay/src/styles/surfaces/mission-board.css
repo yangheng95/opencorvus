@@ -109,7 +109,8 @@ body {
   font-size: var(--ui-font-caption);
 }
 
-.mission-board__error {
+.mission-board__error,
+.mission-board__saved {
   flex: 0 0 auto;
   margin: var(--ui-gap-lg) var(--ui-gap-xl);
 }
@@ -669,6 +670,11 @@ body {
 }
 
 .mission-create-form__mode {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ui-gap-sm);
   align-self: flex-start;
 }
 

@@ -1,0 +1,593 @@
+{
+  "at": "2026-11-02T05:50:16.566Z",
+  "checks": {
+    "overlay-typecheck": {
+      "label": "overlay-typecheck",
+      "startedAt": 1793597812968,
+      "closedAt": 1793597839747,
+      "code": 0,
+      "signal": null,
+      "childPID": 14424
+    },
+    "focused-checks": {
+      "label": "focused-checks",
+      "startedAt": 1793597812970,
+      "closedAt": 1793597825867,
+      "code": 0,
+      "signal": null,
+      "childPID": 9664
+    },
+    "ui-build-after": {
+      "label": "ui-build-after",
+      "startedAt": 1793597812980,
+      "closedAt": 1793597878045,
+      "code": 0,
+      "signal": null,
+      "childPID": 14528
+    },
+    "final-focused-checks": {
+      "label": "final-focused-checks",
+      "startedAt": 1793598276217,
+      "closedAt": 1793598286183,
+      "code": 0,
+      "signal": null,
+      "childPID": 31192
+    },
+    "ui-build-final": {
+      "label": "ui-build-final",
+      "startedAt": 1793598276216,
+      "closedAt": 1793598334303,
+      "code": 0,
+      "signal": null,
+      "childPID": 30300
+    }
+  },
+  "qualifications": {
+    "before": {
+      "at": "2026-11-02T05:34:59.511Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259474,
+      "current": 259545,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 50724,
+          "after": 50736
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 50724,
+          "after": 50736
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6681,
+          "after": 6685
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6681,
+          "after": 6685
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 20043,
+          "after": 20055
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53103,
+          "after": 53116
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53045,
+          "after": 53058
+        },
+        {
+          "table": "session",
+          "before": 135,
+          "after": 136
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4396484,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CZh4CzLl.js"
+    },
+    "after": {
+      "at": "2026-11-02T05:43:44.926Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259545,
+      "current": 259650,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 50736,
+          "after": 50755
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 50736,
+          "after": 50755
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6685,
+          "after": 6690
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6685,
+          "after": 6690
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 20055,
+          "after": 20070
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53116,
+          "after": 53136
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53058,
+          "after": 53078
+        },
+        {
+          "table": "event_occurrence",
+          "before": 6469,
+          "after": 6470
+        },
+        {
+          "table": "session",
+          "before": 136,
+          "after": 137
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3870694,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BV-ny3r2.js"
+    },
+    "final": {
+      "at": "2026-11-02T05:48:07.746Z",
+      "kind": "final",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259650,
+      "current": 259652,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53136,
+          "after": 53137
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53078,
+          "after": 53079
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3607899,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DmZ_yhYj.js"
+    }
+  },
+  "closures": {
+    "before": {
+      "originalExecHandle": 28348,
+      "originalExecConsumedExit": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "maximumRequests": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4396484,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "physical": {
+        "observedAtUtc": "2026-11-02T05:34:36.5336174Z",
+        "native": {
+          "occurrence": "mission-create-feedback-896-before-bd05d54c-bf61-4106-a39a-1b43fd3960f6",
+          "outcome": "settled",
+          "host": {
+            "pid": 33488,
+            "processInstanceID": "win32:639291944057754542",
+            "occurrenceID": "8f915793-9165-4c6c-b118-25d263b24a74"
+          },
+          "target": {
+            "pid": 31876,
+            "processInstanceID": "win32:639291944064701567",
+            "occurrenceID": "a447ef4b-b68f-44b9-ae19-91a6e15740cb"
+          },
+          "observedAtUtc": "2026-11-02T05:34:35.165Z",
+          "deadlineAt": 1793602071649,
+          "terminal": {
+            "occurrenceID": "mission-create-feedback-896-before-bd05d54c-bf61-4106-a39a-1b43fd3960f6",
+            "pid": 31876,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 33488,
+              "processInstanceID": "win32:639291944057754542",
+              "occurrenceID": "8f915793-9165-4c6c-b118-25d263b24a74"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 31876,
+              "processInstanceID": "win32:639291944064701567",
+              "occurrenceID": "a447ef4b-b68f-44b9-ae19-91a6e15740cb"
+            }
+          }
+        ],
+        "launcher": {
+          "observedAtUtc": "2026-11-02T05:34:35.2039451Z",
+          "originalChildExit": 0
+        }
+      }
+    },
+    "after": {
+      "originalExecHandle": 52643,
+      "originalExecConsumedExit": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "maximumRequests": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3870694,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "physical": {
+        "native": {
+          "occurrence": "mission-create-feedback-896-after-cd301afd-0664-4109-8b06-7572b8550397",
+          "outcome": "settled",
+          "host": {
+            "pid": 18448,
+            "processInstanceID": "win32:639291947704153872",
+            "occurrenceID": "50713d54-015e-44d2-8594-749487c42070"
+          },
+          "target": {
+            "pid": 3268,
+            "processInstanceID": "win32:639291947711182392",
+            "occurrenceID": "384e5ac1-aaab-4619-8146-e7ac56c934c7"
+          },
+          "observedAtUtc": "2026-11-02T05:43:20.955Z",
+          "deadlineAt": 1793602071649,
+          "terminal": {
+            "occurrenceID": "mission-create-feedback-896-after-cd301afd-0664-4109-8b06-7572b8550397",
+            "pid": 3268,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "observedAtUtc": "2026-11-02T05:43:20.9859239Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 18448,
+              "processInstanceID": "win32:639291947704153872",
+              "occurrenceID": "50713d54-015e-44d2-8594-749487c42070"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 3268,
+              "processInstanceID": "win32:639291947711182392",
+              "occurrenceID": "384e5ac1-aaab-4619-8146-e7ac56c934c7"
+            }
+          }
+        ],
+        "observedAtUtc": "2026-11-02T05:43:22.2505094Z"
+      }
+    },
+    "final": {
+      "originalExecHandle": 73967,
+      "originalExecConsumedExit": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "maximumRequests": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3607899,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "physical": {
+        "chain": [
+          {
+            "identity": {
+              "pid": 5296,
+              "processInstanceID": "win32:639291951777488755",
+              "occurrenceID": "722b5020-ea80-4ed9-a0da-322de7d3872e"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 1504,
+              "processInstanceID": "win32:639291951784469912",
+              "occurrenceID": "1687406c-c3f3-40dd-af87-0146a24864d1"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "native": {
+          "occurrence": "mission-create-feedback-896-final-6e73d3c1-19a9-47a6-88f7-4b949051d0ca",
+          "outcome": "settled",
+          "host": {
+            "pid": 5296,
+            "processInstanceID": "win32:639291951777488755",
+            "occurrenceID": "722b5020-ea80-4ed9-a0da-322de7d3872e"
+          },
+          "target": {
+            "pid": 1504,
+            "processInstanceID": "win32:639291951784469912",
+            "occurrenceID": "1687406c-c3f3-40dd-af87-0146a24864d1"
+          },
+          "observedAtUtc": "2026-11-02T05:47:43.75Z",
+          "deadlineAt": 1793602071649,
+          "terminal": {
+            "occurrenceID": "mission-create-feedback-896-final-6e73d3c1-19a9-47a6-88f7-4b949051d0ca",
+            "pid": 1504,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-11-02T05:47:43.7815068Z"
+        },
+        "observedAtUtc": "2026-11-02T05:47:45.0637140Z"
+      }
+    }
+  },
+  "readers": {
+    "before-initial": {
+      "at": "2026-11-02T05:33:34.133Z",
+      "status": 200,
+      "records": 13
+    },
+    "before-saved": {
+      "at": "2026-11-02T05:34:32.809Z",
+      "status": 200,
+      "records": 14,
+      "owned": {
+        "missionID": "fd04403bfcd09ec9",
+        "sessionID": "ses_-zUQCt1D9zzfFl4ktqBJ",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "title": "保存反馈验收896-before（未执行）",
+        "request": "仅保存为手动草稿，验证保存结果可见且可打开编辑；不开始执行、不调用模型或创建Task。源文件和历史保持原样。",
+        "boardLane": "backlog"
+      }
+    },
+    "after-initial": {
+      "at": "2026-11-02T05:39:38.771Z",
+      "status": 200,
+      "records": 14
+    },
+    "after-saved": {
+      "at": "2026-11-02T05:40:45.773Z",
+      "status": 200,
+      "records": 15,
+      "owned": {
+        "missionID": "75d061fcb26b308c",
+        "sessionID": "ses_-zUQCrQsDzz5sIfjyrSV",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "title": "保存反馈验收896-after（未执行）",
+        "request": "仅保存为手动草稿，验证保存结果可见且可打开编辑；不开始执行、不调用模型或创建Task。源文件和历史保持原样。",
+        "boardLane": "backlog"
+      }
+    },
+    "after-edited": {
+      "at": "2026-11-02T05:41:30.204Z",
+      "status": 200,
+      "records": 15,
+      "owned": {
+        "missionID": "75d061fcb26b308c",
+        "sessionID": "ses_-zUQCrQsDzz5sIfjyrSV",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "title": "保存反馈验收896-after（未执行）",
+        "request": "仅保存为手动草稿，验证保存结果可见且可打开编辑；不开始执行、不调用模型或创建Task。源文件和历史保持原样。\n补充：已通过当前编辑窗口保存并回读。",
+        "boardLane": "backlog"
+      }
+    },
+    "final": {
+      "at": "2026-11-02T05:47:41.641Z",
+      "status": 200,
+      "records": 15
+    }
+  },
+  "actualHTTPSubmissions": {
+    "before": [
+      {
+        "at": "2026-11-02T05:34:16.320Z",
+        "path": "/mission/draft",
+        "method": "POST",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "body": {
+          "title": "保存反馈验收896-before（未执行）",
+          "request": "仅保存为手动草稿，验证保存结果可见且可打开编辑；不开始执行、不调用模型或创建Task。源文件和历史保持原样。",
+          "productPillar": "code",
+          "expertSquadIDs": [
+            "dynamic"
+          ]
+        }
+      }
+    ],
+    "after": [
+      {
+        "at": "2026-11-02T05:40:34.330Z",
+        "path": "/mission/draft",
+        "method": "POST",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "body": {
+          "title": "保存反馈验收896-after（未执行）",
+          "request": "仅保存为手动草稿，验证保存结果可见且可打开编辑；不开始执行、不调用模型或创建Task。源文件和历史保持原样。",
+          "productPillar": "code",
+          "expertSquadIDs": [
+            "dynamic"
+          ]
+        }
+      },
+      {
+        "at": "2026-11-02T05:41:24.307Z",
+        "path": "/mission/75d061fcb26b308c/draft",
+        "method": "PATCH",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "body": {
+          "request": "仅保存为手动草稿，验证保存结果可见且可打开编辑；不开始执行、不调用模型或创建Task。源文件和历史保持原样。\n补充：已通过当前编辑窗口保存并回读。",
+          "expectedRequest": "仅保存为手动草稿，验证保存结果可见且可打开编辑；不开始执行、不调用模型或创建Task。源文件和历史保持原样。"
+        }
+      }
+    ]
+  },
+  "observations": {
+    "afterStartHelp": {
+      "describedBy": "cl-65",
+      "help": "Creates a Mission and sends this request to the selected project’s model to start work."
+    },
+    "finalMode": {
+      "group": 164.8125,
+      "help": "Saves the title and request without starting work. You can edit the draft and choose Start later from Missions.",
+      "mode": "manual",
+      "wrapper": 596.328125
+    },
+    "finalChineseDraftHelp": {
+      "describedBy": "cl-65",
+      "help": "保存标题和请求，暂不开始执行。之后可在多步任务页面编辑草稿，再点击“开始执行”。"
+    }
+  },
+  "manualVisualReview": {
+    "method": "Real isolated CLI /ui pages, CUA interaction and individual screenshots; saved originals 10 and 17 also reviewed independently.",
+    "screenshots": [
+      "01-before-create-ai-en.jpg",
+      "02-before-save-draft-en.jpg",
+      "03-before-save-result-hidden-en.jpg",
+      "04-after-start-intent-en.jpg",
+      "05-after-draft-intent-en.jpg",
+      "06-after-visible-save-result-en.jpg",
+      "07-after-open-saved-draft-en.jpg",
+      "08-after-edit-new-draft-en.jpg",
+      "09-after-read-edited-request-en.jpg",
+      "10-after-save-feedback-zh.jpg",
+      "11-after-start-intent-zh.jpg",
+      "12-after-draft-validation-zh.jpg",
+      "13-after-edited-draft-zh.jpg",
+      "14-final-start-en.jpg",
+      "15-final-draft-en.jpg",
+      "16-final-start-zh.jpg",
+      "17-final-draft-zh.jpg"
+    ],
+    "flows": [
+      "Before creates a real 801 draft while 773 project plus 886 search remains visible; result has no acknowledgement",
+      "After switches Start now/Save a draft while preserving typed title/request",
+      "After saves one new draft, sees success outside existing filters, reader publishes its real record and enables Open Mission",
+      "Open Mission navigates to exact newly created Session in project801; return keeps original project773/query886",
+      "Edit only the newly created after draft, save the added line and reopen via the same canonical reader",
+      "Chinese success and draft labels, creation outcomes, real empty-field validation and first title focus",
+      "Dismiss success while preserving current edited draft",
+      "Final natural-width mode control and help in English and Chinese, open/cancel only"
+    ]
+  },
+  "limits": {
+    "uiAutomationTests": false,
+    "modelRequests": 0,
+    "cumulativeRequests": 1260,
+    "deadlineAt": 1793602071649,
+    "schema": 9,
+    "tables": 92,
+    "desktopViewport": [
+      1280,
+      720
+    ],
+    "newOwnedDrafts": 2,
+    "originalMissionRecordsPreserved": 13,
+    "finalMissionRecords": 15,
+    "notClaimed": [
+      "Immediate-start or Provider/model execution in this zero-request batch",
+      "Connection rotation and failed-reader success visuals",
+      "Market search/install/open or typed draft conflicts",
+      "Submissions busy-state pixels",
+      "Additional viewports or all other product pages"
+    ]
+  }
+}

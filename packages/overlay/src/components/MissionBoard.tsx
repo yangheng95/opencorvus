@@ -26,6 +26,7 @@ import { appStore } from "../store/app"
 import { MissionDraftEditDialog, type MissionDraftEditTarget } from "./MissionDraftEditDialog"
 import { Disclosure } from "./ui/Disclosure"
 import { SegmentedControl } from "./ui/SegmentedControl"
+import { captureApiAuthority, assertApiAuthorityCurrent, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 
 const MISSION_TASK_PREVIEW_LIMIT = 3
 
@@ -45,7 +46,7 @@ export interface MissionBoardProps {
   onOpenMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
   canOpenMarketWebPage?: boolean
   onOpenMission: (mission: MissionRecord) => void | Promise<void>
-  onCreateManual: (input: MissionManualCreateRequest) => Promise<void>
+  onCreateManual: (input: MissionManualCreateRequest) => Promise<MissionRecord>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
   onDispatchMission: (mission: MissionRecord) => Promise<void>
   onEditMissionDraft: (input: MissionDraftEditInput) => Promise<void>
@@ -309,6 +310,7 @@ export function MissionBoard(props: MissionBoardProps) {
   const [layout, setLayout] = createSignal<"list" | "board">("list")
   const [projectDirectory, setProjectDirectory] = createSignal("")
   const [createOpen, setCreateOpen] = createSignal(false)
+  const [savedDraftReceipt, setSavedDraftReceipt] = createSignal<{ missionID: string; authority: ApiAuthority } | null>(null)
   const [pendingAction, setPendingAction] = createSignal<{ kind: "dispatch" | "delete"; missionID: string } | null>(
     null,
   )
@@ -320,6 +322,14 @@ export function MissionBoard(props: MissionBoardProps) {
   let actionGeneration = 0
   const projectContextID = createUniqueId()
   const searchHintID = createUniqueId()
+  const currentSavedDraftReceipt = createMemo(() => {
+    const receipt = savedDraftReceipt()
+    return receipt && isApiAuthorityCurrent(receipt.authority) ? receipt : null
+  })
+  const savedDraftMission = createMemo(() => {
+    const receipt = currentSavedDraftReceipt()
+    return receipt ? missionBoardStore.records.find((mission) => mission.missionID === receipt.missionID) : undefined
+  })
 
   const projectOptions = createMemo<ProjectOption[]>(() => {
     const directories = [...new Set(missionBoardStore.records.map((mission) => mission.directory))].sort(
@@ -515,6 +525,35 @@ export function MissionBoard(props: MissionBoardProps) {
         </Show>
       </div>
 
+      <Show when={currentSavedDraftReceipt()}>
+        <Feedback
+          class="mission-board__saved"
+          tone="success"
+          title={t("mission_board.create.saved")}
+          actions={
+            <>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                disabled={!savedDraftMission() || Boolean(pendingAction())}
+                onClick={() => {
+                  const mission = savedDraftMission()
+                  if (mission) void props.onOpenMission(mission)
+                }}
+              >
+                {t("mission_board.create.open_saved")}
+              </Button>
+              <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setSavedDraftReceipt(null)}>
+                {t("common.dismiss")}
+              </Button>
+            </>
+          }
+        >
+          {t("mission_board.create.saved_hint")}
+        </Feedback>
+      </Show>
       <Show when={actionError()}>
         <Feedback
           class="mission-board__error"
@@ -690,7 +729,12 @@ export function MissionBoard(props: MissionBoardProps) {
         onOpenMarketExpertSquad={props.onOpenMarketExpertSquad}
         canOpenMarketWebPage={props.canOpenMarketWebPage}
         onClose={() => setCreateOpen(false)}
-        onCreateManual={props.onCreateManual}
+        onCreateManual={async (input) => {
+          const authority = captureApiAuthority()
+          const created = await props.onCreateManual(input)
+          assertApiAuthorityCurrent(authority)
+          setSavedDraftReceipt({ missionID: created.missionID, authority })
+        }}
         onCreateWithAI={props.onCreateWithAI}
       />
     </section>

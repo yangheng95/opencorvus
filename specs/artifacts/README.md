@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [创建意图与草稿保存反馈](2026-11-02-mission-create-feedback/README.md)：实际提交结果、原身份和全旧数据保全。
+
 - [多步任务列表阅读与状态导航](2026-11-02-mission-list-reading/README.md)：布局/焦点/筛选和旧数据保全证据。
 
 - [任务看板可见内容搜索](2026-11-02-mission-board-search/README.md)：真实检索/项目筛选/预览和旧数据保全。
