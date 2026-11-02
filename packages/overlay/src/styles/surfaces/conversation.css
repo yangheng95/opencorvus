@@ -1094,20 +1094,30 @@
   gap: var(--ui-gap-sm);
 }
 
-.conversation-artifact-inspector__metadata {
+.conversation-artifact-inspector__file-information {
   min-width: 0;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--ui-gap-sm) var(--ui-gap-md);
   color: var(--text-muted);
   font-size: var(--ui-font-caption);
 }
 
-.conversation-artifact-inspector__metadata code {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.conversation-artifact-inspector__file-facts {
+  display: grid;
+  gap: var(--ui-gap-sm);
+  margin: 0;
+}
+
+.conversation-artifact-inspector__file-facts > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+  align-items: baseline;
+  gap: var(--ui-gap-md);
+}
+
+.conversation-artifact-inspector__file-facts dd {
+  min-width: 0;
+  margin: 0;
+  color: var(--text);
+  overflow-wrap: anywhere;
 }
 
 .conversation-artifact-inspector__toolbar {

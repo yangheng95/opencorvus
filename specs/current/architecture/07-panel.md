@@ -3935,6 +3935,14 @@ selection and search along with the renderer. The same helper owns outer and
 selected-resource loading, without another cache, reader or directory resolver.
 The local error boundary contains the request-owning body and child renderers.
 
+File content and snapshot browsers share one localized File information
+disclosure, closed by default. Native details owns its expansion. Its definition
+list presents the original media type, locale-formatted byte count and complete
+SHA-256 checksum as readable, wrapping values; hover is not required to read
+the complete checksum. The content renderer, snapshot selection and request
+owner retain their existing identities when this disclosure opens or closes.
+Resource byte counts in the same inspector use the current locale.
+
 JSON Inspector content is projected once from its original text into the shared
 Tree. Scalar descriptions retain value kinds, with JSON string literals preserving
 quotes, escapes and the empty string. Booleans/null keep their literals; numbers

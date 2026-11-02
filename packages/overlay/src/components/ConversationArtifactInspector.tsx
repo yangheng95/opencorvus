@@ -27,12 +27,13 @@ import {
   type ArtifactReadLocator,
   type ConversationArtifactContent,
 } from "../services/conversation-artifact"
-import { localeTag, t } from "../utils/i18n"
+import { localeTag, t, tc } from "../utils/i18n"
 import { ArtifactFrame } from "./interactive-artifact/ArtifactFrame"
 import type { ArtifactCodeLanguage } from "./interactive-artifact/CodeArtifact"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { SearchField } from "./ui/SearchField"
+import { Disclosure } from "./ui/Disclosure"
 import { captureApiAuthority } from "../services/api"
 import { activeProjectDirectory } from "../services/project-directory"
 import { csvArtifactTable, csvCellComparator } from "../services/csv-artifact"
@@ -149,6 +150,34 @@ function useObjectURL(content: () => ConversationArtifactContent): () => string 
   return url
 }
 
+function artifactByteCount(bytes: number): string {
+  return t("chat.artifacts.byte_count", { count: new Intl.NumberFormat(localeTag()).format(bytes) })
+}
+
+function ArtifactFileInformation(props: { content: ConversationArtifactContent }) {
+  return (
+    <Disclosure.Root class="conversation-artifact-inspector__file-information" size="sm">
+      <Disclosure.Trigger>{t("chat.artifacts.file_information")}</Disclosure.Trigger>
+      <Disclosure.Content>
+        <dl class="conversation-artifact-inspector__file-facts">
+          <div>
+            <dt>{t("chat.artifacts.media_type")}</dt>
+            <dd>{props.content.mediaType}</dd>
+          </div>
+          <div>
+            <dt>{t("chat.artifacts.file_size")}</dt>
+            <dd>{artifactByteCount(props.content.totalBytes)}</dd>
+          </div>
+          <div>
+            <dt>{t("chat.artifacts.checksum")}</dt>
+            <dd><code>{props.content.sha256}</code></dd>
+          </div>
+        </dl>
+      </Disclosure.Content>
+    </Disclosure.Root>
+  )
+}
+
 function ArtifactContentView(props: { title: string; content: ConversationArtifactContent }) {
   const csvCompareCells = createMemo(() => csvCellComparator(localeTag()))
   const csvTable = createMemo(() =>
@@ -174,11 +203,7 @@ function ArtifactContentView(props: { title: string; content: ConversationArtifa
 
   return (
     <div class="conversation-artifact-inspector__content">
-      <div class="conversation-artifact-inspector__metadata">
-        <span>{props.content.mediaType}</span>
-        <span>{t("chat.artifacts.byte_count", { count: props.content.totalBytes })}</span>
-        <code title={props.content.sha256}>sha256:{props.content.sha256.slice(0, 12)}</code>
-      </div>
+      <ArtifactFileInformation content={props.content} />
       <Switch>
         <Match when={csvTable()}>
           {(payload) => (
@@ -274,7 +299,7 @@ function ArtifactContentView(props: { title: string; content: ConversationArtifa
           <ArtifactFrame title={props.title} kind={t("chat.artifacts.binary_kind")} expandable={false}>
             <div class="conversation-artifact-inspector__binary">
               <span>{props.content.mediaType}</span>
-              <span>{t("chat.artifacts.byte_count", { count: props.content.totalBytes })}</span>
+              <span>{artifactByteCount(props.content.totalBytes)}</span>
               <Button
                 type="button"
                 variant="outline"
@@ -343,11 +368,7 @@ function SnapshotArtifactView(props: {
   return (
     <ArtifactFrame title={props.title} kind={t("chat.artifacts.snapshot_kind")} expandable={false}>
       <div class="conversation-artifact-inspector__snapshot">
-        <div class="conversation-artifact-inspector__metadata">
-          <span>{props.content.mediaType}</span>
-          <span>{t("chat.artifacts.byte_count", { count: props.content.totalBytes })}</span>
-          <code title={props.content.sha256}>sha256:{props.content.sha256.slice(0, 12)}</code>
-        </div>
+        <ArtifactFileInformation content={props.content} />
         <div class="conversation-artifact-inspector__toolbar">
           <SearchField
             clearable
@@ -356,7 +377,7 @@ function SnapshotArtifactView(props: {
             placeholder={t("chat.artifacts.search_resources")}
             onValueChange={setQuery}
           />
-          <span>{t("chat.artifacts.resource_total", { count: filteredResources().length })}</span>
+          <span>{tc("chat.artifacts.resource_count", filteredResources().length)}</span>
         </div>
         <div class="conversation-artifact-inspector__resources">
           <For
@@ -380,7 +401,7 @@ function SnapshotArtifactView(props: {
                     {resource.tree} · {resource.file.media_type}
                   </span>
                 </span>
-                <span>{t("chat.artifacts.byte_count", { count: resource.file.bytes })}</span>
+                <span>{artifactByteCount(resource.file.bytes)}</span>
               </Button>
             )}
           </For>

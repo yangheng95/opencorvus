@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [交付文件预览的信息层次](2026-11-02-artifact-preview-reading.md)：原始文件与快照、双语和键盘实页复核。
+
 - [多步任务中的子任务直达](2026-11-02-mission-child-task-navigation.md)：父子入口、原身份和真实跨项目只读体验。
 
 - [创建意图与草稿保存反馈](2026-11-02-mission-create-feedback.md)：真实跨项目保存、直达和编辑回读。

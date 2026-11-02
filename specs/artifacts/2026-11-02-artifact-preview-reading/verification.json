@@ -1,0 +1,472 @@
+{
+  "at": "2026-11-02T07:05:06.115Z",
+  "goal": "progress; active; single agent",
+  "screenshots": [
+    "01-before-readme.jpg",
+    "02-before-delivery-record.jpg",
+    "03-before-snapshot.jpg",
+    "04-after-readme-default-en.jpg",
+    "05-after-file-information-keyboard-en.jpg",
+    "06-after-csv-en.jpg",
+    "07-after-csv-information-en.jpg",
+    "08-after-json-en.jpg",
+    "09-after-record-information-en.jpg",
+    "10-after-snapshot-default-en.jpg",
+    "11-after-snapshot-filter-information-en.jpg",
+    "12-after-selected-snapshot-resource-en.jpg",
+    "13-after-snapshot-selection-retained-en.jpg",
+    "14-final-snapshot-singular-en.jpg",
+    "15-final-snapshot-information-en.jpg",
+    "16-final-resource-information-en.jpg",
+    "17-final-snapshot-resource-zh.jpg",
+    "18-final-snapshot-filter-selection-zh.jpg",
+    "19-final-json-default-zh.jpg",
+    "20-final-json-information-zh.jpg",
+    "21-final-readme-default-zh.jpg",
+    "22-final-readme-information-zh.jpg"
+  ],
+  "phases": [
+    {
+      "qualification": {
+        "at": "2026-11-02T06:42:36.115Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259656,
+        "current": 259658,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53139,
+            "after": 53140
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 53081,
+            "after": 53082
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 4249082,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-DAgb7BYD.js"
+      },
+      "retirement": {
+        "phase": "before",
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "publicShutdown": 200,
+        "reserveMs": 4249082,
+        "nativeExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      },
+      "originalHandle": 62898
+    },
+    {
+      "qualification": {
+        "at": "2026-11-02T06:52:28.809Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259658,
+        "current": 259660,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53140,
+            "after": 53141
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 53082,
+            "after": 53083
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 3684056,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BeK5NElP.js"
+      },
+      "retirement": {
+        "phase": "after",
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "publicShutdown": 200,
+        "reserveMs": 3684056,
+        "nativeExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      },
+      "originalHandle": 88879
+    },
+    {
+      "qualification": {
+        "at": "2026-11-02T07:02:58.109Z",
+        "kind": "final",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259660,
+        "current": 259662,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53141,
+            "after": 53142
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 53083,
+            "after": 53084
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 3030277,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-VmqKCqRv.js"
+      },
+      "retirement": {
+        "phase": "final",
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "publicShutdown": 200,
+        "reserveMs": 3030277,
+        "nativeExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      },
+      "originalHandle": 80216
+    }
+  ],
+  "checks": {
+    "overlay-typecheck-final": {
+      "label": "overlay-typecheck-final",
+      "startedAt": 1793602372465,
+      "closedAt": 1793602394921,
+      "code": 0,
+      "signal": null,
+      "childPID": 31740
+    },
+    "focused-checks-final": {
+      "label": "focused-checks-final",
+      "startedAt": 1793602372487,
+      "closedAt": 1793602384366,
+      "code": 0,
+      "signal": null,
+      "childPID": 21456
+    },
+    "ui-build-final": {
+      "label": "ui-build-final",
+      "startedAt": 1793602372505,
+      "closedAt": 1793602432210,
+      "code": 0,
+      "signal": null,
+      "childPID": 17576
+    }
+  },
+  "realArtifactReader": {
+    "at": "2026-11-02T06:56:01.805Z",
+    "results": [
+      {
+        "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+        "source": "task_artifact_resource",
+        "path": "README.md",
+        "mediaType": "text/markdown",
+        "bytes": 231,
+        "sha256": "f6133831851787ec3925621219a4f918f21d2bf8d2a5ed2952fc1bc8a0d69ab2",
+        "originalBytesExact": true
+      },
+      {
+        "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+        "source": "task_artifact_resource",
+        "path": "calculation-evidence.json",
+        "mediaType": "application/json",
+        "bytes": 732,
+        "sha256": "f7b95fe23181ffca16d5e87740be918be17bd9a52da88c6c0dfc5ec787e759f7",
+        "originalBytesExact": true
+      },
+      {
+        "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+        "source": "task_artifact_resource",
+        "path": "orders.csv",
+        "mediaType": "text/csv",
+        "bytes": 91,
+        "sha256": "13b4e8e854294eacb400abdd5f7545a2f787ce0cf0fb1ab2161883f08aa01e91",
+        "originalBytesExact": true
+      },
+      {
+        "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+        "source": "task_artifact_resource",
+        "path": "review-summary.json",
+        "mediaType": "application/json",
+        "bytes": 58,
+        "sha256": "62954d1184fa81b33eda021e5fc857268403e097579592212d2f9bfe1dd2124c",
+        "originalBytesExact": true
+      },
+      {
+        "taskID": "tsk_g00VZHNpHv00U1GVjV5r",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project",
+        "source": "task_artifact_resource",
+        "path": "README.md",
+        "mediaType": "text/markdown",
+        "bytes": 171,
+        "sha256": "886e60abb30c97f60c6cfa1e6b0693c86363cbff900daf0a32f34576551e8bc6",
+        "originalBytesExact": true
+      },
+      {
+        "taskID": "tsk_g00VZHNpHv00U1GVjV5r",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project",
+        "source": "task_artifact_resource",
+        "path": "invoice.py",
+        "mediaType": "text/x-python",
+        "bytes": 953,
+        "sha256": "917b33c695b93c9379551c83ecabfbef302a2a8ea871f75f5d9062f347b9f451",
+        "originalBytesExact": true
+      },
+      {
+        "taskID": "tsk_g00VZHNpHv00U1GVjV5r",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project",
+        "source": "task_artifact_resource",
+        "path": "test_invoice.py",
+        "mediaType": "text/x-python",
+        "bytes": 1520,
+        "sha256": "535ad1bbe1b5aa22e2efeed87bc6f2e0d1f5537b7506c200dd98c7911d4ecaf9",
+        "originalBytesExact": true
+      },
+      {
+        "taskID": "tsk_g00VZHNpHv00U1GVjV5r",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project",
+        "source": "task_artifact_resource",
+        "path": "verification_report.md",
+        "mediaType": "text/markdown",
+        "bytes": 1566,
+        "sha256": "c64017eeede0d54fb944016f8e3dd6fdc7294f970d41d85d0faac523e6b9315f",
+        "originalBytesExact": true
+      },
+      {
+        "taskID": "tsk_g00VZHNpHv00U1GVjV5r",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project",
+        "source": "task_artifact_snapshot",
+        "mediaType": "application/json",
+        "bytes": 1359,
+        "sha256": "b2529ddb8e2b0a2410090285dd03d6c350971282cd282b3ab43287c3a5b7b07b",
+        "originalBytesExact": false
+      }
+    ]
+  },
+  "originalMissionsExact": 15,
+  "originalTaskStatusesExact": 4,
+  "tasks": [
+    {
+      "name": "failed741",
+      "taskID": "tsk_g00VZHd47u00r0Pa5iWM",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+      "lifecycleStatus": "failed",
+      "activity": "inactive",
+      "rootSessionID": "ses_-zUQiMvTYzzSrPyJpYL1"
+    },
+    {
+      "name": "completed741",
+      "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+      "lifecycleStatus": "completed",
+      "activity": "inactive",
+      "rootSessionID": "ses_-zUQiMz5bzzMH5K9ooZ0"
+    },
+    {
+      "name": "completed801",
+      "taskID": "tsk_g00VZT7V7400TdQ2J6Sj",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+      "lifecycleStatus": "completed",
+      "activity": "inactive",
+      "rootSessionID": "ses_-zUQWsUi1zz5W6N1lPDO"
+    },
+    {
+      "name": "unfinished793",
+      "taskID": "tsk_g00VZRQQAP00yaqEnUZF",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project",
+      "lifecycleStatus": "active",
+      "activity": "inactive",
+      "rootSessionID": "ses_-zUQYZZZfzzZxyo2Fspx"
+    }
+  ],
+  "localeScope": {
+    "added": [
+      "chat.artifacts.file_information",
+      "chat.artifacts.media_type",
+      "chat.artifacts.file_size",
+      "chat.artifacts.checksum"
+    ],
+    "removed": [
+      "chat.artifacts.resource_total"
+    ]
+  },
+  "actualDomObservations": {
+    "snapshotEnglish": [
+      {
+        "fields": [
+          {
+            "label": "Media type",
+            "value": "application/json"
+          },
+          {
+            "label": "File size",
+            "value": "1,359 bytes"
+          },
+          {
+            "label": "SHA-256 checksum",
+            "value": "b2529ddb8e2b0a2410090285dd03d6c350971282cd282b3ab43287c3a5b7b07b"
+          }
+        ],
+        "open": true
+      },
+      {
+        "fields": [
+          {
+            "label": "Media type",
+            "value": "text/x-python"
+          },
+          {
+            "label": "File size",
+            "value": "1,520 bytes"
+          },
+          {
+            "label": "SHA-256 checksum",
+            "value": "535ad1bbe1b5aa22e2efeed87bc6f2e0d1f5537b7506c200dd98c7911d4ecaf9"
+          }
+        ],
+        "open": true
+      }
+    ],
+    "snapshotChinese": [
+      {
+        "fields": [
+          {
+            "label": "媒体类型",
+            "value": "application/json"
+          },
+          {
+            "label": "文件大小",
+            "value": "1,359 字节"
+          },
+          {
+            "label": "SHA-256 校验值",
+            "value": "b2529ddb8e2b0a2410090285dd03d6c350971282cd282b3ab43287c3a5b7b07b"
+          }
+        ],
+        "open": false
+      },
+      {
+        "fields": [
+          {
+            "label": "媒体类型",
+            "value": "text/x-python"
+          },
+          {
+            "label": "文件大小",
+            "value": "1,520 字节"
+          },
+          {
+            "label": "SHA-256 校验值",
+            "value": "535ad1bbe1b5aa22e2efeed87bc6f2e0d1f5537b7506c200dd98c7911d4ecaf9"
+          }
+        ],
+        "open": true
+      }
+    ],
+    "readmeChinese": {
+      "url": "http://localhost:38628/ui/?taskID=tsk_g00VZHd0gV00QEPVDCEU",
+      "information": [
+        {
+          "fields": [
+            {
+              "label": "媒体类型",
+              "value": "text/markdown"
+            },
+            {
+              "label": "文件大小",
+              "value": "231 字节"
+            },
+            {
+              "label": "SHA-256 校验值",
+              "value": "f6133831851787ec3925621219a4f918f21d2bf8d2a5ed2952fc1bc8a0d69ab2"
+            }
+          ],
+          "open": true
+        }
+      ],
+      "reading": {
+        "following": "false",
+        "height": 643,
+        "scrollHeight": 2058,
+        "top": 1131
+      }
+    }
+  },
+  "limitations": [
+    "Read-only presentation; no new model request",
+    "Media, PDF, binary, errors, connection rotation and other sizes not visually covered",
+    "Locator first-click discrepancy retained as investigation; native visible click opened exact README; no speculative scroll patch"
+  ]
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [交付预览阅读验收](2026-11-02-artifact-preview-reading/README.md)：真实文件、快照和文件信息截图。
+
 - [子任务直达验收](2026-11-02-mission-child-task-navigation/README.md)：真实TaskID、项目目录、根Session与页面截图。
 
 - [创建意图与草稿保存反馈](2026-11-02-mission-create-feedback/README.md)：实际提交结果、原身份和全旧数据保全。

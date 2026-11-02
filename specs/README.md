@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [交付文件预览的信息层次](records/2026-11/2026-11-02-artifact-preview-reading.md)：正文优先，文件信息可展开查看完整原值。
+
 - [多步任务卡片中的子任务直达](records/2026-11/2026-11-02-mission-child-task-navigation.md)：独立打开原子任务，复用精确项目导航。
 
 - [创建意图与草稿保存结果](records/2026-11/2026-11-02-mission-create-feedback.md)：明确立即开始与先存草稿，保留筛选并可直达已保存工作。
