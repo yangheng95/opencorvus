@@ -12,8 +12,58 @@ import { Session } from "../src/session"
 import { listArchivedWorkLedger, listWorkLedger } from "../src/work-ledger/projection"
 import { persistEstablishedTask } from "./fixture/engine-task"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
+import { Project } from "../src/project/project"
 
 afterEach(async () => { Server.resetProjectRoutesAppForTest(); await resetMemoryDatabase() })
+
+test("current Project names select exact Chat, Work, Mission and Task rows before pagination", async () => {
+  await using first = await memoryProject("named-ledger-first")
+  await using second = await memoryProject("named-ledger-second")
+  const names = ["客户_50%\\行程Alpha", "客户x50ANYTHING\\行程Alpha"]
+  const create = (directory: string, side: number) => Instance.provide({ directory, fn: async () => {
+    await Project.update({ projectID: Instance.project.id, name: names[side]! })
+    return {
+      projectID: Instance.project.id,
+      chat: await createRightSidebarConversationSession("chat", { title: `Named conversation ${side}` }),
+      work: await createRightSidebarConversationSession("work", { title: `Named deliverable ${side}` }),
+      mission: await ensureMissionSession({ missionID: `named-ledger-${side}`, defaultCwd: directory, productPillar: "work", heldExpertSquadIDs: ["base"] }),
+      taskID: await task(`Named standalone ${side}`),
+    }
+  } })
+  const left = await create(first.path, 0), right = await create(second.path, 1)
+  const keys = (rows: Awaited<ReturnType<typeof listWorkLedger>>["rows"]) => rows.map(row => `${row.kind}:${row.id}`).sort()
+  const expected = (owner: typeof left, project: boolean) => [
+    ...(project ? [`project:${owner.projectID}`] : []), `chat:${owner.chat.id}`, `chat:${owner.work.id}`,
+    `mission:${owner.mission.missionID}`, `task:${owner.taskID}`,
+  ].sort()
+  expect(keys((await listWorkLedger({ search: names[0]!.toLowerCase() })).rows)).toEqual(expected(left, true))
+  expect(keys((await listWorkLedger({ search: names[1], directory: second.path })).rows)).toEqual(expected(right, true))
+  const paged = async (reader: typeof listWorkLedger, search: string) => {
+    const rows: Awaited<ReturnType<typeof listWorkLedger>>["rows"] = []
+    let cursor: Awaited<ReturnType<typeof listWorkLedger>>["nextCursor"] = null
+    do {
+      const page = await reader({ search, limit: 1, ...(cursor ? {
+        cursorPinned: cursor.pinned, cursorUpdated: cursor.updated, cursorRowKey: cursor.rowKey,
+      } : {}) })
+      rows.push(...page.rows)
+      cursor = page.nextCursor
+    } while (cursor)
+    return keys(rows)
+  }
+  expect(await paged(listWorkLedger, names[0]!)).toEqual(expected(left, true))
+  for (const [directory, owner] of [[first.path, left], [second.path, right]] as const) {
+    await Instance.provideProjectIdentity({ directory, fn: async () => {
+      for (const session of [owner.chat, owner.work, owner.mission]) await Session.setArchived({ sessionID: session.id, time: Date.now() })
+      Database.use(db => db.update(EngineTaskTable).set({ time_archived: Date.now() }).where(eq(EngineTaskTable.id, owner.taskID)).run())
+    } })
+  }
+  expect(keys((await listArchivedWorkLedger({ search: names[0]!.toLowerCase() })).rows)).toEqual(expected(left, false))
+  expect(keys((await listArchivedWorkLedger({ search: names[1], directory: second.path })).rows)).toEqual(expected(right, false))
+  expect(await paged(listArchivedWorkLedger, names[0]!)).toEqual(expected(left, false))
+  const renamed = "新名_50%\\行程Omega"
+  await Project.update({ projectID: left.projectID, name: renamed })
+  expect(keys((await listArchivedWorkLedger({ search: renamed.toLowerCase() })).rows)).toEqual(expected(left, false))
+}, 60_000)
 
 test("the public selected reader keeps exact active and archived Chat, Work, Mission and Task identities", async () => {
   await using project = await memoryProject("selected-reader")

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [归档项目身份与项目名检索](2026-11-02-archive-project-search/README.md)：生产检索、真实草稿和全旧数据保全证据。
+
 - [Mission 受阻事项的直接阅读](2026-11-02-mission-unmet-requirements/README.md)：实际卡片阅读、原文投影和全旧数据保全证据。
 
 - [Mission 任务结果与完成进度](2026-11-02-mission-task-result-reading/README.md)：真实看板、公开投影及全旧数据保全证据。

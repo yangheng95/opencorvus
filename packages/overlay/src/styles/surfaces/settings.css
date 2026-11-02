@@ -3313,6 +3313,16 @@ button.s-row:focus-visible {
   white-space: nowrap;
 }
 
+.archive-row-project {
+  color: var(--text-soft);
+}
+
+.archive-row-directory {
+  flex-basis: 100%;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 .archive-row .s-row-actions {
   flex-wrap: nowrap;
 }

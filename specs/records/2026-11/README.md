@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [归档项目身份与项目名检索](2026-11-02-archive-project-search.md)：正向查询合同及中英文真实归档流程。
+
 - [Mission 受阻事项的直接阅读](2026-11-02-mission-unmet-requirements.md)：公开原文、键盘交互和中英文实页复核。
 
 - [Mission 任务结果与完成进度](2026-11-02-mission-task-result-reading.md)：完成事实、结果汇总和中英文实页复核。

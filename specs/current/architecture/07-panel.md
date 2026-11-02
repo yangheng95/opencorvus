@@ -4476,6 +4476,19 @@ UI row identity. Each page retains the existing request generation and authority
 the refreshed window and continuation cursor commit together. Ordinary initial
 and continuation reads still fetch one page.
 
+The shared Work Ledger candidate reader matches the owning Project's current
+custom name for Chat/Work, Mission and Task records as well as their existing
+title, identity, kind and directory fields. Active and archived reads retain the
+same literal escaping, directory scope and cursor order; Project rename is read
+from the canonical Project row. Archive rows present the existing canonical
+project display name with their complete real directory on a separate metadata
+line. This presentation uses the same fully loaded Work Ledger project projection
+as other project labels, without adding a second name store or changing row identity.
+The command palette's Mission/child-Task relevance check reads that same current
+project name, so a server project-name match is not discarded by local descendant
+selection. Work hints use the canonical project display primitive; their original
+selection callbacks and per-kind semantics remain unchanged.
+
 ## Command palette queries
 
 Edit → Search and the declared Windows/Linux Ctrl+G accelerator request the same

@@ -248,6 +248,12 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
   const search = searchPattern(input.search)
   const limit = input.limit + 1
   const archivedOnly = input.archivedOnly === true
+  const sessionProjectNameMatches = sql`EXISTS (
+    SELECT 1
+    FROM ${ProjectTable}
+    WHERE ${ProjectTable.id} = ${SessionTable.project_id}
+      AND ${ProjectTable.name} LIKE ${search ?? null} ESCAPE '\\'
+  )`
   const sessionArchiveCondition = archivedOnly
     ? sql`${SessionTable.time_archived} IS NOT NULL`
     : sql`${SessionTable.time_archived} IS NULL`
@@ -358,6 +364,7 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
             OR ${SessionTable.title} LIKE ${search ?? null} ESCAPE '\\'
             OR ${SessionTable.directory} LIKE ${search ?? null} ESCAPE '\\'
             OR json_extract(${SessionTable.metadata}, '$.mission.id') LIKE ${search ?? null} ESCAPE '\\'
+            OR ${sessionProjectNameMatches}
             OR EXISTS (
               SELECT 1
               FROM ${EngineTaskTable} AS mission_task
@@ -404,6 +411,7 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
             OR ${SessionTable.title} LIKE ${search ?? null} ESCAPE '\\'
             OR ${SessionTable.id} LIKE ${search ?? null} ESCAPE '\\'
             OR ${SessionTable.directory} LIKE ${search ?? null} ESCAPE '\\'
+            OR ${sessionProjectNameMatches}
           )
         UNION ALL
         SELECT
@@ -426,6 +434,7 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
             OR ${EngineTaskTable.title} LIKE ${search ?? null} ESCAPE '\\'
             OR ${EngineTaskTable.id} LIKE ${search ?? null} ESCAPE '\\'
             OR COALESCE(task_session.directory, ${ProjectTable.worktree}, '') LIKE ${search ?? null} ESCAPE '\\'
+            OR ${ProjectTable.name} LIKE ${search ?? null} ESCAPE '\\'
           )
       )
       SELECT

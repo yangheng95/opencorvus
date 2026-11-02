@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [归档项目身份与项目名检索](records/2026-11/2026-11-02-archive-project-search.md)：共享项目名查询、归档可读身份与真实草稿归档恢复。
+
 - [Mission 受阻事项的直接阅读](records/2026-11/2026-11-02-mission-unmet-requirements.md)：受阻卡片原生展开、真实未满足事项与原会话入口。
 
 - [Mission 任务结果与完成进度](records/2026-11/2026-11-02-mission-task-result-reading.md)：真实完成比例、失败/取消/未完成结果与卡片理解成本。

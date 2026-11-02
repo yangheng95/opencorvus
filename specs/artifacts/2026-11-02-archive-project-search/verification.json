@@ -1,0 +1,791 @@
+{
+  "at": "2026-11-02T03:55:54.458Z",
+  "checks": {
+    "ledger-search-before": {
+      "label": "ledger-search-before",
+      "startedAt": 1793590449051,
+      "closedAt": 1793590472627,
+      "code": 1,
+      "signal": null,
+      "childPID": 33692
+    },
+    "ledger-search-after": {
+      "label": "ledger-search-after",
+      "startedAt": 1793590616173,
+      "closedAt": 1793590653327,
+      "code": 0,
+      "signal": null,
+      "childPID": 11164
+    },
+    "core-typecheck": {
+      "label": "core-typecheck",
+      "startedAt": 1793590616210,
+      "closedAt": 1793590677173,
+      "code": 0,
+      "signal": null,
+      "childPID": 21076
+    },
+    "overlay-typecheck": {
+      "label": "overlay-typecheck",
+      "startedAt": 1793590616221,
+      "closedAt": 1793590653459,
+      "code": 0,
+      "signal": null,
+      "childPID": 25040
+    },
+    "final-overlay-typecheck": {
+      "label": "final-overlay-typecheck",
+      "startedAt": 1793591206743,
+      "closedAt": 1793591238891,
+      "code": 0,
+      "signal": null,
+      "childPID": 17912
+    },
+    "final-focused-checks": {
+      "label": "final-focused-checks",
+      "startedAt": 1793591206743,
+      "closedAt": 1793591238719,
+      "code": 0,
+      "signal": null,
+      "childPID": 7568
+    },
+    "ui-build-final": {
+      "label": "ui-build-final",
+      "startedAt": 1793591206743,
+      "closedAt": 1793591276601,
+      "code": 0,
+      "signal": null,
+      "childPID": 25148
+    }
+  },
+  "qualifications": {
+    "before": {
+      "at": "2026-11-02T03:32:06.504Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259051,
+      "current": 259053,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53012,
+          "after": 53013
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52954,
+          "after": 52955
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4329510,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CIjqGyl0.js"
+    },
+    "after": {
+      "at": "2026-11-02T03:45:02.291Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259053,
+      "current": 259055,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53013,
+          "after": 53014
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52955,
+          "after": 52956
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3551238,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-t2W73GyL.js"
+    },
+    "final": {
+      "at": "2026-11-02T03:54:31.010Z",
+      "kind": "final",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259055,
+      "current": 259215,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 50646,
+          "after": 50675
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 50646,
+          "after": 50675
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6667,
+          "after": 6674
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6667,
+          "after": 6674
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 20001,
+          "after": 20022
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53014,
+          "after": 53045
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52956,
+          "after": 52987
+        },
+        {
+          "table": "event_occurrence",
+          "before": 6460,
+          "after": 6462
+        },
+        {
+          "table": "protocol_event",
+          "before": 2485,
+          "after": 2487
+        },
+        {
+          "table": "session",
+          "before": 133,
+          "after": 134
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 2998571,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BBrHDDYe.js"
+    }
+  },
+  "closures": {
+    "before": {
+      "at": "2026-11-02T03:31:42.414Z",
+      "publicShutdown": 200,
+      "physical": {
+        "launcher": {
+          "observedAtUtc": "2026-11-02T03:31:40.163236Z",
+          "originalChildExit": 0
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 28360,
+              "processInstanceID": "win32:639291869580949242",
+              "occurrenceID": "3743df7c-a11f-4b38-a094-09ca3d6245b4"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 31256,
+              "processInstanceID": "win32:639291869587803819",
+              "occurrenceID": "c01d01df-4c20-4ffc-bb72-696c6d27a21a"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "native": {
+          "occurrence": "archive-project-search-892-before-4d29996f-c0d4-4050-bdc2-6339c641eb97",
+          "outcome": "settled",
+          "host": {
+            "pid": 28360,
+            "processInstanceID": "win32:639291869580949242",
+            "occurrenceID": "3743df7c-a11f-4b38-a094-09ca3d6245b4"
+          },
+          "target": {
+            "pid": 31256,
+            "processInstanceID": "win32:639291869587803819",
+            "occurrenceID": "c01d01df-4c20-4ffc-bb72-696c6d27a21a"
+          },
+          "observedAtUtc": "2026-11-02T03:31:40.092Z",
+          "deadlineAt": 1793594629602,
+          "terminal": {
+            "occurrenceID": "archive-project-search-892-before-4d29996f-c0d4-4050-bdc2-6339c641eb97",
+            "pid": 31256,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-11-02T03:31:41.6339672Z"
+      },
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "pairedCopiesRetired": 2
+    },
+    "after": {
+      "at": "2026-11-02T03:44:40.377Z",
+      "publicShutdown": 200,
+      "physical": {
+        "native": {
+          "occurrence": "archive-project-search-892-after-c81e1193-4e4c-456d-ac40-064fe0876115",
+          "outcome": "settled",
+          "host": {
+            "pid": 4572,
+            "processInstanceID": "win32:639291876321108461",
+            "occurrenceID": "3a61cf18-cc1c-4a07-b2da-02a3d161fe13"
+          },
+          "target": {
+            "pid": 26988,
+            "processInstanceID": "win32:639291876328049993",
+            "occurrenceID": "a56ad8ff-c6a1-4899-b0d5-a7db6e014b21"
+          },
+          "observedAtUtc": "2026-11-02T03:44:38.364Z",
+          "deadlineAt": 1793594629602,
+          "terminal": {
+            "occurrenceID": "archive-project-search-892-after-c81e1193-4e4c-456d-ac40-064fe0876115",
+            "pid": 26988,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-11-02T03:44:39.6874946Z",
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-11-02T03:44:38.3963055Z"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 4572,
+              "processInstanceID": "win32:639291876321108461",
+              "occurrenceID": "3a61cf18-cc1c-4a07-b2da-02a3d161fe13"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 26988,
+              "processInstanceID": "win32:639291876328049993",
+              "occurrenceID": "a56ad8ff-c6a1-4899-b0d5-a7db6e014b21"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      },
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "pairedCopiesRetired": 2
+    },
+    "final": {
+      "at": "2026-11-02T03:54:03.761Z",
+      "publicShutdown": 200,
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-11-02T03:53:51.064107Z"
+        },
+        "observedAtUtc": "2026-11-02T03:53:58.2763378Z",
+        "native": {
+          "occurrence": "archive-project-search-892-final-dc8c9a1a-bf50-4473-91da-42e31203d077",
+          "outcome": "settled",
+          "host": {
+            "pid": 7660,
+            "processInstanceID": "win32:639291882430005553",
+            "occurrenceID": "b476b163-8e86-4bbd-8331-929e606a7e15"
+          },
+          "target": {
+            "pid": 28636,
+            "processInstanceID": "win32:639291882438969328",
+            "occurrenceID": "ea56d15a-492c-4010-8bb9-3d12eda3cac1"
+          },
+          "observedAtUtc": "2026-11-02T03:53:51.031Z",
+          "deadlineAt": 1793594629602,
+          "terminal": {
+            "occurrenceID": "archive-project-search-892-final-dc8c9a1a-bf50-4473-91da-42e31203d077",
+            "pid": 28636,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 7660,
+              "processInstanceID": "win32:639291882430005553",
+              "occurrenceID": "b476b163-8e86-4bbd-8331-929e606a7e15"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 28636,
+              "processInstanceID": "win32:639291882438969328",
+              "occurrenceID": "ea56d15a-492c-4010-8bb9-3d12eda3cac1"
+            },
+            "state": "dead_or_reused"
+          }
+        ]
+      },
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "pairedCopiesRetired": 2
+    }
+  },
+  "stages": {
+    "created": {
+      "at": "2026-11-02T03:51:45.474Z",
+      "stage": "created",
+      "status": 200,
+      "mission": {
+        "missionID": "bd4c3e6cf63ff486",
+        "sessionID": "ses_-zUQDIqBhzzV3puN2erj",
+        "title": "归档项目检索892（未执行）",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "created": 1793591502170,
+        "updated": 1793591502189,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "仅保存本轮归档与项目名检索验收草稿，保持待规划，不执行任务。用于验证归档、按项目名搜索、打开历史和恢复；不调用模型。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      "archive": {
+        "rows": [
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_-zUQWKSgYzzXgm2YLTag",
+            "sessionID": "ses_-zUQWKSgYzzXgm2YLTag",
+            "title": "原生对话读取错误803",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+            "created": 1793310365473,
+            "started": 1793310365473,
+            "updated": 1793310384133,
+            "pinned": false,
+            "archived": 1793310384132,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      },
+      "byName": {
+        "rows": [],
+        "nextCursor": null
+      }
+    },
+    "archived": {
+      "at": "2026-11-02T03:52:08.684Z",
+      "stage": "archived",
+      "status": 200,
+      "mission": {
+        "missionID": "bd4c3e6cf63ff486",
+        "sessionID": "ses_-zUQDIqBhzzV3puN2erj",
+        "title": "归档项目检索892（未执行）",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "created": 1793591502170,
+        "updated": 1793591525467,
+        "archived": 1793591525467,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "仅保存本轮归档与项目名检索验收草稿，保持待规划，不执行任务。用于验证归档、按项目名搜索、打开历史和恢复；不调用模型。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      "archive": {
+        "rows": [
+          {
+            "kind": "mission",
+            "id": "bd4c3e6cf63ff486",
+            "missionID": "bd4c3e6cf63ff486",
+            "sessionID": "ses_-zUQDIqBhzzV3puN2erj",
+            "title": "归档项目检索892（未执行）",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+            "created": 1793591502170,
+            "started": 1793591502170,
+            "updated": 1793591525467,
+            "pinned": false,
+            "archived": 1793591525467,
+            "interruptible": false,
+            "outcome": null,
+            "productPillar": "work",
+            "taskStats": {
+              "total": 0,
+              "running": 0,
+              "inactive": 0
+            },
+            "pendingInteractions": 0,
+            "tasks": []
+          },
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_-zUQWKSgYzzXgm2YLTag",
+            "sessionID": "ses_-zUQWKSgYzzXgm2YLTag",
+            "title": "原生对话读取错误803",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+            "created": 1793310365473,
+            "started": 1793310365473,
+            "updated": 1793310384133,
+            "pinned": false,
+            "archived": 1793310384132,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      },
+      "byName": {
+        "rows": [
+          {
+            "kind": "mission",
+            "id": "bd4c3e6cf63ff486",
+            "missionID": "bd4c3e6cf63ff486",
+            "sessionID": "ses_-zUQDIqBhzzV3puN2erj",
+            "title": "归档项目检索892（未执行）",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+            "created": 1793591502170,
+            "started": 1793591502170,
+            "updated": 1793591525467,
+            "pinned": false,
+            "archived": 1793591525467,
+            "interruptible": false,
+            "outcome": null,
+            "productPillar": "work",
+            "taskStats": {
+              "total": 0,
+              "running": 0,
+              "inactive": 0
+            },
+            "pendingInteractions": 0,
+            "tasks": []
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "opened": {
+      "at": "2026-11-02T03:52:49.834Z",
+      "stage": "opened",
+      "status": 200,
+      "mission": {
+        "missionID": "bd4c3e6cf63ff486",
+        "sessionID": "ses_-zUQDIqBhzzV3puN2erj",
+        "title": "归档项目检索892（未执行）",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "created": 1793591502170,
+        "updated": 1793591525467,
+        "archived": 1793591525467,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "仅保存本轮归档与项目名检索验收草稿，保持待规划，不执行任务。用于验证归档、按项目名搜索、打开历史和恢复；不调用模型。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      "archive": {
+        "rows": [
+          {
+            "kind": "mission",
+            "id": "bd4c3e6cf63ff486",
+            "missionID": "bd4c3e6cf63ff486",
+            "sessionID": "ses_-zUQDIqBhzzV3puN2erj",
+            "title": "归档项目检索892（未执行）",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+            "created": 1793591502170,
+            "started": 1793591502170,
+            "updated": 1793591525467,
+            "pinned": false,
+            "archived": 1793591525467,
+            "interruptible": false,
+            "outcome": null,
+            "productPillar": "work",
+            "taskStats": {
+              "total": 0,
+              "running": 0,
+              "inactive": 0
+            },
+            "pendingInteractions": 0,
+            "tasks": []
+          },
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_-zUQWKSgYzzXgm2YLTag",
+            "sessionID": "ses_-zUQWKSgYzzXgm2YLTag",
+            "title": "原生对话读取错误803",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+            "created": 1793310365473,
+            "started": 1793310365473,
+            "updated": 1793310384133,
+            "pinned": false,
+            "archived": 1793310384132,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      },
+      "byName": {
+        "rows": [
+          {
+            "kind": "mission",
+            "id": "bd4c3e6cf63ff486",
+            "missionID": "bd4c3e6cf63ff486",
+            "sessionID": "ses_-zUQDIqBhzzV3puN2erj",
+            "title": "归档项目检索892（未执行）",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+            "created": 1793591502170,
+            "started": 1793591502170,
+            "updated": 1793591525467,
+            "pinned": false,
+            "archived": 1793591525467,
+            "interruptible": false,
+            "outcome": null,
+            "productPillar": "work",
+            "taskStats": {
+              "total": 0,
+              "running": 0,
+              "inactive": 0
+            },
+            "pendingInteractions": 0,
+            "tasks": []
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "restored": {
+      "at": "2026-11-02T03:53:01.377Z",
+      "stage": "restored",
+      "status": 200,
+      "mission": {
+        "missionID": "bd4c3e6cf63ff486",
+        "sessionID": "ses_-zUQDIqBhzzV3puN2erj",
+        "title": "归档项目检索892（未执行）",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "created": 1793591502170,
+        "updated": 1793591578360,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "仅保存本轮归档与项目名检索验收草稿，保持待规划，不执行任务。用于验证归档、按项目名搜索、打开历史和恢复；不调用模型。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      "archive": {
+        "rows": [
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_-zUQWKSgYzzXgm2YLTag",
+            "sessionID": "ses_-zUQWKSgYzzXgm2YLTag",
+            "title": "原生对话读取错误803",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+            "created": 1793310365473,
+            "started": 1793310365473,
+            "updated": 1793310384133,
+            "pinned": false,
+            "archived": 1793310384132,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      },
+      "byName": {
+        "rows": [],
+        "nextCursor": null
+      }
+    },
+    "rearchived": {
+      "at": "2026-11-02T03:53:20.474Z",
+      "stage": "rearchived",
+      "status": 200,
+      "mission": {
+        "missionID": "bd4c3e6cf63ff486",
+        "sessionID": "ses_-zUQDIqBhzzV3puN2erj",
+        "title": "归档项目检索892（未执行）",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "created": 1793591502170,
+        "updated": 1793591596560,
+        "archived": 1793591596560,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "仅保存本轮归档与项目名检索验收草稿，保持待规划，不执行任务。用于验证归档、按项目名搜索、打开历史和恢复；不调用模型。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      "archive": {
+        "rows": [
+          {
+            "kind": "mission",
+            "id": "bd4c3e6cf63ff486",
+            "missionID": "bd4c3e6cf63ff486",
+            "sessionID": "ses_-zUQDIqBhzzV3puN2erj",
+            "title": "归档项目检索892（未执行）",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+            "created": 1793591502170,
+            "started": 1793591502170,
+            "updated": 1793591596560,
+            "pinned": false,
+            "archived": 1793591596560,
+            "interruptible": false,
+            "outcome": null,
+            "productPillar": "work",
+            "taskStats": {
+              "total": 0,
+              "running": 0,
+              "inactive": 0
+            },
+            "pendingInteractions": 0,
+            "tasks": []
+          },
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_-zUQWKSgYzzXgm2YLTag",
+            "sessionID": "ses_-zUQWKSgYzzXgm2YLTag",
+            "title": "原生对话读取错误803",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\source-file-recovery-784\\project",
+            "created": 1793310365473,
+            "started": 1793310365473,
+            "updated": 1793310384133,
+            "pinned": false,
+            "archived": 1793310384132,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      },
+      "byName": {
+        "rows": [
+          {
+            "kind": "mission",
+            "id": "bd4c3e6cf63ff486",
+            "missionID": "bd4c3e6cf63ff486",
+            "sessionID": "ses_-zUQDIqBhzzV3puN2erj",
+            "title": "归档项目检索892（未执行）",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+            "created": 1793591502170,
+            "started": 1793591502170,
+            "updated": 1793591596560,
+            "pinned": false,
+            "archived": 1793591596560,
+            "interruptible": false,
+            "outcome": null,
+            "productPillar": "work",
+            "taskStats": {
+              "total": 0,
+              "running": 0,
+              "inactive": 0
+            },
+            "pendingInteractions": 0,
+            "tasks": []
+          }
+        ],
+        "nextCursor": null
+      }
+    }
+  },
+  "manualVisualReview": {
+    "screenshots": 15,
+    "uiAutomationTests": 0,
+    "originalImagesReopened": [
+      "05-final-command-project-search-en.jpg",
+      "14-final-archive-project-zh.jpg"
+    ]
+  },
+  "limits": {
+    "modelExecution": "No new Provider request in this page/query iteration",
+    "permanentDeletion": "Not performed",
+    "release": "Not performed"
+  }
+}

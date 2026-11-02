@@ -6,7 +6,7 @@ import {
   isApiAuthorityCurrent,
   type ApiAuthority,
 } from "../../services/api"
-import { loadArchivedWorkLedger, type WorkLedgerCursor, type WorkLedgerItemRow } from "../../services/work-ledger"
+import { loadArchivedWorkLedger, workLedgerProject, type WorkLedgerCursor, type WorkLedgerItemRow } from "../../services/work-ledger"
 import { archiveRowKey } from "../../services/archive-row-key"
 import { deleteMission, setMissionArchived } from "../../services/mission"
 import { deleteTask, setTaskArchived } from "../../services/task"
@@ -14,7 +14,8 @@ import { deleteConversationSession, setConversationSessionArchived } from "../..
 import { conversationExperienceIcon, conversationExperienceLabel } from "../../services/conversation-experience"
 import { formatErrorDetails, reportError, reportSuccess, runPostCommitUiEffect } from "../../services/diagnostics"
 import { detailStamp } from "../../utils/time"
-import { t } from "../../utils/i18n"
+import { localeTag, t } from "../../utils/i18n"
+import { projectLedgerDisplayName } from "../../utils/project-directory"
 import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { Badge } from "../ui/Badge"
 import { Button } from "../ui/Button"
@@ -344,7 +345,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
           </span>
         }
         description={t("archive.description")}
-        actions={<Badge tone="muted">{rows().length}</Badge>}
+        actions={<Badge tone="muted">{rows().length.toLocaleString(localeTag())}</Badge>}
       >
         <Show when={!error() || rows().length > 0} fallback={
           <Feedback tone="error" actions={
@@ -380,8 +381,16 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                 meta={
                   <>
                     <span>{kindLabel(row)}</span>
-                    <span>{row.directory}</span>
+                    <span class="archive-row-project">
+                      {projectLedgerDisplayName({
+                        directory: row.directory,
+                        customName: workLedgerProject(row.directory)?.title,
+                        unknownName: t("task.project.unknown"),
+                        implicitProjectName: t("work_ledger.implicit_project"),
+                      })}
+                    </span>
                     <span>{t("archive.archived_at", { time: detailStamp(archivedAt(row)) })}</span>
+                    <span class="archive-row-directory">{row.directory}</span>
                   </>
                 }
                 actions={

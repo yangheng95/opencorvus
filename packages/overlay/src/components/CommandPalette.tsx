@@ -26,6 +26,7 @@ import { matchesSearchParts, matchesSearchTerms } from "../services/text-search"
 import { conversationExperienceIcon, conversationExperienceLabel } from "../services/conversation-experience"
 import {
   loadWorkLedger,
+  workLedgerProject,
   type WorkLedgerChatRow,
   type WorkLedgerCursor,
   type WorkLedgerMissionRow,
@@ -94,16 +95,18 @@ function rowCommandIcon(row: PaletteLedgerRow): IconName {
 
 function rowCommandHint(row: PaletteLedgerRow): string {
   if (row.kind === "project") return `${t("work_ledger.kind.project")} · ${row.directory}`
-  const directory = String(row.directory || "")
-    .split(/[\\/]/)
-    .filter(Boolean)
-    .at(-1)
+  const directory = projectLedgerDisplayName({
+    directory: row.directory,
+    customName: workLedgerProject(row.directory)?.title,
+    unknownName: t("task.project.unknown"),
+    implicitProjectName: t("work_ledger.implicit_project"),
+  })
   const kind = row.kind === "chat" ? conversationExperienceLabel(row.experience) : t(`work_ledger.kind.${row.kind}`)
-  return directory ? `${kind} · ${directory}` : kind
+  return `${kind} · ${directory}`
 }
 
 function rowMatches(row: WorkLedgerMissionRow | WorkLedgerTaskRow, query: string): boolean {
-  return matchesSearchParts(query, [row.title, row.id, row.directory, row.kind])
+  return matchesSearchParts(query, [row.title, row.id, row.directory, row.kind, workLedgerProject(row.directory)?.title])
 }
 
 export function CommandPalette(props: {
