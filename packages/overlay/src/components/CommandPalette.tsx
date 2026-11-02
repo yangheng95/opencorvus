@@ -102,7 +102,7 @@ function rowCommandHint(row: PaletteLedgerRow): string {
     implicitProjectName: t("work_ledger.implicit_project"),
   })
   const kind = row.kind === "chat" ? conversationExperienceLabel(row.experience) : t(`work_ledger.kind.${row.kind}`)
-  return `${kind} · ${directory}`
+  return `${kind} · ${directory} · ${row.directory}`
 }
 
 function rowMatches(row: WorkLedgerMissionRow | WorkLedgerTaskRow, query: string): boolean {

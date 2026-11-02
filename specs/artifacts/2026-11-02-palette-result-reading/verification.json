@@ -1,0 +1,126 @@
+{
+  "at": "2026-11-02T11:17:50.801Z",
+  "manualVisualReview": {
+    "screenshots": 17,
+    "ports": [
+      38637,
+      38638
+    ],
+    "ownedTabs": [
+      208,
+      209
+    ],
+    "bothTabsClosed": true,
+    "uiAutomationTests": 0
+  },
+  "phases": {
+    "before": {
+      "at": "2026-11-02T11:07:37.946Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259678,
+      "current": 259680,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53150,
+          "after": 53151
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53092,
+          "after": 53093
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4375319,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-7BYSKwjd.js",
+      "nativeExitCode": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    },
+    "after": {
+      "at": "2026-11-02T11:16:21.291Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259680,
+      "current": 259682,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53151,
+          "after": 53152
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53093,
+          "after": 53094
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3850581,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DEENiwS8.js",
+      "nativeExitCode": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    }
+  },
+  "publicData": {
+    "workQueries": {
+      "": 190,
+      "批准": 1,
+      "PREFLIGHT": 17,
+      "project": 137
+    },
+    "allFourCompleteQueriesExactAcrossPhases": true,
+    "mailbox": {
+      "items": 24,
+      "active": 24,
+      "unread": 24,
+      "completeResponseExact": true
+    },
+    "missions": 15,
+    "completeTaskStatuses": 4
+  },
+  "focusedChecks": {
+    "ui-build-before": 0,
+    "ui-build-after": 0,
+    "focused-checks": 0,
+    "overlay-typecheck": 0
+  },
+  "limits": [
+    "Current desktop and system dark theme only",
+    "Chinese and English only",
+    "Original saved title content retained, including existing truncation",
+    "No new Provider execution",
+    "Mailbox project-name lead deferred to actual page investigation"
+  ]
+}

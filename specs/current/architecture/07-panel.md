@@ -1640,6 +1640,13 @@ runtime default-language policy and titlebar toggle semantics remain unchanged.
 Command palette ledger selections close the settings page through that same
 reveal lifecycle after file departure is approved and before selecting the
 exact Mission, Task or conversation.
+Ledger results share the project result's two-row layout: the original title
+uses up to two lines, with the original kind, project display name and complete
+directory below it. Project rows retain their project kind and directory hint.
+The directory wraps within the result so identical short project names remain
+distinguishable. Group headings, recent-result counts, shortcuts and exact
+selection identities retain their existing owners; local commands keep their
+compact single-row layout.
 Global New chat actions from the rail, palette and titlebar all enter main's
 single global Composer lifecycle: close Settings, open the directory-free
 workspace, apply the default chat intent and reset the primary center surface.

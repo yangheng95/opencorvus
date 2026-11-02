@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [全局查找结果的阅读层次](records/2026-11/2026-11-02-palette-result-reading.md)：原工作标题、完整项目上下文和精确导航。
+
 - [演示文稿的完整控件语言](records/2026-11/2026-11-02-presentation-language.md)：原生导航、跳页、暂停和帮助的同实例语言投影。
 
 - [0.1.42 发布](records/2026-11/2026-11-02-release-0.1.42.md)：冻结源码、原生矩阵、官网和双语更新日志验收。
