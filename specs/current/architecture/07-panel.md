@@ -2765,6 +2765,11 @@ An open combobox consumes its first Escape while Kobalte closes suggestions and
 restores the selected label. Custom input handlers retain priority; a later
 Escape from a closed control can reach its surrounding page. This also applies
 to inline time-zone suggestions, which must not close the Settings page.
+After a closed control's Escape reaches that owner, its current controlled value
+also owns the displayed label. If the owner retains the selection, the label is
+projected again after Kobalte's native clear request; an accepted null selection
+keeps the existing clear behavior. Value-null command and conversation search
+surfaces retain their own query and Escape handlers.
 Transcript actor avatars use neutral chrome with the role glyph; elapsed times
 are caption metadata and activity disclosures use the shared compact row height.
 The existing pane layout effect observes settings hydration and zoom so resolved
@@ -3933,9 +3938,12 @@ The current container size is applied after state restoration settles. Vega
 export controls use the current product language. Dashboard's default filter
 label and numeric metrics follow that language; authored labels, strings, units,
 and published metric values retain their payload identity.
-Select and artifact-download portals use their trigger's actual popover owner,
-including the current workspace or MCP pip; explicit native media fullscreen
-keeps its own ownership. Floating UI retains its placement/collision behavior.
+Floating controls, option tooltips and artifact-download portals use their
+trigger's nearest dialog or artifact popover owner, including the current
+workspace or MCP pip. Modal descendants remain inside that dialog's accessible
+subtree; Kobalte retains modal exclusion, focus and placement/collision behavior.
+Explicit native media fullscreen keeps its existing ownership when no enclosing
+dialog or artifact popover owns the trigger.
 
 Maps carry inline GeoJSON and never accept model-selected styles, tiles, scripts,
 or network data. The Overlay's single basemap configuration supplies the

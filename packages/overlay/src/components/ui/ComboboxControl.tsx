@@ -245,9 +245,16 @@ export function ComboboxControl<T extends object>(props: ComboboxControlProps<T>
             const handler = props.onInputKeyDown
             if (typeof handler === "function") handler(event)
             else if (handler) handler[0](handler[1], event)
-            if (wasOpen && event.key === "Escape" && !event.isComposing && !event.defaultPrevented) {
-              event.preventDefault()
-              event.stopPropagation()
+            if (event.key === "Escape" && !event.isComposing && !event.defaultPrevented) {
+              if (wasOpen) {
+                event.preventDefault()
+                event.stopPropagation()
+              } else {
+                queueMicrotask(() => {
+                  const selected = props.value
+                  if (selected) comboboxContext?.setInputValue(optionLabel(selected))
+                })
+              }
             }
           }}
         />

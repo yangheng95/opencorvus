@@ -1,10 +1,12 @@
 const VIEWPORT_COVERAGE_TRANSITION_EVENT = "opencorvus:viewport-coverage-transition"
 const pendingRequests = new Set<{ element: HTMLElement }>()
 
-/** Keep floating controls in their actual page-owned top layer. */
+/** Keep floating controls in their nearest dialog or page-owned top layer. */
 export function topLayerPortalMount(anchor: Element | undefined): Element | undefined {
-  const workspace = anchor?.closest("[data-artifact-workspace]:popover-open, .msg-artifact--mcp-pip:popover-open")
-  if (workspace) return workspace
+  const owner = anchor?.closest(
+    '[role="dialog"], [data-artifact-workspace]:popover-open, .msg-artifact--mcp-pip:popover-open',
+  )
+  if (owner) return owner
   const fullscreen = anchor?.ownerDocument.fullscreenElement
   return fullscreen && anchor && fullscreen.contains(anchor) ? fullscreen : undefined
 }

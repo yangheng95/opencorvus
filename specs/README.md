@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [浮动控件的对话框归属](records/2026-11/2026-11-02-floating-control-dialog-ownership.md)：可访问选项、模态边界与原作品浮层归属。
+
 - [Mission 未保存输入](records/2026-11/2026-11-02-mission-unsaved-input.md)：作者退出意图、未保存文字保护及原草稿保存。
 
 - [定时任务时间语境](records/2026-11/2026-11-02-schedule-time-context.md)：任务墙钟时区、实际时刻显示与原位编辑保全。

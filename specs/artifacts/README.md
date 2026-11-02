@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [浮动控件的对话框归属](2026-11-02-floating-control-dialog-ownership/README.md)：模态与页面下拉、无障碍及作品菜单的实际页面证据。
+
 - [Mission 未保存输入](2026-11-02-mission-unsaved-input/README.md)：真实退出、输入保留及明确放弃的双语言截图。
 
 - [定时任务时间语境](2026-11-02-schedule-time-context/README.md)：创建、暂停、编辑及实际时刻显示的实页记录。
