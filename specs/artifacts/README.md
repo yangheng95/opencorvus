@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [已归档多步任务原请求阅读](2026-11-02-archived-mission-context/README.md)：实页中英文阅读及当前请求保全证据。
+
 - [归档项目身份与项目名检索](2026-11-02-archive-project-search/README.md)：生产检索、真实草稿和全旧数据保全证据。
 
 - [Mission 受阻事项的直接阅读](2026-11-02-mission-unmet-requirements/README.md)：实际卡片阅读、原文投影和全旧数据保全证据。

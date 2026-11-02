@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [已归档多步任务的原请求阅读](records/2026-11/2026-11-02-archived-mission-context.md)：当前工作读取器统一归档标题和已保存请求。
+
 - [归档项目身份与项目名检索](records/2026-11/2026-11-02-archive-project-search.md)：共享项目名查询、归档可读身份与真实草稿归档恢复。
 
 - [Mission 受阻事项的直接阅读](records/2026-11/2026-11-02-mission-unmet-requirements.md)：受阻卡片原生展开、真实未满足事项与原会话入口。

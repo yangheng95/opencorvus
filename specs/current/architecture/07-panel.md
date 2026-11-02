@@ -1283,12 +1283,15 @@ changes and dialog reopening clear the request projection through its existing
 generation/sequence owner.
 
 A hydrated empty Mission conversation reads its exact Session/directory record
-from that same loaded Mission Board store. Its saved pending request is a
-read-only context section outside the message tree, with the existing Board
-action for editing or starting. Its displayed title reads the same current
-Work Ledger Session item as the header, rather than the hydration snapshot's
-title; renaming therefore updates both displays through one existing metadata
-projection. Loading, failed or mismatched list data does not
+from the same current Work Ledger selection resource as the header, including
+archived work independently of active sidebar or Board membership. The shared
+Mission row projects `pendingPromptText` from the canonical Mission pending request
+for active, archived and selected reads. Its title and saved request use this
+single metadata projection, including the existing selection refresh owner after
+edits and renames. The saved request is a read-only context section outside the
+message tree. Active work retains the Board action for editing or starting;
+archived work explains restoration and uses the existing page-level Restore
+action before Board work. Loading, failed or mismatched selection data does not
 supply draft text. Long requests retain native focused-region keyboard scrolling;
 the parent history keymap owns only its directly focused viewport. Opening the
 already selected source from the Board reveals that conversation without another

@@ -40389,6 +40389,7 @@ export type WorkLedgerListResponses = {
           missionID: string
           outcome: "accepted" | "blocked" | null
           pendingInteractions: number
+          pendingPromptText?: string
           pinned: boolean
           productPillar: "code" | "work"
           sessionID: string
@@ -40509,6 +40510,7 @@ export type WorkLedgerListArchivedResponses = {
           missionID: string
           outcome: "accepted" | "blocked" | null
           pendingInteractions: number
+          pendingPromptText?: string
           pinned: boolean
           productPillar: "code" | "work"
           sessionID: string
@@ -40802,6 +40804,7 @@ export type WorkLedgerSelectionResponses = {
         missionID: string
         outcome: "accepted" | "blocked" | null
         pendingInteractions: number
+        pendingPromptText?: string
         pinned: boolean
         productPillar: "code" | "work"
         sessionID: string

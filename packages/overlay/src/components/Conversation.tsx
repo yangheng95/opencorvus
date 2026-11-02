@@ -31,8 +31,7 @@ import { Button } from "./ui/Button"
 import { StatusIndicator } from "./ui/StatusIndicator"
 import { projectDirectoryKey, projectDisplayName } from "../utils/project-directory"
 import { retrySelectedTaskSelection } from "../services/task"
-import { missionBoardStore } from "../services/mission-board"
-import { workLedgerActiveItem, workLedgerProject } from "../services/work-ledger"
+import { workLedgerProject, type WorkLedgerItemRow } from "../services/work-ledger"
 import {
   buildSubagentConversationItems,
   isSubagentActivityRecord,
@@ -454,6 +453,7 @@ function VirtualizedConversationCards(props: {
 
 export function Conversation(props: {
   container: HTMLElement
+  item: () => WorkLedgerItemRow | null
   homeActive: boolean
   launcherIntent: ComposerIntent
   onGoal: () => void
@@ -627,15 +627,12 @@ export function Conversation(props: {
       return null
     return source
   })
-  const savedMissionRequest = createMemo(() => {
+  const emptyMissionItem = createMemo(() => {
     const source = emptyMissionSource()
-    if (!source || missionBoardStore.loading || missionBoardStore.error) return null
-    const directory = projectDirectoryKey(source.directory || "")
-    return (
-      missionBoardStore.records.find(
-        (mission) => mission.sessionID === source.id && projectDirectoryKey(mission.directory) === directory,
-      )?.pendingPrompt ?? null
-    )
+    const item = props.item()
+    if (!source || item?.kind !== "mission" || item.sessionID !== source.id ||
+      projectDirectoryKey(item.directory) !== projectDirectoryKey(source.directory || "")) return null
+    return item
   })
   const currentTaskID = () => (isSessionSource() ? "" : String(activeTaskID() || boardStore.board?.task?.id || ""))
   const taskContextItem = () => {
@@ -937,12 +934,12 @@ export function Conversation(props: {
           </div>
           <div class="mission-empty-context__body">
             <span class="chat-empty-kicker">
-              {savedMissionRequest() ? t("mission_board.create.manual_draft") : t("chat.empty")}
+              {emptyMissionItem()?.pendingPromptText ? t("mission_board.create.manual_draft") : t("chat.empty")}
             </span>
             <h2 class="chat-empty-title">
-              {workLedgerActiveItem({ sessionID: emptyMissionSource()?.id })?.title || emptyMissionSource()?.id}
+              {emptyMissionItem()?.title || t("mission.title")}
             </h2>
-            <Show when={savedMissionRequest()} keyed>
+            <Show when={emptyMissionItem()?.pendingPromptText} keyed>
               {(request) => (
                 <div
                   class="mission-empty-context__request"
@@ -950,21 +947,25 @@ export function Conversation(props: {
                   aria-label={t("mission.conversation.saved_request")}
                   tabIndex={0}
                 >
-                  {request.text}
+                  {request}
                 </div>
               )}
             </Show>
             <p class="mission-empty-context__hint">
-              {savedMissionRequest()
-                ? t("mission.conversation.draft_hint")
-                : t("mission.conversation.empty_hint")}
+              {emptyMissionItem()?.archived !== undefined
+                ? t("mission.conversation.archived_hint")
+                : emptyMissionItem()?.pendingPromptText
+                  ? t("mission.conversation.draft_hint")
+                  : t("mission.conversation.empty_hint")}
             </p>
-            <div class="chat-empty-actions">
-              <Button type="button" variant="outline" size="sm" tone="neutral" onClick={props.onOpenMissionBoard}>
-                <Icon name="mission" size="compact" />
-                {t("mission_board.title")}
-              </Button>
-            </div>
+            <Show when={emptyMissionItem() && emptyMissionItem()?.archived === undefined}>
+              <div class="chat-empty-actions">
+                <Button type="button" variant="outline" size="sm" tone="neutral" onClick={props.onOpenMissionBoard}>
+                  <Icon name="mission" size="compact" />
+                  {t("mission_board.title")}
+                </Button>
+              </div>
+            </Show>
           </div>
         </section>
       </Show>

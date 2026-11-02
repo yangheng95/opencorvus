@@ -207,6 +207,7 @@ async function workLedgerMissionFromCandidate(
     missionID: record.missionID,
     sessionID: record.sessionID,
     title: record.title,
+    pendingPromptText: record.pendingPrompt?.text,
     directory: record.directory,
     created: record.created,
     started: record.created,

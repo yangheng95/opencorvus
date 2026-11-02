@@ -405,6 +405,7 @@ export const WorkLedgerMissionRow = z
     missionID: WorkLedgerMissionID,
     sessionID: z.string(),
     title: z.string(),
+    pendingPromptText: z.string().optional(),
     directory: z.string(),
     created: z.number(),
     started: z.number(),

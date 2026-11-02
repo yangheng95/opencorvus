@@ -2762,6 +2762,7 @@ function OverlayRoot() {
         <QuotationSelection onQuote={quoteInMain} onSideChat={(quotation) => requestSideChat(quotation)}>
           <Conversation
             container={container}
+            item={selectedItem}
             homeActive={homeActive()}
             launcherIntent={composerIntent()}
             onGoal={onGoal}

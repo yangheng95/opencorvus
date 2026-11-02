@@ -141018,6 +141018,9 @@
                                 "minimum": 0,
                                 "type": "integer"
                               },
+                              "pendingPromptText": {
+                                "type": "string"
+                              },
                               "pinned": {
                                 "type": "boolean"
                               },
@@ -141556,6 +141559,9 @@
                                 "maximum": 9007199254740991,
                                 "minimum": 0,
                                 "type": "integer"
+                              },
+                              "pendingPromptText": {
+                                "type": "string"
                               },
                               "pinned": {
                                 "type": "boolean"
@@ -142571,6 +142577,9 @@
                           "maximum": 9007199254740991,
                           "minimum": 0,
                           "type": "integer"
+                        },
+                        "pendingPromptText": {
+                          "type": "string"
                         },
                         "pinned": {
                           "type": "boolean"
