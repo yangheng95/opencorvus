@@ -20678,6 +20678,53 @@ export type GatewayControlActionData = {
         }
         action: "resume_task"
         /**
+         * Explicit additional cross-Task evidence to deliver atomically with this same-Task resume. Uses the current Mission's completion-decision or terminal-lifecycle authority. Only this flat source set is imported; provenance references never authorize recursive delivery. Exact existing imports are reused and the accepted receipt records actual mappings.
+         */
+        artifact_sources?: Array<
+          | {
+              authority: "completion_decision"
+              source_task_id: string
+            }
+          | {
+              authority: "terminal_lifecycle"
+              locator:
+                | {
+                    artifact_id: string
+                    catalog_revision: number
+                    expected_sha256: string
+                    source: "engine_artifact"
+                  }
+                | {
+                    snapshot: {
+                      manifest_sha256: string
+                      project_id: string
+                      schema_version: 2
+                      snapshot_id: string
+                      task_id: string
+                    }
+                    source: "task_artifact_snapshot"
+                  }
+                | {
+                    ref: {
+                      bytes: number
+                      media_type: string
+                      path: string
+                      sha256: string
+                      snapshot: {
+                        manifest_sha256: string
+                        project_id: string
+                        schema_version: 2
+                        snapshot_id: string
+                        task_id: string
+                      }
+                      tree: string
+                    }
+                    source: "task_artifact_resource"
+                  }
+              source_task_id: string
+            }
+        >
+        /**
          * Completed or failed source Task in the current Mission lineage.
          */
         taskID: string
