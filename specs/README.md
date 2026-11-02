@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [笔记本阅读说明与单元名称](records/2026-11/2026-11-02-notebook-reading.md)：原保存内容、当前语言及只读阅读的真实体验。
+
 - [只读代码预览的自然高度](records/2026-11/2026-11-02-code-preview-density.md)：短代码紧凑阅读、长代码滚动和普通应用内展开。
 
 - [交付记录的可读名称与原始身份](records/2026-11/2026-11-02-delivery-record-labels.md)：本地化阅读名称、完整标识及稳定请求归属。

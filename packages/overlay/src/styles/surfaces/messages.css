@@ -2255,7 +2255,8 @@ button.msg-source-chip .msg-source-chip__filename {
   flex-direction: column;
 }
 
-.msg-artifact-spreadsheet__note {
+.msg-artifact-spreadsheet__note,
+.msg-artifact-notebook__note {
   flex-shrink: 0;
   margin: 0;
   padding: var(--ui-gap-sm) var(--ui-gap-lg);

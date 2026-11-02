@@ -1,0 +1,268 @@
+{
+  "at": "2026-11-02T09:41:10.920Z",
+  "goal": "progress; active; single agent",
+  "screenshots": [
+    "01-before-notebook-en.jpg",
+    "02-before-notebook-zh.jpg",
+    "03-after-notebook-en.jpg",
+    "04-after-notebook-find-en.jpg",
+    "05-after-notebook-find-zh.jpg",
+    "06-after-notebook-expanded-zh.jpg",
+    "07-after-notebook-restored-zh.jpg"
+  ],
+  "phases": [
+    {
+      "qualification": {
+        "at": "2026-11-02T09:30:15.245Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259670,
+        "current": 259672,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53146,
+            "after": 53147
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 53088,
+            "after": 53089
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 4244221,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BmRr-eSd.js"
+      },
+      "originalHandle": 43339,
+      "retirement": {
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "publicShutdown": 200,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "nativeExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 4244221,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      }
+    },
+    {
+      "qualification": {
+        "at": "2026-11-02T09:39:19.438Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259672,
+        "current": 259674,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53147,
+            "after": 53148
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 53089,
+            "after": 53090
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 3614111,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-B4hJK0E9.js"
+      },
+      "originalHandle": 45001,
+      "retirement": {
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "publicShutdown": 200,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "nativeExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 3614111,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      }
+    }
+  ],
+  "checks": {
+    "overlay-typecheck": {
+      "label": "overlay-typecheck",
+      "startedAt": 1793611886266,
+      "closedAt": 1793611917619,
+      "code": 0,
+      "signal": null,
+      "childPID": 28232
+    },
+    "focused-checks": {
+      "label": "focused-checks",
+      "startedAt": 1793611886249,
+      "closedAt": 1793611899979,
+      "code": 0,
+      "signal": null,
+      "childPID": 27060
+    },
+    "ui-build-after": {
+      "label": "ui-build-after",
+      "startedAt": 1793611886267,
+      "closedAt": 1793611961188,
+      "code": 0,
+      "signal": null,
+      "childPID": 19092
+    }
+  },
+  "artifact": {
+    "id": "art_g0VZeNxoV00wdGzSIuDC",
+    "title": "Notebook849",
+    "sessionID": "ses_-zUQLcHKdzzJtKChXFD0",
+    "cells": 1,
+    "outputs": 2,
+    "originalPayloadExact": true,
+    "originalMessagesExact": 6
+  },
+  "originalMissionRecordsExact": 15,
+  "originalCompleteTaskStatusesExact": 4,
+  "actualDomObservations": {
+    "before-zh": [
+      {
+        "contentEditable": "false",
+        "name": "Notebook849 code cell",
+        "text": "EXPORT_849_DISPLAY_ONLY"
+      }
+    ],
+    "after-find-en": [
+      {
+        "code": "EXPORT_849_DISPLAY_ONLY",
+        "editable": "false",
+        "matches": [],
+        "name": "Notebook849, code cell 1 (read-only)",
+        "note": "Read-only preview of saved code and outputs. Code does not run here.",
+        "query": "DISPLAY_ONLY"
+      }
+    ],
+    "after-typed-find-en": [
+      {
+        "code": "EXPORT_849_DISPLAY_ONLY",
+        "editable": "false",
+        "matches": [
+          "DISPLAY_ONLY"
+        ],
+        "name": "Notebook849, code cell 1 (read-only)",
+        "note": "Read-only preview of saved code and outputs. Code does not run here.",
+        "query": "DISPLAY_ONLY"
+      }
+    ],
+    "after-find-zh": [
+      {
+        "editable": "false",
+        "matches": [
+          "DISPLAY_ONLY"
+        ],
+        "name": "Notebook849，代码单元 1（只读）",
+        "note": "只读预览：展示已保存的代码和输出，不会在此执行代码。",
+        "query": "DISPLAY_ONLY"
+      }
+    ],
+    "after-expanded-zh": [
+      {
+        "fullscreenElement": null,
+        "images": [
+          {
+            "alt": "同名原件 1",
+            "complete": true,
+            "naturalHeight": 128,
+            "naturalWidth": 128
+          },
+          {
+            "alt": "同名原件 2",
+            "complete": true,
+            "naturalHeight": 64,
+            "naturalWidth": 64
+          }
+        ],
+        "matches": [
+          "DISPLAY_ONLY"
+        ],
+        "name": "Notebook849，代码单元 1（只读）",
+        "popover": true,
+        "query": "DISPLAY_ONLY",
+        "rect": {
+          "height": 624,
+          "width": 1120,
+          "x": 80,
+          "y": 48
+        }
+      }
+    ],
+    "after-restored-zh": [
+      {
+        "code": "EXPORT_849_DISPLAY_ONLY",
+        "editable": "false",
+        "frameHeight": 477.5,
+        "images": [
+          {
+            "alt": "同名原件 1",
+            "naturalHeight": 128,
+            "naturalWidth": 128
+          },
+          {
+            "alt": "同名原件 2",
+            "naturalHeight": 64,
+            "naturalWidth": 64
+          }
+        ],
+        "name": "Notebook849，代码单元 1（只读）",
+        "note": "只读预览：展示已保存的代码和输出，不会在此执行代码。",
+        "popover": false
+      }
+    ]
+  },
+  "privateGitObservationFix": {
+    "coreQuotePath": true,
+    "originalQualificationRerunPassed": true,
+    "globalAndProjectGitConfigPreserved": true
+  },
+  "limitations": [
+    "Only original one-code-cell notebook and two media outputs visually covered",
+    "Mixed Markdown, multiple cells, execution counts, other outputs and locales beyond en-US/zh-CN not visually covered",
+    "Other sizes, themes, disconnects, connection rotation and download formats not covered in this batch",
+    "No new model request; continuous Goal remains active"
+  ]
+}

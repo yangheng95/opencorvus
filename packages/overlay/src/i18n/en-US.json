@@ -2510,6 +2510,8 @@
   "artifact.actions.resources": "Files ({{count}})",
   "artifact.code.local_edits": "Edits stay in this view. Copy or download before leaving.",
   "artifact.code.modified": "Modified in this view",
+  "artifact.notebook.read_only": "Read-only preview of saved code and outputs. Code does not run here.",
+  "artifact.notebook.code_cell": "{{title}}, code cell {{index}} (read-only)",
   "artifact.scope_required": "Open the project that owns this interactive content.",
   "artifact.renderer_unsupported": "This interactive renderer is not available.",
   "artifact.workspace.open": "Expand",

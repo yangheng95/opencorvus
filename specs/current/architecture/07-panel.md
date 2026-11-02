@@ -4053,7 +4053,13 @@ previews carry canonical project attachment
 references whose ownership, digest, size, and MIME type are checked by the
 publisher against `AttachmentStore` before persistence. Notebook artifacts are
 display-only Markdown/code/output cells and do not own a kernel or execute
-code. Presentations may reference canonical slide images; 3D models and their
+code. Their scroll body presents a localized read-only explanation using the
+existing artifact note layout. Each code cell's accessible name retains the
+authored notebook title and adds its actual cell position, formatted in the
+current locale, and read-only meaning. This position includes Markdown cells
+and is distinct from the authored execution count. Locale changes update the
+existing editor's content attributes without replacing its reading state.
+Presentations may reference canonical slide images; 3D models and their
 optional posters are canonical attachments under the same validation.
 JavaScript Object Notation (JSON) glTF models may contain only embedded
 `data:` resources, so model buffers, images, and extension data cannot create

@@ -5,6 +5,7 @@ import { StaticTextPart } from "../TextPart"
 import { CodeEditor } from "../ui/CodeEditor"
 import { ArtifactFrame } from "./ArtifactFrame"
 import { artifactCodeFilename } from "./CodeArtifact"
+import { localeTag, t } from "../../utils/i18n"
 
 type NotebookPayload = Extract<InteractiveArtifactPayload, { renderer: "notebook@1" }>
 
@@ -12,8 +13,9 @@ export function NotebookArtifact(props: { payload: NotebookPayload }) {
   return (
     <ArtifactFrame payload={props.payload} title={props.payload.title} kind="Notebook">
       <div class="msg-artifact-notebook">
+        <p class="msg-artifact-notebook__note">{t("artifact.notebook.read_only")}</p>
         <For each={props.payload.cells}>
-          {(cell) => (
+          {(cell, index) => (
             <article class="msg-artifact-notebook__cell" data-cell-kind={cell.kind}>
               <Switch>
                 <Match when={cell.kind === "markdown"}>
@@ -31,7 +33,10 @@ export function NotebookArtifact(props: { payload: NotebookPayload }) {
                         class="msg-artifact-code"
                         value={cell.kind === "code" ? cell.source : ""}
                         path={artifactCodeFilename(cell.kind === "code" ? cell.language : "plaintext")}
-                        ariaLabel={`${props.payload.title} code cell`}
+                        ariaLabel={t("artifact.notebook.code_cell", {
+                          title: props.payload.title,
+                          index: new Intl.NumberFormat(localeTag()).format(index() + 1),
+                        })}
                         readOnly
                         onValueChange={() => undefined}
                       />
