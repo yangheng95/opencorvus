@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Excel交付与跟进流程](records/2026-11/2026-11-02-office-workflow.md)：真实Sol工作、规范Excel文件与继续修改验收。
+
 - [共享文件搜索顺序](records/2026-11/2026-11-02-file-search-order.md)：候选扫描、稳定窗口及原路径身份调查。
 
 - [文件搜索结果范围](records/2026-11/2026-11-02-file-search-limit.md)：真实大目录搜索、返回上限和文件导航调查。

@@ -362,6 +362,10 @@ const TOOL_PRESENTATIONS: { names: string[]; icon: IconName; label: string }[] =
   { names: ["read", "read_file"], icon: "file-document", label: "tool.action.read" },
   { names: ["edit", "edit_file", "apply_patch"], icon: "edit", label: "tool.action.edit" },
   { names: ["write", "write_file"], icon: "file-document", label: "tool.action.write" },
+  { names: ["work_artifact_author"], icon: "file-document", label: "tool.action.work_artifact_author" },
+  { names: ["work_artifact_inspect"], icon: "file-document", label: "tool.action.work_artifact_inspect" },
+  { names: ["work_artifact_validate"], icon: "file-document", label: "tool.action.work_artifact_validate" },
+  { names: ["work_artifact_deliver"], icon: "file-document", label: "tool.action.work_artifact_deliver" },
   { names: ["bash", "shell_command", "run_command"], icon: "terminal", label: "tool.action.command" },
   { names: ["grep", "search_code"], icon: "search", label: "tool.action.search_code" },
   { names: ["glob", "find_files"], icon: "folder-open", label: "tool.action.find_files" },
@@ -482,6 +486,16 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
   const message = failure.message || shortValue((safeState as any).error)
   if (message) return singleLine(message)
   const n = toolNameKey(name)
+  if (n === "workartifactdeliver") return firstNonEmptyString(safeInput.title)
+  if (n === "workartifactinspect" || n === "workartifactvalidate") {
+    const formatLabels: Record<string, string> = {
+      "office.spreadsheet@1": "tool.office.spreadsheet",
+      "office.document@1": "tool.office.document",
+      "office.presentation@1": "tool.office.presentation",
+    }
+    const label = formatLabels[firstNonEmptyString(safeInput.profile)]
+    if (label) return t(label)
+  }
   // The request URL identifies this fetch. Response media/encoding belongs to
   // the result disclosure rather than the compact transcript identity.
   if (n === "webfetch") return typeof safeInput.url === "string" ? safeInput.url : ""

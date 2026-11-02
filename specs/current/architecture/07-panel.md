@@ -2303,6 +2303,11 @@ explicitly declared names, and generated references use that same allocation.
 This is a download projection; original attachment metadata remains intact.
 For native Office delivery cards, `InteractiveArtifactRecord.downloads` is a
 read projection of the exact producing display Part's completed Tool outcome.
+The shared tool presentation registry maps all four `work_artifact_*` operations
+to localized action names. Author/deliver retain the real filename/title;
+inspect/validate show the localized format selected by the declared profile.
+Original tool IDs, producer titles, inputs, outputs and failures remain evidence
+in the disclosure; display labels do not change the protocol or stored Parts.
 The declared source identity selects its canonical attachment within the same
 Project; a declared source without a matching attachment is a corruption error.
 Original DOCX, XLSX or PPTX downloads precede renderer exports and derived PDF

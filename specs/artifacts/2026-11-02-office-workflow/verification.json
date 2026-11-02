@@ -1,0 +1,190 @@
+{
+  "at": "2026-11-02T15:51:58.719Z",
+  "schema": 9,
+  "tables": 92,
+  "originalUserRows": 259704,
+  "oldProjects": 100,
+  "phaseRows": [
+    264223,
+    268156
+  ],
+  "afterProtectedAttachments": 245,
+  "original907BusinessRowsExact": true,
+  "sourceDatabasesExact": true,
+  "oldProjectFilesAndGitExact": true,
+  "ownProjectSourcesAndFirstOutputsExact": true,
+  "historyCopiesExact": 2,
+  "ownedMemoryUpdate": {
+    "files": 1,
+    "chunks": 1,
+    "projectDocumentRevision": [
+      1,
+      2
+    ],
+    "newProjectOnly": true
+  },
+  "requests": {
+    "initial": 20,
+    "followup": 16,
+    "total": 36,
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "status": 200,
+    "readers": "all EOF"
+  },
+  "firstWorkbook": {
+    "phase": "before",
+    "checkpoint": "initial",
+    "worksheets": [
+      "问题清单",
+      "未关闭汇总"
+    ],
+    "records": 14,
+    "stats": [
+      [
+        "P0",
+        2
+      ],
+      [
+        "P1",
+        3
+      ],
+      [
+        "P2",
+        2
+      ],
+      [
+        "合计",
+        7
+      ]
+    ],
+    "numericCounts": true,
+    "originalSourcesExact": true,
+    "xlsxBytes": 5891,
+    "columnWidths": {
+      "问题清单": {
+        "A": 8,
+        "B": 8.006,
+        "C": 8.600000000000001,
+        "D": 8.006,
+        "E": 13,
+        "F": 22.02
+      },
+      "未关闭汇总": {
+        "A": 8.006,
+        "B": 12.01
+      }
+    },
+    "summaryCharacters": 989,
+    "changedRecord": [
+      "B-006",
+      "P1",
+      "open",
+      "周悦",
+      "2026-11-08",
+      "预览表格列宽不足"
+    ]
+  },
+  "followupCanonical": {
+    "phase": "after",
+    "checkpoint": "followup",
+    "worksheets": [
+      "问题清单",
+      "未关闭汇总"
+    ],
+    "records": 14,
+    "stats": [
+      [
+        "P0",
+        2
+      ],
+      [
+        "P1",
+        2
+      ],
+      [
+        "P2",
+        2
+      ],
+      [
+        "合计",
+        6
+      ]
+    ],
+    "numericCounts": true,
+    "originalSourcesExact": true,
+    "xlsxBytes": 5895,
+    "columnWidths": {
+      "问题清单": {
+        "A": 8,
+        "B": 8.006,
+        "C": 8.600000000000001,
+        "D": 8.006,
+        "E": 13,
+        "F": 22.02
+      },
+      "未关闭汇总": {
+        "A": 8.006,
+        "B": 12.01
+      }
+    },
+    "summaryCharacters": 989,
+    "changedRecord": [
+      "B-006",
+      "P1",
+      "closed",
+      "赵敏",
+      "2026-11-05",
+      "预览表格列宽不足"
+    ],
+    "checkedFileKind": "validated canonical attachment"
+  },
+  "followupProjectDeliveryCompleted": false,
+  "terminal": "E2E_REQUEST_BUDGET_EXHAUSTED in the declared owned acceptance runner",
+  "ui": {
+    "entry": "main-CYHlEENr.js",
+    "realPages": [
+      38650,
+      38651
+    ],
+    "languages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "manualVisualReview": true,
+    "automatedUiTestsRun": false
+  },
+  "checks": {
+    "overlayTypecheck": 0,
+    "i18n": 0,
+    "docs": 0
+  },
+  "settlement": [
+    {
+      "phase": "before",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "sourceMetadataAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 2046671
+    },
+    {
+      "phase": "after",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "sourceMetadataAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 1133050
+    }
+  ]
+}

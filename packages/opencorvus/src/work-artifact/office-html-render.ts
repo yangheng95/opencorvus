@@ -27,6 +27,11 @@ const input = JSON.parse(Buffer.from(process.argv[2], 'base64').toString('utf8')
     await page.setContent(html, { waitUntil: 'load', timeout: input.timeoutMs });
     await page.evaluate(async () => { await document.fonts.ready; });
     await page.addStyleTag({ content: '* { animation: none !important; transition: none !important; } .page { transform: none !important; } .sheet-content { display:block !important; overflow:visible !important; flex:none !important; width:max-content; } .table-wrapper { overflow:visible !important; max-height:none !important; flex:none !important; } .sheet-content caption { position:static; clip:auto; width:auto; height:auto; padding:10px; text-align:left; font-size:16px; font-weight:600; }' });
+    // Review images must expose each literal cell's content. The interactive
+    // Office view clips fixed-height cells; retain its columns and typography
+    // while letting review rows grow to fit wrapped text, as the PDF does.
+    if (input.format === 'xlsx') await page.addStyleTag({ content:
+      '.sheet-content tbody tr { height:auto !important; } .sheet-content td { white-space:normal !important; overflow:visible !important; text-overflow:clip !important; overflow-wrap:anywhere; } .sheet-content td .spill-text { white-space:normal !important; overflow:visible !important; max-width:100% !important; }' });
     const selector = input.format === 'docx' ? '.page' : '.sheet-content';
     const units = page.locator(selector);
     const count = await units.count();

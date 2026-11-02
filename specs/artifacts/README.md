@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Excel 文件交付与跟进验收](2026-11-02-office-workflow/README.md)：真实 Sol、原生工作簿、逐表预览与同一会话修改。
+
 - [共享文件搜索顺序验收](2026-11-02-file-search-order/README.md)：重复搜索、同分自然顺序及真实文件交互截图。
 
 - [文件搜索范围验收](2026-11-02-file-search-limit/README.md)：大目录、有界结果、原文件打开与范围提示实图。
