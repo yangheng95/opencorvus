@@ -84,12 +84,17 @@ body {
   width: calc(190px * var(--ui-scale));
 }
 
-.mission-board__project-context {
+.mission-board__project-context,
+.mission-board__search-hint {
   flex-basis: 100%;
   min-width: 0;
   color: var(--text-soft);
   font-size: var(--ui-font-caption);
   overflow-wrap: anywhere;
+}
+
+.mission-board__search-hint {
+  margin: 0;
 }
 
 .mission-project-parent,

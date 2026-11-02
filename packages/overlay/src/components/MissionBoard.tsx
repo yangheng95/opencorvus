@@ -71,8 +71,23 @@ function missionProjectLabel(mission: MissionRecord): string {
   return missionDirectoryLabel(mission.directory)
 }
 
+function missionSearchParts(mission: MissionRecord): readonly unknown[] {
+  return [
+    mission.title,
+    mission.missionID,
+    mission.sessionID,
+    mission.directory,
+    mission.directory.replaceAll("\\", "/"),
+    missionProjectLabel(mission),
+    mission.pendingPrompt?.text,
+    mission.outcome?.summary,
+    ...(mission.outcome?.kind === "blocked" ? mission.outcome.unresolvedCriteria : []),
+  ]
+}
+
 function MissionBoardCard(props: {
   mission: MissionRecord
+  searchQuery: string
   dispatching: boolean
   deleting: boolean
   actionBusy: boolean
@@ -97,6 +112,19 @@ function MissionBoardCard(props: {
     }),
   )
   const remainingTasks = createMemo(() => Math.max(0, props.mission.tasks.length - MISSION_TASK_PREVIEW_LIMIT))
+  const taskPreview = createMemo(() => {
+    if (!props.searchQuery.trim()) return props.mission.tasks.slice(0, MISSION_TASK_PREVIEW_LIMIT)
+    const parentParts = missionSearchParts(props.mission)
+    return props.mission.tasks
+      .map((task, index) => ({
+        task,
+        index,
+        matching: matchesSearchTerms(props.searchQuery, [...parentParts, task.title, task.description]),
+      }))
+      .sort((left, right) => Number(right.matching) - Number(left.matching) || left.index - right.index)
+      .slice(0, MISSION_TASK_PREVIEW_LIMIT)
+      .map(({ task }) => task)
+  })
   const blockedOutcome = createMemo(() => {
     const outcome = props.mission.outcome
     return outcome?.kind === "blocked" ? outcome : undefined
@@ -170,7 +198,7 @@ function MissionBoardCard(props: {
               </span>
             </Show>
             <span class="mission-board-card__tasks">
-              <For each={props.mission.tasks.slice(0, MISSION_TASK_PREVIEW_LIMIT)}>
+              <For each={taskPreview()}>
                 {(task) => (
                   <Badge
                     class="mission-board-card__task"
@@ -287,6 +315,7 @@ export function MissionBoard(props: MissionBoardProps) {
   let searchInput: HTMLInputElement | undefined
   let actionGeneration = 0
   const projectContextID = createUniqueId()
+  const searchHintID = createUniqueId()
 
   const projectOptions = createMemo<ProjectOption[]>(() => {
     const directories = [...new Set(missionBoardStore.records.map((mission) => mission.directory))].sort(
@@ -309,14 +338,14 @@ export function MissionBoard(props: MissionBoardProps) {
     if (directory && !projectOptions().some((option) => option.value === directory)) setProjectDirectory("")
   })
   const visibleMissions = createMemo(() => {
-    const query = search().trim().toLocaleLowerCase()
+    const query = search().trim()
     const directory = projectDirectory()
     return missionBoardStore.records.filter((mission) => {
       if (directory && mission.directory !== directory) return false
-      if (!query) return true
-      return [mission.title, mission.missionID, mission.directory, missionProjectLabel(mission)].some((value) =>
-        value.toLocaleLowerCase().includes(query),
-      )
+      return matchesSearchTerms(query, [
+        ...missionSearchParts(mission),
+        ...mission.tasks.flatMap((task) => [task.title, task.description]),
+      ])
     })
   })
   const filtersActive = createMemo(() => Boolean(search().trim() || projectDirectory()))
@@ -400,6 +429,7 @@ export function MissionBoard(props: MissionBoardProps) {
           }}
           value={search()}
           placeholder={t("mission_board.search_placeholder")}
+          ariaDescribedBy={searchHintID}
           onValueChange={setSearch}
         />
         <ComboboxControl<ProjectOption>
@@ -444,6 +474,7 @@ export function MissionBoard(props: MissionBoardProps) {
         >
           <Icon name={missionBoardStore.loading ? "loading" : "refresh"} size="medium" />
         </Button>
+        <p class="mission-board__search-hint" id={searchHintID}>{t("mission_board.search_hint")}</p>
         <Show when={projectDirectory()}>
           {(directory) => (
             <div class="mission-board__project-context" id={projectContextID}>
@@ -553,6 +584,7 @@ export function MissionBoard(props: MissionBoardProps) {
                         {(mission) => (
                           <MissionBoardCard
                             mission={mission}
+                            searchQuery={search()}
                             dispatching={
                               pendingAction()?.kind === "dispatch" && pendingAction()?.missionID === mission.missionID
                             }

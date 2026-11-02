@@ -2769,6 +2769,15 @@ Board project choices, creation fields and Mission cards read custom project nam
 from the existing reactive work-ledger project reader, as the chat home does.
 Search covers that current display name and the original directory; a project
 rename never changes the filtering or creation target's directory identity.
+Board search matches all query terms across the current Mission title, identities,
+project name and original/normalized path, saved request, result/blocked criteria,
+and every child Task's title and request. The existing complete Board projection
+owns these fields; the exact project filter still selects the parent Mission's
+directory. Card previews stably prioritize matching child Tasks within the same
+three-item limit without reordering stored Tasks or changing progress/counts.
+The localized scope hint is associated with the shared SearchField input through
+its optional `ariaDescribedBy` property. Clearing the query restores the original
+Task preview order; the existing filtered-empty reset owns query/project clearing.
 Expert-squad choice rows and their install action retain their natural content
 height within the creation list's bounded scroll region. Long squad descriptions
 wrap within their own row rather than compressing into adjacent choices.

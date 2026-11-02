@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [任务看板的可见内容搜索](2026-11-02-mission-board-search.md)：所有词匹配与只读真实页面验收。
+
 - [已归档多步任务的原请求阅读](2026-11-02-archived-mission-context.md)：只读上下文与真实草稿阅读验收。
 
 - [归档项目身份与项目名检索](2026-11-02-archive-project-search.md)：正向查询合同及中英文真实归档流程。

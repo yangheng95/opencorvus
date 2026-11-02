@@ -8,6 +8,7 @@ export interface SearchFieldProps {
   value: string
   placeholder: string
   ariaLabel?: string
+  ariaDescribedBy?: string
   size?: TextFieldSize
   class?: string
   dataUI?: string
@@ -78,6 +79,7 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
         value={props.value}
         placeholder={props.placeholder}
         aria-label={props.ariaLabel || props.placeholder}
+        aria-describedby={props.ariaDescribedBy}
         data-ui={props.inputDataUI}
         data-testid={props.inputDataTestID}
         disabled={props.disabled}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [任务看板的可见内容搜索](records/2026-11/2026-11-02-mission-board-search.md)：原请求、结果和子任务检索及相关预览。
+
 - [已归档多步任务的原请求阅读](records/2026-11/2026-11-02-archived-mission-context.md)：当前工作读取器统一归档标题和已保存请求。
 
 - [归档项目身份与项目名检索](records/2026-11/2026-11-02-archive-project-search.md)：共享项目名查询、归档可读身份与真实草稿归档恢复。
