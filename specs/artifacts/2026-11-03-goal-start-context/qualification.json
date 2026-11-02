@@ -1,0 +1,327 @@
+{
+  "at": "2026-11-02T20:28:24.589Z",
+  "scope": "915 Home Goal start context and real bounded delivery",
+  "manualReview": "Sixteen genuine page screenshots manually inspected. English inherited and selected models, project and global new-project states, renamed project, Chinese selected model, draft/guide round trips, a real Goal and actual file preview, completed details, existing-conversation creation and reopening. No UI automated tests.",
+  "screenshots": [
+    "01-before-home-en.jpg",
+    "02-before-form-en.jpg",
+    "03-before-selected-model-en.jpg",
+    "04-after-inherited-en.jpg",
+    "05-after-global-new-project-en.jpg",
+    "06-after-project-name-en.jpg",
+    "07-after-selected-model-en.jpg",
+    "08-after-selected-model-zh.jpg",
+    "09-before-real-start-zh.jpg",
+    "10-real-running-zh.jpg",
+    "11-real-delivery-zh.jpg",
+    "12-real-file-preview-zh.jpg",
+    "13-real-completed-details-zh.jpg",
+    "14-existing-conversation-form-zh.jpg",
+    "15-after-global-new-project-zh.jpg",
+    "16-reopened-completed-zh.jpg"
+  ],
+  "goal": {
+    "at": "2026-11-02T20:23:38.017Z",
+    "sessionID": "ses_-zUQ9HvfbzzEYnSgSg3b",
+    "goalID": "pev_g0VZqi4VF006X0VITEUv",
+    "goalStatus": "complete",
+    "sessionStatus": "idle",
+    "experience": "work",
+    "projectID": "prj_haVDuAijnh89NhsVqWv4",
+    "turnBudget": 2,
+    "turnsAccepted": 1,
+    "tokensUsed": 345102,
+    "model": "openai/gpt-6.1-sol",
+    "requests": 10,
+    "maximumRequests": 16,
+    "streamHTTP200EOF": 10,
+    "completedTools": [
+      "read",
+      "read",
+      "read",
+      "apply_patch",
+      "read",
+      "read",
+      "read",
+      "get_continuous_goal",
+      "update_continuous_goal"
+    ],
+    "controllerMessages": 1,
+    "controllerAuthor": "goal-controller",
+    "projectSessions": 1,
+    "originalTaskCount": 8,
+    "taskCount": 8,
+    "sourceFilesPreserved": 2,
+    "rereadFiles": 3,
+    "documentLines": 18,
+    "deliveredRows": [
+      [
+        "A-02",
+        "陈实",
+        "2026-11-03",
+        "closed"
+      ],
+      [
+        "A-03",
+        "林岚",
+        "2026-11-04",
+        "open"
+      ],
+      [
+        "A-01",
+        "林岚",
+        "2026-11-05",
+        "open"
+      ],
+      [
+        "A-04",
+        "周宁",
+        "2026-11-06",
+        "open"
+      ]
+    ],
+    "owners": {
+      "陈实": 1,
+      "林岚": 2,
+      "周宁": 1
+    },
+    "openItems": 3
+  },
+  "publicReads": {
+    "checkpoints": 4,
+    "missionRecordsPerCheckpoint": 15,
+    "taskStatesAndRootSessionsPerCheckpoint": 4,
+    "mailbox": 24,
+    "fileReads": 12
+  },
+  "qualifications": [
+    {
+      "at": "2026-11-02T20:14:07.207Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 271264,
+      "current": 271269,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55404,
+          "after": 55405
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55346,
+          "after": 55347
+        },
+        {
+          "table": "memory_chunk",
+          "before": 98,
+          "after": 99
+        },
+        {
+          "table": "memory_file",
+          "before": 98,
+          "after": 99
+        },
+        {
+          "table": "project",
+          "before": 101,
+          "after": 102
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 263,
+      "projects": 101,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1309,
+      "reserveMs": 4220711,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-B9OOQFwN.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2,
+      "unusedAllowanceRetired": 0
+    },
+    {
+      "at": "2026-11-02T20:25:49.414Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 271269,
+      "current": 273825,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 52949,
+          "after": 53440
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 52949,
+          "after": 53440
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 7019,
+          "after": 7093
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 7019,
+          "after": 7093
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 21057,
+          "after": 21279
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55405,
+          "after": 55899
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55347,
+          "after": 55841
+        },
+        {
+          "table": "event_occurrence",
+          "before": 6799,
+          "after": 6873
+        },
+        {
+          "table": "memory_chunk",
+          "before": 99,
+          "after": 100
+        },
+        {
+          "table": "memory_file",
+          "before": 99,
+          "after": 100
+        },
+        {
+          "table": "message",
+          "before": 905,
+          "after": 916
+        },
+        {
+          "table": "part",
+          "before": 2556,
+          "after": 2586
+        },
+        {
+          "table": "permission_execution_result",
+          "before": 232,
+          "after": 234
+        },
+        {
+          "table": "permission_ledger",
+          "before": 1176,
+          "after": 1186
+        },
+        {
+          "table": "permission_policy",
+          "before": 52,
+          "after": 53
+        },
+        {
+          "table": "project",
+          "before": 102,
+          "after": 103
+        },
+        {
+          "table": "protocol_event",
+          "before": 2591,
+          "after": 2625
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 881,
+          "after": 891
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 881,
+          "after": 891
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 924,
+          "after": 934
+        },
+        {
+          "table": "session_control_event",
+          "before": 69,
+          "after": 70
+        },
+        {
+          "table": "session_control_record",
+          "before": 68,
+          "after": 69
+        },
+        {
+          "table": "session",
+          "before": 138,
+          "after": 139
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 706,
+          "after": 715
+        },
+        {
+          "table": "tool_part_request",
+          "before": 706,
+          "after": 715
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793636063764,
+          "reacquiredAt": 1793650868117,
+          "releasedAt": 1793650873026,
+          "ownedByRuntime": true
+        }
+      ],
+      "sourceDatabasePreserved": true,
+      "attachments": 263,
+      "projects": 102,
+      "filesystemExclusions": 0,
+      "requests": 10,
+      "cumulativeRequests": 1319,
+      "reserveMs": 3474795,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-SC8WvLdj.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2,
+      "unusedAllowanceRetired": 6
+    }
+  ],
+  "typecheck": 0,
+  "uiBuild": 0,
+  "newModelRequests": 10,
+  "cumulativeModelRequests": 1319
+}

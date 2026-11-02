@@ -200,6 +200,21 @@
   color: var(--text-soft);
   line-height: var(--ui-line-height-normal);
 }
+.continuous-goal__launch-context {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--ui-gap-xs) var(--ui-gap-md);
+  margin: 0;
+  font-size: var(--ui-font-caption);
+}
+.continuous-goal__launch-context dt {
+  color: var(--text-soft);
+}
+.continuous-goal__launch-context dd {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 .continuous-goal__budget-options .oc-disclosure__content {
   display: grid;
   gap: var(--ui-gap-lg);

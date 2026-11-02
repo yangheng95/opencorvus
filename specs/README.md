@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标的开始工作上下文](records/2026-11/2026-11-03-goal-start-context.md)：默认页、确认表单和真实执行归属。
+
 - [清除筛选后的键盘焦点](records/2026-11/2026-11-03-filter-recovery-focus.md)：恢复文件列表后继续操作的焦点归属。
 
 - [审阅筛选的状态与恢复](records/2026-11/2026-11-03-change-status-meaning.md)：类型未定含义、无匹配空态与清除全部筛选。

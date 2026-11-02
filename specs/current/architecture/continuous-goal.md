@@ -322,6 +322,11 @@ title or the SideChat selector's localized name, alongside its scope description
 Long names wrap inside the dialog. This is presentation from the current owner;
 it does not become request identity, a source key or a second persisted title.
 Home creation retains its explicit new-conversation scope until an owner exists.
+Its confirmation form shows the current project through the canonical project-name
+projection and the exact composer model selection. An empty model selection keeps
+the existing inherited-configuration label; an unassigned workspace states that
+starting will create a project. These are live display facts, not another launch
+snapshot or configuration source; confirmation keeps the original creation path.
 
 Completion requires the operator's evidence. A completed goal remains readable and
 offers a new goal with a new identity. Form drafts survive revision conflicts; the

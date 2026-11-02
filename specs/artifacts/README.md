@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标开始工作验收](2026-11-03-goal-start-context/README.md)：首页到目标运行的真实页面与交付事实。
+
 - [筛选恢复焦点验收](2026-11-03-filter-recovery-focus/README.md)：键盘清除与后续列表/搜索操作的人工复核。
 
 - [审阅筛选状态与恢复验收](2026-11-03-change-status-meaning/README.md)：中英类型说明、无匹配恢复与已知分类实页。

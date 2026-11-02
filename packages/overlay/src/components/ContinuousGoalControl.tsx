@@ -23,6 +23,9 @@ import {
 } from "../services/continuous-goal"
 import { formatErrorDetails } from "../services/diagnostics"
 import { composerDraftText, composerQuotation, setComposerDraft } from "../services/composer-draft"
+import { activeDirectory } from "../services/workspace"
+import { workLedgerProject } from "../services/work-ledger"
+import { projectDisplayName } from "../utils/project-directory"
 import { randomUUID } from "../utils/random-id"
 import { localeTag, t } from "../utils/i18n"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
@@ -126,6 +129,15 @@ export function ContinuousGoalControl(props: {
   hasStagedAttachments?: boolean
 }) {
   const formID = `continuous-goal-${createUniqueId()}`
+  const launchProjectName = () => {
+    const directory = activeDirectory().trim()
+    return projectDisplayName({
+      directory,
+      customName: directory ? workLedgerProject(directory)?.title : undefined,
+      unknownName: t("continuous_goal.launch_new_project"),
+      implicitProjectName: t("work_ledger.implicit_project"),
+    })
+  }
   const source = createMemo(
     () => {
       const target = props.owner
@@ -784,6 +796,14 @@ export function ContinuousGoalControl(props: {
               }
             >
               <p class="continuous-goal__create-intro">{t(props.home ? "continuous_goal.home_intro" : "continuous_goal.create_intro")}</p>
+              <Show when={props.home}>
+                <dl class="continuous-goal__launch-context">
+                  <dt>{t("continuous_goal.launch_project")}</dt>
+                  <dd title={activeDirectory().trim()}>{launchProjectName()}</dd>
+                  <dt>{t("continuous_goal.launch_model")}</dt>
+                  <dd>{appStore.composerModel || t("model_selector.model_inherit")}</dd>
+                </dl>
+              </Show>
               <Show when={pendingComposerContext()}>
                 <p class="continuous-goal__hint">{t("continuous_goal.pending_context_hint")}</p>
               </Show>
