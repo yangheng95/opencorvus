@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [0.1.43发布](records/2026-11/2026-11-03-release-0.1.43.md)：同任务证据补交、压缩进度与文件体验的冻结发布和交付验收。
+
 - [文件读取失败反馈](records/2026-11/2026-11-03-file-read-feedback.md)：具名错误、真实文件身份与中英恢复提示。
 
 - [审阅中的已记录文件版本](records/2026-11/2026-11-03-recorded-file-versions.md)：历史内容、当前文件和原始版本入口调查。

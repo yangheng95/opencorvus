@@ -4,19 +4,53 @@
 
 ## 未发布
 
+## 0.1.43 - 2026-11-03
+
 ### zh-CN
+
+#### 新增
+
+- Review 可打开工具记录的原始创建版本，区分历史版本与当前磁盘文件，并保留原文件身份。
+
+#### 调整
+
+- 收件箱在项目切换、搜索、刷新及批量选择时保持明确的项目和消息归属，搜索中也可完成所选消息操作；交付文件与工具步骤的中英说明更易辨认。
 
 #### 修复
 
+- 文件搜索使用稳定的候选和同分顺序，明确提示返回范围；当前文件移动或删除时提供带路径的错误说明及重试。
+- Office 工作簿预览保留单元格文字，原生 Office 文件下载明确声明附件类型，保留原件和历史版本。
 - Mission 可在恢复同一任务时显式补交授权的跨任务证据，复用已导入对象，并在耐久收据中记录实际映射；重试和重启保留原有交付，自动数据迁移保留历史收据。
 - 压缩助手的每次请求显示现有配置的步骤上限、已完成和剩余步骤；保存工作笔记后仍保留真实执行进度，帮助在原有余量内完成普通摘要。真实摘要校验及工具耗尽错误保持。
 
+#### 升级影响与已知限制
+
+- 数据库自动迁移至版本 10，保留既有数据与历史收据；升级后的数据库不能直接由旧版本程序打开。
+- 压缩助手仍使用原配置的步骤上限和真实摘要校验，不保证任意模型或历史都能收敛；聚焦测试及隔离长会话复核只证明各自验收范围。
+- macOS 仍为临时签名，未经过 Apple 公证。
+
 ### en-US
+
+#### Added
+
+- Open the original creation version recorded by a tool in Review, distinguishing historical content from the current disk file while retaining original file identities.
+
+#### Changed
+
+- Keep project and message ownership clear across Mailbox project changes, search, refresh and bulk selection, including actions on selected search results. Improve localized file-delivery and tool-step labels.
 
 #### Fixed
 
+- Stabilize file-search candidates and tie ordering, and explain result limits. Moved or deleted current files show their paths and an actionable retry.
+- Preserve cell text in workbook previews and explicitly identify native Office downloads as attachments while retaining original files and historical versions.
 - Missions can explicitly deliver authorized cross-Task evidence when resuming the same Task, reusing exact existing imports and recording actual mappings in the durable receipt. Retries and restarts retain the accepted delivery; automatic data migration preserves historical receipts.
 - Show the compaction helper's configured step allowance, completed steps and remaining steps in each request. Saved working notes retain actual execution progress so the helper can plan its ordinary summary within the existing allowance. Genuine-summary validation and explicit exhaustion errors remain authoritative.
+
+#### Upgrade impact and known limitations
+
+- Automatically migrate the database to version 10 while preserving existing data and historical receipts. Older application versions cannot directly open the upgraded database.
+- Compaction retains its configured step limit and genuine-summary validation. Convergence depends on the model and history; focused tests and an isolated retained-history run establish only their stated scope.
+- macOS remains ad hoc signed without Apple notarization.
 
 ## 0.1.42 - 2026-11-02
 

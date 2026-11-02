@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [0.1.43发布证据](2026-11-03-release-0.1.43/README.md)：冻结源码、规范运行、公开资源和三处日志。
+
 - [文件读取失败反馈验收](2026-11-03-file-read-feedback/README.md)：缺失路径、中英恢复说明、正常文件和隔离迁移备份实证。
 
 - [审阅历史文件版本验收](2026-11-03-recorded-file-versions/README.md)：真实新旧 Excel、当前路径和项目切换截图。
