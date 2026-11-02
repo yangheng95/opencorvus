@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [多步任务中的子任务直达](2026-11-02-mission-child-task-navigation.md)：父子入口、原身份和真实跨项目只读体验。
+
 - [创建意图与草稿保存反馈](2026-11-02-mission-create-feedback.md)：真实跨项目保存、直达和编辑回读。
 
 - [多步任务的列表阅读与状态导航](2026-11-02-mission-list-reading.md)：长文本阅读、视图切换及真实只读验收。

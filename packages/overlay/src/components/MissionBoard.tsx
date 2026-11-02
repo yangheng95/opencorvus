@@ -46,6 +46,7 @@ export interface MissionBoardProps {
   onOpenMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
   canOpenMarketWebPage?: boolean
   onOpenMission: (mission: MissionRecord) => void | Promise<void>
+  onOpenTask: (task: MissionTask) => void | Promise<void>
   onCreateManual: (input: MissionManualCreateRequest) => Promise<MissionRecord>
   onCreateWithAI: (input: MissionCreateRequest) => Promise<void>
   onDispatchMission: (mission: MissionRecord) => Promise<void>
@@ -94,6 +95,7 @@ function MissionBoardCard(props: {
   deleting: boolean
   actionBusy: boolean
   onOpen: () => void
+  onOpenTask: (task: MissionTask) => void
   onDispatch: () => void
   onEdit: () => void
   onDelete: () => void
@@ -199,27 +201,6 @@ function MissionBoardCard(props: {
                 </For>
               </span>
             </Show>
-            <span class="mission-board-card__tasks">
-              <For each={taskPreview()}>
-                {(task) => (
-                  <Badge
-                    class="mission-board-card__task"
-                    size="sm"
-                    tone={taskStatusTone(task.lifecycleStatus)}
-                    title={task.title}
-                  >
-                    <span>{task.title}</span>
-                    <span aria-hidden="true">·</span>
-                    <span>{taskLifecycleStatusLabel(task.lifecycleStatus)}</span>
-                  </Badge>
-                )}
-              </For>
-              <Show when={remainingTasks() > 0}>
-                <Badge size="sm" tone="muted">
-                  {t("mission_board.more_tasks", { count: remainingTasks().toLocaleString(localeTag()) })}
-                </Badge>
-              </Show>
-            </span>
           </Show>
           <Show when={props.mission.pendingInteractions > 0}>
             <Badge class="mission-board-card__attention" size="sm" tone="warn">
@@ -230,6 +211,42 @@ function MissionBoardCard(props: {
             </Badge>
           </Show>
         </Button>
+        <Show when={props.mission.tasks.length > 0}>
+          <div class="mission-board-card__tasks" role="group" aria-label={t("mission_board.child_tasks")}>
+            <span class="mission-board-card__tasks-label">{t("mission_board.child_tasks")}</span>
+            <For each={taskPreview()}>
+              {(task) => (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  tone="neutral"
+                  class="mission-board-card__task"
+                  title={task.title}
+                  aria-label={t("mission_board.open_task", {
+                    title: task.title,
+                    status: taskLifecycleStatusLabel(task.lifecycleStatus),
+                  })}
+                  disabled={props.actionBusy}
+                  onClick={() => props.onOpenTask(task)}
+                >
+                  <span class="mission-board-card__task-title">{task.title}</span>
+                  <span class="mission-board-card__task-meta">
+                    <Badge size="sm" tone={taskStatusTone(task.lifecycleStatus)}>
+                      {taskLifecycleStatusLabel(task.lifecycleStatus)}
+                    </Badge>
+                    <Icon name="chevron" size="compact" />
+                  </span>
+                </Button>
+              )}
+            </For>
+            <Show when={remainingTasks() > 0}>
+              <Badge size="sm" tone="muted">
+                {t("mission_board.more_tasks", { count: remainingTasks().toLocaleString(localeTag()) })}
+              </Badge>
+            </Show>
+          </div>
+        </Show>
         <Show when={blockedOutcome()}>
           {(outcome) => (
             <Disclosure.Root class="mission-board-card__blockers">
@@ -693,6 +710,7 @@ export function MissionBoard(props: MissionBoardProps) {
                             }
                             actionBusy={Boolean(pendingAction())}
                             onOpen={() => void props.onOpenMission(mission)}
+                            onOpenTask={(task) => void props.onOpenTask(task)}
                             onDispatch={() => void dispatchMission(mission)}
                             onEdit={() =>
                               setEditingDraft({

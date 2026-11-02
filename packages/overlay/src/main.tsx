@@ -2577,6 +2577,9 @@ function OverlayRoot() {
           onOpenMission={(mission) =>
             runUserNavigation("mission-board.open-mission", () => openMissionBoardMission(mission))
           }
+          onOpenTask={(task) =>
+            runUserNavigation("mission-board.open-task", () => selectTaskWithUILifecycle(task.id, task.directory))
+          }
           onCreateManual={createMissionBoardDraft}
           onCreateWithAI={createMissionBoardWithAI}
           onDispatchMission={dispatchMissionBoardDraft}

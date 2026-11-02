@@ -1219,6 +1219,18 @@ the Mission's lane and acceptance remain owned by the server projection. Each
 browser's native progress fill selector has its own rule so an unsupported
 vendor pseudo-element cannot invalidate the other browser's lane-theme fill.
 
+The same compact Task preview is a sibling region of the Mission open button.
+Each child has its own native Button, original title and lifecycle Badge, with
+current-language group/open names and state. Board rows stack title and metadata;
+List rows keep complete names beside state and the navigation arrow. The three
+preview limit and stable search prioritization retain their existing owner.
+The page's sole Task-open callback uses that child's exact ID and own directory
+through `runUserNavigation` and `selectTaskWithUILifecycle`, the shared explicit
+selection path used by Ledger, Archive, App and Mailbox. It adds no execution,
+loading state, locator or data source. Parent opening, draft actions and blocked
+criteria remain separate controls; no interactive child is nested in its parent
+button. Returning to Missions retains the page's original query/project/view.
+
 Blocked Mission cards expose their current outcome's complete unresolved criteria
 through the existing native Disclosure, with a localized blocked/count entry.
 The exact authored items retain their order, text and line breaks. This read-only

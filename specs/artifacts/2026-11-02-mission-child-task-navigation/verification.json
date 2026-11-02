@@ -1,0 +1,524 @@
+{
+  "at": "2026-11-02T06:23:00.612Z",
+  "checks": {
+    "overlay-typecheck": {
+      "label": "overlay-typecheck",
+      "startedAt": 1793599604600,
+      "closedAt": 1793599632464,
+      "code": 0,
+      "signal": null,
+      "childPID": 2420
+    },
+    "focused-checks": {
+      "label": "focused-checks",
+      "startedAt": 1793599604590,
+      "closedAt": 1793599618089,
+      "code": 0,
+      "signal": null,
+      "childPID": 10280
+    },
+    "ui-build-after": {
+      "label": "ui-build-after",
+      "startedAt": 1793599604621,
+      "closedAt": 1793599668586,
+      "code": 0,
+      "signal": null,
+      "childPID": 31436
+    }
+  },
+  "qualifications": {
+    "before": {
+      "at": "2026-11-02T06:03:26.102Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259652,
+      "current": 259654,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53137,
+          "after": 53138
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53079,
+          "after": 53080
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4393082,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DmZ_yhYj.js"
+    },
+    "after": {
+      "at": "2026-11-02T06:18:38.088Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259654,
+      "current": 259656,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53138,
+          "after": 53139
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53080,
+          "after": 53081
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3481513,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DAgb7BYD.js"
+    }
+  },
+  "closures": {
+    "before": {
+      "originalExecHandle": 52367,
+      "originalExecConsumedExit": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "maximumRequests": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4393082,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "physical": {
+        "launcher": {
+          "originalChildExit": 0,
+          "observedAtUtc": "2026-11-02T06:03:02.1385941Z"
+        },
+        "chain": [
+          {
+            "identity": {
+              "pid": 24580,
+              "processInstanceID": "win32:639291961282448161",
+              "occurrenceID": "b1d7cc9d-e85b-43f9-9faf-b62852c90c07"
+            },
+            "state": "dead_or_reused"
+          },
+          {
+            "identity": {
+              "pid": 33192,
+              "processInstanceID": "win32:639291961289380391",
+              "occurrenceID": "7c0198e6-076a-42b6-941a-3014aec72659"
+            },
+            "state": "dead_or_reused"
+          }
+        ],
+        "native": {
+          "occurrence": "mission-child-task-navigation-897-before-eeeeba30-b45c-4215-83e1-66c48a1a98ec",
+          "outcome": "settled",
+          "host": {
+            "pid": 24580,
+            "processInstanceID": "win32:639291961282448161",
+            "occurrenceID": "b1d7cc9d-e85b-43f9-9faf-b62852c90c07"
+          },
+          "target": {
+            "pid": 33192,
+            "processInstanceID": "win32:639291961289380391",
+            "occurrenceID": "7c0198e6-076a-42b6-941a-3014aec72659"
+          },
+          "observedAtUtc": "2026-11-02T06:03:02.105Z",
+          "deadlineAt": 1793603775187,
+          "terminal": {
+            "occurrenceID": "mission-child-task-navigation-897-before-eeeeba30-b45c-4215-83e1-66c48a1a98ec",
+            "pid": 33192,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "observedAtUtc": "2026-11-02T06:03:03.4661439Z"
+      }
+    },
+    "after": {
+      "originalExecHandle": 65054,
+      "originalExecConsumedExit": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "maximumRequests": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3481513,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "physical": {
+        "observedAtUtc": "2026-11-02T06:18:14.9753571Z",
+        "native": {
+          "occurrence": "mission-child-task-navigation-897-after-f5c02351-d64c-450d-93d1-5fcf5f4d7b0f",
+          "outcome": "settled",
+          "host": {
+            "pid": 22916,
+            "processInstanceID": "win32:639291965147307612",
+            "occurrenceID": "73897bd1-acdf-4ac9-8c23-35aeb361c0b9"
+          },
+          "target": {
+            "pid": 33116,
+            "processInstanceID": "win32:639291965154589861",
+            "occurrenceID": "f37bad6b-cd44-4b60-9143-cec548b7602b"
+          },
+          "observedAtUtc": "2026-11-02T06:18:13.674Z",
+          "deadlineAt": 1793603775187,
+          "terminal": {
+            "occurrenceID": "mission-child-task-navigation-897-after-f5c02351-d64c-450d-93d1-5fcf5f4d7b0f",
+            "pid": 33116,
+            "reason": "exited",
+            "exitCode": 0,
+            "signal": null
+          },
+          "physicalCompletion": true,
+          "outputDrainComplete": true,
+          "requestCleanupComplete": true,
+          "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+        },
+        "chain": [
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 22916,
+              "processInstanceID": "win32:639291965147307612",
+              "occurrenceID": "73897bd1-acdf-4ac9-8c23-35aeb361c0b9"
+            }
+          },
+          {
+            "state": "dead_or_reused",
+            "identity": {
+              "pid": 33116,
+              "processInstanceID": "win32:639291965154589861",
+              "occurrenceID": "f37bad6b-cd44-4b60-9143-cec548b7602b"
+            }
+          }
+        ],
+        "launcher": {
+          "observedAtUtc": "2026-11-02T06:18:13.7049765Z",
+          "originalChildExit": 0
+        }
+      }
+    }
+  },
+  "reader": {
+    "before": {
+      "at": "2026-11-02T06:02:17.903Z",
+      "records": 15
+    },
+    "afterInitial": {
+      "at": "2026-11-02T06:08:43.765Z",
+      "records": 15,
+      "exactOriginalRecords": true,
+      "exactOriginalTaskStatusSnapshots": true
+    },
+    "afterFinal": {
+      "at": "2026-11-02T06:18:11.512Z",
+      "records": 15,
+      "exactOriginalRecords": true,
+      "exactOriginalTaskStatusSnapshots": true
+    },
+    "targets": {
+      "failed741": {
+        "taskID": "tsk_g00VZHd47u00r0Pa5iWM",
+        "title": "客户原件复核与阻塞确认",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+        "lifecycleStatus": "failed",
+        "activity": "inactive",
+        "rootSessionID": "ses_-zUQiMvTYzzSrPyJpYL1"
+      },
+      "completed741": {
+        "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+        "title": "订单精确计算与汇总交付",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+        "lifecycleStatus": "completed",
+        "activity": "inactive",
+        "rootSessionID": "ses_-zUQiMz5bzzMH5K9ooZ0"
+      },
+      "completed801": {
+        "taskID": "tsk_g00VZT7V7400TdQ2J6Sj",
+        "title": "批准后提交801",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "lifecycleStatus": "completed",
+        "activity": "inactive",
+        "rootSessionID": "ses_-zUQWsUi1zz5W6N1lPDO"
+      },
+      "unfinished793": {
+        "taskID": "tsk_g00VZRQQAP00yaqEnUZF",
+        "title": "协调差异验收793 限定代码修复",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project",
+        "lifecycleStatus": "active",
+        "activity": "inactive",
+        "rootSessionID": "ses_-zUQYZZZfzzZxyo2Fspx"
+      }
+    }
+  },
+  "locations": {
+    "before-click": {
+      "at": "2026-11-02T06:02:45.229Z",
+      "url": "http://localhost:38624/ui/?sessionID=ses_-zUQiNDP0zzyyPiL2nvx&sessionKind=mission&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-28%5Clive-mission-blocked-741%5Cproject"
+    },
+    "after-completed-task": {
+      "at": "2026-11-02T06:09:21.004Z",
+      "url": "http://localhost:38625/ui/?taskID=tsk_g00VZHd0gV00QEPVDCEU",
+      "domFacts": {
+        "sessions": [],
+        "taskSummaries": [
+          {
+            "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+            "title": "4 files"
+          }
+        ]
+      }
+    },
+    "after-refresh": {
+      "at": "2026-11-02T06:09:45.702Z",
+      "url": "http://localhost:38625/ui/?taskID=tsk_g00VZHd0gV00QEPVDCEU"
+    },
+    "after-failed-task": {
+      "at": "2026-11-02T06:10:51.965Z",
+      "url": "http://localhost:38625/ui/?taskID=tsk_g00VZHd47u00r0Pa5iWM"
+    },
+    "after-parent": {
+      "at": "2026-11-02T06:11:15.054Z",
+      "url": "http://localhost:38625/ui/?sessionID=ses_-zUQiNDP0zzyyPiL2nvx&sessionKind=mission&directory=C%3A%5CUsers%5Chengu%5C.codex%5Copencorvus-product-iteration%5C2026-10-28%5Clive-mission-blocked-741%5Cproject"
+    },
+    "after-board-task": {
+      "at": "2026-11-02T06:12:06.369Z",
+      "url": "http://localhost:38625/ui/?taskID=tsk_g00VZHd0gV00QEPVDCEU"
+    },
+    "after-cross-project": {
+      "at": "2026-11-02T06:12:21.853Z",
+      "url": "http://localhost:38625/ui/?taskID=tsk_g00VZT7V7400TdQ2J6Sj"
+    },
+    "after-unfinished": {
+      "at": "2026-11-02T06:12:54.862Z",
+      "url": "http://localhost:38625/ui/?taskID=tsk_g00VZRQQAP00yaqEnUZF"
+    },
+    "after-chinese-task": {
+      "at": "2026-11-02T06:16:18.076Z",
+      "url": "http://localhost:38625/ui/?taskID=tsk_g00VZHd0gV00QEPVDCEU"
+    }
+  },
+  "actualHTTPNavigation": {
+    "at": "2026-11-02T06:20:23.733Z",
+    "tasks": {
+      "failed741": {
+        "taskID": "tsk_g00VZHd47u00r0Pa5iWM",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+        "rootSessionID": "ses_-zUQiMvTYzzSrPyJpYL1",
+        "actualConversationRequests": 1,
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/task/tsk_g00VZHd47u00r0Pa5iWM/conversation",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/work-ledger/selection/task/tsk_g00VZHd47u00r0Pa5iWM",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/task/tsk_g00VZHd47u00r0Pa5iWM/events",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/continuous-goal/task/tsk_g00VZHd47u00r0Pa5iWM",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project"
+          }
+        ]
+      },
+      "completed741": {
+        "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+        "rootSessionID": "ses_-zUQiMz5bzzMH5K9ooZ0",
+        "actualConversationRequests": 4,
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/task/tsk_g00VZHd0gV00QEPVDCEU/conversation",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/work-ledger/selection/task/tsk_g00VZHd0gV00QEPVDCEU",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/task/tsk_g00VZHd0gV00QEPVDCEU/events",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/continuous-goal/task/tsk_g00VZHd0gV00QEPVDCEU",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project"
+          }
+        ]
+      },
+      "completed801": {
+        "taskID": "tsk_g00VZT7V7400TdQ2J6Sj",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "rootSessionID": "ses_-zUQWsUi1zz5W6N1lPDO",
+        "actualConversationRequests": 1,
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/task/tsk_g00VZT7V7400TdQ2J6Sj/conversation",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/work-ledger/selection/task/tsk_g00VZT7V7400TdQ2J6Sj",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/task/tsk_g00VZT7V7400TdQ2J6Sj/events",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/continuous-goal/task/tsk_g00VZT7V7400TdQ2J6Sj",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project"
+          }
+        ]
+      },
+      "unfinished793": {
+        "taskID": "tsk_g00VZRQQAP00yaqEnUZF",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project",
+        "rootSessionID": "ses_-zUQYZZZfzzZxyo2Fspx",
+        "actualConversationRequests": 1,
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/task/tsk_g00VZRQQAP00yaqEnUZF/conversation",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/work-ledger/selection/task/tsk_g00VZRQQAP00yaqEnUZF",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/continuous-goal/task/tsk_g00VZRQQAP00yaqEnUZF",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project"
+          },
+          {
+            "method": "GET",
+            "path": "/task/tsk_g00VZRQQAP00yaqEnUZF/events",
+            "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project"
+          }
+        ]
+      }
+    }
+  },
+  "filterObservations": {
+    "layout": "list",
+    "projectContext": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+    "query": "订单精确计算与汇总交付",
+    "taskButtons": [
+      {
+        "name": "打开子任务：订单精确计算与汇总交付（已完成）",
+        "title": "订单精确计算与汇总交付"
+      },
+      {
+        "name": "打开子任务：客户原件复核与阻塞确认（失败）",
+        "title": "客户原件复核与阻塞确认"
+      }
+    ]
+  },
+  "manualVisualReview": {
+    "method": "Real isolated CLI /ui pages and CUA mouse/keyboard interactions; individual screenshots manually reviewed, originals 12/08 independently reopened.",
+    "screenshots": [
+      "01-before-child-preview.jpg",
+      "02-before-child-click-opens-parent.jpg",
+      "03-after-list-child-actions-en.jpg",
+      "04-after-completed-task-en.jpg",
+      "05-after-task-refresh-en.jpg",
+      "06-after-failed-task-keyboard-en.jpg",
+      "07-after-parent-remains-mission-en.jpg",
+      "08-after-board-child-actions-en.jpg",
+      "09-after-cross-project-task801-en.jpg",
+      "10-after-unfinished-task793-en.jpg",
+      "11-after-search-prioritizes-child-en.jpg",
+      "12-after-child-actions-zh.jpg",
+      "13-after-completed-task-keyboard-zh.jpg",
+      "14-after-board-child-actions-zh.jpg",
+      "15-after-parent-blockers-zh.jpg",
+      "16-after-project-query-preserved-zh.jpg"
+    ],
+    "flows": [
+      "Before clicking completed child title opens original parent Mission Session",
+      "After native completed child button opens exact original Task and four original deliverables",
+      "Own Task-page refresh restores the same Task ID and content",
+      "Keyboard Enter opens original failed Task and its missing-source explanation",
+      "Parent button still opens original parent Mission, Task buttons remain siblings",
+      "Board mode opens same completed Task; return retains current mode/query",
+      "Cross-project navigation opens original completed801 Task and counter.py/test_counter.py deliverables",
+      "Original unfinished793 Task opens with original Idle activity and active lifecycle; no execution is started",
+      "Matching child title remains prioritized without changing original stored order or parent progress",
+      "English/Chinese labels and keyboard entry, parent blocked criteria still independently expand",
+      "Specific741 project/query/List retained after Task opening and return"
+    ]
+  },
+  "limits": {
+    "uiAutomationTests": false,
+    "modelRequests": 0,
+    "cumulativeRequests": 1260,
+    "deadlineAt": 1793603775187,
+    "schema": 9,
+    "tables": 92,
+    "maximumChildTasksObserved": 2,
+    "desktopViewport": [
+      1280,
+      720
+    ],
+    "notClaimed": [
+      "Model execution or starting/resuming/stopping a Task",
+      "A child whose owning directory differs from its parent within the same Mission",
+      "More than three children or the remaining count visual",
+      "Offline/error/connection rotation or unsaved-editor navigation conflict visuals",
+      "All other pages or viewport sizes"
+    ]
+  }
+}
