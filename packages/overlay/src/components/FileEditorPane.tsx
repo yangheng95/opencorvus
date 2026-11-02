@@ -114,7 +114,7 @@ export function FileEditorPane() {
   const [saving, setSaving] = createSignal(false)
   const [reloading, setReloading] = createSignal(false)
   const [downloading, setDownloading] = createSignal(false)
-  const [textView, setTextView] = createSignal<"source" | "preview">("source")
+  const [textView, setTextView] = createSignal<"source" | "preview" | null>(null)
   const [editorSearch, setEditorSearch] = createSignal<(() => void) | undefined>()
   const [error, setError] = createSignal<FileEditorFailure | null>(null)
   const [loadFailure, setLoadFailure] = createSignal<{ error: unknown } | null>(null)
@@ -344,6 +344,13 @@ export function FileEditorPane() {
   }
 
   const applyContent = (next: FileContent | null) => batch(() => {
+    if (next && textView() === null) {
+      setTextView(
+        canEdit(next) && next.content.length > 0 && extToLang(path()) === "markdown" && !target()?.range
+          ? "preview"
+          : "source",
+      )
+    }
     setContent(next)
     setError(null)
     draftRevision += 1
@@ -360,7 +367,7 @@ export function FileEditorPane() {
       const identity = identityOf(file)
       const retainDraft = identity === activeTargetIdentity && dirty()
       if (identity !== activeTargetIdentity) {
-        setTextView(file && !target()?.range && extToLang(file.path) === "markdown" ? "preview" : "source")
+        setTextView(null)
       }
       activeTargetIdentity = identity
       const generation = ++loadGeneration
@@ -665,7 +672,7 @@ export function FileEditorPane() {
           <div class="file-editor-text-toolbar">
             <SegmentedControl<"source" | "preview">
               size="sm"
-              value={textView()}
+              value={textView() === "preview" ? "preview" : "source"}
               ariaLabel={t("file_editor.view")}
               options={[
                 { value: "source", label: t("file_editor.view_source") },

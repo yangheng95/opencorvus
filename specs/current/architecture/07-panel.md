@@ -796,9 +796,12 @@ the same directory input as listing, search and commands; the full path remains
 readable when the navigation sidebar is hidden.
 
 Markdown text files offer Source and Preview views of the same current draft.
-New Markdown file identities without a source range open in Preview. Explicit
-source ranges and Find reveal Source; an existing identity retains its chosen
-view and dirty draft through the same file-workbench owner.
+A newly opened nonempty Markdown file without a source range opens in Preview.
+An empty Markdown file opens in Source so its existing editor can accept input.
+The initial view settles with the first successful content read, including a
+retry after an initial read failure. Explicit source ranges and Find reveal
+Source; an existing identity retains its chosen view and dirty draft through
+the same file-workbench owner.
 
 Primary navigation retains visible localized captions on the existing actions.
 The Composer's mode selector exposes work type and conversation approach with

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [空Markdown文件编辑验收](2026-11-03-empty-markdown-editing/README.md)：真实新建、编辑、保存与原数据保全。
+
 - [文件浏览项目语境验收](2026-11-03-file-browser-context/README.md)：隔离页面的项目/目录阅读与原数据保全。
 
 - [项目侧栏操作验收](2026-11-03-project-tree-navigation/README.md)：折叠与打开的真实界面、草稿和焦点连续性。

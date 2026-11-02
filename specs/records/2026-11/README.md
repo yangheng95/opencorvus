@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [空Markdown文件的开始编辑](2026-11-03-empty-markdown-editing.md)：空文件输入、视图选择与保存/重载往返。
+
 - [文件浏览的项目语境](2026-11-03-file-browser-context.md)：项目切换、长名称与文件浏览的范围辨认。
 
 - [项目侧栏的折叠与打开](2026-11-03-project-tree-navigation.md)：未发送草稿、独立项目动作与菜单/置顶/定位焦点实页调查。

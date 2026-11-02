@@ -1,0 +1,306 @@
+{
+  "at": "2026-11-02T22:13:05.703Z",
+  "scope": "918 initialize the Markdown view from its first successful actual content read",
+  "manualReview": "Fourteen real page screenshots manually inspected. Before, a newly created zero-byte Markdown file shows an empty Preview with the actual editor hidden and focus on the page background. After, English and Chinese empty files show Source and receive the original editor focus. Actual input and saves read back as 71, 123, 182 and 221 bytes. Explicit Preview, further Source editing, reload/close cancellation with retained draft and initiating-control focus, successful reload, nonempty reopening and actual moved-file failure/restoration/Retry verified. A real saved Markdown #L3 link opens Source and highlights line 3. Initial source-chip activation immediately after a conversation switch had an unresolved visibility observation; a later body link and source-chip reopening succeeded. This batch does not claim a source-click timing fix. No UI automated tests.",
+  "screenshots": [
+    "01-before-new-empty-preview.png",
+    "02-before-manual-source-required.png",
+    "03-after-empty-source-ready.png",
+    "04-after-first-save.png",
+    "05-after-explicit-preview.png",
+    "06-after-reload-cancel-draft.png",
+    "07-after-close-cancel-draft.png",
+    "08-after-saved-reload-source.png",
+    "09-after-nonempty-reopens-preview.png",
+    "10-after-real-missing-file.png",
+    "11-after-retry-default-preview.png",
+    "12-after-chinese-preview-retained.png",
+    "13-after-chinese-empty-source.png",
+    "14-after-explicit-line-source.png"
+  ],
+  "preservedGoal": {
+    "goalID": "pev_g0VZqi4VF006X0VITEUv",
+    "sessionID": "ses_-zUQ9HvfbzzEYnSgSg3b",
+    "status": "complete",
+    "tokensUsed": 345102,
+    "turnsAccepted": 1,
+    "checkpoints": 4,
+    "originalDefinitionAndStateExact": true,
+    "sessionActivity": "idle"
+  },
+  "publicReads": {
+    "checkpoints": 4,
+    "missionRecordsPerCheckpoint": 15,
+    "taskStatesAndRootSessionsPerCheckpoint": 4,
+    "mailbox": 24,
+    "originalFileReads": 12,
+    "authoredFileReads": 8,
+    "actualMissingRead": 1,
+    "goalReads": 4
+  },
+  "authoredFiles": [
+    {
+      "phase": "after",
+      "checkpoint": "empty",
+      "filename": "new-note-after.md",
+      "status": 200,
+      "type": "text",
+      "bytes": 0,
+      "actualPublicAndPhysicalContentExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "empty-zh",
+      "filename": "empty-zh-after.md",
+      "status": 200,
+      "type": "text",
+      "bytes": 0,
+      "actualPublicAndPhysicalContentExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "final",
+      "filename": "new-note-after.md",
+      "status": 200,
+      "type": "text",
+      "bytes": 182,
+      "actualPublicAndPhysicalContentExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "ranged",
+      "filename": "new-note-after.md",
+      "status": 200,
+      "type": "text",
+      "bytes": 221,
+      "actualPublicAndPhysicalContentExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "resaved",
+      "filename": "new-note-after.md",
+      "status": 200,
+      "type": "text",
+      "bytes": 123,
+      "actualPublicAndPhysicalContentExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "retry",
+      "filename": "new-note-after.md",
+      "status": 200,
+      "type": "text",
+      "bytes": 182,
+      "actualPublicAndPhysicalContentExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "saved",
+      "filename": "new-note-after.md",
+      "status": 200,
+      "type": "text",
+      "bytes": 71,
+      "actualPublicAndPhysicalContentExact": true
+    },
+    {
+      "phase": "before",
+      "checkpoint": "empty",
+      "filename": "new-note-before.md",
+      "status": 200,
+      "type": "text",
+      "bytes": 0,
+      "actualPublicAndPhysicalContentExact": true
+    }
+  ],
+  "actualMissingRead": {
+    "status": 404,
+    "error": "FileNotFoundError",
+    "path": "new-note-after.md",
+    "heldOriginalBytesPreserved": true,
+    "originalFileRestored": true
+  },
+  "qualifications": [
+    {
+      "at": "2026-11-02T21:51:29.326Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 273837,
+      "current": 273872,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 53440,
+          "after": 53446
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 53440,
+          "after": 53446
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 7093,
+          "after": 7094
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 7093,
+          "after": 7094
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 21279,
+          "after": 21282
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55903,
+          "after": 55910
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55845,
+          "after": 55852
+        },
+        {
+          "table": "event_occurrence",
+          "before": 6873,
+          "after": 6874
+        },
+        {
+          "table": "memory_chunk",
+          "before": 101,
+          "after": 102
+        },
+        {
+          "table": "memory_file",
+          "before": 101,
+          "after": 102
+        },
+        {
+          "table": "project",
+          "before": 105,
+          "after": 106
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 265,
+      "projects": 105,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1319,
+      "reserveMs": 4318765,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-D01YZYgk.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2
+    },
+    {
+      "at": "2026-11-02T22:10:15.418Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 273872,
+      "current": 274061,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 53446,
+          "after": 53483
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 53446,
+          "after": 53483
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 7094,
+          "after": 7100
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 7094,
+          "after": 7100
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 21282,
+          "after": 21300
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55910,
+          "after": 55948
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55852,
+          "after": 55890
+        },
+        {
+          "table": "event_occurrence",
+          "before": 6874,
+          "after": 6880
+        },
+        {
+          "table": "memory_chunk",
+          "before": 102,
+          "after": 103
+        },
+        {
+          "table": "memory_file",
+          "before": 102,
+          "after": 103
+        },
+        {
+          "table": "project",
+          "before": 106,
+          "after": 107
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 265,
+      "projects": 106,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1319,
+      "reserveMs": 3195189,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BrB3fGDk.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2
+    }
+  ],
+  "typecheck": 0,
+  "uiBuild": 0,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1319
+}
