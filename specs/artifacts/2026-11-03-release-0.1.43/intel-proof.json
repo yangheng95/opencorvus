@@ -1,0 +1,11 @@
+{
+  "runID": 41511629235,
+  "source": "327501f1cb78cd212fd08a6283ea89d381b77710",
+  "jobID": 125506061822,
+  "evidence": [
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-11-02T19:42:42.6457480Z Cache hit for: v0-rust-build-Darwin-x64-825c9b43-e83e704d",
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-11-02T19:47:32.1147600Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-11-02T19:55:17.2413120Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 7m 12s"
+  ],
+  "scope": "Frozen source rebuilt natively; successful preflight cache reused, first-run and restart used realProvider=false"
+}
