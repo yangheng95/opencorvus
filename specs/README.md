@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [项目侧栏的折叠与打开](records/2026-11/2026-11-03-project-tree-navigation.md)：分组可见性、项目导航与当前对话的操作边界。
+
 - [持续目标的开始工作上下文](records/2026-11/2026-11-03-goal-start-context.md)：默认页、确认表单和真实执行归属。
 
 - [清除筛选后的键盘焦点](records/2026-11/2026-11-03-filter-recovery-focus.md)：恢复文件列表后继续操作的焦点归属。

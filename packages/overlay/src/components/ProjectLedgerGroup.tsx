@@ -18,7 +18,7 @@ export interface ProjectLedgerGroupProps {
   count: number
   collapsed: boolean
   onToggle: () => void
-  onSelectProject?: (directory: string) => void | Promise<void>
+  onSelectProject: (directory: string) => void | Promise<void>
   projectName?: string
   pinned?: boolean
   onPinnedChange?: (pinned: boolean) => void | Promise<void>
@@ -96,7 +96,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
     const presentation: ProjectActionPresentation = {
       openingGuard: ownsAction,
       returnFocusTarget: () =>
-        ownsAction() ? groupHeadRef?.querySelector<HTMLButtonElement>('[data-ui="project-group-toggle"]') ?? null : null,
+        ownsAction() ? groupHeadRef?.querySelector<HTMLButtonElement>('[data-ui="project-group-select"]') ?? null : null,
     }
     setBusy(true)
     try {
@@ -162,6 +162,24 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
       data-project-actions={hasProjectActions() ? "true" : undefined}
     >
       <div ref={groupHeadRef} class="project-group-head oc-navigation-row" data-density="compact">
+        <Button
+          type="button"
+          variant="ghost"
+          size="mini"
+          tone="neutral"
+          data-ui="project-group-toggle"
+          aria-expanded={props.collapsed ? "false" : "true"}
+          aria-controls={props.collapsed ? undefined : bodyElementID()}
+          aria-label={t(props.collapsed ? "task.project.expand" : "task.project.collapse", { name: label().name })}
+          title={t(props.collapsed ? "task.project.expand" : "task.project.collapse", { name: label().name })}
+          onClick={() => {
+            if (!busy()) props.onToggle()
+          }}
+        >
+          <span class="project-group-icon" aria-hidden="true">
+            <Icon name={props.collapsed ? "chevron" : "chevron-down"} size="compact" />
+          </span>
+        </Button>
         <Tooltip.Root
           openDelay={350}
           closeDelay={0}
@@ -177,25 +195,10 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
             variant="ghost"
             size="mini"
             tone="neutral"
-            data-ui="project-group-toggle"
-            aria-expanded={props.collapsed ? "false" : "true"}
-            aria-controls={props.collapsed ? undefined : bodyElementID()}
-            aria-label={
-              props.collapsed
-                ? t("task.project.expand", { name: label().name })
-                : t("task.project.collapse", { name: label().name })
-            }
-            onClick={() => {
-              if (busy()) return
-              props.onToggle()
-              if (props.onSelectProject) {
-                runProjectAction(`select:${props.directory}`, () => props.onSelectProject?.(props.directory))
-              }
-            }}
+            data-ui="project-group-select"
+            aria-label={`${t("work_ledger.open_project")}: ${label().name}`}
+            onClick={() => void runProjectAction(`select:${props.directory}`, () => props.onSelectProject(props.directory))}
           >
-            <span class="project-group-icon" aria-hidden="true">
-              <Icon name={props.collapsed ? "folder" : "folder-open"} size="medium" />
-            </span>
             <span class="project-group-copy">
               <span class="project-group-name">{label().name}</span>
               <Show when={label().parent}>
@@ -204,9 +207,6 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
             </span>
             <span class="project-group-count" aria-label={t("task.project.count", { count: countText() })}>
               {countText()}
-            </span>
-            <span class="project-group-chevron" aria-hidden="true">
-              <Icon name={props.collapsed ? "chevron" : "chevron-down"} size="compact" />
             </span>
           </Tooltip.Trigger>
           <Show when={hasTooltipSummary()}>

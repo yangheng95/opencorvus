@@ -3298,6 +3298,11 @@ existing directory suffix. Original names, IDs, directory hints and search data
 remain canonical; generic homepage names retain their own display contract.
 Explicitly pinned named Projects remain complete groups in the separate `Pinned`
 section and are omitted from Projects exactly once.
+Each Project header has separate disclosure and navigation buttons. Its arrow
+changes only the existing group visibility; its name opens the Project through
+the original selection action. Project action dialogs, pin relocation and Project
+locating return focus to that visible name button. Collapsing a group preserves
+the current conversation and its scoped composer draft.
 
 Every Mission, Task, Chat, and Work row exposes one narrow hover/focus actions
 menu containing its persisted pin action and applicable stop, download, and

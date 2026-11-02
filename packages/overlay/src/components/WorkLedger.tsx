@@ -1115,7 +1115,7 @@ export function WorkLedger(props: WorkLedgerProps) {
       const projectElement = Array.from(
         projectsScrollRef?.querySelectorAll<HTMLElement>(".project-group[data-project-directory]") ?? [],
       ).find((element) => projectDirectoryKey(element.dataset.projectDirectory ?? "") === projectDirectoryKey(group.directory))
-      target = projectElement?.querySelector<HTMLElement>('[data-ui="project-group-toggle"]') ?? null
+      target = projectElement?.querySelector<HTMLElement>('[data-ui="project-group-select"]') ?? null
     } else {
       const itemKeys = new Set(group.items.map(rowKey))
       const row = Array.from(ordinaryList?.querySelectorAll<HTMLElement>('[data-ui="work-ledger-row"]') ?? [])
@@ -1236,7 +1236,7 @@ export function WorkLedger(props: WorkLedgerProps) {
         (element) =>
           projectDirectoryKey(element.dataset.projectDirectory ?? "") === projectDirectoryKey(request.target.directory),
       )
-      target = group?.querySelector<HTMLElement>('[data-ui="project-group-toggle"]') ?? null
+      target = group?.querySelector<HTMLElement>('[data-ui="project-group-select"]') ?? null
     }
     if (
       !target?.isConnected ||

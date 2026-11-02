@@ -687,7 +687,7 @@ body .sidebar-header.oc-surface-header {
 .project-group-head {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: var(--ui-left-rail-row-icon-track) minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--ui-gap-xs);
   min-width: 0;
@@ -719,9 +719,10 @@ body .sidebar-header.oc-surface-header {
   pointer-events: auto;
 }
 
-.project-group .oc-button[data-ui="project-group-toggle"] {
+.project-group .oc-button[data-ui="project-group-toggle"],
+.project-group .oc-button[data-ui="project-group-select"] {
   --oc-button-height: var(--oc-density-navigation-row);
-  --oc-button-padding-x: var(--ui-left-rail-row-control-inline-inset);
+  --oc-button-padding-x: 0;
   --oc-button-padding-y: calc(1px * var(--ui-scale));
   --oc-button-border: 0 solid transparent;
   --oc-button-color: var(--text-muted);
@@ -729,21 +730,32 @@ body .sidebar-header.oc-surface-header {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
-  display: grid;
-  grid-template-columns: var(--ui-left-rail-row-icon-track) minmax(0, 1fr);
-  align-items: center;
-  gap: var(--ui-left-rail-row-label-gap);
   height: var(--oc-density-navigation-row);
   min-height: var(--oc-density-navigation-row);
-  font-size: var(--ui-font-body);
-  text-align: left;
   transition:
     background var(--ui-duration-base),
     color var(--ui-duration-base);
 }
 
+.project-group .oc-button[data-ui="project-group-toggle"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-group .oc-button[data-ui="project-group-select"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: var(--ui-left-rail-row-label-gap);
+  font-size: var(--ui-font-body);
+  text-align: left;
+}
+
 .project-group .oc-button[data-ui="project-group-toggle"]:hover,
-.project-group .oc-button[data-ui="project-group-toggle"]:focus-visible {
+.project-group .oc-button[data-ui="project-group-toggle"]:focus-visible,
+.project-group .oc-button[data-ui="project-group-select"]:hover,
+.project-group .oc-button[data-ui="project-group-select"]:focus-visible {
   --oc-button-bg: transparent;
   --oc-button-color: var(--text-soft);
 }
@@ -799,13 +811,6 @@ body .sidebar-header.oc-surface-header {
 
 .project-group-icon {
   display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: color-mix(in srgb, var(--text-muted) 86%, transparent);
-}
-
-.project-group-chevron {
-  display: none;
   align-items: center;
   justify-content: center;
   color: color-mix(in srgb, var(--text-muted) 86%, transparent);

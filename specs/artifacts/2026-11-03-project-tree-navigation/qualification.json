@@ -1,0 +1,153 @@
+{
+  "at": "2026-11-02T21:08:52.467Z",
+  "scope": "916 separate Project disclosure and navigation",
+  "manualReview": "Eighteen real page screenshots manually inspected. Original combined action leaves the conversation; returning retains the scoped draft. Final pointer/Enter/Space disclosure preserves current work, the name opens Home, rename cancellation returns focus to the name, pin/unpin and both organizations retain their current focus contracts, project/conversation locate and Chinese names verified. 07 is the immediate destination while authorization is loading; 08 is the settled Home. No UI automated tests.",
+  "screenshots": [
+    "01-before-current-conversation.jpg",
+    "02-before-collapse-navigates.jpg",
+    "03-before-returned-draft.jpg",
+    "04-after-other-project-collapse-en.jpg",
+    "05-after-keyboard-current-collapse-en.jpg",
+    "06-after-locate-conversation-en.jpg",
+    "07-after-name-opens-project-en.jpg",
+    "08-after-project-home-settled-en.jpg",
+    "09-after-rename-cancel-focus-en.jpg",
+    "10-after-pin-focus-en.jpg",
+    "11-after-unpin-focus-en.jpg",
+    "12-one-list-disclosure-en.jpg",
+    "13-one-list-project-locate-en.jpg",
+    "14-one-list-empty-unpin-en.jpg",
+    "15-project-locate-focus-zh.jpg",
+    "16-disclosure-preserves-draft-zh.jpg",
+    "17-name-and-cancel-focus-zh.jpg",
+    "18-returned-conversation-draft-zh.jpg"
+  ],
+  "preservedGoal": {
+    "goalID": "pev_g0VZqi4VF006X0VITEUv",
+    "sessionID": "ses_-zUQ9HvfbzzEYnSgSg3b",
+    "status": "complete",
+    "tokensUsed": 345102,
+    "turnsAccepted": 1,
+    "checkpoints": 4,
+    "originalDefinitionAndStateExact": true,
+    "sessionActivity": "idle"
+  },
+  "publicReads": {
+    "checkpoints": 4,
+    "missionRecordsPerCheckpoint": 15,
+    "taskStatesAndRootSessionsPerCheckpoint": 4,
+    "mailbox": 24,
+    "fileReads": 12,
+    "goalReads": 4
+  },
+  "qualifications": [
+    {
+      "at": "2026-11-02T20:47:17.728Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 273825,
+      "current": 273828,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55899,
+          "after": 55900
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55841,
+          "after": 55842
+        },
+        {
+          "table": "project",
+          "before": 103,
+          "after": 104
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 265,
+      "projects": 103,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1319,
+      "reserveMs": 4261653,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-SC8WvLdj.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2
+    },
+    {
+      "at": "2026-11-02T21:04:17.098Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 273828,
+      "current": 273833,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55900,
+          "after": 55901
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55842,
+          "after": 55843
+        },
+        {
+          "table": "memory_chunk",
+          "before": 100,
+          "after": 101
+        },
+        {
+          "table": "memory_file",
+          "before": 100,
+          "after": 101
+        },
+        {
+          "table": "project",
+          "before": 104,
+          "after": 105
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 265,
+      "projects": 104,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1319,
+      "reserveMs": 3156423,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BlMy3trN.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2
+    }
+  ],
+  "typecheck": 0,
+  "uiBuild": 0,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1319
+}
