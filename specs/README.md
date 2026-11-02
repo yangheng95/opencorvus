@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Mission 未保存输入](records/2026-11/2026-11-02-mission-unsaved-input.md)：作者退出意图、未保存文字保护及原草稿保存。
+
 - [定时任务时间语境](records/2026-11/2026-11-02-schedule-time-context.md)：任务墙钟时区、实际时刻显示与原位编辑保全。
 
 - [Mission 创建表单校验](records/2026-11/2026-11-02-mission-form-validation.md)：空字段本地化反馈、逐项纠正及真实草稿保存编辑。

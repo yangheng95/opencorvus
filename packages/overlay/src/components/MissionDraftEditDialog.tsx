@@ -32,7 +32,9 @@ export function MissionDraftEditDialog(props: {
   const [request, setRequest] = createSignal("")
   const [saving, setSaving] = createSignal(false)
   const [error, setError] = createSignal("")
+  const [leaving, setLeaving] = createSignal(false)
   let requestInput: HTMLTextAreaElement | undefined
+  let leaveFeedback: HTMLDivElement | undefined
   let generation = 0
 
   createEffect(
@@ -43,6 +45,7 @@ export function MissionDraftEditDialog(props: {
         setRequest(target?.expectedRequest ?? "")
         setSaving(false)
         setError("")
+        setLeaving(false)
       },
     ),
   )
@@ -50,8 +53,19 @@ export function MissionDraftEditDialog(props: {
     generation += 1
   })
 
+  const keepEditing = () => {
+    setLeaving(false)
+    queueMicrotask(() => requestInput?.focus())
+  }
   const close = () => {
-    if (!saving()) props.onClose()
+    if (saving()) return
+    if (leaving()) return keepEditing()
+    if (request() === props.target?.expectedRequest) return props.onClose()
+    setLeaving(true)
+    queueMicrotask(() => {
+      leaveFeedback?.scrollIntoView({ block: "nearest" })
+      leaveFeedback?.focus({ preventScroll: true })
+    })
   }
   async function submit(event: SubmitEvent): Promise<void> {
     event.preventDefault()
@@ -90,8 +104,13 @@ export function MissionDraftEditDialog(props: {
       footer={
         <>
           <Button type="button" variant="ghost" size="md" tone="neutral" disabled={saving()} onClick={close}>
-            {t("common.cancel")}
+            {leaving() ? t("mission_board.unsaved.keep") : t("common.cancel")}
           </Button>
+          <Show when={leaving()}>
+            <Button type="button" variant="outline" size="md" tone="danger" disabled={saving()} onClick={props.onClose}>
+              {t("mission_board.unsaved.discard")}
+            </Button>
+          </Show>
           <Button
             type="submit"
             form="missionDraftEditForm"
@@ -105,7 +124,17 @@ export function MissionDraftEditDialog(props: {
         </>
       }
     >
-      <form id="missionDraftEditForm" class="mission-create-form" onSubmit={(event) => void submit(event)}>
+      <form
+        id="missionDraftEditForm"
+        class="mission-create-form"
+        onSubmit={(event) => void submit(event)}
+        onInput={() => setLeaving(false)}
+      >
+        <Show when={leaving()}>
+          <Feedback ref={leaveFeedback} tone="warning" title={t("mission_board.unsaved.title")} tabIndex={-1}>
+            {t("mission_board.unsaved.message")}
+          </Feedback>
+        </Show>
         <div class="mission-draft-edit__context">
           <strong>{props.target?.title}</strong>
           <span title={props.target?.directory}>{props.target?.directory}</span>

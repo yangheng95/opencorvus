@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Mission 未保存输入](2026-11-02-mission-unsaved-input/README.md)：真实退出、输入保留及明确放弃的双语言截图。
+
 - [定时任务时间语境](2026-11-02-schedule-time-context/README.md)：创建、暂停、编辑及实际时刻显示的实页记录。
 
 - [Mission 创建表单校验](2026-11-02-mission-form-validation/README.md)：中英文错误反馈及真实保存编辑的实页复核。

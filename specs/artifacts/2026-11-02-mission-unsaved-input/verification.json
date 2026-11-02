@@ -1,0 +1,428 @@
+{
+  "batch": 888,
+  "at": "2026-11-02T01:00:37.934Z",
+  "singleAgent": true,
+  "ownedDevPorts": [
+    38598,
+    38599,
+    38600,
+    38601
+  ],
+  "manualVisualReview": true,
+  "images": 28,
+  "uiAutomationTests": "none added, modified, updated or run",
+  "phases": [
+    {
+      "at": "2026-11-02T00:26:39.997Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258878,
+      "current": 258880,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52971,
+          "after": 52972
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52913,
+          "after": 52914
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4381705,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-ghCST1bP.js",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "pairedCredentialCopyRetired": true,
+      "pairedCatalogCopyRetired": true
+    },
+    {
+      "at": "2026-11-02T00:40:16.880Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258880,
+      "current": 259033,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 50616,
+          "after": 50646
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 50616,
+          "after": 50646
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 6662,
+          "after": 6667
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 6662,
+          "after": 6667
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 19986,
+          "after": 20001
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52972,
+          "after": 53003
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52914,
+          "after": 52945
+        },
+        {
+          "table": "event_occurrence",
+          "before": 6455,
+          "after": 6460
+        },
+        {
+          "table": "session",
+          "before": 132,
+          "after": 133
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3562256,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BaGtQT4E.js",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "pairedCredentialCopyRetired": true,
+      "pairedCatalogCopyRetired": true
+    },
+    {
+      "at": "2026-11-02T00:49:53.464Z",
+      "kind": "context-before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259033,
+      "current": 259035,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53003,
+          "after": 53004
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52945,
+          "after": 52946
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 2983751,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BaGtQT4E.js",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "pairedCredentialCopyRetired": true,
+      "pairedCatalogCopyRetired": true
+    },
+    {
+      "at": "2026-11-02T00:59:00.094Z",
+      "kind": "final",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259035,
+      "current": 259037,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53004,
+          "after": 53005
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52946,
+          "after": 52947
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 2435002,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DMbAF13e.js",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "pairedCredentialCopyRetired": true,
+      "pairedCatalogCopyRetired": true
+    }
+  ],
+  "checks": [
+    {
+      "stage": "created",
+      "at": "2026-11-02T00:35:25.997Z",
+      "httpStatus": 200,
+      "missionID": "ead8ffac0ee1e2ae",
+      "sessionID": "ses_-zUQE6HHhzz5vQW8qK87",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+      "title": "输入保全验收888（未执行）",
+      "boardLane": "backlog",
+      "productPillar": "work",
+      "pendingRequest": "这是一份未来仍需编辑的手动草稿，仅验证未保存输入的保留、明确放弃和保存；不开始执行。",
+      "persisted": {
+        "sessionID": "ses_-zUQE6HHhzz5vQW8qK87",
+        "projectID": "prj_hY6kPfHVDg5lcTRFOYg9",
+        "kind": "mission",
+        "title": "输入保全验收888（未执行）",
+        "pendingRequestMatched": true,
+        "directoryMatched": true,
+        "squadsMatched": true
+      },
+      "submission": {
+        "id": 81,
+        "at": "2026-11-02T00:35:19.934Z",
+        "path": "/mission/draft",
+        "method": "POST",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "body": {
+          "title": "输入保全验收888（未执行）",
+          "request": "这是一份未来仍需编辑的手动草稿，仅验证未保存输入的保留、明确放弃和保存；不开始执行。",
+          "productPillar": "work",
+          "expertSquadIDs": [
+            "base"
+          ]
+        }
+      }
+    },
+    {
+      "stage": "edited",
+      "at": "2026-11-02T00:36:51.217Z",
+      "httpStatus": 200,
+      "missionID": "ead8ffac0ee1e2ae",
+      "sessionID": "ses_-zUQE6HHhzz5vQW8qK87",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+      "title": "输入保全验收888（未执行）",
+      "boardLane": "backlog",
+      "productPillar": "work",
+      "pendingRequest": "这是一份未来仍需编辑的手动草稿，仅验证未保存输入的保留、明确放弃和保存；不开始执行。\n补充：仅保存当前输入，不开始执行。",
+      "persisted": {
+        "sessionID": "ses_-zUQE6HHhzz5vQW8qK87",
+        "projectID": "prj_hY6kPfHVDg5lcTRFOYg9",
+        "kind": "mission",
+        "title": "输入保全验收888（未执行）",
+        "pendingRequestMatched": true,
+        "directoryMatched": true,
+        "squadsMatched": true
+      },
+      "submission": {
+        "id": 95,
+        "at": "2026-11-02T00:36:47.487Z",
+        "path": "/mission/ead8ffac0ee1e2ae/draft",
+        "method": "PATCH",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "body": {
+          "request": "这是一份未来仍需编辑的手动草稿，仅验证未保存输入的保留、明确放弃和保存；不开始执行。\n补充：仅保存当前输入，不开始执行。",
+          "expectedRequest": "这是一份未来仍需编辑的手动草稿，仅验证未保存输入的保留、明确放弃和保存；不开始执行。"
+        }
+      }
+    },
+    {
+      "stage": "final",
+      "at": "2026-11-02T00:39:36.772Z",
+      "httpStatus": 200,
+      "missionID": "ead8ffac0ee1e2ae",
+      "sessionID": "ses_-zUQE6HHhzz5vQW8qK87",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+      "title": "输入保全验收888（未执行）",
+      "boardLane": "backlog",
+      "productPillar": "work",
+      "pendingRequest": "这是一份未来仍需编辑的手动草稿，仅验证未保存输入的保留、明确放弃和保存；不开始执行。\n补充：仅保存当前输入，不开始执行。",
+      "persisted": {
+        "sessionID": "ses_-zUQE6HHhzz5vQW8qK87",
+        "projectID": "prj_hY6kPfHVDg5lcTRFOYg9",
+        "kind": "mission",
+        "pendingRequestMatched": true
+      }
+    }
+  ],
+  "toolChecks": [
+    {
+      "label": "ui-build-after",
+      "startedAt": 1793579326277,
+      "closedAt": 1793579394626,
+      "code": 0,
+      "signal": null,
+      "childPID": 16508
+    },
+    {
+      "label": "overlay-typecheck",
+      "startedAt": 1793579326296,
+      "closedAt": 1793579358002,
+      "code": 0,
+      "signal": null,
+      "childPID": 18196
+    },
+    {
+      "label": "focused-checks",
+      "startedAt": 1793579326275,
+      "closedAt": 1793579339073,
+      "code": 0,
+      "signal": null,
+      "childPID": 32932
+    },
+    {
+      "label": "ui-build-final",
+      "startedAt": 1793580626803,
+      "closedAt": 1793580689897,
+      "code": 0,
+      "signal": null,
+      "childPID": 32888
+    },
+    {
+      "label": "final-typecheck",
+      "startedAt": 1793580626810,
+      "closedAt": 1793580649474,
+      "code": 0,
+      "signal": null,
+      "childPID": 18528
+    },
+    {
+      "label": "final-focused-checks",
+      "startedAt": 1793580626818,
+      "closedAt": 1793580638564,
+      "code": 0,
+      "signal": null,
+      "childPID": 4032
+    },
+    {
+      "label": "delivery-docs",
+      "startedAt": 1793580118817,
+      "closedAt": 1793580126080,
+      "code": 0,
+      "signal": null,
+      "childPID": 12452
+    }
+  ],
+  "limits": [
+    "Form-owned exits verified; browser refresh and process-close persistence are outside this change",
+    "Cross-project exit navigation verified; actual market installation not exercised",
+    "Original submit busy guards retained; no synthetic delayed concurrency case",
+    "No model dispatch requested in this authoring-only acceptance"
+  ],
+  "goal": "active",
+  "contextChecks": [
+    {
+      "at": "2026-11-02T00:49:16.014Z",
+      "phase": "context-before",
+      "selectedProject": {
+        "id": "prj_hFmj1f6BXMBemXaPwm5n",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "name": "Project journey 773"
+      },
+      "observedBrowserMarketRequest": {
+        "id": 67,
+        "at": "2026-11-02T00:48:43.085Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/expert-squad/market",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "origin": null,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "initialSignalAborted": false,
+        "diagnostic": false
+      },
+      "readbackStatus": 200,
+      "directoryMatched": false,
+      "interpretation": "Observed regression: old captured exit intent survived the Project change"
+    },
+    {
+      "at": "2026-11-02T00:56:21.195Z",
+      "phase": "final",
+      "selectedProject": {
+        "id": "prj_hFmj1f6BXMBemXaPwm5n",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "name": "Project journey 773"
+      },
+      "observedBrowserMarketRequest": {
+        "id": 83,
+        "at": "2026-11-02T00:56:05.786Z",
+        "phase": "arrived",
+        "method": "GET",
+        "path": "/expert-squad/market",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+        "origin": null,
+        "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.0.0 Safari/537.36",
+        "initialSignalAborted": false,
+        "diagnostic": false
+      },
+      "readbackStatus": 200,
+      "directoryMatched": true,
+      "interpretation": "Current selected Project reached the original market route"
+    }
+  ],
+  "finalDraftReadback": {
+    "at": "2026-11-02T00:58:23.755Z",
+    "httpStatus": 200,
+    "missionID": "ead8ffac0ee1e2ae",
+    "sessionID": "ses_-zUQE6HHhzz5vQW8qK87",
+    "boardLane": "backlog",
+    "pendingRequest": "这是一份未来仍需编辑的手动草稿，仅验证未保存输入的保留、明确放弃和保存；不开始执行。\n补充：仅保存当前输入，不开始执行。",
+    "persisted": {
+      "sessionID": "ses_-zUQE6HHhzz5vQW8qK87",
+      "projectID": "prj_hY6kPfHVDg5lcTRFOYg9",
+      "kind": "mission",
+      "pendingRequestMatched": true
+    }
+  },
+  "followup": {
+    "projectPopupAccessibility": "Visible Project option has an aria-hidden=true ancestor; still pending shared component investigation",
+    "taskProgressTerminology": "Task terminal wording remains for subsequent readability iteration"
+  }
+}

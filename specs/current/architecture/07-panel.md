@@ -1215,6 +1215,18 @@ Board refreshes do not replace its authored input. Save uses `mission.editDraft`
 and the shared refresh lifecycle. Typed conflicts preserve entered text for
 review/copy; cancellation and saving do not dispatch an execution.
 
+Mission creation and draft editing retain authored text when a close is requested.
+The existing dialog shows an inline unsaved-input choice; continuing to edit or
+pressing Escape again returns to the mounted request field, while explicit
+discard performs the original exit. Creation's install-more navigation uses the
+same exit intent and captured Project directory. Editing compares against its
+opened target's exact request snapshot. Creation's current mode, Project, pillar
+and squad selection retire any pending exit intent when that context changes;
+an explicit later exit captures the updated context. Creation guards authored
+title/request text. Clean exits and successful saves retain their direct close
+path. Submission busy state still owns exit availability; no persistence or
+execution is added.
+
 Manual Mission draft creation, draft edits, Mission/Task titles and Work Ledger
 item pin changes use Project identity independently of execution-model readiness.
 Their existing exact owner, kind, revision, transaction and event contracts still

@@ -96,11 +96,50 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [submitting, setSubmitting] = createSignal(false)
   const [error, setError] = createSignal<{ mode: MissionCreateMode; cause: unknown }>()
   const [submitAttempted, setSubmitAttempted] = createSignal(false)
+  const [leaving, setLeaving] = createSignal(false)
   let requestRef: HTMLTextAreaElement | undefined
   let titleRef: HTMLInputElement | undefined
   let submitFeedback: HTMLDivElement | undefined
+  let leaveFeedback: HTMLDivElement | undefined
+  let leaveAction: (() => void) | undefined
   let dialogGeneration = 0
   let expertSquadRequestSequence = 0
+
+  function cancelLeave(): void {
+    setLeaving(false)
+    leaveAction = undefined
+  }
+
+  function keepEditing(): void {
+    cancelLeave()
+    queueMicrotask(() => requestRef?.focus())
+  }
+
+  function requestLeave(action: () => void): void {
+    if (submitting()) return
+    if (!title() && !request()) return action()
+    leaveAction = action
+    setLeaving(true)
+    queueMicrotask(() => {
+      leaveFeedback?.scrollIntoView({ block: "nearest" })
+      leaveFeedback?.focus({ preventScroll: true })
+    })
+  }
+
+  function close(): void {
+    if (submitting()) return
+    if (leaving()) return keepEditing()
+    requestLeave(props.onClose)
+  }
+
+  function discardInput(): void {
+    if (submitting()) return
+    const action = leaveAction
+    cancelLeave()
+    action?.()
+  }
+
+  createEffect(on([mode, projectDirectory, productPillar, expertSquadIDs], cancelLeave, { defer: true }))
 
   const modeOptions = createMemo<SegmentedControlOption<MissionCreateMode>[]>(() => [
     { value: "ai", label: t("mission_board.create.ai"), disabled: submitting() },
@@ -329,6 +368,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     on(
       () => props.open,
       (open) => {
+        cancelLeave()
         if (!open) {
           expertSquadRequestSequence += 1
           return
@@ -526,9 +566,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         </span>
       }
       onOpenAutoFocus={(event) => event.preventDefault()}
-      onClose={() => {
-        if (!submitting()) props.onClose()
-      }}
+      onClose={close}
       footer={
         <>
           <Button
@@ -537,10 +575,15 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             size="md"
             tone="neutral"
             disabled={submitting()}
-            onClick={props.onClose}
+            onClick={close}
           >
-            {t("common.cancel")}
+            {leaving() ? t("mission_board.unsaved.keep") : t("common.cancel")}
           </Button>
+          <Show when={leaving()}>
+            <Button type="button" variant="outline" size="md" tone="danger" disabled={submitting()} onClick={discardInput}>
+              {t("mission_board.unsaved.discard")}
+            </Button>
+          </Show>
           <Button
             type="submit"
             form="missionCreateForm"
@@ -568,11 +611,17 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         class="mission-create-form"
         data-mode={mode()}
         noValidate
+        onInput={cancelLeave}
         onSubmit={(event) => {
           event.preventDefault()
           void submit()
         }}
       >
+        <Show when={leaving()}>
+          <Feedback ref={leaveFeedback} tone="warning" title={t("mission_board.unsaved.title")} tabIndex={-1}>
+            {t("mission_board.unsaved.message")}
+          </Feedback>
+        </Show>
         <SegmentedControl
           class="mission-create-form__mode"
           value={mode()}
@@ -749,8 +798,11 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                         data-ui="mission-create-install-more-squads"
                         disabled={submitting() || expertSquadLoading()}
                         onClick={() => {
-                          props.onClose()
-                          props.onInstallMoreExpertSquads?.(projectDirectory())
+                          const directory = projectDirectory()
+                          requestLeave(() => {
+                            props.onClose()
+                            props.onInstallMoreExpertSquads?.(directory)
+                          })
                         }}
                       >
                         <Icon name="config-expert-squad-install" size="compact" />

@@ -1,0 +1,29 @@
+file,phase,language,manual_review
+01-before-create-authored-en.jpg,before,en-US,Authored unsaved new Mission request
+02-before-create-reopened-empty-en.jpg,before,en-US,Esc and reopen reset the request
+03-before-edit-authored-en.jpg,before,en-US,Authored unsaved draft edit
+04-before-edit-reopened-original-en.jpg,before,en-US,Esc and reopen reset the edit to persisted text
+05-after-create-exit-choice-en.jpg,after,en-US,Inline exit choice retains authored request
+06-after-create-continue-typing-en.jpg,after,en-US,Second Esc and sequential typing retain text and focus
+07-after-install-more-exit-choice-en.jpg,after,en-US,Install-more navigation requests explicit exit decision
+08-after-explicit-discard-clean-create-en.jpg,after,en-US,Explicit discard permits a clean form on reopen
+09-after-confirmed-market-navigation-en.jpg,after,en-US,Confirmed install-more exit reaches the original market
+10-after-manual-draft-exit-choice-en.jpg,after,en-US,Existing save action remains available with pending exit choice
+11-after-created-draft-board-en.jpg,after,en-US,Actual saved draft remains in backlog
+12-after-edit-exit-choice-en.jpg,after,en-US,Inline edit choice retains complete modified request
+13-after-discard-restores-saved-draft-en.jpg,after,en-US,Explicitly discarded edit reopens persisted request
+14-after-create-exit-choice-zh.jpg,after,zh-CN,Localized new Mission exit choice
+15-after-edit-exit-choice-zh.jpg,after,zh-CN,Localized draft-edit exit choice
+16-after-edit-direct-typing-zh.jpg,after,zh-CN,Direct typing retires exit intent and preserves focus
+17-after-final-persisted-request-zh.jpg,after,zh-CN,Reopened request matches final persisted text
+18-after-final-board-zh.jpg,after,zh-CN,Clean exits return to the backlog draft
+19-context-before-stale-exit-after-project-change-en.jpg,context-before,en-US,Changed Project retains stale exit intent while scrolled
+20-context-before-stale-exit-visible-en.jpg,context-before,en-US,Stale exit choice and changed Project visible together
+21-context-before-market-en.jpg,context-before,en-US,Original browser market request still targets the old Project
+22-final-project-change-retires-exit-en.jpg,final,en-US,Project change retires prior exit intent and retains request
+23-final-mode-change-retires-exit-en.jpg,final,en-US,Creation mode change retires prior exit intent
+24-final-pillar-change-retires-exit-en.jpg,final,en-US,Mission type change retires prior exit intent
+25-final-squad-change-retires-exit-en.jpg,final,en-US,Squad selection change retires prior exit intent
+26-final-current-project-market-en.jpg,final,en-US,Confirmed new exit sends original browser market request to selected Project
+27-final-create-exit-choice-zh.jpg,final,zh-CN,Final build localized exit choice retains current Project and request
+28-final-persisted-edit-request-zh.jpg,final,zh-CN,Final build reads the exact saved draft request
