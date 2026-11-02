@@ -1,0 +1,203 @@
+{
+  "verifiedAt": "2026-11-02T11:11:27.154Z",
+  "version": "0.1.42",
+  "source": "91e157449f294b5a5c51bdddf2e89392f7745ba6",
+  "nativeRunID": 41430303374,
+  "websiteRunID": 41433362193,
+  "createdAt": "2026-11-02T10:37:29Z",
+  "completedAt": "2026-11-02T11:07:58Z",
+  "elapsedSeconds": 1829,
+  "budgetMinutes": 60,
+  "pairedWebsiteSource": [
+    "2026-11-02T11:01:40.6727325Z   SOURCE_SHA: 91e157449f294b5a5c51bdddf2e89392f7745ba6",
+    "2026-11-02T11:01:40.6727866Z   RELEASE_RUN_ID: 41430303374",
+    "2026-11-02T11:01:41.9242814Z Resolved immutable website source 91e157449f294b5a5c51bdddf2e89392f7745ba6"
+  ],
+  "publication": [
+    "2026-11-02T11:01:02.1948116Z Website workflow: https://github.com/yangheng95/opencorvus/actions/runs/41433362193",
+    "2026-11-02T11:07:33.3202361Z Website run 41433362193 completed successfully within the release budget"
+  ],
+  "selectedCI": {
+    "id": 41427815523,
+    "source": "3891d3488a803d8fb2de0282b133c3aa997eb83b",
+    "platforms": [
+      {
+        "platform": "linux",
+        "jobID": 125220989324,
+        "completions": [
+          "2026-11-02T10:26:26.1180299Z opencorvus:test: [1/2] DONE test/work-ledger-search.test.ts exit=0 duration=7.03s",
+          "2026-11-02T10:26:28.6021916Z opencorvus:test: [2/2] DONE test/work-ledger-mission-request.test.ts exit=0 duration=2.48s"
+        ]
+      },
+      {
+        "platform": "macos",
+        "jobID": 125220989280,
+        "completions": [
+          "2026-11-02T10:28:16.7339320Z opencorvus:test: [1/2] DONE test/work-ledger-search.test.ts exit=0 duration=10.01s",
+          "2026-11-02T10:28:19.4071940Z opencorvus:test: [2/2] DONE test/work-ledger-mission-request.test.ts exit=0 duration=2.67s"
+        ]
+      },
+      {
+        "platform": "windows",
+        "jobID": 125220989461,
+        "completions": [
+          "2026-11-02T10:29:06.4523630Z opencorvus:test: [1/2] DONE test/work-ledger-search.test.ts exit=0 duration=18.03s",
+          "2026-11-02T10:29:10.7264740Z opencorvus:test: [2/2] DONE test/work-ledger-mission-request.test.ts exit=0 duration=4.27s"
+        ]
+      }
+    ],
+    "scope": "Two changed backend files on three native hosts; not the full backend suite"
+  },
+  "nativeJobs": [
+    {
+      "id": 125226908266,
+      "name": "release deadline",
+      "conclusion": "success"
+    },
+    {
+      "id": 125226908566,
+      "name": "prepare",
+      "conclusion": "success"
+    },
+    {
+      "id": 125227852533,
+      "name": "cli (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125227852665,
+      "name": "cli (darwin-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125227852677,
+      "name": "cli (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125227852730,
+      "name": "cli (windows-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125227852733,
+      "name": "cli (darwin-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125227852801,
+      "name": "overlay (linux-x64) / compile (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125227852930,
+      "name": "overlay (linux-arm64) / compile (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125227852966,
+      "name": "overlay (darwin-arm64) / compile (darwin-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125227852994,
+      "name": "overlay (darwin-x64) / compile (darwin-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125227853070,
+      "name": "overlay (windows-x64) / compile (windows-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125231108479,
+      "name": "overlay (darwin-arm64) / ${{ matrix.kind }} (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 125231109117,
+      "name": "overlay (darwin-arm64) / validate installers (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 125231208559,
+      "name": "overlay (linux-arm64) / rpm (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125231208579,
+      "name": "overlay (linux-arm64) / deb (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125231208621,
+      "name": "overlay (linux-arm64) / appimage (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125232047432,
+      "name": "overlay (linux-x64) / rpm (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125232047447,
+      "name": "overlay (linux-x64) / appimage (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125232047813,
+      "name": "overlay (linux-x64) / deb (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125233684402,
+      "name": "overlay (linux-arm64) / validate installers (linux-arm64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125234179122,
+      "name": "overlay (darwin-x64) / ${{ matrix.kind }} (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 125234180084,
+      "name": "overlay (darwin-x64) / validate installers (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 125234522184,
+      "name": "overlay (windows-x64) / ${{ matrix.kind }} (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 125234524711,
+      "name": "overlay (windows-x64) / validate installers (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 125234819484,
+      "name": "overlay (linux-x64) / validate installers (linux-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 125235898756,
+      "name": "publish release assets",
+      "conclusion": "success"
+    },
+    {
+      "id": 125236680892,
+      "name": "publish release",
+      "conclusion": "success"
+    },
+    {
+      "id": 125240086987,
+      "name": "release result",
+      "conclusion": "success"
+    }
+  ],
+  "publicReadback": {
+    "assets": 29,
+    "updaterPlatforms": 5,
+    "downloads": 18
+  }
+}

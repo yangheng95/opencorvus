@@ -1,0 +1,24 @@
+{
+  "verifiedAt": "2026-11-02T10:55:46.573Z",
+  "preflight": {
+    "runID": 41426702065,
+    "source": "4687b57064191376b21bd07307b6e75432be9567",
+    "elapsedSeconds": 1540,
+    "evidence": [
+      "2026-11-02T10:20:31.0054820Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+      "2026-11-02T10:33:48.6455990Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 12m 54s",
+      "2026-11-02T10:35:53.5979760Z ... Saving cache ..."
+    ]
+  },
+  "native": {
+    "runID": 41430303374,
+    "jobID": 125227852994,
+    "source": "91e157449f294b5a5c51bdddf2e89392f7745ba6",
+    "evidence": [
+      "2026-11-02T10:43:25.8499950Z Cache hit for: v0-rust-build-Darwin-x64-825c9b43-e83e704d",
+      "2026-11-02T10:48:15.8570460Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+      "2026-11-02T10:53:06.7256800Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 4m 26s"
+    ]
+  },
+  "scope": "Same dependency graph; native42 rebuilt frozen source, cache is not a transferred product; first-run/restart qualification used realProvider=false"
+}

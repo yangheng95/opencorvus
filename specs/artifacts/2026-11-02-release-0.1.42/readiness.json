@@ -32,6 +32,31 @@
   "preflight": {
     "runID": 41426702065,
     "source": "4687b57064191376b21bd07307b6e75432be9567",
-    "status": "pending"
+    "status": "success",
+    "elapsedSeconds": 1540,
+    "cacheID": 9870414888
+  },
+  "selectedCI": {
+    "runID": 41427815523,
+    "source": "3891d3488a803d8fb2de0282b133c3aa997eb83b",
+    "status": "success",
+    "platforms": [
+      "linux",
+      "macos",
+      "windows"
+    ],
+    "fileCompletions": 6
+  },
+  "formal": {
+    "runID": 41430303374,
+    "source": "91e157449f294b5a5c51bdddf2e89392f7745ba6",
+    "createdAt": "2026-11-02T10:37:29Z",
+    "originalDeadline": "2026-11-02T11:37:29Z",
+    "budgetMinutes": 60,
+    "status": "success",
+    "completedAt": "2026-11-02T11:07:58Z",
+    "elapsedSeconds": 1829,
+    "pairedWebsiteRunID": 41433362193,
+    "pairedWebsiteStatus": "success"
   }
 }

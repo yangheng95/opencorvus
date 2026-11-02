@@ -1,0 +1,20 @@
+{
+  "verifiedAt": "2026-11-02T10:40:57.126Z",
+  "version": "0.1.42",
+  "source": "91e157449f294b5a5c51bdddf2e89392f7745ba6",
+  "runID": 41430303374,
+  "releaseID": 431336664,
+  "draft": true,
+  "assets": 0,
+  "tag": {
+    "sha": "91e157449f294b5a5c51bdddf2e89392f7745ba6",
+    "type": "commit",
+    "url": "https://api.github.com/repos/yangheng95/opencorvus/git/commits/91e157449f294b5a5c51bdddf2e89392f7745ba6"
+  },
+  "releaseNotes": "exact frozen-source authored body with canonical run/source ownership",
+  "selectedCI": {
+    "source": "3891d3488a803d8fb2de0282b133c3aa997eb83b",
+    "productionInputDifference": "",
+    "scope": "Backend/SDK/protocol/runtime dependencies/workflows identical; final UI is validated by native matrix and its original manual QA"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "verifiedAt": "2026-11-02T10:38:19.784Z",
+  "alerts": [
+    {
+      "count": 64,
+      "manifest": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/product-quality-audit-20261031/codex-final/requirements-lock.txt"
+    }
+  ],
+  "actualBunAudit": {
+    "packages": 1732,
+    "vulnerabilities": 0
+  },
+  "scope": "Retained research requirements file, excluded by native/website sparse checkout; no alert dismissal or evidence rewrite"
+}
