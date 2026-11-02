@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [收件箱项目上下文](records/2026-11/2026-11-02-mailbox-project-context.md)：真实改名、统一分组名称和项目查找刷新。
+
 - [全局查找结果的阅读层次](records/2026-11/2026-11-02-palette-result-reading.md)：原工作标题、完整项目上下文和精确导航。
 
 - [演示文稿的完整控件语言](records/2026-11/2026-11-02-presentation-language.md)：原生导航、跳页、暂停和帮助的同实例语言投影。

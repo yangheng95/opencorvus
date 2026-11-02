@@ -3457,7 +3457,13 @@ directory-free list, acknowledgement actions, and change stream stay mounted
 and project one global view over protocol events
 whose Tasks belong to registered Projects. Every item carries its canonical
 project worktree, and the Overlay groups rows by that directory while owning
-only sidebar selection and local search/view state. The selected project
+only sidebar selection and local search/view state. Group names consume the
+existing reactive Work Ledger project reader and project display formatter,
+including custom names and the existing anonymous identity suffix. The name
+and compact original parent path each use up to two lines; counts and disclosure
+indicators retain their own space, and the complete name and directory remain
+in the trigger title. The directory remains the stable group key across rename.
+The selected project
 directory is not Mailbox transport context and never filters the global
 projection. It is not a Right Dock tool or Environment Information shortcut. The Overlay has
 no toast center or event-oriented
@@ -3541,7 +3547,7 @@ trimmed search query. Selecting another registered project, including Open
 Task navigation, preserves the global loaded range and expanded messages.
 Connection rotation retires prior reads and notification projection. Search
 is a literal case-insensitive query over canonical subject, body, source agent,
-squad, task title, and project directory, applied before cursor pagination by
+squad, task title, current custom project name, and project directory, applied before cursor pagination by
 the sole Mailbox API. Counts remain global. Filtered results expose the same
 Load more operation; acknowledgements and invalidations revalidate the accepted
 prefix through its original oldest position before committing the fresh page
@@ -3550,9 +3556,14 @@ projector's complete active global snapshot. Dense row timestamps may truncate
 to preserve the subject; their complete localized date remains available on
 hover.
 
-Every `mailbox.connected` frame triggers a canonical `/mailbox` refetch,
+Every `work-ledger.connected` frame on the unified stream triggers a canonical `/mailbox` refetch,
 so durable items written while the change stream was disconnected converge
 without replay cursors or a second client-side history.
+The same canonical `project.updated` change on the unified Work Ledger stream
+also refetches the current Mailbox query through its existing request owner.
+This keeps project-name searches current after a rename without another stream,
+synthetic Mailbox message, or name cache. Server search reads the current name
+through its existing registered-Project join; it does not add it to stored mail.
 
 The Browser Preview panel discovers the selected task's canonical backend
 preview target while the Right Dock is closed. A new ready target reveals the

@@ -43,8 +43,12 @@ test("Work Ledger and Mailbox notifications share one app-lifetime physical stre
   configure({ serverUrl: "http://ledger-first.test", password: "", directory: "" })
 
   const workLedgerEvents: string[] = []
+  const projectUpdates: unknown[] = []
   let mailboxRefreshes = 0
-  setWorkLedgerChangeHandler((event) => workLedgerEvents.push(event.type))
+  setWorkLedgerChangeHandler((event) => {
+    workLedgerEvents.push(event.type)
+    if (event.type === "work-ledger.changed" && event.projectID) projectUpdates.push(event)
+  })
   const unsubscribeFailingMailbox = subscribeMailboxChanges(() => {
     throw new Error("one mailbox consumer failed")
   })
@@ -81,14 +85,20 @@ test("Work Ledger and Mailbox notifications share one app-lifetime physical stre
     }),
   )
 
-  expect(mailboxRefreshes).toBe(2)
-  expect(workLedgerEvents).toEqual(["work-ledger.changed", "work-ledger.connected"])
+  const renamedProject = {
+    type: "work-ledger.changed", sourceType: "project.updated",
+    projectID: "original-project", directory: "D:/original-project", sequence: 13,
+  }
+  streamRequests[0]!.handlers.onEvent(JSON.stringify(renamedProject))
+  expect(projectUpdates).toEqual([renamedProject])
+  expect(mailboxRefreshes).toBe(3)
+  expect(workLedgerEvents).toEqual(["work-ledger.changed", "work-ledger.connected", "work-ledger.changed"])
   unsubscribeFailingMailbox()
   unsubscribeMailbox()
   streamRequests[0]!.handlers.onEvent(
     JSON.stringify({ type: "work-ledger.changed", sourceType: "task.completed", taskID: null, sequence: 12 }),
   )
-  expect(workLedgerEvents).toEqual(["work-ledger.changed", "work-ledger.connected", "work-ledger.changed"])
+  expect(workLedgerEvents).toEqual(["work-ledger.changed", "work-ledger.connected", "work-ledger.changed", "work-ledger.changed"])
   stopWorkLedgerSSE()
   expect(closes).toBe(1)
   startWorkLedgerSSE()

@@ -617,7 +617,10 @@ export function startWorkLedgerSSE(authority = captureApiAuthority()) {
           dispatchMailboxRefresh()
           return
         }
-        if (parsed.data.type === "work-ledger.connected") {
+        if (
+          parsed.data.type === "work-ledger.connected" ||
+          (parsed.data.type === "work-ledger.changed" && parsed.data.sourceType === "project.updated")
+        ) {
           dispatchMailboxRefresh()
         }
         if (parsed.data.type === "work-ledger.heartbeat") return

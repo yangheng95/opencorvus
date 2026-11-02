@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [收件箱项目上下文](2026-11-02-mailbox-project-context.md)：项目名称、原消息及查找的一致性调查。
+
 - [全局查找结果阅读](2026-11-02-palette-result-reading.md)：最近记录、原目录、长标题与键盘实页调查。
 
 - [演示文稿控件语言](2026-11-02-presentation-language.md)：原产物与库生成控件的中英文实页调查。

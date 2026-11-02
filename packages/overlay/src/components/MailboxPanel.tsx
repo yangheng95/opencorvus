@@ -19,9 +19,10 @@ import { showAppDialog } from "../services/app-dialog"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { loadTasks } from "../store/board"
 import { appStore } from "../store/app"
+import { workLedgerProject } from "../services/work-ledger"
 import { detailStamp, relativeTime } from "../utils/time"
 import { t } from "../utils/i18n"
-import { projectDirectoryLabel } from "../utils/project-directory"
+import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/project-directory"
 import { Avatar } from "./Avatar"
 import { Icon, type IconName } from "./ui/Icon"
 import { Badge, type BadgeTone } from "./ui/Badge"
@@ -114,7 +115,12 @@ export function MailboxPanel(props: MailboxPanelProps) {
         const label = projectDirectoryLabel(item.taskDirectory, t("task.project.unknown"))
         grouped.set(item.taskDirectory, {
           directory: item.taskDirectory,
-          name: label.name,
+          name: projectLedgerDisplayName({
+            directory: item.taskDirectory,
+            customName: workLedgerProject(item.taskDirectory)?.title,
+            unknownName: t("task.project.unknown"),
+            implicitProjectName: t("work_ledger.implicit_project"),
+          }),
           parent: label.parent,
           items: [item],
         })
@@ -641,14 +647,16 @@ export function MailboxPanel(props: MailboxPanelProps) {
                     <Disclosure.Root class="mailbox-project-group" data-project-directory={directory} defaultOpen>
                       <Disclosure.Trigger
                         class="mailbox-project-group__header oc-section-heading"
-                        title={directory}
+                        title={`${group().name}\n${directory}`}
                         indicatorPosition="end"
                       >
                         <Icon name="folder" size="compact" />
-                        <span class="mailbox-project-group__name">{group().name}</span>
-                        <Show when={group().parent}>
-                          <span class="mailbox-project-group__parent">{group().parent}</span>
-                        </Show>
+                        <span class="mailbox-project-group__copy">
+                          <span class="mailbox-project-group__name">{group().name}</span>
+                          <Show when={group().parent}>
+                            <span class="mailbox-project-group__parent">{group().parent}</span>
+                          </Show>
+                        </span>
                         <span class="mailbox-project-group__count">{messageIDs().length}</span>
                       </Disclosure.Trigger>
                       <Disclosure.Content class="mailbox-project-group__content">

@@ -3,6 +3,7 @@ import { EngineTaskTable } from "@/engine/engine.sql"
 import { acknowledgeMailboxItem, listMailbox, recordMailboxMessage } from "@/engine/mailbox"
 import { Identifier } from "@/id/id"
 import { Instance, runOutsideInstanceContext } from "@/project/instance"
+import { Project } from "@/project/project"
 import { Server } from "@/server/server"
 import { Session } from "@/session"
 import { Database } from "@/storage/db"
@@ -99,4 +100,38 @@ test("the public Mailbox query includes matching original notifications across r
   const result = await page({ search: "older-needle", limit: "100" }, first.path)
   expect({ tasks: result.items.map(item => item.taskID).sort(), active: result.activeCount })
     .toEqual({ tasks: [a.id, b.id].sort(), active: 2 })
+})
+
+test("current project names participate in global Mailbox search and paginated rename results", async () => {
+  await using first = await memoryProject("mailbox-project-name-a")
+  await using second = await memoryProject("mailbox-project-name-b")
+  const name = "Inbox%_ 收件箱904"
+  const a = await Instance.provide({ directory: first.path, fn: async () => {
+    const fixture = await seed(3)
+    const project = await Project.update({ projectID: Instance.project.id, name })
+    return { ...fixture, projectID: project.id }
+  } })
+  const b = await Instance.provide({ directory: second.path, fn: async () => {
+    const fixture = await seed(2)
+    await Project.update({ projectID: Instance.project.id, name })
+    return fixture
+  } })
+  const combined = await page({ search: "  INBOX%_ 收件箱904  ", limit: "100" }, first.path)
+  expect({ ids: combined.items.map(item => item.id).sort(), active: combined.activeCount, unread: combined.unreadCount })
+    .toEqual({ ids: [...a.messages, ...b.messages].map(item => item.id).sort(), active: 5, unread: 5 })
+
+  const renamed = name + " · 更新"
+  await Project.update({ projectID: a.projectID, name: renamed })
+  let cursor: ReturnType<typeof listMailbox>["nextCursor"] = null
+  for (const index of [2, 1, 0]) {
+    const result = await page({
+      search: renamed.toUpperCase(), limit: "1",
+      ...(cursor ? { cursorCreatedAt: String(cursor.createdAt), cursorID: cursor.id } : {}),
+    }, second.path)
+    expect({ ids: result.items.map(item => item.id), task: result.items[0]?.taskID,
+      directory: result.items[0]?.taskDirectory, active: result.activeCount, unread: result.unreadCount })
+      .toEqual({ ids: [a.messages[index]!.id], task: a.id, directory: first.path, active: 5, unread: 5 })
+    cursor = result.nextCursor
+  }
+  expect(cursor).toBeNull()
 })

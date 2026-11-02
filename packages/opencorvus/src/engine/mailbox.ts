@@ -134,6 +134,7 @@ interface MailboxSourceRow {
   event: ProtocolEventRow
   taskTitle: string
   directory: string
+  projectName: string | null
 }
 
 export class MailboxItemNotFoundError extends Error {
@@ -288,7 +289,12 @@ function mailboxItemFromRow(input: { row: MailboxSourceRow; state?: MailboxState
 function allMailboxSourceRows(): MailboxSourceRow[] {
   return Database.use((db) =>
     db
-      .select({ event: ProtocolEventTable, taskTitle: EngineTaskTable.title, directory: ProjectTable.worktree })
+      .select({
+        event: ProtocolEventTable,
+        taskTitle: EngineTaskTable.title,
+        directory: ProjectTable.worktree,
+        projectName: ProjectTable.name,
+      })
       .from(ProtocolEventTable)
       .innerJoin(EngineTaskTable, protocolEventTaskJoin())
       .innerJoin(ProjectTable, eq(ProjectTable.id, EngineTaskTable.project_id))
@@ -325,7 +331,7 @@ export function listMailbox(input: { view?: MailboxView; cursor?: MailboxCursor;
     if (search) {
       const item = mailboxItemFromRow({ row, state: itemState })
       const fields = [item.subject, item.body, item.sourceAgentID, item.expertSquadID, item.taskTitle,
-        item.taskDirectory, item.taskDirectory.replaceAll("\\", "/")]
+        item.taskDirectory, item.taskDirectory.replaceAll("\\", "/"), row.projectName]
       if (!fields.some(value => value?.toLowerCase().includes(search))) return false
     }
     if (!input.cursor) return true

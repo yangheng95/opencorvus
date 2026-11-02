@@ -1,0 +1,212 @@
+{
+  "at": "2026-11-02T12:13:22.939Z",
+  "manualVisualReview": {
+    "screenshots": 19,
+    "ports": [
+      38639,
+      38640,
+      38641
+    ],
+    "ownedTabs": [
+      210,
+      211,
+      212
+    ],
+    "allTabsClosed": true,
+    "uiAutomationTests": 0,
+    "finalScreenshots": [
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "servedFinalUI": "main-W0LNQ_yy.js"
+  },
+  "phases": {
+    "before": {
+      "at": "2026-11-02T11:35:21.931Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259682,
+      "current": 259684,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53152,
+          "after": 53153
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53094,
+          "after": 53095
+        }
+      ],
+      "allUntouchedBusinessRowsPreserved": true,
+      "ownedProjectRenameVerified": true,
+      "allOriginalIdentitiesPreserved": true,
+      "ownedProjectRenames": [
+        {
+          "id": "prj_hY6kPfHVDg5lcTRFOYg9",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+          "from": null,
+          "to": "收件箱项目验收904",
+          "timeUpdated": 1793619143006,
+          "canonicalRequestVerified": true,
+          "otherFieldsPreserved": true
+        }
+      ],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4284902,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DEENiwS8.js",
+      "nativeExitCode": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    },
+    "after": {
+      "at": "2026-11-02T12:00:35.822Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259684,
+      "current": 259686,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53153,
+          "after": 53154
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53095,
+          "after": 53096
+        }
+      ],
+      "allUntouchedBusinessRowsPreserved": true,
+      "ownedProjectRenameVerified": true,
+      "allOriginalIdentitiesPreserved": true,
+      "ownedProjectRenames": [
+        {
+          "id": "prj_hY6kPfHVDg5lcTRFOYg9",
+          "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+          "from": "收件箱项目验收904",
+          "to": "收件箱项目验收904 · 更新",
+          "timeUpdated": 1793620112184,
+          "canonicalRequestVerified": true,
+          "otherFieldsPreserved": true
+        }
+      ],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 2739486,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-Dui-1ga6.js",
+      "attemptedFilePublicationEntry": "main-W0LNQ_yy.js",
+      "indexResourcesFrozenAtStartup": true,
+      "nativeExitCode": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    },
+    "final": {
+      "at": "2026-11-02T12:08:35.146Z",
+      "kind": "final",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259686,
+      "current": 259688,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53154,
+          "after": 53155
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53096,
+          "after": 53097
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 2260071,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-W0LNQ_yy.js",
+      "nativeExitCode": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    }
+  },
+  "projectRenameRefresh": {
+    "projectPatchAt": "2026-11-02T11:48:32.181Z",
+    "canonicalMailboxRefetchAt": "2026-11-02T11:48:32.317Z",
+    "queryRetained": true,
+    "oldMailboxItems": 24,
+    "finalMailboxItems": 24,
+    "active": 24,
+    "unread": 24,
+    "originalCompleteMailboxResponsesExact": true
+  },
+  "publicTaskFacts": {
+    "missions": 15,
+    "completeTaskStatuses": 4,
+    "allSixSnapshotsExact": true
+  },
+  "focusedChecks": {
+    "contracts-after": 0,
+    "overlay-typecheck": 0,
+    "backend-typecheck": 0,
+    "focused-checks-final": 0,
+    "ui-build-after-final": 0
+  },
+  "corrections": {
+    "oldContracts": {
+      "passed": 5,
+      "expectedFailures": 2
+    },
+    "privateRowPrototypeComparison": "corrected; every project column retained",
+    "cssToken": "existing ui-gap-xs verified by final checker",
+    "fileRepublication": "did not replace immutable startup resources; final new instance bound the correct build"
+  },
+  "limits": [
+    "Current desktop and system dark theme only",
+    "Chinese and English only",
+    "No original message acknowledgements, deletion or Open Task action",
+    "No implicit-project notification case or new model execution",
+    "Filtered bulk-selection toolbar lead awaits next actual-page investigation"
+  ]
+}

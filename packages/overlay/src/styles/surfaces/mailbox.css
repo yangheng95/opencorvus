@@ -179,22 +179,35 @@
   line-height: var(--ui-line-height-normal);
   cursor: pointer;
 }
+.mailbox-project-group__copy {
+  display: grid;
+  flex: 1 1 0;
+  gap: var(--ui-gap-xs);
+  min-width: 0;
+}
 .mailbox-project-group__name {
-  flex: 0 1 auto;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   min-width: 0;
   overflow: hidden;
   color: var(--text-strong);
   font-weight: var(--ui-font-weight-strong);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 .mailbox-project-group__parent {
-  flex: 1 1 auto;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   min-width: 0;
   overflow: hidden;
   font-size: var(--ui-font-caption);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 .mailbox-project-group__count {
   flex: 0 0 auto;
