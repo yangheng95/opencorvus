@@ -1,0 +1,310 @@
+{
+  "at": "2026-11-02T02:15:36.966Z",
+  "phase": "before",
+  "status": 200,
+  "total": 13,
+  "summaries": [
+    {
+      "missionID": "ead8ffac0ee1e2ae",
+      "sessionID": "ses_-zUQE6HHhzz5vQW8qK87",
+      "title": "输入保全验收888（未执行）",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+      "lane": "backlog",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "counts": {
+        "active": 0,
+        "completed": 0,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": []
+    },
+    {
+      "missionID": "c7f66600b7f80fc0",
+      "sessionID": "ses_-zUQENsLqzzjXteuzqt3",
+      "title": "表单校验验收886（未执行）",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+      "lane": "backlog",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "counts": {
+        "active": 0,
+        "completed": 0,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": []
+    },
+    {
+      "missionID": "86ad149ea7d1af98",
+      "sessionID": "ses_-zUQEUGDwzzyYWN7sziU",
+      "title": "项目名称验收885（未执行）",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\stream-stop-755\\project",
+      "lane": "backlog",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "counts": {
+        "active": 0,
+        "completed": 0,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": []
+    },
+    {
+      "missionID": "8ce1dd0029ef8f5e",
+      "sessionID": "ses_-zUQi8aC3zzDyYDXPxXm",
+      "title": "会话问候确认",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\title-goal-746\\project",
+      "lane": "backlog",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "counts": {
+        "active": 0,
+        "completed": 0,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": []
+    },
+    {
+      "missionID": "19467ea3d5e810a6",
+      "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+      "title": "批准后提交801",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+      "lane": "completed",
+      "taskStats": {
+        "total": 1,
+        "running": 0,
+        "inactive": 1
+      },
+      "counts": {
+        "active": 0,
+        "completed": 1,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": [
+        {
+          "id": "tsk_g00VZT7V7400TdQ2J6Sj",
+          "title": "批准后提交801",
+          "lifecycleStatus": "completed",
+          "activityStatus": "inactive"
+        }
+      ]
+    },
+    {
+      "missionID": "66393cec906d4d96",
+      "sessionID": "ses_-zUQX2jmmzzvFt8xAveR",
+      "title": "搜索选择保全800",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\checkpoint-ownership-795\\checkpoint-qa-795",
+      "lane": "backlog",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "counts": {
+        "active": 0,
+        "completed": 0,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": []
+    },
+    {
+      "missionID": "251041406c937351",
+      "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+      "title": "在当前 checkpoint-qa-795 独立项目创建并完成一个有限代码 Task，命名“检查点保全795”。先读取 README.md 和真实 Git...",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\checkpoint-ownership-795\\checkpoint-qa-795",
+      "lane": "completed",
+      "taskStats": {
+        "total": 1,
+        "running": 0,
+        "inactive": 1
+      },
+      "counts": {
+        "active": 0,
+        "completed": 1,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": [
+        {
+          "id": "tsk_g00VZRwPYV00d8tnhr0L",
+          "title": "检查点保全795",
+          "lifecycleStatus": "completed",
+          "activityStatus": "inactive"
+        }
+      ]
+    },
+    {
+      "missionID": "c728c8c279495d23",
+      "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+      "title": "在当前隔离项目完成一个有限代码任务，名称“协调差异验收793”。只修复 counter.py 的 next_serial(value)，让 next_se...",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-29\\review-handoff-793\\project",
+      "lane": "running",
+      "taskStats": {
+        "total": 1,
+        "running": 0,
+        "inactive": 1
+      },
+      "counts": {
+        "active": 1,
+        "completed": 0,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": [
+        {
+          "id": "tsk_g00VZRQQAP00yaqEnUZF",
+          "title": "协调差异验收793 限定代码修复",
+          "lifecycleStatus": "active",
+          "activityStatus": "inactive"
+        }
+      ]
+    },
+    {
+      "missionID": "0249bbe6c48d8cce",
+      "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+      "title": "@squad(\"base\") 请在当前隔离项目完成两个可独立验收的结果。第一项：实际读取 orders.csv，精确计算每行 quantity × uni...",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\live-mission-blocked-741\\project",
+      "lane": "attention",
+      "taskStats": {
+        "total": 2,
+        "running": 0,
+        "inactive": 2
+      },
+      "counts": {
+        "active": 0,
+        "completed": 1,
+        "failed": 1,
+        "cancelled": 0
+      },
+      "tasks": [
+        {
+          "id": "tsk_g00VZHd47u00r0Pa5iWM",
+          "title": "客户原件复核与阻塞确认",
+          "lifecycleStatus": "failed",
+          "activityStatus": "inactive"
+        },
+        {
+          "id": "tsk_g00VZHd0gV00QEPVDCEU",
+          "title": "订单精确计算与汇总交付",
+          "lifecycleStatus": "completed",
+          "activityStatus": "inactive"
+        }
+      ]
+    },
+    {
+      "missionID": "fd2fe5542b20088f",
+      "sessionID": "ses_-zUQiSy3lzzHIaqSL6cV",
+      "title": "状态展示草稿740",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project",
+      "lane": "backlog",
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      },
+      "counts": {
+        "active": 0,
+        "completed": 0,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": []
+    },
+    {
+      "missionID": "586aecffc30805c8",
+      "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+      "title": "在当前隔离项目中修复 invoice.py 的 sum_due(rows)。输入为 (quantity 整数, unit_price 十进制字符串) 的列...",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project",
+      "lane": "completed",
+      "taskStats": {
+        "total": 1,
+        "running": 0,
+        "inactive": 1
+      },
+      "counts": {
+        "active": 0,
+        "completed": 1,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": [
+        {
+          "id": "tsk_g00VZHNpHv00U1GVjV5r",
+          "title": "修复发票总额并验证精确计算",
+          "lifecycleStatus": "completed",
+          "activityStatus": "inactive"
+        }
+      ]
+    },
+    {
+      "missionID": "21816cb0466ec3b7",
+      "sessionID": "ses_-zUQipPGEzzGzIBo7bzl",
+      "title": "验证当前项目已完成的 invoice.py 与 test_invoice.py：实际运行现有 Python unittest，并独立核对 [(3,\"0.1...",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-delivery-734\\project",
+      "lane": "completed",
+      "taskStats": {
+        "total": 1,
+        "running": 0,
+        "inactive": 1
+      },
+      "counts": {
+        "active": 0,
+        "completed": 1,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": [
+        {
+          "id": "tsk_g00VZHAq8900E5iJwrbu",
+          "title": "当前发票实现只读验证",
+          "lifecycleStatus": "completed",
+          "activityStatus": "inactive"
+        }
+      ]
+    },
+    {
+      "missionID": "349e4f289bbd14e6",
+      "sessionID": "ses_-zUQivmTBzzY0ljL6aD5",
+      "title": "在当前隔离项目中修复 invoice.py 的 sum_due(rows)。输入为 (quantity 整数, unit_price 十进制字符串) 的列...",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-delivery-734\\project",
+      "lane": "completed",
+      "taskStats": {
+        "total": 1,
+        "running": 0,
+        "inactive": 1
+      },
+      "counts": {
+        "active": 0,
+        "completed": 1,
+        "failed": 0,
+        "cancelled": 0
+      },
+      "tasks": [
+        {
+          "id": "tsk_g00VZH4Swp00oZbphtIe",
+          "title": "修复账单精确合计并验证",
+          "lifecycleStatus": "completed",
+          "activityStatus": "inactive"
+        }
+      ]
+    }
+  ]
+}

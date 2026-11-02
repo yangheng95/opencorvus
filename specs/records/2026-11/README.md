@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [Mission 任务结果与完成进度](2026-11-02-mission-task-result-reading.md)：完成事实、结果汇总和中英文实页复核。
+
 - [浮动控件的对话框归属](2026-11-02-floating-control-dialog-ownership.md)：共享挂载器及真实下拉/作品菜单复核。
 
 - [Mission 未保存输入](2026-11-02-mission-unsaved-input.md)：新建与编辑草稿的真实退出和保存复核。

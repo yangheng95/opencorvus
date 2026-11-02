@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Mission 任务结果与完成进度](records/2026-11/2026-11-02-mission-task-result-reading.md)：真实完成比例、失败/取消/未完成结果与卡片理解成本。
+
 - [浮动控件的对话框归属](records/2026-11/2026-11-02-floating-control-dialog-ownership.md)：可访问选项、模态边界与原作品浮层归属。
 
 - [Mission 未保存输入](records/2026-11/2026-11-02-mission-unsaved-input.md)：作者退出意图、未保存文字保护及原草稿保存。

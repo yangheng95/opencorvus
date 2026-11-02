@@ -1209,6 +1209,16 @@ a retryable highlighting failure; grammar loading never owns file saving.
 
 ## Mission draft and schedule authoring
 
+Mission Board card progress counts only completed Tasks against all Tasks in that
+Mission. Failed, cancelled and unfinished lifecycle counts are shown separately
+from that successful-completion fraction, including Tasks outside the compact
+preview. Active lifecycle means unfinished work and does not assert current
+runtime activity. Task previews use the shared lifecycle labels. Visible and
+accessible progress use the same count and current-language number formatting;
+the Mission's lane and acceptance remain owned by the server projection. Each
+browser's native progress fill selector has its own rule so an unsupported
+vendor pseudo-element cannot invalidate the other browser's lane-theme fill.
+
 Mission Board draft cards offer separate Edit request and Start actions. The
 editor snapshots exact Mission/directory and original pending text when opened;
 Board refreshes do not replace its authored input. Save uses `mission.editDraft`

@@ -11,7 +11,8 @@ import { missionBoardStore, reloadMissionBoard } from "../services/mission-board
 import { workLedgerProject } from "../services/work-ledger"
 import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/project-directory"
 import { detailStamp, relativeTime } from "../utils/time"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
+import { taskLifecycleStatusLabel } from "../utils/status-labels"
 import { MissionCreateDialog, type MissionCreateRequest, type MissionManualCreateRequest } from "./MissionCreateDialog"
 import { Badge, type BadgeTone } from "./ui/Badge"
 import { Button } from "./ui/Button"
@@ -50,21 +51,10 @@ export interface MissionBoardProps {
   onDeleteMission: (mission: MissionRecord) => Promise<boolean>
 }
 
-function taskIsTerminal(task: MissionTask): boolean {
-  return (
-    task.lifecycleStatus === "completed" || task.lifecycleStatus === "failed" || task.lifecycleStatus === "cancelled"
-  )
-}
-
-function taskStatusTone(task: MissionTask): BadgeTone {
-  if (task.lifecycleStatus === "completed") return "ok"
-  if (task.lifecycleStatus === "failed" || task.lifecycleStatus === "cancelled") return "bad"
-  if (task.lifecycleStatus === "active") return "accent"
-  return "muted"
-}
-
-function taskStatusLabel(task: MissionTask): string {
-  return t(`mission_board.task_status.${task.lifecycleStatus}`)
+function taskStatusTone(status: MissionTask["lifecycleStatus"]): BadgeTone {
+  if (status === "completed") return "ok"
+  if (status === "failed" || status === "cancelled") return "bad"
+  return "accent"
 }
 
 function missionDirectoryLabel(directory: string): string {
@@ -90,8 +80,21 @@ function MissionBoardCard(props: {
   onEdit: () => void
   onDelete: () => void
 }) {
-  const terminalTasks = createMemo(() => props.mission.tasks.filter(taskIsTerminal).length)
-  const activeTasks = createMemo(() => props.mission.tasks.filter((task) => task.lifecycleStatus === "active").length)
+  const taskCounts = createMemo(() =>
+    props.mission.tasks.reduce(
+      (counts, task) => {
+        counts[task.lifecycleStatus] += 1
+        return counts
+      },
+      { active: 0, completed: 0, failed: 0, cancelled: 0 },
+    ),
+  )
+  const taskProgressLabel = createMemo(() =>
+    t("mission_board.task_progress", {
+      completed: taskCounts().completed.toLocaleString(localeTag()),
+      total: props.mission.tasks.length.toLocaleString(localeTag()),
+    }),
+  )
   const remainingTasks = createMemo(() => Math.max(0, props.mission.tasks.length - MISSION_TASK_PREVIEW_LIMIT))
 
   return (
@@ -139,39 +142,46 @@ function MissionBoardCard(props: {
             </time>
           </span>
           <Show when={props.mission.tasks.length > 0}>
-            <span class="mission-board-card__progress-copy">
-              <span>
-                {t("mission_board.task_progress", {
-                  completed: terminalTasks(),
-                  total: props.mission.tasks.length,
-                })}
-              </span>
-              <Show when={activeTasks() > 0}>
-                <span>{t("mission_board.active_tasks", { count: activeTasks() })}</span>
-              </Show>
-            </span>
+            <span class="mission-board-card__progress-copy">{taskProgressLabel()}</span>
             <progress
               class="mission-board-card__progress"
               max={props.mission.tasks.length}
-              value={terminalTasks()}
-              aria-label={t("mission_board.task_progress", {
-                completed: terminalTasks(),
-                total: props.mission.tasks.length,
-              })}
+              value={taskCounts().completed}
+              aria-label={taskProgressLabel()}
             />
+            <Show when={taskCounts().completed < props.mission.tasks.length}>
+              <span class="mission-board-card__task-counts">
+                <For each={["active", "failed", "cancelled"] as const}>
+                  {(status) => (
+                    <Show when={taskCounts()[status] > 0}>
+                      <Badge size="sm" tone={taskStatusTone(status)}>
+                        {t(`mission_board.task_count.${status}`, {
+                          count: taskCounts()[status].toLocaleString(localeTag()),
+                        })}
+                      </Badge>
+                    </Show>
+                  )}
+                </For>
+              </span>
+            </Show>
             <span class="mission-board-card__tasks">
               <For each={props.mission.tasks.slice(0, MISSION_TASK_PREVIEW_LIMIT)}>
                 {(task) => (
-                  <Badge class="mission-board-card__task" size="sm" tone={taskStatusTone(task)} title={task.title}>
+                  <Badge
+                    class="mission-board-card__task"
+                    size="sm"
+                    tone={taskStatusTone(task.lifecycleStatus)}
+                    title={task.title}
+                  >
                     <span>{task.title}</span>
                     <span aria-hidden="true">·</span>
-                    <span>{taskStatusLabel(task)}</span>
+                    <span>{taskLifecycleStatusLabel(task.lifecycleStatus)}</span>
                   </Badge>
                 )}
               </For>
               <Show when={remainingTasks() > 0}>
                 <Badge size="sm" tone="muted">
-                  {t("mission_board.more_tasks", { count: remainingTasks() })}
+                  {t("mission_board.more_tasks", { count: remainingTasks().toLocaleString(localeTag()) })}
                 </Badge>
               </Show>
             </span>
@@ -179,7 +189,9 @@ function MissionBoardCard(props: {
           <Show when={props.mission.pendingInteractions > 0}>
             <Badge class="mission-board-card__attention" size="sm" tone="warn">
               <Icon name="interaction-question" size="compact" />
-              {t("mission_board.pending_interactions", { count: props.mission.pendingInteractions })}
+              {t("mission_board.pending_interactions", {
+                count: props.mission.pendingInteractions.toLocaleString(localeTag()),
+              })}
             </Badge>
           </Show>
         </Button>
@@ -500,7 +512,7 @@ export function MissionBoard(props: MissionBoardProps) {
                       <span class="mission-board-lane__indicator" aria-hidden="true" />
                       <h2 id={`missionBoardLane-${lane}`}>{t(`mission_board.lane.${lane}`)}</h2>
                       <Badge size="sm" tone="muted">
-                        {laneMissions(lane).length}
+                        {laneMissions(lane).length.toLocaleString(localeTag())}
                       </Badge>
                     </header>
                     <div class="mission-board-lane__cards">

@@ -1,0 +1,116 @@
+{
+  "layout": [
+    {
+      "class": "oc-button mission-board-card__open",
+      "height": 248.4375,
+      "scrollHeight": 248,
+      "scrollTop": 0,
+      "tag": "BUTTON",
+      "width": 168,
+      "x": 709,
+      "y": 201.890625
+    },
+    {
+      "class": "mission-board-card",
+      "height": 250.4375,
+      "scrollHeight": 248,
+      "scrollTop": 0,
+      "tag": "ARTICLE",
+      "width": 170,
+      "x": 708,
+      "y": 200.890625
+    },
+    {
+      "class": "mission-board-lane__cards",
+      "height": 509.109375,
+      "scrollHeight": 509,
+      "scrollTop": 0,
+      "tag": "DIV",
+      "width": 182,
+      "x": 702,
+      "y": 194.890625
+    },
+    {
+      "class": "mission-board-lane",
+      "height": 549.109375,
+      "scrollHeight": 549,
+      "scrollTop": 0,
+      "tag": "SECTION",
+      "width": 182,
+      "x": 702,
+      "y": 154.890625
+    },
+    {
+      "class": "mission-board__lanes",
+      "height": 577.109375,
+      "scrollHeight": 577,
+      "scrollTop": 0,
+      "tag": "DIV",
+      "width": 974,
+      "x": 306,
+      "y": 142.890625
+    },
+    {
+      "class": "mission-board",
+      "height": 683,
+      "scrollHeight": 683,
+      "scrollTop": 0,
+      "tag": "SECTION",
+      "width": 974,
+      "x": 306,
+      "y": 37
+    }
+  ],
+  "paint": [
+    {
+      "class": "oc-button mission-board-card__open",
+      "contentVisibility": "visible",
+      "display": "flex",
+      "opacity": "1",
+      "visibility": "visible"
+    },
+    {
+      "class": "mission-board-card",
+      "contentVisibility": "visible",
+      "display": "flex",
+      "opacity": "1",
+      "visibility": "visible"
+    },
+    {
+      "class": "mission-board-lane__cards",
+      "contentVisibility": "visible",
+      "display": "flex",
+      "opacity": "1",
+      "visibility": "visible"
+    },
+    {
+      "class": "mission-board-lane",
+      "contentVisibility": "visible",
+      "display": "flex",
+      "opacity": "1",
+      "visibility": "visible"
+    },
+    {
+      "class": "mission-board__lanes",
+      "contentVisibility": "visible",
+      "display": "grid",
+      "opacity": "1",
+      "visibility": "visible"
+    },
+    {
+      "class": "mission-board",
+      "contentVisibility": "visible",
+      "display": "flex",
+      "opacity": "1",
+      "visibility": "visible"
+    },
+    {
+      "class": "center-workbench-activity mission-board-activity",
+      "contentVisibility": "visible",
+      "display": "flex",
+      "opacity": "1",
+      "visibility": "visible"
+    }
+  ],
+  "note": "工具内联显示曾与原图不一致；提交前直接重读磁盘02/03/04/09/10/14，卡片均正常。没有证明产品绘制故障，也未加入重绘补丁。"
+}

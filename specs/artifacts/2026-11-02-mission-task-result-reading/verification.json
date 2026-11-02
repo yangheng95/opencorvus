@@ -1,0 +1,237 @@
+{
+  "at": "2026-11-02T02:32:50.487Z",
+  "ui": {
+    "method": "真实隔离页面交互与16张截图人工复核",
+    "shots": [
+      "01-before-board-en.jpg",
+      "02-before-mixed-results-en.jpg",
+      "03-before-mixed-results-en-settled.jpg",
+      "04-before-mixed-results-pointer-en.jpg",
+      "05-before-idle-active-en.jpg",
+      "06-before-idle-active-zh.jpg",
+      "07-before-mixed-results-zh.jpg",
+      "08-after-board-en.jpg",
+      "09-after-mixed-results-en.jpg",
+      "10-after-mixed-results-en-pointer.jpg",
+      "11-after-idle-active-en.jpg",
+      "12-after-project-filter-en.jpg",
+      "13-after-idle-active-zh.jpg",
+      "14-after-mixed-results-zh.jpg",
+      "15-after-board-zh.jpg",
+      "16-after-open-original-mission-zh.jpg"
+    ],
+    "ports": [
+      38606,
+      38607
+    ],
+    "originalHandles": [
+      68568,
+      15996
+    ],
+    "inlineDisplayDiscrepancyFrames": [
+      "02",
+      "03",
+      "09"
+    ],
+    "savedOriginalsReopened": [
+      "02",
+      "03",
+      "04",
+      "09",
+      "10",
+      "14"
+    ],
+    "savedOriginalReview": "工具内联显示曾与原图不一致；提交前直接重读磁盘02/03/04/09/10/14，卡片均正常。没有证明产品绘制故障，也未加入重绘补丁。"
+  },
+  "phases": [
+    {
+      "kind": "before",
+      "qualification": {
+        "at": "2026-11-02T02:19:56.977Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259043,
+        "current": 259045,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53008,
+            "after": 53009
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 52950,
+            "after": 52951
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 4230782,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BeJWP6iR.js"
+      },
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "retireExit": 0,
+      "physical": {
+        "occurrence": "mission-result-890-before-f0967237-662e-47a3-a4e2-374e17464142",
+        "outcome": "settled",
+        "host": {
+          "pid": 29672,
+          "processInstanceID": "win32:639291825248627565",
+          "occurrenceID": "8011f404-7647-47c4-9c98-3afc37a2ce5c"
+        },
+        "target": {
+          "pid": 32896,
+          "processInstanceID": "win32:639291825255625210",
+          "occurrenceID": "b01d9703-5c94-461d-8abd-94627dfad6b2"
+        },
+        "observedAtUtc": "2026-11-02T02:19:25.374Z",
+        "deadlineAt": 1793590196156,
+        "terminal": {
+          "occurrenceID": "mission-result-890-before-f0967237-662e-47a3-a4e2-374e17464142",
+          "pid": 32896,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-11-02T02:19:25.4059547Z"
+      },
+      "identityStates": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ]
+    },
+    {
+      "kind": "after",
+      "qualification": {
+        "at": "2026-11-02T02:30:36.741Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259045,
+        "current": 259047,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53009,
+            "after": 53010
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 52951,
+            "after": 52952
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 3585768,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-Y2tOqPNR.js"
+      },
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "retireExit": 0,
+      "physical": {
+        "occurrence": "mission-result-890-after-de9dc9fb-a4c8-4c82-8b38-1ef6faaddf18",
+        "outcome": "settled",
+        "host": {
+          "pid": 30836,
+          "processInstanceID": "win32:639291830231957475",
+          "occurrenceID": "13198f43-6376-45fa-8a01-14c4eb6eaa03"
+        },
+        "target": {
+          "pid": 12696,
+          "processInstanceID": "win32:639291830238623462",
+          "occurrenceID": "a3c68615-a138-444e-96ae-1e26640549b2"
+        },
+        "observedAtUtc": "2026-11-02T02:30:10.388Z",
+        "deadlineAt": 1793590196156,
+        "terminal": {
+          "occurrenceID": "mission-result-890-after-de9dc9fb-a4c8-4c82-8b38-1ef6faaddf18",
+          "pid": 12696,
+          "reason": "exited",
+          "exitCode": 0,
+          "signal": null
+        },
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+      },
+      "launcher": {
+        "originalChildExit": 0,
+        "observedAtUtc": "2026-11-02T02:30:10.4320675Z"
+      },
+      "identityStates": [
+        "dead_or_reused",
+        "dead_or_reused"
+      ]
+    }
+  ],
+  "publicProjection": {
+    "status": 200,
+    "missions": 13,
+    "completeRecordsMatched": true
+  },
+  "checks": [
+    {
+      "label": "ui-build-after",
+      "startedAt": 1793586099456,
+      "closedAt": 1793586159699,
+      "code": 0,
+      "signal": null,
+      "childPID": 16472
+    },
+    {
+      "label": "overlay-typecheck",
+      "startedAt": 1793586099456,
+      "closedAt": 1793586120966,
+      "code": 0,
+      "signal": null,
+      "childPID": 14404
+    },
+    {
+      "label": "focused-checks",
+      "startedAt": 1793586099462,
+      "closedAt": 1793586110310,
+      "code": 0,
+      "signal": null,
+      "childPID": 16268
+    }
+  ],
+  "limits": [
+    "无当前未归档取消任务样本",
+    "无当前超过三项任务的卡片样本",
+    "Firefox未实际运行"
+  ],
+  "userWindow18571": "未操作"
+}

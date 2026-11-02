@@ -295,6 +295,7 @@ body {
 .mission-board-card__identity,
 .mission-board-card__project,
 .mission-board-card__progress-copy,
+.mission-board-card__task-counts,
 .mission-board-card__tasks,
 .mission-board-card__attention {
   display: flex;
@@ -385,13 +386,18 @@ body {
   background: transparent;
 }
 
-.mission-board-card__progress::-webkit-progress-value,
+.mission-board-card__progress::-webkit-progress-value {
+  border-radius: inherit;
+  background: var(--mission-board-lane-accent, var(--accent));
+}
+
 .mission-board-card__progress::-moz-progress-bar {
   border-radius: inherit;
   background: var(--mission-board-lane-accent, var(--accent));
 }
 
-.mission-board-card__tasks {
+.mission-board-card__tasks,
+.mission-board-card__task-counts {
   flex-wrap: wrap;
   gap: var(--ui-gap-sm);
 }

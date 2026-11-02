@@ -1,0 +1,30 @@
+{
+  "label": "1 / 2 tasks completed",
+  "laneAccent": "#fbbf24",
+  "selectors": [
+    {
+      "css": "display: flex; min-width: 0px; align-items: center;",
+      "selector": ".mission-board-card__identity, .mission-board-card__project, .mission-board-card__progress-copy, .mission-board-card__task-counts, .mission-board-card__tasks, .mission-board-card__attention"
+    },
+    {
+      "css": "justify-content: space-between; gap: var(--ui-gap-sm); color: var(--text-muted); font-size: var(--ui-font-caption); font-variant-numeric: tabular-nums;",
+      "selector": ".mission-board-card__identity, .mission-board-card__progress-copy"
+    },
+    {
+      "css": "appearance: none; width: 100%; height: calc(4px * var(--ui-scale)); overflow: hidden; border: 0px; border-radius: var(--oc-radius-pill); background: color-mix(in srgb,var(--text-strong) 10%,transparent);",
+      "selector": ".mission-board-card__progress"
+    },
+    {
+      "css": "background: transparent;",
+      "selector": ".mission-board-card__progress::-webkit-progress-bar"
+    },
+    {
+      "css": "border-radius: inherit; background: var(--mission-board-lane-accent, var(--accent));",
+      "selector": ".mission-board-card__progress::-webkit-progress-value"
+    }
+  ],
+  "nativeWrapperValue": "",
+  "nativeWrapperMax": "",
+  "maxAttribute": "2",
+  "valueAttribute": "1"
+}
