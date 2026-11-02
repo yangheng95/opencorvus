@@ -1,0 +1,230 @@
+{
+  "at": "2026-11-02T16:57:25.971Z",
+  "endToEnd": {
+    "sameRootWorkSession": true,
+    "naturalStatus": "idle",
+    "finish": "stop",
+    "actualModel": "gpt-6.1-sol",
+    "streaming": true,
+    "allActualRequests200AndEof": true,
+    "requests": 13,
+    "cumulativeRequests": 1309,
+    "canonicalDelivered": true,
+    "projectWorkbookAndSummaryUpdated": true,
+    "workbook": {
+      "phase": "before",
+      "checkpoint": "final",
+      "target": "actual project deliverable",
+      "records": 14,
+      "worksheets": [
+        "问题清单",
+        "未关闭汇总"
+      ],
+      "stats": [
+        [
+          "P0",
+          2
+        ],
+        [
+          "P1",
+          2
+        ],
+        [
+          "P2",
+          2
+        ],
+        [
+          "合计",
+          6
+        ]
+      ],
+      "numericCounts": true,
+      "xlsxBytes": 5895,
+      "changedRecord": [
+        "B-006",
+        "P1",
+        "closed",
+        "赵敏",
+        "2026-11-05",
+        "预览表格列宽不足"
+      ],
+      "unchangedProjectFiles": [
+        ".gitattributes",
+        ".gitignore",
+        "deliverables/history-before-B-006-closure/issue-register.xlsx",
+        "deliverables/history-before-B-006-closure/summary.md",
+        "sources/brief.md",
+        "sources/bugs.csv"
+      ],
+      "unchangedBusinessFiles": 4,
+      "unchangedGitConfigFiles": 2
+    },
+    "summaryRows": [
+      [
+        "P0",
+        "4",
+        "2"
+      ],
+      [
+        "P1",
+        "5",
+        "2"
+      ],
+      [
+        "P2",
+        "5",
+        "2"
+      ],
+      [
+        "合计",
+        "14",
+        "6"
+      ]
+    ],
+    "canonicalProjectAndBrowserDownloadBytesExact": true
+  },
+  "downloads": {
+    "primaryDownloads": 2,
+    "primaryEvidence": [
+      {
+        "phase": "before",
+        "bytes": 5895,
+        "createdAt": "2026-11-02T16:17:27.579Z",
+        "browserRequestAt": "2026-11-02T16:17:27.571Z",
+        "requestToFileCreationMs": 8,
+        "canonicalAndProjectBytesExact": true
+      },
+      {
+        "phase": "after",
+        "bytes": 5895,
+        "createdAt": "2026-11-02T16:38:07.692Z",
+        "browserRequestAt": "2026-11-02T16:38:07.686Z",
+        "requestToFileCreationMs": 6,
+        "canonicalAndProjectBytesExact": true
+      }
+    ],
+    "eventObserverReturned": false,
+    "eventTimeoutWasNotDownloadFailure": true,
+    "additionalIdenticalCopiesObserved": 2,
+    "additionalCopiesExcludedFromNetworkAcceptance": true,
+    "ownedTemporaryDownloadsCleaned": 4
+  },
+  "httpContract": {
+    "source": "One attachmentHeaders implementation using the current qualified profile MIME registry",
+    "nativeOfficeDisposition": "attachment",
+    "safePdfDisposition": "inline",
+    "actualResponses": [
+      {
+        "filename": "issue-register.xlsx",
+        "bytes": 5895,
+        "status": 200,
+        "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "beforeDisposition": "inline; filename*=UTF-8''issue-register.xlsx",
+        "afterDisposition": "attachment; filename*=UTF-8''issue-register.xlsx",
+        "canonicalBytesExact": true,
+        "projectBytesExact": true
+      },
+      {
+        "filename": "issue-register-preview.pdf",
+        "bytes": 303692,
+        "status": 200,
+        "mime": "application/pdf",
+        "beforeDisposition": "inline; filename*=UTF-8''issue-register-preview.pdf",
+        "afterDisposition": "inline; filename*=UTF-8''issue-register-preview.pdf",
+        "canonicalBytesExact": true
+      }
+    ],
+    "tests": {
+      "before": {
+        "pass": 2,
+        "fail": 1
+      },
+      "after": {
+        "pass": 3,
+        "expectations": 18,
+        "exit": 0
+      },
+      "scope": "Real HTTP transport for DOCX/XLSX/PPTX names and bytes, PDF and SVG; native XLSX validity separately checked in the real Work flow"
+    }
+  },
+  "preservation": {
+    "schema": 9,
+    "tables": 92,
+    "initialRows": 268156,
+    "beforeFinalRows": 271236,
+    "afterFinalRows": 271238,
+    "original907BusinessRowsExact": true,
+    "allSourceDatabasesExact": true,
+    "allOld100ProjectsAndGitPreserved": true,
+    "projects": 101,
+    "afterProtectedAttachments": 263,
+    "readOnlyAfterBusinessRowsExact": true,
+    "ownedUpdates": [
+      {
+        "table": "memory_chunk",
+        "fromRevision": 2,
+        "toRevision": 3,
+        "coveredActualOccurrences": true
+      },
+      {
+        "table": "memory_file",
+        "fields": [
+          "time_updated"
+        ]
+      },
+      {
+        "table": "session",
+        "fields": [
+          "time_updated",
+          "summary_additions",
+          "summary_deletions",
+          "summary_files"
+        ]
+      }
+    ],
+    "oldMissionRows": 15,
+    "fullTaskStates": 4,
+    "mailboxRows": 24
+  },
+  "ui": {
+    "realProjectDevelopmentRoutes": [
+      38652,
+      38653
+    ],
+    "qualifiedEntry": "main-CYHlEENr.js",
+    "backendOnlyChange": true,
+    "manualScreenshotsReviewed": true,
+    "automatedUiTestsRun": false,
+    "browserViewportOverrideSet": false
+  },
+  "settlement": [
+    {
+      "phase": "before",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "requests": 13,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "originalSourcesPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 2911364
+    },
+    {
+      "phase": "after",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "requests": 0,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true,
+      "originalSourcesPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 1714615
+    }
+  ]
+}

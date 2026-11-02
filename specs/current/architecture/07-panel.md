@@ -399,7 +399,8 @@ select a resource. Original citation paths, semantic IDs and Tool evidence stay
 unchanged. External paths retain their exact absolute-file contract.
 Canonical attachment HTTP responses read the same verified reference and bytes,
 and retain its filename through RFC 5987 UTF-8 Content-Disposition. Office source
-types come from the qualified profile registry; PDF and other safe preview types
+types come from the qualified profile registry and use attachment disposition
+for editable Office sources, including direct links in messages; PDF and other safe preview types
 remain inline, while active SVG remains download-only octet-stream with nosniff.
 Canonical SVG image display selects the explicit `image-preview` rendition:
 lossless WebP, at most 4096 by 4096 pixels, without enlargement. It shares

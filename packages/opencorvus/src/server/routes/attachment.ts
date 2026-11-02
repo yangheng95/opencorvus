@@ -8,7 +8,7 @@ import { Instance } from "@/project/instance"
 import { AttachmentStore } from "@/storage/attachment-store"
 import { lazy } from "../../util/lazy"
 import { DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
-import { WorkArtifactProfileRegistry } from "@/work-artifact/profile-registry"
+import { WORK_ARTIFACT_PROFILE_IDS, WorkArtifactProfileRegistry } from "@/work-artifact/profile-registry"
 
 const AttachmentReference = z.object({
   sha: z.string().length(64),
@@ -62,18 +62,20 @@ function mimeFromName(name: string): string {
   return MIME_FROM_EXT[ext] ?? "application/octet-stream"
 }
 
+const OFFICE_SOURCE_MIMES = new Set(WORK_ARTIFACT_PROFILE_IDS.flatMap((id) => WorkArtifactProfileRegistry.require(id).mimeTypes))
+
 function attachmentHeaders(name: string, reference: AttachmentStore.Reference) {
   const mime = mimeFromName(name)
+  const disposition = OFFICE_SOURCE_MIMES.has(mime) || mime === "image/svg+xml" ? "attachment" : "inline"
   const headers: Record<string, string> = {
     "content-type": mime,
     "content-length": String(reference.size),
     "cache-control": "public, max-age=31536000, immutable",
     "x-content-type-options": "nosniff",
-    "content-disposition": `inline; filename*=UTF-8''${encodeURIComponent(reference.filename ?? name).replace(/[!'()*]/g, (character) => `%${character.charCodeAt(0).toString(16).toUpperCase()}`)}`,
+    "content-disposition": `${disposition}; filename*=UTF-8''${encodeURIComponent(reference.filename ?? name).replace(/[!'()*]/g, (character) => `%${character.charCodeAt(0).toString(16).toUpperCase()}`)}`,
   }
   if (mime === "image/svg+xml") {
     headers["content-type"] = "application/octet-stream"
-    headers["content-disposition"] = headers["content-disposition"]!.replace(/^inline;/, "attachment;")
   }
   return headers
 }

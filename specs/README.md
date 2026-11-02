@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Office中断后继续交付](records/2026-11/2026-11-03-office-followup.md)：原会话恢复、项目文件及真实下载验收。
+
 - [Excel交付与跟进流程](records/2026-11/2026-11-02-office-workflow.md)：真实Sol工作、规范Excel文件与继续修改验收。
 
 - [共享文件搜索顺序](records/2026-11/2026-11-02-file-search-order.md)：候选扫描、稳定窗口及原路径身份调查。

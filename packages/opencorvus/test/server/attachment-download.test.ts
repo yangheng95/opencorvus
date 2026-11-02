@@ -84,7 +84,7 @@ test("canonical Office downloads preserve actual bytes, MIME and Unicode filenam
           }).toEqual({
             status: 200,
             mime,
-            disposition: `inline; filename*=UTF-8''${encoded}`,
+            disposition: `attachment; filename*=UTF-8''${encoded}`,
             size: String(bytes.length),
           })
           expect(Buffer.from(await response.arrayBuffer())).toEqual(bytes)

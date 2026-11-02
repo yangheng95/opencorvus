@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Office继续交付验收](2026-11-03-office-followup/README.md)：原会话错误历史、继续输入、项目文件与实际下载。
+
 - [Excel 文件交付与跟进验收](2026-11-02-office-workflow/README.md)：真实 Sol、原生工作簿、逐表预览与同一会话修改。
 
 - [共享文件搜索顺序验收](2026-11-02-file-search-order/README.md)：重复搜索、同分自然顺序及真实文件交互截图。
