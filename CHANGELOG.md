@@ -16,7 +16,7 @@
 #### 调整
 
 - 优化执行记录、工具操作、来源分组和交付文件的可读名称，完整原始标识可展开查看；Markdown 表格、长目标输入和只读代码预览更便于阅读。
-- 定时任务明确显示时间语境；Notebook 标明阅读模式，代码单元查找及应用内展开保留原内容。
+- 定时任务明确显示时间语境；Notebook 标明阅读模式，代码单元查找及应用内展开保留原内容。演示文稿的翻页、跳页、暂停恢复和快捷键帮助跟随当前语言，切换语言保留当前页。
 - 发布全流程总时限调整为 60 分钟，覆盖排队、重试、原生构建、自动更新和配对官网部署；重试仍从最初运行创建时间计时。
 
 #### 修复
@@ -41,7 +41,7 @@
 #### Changed
 
 - Improve readable names for execution records, tool operations, grouped sources and delivered files, with full original identifiers available in details. Make Markdown tables, long Goal fields and read-only code previews easier to read.
-- Clarify scheduled-task time context and Notebook reading mode. Code-cell search and in-app expansion retain original content.
+- Clarify scheduled-task time context and Notebook reading mode. Code-cell search and in-app expansion retain original content. Presentation navigation, jump controls, pause/resume and shortcut help follow the current language while preserving the current slide.
 - Set the whole-release budget to 60 minutes, including queues, retries, native builds, desktop updates and the paired website deployment. Retries retain the original run creation time.
 
 #### Fixed
