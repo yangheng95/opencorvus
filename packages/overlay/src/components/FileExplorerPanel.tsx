@@ -16,6 +16,7 @@ import { DropdownMenu } from "./ui/DropdownMenu"
 import { Virtualizer, type VirtualizerHandle, type CustomContainerComponentProps, type CustomItemComponentProps } from "virtua/solid"
 import { ApiError, apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { boardStore } from "../store/board"
+import { workLedgerProject } from "../services/work-ledger"
 import { showAppDialog } from "../services/app-dialog"
 import {
   collectFileRefreshReceipts,
@@ -41,6 +42,7 @@ import {
   type FileUploadResult,
 } from "../services/file-workbench"
 import { normalizeProjectFilePath } from "../utils/server-path"
+import { projectDisplayName } from "../utils/project-directory"
 import { currentUIScale } from "../utils/layout-tokens"
 import { localeTag, t, tc } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
@@ -459,6 +461,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [mutationFeedback, setMutationFeedback] = createSignal<ExplorerFeedback | null>(null)
   const active = createMemo(() => props.active?.() ?? true)
   const directory = createMemo(() => (props.directory ? props.directory().trim() : ""))
+  const projectName = () => projectDisplayName({
+    directory: directory(),
+    customName: workLedgerProject(directory())?.title,
+    unknownName: t("task.project.unknown"),
+    implicitProjectName: t("work_ledger.implicit_project"),
+  })
   const [focusedRowKey, setFocusedRowKey] = createSignal<string | null>(null)
   const rowElements = new Map<string, HTMLButtonElement>()
   let listElement: HTMLDivElement | undefined
@@ -2119,6 +2127,13 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         aria-hidden="true"
         onChange={(event) => void handleUploadInputChange(event)}
       />
+      <Show when={directory()}>
+        <div class="file-explorer-project">
+          <span class="file-explorer-project-label">{t("explorer.project_files")}</span>
+          <strong class="file-explorer-project-name">{projectName()}</strong>
+          <span class="file-explorer-project-directory">{directory()}</span>
+        </div>
+      </Show>
       <SurfaceHeader
         variant="panel"
         data-ui="file-explorer-toolbar"

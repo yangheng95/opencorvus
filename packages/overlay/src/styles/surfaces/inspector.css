@@ -658,6 +658,28 @@
   width: min(calc(260px * var(--ui-scale)), calc(100cqw - calc(16px * var(--ui-scale))));
 }
 
+.file-explorer-project {
+  display: grid;
+  flex: 0 0 auto;
+  min-width: 0;
+  gap: var(--ui-gap-3xs);
+  padding: var(--ui-gap-sm) var(--ui-gap-lg) 0;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.file-explorer-project-label,
+.file-explorer-project-directory {
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
+.file-explorer-project-name {
+  color: var(--text);
+  font-size: var(--ui-font-body);
+  font-weight: var(--ui-font-weight-medium);
+}
+
 .file-explorer-context-menu[hidden] {
   display: none;
 }

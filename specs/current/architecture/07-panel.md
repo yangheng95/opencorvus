@@ -790,6 +790,10 @@ the target directory and the existing naming dialog confirms it before writing:
 a selected directory, a selected file's parent, or the project root. Busy and
 navigation-reservation boundaries, mutation feedback, refresh and post-create
 editor admission remain owned by that existing operation.
+The Files tool identifies its current Project above the existing toolbar using
+the canonical work-ledger Project title and original directory. Both update from
+the same directory input as listing, search and commands; the full path remains
+readable when the navigation sidebar is hidden.
 
 Markdown text files offer Source and Preview views of the same current draft.
 New Markdown file identities without a source range open in Preview. Explicit

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件浏览的项目语境](records/2026-11/2026-11-03-file-browser-context.md)：文件工具中项目身份、真实目录和原操作范围的实页调查。
+
 - [项目侧栏的折叠与打开](records/2026-11/2026-11-03-project-tree-navigation.md)：分组可见性、项目导航与当前对话的操作边界。
 
 - [持续目标的开始工作上下文](records/2026-11/2026-11-03-goal-start-context.md)：默认页、确认表单和真实执行归属。

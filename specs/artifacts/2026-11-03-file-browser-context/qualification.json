@@ -1,0 +1,161 @@
+{
+  "at": "2026-11-02T21:36:13.872Z",
+  "scope": "917 identify the current Project and original root in Files",
+  "manualReview": "Thirteen real page screenshots manually inspected. Before, Explorer in two existing projects shows similar relative filenames without the Project identity when the navigation sidebar is hidden. After, canonical custom names and complete roots wrap visibly above the original toolbar. English and Chinese, Office and the existing renamed Goal project, search, original file opening by Enter, retained query after tool hiding, clearing and keyboard folder disclosure, existing root/selected-parent creation dialogs followed by cancellation, and switching back to Office Home verified. 08 includes an unrelated usage tooltip; 09 is the unobstructed Chinese search. No UI automated tests.",
+  "screenshots": [
+    "01-before-files-without-project.png",
+    "02-before-same-filename-another-project.png",
+    "03-after-office-project-context-en.png",
+    "04-after-search-new-scope-en.png",
+    "05-after-original-file-en.png",
+    "06-after-retained-search-context-en.png",
+    "07-after-renamed-project-context-en.png",
+    "08-after-project-context-zh.png",
+    "09-after-source-search-zh.png",
+    "10-after-original-project-source-zh.png",
+    "11-after-tree-keyboard-zh.png",
+    "12-after-selected-folder-scope-zh.png",
+    "13-after-switch-project-zh.png"
+  ],
+  "preservedGoal": {
+    "goalID": "pev_g0VZqi4VF006X0VITEUv",
+    "sessionID": "ses_-zUQ9HvfbzzEYnSgSg3b",
+    "status": "complete",
+    "tokensUsed": 345102,
+    "turnsAccepted": 1,
+    "checkpoints": 4,
+    "originalDefinitionAndStateExact": true,
+    "sessionActivity": "idle"
+  },
+  "publicReads": {
+    "checkpoints": 4,
+    "missionRecordsPerCheckpoint": 15,
+    "taskStatesAndRootSessionsPerCheckpoint": 4,
+    "mailbox": 24,
+    "fileReads": 12,
+    "goalReads": 4
+  },
+  "qualifications": [
+    {
+      "at": "2026-11-02T21:26:32.136Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 273833,
+      "current": 273835,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55901,
+          "after": 55902
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55843,
+          "after": 55844
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": false,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [
+        {
+          "phase": "before",
+          "projectID": "prj_hGPiGXdu78xls6JLka9M",
+          "fileID": "mem_hGGqW0GeNhYsF55NJAHM",
+          "chunkID": "mck_hFUKkSOyuSaUyooB9Siz",
+          "beforeGeneration": 1,
+          "afterGeneration": 2,
+          "timeUpdated": 1793654333281,
+          "terminalDefaultStage": {
+            "startedAt": "2026-11-02T21:18:53.043Z",
+            "completedAt": "2026-11-02T21:18:53.283Z"
+          },
+          "documentAndInboxPreserved": true
+        },
+        {
+          "phase": "before",
+          "projectID": "prj_haVDuAijnh89NhsVqWv4",
+          "fileID": "mem_hiktSQY3WzAyjzKQPukh",
+          "chunkID": "mck_hk3GO2wuAvPFN5iYSRzz",
+          "beforeGeneration": 1,
+          "afterGeneration": 2,
+          "timeUpdated": 1793654423855,
+          "terminalDefaultStage": {
+            "startedAt": "2026-11-02T21:20:23.652Z",
+            "completedAt": "2026-11-02T21:20:23.859Z"
+          },
+          "documentAndInboxPreserved": true
+        }
+      ],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 265,
+      "projects": 105,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1319,
+      "reserveMs": 4286431,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BlMy3trN.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2
+    },
+    {
+      "at": "2026-11-02T21:34:58.043Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 273835,
+      "current": 273837,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55902,
+          "after": 55903
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55844,
+          "after": 55845
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 265,
+      "projects": 105,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1319,
+      "reserveMs": 3517545,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-D01YZYgk.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2
+    }
+  ],
+  "typecheck": 0,
+  "uiBuild": 0,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1319
+}
