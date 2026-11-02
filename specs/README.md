@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [收件箱筛选批量操作](records/2026-11/2026-11-02-mailbox-search-selection.md)：搜索选择的操作入口、取消及全局已读范围。
+
 - [收件箱项目上下文](records/2026-11/2026-11-02-mailbox-project-context.md)：真实改名、统一分组名称和项目查找刷新。
 
 - [全局查找结果的阅读层次](records/2026-11/2026-11-02-palette-result-reading.md)：原工作标题、完整项目上下文和精确导航。

@@ -1,0 +1,170 @@
+{
+  "at": "2026-11-02T13:02:02.788Z",
+  "manualVisualReview": {
+    "screenshots": 21,
+    "ports": [
+      38642,
+      38643,
+      38644
+    ],
+    "ownedTabs": [
+      213,
+      214,
+      215
+    ],
+    "allTabsClosed": true,
+    "uiAutomationTests": 0,
+    "finalQuantityLabelScreenshots": [
+      18,
+      19,
+      20,
+      21
+    ]
+  },
+  "phases": {
+    "before": {
+      "at": "2026-11-02T12:31:37.493Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259688,
+      "current": 259690,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53155,
+          "after": 53156
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53097,
+          "after": 53098
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4334057,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-W0LNQ_yy.js",
+      "nativeExitCode": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    },
+    "after": {
+      "at": "2026-11-02T12:47:46.625Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259690,
+      "current": 259692,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53156,
+          "after": 53157
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53098,
+          "after": 53099
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3364670,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-UkSkKNYj.js",
+      "nativeExitCode": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    },
+    "final": {
+      "at": "2026-11-02T12:57:10.031Z",
+      "kind": "final",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259692,
+      "current": 259694,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53157,
+          "after": 53158
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53099,
+          "after": 53100
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 2801293,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-UkSkKNYj.js",
+      "nativeExitCode": 0,
+      "publicShutdown": 200,
+      "credentialCopyRetired": true,
+      "modelCatalogCopyRetired": true
+    }
+  },
+  "publicFacts": {
+    "completeMailboxSnapshotsExact": 6,
+    "active": 24,
+    "unread": 24,
+    "filteredOriginalCounts": {
+      "approved-code-801": 2,
+      "checkpoint-qa-795": 7,
+      "没有匹配的收件箱905": 0
+    },
+    "missions": 15,
+    "completeTaskStatuses": 4,
+    "taskFactSnapshotsExact": 6
+  },
+  "focusedChecks": {
+    "ui-build-after": 0,
+    "ui-build-final": 0,
+    "overlay-typecheck": 0,
+    "focused-checks-final": 0
+  },
+  "localeValuesChanged": 3,
+  "limits": [
+    "Desktop current system dark theme only",
+    "Chinese and English only",
+    "Opened confirmations and canceled; deletion and read writes not executed",
+    "Multi-page selection, connection failures and races not exercised",
+    "No new Provider execution"
+  ]
+}

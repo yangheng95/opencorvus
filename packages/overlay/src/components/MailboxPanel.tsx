@@ -506,80 +506,76 @@ export function MailboxPanel(props: MailboxPanelProps) {
             <Icon name={searchOpen() ? "close" : "search"} />
           </Button>
         </div>
-        <Show when={searchOpen() || visibleItems().length > 0}>
+        <Show when={searchOpen()}>
           <div class="mailbox-panel__toolbar">
-            <Show
-              when={searchOpen()}
-              fallback={
-                <>
-                  <div class="mailbox-panel__selection-summary">
-                    <Checkbox
-                      class="mailbox-panel__select-visible"
-                      data-ui="mailbox-select-visible"
-                      checked={allVisibleSelected()}
-                      indeterminate={someVisibleSelected() && !allVisibleSelected()}
-                      disabled={visibleItems().length === 0 || loading() || deletePending()}
-                      aria-label={allVisibleSelected() ? t("mailbox.clear_selection") : t("mailbox.select_visible")}
-                      onChange={setVisibleMessagesSelected}
-                    />
-                    <span class="mailbox-panel__subtitle" data-ui="mailbox-summary">
-                      {selectedCount() > 0
-                        ? t("mailbox.selected_count", { count: selectedCount() })
-                        : counts().unread > 0
-                          ? t("mailbox.unread_count", { count: counts().unread })
-                          : t("mailbox.caught_up")}
-                    </span>
-                  </div>
-                  <div class="mailbox-panel__actions">
-                    <Show when={selectedCount() > 0}>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        tone="danger"
-                        data-ui="mailbox-delete-selected"
-                        aria-label={t("mailbox.delete_selected", { count: selectedCount() })}
-                        title={t("mailbox.delete_selected", { count: selectedCount() })}
-                        disabled={deletePending() || loading() || !appStore.connected}
-                        onClick={deleteSelectedMessages}
-                      >
-                        <Icon name="delete" size="compact" />
-                      </Button>
-                    </Show>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      tone={counts().unread > 0 ? "accent" : "neutral"}
-                      data-ui="mailbox-mark-all-read"
-                      aria-label={t("mailbox.mark_all_read")}
-                      title={t("mailbox.mark_all_read")}
-                      disabled={counts().unread === 0 || markAllReadPending() || loading() || !appStore.connected}
-                      onClick={() => void markAllAsRead()}
-                    >
-                      <Icon name="mail-check" />
-                    </Button>
-                  </div>
-                </>
-              }
-            >
-              <div class="mailbox-panel__search-shell">
-                <SearchField
-                  class="mailbox-panel__search"
-                  value={query()}
-                  size="sm"
-                  placeholder={t("mailbox.search")}
-                  inputRef={(element) => (searchInput = element)}
-                  onValueChange={setQuery}
-                  onKeyDown={(event) => {
-                    if (event.key !== "Escape") return
-                    event.preventDefault()
-                    closeSearch()
-                  }}
-                  dataUI="mailbox-search"
-                />
-              </div>
-            </Show>
+            <div class="mailbox-panel__search-shell">
+              <SearchField
+                class="mailbox-panel__search"
+                value={query()}
+                size="sm"
+                placeholder={t("mailbox.search")}
+                inputRef={(element) => (searchInput = element)}
+                onValueChange={setQuery}
+                onKeyDown={(event) => {
+                  if (event.key !== "Escape") return
+                  event.preventDefault()
+                  closeSearch()
+                }}
+                dataUI="mailbox-search"
+              />
+            </div>
+          </div>
+        </Show>
+        <Show when={visibleItems().length > 0}>
+          <div class="mailbox-panel__toolbar">
+            <div class="mailbox-panel__selection-summary">
+              <Checkbox
+                class="mailbox-panel__select-visible"
+                data-ui="mailbox-select-visible"
+                checked={allVisibleSelected()}
+                indeterminate={someVisibleSelected() && !allVisibleSelected()}
+                disabled={visibleItems().length === 0 || loading() || deletePending()}
+                aria-label={allVisibleSelected() ? t("mailbox.clear_selection") : t("mailbox.select_visible")}
+                onChange={setVisibleMessagesSelected}
+              />
+              <span class="mailbox-panel__subtitle" data-ui="mailbox-summary">
+                {selectedCount() > 0
+                  ? t("mailbox.selected_count", { count: selectedCount() })
+                  : counts().unread > 0
+                    ? t("mailbox.unread_count", { count: counts().unread })
+                    : t("mailbox.caught_up")}
+              </span>
+            </div>
+            <div class="mailbox-panel__actions">
+              <Show when={selectedCount() > 0}>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  tone="danger"
+                  data-ui="mailbox-delete-selected"
+                  aria-label={t("mailbox.delete_selected", { count: selectedCount() })}
+                  title={t("mailbox.delete_selected", { count: selectedCount() })}
+                  disabled={deletePending() || loading() || !appStore.connected}
+                  onClick={deleteSelectedMessages}
+                >
+                  <Icon name="delete" size="compact" />
+                </Button>
+              </Show>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                tone={counts().unread > 0 ? "accent" : "neutral"}
+                data-ui="mailbox-mark-all-read"
+                aria-label={t("mailbox.mark_all_read")}
+                title={t("mailbox.mark_all_read")}
+                disabled={counts().unread === 0 || markAllReadPending() || loading() || !appStore.connected}
+                onClick={() => void markAllAsRead()}
+              >
+                <Icon name="mail-check" />
+              </Button>
+            </div>
           </div>
         </Show>
       </header>

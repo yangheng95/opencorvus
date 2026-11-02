@@ -3501,8 +3501,12 @@ backend `attention` fact and does not disappear merely because a message was
 read. The left-sidebar surface projects the active Inbox only and represents
 it with a text heading and compact count sourced from the backend `activeCount`;
 the unread/selection summary is plain secondary text. The title and exact active
-count share the heading row with Search. Bulk actions occupy a second row only
-when there are visible messages. The surface exposes no Archived
+count share the heading row with Search. Bulk actions occupy their own row
+while loaded messages are visible. The same selection count, visible-message
+checkbox and delete-selected action remain available during search; they are
+not replaced by the search field. The mark-all-read action is explicitly labeled
+as applying to the entire Inbox, including when a filtered selection is present.
+The surface exposes no Archived
 control. The upper-right left-Dock Mailbox launcher independently projects the
 exact backend `unreadCount` through the shared Badge primitive, visually caps
 counts above 99 as `99+`, and retains the exact count in its accessible label.
@@ -3512,8 +3516,10 @@ Clicking pins a hover-opened Mailbox. Both activities remain mounted, so this
 selection change preserves Mailbox pagination, loaded rows, disclosure, and
 scroll position. Search expands to
 the canonical SearchField only after explicit activation. Search takes the second
-header row while the Inbox heading remains stable; its close button and Escape
-use the same query-clearing operation. Open Task is a separate
+header row while the Inbox heading remains stable; the selection toolbar follows
+it when results are visible. Its close button and Escape use the same
+query-clearing operation. Canceling the existing delete confirmation preserves
+the current query and selected message IDs. Open Task is a separate
 hover/focus action that uses the canonical task ID and directory. The row
 exposes no archive/restore action. Neither reading
 nor navigation infers lifecycle or scheduling decisions from the message body.
