@@ -237,7 +237,7 @@ export async function resolveDiff(
   const matches = group?.changes.filter((change) => change.file === target.filePath) ?? []
   if (matches.length > 1) throw new DiffSelectionError("ambiguous_path")
   const change = matches[0] ?? null
-  if (!change || change.evidence.kind === "incomplete" || hasDiffBody(change) || change.isText !== true) return change
+  if (!change || change.evidence.kind === "incomplete" || hasDiffBody(change) || change.afterAttachment) return change
   if (group?.observationKind === "tool_interval" && change.evidence.receipts.length === 1) {
     const receipt = change.evidence.receipts[0]
     if ("partID" in receipt && receipt.directory && receipt.deferredState) {
@@ -260,6 +260,7 @@ export async function resolveDiff(
         !original ||
         original.file !== change.file ||
         original.status !== change.status ||
+        original.isText !== change.isText ||
         original.additions !== change.additions ||
         original.deletions !== change.deletions
       ) {
@@ -268,6 +269,7 @@ export async function resolveDiff(
       return original
     }
   }
+  if (change.isText !== true) return change
   if (
     group?.observationKind !== "immutable_build_interval" ||
     !group.artifactID ||

@@ -107,3 +107,27 @@
 .diff-empty {
   padding: var(--ui-panel-padding-x);
 }
+
+.diff-recorded-file {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ui-gap-sm);
+  margin: var(--ui-panel-padding-x);
+  padding: var(--ui-panel-padding-x);
+  border: var(--oc-border-width) solid var(--divider-soft);
+  border-radius: var(--oc-radius-soft);
+  background: var(--subtle-1);
+}
+
+.diff-recorded-file__name {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-family: var(--mono);
+  font-size: var(--ui-font-caption);
+  color: var(--text-soft);
+}
+
+.diff-recorded-file > .empty-hint {
+  margin: 0;
+}

@@ -687,6 +687,13 @@ dirty-draft confirmation applies before changing files. The action and its error
 feedback stay bound to the visible source, comparison and API authority; missing
 current files retain the workbench's normal read-error contract.
 The action is labelled as reading the current file, independently of historical edits.
+An attachment-backed create-only Write retains its exact immutable source as a
+read-only FileChange reference. The shared diff renderer labels it as the file
+version at creation and uses the existing authorized original-file download.
+Bounded binary observations resolve through the same canonical Part reader and
+observation-identity checks as text comparisons. Current disk contents never
+populate this reference; incomplete combined intervals expose only their separate
+original records and do not claim one record as the combined final version.
 Single-file Review keeps the same selected diff owner without an inventory or
 filters that cannot change the selection. Multi-file inventories retain their
 search, status filters and independent scrolling. Incomplete Tool intervals with

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [审阅中的已记录文件版本](records/2026-11/2026-11-03-recorded-file-versions.md)：历史内容、当前文件和原始版本入口调查。
+
 - [Issues61/62修复](records/2026-11/2026-11-03-issues-61-62.md)：同任务证据交付、压缩步骤进度及共享恢复审计。
 
 - [Office中断后继续交付](records/2026-11/2026-11-03-office-followup.md)：原会话恢复、项目文件及真实下载验收。

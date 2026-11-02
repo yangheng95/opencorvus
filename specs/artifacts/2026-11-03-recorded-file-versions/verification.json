@@ -1,0 +1,221 @@
+{
+  "at": "2026-11-02T17:44:40.865Z",
+  "scope": "Recorded attachment-backed creation versions; actual existing model-produced Excel history",
+  "manualVisualReview": {
+    "nativeUi": true,
+    "ports": [
+      38654,
+      38655
+    ],
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "screenshots": 10,
+    "currentFileActionChecked": true,
+    "textOriginalComparisonChecked": true,
+    "otherProjectAndReturnChecked": true,
+    "uiAutomationUsed": false
+  },
+  "actualBrowserDownloads": [
+    {
+      "name": "issue-register.xlsx",
+      "bytes": 5891,
+      "createdAt": "2026-11-02T17:39:54.580Z",
+      "canonicalBytesExact": true,
+      "browserLoadedSelectedSource": true,
+      "currentExists": true,
+      "currentBytes": 5895,
+      "equalsCurrent": false
+    },
+    {
+      "name": "issue-register-updated.xlsx",
+      "bytes": 5895,
+      "createdAt": "2026-11-02T17:40:08.294Z",
+      "canonicalBytesExact": true,
+      "browserLoadedSelectedSource": true,
+      "currentExists": false
+    }
+  ],
+  "workbookChecks": [
+    {
+      "file": "issue-register.xlsx",
+      "bytes": 5891,
+      "records": 14,
+      "allFieldsExact": true,
+      "changedRecord": [
+        "B-006",
+        "P1",
+        "open",
+        "周悦",
+        "2026-11-08",
+        "预览表格列宽不足"
+      ],
+      "stats": [
+        [
+          "P0",
+          2
+        ],
+        [
+          "P1",
+          3
+        ],
+        [
+          "P2",
+          2
+        ],
+        [
+          "合计",
+          7
+        ]
+      ],
+      "numericCounts": true
+    },
+    {
+      "file": "issue-register-updated.xlsx",
+      "bytes": 5895,
+      "records": 14,
+      "allFieldsExact": true,
+      "changedRecord": [
+        "B-006",
+        "P1",
+        "closed",
+        "赵敏",
+        "2026-11-05",
+        "预览表格列宽不足"
+      ],
+      "stats": [
+        [
+          "P0",
+          2
+        ],
+        [
+          "P1",
+          2
+        ],
+        [
+          "P2",
+          2
+        ],
+        [
+          "合计",
+          6
+        ]
+      ],
+      "numericCounts": true
+    }
+  ],
+  "validation": {
+    "dataContractTests": 6,
+    "assertions": 11,
+    "typecheckExit": 0,
+    "uiBuildExit": 0,
+    "uiEntry": "main-Bva2WOlA.js",
+    "successfulOperations": [
+      "recorded-contracts-green",
+      "typecheck",
+      "ui-build-after",
+      "read-before-initial",
+      "read-before-final",
+      "read-after-initial",
+      "read-after-final",
+      "mailbox-before-initial",
+      "mailbox-before-final",
+      "mailbox-after-initial",
+      "mailbox-after-final",
+      "canonical-readback",
+      "browser-downloads-actual",
+      "downloads-workbook-contracts",
+      "shutdown-before",
+      "shutdown-after",
+      "settle-before",
+      "settle-after",
+      "retire-before",
+      "retire-after",
+      "qualify-before",
+      "qualify-after",
+      "cleanup-downloads"
+    ]
+  },
+  "preservation": [
+    {
+      "phase": "before",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 271238,
+      "currentRows": 271240,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55391,
+          "after": 55392
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55333,
+          "after": 55334
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 101,
+      "attachments": 263,
+      "filesystemExclusions": 0
+    },
+    {
+      "phase": "after",
+      "schema": 9,
+      "tables": 92,
+      "originalRows": 271240,
+      "currentRows": 271242,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55392,
+          "after": 55393
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55334,
+          "after": 55335
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 101,
+      "attachments": 263,
+      "filesystemExclusions": 0
+    }
+  ],
+  "runtime": {
+    "newModelRequests": 0,
+    "cumulativeRequests": 1309,
+    "existingModelEvidence": "Previous qualified 908/909 gpt-6.1-sol streams; no fresh model request in this read-only batch",
+    "missions": 15,
+    "fullTasks": 4,
+    "mailboxItems": 24,
+    "mailboxUnread": 24,
+    "ownedNativeExitCodes": [
+      0,
+      0
+    ],
+    "publicShutdownStatuses": [
+      200,
+      200
+    ],
+    "credentialAndCatalogCopiesRetired": 4,
+    "sourceCredentialMetadataPreserved": true,
+    "sourceCatalogBytesPreserved": true,
+    "sourceCatalogMetadataPreserved": true,
+    "settlementReserveMs": [
+      3844702,
+      3391422
+    ],
+    "ownedDownloadsCleaned": 2
+  },
+  "limitations": [
+    "A reliable single attachment-backed creation provides its recorded bytes; unsupported aggregate comparisons remain explicitly incomplete.",
+    "Initial ordinary-click download observation found no saved file; subsequent downloadMedia calls returned the two actual files accepted here.",
+    "Browser original-file downloads use authorized cached blob bytes; each click need not issue a second origin request."
+  ]
+}

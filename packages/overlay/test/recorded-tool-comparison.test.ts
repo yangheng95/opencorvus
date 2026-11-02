@@ -1,7 +1,12 @@
 import { afterEach, beforeEach, expect, test } from "bun:test"
 import { captureApiAuthority, configure, renewApiAuthority } from "../src/services/api"
 import { readToolPart } from "../src/services/tool-part"
-import { readRecordedToolComparison } from "../src/services/diff"
+import { readRecordedToolComparison, resolveDiff } from "../src/services/diff"
+import { toolFileChangesFromState } from "../src/utils/tool-file-changes"
+import {
+  CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY,
+  CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY,
+} from "@opencorvus-ai/transport-protocol"
 import { createTauriTransport } from "../src/services/tauri-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
 
@@ -101,4 +106,81 @@ test("an unfinished outcome returns the explicit completed-outcome error", async
   const result = await readToolPart({ ...receipt, authority: captureApiAuthority() }).catch((error) => error)
   expect(result).toBeInstanceOf(Error)
   expect(result.message).toBe("Recorded Tool Part prt_original has no completed outcome")
+})
+
+const attachmentSource = {
+  url: `/attachment/prj_recorded/${"a".repeat(64)}.xlsx`,
+  sha: "a".repeat(64),
+  size: 5895,
+}
+const attachmentState = {
+  status: "completed",
+  output: "Created the requested file",
+  metadata: {
+    filepath: `${directory}/deliverables/issue-register-updated.xlsx`,
+    exists: false,
+    bytes: 5895,
+    source: attachmentSource,
+  },
+}
+
+test("a completed attachment creation projects its exact recorded source and destination filename", async () => {
+  globalThis.fetch = Object.assign(async () => Response.json({ ...part, tool: "write", state: attachmentState }), originalFetch)
+  const result = await readRecordedToolComparison({ ...receipt, fileIndex: 0 })
+  expect(result).toMatchObject({
+    file: "deliverables/issue-register-updated.xlsx",
+    status: "added",
+    isText: false,
+    additions: null,
+    deletions: null,
+    afterAttachment: { url: attachmentSource.url, name: "issue-register-updated.xlsx" },
+    evidence: { kind: "complete", receipts: [{ ...receipt, fileIndex: 0 }] },
+  })
+})
+
+test("a bounded binary observation resolves the exact integrity-bound creation source", async () => {
+  const deferredState = { ...attachmentState, output: attachmentState.output.repeat(200) }
+  const serialized = JSON.stringify(deferredState)
+  const integrity = {
+    kind: "deferred" as const,
+    outputBytes: new TextEncoder().encode(deferredState.output).byteLength,
+    stateBytes: new TextEncoder().encode(serialized).byteLength,
+    stateSha256: Array.from(
+      new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(serialized))),
+      (byte) => byte.toString(16).padStart(2, "0"),
+    ).join(""),
+  }
+  const changes = toolFileChangesFromState({
+    status: "completed",
+    metadata: {
+      [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: integrity,
+      [CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY]: [{
+        fileIndex: 0,
+        filePath: attachmentState.metadata.filepath,
+        status: "added",
+        isText: false,
+        additions: null,
+        deletions: null,
+      }],
+    },
+  }, directory, { ...receipt, deferredState: integrity })
+  const requests: string[] = []
+  globalThis.fetch = Object.assign(async (input: Parameters<typeof fetch>[0]) => {
+    requests.push(new URL(String(input)).pathname)
+    return Response.json({ ...part, tool: "write", state: deferredState })
+  }, originalFetch)
+  const result = await resolveDiff({ filePath: changes[0].file, groupID: "original-creation" }, [{
+    id: "original-creation",
+    observationKind: "tool_interval",
+    additions: null,
+    deletions: null,
+    changes,
+  }])
+  expect(result).toMatchObject({
+    file: "deliverables/issue-register-updated.xlsx",
+    isText: false,
+    afterAttachment: { url: attachmentSource.url, name: "issue-register-updated.xlsx" },
+    evidence: { kind: "complete" },
+  })
+  expect(requests).toEqual(["/session/ses_original/message/msg_original/part/prt_original"])
 })

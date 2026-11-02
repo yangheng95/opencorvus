@@ -71,6 +71,22 @@ export function toolFileChangesFromState(state: unknown, base: string, context?:
   if (!record(state) || state.status !== "completed" || !record(state.metadata)) return []
   const receipt = (fileIndex: number): FileChangeReceipt[] => (context ? [{ ...context, fileIndex }] : [])
   const meta = state.metadata
+  const createdAttachment = conversationAttachmentWriteChange(meta)
+  if (createdAttachment)
+    return [
+      {
+        ...identity(createdAttachment.filePath, createdAttachment.filePath, base),
+        status: createdAttachment.status,
+        isText: false,
+        additions: null,
+        deletions: null,
+        afterAttachment: {
+          url: meta.source.url,
+          name: createdAttachment.filePath.split(/[\\/]/).pop()!,
+        },
+        evidence: { kind: "complete", receipts: receipt(0) },
+      },
+    ]
   const deferred = conversationDeferredToolState(meta)
   const observations = deferred && conversationToolFileChanges(meta)
   if (observations)
@@ -82,18 +98,6 @@ export function toolFileChangesFromState(state: unknown, base: string, context?:
       deletions: row.deletions,
       evidence: { kind: "complete", receipts: receipt(row.fileIndex) },
     }))
-  const createdAttachment = conversationAttachmentWriteChange(meta)
-  if (createdAttachment)
-    return [
-      {
-        ...identity(createdAttachment.filePath, createdAttachment.filePath, base),
-        status: createdAttachment.status,
-        isText: false,
-        additions: null,
-        deletions: null,
-        evidence: { kind: "complete", receipts: receipt(0) },
-      },
-    ]
   if (Array.isArray(meta.files))
     return meta.files.flatMap((raw, index) => {
       const change = record(raw) ? comparison(raw, base, "patch", receipt(index)) : null

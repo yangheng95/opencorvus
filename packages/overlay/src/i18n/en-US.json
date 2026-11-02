@@ -1229,6 +1229,8 @@
   "diff.incomplete.conflicting_receipt": "The recorded results disagree for this change. Inspect the original tool results.",
   "diff.incomplete.unknown_resource": "The saved content references are incomplete. A reliable preview is unavailable.",
   "diff.non_text": "This file is not a text diff.",
+  "diff.recorded_file_title": "File version at creation",
+  "diff.recorded_file_detail": "The contents saved by this creation. Later edits or moves do not change this version.",
   "diff.non_text_short": "Non-text",
   "diff.empty_unchanged": "No text differences in this recorded comparison.",
   "diff.select_file": "Select a file to view its diff.",

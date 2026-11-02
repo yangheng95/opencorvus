@@ -8,6 +8,7 @@ import { createMemo, createSignal, For, Show } from "solid-js"
 import { t, tc } from "../utils/i18n"
 import type { ConversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
 import { Disclosure } from "./ui/Disclosure"
+import { OriginalFileDownload } from "./OriginalFileDownload"
 
 // ── Types ──
 
@@ -52,6 +53,8 @@ export interface FileChange {
   isText?: boolean
   beforeObject?: { oid: string; bytes: number } | null
   afterObject?: { oid: string; bytes: number } | null
+  /** Exact immutable bytes recorded by a single attachment-backed creation. */
+  afterAttachment?: { url: string; name: string }
 }
 
 interface DiffLine {
@@ -212,14 +215,25 @@ export function DiffView(props: DiffViewProps) {
     }
     return t("diff.no_preview")
   })
+  const recordedFile = createMemo(() =>
+    props.item.evidence.kind === "complete" ? props.item.afterAttachment : undefined,
+  )
 
   return (
     <Show
       when={text()}
       fallback={
-        <div class="diff-empty">
-          <p class="empty-hint">{emptyMessage()}</p>
-        </div>
+        <Show when={recordedFile()} fallback={<div class="diff-empty"><p class="empty-hint">{emptyMessage()}</p></div>}>
+          {(file) => (
+            <section class="diff-recorded-file" aria-label={t("diff.recorded_file_title")}>
+              <strong>{t("diff.recorded_file_title")}</strong>
+              <span class="diff-recorded-file__name">{file().name}</span>
+              <p class="empty-hint">{t("diff.recorded_file_detail")}</p>
+              <OriginalFileDownload url={file().url} name={file().name}
+                displayLabel={`${file().name} · ${t("diff.recorded_file_title")}`} />
+            </section>
+          )}
+        </Show>
       }
     >
       {(value) => <TextDiffView before={value().before} after={value().after} />}

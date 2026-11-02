@@ -1229,6 +1229,8 @@
   "diff.incomplete.conflicting_receipt": "此项修改的记录相互冲突。请查看原始工具结果。",
   "diff.incomplete.unknown_resource": "已保存的内容引用不完整，无法提供可靠预览。",
   "diff.non_text": "该文件不是文本差异。",
+  "diff.recorded_file_title": "创建时的文件版本",
+  "diff.recorded_file_detail": "此次创建时保存的内容。后续修改或移动文件不会改变此版本。",
   "diff.non_text_short": "非文本",
   "diff.empty_unchanged": "此项比较的文本内容没有差异。",
   "diff.select_file": "选择文件查看差异。",
