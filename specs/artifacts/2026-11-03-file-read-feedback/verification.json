@@ -1,0 +1,357 @@
+{
+  "at": "2026-11-02T18:18:23.584Z",
+  "scope": "Current file read-failure presentation; exact structured missing error, path identity and localized recovery guidance",
+  "manualVisualReview": {
+    "nativeUi": true,
+    "ports": [
+      38656,
+      38657,
+      38658
+    ],
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "screenshots": 11,
+    "finalUiEntry": "main-CmPUOOWj.js",
+    "finalScreenshots": [
+      "08-final-missing-file-en.jpg",
+      "09-final-missing-file-zh.jpg",
+      "10-final-other-project.jpg",
+      "11-final-project-return.jpg"
+    ],
+    "detailsRetained": true,
+    "manualRetryChecked": true,
+    "existingFileOpenedFromExplorer": true,
+    "otherProjectAndReturnChecked": true,
+    "uiAutomationUsed": false
+  },
+  "fileChecks": [
+    {
+      "phase": "before",
+      "checkpoint": "initial",
+      "contracts": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "actualProjectTextExact": true
+        }
+      ]
+    },
+    {
+      "phase": "before",
+      "checkpoint": "final",
+      "contracts": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "actualProjectTextExact": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "checkpoint": "initial",
+      "contracts": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "actualProjectTextExact": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "checkpoint": "final",
+      "contracts": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "actualProjectTextExact": true
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "checkpoint": "initial",
+      "contracts": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "actualProjectTextExact": true
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "checkpoint": "final",
+      "contracts": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "actualProjectTextExact": true
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "typecheckExit": 0,
+    "uiBuildExits": [
+      0,
+      0
+    ],
+    "nonUiProductContractChanged": false,
+    "newUiTests": 0,
+    "successfulOperations": [
+      "typecheck",
+      "ui-build-after",
+      "ui-build-final",
+      "isolated-migration-proof",
+      "shutdown-before",
+      "settle-before",
+      "retire-before",
+      "qualify-before",
+      "read-before-initial",
+      "mailbox-before-initial",
+      "file-before-initial",
+      "read-before-final",
+      "mailbox-before-final",
+      "file-before-final",
+      "shutdown-after",
+      "settle-after",
+      "retire-after",
+      "qualify-after",
+      "read-after-initial",
+      "mailbox-after-initial",
+      "file-after-initial",
+      "read-after-final",
+      "mailbox-after-final",
+      "file-after-final",
+      "shutdown-final",
+      "settle-final",
+      "retire-final",
+      "qualify-final",
+      "read-final-initial",
+      "mailbox-final-initial",
+      "file-final-initial",
+      "read-final-final",
+      "mailbox-final-final",
+      "file-final-final"
+    ]
+  },
+  "preservation": [
+    {
+      "phase": "before",
+      "sourceSchema": 9,
+      "targetSchema": 9,
+      "tables": 92,
+      "originalRows": 271242,
+      "currentRows": 271244,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55393,
+          "after": 55394
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55335,
+          "after": 55336
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 101,
+      "attachments": 263,
+      "filesystemExclusions": 0
+    },
+    {
+      "phase": "after",
+      "sourceSchema": 9,
+      "targetSchema": 10,
+      "tables": 92,
+      "originalRows": 271244,
+      "currentRows": 271246,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55394,
+          "after": 55395
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55336,
+          "after": 55337
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 101,
+      "attachments": 263,
+      "filesystemExclusions": 0
+    },
+    {
+      "phase": "final",
+      "sourceSchema": 10,
+      "targetSchema": 10,
+      "tables": 92,
+      "originalRows": 271246,
+      "currentRows": 271248,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55395,
+          "after": 55396
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55337,
+          "after": 55338
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 101,
+      "attachments": 263,
+      "filesystemExclusions": 0
+    }
+  ],
+  "isolatedMigration": {
+    "from": 9,
+    "to": 10,
+    "registryTarget": 10,
+    "trigger": "Normal isolated native development startup; registry validation uses only in-memory SQLite",
+    "backup": {
+      "bytes": 125431808,
+      "schema": 9,
+      "tables": 92,
+      "rows": 271244,
+      "allBaselineRowsAndSchemaExact": true,
+      "integrity": "ok"
+    },
+    "sourceDatabasePreserved": true,
+    "allOldBusinessRowsPreserved": true,
+    "peerImplementationOutsideThisCommit": true
+  },
+  "runtime": {
+    "newModelRequests": 0,
+    "cumulativeRequests": 1309,
+    "missions": 15,
+    "fullTasks": 4,
+    "mailboxItems": 24,
+    "mailboxUnread": 24,
+    "ownedNativeExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "publicShutdownStatuses": [
+      200,
+      200,
+      200
+    ],
+    "credentialAndCatalogCopiesRetired": 6,
+    "sourceCredentialMetadataPreserved": true,
+    "sourceCatalogBytesAndMetadataPreserved": true,
+    "settlementReserveMs": [
+      4198190,
+      3789455,
+      3401375
+    ]
+  },
+  "limitations": [
+    "Special missing-file feedback is limited to a genuine 404/FileNotFoundError; unknown failures retain the existing operation summary.",
+    "Current-source reads and read-error presentation were exercised without new model calls or business file writes.",
+    "The migration evidence proves this exact isolated 9-to-10 startup, backup and preserved data; it does not validate every new peer task-resume behavior."
+  ]
+}

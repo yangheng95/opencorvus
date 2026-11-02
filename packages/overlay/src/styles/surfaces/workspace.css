@@ -365,6 +365,14 @@ code .file-link:focus-visible {
   overscroll-behavior: contain;
 }
 
+.file-editor-failure-path {
+  margin-bottom: var(--ui-gap-sm);
+  overflow-wrap: anywhere;
+  font-family: var(--mono);
+  font-size: var(--ui-font-caption);
+  color: var(--text-soft);
+}
+
 .file-editor-image {
   flex: 1 1 0;
   min-width: 0;

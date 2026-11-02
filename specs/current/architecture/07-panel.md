@@ -686,6 +686,11 @@ downloading the current disk file leaves the recorded comparison intact. Existin
 dirty-draft confirmation applies before changing files. The action and its error
 feedback stay bound to the visible source, comparison and API authority; missing
 current files retain the workbench's normal read-error contract.
+The file workbench distinguishes a structured 404/FileNotFoundError from unknown
+read failures. Its localized feedback names the selected path, explains possible
+moves/deletion and offers the existing retry after recovery. The original error
+remains in Details; the loaded target, request authority and retry owner stay the
+same. Unknown read failures keep their operation-specific summary.
 The action is labelled as reading the current file, independently of historical edits.
 An attachment-backed create-only Write retains its exact immutable source as a
 read-only FileChange reference. The shared diff renderer labels it as the file

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件读取失败反馈验收](2026-11-03-file-read-feedback/README.md)：缺失路径、中英恢复说明、正常文件和隔离迁移备份实证。
+
 - [审阅历史文件版本验收](2026-11-03-recorded-file-versions/README.md)：真实新旧 Excel、当前路径和项目切换截图。
 
 - [Issues61/62证据](2026-11-03-issues-61-62/README.md)：聚焦流式/持久化合同及明确的实际验收范围。

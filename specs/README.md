@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件读取失败反馈](records/2026-11/2026-11-03-file-read-feedback.md)：具名错误、真实文件身份与中英恢复提示。
+
 - [审阅中的已记录文件版本](records/2026-11/2026-11-03-recorded-file-versions.md)：历史内容、当前文件和原始版本入口调查。
 
 - [Issues61/62修复](records/2026-11/2026-11-03-issues-61-62.md)：同任务证据交付、压缩步骤进度及共享恢复审计。

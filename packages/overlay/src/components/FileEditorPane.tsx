@@ -231,6 +231,12 @@ export function FileEditorPane() {
     const failure = error()
     return failure && t(failure.messageKey)
   }
+  const missingReadTarget = createMemo(() => {
+    const cause = loadFailure()?.error
+    const body = cause instanceof ApiError ? cause.body : undefined
+    return cause instanceof ApiError && cause.status === 404 && !!body && typeof body === "object" &&
+      (body as { name?: unknown }).name === "FileNotFoundError"
+  })
 
   const comparisonPair = createMemo(() => {
     const read = comparison()
@@ -688,7 +694,7 @@ export function FileEditorPane() {
                   class="file-editor-load-feedback"
                   data-ui="file-editor-load-error"
                   tone="error"
-                  title={t("file_editor.load_failed")}
+                  title={t(missingReadTarget() ? "file_editor.load_missing" : "file_editor.load_failed")}
                   details={loadFailure() ? formatErrorDetails(loadFailure()!.error) : undefined}
                   actions={
                     <Button
@@ -705,7 +711,8 @@ export function FileEditorPane() {
                     </Button>
                   }
                 >
-                  {t("file_editor.load_failed_hint")}
+                  <div class="file-editor-failure-path">{target()?.sourceAbsolutePath || path()}</div>
+                  <div>{t(missingReadTarget() ? "file_editor.load_missing_hint" : "file_editor.load_failed_hint")}</div>
                 </Feedback>
               }
             >
