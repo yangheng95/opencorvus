@@ -174,10 +174,14 @@ function selectOption<T extends string>(options: SelectOption<T>[], value: T): S
 
 function formatTimestamp(value: number | null): string {
   if (!value) return t("automations.never")
-  return new Intl.DateTimeFormat(localeTag(), {
+  const formatter = new Intl.DateTimeFormat(localeTag(), {
     dateStyle: "medium",
     timeStyle: "short",
-  }).format(new Date(value))
+  })
+  return t("automations.timestamp_with_zone", {
+    value: formatter.format(new Date(value)),
+    timeZone: formatter.resolvedOptions().timeZone,
+  })
 }
 
 function nextRunValue(automation: AutomationView): string {

@@ -1263,8 +1263,10 @@ already selected source from the Board reveals that conversation without another
 selection epoch, hydration or file-owner transition.
 
 Scheduled timestamp presentation uses the current application locale while
-retaining the original instant and existing browser time-zone semantics. List,
-detail and search share one localized recurrence summary built from the existing
+retaining the original instant and existing browser time-zone semantics.
+List, detail and run-history timestamps name the same formatter's resolved time
+zone, distinguishing displayed instants from the recurrence's wall-clock zone.
+List, detail and search share one localized recurrence summary built from the existing
 calendar parser. Basic frequency and weekday names use current translations;
 advanced expressions retain their complete authored rule as technical content.
 The machine calendar service owns parsing, serialization and edit comparison,

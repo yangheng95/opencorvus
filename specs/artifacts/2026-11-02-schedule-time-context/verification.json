@@ -1,0 +1,236 @@
+{
+  "batch": 887,
+  "at": "2026-11-02T00:16:02.200Z",
+  "singleAgent": true,
+  "ownedDevPorts": [
+    38596,
+    38597
+  ],
+  "manualVisualReview": true,
+  "images": 10,
+  "uiAutomationTests": "none added, modified, updated or run",
+  "phases": [
+    {
+      "at": "2026-11-02T00:05:15.559Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258862,
+      "current": 258869,
+      "changes": [
+        {
+          "table": "automation_fire",
+          "before": 5,
+          "after": 6
+        },
+        {
+          "table": "automation_project_target",
+          "before": 15,
+          "after": 17
+        },
+        {
+          "table": "automation",
+          "before": 13,
+          "after": 15
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52969,
+          "after": 52970
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52911,
+          "after": 52912
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3979022,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DSE5KBTe.js",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "pairedCredentialCopyRetired": true,
+      "pairedCatalogCopyRetired": true
+    },
+    {
+      "at": "2026-11-02T00:15:01.066Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 258869,
+      "current": 258878,
+      "changes": [
+        {
+          "table": "automation_fire",
+          "before": 6,
+          "after": 7
+        },
+        {
+          "table": "automation_project_target",
+          "before": 17,
+          "after": 20
+        },
+        {
+          "table": "automation",
+          "before": 15,
+          "after": 18
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 52970,
+          "after": 52971
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 52912,
+          "after": 52913
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3403000,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-ghCST1bP.js",
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "pairedCredentialCopyRetired": true,
+      "pairedCatalogCopyRetired": true
+    }
+  ],
+  "checks": [
+    {
+      "label": "before-paused",
+      "at": "2026-11-02T00:03:08.328Z",
+      "httpStatus": 200,
+      "definition": "atm_g0VZlktLX00vdYVyN8Zv",
+      "revision": 2,
+      "status": "paused",
+      "name": "时区显示验收887（未执行）",
+      "recurrence": "DTSTART;TZID=Europe/London:20261204T090000\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hY6kPfHVDg5lcTRFOYg9"
+        ]
+      },
+      "executionMode": "local",
+      "nextRun": 1796374800000,
+      "nextRunISO": "2026-12-04T09:00:00.000Z"
+    },
+    {
+      "label": "after-edited",
+      "at": "2026-11-02T00:13:06.870Z",
+      "httpStatus": 200,
+      "definition": "atm_g0VZlktLX00vdYVyN8Zv",
+      "revision": 3,
+      "status": "paused",
+      "name": "时区显示验收887（已暂停）",
+      "recurrence": "DTSTART;TZID=Europe/London:20261204T090000\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hY6kPfHVDg5lcTRFOYg9"
+        ]
+      },
+      "executionMode": "local",
+      "nextRun": 1796374800000,
+      "nextRunISO": "2026-12-04T09:00:00.000Z",
+      "futureFireCount": 1
+    },
+    {
+      "label": "after-active",
+      "at": "2026-11-02T00:13:23.081Z",
+      "httpStatus": 200,
+      "definition": "atm_g0VZlktLX00vdYVyN8Zv",
+      "revision": 4,
+      "status": "active",
+      "name": "时区显示验收887（已暂停）",
+      "recurrence": "DTSTART;TZID=Europe/London:20261204T090000\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hY6kPfHVDg5lcTRFOYg9"
+        ]
+      },
+      "executionMode": "local",
+      "nextRun": 1796374800000,
+      "nextRunISO": "2026-12-04T09:00:00.000Z",
+      "futureFireCount": 2
+    },
+    {
+      "label": "after-paused",
+      "at": "2026-11-02T00:14:04.085Z",
+      "httpStatus": 200,
+      "definition": "atm_g0VZlktLX00vdYVyN8Zv",
+      "revision": 5,
+      "status": "paused",
+      "name": "时区显示验收887（已暂停）",
+      "recurrence": "DTSTART;TZID=Europe/London:20261204T090000\nRRULE:FREQ=WEEKLY;BYDAY=FR",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hY6kPfHVDg5lcTRFOYg9"
+        ]
+      },
+      "executionMode": "local",
+      "nextRun": 1796374800000,
+      "nextRunISO": "2026-12-04T09:00:00.000Z",
+      "futureFireCount": 2
+    }
+  ],
+  "toolChecks": [
+    {
+      "label": "ui-build-after",
+      "startedAt": 1793577990687,
+      "closedAt": 1793578064967,
+      "code": 0,
+      "signal": null,
+      "childPID": 32216
+    },
+    {
+      "label": "overlay-typecheck",
+      "startedAt": 1793577990717,
+      "closedAt": 1793578021948,
+      "code": 0,
+      "signal": null,
+      "childPID": 4280
+    },
+    {
+      "label": "focused-checks",
+      "startedAt": 1793577990709,
+      "closedAt": 1793578004127,
+      "code": 0,
+      "signal": null,
+      "childPID": 32528
+    }
+  ],
+  "limits": [
+    "Different-zone list and next-run detail verified in en-US and zh-CN",
+    "No populated last-run or run-history timestamp visual case",
+    "Same-zone browser case not separately instantiated",
+    "Native calendar control format unchanged"
+  ],
+  "goal": "active"
+}

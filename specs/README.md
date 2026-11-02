@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [定时任务时间语境](records/2026-11/2026-11-02-schedule-time-context.md)：任务墙钟时区、实际时刻显示与原位编辑保全。
+
 - [Mission 创建表单校验](records/2026-11/2026-11-02-mission-form-validation.md)：空字段本地化反馈、逐项纠正及真实草稿保存编辑。
 
 - [重命名项目的统一显示](records/2026-11/2026-11-02-project-names.md)：现项目名称读取、旧目录检索与真实手动草稿目标。

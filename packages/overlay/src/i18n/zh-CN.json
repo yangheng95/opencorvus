@@ -963,6 +963,7 @@
   "automations.status.paused": "已暂停",
   "automations.automatic_paused": "自动运行已暂停",
   "automations.next_run": "下次：{{value}}",
+  "automations.timestamp_with_zone": "{{value}}（{{timeZone}}）",
   "automations.next": "下次运行",
   "automations.last": "上次运行",
   "automations.never": "从未",

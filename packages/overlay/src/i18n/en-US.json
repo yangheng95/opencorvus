@@ -963,6 +963,7 @@
   "automations.status.paused": "Paused",
   "automations.automatic_paused": "Automatic runs paused",
   "automations.next_run": "Next: {{value}}",
+  "automations.timestamp_with_zone": "{{value}} ({{timeZone}})",
   "automations.next": "Next run",
   "automations.last": "Last run",
   "automations.never": "Never",

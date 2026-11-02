@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [定时任务时间语境](2026-11-02-schedule-time-context.md)：真实未来定义及中英文时间语境复核。
+
 - [Mission 创建表单校验](2026-11-02-mission-form-validation.md)：单一提交校验、字段聚焦与真实草稿验收。
 
 - [重命名项目的统一显示](2026-11-02-project-names.md)：首页、创建与看板使用同一项目名称事实。
