@@ -14,6 +14,7 @@
 
 #### 调整
 
+- 审阅明确说明类型未定的修改记录，筛选无结果时可一次清除条件并恢复文件列表。
 - 聊天文件汇总明确标为修改记录；审阅说明区分历史路径、当前磁盘读取和交付文件，保留原有筛选、比较及项目归属。
 - 收件箱在项目切换、搜索、刷新及批量选择时保持明确的项目和消息归属，搜索中也可完成所选消息操作；交付文件与工具步骤的中英说明更易辨认。
 
@@ -38,6 +39,7 @@
 
 #### Changed
 
+- Explain unknown change types in Review and clear combined filters to recover the file list when no entries match.
 - Label conversation file summaries as recorded changes. Review explains historical paths, current disk reads and delivered files while preserving filtering, comparisons and project ownership.
 - Keep project and message ownership clear across Mailbox project changes, search, refresh and bulk selection, including actions on selected search results. Improve localized file-delivery and tool-step labels.
 
