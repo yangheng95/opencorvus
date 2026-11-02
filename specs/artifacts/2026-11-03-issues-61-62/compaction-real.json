@@ -1,0 +1,40 @@
+{
+  "model": "gpt-6.1-sol",
+  "requests": 6,
+  "maximumRequests": 24,
+  "physicalExit": 0,
+  "credentialCopyRetired": true,
+  "modelCatalogCopyRetired": true,
+  "memoryReaderRetiredByOwnedShutdown": true,
+  "sourceCredentialAndCatalogPreserved": true,
+  "historyMessages": 50,
+  "historyParts": 182,
+  "summaryCharacters": 7120,
+  "summaryInputTokens": 118558,
+  "ordinarySummaryAndCheckpoint": true,
+  "originalUserTextRetained": true,
+  "nativeContinuationCompleted": true,
+  "progress": [
+    {
+      "completedSteps": 0,
+      "stepLimit": 20,
+      "remainingSteps": 20
+    },
+    {
+      "completedSteps": 1,
+      "stepLimit": 20,
+      "remainingSteps": 19
+    }
+  ],
+  "originalBusinessRowsPreserved": true,
+  "changedHistoricalTables": [
+    "memory_chunk",
+    "memory_file",
+    "runtime_execution_capacity_lease",
+    "session"
+  ],
+  "sourceDatabasePreserved": true,
+  "originalProjectsPreserved": 101,
+  "ownedAttachmentNamespacesRetired": true,
+  "reserveMs": 2539458
+}
