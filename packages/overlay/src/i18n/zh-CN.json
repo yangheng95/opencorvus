@@ -2387,6 +2387,8 @@
   "mission_board.task_count.cancelled": "已取消 {{count}}",
   "mission_board.more_tasks": "另有 {{count}} 个",
   "mission_board.pending_interactions": "{{count}} 项等待输入",
+  "mission_board.unmet_requirements": "{{status}} · {{count}} 项未满足",
+  "mission_board.unmet_requirements_for": "{{title}} 的未满足事项（{{count}}）",
   "mission_board.create.action": "创建 Mission",
   "mission_board.create.mode": "创建方式",
   "mission_board.create.manual": "手动创建",

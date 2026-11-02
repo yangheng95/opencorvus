@@ -1219,6 +1219,16 @@ the Mission's lane and acceptance remain owned by the server projection. Each
 browser's native progress fill selector has its own rule so an unsupported
 vendor pseudo-element cannot invalidate the other browser's lane-theme fill.
 
+Blocked Mission cards expose their current outcome's complete unresolved criteria
+through the existing native Disclosure, with a localized blocked/count entry.
+The exact authored items retain their order, text and line breaks. This read-only
+control is a sibling of the card's open button; expanding it does not navigate or
+dispatch work. Its native open state survives ordinary reconciliation of that
+mounted card, while filtering or navigation can retire the owner. The current
+blocked outcome alone owns the criteria; no cached result or inferred next step
+is introduced. Existing summaries, acceptance, lanes and conversation navigation
+retain their owners.
+
 Mission Board draft cards offer separate Edit request and Start actions. The
 editor snapshots exact Mission/directory and original pending text when opened;
 Board refreshes do not replace its authored input. Save uses `mission.editDraft`

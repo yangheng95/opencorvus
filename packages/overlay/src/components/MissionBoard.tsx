@@ -24,6 +24,7 @@ import { SearchField } from "./ui/SearchField"
 import { Feedback } from "./ui/Feedback"
 import { appStore } from "../store/app"
 import { MissionDraftEditDialog, type MissionDraftEditTarget } from "./MissionDraftEditDialog"
+import { Disclosure } from "./ui/Disclosure"
 
 const MISSION_TASK_PREVIEW_LIMIT = 3
 
@@ -96,6 +97,10 @@ function MissionBoardCard(props: {
     }),
   )
   const remainingTasks = createMemo(() => Math.max(0, props.mission.tasks.length - MISSION_TASK_PREVIEW_LIMIT))
+  const blockedOutcome = createMemo(() => {
+    const outcome = props.mission.outcome
+    return outcome?.kind === "blocked" ? outcome : undefined
+  })
 
   return (
     <ContextMenu.Root>
@@ -195,6 +200,31 @@ function MissionBoardCard(props: {
             </Badge>
           </Show>
         </Button>
+        <Show when={blockedOutcome()}>
+          {(outcome) => (
+            <Disclosure.Root class="mission-board-card__blockers">
+              <Disclosure.Trigger
+                indicatorPosition="end"
+                aria-label={t("mission_board.unmet_requirements_for", {
+                  title: props.mission.title,
+                  count: outcome().unresolvedCriteria.length.toLocaleString(localeTag()),
+                })}
+              >
+                <span>
+                  {t("mission_board.unmet_requirements", {
+                    status: t("mission.outcome.blocked"),
+                    count: outcome().unresolvedCriteria.length.toLocaleString(localeTag()),
+                  })}
+                </span>
+              </Disclosure.Trigger>
+              <Disclosure.Content>
+                <ul>
+                  <For each={outcome().unresolvedCriteria}>{(criterion) => <li>{criterion}</li>}</For>
+                </ul>
+              </Disclosure.Content>
+            </Disclosure.Root>
+          )}
+        </Show>
         <Show when={props.mission.pendingPrompt}>
           <div class="mission-board-card__actions">
             <Badge size="sm" tone="muted">

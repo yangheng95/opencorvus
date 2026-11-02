@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Mission 受阻事项的直接阅读](2026-11-02-mission-unmet-requirements/README.md)：实际卡片阅读、原文投影和全旧数据保全证据。
+
 - [Mission 任务结果与完成进度](2026-11-02-mission-task-result-reading/README.md)：真实看板、公开投影及全旧数据保全证据。
 
 - [浮动控件的对话框归属](2026-11-02-floating-control-dialog-ownership/README.md)：模态与页面下拉、无障碍及作品菜单的实际页面证据。

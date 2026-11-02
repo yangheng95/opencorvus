@@ -2388,6 +2388,8 @@
   "mission_board.task_count.cancelled": "{{count}} cancelled",
   "mission_board.more_tasks": "+{{count}} more",
   "mission_board.pending_interactions": "{{count}} awaiting input",
+  "mission_board.unmet_requirements": "{{status}} · {{count}} unmet",
+  "mission_board.unmet_requirements_for": "Unmet requirements for {{title}} ({{count}})",
   "mission_board.create.action": "Create Mission",
   "mission_board.create.mode": "Creation method",
   "mission_board.create.manual": "Create manually",

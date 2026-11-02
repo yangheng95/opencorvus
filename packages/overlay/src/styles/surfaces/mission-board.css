@@ -412,6 +412,31 @@ body {
   gap: var(--ui-gap-sm);
 }
 
+.mission-board-card__blockers {
+  padding: var(--ui-gap-md) var(--ui-gap-lg);
+  border-top: var(--oc-border-width) solid var(--border);
+}
+
+.mission-board-card__blockers > .oc-disclosure__trigger {
+  color: var(--warn);
+}
+
+.mission-board-card__blockers ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-gap-md);
+  margin: var(--ui-gap-sm) 0 0;
+  padding-inline-start: var(--ui-gap-lg);
+  color: var(--text-soft);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
+}
+
+.mission-board-card__blockers li {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .mission-board-card__actions {
   display: flex;
   flex-wrap: wrap;
