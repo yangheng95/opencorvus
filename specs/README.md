@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件搜索结果范围](records/2026-11/2026-11-02-file-search-limit.md)：真实大目录搜索、返回上限和文件导航调查。
+
 - [收件箱筛选批量操作](records/2026-11/2026-11-02-mailbox-search-selection.md)：搜索选择的操作入口、取消及全局已读范围。
 
 - [收件箱项目上下文](records/2026-11/2026-11-02-mailbox-project-context.md)：真实改名、统一分组名称和项目查找刷新。

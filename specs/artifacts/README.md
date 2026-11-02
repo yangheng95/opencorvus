@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件搜索范围验收](2026-11-02-file-search-limit/README.md)：大目录、有界结果、原文件打开与范围提示实图。
+
 - [收件箱筛选选择验收](2026-11-02-mailbox-search-selection/README.md)：筛选勾选、批量确认与取消的实页截图。
 
 - [收件箱项目上下文验收](2026-11-02-mailbox-project-context/README.md)：独立项目改名、原通知与查询实图。

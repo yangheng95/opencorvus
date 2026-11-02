@@ -1183,6 +1183,12 @@ their existing owners. The parent file list remains the one scrollable viewport;
 the virtual container retains the library's total-size geometry. It does not
 hide parent scrolling or own another inner scroll surface.
 Current-language keyboard guidance remains in the file panel.
+File search keeps a visible limit of 80 paths. Its same scoped request asks for
+one additional path; only that returned extra path establishes that more matches
+exist. The current owned result supplies both the first 80 rows and a localized
+inline prompt to narrow the query. A response of exactly 80 paths establishes no
+additional matches. This is neither a total-count projection nor pagination;
+the existing backend matching and ranking contract remains authoritative.
 The key derives from the existing API authority revision, directory, committed
 selection epoch, row kind, physical node type and exact normalized path. All
 rows use those string keys and read current metadata through the same

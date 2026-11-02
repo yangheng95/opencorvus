@@ -1,0 +1,190 @@
+{
+  "at": "2026-11-02T13:35:02.927Z",
+  "manualVisualReview": {
+    "screenshots": 13,
+    "ports": [
+      38645,
+      38646
+    ],
+    "ownedTabs": [
+      216,
+      217
+    ],
+    "allTabsClosed": true,
+    "uiAutomationTests": 0
+  },
+  "phases": {
+    "before": {
+      "at": "2026-11-02T13:23:11.503Z",
+      "kind": "before",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259694,
+      "current": 259696,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53158,
+          "after": 53159
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53100,
+          "after": 53101
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 4145130,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-UkSkKNYj.js"
+    },
+    "after": {
+      "at": "2026-11-02T13:32:14.695Z",
+      "kind": "after",
+      "schema": 9,
+      "tables": 92,
+      "originals": 259696,
+      "current": 259698,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 53159,
+          "after": 53160
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 53101,
+          "after": 53102
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 229,
+      "projects": 100,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1260,
+      "reserveMs": 3599205,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BMjfZzvo.js"
+    }
+  },
+  "native": {
+    "before": {
+      "label": "native-before",
+      "startedAt": 1793625419026,
+      "closedAt": 1793625744062,
+      "code": 0,
+      "signal": null,
+      "childPID": 21496
+    },
+    "after": {
+      "label": "native-after",
+      "startedAt": 1793626023427,
+      "closedAt": 1793626289991,
+      "code": 0,
+      "signal": null,
+      "childPID": 22028
+    },
+    "bothOriginalHandlesConsumed": true,
+    "bothPublicShutdown": 200,
+    "bothPhysicalOutputAndRequestSettled": true,
+    "pairedCredentialAndFullCatalogCopiesRetired": 4
+  },
+  "preservation": {
+    "allOriginalRowsAndSourceDatabases": true,
+    "projectFilesAndGit": 100,
+    "attachmentsExactBytes": 229,
+    "completeMailboxResponses": 24,
+    "unread": 24,
+    "completeMissions": 15,
+    "completeTaskStatuses": 4,
+    "snapshotCount": 4,
+    "fullMatchingFileIdentitySet": 132
+  },
+  "publicSearchContract": {
+    "requestedLimits": [
+      80,
+      81,
+      200
+    ],
+    "returned": [
+      80,
+      81,
+      132
+    ],
+    "specificFile": "keyboard-review-858/entry-126.txt",
+    "specificMatches": 1,
+    "emptyMatches": 0,
+    "cappedSameScoreMemberOrder": "varies with the existing filesystem scan; not asserted equal",
+    "wholeFileSetPreserved": true
+  },
+  "observedBrowserRequests": [
+    {
+      "at": "2026-11-02T13:27:44.704Z",
+      "query": "entry",
+      "requestedLimit": "81",
+      "project": "original-large-project"
+    },
+    {
+      "at": "2026-11-02T13:28:32.910Z",
+      "query": "entry-079.txt",
+      "requestedLimit": "81",
+      "project": "original-large-project"
+    },
+    {
+      "at": "2026-11-02T13:29:07.341Z",
+      "query": "没有匹配的文件906",
+      "requestedLimit": "81",
+      "project": "original-large-project"
+    },
+    {
+      "at": "2026-11-02T13:29:29.112Z",
+      "query": "entry",
+      "requestedLimit": "81",
+      "project": "original-large-project"
+    },
+    {
+      "at": "2026-11-02T13:30:18.455Z",
+      "query": "entry",
+      "requestedLimit": "81",
+      "project": "original-large-project"
+    },
+    {
+      "at": "2026-11-02T13:31:00.419Z",
+      "query": "counter",
+      "requestedLimit": "81",
+      "project": "approved-code-801"
+    }
+  ],
+  "checks": {
+    "overlay-typecheck": 0,
+    "ui-checks": 0,
+    "ui-build-after": 0
+  },
+  "modelRequests": 0,
+  "cumulativeModelRequests": 1260,
+  "limits": [
+    "Exactly 80 matching files was not independently available in the existing project",
+    "No pagination, total-count, or same-score ordering fix",
+    "Service failures, disconnection and in-flight race cases not exercised",
+    "Desktop current System dark theme, EN/CN only",
+    "No model execution or file mutation"
+  ]
+}

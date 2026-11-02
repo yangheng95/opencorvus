@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [文件搜索结果范围](2026-11-02-file-search-limit.md)：既有文件的有界查询与实页验收。
+
 - [收件箱筛选批量操作](2026-11-02-mailbox-search-selection.md)：选择、搜索和取消的真实交互调查。
 
 - [收件箱项目上下文](2026-11-02-mailbox-project-context.md)：项目名称、原消息及查找的一致性调查。

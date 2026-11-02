@@ -174,7 +174,7 @@ async function searchFiles(query: string, scope: ExplorerOperationScope): Promis
   const params = new URLSearchParams({
     query,
     type: "file",
-    limit: String(SEARCH_LIMIT),
+    limit: String(SEARCH_LIMIT + 1),
     directory,
   })
   return (await apiJson(`find/file?${params.toString()}`, { authority: scope.authority })) as string[]
@@ -817,21 +817,23 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       }
     }
   })
-  const currentSearchFailure = createMemo(() => {
+  const currentSearchResult = createMemo(() => {
+    const search = deferredQuery()
+    if (!search) return undefined
     const result = searchResults()
-    return result && result.source === searchSource() && ownsExplorerOperation(result.source) ? result.error : null
+    const latest = searchResults.latest
+    const owned = (value: typeof result) =>
+      value?.query === search && value.source === searchSource() && ownsExplorerOperation(value.source)
+    return owned(result) ? result : owned(latest) ? latest : undefined
   })
+  const currentSearchFailure = createMemo(() => currentSearchResult()?.error ?? null)
+  const searchHasMore = () => (currentSearchResult()?.paths.length ?? 0) > SEARCH_LIMIT
 
   const rows = createMemo<ExplorerRow[]>(() => {
     const scopeKey = JSON.stringify([captureApiAuthority()?.revision ?? null, directory(), boardStore.selectEpoch])
     const search = deferredQuery()
     if (search) {
-      const current = searchResults()
-      const latest = searchResults.latest
-      const owned = (result: typeof current) =>
-        result?.query === search && result.source === searchSource() && ownsExplorerOperation(result.source)
-      const resolved = owned(current) ? current : owned(latest) ? latest : undefined
-      return (resolved?.paths ?? []).map((path) => ({
+      return (currentSearchResult()?.paths ?? []).slice(0, SEARCH_LIMIT).map((path) => ({
         kind: "search",
         key: JSON.stringify([scopeKey, "search", "file", path]),
         path,
@@ -2166,7 +2168,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           </>
         }
       />
-      <Show when={uploading() || uploadFeedback() || mutationFeedback() || expandedDirectoryFailures().length > 0}>
+      <Show when={uploading() || uploadFeedback() || mutationFeedback() || expandedDirectoryFailures().length > 0 || searchHasMore()}>
         <div class="file-explorer-feedback-stack">
           <Show when={uploading()}>
             <Feedback class="file-explorer-feedback" tone="info">
@@ -2202,6 +2204,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
               </Feedback>
             )}
           </For>
+          <Show when={searchHasMore()}>
+            <Feedback class="file-explorer-feedback" tone="info">
+              {t("explorer.search_more", { count: new Intl.NumberFormat(localeTag()).format(SEARCH_LIMIT) })}
+            </Feedback>
+          </Show>
         </div>
       </Show>
       <ContextMenu.Root>
