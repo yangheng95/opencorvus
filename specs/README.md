@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [审阅筛选的状态与恢复](records/2026-11/2026-11-03-change-status-meaning.md)：类型未定含义、无匹配空态与清除全部筛选。
+
 - [文件修改记录的入口与语义](records/2026-11/2026-11-03-file-review-orientation.md)：历史路径、比较入口与真实交付的区分。
 
 - [0.1.43发布](records/2026-11/2026-11-03-release-0.1.43.md)：同任务证据补交、压缩进度与文件体验的冻结发布和交付验收。

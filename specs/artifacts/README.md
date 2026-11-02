@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [审阅筛选状态与恢复验收](2026-11-03-change-status-meaning/README.md)：中英类型说明、无匹配恢复与已知分类实页。
+
 - [文件修改记录入口验收](2026-11-03-file-review-orientation/README.md)：历史修改路径与当前文件的真实页面复核。
 
 - [0.1.43发布证据](2026-11-03-release-0.1.43/README.md)：冻结源码、规范运行、公开资源和三处日志。

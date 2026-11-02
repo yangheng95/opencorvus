@@ -709,6 +709,14 @@ recorded paths. The summary explains that recorded paths may later move or be
 deleted; Review distinguishes recorded changes from its existing current-disk
 read action using that action's localized label. The original paths, counts,
 comparison owners and delivery-file projections remain the sole facts.
+Shared file-change status labels distinguish explicit added, modified and deleted
+facts from an unspecified physical type. Review explains the unclassified category
+when it is selected. Classification continues to use the original optional status;
+text/binary identity and line counts do not establish that physical type.
+An empty filtered result has contextual neutral feedback and one action to clear
+the existing search, status and non-text filters. The same local reset serves
+scope changes and exact Review focus. Selection resumes through its existing
+effect; an empty filter never asks the user to select an unavailable file.
 Incomplete Tool intervals expose their individual original comparisons through
 the recorded Session/Message/Part/file-index receipts. Each disclosure lazily
 uses the same bounded, authority-scoped completed Tool reader and shared diff

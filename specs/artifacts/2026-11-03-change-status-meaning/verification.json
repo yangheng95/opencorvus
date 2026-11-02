@@ -1,0 +1,435 @@
+{
+  "at": "2026-11-02T19:30:10.241Z",
+  "scope": "Shared physical-status meaning and contextual recovery from empty Review filters",
+  "manualVisualReview": {
+    "nativeDevelopmentUi": true,
+    "ports": [
+      38661,
+      38662,
+      38663,
+      38664
+    ],
+    "languages": [
+      "en-US",
+      "zh-CN"
+    ],
+    "screenshots": [
+      "01-before-changed-filter-en.jpg",
+      "02-before-added-files-en.jpg",
+      "03-after-unclassified-en.jpg",
+      "04-intermediate-unknown-en.jpg",
+      "05-recovery-unknown-en.jpg",
+      "06-recovery-unknown-zh.jpg",
+      "07-combined-filter-empty-zh.jpg",
+      "08-cleared-filters-zh.jpg",
+      "09-other-project-zh.jpg",
+      "10-project-return-zh.jpg"
+    ],
+    "finalUiEntry": "main-CEVJSsQU.js",
+    "finalScreenshots": [
+      "05-recovery-unknown-en.jpg",
+      "06-recovery-unknown-zh.jpg",
+      "07-combined-filter-empty-zh.jpg",
+      "08-cleared-filters-zh.jpg",
+      "09-other-project-zh.jpg",
+      "10-project-return-zh.jpg"
+    ],
+    "unknownCategoryZero": true,
+    "knownAddedPaths": 3,
+    "knownNonTextPaths": 2,
+    "definitionShownForSelectedCategory": true,
+    "englishSingleRowFilters": true,
+    "pointerClearAll": true,
+    "keyboardClearAll": true,
+    "combinedSearchStatusAndNonTextRecovery": true,
+    "otherProjectAndExactFocusReturn": true,
+    "uiAutomationUsed": false
+  },
+  "discovery": {
+    "genuineSavedComparisonsRead": 98,
+    "nonemptyUnclassifiedCandidates": 0,
+    "nonemptyUnclassifiedRowUiExercised": false
+  },
+  "validation": {
+    "finalTypecheckExit": 0,
+    "finalUiBuildExit": 0,
+    "docsCheckExit": 0,
+    "apiOperations": 352,
+    "apiGroups": 26,
+    "nonUiProductContractChanged": false
+  },
+  "publicReadChecks": [
+    {
+      "phase": "before",
+      "checkpoint": "initial",
+      "missions": 15,
+      "fullTaskStates": 4,
+      "mailboxActive": 24,
+      "mailboxUnread": 24,
+      "files": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "exactOriginalText": true
+        }
+      ]
+    },
+    {
+      "phase": "before",
+      "checkpoint": "final",
+      "missions": 15,
+      "fullTaskStates": 4,
+      "mailboxActive": 24,
+      "mailboxUnread": 24,
+      "files": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "exactOriginalText": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "checkpoint": "initial",
+      "missions": 15,
+      "fullTaskStates": 4,
+      "mailboxActive": 24,
+      "mailboxUnread": 24,
+      "files": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "exactOriginalText": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "checkpoint": "final",
+      "missions": 15,
+      "fullTaskStates": 4,
+      "mailboxActive": 24,
+      "mailboxUnread": 24,
+      "files": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "exactOriginalText": true
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "checkpoint": "initial",
+      "missions": 15,
+      "fullTaskStates": 4,
+      "mailboxActive": 24,
+      "mailboxUnread": 24,
+      "files": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "exactOriginalText": true
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "checkpoint": "final",
+      "missions": 15,
+      "fullTaskStates": 4,
+      "mailboxActive": 24,
+      "mailboxUnread": 24,
+      "files": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "exactOriginalText": true
+        }
+      ]
+    },
+    {
+      "phase": "recovery",
+      "checkpoint": "initial",
+      "missions": 15,
+      "fullTaskStates": 4,
+      "mailboxActive": 24,
+      "mailboxUnread": 24,
+      "files": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "exactOriginalText": true
+        }
+      ]
+    },
+    {
+      "phase": "recovery",
+      "checkpoint": "final",
+      "missions": 15,
+      "fullTaskStates": 4,
+      "mailboxActive": 24,
+      "mailboxUnread": 24,
+      "files": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "name": "FileNotFoundError",
+          "errorPath": "deliverables/issue-register-updated.xlsx"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text",
+          "exactOriginalText": true
+        }
+      ]
+    }
+  ],
+  "preservation": [
+    {
+      "phase": "before",
+      "sourceSchema": 10,
+      "targetSchema": 10,
+      "tables": 92,
+      "originalRows": 271252,
+      "currentRows": 271254,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55398,
+          "after": 55399
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55340,
+          "after": 55341
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 101,
+      "attachments": 263,
+      "filesystemExclusions": 0
+    },
+    {
+      "phase": "after",
+      "sourceSchema": 10,
+      "targetSchema": 10,
+      "tables": 92,
+      "originalRows": 271254,
+      "currentRows": 271256,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55399,
+          "after": 55400
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55341,
+          "after": 55342
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 101,
+      "attachments": 263,
+      "filesystemExclusions": 0
+    },
+    {
+      "phase": "final",
+      "sourceSchema": 10,
+      "targetSchema": 10,
+      "tables": 92,
+      "originalRows": 271256,
+      "currentRows": 271258,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55400,
+          "after": 55401
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55342,
+          "after": 55343
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 101,
+      "attachments": 263,
+      "filesystemExclusions": 0
+    },
+    {
+      "phase": "recovery",
+      "sourceSchema": 10,
+      "targetSchema": 10,
+      "tables": 92,
+      "originalRows": 271258,
+      "currentRows": 271260,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55401,
+          "after": 55402
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55343,
+          "after": 55344
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 101,
+      "attachments": 263,
+      "filesystemExclusions": 0
+    }
+  ],
+  "runtime": {
+    "newModelRequests": 0,
+    "cumulativeRequests": 1309,
+    "ownedNativeExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "publicShutdownStatuses": [
+      200,
+      200,
+      200,
+      200
+    ],
+    "pairedCredentialAndCatalogCopiesRetired": 8,
+    "sourceCredentialMetadataPreserved": true,
+    "sourceCatalogBytesAndMetadataPreserved": true,
+    "settlementReserveMs": [
+      4387848,
+      4143636,
+      3706223,
+      3257445
+    ]
+  },
+  "limitations": [
+    "The genuine dataset has no nonempty unclassified file-status example; that complete row path was not exercised or replaced with synthetic history.",
+    "The three Added files were already counted correctly; the fix clarifies unspecified status and recovers empty local filters without changing evidence classification.",
+    "No new model request, business file write or historical download-byte repetition was performed."
+  ]
+}

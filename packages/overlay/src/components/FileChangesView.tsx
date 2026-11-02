@@ -14,6 +14,7 @@ import { Button } from "./ui/Button"
 import { FileRowContent } from "./ui/FileRow"
 import { SegmentedControl, type SegmentedControlOption } from "./ui/SegmentedControl"
 import { SearchField } from "./ui/SearchField"
+import { Feedback } from "./ui/Feedback"
 import { Checkbox } from "./ui/Checkbox"
 import { DiffPreviewPanel } from "./DiffPreviewPanel"
 import {
@@ -199,14 +200,17 @@ export function FileChangesView(props: FileChangesViewProps) {
   const [filterQuery, setFilterQuery] = createSignal("")
   const [statusFilter, setStatusFilter] = createSignal<ChangeStatusFilter>("all")
   const [hideNonTextFiles, setHideNonTextFiles] = createSignal(false)
+  const resetFilters = () => {
+    setFilterQuery("")
+    setStatusFilter("all")
+    setHideNonTextFiles(false)
+  }
 
   createEffect(
     on(
       () => props.scopeKey,
       () => {
-        setFilterQuery("")
-        setStatusFilter("all")
-        setHideNonTextFiles(false)
+        resetFilters()
         setSelectedRowKey("")
       },
       { defer: true },
@@ -318,7 +322,7 @@ export function FileChangesView(props: FileChangesViewProps) {
         </>
       ),
       tone: status === "added" ? "ok" : status === "deleted" ? "bad" : status === "modified" ? "accent" : "neutral",
-      title: statusFilterLabel(status),
+      title: status === "changed" ? t("files.status.changed_hint") : statusFilterLabel(status),
     })),
   )
 
@@ -337,9 +341,7 @@ export function FileChangesView(props: FileChangesViewProps) {
   const selectRow = (row: ChangeRowModel) => setSelectedRowKey(row.key)
 
   const focusExactRow = (row: ChangeRowModel) => {
-    setFilterQuery("")
-    setStatusFilter("all")
-    setHideNonTextFiles(false)
+    resetFilters()
     setSelectedRowKey(row.key)
     window.requestAnimationFrame(() => {
       const position = filteredRows().findIndex((candidate) => candidate.key === row.key)
@@ -451,7 +453,22 @@ export function FileChangesView(props: FileChangesViewProps) {
         </p>
         <div class="changes-review-workspace" data-single-file={allRows().length === 1 ? "true" : undefined}>
           <section class="changes-diff-pane" aria-label={t("workspace.diff")}>
-            <DiffPreviewPanel target={selectedDiffTarget()} scopeKey={props.scopeKey || ""} groups={groups()} directory={props.directory} />
+            <Show
+              when={filteredRows().length > 0}
+              fallback={
+                <div class="changes-filter-empty">
+                  <Feedback tone="neutral" actions={
+                    <Button type="button" variant="outline" size="sm" tone="neutral" onClick={resetFilters}>
+                      {t("files.clear_filters")}
+                    </Button>
+                  }>
+                    {t("files.clear_filters_hint")}
+                  </Feedback>
+                </div>
+              }
+            >
+              <DiffPreviewPanel target={selectedDiffTarget()} scopeKey={props.scopeKey || ""} groups={groups()} directory={props.directory} />
+            </Show>
           </section>
 
           <Show when={allRows().length > 1}>
@@ -503,6 +520,9 @@ export function FileChangesView(props: FileChangesViewProps) {
                 </div>
               </Show>
 
+              <Show when={statusFilter() === "changed"}>
+                <p class="changes-status-explanation">{t("files.status.changed_hint")}</p>
+              </Show>
               <ListboxRoot<ChangeRowModel>
                 ref={listEl}
                 class="changes-list"
