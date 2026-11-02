@@ -1309,7 +1309,7 @@
   "chat.artifacts.provider_error": "{{source}} 目录不可用：{{error}}",
   "chat.artifacts.task_failed": "任务失败",
   "chat.artifacts.task_cancelled": "任务已取消",
-  "chat.artifacts.review": "审阅",
+  "chat.artifacts.review": "查看修改",
   "chat.artifacts.show_more": "再显示 {{count}} 项",
   "chat.artifacts.show_less": "收起项目",
   "chat.artifacts.totals": "新增 {{additions}} 行，删除 {{deletions}} 行",
@@ -1327,6 +1327,12 @@
   "chat.artifacts.file_size": "文件大小",
   "chat.artifacts.checksum": "SHA-256 校验值",
   "chat.artifacts.download": "下载",
+  "files.recorded_count": {
+    "one": "文件修改 · {{count}} 个路径",
+    "other": "文件修改 · {{count}} 个路径"
+  },
+  "files.recorded_paths_hint": "记录中的路径可能已被移动或删除。",
+  "files.recorded_comparison_hint": "这里显示已记录的修改；“{{action}}”打开磁盘上的当前内容。",
   "files.select_target": "选择任务查看文件变更",
   "files.none": "当前任务没有文件变更",
   "files.filter_placeholder": "筛选变更文件",

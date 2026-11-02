@@ -1310,7 +1310,7 @@
   "chat.artifacts.provider_error": "{{source}} catalog unavailable: {{error}}",
   "chat.artifacts.task_failed": "Task failed",
   "chat.artifacts.task_cancelled": "Task cancelled",
-  "chat.artifacts.review": "Review",
+  "chat.artifacts.review": "Review changes",
   "chat.artifacts.show_more": "Show {{count}} more items",
   "chat.artifacts.show_less": "Show fewer items",
   "chat.artifacts.totals": "{{additions}} additions and {{deletions}} deletions",
@@ -1328,6 +1328,12 @@
   "chat.artifacts.file_size": "File size",
   "chat.artifacts.checksum": "SHA-256 checksum",
   "chat.artifacts.download": "Download",
+  "files.recorded_count": {
+    "one": "File changes · {{count}} path",
+    "other": "File changes · {{count}} paths"
+  },
+  "files.recorded_paths_hint": "Recorded paths may have since been moved or deleted.",
+  "files.recorded_comparison_hint": "These are recorded changes. “{{action}}” opens the current contents on disk.",
   "files.select_target": "Select a task to view file changes",
   "files.none": "No file changes for this task",
   "files.filter_placeholder": "Filter changed files",

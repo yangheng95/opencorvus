@@ -68,7 +68,7 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
             <Icon name="edit" size="medium" />
           </span>
           <div class="conversation-artifact-summary__identity">
-            <strong>{totals().files > 0 ? tc("files.changed", totals().files) : t("diff.unresolved_title")}</strong>
+            <strong>{totals().files > 0 ? tc("files.recorded_count", totals().files) : t("diff.unresolved_title")}</strong>
             <Show when={totals().additions !== null && totals().deletions !== null}>
               <span
                 class="conversation-artifact-summary__totals"
@@ -100,6 +100,9 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
           </Button>
         </header>
         <div class="conversation-artifact-summary__section">
+          <Show when={fileRows().length > 0}>
+            <p class="conversation-artifact-summary__context">{t("files.recorded_paths_hint")}</p>
+          </Show>
           <div class="conversation-artifact-summary__files">
             <For each={visibleFiles()}>
               {(row) => (

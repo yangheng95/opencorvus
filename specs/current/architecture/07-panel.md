@@ -704,6 +704,11 @@ filters that cannot change the selection. Multi-file inventories retain their
 search, status filters and independent scrolling. Incomplete Tool intervals with
 individual comparisons explain the missing combined comparison once; their
 original comparisons remain separately expandable and keep their own counts.
+Conversation change summaries and multi-file Review label their shared totals as
+recorded paths. The summary explains that recorded paths may later move or be
+deleted; Review distinguishes recorded changes from its existing current-disk
+read action using that action's localized label. The original paths, counts,
+comparison owners and delivery-file projections remain the sole facts.
 Incomplete Tool intervals expose their individual original comparisons through
 the recorded Session/Message/Part/file-index receipts. Each disclosure lazily
 uses the same bounded, authority-scoped completed Tool reader and shared diff

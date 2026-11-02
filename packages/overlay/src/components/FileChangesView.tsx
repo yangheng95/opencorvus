@@ -434,7 +434,7 @@ export function FileChangesView(props: FileChangesViewProps) {
       <Show when={files().length > 0}>
         <Show when={allRows().length > 1}>
           <div class="changes-summary">
-            <span>{tc("files.changed", summary().files)}</span>
+            <span>{tc("files.recorded_count", summary().files)}</span>
             <span class="changes-total">
               <Show when={summaryCommitRef()}>
                 <span class="changes-commit" title={`${t("chat.git.commit")} ${summaryCommitRef()}`}>
@@ -446,6 +446,9 @@ export function FileChangesView(props: FileChangesViewProps) {
           </div>
         </Show>
 
+        <p class="changes-context">
+          {t("files.recorded_comparison_hint", { action: t("diff.open_current_file") })}
+        </p>
         <div class="changes-review-workspace" data-single-file={allRows().length === 1 ? "true" : undefined}>
           <section class="changes-diff-pane" aria-label={t("workspace.diff")}>
             <DiffPreviewPanel target={selectedDiffTarget()} scopeKey={props.scopeKey || ""} groups={groups()} directory={props.directory} />
