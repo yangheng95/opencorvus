@@ -154,12 +154,20 @@ function artifactByteCount(bytes: number): string {
   return t("chat.artifacts.byte_count", { count: new Intl.NumberFormat(localeTag()).format(bytes) })
 }
 
-function ArtifactFileInformation(props: { content: ConversationArtifactContent }) {
+function ArtifactFileInformation(props: { content: ConversationArtifactContent; snapshotID?: string }) {
   return (
     <Disclosure.Root class="conversation-artifact-inspector__file-information" size="sm">
       <Disclosure.Trigger>{t("chat.artifacts.file_information")}</Disclosure.Trigger>
       <Disclosure.Content>
         <dl class="conversation-artifact-inspector__file-facts">
+          <Show when={props.snapshotID}>
+            {(snapshotID) => (
+              <div>
+                <dt>{t("chat.artifacts.snapshot_id")}</dt>
+                <dd><code>{snapshotID()}</code></dd>
+              </div>
+            )}
+          </Show>
           <div>
             <dt>{t("chat.artifacts.media_type")}</dt>
             <dd>{props.content.mediaType}</dd>
@@ -324,7 +332,7 @@ function ArtifactContentView(props: { title: string; content: ConversationArtifa
 
 function SnapshotArtifactView(props: {
   taskID: string
-  title: string
+  displayTitle?: string
   locator: ArtifactReadLocator
   content: ConversationArtifactContent
   onContentChanged?: () => void
@@ -366,9 +374,9 @@ function SnapshotArtifactView(props: {
   })
 
   return (
-    <ArtifactFrame title={props.title} kind={t("chat.artifacts.snapshot_kind")} expandable={false}>
+    <ArtifactFrame title={props.displayTitle ?? t("chat.artifacts.saved_files")} kind={t("chat.artifacts.snapshot_kind")} expandable={false}>
       <div class="conversation-artifact-inspector__snapshot">
-        <ArtifactFileInformation content={props.content} />
+        <ArtifactFileInformation content={props.content} snapshotID={snapshot().snapshot_id} />
         <div class="conversation-artifact-inspector__toolbar">
           <SearchField
             clearable
@@ -427,6 +435,8 @@ function SnapshotArtifactView(props: {
 type ArtifactInspectorProps = {
   taskID: string
   title: string
+  /** Presentation only; the original title continues to own the read request. */
+  displayTitle?: string
   locator: ArtifactReadLocator
   onContentChanged?: () => void
 }
@@ -464,7 +474,7 @@ function ArtifactInspectorContent(props: ArtifactInspectorProps) {
           >
             <SnapshotArtifactView
               taskID={loaded.request.input.taskID}
-              title={loaded.request.input.title}
+              displayTitle={props.displayTitle}
               locator={loaded.request.input.locator}
               content={loaded.content}
               onContentChanged={props.onContentChanged}

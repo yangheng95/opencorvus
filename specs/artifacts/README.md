@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [交付记录名称验收](2026-11-02-delivery-record-labels/README.md)：原始身份与界面名称、语言切换和资源截图。
+
 - [交付预览阅读验收](2026-11-02-artifact-preview-reading/README.md)：真实文件、快照和文件信息截图。
 
 - [子任务直达验收](2026-11-02-mission-child-task-navigation/README.md)：真实TaskID、项目目录、根Session与页面截图。

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [交付记录可读名称](2026-11-02-delivery-record-labels.md)：原快照、资源及中英文状态保留的实页验收。
+
 - [交付文件预览的信息层次](2026-11-02-artifact-preview-reading.md)：原始文件与快照、双语和键盘实页复核。
 
 - [多步任务中的子任务直达](2026-11-02-mission-child-task-navigation.md)：父子入口、原身份和真实跨项目只读体验。

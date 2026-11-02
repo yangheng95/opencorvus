@@ -2,7 +2,9 @@ import { For, Show, createMemo, createSignal } from "solid-js"
 
 import type { CardNode } from "../store/card-tree"
 import type { ArtifactReadLocator } from "../services/conversation-artifact"
+import type { TaskArtifactSnapshotIdentity } from "@opencorvus-ai/plugin/task-artifact"
 import { t, tc } from "../utils/i18n"
+import { distinctIdentitySuffix } from "../utils/identity-suffix"
 import { ConversationArtifactInspector } from "./ConversationArtifactInspector"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
@@ -30,7 +32,17 @@ function outputIdentity(output: DeclaredOutputRow): string {
 }
 
 function artifactTypeLabel(entry: Entry): string {
+  const locator = entry.locator as ArtifactReadLocator
+  if (locator.source === "task_artifact_snapshot") return t("chat.artifacts.snapshot_kind")
+  if (locator.source === "task_artifact_resource") return t("chat.artifacts.file_kind")
   return entry.artifact_type || entry.kind
+}
+
+function artifactSnapshotID(entry: Entry): string | undefined {
+  const locator = entry.locator as ArtifactReadLocator
+  return locator.source === "task_artifact_snapshot"
+    ? (locator.snapshot as TaskArtifactSnapshotIdentity).snapshot_id
+    : undefined
 }
 
 function artifactResourceLabel(entry: Entry): string {
@@ -77,6 +89,9 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
   const [recordsExpanded, setRecordsExpanded] = createSignal(false)
   const [openOutputID, setOpenOutputID] = createSignal("")
   const [openArtifactID, setOpenArtifactID] = createSignal("")
+  const snapshotIDs = createMemo(() =>
+    props.summary.entries.map(artifactSnapshotID).filter((id): id is string => id !== undefined),
+  )
   const outputRows = createMemo<DeclaredOutputRow[]>(() => {
     const rows: DeclaredOutputRow[] = []
     const resources = new Map<string, Extract<DeclaredOutputRow, { kind: "resource" }>>()
@@ -285,7 +300,13 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
                 <For each={props.summary.entries}>
                   {(entry) => {
                     const identity = artifactIdentity(entry)
-                    const title = entry.label || artifactTypeLabel(entry)
+                    const originalTitle = entry.label || entry.artifact_type || entry.kind
+                    const title = createMemo(() => {
+                      const snapshotID = artifactSnapshotID(entry)
+                      if (snapshotID === undefined) return originalTitle
+                      const suffix = distinctIdentitySuffix(snapshotID, snapshotIDs())
+                      return [t("chat.artifacts.saved_files"), suffix].filter(Boolean).join(" · ")
+                    })
                     const open = () => openArtifactID() === identity
                     return (
                       <div class="conversation-artifact-summary__artifact-item">
@@ -298,7 +319,7 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
                           data-artifact-source={entry.source}
                           data-artifact-id={identity}
                           data-selected={open() ? "true" : undefined}
-                          title={title}
+                          title={title()}
                           aria-expanded={open()}
                           onClick={() => {
                             setOpenArtifactID(open() ? "" : identity)
@@ -310,7 +331,7 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
                             <Icon name="file-document" size="compact" />
                           </span>
                           <span class="conversation-artifact-summary__artifact-copy">
-                            <strong>{title}</strong>
+                            <strong>{title()}</strong>
                             <span>{artifactTypeLabel(entry)}</span>
                           </span>
                           <span class="conversation-artifact-summary__artifact-meta">
@@ -321,7 +342,8 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
                         <Show when={open()}>
                           <ConversationArtifactInspector
                             taskID={props.summary.task.id}
-                            title={title}
+                            title={originalTitle}
+                            displayTitle={title()}
                             locator={entry.locator as ArtifactReadLocator}
                             onContentChanged={props.onContentChanged}
                           />

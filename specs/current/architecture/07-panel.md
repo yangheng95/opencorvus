@@ -3943,6 +3943,16 @@ the complete checksum. The content renderer, snapshot selection and request
 owner retain their existing identities when this disclosure opens or closes.
 Resource byte counts in the same inspector use the current locale.
 
+Conversation delivery records derive a localized Saved files caption from an
+actual snapshot locator; simultaneous snapshots use the existing distinguishing
+identity suffix. Snapshot and resource secondary labels use product names,
+while original file paths, authored labels and Engine artifact types retain
+their identity. The complete snapshot identifier is readable inside File
+information. Catalog labels and locators remain unchanged. A record's optional
+display title belongs only to the snapshot frame; the original title still owns
+the request. Locale changes update that caption without replacing the request,
+snapshot search, resource selection or mounted renderer.
+
 JSON Inspector content is projected once from its original text into the shared
 Tree. Scalar descriptions retain value kinds, with JSON string literals preserving
 quotes, escapes and the empty string. Booleans/null keep their literals; numbers

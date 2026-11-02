@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [交付记录的可读名称与原始身份](records/2026-11/2026-11-02-delivery-record-labels.md)：本地化阅读名称、完整标识及稳定请求归属。
+
 - [交付文件预览的信息层次](records/2026-11/2026-11-02-artifact-preview-reading.md)：正文优先，文件信息可展开查看完整原值。
 
 - [多步任务卡片中的子任务直达](records/2026-11/2026-11-02-mission-child-task-navigation.md)：独立打开原子任务，复用精确项目导航。

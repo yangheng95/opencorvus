@@ -1,0 +1,330 @@
+{
+  "at": "2026-11-02T07:42:31.560Z",
+  "goal": "progress; active; single agent",
+  "screenshots": [
+    "01-before-snapshot-record.jpg",
+    "02-before-snapshot-browser.jpg",
+    "03-before-resource-records.jpg",
+    "04-after-snapshot-record-en.jpg",
+    "05-after-snapshot-browser-en.jpg",
+    "06-after-full-snapshot-identity-en.jpg",
+    "07-after-snapshot-filter-selection-en.jpg",
+    "08-after-language-selection-retained-zh.jpg",
+    "09-after-full-snapshot-identity-zh.jpg",
+    "10-after-resource-records-zh.jpg",
+    "11-after-resource-records-en.jpg",
+    "12-after-resource-preview-en.jpg",
+    "13-after-resource-code-content-en.jpg"
+  ],
+  "phases": [
+    {
+      "qualification": {
+        "at": "2026-11-02T07:23:47.380Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259662,
+        "current": 259664,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53142,
+            "after": 53143
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 53084,
+            "after": 53085
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 4221371,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-VmqKCqRv.js"
+      },
+      "retirement": {
+        "phase": "before",
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "publicShutdown": 200,
+        "reserveMs": 4221371,
+        "nativeExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      },
+      "originalHandle": 45573
+    },
+    {
+      "qualification": {
+        "at": "2026-11-02T07:38:46.725Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259664,
+        "current": 259666,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53143,
+            "after": 53144
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 53085,
+            "after": 53086
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 3315472,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-EtX01Pmw.js"
+      },
+      "retirement": {
+        "phase": "after",
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "publicShutdown": 200,
+        "reserveMs": 3315472,
+        "nativeExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      },
+      "originalHandle": 68964
+    }
+  ],
+  "checks": {
+    "overlay-typecheck": {
+      "label": "overlay-typecheck",
+      "startedAt": 1793604322618,
+      "closedAt": 1793604351390,
+      "code": 0,
+      "signal": null,
+      "childPID": 23460
+    },
+    "focused-checks": {
+      "label": "focused-checks",
+      "startedAt": 1793604322626,
+      "closedAt": 1793604336407,
+      "code": 0,
+      "signal": null,
+      "childPID": 32340
+    },
+    "ui-build-after": {
+      "label": "ui-build-after",
+      "startedAt": 1793604322625,
+      "closedAt": 1793604387828,
+      "code": 0,
+      "signal": null,
+      "childPID": 14668
+    }
+  },
+  "originalMissionsExact": 15,
+  "originalTaskStatusesExact": 4,
+  "originalTranscriptAndTurnArtifactConversationsExact": 2,
+  "originalCatalogs": [
+    {
+      "taskID": "tsk_g00VZT7V7400TdQ2J6Sj",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+      "records": [
+        {
+          "label": "批准后提交801：独立只读验收报告",
+          "kind": "expert_output",
+          "locator": {
+            "source": "engine_artifact",
+            "artifact_id": "art_hOvmzkCncRXRLqG17Jzq",
+            "catalog_revision": 93,
+            "expected_sha256": "914937e71c21fd3fd92535ecc05cc008ebcd9460f2e72ebe713a711d241cf330"
+          },
+          "version": {
+            "state": "current",
+            "catalog_revision": 93
+          },
+          "resource_count": 0
+        },
+        {
+          "label": "counter.py",
+          "kind": "task_artifact_resource",
+          "locator": {
+            "source": "task_artifact_resource",
+            "ref": {
+              "snapshot": {
+                "schema_version": 2,
+                "project_id": "prj_hY6kPfHVDg5lcTRFOYg9",
+                "task_id": "tsk_g00VZT7V7400TdQ2J6Sj",
+                "snapshot_id": "0b69a610-bd3d-528e-afca-35f60c919fd6",
+                "manifest_sha256": "2770679af3b0262053b2b5fe280f736246ecfc5cf7caf068ef324315021eee19"
+              },
+              "tree": "resources",
+              "path": "counter.py",
+              "media_type": "text/x-python",
+              "bytes": 45,
+              "sha256": "dd296edd4ef26aa35037a34be9292ce2a0f8f03899abfd8a08b3668034414b46"
+            }
+          },
+          "version": {
+            "state": "immutable",
+            "publication_sequence": 2
+          },
+          "resource_count": 1
+        },
+        {
+          "label": "test_counter.py",
+          "kind": "task_artifact_resource",
+          "locator": {
+            "source": "task_artifact_resource",
+            "ref": {
+              "snapshot": {
+                "schema_version": 2,
+                "project_id": "prj_hY6kPfHVDg5lcTRFOYg9",
+                "task_id": "tsk_g00VZT7V7400TdQ2J6Sj",
+                "snapshot_id": "0b69a610-bd3d-528e-afca-35f60c919fd6",
+                "manifest_sha256": "2770679af3b0262053b2b5fe280f736246ecfc5cf7caf068ef324315021eee19"
+              },
+              "tree": "resources",
+              "path": "test_counter.py",
+              "media_type": "text/x-python",
+              "bytes": 318,
+              "sha256": "a62419650a8f54b1d61fad5e941b95793d5dab025aac985f4f46714d195d65df"
+            }
+          },
+          "version": {
+            "state": "immutable",
+            "publication_sequence": 2
+          },
+          "resource_count": 1
+        }
+      ]
+    },
+    {
+      "taskID": "tsk_g00VZHNpHv00U1GVjV5r",
+      "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project",
+      "records": [
+        {
+          "label": "Task Artifact snapshot b43c89cb-84f7-54f7-a8b4-60f917f4145a",
+          "kind": "task_artifact_snapshot",
+          "locator": {
+            "source": "task_artifact_snapshot",
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hb9YG40tg23d7Y0BDqHw",
+              "task_id": "tsk_g00VZHNpHv00U1GVjV5r",
+              "snapshot_id": "b43c89cb-84f7-54f7-a8b4-60f917f4145a",
+              "manifest_sha256": "b2529ddb8e2b0a2410090285dd03d6c350971282cd282b3ab43287c3a5b7b07b"
+            }
+          },
+          "version": {
+            "state": "immutable",
+            "publication_sequence": 1
+          },
+          "resource_count": 4
+        }
+      ]
+    }
+  ],
+  "resourceRead": {
+    "at": "2026-11-02T07:37:21.362Z",
+    "taskID": "tsk_g00VZT7V7400TdQ2J6Sj",
+    "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+    "locator": {
+      "source": "task_artifact_resource",
+      "ref": {
+        "snapshot": {
+          "schema_version": 2,
+          "project_id": "prj_hY6kPfHVDg5lcTRFOYg9",
+          "task_id": "tsk_g00VZT7V7400TdQ2J6Sj",
+          "snapshot_id": "0b69a610-bd3d-528e-afca-35f60c919fd6",
+          "manifest_sha256": "2770679af3b0262053b2b5fe280f736246ecfc5cf7caf068ef324315021eee19"
+        },
+        "tree": "resources",
+        "path": "counter.py",
+        "media_type": "text/x-python",
+        "bytes": 45,
+        "sha256": "dd296edd4ef26aa35037a34be9292ce2a0f8f03899abfd8a08b3668034414b46"
+      }
+    },
+    "originalCatalogLabel": "counter.py",
+    "status": 200,
+    "bytes": 45,
+    "mediaType": "text/x-python",
+    "originalResourceBodyExact": true
+  },
+  "actualDomObservations": {
+    "snapshotEnglish": {
+      "url": "http://localhost:38630/ui/?taskID=tsk_g00VZHNpHv00U1GVjV5r",
+      "records": [
+        {
+          "identity": "task_artifact:{\"source\":\"task_artifact_snapshot\",\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hb9YG40tg23d7Y0BDqHw\",\"task_id\":\"tsk_g00VZHNpHv00U1GVjV5r\",\"snapshot_id\":\"b43c89cb-84f7-54f7-a8b4-60f917f4145a\",\"manifest_sha256\":\"b2529ddb8e2b0a2410090285dd03d6c350971282cd282b3ab43287c3a5b7b07b\"}}",
+          "text": "Saved filesSnapshot4 resources"
+        }
+      ],
+      "search": "test_invoice"
+    },
+    "snapshotChinese": {
+      "url": "http://localhost:38630/ui/?taskID=tsk_g00VZHNpHv00U1GVjV5r",
+      "records": [
+        {
+          "identity": "task_artifact:{\"source\":\"task_artifact_snapshot\",\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hb9YG40tg23d7Y0BDqHw\",\"task_id\":\"tsk_g00VZHNpHv00U1GVjV5r\",\"snapshot_id\":\"b43c89cb-84f7-54f7-a8b4-60f917f4145a\",\"manifest_sha256\":\"b2529ddb8e2b0a2410090285dd03d6c350971282cd282b3ab43287c3a5b7b07b\"}}",
+          "text": "已保存的文件文件快照4 个资源"
+        }
+      ],
+      "search": "test_invoice"
+    },
+    "resourceEnglish": {
+      "url": "http://localhost:38630/ui/?taskID=tsk_g00VZT7V7400TdQ2J6Sj",
+      "records": [
+        {
+          "identity": "task_artifact:{\"source\":\"task_artifact_resource\",\"ref\":{\"snapshot\":{\"schema_version\":2,\"project_id\":\"prj_hY6kPfHVDg5lcTRFOYg9\",\"task_id\":\"tsk_g00VZT7V7400TdQ2J6Sj\",\"snapshot_id\":\"0b69a610-bd3d-528e-afca-35f60c919fd6\",\"manifest_sha256\":\"2770679af3b0262053b2b5fe280f736246ecfc5cf7caf068ef324315021eee19\"},\"tree\":\"resources\",\"path\":\"counter.py\",\"media_type\":\"text/x-python\",\"bytes\":45,\"sha256\":\"dd296edd4ef26aa35037a34be9292ce2a0f8f03899abfd8a08b3668034414b46\"}}",
+          "text": "counter.pyFile1 resource"
+        }
+      ]
+    }
+  },
+  "localeKeys": [
+    "chat.artifacts.saved_files",
+    "chat.artifacts.file_kind",
+    "chat.artifacts.snapshot_id"
+  ],
+  "limitations": [
+    "Single actual snapshot; multiple distinguishing suffixes not visually covered",
+    "Other sizes, connection rotation, errors and ProjectDeliveries not visually covered",
+    "Read-only UI; no new Provider request; continuous Goal remains active"
+  ]
+}
