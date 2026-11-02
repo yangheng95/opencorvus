@@ -1,0 +1,366 @@
+{
+  "at": "2026-11-02T09:13:29.349Z",
+  "goal": "progress; active; single agent",
+  "screenshots": [
+    "01-before-short-code.jpg",
+    "02-before-long-code.jpg",
+    "03-after-short-code-en.jpg",
+    "04-after-short-expanded-en.jpg",
+    "05-after-short-restored-en.jpg",
+    "06-after-long-code-en.jpg",
+    "07-after-long-inner-scroll-en.jpg",
+    "08-after-long-find-en.jpg",
+    "09-after-long-find-zh.jpg",
+    "10-after-long-expanded-find-zh.jpg",
+    "11-after-long-restored-zh.jpg"
+  ],
+  "phases": [
+    {
+      "qualification": {
+        "at": "2026-11-02T08:21:38.170Z",
+        "kind": "before",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259666,
+        "current": 259668,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53144,
+            "after": 53145
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 53086,
+            "after": 53087
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 3668019,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-EtX01Pmw.js"
+      },
+      "retirement": {
+        "phase": "before",
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "publicShutdown": 200,
+        "reserveMs": 3668019,
+        "nativeExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      },
+      "originalHandle": 48808
+    },
+    {
+      "qualification": {
+        "at": "2026-11-02T09:10:16.264Z",
+        "kind": "after",
+        "schema": 9,
+        "tables": 92,
+        "originals": 259668,
+        "current": 259670,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 53145,
+            "after": 53146
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 53087,
+            "after": 53088
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 229,
+        "projects": 100,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "reserveMs": 752346,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BmRr-eSd.js"
+      },
+      "retirement": {
+        "phase": "after",
+        "requests": 0,
+        "cumulativeRequests": 1260,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "publicShutdown": 200,
+        "reserveMs": 752346,
+        "nativeExit": 0,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        }
+      },
+      "originalHandle": 28565
+    }
+  ],
+  "checks": {
+    "overlay-typecheck": {
+      "label": "overlay-typecheck",
+      "startedAt": 1793607911569,
+      "closedAt": 1793607942854,
+      "code": 0,
+      "signal": null,
+      "childPID": 15324
+    },
+    "focused-checks": {
+      "label": "focused-checks",
+      "startedAt": 1793607911569,
+      "closedAt": 1793607925762,
+      "code": 0,
+      "signal": null,
+      "childPID": 6832
+    },
+    "ui-build-after": {
+      "label": "ui-build-after",
+      "startedAt": 1793607911570,
+      "closedAt": 1793607985324,
+      "code": 0,
+      "signal": null,
+      "childPID": 33344
+    }
+  },
+  "originalMissionsExact": 15,
+  "originalTaskStatusesExact": 4,
+  "originalTranscriptAndTurnArtifactConversationsExact": 2,
+  "resourceRead": {
+    "at": "2026-11-02T08:37:34.707Z",
+    "results": [
+      {
+        "taskID": "tsk_g00VZT7V7400TdQ2J6Sj",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+        "locator": {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hY6kPfHVDg5lcTRFOYg9",
+              "task_id": "tsk_g00VZT7V7400TdQ2J6Sj",
+              "snapshot_id": "0b69a610-bd3d-528e-afca-35f60c919fd6",
+              "manifest_sha256": "2770679af3b0262053b2b5fe280f736246ecfc5cf7caf068ef324315021eee19"
+            },
+            "tree": "resources",
+            "path": "counter.py",
+            "media_type": "text/x-python",
+            "bytes": 45,
+            "sha256": "dd296edd4ef26aa35037a34be9292ce2a0f8f03899abfd8a08b3668034414b46"
+          }
+        },
+        "status": 200,
+        "bytes": 45,
+        "lines": 3,
+        "originalResourceBodyExact": true
+      },
+      {
+        "taskID": "tsk_g00VZHNpHv00U1GVjV5r",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-28\\code-task-commit-authority-737\\project",
+        "locator": {
+          "source": "task_artifact_resource",
+          "ref": {
+            "snapshot": {
+              "schema_version": 2,
+              "project_id": "prj_hb9YG40tg23d7Y0BDqHw",
+              "task_id": "tsk_g00VZHNpHv00U1GVjV5r",
+              "snapshot_id": "b43c89cb-84f7-54f7-a8b4-60f917f4145a",
+              "manifest_sha256": "b2529ddb8e2b0a2410090285dd03d6c350971282cd282b3ab43287c3a5b7b07b"
+            },
+            "tree": "resources",
+            "path": "test_invoice.py",
+            "media_type": "text/x-python",
+            "bytes": 1520,
+            "sha256": "535ad1bbe1b5aa22e2efeed87bc6f2e0d1f5537b7506c200dd98c7911d4ecaf9"
+          }
+        },
+        "status": 200,
+        "bytes": 1520,
+        "lines": 49,
+        "originalResourceBodyExact": true
+      }
+    ]
+  },
+  "actualDomObservations": {
+    "before-short": [
+      {
+        "editorHeight": 220,
+        "frameHeight": 308,
+        "popover": false,
+        "scrollHeight": 195,
+        "scrollerHeight": 195,
+        "title": "counter.py"
+      }
+    ],
+    "before-long": [
+      {
+        "editorHeight": 220,
+        "frameHeight": 308,
+        "popover": false,
+        "scrollHeight": 906,
+        "scrollerHeight": 195,
+        "title": "test_invoice.py"
+      }
+    ],
+    "after-short": [
+      {
+        "editorHeight": 103.5,
+        "frameHeight": 191.5,
+        "popover": false,
+        "readOnly": "true",
+        "scrollHeight": 78,
+        "scrollerHeight": 78,
+        "title": "counter.py"
+      }
+    ],
+    "after-short-expanded": [
+      {
+        "editorHeight": 536,
+        "fullscreenElement": null,
+        "popover": true,
+        "rect": {
+          "height": 624,
+          "width": 1120,
+          "x": 80,
+          "y": 48
+        },
+        "title": "counter.py"
+      }
+    ],
+    "after-short-restored": [
+      {
+        "editorHeight": 103.5,
+        "frameHeight": 191.5,
+        "popover": false,
+        "scrollHeight": 78,
+        "scrollerHeight": 78,
+        "title": "counter.py"
+      }
+    ],
+    "after-long": [
+      {
+        "chatTop": 1484,
+        "editorHeight": 385.5,
+        "frameHeight": 473.5,
+        "frameY": 102.6875,
+        "scrollHeight": 906,
+        "scrollTop": 0,
+        "scrollerHeight": 360,
+        "title": "test_invoice.py"
+      }
+    ],
+    "after-long-inner-tail": [
+      {
+        "chatTop": 1484,
+        "frameY": 102.6875,
+        "scrollHeight": 906,
+        "scrollTop": 546,
+        "scrollerHeight": 360,
+        "title": "test_invoice.py"
+      }
+    ],
+    "after-long-bottom-wheel": [
+      {
+        "chatTop": 1484,
+        "frameY": 102.6875,
+        "scrollTop": 546,
+        "title": "test_invoice.py"
+      }
+    ],
+    "after-long-find": [
+      {
+        "chatTop": 1725,
+        "frameHeight": 529.640625,
+        "frameY": -138.3125,
+        "matches": [
+          {
+            "text": "test_fraction_alignment_and_carry",
+            "y": 287.6875
+          }
+        ],
+        "scrollTop": 430,
+        "scrollerHeight": 360,
+        "search": "test_fraction_alignment_and_carry",
+        "title": "test_invoice.py"
+      }
+    ],
+    "after-long-find-zh": [
+      {
+        "frameHeight": 509.25,
+        "matches": [
+          "test_fraction_alignment_and_carry"
+        ],
+        "scrollTop": 430,
+        "scrollerHeight": 360,
+        "search": "test_fraction_alignment_and_carry",
+        "title": "test_invoice.py"
+      }
+    ],
+    "after-long-expanded": [
+      {
+        "editorHeight": 536,
+        "frameHeight": 624,
+        "fullscreenElement": null,
+        "popover": true,
+        "scrollerHeight": 475,
+        "search": "test_fraction_alignment_and_carry",
+        "title": "test_invoice.py"
+      }
+    ],
+    "after-long-restored": [
+      {
+        "chatTop": 1689,
+        "editorHeight": 385.5,
+        "frameHeight": 473.5,
+        "frameY": -102.3125,
+        "popover": false,
+        "scrollTop": 430,
+        "scrollerHeight": 360,
+        "title": "test_invoice.py"
+      }
+    ]
+  },
+  "localeChanges": 0,
+  "technicalSource": {
+    "title": "CodeMirror Styling Example",
+    "url": "https://codemirror.net/examples/styling/",
+    "repositoryVersion": "@codemirror/view 6.43.14"
+  },
+  "limitations": [
+    "Readonly Code only; editable Code, Diff, Notebook, file workbench and other attachment entries not visually covered",
+    "Other sizes, errors, disconnects and connection rotation not visually covered",
+    "Initial Enter observation was not used as successful matching evidence; explicit visible Next gave the actual match",
+    "No new Provider request; continuous Goal remains active"
+  ]
+}

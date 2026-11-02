@@ -986,21 +986,25 @@
   overscroll-behavior: contain;
 }
 
-.msg-text-attachment .msg-artifact-code {
+.msg-text-attachment .msg-artifact-code,
+.msg-artifact[data-artifact-renderer="Code"]:not(:popover-open) > .msg-artifact__body > .msg-artifact-code[data-read-only="true"] {
   flex: initial;
   min-height: 0;
   max-height: none;
 }
 
-.msg-text-attachment .file-editor-view {
+.msg-text-attachment .file-editor-view,
+.msg-artifact[data-artifact-renderer="Code"]:not(:popover-open) > .msg-artifact__body > .msg-artifact-code[data-read-only="true"] > .file-editor-view {
   flex: initial;
 }
 
-.msg-text-attachment .cm-editor {
+.msg-text-attachment .cm-editor,
+.msg-artifact[data-artifact-renderer="Code"]:not(:popover-open) > .msg-artifact__body > .msg-artifact-code[data-read-only="true"] .cm-editor {
   height: auto;
 }
 
-.msg-text-attachment .cm-scroller {
+.msg-text-attachment .cm-scroller,
+.msg-artifact[data-artifact-renderer="Code"]:not(:popover-open) > .msg-artifact__body > .msg-artifact-code[data-read-only="true"] .cm-scroller {
   max-height: min(50vh, calc(560px * var(--ui-scale)));
   overscroll-behavior: contain;
 }

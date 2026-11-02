@@ -853,6 +853,14 @@ Read-only CodeEditor content keeps a normal keyboard focus entry through the
 existing read-only compartment's content attributes. It remains non-editable
 at both the state and DOM levels; range reveals can focus the same view, and
 navigation/search commands belong to that editor rather than the page.
+Inline read-only Code artifacts share the existing content-sized text-attachment
+editor layout. CodeArtifact projects its actual editable flag as a read-only
+data attribute; the nearest non-open Code frame's direct body/editor children
+own this sizing. Short content uses its native height, while long content uses
+the same bounded inner scroller. Native workspace expansion leaves that selector
+and uses the existing filling layout; closing returns the same mounted editor
+to content sizing. Editor state, measurement and keyboard ownership remain with
+the existing CodeEditor and CodeMirror owners.
 An absolute Source target displays a localized read-only badge in the file
 toolbar's save position. This status derives from the same target that owns
 the editor's read-only mode; editable project-file targets retain their save action.

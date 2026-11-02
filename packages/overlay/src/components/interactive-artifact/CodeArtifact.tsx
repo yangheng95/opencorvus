@@ -31,6 +31,7 @@ export function CodeArtifact(props: { payload: CodePayload }) {
       </div>
       <CodeEditor
         class="msg-artifact-code"
+        data-read-only={!props.payload.editable ? "true" : undefined}
         value={source()}
         path={artifactCodeFilename(props.payload.language, props.payload.filename)}
         ariaLabel={props.payload.title}

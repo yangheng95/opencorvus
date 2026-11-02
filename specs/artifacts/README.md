@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [代码预览密度验收](2026-11-02-code-preview-density/README.md)：真实长短文件、内部滚动和展开收起截图。
+
 - [交付记录名称验收](2026-11-02-delivery-record-labels/README.md)：原始身份与界面名称、语言切换和资源截图。
 
 - [交付预览阅读验收](2026-11-02-artifact-preview-reading/README.md)：真实文件、快照和文件信息截图。
