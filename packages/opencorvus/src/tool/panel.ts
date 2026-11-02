@@ -2043,7 +2043,7 @@ export const PanelTool = Tool.define<ReturnType<typeof panelActionSchemaForAgent
               expectedAcceptanceLedgerArtifactID: baseLedgerID!,
               activeExecutionReference: observation.active_execution_reference!,
             })
-          : await EngineService.resumeMissionTask(shared)
+          : await EngineService.resumeMissionTask({ ...shared, artifactSources: params.artifact_sources })
         return {
           title:
             result.kind === "accepted"

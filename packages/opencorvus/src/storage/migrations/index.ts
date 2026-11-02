@@ -29,4 +29,5 @@ export const DATABASE_MIGRATIONS: readonly SchemaMigration[] = [
   { version: 7, name: "Frozen durable publication and execution owners", ddl: durablePublicationOwners, migrate: preserveHistoricalPublicationOwners },
   { version: 8, name: "Installation lifetime mutation commit receipts", ddl: installationMutationReceipts, migrate: preserveInstallationMutationReceipts },
   { version: 9, name: "Owned interactive artifact snapshots in copied history", ddl: installationMutationReceipts, migrate: preserveCopiedInteractiveArtifacts },
+  { version: 10, name: "Explicit Mission acceptance-resume Artifact delivery receipts", ddl: installationMutationReceipts },
 ]

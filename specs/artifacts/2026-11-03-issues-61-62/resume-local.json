@@ -1,0 +1,68 @@
+{
+  "issue": 61,
+  "tests": 30,
+  "assertions": 274,
+  "files": [
+    {
+      "path": "test/mission-resume-artifact-delivery.test.ts",
+      "pass": 4,
+      "assertions": 31,
+      "exit": 0
+    },
+    {
+      "path": "test/mission-active-repair-boundary.test.ts",
+      "pass": 3,
+      "assertions": 38,
+      "exit": 0
+    },
+    {
+      "path": "test/mission-acceptance-extension.test.ts",
+      "pass": 4,
+      "assertions": 110,
+      "exit": 0
+    },
+    {
+      "path": "test/task-terminal-artifact-closure.test.ts",
+      "pass": 14,
+      "assertions": 72,
+      "exit": 0
+    },
+    {
+      "path": "test/storage/mission-resume-delivery-migration.test.ts",
+      "pass": 1,
+      "assertions": 9,
+      "exit": 0
+    },
+    {
+      "path": "test/storage/database-schema-log.test.ts",
+      "pass": 3,
+      "assertions": 8,
+      "exit": 0
+    },
+    {
+      "path": "test/storage/copied-interactive-artifact-migration.test.ts",
+      "pass": 1,
+      "assertions": 6,
+      "exit": 0
+    }
+  ],
+  "checks": {
+    "backendTypecheck": 0,
+    "apiDocs": {
+      "exit": 0,
+      "ops": 352,
+      "groups": 26
+    },
+    "architecture": {
+      "exit": 0,
+      "documents": 20
+    }
+  },
+  "scope": "Production native service/import/resource/receipt/ingress/migration contracts. Existing Task loop test driver excludes autonomous worker decisions. No remote model or original private Mac business run claimed.",
+  "storage": {
+    "from": 9,
+    "to": 10,
+    "historicalReceiptPayloadPreserved": true
+  },
+  "realProviderRequests": 0
+}

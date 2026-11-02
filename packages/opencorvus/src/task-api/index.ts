@@ -296,15 +296,18 @@ import {
   ArtifactReadInputSchema,
   ArtifactReadLocatorSchema,
   artifactReadLocatorKey,
+  CrossTaskArtifactSourceListSchema,
   type ArtifactReadInput,
   type ArtifactReadLocator,
   type ArtifactSearchRequest,
+  type CrossTaskArtifactSource,
 } from "@opencorvus-ai/plugin/artifact-catalog"
 import {
   importsFromMappings,
   importsFromResolvedCrossTaskArtifactSources,
   listCrossTaskArtifactImportMappings,
   prepareCrossTaskArtifactSourceImports,
+  persistPreparedCrossTaskArtifactImports,
   resolveCrossTaskArtifactSources,
   requireMissionArtifactSourceAuthority,
   requireMissionTaskLineageAuthority,
@@ -3732,6 +3735,7 @@ export namespace EngineService {
       toolPartID: string
       expectedAcceptanceLedgerArtifactID: string | null
       acceptanceGap: MissionAcceptanceGap
+      artifactSources?: readonly CrossTaskArtifactSource[]
     },
   ) {
     const receipt = existing.receipt
@@ -3740,7 +3744,8 @@ export namespace EngineService {
       receipt.mission_session_id !== input.importer.sessionID ||
       receipt.panel_message_id !== input.importer.messageID ||
       receipt.tool_part_id !== input.toolPartID ||
-      JSON.stringify(receipt.acceptance_gap) !== JSON.stringify(MissionAcceptanceGapSchema.parse(input.acceptanceGap))
+      JSON.stringify(receipt.acceptance_gap) !== JSON.stringify(MissionAcceptanceGapSchema.parse(input.acceptanceGap)) ||
+      canonicalJSONValue(receipt.artifact_sources ?? []) !== canonicalJSONValue(input.artifactSources ?? [])
     ) {
       throw new Error(`Mission acceptance-resume tool identity conflicts with receipt ${existing.artifactID}.`)
     }
@@ -3932,7 +3937,9 @@ export namespace EngineService {
     acceptanceGap: MissionAcceptanceGap
     completeEvidenceLocators: ArtifactReadLocator[]
     toolPartID: string
+    artifactSources?: readonly CrossTaskArtifactSource[]
   }) {
+    const artifactSources = CrossTaskArtifactSourceListSchema.parse(input.artifactSources ?? [])
     const reviewed = TerminalLifecycleReferenceSchema.parse(input.reviewedTerminalLifecycleReference)
     const acceptanceGap = MissionAcceptanceGapSchema.parse(input.acceptanceGap)
     if (!sameTerminalLifecycleReference(acceptanceGap.reviewed_terminal_lifecycle_reference, reviewed)) {
@@ -3982,6 +3989,25 @@ export namespace EngineService {
       })
     }
 
+    const resolvedSources = resolveCrossTaskArtifactSources({
+      sources: artifactSources,
+      projectID: Instance.project.id,
+      importer: input.importer,
+    })
+    const priorMappings = listCrossTaskArtifactImportMappings(input.taskID)
+    const requestedImports = importsFromResolvedCrossTaskArtifactSources(resolvedSources)
+    const missingImports = resolvedSources.imports.filter(({ source_task_id, locator }) =>
+      !priorMappings.some((mapping) =>
+        sameCrossTaskArtifactImportSet([{ source_task_id, locator }], importsFromMappings([mapping])),
+      ),
+    )
+    const preparedImports = await prepareCrossTaskArtifactSourceImports({
+      resolved: { imports: missingImports, authorities: resolvedSources.authorities },
+      projectID: Instance.project.id,
+      targetProjectDirectory: taskRootDirectory(task),
+      targetTaskID: input.taskID,
+      importer: input.importer,
+    })
     const now = Date.now()
     const acceptanceLedgerArtifactID = Identifier.deterministic(
       "artifact",
@@ -3989,7 +4015,12 @@ export namespace EngineService {
     )
     const bundle = await buildTaskSessionMessageBundle(
       task,
-      renderMissionAcceptanceRepairMessage(acceptanceGap),
+      [
+        renderMissionAcceptanceRepairMessage(acceptanceGap),
+        ...(artifactSources.length
+          ? ["", "Explicit additional Artifact sources (flat delivery):", JSON.stringify(artifactSources)]
+          : []),
+      ].join("\n"),
       "mission.acceptance_resume",
       "mission",
     )
@@ -4029,6 +4060,18 @@ export namespace EngineService {
                 throw missionTaskResumeLifecycleConflict({ task: current, reviewed })
               }
               if (isTaskCancelled(current)) throw missionTaskResumeLifecycleConflict({ task: current, reviewed })
+              persistPreparedCrossTaskArtifactImports(db, {
+                targetTaskID: input.taskID,
+                prepared: preparedImports.imports,
+                authorities: preparedImports.authorities,
+                timeCreated: now,
+              })
+              const artifactImports = listCrossTaskArtifactImportMappings(input.taskID).filter((mapping) =>
+                requestedImports.some((source) => sameCrossTaskArtifactImportSet([source], importsFromMappings([mapping]))),
+              )
+              if (!sameCrossTaskArtifactImportSet(importsFromMappings(artifactImports), requestedImports)) {
+                throw new Error(`Task ${input.taskID} resume did not persist its exact requested Artifact imports.`)
+              }
               const openedTask = openTaskForContinuationInTransaction({ db, taskID: input.taskID, now })
               appendTaskRewindClearedInTransaction(input.taskID, now, "mission.acceptance_resume")
               const executionEpoch = taskLifecycleProjectionInTransaction(db, input.taskID).epoch
@@ -4070,6 +4113,8 @@ export namespace EngineService {
                 acceptance_ledger_revision_artifact_id: acceptanceLedgerArtifactID,
                 prior_terminal_lifecycle_reference: reviewed,
                 acceptance_gap: acceptanceGap,
+                artifact_sources: artifactSources,
+                artifact_imports: artifactImports,
                 time_accepted: now,
               })
               const artifactID = insertEngineArtifact(db, {

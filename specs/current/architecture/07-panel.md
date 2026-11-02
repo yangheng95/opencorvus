@@ -3468,7 +3468,13 @@ introduced.
 same-Mission child authority; worker and Orchestrator `artifact_read.reads` share the batch implementation. Each Panel chunk binds its observed active execution or terminal occurrence, revalidated around the read. Active inspection provides immutable evidence for coordination, while formal handoff and acceptance retain terminal authority. Terminal acceptance and resume reducers cannot use active-period bytes to fill a later terminal read. Structured results share 40 KiB and text chunks share 24 KiB per call; encoded media attachment URLs share 32 MiB. An item exceeding the media limit returns an explicit error; a batch that fills the limit defers whole remaining media items. `next_reads` contains exact continuation requests to resubmit unchanged. Each visible result retains its current version-2 atomic receipt. Evidence reducers traverse these atoms in the real Tool outcome, including deferred permission results, and match each read to exactly one submitted reference and byte offset. Final completion filters the Session-scoped joined query by the supplied references and accepts only those chunks; multiple receipts in one Tool Part remain distinct evidence. Existing immutable scalar version-2 receipts use the same atomic parser, with no second execution protocol, schema reset or copied evidence store. `resume_task` is the separate mutation for an
 evidence-backed acceptance gap: it binds the reviewed terminal occurrence and
 fully read locators, writes one visible Mission participant message, and
-returns the durable same-Task wake/receipt identity. `send_task_message` keeps
+returns the durable same-Task wake/receipt identity. Optional `artifact_sources`
+explicitly delivers the same flat, Mission-authorized cross-Task source set used
+at creation; provenance references supply no recursive import authority. Exact
+existing imports are reused. Imports, the visible repair Message, epoch, ledger,
+ingress and receipt commit together. The receipt records sources and actual
+import mappings, and replay returns that original accepted delivery after
+validating the same Tool call's identity. `send_task_message` keeps
 its ordinary terminal conversation behavior. These are model-visible control
 facts; Overlay renders the existing Task, message, activity, and Artifact
 projections and does not invent a second acceptance or resume state.

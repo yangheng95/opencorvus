@@ -97,7 +97,7 @@ PASSIVE的busy/部分进度在下次周期继续；非暂态回写错误进入�
 
 ## 数据库版本化迁移
 
-当前版本为9，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
+当前版本为10，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
 `src/storage/migrations/index.ts`，每版保存完整、不可改写的目标 SQL；后续结构或持久
 payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一已完成版本，当前
 `SCHEMA_DDL` 与 typed schema 继续定义唯一业务 reader/writer。`check:database-migrations`
@@ -452,6 +452,14 @@ event 加调用者提供的精确 immutable locator 构成恢复权威。两种�
 不存在旧 `artifact_imports` 输入、latest-wins selector 或 fuzzy recovery。prepare 阶段冻结 source epoch/decision，target Task 与
 imported Artifact 的同一事务再次进行 compare-and-swap（CAS，比较并交换）复核；source 已 reopen
 或换 epoch 时整个 target commit 失败，准备期 TaskArtifact 由既有创建失败清理路径删除。
+同Task验收恢复的`resume_task`可显式追加同一`artifact_sources`平面集合。现有精确source/locator映射复用，
+缺失资源经同一snapshot owner准备；在Task-root ingress owner内，source权威复核、新增import目录、
+可见Mission修复Message、新epoch、ledger、ingress与resume receipt同事务提交，释放owner后dispatch。
+receipt保存原始sources及实际`artifact_imports`映射，same-Tool-call replay先核对请求身份并返回原收据，
+不根据后来改变的source重新解释历史交付。读取时对照不可变import目录核验实际映射；损坏import经typed
+receipt完整性边界投影为`host_fault/evidence_violation`。未引用的准备资源由既有bootstrap recovery回收。
+版本10提升此存储格式的自动迁移栅栏，表布局保持；当前唯一schema允许成对缺省的sources/mappings表示
+无补交的历史receipt，逐字保留其payload，不回填或改写。新receipt记录真实数组，旧二进制拒绝新版本数据库。
 显式交付按用户/后继Task用途定义，业务结构化Artifact即使resources为空也可作为deliverable；仅验收用途的记录仍属evidence，
 同一产物可同时具备两种明确用途。请求实际文件时仍须真实资源；不把全部evidence自动展开为交付，也不以resource数量分类交付意图。
 Reviewer artifact 的 producer Session、completed assistant message、Slice revision、

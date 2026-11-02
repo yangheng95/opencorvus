@@ -8,12 +8,14 @@
 
 #### 修复
 
+- Mission 可在恢复同一任务时显式补交授权的跨任务证据，复用已导入对象，并在耐久收据中记录实际映射；重试和重启保留原有交付，自动数据迁移保留历史收据。
 - 压缩助手的每次请求显示现有配置的步骤上限、已完成和剩余步骤；保存工作笔记后仍保留真实执行进度，帮助在原有余量内完成普通摘要。真实摘要校验及工具耗尽错误保持。
 
 ### en-US
 
 #### Fixed
 
+- Missions can explicitly deliver authorized cross-Task evidence when resuming the same Task, reusing exact existing imports and recording actual mappings in the durable receipt. Retries and restarts retain the accepted delivery; automatic data migration preserves historical receipts.
 - Show the compaction helper's configured step allowance, completed steps and remaining steps in each request. Saved working notes retain actual execution progress so the helper can plan its ordinary summary within the existing allowance. Genuine-summary validation and explicit exhaustion errors remain authoritative.
 
 ## 0.1.42 - 2026-11-02

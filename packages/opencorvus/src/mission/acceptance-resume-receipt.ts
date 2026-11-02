@@ -3,6 +3,15 @@ import { Database, and, eq, sql } from "@/storage/db"
 import { EngineArtifactTable } from "@/engine/engine.sql"
 import { TerminalLifecycleReferenceSchema } from "@/engine/terminal-lifecycle-reference-schema"
 import { MissionAcceptanceGapSchema } from "./acceptance-gap"
+import {
+  CrossTaskArtifactSourceListSchema,
+  CrossTaskArtifactImportMappingSchema,
+} from "@opencorvus-ai/plugin/artifact-catalog"
+import {
+  CrossTaskArtifactImportIntegrityError,
+  listCrossTaskArtifactImportMappings,
+} from "@/engine/cross-task-artifact-import"
+import { canonicalJSONValue } from "@/util/canonical-digest"
 
 export const MissionTaskResumeReceiptSchema = z
   .object({
@@ -19,9 +28,20 @@ export const MissionTaskResumeReceiptSchema = z
     acceptance_ledger_revision_artifact_id: z.string().min(1),
     prior_terminal_lifecycle_reference: TerminalLifecycleReferenceSchema,
     acceptance_gap: MissionAcceptanceGapSchema,
+    artifact_sources: CrossTaskArtifactSourceListSchema.optional(),
+    artifact_imports: z.array(CrossTaskArtifactImportMappingSchema).optional(),
     time_accepted: z.number().int().positive(),
   })
   .strict()
+  .superRefine((receipt, context) => {
+    if ((receipt.artifact_sources === undefined) !== (receipt.artifact_imports === undefined)) {
+      context.addIssue({
+        code: "custom",
+        path: ["artifact_imports"],
+        message: "Resume sources and actual mappings must be recorded together",
+      })
+    }
+  })
 
 export class MissionTaskResumeReceiptIntegrityError extends Error {
   override readonly name = "MissionTaskResumeReceiptIntegrityError"
@@ -51,6 +71,28 @@ export function readMissionTaskResumeReceipt(taskID: string, identity: { toolCal
   const parsed = MissionTaskResumeReceiptSchema.safeParse(row.payload)
   if (!parsed.success || parsed.data.task_id !== taskID) {
     throw new MissionTaskResumeReceiptIntegrityError(`Task ${taskID} has an invalid Mission resume receipt ${row.id}.`)
+  }
+  try {
+    const actual = listCrossTaskArtifactImportMappings(taskID)
+    const recorded = parsed.data.artifact_imports ?? []
+    const sources = parsed.data.artifact_sources ?? []
+    const identities = new Set<string>()
+    for (const mapping of recorded) {
+      const key = canonicalJSONValue(mapping)
+      if (
+        identities.has(key) ||
+        !sources.some((source) => source.source_task_id === mapping.source_task_id) ||
+        !actual.some((candidate) => canonicalJSONValue(candidate) === key)
+      ) {
+        throw new MissionTaskResumeReceiptIntegrityError(
+          `Task ${taskID} resume receipt ${row.id} has an invalid actual import mapping.`,
+        )
+      }
+      identities.add(key)
+    }
+  } catch (error) {
+    if (!(error instanceof CrossTaskArtifactImportIntegrityError)) throw error
+    throw new MissionTaskResumeReceiptIntegrityError(error.message, { cause: error })
   }
   return { artifactID: row.id, receipt: parsed.data }
 }

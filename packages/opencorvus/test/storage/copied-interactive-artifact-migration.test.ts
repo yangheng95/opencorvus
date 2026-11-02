@@ -71,7 +71,7 @@ test("version nine preserves copied payloads and exact retained coverage through
     const repairedCheckpoint = readPart(checkpoint.id) as Message.CompactionPart
     const repairedDependent = readPart(dependent.id) as Message.CompactionPart
     expect({ from: receipt.from, to: receipt.to, version: schemaVersion(sqlite), copies, source: query("SELECT * FROM interactive_artifact WHERE id='artifact'")[0], messages: query("SELECT * FROM message ORDER BY id"), foreign: query("SELECT * FROM part WHERE id='foreign-display'")[0] }).toEqual({
-      from: 8, to: 9, version: 9, copies: [{ ...source, id: newID, message_id: "copy" }], source, messages, foreign,
+      from: 8, to: DATABASE_MIGRATIONS.at(-1)!.version, version: DATABASE_MIGRATIONS.at(-1)!.version, copies: [{ ...source, id: newID, message_id: "copy" }], source, messages, foreign,
     })
     expect({ repaired, second: readPart(second.id), checkpoint: repairedCheckpoint, dependent: repairedDependent }).toEqual({
       repaired: { ...display, artifactID: newID }, second: { ...second, artifactID: newID },
@@ -85,9 +85,9 @@ test("version nine preserves copied payloads and exact retained coverage through
     expect(backup.query("SELECT id,message_id,payload FROM interactive_artifact").all()).toEqual([{ id: "artifact", message_id: "original", payload }])
     const settled = query("SELECT * FROM part ORDER BY id")
     const reopen = migrateSchema({ sqlite, databasePath, migrations: DATABASE_MIGRATIONS, currentDDL: DATABASE_MIGRATIONS.at(-1)!.ddl, validate() {} })
-    expect({ from: reopen.from, to: reopen.to, parts: query("SELECT * FROM part ORDER BY id"), artifacts: query("SELECT * FROM interactive_artifact WHERE message_id='copy'") }).toEqual({ from: 9, to: 9, parts: settled, artifacts: copies })
+    expect({ from: reopen.from, to: reopen.to, parts: query("SELECT * FROM part ORDER BY id"), artifacts: query("SELECT * FROM interactive_artifact WHERE message_id='copy'") }).toEqual({ from: DATABASE_MIGRATIONS.at(-1)!.version, to: DATABASE_MIGRATIONS.at(-1)!.version, parts: settled, artifacts: copies })
     using reader = new SQLite(databasePath, { readonly: true })
-    expect({ version: schemaVersion(reader), payload: reader.query("SELECT payload FROM interactive_artifact WHERE id=?").get(newID) }).toEqual({ version: 9, payload: { payload } })
+    expect({ version: schemaVersion(reader), payload: reader.query("SELECT payload FROM interactive_artifact WHERE id=?").get(newID) }).toEqual({ version: DATABASE_MIGRATIONS.at(-1)!.version, payload: { payload } })
   } finally {
     sqlite.close(true)
     fs.rmSync(directory, { recursive: true, force: true })

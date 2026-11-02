@@ -46,6 +46,31 @@ export const CROSS_TASK_PLAIN_ENGINE_ARTIFACT_TYPE = "opencorvus/imported-engine
 export const CROSS_TASK_TASK_ARTIFACT_SNAPSHOT_TYPE = "opencorvus/imported-task-artifact-snapshot"
 export const CROSS_TASK_TASK_ARTIFACT_RESOURCE_TYPE = "opencorvus/imported-task-artifact-resource"
 
+export class CrossTaskArtifactImportIntegrityError extends Error {
+  override readonly name = "CrossTaskArtifactImportIntegrityError"
+  readonly code = "CROSS_TASK_ARTIFACT_IMPORT_INTEGRITY_INVALID"
+
+  constructor(
+    readonly taskID: string,
+    readonly artifactID: string,
+    message: string,
+    options?: ErrorOptions,
+  ) {
+    super(message, options)
+  }
+}
+
+export class CrossTaskArtifactLineageAuthorityError extends Error {
+  override readonly name = "CrossTaskArtifactLineageAuthorityError"
+  readonly code = "CROSS_TASK_ARTIFACT_LINEAGE_AUTHORITY_INVALID"
+  constructor(
+    readonly sourceTaskID: string,
+    message: string,
+  ) {
+    super(message)
+  }
+}
+
 export type CrossTaskArtifactImporter = Readonly<{
   missionID: string
   sessionID: string
@@ -188,7 +213,10 @@ export function requireMissionTaskLineageAuthority(input: {
 }) {
   const sourceTask = requireTask(input.sourceTaskID)
   if (sourceTask.project_id !== input.projectID) {
-    throw new Error(`Cross-Task Artifact source ${input.sourceTaskID} belongs to another project`)
+    throw new CrossTaskArtifactLineageAuthorityError(
+      input.sourceTaskID,
+      `Cross-Task Artifact source ${input.sourceTaskID} belongs to another project`,
+    )
   }
   const metadata = sourceTask.metadata as
     | { actor?: unknown; mission?: { id?: unknown; session_id?: unknown } }
@@ -198,7 +226,8 @@ export function requireMissionTaskLineageAuthority(input: {
     metadata.mission?.id !== input.importer.missionID ||
     metadata.mission?.session_id !== input.importer.sessionID
   ) {
-    throw new Error(
+    throw new CrossTaskArtifactLineageAuthorityError(
+      input.sourceTaskID,
       `Cross-Task Artifact source ${input.sourceTaskID} is outside Mission ${input.importer.missionID} lineage`,
     )
   }
@@ -271,9 +300,7 @@ export function resolveCrossTaskArtifactSources(input: {
       sourceAuthority,
     })
   }
-  CrossTaskArtifactImportListSchema.parse(
-    imports.map(({ source_task_id, locator }) => ({ source_task_id, locator })),
-  )
+  CrossTaskArtifactImportListSchema.parse(imports.map(({ source_task_id, locator }) => ({ source_task_id, locator })))
   return Object.freeze({
     imports: Object.freeze(
       imports.toSorted(
@@ -686,18 +713,28 @@ export function listCrossTaskArtifactImportMappings(taskID: string): CrossTaskAr
       payloadText = new TextDecoder("utf-8", { fatal: true }).decode(row.rawPayload)
     } catch (cause) {
       if (!catalogSignalsImport) continue
-      throw new Error(`Imported cross-Task Artifact ${row.id} payload is not valid UTF-8`, {
-        cause,
-      })
+      throw new CrossTaskArtifactImportIntegrityError(
+        taskID,
+        row.id,
+        `Imported cross-Task Artifact ${row.id} payload is not valid UTF-8`,
+        {
+          cause,
+        },
+      )
     }
     let rawPayload: unknown
     try {
       rawPayload = JSON.parse(payloadText)
     } catch (cause) {
       if (!catalogSignalsImport) continue
-      throw new Error(`Imported cross-Task Artifact ${row.id} payload is not valid JSON`, {
-        cause,
-      })
+      throw new CrossTaskArtifactImportIntegrityError(
+        taskID,
+        row.id,
+        `Imported cross-Task Artifact ${row.id} payload is not valid JSON`,
+        {
+          cause,
+        },
+      )
     }
     const payloadSignalsImport =
       rawPayload !== null &&
@@ -711,23 +748,35 @@ export function listCrossTaskArtifactImportMappings(taskID: string): CrossTaskAr
       sha256(row.rawPayload) === row.payloadSHA256 ? undefined : "payload_sha256",
     ].filter((value): value is string => value !== undefined)
     if (identityMismatches.length > 0) {
-      throw new Error(
+      throw new CrossTaskArtifactImportIntegrityError(
+        taskID,
+        row.id,
         `Imported cross-Task Artifact ${row.id} exact payload identity is corrupt: ${identityMismatches.join(", ")}`,
       )
     }
 
     const envelopeResult = EngineArtifactEnvelopeSchema.safeParse(rawPayload)
     if (!envelopeResult.success) {
-      throw new Error(
+      throw new CrossTaskArtifactImportIntegrityError(
+        taskID,
+        row.id,
         `Imported cross-Task Artifact ${row.id} transport envelope is corrupt: ${envelopeResult.error.message}`,
       )
     }
     const envelope = envelopeResult.data
     if (!envelope.import_lineage) {
-      throw new Error(`Imported cross-Task Artifact ${row.id} is missing its immutable import_lineage`)
+      throw new CrossTaskArtifactImportIntegrityError(
+        taskID,
+        row.id,
+        `Imported cross-Task Artifact ${row.id} is missing its immutable import_lineage`,
+      )
     }
     if (envelope.producer.owner_kind !== "mission") {
-      throw new Error(`Imported cross-Task Artifact ${row.id} producer is not its Mission importer`)
+      throw new CrossTaskArtifactImportIntegrityError(
+        taskID,
+        row.id,
+        `Imported cross-Task Artifact ${row.id} producer is not its Mission importer`,
+      )
     }
 
     const derived = deriveEngineArtifactCatalogMetadata({ kind: row.kind, payloadText })
@@ -746,11 +795,25 @@ export function listCrossTaskArtifactImportMappings(taskID: string): CrossTaskAr
         : "catalog_search_text_truncated",
     ].filter((value): value is string => value !== undefined)
     if (catalogMismatches.length > 0) {
-      throw new Error(
+      throw new CrossTaskArtifactImportIntegrityError(
+        taskID,
+        row.id,
         `Imported cross-Task Artifact ${row.id} catalog metadata is corrupt: ${catalogMismatches.join(", ")}`,
       )
     }
 
+    const duplicate = mappings.find(
+      (mapping) =>
+        mapping.source_task_id === envelope.import_lineage!.source_task_id &&
+        stableJSON(mapping.source_locator) === stableJSON(envelope.import_lineage!.source_locator),
+    )
+    if (duplicate) {
+      throw new CrossTaskArtifactImportIntegrityError(
+        taskID,
+        row.id,
+        `Imported cross-Task Artifact ${row.id} duplicates exact source mapping ${duplicate.imported_locator.artifact_id}`,
+      )
+    }
     mappings.push({
       source_task_id: envelope.import_lineage.source_task_id,
       source_locator: envelope.import_lineage.source_locator,

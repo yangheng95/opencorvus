@@ -508,6 +508,9 @@ export const PanelCapabilityRegistry = list(
       acceptance_gap: MissionAcceptanceGapInputSchema.describe(
         "Exact failed or unresolved criteria, preserved acceptances, current ledger revision, workflow ownership, and completely read evidence for the next execution epoch. The Host renders the visible Mission repair Message from this single structure.",
       ),
+      artifact_sources: CrossTaskArtifactSourceListSchema.optional().describe(
+        "Explicit additional cross-Task evidence to deliver atomically with this same-Task resume. Uses the current Mission's completion-decision or terminal-lifecycle authority. Only this flat source set is imported; provenance references never authorize recursive delivery. Exact existing imports are reused and the accepted receipt records actual mappings.",
+      ),
     },
   }),
   item({
