@@ -1,0 +1,22 @@
+{
+  "verifiedAt": "2026-11-03T17:49:39.756Z",
+  "source": "38da0903b96e412532b2778da4a8491e4ac9525a",
+  "checker": "Actual git sparse-checkout check-rules; actual production asset list extracted with Python AST",
+  "rules": "/*\n!/specs/artifacts/\n",
+  "selectedFiles": 7030,
+  "selectedUncompressedBytes": 173675288,
+  "productionConfigurationAssets": [
+    "deploy/racknerd/Caddyfile",
+    "deploy/racknerd/deploy-signing-public.pem",
+    "deploy/racknerd/opencorvus-activate-release",
+    "deploy/racknerd/opencorvus-deploy.sudoers",
+    "deploy/racknerd/opencorvus-registry-backup",
+    "deploy/racknerd/opencorvus-registry-backup.service",
+    "deploy/racknerd/opencorvus-registry-backup.timer",
+    "deploy/racknerd/opencorvus-web.service",
+    "deploy/racknerd/production.env.example",
+    "specs/current/architecture/public-website.md",
+    "specs/records/2026-08/2026-08-12-opencorvus-production-database-bootstrap-configuration.md"
+  ],
+  "scope": "Positive mapping of every current production configuration asset through the actual Git rule engine; full live workflow acceptance remains required"
+}
