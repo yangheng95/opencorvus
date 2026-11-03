@@ -39,7 +39,10 @@ format and platform artifacts remain available within the original run budget.
 
 Native packaging, format, transfer and deadline helpers check out all product
 inputs while excluding `specs/` evidence. Release preparation retains the complete
-checkout for its generated fixed-point and documentation checks. The shared Bun
+checkout for its generated fixed-point and documentation checks. Website archive,
+build and deployment jobs use that same product-tree checkout, retaining the root
+changelog and all generated website inputs while excluding `specs/` evidence.
+The shared Bun
 dependency cache is keyed by the root workspace `bun.lock`, which owns the actual
 installed dependency graph. Run the existing `build-overlays` Intel preflight
 from main to establish its dependency cache before canonical Intel publication,
