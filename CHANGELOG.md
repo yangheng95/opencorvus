@@ -4,6 +4,52 @@
 
 ## 未发布
 
+## 0.1.44 - 2026-11-04
+
+### zh-CN
+
+#### 新增
+
+- 首页创建持续目标时显示当前项目和模型；未选择模型时明确显示继承配置，全局入口说明开始时会创建新项目。
+- 文件浏览工具显示当前项目名称和完整目录，隐藏侧栏或切换同名文件时仍可辨认文件归属。
+
+#### 调整
+
+- 项目侧栏提供独立的展开箭头和项目名称入口；收起、展开分组保留当前对话与未发送草稿，点击名称打开对应项目，菜单和定位操作保持连续的键盘焦点。
+
+#### 修复
+
+- 审阅中清除无匹配的筛选后，焦点回到文件列表，可直接使用方向键和回车继续选择文件。
+- 新建空 Markdown 文件后直接进入源码编辑并接续编辑焦点；初始视图依据首次成功读取的真实内容决定，非空文档仍默认预览，保存、重载和取消离开保留原有行为。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 10，保留用户数据与既有自动迁移；旧版本程序不能直接打开已升级的数据库。
+- 切换会话后来源文件首次打开的交互仍在调查，本版不宣称修复；界面实页验收与一次有界目标交付只证明各自覆盖范围。
+- macOS 仍为临时签名，未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Show the current project and model when starting a continuous goal from Home. An empty model selection explicitly inherits configuration, and the global entry explains that starting creates a new project.
+- Display the current project name and full directory in the file browser, keeping ownership visible with the sidebar hidden or similarly named files in different projects.
+
+#### Changed
+
+- Separate project disclosure arrows from project-name navigation. Collapsing or expanding a group retains the current conversation and unsent draft; names open the corresponding project, with continuous keyboard focus for menus and location actions.
+
+#### Fixed
+
+- Return focus to the Review file list after clearing filters with no matches, so arrow keys and Enter can immediately select files.
+- Open newly created empty Markdown files directly in Source with editor focus. Choose the initial view from the first successful content read; nonempty documents still start in Preview, retaining existing save, reload and leave-cancellation behavior.
+
+#### Upgrade impact and known limitations
+
+- Database version remains 10, retaining user data and existing automatic migrations. Older application versions cannot directly open an upgraded database.
+- First opening a source file after switching conversations remains under investigation; this release does not claim a fix. Manual interface reviews and one bounded goal delivery establish only their stated scope.
+- macOS remains ad hoc signed without Apple notarization.
+
 ## 0.1.43 - 2026-11-03
 
 ### zh-CN

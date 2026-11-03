@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [0.1.44发布](records/2026-11/2026-11-04-release-0.1.44.md)：项目语境、侧栏操作与空Markdown编辑的冻结发布及交付验收。
+
 - [空Markdown文件的开始编辑](records/2026-11/2026-11-03-empty-markdown-editing.md)：新建文件、初始视图和真实编辑保存的实页调查。
 
 - [文件浏览的项目语境](records/2026-11/2026-11-03-file-browser-context.md)：文件工具中项目身份、真实目录和原操作范围的实页调查。

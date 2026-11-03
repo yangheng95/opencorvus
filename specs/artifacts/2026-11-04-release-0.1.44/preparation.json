@@ -1,0 +1,16 @@
+{
+  "version": "0.1.44",
+  "date": "2026-11-04",
+  "previous": "0.1.43",
+  "checks": {
+    "versionAlignment": 0,
+    "writtenNotes": 0,
+    "frozenInstall": { "exit": 0, "installs": 1659, "packages": 1905, "changes": 0 },
+    "audit": { "exit": 0, "packages": 1732, "vulnerabilities": 0 },
+    "versionNotesTests": { "exit": 0, "files": 2, "pass": 15, "assertions": 21 },
+    "generate": 0
+  },
+  "dependencyGraphChanged": false,
+  "databaseVersion": 10,
+  "releaseDispatched": false
+}
