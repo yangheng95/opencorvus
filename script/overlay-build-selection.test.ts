@@ -5,7 +5,7 @@ import { selectOverlayBuildMatrix } from "./overlay-build-selection"
 test("selects native Intel macOS and Linux rows from the release matrix", async () => {
   expect(await selectOverlayBuildMatrix("darwin-x64")).toEqual([{ runner: "macos-15-intel", platform: "darwin-x64" }])
   expect(await selectOverlayBuildMatrix("linux")).toEqual([
-    { runner: "ubuntu-latest", platform: "linux-x64" },
+    { runner: "ubuntu-24.04", platform: "linux-x64" },
     { runner: "ubuntu-24.04-arm", platform: "linux-arm64" },
   ])
   expect((await selectOverlayBuildMatrix("all")).map((row) => row.platform).sort()).toEqual([

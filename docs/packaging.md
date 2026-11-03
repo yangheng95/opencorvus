@@ -11,6 +11,12 @@ binary, the Tauri overlay desktop app, release CI, and local smoke packaging.
 
 ## Package Surfaces
 
+Linux x64 native GUI/CLI packaging and the Linux unit-test host use Ubuntu 24.04,
+matching the Office preview browser supported by the pinned product Playwright
+package. The debug native selector reads the same release matrix; Linux ARM64
+retains its Ubuntu 24.04 Arm runner. Jobs that do not install the browser retain
+their existing host selection.
+
 Ubuntu build prerequisites use the single `script/install-ubuntu-packages.sh`
 entry point. It retains the runner's signed Deb822 suites and components while
 selecting Canonical's official HTTPS archive for the actual architecture in an

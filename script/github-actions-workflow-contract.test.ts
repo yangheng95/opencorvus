@@ -775,7 +775,7 @@ describe("GitHub Actions workflow contract", () => {
     })
 
     const nativeMatrix = [
-      { runner: "ubuntu-latest", platform: "linux-x64" },
+      { runner: "ubuntu-24.04", platform: "linux-x64" },
       { runner: "ubuntu-24.04-arm", platform: "linux-arm64" },
       { runner: "macos-latest", platform: "darwin-arm64" },
       { runner: "macos-15-intel", platform: "darwin-x64" },
@@ -1105,7 +1105,7 @@ describe("GitHub Actions workflow contract", () => {
       "fail-fast": false,
       matrix: {
         settings: [
-          { name: "linux", host: "ubuntu-latest" },
+          { name: "linux", host: "ubuntu-24.04" },
           { name: "macos", host: "macos-latest" },
           { name: "windows", host: "windows-latest" },
         ],

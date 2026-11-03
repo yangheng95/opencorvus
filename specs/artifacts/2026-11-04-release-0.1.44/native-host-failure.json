@@ -1,0 +1,29 @@
+{
+  "version": "0.1.44",
+  "runID": 41690045392,
+  "source": "200f79414fe5a3da55498154a5374e60b9b09322",
+  "jobID": 126107478032,
+  "releaseID": 433049038,
+  "originalCreatedAt": "2026-11-03T18:02:59Z",
+  "originalDeadline": "2026-11-03T19:02:59Z",
+  "observedPackage": "packages/opencorvus Playwright/Playwright-core 1.59.1",
+  "requestedHost": "ubuntu-latest",
+  "actualHost": "Ubuntu 26.04.1 / ubuntu-26.04 / 20261025.179.1",
+  "correctedHost": "ubuntu-24.04",
+  "evidence": [
+    "2026-11-03T18:05:50.1405652Z Ubuntu",
+    "2026-11-03T18:05:50.1406282Z 26.04.1",
+    "2026-11-03T18:05:50.1408637Z Image: ubuntu-26.04",
+    "2026-11-03T18:05:50.1410785Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261025.179/images/ubuntu/Ubuntu2604-Readme.md",
+    "2026-11-03T18:06:59.3400210Z BEWARE: your OS is not officially supported by Playwright; installing dependencies for ubuntu26.04-x64 as a fallback.",
+    "2026-11-03T18:06:59.3403457Z Cannot install dependencies for ubuntu26.04-x64 with Playwright 1.59.1!",
+    "2026-11-03T18:06:59.6304588Z Error: ERROR: Playwright does not support chromium on ubuntu26.04-x64",
+    "2026-11-03T18:06:59.6411667Z ##[error]Process completed with exit code 1."
+  ],
+  "focusedValidation": {
+    "files": 2,
+    "pass": 30,
+    "assertions": 237
+  },
+  "scope": "Deterministic Office browser installation incompatibility before the product starts; cancelled original run, unchanged source and original deadline; owned unpublished draft retirement is recorded separately"
+}

@@ -7,3 +7,4 @@
 - [初次准备官网](preparation-website-initial.json)保留真实取消事实；[检出输入调查](checkout-inputs.json)为8df不可变树的86579份specs/3909571358未压缩字节与5805份产品文件/151108220字节，未量测压缩网络字节。原单fetch近15分钟后18分钟build上限取消。
 - [中间准备官网](prior-preparation-website.json)：8df说明源码、八job成功。38da稀疏输入的checkout96秒/生成固定点通过，但生产配置资产需要两份规格，原checker正确拒绝；据此修正build只排除specs/artifacts，保留全部current/records。
 - [实际Git输入合同](checkout-input-contract.json)：从原配置checker读取11资产，经真实Git规则全部映射保留，7030文件/约174MB未压缩内容；完整真实官网流程仍待新源码通过，原18分钟build/60分钟总时限保持。
+- [第一次正式运行](native-attempt1.json)、[初次owner](prepare-owner-attempt1.json)和[原生主机失败](native-host-failure.json)：41690045392/200f，空草稿433049038；实际Ubuntu26.04.1与产品Playwright1.59.1不兼容，18:21:52Z取消。原创建/截止及诊断保留，不将原轮改记成功；精确清退与新源码正式资格后续单独补录。

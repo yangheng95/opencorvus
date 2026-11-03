@@ -145,7 +145,7 @@ jobs:
       matrix:
         settings:
           - name: linux
-            host: ubuntu-latest
+            host: ubuntu-24.04
           - name: macos
             host: macos-latest
           - name: windows
