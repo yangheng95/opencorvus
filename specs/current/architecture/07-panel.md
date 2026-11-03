@@ -2719,13 +2719,14 @@ observe the same ownership. Disposal retires the document subscription and queue
 work with the existing controller/source lifetime; no separate artifact bookmark,
 renderer copy, or close-button scroll writer owns the return.
 
-The main virtual Conversation reads that same follow signal for its render
-buffer. Following the output uses the viewport range; reading history uses the
-existing four-card pixel buffer. This keeps directional scroll/idle overscan
-changes from repeatedly rebuilding offscreen Markdown during streaming pauses.
-Focused controls and a pending history restoration keep their existing explicit
-mounted-item pins. The buffer owns neither a second follow state nor a scroll
-writer; Session, Task, and Mission use the same Conversation policy.
+The main virtual Conversation uses the same explicit four-card pixel render
+buffer while following output and reading history. Focusing a transcript control
+releases follow without changing the render range policy between pointer down
+and up. An explicit buffer also keeps directional scroll/idle overscan changes
+from repeatedly rebuilding offscreen Markdown during streaming pauses. Focused
+controls and a pending history restoration keep their existing mounted-item
+pins. The buffer owns neither a second follow state nor a scroll writer;
+Session, Task, and Mission use the same Conversation policy.
 
 Agent list/detail visibility is local presentation state; it does not own
 Session identity. Returning to the list or choosing another Session is an

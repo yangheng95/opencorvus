@@ -1,0 +1,220 @@
+{
+  "at": "2026-11-03T17:17:10.754Z",
+  "scope": "919 keep the main conversation virtual buffer stable across follow and reading focus",
+  "manualReview": "Sixteen actual screenshots personally reviewed. Old first pointer activation receives pointerdown at 909/325; its source button moves up 28.28125 pixels before release and file activation is not dispatched. Keyboard activation reaches ready/commit/opened true. Ordinary repaired build first activation from the same original empty-file project opens the correct existing file. English and Chinese source opening, keyboard reveal of hidden dock, body link, finite long-history scrolling and return to bottom, source disclosure, unsaved navigation Cancel with retained original draft and actual Discard back to original project all verified. Zero new files, model requests or UI automated tests. Existing PDF white footer is actual original page whitespace; further PageUp shows its correct table.",
+  "screenshots": [
+    "01-before-empty-project.png",
+    "02-first-source-pointerdown-only.png",
+    "03-keyboard-admitted-original-file.png",
+    "04-after-same-empty-project.png",
+    "05-first-pointer-click-opens-file.png",
+    "06-keyboard-reopens-hidden-panel.png",
+    "07-body-link-original-file.png",
+    "08-long-history-reading.png",
+    "09-original-pdf-history.png",
+    "10-return-to-bottom.png",
+    "11-chinese-source-opens-file.png",
+    "12-chinese-original-source-group.png",
+    "13-original-unsaved-navigation-decision.png",
+    "14-cancel-preserves-original-draft.png",
+    "15-original-project-file-preserved.png",
+    "16-chinese-after-project-switch.png"
+  ],
+  "firstPointerEvidence": {
+    "at": "2026-11-03T17:02:40.348Z",
+    "path": "deliverables/summary.md",
+    "pointer": {
+      "x": 909,
+      "y": 325
+    },
+    "downRectangle": {
+      "x": 861.5,
+      "y": 308.90625,
+      "width": 94.1875,
+      "height": 33.03125,
+      "top": 308.90625,
+      "right": 955.6875,
+      "bottom": 341.9375,
+      "left": 861.5
+    },
+    "observedAfterRectangle": {
+      "x": 861.5,
+      "y": 280.625,
+      "width": 94.1875,
+      "height": 33.03125,
+      "bottom": 313.65625
+    },
+    "sourceRequestReached": false
+  },
+  "focusGeometry": {
+    "before": {
+      "client": 643,
+      "following": "true",
+      "height": 3903,
+      "items": 1,
+      "source": {
+        "bottom": 205.96875,
+        "height": 33.03125,
+        "left": 861.5,
+        "right": 955.6875,
+        "top": 172.9375,
+        "width": 94.1875,
+        "x": 861.5,
+        "y": 172.9375
+      },
+      "top": 3260
+    },
+    "after": {
+      "active": "Copy source location: deliverables/summary.md",
+      "client": 643,
+      "following": "false",
+      "height": 3903,
+      "items": 3,
+      "source": {
+        "bottom": 341.96875,
+        "height": 33.03125,
+        "left": 861.5,
+        "right": 955.6875,
+        "top": 308.9375,
+        "width": 94.1875,
+        "x": 861.5,
+        "y": 308.9375
+      },
+      "top": 3124
+    }
+  },
+  "authentication": {
+    "at": "2026-11-03T16:58:17.931Z",
+    "endpoint": "https://chatgpt.com/backend-api/wham/usage",
+    "status": 200,
+    "accepted": true,
+    "expiresAt": "2026-11-11T16:15:41.053Z",
+    "exactCatalogModel": "openai/gpt-6.1-sol",
+    "sourceCredentialsAndCatalogPreserved": true,
+    "forcedRefresh": false,
+    "modelRequests": 0
+  },
+  "preservedGoal": {
+    "id": "pev_g0VZqi4VF006X0VITEUv",
+    "sessionID": "ses_-zUQ9HvfbzzEYnSgSg3b",
+    "status": "complete",
+    "tokensUsed": 345102,
+    "turnsAccepted": 1,
+    "checkpoints": 4,
+    "originalDefinitionAndStateExact": true,
+    "sessionActivity": "idle"
+  },
+  "publicReads": {
+    "checkpoints": 4,
+    "missionRecordsPerCheckpoint": 15,
+    "taskStatesAndRootSessionsPerCheckpoint": 4,
+    "mailbox": 24,
+    "queries": {
+      "approved": 2,
+      "checkpoint": 7,
+      "none": 0
+    },
+    "originalFileReads": 12,
+    "goalReads": 4
+  },
+  "qualifications": [
+    {
+      "at": "2026-11-03T17:09:00.267Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 274061,
+      "current": 274063,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55948,
+          "after": 55949
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55890,
+          "after": 55891
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 265,
+      "projects": 107,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1319,
+      "reserveMs": 3957744,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-2qQMYUqg.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2
+    },
+    {
+      "at": "2026-11-03T17:15:27.090Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 274063,
+      "current": 274065,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 55949,
+          "after": 55950
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 55891,
+          "after": 55892
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 265,
+      "projects": 107,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1319,
+      "reserveMs": 3549690,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DajO1nWA.js",
+      "publicShutdown": 200,
+      "originalHandleExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": 2
+    }
+  ],
+  "typecheck": 0,
+  "uiBuild": 0,
+  "docsCheck": 0,
+  "newModelRequests": 0,
+  "cumulativeModelRequests": 1319,
+  "limitations": [
+    "No new live streaming performance qualification in this zero-request batch.",
+    "Current native product build uses version 0.1.44 from the separately authorized release preparation; this task changes no versions, lockfiles, changelog, tags or releases.",
+    "The observed first source click is fixed in the manually exercised current paths; this is not a claim that all possible asynchronous layout changes are eliminated."
+  ]
+}

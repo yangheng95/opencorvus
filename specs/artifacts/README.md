@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [来源文件首次打开调查](2026-11-03-source-open-admission/README.md)：隔离页面、只读轨迹和原数据保全。
+
 - [0.1.44发布证据](2026-11-04-release-0.1.44/README.md)：版本准备、原生运行、公开资源与三处双语日志。
 
 - [空Markdown文件编辑验收](2026-11-03-empty-markdown-editing/README.md)：真实新建、编辑、保存与原数据保全。
