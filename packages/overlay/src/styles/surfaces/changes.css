@@ -151,7 +151,7 @@
   min-width: 100%;
 }
 
-@container file-review (width < 680px) {
+@container file-review (width < 800px) {
   .changes-review-workspace {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: fit-content(40%) minmax(0, 1fr);

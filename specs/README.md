@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [逐行比较的阅读方向](records/2026-11/2026-11-04-review-reading.md)：真实已记录修改、行号与当前文件的完整阅读体验。
+
 - [保存的来源摘录与阅读操作](records/2026-11/2026-11-04-source-excerpt-reading.md)：已有真实来源、复制与阅读位置的隔离体验。
 
 - [真实流式工作中的来源与交付体验](records/2026-11/2026-11-04-live-source-work.md)：精确Sol请求、运行中来源与实际文件交付验收。

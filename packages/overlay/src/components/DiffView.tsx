@@ -236,7 +236,20 @@ export function DiffView(props: DiffViewProps) {
         </Show>
       }
     >
-      {(value) => <TextDiffView before={value().before} after={value().after} />}
+      {(value) => (
+        <div class="diff-comparison">
+          <div class="diff-row diff-columns">
+            <div class="diff-gutter" aria-hidden="true" />
+            <div class="diff-num" title={t("diff.before_line_hint")}>{t("diff.before_line")}</div>
+            <div class="diff-num" title={t("diff.after_line_hint")}>{t("diff.after_line")}</div>
+            <div class="diff-code diff-columns__legend">
+              <span data-tone="del">− {t("files.status.deleted")}</span>
+              <span data-tone="add">+ {t("files.status.added")}</span>
+            </div>
+          </div>
+          <TextDiffView before={value().before} after={value().after} />
+        </div>
+      )}
     </Show>
   )
 }

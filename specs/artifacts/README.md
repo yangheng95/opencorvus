@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [逐行比较阅读证据](2026-11-04-review-reading/README.md)：原文件修改、真实页面与数据保全。
+
 - [来源摘录阅读证据](2026-11-04-source-excerpt-reading/README.md)：真实页面、原始来源与复制操作。
 
 - [真实流式来源体验](2026-11-04-live-source-work/README.md)：实际模型请求、人工视觉与内容检查证据。
