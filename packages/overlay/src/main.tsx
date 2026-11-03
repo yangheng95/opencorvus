@@ -555,6 +555,7 @@ const [missionSharedRefreshToken, setMissionSharedRefreshToken] = createSignal(0
 const [missionLauncherSubmitting, setMissionLauncherSubmitting] = createSignal(false)
 const [expertSquadLauncherSubmitting, setExpertSquadLauncherSubmitting] = createSignal(false)
 const [assistantLauncherSubmitting, setAssistantLauncherSubmitting] = createSignal(false)
+const [acceptedComposerSubmissionRevision, setAcceptedComposerSubmissionRevision] = createSignal(0)
 setWorkLedgerChangeHandler(handleWorkLedgerStreamEvent)
 disposers.push(() => setWorkLedgerChangeHandler(null))
 const [composerIntent, setComposerIntent] = createSignal<ComposerIntent>(DEFAULT_COMPOSER_INTENT)
@@ -2772,6 +2773,7 @@ function OverlayRoot() {
             onGoal={onGoal}
             onFiles={onFiles}
             filesAvailable={filesAvailable}
+            acceptedSubmissionRevision={acceptedComposerSubmissionRevision()}
             onOpenSubagentConversation={openSubagentConversation}
             onOpenMissionBoard={openMissionBoard}
           />
@@ -2781,6 +2783,7 @@ function OverlayRoot() {
       composer={(onGoal) => (
         <ChatComposer
           onGoal={onGoal}
+          onAcceptedSubmit={() => setAcceptedComposerSubmissionRevision((revision) => revision + 1)}
           onSideChat={async (prompt, sourceDraft) => requestSideChat(undefined, prompt, sourceDraft)}
           availability={
             !canComposeChat() || selectionUnavailable() || selectedArchived()

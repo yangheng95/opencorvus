@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [真实流式工作中的来源与交付体验](records/2026-11/2026-11-04-live-source-work.md)：精确Sol请求、运行中来源与实际文件交付验收。
+
 - [来源文件首次打开的准入调查](records/2026-11/2026-11-03-source-open-admission.md)：真实来源点击、文件准入与面板呈现的控制流调查。
 
 - [0.1.44发布](records/2026-11/2026-11-04-release-0.1.44.md)：项目语境、侧栏操作与空Markdown编辑的冻结发布及交付验收。

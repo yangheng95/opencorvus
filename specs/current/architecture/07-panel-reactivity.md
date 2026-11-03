@@ -913,9 +913,15 @@ controller releases follow on owned upward input before asynchronous resize;
 editable keyboard controls and another nested transcript retain their input.
 Program echoes, layout clamping and near-bottom geometry alone cannot rearm
 released follow. Owned downward movement reaching the bottom can rearm it;
-explicit bottom and new selection/send actions retain their caller-owned
-behavior. Sources reading intent clears stale event attribution and pauses the
-nearest transcript through the existing reading event.
+explicit bottom and new selection actions retain their caller-owned behavior.
+A real accepted main-composer input still owned by its generation, authority,
+draft key and selection epoch notifies the existing main Conversation through
+one transient submission revision. That reader resumes follow with its existing
+bottom action, keeping the open file panel and native focus. Draft and attachment
+clearing retain their own revision conditions; a late acceptance for a changed
+scope cannot direct the current reader. Ordinary output is not a send intent.
+Sources reading intent clears stale event attribution and pauses the nearest
+transcript through the existing reading event.
 
 Side-chat message cards project the same message's created and completed
 timestamps to the shared running/finished duration display. A selected child

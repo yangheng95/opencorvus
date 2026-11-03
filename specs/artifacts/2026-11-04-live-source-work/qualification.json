@@ -1,0 +1,749 @@
+{
+  "at": "2026-11-03T18:02:42.176Z",
+  "scope": "920 accepted main-composer sends return the existing conversation reader to the current work",
+  "manualReview": "Twenty actual native-page screenshots personally inspected. Before, a source click while the final work request was streaming opens the correct file and preserves the paused reading position as text grows. A new accepted follow-up then finishes with both its request and output offscreen; the actual user paragraph is below the viewport and only explicit Bottom reveals it. After, the same source-reading precondition followed by a real Send immediately reveals the accepted user request and follows the next real model stream, while the original file remains open. English live input/output, line references, original file sources, actual later reading pause, Chinese settings return, current-conversation Goal form and final delivery verified. No UI automated tests or DOM acceptance assertions.",
+  "screenshots": [
+    "01-goal-project-model-context.png",
+    "02-existing-goal-guide.png",
+    "03-real-request-before-send.png",
+    "04-actual-running-sources.png",
+    "05-source-file-during-stream.png",
+    "06-completed-keeps-reading-and-file.png",
+    "07-natural-line-reference-opens-source.png",
+    "08-all-natural-file-sources.png",
+    "09-idle-followup-with-original-file.png",
+    "10-followup-preserves-open-source.png",
+    "11-accepted-followup-remains-offscreen.png",
+    "12-explicit-bottom-reveals-followup.png",
+    "13-after-real-request-and-model.png",
+    "14-after-source-opens-current-delivery.png",
+    "15-accepted-followup-visible-with-open-file.png",
+    "16-following-new-live-output.png",
+    "17-explicit-reading-pauses-follow-again.png",
+    "18-chinese-return-preserves-reading-and-file.png",
+    "19-chinese-existing-conversation-goal-entry.png",
+    "20-chinese-final-reply-and-delivery.png"
+  ],
+  "beforeOffscreenReading": {
+    "at": "2026-11-03T17:47:00.182Z",
+    "message": {
+      "bottom": 1719.09375,
+      "height": 115.125,
+      "left": 490.53125,
+      "right": 849,
+      "top": 1603.96875,
+      "width": 358.46875,
+      "x": 490.53125,
+      "y": 1603.96875
+    },
+    "scrollport": {
+      "bottom": 720,
+      "height": 643,
+      "left": 306,
+      "right": 899,
+      "top": 77,
+      "width": 593,
+      "x": 306,
+      "y": 77
+    }
+  },
+  "afterPreFollowReading": {
+    "at": "2026-11-03T17:54:29.671Z",
+    "client": 643,
+    "following": "false",
+    "height": 2034,
+    "top": 554
+  },
+  "afterLiveFollowReading": {
+    "at": "2026-11-03T17:55:03.673Z",
+    "client": 643,
+    "following": "true",
+    "height": 2893,
+    "top": 2250,
+    "message": {
+      "bottom": -278.90625,
+      "height": 95.9375,
+      "left": 490.53125,
+      "right": 849,
+      "top": -374.84375,
+      "width": 358.46875,
+      "x": 490.53125,
+      "y": -374.84375
+    },
+    "scrollport": {
+      "bottom": 720,
+      "height": 643,
+      "left": 306,
+      "right": 899,
+      "top": 77,
+      "width": 593,
+      "x": 306,
+      "y": 77
+    }
+  },
+  "preservedGoal": {
+    "id": "pev_g0VZqi4VF006X0VITEUv",
+    "sessionID": "ses_-zUQ9HvfbzzEYnSgSg3b",
+    "status": "complete",
+    "tokensUsed": 345102,
+    "turnsAccepted": 1,
+    "originalDefinitionAndStateExact": true,
+    "publicCheckpoints": 4,
+    "sessionActivity": "idle"
+  },
+  "originalPublicReads": {
+    "checkpoints": 4,
+    "missionRecordsPerCheckpoint": 15,
+    "taskStatesAndRootSessionsPerCheckpoint": 4,
+    "mailboxRecords": 24,
+    "fileContractReads": 12,
+    "goalReads": 4
+  },
+  "scopes": [
+    {
+      "phase": "before",
+      "providerPreflight": {
+        "at": "2026-11-03T17:29:08.353Z",
+        "phase": "before",
+        "route": "/global/providers/openai/account-usage",
+        "status": 200,
+        "accepted": true,
+        "usageKind": "rate_limits",
+        "projectedModel": "gpt-6.1-sol",
+        "credentialRegistered": "registered copied OAuth",
+        "modelRequests": 0
+      },
+      "work": {
+        "at": "2026-11-03T17:46:33.537Z",
+        "phase": "before",
+        "sessionID": "ses_-zUQ48EAQzzr5yZeh7TO",
+        "status": "idle",
+        "experience": "work",
+        "rootSessions": 1,
+        "userMessages": 2,
+        "originalTaskCount": 8,
+        "currentTaskCount": 8,
+        "model": "openai/gpt-6.1-sol",
+        "requests": 11,
+        "maximumRequests": 12,
+        "streamHTTP200EOF": 11,
+        "roleCounts": {
+          "memory": 2,
+          "work": 9
+        },
+        "sourcePointerAction": {
+          "at": "2026-11-03T17:31:22.258Z",
+          "path": "deliverables/summary.md",
+          "overlappingRequestIndex": 8,
+          "streamStartedAt": 1793727074719,
+          "streamEOFAt": 1793727113359
+        },
+        "completedTools": [
+          "read",
+          "read",
+          "apply_patch",
+          "read",
+          "read",
+          "read"
+        ],
+        "actualExpectedPrecreationError": [
+          {
+            "tool": "read",
+            "path": "deliverables",
+            "outcome": "failed",
+            "failureKind": "tool-execution",
+            "name": "Error",
+            "origin": "session.processor.tool-error",
+            "followedByActualDirectoryAndDeliveryCreation": true
+          }
+        ],
+        "sourceFilesPreserved": 2,
+        "rereadFiles": 3,
+        "publicContentContracts": [
+          {
+            "path": "sources/brief.md",
+            "status": 200,
+            "type": "text",
+            "bytes": 809,
+            "actualToolAndPublicAndPhysicalContentExact": true
+          },
+          {
+            "path": "sources/actions.csv",
+            "status": 200,
+            "type": "text",
+            "bytes": 192,
+            "actualToolAndPublicAndPhysicalContentExact": true
+          },
+          {
+            "path": "deliverables/summary.md",
+            "status": 200,
+            "type": "text",
+            "bytes": 1194,
+            "actualToolAndPublicAndPhysicalContentExact": true
+          }
+        ],
+        "deliveredRows": [
+          [
+            "A-03",
+            "林岚",
+            "2026-11-04",
+            "open"
+          ],
+          [
+            "A-02",
+            "陈实",
+            "2026-11-05",
+            "closed"
+          ],
+          [
+            "A-05",
+            "周宁",
+            "2026-11-05",
+            "closed"
+          ],
+          [
+            "A-06",
+            "陈实",
+            "2026-11-05",
+            "open"
+          ],
+          [
+            "A-04",
+            "周宁",
+            "2026-11-06",
+            "open"
+          ],
+          [
+            "A-01",
+            "林岚",
+            "2026-11-07",
+            "open"
+          ]
+        ],
+        "total": 6,
+        "open": 4,
+        "owners": {
+          "林岚": 2,
+          "陈实": 2,
+          "周宁": 2
+        },
+        "documentBytes": 1194,
+        "documentLines": 28,
+        "finalReplyCharacters": 2372,
+        "finalReplyHanCharacters": 1770,
+        "finalReplyHeadings": [
+          "## 一、本次补充的范围与交付结论",
+          "## 二、来源事实能够证明什么",
+          "## 三、六项记录与统计怎样理解",
+          "## 四、截止日排序及风险边界",
+          "## 五、按截止日跟进的具体步骤",
+          "## 六、如何处理关闭项与跟进反馈",
+          "## 七、怎样用现有交付逐项复核",
+          "## 八、交付使用方式与最终边界"
+        ],
+        "finish": "stop"
+      },
+      "qualification": {
+        "at": "2026-11-03T17:49:40.725Z",
+        "kind": "before",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 274065,
+        "current": 276658,
+        "changes": [
+          {
+            "table": "bus_publication_delivery_receipt",
+            "before": 53483,
+            "after": 53987
+          },
+          {
+            "table": "bus_publication_delivery",
+            "before": 53483,
+            "after": 53987
+          },
+          {
+            "table": "bus_publication_outbox",
+            "before": 7100,
+            "after": 7176
+          },
+          {
+            "table": "bus_publication_owner",
+            "before": 7100,
+            "after": 7176
+          },
+          {
+            "table": "bus_publication_phase_receipt",
+            "before": 21300,
+            "after": 21528
+          },
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 55950,
+            "after": 56456
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 55892,
+            "after": 56398
+          },
+          {
+            "table": "event_occurrence",
+            "before": 6880,
+            "after": 6956
+          },
+          {
+            "table": "memory_chunk",
+            "before": 103,
+            "after": 104
+          },
+          {
+            "table": "memory_file",
+            "before": 103,
+            "after": 104
+          },
+          {
+            "table": "message",
+            "before": 916,
+            "after": 927
+          },
+          {
+            "table": "part",
+            "before": 2586,
+            "after": 2617
+          },
+          {
+            "table": "permission_execution_result",
+            "before": 234,
+            "after": 235
+          },
+          {
+            "table": "permission_ledger",
+            "before": 1186,
+            "after": 1191
+          },
+          {
+            "table": "permission_policy",
+            "before": 53,
+            "after": 54
+          },
+          {
+            "table": "project",
+            "before": 107,
+            "after": 108
+          },
+          {
+            "table": "protocol_event",
+            "before": 2625,
+            "after": 2646
+          },
+          {
+            "table": "provider_activity_outcome",
+            "before": 891,
+            "after": 900
+          },
+          {
+            "table": "provider_activity_request",
+            "before": 891,
+            "after": 900
+          },
+          {
+            "table": "provider_usage_event",
+            "before": 934,
+            "after": 945
+          },
+          {
+            "table": "session",
+            "before": 139,
+            "after": 140
+          },
+          {
+            "table": "tool_part_outcome",
+            "before": 715,
+            "after": 722
+          },
+          {
+            "table": "tool_part_request",
+            "before": 715,
+            "after": 722
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": false,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [
+          {
+            "slot": 0,
+            "priorExpiredAt": 1793650873026,
+            "reacquiredAt": 1793727571688,
+            "releasedAt": 1793727625296,
+            "ownedByRuntime": true
+          },
+          {
+            "slot": 1,
+            "priorExpiredAt": 1793635828144,
+            "reacquiredAt": 1793727572470,
+            "releasedAt": 1793727624908,
+            "ownedByRuntime": true
+          }
+        ],
+        "sourceDatabasePreserved": true,
+        "attachments": 265,
+        "projects": 107,
+        "filesystemExclusions": 0,
+        "requests": 11,
+        "cumulativeRequests": 1330,
+        "reserveMs": 3288194,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-DajO1nWA.js"
+      },
+      "retirement": {
+        "publicShutdown": 200,
+        "originalHandleExit": 0,
+        "pairedCopiesRetired": 2,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 3288194
+      }
+    },
+    {
+      "phase": "after",
+      "providerPreflight": {
+        "at": "2026-11-03T17:51:45.977Z",
+        "phase": "after",
+        "route": "/global/providers/openai/account-usage",
+        "status": 200,
+        "accepted": true,
+        "usageKind": "rate_limits",
+        "projectedModel": "gpt-6.1-sol",
+        "credentialRegistered": "registered copied OAuth",
+        "modelRequests": 0
+      },
+      "work": {
+        "at": "2026-11-03T17:57:03.118Z",
+        "phase": "after",
+        "sessionID": "ses_-zUQ42iEkzzFE7ZU3knJ",
+        "status": "idle",
+        "experience": "work",
+        "rootSessions": 1,
+        "userMessages": 2,
+        "originalTaskCount": 8,
+        "currentTaskCount": 8,
+        "model": "openai/gpt-6.1-sol",
+        "requests": 11,
+        "maximumRequests": 12,
+        "streamHTTP200EOF": 11,
+        "roleCounts": {
+          "memory": 2,
+          "work": 9
+        },
+        "sourcePointerAction": {
+          "at": "2026-11-03T17:53:31.249Z",
+          "path": "deliverables/summary.md",
+          "overlappingRequestIndex": -1,
+          "streamStartedAt": null,
+          "streamEOFAt": null
+        },
+        "followupReading": {
+          "observationAt": "2026-11-03T17:55:03.673Z",
+          "overlappingRequestIndex": 10,
+          "streamStartedAt": 1793728473425,
+          "streamEOFAt": 1793728521174,
+          "qualification": "Actual native request overlap; follow restoration itself is qualified by manually reviewed screenshots, not DOM assertions"
+        },
+        "completedTools": [
+          "read",
+          "read",
+          "apply_patch",
+          "read",
+          "read",
+          "read"
+        ],
+        "actualExpectedPrecreationError": [
+          {
+            "tool": "read",
+            "path": "deliverables",
+            "outcome": "failed",
+            "failureKind": "tool-execution",
+            "name": "Error",
+            "origin": "session.processor.tool-error",
+            "followedByActualDirectoryAndDeliveryCreation": true
+          }
+        ],
+        "sourceFilesPreserved": 2,
+        "rereadFiles": 3,
+        "publicContentContracts": [
+          {
+            "path": "sources/brief.md",
+            "status": 200,
+            "type": "text",
+            "bytes": 807,
+            "actualToolAndPublicAndPhysicalContentExact": true
+          },
+          {
+            "path": "sources/actions.csv",
+            "status": 200,
+            "type": "text",
+            "bytes": 192,
+            "actualToolAndPublicAndPhysicalContentExact": true
+          },
+          {
+            "path": "deliverables/summary.md",
+            "status": 200,
+            "type": "text",
+            "bytes": 430,
+            "actualToolAndPublicAndPhysicalContentExact": true
+          }
+        ],
+        "deliveredRows": [
+          [
+            "A-03",
+            "林岚",
+            "2026-11-04",
+            "open"
+          ],
+          [
+            "A-02",
+            "陈实",
+            "2026-11-05",
+            "closed"
+          ],
+          [
+            "A-05",
+            "周宁",
+            "2026-11-05",
+            "closed"
+          ],
+          [
+            "A-06",
+            "陈实",
+            "2026-11-05",
+            "open"
+          ],
+          [
+            "A-04",
+            "周宁",
+            "2026-11-06",
+            "open"
+          ],
+          [
+            "A-01",
+            "林岚",
+            "2026-11-07",
+            "open"
+          ]
+        ],
+        "total": 6,
+        "open": 4,
+        "owners": {
+          "林岚": 2,
+          "陈实": 2,
+          "周宁": 2
+        },
+        "documentBytes": 430,
+        "documentLines": 18,
+        "finalReplyCharacters": 2154,
+        "finalReplyHanCharacters": 1747,
+        "finalReplyHeadings": [
+          "## 一、使用范围：只解释，不改变交付",
+          "## 二、来源事实：能确认什么，不能确认什么",
+          "## 三、状态边界：保留原文，谨慎解释",
+          "## 四、日期跟进：先建立当天检查清单",
+          "## 五、具体跟进：逐项询问并区分回答性质",
+          "## 六、逐项复核：按编号对齐四个字段",
+          "## 七、整体复核：检查排序、统计和固定文字",
+          "## 八、使用结论：把快照、分析和行动分开"
+        ],
+        "finish": "stop"
+      },
+      "qualification": {
+        "at": "2026-11-03T17:59:31.213Z",
+        "kind": "after",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 276658,
+        "current": 279251,
+        "changes": [
+          {
+            "table": "bus_publication_delivery_receipt",
+            "before": 53987,
+            "after": 54491
+          },
+          {
+            "table": "bus_publication_delivery",
+            "before": 53987,
+            "after": 54491
+          },
+          {
+            "table": "bus_publication_outbox",
+            "before": 7176,
+            "after": 7252
+          },
+          {
+            "table": "bus_publication_owner",
+            "before": 7176,
+            "after": 7252
+          },
+          {
+            "table": "bus_publication_phase_receipt",
+            "before": 21528,
+            "after": 21756
+          },
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 56456,
+            "after": 56962
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 56398,
+            "after": 56904
+          },
+          {
+            "table": "event_occurrence",
+            "before": 6956,
+            "after": 7032
+          },
+          {
+            "table": "memory_chunk",
+            "before": 104,
+            "after": 105
+          },
+          {
+            "table": "memory_file",
+            "before": 104,
+            "after": 105
+          },
+          {
+            "table": "message",
+            "before": 927,
+            "after": 938
+          },
+          {
+            "table": "part",
+            "before": 2617,
+            "after": 2648
+          },
+          {
+            "table": "permission_execution_result",
+            "before": 235,
+            "after": 236
+          },
+          {
+            "table": "permission_ledger",
+            "before": 1191,
+            "after": 1196
+          },
+          {
+            "table": "permission_policy",
+            "before": 54,
+            "after": 55
+          },
+          {
+            "table": "project",
+            "before": 108,
+            "after": 109
+          },
+          {
+            "table": "protocol_event",
+            "before": 2646,
+            "after": 2667
+          },
+          {
+            "table": "provider_activity_outcome",
+            "before": 900,
+            "after": 909
+          },
+          {
+            "table": "provider_activity_request",
+            "before": 900,
+            "after": 909
+          },
+          {
+            "table": "provider_usage_event",
+            "before": 945,
+            "after": 956
+          },
+          {
+            "table": "session",
+            "before": 140,
+            "after": 141
+          },
+          {
+            "table": "tool_part_outcome",
+            "before": 722,
+            "after": 729
+          },
+          {
+            "table": "tool_part_request",
+            "before": 722,
+            "after": 729
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": false,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [
+          {
+            "slot": 0,
+            "priorExpiredAt": 1793727625296,
+            "reacquiredAt": 1793728469954,
+            "releasedAt": 1793728499720,
+            "ownedByRuntime": true
+          },
+          {
+            "slot": 1,
+            "priorExpiredAt": 1793727624908,
+            "reacquiredAt": 1793728471373,
+            "releasedAt": 1793728521175,
+            "ownedByRuntime": true
+          }
+        ],
+        "sourceDatabasePreserved": true,
+        "attachments": 267,
+        "projects": 108,
+        "filesystemExclusions": 0,
+        "requests": 11,
+        "cumulativeRequests": 1341,
+        "reserveMs": 2594915,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-2viiIibi.js"
+      },
+      "retirement": {
+        "publicShutdown": 200,
+        "originalHandleExit": 0,
+        "pairedCopiesRetired": 2,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true,
+        "reserveMs": 2594915
+      }
+    }
+  ],
+  "modelRequests": 22,
+  "modelRoleCounts": {
+    "memory": 4,
+    "work": 18
+  },
+  "initialCumulativeRequests": 1319,
+  "finalCumulativeRequests": 1341,
+  "typecheck": 0,
+  "build": 0,
+  "docsCheck": 0,
+  "limitations": [
+    "Saved-excerpt UI is not supplied by this actual file-source scenario and was not qualified.",
+    "After-phase initial Source activation and later PageUp/Source pause occurred after their streams completed; only the before-phase initial Source activation and the after-phase resumed-follow observation have recorded native stream overlap.",
+    "A delayed acceptance after an actual source switch was audited through the unchanged generation/authority/draft-key/selection-epoch ownership conditions, without a simulated or delayed UI fixture; that race window was not manually reproduced.",
+    "These real streaming interactions are functional/visual evidence, not frame-rate or general performance measurements."
+  ]
+}

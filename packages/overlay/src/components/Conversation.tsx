@@ -458,6 +458,7 @@ export function Conversation(props: {
   onGoal: () => void
   onFiles: () => void
   filesAvailable: () => boolean
+  acceptedSubmissionRevision: number
   onOpenSubagentConversation: (sessionID: string) => void
   onOpenMissionBoard: () => void
 }) {
@@ -923,6 +924,8 @@ export function Conversation(props: {
     scrollController?.scrollToBottom()
     rememberReadingPosition()
   }
+
+  createEffect(on(() => props.acceptedSubmissionRevision, scrollToBottom, { defer: true }))
 
   return (
     <>

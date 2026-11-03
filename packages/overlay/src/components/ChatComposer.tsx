@@ -189,6 +189,8 @@ export interface ChatComposerProps {
     submission: ComposerSubmissionCallbacks,
     authority: ApiAuthority,
   ) => void | Promise<void>
+  /** A real accepted input still owned by this displayed composer. */
+  onAcceptedSubmit: () => void
   /** Resolve and activate the Project that owns a real attachment upload. */
   resolveAttachmentDirectory: (selectionEpoch: number, authority: ApiAuthority) => ComposerProjectOperation
   /** Called when the user clicks the stop button while busy. */
@@ -1160,8 +1162,9 @@ export function ChatComposer(props: ChatComposerProps) {
         onAccepted: () => {
           if (!dispatched || accepted) return
           accepted = true
-          if (!isApiAuthorityCurrent(authority) || !revision || revision.entry.text !== authoredText) return
           const current = ownsScope()
+          if (current) props.onAcceptedSubmit()
+          if (!isApiAuthorityCurrent(authority) || !revision || revision.entry.text !== authoredText) return
           if (current && !sameAttachmentReferences(attachments(), sentAttachments)) return
           if (!clearComposerDraftRevision(revision)) return
           if (!current) return
