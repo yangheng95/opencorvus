@@ -26,7 +26,7 @@
 
 #### 升级影响与已知限制
 
-- 数据库保持版本 10，保留用户数据与既有自动迁移；旧版本程序不能直接打开已升级的数据库。
+- 数据库保持版本 10，保留用户数据与既有自动迁移；仅支持旧数据库结构的程序不能打开版本 10 数据库。
 - 来源首次点击修复已通过既有长历史的中英文实页复核，新增流式长对话的性能尚未重新验收；界面实页验收与一次有界目标交付只证明各自覆盖范围。
 - macOS 仍为临时签名，未经过 Apple 公证。
 
@@ -50,7 +50,7 @@
 
 #### Upgrade impact and known limitations
 
-- Database version remains 10, retaining user data and existing automatic migrations. Older application versions cannot directly open an upgraded database.
+- Database version remains 10, retaining user data and existing automatic migrations. Applications that only support earlier schemas cannot directly open database version 10.
 - The source first-click fix passed English and Chinese reviews of retained long histories; performance with a new live streaming long conversation has not been requalified. Manual interface reviews and one bounded goal delivery establish only their stated scope.
 - macOS remains ad hoc signed without Apple notarization.
 
