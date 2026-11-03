@@ -53,7 +53,7 @@ import { appendConversationLiveEvent } from "@/protocol/conversation-live-buffer
 import {
   enrichStandaloneSessionTranscript,
   standalonePendingPermission,
-  standalonePendingQuestion,
+  standaloneQuestionSnapshot,
 } from "@/protocol/session-mirror"
 import { PermissionAuthority } from "@/permission/authority"
 import { listConversationAgentSessionsForSessionTree, taskExecutionProjectionForTask } from "@/orchestrator/task-event"
@@ -62,6 +62,7 @@ import {
   ConversationTurnArtifactSummary,
   SessionConversationHistoryPage,
   SessionConversationHydration,
+  SessionResolvedQuestion,
   SessionConnectedEvent,
   SessionEvent,
   SessionProtocolEvent,
@@ -706,18 +707,6 @@ export function protocolSessionEvent(event: ReturnType<typeof ProtocolStore.list
   })
 }
 
-function pendingQuestionsForConversation(
-  requests: Question.Request[],
-  projectID: string,
-  sessionIDs: ReadonlySet<string>,
-) {
-  return requests.flatMap((request) => {
-    if (!sessionIDs.has(request.sessionID)) return []
-    const projected = standalonePendingQuestion(request, projectID)
-    return projected ? [projected] : []
-  })
-}
-
 async function pendingPermissionsForConversation(projectID: string, sessionIDs: ReadonlySet<string>) {
   return (await PermissionAuthority.list()).flatMap((request) => {
     if (!sessionIDs.has(request.sessionID)) return []
@@ -1102,7 +1091,7 @@ export const SessionRoutes = lazy(() =>
         const { sessionIDs, transcript, history, view, agentView, selectedTaskID, executionEvents } = conversation
         const rootMessages = await MessageStore.earliestInSession({ sessionID, limit: 20 })
         const sessionIDSet = new Set(sessionIDs)
-        const pendingQuestions = pendingQuestionsForConversation(await Question.list(), session.projectID, sessionIDSet)
+        const readPendingQuestions = await Question.pendingSnapshotReader()
         const board = {
           kind: "session" as const,
           sessionID,
@@ -1125,10 +1114,17 @@ export const SessionRoutes = lazy(() =>
                 view,
               })
             : []
+        const pendingPermissions = await pendingPermissionsForConversation(session.projectID, sessionIDSet)
+        const questionSnapshot = standaloneQuestionSnapshot(session.projectID, sessionIDSet, readPendingQuestions())
+        const { pendingQuestions } = questionSnapshot
+        const resolvedQuestions = questionSnapshot.resolvedQuestions.map((question) =>
+          SessionResolvedQuestion.parse(question),
+        )
         return c.json({
           board,
           pendingQuestions,
-          pendingPermissions: await pendingPermissionsForConversation(session.projectID, sessionIDSet),
+          resolvedQuestions,
+          pendingPermissions,
           transcript: projectConversationTransportTranscript(transcript),
           events: executionEvents.map(protocolSessionEvent),
           view,
@@ -1296,17 +1292,20 @@ export const SessionRoutes = lazy(() =>
           )
           await SessionEventStreamTestHooks.afterConversationSnapshotRead?.({ sessionID })
           for (const treeSessionID of connectionConversation.sessionIDs) sessionTreeIDs.add(treeSessionID)
+          const pendingPermissions = await pendingPermissionsForConversation(session.projectID, sessionTreeIDs)
+          const questionSnapshot = standaloneQuestionSnapshot(session.projectID, sessionTreeIDs, readPendingQuestions())
+          const { pendingQuestions } = questionSnapshot
+          const resolvedQuestions = questionSnapshot.resolvedQuestions.map((question) =>
+            SessionResolvedQuestion.parse(question),
+          )
           const conversationSnapshot = {
             transcript: projectConversationTransportTranscript(connectionConversation.transcript),
             view: connectionConversation.view,
             agentView: connectionConversation.agentView,
             history: connectionConversation.history,
-            pendingPermissions: await pendingPermissionsForConversation(session.projectID, sessionTreeIDs),
-            pendingQuestions: pendingQuestionsForConversation(
-              readPendingQuestions(),
-              session.projectID,
-              sessionTreeIDs,
-            ),
+            pendingPermissions,
+            pendingQuestions,
+            resolvedQuestions,
           }
           await Promise.all([stopSessionProtocol.drain(), stopTaskLifecycleProtocol.drain()])
           const connectedAt = Date.now()

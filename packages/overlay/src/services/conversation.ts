@@ -1,5 +1,12 @@
 import { batch } from "solid-js"
-import { apiJson, ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
+import {
+  apiJson,
+  ApiAuthorityChangedError,
+  captureApiAuthority,
+  isApiAuthorityCurrent,
+  assertApiAuthorityCurrent,
+  type ApiAuthority,
+} from "./api"
 import { directoryScopedPath } from "./task-path"
 import {
   applyEvent as replayTaskEventToTree,
@@ -9,7 +16,7 @@ import {
   commitStandaloneQuestionInteractions,
   deferConversationTreeProjection,
   prepareConversationView,
-  replaceStandalonePendingInteractions,
+  replaceStandaloneInteractions,
   resetWriter,
   validateConversationBoardInteractions,
 } from "./tree-writer"
@@ -46,7 +53,7 @@ import { conversationHistoryPath } from "./conversation-history-path"
 import { captureMainReadingPosition } from "../store/conversation-ui"
 import { ConversationHistoryPageReader } from "./conversation-history-page-reader"
 import { preparePermissionInteractions } from "../utils/permission-interaction"
-import { prepareQuestionInteractions } from "../utils/question-interaction"
+import { prepareQuestionSnapshot } from "../utils/question-interaction"
 import { publishSubagentConversationUpdate } from "./subagent-conversation"
 
 type EventReplay = {
@@ -416,7 +423,10 @@ function commitConversationEvents(input: {
         }
       })
     } catch (error) {
-      if (!(error instanceof ApiAuthorityChangedError) && !(error instanceof DOMException && error.name === "AbortError")) {
+      if (
+        !(error instanceof ApiAuthorityChangedError) &&
+        !(error instanceof DOMException && error.name === "AbortError")
+      ) {
         rollbackConversationProjection(`${input.cause}-rollback`)
       }
       throw error
@@ -469,8 +479,9 @@ export function mergeSessionConnectionSnapshot(
   validateConversationAgentView(agentView, { rootSessionID: source.id })
   const history = parseHistoryState(snapshot.history)
   const preparedConversation = prepareConversationView(view, transcript)
-  const preparedQuestions = prepareQuestionInteractions(
+  const preparedQuestions = prepareQuestionSnapshot(
     requireArray(snapshot.pendingQuestions, "session.connected conversationSnapshot.pendingQuestions"),
+    requireArray(snapshot.resolvedQuestions, "session.connected conversationSnapshot.resolvedQuestions"),
     conversationSourceDirectory(source),
   )
   const preparedPermissions = preparePermissionInteractions(
@@ -483,7 +494,7 @@ export function mergeSessionConnectionSnapshot(
   historyLoading = false
   batch(() => {
     deferConversationTreeProjection(() => {
-      replaceStandalonePendingInteractions(preparedQuestions, preparedPermissions)
+      replaceStandaloneInteractions(preparedQuestions, preparedPermissions)
       commitPreparedConversationView(preparedConversation)
       hydrateConversationAgentView(sourceKey(source), agentView, { validated: true })
     })
@@ -707,7 +718,8 @@ export async function hydrateConversation(
     const responseDirectory = source.kind === "task" ? hydratedTaskDirectory(board, source.id) : requestDirectory
     const transcript = requireArray(data?.transcript, "transcript")
     const pendingQuestions = source.kind === "session" ? requireArray(data?.pendingQuestions, "pendingQuestions") : []
-    const pendingPermissions = source.kind === "session" ? requireArray(data?.pendingPermissions, "pendingPermissions") : []
+    const pendingPermissions =
+      source.kind === "session" ? requireArray(data?.pendingPermissions, "pendingPermissions") : []
     const events = requireArray(data?.events, "events")
     const view = requireObject(data?.view, "view")
     const agentView = requireObject(data?.agentView, "agentView") as unknown as ConversationAgentView
@@ -719,7 +731,11 @@ export async function hydrateConversation(
     const history = parseHistoryState(data?.history)
     const rewindCursor = parseRewindCursor((board as any).rewindCursor)
     const lastSequence = source.kind === "task" ? requireNonnegativeInteger(data?.lastSequence, "lastSequence") : 0
-    const preparedQuestions = prepareQuestionInteractions(pendingQuestions, responseDirectory)
+    const preparedQuestions = prepareQuestionSnapshot(
+      pendingQuestions,
+      source.kind === "session" ? requireArray(data?.resolvedQuestions, "resolvedQuestions") : [],
+      responseDirectory,
+    )
     const preparedPermissions = preparePermissionInteractions(pendingPermissions, responseDirectory)
     const preparedConversation = prepareConversationView(view, transcript)
     validateConversationBoardInteractions(board, [...preparedQuestions, ...preparedPermissions])
@@ -759,7 +775,8 @@ export async function hydrateConversation(
         })
         applyConversationTurnArtifacts(turnArtifacts)
       } catch (error) {
-        if (isApiAuthorityCurrent(authority) && epoch === replayEpoch) rollbackConversationProjection(`${hydrateCause}-rollback`, options.scrollIntent ?? "preserve")
+        if (isApiAuthorityCurrent(authority) && epoch === replayEpoch)
+          rollbackConversationProjection(`${hydrateCause}-rollback`, options.scrollIntent ?? "preserve")
         throw error
       }
     })
@@ -793,7 +810,9 @@ export async function hydrateConversation(
       return Math.max(lastSequence, replay.latestSequence)
     }
     const finalReplay =
-      source.kind === "task" ? await continueConversationReplay(source.id, directory, replay, epoch, signal, authority) : replay
+      source.kind === "task"
+        ? await continueConversationReplay(source.id, directory, replay, epoch, signal, authority)
+        : replay
     return Math.max(lastSequence, finalReplay.latestSequence)
   } finally {
     if (replayAbort === controller && !backgroundReplay) replayAbort = null
@@ -866,7 +885,8 @@ export async function mergeLatestConversationTail(
         })
         applyConversationTurnArtifacts(turnArtifacts)
       } catch (error) {
-        if (isApiAuthorityCurrent(authority) && epoch === tailMergeEpoch) rollbackConversationProjection("conversation-tail-merge-rollback")
+        if (isApiAuthorityCurrent(authority) && epoch === tailMergeEpoch)
+          rollbackConversationProjection("conversation-tail-merge-rollback")
         throw error
       }
     })
@@ -888,7 +908,8 @@ export async function mergeLatestConversationTail(
 export function canLoadOlderConversationHistory(source: BoardSource | null = boardStore.selectedSource): boolean {
   return (
     !!source &&
-    !!historyAuthority && isApiAuthorityCurrent(historyAuthority) &&
+    !!historyAuthority &&
+    isApiAuthorityCurrent(historyAuthority) &&
     sourceMatches(source, historySource) &&
     historyState.hasMore &&
     historyState.oldestTimestamp !== null &&
@@ -899,8 +920,12 @@ export function canLoadOlderConversationHistory(source: BoardSource | null = boa
 
 /** Current loaded history ownership, separate from the next selected source. */
 export function ownsConversationHistory(source: BoardSource, authority: ApiAuthority): boolean {
-  return !!historyAuthority && historyAuthority.revision === authority.revision &&
-    isApiAuthorityCurrent(authority) && sourceMatches(source, historySource)
+  return (
+    !!historyAuthority &&
+    historyAuthority.revision === authority.revision &&
+    isApiAuthorityCurrent(authority) &&
+    sourceMatches(source, historySource)
+  )
 }
 
 export function conversationCardContainsMessage(cardID: string, messageID: string): boolean {
@@ -987,7 +1012,8 @@ async function loadOlderConversationHistoryPage(
           })
         })
       } catch (error) {
-        if (isApiAuthorityCurrent(authority) && epoch === historyEpoch) rollbackConversationProjection("older-conversation-history-rollback")
+        if (isApiAuthorityCurrent(authority) && epoch === historyEpoch)
+          rollbackConversationProjection("older-conversation-history-rollback")
         throw error
       }
     })
@@ -996,10 +1022,11 @@ async function loadOlderConversationHistoryPage(
     return true
   } catch (error) {
     if (!(error instanceof DOMException && error.name === "AbortError")) {
-      if (isApiAuthorityCurrent(authority)) logConversationAsyncError("older history load failed", error, {
-        ...(source.kind === "task" ? { taskID: source.id } : { sessionID: source.id }),
-        source: "older-history",
-      })
+      if (isApiAuthorityCurrent(authority))
+        logConversationAsyncError("older history load failed", error, {
+          ...(source.kind === "task" ? { taskID: source.id } : { sessionID: source.id }),
+          source: "older-history",
+        })
     }
     throw error
   } finally {
@@ -1051,7 +1078,8 @@ export async function loadConversationSessionHistory(
           })
         })
       } catch (error) {
-        if (isApiAuthorityCurrent(authority) && epoch === historyEpoch) rollbackConversationProjection("conversation-session-history-rollback")
+        if (isApiAuthorityCurrent(authority) && epoch === historyEpoch)
+          rollbackConversationProjection("conversation-session-history-rollback")
         throw error
       }
     })
@@ -1059,11 +1087,12 @@ export async function loadConversationSessionHistory(
     return true
   } catch (error) {
     if (!(error instanceof DOMException && error.name === "AbortError")) {
-      if (isApiAuthorityCurrent(authority)) logConversationAsyncError("session history hydrate failed", error, {
-        taskID: selectedTaskID,
-        sessionID: targetSessionID,
-        source: "session-history",
-      })
+      if (isApiAuthorityCurrent(authority))
+        logConversationAsyncError("session history hydrate failed", error, {
+          taskID: selectedTaskID,
+          sessionID: targetSessionID,
+          source: "session-history",
+        })
     }
     throw error
   } finally {

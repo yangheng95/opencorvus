@@ -78,18 +78,28 @@ export function interactionReplyLabel(decision: unknown): string {
   throw new Error(`permission response has unknown decision ${String(decision)}`)
 }
 
-/** Build answer lines for an interaction (mirrors app.js interactionAnswerLines). */
+function questionAnswerText(question: any, answers: unknown): string {
+  if (!Array.isArray(answers)) return ""
+  const options: any[] = Array.isArray(question?.options) ? question.options : []
+  return answers
+    .filter((value): value is string => typeof value === "string" && !!value.trim())
+    .map((value) => {
+      const option = options.find((candidate) => candidate?.value === value)
+      return typeof option?.label === "string" && option.label.trim() ? option.label : value
+    })
+    .join(", ")
+}
+
+/** Build retained answer lines from the original option labels and custom text. */
 export function interactionAnswerLines(interaction: any): string[] {
   const response = record(interaction?.response) ? interaction.response : null
   const payload = record(interaction?.payload) ? interaction.payload : null
   const questions: any[] = Array.isArray(payload?.questions) ? payload.questions : []
   if (Array.isArray(response?.answers)) {
     return response.answers.flatMap((answer: any, index: number) => {
-      const value = Array.isArray(answer)
-        ? answer.filter((item: any) => typeof item === "string" && item.trim()).join(", ")
-        : ""
-      if (!value) return []
       const question = record(questions[index]) ? questions[index] : null
+      const value = questionAnswerText(question, answer)
+      if (!value) return []
       const label =
         typeof question?.header === "string" && question.header.trim()
           ? question.header.trim()
@@ -102,11 +112,9 @@ export function interactionAnswerLines(interaction: any): string[] {
   if (record(response?.answers)) {
     return Object.entries(response.answers).flatMap(([key, item]: [string, any], index: number) => {
       const answer = record(item) ? item : null
-      const value = Array.isArray(answer?.answers)
-        ? answer.answers.filter((entry: any) => typeof entry === "string" && entry.trim()).join(", ")
-        : ""
-      if (!value) return []
       const question = record(questions[index]) ? questions[index] : null
+      const value = questionAnswerText(question, answer?.answers)
+      if (!value) return []
       const label =
         typeof question?.header === "string" && question.header.trim()
           ? question.header.trim()
@@ -155,7 +163,9 @@ export function interactionResponseText(interaction: any): string {
       }
       return prefix + label
     }
-    throw new Error(`permission ${interaction.id} status ${interaction.status} conflicts with decision ${String(decision)}`)
+    throw new Error(
+      `permission ${interaction.id} status ${interaction.status} conflicts with decision ${String(decision)}`,
+    )
   }
   if (interaction?.status === "rejected") return prefix + t("interaction.skip")
   const answers = interactionAnswerLines(interaction)

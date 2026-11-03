@@ -434,13 +434,17 @@ Tool Part with its canonical admission ordering. Cancellation, retry and an
 unfinished stream remove the draft; they do not fabricate a Tool execution fact.
 The existing conversation writer and pending Tool renderer consume these events.
 
-Standalone session hydration and connection snapshots carry the complete current
-`pendingQuestions` array for the selected durable Project/Session tree. The
-backend projects each original Request and its interaction `orderKey` through
-one reader. Non-Task children use the same durable lineage admission as the
-selected Session; Task-owned questions remain sourced only from
-`board.interactions`. Live Asked and terminal deliveries read the original
-publication facts, so a delayed Asked cannot reopen an accepted terminal.
+Standalone session hydration and connection snapshots carry complete current
+`pendingQuestions` and `resolvedQuestions` arrays for the selected durable
+Project/Session tree, independently of the bounded message tail. One shared
+snapshot partitions the original publication facts: only physically replyable
+Requests without a canonical terminal become pending; actual terminal events
+carry their original Request and interaction `orderKey`. A canonical terminal
+absorbs a stale physical pending projection. Non-Task children use the same
+durable lineage admission as the selected Session; Task-owned questions remain
+sourced only from `board.interactions`. Live terminal events carry the same
+original Request, so terminal-first delivery restores history directly and a
+delayed identical Asked cannot reopen an accepted terminal.
 For standalone live Asked delivery, the prepared canonical pending reader and
 publication facts are read synchronously; only a complete current Request owned
 by this server's reply API becomes a pending projection. A dead ordinary Tool's
@@ -553,28 +557,35 @@ already produced by the canonical activity projector, reusing Message source
 payload validation. Source identity, URL/path, title and file range survive both
 HTTP hydration and the schema-validated connection frame.
 
-Session HTTP hydration and the ordered connection snapshot require both
-`pendingPermissions` and `pendingQuestions`. Each is a complete current pending
-set for the admitted conversation tree, distinct from the bounded additive
-transcript tail. The existing standalone interaction Map owns both. Strict
+Session HTTP hydration and the ordered connection snapshot require
+`pendingPermissions`, `pendingQuestions` and `resolvedQuestions`. These are the
+complete current interaction sets for the admitted conversation tree, distinct
+from the bounded additive transcript tail. The existing standalone interaction
+Map owns them. Strict
 adapters preserve Request identity, summary, directory, time and interaction
 order key for cold, connection and live input. A repeated identical pending
 Question retains its original object and component owner, including its local
 draft; conflicting immutable payloads produce an explicit contract error.
-Connection replacement applies both arrays once. Absence removes a pending
-projection without inventing a terminal status or time. Actual Question replied,
+Cold hydration and connection replacement apply the complete canonical snapshot
+once, without relying on resolved objects retained only in the current page.
+Absence removes a projection without inventing a terminal status or time.
+Actual Question replied,
 rejected, expired and abandoned facts preserve their original outcome/provenance;
 Permission Replied or ledger-backed Terminated retires its matching card.
 Task cards continue to come from Board interactions. Side Chat uses the same
-Question adapter, admits only its exact independent Session and replaces its
-pending set without an intermediate empty callback.
+Question adapter, admits only its exact independent Session and retains terminal
+facts in its canonical interaction Map for deduplication and delayed-Asked
+absorption. It publishes only the pending projection to its existing actionable
+cards, without an intermediate empty callback.
 
 Resolved Question history derives request/response presentation phases from the
 same original interaction, order keys and terminal times. Stable interaction and
 phase identities retain the history owners; the mounted renderer formats them
 with the current locale. Empty authored titles use the localized Question label.
 Deadline expiry and infrastructure closure have separate localized outcomes;
-authored question text and answers retain their original contents.
+authored question text and custom answers retain their original contents. A
+selected answer displays its exact original option label when its stored value
+matches that option; canonical answer values and Tool results remain intact.
 
 Question options share one compact grid across inline, Side Chat and Dialog renderers;
 the Dialog retains its existing larger spacing and interaction area. The authored

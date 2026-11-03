@@ -8,7 +8,12 @@ import { isStandaloneInteractionSession, sessionRole, taskIDForSession } from "@
 import { originSourceFromMessageExtra, overlayMeta } from "@/orchestrator/protocol/message-bridge"
 import { Database, eq } from "@/storage/db"
 import { SessionTable } from "@/session/session.sql"
-import { timelineInteractionResponseOrderKey, timelineMessageOrderKey, timelineOrderKey } from "@/timeline/order"
+import {
+  compareTimelineOrderKeys,
+  timelineInteractionResponseOrderKey,
+  timelineMessageOrderKey,
+  timelineOrderKey,
+} from "@/timeline/order"
 import { persistedSessionAgentID } from "@/agent/persisted-session-identity"
 import { WorkerTurnDescriptor } from "@/agent/worker-turn-descriptor"
 import { Instance } from "@/project/instance"
@@ -33,7 +38,7 @@ export function permissionRequestOrderKey(request: Pick<PermissionAuthority.Requ
 
 export function standalonePendingPermission(request: PermissionAuthority.Request, projectID: string) {
   if (request.projectID !== projectID) return
-  const facts = Database.use(db => readPermissionRequestFacts(db, request.id))
+  const facts = Database.use((db) => readPermissionRequestFacts(db, request.id))
   if (!facts || !isDeepStrictEqual(facts.request, request))
     throw new Error(`Permission ${request.id} Asked differs from its immutable request authority`)
   if (facts.authority) return
@@ -135,6 +140,68 @@ function questionResponseOrderKey(props: Record<string, unknown>): string {
   })
 }
 
+function questionResponsePayload(
+  sessionID: string,
+  props: Record<string, unknown>,
+  request: Question.Request | undefined,
+) {
+  const original = Question.Request.parse(request)
+  if (original.sessionID !== sessionID || original.id !== props.requestID)
+    throw new Error(`Question ${String(props.requestID)} terminal differs from its original Request`)
+  return stampSessionEventPayload(
+    sessionID,
+    {
+      ...props,
+      request: { ...original, orderKey: questionRequestOrderKey(original) },
+    },
+    questionResponseOrderKey(props),
+  )
+}
+
+/** One canonical fact read partitions physical pending owners and resolved history. */
+export function standaloneQuestionSnapshot(
+  projectID: string,
+  sessionIDs: ReadonlySet<string>,
+  pending: readonly Question.Request[],
+) {
+  const admitted = new Set([...sessionIDs].filter((sessionID) => isStandaloneInteractionSession(sessionID, projectID)))
+  const history = Question.publicationHistory({ projectID, sessionIDs: [...admitted] })
+  const byID = new Map(history.map((facts) => [facts.request.id, facts]))
+  const pendingQuestions = pending.flatMap((request) => {
+    if (!admitted.has(request.sessionID)) return []
+    const facts = byID.get(request.id)
+    if (!facts || !isDeepStrictEqual(facts.request, request))
+      throw new Error(`Question ${request.id} pending snapshot differs from its original Request`)
+    if (facts.terminal) return []
+    return [standalonePendingQuestion(request, projectID)!]
+  })
+  const resolvedQuestions = history
+    .flatMap((facts) => {
+      const terminal = facts.terminal
+      if (!terminal) return []
+      const mapped = mapSessionBusEvent(
+        { type: terminal.type, occurrenceID: terminal.occurrenceID, properties: terminal.properties },
+        { sessionID: facts.request.sessionID, questionRequest: facts.request },
+      )
+      if (!mapped?.payload || typeof mapped.payload.orderKey !== "string")
+        throw new Error(`Question ${facts.request.id} terminal projection is incomplete`)
+      return [
+        {
+          event_id: terminal.occurrenceID,
+          session_id: facts.request.sessionID,
+          type: terminal.type,
+          orderKey: mapped.payload.orderKey,
+          emittedAt: terminal.properties.timeResolved,
+          timestamp: terminal.properties.timeResolved,
+          summary: mapped.summary ?? terminal.type,
+          payload: mapped.payload,
+        },
+      ]
+    })
+    .sort((left, right) => compareTimelineOrderKeys(left.orderKey, right.orderKey))
+  return { pendingQuestions, resolvedQuestions }
+}
+
 function stampPayloadWithMeta(
   props: Record<string, unknown>,
   meta: { channel: string; resolvedRole: string; agentID?: string; orderKey?: string },
@@ -196,7 +263,7 @@ export function enrichStandaloneSessionTranscript(messages: Message.WithParts[])
 
 export function mapSessionBusEvent(
   event: SessionBusEvent,
-  input: { sessionID: string },
+  input: { sessionID: string; questionRequest?: Question.Request },
 ): SessionMirrorEvent | undefined {
   const props = event.properties
   const sessionID = sessionBusEventSessionID(event)
@@ -230,12 +297,17 @@ export function mapSessionBusEvent(
   }
   if (event.type === PermissionAuthority.Event.Replied.type) {
     const input = PermissionAuthority.Event.Replied.properties.parse(props)
-    const facts = Database.use(db => readPermissionRequestFacts(db, input.requestID))
+    const facts = Database.use((db) => readPermissionRequestFacts(db, input.requestID))
     if (!facts?.authority || facts.request.sessionID !== sessionID || facts.decision !== input.decision)
       throw new Error(`Permission ${input.requestID} reply differs from its immutable decision authority`)
-    const payload = stampSessionEventPayload(sessionID, props, timelineInteractionResponseOrderKey({
-      id: input.requestID, timeResolved: facts.authority.time_created,
-    }))
+    const payload = stampSessionEventPayload(
+      sessionID,
+      props,
+      timelineInteractionResponseOrderKey({
+        id: input.requestID,
+        timeResolved: facts.authority.time_created,
+      }),
+    )
     return {
       type: "permission.replied",
       summary: `Permission decision: ${String(props.decision ?? "")}`.trim(),
@@ -258,7 +330,7 @@ export function mapSessionBusEvent(
     }
   }
   if (event.type === Question.Event.Replied.type) {
-    const payload = stampSessionEventPayload(sessionID, props, questionResponseOrderKey(props))
+    const payload = questionResponsePayload(sessionID, props, input.questionRequest)
     return {
       type: "question.replied",
       summary: "Question answered",
@@ -266,7 +338,7 @@ export function mapSessionBusEvent(
     }
   }
   if (event.type === Question.Event.Rejected.type) {
-    const payload = stampSessionEventPayload(sessionID, props, questionResponseOrderKey(props))
+    const payload = questionResponsePayload(sessionID, props, input.questionRequest)
     return {
       type: "question.rejected",
       summary: "Question rejected",
@@ -274,7 +346,7 @@ export function mapSessionBusEvent(
     }
   }
   if (event.type === Question.Event.Expired.type) {
-    const payload = stampSessionEventPayload(sessionID, props, questionResponseOrderKey(props))
+    const payload = questionResponsePayload(sessionID, props, input.questionRequest)
     return {
       type: "question.expired",
       summary: "Question deadline expired",
@@ -282,7 +354,7 @@ export function mapSessionBusEvent(
     }
   }
   if (event.type === Question.Event.Abandoned.type) {
-    const payload = stampSessionEventPayload(sessionID, props, questionResponseOrderKey(props))
+    const payload = questionResponsePayload(sessionID, props, input.questionRequest)
     return {
       type: "question.abandoned",
       summary: "Question abandoned by infrastructure",
@@ -306,6 +378,7 @@ export async function mirrorSessionBusEvent(event: SessionBusEvent, sessionID: s
     event.type === Question.Event.Rejected.type ||
     event.type === Question.Event.Expired.type ||
     event.type === Question.Event.Abandoned.type
+  let questionRequest: Question.Request | undefined
   if (question) {
     if (!isStandaloneInteractionSession(sessionID, Instance.project.id)) return
     const asked = event.type === Question.Event.Asked.type
@@ -320,8 +393,13 @@ export async function mirrorSessionBusEvent(event: SessionBusEvent, sessionID: s
     // Terminals can be delivered while Question state itself is disposing.
     const readPending = asked ? await Question.pendingSnapshotReader() : undefined
     const facts = Question.publicationFacts(publicationOwner)
+    questionRequest = facts.request
     if (facts.terminal) {
-      event = { type: facts.terminal.type, properties: facts.terminal.properties, occurrenceID: facts.terminal.occurrenceID }
+      event = {
+        type: facts.terminal.type,
+        properties: facts.terminal.properties,
+        occurrenceID: facts.terminal.occurrenceID,
+      }
     } else {
       // Session pending projections use the same physical reply owner as the
       // canonical snapshot. A historical Asked is not a local continuation.
@@ -343,7 +421,7 @@ export async function mirrorSessionBusEvent(event: SessionBusEvent, sessionID: s
     if (event.type === PermissionAuthority.Event.Terminated.type && event.properties.projectID !== Instance.project.id)
       return
   }
-  const mapped = mapSessionBusEvent(event, { sessionID })
+  const mapped = mapSessionBusEvent(event, { sessionID, questionRequest })
   if (!mapped) return
   const orderKey = mapped.payload?.orderKey
   if (typeof orderKey !== "string" || orderKey.length === 0) {

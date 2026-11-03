@@ -115,6 +115,35 @@ export namespace Question {
     | { type: "question.expired"; occurrenceID: string; properties: z.output<typeof Event.Expired.properties> }
     | { type: "question.abandoned"; occurrenceID: string; properties: z.output<typeof Event.Abandoned.properties> }
 
+  export type PublicationFacts = { request: Request; askedOccurrenceID: string; terminal?: TerminalPublication }
+
+  /** Original publication identities for this exact admitted Session set. */
+  export function publicationHistory(input: { projectID: string; sessionIDs: readonly string[] }): PublicationFacts[] {
+    if (input.sessionIDs.length === 0) return []
+    return Database.use((db) =>
+      db
+        .select()
+        .from(BusPublicationOutboxTable)
+        .where(
+          and(
+            eq(BusPublicationOutboxTable.project_id, input.projectID),
+            eq(BusPublicationOutboxTable.event_type, Event.Asked.type),
+            inArray(sql`json_extract(${BusPublicationOutboxTable.properties}, '$.sessionID')`, [...input.sessionIDs]),
+          ),
+        )
+        .all()
+        .map((row) => {
+          const request = Request.parse(row.properties)
+          return publicationFacts({
+            projectID: input.projectID,
+            sessionID: request.sessionID,
+            requestID: request.id,
+            askedOccurrenceID: row.occurrence_id,
+          })
+        }),
+    )
+  }
+
   /** Read the original publication facts, including terminal-first delivery.
    * The physical waiter map is not an independent terminal authority. */
   export function publicationFacts(input: {
@@ -123,7 +152,7 @@ export namespace Question {
     requestID: string
     askedOccurrenceID?: string
     terminalOccurrenceID?: string
-  }): { request: Request; askedOccurrenceID: string; terminal?: TerminalPublication } {
+  }): PublicationFacts {
     return Database.use((db) => {
       const asked = db
         .select()

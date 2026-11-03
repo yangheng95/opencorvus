@@ -893,9 +893,13 @@ export const TaskConversationAgentActivityItem = z.discriminatedUnion("type", [
   Message.SourceUrlPayload.pick({ type: true, sourceId: true, url: true, title: true }).extend(
     ConversationSourceActivityIdentity,
   ),
-  Message.SourceDocumentPayload.pick({ type: true, sourceId: true, mediaType: true, title: true, filename: true }).extend(
-    ConversationSourceActivityIdentity,
-  ),
+  Message.SourceDocumentPayload.pick({
+    type: true,
+    sourceId: true,
+    mediaType: true,
+    title: true,
+    filename: true,
+  }).extend(ConversationSourceActivityIdentity),
   Message.SourceFilePayload.pick({ type: true, sourceId: true, path: true, title: true, range: true }).extend(
     ConversationSourceActivityIdentity,
   ),
@@ -1066,10 +1070,16 @@ export const SessionEvent = SessionEventEnvelope.extend({
   payload: z.record(z.string(), z.any()),
 })
 
+export const SessionResolvedQuestion = SessionEvent.extend({
+  type: z.enum(["question.replied", "question.rejected", "question.expired", "question.abandoned"]),
+  payload: z.object({ request: SessionPendingQuestion }).catchall(z.unknown()),
+}).meta({ ref: "SessionResolvedQuestion" })
+
 export const SessionConversationConnectionSnapshot = z
   .object({
     pendingPermissions: SessionPendingPermission.array(),
     pendingQuestions: SessionPendingQuestion.array(),
+    resolvedQuestions: SessionResolvedQuestion.array(),
     transcript: z.array(
       z.object({
         info: z.intersection(
@@ -1135,6 +1145,7 @@ export const SessionStreamEvent = z
 export const SessionConversationHydration = z.object({
   board: SessionBoardEnvelope,
   pendingQuestions: SessionPendingQuestion.array(),
+  resolvedQuestions: SessionResolvedQuestion.array(),
   pendingPermissions: SessionPendingPermission.array(),
   transcript: MessageVisibleWithPartsArray,
   events: SessionEvent.array(),

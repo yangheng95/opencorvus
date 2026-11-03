@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [提问历史恢复](2026-11-04-question-history-restore.md)：冷读、重连与真实回答原文。
+
 - [目标反馈交接](2026-11-04-goal-feedback-handoff.md)：第一阶段文件、等待确认和继续交付的真实流程。
 
 - [逐行比较阅读](2026-11-04-review-reading.md)：原比较端点、行号与当前文件的实际界面验证。

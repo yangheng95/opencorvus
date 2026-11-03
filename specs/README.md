@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [已答提问历史恢复](records/2026-11/2026-11-04-question-history-restore.md)：原始请求、终态与冷读/重连的完整显示合同。
+
 - [持续目标等待反馈与继续交付](records/2026-11/2026-11-04-goal-feedback-handoff.md)：真实模型、阶段确认与同一目标的完整交付验收。
 
 - [逐行比较的阅读方向](records/2026-11/2026-11-04-review-reading.md)：真实已记录修改、行号与当前文件的完整阅读体验。

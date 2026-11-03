@@ -428,6 +428,7 @@ test("Session stream schema classifies connection snapshots and ordinary protoco
       conversationSnapshot: {
         pendingPermissions: [],
         pendingQuestions: [],
+        resolvedQuestions: [],
         transcript: [],
         view: { topLevelSessionIDs: [], sessions: [], messages: [] },
         agentView: { topLevelExecutionIDs: [], sessions: [], messages: [] },

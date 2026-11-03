@@ -1,0 +1,1425 @@
+{
+  "at": "2026-11-03T20:40:40.299Z",
+  "batch": 924,
+  "scope": "Canonical resolved Question cold hydration and connected snapshot; terminal-first recovery and original option labels",
+  "budget": {
+    "startedAt": 1793736713138,
+    "deadlineAt": 1793742113138,
+    "maximumRequests": 0,
+    "initialCumulativeRequests": 1367
+  },
+  "phases": {
+    "before": {
+      "qualified": {
+        "at": "2026-11-03T20:17:03.934Z",
+        "kind": "before",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 285809,
+        "current": 285811,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 58233,
+            "after": 58234
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 58175,
+            "after": 58176
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 273,
+        "projects": 111,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "reserveMs": 5119334,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-B3Xi2ME_.js"
+      },
+      "preflight": {
+        "at": "2026-11-03T20:14:43.390Z",
+        "phase": "before",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 0,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "retirement": {
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "publicShutdown": 200,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 5119334,
+        "physical": {
+          "observedAtUtc": "2026-11-03T20:16:35.0992091Z",
+          "launcher": {
+            "originalChildExit": 0,
+            "observedAtUtc": "2026-11-03T20:16:33.8301355Z"
+          },
+          "chain": [
+            {
+              "identity": {
+                "pid": 11604,
+                "processInstanceID": "win32:639293336504924541",
+                "occurrenceID": "1748764f-5fc1-42e6-8e24-5c5bd8138920"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 19084,
+                "processInstanceID": "win32:639293336511980639",
+                "occurrenceID": "ef815ef5-fe89-40e8-b058-bc02591483df"
+              },
+              "state": "dead_or_reused"
+            }
+          ],
+          "native": {
+            "occurrence": "question-history-restore-924-before-cf69f082-6a8c-48eb-9ffe-3277488c3fbd",
+            "outcome": "settled",
+            "host": {
+              "pid": 11604,
+              "processInstanceID": "win32:639293336504924541",
+              "occurrenceID": "1748764f-5fc1-42e6-8e24-5c5bd8138920"
+            },
+            "target": {
+              "pid": 19084,
+              "processInstanceID": "win32:639293336511980639",
+              "occurrenceID": "ef815ef5-fe89-40e8-b058-bc02591483df"
+            },
+            "observedAtUtc": "2026-11-03T20:16:33.804Z",
+            "deadlineAt": 1793742113138,
+            "terminal": {
+              "occurrenceID": "question-history-restore-924-before-cf69f082-6a8c-48eb-9ffe-3277488c3fbd",
+              "pid": 19084,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          }
+        }
+      },
+      "goals": [
+        {
+          "sample": "before",
+          "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+          "goalID": "pev_g0VZwLVjD00U77xRGpKi",
+          "status": "complete",
+          "tokensUsed": 470051,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "toolFacts": 12,
+          "originalQuestion": {
+            "occurrence_id": "bus-occurrence:cb0104d5-ced8-4a38-83c7-77edad5737a8",
+            "event_type": "question.asked",
+            "properties": {
+              "id": "que_g0VZwLeoK00AoBm1jryg",
+              "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+              "timeCreated": 1793734141480,
+              "questions": [
+                {
+                  "question": "A-03 当前状态为 open。请确认最终状态，并明确是否继续第二阶段。",
+                  "header": "确认 A-03",
+                  "options": [
+                    {
+                      "value": "closed_continue",
+                      "label": "改为 closed，并继续",
+                      "description": "仅将 A-03 状态改为 closed，生成并核对 final.md。"
+                    },
+                    {
+                      "value": "open_continue",
+                      "label": "保留 open，并继续",
+                      "description": "确认 A-03 保持 open，继续第二阶段并如实说明无字段变化。"
+                    },
+                    {
+                      "value": "wait",
+                      "label": "暂不确认，继续等待",
+                      "description": "保留提案，不执行第二阶段，目标尚未完成。"
+                    }
+                  ],
+                  "custom": true
+                }
+              ],
+              "tool": {
+                "messageID": "msg_g0VZwLctE00wyT5G2AXb",
+                "callID": "call_49d9f0af29064151b0ab3f7128513e77"
+              },
+              "expiry": {
+                "origin": "deadline",
+                "timeoutMs": 300000,
+                "timeExpires": 1793734441480
+              }
+            },
+            "time_created": 1793734141481
+          },
+          "originalTerminal": {
+            "occurrence_id": "bus-occurrence:question-terminal:que_g0VZwLeoK00AoBm1jryg",
+            "event_type": "question.replied",
+            "properties": {
+              "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+              "requestID": "que_g0VZwLeoK00AoBm1jryg",
+              "answers": [
+                [
+                  "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                ]
+              ],
+              "timeResolved": 1793734405088,
+              "userInput": {
+                "surface": "http.question",
+                "text": "[[\"确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。\"]]",
+                "structured": {
+                  "answers": [
+                    [
+                      "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                    ]
+                  ]
+                }
+              }
+            },
+            "time_created": 1793734405089
+          },
+          "httpFields": [
+            "board",
+            "pendingQuestions",
+            "pendingPermissions",
+            "transcript",
+            "events",
+            "view",
+            "turnArtifacts",
+            "agentView",
+            "history"
+          ],
+          "connectedFields": [
+            "pendingPermissions",
+            "pendingQuestions",
+            "transcript",
+            "view",
+            "agentView",
+            "history"
+          ],
+          "resolvedHTTP": null,
+          "resolvedSSE": null
+        },
+        {
+          "sample": "after",
+          "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+          "goalID": "pev_g0VZwOZI300sc5tIc1qy",
+          "status": "complete",
+          "tokensUsed": 472109,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "toolFacts": 12,
+          "originalQuestion": {
+            "occurrence_id": "bus-occurrence:9f1da7cf-dc5b-471b-94dd-c36d81cdb32b",
+            "event_type": "question.asked",
+            "properties": {
+              "id": "que_g0VZwOgyd000YhrC1zsB",
+              "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+              "timeCreated": 1793734864791,
+              "questions": [
+                {
+                  "question": "请确认 A-03 的最终状态，并明确是否执行第二阶段。当前源状态为 open；若需其他状态，请在自定义回答中填写准确状态及是否继续。",
+                  "header": "A-03 状态确认",
+                  "options": [
+                    {
+                      "value": "closed_continue",
+                      "label": "改为 closed，继续",
+                      "description": "确认 A-03 最终状态为 closed，并要求生成、回读和核对 final.md。"
+                    },
+                    {
+                      "value": "open_continue",
+                      "label": "保持 open，继续",
+                      "description": "确认 A-03 最终状态仍为 open，并要求生成、回读和核对 final.md。"
+                    },
+                    {
+                      "value": "wait",
+                      "label": "暂不确认",
+                      "description": "继续等待真实反馈，不执行第二阶段，整个目标保持未完成。"
+                    }
+                  ]
+                }
+              ],
+              "tool": {
+                "messageID": "msg_g0VZwOfDA0031BX8sGU3",
+                "callID": "call_a4a249548e5e499581dd7d9e7717f263"
+              },
+              "expiry": {
+                "origin": "deadline",
+                "timeoutMs": 300000,
+                "timeExpires": 1793735164791
+              }
+            },
+            "time_created": 1793734864793
+          },
+          "originalTerminal": {
+            "occurrence_id": "bus-occurrence:question-terminal:que_g0VZwOgyd000YhrC1zsB",
+            "event_type": "question.replied",
+            "properties": {
+              "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+              "requestID": "que_g0VZwOgyd000YhrC1zsB",
+              "answers": [
+                [
+                  "closed_continue",
+                  "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                ]
+              ],
+              "timeResolved": 1793734983516,
+              "userInput": {
+                "surface": "http.question",
+                "text": "[[\"closed_continue\",\"确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。\"]]",
+                "structured": {
+                  "answers": [
+                    [
+                      "closed_continue",
+                      "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                    ]
+                  ]
+                }
+              }
+            },
+            "time_created": 1793734983517
+          },
+          "httpFields": [
+            "board",
+            "pendingQuestions",
+            "pendingPermissions",
+            "transcript",
+            "events",
+            "view",
+            "turnArtifacts",
+            "agentView",
+            "history"
+          ],
+          "connectedFields": [
+            "pendingPermissions",
+            "pendingQuestions",
+            "transcript",
+            "view",
+            "agentView",
+            "history"
+          ],
+          "resolvedHTTP": null,
+          "resolvedSSE": null
+        }
+      ],
+      "tasks": [
+        {
+          "name": "failed741",
+          "taskID": "tsk_g00VZHd47u00r0Pa5iWM",
+          "interactions": []
+        },
+        {
+          "name": "completed741",
+          "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+          "interactions": []
+        },
+        {
+          "name": "completed801",
+          "taskID": "tsk_g00VZT7V7400TdQ2J6Sj",
+          "interactions": [
+            {
+              "id": "int_g0VZT7pOE00X1WJykans",
+              "taskID": "tsk_g00VZT7V7400TdQ2J6Sj",
+              "orderKey": "v1:0001793302331800:0000000000000070:0000000000000000:interaction:int_g0VZT7pOE00X1WJykans",
+              "responseOrderKey": "v1:0001793302631800:0000000000000070:0000000000000000:interaction:int_g0VZT7pOE00X1WJykans_response",
+              "sessionID": "ses_-zUQWsTcezzNPfRFa33B",
+              "externalID": "que_g0VZT7pO3005OFf0gED6",
+              "type": "question",
+              "status": "expired",
+              "title": "本地提交批准",
+              "body": "是否批准只将 counter.py 和 test_counter.py 做一次本地提交？上方已展示两个文件的完整差异和两例实际通过的测试输出；operator-note.txt 及其他文件不会纳入提交，原有暂存和工作区内容将保留。",
+              "payload": {
+                "questions": [
+                  {
+                    "question": "是否批准只将 counter.py 和 test_counter.py 做一次本地提交？上方已展示两个文件的完整差异和两例实际通过的测试输出；operator-note.txt 及其他文件不会纳入提交，原有暂存和工作区内容将保留。",
+                    "header": "本地提交批准",
+                    "options": [
+                      {
+                        "value": "approve",
+                        "label": "批准",
+                        "description": "批准仅将 counter.py 和 test_counter.py 做一次本地提交，不推送。"
+                      },
+                      {
+                        "value": "reject",
+                        "label": "不批准",
+                        "description": "不执行暂存或提交，保留当前修改。"
+                      }
+                    ],
+                    "custom": true
+                  }
+                ],
+                "tool": {
+                  "messageID": "msg_hfbO0nUQ4KMQO1Hw9DCo",
+                  "callID": "call_ffb5e3754e154200affbe600b3fcaad9"
+                },
+                "expiry": {
+                  "origin": "deadline",
+                  "timeoutMs": 300000,
+                  "timeExpires": 1793302631800
+                }
+              },
+              "response": {
+                "origin": "deadline",
+                "time_expires": 1793302631800
+              },
+              "time": {
+                "created": 1793302331800,
+                "updated": 1793302631800,
+                "resolved": 1793302631800
+              }
+            }
+          ]
+        },
+        {
+          "name": "unfinished793",
+          "taskID": "tsk_g00VZRQQAP00yaqEnUZF",
+          "interactions": [
+            {
+              "id": "int_g0VZRk9Ba00Fr3AWQ7fl",
+              "taskID": "tsk_g00VZRQQAP00yaqEnUZF",
+              "orderKey": "v1:0001793281911684:0000000000000070:0000000000000000:interaction:int_g0VZRk9Ba00Fr3AWQ7fl",
+              "responseOrderKey": "v1:0001793282211684:0000000000000070:0000000000000000:interaction:int_g0VZRk9Ba00Fr3AWQ7fl_response",
+              "sessionID": "ses_-zUQYZYLhzz8tokz8EUs",
+              "externalID": "que_g0VZRk9BM00m0LwDNQ7Q",
+              "type": "question",
+              "status": "expired",
+              "title": "下一阶段修复",
+              "body": "是否开始下一阶段修复？",
+              "payload": {
+                "questions": [
+                  {
+                    "question": "是否开始下一阶段修复？",
+                    "header": "下一阶段修复",
+                    "options": [
+                      {
+                        "value": "yes",
+                        "label": "是",
+                        "description": "同意开始下一阶段修复；这不等于批准 Git 提交，提交仍须另行取得真实确认。"
+                      },
+                      {
+                        "value": "no",
+                        "label": "否",
+                        "description": "暂不开始下一阶段修复，保留当前 Task 和原会话。"
+                      }
+                    ],
+                    "multiple": false,
+                    "custom": true
+                  }
+                ],
+                "tool": {
+                  "messageID": "msg_hePrB2aXcTHHlWzzDtDy",
+                  "callID": "call_d42b0193c0a64b1b9d12c2dccfee6dbd"
+                },
+                "expiry": {
+                  "origin": "deadline",
+                  "timeoutMs": 300000,
+                  "timeExpires": 1793282211684
+                }
+              },
+              "response": {
+                "origin": "deadline",
+                "time_expires": 1793282211684
+              },
+              "time": {
+                "created": 1793281911684,
+                "updated": 1793282211684,
+                "resolved": 1793282211684
+              }
+            }
+          ]
+        }
+      ],
+      "regressions": {
+        "missionCount": 15,
+        "originalTaskHydrationsExact": 4,
+        "mailbox": {
+          "active": 24,
+          "unread": 24,
+          "queryCounts": {
+            "approved-code-801": 2,
+            "checkpoint-qa-795": 7,
+            "没有匹配的收件箱905": 0
+          }
+        },
+        "files": [
+          {
+            "key": "movedCurrentPath",
+            "path": "deliverables/issue-register-updated.xlsx",
+            "status": 404,
+            "error": "FileNotFoundError"
+          },
+          {
+            "key": "existingCurrentFile",
+            "path": "deliverables/issue-register.xlsx",
+            "status": 200,
+            "type": "binary"
+          },
+          {
+            "key": "existingSummary",
+            "path": "deliverables/summary.md",
+            "status": 200,
+            "type": "text"
+          }
+        ],
+        "goal915": {
+          "id": "pev_g0VZqi4VF006X0VITEUv",
+          "status": "complete",
+          "tokensUsed": 345102,
+          "turnsAccepted": 1,
+          "activity": "idle"
+        }
+      }
+    },
+    "after": {
+      "qualified": {
+        "at": "2026-11-03T20:39:16.171Z",
+        "kind": "after",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 285811,
+        "current": 285813,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 58234,
+            "after": 58235
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 58176,
+            "after": 58177
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 273,
+        "projects": 111,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "reserveMs": 3792315,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-0GaABhLf.js"
+      },
+      "preflight": {
+        "at": "2026-11-03T20:34:53.904Z",
+        "phase": "after",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 0,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "retirement": {
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "publicShutdown": 200,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 3792315,
+        "physical": {
+          "native": {
+            "occurrence": "question-history-restore-924-after-81e98c61-7dcf-42cb-b1bc-04a0aff4245a",
+            "outcome": "settled",
+            "host": {
+              "pid": 11848,
+              "processInstanceID": "win32:639293348772372902",
+              "occurrenceID": "a428911b-21f5-49d6-bcfc-87b3af66cf53"
+            },
+            "target": {
+              "pid": 29024,
+              "processInstanceID": "win32:639293348781154030",
+              "occurrenceID": "f675737c-2dd7-4a10-b5ab-cc3bae8095eb"
+            },
+            "observedAtUtc": "2026-11-03T20:38:40.823Z",
+            "deadlineAt": 1793742113138,
+            "terminal": {
+              "occurrenceID": "question-history-restore-924-after-81e98c61-7dcf-42cb-b1bc-04a0aff4245a",
+              "pid": 29024,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "observedAtUtc": "2026-11-03T20:38:45.1660133Z",
+          "launcher": {
+            "originalChildExit": 0,
+            "observedAtUtc": "2026-11-03T20:38:40.8474719Z"
+          },
+          "chain": [
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 11848,
+                "processInstanceID": "win32:639293348772372902",
+                "occurrenceID": "a428911b-21f5-49d6-bcfc-87b3af66cf53"
+              }
+            },
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 29024,
+                "processInstanceID": "win32:639293348781154030",
+                "occurrenceID": "f675737c-2dd7-4a10-b5ab-cc3bae8095eb"
+              }
+            }
+          ]
+        }
+      },
+      "goals": [
+        {
+          "sample": "before",
+          "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+          "goalID": "pev_g0VZwLVjD00U77xRGpKi",
+          "status": "complete",
+          "tokensUsed": 470051,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "toolFacts": 12,
+          "originalQuestion": {
+            "occurrence_id": "bus-occurrence:cb0104d5-ced8-4a38-83c7-77edad5737a8",
+            "event_type": "question.asked",
+            "properties": {
+              "id": "que_g0VZwLeoK00AoBm1jryg",
+              "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+              "timeCreated": 1793734141480,
+              "questions": [
+                {
+                  "question": "A-03 当前状态为 open。请确认最终状态，并明确是否继续第二阶段。",
+                  "header": "确认 A-03",
+                  "options": [
+                    {
+                      "value": "closed_continue",
+                      "label": "改为 closed，并继续",
+                      "description": "仅将 A-03 状态改为 closed，生成并核对 final.md。"
+                    },
+                    {
+                      "value": "open_continue",
+                      "label": "保留 open，并继续",
+                      "description": "确认 A-03 保持 open，继续第二阶段并如实说明无字段变化。"
+                    },
+                    {
+                      "value": "wait",
+                      "label": "暂不确认，继续等待",
+                      "description": "保留提案，不执行第二阶段，目标尚未完成。"
+                    }
+                  ],
+                  "custom": true
+                }
+              ],
+              "tool": {
+                "messageID": "msg_g0VZwLctE00wyT5G2AXb",
+                "callID": "call_49d9f0af29064151b0ab3f7128513e77"
+              },
+              "expiry": {
+                "origin": "deadline",
+                "timeoutMs": 300000,
+                "timeExpires": 1793734441480
+              }
+            },
+            "time_created": 1793734141481
+          },
+          "originalTerminal": {
+            "occurrence_id": "bus-occurrence:question-terminal:que_g0VZwLeoK00AoBm1jryg",
+            "event_type": "question.replied",
+            "properties": {
+              "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+              "requestID": "que_g0VZwLeoK00AoBm1jryg",
+              "answers": [
+                [
+                  "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                ]
+              ],
+              "timeResolved": 1793734405088,
+              "userInput": {
+                "surface": "http.question",
+                "text": "[[\"确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。\"]]",
+                "structured": {
+                  "answers": [
+                    [
+                      "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                    ]
+                  ]
+                }
+              }
+            },
+            "time_created": 1793734405089
+          },
+          "httpFields": [
+            "board",
+            "pendingQuestions",
+            "resolvedQuestions",
+            "pendingPermissions",
+            "transcript",
+            "events",
+            "view",
+            "turnArtifacts",
+            "agentView",
+            "history"
+          ],
+          "connectedFields": [
+            "pendingPermissions",
+            "pendingQuestions",
+            "resolvedQuestions",
+            "transcript",
+            "view",
+            "agentView",
+            "history"
+          ],
+          "resolvedHTTP": [
+            {
+              "event_id": "bus-occurrence:question-terminal:que_g0VZwLeoK00AoBm1jryg",
+              "session_id": "ses_-zUQ3eUVjzzlDQzs44V0",
+              "orderKey": "v1:0001793734405088:0000000000000070:0000000000000000:interaction:que_g0VZwLeoK00AoBm1jryg_response",
+              "emittedAt": 1793734405088,
+              "timestamp": 1793734405088,
+              "summary": "Question answered",
+              "type": "question.replied",
+              "payload": {
+                "request": {
+                  "id": "que_g0VZwLeoK00AoBm1jryg",
+                  "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+                  "timeCreated": 1793734141480,
+                  "questions": [
+                    {
+                      "question": "A-03 当前状态为 open。请确认最终状态，并明确是否继续第二阶段。",
+                      "header": "确认 A-03",
+                      "options": [
+                        {
+                          "value": "closed_continue",
+                          "label": "改为 closed，并继续",
+                          "description": "仅将 A-03 状态改为 closed，生成并核对 final.md。"
+                        },
+                        {
+                          "value": "open_continue",
+                          "label": "保留 open，并继续",
+                          "description": "确认 A-03 保持 open，继续第二阶段并如实说明无字段变化。"
+                        },
+                        {
+                          "value": "wait",
+                          "label": "暂不确认，继续等待",
+                          "description": "保留提案，不执行第二阶段，目标尚未完成。"
+                        }
+                      ],
+                      "custom": true
+                    }
+                  ],
+                  "tool": {
+                    "messageID": "msg_g0VZwLctE00wyT5G2AXb",
+                    "callID": "call_49d9f0af29064151b0ab3f7128513e77"
+                  },
+                  "expiry": {
+                    "origin": "deadline",
+                    "timeoutMs": 300000,
+                    "timeExpires": 1793734441480
+                  },
+                  "orderKey": "v1:0001793734141480:0000000000000070:0000000000000000:interaction:que_g0VZwLeoK00AoBm1jryg"
+                },
+                "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+                "requestID": "que_g0VZwLeoK00AoBm1jryg",
+                "answers": [
+                  [
+                    "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                  ]
+                ],
+                "timeResolved": 1793734405088,
+                "userInput": {
+                  "surface": "http.question",
+                  "text": "[[\"确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。\"]]",
+                  "structured": {
+                    "answers": [
+                      [
+                        "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                      ]
+                    ]
+                  }
+                },
+                "orderKey": "v1:0001793734405088:0000000000000070:0000000000000000:interaction:que_g0VZwLeoK00AoBm1jryg_response",
+                "channel": "assistant",
+                "resolvedRole": "work",
+                "agentID": "work"
+              }
+            }
+          ],
+          "resolvedSSE": [
+            {
+              "event_id": "bus-occurrence:question-terminal:que_g0VZwLeoK00AoBm1jryg",
+              "session_id": "ses_-zUQ3eUVjzzlDQzs44V0",
+              "orderKey": "v1:0001793734405088:0000000000000070:0000000000000000:interaction:que_g0VZwLeoK00AoBm1jryg_response",
+              "emittedAt": 1793734405088,
+              "timestamp": 1793734405088,
+              "summary": "Question answered",
+              "type": "question.replied",
+              "payload": {
+                "request": {
+                  "id": "que_g0VZwLeoK00AoBm1jryg",
+                  "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+                  "timeCreated": 1793734141480,
+                  "questions": [
+                    {
+                      "question": "A-03 当前状态为 open。请确认最终状态，并明确是否继续第二阶段。",
+                      "header": "确认 A-03",
+                      "options": [
+                        {
+                          "value": "closed_continue",
+                          "label": "改为 closed，并继续",
+                          "description": "仅将 A-03 状态改为 closed，生成并核对 final.md。"
+                        },
+                        {
+                          "value": "open_continue",
+                          "label": "保留 open，并继续",
+                          "description": "确认 A-03 保持 open，继续第二阶段并如实说明无字段变化。"
+                        },
+                        {
+                          "value": "wait",
+                          "label": "暂不确认，继续等待",
+                          "description": "保留提案，不执行第二阶段，目标尚未完成。"
+                        }
+                      ],
+                      "custom": true
+                    }
+                  ],
+                  "tool": {
+                    "messageID": "msg_g0VZwLctE00wyT5G2AXb",
+                    "callID": "call_49d9f0af29064151b0ab3f7128513e77"
+                  },
+                  "expiry": {
+                    "origin": "deadline",
+                    "timeoutMs": 300000,
+                    "timeExpires": 1793734441480
+                  },
+                  "orderKey": "v1:0001793734141480:0000000000000070:0000000000000000:interaction:que_g0VZwLeoK00AoBm1jryg"
+                },
+                "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+                "requestID": "que_g0VZwLeoK00AoBm1jryg",
+                "answers": [
+                  [
+                    "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                  ]
+                ],
+                "timeResolved": 1793734405088,
+                "userInput": {
+                  "surface": "http.question",
+                  "text": "[[\"确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。\"]]",
+                  "structured": {
+                    "answers": [
+                      [
+                        "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                      ]
+                    ]
+                  }
+                },
+                "orderKey": "v1:0001793734405088:0000000000000070:0000000000000000:interaction:que_g0VZwLeoK00AoBm1jryg_response",
+                "channel": "assistant",
+                "resolvedRole": "work",
+                "agentID": "work"
+              }
+            }
+          ]
+        },
+        {
+          "sample": "after",
+          "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+          "goalID": "pev_g0VZwOZI300sc5tIc1qy",
+          "status": "complete",
+          "tokensUsed": 472109,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "toolFacts": 12,
+          "originalQuestion": {
+            "occurrence_id": "bus-occurrence:9f1da7cf-dc5b-471b-94dd-c36d81cdb32b",
+            "event_type": "question.asked",
+            "properties": {
+              "id": "que_g0VZwOgyd000YhrC1zsB",
+              "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+              "timeCreated": 1793734864791,
+              "questions": [
+                {
+                  "question": "请确认 A-03 的最终状态，并明确是否执行第二阶段。当前源状态为 open；若需其他状态，请在自定义回答中填写准确状态及是否继续。",
+                  "header": "A-03 状态确认",
+                  "options": [
+                    {
+                      "value": "closed_continue",
+                      "label": "改为 closed，继续",
+                      "description": "确认 A-03 最终状态为 closed，并要求生成、回读和核对 final.md。"
+                    },
+                    {
+                      "value": "open_continue",
+                      "label": "保持 open，继续",
+                      "description": "确认 A-03 最终状态仍为 open，并要求生成、回读和核对 final.md。"
+                    },
+                    {
+                      "value": "wait",
+                      "label": "暂不确认",
+                      "description": "继续等待真实反馈，不执行第二阶段，整个目标保持未完成。"
+                    }
+                  ]
+                }
+              ],
+              "tool": {
+                "messageID": "msg_g0VZwOfDA0031BX8sGU3",
+                "callID": "call_a4a249548e5e499581dd7d9e7717f263"
+              },
+              "expiry": {
+                "origin": "deadline",
+                "timeoutMs": 300000,
+                "timeExpires": 1793735164791
+              }
+            },
+            "time_created": 1793734864793
+          },
+          "originalTerminal": {
+            "occurrence_id": "bus-occurrence:question-terminal:que_g0VZwOgyd000YhrC1zsB",
+            "event_type": "question.replied",
+            "properties": {
+              "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+              "requestID": "que_g0VZwOgyd000YhrC1zsB",
+              "answers": [
+                [
+                  "closed_continue",
+                  "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                ]
+              ],
+              "timeResolved": 1793734983516,
+              "userInput": {
+                "surface": "http.question",
+                "text": "[[\"closed_continue\",\"确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。\"]]",
+                "structured": {
+                  "answers": [
+                    [
+                      "closed_continue",
+                      "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                    ]
+                  ]
+                }
+              }
+            },
+            "time_created": 1793734983517
+          },
+          "httpFields": [
+            "board",
+            "pendingQuestions",
+            "resolvedQuestions",
+            "pendingPermissions",
+            "transcript",
+            "events",
+            "view",
+            "turnArtifacts",
+            "agentView",
+            "history"
+          ],
+          "connectedFields": [
+            "pendingPermissions",
+            "pendingQuestions",
+            "resolvedQuestions",
+            "transcript",
+            "view",
+            "agentView",
+            "history"
+          ],
+          "resolvedHTTP": [
+            {
+              "event_id": "bus-occurrence:question-terminal:que_g0VZwOgyd000YhrC1zsB",
+              "session_id": "ses_-zUQ3bQvczzYKyEmZAFl",
+              "orderKey": "v1:0001793734983516:0000000000000070:0000000000000000:interaction:que_g0VZwOgyd000YhrC1zsB_response",
+              "emittedAt": 1793734983516,
+              "timestamp": 1793734983516,
+              "summary": "Question answered",
+              "type": "question.replied",
+              "payload": {
+                "request": {
+                  "id": "que_g0VZwOgyd000YhrC1zsB",
+                  "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+                  "timeCreated": 1793734864791,
+                  "questions": [
+                    {
+                      "question": "请确认 A-03 的最终状态，并明确是否执行第二阶段。当前源状态为 open；若需其他状态，请在自定义回答中填写准确状态及是否继续。",
+                      "header": "A-03 状态确认",
+                      "options": [
+                        {
+                          "value": "closed_continue",
+                          "label": "改为 closed，继续",
+                          "description": "确认 A-03 最终状态为 closed，并要求生成、回读和核对 final.md。"
+                        },
+                        {
+                          "value": "open_continue",
+                          "label": "保持 open，继续",
+                          "description": "确认 A-03 最终状态仍为 open，并要求生成、回读和核对 final.md。"
+                        },
+                        {
+                          "value": "wait",
+                          "label": "暂不确认",
+                          "description": "继续等待真实反馈，不执行第二阶段，整个目标保持未完成。"
+                        }
+                      ]
+                    }
+                  ],
+                  "tool": {
+                    "messageID": "msg_g0VZwOfDA0031BX8sGU3",
+                    "callID": "call_a4a249548e5e499581dd7d9e7717f263"
+                  },
+                  "expiry": {
+                    "origin": "deadline",
+                    "timeoutMs": 300000,
+                    "timeExpires": 1793735164791
+                  },
+                  "orderKey": "v1:0001793734864791:0000000000000070:0000000000000000:interaction:que_g0VZwOgyd000YhrC1zsB"
+                },
+                "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+                "requestID": "que_g0VZwOgyd000YhrC1zsB",
+                "answers": [
+                  [
+                    "closed_continue",
+                    "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                  ]
+                ],
+                "timeResolved": 1793734983516,
+                "userInput": {
+                  "surface": "http.question",
+                  "text": "[[\"closed_continue\",\"确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。\"]]",
+                  "structured": {
+                    "answers": [
+                      [
+                        "closed_continue",
+                        "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                      ]
+                    ]
+                  }
+                },
+                "orderKey": "v1:0001793734983516:0000000000000070:0000000000000000:interaction:que_g0VZwOgyd000YhrC1zsB_response",
+                "channel": "assistant",
+                "resolvedRole": "work",
+                "agentID": "work"
+              }
+            }
+          ],
+          "resolvedSSE": [
+            {
+              "event_id": "bus-occurrence:question-terminal:que_g0VZwOgyd000YhrC1zsB",
+              "session_id": "ses_-zUQ3bQvczzYKyEmZAFl",
+              "orderKey": "v1:0001793734983516:0000000000000070:0000000000000000:interaction:que_g0VZwOgyd000YhrC1zsB_response",
+              "emittedAt": 1793734983516,
+              "timestamp": 1793734983516,
+              "summary": "Question answered",
+              "type": "question.replied",
+              "payload": {
+                "request": {
+                  "id": "que_g0VZwOgyd000YhrC1zsB",
+                  "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+                  "timeCreated": 1793734864791,
+                  "questions": [
+                    {
+                      "question": "请确认 A-03 的最终状态，并明确是否执行第二阶段。当前源状态为 open；若需其他状态，请在自定义回答中填写准确状态及是否继续。",
+                      "header": "A-03 状态确认",
+                      "options": [
+                        {
+                          "value": "closed_continue",
+                          "label": "改为 closed，继续",
+                          "description": "确认 A-03 最终状态为 closed，并要求生成、回读和核对 final.md。"
+                        },
+                        {
+                          "value": "open_continue",
+                          "label": "保持 open，继续",
+                          "description": "确认 A-03 最终状态仍为 open，并要求生成、回读和核对 final.md。"
+                        },
+                        {
+                          "value": "wait",
+                          "label": "暂不确认",
+                          "description": "继续等待真实反馈，不执行第二阶段，整个目标保持未完成。"
+                        }
+                      ]
+                    }
+                  ],
+                  "tool": {
+                    "messageID": "msg_g0VZwOfDA0031BX8sGU3",
+                    "callID": "call_a4a249548e5e499581dd7d9e7717f263"
+                  },
+                  "expiry": {
+                    "origin": "deadline",
+                    "timeoutMs": 300000,
+                    "timeExpires": 1793735164791
+                  },
+                  "orderKey": "v1:0001793734864791:0000000000000070:0000000000000000:interaction:que_g0VZwOgyd000YhrC1zsB"
+                },
+                "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+                "requestID": "que_g0VZwOgyd000YhrC1zsB",
+                "answers": [
+                  [
+                    "closed_continue",
+                    "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                  ]
+                ],
+                "timeResolved": 1793734983516,
+                "userInput": {
+                  "surface": "http.question",
+                  "text": "[[\"closed_continue\",\"确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。\"]]",
+                  "structured": {
+                    "answers": [
+                      [
+                        "closed_continue",
+                        "确认第一阶段：A-03已完成，请仅将其状态从open改为closed，其余编号、责任人、截止日和状态保持。现在明确继续同一个持续目标，按brief要求生成deliverables/final.md并回读核对；保留原CSV和proposal，完成全部交付后再标记目标完成。"
+                      ]
+                    ]
+                  }
+                },
+                "orderKey": "v1:0001793734983516:0000000000000070:0000000000000000:interaction:que_g0VZwOgyd000YhrC1zsB_response",
+                "channel": "assistant",
+                "resolvedRole": "work",
+                "agentID": "work"
+              }
+            }
+          ]
+        }
+      ],
+      "tasks": [
+        {
+          "name": "failed741",
+          "taskID": "tsk_g00VZHd47u00r0Pa5iWM",
+          "interactions": []
+        },
+        {
+          "name": "completed741",
+          "taskID": "tsk_g00VZHd0gV00QEPVDCEU",
+          "interactions": []
+        },
+        {
+          "name": "completed801",
+          "taskID": "tsk_g00VZT7V7400TdQ2J6Sj",
+          "interactions": [
+            {
+              "id": "int_g0VZT7pOE00X1WJykans",
+              "taskID": "tsk_g00VZT7V7400TdQ2J6Sj",
+              "orderKey": "v1:0001793302331800:0000000000000070:0000000000000000:interaction:int_g0VZT7pOE00X1WJykans",
+              "responseOrderKey": "v1:0001793302631800:0000000000000070:0000000000000000:interaction:int_g0VZT7pOE00X1WJykans_response",
+              "sessionID": "ses_-zUQWsTcezzNPfRFa33B",
+              "externalID": "que_g0VZT7pO3005OFf0gED6",
+              "type": "question",
+              "status": "expired",
+              "title": "本地提交批准",
+              "body": "是否批准只将 counter.py 和 test_counter.py 做一次本地提交？上方已展示两个文件的完整差异和两例实际通过的测试输出；operator-note.txt 及其他文件不会纳入提交，原有暂存和工作区内容将保留。",
+              "payload": {
+                "questions": [
+                  {
+                    "question": "是否批准只将 counter.py 和 test_counter.py 做一次本地提交？上方已展示两个文件的完整差异和两例实际通过的测试输出；operator-note.txt 及其他文件不会纳入提交，原有暂存和工作区内容将保留。",
+                    "header": "本地提交批准",
+                    "options": [
+                      {
+                        "value": "approve",
+                        "label": "批准",
+                        "description": "批准仅将 counter.py 和 test_counter.py 做一次本地提交，不推送。"
+                      },
+                      {
+                        "value": "reject",
+                        "label": "不批准",
+                        "description": "不执行暂存或提交，保留当前修改。"
+                      }
+                    ],
+                    "custom": true
+                  }
+                ],
+                "tool": {
+                  "messageID": "msg_hfbO0nUQ4KMQO1Hw9DCo",
+                  "callID": "call_ffb5e3754e154200affbe600b3fcaad9"
+                },
+                "expiry": {
+                  "origin": "deadline",
+                  "timeoutMs": 300000,
+                  "timeExpires": 1793302631800
+                }
+              },
+              "response": {
+                "origin": "deadline",
+                "time_expires": 1793302631800
+              },
+              "time": {
+                "created": 1793302331800,
+                "updated": 1793302631800,
+                "resolved": 1793302631800
+              }
+            }
+          ]
+        },
+        {
+          "name": "unfinished793",
+          "taskID": "tsk_g00VZRQQAP00yaqEnUZF",
+          "interactions": [
+            {
+              "id": "int_g0VZRk9Ba00Fr3AWQ7fl",
+              "taskID": "tsk_g00VZRQQAP00yaqEnUZF",
+              "orderKey": "v1:0001793281911684:0000000000000070:0000000000000000:interaction:int_g0VZRk9Ba00Fr3AWQ7fl",
+              "responseOrderKey": "v1:0001793282211684:0000000000000070:0000000000000000:interaction:int_g0VZRk9Ba00Fr3AWQ7fl_response",
+              "sessionID": "ses_-zUQYZYLhzz8tokz8EUs",
+              "externalID": "que_g0VZRk9BM00m0LwDNQ7Q",
+              "type": "question",
+              "status": "expired",
+              "title": "下一阶段修复",
+              "body": "是否开始下一阶段修复？",
+              "payload": {
+                "questions": [
+                  {
+                    "question": "是否开始下一阶段修复？",
+                    "header": "下一阶段修复",
+                    "options": [
+                      {
+                        "value": "yes",
+                        "label": "是",
+                        "description": "同意开始下一阶段修复；这不等于批准 Git 提交，提交仍须另行取得真实确认。"
+                      },
+                      {
+                        "value": "no",
+                        "label": "否",
+                        "description": "暂不开始下一阶段修复，保留当前 Task 和原会话。"
+                      }
+                    ],
+                    "multiple": false,
+                    "custom": true
+                  }
+                ],
+                "tool": {
+                  "messageID": "msg_hePrB2aXcTHHlWzzDtDy",
+                  "callID": "call_d42b0193c0a64b1b9d12c2dccfee6dbd"
+                },
+                "expiry": {
+                  "origin": "deadline",
+                  "timeoutMs": 300000,
+                  "timeExpires": 1793282211684
+                }
+              },
+              "response": {
+                "origin": "deadline",
+                "time_expires": 1793282211684
+              },
+              "time": {
+                "created": 1793281911684,
+                "updated": 1793282211684,
+                "resolved": 1793282211684
+              }
+            }
+          ]
+        }
+      ],
+      "regressions": {
+        "missionCount": 15,
+        "originalTaskHydrationsExact": 4,
+        "mailbox": {
+          "active": 24,
+          "unread": 24,
+          "queryCounts": {
+            "approved-code-801": 2,
+            "checkpoint-qa-795": 7,
+            "没有匹配的收件箱905": 0
+          }
+        },
+        "files": [
+          {
+            "key": "movedCurrentPath",
+            "path": "deliverables/issue-register-updated.xlsx",
+            "status": 404,
+            "error": "FileNotFoundError"
+          },
+          {
+            "key": "existingCurrentFile",
+            "path": "deliverables/issue-register.xlsx",
+            "status": 200,
+            "type": "binary"
+          },
+          {
+            "key": "existingSummary",
+            "path": "deliverables/summary.md",
+            "status": 200,
+            "type": "text"
+          }
+        ],
+        "goal915": {
+          "id": "pev_g0VZqi4VF006X0VITEUv",
+          "status": "complete",
+          "tokensUsed": 345102,
+          "turnsAccepted": 1,
+          "activity": "idle"
+        }
+      }
+    }
+  },
+  "historyPaging": [
+    {
+      "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+      "fullMessageCount": 14,
+      "pages": 3,
+      "completeResolvedQuestions": 1
+    },
+    {
+      "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+      "fullMessageCount": 14,
+      "pages": 3,
+      "completeResolvedQuestions": 1
+    }
+  ],
+  "checks": {
+    "unit-question-snapshot-final": {
+      "label": "unit-question-snapshot-final",
+      "startedAt": 1793737626263,
+      "closedAt": 1793737700000,
+      "code": 0,
+      "signal": null,
+      "childPID": 9856,
+      "summary": [
+        " 2 pass",
+        " 0 fail",
+        " 26 expect() calls",
+        "[1/4] DONE test/question-history-read.test.ts exit=0 duration=8.77s",
+        " 12 pass",
+        " 0 fail",
+        " 58 expect() calls",
+        "[2/4] DONE test/question-publication-projection.test.ts exit=0 duration=28.85s",
+        " 13 pass",
+        " 0 fail",
+        " 47 expect() calls",
+        "[3/4] DONE test/server/session-event-connection-snapshot.test.ts exit=0 duration=17.92s",
+        " 1 pass",
+        " 0 fail",
+        " 14 expect() calls",
+        "[4/4] DONE test/question-process-projection.test.ts exit=0 duration=16.16s"
+      ]
+    },
+    "unit-side-transport": {
+      "label": "unit-side-transport",
+      "startedAt": 1793737330752,
+      "closedAt": 1793737338372,
+      "code": 0,
+      "signal": null,
+      "childPID": 2256,
+      "summary": [
+        " 16 pass",
+        " 0 fail",
+        " 40 expect() calls"
+      ]
+    },
+    "types-final": {
+      "label": "types-final",
+      "startedAt": 1793737626280,
+      "closedAt": 1793737675335,
+      "code": 0,
+      "signal": null,
+      "childPID": 29628,
+      "summary": []
+    },
+    "types-overlay": {
+      "label": "types-overlay",
+      "startedAt": 1793737168853,
+      "closedAt": 1793737190450,
+      "code": 0,
+      "signal": null,
+      "childPID": 17948,
+      "summary": []
+    },
+    "sdk-build": {
+      "label": "sdk-build",
+      "startedAt": 1793737330756,
+      "closedAt": 1793737353537,
+      "code": 0,
+      "signal": null,
+      "childPID": 30964,
+      "summary": []
+    },
+    "docs-render": {
+      "label": "docs-render",
+      "startedAt": 1793737481112,
+      "closedAt": 1793737487478,
+      "code": 0,
+      "signal": null,
+      "childPID": 5312,
+      "summary": []
+    },
+    "api-routes": {
+      "label": "api-routes",
+      "startedAt": 1793738140667,
+      "closedAt": 1793738149868,
+      "code": 0,
+      "signal": null,
+      "childPID": 31908,
+      "summary": [
+        "api:routes-check ok — 6 rules and route inventory clean across 36 files"
+      ]
+    },
+    "docs-check": {
+      "label": "docs-check",
+      "startedAt": 1793738140689,
+      "closedAt": 1793738149633,
+      "code": 0,
+      "signal": null,
+      "childPID": 8496,
+      "summary": [
+        "docs:check ok (352 ops, 26 groups)"
+      ]
+    },
+    "ui-build-after": {
+      "label": "ui-build-after",
+      "startedAt": 1793737626280,
+      "closedAt": 1793737697060,
+      "code": 0,
+      "signal": null,
+      "childPID": 7772,
+      "summary": [
+        "\u001b[32m✓ built in 1m 7s\u001b[39m"
+      ]
+    }
+  },
+  "visual": {
+    "method": "Actual native development /ui, manual CUA interactions and personally viewed screenshots",
+    "screenshots": 11,
+    "beforeTab": "259",
+    "afterTab": "260",
+    "beforePort": 38687,
+    "afterPort": 38688
+  },
+  "limitations": [
+    "No new model executions: read-only restoration of the real two-stage model and human workflows qualified in batch 923",
+    "Side Chat changes qualified by shared data/transport tests, not a new Side Chat UI run",
+    "Rejected, deadline and infrastructure terminal variants qualified by non-UI positive data tests, not new visual workflows",
+    "No version bump, release, schema or migration change"
+  ]
+}

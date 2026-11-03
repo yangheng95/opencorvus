@@ -2084,9 +2084,9 @@ export function commitStandalonePermissionInteractions(interactions: PermissionI
   for (const interaction of interactions) standaloneInteractions.set(interaction.id, interaction)
 }
 
-/** Commit one canonical pending snapshot, retaining the owners of unchanged Questions. */
-export function replaceStandalonePendingInteractions(questions: QuestionInteraction[], permissions: PermissionInteraction[]): void {
-  const next = new Map([...standaloneInteractions].filter(([, interaction]) => interaction.type === "question" && interaction.status !== "pending"))
+/** Replace the complete admitted interaction snapshot, retaining immutable owners. */
+export function replaceStandaloneInteractions(questions: QuestionInteraction[], permissions: PermissionInteraction[]): void {
+  const next = new Map<string, any>()
   for (const question of questions) {
     next.set(question.id, reuseQuestionInteraction(standaloneInteractions.get(question.id), question))
   }
@@ -2146,8 +2146,7 @@ function handleStandaloneQuestion(event: any): void {
     return
   }
 
-  const resolved = resolveQuestionInteraction(standaloneInteractions.get(requestID), type, props, event.orderKey)
-  if (!resolved) return
+  const resolved = resolveQuestionInteraction(standaloneInteractions.get(requestID), type, props, event.orderKey, source.directory || "")
   standaloneInteractions.set(requestID, resolved)
   regroupTimelineSegments({ deferHierarchy: true })
   rebuildCardHierarchy()

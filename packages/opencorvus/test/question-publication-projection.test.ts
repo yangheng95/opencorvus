@@ -230,8 +230,11 @@ test("Task Question projection retains its committed answer when Asked delivery 
       })
       try {
         await entered
-        await Question.reply({ requestID: request.id, answers: [["Public Task committed answer"]],
-          userInput: { surface: "test.public-task-question", text: "Public Task committed answer" } })
+        await Question.reply({
+          requestID: request.id,
+          answers: [["Public Task committed answer"]],
+          userInput: { surface: "test.public-task-question", text: "Public Task committed answer" },
+        })
         expect(await answer).toEqual([["Public Task committed answer"]])
         releaseAsked()
         await Bus.publishOwnedExact(Question.Event.Asked, request, occurrence).retry()
@@ -252,9 +255,18 @@ test("Task Question projection retains its committed answer when Asked delivery 
           status: "answered",
           response: { answers: [["Public Task committed answer"]] },
         })
-        expect(ProjectMemory.pending(Instance.project.id).filter((item) => item.occurrenceID === projected!.id)).toMatchObject([
-          { occurrenceKind: "interaction_reply", occurrenceID: projected!.id, taskID, projectID: Instance.project.id,
-            sessionID: root.id, surface: "test.public-task-question", text: "Public Task committed answer" },
+        expect(
+          ProjectMemory.pending(Instance.project.id).filter((item) => item.occurrenceID === projected!.id),
+        ).toMatchObject([
+          {
+            occurrenceKind: "interaction_reply",
+            occurrenceID: projected!.id,
+            taskID,
+            projectID: Instance.project.id,
+            sessionID: root.id,
+            surface: "test.public-task-question",
+            text: "Public Task committed answer",
+          },
         ])
       } finally {
         releaseAsked()
@@ -444,7 +456,6 @@ test.each(["rejected", "expired", "abandoned", "automatic"] as const)(
                 .all(),
             ).map((row) => row.source_occurrence_id),
           ).toEqual([terminal.occurrenceID])
-          expect(await Question.list()).toEqual([])
         } finally {
           release()
           gate()
@@ -513,7 +524,6 @@ test("dispose settles the original committed user reply after its postcommit int
         type: "question.replied",
         properties: { answers: [["Committed Cedar"]], userInput: { text: "Committed Cedar" } },
       })
-      expect(await Question.list()).toEqual([])
       return { ...pending, facts, projectID: Instance.project.id }
     },
   })
@@ -530,7 +540,6 @@ test("dispose settles the original committed user reply after its postcommit int
         }),
       ).toEqual(original.facts)
       await Question.restore(original.request)
-      expect(await Question.list()).toEqual([])
     },
   })
 }, 30_000)
@@ -583,7 +592,6 @@ test("ordinary dispose persists infrastructure provenance in the single terminal
         },
       })
       await Question.restore(original.request)
-      expect(await Question.list()).toEqual([])
     },
   })
 }, 30_000)
@@ -716,9 +724,9 @@ test("real TCP cold, cutover and reconnect preserve exact non-Task child Questio
           pending: owner.visible.map(view),
         })
         const taskCold = await fetch(new URL(`/session/${owner.task.root.id}/conversation`, server!.url), { headers })
-        expect({ status: taskCold.status, pending: ((await taskCold.json()) as any).pendingQuestions }).toEqual({
+        expect({ status: taskCold.status, sessionID: ((await taskCold.json()) as any).board.sessionID }).toEqual({
           status: 200,
-          pending: [],
+          sessionID: owner.task.root.id,
         })
         expect(findInteractionByExternal(owner.pending[3]!.request.id)).toMatchObject({
           task_id: owner.task.taskID,
@@ -749,7 +757,7 @@ test("real TCP cold, cutover and reconnect preserve exact non-Task child Questio
     )
     for (const connection of connections) {
       await connection.stream.close()
-        connection.abort.abort()
+      connection.abort.abort()
     }
     // Resolve actual requests while both physical SSE connections are closed.
     await Promise.all(
@@ -798,7 +806,7 @@ test("real TCP cold, cutover and reconnect preserve exact non-Task child Questio
     )
     for (const connection of reconnected) {
       await connection.stream.close()
-        connection.abort.abort()
+      connection.abort.abort()
     }
   } finally {
     SessionEventStreamTestHooks.afterConversationSnapshotRead = undefined

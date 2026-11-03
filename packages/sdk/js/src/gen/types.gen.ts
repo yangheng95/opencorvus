@@ -5088,6 +5088,7 @@ export type SessionConversationConnectionSnapshot = {
       messageID: string
     }
   }>
+  resolvedQuestions: Array<SessionResolvedQuestion>
   transcript: Array<{
     info: VisibleMessage & {
       agentID: string
@@ -5383,6 +5384,56 @@ export type SessionProtocolEvent = {
     | "session.diff"
     | "session.error"
     | "session.heartbeat"
+}
+
+export type SessionResolvedQuestion = {
+  emittedAt: number
+  event_id: string
+  notify?: {
+    badge?: boolean
+    tier: 1 | 2 | 3
+  }
+  orderKey: string
+  payload: {
+    request: {
+      /**
+       * Explicit automatic answer contract for this question request
+       */
+      automatic?: {
+        /**
+         * Default answers submitted when the deadline expires
+         */
+        answers: Array<QuestionAnswer>
+        /**
+         * Absolute automatic-answer deadline in Unix milliseconds
+         */
+        timeExpires: number
+        /**
+         * Configured automatic-answer delay in milliseconds
+         */
+        timeoutMs: number
+      }
+      expiry?: QuestionExpiry
+      id: string
+      orderKey: string
+      /**
+       * Questions to ask
+       */
+      questions: Array<QuestionInfo>
+      sessionID: string
+      timeCreated: number
+      tool?: {
+        callID: string
+        messageID: string
+      }
+    }
+    [key: string]: unknown
+  }
+  sequence?: number
+  session_id: string
+  summary: string
+  timestamp: number
+  type: "question.replied" | "question.rejected" | "question.expired" | "question.abandoned"
 }
 
 export type SessionStatus =
@@ -29892,6 +29943,7 @@ export type SessionConversationResponses = {
         messageID: string
       }
     }>
+    resolvedQuestions: Array<SessionResolvedQuestion>
     transcript: Array<VisibleMessageWithParts>
     turnArtifacts: Array<{
       catalogComplete: boolean
