@@ -19,13 +19,14 @@
 
 #### 修复
 
+- 会话从自动跟随转入阅读时保持来源按钮位置稳定，修复切换项目后首次点击来源文件未触发打开的已复现场景；保留键盘打开、历史阅读和未保存草稿的导航确认。
 - 审阅中清除无匹配的筛选后，焦点回到文件列表，可直接使用方向键和回车继续选择文件。
 - 新建空 Markdown 文件后直接进入源码编辑并接续编辑焦点；初始视图依据首次成功读取的真实内容决定，非空文档仍默认预览，保存、重载和取消离开保留原有行为。
 
 #### 升级影响与已知限制
 
 - 数据库保持版本 10，保留用户数据与既有自动迁移；旧版本程序不能直接打开已升级的数据库。
-- 切换会话后来源文件首次打开的交互仍在调查，本版不宣称修复；界面实页验收与一次有界目标交付只证明各自覆盖范围。
+- 来源首次点击修复已通过既有长历史的中英文实页复核，新增流式长对话的性能尚未重新验收；界面实页验收与一次有界目标交付只证明各自覆盖范围。
 - macOS 仍为临时签名，未经过 Apple 公证。
 
 ### en-US
@@ -41,13 +42,14 @@
 
 #### Fixed
 
+- Keep source controls stable as a conversation leaves automatic following for reading, fixing the reproduced first-click failure after a project switch. Retain keyboard opening, history reading and unsaved-draft navigation confirmation.
 - Return focus to the Review file list after clearing filters with no matches, so arrow keys and Enter can immediately select files.
 - Open newly created empty Markdown files directly in Source with editor focus. Choose the initial view from the first successful content read; nonempty documents still start in Preview, retaining existing save, reload and leave-cancellation behavior.
 
 #### Upgrade impact and known limitations
 
 - Database version remains 10, retaining user data and existing automatic migrations. Older application versions cannot directly open an upgraded database.
-- First opening a source file after switching conversations remains under investigation; this release does not claim a fix. Manual interface reviews and one bounded goal delivery establish only their stated scope.
+- The source first-click fix passed English and Chinese reviews of retained long histories; performance with a new live streaming long conversation has not been requalified. Manual interface reviews and one bounded goal delivery establish only their stated scope.
 - macOS remains ad hoc signed without Apple notarization.
 
 ## 0.1.43 - 2026-11-03
