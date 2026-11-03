@@ -17,7 +17,7 @@
 
 - 项目侧栏提供独立的展开箭头和项目名称入口；收起、展开分组保留当前对话与未发送草稿，点击名称打开对应项目，菜单和定位操作保持连续的键盘焦点。
 - 官网构建沿用产品源码的稀疏检出，减少历史验收材料对发布时间的影响；原有构建上限和一小时发布总时限保持。
-- Linux x64 原生构建及 Linux 单元验收固定使用 Ubuntu 24.04，与已锁定的 Office 预览浏览器依赖一致，避免运行器自动升级导致安装失败。
+- Linux x64 原生构建及 Linux 单元验收固定使用 Ubuntu 24.04，匹配 Office 预览浏览器与原生 RPM 校验器的系统基线，避免运行器自动升级导致构建失败。
 
 #### 修复
 
@@ -42,7 +42,7 @@
 
 - Separate project disclosure arrows from project-name navigation. Collapsing or expanding a group retains the current conversation and unsent draft; names open the corresponding project, with continuous keyboard focus for menus and location actions.
 - Use the existing sparse product-tree checkout for website builds, reducing historical evidence transfer during publication while retaining the original build limit and one-hour release budget.
-- Pin Linux x64 native builds and Linux unit validation to Ubuntu 24.04, matching the locked Office preview browser dependency and avoiding installation failures after runner image upgrades.
+- Pin Linux x64 native builds and Linux unit validation to Ubuntu 24.04, matching the Office preview browser and native RPM checker system baseline and avoiding build failures after runner image upgrades.
 
 #### Fixed
 
