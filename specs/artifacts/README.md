@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [目标反馈交接证据](2026-11-04-goal-feedback-handoff/README.md)：真实模型、原始文件与页面验收。
+
 - [逐行比较阅读证据](2026-11-04-review-reading/README.md)：原文件修改、真实页面与数据保全。
 
 - [来源摘录阅读证据](2026-11-04-source-excerpt-reading/README.md)：真实页面、原始来源与复制操作。

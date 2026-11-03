@@ -2,7 +2,8 @@
 // Single self-contained component used wherever the UI surfaces a pending
 // `permission` or `question` interaction:
 //   • inline in the conversation timeline (CardParts)
-// Owns its own busy / error / draft state and dispatches replies through
+// Shares question drafts across mounted surfaces of the same scoped request.
+// Owns its own busy / error state and dispatches replies through
 // the shared `interaction-reply` service (which carries a per-id mutex), so
 // callers don't need to wire callbacks. Permissions retain their structured
 // Request scope through the shared approval/history content component.
@@ -11,7 +12,7 @@
 // reusing the same `--card-*` design vars as the agent / goal cards so all
 // system-prompt cards share one look.
 
-import { createEffect, createMemo, createSignal, createUniqueId, For, onCleanup, Show } from "solid-js"
+import { type Accessor, type Setter, createEffect, createMemo, createSignal, createUniqueId, For, onCleanup, Show } from "solid-js"
 import { t } from "../utils/i18n"
 import { PermissionRequestContent } from "./PermissionRequestContent"
 import { boardStore, loadBoard } from "../store/board"
@@ -66,10 +67,22 @@ export interface InteractionCardProps {
   afterReply?: () => void | Promise<unknown>
 }
 
+interface QuestionDraft {
+  selected: string[][]
+  customText: string[]
+}
+
+interface QuestionDraftOwner {
+  read: Accessor<QuestionDraft>
+  write: Setter<QuestionDraft>
+  surfaces: number
+}
+
+const questionDraftOwners = new Map<string, QuestionDraftOwner>()
+
 export function InteractionCard(props: InteractionCardProps) {
   const [busy, setBusy] = createSignal(false)
   const [error, setError] = createSignal("")
-  const [customText, setCustomText] = createSignal<string[]>([])
   const [countdownNow, setCountdownNow] = createSignal(Date.now())
   const instanceID = createUniqueId()
   let cardElement: HTMLDivElement | undefined
@@ -116,7 +129,6 @@ export function InteractionCard(props: InteractionCardProps) {
     const timer = window.setInterval(() => setCountdownNow(Date.now()), 250)
     onCleanup(() => window.clearInterval(timer))
   })
-  const [drafts, setDrafts] = createSignal<string[][]>(initialQuestionDrafts(questions()))
   const replyEndpoint = createMemo<InteractionReplyEndpoint>(() =>
     props.interaction.replyEndpoint ?? "interaction",
   )
@@ -125,13 +137,37 @@ export function InteractionCard(props: InteractionCardProps) {
     directory: String(props.interaction.directory || "").trim() || currentTraceDirectory(),
   })
 
+  const draftOwner = createMemo(() => {
+    if (isPermission()) return undefined
+    const target = replyTarget()
+    const key = JSON.stringify([captureApiAuthority().revision, target.directory, replyEndpoint(), target.id])
+    let owner = questionDraftOwners.get(key)
+    if (!owner) {
+      const [read, write] = createSignal<QuestionDraft>({ selected: initialQuestionDrafts(questions()), customText: [] })
+      owner = { read, write, surfaces: 0 }
+      questionDraftOwners.set(key, owner)
+    }
+    const current = owner
+    current.surfaces++
+    onCleanup(() => {
+      current.surfaces--
+      // Retain the editor during same-batch remounts and while the inline card
+      // remains mounted after the question dialog is dismissed.
+      queueMicrotask(() => {
+        if (current.surfaces === 0 && questionDraftOwners.get(key) === current) questionDraftOwners.delete(key)
+      })
+    })
+    return current
+  })
+  const customText = () => draftOwner()?.read().customText ?? []
+
   function getSelected(qIdx: number): string[] {
-    return drafts()[qIdx] ?? []
+    return draftOwner()?.read().selected[qIdx] ?? []
   }
 
   function toggleOption(qIdx: number, value: string, multiple: boolean) {
-    setDrafts((prev) => {
-      const next = [...prev]
+    draftOwner()?.write((prev) => {
+      const next = [...prev.selected]
       const current = next[qIdx] ?? []
       next[qIdx] = multiple
         ? current.includes(value)
@@ -140,15 +176,15 @@ export function InteractionCard(props: InteractionCardProps) {
         : current.includes(value)
           ? []
           : [value]
-      return next
+      return { ...prev, selected: next }
     })
   }
 
   function setCustomAt(qIdx: number, value: string) {
-    setCustomText((prev) => {
-      const next = [...prev]
+    draftOwner()?.write((prev) => {
+      const next = [...prev.customText]
       next[qIdx] = value
-      return next
+      return { ...prev, customText: next }
     })
   }
 

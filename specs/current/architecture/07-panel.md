@@ -1533,6 +1533,13 @@ The keyed accessor supplies current message data; removing a Message or changing
 the actual target retains the existing retirement behavior. Reconnection does
 not discard rendered history solely because its snapshot objects are new.
 Pending questions and permissions render through the existing InteractionCard.
+Mounted Question surfaces share one in-memory selection and custom-answer draft
+per API authority, project directory, reply endpoint and Interaction ID. Closing
+the question dialog retains that editor while its inline card remains mounted.
+The last surface releases the draft after the current microtask, allowing
+same-batch remounts to keep the editor. This is not persisted across page reloads
+or retirement of every surface; reply ownership and recorded answers continue
+through the canonical interaction service.
 Permission approvals and retained requests share the structured scope renderer.
 The canonical ledger Request supplies Tool identity, effect, exact scope and
 available decisions; Task live/history projections use one helper, and standalone
