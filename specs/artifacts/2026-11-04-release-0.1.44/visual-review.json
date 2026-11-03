@@ -1,0 +1,33 @@
+{
+  "verifiedAt": "2026-11-03T19:40:09.089113+00:00",
+  "version": "0.1.44",
+  "source": "3827428ac4a17afca8448ec6bca6a3ece1eab270",
+  "method": "Real background browser interaction and manual screenshot review; no UI automation tests",
+  "bundledUI": {
+    "publishedAsset": "opencorvus-windows-x64-baseline.tar.gz",
+    "version": "0.1.44",
+    "date": "2026-11-04",
+    "english": [
+      "05-published-settings-en.png",
+      "06-published-settings-en-limits.png"
+    ],
+    "chinese": [
+      "07-published-settings-zh.png",
+      "08-published-settings-zh-limits.png"
+    ],
+    "observed": "Current version/date, all authored changes, DB10 and macOS limitations, localized website links"
+  },
+  "productionWebsite": {
+    "chinese": "09-published-web-zh.png",
+    "english": "10-published-web-en.png",
+    "downloadReady": "12-published-download-ready.png",
+    "observed": "Authored bilingual version notes and actual Windows x64 EXE 0.1.44 download control",
+    "intermediateFrames": [
+      "11-published-downloads.png",
+      "13-published-platform-downloads.png"
+    ],
+    "intermediateFramesQualified": false
+  },
+  "scope": "Changelog/publication presentation; not every installer manually installed, no new model conversation, no claimed Side Chat or universal streaming performance qualification",
+  "ownedTabsClosed": true
+}

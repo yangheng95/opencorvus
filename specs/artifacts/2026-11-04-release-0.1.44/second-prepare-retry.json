@@ -1,0 +1,24 @@
+{
+  "runID": 41696667648,
+  "source": "3827428ac4a17afca8448ec6bca6a3ece1eab270",
+  "createdAt": "2026-11-03T18:44:27Z",
+  "originalDeadline": "2026-11-03T19:44:27Z",
+  "firstExecution": {
+    "jobID": 126128918444,
+    "outcome": "cancelled at prepare 8-minute infrastructure limit",
+    "evidence": [
+      "2026-11-03T18:44:32.5850430Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3827428ac4a17afca8448ec6bca6a3ece1eab270:refs/remotes/origin/main",
+      "2026-11-03T18:53:16.4236676Z ##[error]The operation was canceled."
+    ]
+  },
+  "secondExecution": {
+    "jobID": 126134226176,
+    "outcome": "prepare success; native matrix admitted",
+    "evidence": [
+      "2026-11-03T18:54:17.2233834Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +3827428ac4a17afca8448ec6bca6a3ece1eab270:refs/remotes/origin/main",
+      "2026-11-03T18:58:25.4444225Z ##[group]Checking out the ref"
+    ]
+  },
+  "retry": "complete failed set in same run; original source and deadline retained",
+  "providerRequests": 0
+}

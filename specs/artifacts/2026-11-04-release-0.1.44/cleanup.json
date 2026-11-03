@@ -1,0 +1,18 @@
+{
+  "verifiedAt": "2026-11-03T19:37:36.550Z",
+  "version": "0.1.44",
+  "nativeRunID": 41696667648,
+  "publicationAttempts": 2,
+  "outcome": "success",
+  "retiredFailedCandidates": 1,
+  "retiredReleaseID": 433049038,
+  "retirementEvidence": "attempt1-retirement.json",
+  "retirementOperations": [
+    "delete exact owned unpublished empty Release",
+    "delete exact old-source tag",
+    "delete exact old-source local tag"
+  ],
+  "historicalObjectsRetained": 19,
+  "publicObjectsAfter": 20,
+  "history": "All original healthy release IDs, publication times, tags and publication flags match the before inventory; all 80 authored changelog versions retained; the old unpublished empty candidate and its old-source tag were retired before fresh admission"
+}

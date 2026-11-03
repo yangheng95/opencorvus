@@ -1,0 +1,24 @@
+{
+  "verifiedAt": "2026-11-03T18:08:25.787Z",
+  "source": "200f79414fe5a3da55498154a5374e60b9b09322",
+  "runID": 41688720624,
+  "conclusion": "success",
+  "jobs": 8,
+  "createdAt": "2026-11-03T17:54:28Z",
+  "completedAt": "2026-11-03T18:01:59Z",
+  "elapsedSeconds": 451,
+  "buildCheckout": {
+    "startedAt": "2026-11-03T17:55:14Z",
+    "completedAt": "2026-11-03T17:56:08Z",
+    "seconds": 54,
+    "rules": "/*\n!/specs/artifacts/\n"
+  },
+  "productionConfiguration": [
+    "2026-11-03T17:57:10.3421885Z production configuration passed: safe deployment default, operator placeholders, host path matrix, Caddy, systemd, backup timer, and sudo boundary"
+  ],
+  "runtime": [
+    "2026-11-03T17:58:41.3521176Z {\"publicationID\":1,\"publication\":{\"id\":1,\"catalogSha256\":\"effaa9c26ab3a5f177b663113900e97e4c6d967f9027f7fa69d16c35ebf4b16b\",\"total\":122,\"embeddedAlreadyAvailable\":5,\"bundledMarketImportable\":117,\"activatedAt\":\"2026-11-03T17:58:41.258Z\"}}",
+    "2026-11-03T17:59:10.6693805Z signing workflow integration passed: 02e04ee53253c6dd8079df8b1e6bee6915ee4d7577e2fd6e6393d46e53929fe6"
+  ],
+  "scope": "Real full website workflow including generated fixed point, every original production configuration asset, archive determinism, Registry, activation/rollback and cache checks, static build, packaged database smoke, signing and deployment. Byte totals in the input inventory are uncompressed Git content, not measured network transfer."
+}

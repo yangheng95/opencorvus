@@ -1,0 +1,23 @@
+{
+  "source": "3827428ac4a17afca8448ec6bca6a3ece1eab270",
+  "runID": 41696667648,
+  "cliJobID": 126137340207,
+  "cliConclusion": "success",
+  "browserInstall": {
+    "name": "Install Office preview renderer browser",
+    "status": "completed",
+    "conclusion": "success",
+    "number": 10,
+    "started_at": "2026-11-03T19:01:06Z",
+    "completed_at": "2026-11-03T19:01:20Z"
+  },
+  "rpmJobID": 126141368581,
+  "rpmConclusion": "success",
+  "rpmEvidence": [
+    "2026-11-03T19:09:47.3724773Z Unpacking python3-rpm (4.18.2+dfsg-2.1build2) ...",
+    "2026-11-03T19:09:49.0532378Z Ran 3 tests in 0.431s",
+    "2026-11-03T19:09:49.0540448Z {\"package\": \"/tmp/opencorvus-rpm-contract-t5vkkkoo/RPMS/x86_64/opencorvus-rpm-check-0.1.44-1.x86_64.rpm\", \"version\": \"0.1.44\", \"architecture\": \"x86_64\", \"uncompressed_payload_sha256\": \"d87b2588da55e69f0e263debd881ece703787d40c3ad8507fe00b24d1f13fed2\", \"file_install\": \"passed\", \"installed_binary_sha256\": \"0ce42b47811f80fda1b79211683a6ad8c05167b4ec27c43ec8de891dcf4603ed\", \"payload_bytes\": 340, \"compiled_snapshot_sha256\": \"fd160f4ab7b305eab4bfa16916e521b5343f74b592e59ec1a14e32e0d4cbbd8f\", \"expected_installed_binary_sha256\": \"0ce42b47811f80fda1b79211683a6ad8c05167b4ec27c43ec8de891dcf4603ed\", \"bundle_type_patch\": {\"offset\": 12, \"from\": \"UNK\", \"to\": \"RPM\"}, \"file_input\": \"matched immutable compile input with the first Tauri RPM marker\", \"evidence_root\": \"/tmp/opencorvus-rpm-check-3aadqvpo\"}",
+    "2026-11-03T19:10:28.2260435Z {\"package\": \"/home/runner/work/opencorvus/opencorvus/packages/overlay/src-tauri/target/release/bundle/rpm/OpenCorvus-0.1.44-1.x86_64.rpm\", \"version\": \"0.1.44\", \"architecture\": \"x86_64\", \"uncompressed_payload_sha256\": \"00636843c5772a73d77325eeba6589396e1ae5c59b8f6813656fa0a14520266e\", \"file_install\": \"passed\", \"installed_binary_sha256\": \"01abf1e5779e93fb5d311ce35e9d799dec68e95d4627788cee5b98723f788be4\", \"payload_bytes\": 218123092, \"compiled_snapshot_sha256\": \"48a58ac560292f270b9dde3ea044db7e371651c47f3b3a6f09048a6a4a0e42db\", \"expected_installed_binary_sha256\": \"01abf1e5779e93fb5d311ce35e9d799dec68e95d4627788cee5b98723f788be4\", \"bundle_type_patch\": {\"offset\": 206352653, \"from\": \"UNK\", \"to\": \"RPM\"}, \"file_input\": \"matched immutable compile input with the first Tauri RPM marker\", \"evidence_root\": \"/tmp/opencorvus-rpm-check-wz8gswtt\"}"
+  ],
+  "scope": "Actual Ubuntu 24.04 native CLI and original RPM checker plus immutable compiled-payload installation passed; no browser/OS spoofing, checker fallback, or weakened integrity validation"
+}

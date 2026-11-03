@@ -1,0 +1,28 @@
+{
+  "before": {
+    "listening": [
+      {
+        "OwningProcess": 24672,
+        "LocalAddress": "127.0.0.1",
+        "LocalPort": 56114
+      }
+    ],
+    "processes": [
+      {
+        "ProcessId": 15156,
+        "CreationDate": "2026-11-04T03:27:58.939092+08:00",
+        "ExecutablePath": "D:\\myhexin-local\\opencorvus\\.scratch\\release-0.1.44\\published-cli\\extracted\\opencorvus-process-supervisor.exe"
+      },
+      {
+        "ProcessId": 24672,
+        "CreationDate": "2026-11-04T03:27:58.953687+08:00",
+        "ExecutablePath": "D:\\myhexin-local\\opencorvus\\.scratch\\release-0.1.44\\published-cli\\extracted\\opencorvus.exe"
+      }
+    ],
+    "at": "2026-11-04T03:28:35.5840629+08:00"
+  },
+  "ownedTemporaryRootRetired": true,
+  "at": "2026-11-03T19:33:06.4317656+00:00",
+  "remainingOwnedListeners": 0,
+  "remainingOwnedExecutableProcesses": 0
+}
