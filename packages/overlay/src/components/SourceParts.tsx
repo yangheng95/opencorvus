@@ -461,7 +461,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
             type="button"
             class="msg-source-excerpt-open"
             variant="ghost"
-            size="icon"
+            size="mini"
             tone="neutral"
             title={t("chat.source_open_excerpt", { source: displayLabel() })}
             aria-label={t("chat.source_open_excerpt", { source: displayLabel() })}
@@ -472,11 +472,13 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
             }}
           >
             <Icon name="quotation" size="compact" />
+            {t("chat.source_excerpt")}
           </Button>
           <Dialog
             open={fileExcerptOpen()}
             onClose={() => setFileExcerptOpen(false)}
             title={t("chat.source_saved_excerpt_title", { source: displayLabel() })}
+            wide
             footer={
               <>
                 <ExcerptCopyButton />
