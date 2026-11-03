@@ -1,0 +1,52 @@
+{
+  "verifiedAt": "2026-11-03T18:30:38.060Z",
+  "version": "0.1.44",
+  "runID": 41690045392,
+  "source": "200f79414fe5a3da55498154a5374e60b9b09322",
+  "releaseID": 433049038,
+  "tag": {
+    "sha": "200f79414fe5a3da55498154a5374e60b9b09322",
+    "type": "commit",
+    "url": "https://api.github.com/repos/yangheng95/opencorvus/git/commits/200f79414fe5a3da55498154a5374e60b9b09322"
+  },
+  "assets": 0,
+  "publication": "unpublished draft",
+  "originalCreatedAt": "2026-11-03T18:02:59Z",
+  "originalDeadline": "2026-11-03T19:02:59.000Z",
+  "originalCompletedAt": "2026-11-03T18:21:52Z",
+  "originalConclusion": "cancelled",
+  "protectedReleaseIDs": [
+    431890128,
+    431336664,
+    430696017,
+    429739811,
+    428677492,
+    427152317,
+    426980428,
+    424747814,
+    424572947,
+    412567115,
+    410489665,
+    399790092,
+    399686268,
+    399293192,
+    398929562,
+    398946877,
+    398184067,
+    394923990,
+    386746687
+  ],
+  "stableVersion": "0.1.43",
+  "retiredAt": "2026-11-03T18:30:44.542Z",
+  "deletedReleaseID": 433049038,
+  "retiredRemoteTagStatus": 404,
+  "localOwnedTag": "deleted after exact source match",
+  "protectedReleaseCount": 19,
+  "stableAfter": "0.1.43",
+  "mutationOperations": [
+    "delete exact owned unpublished empty Release",
+    "delete exact old-source tag",
+    "delete exact old-source local tag"
+  ],
+  "scope": "Only the failed unpublished candidate retired; healthy releases, stable update pointer, committed source history and authored changelog retained. This run remains cancelled with its original clock."
+}

@@ -22,13 +22,14 @@
 #### 修复
 
 - 会话从自动跟随转入阅读时保持来源按钮位置稳定，修复切换项目后首次点击来源文件未触发打开的已复现场景；保留键盘打开、历史阅读和未保存草稿的导航确认。
+- 阅读历史后发送被接纳的新消息会回到当前工作并恢复跟随，保持已打开的来源文件，便于继续阅读真实流式输出。
 - 审阅中清除无匹配的筛选后，焦点回到文件列表，可直接使用方向键和回车继续选择文件。
 - 新建空 Markdown 文件后直接进入源码编辑并接续编辑焦点；初始视图依据首次成功读取的真实内容决定，非空文档仍默认预览，保存、重载和取消离开保留原有行为。
 
 #### 升级影响与已知限制
 
 - 数据库保持版本 10，保留用户数据与既有自动迁移；仅支持旧数据库结构的程序不能打开版本 10 数据库。
-- 来源首次点击修复已通过既有长历史的中英文实页复核，新增流式长对话的性能尚未重新验收；界面实页验收与一次有界目标交付只证明各自覆盖范围。
+- 来源阅读与提交后恢复跟随已通过有界真实流式复核；通用帧率、全部模型与历史以及所有并发交互仍在已验收范围之外。
 - macOS 仍为临时签名，未经过 Apple 公证。
 
 ### en-US
@@ -47,13 +48,14 @@
 #### Fixed
 
 - Keep source controls stable as a conversation leaves automatic following for reading, fixing the reproduced first-click failure after a project switch. Retain keyboard opening, history reading and unsaved-draft navigation confirmation.
+- Return to the current work and resume following after a new message is accepted while reading history, keeping the open source file visible during live output.
 - Return focus to the Review file list after clearing filters with no matches, so arrow keys and Enter can immediately select files.
 - Open newly created empty Markdown files directly in Source with editor focus. Choose the initial view from the first successful content read; nonempty documents still start in Preview, retaining existing save, reload and leave-cancellation behavior.
 
 #### Upgrade impact and known limitations
 
 - Database version remains 10, retaining user data and existing automatic migrations. Applications that only support earlier schemas cannot directly open database version 10.
-- The source first-click fix passed English and Chinese reviews of retained long histories; performance with a new live streaming long conversation has not been requalified. Manual interface reviews and one bounded goal delivery establish only their stated scope.
+- Source reading and resumed following passed bounded live streaming review. General frame rates, every model and history, and all concurrent interactions remain outside the verified scope.
 - macOS remains ad hoc signed without Apple notarization.
 
 ## 0.1.43 - 2026-11-03
