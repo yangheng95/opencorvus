@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [读取时的来源摘录](2026-11-05-read-source-snapshot.md)：文本读取来源、真实回复和修改前后内容。
+
 - [模型服务商设置范围](2026-11-05-provider-scope-context.md)：真实目录、保存目标和共享登录说明。
 
 - [已配置服务商可见性](2026-11-05-configured-provider-visibility.md)：空模型项目和正常目录的配置身份辨认。

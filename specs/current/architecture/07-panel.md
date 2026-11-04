@@ -1889,6 +1889,14 @@ the shared host clipboard action and value-owned pending, confirmation and error
 feedback. It does not copy only the visible viewport or substitute the location;
 the existing location action and native disclosure semantics remain independent.
 File sources with a saved snippet expose a compact View saved excerpt action.
+Text `read` sources supply the same bounded, inline-payload-redacted first-20-line
+preview already produced for the actual read window. This snapshot preserves
+whitespace and the original read content after the file changes; it is an excerpt,
+not a full-file backup. Existing first-source-per-Message identity and immutability
+remain authoritative, so later reads never replace a saved source in that Message.
+New reads in another Message carry their own snapshot. Historical sources are not
+reconstructed from the current file. Binary and directory reads retain their
+existing source contracts.
 The shared Dialog reads that exact Source snippet and full source location,
 reusing the same value-owned Copy excerpt action. It preserves whitespace and
 distinguishes the saved excerpt from opening the current file. File leaves retain

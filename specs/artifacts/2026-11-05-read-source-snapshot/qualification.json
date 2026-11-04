@@ -1,0 +1,209 @@
+{
+  "at": "2026-11-04T21:55:14.213Z",
+  "phases": [
+    {
+      "phase": "before",
+      "port": 38718,
+      "uiEntry": "main-ln4zqIzm.js",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293746,
+      "rows": 295970,
+      "protectedProjects": 114,
+      "protectedAttachments": 277,
+      "allOriginalBusinessRowsExact": false,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793814031052,
+          "reacquiredAt": 1793828521032,
+          "releasedAt": 1793828525705,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793813885237,
+          "reacquiredAt": 1793828437771,
+          "releasedAt": 1793828441805,
+          "ownedByRuntime": true
+        }
+      ],
+      "memoryAvailabilityTransitions": [],
+      "model": "gpt-6.1-sol",
+      "requests": 9,
+      "maximumRequests": 16,
+      "cumulativeRequests": 1409,
+      "allRequestsStreaming": true,
+      "allRequestsCompletedNormally": true,
+      "unusedAllowanceRetired": 7,
+      "credentialCopiesRetired": 2,
+      "sourceCredentialAndCatalogPreserved": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 5073923,
+      "ownFlow": {
+        "sessionID": "ses_-zUPxGhXSzzm0oqTZ5Y7",
+        "status": "idle",
+        "questions": 2,
+        "answers": [
+          [
+            "保留行动编号",
+            "保留责任人"
+          ],
+          [
+            "保留原始行动字段。\n请标注本地确认935，不改变客户原文。"
+          ]
+        ],
+        "textReads": 5,
+        "fileEdits": 1,
+        "sourceParts": 5,
+        "gitNumstat": "31\t2\tdeliverables/客户确认.md\n",
+        "sourceSnapshots": [
+          {
+            "messageID": "msg_g0Va2jLNK00K07EgzUu3",
+            "sourceID": "9038aff9d20b648144b5d5fcb9ab198a6cc78f703df65ecbf1ebfaae8a2a34bd",
+            "snippet": null
+          },
+          {
+            "messageID": "msg_g0Va2jeGh00n3j49d31G",
+            "sourceID": "9038aff9d20b648144b5d5fcb9ab198a6cc78f703df65ecbf1ebfaae8a2a34bd",
+            "snippet": null
+          }
+        ]
+      }
+    },
+    {
+      "phase": "after",
+      "port": 38719,
+      "uiEntry": "main-ln4zqIzm.js",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 295970,
+      "rows": 298194,
+      "protectedProjects": 115,
+      "protectedAttachments": 279,
+      "allOriginalBusinessRowsExact": false,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793828525705,
+          "reacquiredAt": 1793829015920,
+          "releasedAt": 1793829021703,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793828441805,
+          "reacquiredAt": 1793828957288,
+          "releasedAt": 1793828959854,
+          "ownedByRuntime": true
+        }
+      ],
+      "memoryAvailabilityTransitions": [],
+      "model": "gpt-6.1-sol",
+      "requests": 9,
+      "maximumRequests": 16,
+      "cumulativeRequests": 1418,
+      "allRequestsStreaming": true,
+      "allRequestsCompletedNormally": true,
+      "unusedAllowanceRetired": 7,
+      "credentialCopiesRetired": 2,
+      "sourceCredentialAndCatalogPreserved": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 4522206,
+      "ownFlow": {
+        "sessionID": "ses_-zUPxEXndzzDe5A7edR3",
+        "status": "idle",
+        "questions": 2,
+        "answers": [
+          [
+            "保留行动编号",
+            "保留责任人"
+          ],
+          [
+            "保留原始行动字段。\n请标注本地确认935，不改变客户原文。"
+          ]
+        ],
+        "textReads": 5,
+        "fileEdits": 1,
+        "sourceParts": 5,
+        "gitNumstat": "31\t2\tdeliverables/客户确认.md\n",
+        "sourceSnapshots": [
+          {
+            "messageID": "msg_g0Va2lUdk00NaXVE9OuC",
+            "sourceID": "1cd2bf73ad2f91f975ad0fb7289e527c34843c7157b85952a7388d43ec533cc5",
+            "snippet": "# 客户确认纪要\n\n状态：未确认\n\n## 待确认内容\n\n  原草稿保留此行的两个前导空格。\n\n尚未收到实际回复；本草稿只用于后续与确认结果对照。"
+          },
+          {
+            "messageID": "msg_g0Va2lin900t4zuNZxcv",
+            "sourceID": "1cd2bf73ad2f91f975ad0fb7289e527c34843c7157b85952a7388d43ec533cc5",
+            "snippet": "# 客户确认纪要\n\n状态：已确认\n\n## 待确认内容\n\n  原草稿保留此行的两个前导空格。\n\n确认标记：本地确认935\n\n## 实际确认回复\n\n### 问题1 保留字段\n\n确认纪要中哪些字段需要按原表保留？本题可以多选。\n\n- 保留行动编号：行动编号保持原值\n- 保留责任人：责任人姓名保持原值\n\n### 问题2 补充说明"
+          }
+        ]
+      }
+    }
+  ],
+  "checks": [
+    {
+      "label": "focused-read-tests",
+      "exit": 0
+    },
+    {
+      "label": "typecheck",
+      "exit": 0
+    },
+    {
+      "label": "ui-build-after",
+      "exit": 0
+    },
+    {
+      "label": "docs-check",
+      "exit": 0
+    },
+    {
+      "label": "architecture-check",
+      "exit": 0
+    }
+  ],
+  "focusedNonUiTests": 11,
+  "businessCheckerInvocations": 36,
+  "screenshots": [
+    "01-before-live-read-sources.png",
+    "02-before-two-questions.png",
+    "03-before-answers-complete.png",
+    "04-before-source-opens-current-file.png",
+    "05-before-original-read-and-current-file.png",
+    "06-before-change-review.png",
+    "07-before-reloaded-answers-and-summary.png",
+    "08-after-two-answers-complete.png",
+    "09-after-original-saved-excerpt-live.png",
+    "10-after-source-current-confirmed-file.png",
+    "11-after-original-excerpt-after-edit.png",
+    "12-after-summary-and-original-comparison.png",
+    "13-after-new-read-has-independent-confirmed-excerpt.png",
+    "14-after-saved-excerpt-scroll.png",
+    "15-after-original-excerpt-english.png",
+    "16-after-reloaded-original-excerpt.png"
+  ],
+  "visualAcceptance": "All16 actual page screenshots personally inspected; real manual interactions only",
+  "clipboard": "Original browser clipboard was empty; saved excerpt copied exactly and restored to empty text using the supported API",
+  "uiAutomationTestsRun": 0,
+  "sourceOfChange": "Text read reuses its existing redacted bounded preview as the canonical optional file source snippet",
+  "scope": "Single agent, owned hidden IAB pages and independent native dev services; active user window/18571/user database untouched",
+  "limitations": [
+    "Excerpts contain the first20 lines of the actual bounded read window; they are not full-file backups",
+    "Historical source Parts remain their original immutable facts and are not reconstructed",
+    "Same semantic source in one Message retains its first saved Part"
+  ]
+}

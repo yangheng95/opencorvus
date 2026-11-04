@@ -45,7 +45,7 @@ test("attachment URL, shorthand and physical-path reads retain original names, e
       expect(result.title).toBe(reference.filename!)
       expect(Message.SourcePayload.parse(result.sources![0])).toMatchObject({
         type: "source-file", origin: "attachment", path: absolute, title: reference.filename,
-        range: { startLine: 3, endLine: 4 }, provider: "opencorvus-read",
+        range: { startLine: 3, endLine: 4 }, provider: "opencorvus-read", snippet: "three\nfour",
       })
       expect(result.output).toContain("3: three")
       results.push(result.sources![0].sourceId)
@@ -57,6 +57,48 @@ test("attachment URL, shorthand and physical-path reads retain original names, e
     expect(copied).toMatchObject({ title: located.name, sources: [{ path: copy, title: located.name }] })
     const metadata = await reader.execute({ filePath: absolute + ".metadata.json" }, ctx)
     expect(metadata.output).toContain(reference.filename!)
+  } })
+}, 30_000)
+
+test("text read sources retain the original bounded preview across file edits and preserve actual windows", async () => {
+  await using project = await memoryProject("read-source-snapshot")
+  await Instance.provide({ directory: project.path, fn: async () => {
+    const filePath = path.join(project.path, "source.md")
+    const lines = ["  original heading 中文😀\t  ", "", ...Array.from({ length: 24 }, (_, index) => `line ${index + 3}`)]
+    await fs.writeFile(filePath, lines.join("\n") + "\n")
+    const reader = await ReadTool.init(), ctx = await context()
+    const original = await reader.execute({ filePath }, ctx)
+    const expected = lines.slice(0, 20).join("\n")
+    expect(Message.SourcePayload.parse(original.sources![0])).toMatchObject({
+      type: "source-file", path: filePath, snippet: expected, provider: "opencorvus-read",
+    })
+    expect(original.metadata).toMatchObject({ preview: expected, readType: "text", lines: 26, totalLines: 26 })
+    const window = await reader.execute({ filePath, offset: 21, limit: 3 }, ctx)
+    expect(window.sources![0]).toMatchObject({ snippet: "line 21\nline 22\nline 23", range: { startLine: 21, endLine: 23 } })
+    expect(window.output).toContain("21: line 21\n22: line 22\n23: line 23")
+    await fs.writeFile(filePath, "  confirmed content\n")
+    const current = await reader.execute({ filePath }, ctx)
+    expect({ original: original.sources![0].snippet, current: current.sources![0].snippet }).toEqual({
+      original: expected, current: "  confirmed content",
+    })
+    expect(current.sources![0].sourceId).toBe(original.sources![0].sourceId)
+    expect(await fs.readFile(filePath, "utf8")).toBe("  confirmed content\n")
+  } })
+}, 30_000)
+
+test("text read source excerpts carry the existing redacted preview and exact empty content", async () => {
+  await using project = await memoryProject("read-source-redacted-preview")
+  await Instance.provide({ directory: project.path, fn: async () => {
+    const reader = await ReadTool.init(), ctx = await context()
+    await fs.writeFile(path.join(project.path, "inline.md"), "before data:text/plain;base64,YQ== after\n")
+    const redacted = await reader.execute({ filePath: "inline.md" }, ctx)
+    const expected = "before inline_binary_omitted(kind=data_url offset=7 media=text/plain payload_chars=4) after"
+    expect(redacted.sources![0]).toMatchObject({ snippet: expected })
+    expect(redacted.metadata).toMatchObject({ preview: expected, readType: "text", lines: 1, totalLines: 1 })
+    await fs.writeFile(path.join(project.path, "empty.md"), "")
+    const empty = await reader.execute({ filePath: "empty.md" }, ctx)
+    expect(empty.sources![0]).toMatchObject({ snippet: "" })
+    expect(empty.metadata).toMatchObject({ preview: "", readType: "text", lines: 0, totalLines: 0 })
   } })
 }, 30_000)
 

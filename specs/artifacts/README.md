@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [读取来源摘录实页证据](2026-11-05-read-source-snapshot/README.md)：真实模型提问、修改摘要和历史读取对照。
+
 - [模型设置范围实页证据](2026-11-05-provider-scope-context/README.md)：项目/全局、中英说明与原数据保全。
 
 - [已配置服务商实页证据](2026-11-05-configured-provider-visibility/README.md)：默认列表、搜索、中英徽标与原数据保全。

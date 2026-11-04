@@ -223,6 +223,7 @@ export const ReadTool = Tool.define("read", {
         fileSource({
           ...source,
           ...(citedReadRange(page) ?? {}),
+          snippet: preview,
         }),
       ],
     }
