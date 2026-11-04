@@ -1,0 +1,292 @@
+{
+  "at": "2026-11-04T21:24:30.240Z",
+  "baseline": {
+    "commit": "96add7676afbd6996dc610f306eb12801a31b456",
+    "evidence": "../2026-11-05-configured-provider-visibility/README.md"
+  },
+  "method": "Three native development /ui occurrences. Owned hidden IAB tabs282/283/284; manual interactions and personally reviewed screenshots. The third occurrence uses normal directory-free CLI startup and a fresh independent data root initialized by the application; no client state injection, UI interception, mocked routes or recovery bypass.",
+  "phases": [
+    {
+      "phase": "before",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293742,
+      "currentRows": 293744,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59793,
+          "after": 59794
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59735,
+          "after": 59736
+        }
+      ],
+      "originalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 114,
+      "hiddenConfigurations": 104,
+      "attachments": 277,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 4873039,
+      "uiEntry": "main-BMR_VcVg.js"
+    },
+    {
+      "phase": "after",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293744,
+      "currentRows": 293746,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59794,
+          "after": 59795
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59736,
+          "after": 59737
+        }
+      ],
+      "originalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 114,
+      "hiddenConfigurations": 104,
+      "attachments": 277,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 4519166,
+      "uiEntry": "main-ln4zqIzm.js"
+    },
+    {
+      "phase": "global",
+      "schema": 10,
+      "tables": 92,
+      "freshDatabase": true,
+      "freshDatabaseRows": 4,
+      "nonemptyTables": [
+        {
+          "table": "database_authority",
+          "rows": 1
+        },
+        {
+          "table": "memory_fts_data",
+          "rows": 2
+        },
+        {
+          "table": "memory_fts_config",
+          "rows": 1
+        }
+      ],
+      "projects": 0,
+      "sessions": 0,
+      "originalSourceRows": 293746,
+      "originalSourceDatabasePreserved": true,
+      "originalProjectsPreserved": 114,
+      "originalAttachmentsPreserved": 277,
+      "globalConfigurationPreserved": true,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 4338033,
+      "uiEntry": "main-ln4zqIzm.js"
+    }
+  ],
+  "emptyModelCheckpoints": [
+    {
+      "phase": "before",
+      "checkpoint": "initial",
+      "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+      "modelCount": 0,
+      "messages": 0,
+      "configExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "checkpoint": "final",
+      "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+      "modelCount": 0,
+      "messages": 0,
+      "configExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "checkpoint": "initial",
+      "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+      "modelCount": 0,
+      "messages": 0,
+      "configExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "checkpoint": "final",
+      "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+      "modelCount": 0,
+      "messages": 0,
+      "configExact": true,
+      "modelRequests": 0
+    }
+  ],
+  "globalCheckpoints": [
+    {
+      "at": "2026-11-04T21:19:46.697Z",
+      "checkpoint": "initial",
+      "statuses": {
+        "discovery": 200,
+        "providers": 200,
+        "auth": 200,
+        "config": 200
+      },
+      "defaultDirectory": "",
+      "projects": 0,
+      "connected": [
+        "openai"
+      ],
+      "models": 12,
+      "model": "openai/gpt-6.1-sol",
+      "oauthMethodAvailable": true,
+      "modelRequests": 0
+    },
+    {
+      "at": "2026-11-04T21:20:59.264Z",
+      "checkpoint": "final",
+      "statuses": {
+        "discovery": 200,
+        "providers": 200,
+        "auth": 200,
+        "config": 200
+      },
+      "defaultDirectory": "",
+      "projects": 0,
+      "connected": [
+        "openai"
+      ],
+      "models": 12,
+      "model": "openai/gpt-6.1-sol",
+      "oauthMethodAvailable": true,
+      "modelRequests": 0
+    }
+  ],
+  "publicReadCheckers": {
+    "businessNames": [
+      "read-proof",
+      "inspect",
+      "goal-preservation-proof",
+      "mailbox-proof",
+      "file-read-proof",
+      "prior-business-proof",
+      "question-business-proof",
+      "resource-proof",
+      "empty-proof"
+    ],
+    "businessCheckpointsPerPhase": 2,
+    "businessSuccessfulChecks": 36,
+    "freshGlobalRoutes": [
+      "/global/projects/discover",
+      "/global/providers",
+      "/global/providers/auth",
+      "/global/config"
+    ],
+    "freshGlobalReadbacks": 2,
+    "allOriginalCheckerResultsZero": true
+  },
+  "manual": {
+    "screenshots": [
+      "01-before-root-project-english.png",
+      "02-before-empty-project-chinese.png",
+      "03-before-add-form-scope.png",
+      "04-before-original-project-chinese.png",
+      "05-after-project-scope-english.png",
+      "06-after-project-path-english.png",
+      "07-after-empty-project-chinese.png",
+      "08-after-empty-project-path-chinese.png",
+      "09-after-search-and-shared-key-context.png",
+      "10-after-add-form-project-scope.png",
+      "11-after-original-project-scope.png",
+      "12-after-original-project-full-path.png",
+      "13-after-return-empty-project-path.png",
+      "14-after-global-scope-english.png",
+      "15-after-global-scope-chinese.png",
+      "16-after-global-add-form-scope.png"
+    ],
+    "project": "EN/CN scope labels and save/shared-credential explanation; real full long paths expanded/collapsed; search/configuration row expansion; open/cancel add form; normal12-model project and empty0-model project with the same basename distinguished by exact real paths; cross-project return.",
+    "global": "Real empty defaultDirectory and0 registered projects; normal English/Chinese settings page; global save/shared-credential explanation; add form opened and cancelled, preserving config and0 sessions.",
+    "scopeSource": "Existing activeDirectory/activeProjectDirectory owner; existing projectDirectoryLabel/implicitProjectSuffix and shared settings.product.scope_project translation.",
+    "deletion": "Existing armed-description copy reviewed against the current project/global config writer and data-root-global Auth.remove contract; deletion not executed."
+  },
+  "nonUI": {
+    "typecheckPackages": 8,
+    "actualUiBuilds": 1,
+    "apiRules": 6,
+    "apiFiles": 36,
+    "apiDocumentationOperations": 352,
+    "apiDocumentationGroups": 26,
+    "architectureDocuments": 20,
+    "focusedUnitTests": "Not added or run for this presentation-only change"
+  },
+  "limits": [
+    "Configuration, authentication, credential saving, deletion, refresh, discovery and model-test writes were not performed. The destructive-action description received source/contract review only.",
+    "No new implicit Project was created; its display suffix uses the existing canonical formatter.",
+    "Account200 and catalog projection are read-only evidence, not inference acceptance. Zero model calls were issued.",
+    "Existing build chunk-size warning remains; no bundle-structure optimization was attempted."
+  ],
+  "database": "Original schema10/92 tables unchanged. The inherited data progresses293742→293744→293746 with exactly one normal service lease/grant per inherited-data occurrence and all original rows preserved. Fresh-global first startup creates only4 initialization rows:1 database_authority and3 internal full-text-index rows,0 Projects and0 Sessions; it also re-verifies the original293746 rows,114 project/Git identities,104 hidden configs and277 attachments.",
+  "userWindow": "User localhost:18571 was not opened, refreshed, restarted or stopped."
+}

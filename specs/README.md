@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [模型服务商设置范围](records/2026-11/2026-11-05-provider-scope-context.md)：当前项目、全局配置与共享凭据的可读说明。
+
 - [已配置服务商可见性](records/2026-11/2026-11-05-configured-provider-visibility.md)：配置统计、目录优先级与真实连接状态。
 
 - [模型设置语言与引导](records/2026-11/2026-11-05-provider-settings-language.md)：中文术语统一、真实空模型说明与设置入口。

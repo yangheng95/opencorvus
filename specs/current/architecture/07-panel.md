@@ -4489,6 +4489,15 @@ as CONFIG_SECTIONS. Chinese provider settings use model-service terminology and
 localized form/search/action guidance, while canonical brand/model/provider IDs,
 environment variables, endpoint values and original diagnostics stay unchanged.
 
+Provider settings name the current Project from the same active directory that
+owns loading and configuration writes, with its full real path in the existing
+Disclosure. Directory-free startup names the global configuration scope instead.
+Localized guidance distinguishes the Project/global configuration destination
+from sign-in and saved API keys shared by all Projects. The existing armed
+removal description also names that shared credential impact. These are read-only
+presentation facts; form-captured scope, mutation fencing, Auth ownership and
+removal semantics retain their existing contracts.
+
 Provider saves distinguish configuration commitment, credential commitment and
 directory observation. A successful configuration response or the shared typed
 committed receipt proceeds through the existing serial followups, retaining any
