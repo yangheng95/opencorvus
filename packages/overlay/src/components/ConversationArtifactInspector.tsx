@@ -40,6 +40,7 @@ import { captureApiAuthority } from "../services/api"
 import { activeProjectDirectory } from "../services/project-directory"
 import { csvArtifactTable, csvCellComparator } from "../services/csv-artifact"
 import { jsonArtifactTree } from "../services/json-artifact"
+import { conversationArtifactDisplayState, setConversationArtifactDisplayState } from "../store/conversation-ui"
 
 // Loaded with the artifact the inspector is actually opening; keeping these
 // static held CodeMirror and its grammars in the startup bundle.
@@ -358,9 +359,15 @@ function SnapshotArtifactView(props: {
 }) {
   const manifest = createMemo(() => JSON.parse(props.content.text ?? "") as TaskArtifactSnapshotManifest)
   const snapshot = createMemo(() => props.locator.snapshot as TaskArtifactSnapshotIdentity)
-  const [query, setQuery] = createSignal("")
-  const [selection, setSelection] = createSignal<ResourceSelection>()
-  const resources = createMemo(() =>
+  const stateKey = () => JSON.stringify([
+    "artifact-browser", props.taskID, artifactReadLocatorKey(props.locator as CanonicalArtifactReadLocator),
+  ])
+  const display = () => conversationArtifactDisplayState(stateKey())
+  const query = () => display()?.query ?? ""
+  const setQuery = (query: string) => setConversationArtifactDisplayState(stateKey(), { query })
+  const resourceKey = (resource: ResourceSelection) =>
+    artifactReadLocatorKey(resource.locator as CanonicalArtifactReadLocator)
+  const resources = createMemo<ResourceSelection[]>(() =>
     Object.entries(manifest().trees).flatMap(([tree, value]) =>
       value.files.map((file) => ({
         tree,
@@ -372,6 +379,10 @@ function SnapshotArtifactView(props: {
       })),
     ),
   )
+  const selection = createMemo(() => {
+    const key = display()?.selectedResourceKey
+    return key ? resources().find((resource) => resourceKey(resource) === key) : undefined
+  })
   const filteredResources = createMemo(() => {
     const value = query().trim().toLowerCase()
     return value
@@ -419,7 +430,7 @@ function SnapshotArtifactView(props: {
                 tone="neutral"
                 class="conversation-artifact-inspector__resource"
                 data-selected={selection()?.locator === resource.locator ? "true" : undefined}
-                onClick={() => setSelection(resource)}
+                onClick={() => setConversationArtifactDisplayState(stateKey(), { selectedResourceKey: resourceKey(resource) })}
               >
                 <Icon name="file-document" size="compact" />
                 <span class="conversation-artifact-inspector__resource-copy">

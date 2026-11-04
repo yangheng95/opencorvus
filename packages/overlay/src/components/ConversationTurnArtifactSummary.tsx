@@ -1,4 +1,4 @@
-import { For, Show, createMemo, createSignal } from "solid-js"
+import { For, Show, createMemo } from "solid-js"
 
 import type { CardNode } from "../store/card-tree"
 import type { ArtifactReadLocator } from "../services/conversation-artifact"
@@ -11,6 +11,7 @@ import { Icon } from "./ui/Icon"
 import { ArtifactResourceDownload } from "./ArtifactResourceDownload"
 import { createClipboardCopy } from "./ui/clipboard-copy"
 import { Feedback } from "./ui/Feedback"
+import { conversationArtifactDisplayState, setConversationArtifactDisplayState } from "../store/conversation-ui"
 
 const DEFAULT_VISIBLE_OUTPUT_COUNT = 5
 
@@ -85,10 +86,12 @@ function outputMeta(output: DeclaredOutputRow): string {
 }
 
 export function ConversationTurnArtifactSummary(props: { summary: Summary; onContentChanged?: () => void }) {
-  const [outputsExpanded, setOutputsExpanded] = createSignal(false)
-  const [recordsExpanded, setRecordsExpanded] = createSignal(false)
-  const [openOutputID, setOpenOutputID] = createSignal("")
-  const [openArtifactID, setOpenArtifactID] = createSignal("")
+  const stateKey = () => JSON.stringify(["turn-artifacts", props.summary.task.id, props.summary.messageID])
+  const display = () => conversationArtifactDisplayState(stateKey())
+  const outputsExpanded = () => display()?.outputsExpanded ?? false
+  const recordsExpanded = () => display()?.recordsExpanded ?? false
+  const openOutputID = () => display()?.openOutputID ?? ""
+  const openArtifactID = () => display()?.openArtifactID ?? ""
   const snapshotIDs = createMemo(() =>
     props.summary.entries.map(artifactSnapshotID).filter((id): id is string => id !== undefined),
   )
@@ -197,8 +200,10 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
                           title={title}
                           aria-expanded={open()}
                           onClick={() => {
-                            setOpenOutputID(open() ? "" : identity)
-                            setOpenArtifactID("")
+                            setConversationArtifactDisplayState(stateKey(), {
+                              openOutputID: open() ? "" : identity,
+                              openArtifactID: "",
+                            })
                             props.onContentChanged?.()
                           }}
                         >
@@ -263,7 +268,7 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
                 data-ui="conversation-output-disclosure"
                 aria-expanded={outputsExpanded()}
                 onClick={() => {
-                  setOutputsExpanded((value) => !value)
+                  setConversationArtifactDisplayState(stateKey(), { outputsExpanded: !outputsExpanded() })
                   props.onContentChanged?.()
                 }}
               >
@@ -288,7 +293,7 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
               class="conversation-artifact-summary__disclosure conversation-artifact-summary__records-disclosure"
               aria-expanded={recordsExpanded()}
               onClick={() => {
-                setRecordsExpanded((value) => !value)
+                setConversationArtifactDisplayState(stateKey(), { recordsExpanded: !recordsExpanded() })
                 props.onContentChanged?.()
               }}
             >
@@ -322,8 +327,10 @@ export function ConversationTurnArtifactSummary(props: { summary: Summary; onCon
                           title={title()}
                           aria-expanded={open()}
                           onClick={() => {
-                            setOpenArtifactID(open() ? "" : identity)
-                            setOpenOutputID("")
+                            setConversationArtifactDisplayState(stateKey(), {
+                              openArtifactID: open() ? "" : identity,
+                              openOutputID: "",
+                            })
                             props.onContentChanged?.()
                           }}
                         >

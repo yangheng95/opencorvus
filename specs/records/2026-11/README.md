@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [交付阅读状态](2026-11-05-delivery-reading-state.md)：统一呈现所有者与真实断连恢复。
+
 - [交付内容读取重试](2026-11-05-delivery-content-retry.md)：资源读取、中文提示和同一页面恢复。
 
 - [文件修改统计可读表达](2026-11-05-readable-change-counts.md)：清晰统计、原比较及中文提示。

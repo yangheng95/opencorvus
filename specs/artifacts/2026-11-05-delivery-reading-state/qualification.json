@@ -1,0 +1,196 @@
+{
+  "at": "2026-11-04T19:57:41.191Z",
+  "baseline": {
+    "commit": "8288524d4be66578d00cbc5e7f4e36f142e986dd",
+    "evidence": "../2026-11-05-delivery-content-retry/README.md",
+    "sameBeforeProductSource": true,
+    "additionalBeforeOccurrence": false
+  },
+  "method": "Native development /ui; hidden owned IAB tab; manual interactions and personally reviewed screenshots; actual normal service shutdown and same-origin recovery; no browser interception or injected messages",
+  "phases": [
+    {
+      "phase": "after",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293648,
+      "currentRows": 293650,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59772,
+          "after": 59773
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59714,
+          "after": 59715
+        }
+      ],
+      "originalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 113,
+      "hiddenConfigurations": 103,
+      "attachments": 277,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 5064727,
+      "uiEntry": "main-vh3rTlAP.js"
+    },
+    {
+      "phase": "final",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293650,
+      "currentRows": 293652,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59773,
+          "after": 59774
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59715,
+          "after": 59716
+        }
+      ],
+      "originalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 113,
+      "hiddenConfigurations": 103,
+      "attachments": 277,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 4808225,
+      "uiEntry": "main-vh3rTlAP.js"
+    }
+  ],
+  "publicReadCheckers": {
+    "names": [
+      "read-proof",
+      "inspect",
+      "goal-preservation-proof",
+      "mailbox-proof",
+      "file-read-proof",
+      "prior-business-proof",
+      "question-business-proof",
+      "resource-proof"
+    ],
+    "checkpointsPerPhase": 2,
+    "successfulChecks": 32,
+    "toolchainRepair": "First after-initial prior-business proof stopped because its unchanged original before-final baseline had not been copied. Restored that original 930 baseline, corrected preparation selection, and reran original acceptance successfully under a fresh observation label. Failed original receipt retained."
+  },
+  "manual": {
+    "screenshots": [
+      "01-after-english-selection.png",
+      "02-after-reopened-reader.png",
+      "03-after-chinese-arrangement.png",
+      "04-after-ordinary-preview-close.png",
+      "05-after-another-task-default.png",
+      "06-after-returned-task-state.png",
+      "07-after-offline-retained-selection.png",
+      "08-final-automatic-recovery.png",
+      "09-final-search-selection-and-code.png",
+      "10-final-readable-restored-content.png",
+      "11-final-other-output.png",
+      "12-final-returned-snapshot.png"
+    ],
+    "normal": "EN/CN snapshot browsing; close/reopen retains query and selection; ordinary preview close; another Task shows its own defaults and returning restores original query/selection; clear/search; separate output and snapshot are mutually exclusive",
+    "recovery": {
+      "mode": "Automatic re-read by the existing reader after same-authority hydration",
+      "query": "test",
+      "file": "test_invoice.py",
+      "bytes": 1520,
+      "offlineCapturedAt": "2026-11-04T19:51:19.520Z",
+      "firstObservationAt": "2026-11-04T19:53:15.443Z",
+      "requestArrivedAt": "2026-11-04T19:53:08.931Z",
+      "requestID": 49,
+      "sameTask": true,
+      "sameDirectory": true,
+      "sameImmutableLocator": true,
+      "range": {
+        "byte_offset": 0,
+        "max_bytes": 65536
+      },
+      "originalTabRetained": true,
+      "pageReloaded": false,
+      "clickedRetryDuringRecovery": false,
+      "recordsExpanded": true,
+      "snapshotExpanded": true,
+      "queryAndSelectionRetained": true,
+      "realCodeVisuallyRestored": true,
+      "preObservationArtifactRequests": [
+        {
+          "id": 34,
+          "at": "2026-11-04T19:53:08.790Z",
+          "source": "task_artifact_snapshot"
+        },
+        {
+          "id": 47,
+          "at": "2026-11-04T19:53:08.872Z",
+          "source": "task_artifact_snapshot"
+        },
+        {
+          "id": 49,
+          "at": "2026-11-04T19:53:08.931Z",
+          "source": "task_artifact_resource"
+        }
+      ],
+      "requestObservation": "Observer records arrival and canonical input only. Restored content is manual UI evidence; independent public reads validate original immutable bytes and 200 responses."
+    },
+    "chineseOfflineTitle": "任务"
+  },
+  "nonUI": {
+    "transportTests": 16,
+    "assertions": 38,
+    "typecheckPackages": 8,
+    "actualUiBuilds": 2,
+    "apiRules": 6,
+    "apiFiles": 36,
+    "apiDocumentationOperations": 352,
+    "apiDocumentationGroups": 26,
+    "architectureDocuments": 20
+  },
+  "limits": [
+    "Presentation state remains in the existing bounded memory record; page-reload persistence was not added",
+    "Authority-rotation isolation uses the existing canonical API/source key; no artificial credential rotation was performed",
+    "More-than-five declared-output expander not exercised by this four-file Task",
+    "No model execution requested in this read-only iteration"
+  ],
+  "database": "Existing schema 10 unchanged; all original rows/source database/project files and identities preserved",
+  "userWindow": "User localhost:18571 was not opened, refreshed, restarted or stopped"
+}

@@ -15,6 +15,14 @@ export type ToolPayloadDisplayState = {
 export type MainConversationReadingPosition = ConversationReadingPosition & {
   viewportWidth: number
 }
+export type ConversationArtifactDisplayState = {
+  outputsExpanded?: boolean
+  recordsExpanded?: boolean
+  openOutputID?: string
+  openArtifactID?: string
+  query?: string
+  selectedResourceKey?: string
+}
 
 type ConversationUiState = {
   storageKey: string
@@ -23,6 +31,7 @@ type ConversationUiState = {
   sourceExcerptPositions: Record<string, { top: number; anchor?: TextReadingAnchor }>
   sideChatReadingPositions: Record<string, ConversationReadingPosition>
   toolPayloadDisplays: Record<string, ToolPayloadDisplayState>
+  artifactDisplays: Record<string, ConversationArtifactDisplayState>
 }
 
 const [store, setStore] = createStore({
@@ -164,6 +173,7 @@ export function loadConversationUiStateForSource(source: Pick<BoardSource, "kind
         sourceExcerptPositions: {},
         sideChatReadingPositions: {},
         toolPayloadDisplays: {},
+        artifactDisplays: {},
       })
     }
     for (const retired of recentConversations) {
@@ -237,6 +247,19 @@ export function setToolPayloadDisplayState(id: string, value: ToolPayloadDisplay
   if (!id || !current) return
   const next = { ...current.toolPayloadDisplays[id], ...value }
   setStore("conversations", store.activeKey, "toolPayloadDisplays", reconcile(remember(current.toolPayloadDisplays, id, next), { merge: false }))
+}
+
+/** Delivery browsing follows the same API/source lifetime as other disclosures.
+ * Only presentation keys live here; resources and content remain reader-owned. */
+export function conversationArtifactDisplayState(id: string): ConversationArtifactDisplayState | undefined {
+  return currentState()?.artifactDisplays[id]
+}
+
+export function setConversationArtifactDisplayState(id: string, value: ConversationArtifactDisplayState): void {
+  const current = currentState()
+  if (!id || !current) return
+  const next = { ...current.artifactDisplays[id], ...value }
+  setStore("conversations", store.activeKey, "artifactDisplays", reconcile(remember(current.artifactDisplays, id, next), { merge: false }))
 }
 
 export function setSideChatReadingPosition(id: string, position: ConversationReadingPosition): void {

@@ -2174,7 +2174,14 @@ API revision and source kind/ID selects one presentation record containing card
 folds, reference disclosures, excerpt positions and Side reading positions.
 Task, ordinary Session and Mission entry points select that record in the same
 synchronous batch as their Board source; an empty workspace deselects it. The
-store retains fifty recently selected conversations, with two hundred entries
+same record owns delivery browsing: turn disclosures and mutually exclusive
+open output/record keys use the original Task and Message identity. Snapshot
+search and selected-resource keys use the original Task and complete canonical
+snapshot locator. Selection resolves that key from the current manifest, without
+retaining another resource or content copy. Reader/virtualizer remounts and
+same-authority hydration retain that arrangement; another source, authority or
+snapshot selects its own state. These fields remain in memory only.
+The store retains fifty recently selected conversations, with two hundred entries
 per presentation field. Only card folds persist across reloads, under the server
 URL and source kind/ID; reading positions remain in memory. The previous bare
 Task-ID folding keys are no longer read, so that old presentation preference

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [交付阅读状态](records/2026-11/2026-11-05-delivery-reading-state.md)：刷新后保留交付记录、文件选择和搜索。
+
 - [交付内容读取重试](records/2026-11/2026-11-05-delivery-content-retry.md)：清晰错误说明、原始详情与真实断连恢复。
 
 - [文件修改统计可读表达](records/2026-11/2026-11-05-readable-change-counts.md)：新增删除行数、未知与非文本状态。
