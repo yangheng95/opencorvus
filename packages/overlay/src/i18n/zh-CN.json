@@ -1330,7 +1330,7 @@
   "chat.artifacts.task_cancelled": "任务已取消",
   "chat.artifacts.review": "查看修改",
   "chat.artifacts.show_more": "再显示 {{count}} 项",
-  "chat.artifacts.show_less": "收起项目",
+  "chat.artifacts.show_less": "收起列表",
   "chat.artifacts.loading": "正在读取交付内容…",
   "chat.artifacts.read_failed": "无法读取此交付内容",
   "chat.artifacts.read_failed_hint": "可以重试读取，或展开详情查看具体原因。",
@@ -1353,7 +1353,7 @@
     "one": "文件修改 · {{count}} 项",
     "other": "文件修改 · {{count}} 项"
   },
-  "files.recorded_changes_hint": "点击文件查看修改详情。",
+  "files.recorded_changes_hint": "点击记录查看当时的修改详情。",
   "files.recorded_comparison_hint": "这里显示已记录的修改；“{{action}}”打开磁盘上的当前内容。",
   "files.select_target": "选择任务查看文件变更",
   "files.none": "当前任务没有文件变更",

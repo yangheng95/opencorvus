@@ -1,6 +1,6 @@
 import { cardTreeStore, publishedCardTreeVersion, type CardNode } from "../store/card-tree"
 import { selectedConversationDirectory } from "../store/board"
-import type { FileChangeReceipt, FileChangeIncompleteReason } from "../components/DiffView"
+import type { FileChange, FileChangeReceipt, FileChangeIncompleteReason } from "../components/DiffView"
 import { changeGroupIdentity, summarizeFileChanges, type ChangeGroup } from "../services/diff"
 import { textComparisonCounts } from "./text-comparison"
 import { toolFileChangesFromState, type ToolFileChange, type ToolReceiptContext } from "./tool-file-changes"
@@ -18,6 +18,8 @@ export interface ArtifactFileRow {
   groupID: string
   targetPath: string
   file: string
+  status?: FileChange["status"]
+  previousPath?: string
   additions: number | null
   deletions: number | null
   isText?: boolean
@@ -487,6 +489,8 @@ export function conversationArtifactFileRows(groups: readonly ChangeGroup[]): Ar
         groupID: group.id,
         targetPath: change.file,
         file: change.file.replaceAll("\\", "/").replace(/^\.\//, ""),
+        status: change.status,
+        previousPath: change.previousPath,
         additions: change.additions,
         deletions: change.deletions,
         isText: change.isText,

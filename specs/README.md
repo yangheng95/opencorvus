@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [对话摘要的操作类型](records/2026-11/2026-11-05-summary-operation-labels.md)：文件摘要直接辨认修改、重命名与删除。
+
 - [重命名记录的辨认与搜索](records/2026-11/2026-11-05-rename-reading.md)：操作名称、原路径与当前语言筛选。
 
 - [重命名修改记录的当前文件入口](records/2026-11/2026-11-05-renamed-review-target.md)：比较身份与真实打开路径的完整衔接。

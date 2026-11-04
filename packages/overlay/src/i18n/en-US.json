@@ -1331,7 +1331,7 @@
   "chat.artifacts.task_cancelled": "Task cancelled",
   "chat.artifacts.review": "Review changes",
   "chat.artifacts.show_more": "Show {{count}} more items",
-  "chat.artifacts.show_less": "Show fewer items",
+  "chat.artifacts.show_less": "Collapse list",
   "chat.artifacts.loading": "Loading saved content…",
   "chat.artifacts.read_failed": "Unable to read this content",
   "chat.artifacts.read_failed_hint": "Retry the read, or expand Details to inspect the cause.",
@@ -1354,7 +1354,7 @@
     "one": "File changes · {{count}} path",
     "other": "File changes · {{count}} paths"
   },
-  "files.recorded_changes_hint": "Select a file to view its recorded changes.",
+  "files.recorded_changes_hint": "Select a record to view the changes recorded at that time.",
   "files.recorded_comparison_hint": "These are recorded changes. “{{action}}” opens the current contents on disk.",
   "files.select_target": "Select a task to view file changes",
   "files.none": "No file changes for this task",

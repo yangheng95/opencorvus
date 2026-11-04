@@ -18,7 +18,7 @@ import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { FileRowContent } from "./ui/FileRow"
 import { Tooltip } from "./ui/Tooltip"
-import { ChangeLineStats } from "./DiffView"
+import { ChangeLineStats, changeStatusLabel } from "./DiffView"
 
 const DEFAULT_VISIBLE_FILE_COUNT = 5
 
@@ -139,6 +139,9 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
                     icon="file-document"
                     trailing={
                       <span class="conversation-artifact-summary__file-stats">
+                        <span class="change-status" data-status={row.status}>
+                          {changeStatusLabel(row.status, row.previousPath)}
+                        </span>
                         <ChangeLineStats additions={row.additions} deletions={row.deletions} isText={row.isText} />
                       </span>
                     }

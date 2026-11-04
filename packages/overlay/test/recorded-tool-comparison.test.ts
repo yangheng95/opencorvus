@@ -1,9 +1,9 @@
 import { afterEach, beforeEach, expect, test } from "bun:test"
 import { captureApiAuthority, configure, renewApiAuthority } from "../src/services/api"
 import { readToolPart, retainedToolPart } from "../src/services/tool-part"
-import { immutableBuildChangeGroups, readRecordedToolComparison, resolveDiff, savedSessionChangeGroups } from "../src/services/diff"
+import { immutableBuildChangeGroups, readRecordedToolComparison, resolveDiff, savedSessionChangeGroups, type ChangeGroup } from "../src/services/diff"
 import { toolFileChangesFromState } from "../src/utils/tool-file-changes"
-import { mergeChangeGroups, reduceToolFileChangeGroups } from "../src/utils/file-change-summary"
+import { conversationArtifactFileRows, mergeChangeGroups, reduceToolFileChangeGroups } from "../src/utils/file-change-summary"
 import {
   CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY,
   CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY,
@@ -90,11 +90,44 @@ test("full and bounded rename observations retain the comparison identity and bo
     [CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY]: [{ fileIndex: 0, filePath: source, movePath: target, status: "modified", isText: true, additions: 1, deletions: 1 }],
   } }
   for (const input of [moved, bounded]) {
-    expect(toolFileChangesFromState(input, directory, receipt)[0]).toMatchObject({
+    const changes = toolFileChangesFromState(input, directory, receipt)
+    expect(changes[0]).toMatchObject({
       file: "draft/原始方案.md -> deliverables/客户方案（已确认）.md",
       openPath: target, previousPath: source, status: "modified", additions: 1, deletions: 1,
     })
+    expect(conversationArtifactFileRows([{
+      id: "original-rename", observationKind: "tool_interval", additions: 1, deletions: 1, changes,
+    }])[0]).toEqual({
+      groupID: "original-rename", targetPath: changes[0].file, file: changes[0].file,
+      previousPath: source, status: "modified", additions: 1, deletions: 1, isText: true,
+    })
   }
+})
+
+test("summary rows preserve original classification, path identity and non-text or unknown counts", () => {
+  const complete = { kind: "complete" as const, receipts: [] }
+  const changes: ChangeGroup["changes"] = [
+    { file: "created.xlsx", openPath: "created.xlsx", status: "added", isText: false,
+      additions: null, deletions: null, evidence: complete },
+    { file: "folder\\modified.md", openPath: "folder\\modified.md", status: "modified", isText: true,
+      additions: 2, deletions: 1, evidence: complete },
+    { file: "deleted.md", openPath: "deleted.md", status: "deleted", isText: true,
+      additions: 0, deletions: 1, evidence: complete },
+    { file: "unknown.md", openPath: "unknown.md", additions: null, deletions: null,
+      evidence: { kind: "incomplete", reason: "path_only", receipts: [] } },
+  ]
+  expect(conversationArtifactFileRows([{
+    id: "original-operations", observationKind: "tool_interval", additions: null, deletions: null, changes,
+  }])).toEqual([
+    { groupID: "original-operations", targetPath: "created.xlsx", file: "created.xlsx", status: "added",
+      previousPath: undefined, additions: null, deletions: null, isText: false },
+    { groupID: "original-operations", targetPath: "deleted.md", file: "deleted.md", status: "deleted",
+      previousPath: undefined, additions: 0, deletions: 1, isText: true },
+    { groupID: "original-operations", targetPath: "folder\\modified.md", file: "folder/modified.md", status: "modified",
+      previousPath: undefined, additions: 2, deletions: 1, isText: true },
+    { groupID: "original-operations", targetPath: "unknown.md", file: "unknown.md", status: undefined,
+      previousPath: undefined, additions: null, deletions: null, isText: undefined },
+  ])
 })
 
 test("non-composable and conflicting intervals retain their recorded source and canonical destination", () => {

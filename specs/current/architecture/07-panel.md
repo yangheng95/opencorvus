@@ -726,6 +726,13 @@ recorded changes; actual current-file errors belong to the file reader. Review
 distinguishes recorded changes from its existing current-disk
 read action using that action's localized label. The original paths, counts,
 comparison owners and delivery-file projections remain the sole facts.
+The conversation's file-row projection retains each original physical status and
+recorded move source. Summary rows reuse Review's localized operation labels,
+including renames, alongside the same line statistics. Their click still selects
+the original group/comparison identity; a displayed status does not imply that
+the historical path exists on disk or alter summary aggregation.
+File and declared-output list disclosures name their collapse action as a list,
+distinct from the workspace's Project navigation.
 The shared line-stat presentation spells out added and deleted line totals in
 conversation summaries and multi-file Review headers. Compact file rows retain
 their symbols with complete localized accessible names and native titles.

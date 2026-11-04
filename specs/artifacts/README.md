@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [摘要操作类型实页证据](2026-11-05-summary-operation-labels/README.md)：摘要、审阅、折叠与数据保全。
+
 - [重命名阅读实页证据](2026-11-05-rename-reading/README.md)：操作辨认、原路径、搜索和数据保全。
 
 - [重命名审阅目标实页证据](2026-11-05-renamed-review-target/README.md)：原比较、当前文件与独立数据保全。

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [文件摘要操作类型](2026-11-05-summary-operation-labels.md)：原状态投影、双语标签与真实导航。
+
 - [重命名记录阅读](2026-11-05-rename-reading.md)：实际原路径、操作名称与双语搜索。
 
 - [重命名记录的打开目标](2026-11-05-renamed-review-target.md)：实际修改、删除和原比较的文件定位。
