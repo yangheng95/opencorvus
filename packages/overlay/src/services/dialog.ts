@@ -5,7 +5,7 @@
 
 import { boardStore, loadBoard, activeTaskID } from "../store/board"
 import { apiJson } from "./api"
-import { selectedTaskDirectory } from "../store/board"
+import { selectedConversationDirectory, selectedTaskDirectory } from "../store/board"
 import { renderMarkdown, escapeHtml } from "../utils/markdown"
 import { iconHtml } from "../utils/icon-html"
 import { describeToolPart } from "../utils/tool"
@@ -24,7 +24,7 @@ interface GoalDialogOwner {
 }
 
 function renderSessionToolChip(part: any): string {
-  const display = describeToolPart(part, selectedTaskDirectory())
+  const display = describeToolPart(part, selectedConversationDirectory())
   if (!display) return ""
   const statusAttr = display.status ? ` data-status="${escapeHtml(display.status)}"` : ""
   const detail = display.detail ? `<span class="tool-detail">${escapeHtml(display.detail)}</span>` : ""

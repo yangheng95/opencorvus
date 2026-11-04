@@ -6,7 +6,7 @@ import { InteractionCard } from "./InteractionCard"
 import { PermissionRequestContent } from "./PermissionRequestContent"
 import { FilePart, messageAttachmentDisplayLabel, type FilePartPresentation, type MessageFilePart } from "./FilePart"
 import { describeToolPart, shortRelativePath, type ToolDisplayModel } from "../utils/tool"
-import { boardStore, selectedTaskDirectory } from "../store/board"
+import { selectedConversationDirectory } from "../store/board"
 import { toolToCardNode } from "../utils/tool-card-node"
 import { localeTag, t } from "../utils/i18n"
 import { interactionRequestText, interactionResponseText } from "../utils/transcript"
@@ -106,7 +106,7 @@ function RenderableCardPart(props: {
         <div class="msg-patch">
           <Icon name="edit" class="msg-patch__icon" />
           <span class="msg-patch__text">
-            {(part().files || []).map((f: string) => shortRelativePath(f, selectedTaskDirectory())).join(", ")}
+            {(part().files || []).map((f: string) => shortRelativePath(f, selectedConversationDirectory())).join(", ")}
           </span>
         </div>
       </Match>
@@ -240,8 +240,7 @@ function ExecutionToolIdentity(props: { tool: ToolDisplayModel; commandCodeInSta
 function ExecutionEventRun(props: PartCollectionProps) {
   const key = createMemo(() => executionDisclosureKey(props.parts))
   const expanded = () => cardExpanded(key(), false)
-  const directory = () =>
-    boardStore.selectedSource?.kind === "task" ? selectedTaskDirectory() : boardStore.selectedSource?.directory || ""
+  const directory = selectedConversationDirectory
   const tools = createMemo(() =>
     props.parts.map((part) => describeToolPart(part, directory())).filter((tool) => tool !== null),
   )

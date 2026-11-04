@@ -1062,6 +1062,8 @@
   "tool.action.read_agent_message": "Read agent message",
   "tool.action.todo": "Manage to-dos",
   "tool.action.question": "Ask user",
+  "tool.question_count": { "one": "{{count}} question", "other": "{{count}} questions" },
+  "tool.changed_file_count": { "one": "{{count}} file", "other": "{{count}} files" },
   "tool.action.skill": "Load skill",
   "tool.action.memory": "Manage memory",
   "tool.action.schedule": "Manage schedule",

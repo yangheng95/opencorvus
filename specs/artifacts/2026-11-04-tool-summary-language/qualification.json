@@ -1,0 +1,1072 @@
+{
+  "at": "2026-11-04T15:49:19.292Z",
+  "scope": "Question counts and patch summaries, consistent conversation paths, and preservation of existing terminal configuration",
+  "phases": {
+    "original-before": {
+      "port": 38690,
+      "uiEntry": "main-0GaABhLf.js",
+      "qualified": {
+        "at": "2026-11-03T20:55:01.925Z",
+        "kind": "before",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 285813,
+        "current": 285815,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 58235,
+            "after": 58236
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 58177,
+            "after": 58178
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 273,
+        "projects": 111,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "reserveMs": 5204092,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-0GaABhLf.js"
+      },
+      "preflight": {
+        "at": "2026-11-03T20:52:56.933Z",
+        "phase": "before",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 0,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "retirement": {
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "publicShutdown": 200,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 5204092,
+        "physical": {
+          "observedAtUtc": "2026-11-03T20:54:34.7545543Z",
+          "launcher": {
+            "originalChildExit": 0,
+            "observedAtUtc": "2026-11-03T20:54:19.0402774Z"
+          },
+          "chain": [
+            {
+              "identity": {
+                "pid": 15424,
+                "processInstanceID": "win32:639293359591038643",
+                "occurrenceID": "2aad6b39-ae34-4b0d-8776-89354980b52e"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 7076,
+                "processInstanceID": "win32:639293359597793858",
+                "occurrenceID": "3b2efa54-15c2-45b7-8f99-bbe3ac6ba6f6"
+              },
+              "state": "dead_or_reused"
+            }
+          ],
+          "native": {
+            "occurrence": "tool-summary-925-before-9feb2c00-4e79-406d-aff0-1fa949092418",
+            "outcome": "settled",
+            "host": {
+              "pid": 15424,
+              "processInstanceID": "win32:639293359591038643",
+              "occurrenceID": "2aad6b39-ae34-4b0d-8776-89354980b52e"
+            },
+            "target": {
+              "pid": 7076,
+              "processInstanceID": "win32:639293359597793858",
+              "occurrenceID": "3b2efa54-15c2-45b7-8f99-bbe3ac6ba6f6"
+            },
+            "observedAtUtc": "2026-11-03T20:54:19.017Z",
+            "deadlineAt": 1793744463109,
+            "terminal": {
+              "occurrenceID": "tool-summary-925-before-9feb2c00-4e79-406d-aff0-1fa949092418",
+              "pid": 7076,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          }
+        }
+      },
+      "goals": [
+        {
+          "sample": "before",
+          "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+          "id": "pev_g0VZwLVjD00U77xRGpKi",
+          "status": "complete",
+          "tokensUsed": 470051,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "canonicalTools": 12,
+          "originalQuestionID": "que_g0VZwLeoK00AoBm1jryg",
+          "questionHTTP": 1,
+          "questionConnected": 1
+        },
+        {
+          "sample": "after",
+          "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+          "id": "pev_g0VZwOZI300sc5tIc1qy",
+          "status": "complete",
+          "tokensUsed": 472109,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "canonicalTools": 12,
+          "originalQuestionID": "que_g0VZwOgyd000YhrC1zsB",
+          "questionHTTP": 1,
+          "questionConnected": 1
+        }
+      ],
+      "taskHydrations": [
+        {
+          "name": "failed741",
+          "id": "tsk_g00VZHd47u00r0Pa5iWM",
+          "interactions": 0
+        },
+        {
+          "name": "completed741",
+          "id": "tsk_g00VZHd0gV00QEPVDCEU",
+          "interactions": 0
+        },
+        {
+          "name": "completed801",
+          "id": "tsk_g00VZT7V7400TdQ2J6Sj",
+          "interactions": 1
+        },
+        {
+          "name": "unfinished793",
+          "id": "tsk_g00VZRQQAP00yaqEnUZF",
+          "interactions": 1
+        }
+      ],
+      "mailbox": {
+        "active": 24,
+        "unread": 24,
+        "queries": {
+          "approved-code-801": 2,
+          "checkpoint-qa-795": 7,
+          "没有匹配的收件箱905": 0
+        }
+      },
+      "fileContracts": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "error": "FileNotFoundError"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text"
+        }
+      ]
+    },
+    "resumed-candidate": {
+      "port": 38693,
+      "uiEntry": "main-NhAzoS6e.js",
+      "qualified": {
+        "at": "2026-11-04T15:21:20.109Z",
+        "kind": "before",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 285815,
+        "current": 285817,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 58236,
+            "after": 58237
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 58178,
+            "after": 58179
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 273,
+        "projects": 111,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "reserveMs": 4914350,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-NhAzoS6e.js"
+      },
+      "preflight": {
+        "at": "2026-11-04T15:14:00.479Z",
+        "phase": "before",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 0,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "retirement": {
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "publicShutdown": 200,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 4914350,
+        "physical": {
+          "observedAtUtc": "2026-11-04T15:20:53.3216673Z",
+          "launcher": {
+            "originalChildExit": 0,
+            "observedAtUtc": "2026-11-04T15:20:38.5849393Z"
+          },
+          "chain": [
+            {
+              "identity": {
+                "pid": 21076,
+                "processInstanceID": "win32:639294019978478752",
+                "occurrenceID": "dc80bf16-0f7d-401a-80c9-cb481c584f19"
+              },
+              "state": "dead_or_reused"
+            },
+            {
+              "identity": {
+                "pid": 6272,
+                "processInstanceID": "win32:639294019986467465",
+                "occurrenceID": "c38af0eb-fb4c-4d76-ad35-c53a3d0b8731"
+              },
+              "state": "dead_or_reused"
+            }
+          ],
+          "native": {
+            "occurrence": "tool-summary-resume-926-before-ed2ba8f1-d219-426c-a5de-bb4c70cdbb8d",
+            "outcome": "settled",
+            "host": {
+              "pid": 21076,
+              "processInstanceID": "win32:639294019978478752",
+              "occurrenceID": "dc80bf16-0f7d-401a-80c9-cb481c584f19"
+            },
+            "target": {
+              "pid": 6272,
+              "processInstanceID": "win32:639294019986467465",
+              "occurrenceID": "c38af0eb-fb4c-4d76-ad35-c53a3d0b8731"
+            },
+            "observedAtUtc": "2026-11-04T15:20:38.559Z",
+            "deadlineAt": 1793810552909,
+            "terminal": {
+              "occurrenceID": "tool-summary-resume-926-before-ed2ba8f1-d219-426c-a5de-bb4c70cdbb8d",
+              "pid": 6272,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          }
+        }
+      },
+      "goals": [
+        {
+          "sample": "before",
+          "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+          "id": "pev_g0VZwLVjD00U77xRGpKi",
+          "status": "complete",
+          "tokensUsed": 470051,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "canonicalTools": 12,
+          "originalQuestionID": "que_g0VZwLeoK00AoBm1jryg",
+          "questionHTTP": 1,
+          "questionConnected": 1
+        },
+        {
+          "sample": "after",
+          "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+          "id": "pev_g0VZwOZI300sc5tIc1qy",
+          "status": "complete",
+          "tokensUsed": 472109,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "canonicalTools": 12,
+          "originalQuestionID": "que_g0VZwOgyd000YhrC1zsB",
+          "questionHTTP": 1,
+          "questionConnected": 1
+        }
+      ],
+      "taskHydrations": [
+        {
+          "name": "failed741",
+          "id": "tsk_g00VZHd47u00r0Pa5iWM",
+          "interactions": 0
+        },
+        {
+          "name": "completed741",
+          "id": "tsk_g00VZHd0gV00QEPVDCEU",
+          "interactions": 0
+        },
+        {
+          "name": "completed801",
+          "id": "tsk_g00VZT7V7400TdQ2J6Sj",
+          "interactions": 1
+        },
+        {
+          "name": "unfinished793",
+          "id": "tsk_g00VZRQQAP00yaqEnUZF",
+          "interactions": 1
+        }
+      ],
+      "mailbox": {
+        "active": 24,
+        "unread": 24,
+        "queries": {
+          "approved-code-801": 2,
+          "checkpoint-qa-795": 7,
+          "没有匹配的收件箱905": 0
+        }
+      },
+      "fileContracts": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "error": "FileNotFoundError"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text"
+        }
+      ]
+    },
+    "ui-after-with-recovered-config": {
+      "port": 38694,
+      "uiEntry": "main-CwnbdKAa.js",
+      "qualified": {
+        "at": "2026-11-04T15:39:37.865Z",
+        "kind": "after",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 285817,
+        "current": 285819,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 58237,
+            "after": 58238
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 58179,
+            "after": 58180
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": false,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [
+          {
+            "phase": "after",
+            "projectID": "prj_hSJnf2ycXJYqduYeSInW",
+            "fileID": "mem_hAIbqf5nIhMZHpTTFTjW",
+            "chunkID": "mck_h3UGdvNGVRzpriP8eh40",
+            "beforeGeneration": 1,
+            "afterGeneration": 2,
+            "timeUpdated": 1793805795451,
+            "terminalDefaultStage": {
+              "startedAt": "2026-11-04T15:23:15.214Z",
+              "completedAt": "2026-11-04T15:23:15.454Z"
+            },
+            "documentAndInboxPreserved": true
+          },
+          {
+            "phase": "after",
+            "projectID": "prj_hY6kPfHVDg5lcTRFOYg9",
+            "fileID": "mem_htU6tuFQeHSWySMwNA5K",
+            "chunkID": "mck_hyECLbAmpMSTRDanWLLp",
+            "beforeGeneration": 4,
+            "afterGeneration": 5,
+            "timeUpdated": 1793805891333,
+            "terminalDefaultStage": {
+              "startedAt": "2026-11-04T15:24:51.113Z",
+              "completedAt": "2026-11-04T15:24:51.336Z"
+            },
+            "documentAndInboxPreserved": true
+          }
+        ],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 273,
+        "projects": 111,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "reserveMs": 4503489,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-CwnbdKAa.js"
+      },
+      "preflight": {
+        "at": "2026-11-04T15:22:52.265Z",
+        "phase": "after",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 0,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "retirement": {
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "publicShutdown": 200,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 4503489,
+        "physical": {
+          "native": {
+            "occurrence": "tool-summary-resume-926-after-5393c664-bea1-431e-8194-e1bdb6cdc44f",
+            "outcome": "settled",
+            "host": {
+              "pid": 32808,
+              "processInstanceID": "win32:639294025496054319",
+              "occurrenceID": "7da57e24-a80c-43f7-89a1-ec6f7f25f498"
+            },
+            "target": {
+              "pid": 30384,
+              "processInstanceID": "win32:639294025502740390",
+              "occurrenceID": "c5b65af1-561d-4b05-b416-e1906153d644"
+            },
+            "observedAtUtc": "2026-11-04T15:27:29.42Z",
+            "deadlineAt": 1793810552909,
+            "terminal": {
+              "occurrenceID": "tool-summary-resume-926-after-5393c664-bea1-431e-8194-e1bdb6cdc44f",
+              "pid": 30384,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          },
+          "launcher": {
+            "observedAtUtc": "2026-11-04T15:27:29.444418Z",
+            "originalChildExit": 0
+          },
+          "observedAtUtc": "2026-11-04T15:27:39.0019038Z",
+          "chain": [
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 32808,
+                "processInstanceID": "win32:639294025496054319",
+                "occurrenceID": "7da57e24-a80c-43f7-89a1-ec6f7f25f498"
+              }
+            },
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 30384,
+                "processInstanceID": "win32:639294025502740390",
+                "occurrenceID": "c5b65af1-561d-4b05-b416-e1906153d644"
+              }
+            }
+          ]
+        }
+      },
+      "goals": [
+        {
+          "sample": "before",
+          "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+          "id": "pev_g0VZwLVjD00U77xRGpKi",
+          "status": "complete",
+          "tokensUsed": 470051,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "canonicalTools": 12,
+          "originalQuestionID": "que_g0VZwLeoK00AoBm1jryg",
+          "questionHTTP": 1,
+          "questionConnected": 1
+        },
+        {
+          "sample": "after",
+          "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+          "id": "pev_g0VZwOZI300sc5tIc1qy",
+          "status": "complete",
+          "tokensUsed": 472109,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "canonicalTools": 12,
+          "originalQuestionID": "que_g0VZwOgyd000YhrC1zsB",
+          "questionHTTP": 1,
+          "questionConnected": 1
+        }
+      ],
+      "taskHydrations": [
+        {
+          "name": "failed741",
+          "id": "tsk_g00VZHd47u00r0Pa5iWM",
+          "interactions": 0
+        },
+        {
+          "name": "completed741",
+          "id": "tsk_g00VZHd0gV00QEPVDCEU",
+          "interactions": 0
+        },
+        {
+          "name": "completed801",
+          "id": "tsk_g00VZT7V7400TdQ2J6Sj",
+          "interactions": 1
+        },
+        {
+          "name": "unfinished793",
+          "id": "tsk_g00VZRQQAP00yaqEnUZF",
+          "interactions": 1
+        }
+      ],
+      "mailbox": {
+        "active": 24,
+        "unread": 24,
+        "queries": {
+          "approved-code-801": 2,
+          "checkpoint-qa-795": 7,
+          "没有匹配的收件箱905": 0
+        }
+      },
+      "fileContracts": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "error": "FileNotFoundError"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text"
+        }
+      ]
+    },
+    "final": {
+      "port": 38695,
+      "uiEntry": "main-CwnbdKAa.js",
+      "qualified": {
+        "at": "2026-11-04T15:45:49.153Z",
+        "kind": "final",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 285819,
+        "current": 285821,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 58238,
+            "after": 58239
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 58180,
+            "after": 58181
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 273,
+        "projects": 111,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "reserveMs": 3444880,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-CwnbdKAa.js"
+      },
+      "preflight": {
+        "at": "2026-11-04T15:43:17.784Z",
+        "phase": "final",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 0,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "retirement": {
+        "requests": 0,
+        "cumulativeRequests": 1367,
+        "credentialCopyRetired": true,
+        "modelCatalogCopyRetired": true,
+        "publicShutdown": 200,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "reserveMs": 3444880,
+        "physical": {
+          "observedAtUtc": "2026-11-04T15:45:22.0737755Z",
+          "launcher": {
+            "originalChildExit": 0,
+            "observedAtUtc": "2026-11-04T15:45:08.0537817Z"
+          },
+          "chain": [
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 5796,
+                "processInstanceID": "win32:639294037469489778",
+                "occurrenceID": "e4c4f847-2662-4072-8163-07ed048eb8fa"
+              }
+            },
+            {
+              "state": "dead_or_reused",
+              "identity": {
+                "pid": 18052,
+                "processInstanceID": "win32:639294037476247771",
+                "occurrenceID": "98522611-5d5d-4d1f-b018-9b1461d551af"
+              }
+            }
+          ],
+          "native": {
+            "occurrence": "tool-summary-resume-926-final-d71f7629-9509-4311-965a-9a18648b919d",
+            "outcome": "settled",
+            "host": {
+              "pid": 5796,
+              "processInstanceID": "win32:639294037469489778",
+              "occurrenceID": "e4c4f847-2662-4072-8163-07ed048eb8fa"
+            },
+            "target": {
+              "pid": 18052,
+              "processInstanceID": "win32:639294037476247771",
+              "occurrenceID": "98522611-5d5d-4d1f-b018-9b1461d551af"
+            },
+            "observedAtUtc": "2026-11-04T15:45:08.029Z",
+            "deadlineAt": 1793810552909,
+            "terminal": {
+              "occurrenceID": "tool-summary-resume-926-final-d71f7629-9509-4311-965a-9a18648b919d",
+              "pid": 18052,
+              "reason": "exited",
+              "exitCode": 0,
+              "signal": null
+            },
+            "physicalCompletion": true,
+            "outputDrainComplete": true,
+            "requestCleanupComplete": true,
+            "authority": "Actual fulfilled production ProcessFacade/ProcessSupervisor settlement and both output drains; native marker validation precedes request cleanup"
+          }
+        }
+      },
+      "goals": [
+        {
+          "sample": "before",
+          "sessionID": "ses_-zUQ3eUVjzzlDQzs44V0",
+          "id": "pev_g0VZwLVjD00U77xRGpKi",
+          "status": "complete",
+          "tokensUsed": 470051,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "canonicalTools": 12,
+          "originalQuestionID": "que_g0VZwLeoK00AoBm1jryg",
+          "questionHTTP": 1,
+          "questionConnected": 1
+        },
+        {
+          "sample": "after",
+          "sessionID": "ses_-zUQ3bQvczzYKyEmZAFl",
+          "id": "pev_g0VZwOZI300sc5tIc1qy",
+          "status": "complete",
+          "tokensUsed": 472109,
+          "turnsAccepted": 1,
+          "activity": "idle",
+          "canonicalTools": 12,
+          "originalQuestionID": "que_g0VZwOgyd000YhrC1zsB",
+          "questionHTTP": 1,
+          "questionConnected": 1
+        }
+      ],
+      "taskHydrations": [
+        {
+          "name": "failed741",
+          "id": "tsk_g00VZHd47u00r0Pa5iWM",
+          "interactions": 0
+        },
+        {
+          "name": "completed741",
+          "id": "tsk_g00VZHd0gV00QEPVDCEU",
+          "interactions": 0
+        },
+        {
+          "name": "completed801",
+          "id": "tsk_g00VZT7V7400TdQ2J6Sj",
+          "interactions": 1
+        },
+        {
+          "name": "unfinished793",
+          "id": "tsk_g00VZRQQAP00yaqEnUZF",
+          "interactions": 1
+        }
+      ],
+      "mailbox": {
+        "active": 24,
+        "unread": 24,
+        "queries": {
+          "approved-code-801": 2,
+          "checkpoint-qa-795": 7,
+          "没有匹配的收件箱905": 0
+        }
+      },
+      "fileContracts": [
+        {
+          "key": "movedCurrentPath",
+          "path": "deliverables/issue-register-updated.xlsx",
+          "status": 404,
+          "error": "FileNotFoundError"
+        },
+        {
+          "key": "existingCurrentFile",
+          "path": "deliverables/issue-register.xlsx",
+          "status": 200,
+          "type": "binary"
+        },
+        {
+          "key": "existingSummary",
+          "path": "deliverables/summary.md",
+          "status": 200,
+          "type": "text"
+        }
+      ]
+    }
+  },
+  "checks": {
+    "unit-terminal-preservation": {
+      "label": "unit-terminal-preservation",
+      "startedAt": 1793806641704,
+      "closedAt": 1793806657393,
+      "code": 0,
+      "signal": null,
+      "childPID": 28760,
+      "summary": [
+        " 3 pass",
+        " 0 fail",
+        " 13 expect() calls",
+        "[1/1] DONE test/terminal-profile-preservation.test.ts exit=0 duration=13.49s"
+      ]
+    },
+    "types-core": {
+      "label": "types-core",
+      "startedAt": 1793806641674,
+      "closedAt": 1793806693565,
+      "code": 0,
+      "signal": null,
+      "childPID": 32244,
+      "summary": []
+    },
+    "types-after": {
+      "label": "types-after",
+      "startedAt": 1793805559850,
+      "closedAt": 1793805587904,
+      "code": 0,
+      "signal": null,
+      "childPID": 17828,
+      "summary": []
+    },
+    "ui-build-final": {
+      "label": "ui-build-final",
+      "startedAt": 1793806641685,
+      "closedAt": 1793806709826,
+      "code": 0,
+      "signal": null,
+      "childPID": 33216,
+      "summary": []
+    },
+    "docs-check": {
+      "label": "docs-check",
+      "startedAt": 1793805733931,
+      "closedAt": 1793805741626,
+      "code": 0,
+      "signal": null,
+      "childPID": 7156,
+      "summary": [
+        "docs:check ok (352 ops, 26 groups)"
+      ]
+    },
+    "architecture-check": {
+      "label": "architecture-check",
+      "startedAt": 1793806070373,
+      "closedAt": 1793806071767,
+      "code": 0,
+      "signal": null,
+      "childPID": 29980,
+      "summary": [
+        "architecture-index ok — 20 current documents indexed, every link live"
+      ]
+    }
+  },
+  "originalBudget": {
+    "startedAt": 1793739063109,
+    "deadlineAt": 1793744463109,
+    "maximumRequests": 0,
+    "initialCumulativeRequests": 1367
+  },
+  "resumedBudget": {
+    "startedAt": 1793805152909,
+    "deadlineAt": 1793810552909,
+    "maximumRequests": 0,
+    "initialCumulativeRequests": 1367,
+    "reason": "User explicitly resumed after pause; original 925 runtime terminal and retired; post-fix read-only verification"
+  },
+  "newModelRequests": 0,
+  "cumulativeRequests": 1367,
+  "naturalSamples": [
+    {
+      "name": "multiple-files",
+      "sessionID": "ses_-zUQQoMM4zz2OmWzwfcN",
+      "selectionKind": "chat",
+      "experience": "chat",
+      "status": "idle",
+      "toolID": "prt_g0VZZBgq400SgtafGjPc",
+      "tool": "apply_patch",
+      "files": [
+        {
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-31\\home-goal-delivery-823-after\\runtime\\data\\projects\\2026\\10\\31\\9e7e684c-dce8-4c89-aab5-a28a76500739\\duration.py",
+          "type": "add",
+          "additions": 13,
+          "deletions": 0
+        },
+        {
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-31\\home-goal-delivery-823-after\\runtime\\data\\projects\\2026\\10\\31\\9e7e684c-dce8-4c89-aab5-a28a76500739\\test_duration.py",
+          "type": "add",
+          "additions": 31,
+          "deletions": 0
+        }
+      ]
+    },
+    {
+      "name": "expired-question",
+      "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+      "selectionKind": "mission",
+      "status": "accepted",
+      "toolID": "prt_g0VZT9Cq200ox4ulyYfW",
+      "tool": "question",
+      "questions": 1,
+      "questionStatus": "expired"
+    }
+  ],
+  "terminalProfiles": {
+    "initial": {
+      "at": "2026-11-04T15:43:18.988Z",
+      "phase": "final",
+      "checkpoint": "initial",
+      "results": [
+        {
+          "sample": "multiple-files",
+          "projectID": "prj_hSJnf2ycXJYqduYeSInW",
+          "sessionID": "ses_-zUQQoMM4zz2OmWzwfcN",
+          "status": 200,
+          "defaultProfileID": "powershell",
+          "profileIDs": [
+            "powershell",
+            "pwsh",
+            "cmd",
+            "git-bash"
+          ],
+          "configBytes": 1290,
+          "projectConfigExact": true
+        },
+        {
+          "sample": "expired-question",
+          "projectID": "prj_hY6kPfHVDg5lcTRFOYg9",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "status": 200,
+          "defaultProfileID": "pwsh",
+          "profileIDs": [
+            "powershell",
+            "pwsh",
+            "cmd",
+            "git-bash"
+          ],
+          "configBytes": 1372,
+          "projectConfigExact": true
+        }
+      ]
+    },
+    "final": {
+      "at": "2026-11-04T15:45:03.076Z",
+      "phase": "final",
+      "checkpoint": "final",
+      "results": [
+        {
+          "sample": "multiple-files",
+          "projectID": "prj_hSJnf2ycXJYqduYeSInW",
+          "sessionID": "ses_-zUQQoMM4zz2OmWzwfcN",
+          "status": 200,
+          "defaultProfileID": "powershell",
+          "profileIDs": [
+            "powershell",
+            "pwsh",
+            "cmd",
+            "git-bash"
+          ],
+          "configBytes": 1290,
+          "projectConfigExact": true
+        },
+        {
+          "sample": "expired-question",
+          "projectID": "prj_hY6kPfHVDg5lcTRFOYg9",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "status": 200,
+          "defaultProfileID": "pwsh",
+          "profileIDs": [
+            "powershell",
+            "pwsh",
+            "cmd",
+            "git-bash"
+          ],
+          "configBytes": 1372,
+          "projectConfigExact": true
+        }
+      ]
+    },
+    "protectedProjectConfigs": 101
+  },
+  "firstPreservationFailure": {
+    "label": "qualify-after",
+    "startedAt": 1793806060127,
+    "closedAt": 1793806073341,
+    "code": 1,
+    "signal": null,
+    "childPID": 31176
+  },
+  "restoration": {
+    "at": "2026-11-04T15:39:11.400Z",
+    "file": ".opencorvus/opencorvus.jsonc",
+    "project": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-10-30\\approved-code-801\\project",
+    "originalTrackedContentRestored": true,
+    "indexAndHeadPreserved": true,
+    "originalGitStatusRestored": true,
+    "rewrittenAt": "2026-11-04T15:24:51.314Z",
+    "originalWorkingLineEndingBytesNotCaptured": true
+  },
+  "restoredRequalification": {
+    "label": "qualify-after-restored",
+    "startedAt": 1793806751501,
+    "closedAt": 1793806777912,
+    "code": 0,
+    "signal": null,
+    "childPID": 23272
+  },
+  "visual": {
+    "screenshotsPersonallyViewed": [
+      "01-before-chinese-patch-summary.png",
+      "02-before-chinese-question-summary.png",
+      "03-after-english-file-summary.png",
+      "04-after-english-question-count.png",
+      "05-after-chinese-question-count.png",
+      "06-after-original-question-output.png",
+      "07-after-original-output-reading.png",
+      "08-after-full-original-answer.png",
+      "09-after-chinese-file-comparison.png",
+      "10-final-english-two-file-detail.png",
+      "11-final-short-path-comparison.png",
+      "12-final-chinese-two-files.png",
+      "13-final-chinese-expired-question.png",
+      "14-final-chinese-single-file.png",
+      "15-final-file-open-from-comparison.png",
+      "16-final-chinese-question-after-reload.png",
+      "17-final-reopen-with-preserved-terminal.png",
+      "18-final-reopen-multiple-files.png"
+    ],
+    "method": "Native development /ui, manual CUA interaction and screenshots",
+    "uiAutomatedTests": 0
+  },
+  "limits": [
+    "No new model workflow; real previously generated 923/823/801 records were read",
+    "No multi-question, delete or move patch visual case",
+    "Initial ignored metadata directories were outside the old byte snapshot; no claim of historical byte preservation for those files",
+    "The after phase includes qualified project-context availability generations and an explicitly recovered tracked config; only the final phase proves all original rows and exact existing config working bytes",
+    "No schema, migration, API, SDK, version or release change"
+  ]
+}

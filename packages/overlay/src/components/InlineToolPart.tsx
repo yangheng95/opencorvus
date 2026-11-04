@@ -11,7 +11,7 @@ import {
   toolPayloadText,
 } from "../utils/tool"
 import { extToLang, renderCodeBlock } from "../utils/markdown"
-import { boardStore, selectedTaskDirectory } from "../store/board"
+import { selectedConversationDirectory } from "../store/board"
 import { TodoListPart, extractTodos } from "./TodoListPart"
 import { StaticTextPart } from "./TextPart"
 import { FilePart } from "./FilePart"
@@ -261,7 +261,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     const sessionID = String(props.part?.sessionID || "").trim()
     const messageID = String(props.part?.messageID || "").trim()
     const partID = String(props.part?.id || "").trim()
-    const directory = selectedTaskDirectory() || String(boardStore.board?.directory || "").trim()
+    const directory = selectedConversationDirectory()
     if (!sessionID || !messageID || !partID || !directory) {
       throw new Error(`Deferred Tool Part ${partID || "<missing>"} has incomplete persisted identity`)
     }
@@ -279,7 +279,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
   const state = () => part().state || {}
   const toolName = () => part().tool || "unknown"
   const input = () => state().input || {}
-  const display = createMemo(() => describeToolCall(toolName(), input(), state(), selectedTaskDirectory()))
+  const display = createMemo(() => describeToolCall(toolName(), input(), state(), selectedConversationDirectory()))
   const status = () => display().status || "pending"
   const icon = () => display().icon
   const detail = () => {
@@ -344,7 +344,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
       source.id
         ? { sessionID: source.sessionID, messageID: source.messageID, partID: source.id }
         : undefined
-    const changes = toolFileChangesFromState(state(), selectedTaskDirectory(), context)
+    const changes = toolFileChangesFromState(state(), selectedConversationDirectory(), context)
     return changes.length > 0 ? changes : null
   })
   const browserEvidenceScreenshotUrl = createMemo(() =>

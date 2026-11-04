@@ -2677,6 +2677,17 @@ failure facts continue to use the canonical Tool record. Continuous Goal names
 match their actual create/get/update-first Tool declarations. A completed read
 uses its validated producer-owned readType to distinguish directory name/icon
 from file reading; request paths do not establish the resource type.
+Question summaries localize the actual request's question count and retain an
+explicit expired outcome from its result metadata. Completed patch summaries
+identify the original target path for one file, or the distinct recorded target
+count for multiple files. Full and deferred Tool records use their existing
+canonical file observations; missing bounded detail supplies only the known
+execution status. These summaries never parse producer titles or patch text,
+and expanded input, original output and comparisons keep their authored contents.
+Tool identities, expanded comparisons, deferred Part reads and session dialogs
+share the selected conversation's project directory: the frozen Task directory
+for Tasks and the admitted selected Session directory for ordinary conversations.
+They do not derive file identity from the mutable workspace cwd or an absent Task.
 Registry entries use the declared Tool IDs and share the same normalization at
 registration and lookup. Routine Task/Mission coordination, Artifact catalog
 operations and child-Task evidence use this same presentation owner. Labels
@@ -3527,6 +3538,12 @@ resolved by the server-owned terminal profile registry; the project-scoped PTY
 host owns process lifecycle, buffering, input, and resize; authenticated output
 streams through the shared HostTransport. The Overlay only owns emulator view
 state and explicit session selection.
+Project-open terminal initialization creates system defaults only when the
+project has no configured profiles. Existing profile IDs, commands, arguments,
+environment and default selection remain operator-owned, including profiles
+whose labels resemble system defaults. Host discovery does not establish
+ownership or authorize rewriting that configuration. Registry reads report
+explicit configuration errors through the existing terminal error contract.
 
 The Mailbox is a normal left-sidebar activity beside Projects. Its
 directory-free list, acknowledgement actions, and change stream stay mounted

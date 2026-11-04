@@ -1,5 +1,5 @@
 import type { CardNode } from "./card-tree"
-import { selectedTaskDirectory } from "../store/board"
+import { selectedConversationDirectory } from "../store/board"
 import { displayToolArguments, toolNameKey } from "./tool"
 import { requireTimelineOrderKeyDomain } from "./timeline-order"
 
@@ -38,7 +38,7 @@ export function toolToCardNode(part: any): CardNode {
     return undefined
   })()
   const key = toolNameKey(toolName)
-  const args = displayToolArguments(toolName, state.input, state, selectedTaskDirectory())
+  const args = displayToolArguments(toolName, state.input, state, selectedConversationDirectory())
   const title = TODO_CARD_TITLE_KEYS[key] || toolName
   const time = requirePositiveFiniteTimestamp(state?.time?.start, `tool part ${id} start time`)
   const timeCompleted = positiveFiniteTimestamp(state?.time?.end)

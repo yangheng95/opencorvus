@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [工具摘要语言](records/2026-11/2026-11-04-tool-summary-language.md)：提问数量、补丁文件身份和原始记录的共享呈现。
+
 - [已答提问历史恢复](records/2026-11/2026-11-04-question-history-restore.md)：原始请求、终态与冷读/重连的完整显示合同。
 
 - [持续目标等待反馈与继续交付](records/2026-11/2026-11-04-goal-feedback-handoff.md)：真实模型、阶段确认与同一目标的完整交付验收。

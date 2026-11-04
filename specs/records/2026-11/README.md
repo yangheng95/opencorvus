@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [工具摘要语言](2026-11-04-tool-summary-language.md)：中文摘要、文件名与原始披露。
+
 - [提问历史恢复](2026-11-04-question-history-restore.md)：冷读、重连与真实回答原文。
 
 - [目标反馈交接](2026-11-04-goal-feedback-handoff.md)：第一阶段文件、等待确认和继续交付的真实流程。

@@ -4,7 +4,13 @@
 import type { IconName } from "../components/ui/Icon"
 import { localeTag, t, tc } from "./i18n"
 import { isWindowsPath, normalizeServerPath } from "./server-path"
-import { ReadToolResultFacts, ToolFailureCause, renderToolFailureCause } from "@opencorvus-ai/transport-protocol"
+import {
+  ReadToolResultFacts,
+  ToolFailureCause,
+  renderToolFailureCause,
+  conversationDeferredToolState,
+  conversationToolFileChanges,
+} from "@opencorvus-ai/transport-protocol"
 
 // ── ANSI stripping ──
 
@@ -486,6 +492,30 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
   const message = failure.message || shortValue((safeState as any).error)
   if (message) return singleLine(message)
   const n = toolNameKey(name)
+  if (n === "question") {
+    const count = Array.isArray(safeInput.questions) ? safeInput.questions.length : 0
+    const expired = safeState.status === "completed" && safeState.metadata?.status === "expired"
+    const detail = [count > 0 ? tc("tool.question_count", count) : "", expired ? t("interaction.expired") : ""]
+      .filter(Boolean)
+      .join(t("card.meta_separator"))
+    const status = normalizeToolStatus(safeState.status)
+    return detail || (status ? toolStatusLabel(status) : "")
+  }
+  if (n === "applypatch" && safeState.status === "completed") {
+    const metadata = record(safeState.metadata) ? safeState.metadata : {}
+    const files = conversationDeferredToolState(metadata)
+      ? conversationToolFileChanges(metadata)
+      : Array.isArray(metadata.files)
+        ? metadata.files
+        : undefined
+    const paths = [...new Set<string>((files ?? []).flatMap((file: any) => {
+      if (!record(file)) return []
+      const target = firstNonEmptyString(file.movePath, file.filePath)
+      return target ? [target] : []
+    }))]
+    if (paths.length === 1) return shortRelativePath(paths[0], base)
+    return paths.length > 1 ? tc("tool.changed_file_count", paths.length) : toolStatusLabel("completed")
+  }
   if (n === "workartifactdeliver") return firstNonEmptyString(safeInput.title)
   if (n === "workartifactinspect" || n === "workartifactvalidate") {
     const formatLabels: Record<string, string> = {

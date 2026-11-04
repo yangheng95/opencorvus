@@ -794,6 +794,13 @@ export function selectedTaskDirectory(): string {
   return boardStore.board?.task?.directory ?? ""
 }
 
+/** Project identity for the selected transcript, independent of the workspace cwd. */
+export function selectedConversationDirectory(): string {
+  const source = boardStore.selectedSource
+  if (source?.kind === "task") return selectedTaskDirectory()
+  return source?.kind === "session" ? source.directory || "" : ""
+}
+
 export function activeTaskID(): string {
   const source = boardStore.selectedSource
   return source?.kind === "task" ? source.id : ""
