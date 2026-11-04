@@ -999,6 +999,17 @@ export default function ProvidersPanel() {
     return Boolean(appStore.providerCatalog) && !modelListIssue(providerID)
   }
 
+  const configuredProviderIDs = createMemo(() => {
+    const configured = new Set(Object.keys(providerConfigs()))
+    const connected = appStore.providerCatalog?.connected
+    if (Array.isArray(connected)) {
+      for (const providerId of connected) {
+        if (typeof providerId === "string" && providerId.trim()) configured.add(providerId)
+      }
+    }
+    return configured
+  })
+
   const unfilteredProviderEntries = createMemo(() =>
     Object.entries(configProviders()).map(([id, provider]) => {
       const modelsKnown = modelListKnown(id)
@@ -1024,6 +1035,7 @@ export default function ProvidersPanel() {
           ? modelSummary(modelIds)
           : t(modelListIssue(id) ? "provider.models.unavailable" : "common.loading"),
         modelOverflowText,
+        configurationText: configuredProviderIDs().has(id) ? t("llm.status.configured") : "",
         canAuthenticate,
         status,
         statusText,
@@ -1042,6 +1054,7 @@ export default function ProvidersPanel() {
         ...row.modelIds,
         row.modelOverflowText,
         row.statusText,
+        row.configurationText,
       ]),
     ),
   )
@@ -1053,12 +1066,20 @@ export default function ProvidersPanel() {
         const modelsKnown = modelListKnown(p.id)
         const modelCount = modelsKnown ? modelsForProvider(p.id).length : 0
         const providerStatus = providerState(p.id)
-        const status = providerStatus.tone === "active" ? providerStatus : null
+        const configured = configuredProviderIDs().has(p.id)
+        const configurationText = configured ? t("llm.status.configured") : ""
+        const status = providerStatus.tone === "active"
+          ? providerStatus
+          : configured
+            ? { tone: "neutral", label: configurationText, detail: configurationText }
+            : null
         return {
           id: p.id,
           name: p.name || p.id,
           modelCountText: modelsKnown ? tc("provider.models.count", modelCount) : "—",
           authMethods: providerAuthMethods(p.id).length,
+          configured,
+          configurationText,
           status,
           statusText: status
             ? status.label === status.detail
@@ -1069,27 +1090,19 @@ export default function ProvidersPanel() {
       })
       .sort(
         (left, right) =>
-          Number(Boolean(right.status)) - Number(Boolean(left.status)) || left.name.localeCompare(right.name),
+          Number(right.status?.tone === "active") - Number(left.status?.tone === "active") ||
+          Number(right.configured) - Number(left.configured) || left.name.localeCompare(right.name),
       )
   })
   const catalogEntries = createMemo(() =>
     unfilteredCatalogEntries().filter((row) =>
-      providerMatchesSearch([row.id, row.name, row.modelCountText, row.statusText]),
+      providerMatchesSearch([row.id, row.name, row.modelCountText, row.statusText, row.configurationText]),
     ),
   )
   const totalProviderCount = createMemo(() => unfilteredProviderEntries().length + unfilteredCatalogEntries().length)
   const visibleProviderCount = createMemo(() => providerEntries().length + catalogEntries().length)
   const hasProviderSearch = createMemo(() => providerSearch().trim().length > 0)
-  const configuredProviderCount = createMemo(() => {
-    const configured = new Set(Object.keys(providerConfigs()))
-    const connected = appStore.providerCatalog?.connected
-    if (Array.isArray(connected)) {
-      for (const providerId of connected) {
-        if (typeof providerId === "string" && providerId.trim()) configured.add(providerId)
-      }
-    }
-    return configured.size
-  })
+  const configuredProviderCount = createMemo(() => configuredProviderIDs().size)
   const catalogProviderCount = createMemo(() => catalogProviders().length)
   const catalogUnavailable = () => appStore.providerLoadIssues.some((issue) => issue.resource === "catalog")
   const configuredUnavailable = () =>

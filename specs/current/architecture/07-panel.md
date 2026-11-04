@@ -4463,7 +4463,13 @@ catalog row collections. The unsearched collections retain editable custom
 declarations and exclude their IDs from catalog rows; the query filters those
 collections without counting declarations twice. The separate Configured
 summary remains the union of configuration and connected IDs, while Catalog
-remains the complete current catalog projection. Model quantities in provider
+remains the complete current catalog projection. The same configured-ID union
+owns the count, directory-row configuration labels and configuration-status
+search terms in both row collections. Catalog rows retain active connections
+first, then configured declarations, then other entries, with name ordering
+within each group. A configuration-only catalog label uses the neutral badge;
+it does not claim authentication, runnable models or successful inference.
+Model quantities in provider
 rows, discovery receipts, Composer groups and usage use the shared plural
 translation contract. Discovery stores the current successful count, translated
 at render time under the existing form occurrence and response ownership.

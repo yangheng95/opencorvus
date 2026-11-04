@@ -1,0 +1,211 @@
+{
+  "at": "2026-11-04T20:55:04.468Z",
+  "baseline": {
+    "commit": "92e4d04835f5d9e7f55fd03ae0071a73bab1bff1",
+    "evidence": "../2026-11-05-provider-settings-language/README.md"
+  },
+  "method": "Two native development /ui occurrences; owned hidden IAB tabs280/281; manual interactions and personally reviewed screenshots. No UI automated tests or synthetic messages.",
+  "phases": [
+    {
+      "phase": "before",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293738,
+      "currentRows": 293740,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59791,
+          "after": 59792
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59733,
+          "after": 59734
+        }
+      ],
+      "originalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 114,
+      "hiddenConfigurations": 104,
+      "attachments": 277,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 5163096,
+      "uiEntry": "main-DK23sktt.js"
+    },
+    {
+      "phase": "after",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293740,
+      "currentRows": 293742,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59792,
+          "after": 59793
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59734,
+          "after": 59735
+        }
+      ],
+      "originalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 114,
+      "hiddenConfigurations": 104,
+      "attachments": 277,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 4828761,
+      "uiEntry": "main-BMR_VcVg.js"
+    }
+  ],
+  "emptyModelCheckpoints": [
+    {
+      "phase": "before",
+      "checkpoint": "initial",
+      "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+      "globalConnected": [
+        "openai"
+      ],
+      "projectRunnableProviders": [],
+      "modelCount": 0,
+      "messages": 0,
+      "configExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "checkpoint": "final",
+      "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+      "globalConnected": [
+        "openai"
+      ],
+      "projectRunnableProviders": [],
+      "modelCount": 0,
+      "messages": 0,
+      "configExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "checkpoint": "initial",
+      "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+      "globalConnected": [
+        "openai"
+      ],
+      "projectRunnableProviders": [],
+      "modelCount": 0,
+      "messages": 0,
+      "configExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "checkpoint": "final",
+      "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+      "globalConnected": [
+        "openai"
+      ],
+      "projectRunnableProviders": [],
+      "modelCount": 0,
+      "messages": 0,
+      "configExact": true,
+      "modelRequests": 0
+    }
+  ],
+  "publicReadCheckers": {
+    "names": [
+      "read-proof",
+      "inspect",
+      "goal-preservation-proof",
+      "mailbox-proof",
+      "file-read-proof",
+      "prior-business-proof",
+      "question-business-proof",
+      "resource-proof",
+      "empty-proof"
+    ],
+    "checkpointsPerPhase": 2,
+    "successfulChecks": 36,
+    "allOriginalCheckerResultsZero": true
+  },
+  "manual": {
+    "screenshots": [
+      "01-before-default-chinese.png",
+      "02-before-openai-search.png",
+      "03-before-configured-row-expanded.png",
+      "04-before-configured-search-empty.png",
+      "05-before-original-connected-project.png",
+      "06-after-default-english.png",
+      "07-after-configured-search-english.png",
+      "08-after-default-chinese.png",
+      "09-after-configured-search-chinese.png",
+      "10-after-configured-row-expanded.png",
+      "11-after-no-matching-provider.png",
+      "12-after-add-form-and-configured-row.png",
+      "13-after-original-connected-project.png",
+      "14-after-connected-in-configured-search.png",
+      "15-after-return-to-empty-project.png"
+    ],
+    "before": "CN default configured count versus alphabetical rows; OpenAI0-model search and expand/collapse; 已配置 search0/227; normal original Task737 connected12-model row.",
+    "after": "EN default configured priority/neutral badge and OpenAI Configured multi-term search; CN default priority, 已配置 search1/227, row expand/collapse, empty search, clear, open/cancel add form, original connected12-model default and inclusion in configured search, return to empty project with its original0-model neutral configuration state.",
+    "configuredLabel": "Existing shipped llm.status.configured translation with neutral badge, independent of providerState active status.",
+    "originalConnectedLabel": "Existing green 已连接 with12 OpenAI models retained."
+  },
+  "nonUI": {
+    "typecheckPackages": 8,
+    "actualUiBuilds": 1,
+    "apiRules": 6,
+    "apiFiles": 36,
+    "apiDocumentationOperations": 352,
+    "apiDocumentationGroups": 26,
+    "architectureDocuments": 20,
+    "focusedUnitTests": "Not added or run for this presentation-only change"
+  },
+  "limits": [
+    "No editable custom-provider declarations were present in the inherited valid-JSON project configuration scan; their shared configuration-search field extension received source review, without creating artificial configuration data.",
+    "Configuration, authentication, credentials, discovery, refresh, deletion and model-test writes were not performed.",
+    "Account200/catalog projection are read-only evidence; no inference acceptance is claimed and zero model calls were issued.",
+    "Existing build chunk-size warning remains; no bundle-structure optimization was attempted."
+  ],
+  "database": "Existing schema10 and92 tables unchanged;293738→293740→293742. Each occurrence adds exactly its normal service lease/grant. All original business rows/source databases,114 project files/Git identities,104 hidden configurations and277 attachments preserved.",
+  "userWindow": "User localhost:18571 was not opened, refreshed, restarted or stopped."
+}

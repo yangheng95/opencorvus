@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [已配置服务商可见性](2026-11-05-configured-provider-visibility.md)：空模型项目和正常目录的配置身份辨认。
+
 - [模型设置语言与引导](2026-11-05-provider-settings-language.md)：服务商表单和已连接但无模型的真实场景。
 
 - [交付阅读状态](2026-11-05-delivery-reading-state.md)：统一呈现所有者与真实断连恢复。
