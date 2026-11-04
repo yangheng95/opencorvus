@@ -13,7 +13,7 @@
 // system-prompt cards share one look.
 
 import { type Accessor, type Setter, createEffect, createMemo, createSignal, createUniqueId, For, onCleanup, Show } from "solid-js"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { PermissionRequestContent } from "./PermissionRequestContent"
 import { boardStore, loadBoard } from "../store/board"
 import { captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
@@ -165,6 +165,10 @@ export function InteractionCard(props: InteractionCardProps) {
     return draftOwner()?.read().selected[qIdx] ?? []
   }
 
+  const filledQuestionCount = createMemo(() => questions().filter((_, index) =>
+    getSelected(index).length > 0 || !!(customText()[index] ?? "").trim(),
+  ).length)
+
   function toggleOption(qIdx: number, value: string, multiple: boolean) {
     draftOwner()?.write((prev) => {
       const next = [...prev.selected]
@@ -296,6 +300,12 @@ export function InteractionCard(props: InteractionCardProps) {
                 return (
                   <fieldset class="interaction-card__question" aria-labelledby={questionID()}>
                     <legend id={questionID()} class="interaction-card__question-text">
+                      <span class="interaction-card__question-position">
+                        {t("interaction.question_position", {
+                          index: (qIdx() + 1).toLocaleString(localeTag()),
+                          count: questions().length.toLocaleString(localeTag()),
+                        })}
+                      </span>
                       {questionText()}
                     </legend>
                     <Show when={opts.length > 0}>
@@ -387,6 +397,14 @@ export function InteractionCard(props: InteractionCardProps) {
           when={isPermission()}
           fallback={
             <>
+              <Show when={questions().length > 0}>
+                <span class="interaction-card__progress" role="status" aria-live="polite" aria-atomic="true">
+                  {t("interaction.question_progress", {
+                    filled: filledQuestionCount().toLocaleString(localeTag()),
+                    count: questions().length.toLocaleString(localeTag()),
+                  })}
+                </span>
+              </Show>
               <Button
                 type="button"
                 variant="solid"

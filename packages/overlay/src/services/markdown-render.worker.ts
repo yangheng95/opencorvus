@@ -21,12 +21,15 @@ async function drain() {
     while (latest.size) {
       const request = latest.values().next().value!
       try {
-        setLocaleData(request.locale, { "markdown.copy_code": request.copyLabel })
+        setLocaleData(request.locale, {
+          "markdown.copy_code": request.copyLabel,
+          "markdown.code_block": request.codeBlockLabel,
+        })
         await setLocale(request.locale)
         copyIcon = request.copyIcon
         const tokens = lexMarkdown(request.text)
         const visible = tokens.filter((token) => token.type !== "space")
-        const context = JSON.stringify([request.locale, request.copyLabel, request.copyIcon, tokens.links])
+        const context = JSON.stringify([request.locale, request.copyLabel, request.codeBlockLabel, request.copyIcon, tokens.links])
         let start = 0
         let html: string[] = []
         let sliceStart = performance.now()

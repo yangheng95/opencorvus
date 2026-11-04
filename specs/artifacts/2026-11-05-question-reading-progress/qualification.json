@@ -1,0 +1,774 @@
+{
+  "at": "2026-11-04T18:02:15.469Z",
+  "singleAgent": true,
+  "isolatedNativeDevUI": true,
+  "userWindowUntouched": true,
+  "deadline": {
+    "startedAt": 1793812539941,
+    "deadlineAt": 1793817939941,
+    "maximumRequests": 24,
+    "initialCumulativeRequests": 1386
+  },
+  "phases": [
+    {
+      "at": "2026-11-04T17:18:56.046Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 290286,
+      "current": 290288,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59110,
+          "after": 59111
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59052,
+          "after": 59053
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 275,
+      "projects": 112,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1386,
+      "reserveMs": 5241769,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-D-Lc2Rbr.js",
+      "preflight": {
+        "at": "2026-11-04T17:16:40.092Z",
+        "phase": "before",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 0,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "native": {
+        "originalExitCode": 0,
+        "publicShutdown": 200,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true
+      },
+      "protectedHiddenConfigs": 102,
+      "copiesRetired": 2,
+      "unusedAllowanceRetired": 0,
+      "requestOutcomes": []
+    },
+    {
+      "at": "2026-11-04T17:56:09.028Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 290288,
+      "current": 293634,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 56615,
+          "after": 57267
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 56615,
+          "after": 57267
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 7571,
+          "after": 7669
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 7571,
+          "after": 7669
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 22713,
+          "after": 23007
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59111,
+          "after": 59765
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59053,
+          "after": 59707
+        },
+        {
+          "table": "event_occurrence",
+          "before": 7351,
+          "after": 7449
+        },
+        {
+          "table": "memory_chunk",
+          "before": 108,
+          "after": 109
+        },
+        {
+          "table": "memory_file",
+          "before": 108,
+          "after": 109
+        },
+        {
+          "table": "message",
+          "before": 985,
+          "after": 999
+        },
+        {
+          "table": "part",
+          "before": 2778,
+          "after": 2815
+        },
+        {
+          "table": "permission_execution_result",
+          "before": 243,
+          "after": 244
+        },
+        {
+          "table": "permission_ledger",
+          "before": 1231,
+          "after": 1236
+        },
+        {
+          "table": "permission_policy",
+          "before": 58,
+          "after": 59
+        },
+        {
+          "table": "project",
+          "before": 112,
+          "after": 113
+        },
+        {
+          "table": "protocol_event",
+          "before": 2791,
+          "after": 2817
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 953,
+          "after": 965
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 953,
+          "after": 965
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 1001,
+          "after": 1015
+        },
+        {
+          "table": "session",
+          "before": 144,
+          "after": 145
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 770,
+          "after": 780
+        },
+        {
+          "table": "tool_part_request",
+          "before": 770,
+          "after": 780
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": false,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793809201982,
+          "reacquiredAt": 1793814027563,
+          "releasedAt": 1793814031052,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793809000176,
+          "reacquiredAt": 1793813872522,
+          "releasedAt": 1793813885237,
+          "ownedByRuntime": true
+        }
+      ],
+      "sourceDatabasePreserved": true,
+      "attachments": 275,
+      "projects": 112,
+      "filesystemExclusions": 0,
+      "requests": 14,
+      "cumulativeRequests": 1400,
+      "reserveMs": 3045526,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-D3D_pD9O.js",
+      "preflight": {
+        "at": "2026-11-04T17:25:42.992Z",
+        "phase": "after",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 24,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "native": {
+        "originalExitCode": 0,
+        "publicShutdown": 200,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true
+      },
+      "protectedHiddenConfigs": 102,
+      "copiesRetired": 2,
+      "unusedAllowanceRetired": 10,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ]
+    },
+    {
+      "at": "2026-11-04T18:01:30.261Z",
+      "kind": "final",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 293634,
+      "current": 293636,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59765,
+          "after": 59766
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59707,
+          "after": 59708
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 277,
+      "projects": 113,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1400,
+      "reserveMs": 2706723,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-C_uPU_3C.js",
+      "preflight": {
+        "at": "2026-11-04T17:57:30.574Z",
+        "phase": "final",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 0,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "native": {
+        "originalExitCode": 0,
+        "publicShutdown": 200,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true
+      },
+      "protectedHiddenConfigs": 103,
+      "copiesRetired": 2,
+      "unusedAllowanceRetired": 0,
+      "requestOutcomes": []
+    }
+  ],
+  "checks": [
+    {
+      "label": "types",
+      "code": 0,
+      "startedAt": 1793812841132,
+      "closedAt": 1793812868925
+    },
+    {
+      "label": "types-localized",
+      "code": 0,
+      "startedAt": 1793814866035,
+      "closedAt": 1793814894925
+    },
+    {
+      "label": "ui-build-after",
+      "code": 0,
+      "startedAt": 1793812841132,
+      "closedAt": 1793812897727
+    },
+    {
+      "label": "ui-build-final",
+      "code": 0,
+      "startedAt": 1793814322573,
+      "closedAt": 1793814393965
+    },
+    {
+      "label": "ui-build-final-localized",
+      "code": 0,
+      "startedAt": 1793814820713,
+      "closedAt": 1793814884518
+    },
+    {
+      "label": "api-routes",
+      "code": 0,
+      "startedAt": 1793814941555,
+      "closedAt": 1793814959843
+    },
+    {
+      "label": "docs",
+      "code": 0,
+      "startedAt": 1793814941554,
+      "closedAt": 1793814959571
+    },
+    {
+      "label": "architecture-index",
+      "code": 0,
+      "startedAt": 1793814941564,
+      "closedAt": 1793814943995
+    },
+    {
+      "label": "read-proof-before-initial",
+      "code": 0,
+      "startedAt": 1793812600902,
+      "closedAt": 1793812604780
+    },
+    {
+      "label": "read-proof-before-final",
+      "code": 0,
+      "startedAt": 1793812678210,
+      "closedAt": 1793812681578
+    },
+    {
+      "label": "inspect-before-initial",
+      "code": 0,
+      "startedAt": 1793812600951,
+      "closedAt": 1793812608613
+    },
+    {
+      "label": "inspect-before-final",
+      "code": 0,
+      "startedAt": 1793812678305,
+      "closedAt": 1793812684058
+    },
+    {
+      "label": "goal-preservation-proof-before-initial",
+      "code": 0,
+      "startedAt": 1793812600927,
+      "closedAt": 1793812606579
+    },
+    {
+      "label": "goal-preservation-proof-before-final",
+      "code": 0,
+      "startedAt": 1793812678255,
+      "closedAt": 1793812681251
+    },
+    {
+      "label": "mailbox-proof-before-initial",
+      "code": 0,
+      "startedAt": 1793812600875,
+      "closedAt": 1793812604409
+    },
+    {
+      "label": "mailbox-proof-before-final",
+      "code": 0,
+      "startedAt": 1793812678219,
+      "closedAt": 1793812681265
+    },
+    {
+      "label": "file-read-proof-before-initial",
+      "code": 0,
+      "startedAt": 1793812600930,
+      "closedAt": 1793812605613
+    },
+    {
+      "label": "file-read-proof-before-final",
+      "code": 0,
+      "startedAt": 1793812678230,
+      "closedAt": 1793812682940
+    },
+    {
+      "label": "prior-business-proof-before-initial",
+      "code": 0,
+      "startedAt": 1793812600973,
+      "closedAt": 1793812607448
+    },
+    {
+      "label": "prior-business-proof-before-final",
+      "code": 0,
+      "startedAt": 1793812678306,
+      "closedAt": 1793812682352
+    },
+    {
+      "label": "read-proof-after-initial",
+      "code": 0,
+      "startedAt": 1793813157986,
+      "closedAt": 1793813161565
+    },
+    {
+      "label": "read-proof-after-final",
+      "code": 0,
+      "startedAt": 1793814849000,
+      "closedAt": 1793814853311
+    },
+    {
+      "label": "inspect-after-initial",
+      "code": 0,
+      "startedAt": 1793813158119,
+      "closedAt": 1793813164256
+    },
+    {
+      "label": "inspect-after-final",
+      "code": 0,
+      "startedAt": 1793814849026,
+      "closedAt": 1793814856560
+    },
+    {
+      "label": "goal-preservation-proof-after-initial",
+      "code": 0,
+      "startedAt": 1793813158073,
+      "closedAt": 1793813162653
+    },
+    {
+      "label": "goal-preservation-proof-after-final",
+      "code": 0,
+      "startedAt": 1793814849012,
+      "closedAt": 1793814854581
+    },
+    {
+      "label": "mailbox-proof-after-initial",
+      "code": 0,
+      "startedAt": 1793813158048,
+      "closedAt": 1793813161582
+    },
+    {
+      "label": "mailbox-proof-after-final",
+      "code": 0,
+      "startedAt": 1793814849052,
+      "closedAt": 1793814853528
+    },
+    {
+      "label": "file-read-proof-after-initial",
+      "code": 0,
+      "startedAt": 1793813158043,
+      "closedAt": 1793813162610
+    },
+    {
+      "label": "file-read-proof-after-final",
+      "code": 0,
+      "startedAt": 1793814849107,
+      "closedAt": 1793814855252
+    },
+    {
+      "label": "prior-business-proof-after-initial",
+      "code": 0,
+      "startedAt": 1793813158130,
+      "closedAt": 1793813162469
+    },
+    {
+      "label": "prior-business-proof-after-final",
+      "code": 0,
+      "startedAt": 1793814849107,
+      "closedAt": 1793814854074
+    },
+    {
+      "label": "read-proof-final-initial",
+      "code": 0,
+      "startedAt": 1793815081003,
+      "closedAt": 1793815084925
+    },
+    {
+      "label": "read-proof-final-final",
+      "code": 0,
+      "startedAt": 1793815194642,
+      "closedAt": 1793815199494
+    },
+    {
+      "label": "inspect-final-initial",
+      "code": 0,
+      "startedAt": 1793815081018,
+      "closedAt": 1793815088276
+    },
+    {
+      "label": "inspect-final-final",
+      "code": 0,
+      "startedAt": 1793815194638,
+      "closedAt": 1793815201647
+    },
+    {
+      "label": "goal-preservation-proof-final-initial",
+      "code": 0,
+      "startedAt": 1793815081035,
+      "closedAt": 1793815085330
+    },
+    {
+      "label": "goal-preservation-proof-final-final",
+      "code": 0,
+      "startedAt": 1793815194687,
+      "closedAt": 1793815199889
+    },
+    {
+      "label": "mailbox-proof-final-initial",
+      "code": 0,
+      "startedAt": 1793815081026,
+      "closedAt": 1793815084925
+    },
+    {
+      "label": "mailbox-proof-final-final",
+      "code": 0,
+      "startedAt": 1793815194748,
+      "closedAt": 1793815199366
+    },
+    {
+      "label": "file-read-proof-final-initial",
+      "code": 0,
+      "startedAt": 1793815081107,
+      "closedAt": 1793815085719
+    },
+    {
+      "label": "file-read-proof-final-final",
+      "code": 0,
+      "startedAt": 1793815194769,
+      "closedAt": 1793815200816
+    },
+    {
+      "label": "prior-business-proof-final-initial",
+      "code": 0,
+      "startedAt": 1793815081119,
+      "closedAt": 1793815086985
+    },
+    {
+      "label": "prior-business-proof-final-final",
+      "code": 0,
+      "startedAt": 1793815194818,
+      "closedAt": 1793815199756
+    },
+    {
+      "label": "business-after-pending",
+      "code": 0,
+      "startedAt": 1793813576333,
+      "closedAt": 1793813581477
+    },
+    {
+      "label": "business-after-finished",
+      "code": 0,
+      "startedAt": 1793813658580,
+      "closedAt": 1793813660308
+    },
+    {
+      "label": "business-after-pending-second",
+      "code": 0,
+      "startedAt": 1793814009978,
+      "closedAt": 1793814011903
+    },
+    {
+      "label": "business-after-confirmed",
+      "code": 0,
+      "startedAt": 1793814117720,
+      "closedAt": 1793814119479
+    },
+    {
+      "label": "business-after-reloaded",
+      "code": 0,
+      "startedAt": 1793814848963,
+      "closedAt": 1793814853825
+    },
+    {
+      "label": "business-final-confirmed",
+      "code": 0,
+      "startedAt": 1793815081192,
+      "closedAt": 1793815085741
+    },
+    {
+      "label": "business-final-reloaded",
+      "code": 0,
+      "startedAt": 1793815194648,
+      "closedAt": 1793815199549
+    }
+  ],
+  "screenshots": [
+    "01-before-long-question-history.png",
+    "02-before-answers-and-following-work.png",
+    "03-after-compact-history-en.png",
+    "04-after-compact-history-zh.png",
+    "05-after-original-question-expanded.png",
+    "06-after-initial-question-draft.png",
+    "07-after-multiple-selections-one-question.png",
+    "08-after-custom-answer-four-filled.png",
+    "09-after-first-real-reply-and-delivery.png",
+    "10-after-zero-of-four-filled.png",
+    "11-after-one-of-four-multiple.png",
+    "12-after-two-of-four-filled.png",
+    "13-after-three-of-four-custom.png",
+    "14-after-four-filled-inline.png",
+    "15-after-second-real-replies.png",
+    "16-after-recorded-file-review.png",
+    "17-after-current-file-preview.png",
+    "18-after-reloaded-replies.png",
+    "19-final-history-en.png",
+    "20-final-history-zh.png",
+    "21-final-recorded-comparison-zh.png",
+    "22-final-current-file-localized.png",
+    "23-final-reloaded-delivery.png",
+    "24-final-original-question-expanded.png"
+  ],
+  "manualBusiness": {
+    "questionRounds": 2,
+    "questionsPerRound": 4,
+    "answersPerRound": 4,
+    "expiryMs": 300000,
+    "firstInitialFilled": 2,
+    "secondFilledSequence": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "multipleSelectionsCountOnce": true,
+    "inlineDraftRetained": true,
+    "keyboardFinalChoice": true,
+    "generatedAndRereadFiles": 1,
+    "generatedLines": 40,
+    "secondRoundPreservesFirstBusiness": true,
+    "coldFinalPreservesBothRounds": true
+  },
+  "limitations": [
+    "Draft counts retain existing initial selections; they do not mean a submitted response.",
+    "Two expired runtime capacity slots were normally reused during actual model work; all original business content and source database remained preserved.",
+    "English live pending progress was not separately generated for visual inspection; English completed history and file summary were personally reviewed.",
+    "No UI automated tests were used."
+  ]
+}

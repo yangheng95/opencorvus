@@ -1340,7 +1340,7 @@
     "one": "File changes · {{count}} path",
     "other": "File changes · {{count}} paths"
   },
-  "files.recorded_paths_hint": "Recorded paths may have since been moved or deleted.",
+  "files.recorded_changes_hint": "Select a file to view its recorded changes.",
   "files.recorded_comparison_hint": "These are recorded changes. “{{action}}” opens the current contents on disk.",
   "files.select_target": "Select a task to view file changes",
   "files.none": "No file changes for this task",
@@ -1390,6 +1390,9 @@
   "interaction.allow_project": "Always Allow Exact Scope",
   "interaction.allow_project_title": "Allow this exact provider, tool, effect, and argument scope for this project.",
   "interaction.answer": "Answer",
+  "interaction.question_details": "Question details",
+  "interaction.question_position": "Question {{index}} of {{count}}",
+  "interaction.question_progress": "Filled {{filled}} / {{count}}",
   "interaction.answer_title": "Send your answer back to the assistant.",
   "interaction.auto_reply": "Auto Reply",
   "interaction.automatic_answer_countdown": "{{label}} will be selected automatically in {{seconds}}s.",

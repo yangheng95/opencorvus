@@ -705,8 +705,9 @@ search, status filters and independent scrolling. Incomplete Tool intervals with
 individual comparisons explain the missing combined comparison once; their
 original comparisons remain separately expandable and keep their own counts.
 Conversation change summaries and multi-file Review label their shared totals as
-recorded paths. The summary explains that recorded paths may later move or be
-deleted; Review distinguishes recorded changes from its existing current-disk
+recorded change entries. The summary directs readers to select a file for its
+recorded changes; actual current-file errors belong to the file reader. Review
+distinguishes recorded changes from its existing current-disk
 read action using that action's localized label. The original paths, counts,
 comparison owners and delivery-file projections remain the sole facts.
 Shared file-change status labels distinguish explicit added, modified and deleted
@@ -1540,6 +1541,14 @@ The last surface releases the draft after the current microtask, allowing
 same-batch remounts to keep the editor. This is not persisted across page reloads
 or retirement of every surface; reply ownership and recorded answers continue
 through the canonical interaction service.
+Question fieldsets identify their position within the original question array.
+The action row derives its filled count from that same shared draft: one question
+counts once when it has a selected option or nonempty custom text. The count
+describes the current draft, including existing selections, rather than a sent
+reply; sending and skipping keep their original contracts. Retained Question
+requests use the shared native Disclosure in a compact default state, with the
+original request formatter mounted when opened. Their original answer labels,
+custom text and response remain visible in their separate chronological phase.
 Permission approvals and retained requests share the structured scope renderer.
 The canonical ledger Request supplies Tool identity, effect, exact scope and
 available decisions; Task live/history projections use one helper, and standalone

@@ -9,6 +9,7 @@ export type MarkdownRenderRequest = {
   locale: string
   localeSeq: number
   copyLabel: string
+  codeBlockLabel: string
   copyIcon: string
 }
 
@@ -29,7 +30,7 @@ let completedCodeUnits = 0
 
 function completedResultKey(request: MarkdownRenderRequest): string {
   return JSON.stringify([
-    request.text, request.streaming, request.locale, request.localeSeq, request.copyLabel, request.copyIcon,
+    request.text, request.streaming, request.locale, request.localeSeq, request.copyLabel, request.codeBlockLabel, request.copyIcon,
   ])
 }
 
@@ -126,6 +127,7 @@ export function createMarkdownRenderer(receive: (reply: MarkdownRenderReply, req
         locale: localeTag(),
         localeSeq,
         copyLabel: t("markdown.copy_code"),
+        codeBlockLabel: t("markdown.code_block"),
         copyIcon: iconHtml("copy", "compact"),
       }
       if (workerFailure) throw new Error(workerFailure)

@@ -1336,10 +1336,10 @@
   "chat.artifacts.checksum": "SHA-256 校验值",
   "chat.artifacts.download": "下载",
   "files.recorded_count": {
-    "one": "文件修改 · {{count}} 个路径",
-    "other": "文件修改 · {{count}} 个路径"
+    "one": "文件修改 · {{count}} 项",
+    "other": "文件修改 · {{count}} 项"
   },
-  "files.recorded_paths_hint": "记录中的路径可能已被移动或删除。",
+  "files.recorded_changes_hint": "点击文件查看修改详情。",
   "files.recorded_comparison_hint": "这里显示已记录的修改；“{{action}}”打开磁盘上的当前内容。",
   "files.select_target": "选择任务查看文件变更",
   "files.none": "当前任务没有文件变更",
@@ -1389,6 +1389,9 @@
   "interaction.allow_project": "始终允许精确范围",
   "interaction.allow_project_title": "在当前项目内允许完全相同的提供方、工具、影响类型和参数范围。",
   "interaction.answer": "回复",
+  "interaction.question_details": "提问内容",
+  "interaction.question_position": "第 {{index}} / {{count}} 题",
+  "interaction.question_progress": "已填写 {{filled}} / {{count}} 题",
   "interaction.answer_title": "将输入的回复发送给助手。",
   "interaction.auto_reply": "自动回复",
   "interaction.automatic_answer_countdown": "{{seconds}} 秒后将自动选择“{{label}}”。",

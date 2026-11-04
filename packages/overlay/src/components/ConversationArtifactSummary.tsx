@@ -122,7 +122,7 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
         </header>
         <div class="conversation-artifact-summary__section">
           <Show when={fileRows().length > 0}>
-            <p class="conversation-artifact-summary__context">{t("files.recorded_paths_hint")}</p>
+            <p class="conversation-artifact-summary__context">{t("files.recorded_changes_hint")}</p>
           </Show>
           <div class="conversation-artifact-summary__files">
             <For each={visibleFiles()}>

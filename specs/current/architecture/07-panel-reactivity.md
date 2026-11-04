@@ -582,6 +582,11 @@ Resolved Question history derives request/response presentation phases from the
 same original interaction, order keys and terminal times. Stable interaction and
 phase identities retain the history owners; the mounted renderer formats them
 with the current locale. Empty authored titles use the localized Question label.
+Retained requests keep their original phase owner inside a native Disclosure;
+the complete request text mounts when the reader opens it. Collapsing that
+reading surface changes neither the Request nor its separate visible response.
+Pending field positions and filled counts derive directly from the same scoped
+draft owner used for reply submission, across inline and Dialog surfaces.
 Deadline expiry and infrastructure closure have separate localized outcomes;
 authored question text and custom answers retain their original contents. A
 selected answer displays its exact original option label when its stored value
@@ -892,7 +897,9 @@ and operator-released follow mode do not perform the bottom write.
 Completed Markdown presentation belongs to the existing renderer service,
 independently of a text component's lifetime. Successful non-streaming worker
 results are retained by exact full text, mode, locale/resource sequence and
-actual code-copy label/icon inputs. The service keeps at most 32 results and
+actual code-copy label/icon and generic code-block title inputs. The worker
+receives both translated labels from the current page locale and includes
+them in its token-cache context. The service keeps at most 32 results and
 4,000,000 UTF-16 code units of keys and HTML, evicting least recently used
 results. A remounted model installs a matching produced artifact before paint;
 misses retain the same off-thread lexer/parser and bounded HTML mount batches.

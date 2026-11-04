@@ -4,12 +4,13 @@ import type { CardNode } from "../store/card-tree"
 import { TextPart } from "./TextPart"
 import { InteractionCard } from "./InteractionCard"
 import { PermissionRequestContent } from "./PermissionRequestContent"
+import { QuestionRequestContent } from "./QuestionRequestContent"
 import { FilePart, messageAttachmentDisplayLabel, type FilePartPresentation, type MessageFilePart } from "./FilePart"
 import { describeToolPart, shortRelativePath, type ToolDisplayModel } from "../utils/tool"
 import { selectedConversationDirectory } from "../store/board"
 import { toolToCardNode } from "../utils/tool-card-node"
 import { localeTag, t } from "../utils/i18n"
-import { interactionRequestText, interactionResponseText } from "../utils/transcript"
+import { interactionResponseText } from "../utils/transcript"
 import {
   isCardRenderableMessagePartType,
   isNoActionDecisionToolPart,
@@ -56,8 +57,7 @@ function workPartKind(part: any): "tool" | "patch" {
   return "tool"
 }
 
-function interactionHistoryText(part: any): string {
-  if (part.phase === "request") return interactionRequestText(part.interaction)
+function interactionHistoryResponseText(part: any): string {
   if (part.phase === "response") return interactionResponseText(part.interaction)
   throw new Error(`interaction ${part.interaction.id} has unknown history phase ${String(part.phase)}`)
 }
@@ -122,7 +122,7 @@ function RenderableCardPart(props: {
         }
       >
         <Show when={part().phase === "request"} fallback={
-          <div class="permission-response">{interactionHistoryText(part())}</div>
+          <div class="permission-response">{interactionHistoryResponseText(part())}</div>
         }>
           <PermissionRequestContent interaction={part().interaction} compact />
         </Show>
@@ -134,7 +134,9 @@ function RenderableCardPart(props: {
           part().interaction
         }
       >
-        <TextPart text={interactionHistoryText(part())} />
+        <Show when={part().phase === "request"} fallback={<TextPart text={interactionHistoryResponseText(part())} />}>
+          <QuestionRequestContent interaction={part().interaction} />
+        </Show>
       </Match>
       <Match
         when={

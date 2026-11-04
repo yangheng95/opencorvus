@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [提问作答进度](2026-11-05-question-reading-progress.md)：原始问题披露、填写数量与真实回复。
+
 - [长工具记录数量](2026-11-05-bounded-tool-summary.md)：传输裁剪后的真实数量与模型实页验收。
 
 - [工具摘要语言](2026-11-04-tool-summary-language.md)：中文摘要、文件名与原始披露。
