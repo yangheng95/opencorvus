@@ -902,6 +902,12 @@
   font-variant-numeric: tabular-nums;
 }
 
+.conversation-artifact-summary__totals {
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  font-size: var(--ui-font-caption);
+}
+
 .conversation-artifact-summary [data-tone="add"] {
   color: var(--diff-add-fg);
 }

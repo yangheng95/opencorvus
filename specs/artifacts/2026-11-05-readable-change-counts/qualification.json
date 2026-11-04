@@ -1,0 +1,563 @@
+{
+  "at": "2026-11-04T18:38:55.791Z",
+  "singleAgent": true,
+  "isolatedNativeDevUI": true,
+  "userWindowUntouched": true,
+  "deadline": {
+    "startedAt": 1793815922921,
+    "deadlineAt": 1793821322921,
+    "maximumRequests": 0,
+    "initialCumulativeRequests": 1400
+  },
+  "phases": [
+    {
+      "at": "2026-11-04T18:18:20.256Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 293636,
+      "current": 293638,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59766,
+          "after": 59767
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59708,
+          "after": 59709
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 277,
+      "projects": 113,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1400,
+      "reserveMs": 5092766,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-C_uPU_3C.js",
+      "preflight": {
+        "at": "2026-11-04T18:13:07.556Z",
+        "phase": "before",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 0,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "native": {
+        "originalExitCode": 0,
+        "publicShutdown": 200,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true
+      },
+      "protectedHiddenConfigs": 103,
+      "copiesRetired": 2,
+      "requestOutcomes": []
+    },
+    {
+      "at": "2026-11-04T18:29:29.962Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 293638,
+      "current": 293640,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59767,
+          "after": 59768
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59709,
+          "after": 59710
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 277,
+      "projects": 113,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1400,
+      "reserveMs": 4408712,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DHNe6ScB.js",
+      "preflight": {
+        "at": "2026-11-04T18:19:42.539Z",
+        "phase": "after",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 0,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "native": {
+        "originalExitCode": 0,
+        "publicShutdown": 200,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true
+      },
+      "protectedHiddenConfigs": 103,
+      "copiesRetired": 2,
+      "requestOutcomes": []
+    },
+    {
+      "at": "2026-11-04T18:37:45.031Z",
+      "kind": "final",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 293640,
+      "current": 293642,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59768,
+          "after": 59769
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59710,
+          "after": 59711
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 277,
+      "projects": 113,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1400,
+      "reserveMs": 3899217,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-Cjef8xHU.js",
+      "preflight": {
+        "at": "2026-11-04T18:32:54.824Z",
+        "phase": "final",
+        "accountUsageStatus": 200,
+        "accepted": true,
+        "projectedModel": "gpt-6.1-sol",
+        "model": "openai/gpt-6.1-sol",
+        "modelRequests": 0,
+        "maximumRequests": 0,
+        "pairedCredentialAndCatalog": "registered copied OAuth"
+      },
+      "native": {
+        "originalExitCode": 0,
+        "publicShutdown": 200,
+        "physicalCompletion": true,
+        "outputDrainComplete": true,
+        "requestCleanupComplete": true
+      },
+      "protectedHiddenConfigs": 103,
+      "copiesRetired": 2,
+      "requestOutcomes": []
+    }
+  ],
+  "checks": [
+    {
+      "label": "types",
+      "code": 0,
+      "startedAt": 1793816248129,
+      "closedAt": 1793816267147
+    },
+    {
+      "label": "types-final",
+      "code": 0,
+      "startedAt": 1793816866625,
+      "closedAt": 1793816887698
+    },
+    {
+      "label": "types-stable-context",
+      "code": 0,
+      "startedAt": 1793817012832,
+      "closedAt": 1793817031185
+    },
+    {
+      "label": "ui-build-after",
+      "code": 0,
+      "startedAt": 1793816248129,
+      "closedAt": 1793816306829
+    },
+    {
+      "label": "ui-build-final",
+      "code": 0,
+      "startedAt": 1793816866640,
+      "closedAt": 1793816931028
+    },
+    {
+      "label": "ui-build-final-stable-context",
+      "code": 0,
+      "startedAt": 1793817012832,
+      "closedAt": 1793817069971
+    },
+    {
+      "label": "recorded-comparison-contract",
+      "code": 0,
+      "startedAt": 1793817168051,
+      "closedAt": 1793817171549
+    },
+    {
+      "label": "api-routes",
+      "code": 0,
+      "startedAt": 1793816324190,
+      "closedAt": 1793816334231
+    },
+    {
+      "label": "docs",
+      "code": 0,
+      "startedAt": 1793816324178,
+      "closedAt": 1793816333879
+    },
+    {
+      "label": "architecture-index",
+      "code": 0,
+      "startedAt": 1793816324226,
+      "closedAt": 1793816326237
+    },
+    {
+      "label": "read-proof-before-initial",
+      "code": 0,
+      "startedAt": 1793815988386,
+      "closedAt": 1793815992490
+    },
+    {
+      "label": "read-proof-before-final",
+      "code": 0,
+      "startedAt": 1793816182285,
+      "closedAt": 1793816186154
+    },
+    {
+      "label": "inspect-before-initial",
+      "code": 0,
+      "startedAt": 1793815988410,
+      "closedAt": 1793815995867
+    },
+    {
+      "label": "inspect-before-final",
+      "code": 0,
+      "startedAt": 1793816182309,
+      "closedAt": 1793816189271
+    },
+    {
+      "label": "goal-preservation-proof-before-initial",
+      "code": 0,
+      "startedAt": 1793815988418,
+      "closedAt": 1793815993114
+    },
+    {
+      "label": "goal-preservation-proof-before-final",
+      "code": 0,
+      "startedAt": 1793816182351,
+      "closedAt": 1793816187406
+    },
+    {
+      "label": "mailbox-proof-before-initial",
+      "code": 0,
+      "startedAt": 1793815988418,
+      "closedAt": 1793815992475
+    },
+    {
+      "label": "mailbox-proof-before-final",
+      "code": 0,
+      "startedAt": 1793816182363,
+      "closedAt": 1793816186016
+    },
+    {
+      "label": "file-read-proof-before-initial",
+      "code": 0,
+      "startedAt": 1793815988493,
+      "closedAt": 1793815992984
+    },
+    {
+      "label": "file-read-proof-before-final",
+      "code": 0,
+      "startedAt": 1793816182446,
+      "closedAt": 1793816187231
+    },
+    {
+      "label": "prior-business-proof-before-initial",
+      "code": 0,
+      "startedAt": 1793815988485,
+      "closedAt": 1793815994060
+    },
+    {
+      "label": "prior-business-proof-before-final",
+      "code": 0,
+      "startedAt": 1793816182404,
+      "closedAt": 1793816187714
+    },
+    {
+      "label": "question-business-proof-before-initial",
+      "code": 0,
+      "startedAt": 1793815988491,
+      "closedAt": 1793815994642
+    },
+    {
+      "label": "question-business-proof-before-final",
+      "code": 0,
+      "startedAt": 1793816182446,
+      "closedAt": 1793816187057
+    },
+    {
+      "label": "read-proof-after-initial",
+      "code": 0,
+      "startedAt": 1793816383493,
+      "closedAt": 1793816387443
+    },
+    {
+      "label": "read-proof-after-final",
+      "code": 0,
+      "startedAt": 1793816901401,
+      "closedAt": 1793816905531
+    },
+    {
+      "label": "inspect-after-initial",
+      "code": 0,
+      "startedAt": 1793816383492,
+      "closedAt": 1793816390858
+    },
+    {
+      "label": "inspect-after-final",
+      "code": 0,
+      "startedAt": 1793816901400,
+      "closedAt": 1793816909023
+    },
+    {
+      "label": "goal-preservation-proof-after-initial",
+      "code": 0,
+      "startedAt": 1793816383492,
+      "closedAt": 1793816387620
+    },
+    {
+      "label": "goal-preservation-proof-after-final",
+      "code": 0,
+      "startedAt": 1793816901458,
+      "closedAt": 1793816906150
+    },
+    {
+      "label": "mailbox-proof-after-initial",
+      "code": 0,
+      "startedAt": 1793816383520,
+      "closedAt": 1793816387442
+    },
+    {
+      "label": "mailbox-proof-after-final",
+      "code": 0,
+      "startedAt": 1793816901430,
+      "closedAt": 1793816905539
+    },
+    {
+      "label": "file-read-proof-after-initial",
+      "code": 0,
+      "startedAt": 1793816383520,
+      "closedAt": 1793816387638
+    },
+    {
+      "label": "file-read-proof-after-final",
+      "code": 0,
+      "startedAt": 1793816901454,
+      "closedAt": 1793816906567
+    },
+    {
+      "label": "prior-business-proof-after-initial",
+      "code": 0,
+      "startedAt": 1793816383630,
+      "closedAt": 1793816388681
+    },
+    {
+      "label": "prior-business-proof-after-final",
+      "code": 0,
+      "startedAt": 1793816901614,
+      "closedAt": 1793816907264
+    },
+    {
+      "label": "question-business-proof-after-initial",
+      "code": 0,
+      "startedAt": 1793816383666,
+      "closedAt": 1793816389583
+    },
+    {
+      "label": "question-business-proof-after-final",
+      "code": 0,
+      "startedAt": 1793816901671,
+      "closedAt": 1793816906589
+    },
+    {
+      "label": "read-proof-final-initial",
+      "code": 0,
+      "startedAt": 1793817190637,
+      "closedAt": 1793817194747
+    },
+    {
+      "label": "read-proof-final-final",
+      "code": 0,
+      "startedAt": 1793817411966,
+      "closedAt": 1793817415959
+    },
+    {
+      "label": "inspect-final-initial",
+      "code": 0,
+      "startedAt": 1793817190627,
+      "closedAt": 1793817198021
+    },
+    {
+      "label": "inspect-final-final",
+      "code": 0,
+      "startedAt": 1793817411966,
+      "closedAt": 1793817419089
+    },
+    {
+      "label": "goal-preservation-proof-final-initial",
+      "code": 0,
+      "startedAt": 1793817190627,
+      "closedAt": 1793817195793
+    },
+    {
+      "label": "goal-preservation-proof-final-final",
+      "code": 0,
+      "startedAt": 1793817411978,
+      "closedAt": 1793817417174
+    },
+    {
+      "label": "mailbox-proof-final-initial",
+      "code": 0,
+      "startedAt": 1793817190713,
+      "closedAt": 1793817194378
+    },
+    {
+      "label": "mailbox-proof-final-final",
+      "code": 0,
+      "startedAt": 1793817411978,
+      "closedAt": 1793817415958
+    },
+    {
+      "label": "file-read-proof-final-initial",
+      "code": 0,
+      "startedAt": 1793817190665,
+      "closedAt": 1793817195398
+    },
+    {
+      "label": "file-read-proof-final-final",
+      "code": 0,
+      "startedAt": 1793817412025,
+      "closedAt": 1793817417029
+    },
+    {
+      "label": "prior-business-proof-final-initial",
+      "code": 0,
+      "startedAt": 1793817190787,
+      "closedAt": 1793817195617
+    },
+    {
+      "label": "prior-business-proof-final-final",
+      "code": 0,
+      "startedAt": 1793817412056,
+      "closedAt": 1793817417535
+    },
+    {
+      "label": "question-business-proof-final-initial",
+      "code": 0,
+      "startedAt": 1793817190764,
+      "closedAt": 1793817196748
+    },
+    {
+      "label": "question-business-proof-final-final",
+      "code": 0,
+      "startedAt": 1793817412025,
+      "closedAt": 1793817416865
+    }
+  ],
+  "screenshots": [
+    "01-before-symbol-only-totals.png",
+    "02-before-missing-file-stat-states.png",
+    "03-before-office-review-state.png",
+    "04-before-eight-file-totals.png",
+    "05-after-labelled-totals-en.png",
+    "06-after-labelled-totals-zh.png",
+    "07-after-narrow-summary-and-review.png",
+    "08-after-explicit-unknown-states.png",
+    "09-after-unknown-original-comparisons.png",
+    "10-after-nontext-recorded-version.png",
+    "11-after-deferred-count-state.png",
+    "12-after-eight-file-labelled-totals.png",
+    "13-final-synchronized-counts-en.png",
+    "14-final-visible-summary-and-review.png",
+    "15-final-summary-retained-after-close.png",
+    "16-final-synchronized-counts-zh.png",
+    "17-final-cross-project-single-file.png",
+    "18-final-office-states.png",
+    "19-final-returned-project-retained-counts.png",
+    "20-final-reloaded-synchronized-counts.png"
+  ],
+  "manualCases": {
+    "singleFile": {
+      "files": 1,
+      "additions": 40,
+      "deletions": 0
+    },
+    "multiFile": {
+      "files": 8,
+      "additions": 56,
+      "deletions": 0
+    },
+    "office": {
+      "files": 3,
+      "nonText": 2,
+      "lineTotals": "unknown"
+    },
+    "summaryAndReviewSynchronized": true,
+    "summaryRetainedAfterReviewClosed": true,
+    "eighthFileOriginalIdentity": "AC-08",
+    "crossProjectReturn": true,
+    "reloadedReadback": true,
+    "locales": [
+      "en-US",
+      "zh-CN"
+    ]
+  },
+  "focusedNonUIContract": {
+    "tests": 7,
+    "assertions": 14,
+    "httpMockScope": "Local transport/cache contract only"
+  },
+  "limitations": [
+    "No new model work; existing real completed work and original public facts were read and manually explored.",
+    "Cache remains page-local and limited to 128 entries; no greater-than-128 real-page stress or separately generated one-line/thousands count case.",
+    "No UI automated tests."
+  ]
+}

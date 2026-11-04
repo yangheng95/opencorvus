@@ -7,8 +7,8 @@ import { toolFileChangesFromState, type ToolFileChange, type ToolReceiptContext 
 import { relativePathFrom } from "./tool"
 import { projectedConversationMessageFacts, type ProjectedMessageFacts } from "../services/tree-writer"
 import { conversationDeferredToolState, conversationToolFileChanges } from "@opencorvus-ai/transport-protocol"
-import { assertApiAuthorityCurrent, type ApiAuthority } from "../services/api"
-import { readToolPart } from "../services/tool-part"
+import { assertApiAuthorityCurrent, captureApiAuthority, type ApiAuthority } from "../services/api"
+import { readToolPart, retainedToolPart } from "../services/tool-part"
 
 export interface AgentFileChange extends ToolFileChange {
   agentID: string
@@ -421,7 +421,13 @@ export function collectAgentFileChangeGroupsFromNodes(nodes: CardNode[], base: s
 }
 export function currentConversationAgentChangeGroups(): ChangeGroup[] {
   const source = currentConversationFileChangeSource()
-  return reduceToolFileChangeGroups(source.inputs, source.facts, source.directory)
+  const authority = captureApiAuthority()
+  const inputs = source.inputs.map((input) => {
+    const receipt = deferredFileChangeReceipt(input.part, source.directory)
+    const loaded = receipt && retainedToolPart({ ...receipt, directory: source.directory, authority, integrity: receipt.deferredState })
+    return loaded ? { ...input, part: loaded } : input
+  })
+  return reduceToolFileChangeGroups(inputs, source.facts, source.directory)
 }
 export function currentConversationFileChangeSource() {
   publishedCardTreeVersion()
@@ -440,6 +446,17 @@ export function currentConversationFileChangeSource() {
   ]
   return { inputs, facts: projectedConversationMessageFacts(sessionIDs), directory: selectedConversationDirectory() }
 }
+function deferredFileChangeReceipt(part: unknown, directory: string): ToolReceiptContext | undefined {
+  if (
+    !record(part) ||
+    part.type !== "tool" ||
+    !["edit", "apply_patch", "write"].includes(part.tool) ||
+    !conversationDeferredToolState(part.state?.metadata) ||
+    conversationToolFileChanges(part.state?.metadata)
+  )
+    return undefined
+  return context(part, directory)
+}
 /** Opening Review loads canonical comparisons omitted from the bounded transcript. */
 export async function resolveConversationFileChangeSource(
   source: ReturnType<typeof currentConversationFileChangeSource>,
@@ -447,16 +464,7 @@ export async function resolveConversationFileChangeSource(
 ): Promise<ChangeGroup[]> {
   const inputs = await Promise.all(
     source.inputs.map(async (input) => {
-      const part = input.part
-      if (
-        !record(part) ||
-        part.type !== "tool" ||
-        !["edit", "apply_patch", "write"].includes(part.tool) ||
-        !conversationDeferredToolState(part.state?.metadata) ||
-        conversationToolFileChanges(part.state?.metadata)
-      )
-        return input
-      const receipt = context(part, source.directory)
+      const receipt = deferredFileChangeReceipt(input.part, source.directory)
       if (!receipt) return input
       const loaded = await readToolPart({
         ...receipt,

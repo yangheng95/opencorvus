@@ -184,6 +184,7 @@
 
 .changes-total {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--ui-gap-md);
   font-variant-numeric: tabular-nums;

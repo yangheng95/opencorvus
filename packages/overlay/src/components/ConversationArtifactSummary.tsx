@@ -79,17 +79,9 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
                 ? tc("files.recorded_count", totals().files)
                 : t(deferred() ? "diff.deferred_title" : "diff.unresolved_title")}
             </strong>
-            <Show when={totals().additions !== null && totals().deletions !== null}>
-              <span
-                class="conversation-artifact-summary__totals"
-                aria-label={t("chat.artifacts.totals", {
-                  additions: totals().additions,
-                  deletions: totals().deletions,
-                })}
-              >
-                <ChangeLineStats additions={totals().additions} deletions={totals().deletions} />
-              </span>
-            </Show>
+            <span class="conversation-artifact-summary__totals">
+              <ChangeLineStats additions={totals().additions} deletions={totals().deletions} labelled />
+            </span>
           </div>
           <Show when={totals().hasUnresolvedChanges}>
             <Tooltip.Root placement="top" fitViewport>
@@ -146,11 +138,9 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
                     name={row.file}
                     icon="file-document"
                     trailing={
-                      <Show when={row.additions !== null && row.deletions !== null}>
-                        <span class="conversation-artifact-summary__file-stats">
-                          <ChangeLineStats additions={row.additions} deletions={row.deletions} isText={row.isText} />
-                        </span>
-                      </Show>
+                      <span class="conversation-artifact-summary__file-stats">
+                        <ChangeLineStats additions={row.additions} deletions={row.deletions} isText={row.isText} />
+                      </span>
                     }
                   />
                 </Button>

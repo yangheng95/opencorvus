@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [文件修改统计可读表达](2026-11-05-readable-change-counts.md)：清晰统计、原比较及中文提示。
+
 - [提问作答进度](2026-11-05-question-reading-progress.md)：原始问题披露、填写数量与真实回复。
 
 - [长工具记录数量](2026-11-05-bounded-tool-summary.md)：传输裁剪后的真实数量与模型实页验收。

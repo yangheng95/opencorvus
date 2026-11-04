@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, expect, test } from "bun:test"
 import { captureApiAuthority, configure, renewApiAuthority } from "../src/services/api"
-import { readToolPart } from "../src/services/tool-part"
+import { readToolPart, retainedToolPart } from "../src/services/tool-part"
 import { readRecordedToolComparison, resolveDiff } from "../src/services/diff"
 import { toolFileChangesFromState } from "../src/utils/tool-file-changes"
 import {
@@ -86,12 +86,28 @@ test("the shared reader accepts the exact immutable deferred outcome", async () 
   globalThis.fetch = Object.assign(async () => Response.json(deferredPart), originalFetch)
   const loaded = await readToolPart({ ...receipt, authority: captureApiAuthority(), integrity })
   expect(loaded).toEqual(deferredPart)
+  expect(retainedToolPart({ ...receipt, authority: captureApiAuthority(), integrity })).toBe(loaded)
   expect(await readRecordedToolComparison({ ...receipt, deferredState: integrity })).toMatchObject({
     before: "one\n",
     after: "one\ntwo\n",
     additions: 1,
     deletions: 0,
   })
+})
+
+test("verified outcomes retain their exact project-scoped cache entries", async () => {
+  const authority = captureApiAuthority()
+  const sources = ["D:/recorded-first", "D:/recorded-second"].map((project) => ({ ...receipt, directory: project, authority }))
+  globalThis.fetch = Object.assign(async (input: Parameters<typeof fetch>[0]) => {
+    const project = new URL(String(input)).searchParams.get("directory")
+    return Response.json({ ...part, state: { ...state, output: `Recorded outcome for ${project}` } })
+  }, originalFetch)
+  const loaded = await Promise.all(sources.map(readToolPart))
+  expect(sources.map(retainedToolPart)).toEqual(loaded)
+  expect(loaded.map((value) => value.state.output)).toEqual([
+    "Recorded outcome for D:/recorded-first",
+    "Recorded outcome for D:/recorded-second",
+  ])
 })
 
 test("a mismatched persisted identity returns the explicit recorded-part error", async () => {

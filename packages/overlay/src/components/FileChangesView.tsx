@@ -447,7 +447,7 @@ export function FileChangesView(props: FileChangesViewProps) {
                   {t("chat.git.commit")} {shortCommit(summaryCommitRef())}
                 </span>
               </Show>
-              <ChangeLineStats additions={summary().additions} deletions={summary().deletions} />
+              <ChangeLineStats additions={summary().additions} deletions={summary().deletions} labelled />
             </span>
           </div>
         </Show>

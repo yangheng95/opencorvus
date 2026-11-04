@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件修改统计证据](2026-11-05-readable-change-counts/README.md)：单文件、多文件及非文本的实页复核。
+
 - [提问作答进度证据](2026-11-05-question-reading-progress/README.md)：四题手动填写、历史原文和后续交付。
 
 - [长工具记录数量证据](2026-11-05-bounded-tool-summary/README.md)：真实长确认问题、批量交付与重开复核。

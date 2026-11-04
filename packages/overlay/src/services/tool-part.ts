@@ -1,9 +1,12 @@
 import { apiJson, assertApiAuthorityCurrent, type ApiAuthority } from "./api"
 import { directoryScopedPath } from "./task-path"
 import type { ConversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
+import { createSignal } from "solid-js"
 
 const TOOL_PART_CACHE_LIMIT = 128
-const toolPartCache = new Map<string, Promise<any>>()
+type ToolPartCacheEntry = { request: Promise<any>; value?: any }
+const toolPartCache = new Map<string, ToolPartCacheEntry>()
+const [toolPartCacheVersion, setToolPartCacheVersion] = createSignal(0)
 
 export type ToolPartSource = {
   authority: ApiAuthority
@@ -30,12 +33,20 @@ function toolPartCacheKey(source: ToolPartSource): string {
   ].join("\u0000")
 }
 
+/** Observe the same verified cache entry without starting a request. */
+export function retainedToolPart(source: ToolPartSource): any | undefined {
+  toolPartCacheVersion()
+  assertApiAuthorityCurrent(source.authority)
+  return toolPartCache.get(toolPartCacheKey(source))?.value
+}
+
 /** Read the exact immutable Tool outcome shared by disclosures and historical comparisons. */
 export function readToolPart(source: ToolPartSource): Promise<any> {
   assertApiAuthorityCurrent(source.authority)
   const key = toolPartCacheKey(source)
   const cached = toolPartCache.get(key)
-  if (cached) return cached
+  if (cached) return cached.request
+  let entry: ToolPartCacheEntry
   const request = apiJson(
     directoryScopedPath(
       `session/${encodeURIComponent(source.sessionID)}/message/${encodeURIComponent(source.messageID)}/part/${encodeURIComponent(source.partID)}`,
@@ -72,17 +83,24 @@ export function readToolPart(source: ToolPartSource): Promise<any> {
         }
       }
       assertApiAuthorityCurrent(source.authority)
+      if (toolPartCache.get(key) === entry) {
+        entry.value = loaded
+        setToolPartCacheVersion((value) => value + 1)
+      }
       return loaded
     })
     .catch((error) => {
-      if (toolPartCache.get(key) === request) toolPartCache.delete(key)
+      if (toolPartCache.get(key)?.request === request) toolPartCache.delete(key)
       throw error
     })
-  toolPartCache.set(key, request)
+  entry = { request }
+  toolPartCache.set(key, entry)
   while (toolPartCache.size > TOOL_PART_CACHE_LIMIT) {
     const oldest = toolPartCache.keys().next().value
     if (typeof oldest !== "string") break
+    const retired = toolPartCache.get(oldest)
     toolPartCache.delete(oldest)
+    if (retired?.value) setToolPartCacheVersion((value) => value + 1)
   }
   return request
 }

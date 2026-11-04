@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件修改统计可读表达](records/2026-11/2026-11-05-readable-change-counts.md)：新增删除行数、未知与非文本状态。
+
 - [提问作答进度](records/2026-11/2026-11-05-question-reading-progress.md)：多问题填写进度与原始历史阅读。
 
 - [长工具记录数量](records/2026-11/2026-11-05-bounded-tool-summary.md)：长问题与批量文件在完整/裁剪结果中的同源数量。

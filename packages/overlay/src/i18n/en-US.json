@@ -1219,6 +1219,14 @@
   "diff.source.immutable_build_interval": "Build comparison",
   "diff.source.path_coverage": "Affected paths",
   "diff.counts_unavailable": "Lines unknown",
+  "diff.lines_added": {
+    "one": "{{count}} line added",
+    "other": "{{count}} lines added"
+  },
+  "diff.lines_deleted": {
+    "one": "{{count}} line deleted",
+    "other": "{{count}} lines deleted"
+  },
   "diff.counts_unavailable_detail": "Line counts are unavailable for this comparison. Open the file to inspect its recorded changes.",
   "diff.incomplete.missing_endpoints": "Before and after contents are not available for this change.",
   "diff.incomplete.saved_session_flags_missing": "This saved change does not provide enough information for a reliable text preview.",
@@ -1321,7 +1329,6 @@
   "chat.artifacts.review": "Review changes",
   "chat.artifacts.show_more": "Show {{count}} more items",
   "chat.artifacts.show_less": "Show fewer items",
-  "chat.artifacts.totals": "{{additions}} additions and {{deletions}} deletions",
   "chat.artifacts.loading": "Loading exact artifact…",
   "chat.artifacts.snapshot_kind": "Snapshot",
   "chat.artifacts.saved_files": "Saved files",

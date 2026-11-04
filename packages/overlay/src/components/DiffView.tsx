@@ -5,7 +5,7 @@
 
 import { diffLines } from "diff"
 import { createMemo, createSignal, For, Show } from "solid-js"
-import { t, tc } from "../utils/i18n"
+import { localeTag, t, tc } from "../utils/i18n"
 import type { ConversationDeferredToolState } from "@opencorvus-ai/transport-protocol"
 import { Disclosure } from "./ui/Disclosure"
 import { OriginalFileDownload } from "./OriginalFileDownload"
@@ -169,7 +169,10 @@ export function changeStatusLabel(status: FileChange["status"]): string {
   return t("files.status.changed")
 }
 
-export function ChangeLineStats(props: { additions: number | null; deletions: number | null; isText?: boolean }) {
+export function ChangeLineStats(props: { additions: number | null; deletions: number | null; isText?: boolean; labelled?: boolean }) {
+  const number = (value: number | null) => value?.toLocaleString(localeTag()) ?? ""
+  const addedLabel = () => tc("diff.lines_added", props.additions!, { count: number(props.additions) })
+  const deletedLabel = () => tc("diff.lines_deleted", props.deletions!, { count: number(props.deletions) })
   return (
     <Show
       when={props.additions !== null && props.deletions !== null}
@@ -182,11 +185,11 @@ export function ChangeLineStats(props: { additions: number | null; deletions: nu
         </span>
       }
     >
-      <span class="diff-dialog-stat" data-tone="add">
-        +{props.additions?.toLocaleString()}
+      <span class="diff-dialog-stat" data-tone="add" title={addedLabel()} aria-label={addedLabel()}>
+        {props.labelled ? addedLabel() : `+${number(props.additions)}`}
       </span>
-      <span class="diff-dialog-stat" data-tone="del">
-        -{props.deletions?.toLocaleString()}
+      <span class="diff-dialog-stat" data-tone="del" title={deletedLabel()} aria-label={deletedLabel()}>
+        {props.labelled ? deletedLabel() : `-${number(props.deletions)}`}
       </span>
     </Show>
   )

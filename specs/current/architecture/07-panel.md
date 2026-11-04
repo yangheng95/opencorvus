@@ -710,6 +710,19 @@ recorded changes; actual current-file errors belong to the file reader. Review
 distinguishes recorded changes from its existing current-disk
 read action using that action's localized label. The original paths, counts,
 comparison owners and delivery-file projections remain the sole facts.
+The shared line-stat presentation spells out added and deleted line totals in
+conversation summaries and multi-file Review headers. Compact file rows retain
+their symbols with complete localized accessible names and native titles.
+Numbers use the current interface locale. Summary rows keep the same explicit
+unknown/non-text state when counts are unavailable; they never substitute zero
+or hide those states. These labels do not change aggregation or comparison facts.
+Loading a bounded edit's canonical Tool Part also updates the summary through
+the same immutable-reader cache entry. The summary's current file projection observes
+only verified entries matching its authority, directory and original receipt;
+it runs the existing reducer without changing transcript Parts or starting reads.
+Review and the summary therefore share loaded counts while that cache owns them.
+The Review resource key remains based on the original bounded source; retained
+cache completion/eviction only invalidates the summary's presentation projection.
 Shared file-change status labels distinguish explicit added, modified and deleted
 facts from an unspecified physical type. Review explains the unclassified category
 when it is selected. Classification continues to use the original optional status;
