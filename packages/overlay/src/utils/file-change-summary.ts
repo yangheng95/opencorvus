@@ -1,5 +1,5 @@
 import { cardTreeStore, publishedCardTreeVersion, type CardNode } from "../store/card-tree"
-import { boardStore } from "../store/board"
+import { selectedConversationDirectory } from "../store/board"
 import type { FileChangeReceipt, FileChangeIncompleteReason } from "../components/DiffView"
 import { changeGroupIdentity, summarizeFileChanges, type ChangeGroup } from "../services/diff"
 import { textComparisonCounts } from "./text-comparison"
@@ -7,6 +7,8 @@ import { toolFileChangesFromState, type ToolFileChange, type ToolReceiptContext 
 import { relativePathFrom } from "./tool"
 import { projectedConversationMessageFacts, type ProjectedMessageFacts } from "../services/tree-writer"
 import { conversationDeferredToolState, conversationToolFileChanges } from "@opencorvus-ai/transport-protocol"
+import { assertApiAuthorityCurrent, type ApiAuthority } from "../services/api"
+import { readToolPart } from "../services/tool-part"
 
 export interface AgentFileChange extends ToolFileChange {
   agentID: string
@@ -418,14 +420,55 @@ export function collectAgentFileChangeGroupsFromNodes(nodes: CardNode[], base: s
   return reduceToolFileChangeGroups(inputs, projectedConversationMessageFacts(sessionIDs), base)
 }
 export function currentConversationAgentChangeGroups(): ChangeGroup[] {
+  const source = currentConversationFileChangeSource()
+  return reduceToolFileChangeGroups(source.inputs, source.facts, source.directory)
+}
+export function currentConversationFileChangeSource() {
   publishedCardTreeVersion()
-  const board = boardStore.board as any
   const roots = cardTreeStore.order.map((id) => cardTreeStore.cards[id]).filter((node): node is CardNode => !!node)
-  return collectAgentFileChangeGroupsFromNodes(
-    roots,
-    String(board?.task?.directory || board?.directory || ""),
-    board?.goals,
+  const inputs = treeInputs(roots)
+  const sessionIDs = [
+    ...new Set(
+      inputs.flatMap((input) =>
+        record(input.part) && text(input.part.sessionID)
+          ? [input.part.sessionID]
+          : input.sessionID
+            ? [input.sessionID]
+            : [],
+      ),
+    ),
+  ]
+  return { inputs, facts: projectedConversationMessageFacts(sessionIDs), directory: selectedConversationDirectory() }
+}
+/** Opening Review loads canonical comparisons omitted from the bounded transcript. */
+export async function resolveConversationFileChangeSource(
+  source: ReturnType<typeof currentConversationFileChangeSource>,
+  authority: ApiAuthority,
+): Promise<ChangeGroup[]> {
+  const inputs = await Promise.all(
+    source.inputs.map(async (input) => {
+      const part = input.part
+      if (
+        !record(part) ||
+        part.type !== "tool" ||
+        !["edit", "apply_patch", "write"].includes(part.tool) ||
+        !conversationDeferredToolState(part.state?.metadata) ||
+        conversationToolFileChanges(part.state?.metadata)
+      )
+        return input
+      const receipt = context(part, source.directory)
+      if (!receipt) return input
+      const loaded = await readToolPart({
+        ...receipt,
+        directory: source.directory,
+        authority,
+        integrity: receipt.deferredState,
+      })
+      return { ...input, part: loaded }
+    }),
   )
+  assertApiAuthorityCurrent(authority)
+  return reduceToolFileChangeGroups(inputs, source.facts, source.directory)
 }
 export function conversationArtifactFileRows(groups: readonly ChangeGroup[]): ArtifactFileRow[] {
   return groups

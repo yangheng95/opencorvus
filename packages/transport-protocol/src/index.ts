@@ -648,6 +648,68 @@ export function conversationMessageDisplayStage(origin: ConversationMessageOrigi
 export const CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY = "opencorvus_conversation_tool_state" as const
 export const CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES = 4 * 1024
 export const CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY = "opencorvus_tool_file_changes" as const
+export const CONVERSATION_TOOL_IDENTITY_METADATA_KEY = "opencorvus_tool_identity" as const
+
+/** Finite identity facts survive omission of large question and comparison bodies. */
+export type ConversationToolIdentity =
+  | { kind: "question"; count: number; status?: "answered" | "expired" }
+  | { kind: "patch"; count: number; path?: string }
+
+function toolIdentityRecord(value: unknown): value is Record<string, unknown> {
+  return !!value && typeof value === "object" && !Array.isArray(value)
+}
+
+function boundedIdentityPath(value: unknown): value is string {
+  return (
+    typeof value === "string" && !!value.trim() && new TextEncoder().encode(JSON.stringify(value)).byteLength <= 512
+  )
+}
+
+/** Full records derive facts from their producer; deferred records carry that same projection. */
+export function conversationToolIdentity(
+  tool: string,
+  input: unknown,
+  metadata: unknown,
+): ConversationToolIdentity | undefined {
+  const meta = toolIdentityRecord(metadata) ? metadata : {}
+  if (conversationDeferredToolState(meta)) {
+    const value = meta[CONVERSATION_TOOL_IDENTITY_METADATA_KEY]
+    if (!toolIdentityRecord(value) || !Number.isSafeInteger(value.count) || Number(value.count) < 1) return undefined
+    if (tool === "question" && value.kind === "question" && Number(value.count) <= 4) {
+      const status = value.status
+      if (status !== undefined && status !== "answered" && status !== "expired") return undefined
+      return {
+        kind: "question",
+        count: Number(value.count),
+        ...(status === "answered" || status === "expired" ? { status } : {}),
+      }
+    }
+    if (tool === "apply_patch" && value.kind === "patch") {
+      if (value.path !== undefined && (value.count !== 1 || !boundedIdentityPath(value.path))) return undefined
+      return {
+        kind: "patch",
+        count: Number(value.count),
+        ...(typeof value.path === "string" ? { path: value.path } : {}),
+      }
+    }
+    return undefined
+  }
+  if (tool === "question" && toolIdentityRecord(input) && Array.isArray(input.questions)) {
+    const count = input.questions.length
+    if (count < 1 || count > 4) return undefined
+    const status = meta.status === "answered" || meta.status === "expired" ? meta.status : undefined
+    return { kind: "question", count, ...(status ? { status } : {}) }
+  }
+  if (tool !== "apply_patch" || !Array.isArray(meta.files) || meta.files.length === 0) return undefined
+  const paths = new Set<string>()
+  for (const file of meta.files) {
+    if (!toolIdentityRecord(file) || typeof file.filePath !== "string" || !file.filePath.trim()) return undefined
+    if (file.movePath !== undefined && (typeof file.movePath !== "string" || !file.movePath.trim())) return undefined
+    paths.add(typeof file.movePath === "string" ? file.movePath : file.filePath)
+  }
+  const path = paths.size === 1 ? [...paths][0] : undefined
+  return { kind: "patch", count: paths.size, ...(boundedIdentityPath(path) ? { path } : {}) }
+}
 
 /** Bounded observations of one immutable Tool comparison, not composed worktree totals. */
 export type ConversationToolFileChange = {

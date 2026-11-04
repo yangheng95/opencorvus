@@ -2,7 +2,9 @@ import {
   CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY,
   CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
   CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY,
+  CONVERSATION_TOOL_IDENTITY_METADATA_KEY,
   conversationAttachmentWriteChange,
+  conversationToolIdentity,
   type ConversationToolFileChange,
 } from "@opencorvus-ai/transport-protocol"
 import { createHash } from "node:crypto"
@@ -116,15 +118,19 @@ function observedFileChanges(part: Message.ToolPart): ConversationToolFileChange
 
 function boundedToolMetadata(part: Message.ToolPart): Record<string, unknown> {
   const value = part.state.status === "completed" ? part.state.metadata : {}
+  const identity = conversationToolIdentity(part.tool, part.state.input, value)
   const changes = observedFileChanges(part)
-  const observation = changes ? { [CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY]: changes } : {}
-  const observationBytes = changes ? jsonBytes(observation) : 0
-  const projected = observationBytes <= 1024 ? observation : {}
-  const remainingBytes = 1024 - (Object.keys(projected).length ? observationBytes : 0)
+  let projected: Record<string, unknown> = identity ? { [CONVERSATION_TOOL_IDENTITY_METADATA_KEY]: identity } : {}
+  if (changes) {
+    const observation = { ...projected, [CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY]: changes }
+    if (jsonBytes(observation) <= 1024) projected = observation
+  }
+  const remainingBytes = 1024 - (Object.keys(projected).length ? jsonBytes(projected) : 0)
   const source = Object.fromEntries(
     Object.entries(value).filter(
       ([key]) =>
         key !== CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY &&
+        key !== CONVERSATION_TOOL_IDENTITY_METADATA_KEY &&
         (!changes || !["files", "filediff", "diff"].includes(key)),
     ),
   )

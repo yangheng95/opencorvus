@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [长工具记录数量](records/2026-11/2026-11-05-bounded-tool-summary.md)：长问题与批量文件在完整/裁剪结果中的同源数量。
+
 - [工具摘要语言](records/2026-11/2026-11-04-tool-summary-language.md)：提问数量、补丁文件身份和原始记录的共享呈现。
 
 - [已答提问历史恢复](records/2026-11/2026-11-04-question-history-restore.md)：原始请求、终态与冷读/重连的完整显示合同。

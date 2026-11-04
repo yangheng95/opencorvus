@@ -2680,14 +2680,28 @@ from file reading; request paths do not establish the resource type.
 Question summaries localize the actual request's question count and retain an
 explicit expired outcome from its result metadata. Completed patch summaries
 identify the original target path for one file, or the distinct recorded target
-count for multiple files. Full and deferred Tool records use their existing
-canonical file observations; missing bounded detail supplies only the known
-execution status. These summaries never parse producer titles or patch text,
+count for multiple files. The shared transport protocol derives finite identity
+facts from the original questions or distinct patch targets before large bodies
+are bounded. That projection has priority within the existing metadata budget;
+full and deferred records use the same question count, answered/expired outcome
+and target count. One target retains its exact path when it fits the identity
+budget. These summaries never parse producer titles or patch text,
 and expanded input, original output and comparisons keep their authored contents.
 Tool identities, expanded comparisons, deferred Part reads and session dialogs
 share the selected conversation's project directory: the frozen Task directory
 for Tasks and the admitted selected Session directory for ordinary conversations.
 They do not derive file identity from the mutable workspace cwd or an absent Task.
+When bounded transport omits all file observations, the conversation footer
+describes the retained edits as ready to load. Opening Review reads the canonical
+Tool Parts through the existing immutable-state reader, then applies the same
+file-change reducer to the original comparisons. Its resource key includes the
+selected conversation, directory, server authority revision and recorded change
+revision. Loading and retryable failures are visible; another target's resolved
+groups never appear in the current review. The collapsed transcript continues to
+respect its existing first-paint budget.
+Default code-block captions and display-size notices follow the interface
+language; explicit code language identifiers and original Tool output retain
+their recorded contents.
 Registry entries use the declared Tool IDs and share the same normalization at
 registration and lookup. Routine Task/Mission coordination, Artifact catalog
 operations and child-Task evidence use this same presentation owner. Labels

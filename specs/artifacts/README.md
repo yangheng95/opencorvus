@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [长工具记录数量证据](2026-11-05-bounded-tool-summary/README.md)：真实长确认问题、批量交付与重开复核。
+
 - [工具摘要语言证据](2026-11-04-tool-summary-language/README.md)：真实工具记录的中英界面复核。
 
 - [提问历史恢复证据](2026-11-04-question-history-restore/README.md)：真实923记录与隔离页面复核。

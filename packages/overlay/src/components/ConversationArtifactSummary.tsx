@@ -48,6 +48,12 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
   const visibleFiles = createMemo(() => (expanded() ? fileRows() : fileRows().slice(0, DEFAULT_VISIBLE_FILE_COUNT)))
   const remaining = createMemo(() => Math.max(0, fileRows().length - DEFAULT_VISIBLE_FILE_COUNT))
   const totals = createMemo(() => summarizeChangeGroups(groups()))
+  const deferred = createMemo(() =>
+    groups().some((group) =>
+      group.unavailableReceipts?.some((receipt) => "deferredState" in receipt && receipt.deferredState),
+    ),
+  )
+  const unresolvedHint = () => t(deferred() ? "diff.deferred_changes" : "diff.unresolved_changes")
 
   createEffect(() => {
     void boardStore.selectedSource?.id
@@ -68,11 +74,18 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
             <Icon name="edit" size="medium" />
           </span>
           <div class="conversation-artifact-summary__identity">
-            <strong>{totals().files > 0 ? tc("files.recorded_count", totals().files) : t("diff.unresolved_title")}</strong>
+            <strong>
+              {totals().files > 0
+                ? tc("files.recorded_count", totals().files)
+                : t(deferred() ? "diff.deferred_title" : "diff.unresolved_title")}
+            </strong>
             <Show when={totals().additions !== null && totals().deletions !== null}>
               <span
                 class="conversation-artifact-summary__totals"
-                aria-label={t("chat.artifacts.totals", { additions: totals().additions, deletions: totals().deletions })}
+                aria-label={t("chat.artifacts.totals", {
+                  additions: totals().additions,
+                  deletions: totals().deletions,
+                })}
               >
                 <ChangeLineStats additions={totals().additions} deletions={totals().deletions} />
               </span>
@@ -80,11 +93,19 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
           </div>
           <Show when={totals().hasUnresolvedChanges}>
             <Tooltip.Root placement="top" fitViewport>
-              <Tooltip.Trigger as={Button} type="button" variant="ghost" size="sm" tone="neutral" class="conversation-artifact-summary__notice" aria-label={t("diff.unresolved_changes")}>
+              <Tooltip.Trigger
+                as={Button}
+                type="button"
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                class="conversation-artifact-summary__notice"
+                aria-label={unresolvedHint()}
+              >
                 <Icon name="info-circle" size="medium" />
               </Tooltip.Trigger>
               <Tooltip.Portal>
-                <Tooltip.Content>{t("diff.unresolved_changes")}</Tooltip.Content>
+                <Tooltip.Content>{unresolvedHint()}</Tooltip.Content>
               </Tooltip.Portal>
             </Tooltip.Root>
           </Show>

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [长工具记录数量](2026-11-05-bounded-tool-summary.md)：传输裁剪后的真实数量与模型实页验收。
+
 - [工具摘要语言](2026-11-04-tool-summary-language.md)：中文摘要、文件名与原始披露。
 
 - [提问历史恢复](2026-11-04-question-history-restore.md)：冷读、重连与真实回答原文。

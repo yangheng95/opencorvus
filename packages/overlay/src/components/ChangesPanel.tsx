@@ -3,7 +3,7 @@
 // shared diff data that the workspace preview uses; FileChangesView renders the
 // result inline below the row.
 
-import { createMemo, createResource } from "solid-js"
+import { createMemo, createResource, Show } from "solid-js"
 import { activeTaskID, boardStore, selectedTaskDirectory } from "../store/board"
 import {
   changeGroupsRevisionKey,
@@ -11,8 +11,17 @@ import {
   resolveCurrentChangeGroups,
   type ChangeGroup,
 } from "../services/diff"
-import { currentConversationAgentChangeGroups, mergeChangeGroups } from "../utils/file-change-summary"
+import {
+  currentConversationFileChangeSource,
+  reduceToolFileChangeGroups,
+  resolveConversationFileChangeSource,
+  mergeChangeGroups,
+} from "../utils/file-change-summary"
 import { FileChangesView } from "./FileChangesView"
+import { captureApiAuthority } from "../services/api"
+import { Feedback } from "./ui/Feedback"
+import { Button } from "./ui/Button"
+import { t } from "../utils/i18n"
 
 // ── ChangesPanel ──
 
@@ -25,10 +34,11 @@ export interface ChangesPanelProps {
 
 export function ChangesPanel(props: ChangesPanelProps) {
   const panelActive = () => props.active?.() ?? true
+  const conversationSource = createMemo(() => (panelActive() ? currentConversationFileChangeSource() : undefined))
 
   const agentGroups = createMemo<ChangeGroup[]>(() => {
-    if (!panelActive()) return []
-    return currentConversationAgentChangeGroups()
+    const source = conversationSource()
+    return source ? reduceToolFileChangeGroups(source.inputs, source.facts, source.directory) : []
   })
 
   const sourceGroups = createMemo<ChangeGroup[]>(() => {
@@ -40,29 +50,60 @@ export function ChangesPanel(props: ChangesPanelProps) {
     if (!panelActive()) return false
     const groups = sourceGroups()
     const agentKey = changeGroupsRevisionKey(agentGroups())
-    return `${activeTaskID()}:${agentKey}:${changeGroupsRevisionKey(groups)}`
+    return JSON.stringify([
+      captureApiAuthority().revision,
+      boardStore.selectedSource?.kind,
+      boardStore.selectedSource?.id,
+      conversationSource()?.directory,
+      activeTaskID(),
+      agentKey,
+      changeGroupsRevisionKey(groups),
+    ])
   })
 
-  const [resolvedGroups] = createResource(requestKey, async (key) => ({
-    key,
-    groups: await resolveCurrentChangeGroups(),
-  }))
+  const [resolvedGroups, { refetch }] = createResource(requestKey, async (key) => {
+    const source = conversationSource()!
+    const authority = captureApiAuthority()
+    const [agents, persisted] = await Promise.all([
+      resolveConversationFileChangeSource(source, authority),
+      resolveCurrentChangeGroups(),
+    ])
+    return { key, groups: mergeChangeGroups([...agents, ...persisted]) }
+  })
 
   const groups = createMemo<ChangeGroup[]>(() => {
     if (!panelActive()) return []
-    const resolved = resolvedGroups()
-    const source = resolved?.key === requestKey() ? resolved.groups : sourceGroups()
-    return mergeChangeGroups([...agentGroups(), ...source])
+    const resolved = resolvedGroups.error ? undefined : resolvedGroups()
+    return resolved?.key === requestKey() ? resolved.groups : mergeChangeGroups([...agentGroups(), ...sourceGroups()])
   })
 
   return (
-    <FileChangesView
-      groups={groups()}
-      directory={boardStore.selectedSource?.directory?.trim() || selectedTaskDirectory().trim()}
-      scopeKey={activeTaskID()}
-      hasSelectedTask={props.hasSelectedTask}
-      focusEvent="acceptance:focus-changes"
-      groupsSettled={panelActive() && !resolvedGroups.loading}
-    />
+    <>
+      <Show when={panelActive() && resolvedGroups.loading}>
+        <p class="empty-hint" role="status">
+          {t("diff.loading")}
+        </p>
+      </Show>
+      <Show when={panelActive() && resolvedGroups.error}>
+        <Feedback
+          tone="error"
+          actions={
+            <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => refetch()}>
+              {t("common.retry")}
+            </Button>
+          }
+        >
+          {t("diff.load_failed")}
+        </Feedback>
+      </Show>
+      <FileChangesView
+        groups={groups()}
+        directory={boardStore.selectedSource?.directory?.trim() || selectedTaskDirectory().trim()}
+        scopeKey={activeTaskID()}
+        hasSelectedTask={props.hasSelectedTask}
+        focusEvent="acceptance:focus-changes"
+        groupsSettled={panelActive() && !resolvedGroups.loading}
+      />
+    </>
   )
 }

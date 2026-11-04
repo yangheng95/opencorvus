@@ -34,7 +34,9 @@ export const CODE_BLOCK_RENDER_CHAR_LIMIT = 120_000
 export const CODE_BLOCK_RENDER_LINE_LIMIT = 2_000
 export const MARKDOWN_DATA_IMAGE_CHAR_LIMIT = 120_000
 const MARKDOWN_RENDER_CACHE_LIMIT = 512
-const RENDER_CLIP_NOTICE = "\n\n[Overlay display clipped; full content remains available in the task trace.]"
+function renderClipNotice(): string {
+  return `\n\n[${t("markdown.display_clipped")}]`
+}
 const DATA_IMAGE_MARKDOWN_RE = /!\[([^\]]*)\]\((data:image\/(?:png|jpe?g|gif|webp|avif);base64,[^)]+)\)/gi
 const plainUrlLinkifier = new LinkifyIt({ fuzzyEmail: false, fuzzyIP: false })
 const markdownRenderCache = new Map<string, string>()
@@ -118,7 +120,7 @@ marked.setOptions({ async: false, gfm: true, breaks: false })
 // clipboard without needing to re-decode the highlighted HTML.
 function wrapCodeBlock(rawText: string, language: string, highlightedHtml: string): string {
   const langAttr = language ? `language-${language}` : ""
-  const langLabel = language || "code"
+  const langLabel = language || t("markdown.code_block")
   const dataSource = escapeAttr(rawText)
   const copyLabel = escapeAttr(t("markdown.copy_code"))
   return [
@@ -376,9 +378,9 @@ export function renderMarkdown(text: string): string {
   const boundedText = clipped ? text.slice(0, MARKDOWN_RENDER_CHAR_LIMIT) : text
   const withoutOversizedImages = boundedText.replace(DATA_IMAGE_MARKDOWN_RE, (_match, alt: string, url: string) => {
     if (url.length <= MARKDOWN_DATA_IMAGE_CHAR_LIMIT) return _match
-    return alt || "[image omitted]"
+    return alt || `[${t("markdown.image_omitted")}]`
   })
-  const source = clipped ? `${withoutOversizedImages}${RENDER_CLIP_NOTICE}` : withoutOversizedImages
+  const source = clipped ? `${withoutOversizedImages}${renderClipNotice()}` : withoutOversizedImages
   const cacheKey = `${localeTag()}\u0000${source}`
   const cached = markdownRenderCache.get(cacheKey)
   if (cached !== undefined) {
@@ -427,7 +429,7 @@ export function renderCodeBlock(
     clipped = clipped.slice(0, CODE_BLOCK_RENDER_CHAR_LIMIT)
     truncated = true
   }
-  const displayed = truncated ? `${clipped}${RENDER_CLIP_NOTICE}` : clipped
+  const displayed = truncated ? `${clipped}${renderClipNotice()}` : clipped
   const html = renderMarkdown("```" + lang + "\n" + displayed + "\n```")
   return { html, truncated, totalLines: lines.length }
 }

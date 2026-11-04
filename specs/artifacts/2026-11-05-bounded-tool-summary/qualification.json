@@ -1,0 +1,334 @@
+{
+  "at": "2026-11-04T16:55:44.288Z",
+  "scope": "Bounded question and file-change summaries, canonical review reads and Chinese interface labels",
+  "budgets": {
+    "inlineStateBytes": 4096,
+    "toolInputBytes": 2048,
+    "metadataBytes": 1024,
+    "maximumModelRequests": 24,
+    "actualModelRequests": 19,
+    "retiredUnusedRequests": 5
+  },
+  "phases": {
+    "before": {
+      "qualifiedAt": "2026-11-04T16:23:50.015Z",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 285821,
+      "currentRows": 290282,
+      "allOriginalBusinessRowsPreserved": false,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "qualifiedCapacityReuse": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793735014457,
+          "reacquiredAt": 1793809186785,
+          "releasedAt": 1793809201982,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793728521175,
+          "reacquiredAt": 1793808994585,
+          "releasedAt": 1793809000176,
+          "ownedByRuntime": true
+        }
+      ],
+      "memoryAvailabilityTransitions": [],
+      "protectedProjects": 111,
+      "protectedProjectConfigurations": 101,
+      "protectedAttachments": 273,
+      "requests": 19,
+      "cumulativeRequests": 1386,
+      "allRequestsExactStreamingSuccess": true,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "pairedCopiesRetired": true,
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 4449174,
+      "accountUsageStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "uiEntry": "main-CwnbdKAa.js",
+      "workflow": {
+        "questions": 4,
+        "manualAnswers": [
+          [
+            "确认排期"
+          ],
+          [
+            "确认分工"
+          ],
+          [
+            "确认资料"
+          ],
+          [
+            "确认交付"
+          ]
+        ],
+        "onePatchFiles": 8,
+        "rereadFiles": 8,
+        "originalSourceFiles": 2,
+        "maintainedNewQaGitMetadataFiles": 2,
+        "originalToolFacts": 17,
+        "parts": [
+          {
+            "tool": "question",
+            "fullStateBytes": 7938,
+            "inputBytes": 4065,
+            "boundedStateBytes": [
+              430
+            ]
+          },
+          {
+            "tool": "apply_patch",
+            "fullStateBytes": 21068,
+            "inputBytes": 1974,
+            "boundedStateBytes": [
+              2539
+            ]
+          }
+        ]
+      }
+    },
+    "after": {
+      "qualifiedAt": "2026-11-04T16:46:38.901Z",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 290282,
+      "currentRows": 290284,
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "qualifiedCapacityReuse": [],
+      "memoryAvailabilityTransitions": [],
+      "protectedProjects": 112,
+      "protectedProjectConfigurations": 102,
+      "protectedAttachments": 275,
+      "requests": 0,
+      "cumulativeRequests": 1386,
+      "allRequestsExactStreamingSuccess": true,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "pairedCopiesRetired": true,
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 3071896,
+      "accountUsageStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "uiEntry": "main-CrbgZNGR.js",
+      "workflow": {
+        "questions": 4,
+        "manualAnswers": [
+          [
+            "确认排期"
+          ],
+          [
+            "确认分工"
+          ],
+          [
+            "确认资料"
+          ],
+          [
+            "确认交付"
+          ]
+        ],
+        "onePatchFiles": 8,
+        "rereadFiles": 8,
+        "originalSourceFiles": 2,
+        "maintainedNewQaGitMetadataFiles": 2,
+        "originalToolFacts": 17,
+        "parts": [
+          {
+            "tool": "question",
+            "fullStateBytes": 7938,
+            "inputBytes": 4065,
+            "boundedStateBytes": [
+              507
+            ],
+            "identity": {
+              "kind": "question",
+              "count": 4,
+              "status": "answered"
+            }
+          },
+          {
+            "tool": "apply_patch",
+            "fullStateBytes": 21068,
+            "inputBytes": 1974,
+            "boundedStateBytes": [
+              2593
+            ],
+            "identity": {
+              "kind": "patch",
+              "count": 8
+            }
+          }
+        ]
+      }
+    },
+    "final": {
+      "qualifiedAt": "2026-11-04T16:54:07.820Z",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 290284,
+      "currentRows": 290286,
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "qualifiedCapacityReuse": [],
+      "memoryAvailabilityTransitions": [],
+      "protectedProjects": 112,
+      "protectedProjectConfigurations": 102,
+      "protectedAttachments": 275,
+      "requests": 0,
+      "cumulativeRequests": 1386,
+      "allRequestsExactStreamingSuccess": true,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "publicShutdown": 200,
+      "pairedCopiesRetired": true,
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "reserveMs": 2618779,
+      "accountUsageStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "uiEntry": "main-D-Lc2Rbr.js",
+      "workflow": {
+        "questions": 4,
+        "manualAnswers": [
+          [
+            "确认排期"
+          ],
+          [
+            "确认分工"
+          ],
+          [
+            "确认资料"
+          ],
+          [
+            "确认交付"
+          ]
+        ],
+        "onePatchFiles": 8,
+        "rereadFiles": 8,
+        "originalSourceFiles": 2,
+        "maintainedNewQaGitMetadataFiles": 2,
+        "originalToolFacts": 17,
+        "parts": [
+          {
+            "tool": "question",
+            "fullStateBytes": 7938,
+            "inputBytes": 4065,
+            "boundedStateBytes": [
+              507
+            ],
+            "identity": {
+              "kind": "question",
+              "count": 4,
+              "status": "answered"
+            }
+          },
+          {
+            "tool": "apply_patch",
+            "fullStateBytes": 21068,
+            "inputBytes": 1974,
+            "boundedStateBytes": [
+              2593
+            ],
+            "identity": {
+              "kind": "patch",
+              "count": 8
+            }
+          }
+        ]
+      }
+    }
+  },
+  "checks": {
+    "transport-contracts-qualified": {
+      "code": 0,
+      "closedAt": 1793810070239
+    },
+    "types-final": {
+      "code": 0,
+      "closedAt": 1793810857483
+    },
+    "ui-build-final": {
+      "code": 0,
+      "closedAt": 1793810887044
+    },
+    "api-routes": {
+      "code": 0,
+      "closedAt": 1793809908831
+    },
+    "docs": {
+      "code": 0,
+      "closedAt": 1793809796449
+    }
+  },
+  "focusedNonUiTests": {
+    "passed": 30,
+    "expectations": 155
+  },
+  "visual": {
+    "method": "Actual native /ui, hidden owned browser tabs, manual interaction and personally viewed screenshots",
+    "screenshots": [
+      "01-before-four-real-questions.png",
+      "02-before-completed-question-count-lost.png",
+      "03-before-eight-file-count-lost.png",
+      "04-before-cold-eight-file-summary.png",
+      "05-after-cold-eight-file-summary-en.png",
+      "06-after-four-question-summary-en.png",
+      "07-after-four-question-summary-zh.png",
+      "08-after-eight-file-summary-zh.png",
+      "09-after-review-entry-zh.png",
+      "10-after-review-eight-files-zh.png",
+      "11-after-eighth-file-comparison-zh.png",
+      "12-after-current-file-app-preview-zh.png",
+      "13-after-model-service-menu-zh.png",
+      "14-after-other-project-review-zh.png",
+      "15-after-old-project-two-files-review-zh.png",
+      "16-after-expanded-eight-file-tool-zh.png",
+      "17-after-expanded-four-question-tool-zh.png",
+      "18-after-reload-eight-file-summary-zh.png",
+      "19-final-code-caption-and-question-zh.png",
+      "20-final-eight-file-summary-zh.png",
+      "21-final-review-eight-files-zh.png"
+    ]
+  },
+  "limitations": [
+    "The actual batch added eight files; move and duplicate targets are qualified by positive transport contracts.",
+    "Display clipping and omitted-image conditions were localized but were not rendered in this manual workflow.",
+    "Review loading/error/retry controls were not fault-injected during visual acceptance."
+  ],
+  "delivery": {
+    "schemaChanged": false,
+    "persistedToolFormatChanged": false,
+    "apiSchemaChanged": false,
+    "sdkChanged": false,
+    "versionChanged": false,
+    "releaseCreated": false
+  }
+}

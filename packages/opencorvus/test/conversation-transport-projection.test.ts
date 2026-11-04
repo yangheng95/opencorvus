@@ -3,6 +3,8 @@ import {
   CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY,
   CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
   CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY,
+  CONVERSATION_TOOL_IDENTITY_METADATA_KEY,
+  conversationToolIdentity,
   conversationToolFileChanges,
 } from "@opencorvus-ai/transport-protocol"
 import {
@@ -13,17 +15,23 @@ import {
 } from "@/conversation/transport"
 import { Message } from "@/session/message"
 
-function completedTool(input: { id: string; output: string; metadata?: Record<string, unknown> }): Message.ToolPart {
+function completedTool(input: {
+  id: string
+  output: string
+  tool?: string
+  input?: Record<string, unknown>
+  metadata?: Record<string, unknown>
+}): Message.ToolPart {
   return Message.ToolPart.parse({
     id: input.id,
     sessionID: "ses_transport_projection",
     messageID: "msg_transport_projection",
     type: "tool",
     callID: `call_${input.id}`,
-    tool: "read",
+    tool: input.tool ?? "read",
     state: {
       status: "completed",
-      input: { filePath: "README.md" },
+      input: input.input ?? { filePath: "README.md" },
       output: input.output,
       title: "Read README.md",
       metadata: input.metadata ?? { source: "test" },
@@ -31,6 +39,113 @@ function completedTool(input: { id: string; output: string; metadata?: Record<st
     },
   })
 }
+
+function projectedTools(part: Message.ToolPart): Message.ToolPart[] {
+  const visible = Message.VisiblePart.parse({ ...part, orderKey: "identity-order" })
+  return [
+    projectConversationTransportPart(visible),
+    (projectConversationTransportEventPayload(Message.Event.PartUpdated.type, { part: visible }) as any).part,
+    (projectConversationTransportEventPayload(Message.Event.Moved.type, { parts: [visible] }) as any).parts[0],
+  ] as Message.ToolPart[]
+}
+
+test.each(["answered", "expired"] as const)(
+  "preserves four long questions and their %s outcome in every transport",
+  (status) => {
+    const input = {
+      questions: Array.from({ length: 4 }, (_, i) => ({
+        header: `确认 ${i + 1}`,
+        question: `第 ${i + 1} 项完整确认。` + "保留责任人与日期。".repeat(100),
+        options: [{ label: "确认", description: "按原始材料交付" }],
+      })),
+    }
+    const part = completedTool({
+      id: `prt_questions_${status}`,
+      tool: "question",
+      input,
+      output: "真实答复",
+      metadata: { status },
+    })
+    const expected = { kind: "question", count: 4, status }
+    expect(conversationToolIdentity(part.tool, part.state.input, part.state.metadata)).toEqual(expected)
+    expect(Buffer.byteLength(JSON.stringify(input))).toBeGreaterThan(2048)
+    for (const projected of projectedTools(part)) {
+      expect(projected.state.metadata[CONVERSATION_TOOL_IDENTITY_METADATA_KEY]).toEqual(expected)
+      expect(conversationToolIdentity(projected.tool, projected.state.input, projected.state.metadata)).toEqual(
+        expected,
+      )
+      expect(Buffer.byteLength(JSON.stringify(projected.state))).toBeLessThanOrEqual(
+        CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+      )
+    }
+    expect(part.state.input).toEqual(input)
+  },
+)
+
+test("preserves distinct patch targets when a large batch exceeds the observation budget", () => {
+  const files = Array.from({ length: 8 }, (_, i) => ({
+    filePath: `C:/project/${"客户交付责任核对/".repeat(4)}action-${i}.md`,
+    ...(i === 7 ? { movePath: "C:/project/deliverables/moved.md" } : {}),
+    type: i === 7 ? "move" : "add",
+    before: "",
+    after: "行动卡正文\n".repeat(100),
+    additions: 100,
+    deletions: 0,
+  }))
+  files.push({ ...files[0] })
+  const part = completedTool({
+    id: "prt_eight_targets",
+    tool: "apply_patch",
+    output: "批次完成",
+    metadata: { files, source: "s".repeat(500), title: "t".repeat(500) },
+  })
+  const expected = { kind: "patch", count: 8 }
+  expect(conversationToolIdentity(part.tool, part.state.input, part.state.metadata)).toEqual(expected)
+  for (const projected of projectedTools(part)) {
+    const { [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: marker, ...metadata } = projected.state.metadata
+    expect(marker).toMatchObject({ kind: "deferred" })
+    expect(metadata[CONVERSATION_TOOL_IDENTITY_METADATA_KEY]).toEqual(expected)
+    expect(conversationToolIdentity(projected.tool, projected.state.input, projected.state.metadata)).toEqual(expected)
+    expect(Buffer.byteLength(JSON.stringify(metadata))).toBeLessThanOrEqual(1024)
+    expect(Buffer.byteLength(JSON.stringify(projected.state))).toBeLessThanOrEqual(
+      CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+    )
+  }
+})
+
+test.each([
+  {
+    path: "C:/project/deliverables/moved.md",
+    expected: { kind: "patch", count: 1, path: "C:/project/deliverables/moved.md" },
+  },
+  { path: "C:/project/" + "很长的项目目录/".repeat(100) + "card.md", expected: { kind: "patch", count: 1 } },
+])("projects one canonical moved target with bounded identity: $expected", ({ path, expected }) => {
+  const part = completedTool({
+    id: "prt_one_target",
+    tool: "apply_patch",
+    output: "移动完成",
+    metadata: {
+      files: [
+        {
+          filePath: "C:/project/old.md",
+          movePath: path,
+          type: "move",
+          before: "旧正文\n".repeat(1000),
+          after: "新正文\n",
+          additions: 1,
+          deletions: 1000,
+        },
+      ],
+    },
+  })
+  expect(conversationToolIdentity(part.tool, part.state.input, part.state.metadata)).toEqual(expected)
+  for (const projected of projectedTools(part)) {
+    expect(conversationToolIdentity(projected.tool, projected.state.input, projected.state.metadata)).toEqual(expected)
+    expect(Buffer.byteLength(JSON.stringify(projected.state))).toBeLessThanOrEqual(
+      CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+    )
+  }
+})
 
 test("retains bounded exact file observations in historical, updated and moved Tool projections", () => {
   const part = completedTool({
