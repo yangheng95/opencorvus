@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [交付内容读取重试](records/2026-11/2026-11-05-delivery-content-retry.md)：清晰错误说明、原始详情与真实断连恢复。
+
 - [文件修改统计可读表达](records/2026-11/2026-11-05-readable-change-counts.md)：新增删除行数、未知与非文本状态。
 
 - [提问作答进度](records/2026-11/2026-11-05-question-reading-progress.md)：多问题填写进度与原始历史阅读。

@@ -34,6 +34,8 @@ import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { SearchField } from "./ui/SearchField"
 import { Disclosure } from "./ui/Disclosure"
+import { Feedback } from "./ui/Feedback"
+import { formatErrorDetails } from "../utils/error-details"
 import { captureApiAuthority } from "../services/api"
 import { activeProjectDirectory } from "../services/project-directory"
 import { csvArtifactTable, csvCellComparator } from "../services/csv-artifact"
@@ -105,7 +107,7 @@ function createArtifactContentResource(source: () => ArtifactContentRequest | un
     { equals: (previous, current) => previous?.key === current?.key },
   )
   let activeController: AbortController | undefined
-  const [resource] = createResource(request, async (current) => {
+  const [resource, { refetch }] = createResource(request, async (current) => {
     activeController?.abort()
     const controller = new AbortController()
     activeController = controller
@@ -132,7 +134,24 @@ function createArtifactContentResource(source: () => ArtifactContentRequest | un
     if (!request()) activeController?.abort()
   })
   onCleanup(() => activeController?.abort())
-  return [resource, ready, error] as const
+  return [resource, ready, error, refetch] as const
+}
+
+function ArtifactReadFailure(props: { error: unknown; retry: () => unknown }) {
+  return (
+    <Feedback
+      tone="error"
+      title={t("chat.artifacts.read_failed")}
+      details={formatErrorDetails(props.error)}
+      actions={
+        <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void props.retry()}>
+          {t("common.retry")}
+        </Button>
+      }
+    >
+      {t("chat.artifacts.read_failed_hint")}
+    </Feedback>
+  )
 }
 
 function useObjectURL(content: () => ConversationArtifactContent): () => string {
@@ -361,7 +380,7 @@ function SnapshotArtifactView(props: {
         )
       : resources()
   })
-  const [resourceContent, readyResource, resourceError] = createArtifactContentResource(() => {
+  const [resourceContent, readyResource, resourceError, retryResource] = createArtifactContentResource(() => {
     const selected = selection()
     return selected ? { taskID: props.taskID, title: selected.file.path, locator: selected.locator } : undefined
   })
@@ -420,9 +439,7 @@ function SnapshotArtifactView(props: {
           </div>
         </Show>
         <Show when={resourceError()}>
-          <div class="conversation-artifact-inspector__status" role="alert">
-            {String(resourceError())}
-          </div>
+          <ArtifactReadFailure error={resourceError()} retry={retryResource} />
         </Show>
         <Show when={readyResource()} keyed>
           {(resolved) => <ArtifactContentView title={resolved.request.input.title} content={resolved.content} />}
@@ -442,7 +459,7 @@ type ArtifactInspectorProps = {
 }
 
 function ArtifactInspectorContent(props: ArtifactInspectorProps) {
-  const [content, ready, error] = createArtifactContentResource(() => ({
+  const [content, ready, error, retry] = createArtifactContentResource(() => ({
     taskID: props.taskID,
     title: props.title,
     locator: props.locator,
@@ -462,9 +479,7 @@ function ArtifactInspectorContent(props: ArtifactInspectorProps) {
         </div>
       </Show>
       <Show when={error()}>
-        <div class="conversation-artifact-inspector__status" role="alert">
-          {String(error())}
-        </div>
+        <ArtifactReadFailure error={error()} retry={retry} />
       </Show>
       <Show when={ready()} keyed>
         {(loaded) => (
@@ -490,9 +505,9 @@ export function ConversationArtifactInspector(props: ArtifactInspectorProps) {
   return (
     <ErrorBoundary
       fallback={(error) => (
-        <div class="conversation-artifact-inspector__status" role="alert">
-          {String(error)}
-        </div>
+        <Feedback tone="error" title={t("chat.artifacts.render_failed")} details={formatErrorDetails(error)}>
+          {t("chat.artifacts.render_failed_hint")}
+        </Feedback>
       )}
     >
       <ArtifactInspectorContent {...props} />

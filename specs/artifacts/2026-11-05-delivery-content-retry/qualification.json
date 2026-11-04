@@ -1,0 +1,211 @@
+{
+  "at": "2026-11-04T19:35:04.711Z",
+  "method": "Native development /ui; hidden owned IAB tab; manual interactions and personally reviewed screenshots; actual normal service shutdown and same-origin recovery; no browser interception or injected messages",
+  "phases": [
+    {
+      "phase": "before",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293642,
+      "currentRows": 293644,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59769,
+          "after": 59770
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59711,
+          "after": 59712
+        }
+      ],
+      "originalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 113,
+      "hiddenConfigurations": 103,
+      "attachments": 277,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 4634456,
+      "uiEntry": "main-Cjef8xHU.js"
+    },
+    {
+      "phase": "after",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293644,
+      "currentRows": 293646,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59770,
+          "after": 59771
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59712,
+          "after": 59713
+        }
+      ],
+      "originalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 113,
+      "hiddenConfigurations": 103,
+      "attachments": 277,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 3599551,
+      "uiEntry": "main-BOY9_6M1.js"
+    },
+    {
+      "phase": "final",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293646,
+      "currentRows": 293648,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59771,
+          "after": 59772
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59713,
+          "after": 59714
+        }
+      ],
+      "originalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 113,
+      "hiddenConfigurations": 103,
+      "attachments": 277,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 3306382,
+      "uiEntry": "main-BOY9_6M1.js"
+    }
+  ],
+  "publicReadCheckers": {
+    "names": [
+      "read-proof",
+      "inspect",
+      "goal-preservation-proof",
+      "mailbox-proof",
+      "file-read-proof",
+      "prior-business-proof",
+      "question-business-proof",
+      "resource-proof"
+    ],
+    "checkpointsPerPhase": 2,
+    "allPassed": true
+  },
+  "manual": {
+    "screenshots": [
+      "01-before-two-real-readers.png",
+      "02-before-snapshot-resource-reader.png",
+      "03-before-inner-raw-error.png",
+      "04-before-root-raw-error.png",
+      "05-after-english-close.png",
+      "06-after-resource-search.png",
+      "07-after-inner-error-details.png",
+      "08-after-original-error-details.png",
+      "09-after-root-error-close.png",
+      "10-after-root-original-details.png",
+      "11-final-root-retry-restored.png",
+      "12-final-snapshot-resource-reopened.png",
+      "13-final-resource-and-code.png"
+    ],
+    "before": "Both actual content owners showed raw TypeError and no retry; ordinary dialog lacked a visible close button",
+    "after": "CN summaries/actions, collapsed original details, actual offline retry, EN/CN normal-dialog close, resource filtering and clearing",
+    "recovery": {
+      "owner": "ordinary-project-preview",
+      "file": "test_invoice.py",
+      "bytes": 1520,
+      "clickedAt": "2026-11-04T19:30:41.950Z",
+      "requestArrivedAt": "2026-11-04T19:30:42.005Z",
+      "requestID": 53,
+      "sameTask": true,
+      "sameDirectory": true,
+      "sameImmutableLocator": true,
+      "range": {
+        "byte_offset": 0,
+        "max_bytes": 65536
+      },
+      "reloadedPage": false,
+      "visuallyRestored": true,
+      "requestObservation": "Arrival and canonical input recorded; observer does not record response status. The restored code/file information is the manual UI evidence; independent public reads returned 200."
+    },
+    "innerRetryCoverage": "Actual offline retry and localized error/details passed. On connection recovery the message area rebuilt and collapsed its delivery records, retiring the original inner reader. Its recovery-button case is not claimed; reopening the snapshot and selecting the same file read its real code successfully.",
+    "renderBoundary": "Localized rendering failure implementation and typecheck covered; no forced production renderer exception was fabricated."
+  },
+  "nonUI": {
+    "transportTests": 16,
+    "assertions": 38,
+    "typecheckPackages": 8,
+    "apiRules": 6,
+    "apiFiles": 36,
+    "apiDocumentationOperations": 352,
+    "apiDocumentationGroups": 26,
+    "architectureDocuments": 20
+  },
+  "limits": [
+    "No model execution requested in this read-only iteration",
+    "CN generic Task title during offline recovery remains a separate observed candidate",
+    "Provider-settings and unrelated Goal terminology not changed in this delivery"
+  ],
+  "databaseMigration": "No schema change: all three isolated databases stayed on existing version 10. Source databases and original business rows preserved.",
+  "userWindow": "User localhost:18571 was not opened, refreshed, restarted or stopped"
+}

@@ -4095,6 +4095,14 @@ retain their owner; a genuine snapshot request change retires its resource
 selection and search along with the renderer. The same helper owns outer and
 selected-resource loading, without another cache, reader or directory resolver.
 The local error boundary contains the request-owning body and child renderers.
+Root and selected-resource read failures use the shared localized Feedback with
+the complete original diagnostic in Details and an explicit Retry action. Retry
+refetches the same current resource through its existing request owner and abort
+controller; loading/error states retire previous renderers as above. Rendering
+failures keep a separate localized display summary and original Details rather
+than claiming that a failed renderer is a successful read. Project delivery
+previews expose the existing Close action in their ordinary Dialog header,
+alongside the same Escape/backdrop and focus-return ownership.
 
 File content and snapshot browsers share one localized File information
 disclosure, closed by default. Native details owns its expansion. Its definition

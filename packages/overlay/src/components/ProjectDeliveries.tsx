@@ -123,7 +123,25 @@ export function createProjectDeliveries(props: { onOpen: () => void }) {
     </Show>
   )
   const Preview = () => (
-    <Dialog open={Boolean(selected())} onClose={() => setSelected(undefined)} title={selected()?.title ?? ""} wider>
+    <Dialog
+      open={Boolean(selected())}
+      onClose={() => setSelected(undefined)}
+      title={selected()?.title ?? ""}
+      wider
+      headerActions={
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          tone="neutral"
+          title={t("common.close")}
+          aria-label={t("common.close")}
+          onClick={() => setSelected(undefined)}
+        >
+          <Icon name="close" />
+        </Button>
+      }
+    >
       <Show when={selected()}>
         {(delivery) => (
           <>

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [交付内容读取证据](2026-11-05-delivery-content-retry/README.md)：真实已保存资源、错误说明与重试恢复。
+
 - [文件修改统计证据](2026-11-05-readable-change-counts/README.md)：单文件、多文件及非文本的实页复核。
 
 - [提问作答进度证据](2026-11-05-question-reading-progress/README.md)：四题手动填写、历史原文和后续交付。
