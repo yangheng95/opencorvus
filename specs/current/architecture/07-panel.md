@@ -682,8 +682,16 @@ comparison endpoints.
 
 Review offers an explicit current-file action using the comparison owner's project
 directory and the shared file-workbench navigation authority. Reading, editing or
-downloading the current disk file leaves the recorded comparison intact. Existing
-dirty-draft confirmation applies before changing files. The action and its error
+downloading the current disk file leaves the recorded comparison intact.
+FileChange projections retain a required `openPath` alongside the comparison
+identity `file`. A Tool rename keeps its original-to-target comparison label while
+opening the exact recorded target; saved-session and immutable-build observations
+use their real file path. Incomplete and conflicting projections retain that same
+destination. The selected row passes its destination independently to Review's
+current-file action, including its accessible name and asynchronous ownership
+check. Opening the current file remains independent of historical body loading;
+the display label is never parsed or used as a substitute for the destination.
+Existing dirty-draft confirmation applies before changing files. The action and its error
 feedback stay bound to the visible source, comparison and API authority; missing
 current files retain the workbench's normal read-error contract.
 The file workbench distinguishes a structured 404/FileNotFoundError from unknown

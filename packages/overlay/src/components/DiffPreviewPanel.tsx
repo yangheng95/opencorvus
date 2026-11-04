@@ -35,6 +35,8 @@ export interface DiffPreviewPanelProps {
   groups?: readonly ChangeGroup[]
   /** Owning project of the visible comparison, also used for current-file reads. */
   directory: string
+  /** Canonical destination of the selected comparison, independent of its display label. */
+  currentFilePath: string | undefined
 }
 
 type DiffPreviewRequest = { scopeKey: string; target: DiffTarget; groups?: readonly ChangeGroup[] }
@@ -84,7 +86,7 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
   const [openFailure, setOpenFailure] = createSignal<{ error: unknown } | null>(null)
   createEffect(
     on(
-      () => [request()?.key, props.directory, boardStore.selectEpoch],
+      () => [request()?.key, props.directory, props.currentFilePath, boardStore.selectEpoch],
       () => {
         setOpening(false)
         setOpenFailure(null)
@@ -93,7 +95,7 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
   )
 
   const openCurrentFile = async () => {
-    const path = props.target?.filePath
+    const path = props.currentFilePath
     const directory = props.directory.trim()
     if (!path || !directory || opening() || fileEditorReserved()) return
     const authority = captureApiAuthority()
@@ -103,6 +105,7 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
       isApiAuthorityCurrent(authority) &&
       boardStore.selectEpoch === epoch &&
       props.directory.trim() === directory &&
+      props.currentFilePath === path &&
       request()?.key === key
     setOpening(true)
     setOpenFailure(null)
@@ -142,9 +145,9 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
           variant="outline"
           size="sm"
           tone="accent"
-          disabled={!props.directory.trim() || opening() || fileEditorReserved()}
+          disabled={!props.currentFilePath || !props.directory.trim() || opening() || fileEditorReserved()}
           aria-busy={opening() || undefined}
-          aria-label={`${t("diff.open_current_file")}: ${props.target!.filePath}`}
+          aria-label={props.currentFilePath ? `${t("diff.open_current_file")}: ${props.currentFilePath}` : t("diff.open_current_file")}
           title={t("diff.open_current_file_hint")}
           onClick={() => void openCurrentFile()}
         >

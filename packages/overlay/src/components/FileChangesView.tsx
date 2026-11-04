@@ -471,7 +471,13 @@ export function FileChangesView(props: FileChangesViewProps) {
                 </div>
               }
             >
-              <DiffPreviewPanel target={selectedDiffTarget()} scopeKey={props.scopeKey || ""} groups={groups()} directory={props.directory} />
+              <DiffPreviewPanel
+                target={selectedDiffTarget()}
+                currentFilePath={selectedRow()?.item.openPath}
+                scopeKey={props.scopeKey || ""}
+                groups={groups()}
+                directory={props.directory}
+              />
             </Show>
           </section>
 

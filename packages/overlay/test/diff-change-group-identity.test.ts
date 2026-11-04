@@ -11,7 +11,7 @@ const initial: ChangeGroup = {
   additions: 1,
   deletions: 0,
   changes: [
-    { file: "hello.txt", status: "added", additions: 1, deletions: 0, evidence: { kind: "complete", receipts: [] } },
+    { file: "hello.txt", openPath: "hello.txt", status: "added", additions: 1, deletions: 0, evidence: { kind: "complete", receipts: [] } },
   ],
 }
 
@@ -22,7 +22,7 @@ test("a live observation retains its identity as current file evidence changes",
     additions: 2,
     changes: [
       ...initial.changes,
-      { file: "notes.txt", status: "added", additions: 1, deletions: 0, evidence: { kind: "complete", receipts: [] } },
+      { file: "notes.txt", openPath: "notes.txt", status: "added", additions: 1, deletions: 0, evidence: { kind: "complete", receipts: [] } },
     ],
   }
   expect(selected.get(changeGroupIdentity(current))).toBe("selected producer observation")

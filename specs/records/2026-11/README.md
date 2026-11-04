@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [重命名记录的打开目标](2026-11-05-renamed-review-target.md)：实际修改、删除和原比较的文件定位。
+
 - [读取时的来源摘录](2026-11-05-read-source-snapshot.md)：文本读取来源、真实回复和修改前后内容。
 
 - [模型服务商设置范围](2026-11-05-provider-scope-context.md)：真实目录、保存目标和共享登录说明。

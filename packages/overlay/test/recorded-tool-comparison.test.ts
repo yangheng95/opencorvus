@@ -1,8 +1,9 @@
 import { afterEach, beforeEach, expect, test } from "bun:test"
 import { captureApiAuthority, configure, renewApiAuthority } from "../src/services/api"
 import { readToolPart, retainedToolPart } from "../src/services/tool-part"
-import { readRecordedToolComparison, resolveDiff } from "../src/services/diff"
+import { immutableBuildChangeGroups, readRecordedToolComparison, resolveDiff, savedSessionChangeGroups } from "../src/services/diff"
 import { toolFileChangesFromState } from "../src/utils/tool-file-changes"
+import { mergeChangeGroups, reduceToolFileChangeGroups } from "../src/utils/file-change-summary"
 import {
   CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY,
   CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY,
@@ -59,6 +60,7 @@ test("an original file index returns that producer's actual endpoints and counts
   const result = await readRecordedToolComparison(receipt)
   expect(result).toMatchObject({
     file: "notes.md",
+    openPath: `${directory}/notes.md`,
     status: "modified",
     before: "one\n",
     after: "one\ntwo\n",
@@ -69,6 +71,60 @@ test("an original file index returns that producer's actual endpoints and counts
   expect(requests).toEqual([
     { path: "/session/ses_original/message/msg_original/part/prt_original", directory, method: "GET" },
   ])
+})
+
+test("full and bounded rename observations retain the comparison identity and actual current-file destination", async () => {
+  const source = `${directory}/draft/原始方案.md`, target = `${directory}/deliverables/客户方案（已确认）.md`
+  const moved = {
+    status: "completed", output: "Original rename result\n".repeat(200),
+    metadata: { files: [{ filePath: source, movePath: target, type: "move", before: "draft\n", after: "confirmed\n" }] },
+  }
+  const serialized = JSON.stringify(moved), integrity = {
+    kind: "deferred" as const,
+    outputBytes: new TextEncoder().encode(moved.output).byteLength,
+    stateBytes: new TextEncoder().encode(serialized).byteLength,
+    stateSha256: Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(serialized))), byte => byte.toString(16).padStart(2, "0")).join(""),
+  }
+  const bounded = { status: "completed", metadata: {
+    [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: integrity,
+    [CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY]: [{ fileIndex: 0, filePath: source, movePath: target, status: "modified", isText: true, additions: 1, deletions: 1 }],
+  } }
+  for (const input of [moved, bounded]) {
+    expect(toolFileChangesFromState(input, directory, receipt)[0]).toMatchObject({
+      file: "draft/原始方案.md -> deliverables/客户方案（已确认）.md",
+      openPath: target, status: "modified", additions: 1, deletions: 1,
+    })
+  }
+})
+
+test("non-composable and conflicting intervals retain their canonical current-file destination", () => {
+  const source = `${directory}/draft/原始方案.md`, target = `${directory}/deliverables/客户方案（已确认）.md`
+  const input = (id: string, file: object) => ({
+    agentID: "work", part: { type: "tool", tool: "apply_patch", id, sessionID: "ses_rename", messageID: `msg_${id}`,
+      state: { status: "completed", metadata: { files: [file] } } },
+  })
+  const groups = reduceToolFileChangeGroups([
+    input("move", { filePath: source, movePath: target, type: "move", before: "draft\n", after: "confirmed\n" }),
+    input("edit", { filePath: target, type: "update", before: "confirmed\n", after: "confirmed\nreviewed\n" }),
+  ], [], directory)
+  expect(groups[0].changes[0]).toMatchObject({
+    openPath: target, evidence: { kind: "incomplete", reason: "unsupported_lifecycle" },
+  })
+  const conflicting = { ...groups[0], changes: [{ ...groups[0].changes[0], additions: 99 }] }
+  expect(mergeChangeGroups([groups[0], conflicting])[0].changes[0]).toMatchObject({
+    openPath: target, evidence: { kind: "incomplete", reason: "conflicting_receipt" },
+  })
+})
+
+test("saved session and immutable build observations retain their actual file destinations", () => {
+  const file = "deliverables/客户方案（已确认）.md"
+  expect(savedSessionChangeGroups([{ file, status: "modified" }], "ses_saved")[0].changes[0]).toMatchObject({
+    file, openPath: file, evidence: { kind: "incomplete", reason: "saved_session_flags_missing" },
+  })
+  expect(immutableBuildChangeGroups({ artifacts: [{ id: "build_original", kind: "build_host_observation", payload: {
+    task_id: "tsk_original", session_id: "ses_build", diffs: [{ file, status: "added", is_binary: false,
+      before: null, after: { oid: "a".repeat(40), bytes: 1 }, additions: 1, deletions: 0 }],
+  } }] })[0].changes[0]).toMatchObject({ file, openPath: file, status: "added", evidence: { kind: "complete" } })
 })
 
 test("the shared reader accepts the exact immutable deferred outcome", async () => {

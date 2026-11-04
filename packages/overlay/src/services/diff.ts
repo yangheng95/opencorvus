@@ -86,7 +86,7 @@ function incomplete(
   receipts: readonly FileChangeReceipt[],
   reason: "saved_session_flags_missing" | "unknown_resource",
 ): FileChange {
-  return { file, additions: null, deletions: null, evidence: { kind: "incomplete", reason, receipts } }
+  return { file, openPath: file, additions: null, deletions: null, evidence: { kind: "incomplete", reason, receipts } }
 }
 export function savedSessionChangeGroups(raw: unknown, sessionID: string): ChangeGroup[] {
   if (!Array.isArray(raw)) return []
@@ -160,6 +160,7 @@ export function immutableBuildChangeGroups(board: unknown): ChangeGroup[] {
         return [
           {
             file,
+            openPath: file,
             status: physical,
             isText,
             beforeObject,
@@ -279,6 +280,7 @@ export async function resolveDiff(
   )
     return {
       file: change.file,
+      openPath: change.openPath,
       status: change.status,
       additions: null,
       deletions: null,

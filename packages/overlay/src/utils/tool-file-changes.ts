@@ -8,7 +8,6 @@ import { relativePathFrom } from "./tool"
 import { textComparisonCounts } from "./text-comparison"
 
 export interface ToolFileChange extends FileChange {
-  openPath: string
   displayPath: string
 }
 export type ToolReceiptContext = Extract<FileChangeReceipt, { partID: string }>

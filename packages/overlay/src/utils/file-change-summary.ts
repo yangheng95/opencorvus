@@ -354,7 +354,6 @@ export function collectAgentFileChanges(node: CardNode, base: string): AgentFile
   return reduceToolFileChangeGroups(inputs, facts, base).flatMap((group) =>
     group.changes.map((change) => ({
       ...change,
-      openPath: (change as ToolFileChange).openPath,
       displayPath: (change as ToolFileChange).displayPath,
       agentID: group.agentID!,
       sources: change.evidence.receipts.length,
@@ -380,6 +379,7 @@ export function mergeChangeGroups(groups: ChangeGroup[]): ChangeGroup[] {
       if (JSON.stringify(previous) === JSON.stringify(change)) continue
       changes.set(change.file, {
         file: change.file,
+        openPath: change.openPath,
         status: change.status,
         additions: null,
         deletions: null,

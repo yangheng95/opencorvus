@@ -43,7 +43,10 @@ export type FileChangeEvidence =
   | { kind: "incomplete"; reason: FileChangeIncompleteReason; receipts: readonly FileChangeReceipt[] }
 
 export interface FileChange {
+  /** Comparison identity; a rename includes both original and target labels. */
   file: string
+  /** Actual current-file destination, resolved within the owning project. */
+  openPath: string
   status?: "added" | "deleted" | "modified"
   additions: number | null
   deletions: number | null

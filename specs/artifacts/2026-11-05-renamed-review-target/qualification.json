@@ -1,0 +1,182 @@
+{
+  "at": "2026-11-04T22:27:36.242Z",
+  "phases": [
+    {
+      "phase": "before",
+      "port": 38720,
+      "uiEntry": "main-ln4zqIzm.js",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 298194,
+      "rows": 301190,
+      "protectedProjects": 116,
+      "protectedAttachments": 281,
+      "allOriginalRowsExact": false,
+      "businessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793829021703,
+          "reacquiredAt": 1793830061139,
+          "releasedAt": 1793830068804,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793828959854,
+          "reacquiredAt": 1793830023073,
+          "releasedAt": 1793830025835,
+          "ownedByRuntime": true
+        }
+      ],
+      "memoryAvailabilityTransitions": [],
+      "requests": 13,
+      "maximumRequests": 16,
+      "cumulativeRequests": 1431,
+      "allRequestsStreaming": true,
+      "allRequestsCompletedNormally": true,
+      "unusedAllowanceRetired": 3,
+      "pairedCopiesRetired": 2,
+      "sourceCredentialAndCatalogPreserved": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 5000472
+    },
+    {
+      "phase": "after",
+      "port": 38721,
+      "uiEntry": "main-CXyH7gb7.js",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 301190,
+      "rows": 301192,
+      "protectedProjects": 117,
+      "protectedAttachments": 283,
+      "allOriginalRowsExact": true,
+      "businessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "reusedExpiredCapacitySlots": [],
+      "memoryAvailabilityTransitions": [],
+      "requests": 0,
+      "maximumRequests": 0,
+      "cumulativeRequests": 1431,
+      "allRequestsStreaming": true,
+      "allRequestsCompletedNormally": true,
+      "unusedAllowanceRetired": 0,
+      "pairedCopiesRetired": 2,
+      "sourceCredentialAndCatalogPreserved": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true,
+      "reserveMs": 4341624
+    }
+  ],
+  "checks": [
+    {
+      "label": "focused-comparison-tests",
+      "exit": 0
+    },
+    {
+      "label": "typecheck",
+      "exit": 0
+    },
+    {
+      "label": "ui-build-after",
+      "exit": 0
+    }
+  ],
+  "focusedNonUiTests": 13,
+  "expectCalls": 24,
+  "businessCheckerInvocations": 36,
+  "realWork": {
+    "sessionID": "ses_-zUPxA3vfzzX0tJ3NU3o",
+    "toolResults": 11,
+    "textAndDirectoryReads": 8,
+    "patchTypes": [
+      "update",
+      "move",
+      "delete"
+    ],
+    "recordedTotals": {
+      "additions": 6,
+      "deletions": 3
+    },
+    "fileContracts": [
+      {
+        "path": "deliverables/客户方案（已确认）.md",
+        "status": 200,
+        "error": null
+      },
+      {
+        "path": "draft/原始方案.md",
+        "status": 404,
+        "error": "FileNotFoundError"
+      },
+      {
+        "path": "draft/临时记录.md",
+        "status": 404,
+        "error": "FileNotFoundError"
+      }
+    ],
+    "factsFilesAndGitPreservedAcrossReopen": true
+  },
+  "browserFileRequests": {
+    "at": "2026-11-04T22:22:52.171Z",
+    "phase": "after",
+    "browserReads": [
+      {
+        "at": "2026-11-04T22:18:33.237Z",
+        "filePath": "deliverables/客户方案（已确认）.md",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project",
+        "canonicalTarget": true
+      },
+      {
+        "at": "2026-11-04T22:19:37.478Z",
+        "filePath": "draft/临时记录.md",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project",
+        "canonicalTarget": false
+      },
+      {
+        "at": "2026-11-04T22:20:11.303Z",
+        "filePath": "deliverables/客户方案（已确认）.md",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project",
+        "canonicalTarget": true
+      },
+      {
+        "at": "2026-11-04T22:22:34.672Z",
+        "filePath": "deliverables/客户方案（已确认）.md",
+        "directory": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project",
+        "canonicalTarget": true
+      }
+    ],
+    "targetReadCount": 3,
+    "deletedReadCount": 1
+  },
+  "screenshots": [
+    "01-before-live-file-work.png",
+    "02-before-renamed-comparison.png",
+    "03-before-wrong-compound-file-path.png",
+    "04-before-real-target-opens-from-source.png",
+    "05-after-review-opens-real-target.png",
+    "06-after-deleted-file-explicit-read-error.png",
+    "07-after-original-edit-retained.png",
+    "08-after-return-from-deleted-to-current-target.png",
+    "09-after-english-rename-review.png",
+    "10-after-reloaded-chinese-target-read.png"
+  ],
+  "visualAcceptance": "All10 screenshots personally inspected with actual hidden-page interactions",
+  "uiAutomationTestsRun": 0,
+  "optionalFinalOccurrenceUsed": false,
+  "userWindowAndDatabaseUntouched": true,
+  "limitations": [
+    "The action opens the original observation destination; later moves retain normal explicit missing-file feedback",
+    "Saved-session and immutable-build destinations were data-contract tested; this new visual sample is a Tool observation",
+    "Historical body network errors, independent Side Chat/Task and dirty-draft confirmation are not newly visually qualified"
+  ]
+}

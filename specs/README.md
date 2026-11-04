@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [重命名修改记录的当前文件入口](records/2026-11/2026-11-05-renamed-review-target.md)：比较身份与真实打开路径的完整衔接。
+
 - [文件读取来源的当时摘录](records/2026-11/2026-11-05-read-source-snapshot.md)：真实提问、修改摘要与读取时内容的对照。
 
 - [模型服务商设置范围](records/2026-11/2026-11-05-provider-scope-context.md)：当前项目、全局配置与共享凭据的可读说明。
