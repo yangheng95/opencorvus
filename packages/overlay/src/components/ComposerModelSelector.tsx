@@ -462,7 +462,9 @@ export function ComposerModelSelector() {
             when={groups().length > 0}
             fallback={
               <div class="model-selector-popover-empty">
-                {providerLoading() ? t("common.loading") : t("model_selector.no_connected_providers")}
+                {providerLoading()
+                  ? t("common.loading")
+                  : t("model_selector.no_available_models", { providers: t("cmdk.settings.providers") })}
               </div>
             }
           >

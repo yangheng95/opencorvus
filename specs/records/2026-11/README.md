@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [模型设置语言与引导](2026-11-05-provider-settings-language.md)：服务商表单和已连接但无模型的真实场景。
+
 - [交付阅读状态](2026-11-05-delivery-reading-state.md)：统一呈现所有者与真实断连恢复。
 
 - [交付内容读取重试](2026-11-05-delivery-content-retry.md)：资源读取、中文提示和同一页面恢复。

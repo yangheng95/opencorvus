@@ -1,0 +1,281 @@
+{
+  "at": "2026-11-04T20:36:17.321Z",
+  "baseline": {
+    "commit": "d9b6d010af0729584c64b09379f4398c26874863",
+    "evidence": "../2026-11-05-delivery-reading-state/README.md"
+  },
+  "method": "Two native development /ui occurrences; owned hidden IAB tabs278/279; manual interactions and personally reviewed screenshots. No UI automated tests, browser interception or synthetic messages.",
+  "phases": [
+    {
+      "phase": "before",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293652,
+      "currentRows": 293736,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 57267,
+          "after": 57282
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 57267,
+          "after": 57282
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 7669,
+          "after": 7672
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 7669,
+          "after": 7672
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 23007,
+          "after": 23016
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59774,
+          "after": 59790
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59716,
+          "after": 59732
+        },
+        {
+          "table": "event_occurrence",
+          "before": 7449,
+          "after": 7452
+        },
+        {
+          "table": "memory_chunk",
+          "before": 109,
+          "after": 110
+        },
+        {
+          "table": "memory_file",
+          "before": 109,
+          "after": 110
+        },
+        {
+          "table": "project",
+          "before": 113,
+          "after": 114
+        },
+        {
+          "table": "session",
+          "before": 145,
+          "after": 146
+        }
+      ],
+      "originalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 113,
+      "hiddenConfigurations": 103,
+      "attachments": 277,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 4519474,
+      "uiEntry": "main-vh3rTlAP.js"
+    },
+    {
+      "phase": "after",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 293736,
+      "currentRows": 293738,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 59790,
+          "after": 59791
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 59732,
+          "after": 59733
+        }
+      ],
+      "originalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 114,
+      "hiddenConfigurations": 104,
+      "attachments": 277,
+      "modelRequests": 0,
+      "cumulativeRequests": 1400,
+      "providerAccountStatus": 200,
+      "projectedModel": "gpt-6.1-sol",
+      "actualConfiguredModel": "openai/gpt-6.1-sol",
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalCompletion": true,
+      "outputDrained": true,
+      "requestCleanupComplete": true,
+      "pairedCopiesRetired": [
+        true,
+        true
+      ],
+      "sourceCredentialAndCatalogPreserved": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "retirementReserveMs": 3983083,
+      "uiEntry": "main-DK23sktt.js"
+    }
+  ],
+  "emptyModelScenario": {
+    "projectID": "prj_hFzvMnWI4sdZcOQgQkRV",
+    "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+    "creationStatus": 201,
+    "preparation": {
+      "initialEmptyCreateStatus": 400,
+      "initialEmptyCreateError": "ProviderModelNotFoundError",
+      "modelAtCreation": "openai/gpt-6.1-sol",
+      "projectModelProjectedAtCreation": true,
+      "ownedIdleProjectDisposals": 2,
+      "finalFilterRestored": true
+    },
+    "checkpoints": [
+      {
+        "phase": "before",
+        "checkpoint": "initial",
+        "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+        "globalConnected": [
+          "openai"
+        ],
+        "projectRunnableProviders": [],
+        "modelCount": 0,
+        "messages": 0,
+        "configExact": true,
+        "modelRequests": 0
+      },
+      {
+        "phase": "before",
+        "checkpoint": "final",
+        "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+        "globalConnected": [
+          "openai"
+        ],
+        "projectRunnableProviders": [],
+        "modelCount": 0,
+        "messages": 0,
+        "configExact": true,
+        "modelRequests": 0
+      },
+      {
+        "phase": "after",
+        "checkpoint": "initial",
+        "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+        "globalConnected": [
+          "openai"
+        ],
+        "projectRunnableProviders": [],
+        "modelCount": 0,
+        "messages": 0,
+        "configExact": true,
+        "modelRequests": 0
+      },
+      {
+        "phase": "after",
+        "checkpoint": "final",
+        "sessionID": "ses_-zUPxbxayzz6mZALWLWD",
+        "globalConnected": [
+          "openai"
+        ],
+        "projectRunnableProviders": [],
+        "modelCount": 0,
+        "messages": 0,
+        "configExact": true,
+        "modelRequests": 0
+      }
+    ],
+    "addedPublicationTypes": [
+      "session.created",
+      "session.updated",
+      "session.updated"
+    ],
+    "allNewPublicationsBelongToOwnedProjectAndSession": true,
+    "interpretation": "Global OpenAI login and exact Sol catalog remain valid. The project whitelist filters all runnable models, so its runnable-provider connected list is empty. This does not diagnose absent global authentication."
+  },
+  "publicReadCheckers": {
+    "names": [
+      "read-proof",
+      "inspect",
+      "goal-preservation-proof",
+      "mailbox-proof",
+      "file-read-proof",
+      "prior-business-proof",
+      "question-business-proof",
+      "resource-proof",
+      "empty-proof"
+    ],
+    "checkpointsPerPhase": 2,
+    "successfulChecks": 36,
+    "toolchainRepair": "Eight first before-initial checker attempts encountered copied prior-iteration output identities. Verified copied originals against their prior source and retained them under prior-originals; corrected future preparation, then reran all eight original checkers with fresh output labels. The ninth real empty-project proof retained its own original receipt. Failed receipts retained; assertions unchanged."
+  },
+  "manual": {
+    "screenshots": [
+      "01-before-empty-model-english.png",
+      "02-before-chinese-provider-list.png",
+      "03-before-chinese-search-empty.png",
+      "04-before-chinese-add-form.png",
+      "05-before-advanced-invalid-address.png",
+      "06-before-empty-model-chinese.png",
+      "07-after-empty-model-english.png",
+      "08-after-english-provider-settings.png",
+      "09-after-english-form-validation.png",
+      "10-after-chinese-provider-settings.png",
+      "11-after-chinese-search-empty.png",
+      "12-after-chinese-add-form.png",
+      "13-after-chinese-advanced-validation.png",
+      "14-after-empty-model-chinese.png",
+      "15-after-empty-model-settings-navigation.png",
+      "16-after-original-project-sol-models.png"
+    ],
+    "chinese": "Provider headings, counts, search/no-results, add form, advanced form, invalid-address feedback and cancel; model empty state and actual settings navigation; original completed Task catalog with12 OpenAI models and GPT-6.1 Sol selected.",
+    "english": "Empty-model hint and actual settings navigation; provider settings and add/advanced form invalid-address validation with cancellation.",
+    "originalModelSelection": "openai/gpt-6.1-sol",
+    "emptyState": "当前没有可选模型。请打开「模型服务商」，连接服务商或检查模型配置。"
+  },
+  "nonUI": {
+    "typecheckPackages": 8,
+    "actualUiBuilds": 1,
+    "apiRules": 6,
+    "apiFiles": 36,
+    "apiDocumentationOperations": 352,
+    "apiDocumentationGroups": 26,
+    "architectureDocuments": 20,
+    "focusedUnitTests": "Not added or run for this presentation-only change"
+  },
+  "limits": [
+    "Authentication, credential saving, provider deletion, model discovery/refresh and connection-test writes were not exercised; changed messages on those branches received source review only.",
+    "Account200 and catalog projection are read-only checks, not model inference acceptance. Zero model calls were issued.",
+    "Existing build chunk-size warning remains; this change does not modify bundle structure."
+  ],
+  "database": "Existing schema10 unchanged. Before293652→293736 adds only one owned project, one blank session, memory indexing and its audited publication/lease facts. After293736→293738 adds only the normal service lease/grant. All original business rows, source database, project files/Git identities, hidden configurations and277 attachments preserved.",
+  "userWindow": "User localhost:18571 was not opened, refreshed, restarted or stopped."
+}

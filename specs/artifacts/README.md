@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [模型设置语言证据](2026-11-05-provider-settings-language/README.md)：中英设置、空模型与公开目录事实。
+
 - [交付阅读状态证据](2026-11-05-delivery-reading-state/README.md)：隔离页面重连、选择与原文件保全。
 
 - [交付内容读取证据](2026-11-05-delivery-content-retry/README.md)：真实已保存资源、错误说明与重试恢复。

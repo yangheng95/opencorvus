@@ -4476,6 +4476,13 @@ hint states that models can be added or discovered later and inheritance is
 preserved. Model references, captured scope and API validation keep their existing
 contracts. Saving configuration alone does not claim inference qualification.
 
+The Composer's empty model list describes unavailable model choices, without
+inferring missing authentication from an empty runnable-provider projection.
+The settings destination in that localized hint uses the same Providers label
+as CONFIG_SECTIONS. Chinese provider settings use model-service terminology and
+localized form/search/action guidance, while canonical brand/model/provider IDs,
+environment variables, endpoint values and original diagnostics stay unchanged.
+
 Provider saves distinguish configuration commitment, credential commitment and
 directory observation. A successful configuration response or the shared typed
 committed receipt proceeds through the existing serial followups, retaining any

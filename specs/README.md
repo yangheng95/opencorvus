@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [模型设置语言与引导](records/2026-11/2026-11-05-provider-settings-language.md)：中文术语统一、真实空模型说明与设置入口。
+
 - [交付阅读状态](records/2026-11/2026-11-05-delivery-reading-state.md)：刷新后保留交付记录、文件选择和搜索。
 
 - [交付内容读取重试](records/2026-11/2026-11-05-delivery-content-retry.md)：清晰错误说明、原始详情与真实断连恢复。
