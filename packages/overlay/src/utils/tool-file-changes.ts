@@ -24,7 +24,7 @@ function displayPath(path: string, base: string): string {
 function identity(source: string, target: string, base: string) {
   const file =
     target !== source ? `${displayPath(source, base)} -> ${displayPath(target, base)}` : displayPath(target, base)
-  return { file, openPath: target, displayPath: file }
+  return { file, openPath: target, displayPath: file, ...(target !== source ? { previousPath: source } : {}) }
 }
 function comparison(
   raw: Record<string, any>,

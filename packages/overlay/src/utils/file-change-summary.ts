@@ -47,6 +47,7 @@ function unavailable(
   return {
     file: change.file,
     openPath: change.openPath,
+    previousPath: change.previousPath,
     displayPath: change.displayPath,
     status: change.status,
     additions: null,
@@ -380,6 +381,7 @@ export function mergeChangeGroups(groups: ChangeGroup[]): ChangeGroup[] {
       changes.set(change.file, {
         file: change.file,
         openPath: change.openPath,
+        previousPath: change.previousPath,
         status: change.status,
         additions: null,
         deletions: null,

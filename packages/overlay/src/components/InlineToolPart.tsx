@@ -229,7 +229,7 @@ function ToolDiffList(props: { items: ToolFileChange[] }) {
                   {item.displayPath}
                 </Button>
                 <span class="change-status" data-status={item.status}>
-                  {changeStatusLabel(item.status)}
+                  {changeStatusLabel(item.status, item.previousPath)}
                 </span>
               </div>
               <div class="msg-tool-diff-card__meta">

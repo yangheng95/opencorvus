@@ -691,6 +691,14 @@ destination. The selected row passes its destination independently to Review's
 current-file action, including its accessible name and asynchronous ownership
 check. Opening the current file remains independent of historical body loading;
 the display label is never parsed or used as a substitute for the destination.
+Tool moves also retain their structured original path as optional `previousPath`,
+derived by the same full/bounded observation mapper. Incomplete and conflicting
+projections preserve it. Shared row, Review and original-comparison status labels
+identify recorded renames in the current language; row details name their source
+path. Physical status remains `modified`, including its existing count and filter;
+that filter explains its inclusion of content changes and renames. Literal search
+indexes both the physical-status label and the visible operation label. Saved
+observations without a recorded move retain their actual status.
 Existing dirty-draft confirmation applies before changing files. The action and its error
 feedback stay bound to the visible source, comparison and API authority; missing
 current files retain the workbench's normal read-error contract.

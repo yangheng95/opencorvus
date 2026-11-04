@@ -73,7 +73,7 @@ test("an original file index returns that producer's actual endpoints and counts
   ])
 })
 
-test("full and bounded rename observations retain the comparison identity and actual current-file destination", async () => {
+test("full and bounded rename observations retain the comparison identity and both recorded paths", async () => {
   const source = `${directory}/draft/原始方案.md`, target = `${directory}/deliverables/客户方案（已确认）.md`
   const moved = {
     status: "completed", output: "Original rename result\n".repeat(200),
@@ -92,12 +92,12 @@ test("full and bounded rename observations retain the comparison identity and ac
   for (const input of [moved, bounded]) {
     expect(toolFileChangesFromState(input, directory, receipt)[0]).toMatchObject({
       file: "draft/原始方案.md -> deliverables/客户方案（已确认）.md",
-      openPath: target, status: "modified", additions: 1, deletions: 1,
+      openPath: target, previousPath: source, status: "modified", additions: 1, deletions: 1,
     })
   }
 })
 
-test("non-composable and conflicting intervals retain their canonical current-file destination", () => {
+test("non-composable and conflicting intervals retain their recorded source and canonical destination", () => {
   const source = `${directory}/draft/原始方案.md`, target = `${directory}/deliverables/客户方案（已确认）.md`
   const input = (id: string, file: object) => ({
     agentID: "work", part: { type: "tool", tool: "apply_patch", id, sessionID: "ses_rename", messageID: `msg_${id}`,
@@ -108,11 +108,26 @@ test("non-composable and conflicting intervals retain their canonical current-fi
     input("edit", { filePath: target, type: "update", before: "confirmed\n", after: "confirmed\nreviewed\n" }),
   ], [], directory)
   expect(groups[0].changes[0]).toMatchObject({
-    openPath: target, evidence: { kind: "incomplete", reason: "unsupported_lifecycle" },
+    openPath: target, previousPath: source, evidence: { kind: "incomplete", reason: "unsupported_lifecycle" },
   })
   const conflicting = { ...groups[0], changes: [{ ...groups[0].changes[0], additions: 99 }] }
   expect(mergeChangeGroups([groups[0], conflicting])[0].changes[0]).toMatchObject({
-    openPath: target, evidence: { kind: "incomplete", reason: "conflicting_receipt" },
+    openPath: target, previousPath: source, evidence: { kind: "incomplete", reason: "conflicting_receipt" },
+  })
+})
+
+test("an unresolved text resource retains both recorded rename paths and its explicit evidence contract", async () => {
+  const source = `${directory}/draft/原始方案.md`, target = `${directory}/deliverables/客户方案（已确认）.md`
+  const change = {
+    file: "draft/原始方案.md -> deliverables/客户方案（已确认）.md",
+    openPath: target, previousPath: source, status: "modified" as const, isText: true,
+    additions: 1, deletions: 1, evidence: { kind: "complete" as const, receipts: [] },
+  }
+  expect(await resolveDiff({ filePath: change.file, groupID: "original-rename" }, [{
+    id: "original-rename", observationKind: "tool_interval", additions: 1, deletions: 1, changes: [change],
+  }])).toEqual({
+    file: change.file, openPath: target, previousPath: source, status: "modified",
+    additions: null, deletions: null, evidence: { kind: "incomplete", reason: "unknown_resource", receipts: [] },
   })
 })
 

@@ -132,7 +132,7 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
         <Show when={item()}>
           <span class="diff-preview-meta">
             <span class="change-status" data-status={item()!.status}>
-              {changeStatusLabel(item()!.status)}
+              {changeStatusLabel(item()!.status, item()!.previousPath)}
             </span>
             <Show when={item()!.evidence.kind === "complete"}>
               <ChangeLineStats additions={item()!.additions} deletions={item()!.deletions} isText={item()!.isText} />

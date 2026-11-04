@@ -20,7 +20,7 @@ function RecordedToolComparison(props: { receipt: ToolComparisonReceipt; index: 
           {(item) => (
             <>
               <span class="change-status" data-status={item().status}>
-                {changeStatusLabel(item().status)}
+                {changeStatusLabel(item().status, item().previousPath)}
               </span>
               <ChangeLineStats additions={item().additions} deletions={item().deletions} isText={item().isText} />
             </>

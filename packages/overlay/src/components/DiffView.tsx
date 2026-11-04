@@ -47,6 +47,8 @@ export interface FileChange {
   file: string
   /** Actual current-file destination, resolved within the owning project. */
   openPath: string
+  /** Recorded source path when the Tool moved this file. */
+  previousPath?: string
   status?: "added" | "deleted" | "modified"
   additions: number | null
   deletions: number | null
@@ -165,7 +167,8 @@ function DiffContext(props: { lines: DiffLine[] }) {
 
 // ── Status label helper ──
 
-export function changeStatusLabel(status: FileChange["status"]): string {
+export function changeStatusLabel(status: FileChange["status"], previousPath?: string): string {
+  if (previousPath) return t("files.status.renamed")
   if (status === "added") return t("files.status.added")
   if (status === "deleted") return t("files.status.deleted")
   if (status === "modified") return t("files.status.modified")

@@ -281,6 +281,7 @@ export async function resolveDiff(
     return {
       file: change.file,
       openPath: change.openPath,
+      previousPath: change.previousPath,
       status: change.status,
       additions: null,
       deletions: null,

@@ -8,6 +8,7 @@ import {
 } from "virtua/solid"
 import { changeGroupIdentity, summarizeChangeGroups, type ChangeGroup, type DiffTarget } from "../services/diff"
 import { t, tc } from "../utils/i18n"
+import { shortRelativePath } from "../utils/tool"
 import { ChangeLineStats, changeStatusLabel, type FileChange } from "./DiffView"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
@@ -117,7 +118,7 @@ function ChangeRowContent(props: { row: ChangeRowModel; showScope: boolean }) {
       trailing={
         <>
           <span class="change-status" data-status={props.row.item.status}>
-            {changeStatusLabel(props.row.item.status)}
+            {changeStatusLabel(props.row.item.status, props.row.item.previousPath)}
           </span>
           <ChangeLineStats
             additions={props.row.item.additions}
@@ -248,7 +249,8 @@ export function FileChangesView(props: FileChangesViewProps) {
       const groupKey = scopedGroupKey(group)
       return group.changes.map((item) => {
         const path = splitFilePath(item.file)
-        const status = changeStatusLabel(item.status)
+        const status = changeStatusLabel(item.status, item.previousPath)
+        const physicalStatus = changeStatusLabel(item.status)
         const row: ChangeRowModel = {
           group,
           groupKey,
@@ -256,10 +258,12 @@ export function FileChangesView(props: FileChangesViewProps) {
           key: JSON.stringify([groupKey, item.file]),
           index,
           fileName: path.fileName,
-          directory: path.directory,
+          directory: item.previousPath
+            ? t("files.rename_from", { path: shortRelativePath(item.previousPath, props.directory) })
+            : path.directory,
           groupLabel: label,
           groupTitle: title,
-          searchText: `${item.file} ${status} ${label} ${title}`.toLowerCase(),
+          searchText: `${item.file} ${status} ${physicalStatus} ${label} ${title}`.toLowerCase(),
         }
         index += 1
         return row
@@ -326,7 +330,11 @@ export function FileChangesView(props: FileChangesViewProps) {
         </>
       ),
       tone: status === "added" ? "ok" : status === "deleted" ? "bad" : status === "modified" ? "accent" : "neutral",
-      title: status === "changed" ? t("files.status.changed_hint") : statusFilterLabel(status),
+      title: status === "changed"
+        ? t("files.status.changed_hint")
+        : status === "modified"
+          ? t("files.status.modified_hint")
+          : statusFilterLabel(status),
     })),
   )
 
