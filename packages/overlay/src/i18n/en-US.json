@@ -1112,6 +1112,8 @@
   "tool.input_for": "Input · {{name}}",
   "tool.input": "Input",
   "tool.read_lines_count": { "one": "{{count}} line", "other": "{{count}} lines" },
+  "tool.read_result_summary": "Read result: {{summary}}",
+  "tool.read_original_note": "Original read note",
   "tool.read_entries_count": { "one": "{{count}} entry", "other": "{{count}} entries" },
   "tool.read_lines_range": { "one": "line {{range}} of {{total}}", "other": "lines {{range}} of {{total}}" },
   "tool.read_entries_range": { "one": "entry {{range}} of {{total}}", "other": "entries {{range}} of {{total}}" },

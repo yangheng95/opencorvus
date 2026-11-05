@@ -4,6 +4,7 @@ import { summarizeFileChanges } from "../services/diff"
 import {
   describeToolCall,
   displayToolDetail,
+  readToolResultSummary,
   toolNameKey,
   toolInputCommand,
   stripAnsi,
@@ -306,6 +307,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
     if (!FILE_READ_TOOLS.has(key())) return null
     return parseReadOutput(output())
   })
+  const readSummary = createMemo(() => readView() ? readToolResultSummary(state().metadata) : undefined)
 
   // Code rendering for completed file-content tools — always full (no
   // truncation) because block mode lives inside its own <Card> body
@@ -416,7 +418,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
   )
   const bodyReady = () => !persistedPart.loading && !persistedPart.error && (!deferredSource() || !!persistedPart())
   const inputPayload = () => (status() === "pending" && raw() ? raw() : toolPayloadText(state().input))
-  const payloadStateKey = (section: "input" | "metadata" | "output") =>
+  const payloadStateKey = (section: "input" | "metadata" | "output" | "read-note") =>
     JSON.stringify([part().sessionID, part().messageID, part().id, section])
   const hasReadOutputBody = () =>
     status() === "completed" &&
@@ -546,7 +548,20 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
                       <div class="msg-tool-code md-content" innerHTML={codeResult()!.html} />
                     </Show>
                     <Show when={readView()?.note}>
-                      <div class="msg-read-meta">{readView()!.note}</div>
+                      {(note) => (
+                        <>
+                          <Show when={readSummary()}>
+                            {(summary) => <div class="msg-read-meta">{t("tool.read_result_summary", { summary: summary() })}</div>}
+                          </Show>
+                          <ToolPayload
+                            stateKey={payloadStateKey("read-note")}
+                            messageID={part().messageID}
+                            label={t("tool.read_original_note")}
+                            value={note()}
+                            collapsed
+                          />
+                        </>
+                      )}
                     </Show>
                     <Show when={readView()?.reminder}>
                       <section class="msg-read-reminder">

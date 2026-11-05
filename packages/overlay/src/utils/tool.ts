@@ -467,6 +467,20 @@ export function normalizeToolStatus(status: unknown): ToolDisplayStatus | undefi
 
 // ── Tool detail ──
 
+/** Format only the producer's validated read window, shared by summary and body. */
+export function readToolResultSummary(metadata: unknown): string | undefined {
+  const parsed = ReadToolResultFacts.safeParse(metadata)
+  if (!parsed.success || parsed.data.readType === "binary") return undefined
+  const facts = parsed.data
+  const unit = facts.readType === "text" ? "lines" : "entries"
+  if (facts.lines === 0 || (facts.offset === 1 && facts.lines === facts.totalLines)) {
+    return tc(`tool.read_${unit}_count`, facts.lines)
+  }
+  const end = facts.offset + facts.lines - 1
+  const range = facts.lines === 1 ? String(facts.offset) : `${facts.offset}–${end}`
+  return tc(`tool.read_${unit}_range`, facts.lines, { range, total: facts.totalLines })
+}
+
 /** Returns a human-readable detail string for a tool invocation.
  * @param name Tool name
  * @param input Tool input object (from part.state.input)
@@ -544,16 +558,8 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
     // byte-capped reads. In-flight arguments remain explicitly requested bounds.
     if (n === "read" || n === "readfile") {
       if ((safeState as any).status === "completed") {
-        const parsed = ReadToolResultFacts.safeParse((safeState as any).metadata)
-        if (!parsed.success || parsed.data.readType === "binary") return shortPath
-        const facts = parsed.data
-        const unit = facts.readType === "text" ? "lines" : "entries"
-        if (facts.lines === 0 || (facts.offset === 1 && facts.lines === facts.totalLines)) {
-          return `${shortPath} · ${tc(`tool.read_${unit}_count`, facts.lines)}`
-        }
-        const end = facts.offset + facts.lines - 1
-        const range = facts.lines === 1 ? String(facts.offset) : `${facts.offset}–${end}`
-        return `${shortPath} · ${tc(`tool.read_${unit}_range`, facts.lines, { range, total: facts.totalLines })}`
+        const summary = readToolResultSummary((safeState as any).metadata)
+        return summary ? `${shortPath} · ${summary}` : shortPath
       }
       const startLine = (safeInput as any).startLine
       const endLine = (safeInput as any).endLine

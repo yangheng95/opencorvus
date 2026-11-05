@@ -512,6 +512,11 @@ retains these same facts, and host file context still uses the sole lines count.
 Pending/running ranges are explicitly requested bounds. A completed record
 without current typed facts retains its name and expandable original details;
 the UI does not infer a result type from paths or older count-only metadata.
+The completed read body uses the same validated window formatter for its localized
+result summary. The producer's original read note remains available through the
+existing lossless Tool payload disclosure, initially collapsed and keyed by the
+original Part identity. Its instructions and byte limits are preserved verbatim;
+the interface does not parse that authored English note to infer read counts.
 Errors retain their canonical failure text. Expanded Input still shows the exact
 request locator and bounds. Main, child and card summaries share this owner.
 The event

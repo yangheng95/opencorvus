@@ -1112,6 +1112,8 @@
   "tool.input_for": "输入 · {{name}}",
   "tool.input": "输入",
   "tool.read_lines_count": { "one": "{{count}} 行", "other": "{{count}} 行" },
+  "tool.read_result_summary": "读取结果：{{summary}}",
+  "tool.read_original_note": "原始读取说明",
   "tool.read_entries_count": { "one": "{{count}} 项", "other": "{{count}} 项" },
   "tool.read_lines_range": { "one": "第 {{range}} 行，共 {{total}} 行", "other": "第 {{range}} 行，共 {{total}} 行" },
   "tool.read_entries_range": { "one": "第 {{range}} 项，共 {{total}} 项", "other": "第 {{range}} 项，共 {{total}} 项" },

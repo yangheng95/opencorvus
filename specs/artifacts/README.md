@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [工具结果与读取说明实页证据](2026-11-05-tool-result-online-retry/README.md)：显式重试与双语读取摘要。
+
 - [来源列表阅读实页证据](2026-11-05-source-title-reading/README.md)：真实历史来源的阅读与操作。
 
 - [首页示例草稿实页证据](2026-11-05-home-example-draft/README.md)：真实草稿与示例入口。

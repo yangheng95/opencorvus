@@ -1,0 +1,202 @@
+{
+  "at": "2026-11-05T10:13:05.851Z",
+  "singleAgent": true,
+  "userWindowAndDatabaseUntouched": true,
+  "qualifications": [
+    {
+      "at": "2026-11-05T07:44:21.725Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303669,
+      "current": 303671,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61757,
+          "after": 61758
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61699,
+          "after": 61700
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 3453460,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DjhejLO2.js"
+    },
+    {
+      "at": "2026-11-05T08:01:57.860Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303671,
+      "current": 303673,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61758,
+          "after": 61759
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61700,
+          "after": 61701
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 2399192,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-B82aJgGR.js"
+    }
+  ],
+  "checksPassed": [
+    "typecheck",
+    "ui-build-after",
+    "docs-check"
+  ],
+  "ordinaryNodeBuilds": 1,
+  "finalUiEntry": "main-B82aJgGR.js",
+  "originalNativeHandlesExitedZero": 2,
+  "originalTransportProxyHandlesExitedZero": 2,
+  "pairedCredentialAndCompleteCatalogCopiesRetired": 4,
+  "actualModelRequests": 0,
+  "cumulativeModelRequests": 1440,
+  "manuallyReviewedScreenshots": [
+    "01-original-chinese-online-question-history.png",
+    "02-chinese-tool-read-failure-while-page-online.png",
+    "03-connected-path-restored-error-retained-before-click.png",
+    "04-chinese-explicit-retry-loads-original-result.png",
+    "05-english-tool-read-failure-page-online.png",
+    "06-english-connected-path-restored-error-retained.png",
+    "07-english-explicit-retry-loads-original-result.png",
+    "08-after-chinese-read-summary-and-original-note-entry.png",
+    "09-after-original-read-note-remains-verbatim.png",
+    "10-after-connected-new-summary-error-awaits-click.png",
+    "11-after-new-build-explicit-retry-restores-original-result.png",
+    "12-after-english-read-summary-and-original-note-entry.png",
+    "13-after-english-original-read-note-expanded.png",
+    "14-after-english-partial-window-and-original-offset-note.png",
+    "15-after-chinese-partial-window-original-note-open.png",
+    "16-after-chinese-partial-window-original-note-collapsed.png",
+    "17-after-reload-partial-summary-and-original-note.png",
+    "18-after-original-eight-file-review-and-line-counts.png",
+    "19-after-reloaded-read-summary-and-question-count.png",
+    "20-after-four-question-count-and-four-real-answers.png"
+  ],
+  "businessCheckerCheckpoints": 36,
+  "priorRenameFactCheckpoints": 3,
+  "priorPartialAnswerFactCheckpoints": 3,
+  "priorClosedChoiceFactCheckpoints": 6,
+  "explicitSuccessfulRetries": [
+    {
+      "phase": "before",
+      "locale": "chinese",
+      "sessionID": "ses_-zUPyaHZAzzslSCcfE2O",
+      "messageID": "msg_g0Va1PogM00ClveH68NJ",
+      "partID": "prt_g0Va1PpaX00nNtJq065x",
+      "click": {
+        "startedAt": 1793863870192,
+        "endedAt": 1793863870247,
+        "action": "Actual Retry button click on the existing online page"
+      },
+      "proxyRequestAt": 1793863870232,
+      "nativeRequestAt": "2026-11-05T07:31:10.234Z",
+      "status": 200,
+      "responseBytes": 8325,
+      "originalInputOutputAnswersExact": true
+    },
+    {
+      "phase": "before",
+      "locale": "english",
+      "sessionID": "ses_-zUPyaHZAzzslSCcfE2O",
+      "messageID": "msg_g0Va1PogM00ClveH68NJ",
+      "partID": "prt_g0Va1PpaX00nNtJq065x",
+      "click": {
+        "startedAt": 1793864372587,
+        "endedAt": 1793864372635,
+        "action": "Actual Retry button click on the existing online English page"
+      },
+      "proxyRequestAt": 1793864372623,
+      "nativeRequestAt": "2026-11-05T07:39:32.624Z",
+      "status": 200,
+      "responseBytes": 8325,
+      "originalInputOutputAnswersExact": true
+    },
+    {
+      "phase": "after",
+      "locale": "chinese",
+      "sessionID": "ses_-zUPyaHZAzzslSCcfE2O",
+      "messageID": "msg_g0Va1PogM00ClveH68NJ",
+      "partID": "prt_g0Va1PpaX00nNtJq065x",
+      "click": {
+        "startedAt": 1793865034934,
+        "endedAt": 1793865034984,
+        "action": "Actual Retry click in the new localized read-summary build"
+      },
+      "proxyRequestAt": 1793865034971,
+      "nativeRequestAt": "2026-11-05T07:50:34.973Z",
+      "status": 200,
+      "responseBytes": 8325,
+      "originalInputOutputAnswersExact": true
+    }
+  ],
+  "scope": {
+    "readSummaryUsesExistingProducerFacts": true,
+    "sameFormatterForToolHeaderAndBody": true,
+    "originalNoteAvailableInExistingLosslessPayload": true,
+    "readNoteViewKeyUsesCanonicalPartIdentity": true,
+    "localizedCompleteAndPartialReadSummaries": true,
+    "originalFileContentAndNotesPreserved": true,
+    "ownReloadAndNoteExpandCollapse": true,
+    "originalFourQuestionsFourAnswersAndEightFileReview56Added0Deleted8Of8": true,
+    "localeFieldsPerLanguage": 2
+  },
+  "transportQualification": {
+    "faultWasManualPhysicalConnectionCut": true,
+    "onlyOriginalQuestionGetInterrupted": true,
+    "otherRequestsForwardedToRealNativeService": true,
+    "originalOnlinePageRetainedErrorBeforeClick": true,
+    "originalResultWasNotReexecuted": true,
+    "noSyntheticResultBodies": true,
+    "proxiesOwnedStopped": true,
+    "proxyCredentialCopies": 0
+  },
+  "limitations": [
+    "Instantaneous loading/disabled states were not captured.",
+    "No current empty-text read or byte-capped sample was separately visually verified; actual partial text window was verified.",
+    "Clipboard transmission, independent Task/Side Chat views and every tool kind were not independently exercised.",
+    "BrowserEvidenceImage has no stored metadata.browser sample in the source, so that separate code lead was not changed or claimed as reproduced.",
+    "No backend, API, SDK, schema, migration, persistent business format, reply or scheduling change."
+  ]
+}

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [工具结果恢复与读取说明](2026-11-05-tool-result-online-retry.md)：在线按钮恢复与原读取说明。
+
 - [来源列表阅读核验](2026-11-05-source-title-reading.md)：来源语义与完整身份的实际体验。
 
 - [首页示例与草稿](2026-11-05-home-example-draft.md)：替换意图、取消、确认及持续目标预填。

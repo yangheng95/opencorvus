@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [工具结果恢复与读取说明](records/2026-11/2026-11-05-tool-result-online-retry.md)：显式重试验收与本地化读取范围。
+
 - [来源列表阅读核验](records/2026-11/2026-11-05-source-title-reading.md)：真实来源、标题和文件阅读入口。
 
 - [首页示例与草稿](records/2026-11/2026-11-05-home-example-draft.md)：已有未发送内容时的示例操作。
