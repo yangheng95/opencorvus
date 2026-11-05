@@ -1,0 +1,42 @@
+{
+  "after": {
+    "observedAt": "2026-11-05T05:32:08.7179222Z",
+    "temporaryRootExists": false,
+    "ownedProcesses": [],
+    "listeners": []
+  },
+  "scope": "Exact owned executable directory, ephemeral listener and temporary root; independent physical readback",
+  "before": {
+    "processes": [
+      {
+        "ProcessId": 9612,
+        "CreationDate": "2026-11-05T13:30:17.494186+08:00",
+        "ExecutablePath": "D:\\myhexin-local\\opencorvus\\.scratch\\release-0.1.45\\published-cli\\extracted\\opencorvus-process-supervisor.exe"
+      },
+      {
+        "ProcessId": 7140,
+        "CreationDate": "2026-11-05T13:30:17.509603+08:00",
+        "ExecutablePath": "D:\\myhexin-local\\opencorvus\\.scratch\\release-0.1.45\\published-cli\\extracted\\opencorvus.exe"
+      }
+    ],
+    "runtime": {
+      "version": "0.1.45",
+      "source": "a5a26c974d841fd59d232c3585ed064a6a127f59",
+      "executable": "D:\\myhexin-local\\opencorvus\\.scratch\\release-0.1.45\\published-cli\\extracted\\opencorvus.exe",
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-release45-gRQI1B",
+      "url": "http://127.0.0.1:49473",
+      "startedAt": "2026-11-05T05:30:15.132Z",
+      "deadlineAt": "2026-11-05T05:35:15.132Z",
+      "credentialsTransferred": false,
+      "manualReview": "Bundled settings changelog only; no model conversation initiated; Provider request transport was not instrumented"
+    },
+    "observedAt": "2026-11-05T05:30:53.6624485Z",
+    "listeners": [
+      {
+        "LocalAddress": "127.0.0.1",
+        "LocalPort": 49473,
+        "OwningProcess": 7140
+      }
+    ]
+  }
+}

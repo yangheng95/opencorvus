@@ -1,0 +1,22 @@
+{
+  "version": "0.1.45",
+  "source": "a5a26c974d841fd59d232c3585ed064a6a127f59",
+  "reviewedAt": "2026-11-05T05:35:37.195487+00:00",
+  "method": "Actual page interactions and viewed screenshots; no UI automation tests or DOM assertions",
+  "publishedWindowsArchive": "opencorvus-windows-x64-baseline.tar.gz",
+  "settings": "Actual public executable reports 0.1.45; English and Simplified Chinese current-version/date, Added/Changed/Fixed and all upgrade limitations visually reviewed",
+  "website": "Exact paired deployment completed; Chinese and English full notes visually reviewed, including new-read-only excerpts, SDK snapshot qualification, unverified separate online retry click and macOS ad hoc signing; final download button shows Windows x64 EXE 0.1.45",
+  "screenshots": [
+    "01-published-settings-en.png",
+    "02-published-settings-en-continued.png",
+    "03-published-settings-en-limits.png",
+    "04-published-settings-zh.png",
+    "05-published-settings-zh-continued.png",
+    "06-published-settings-zh-limits.png",
+    "07-published-web-zh.png",
+    "08-published-web-en.png",
+    "09-published-download.png"
+  ],
+  "runtime": "Owned empty instance, no credentials transferred or model conversation initiated; graceful shutdown/SDK close and independent process, listener, temporary-root retirement verified",
+  "scope": "Release-note distribution and download presentation; not all product workflows or models"
+}

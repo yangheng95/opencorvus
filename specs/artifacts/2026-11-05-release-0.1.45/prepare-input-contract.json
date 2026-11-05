@@ -1,11 +1,11 @@
 {
-  "source": "14f646608407bcf4accdf9cdfb7f9531bf85590d",
-  "verifiedAt": "2026-11-05T04:29:43.925Z",
+  "source": "a5a26c974d841fd59d232c3585ed064a6a127f59",
+  "verifiedAt": "2026-11-05T04:38:02.158Z",
   "checker": "Real Git sparse-checkout check-rules, current generated artifact registry and every current product/config/document input",
   "rules": "/*\n!/specs/artifacts/\n",
-  "requiredProductFiles": 7058,
-  "selectedFiles": 7058,
-  "selectedUncompressedBytes": 174113683,
+  "requiredProductFiles": 7060,
+  "selectedFiles": 7060,
+  "selectedUncompressedBytes": 174142869,
   "generated": [
     {
       "path": "packages/sdk/openapi.json",

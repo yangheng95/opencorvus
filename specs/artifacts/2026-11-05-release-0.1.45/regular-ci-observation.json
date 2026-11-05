@@ -1,0 +1,58 @@
+{
+  "observedAt": "2026-11-05T05:35:37.195487+00:00",
+  "runID": 41969153797,
+  "source": "a5a26c974d841fd59d232c3585ed064a6a127f59",
+  "conclusion": "cancelled",
+  "completedAt": "2026-11-05T05:32:51Z",
+  "jobs": [
+    {
+      "id": 127053077657,
+      "name": "changes",
+      "conclusion": "success"
+    },
+    {
+      "id": 127053079023,
+      "name": "dependency review",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 127053458497,
+      "name": "verify",
+      "conclusion": "success"
+    },
+    {
+      "id": 127053458579,
+      "name": "dependency audit",
+      "conclusion": "success"
+    },
+    {
+      "id": 127055013854,
+      "name": "service tests",
+      "conclusion": "success"
+    },
+    {
+      "id": 127055014344,
+      "name": "unit (windows)",
+      "conclusion": "cancelled"
+    },
+    {
+      "id": 127055014786,
+      "name": "unit (macos)",
+      "conclusion": "cancelled"
+    },
+    {
+      "id": 127055014916,
+      "name": "unit (linux)",
+      "conclusion": "cancelled"
+    },
+    {
+      "id": 127070664315,
+      "name": "CI passed",
+      "conclusion": "failure"
+    }
+  ],
+  "linuxTerminalEvidence": [
+    "2026-11-05T05:32:35.5747802Z ##[error]The operation was canceled."
+  ],
+  "qualification": "Separate automatic full-unit CI was canceled with three unit jobs canceled and its aggregate guard failing. Not counted as passed. Existing per-platform main-ref concurrency permits replacement; exact cancellation requester is unknown. Canonical native release and its exact paired website both passed."
+}

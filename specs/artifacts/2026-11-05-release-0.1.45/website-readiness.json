@@ -1,0 +1,18 @@
+{
+  "source": "a5a26c974d841fd59d232c3585ed064a6a127f59",
+  "runID": 41969153778,
+  "createdAt": "2026-11-05T04:39:27Z",
+  "completedAt": "2026-11-05T04:45:18Z",
+  "elapsedSeconds": 351.0,
+  "successes": 8,
+  "buildJobID": 127053241441,
+  "actualCheckout": {
+    "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+    "status": "completed",
+    "conclusion": "success",
+    "number": 2,
+    "started_at": "2026-11-05T04:40:02Z",
+    "completed_at": "2026-11-05T04:40:12Z"
+  },
+  "scope": "Real preparation website generated fixed-point, configuration, archive, database and signed deployment; not canonical native release publication"
+}

@@ -1,0 +1,24 @@
+{
+  "source": "a5a26c974d841fd59d232c3585ed064a6a127f59",
+  "nativeRunID": 41971482286,
+  "prepareJobID": 127060536777,
+  "prepareStartedAt": "2026-11-05T05:02:41Z",
+  "prepareCompletedAt": "2026-11-05T05:03:55Z",
+  "actualCheckout": {
+    "name": "Run actions/checkout@v6",
+    "status": "completed",
+    "conclusion": "success",
+    "number": 2,
+    "started_at": "2026-11-05T05:02:42Z",
+    "completed_at": "2026-11-05T05:02:52Z"
+  },
+  "fixedPoint": {
+    "name": "Verify generated repository fixed point",
+    "status": "completed",
+    "conclusion": "success",
+    "number": 12,
+    "started_at": "2026-11-05T05:03:22Z",
+    "completed_at": "2026-11-05T05:03:47Z"
+  },
+  "scope": "Actual canonical prepare retained all original gates and passed generation/fixed-point after sparse product/document checkout; old 8-minute prepare and original 60-minute release budget retained"
+}

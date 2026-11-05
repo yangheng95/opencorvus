@@ -1,0 +1,24 @@
+{
+  "source": "a5a26c974d841fd59d232c3585ed064a6a127f59",
+  "runID": 41969204635,
+  "createdAt": "2026-11-05T04:39:58Z",
+  "completedAt": "2026-11-05T04:58:35Z",
+  "elapsedSeconds": 1117.0,
+  "jobs": {
+    "success": 2,
+    "skipped": 2
+  },
+  "actualCache": {
+    "createdAt": "2026-11-05T04:58:29.786018Z",
+    "id": 10039801358,
+    "key": "v0-rust-build-Darwin-x64-825c9b43-e83e704d",
+    "lastAccessedAt": "2026-11-05T04:58:29.786018Z",
+    "sizeInBytes": 479237471
+  },
+  "qualification": [
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-11-05T04:46:41.6829530Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-11-05T04:55:49.1917240Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 8m 48s",
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-11-05T04:56:49.3102060Z Overlay assets validated for darwin-x64"
+  ],
+  "scope": "Real Intel debug build and first-run/restart; no Release/tag, no actual model requests; formal frozen source must rebuild"
+}
