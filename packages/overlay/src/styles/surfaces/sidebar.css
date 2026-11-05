@@ -839,15 +839,28 @@ body .sidebar-header.oc-surface-header {
 }
 
 .project-group-parent {
-  display: none;
+  display: block;
   font-size: var(--ui-font-caption);
   color: color-mix(in srgb, var(--text-muted) 92%, var(--text-soft));
-  opacity: var(--ui-opacity-subtle);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: var(--ui-line-height-tight);
+  white-space: normal;
+  overflow-wrap: anywhere;
   min-width: 0;
-  flex: 1 1 auto;
+}
+
+.project-group[data-directory-hint="true"] .project-group-head {
+  height: auto;
+  align-items: start;
+}
+
+.project-group[data-directory-hint="true"] .oc-button[data-ui="project-group-select"] {
+  height: auto;
+  padding-block: var(--ui-gap-xs);
+}
+
+.project-group[data-directory-hint="true"] .project-group-copy {
+  display: grid;
+  gap: var(--ui-gap-3xs);
 }
 
 .project-group-count {

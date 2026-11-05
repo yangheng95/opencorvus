@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [侧栏重名项目目录上下文](records/2026-11/2026-11-05-project-name-context.md)：可见区分同名项目。
+
 - [提问选择与清空答案体验](records/2026-11/2026-11-05-question-answer-reset.md)：真实原生选择、撤回答案和题数。
 
 - [0.1.46发布](records/2026-11/2026-11-05-release-0.1.46.md)：设置、提问、草稿与来源阅读的五平台公开交付。

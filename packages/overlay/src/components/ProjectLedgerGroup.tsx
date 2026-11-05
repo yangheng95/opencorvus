@@ -20,6 +20,7 @@ export interface ProjectLedgerGroupProps {
   onToggle: () => void
   onSelectProject: (directory: string) => void | Promise<void>
   projectName?: string
+  directoryHint?: string
   pinned?: boolean
   onPinnedChange?: (pinned: boolean) => void | Promise<void>
   onCreateChat?: (directory: string) => void | Promise<void>
@@ -125,18 +126,14 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
       if (ownsAction()) setBusy(false)
     }
   }
-  const directoryLabel = () => projectDirectoryLabel(props.directory, t("task.project.unknown"))
-  const label = () => {
-    const directoryDefaults = directoryLabel()
-    return {
-      ...directoryDefaults,
-      name: projectDisplayName({
-        directory: props.directory,
-        customName: props.projectName,
-        unknownName: t("task.project.unknown"),
-      }),
-    }
-  }
+  const label = () => ({
+    name: projectDisplayName({
+      directory: props.directory,
+      customName: props.projectName,
+      unknownName: t("task.project.unknown"),
+    }),
+  })
+  const accessibleName = () => [label().name, props.directoryHint].filter(Boolean).join(" · ")
   const className = () => ["project-group", props.class].filter(Boolean).join(" ")
   const countText = () => new Intl.NumberFormat(localeTag()).format(props.count)
   const tooltipDirectory = () => props.directory.trim()
@@ -160,6 +157,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
       data-collapsed={props.collapsed ? "true" : undefined}
       data-project-directory={props.directory}
       data-project-actions={hasProjectActions() ? "true" : undefined}
+      data-directory-hint={props.directoryHint ? "true" : undefined}
     >
       <div ref={groupHeadRef} class="project-group-head oc-navigation-row" data-density="compact">
         <Button
@@ -170,8 +168,8 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
           data-ui="project-group-toggle"
           aria-expanded={props.collapsed ? "false" : "true"}
           aria-controls={props.collapsed ? undefined : bodyElementID()}
-          aria-label={t(props.collapsed ? "task.project.expand" : "task.project.collapse", { name: label().name })}
-          title={t(props.collapsed ? "task.project.expand" : "task.project.collapse", { name: label().name })}
+          aria-label={t(props.collapsed ? "task.project.expand" : "task.project.collapse", { name: accessibleName() })}
+          title={t(props.collapsed ? "task.project.expand" : "task.project.collapse", { name: accessibleName() })}
           onClick={() => {
             if (!busy()) props.onToggle()
           }}
@@ -196,13 +194,13 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
             size="mini"
             tone="neutral"
             data-ui="project-group-select"
-            aria-label={`${t("work_ledger.open_project")}: ${label().name}`}
+            aria-label={`${t("work_ledger.open_project")}: ${accessibleName()}`}
             onClick={() => void runProjectAction(`select:${props.directory}`, () => props.onSelectProject(props.directory))}
           >
             <span class="project-group-copy">
               <span class="project-group-name">{label().name}</span>
-              <Show when={label().parent}>
-                <span class="project-group-parent">{label().parent}</span>
+              <Show when={props.directoryHint}>
+                <span class="project-group-parent">{props.directoryHint}</span>
               </Show>
             </span>
             <span class="project-group-count" aria-label={t("task.project.count", { count: countText() })}>

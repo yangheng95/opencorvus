@@ -3466,6 +3466,14 @@ existing directory suffix. Original names, IDs, directory hints and search data
 remain canonical; generic homepage names retain their own display contract.
 Explicitly pinned named Projects remain complete groups in the separate `Pinned`
 section and are omitted from Projects exactly once.
+The sidebar derives duplicate-name directory context from all canonical groups,
+including pinned Projects. Only duplicate display names show the shortest real
+directory suffix that distinguishes them; a shared folder name uses parent
+context. This reactive presentation follows renames and pin relocation without
+changing names, directory identity, ordering, or command-palette labels. Context
+wraps below the name and participates in navigation/disclosure accessible names;
+the full real directory remains in the existing summary tooltip. Rename fields
+continue to receive the original Project name.
 Each Project header has separate disclosure and navigation buttons. Its arrow
 changes only the existing group visibility; its name opens the Project through
 the original selection action. Project action dialogs, pin relocation and Project

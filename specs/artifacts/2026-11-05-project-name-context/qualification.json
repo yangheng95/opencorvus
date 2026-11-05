@@ -1,0 +1,860 @@
+{
+  "at": "2026-11-05T12:17:06.065Z",
+  "scope": "Duplicate Project names in canonical Work Ledger",
+  "status": "real-page-verified",
+  "uiOnly": true,
+  "phases": [
+    {
+      "phase": "before",
+      "port": 38777,
+      "uiEntry": "main-Dd92rGWc.js",
+      "originalNativeExit": 0,
+      "qualification": {
+        "at": "2026-11-05T12:00:07.250Z",
+        "kind": "before",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 306880,
+        "current": 306882,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 62391,
+            "after": 62392
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 62333,
+            "after": 62334
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 297,
+        "projects": 124,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1452,
+        "reserveMs": 4238699,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-Dd92rGWc.js"
+      },
+      "publicShutdown": 200,
+      "pairedCopiesRetired": 2
+    },
+    {
+      "phase": "after",
+      "port": 38778,
+      "uiEntry": "main-DNpGIHMh.js",
+      "originalNativeExit": 0,
+      "qualification": {
+        "at": "2026-11-05T12:03:53.933Z",
+        "kind": "after",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 306882,
+        "current": 306884,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 62392,
+            "after": 62393
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 62334,
+            "after": 62335
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 297,
+        "projects": 124,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1452,
+        "reserveMs": 3994773,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-DNpGIHMh.js"
+      },
+      "publicShutdown": 200,
+      "pairedCopiesRetired": 2
+    },
+    {
+      "phase": "final",
+      "port": 38779,
+      "uiEntry": "main-CR5ehKzG.js",
+      "originalNativeExit": 0,
+      "qualification": {
+        "at": "2026-11-05T12:15:06.425Z",
+        "kind": "final",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 306884,
+        "current": 306895,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 62393,
+            "after": 62394
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 62335,
+            "after": 62336
+          },
+          {
+            "table": "memory_chunk",
+            "before": 120,
+            "after": 123
+          },
+          {
+            "table": "memory_file",
+            "before": 120,
+            "after": 123
+          },
+          {
+            "table": "project",
+            "before": 124,
+            "after": 127
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 297,
+        "projects": 124,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1452,
+        "reserveMs": 3324321,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-CR5ehKzG.js"
+      },
+      "publicShutdown": 200,
+      "pairedCopiesRetired": 2
+    }
+  ],
+  "checksPassed": [
+    "typecheck",
+    "typecheck-final",
+    "ui-build-after",
+    "ui-build-final",
+    "routes",
+    "architecture"
+  ],
+  "manuallyReviewedScreenshots": [
+    "01-before-ambiguous-projects.png",
+    "02-after-existing-directory-context.png",
+    "03-final-english-no-overlap.png",
+    "04-final-chinese-original-project-open.png",
+    "05-final-custom-name-collision.png",
+    "06-final-custom-collision-settled.png",
+    "07-final-pinned-context-shared.png",
+    "08-final-keyboard-collapse-keeps-context.png",
+    "09-final-narrow-208-context-wraps.png",
+    "10-final-rename-keeps-original-name.png",
+    "11-final-rename-removes-only-unneeded-context.png",
+    "12-final-wide-304-keyboard-navigation.png",
+    "13-final-real-file-confirms-project-b.png",
+    "14-final-reloaded-chinese-project-context.png"
+  ],
+  "finalStableScreenshots": [
+    "03-final-english-no-overlap.png",
+    "04-final-chinese-original-project-open.png",
+    "06-final-custom-collision-settled.png",
+    "07-final-pinned-context-shared.png",
+    "08-final-keyboard-collapse-keeps-context.png",
+    "09-final-narrow-208-context-wraps.png",
+    "10-final-rename-keeps-original-name.png",
+    "11-final-rename-removes-only-unneeded-context.png",
+    "12-final-wide-304-keyboard-navigation.png",
+    "13-final-real-file-confirms-project-b.png",
+    "14-final-reloaded-chinese-project-context.png"
+  ],
+  "intermediateEvidence": {
+    "01": "Ambiguous baseline",
+    "02": "Failed first layout; compact header24px caused overlap",
+    "05": "Rename request pending; settled result in06"
+  },
+  "manualObservations": [
+    "Same basename with matching last two parent levels distinguished by real ancestor",
+    "Custom name collision updates all peers",
+    "Pinned and ordinary groups share context",
+    "Keyboard collapse and expand preserve context and current project",
+    "208px and304px desktop sidebar wrap context",
+    "Rename value contains original name only and returns focus",
+    "Unique name retains compact header",
+    "Keyboard opened project B; actual README B and full real directory inspected",
+    "Chinese and English controls follow current locale; real directory identities retain original text",
+    "Own reload retains canonical names, context and304px sidebar"
+  ],
+  "newProjectChecks": [
+    {
+      "checkpoint": "pinned",
+      "modelRequests": 0,
+      "projects": [
+        {
+          "case": "A",
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "name": null,
+          "pinned": 1793880474267,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        },
+        {
+          "case": "B",
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "name": null,
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        },
+        {
+          "case": "C",
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "name": "同名项目",
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        }
+      ]
+    },
+    {
+      "checkpoint": "finished",
+      "modelRequests": 0,
+      "projects": [
+        {
+          "case": "A",
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "name": null,
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        },
+        {
+          "case": "B",
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "name": null,
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        },
+        {
+          "case": "C",
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "name": "独立资料",
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        }
+      ]
+    },
+    {
+      "checkpoint": "reloaded",
+      "modelRequests": 0,
+      "projects": [
+        {
+          "case": "A",
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "name": null,
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        },
+        {
+          "case": "B",
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "name": null,
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        },
+        {
+          "case": "C",
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "name": "独立资料",
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        }
+      ]
+    }
+  ],
+  "originalQuestionReceipts": [
+    {
+      "phase": "before",
+      "file": "before-finished-after-choice-private.json",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "file": "before-finished-after-prior-answer-private.json",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "file": "before-finished-before-answer-private.json",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "file": "before-finished-before-choice-private.json",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        1,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "file": "before-finished-before-prior-answer-private.json",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "file": "before-finished-partial-private.json",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-after-choice-private.json",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-after-prior-answer-private.json",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-after-prior-reset-private.json",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-before-choice-private.json",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        1,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-before-prior-answer-private.json",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-before-prior-reset-private.json",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-partial-private.json",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "final",
+      "file": "final-finished-after-choice-private.json",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "final",
+      "file": "final-finished-after-prior-answer-private.json",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "final",
+      "file": "final-finished-after-prior-reset-private.json",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "final",
+      "file": "final-finished-before-choice-private.json",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        1,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "final",
+      "file": "final-finished-before-prior-answer-private.json",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "final",
+      "file": "final-finished-before-prior-reset-private.json",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "final",
+      "file": "final-finished-partial-private.json",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    }
+  ],
+  "originalFileChangeReceipts": [
+    {
+      "phase": "before",
+      "sessionID": "ses_-zUPxA3vfzzX0tJ3NU3o",
+      "files": [
+        {
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md",
+          "relativePath": "draft/原始方案.md",
+          "type": "update",
+          "diff": "Index: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n===================================================================\n--- C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n+++ C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n@@ -1,11 +1,13 @@\n # 客户方案936\n \n-状态：草稿\n+状态：待确认\n 客户编号：C-936\n 联系人：林岚\n 截止日期：2026-11-15\n \n ## 行动\n \n - A-01：核对材料\n - A-02：确认排期\n+\n+初审完成\n",
+          "before": "# 客户方案936\n\n状态：草稿\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n",
+          "after": "# 客户方案936\n\n状态：待确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n",
+          "additions": 3,
+          "deletions": 1
+        },
+        {
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md",
+          "relativePath": "deliverables/客户方案（已确认）.md",
+          "type": "move",
+          "diff": "Index: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n===================================================================\n--- C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n+++ C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n@@ -1,7 +1,7 @@\n # 客户方案936\n \n-状态：待确认\n+状态：已确认\n 客户编号：C-936\n 联系人：林岚\n 截止日期：2026-11-15\n \n@@ -10,4 +10,6 @@\n - A-01：核对材料\n - A-02：确认排期\n \n 初审完成\n+\n+交付说明：本地整理936；原字段保持。\n",
+          "before": "# 客户方案936\n\n状态：待确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n",
+          "after": "# 客户方案936\n\n状态：已确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n\n交付说明：本地整理936；原字段保持。\n",
+          "additions": 3,
+          "deletions": 1,
+          "movePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\deliverables\\客户方案（已确认）.md"
+        },
+        {
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md",
+          "relativePath": "draft/临时记录.md",
+          "type": "delete",
+          "diff": "Index: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md\n===================================================================\n--- C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md\n+++ C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md\n@@ -1,1 +0,0 @@\n-临时标记936：这份仅用于本地整理的记录可按简报删除。\n",
+          "before": "临时标记936：这份仅用于本地整理的记录可按简报删除。\n",
+          "after": "",
+          "additions": 0,
+          "deletions": 1
+        }
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "fileContracts": [
+        {
+          "path": "deliverables/客户方案（已确认）.md",
+          "status": 200,
+          "body": {
+            "type": "text",
+            "content": "# 客户方案936\n\n状态：已确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n\n交付说明：本地整理936；原字段保持。\n",
+            "revision": "8bd3a57c38bbea055a0f8e54a581136141a8d756d4a069fcff568e55d944a248"
+          }
+        },
+        {
+          "path": "draft/原始方案.md",
+          "status": 404,
+          "body": {
+            "name": "FileNotFoundError",
+            "data": {
+              "path": "draft/原始方案.md",
+              "message": "File entry not found: draft/原始方案.md"
+            }
+          }
+        },
+        {
+          "path": "draft/临时记录.md",
+          "status": 404,
+          "body": {
+            "name": "FileNotFoundError",
+            "data": {
+              "path": "draft/临时记录.md",
+              "message": "File entry not found: draft/临时记录.md"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "sessionID": "ses_-zUPxA3vfzzX0tJ3NU3o",
+      "files": [
+        {
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md",
+          "relativePath": "draft/原始方案.md",
+          "type": "update",
+          "diff": "Index: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n===================================================================\n--- C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n+++ C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n@@ -1,11 +1,13 @@\n # 客户方案936\n \n-状态：草稿\n+状态：待确认\n 客户编号：C-936\n 联系人：林岚\n 截止日期：2026-11-15\n \n ## 行动\n \n - A-01：核对材料\n - A-02：确认排期\n+\n+初审完成\n",
+          "before": "# 客户方案936\n\n状态：草稿\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n",
+          "after": "# 客户方案936\n\n状态：待确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n",
+          "additions": 3,
+          "deletions": 1
+        },
+        {
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md",
+          "relativePath": "deliverables/客户方案（已确认）.md",
+          "type": "move",
+          "diff": "Index: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n===================================================================\n--- C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n+++ C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n@@ -1,7 +1,7 @@\n # 客户方案936\n \n-状态：待确认\n+状态：已确认\n 客户编号：C-936\n 联系人：林岚\n 截止日期：2026-11-15\n \n@@ -10,4 +10,6 @@\n - A-01：核对材料\n - A-02：确认排期\n \n 初审完成\n+\n+交付说明：本地整理936；原字段保持。\n",
+          "before": "# 客户方案936\n\n状态：待确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n",
+          "after": "# 客户方案936\n\n状态：已确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n\n交付说明：本地整理936；原字段保持。\n",
+          "additions": 3,
+          "deletions": 1,
+          "movePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\deliverables\\客户方案（已确认）.md"
+        },
+        {
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md",
+          "relativePath": "draft/临时记录.md",
+          "type": "delete",
+          "diff": "Index: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md\n===================================================================\n--- C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md\n+++ C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md\n@@ -1,1 +0,0 @@\n-临时标记936：这份仅用于本地整理的记录可按简报删除。\n",
+          "before": "临时标记936：这份仅用于本地整理的记录可按简报删除。\n",
+          "after": "",
+          "additions": 0,
+          "deletions": 1
+        }
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "fileContracts": [
+        {
+          "path": "deliverables/客户方案（已确认）.md",
+          "status": 200,
+          "body": {
+            "type": "text",
+            "content": "# 客户方案936\n\n状态：已确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n\n交付说明：本地整理936；原字段保持。\n",
+            "revision": "8bd3a57c38bbea055a0f8e54a581136141a8d756d4a069fcff568e55d944a248"
+          }
+        },
+        {
+          "path": "draft/原始方案.md",
+          "status": 404,
+          "body": {
+            "name": "FileNotFoundError",
+            "data": {
+              "path": "draft/原始方案.md",
+              "message": "File entry not found: draft/原始方案.md"
+            }
+          }
+        },
+        {
+          "path": "draft/临时记录.md",
+          "status": 404,
+          "body": {
+            "name": "FileNotFoundError",
+            "data": {
+              "path": "draft/临时记录.md",
+              "message": "File entry not found: draft/临时记录.md"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "sessionID": "ses_-zUPxA3vfzzX0tJ3NU3o",
+      "files": [
+        {
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md",
+          "relativePath": "draft/原始方案.md",
+          "type": "update",
+          "diff": "Index: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n===================================================================\n--- C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n+++ C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n@@ -1,11 +1,13 @@\n # 客户方案936\n \n-状态：草稿\n+状态：待确认\n 客户编号：C-936\n 联系人：林岚\n 截止日期：2026-11-15\n \n ## 行动\n \n - A-01：核对材料\n - A-02：确认排期\n+\n+初审完成\n",
+          "before": "# 客户方案936\n\n状态：草稿\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n",
+          "after": "# 客户方案936\n\n状态：待确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n",
+          "additions": 3,
+          "deletions": 1
+        },
+        {
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md",
+          "relativePath": "deliverables/客户方案（已确认）.md",
+          "type": "move",
+          "diff": "Index: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n===================================================================\n--- C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n+++ C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\原始方案.md\n@@ -1,7 +1,7 @@\n # 客户方案936\n \n-状态：待确认\n+状态：已确认\n 客户编号：C-936\n 联系人：林岚\n 截止日期：2026-11-15\n \n@@ -10,4 +10,6 @@\n - A-01：核对材料\n - A-02：确认排期\n \n 初审完成\n+\n+交付说明：本地整理936；原字段保持。\n",
+          "before": "# 客户方案936\n\n状态：待确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n",
+          "after": "# 客户方案936\n\n状态：已确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n\n交付说明：本地整理936；原字段保持。\n",
+          "additions": 3,
+          "deletions": 1,
+          "movePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\deliverables\\客户方案（已确认）.md"
+        },
+        {
+          "filePath": "C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md",
+          "relativePath": "draft/临时记录.md",
+          "type": "delete",
+          "diff": "Index: C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md\n===================================================================\n--- C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md\n+++ C:\\Users\\hengu\\.codex\\opencorvus-product-iteration\\2026-11-05\\renamed-review-target-936-before\\rename-review-project\\draft\\临时记录.md\n@@ -1,1 +0,0 @@\n-临时标记936：这份仅用于本地整理的记录可按简报删除。\n",
+          "before": "临时标记936：这份仅用于本地整理的记录可按简报删除。\n",
+          "after": "",
+          "additions": 0,
+          "deletions": 1
+        }
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "fileContracts": [
+        {
+          "path": "deliverables/客户方案（已确认）.md",
+          "status": 200,
+          "body": {
+            "type": "text",
+            "content": "# 客户方案936\n\n状态：已确认\n客户编号：C-936\n联系人：林岚\n截止日期：2026-11-15\n\n## 行动\n\n- A-01：核对材料\n- A-02：确认排期\n\n初审完成\n\n交付说明：本地整理936；原字段保持。\n",
+            "revision": "8bd3a57c38bbea055a0f8e54a581136141a8d756d4a069fcff568e55d944a248"
+          }
+        },
+        {
+          "path": "draft/原始方案.md",
+          "status": 404,
+          "body": {
+            "name": "FileNotFoundError",
+            "data": {
+              "path": "draft/原始方案.md",
+              "message": "File entry not found: draft/原始方案.md"
+            }
+          }
+        },
+        {
+          "path": "draft/临时记录.md",
+          "status": 404,
+          "body": {
+            "name": "FileNotFoundError",
+            "data": {
+              "path": "draft/临时记录.md",
+              "message": "File entry not found: draft/临时记录.md"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "initialBusinessCheckpoints": 27,
+  "finalBusinessCheckpoints": 27,
+  "originalReplyCheckerCounts": {
+    "before": 7,
+    "after": 8,
+    "final": 8
+  },
+  "correctedPrivateCheckerFailure": "Immutable953 reference filename restored; original eight checkers rerun successfully in after and final. Before eighth receipt is not claimed.",
+  "actualModelRequests": 0,
+  "cumulativeModelRequests": 1452,
+  "pairedCopiesRetired": 6,
+  "originalNativeHandlesExitedZero": 3,
+  "protectedSourceProjects": 124,
+  "protectedSourceAttachments": 297,
+  "newRealProjects": 3,
+  "finalProjects": 127,
+  "finalRows": 306895,
+  "schema": 10,
+  "tables": 92,
+  "userWindowAnd18571Untouched": true,
+  "boundaries": [
+    "Windows desktop only; no actual POSIX/macOS path acceptance",
+    "No new model start/continue acceptance in this UI-only batch",
+    "Command palette and one-list labels unchanged",
+    "No claim that all product UI issues are fixed",
+    "This main change is outside the frozen0.1.46 installer"
+  ]
+}
