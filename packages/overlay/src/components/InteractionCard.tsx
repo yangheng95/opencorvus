@@ -177,9 +177,7 @@ export function InteractionCard(props: InteractionCardProps) {
         ? current.includes(value)
           ? current.filter((candidate) => candidate !== value)
           : [...current, value]
-        : current.includes(value)
-          ? []
-          : [value]
+        : [value]
       return { ...prev, selected: next }
     })
   }
@@ -189,6 +187,16 @@ export function InteractionCard(props: InteractionCardProps) {
       const next = [...prev.customText]
       next[qIdx] = value
       return { ...prev, customText: next }
+    })
+  }
+
+  function clearAnswer(qIdx: number) {
+    draftOwner()?.write((prev) => {
+      const selected = [...prev.selected]
+      const customText = [...prev.customText]
+      selected[qIdx] = []
+      customText[qIdx] = ""
+      return { ...prev, selected, customText }
     })
   }
 
@@ -292,6 +300,7 @@ export function InteractionCard(props: InteractionCardProps) {
           <div class="interaction-card__questions">
             <For each={questions()}>
               {(q, qIdx) => {
+                let questionElement: HTMLFieldSetElement | undefined
                 const multi = q.multiple === true
                 const allowCustom = q.custom !== false
                 const opts = Array.isArray(q.options) ? q.options : []
@@ -302,6 +311,7 @@ export function InteractionCard(props: InteractionCardProps) {
                     class="interaction-card__question"
                     aria-labelledby={questionID()}
                     aria-describedby={opts.length > 0 ? `${questionID()}-mode` : undefined}
+                    ref={questionElement}
                   >
                     <legend id={questionID()} class="interaction-card__question-text">
                       <span class="interaction-card__question-position">
@@ -384,6 +394,26 @@ export function InteractionCard(props: InteractionCardProps) {
                         value={customText()[qIdx()] ?? ""}
                         onInput={(event) => setCustomAt(qIdx(), event.currentTarget.value)}
                       />
+                    </Show>
+                    <Show when={getSelected(qIdx()).length > 0 || !!customText()[qIdx()]}>
+                      <Button
+                        type="button"
+                        class="interaction-card__clear"
+                        variant="ghost"
+                        size="sm"
+                        tone="neutral"
+                        title={t("interaction.clear_answer_title")}
+                        disabled={busy()}
+                        onClick={() => {
+                          clearAnswer(qIdx())
+                          const input = questionElement?.querySelector<HTMLInputElement | HTMLTextAreaElement>(
+                            "input:enabled, textarea:enabled",
+                          )
+                          ;(input ?? cardElement)?.focus()
+                        }}
+                      >
+                        {t("interaction.clear_answer")}
+                      </Button>
                     </Show>
                   </fieldset>
                 )

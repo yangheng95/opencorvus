@@ -1319,6 +1319,9 @@ body {
   font-size: var(--ui-font-caption);
   overflow-wrap: anywhere;
 }
+.interaction-card__clear {
+  align-self: flex-start;
+}
 .interaction-card__options {
   display: flex;
   flex-direction: column;

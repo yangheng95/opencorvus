@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [提问清空体验实页证据](2026-11-05-question-answer-reset/README.md)：实际选择、清空和原部分回复。
+
 - [0.1.46发布证据](2026-11-05-release-0.1.46/README.md)：精确来源、原生与官网、公开回读及随包日志。
 
 - [提问填写提示实页证据](2026-11-05-question-answer-hints/README.md)：真实三种题目与实际回复。

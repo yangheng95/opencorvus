@@ -1603,6 +1603,11 @@ and, where enabled, the existing combined option-and-custom-text reply behavior.
 The fieldset references that localized hint as its accessible description.
 Text-only questions retain a direct custom-answer placeholder without implying
 that absent options must be replaced. These hints do not change drafts or replies.
+Each question with selected options or entered text offers Clear this answer.
+It clears only that original question's shared selection and custom-text draft,
+then returns focus to its first available input. The current native radio owns
+selection; a separate clear action restores an empty answer without changing
+other questions, creating a reply or resetting the whole form.
 The action row derives its filled count from that same shared draft: one question
 counts once when it has a selected option or nonempty custom text. The count
 describes the current draft, including existing selections, rather than a sent

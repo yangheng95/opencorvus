@@ -1,0 +1,509 @@
+{
+  "at": "2026-11-05T11:21:46.115Z",
+  "singleAgent": true,
+  "userWindowAndDatabaseUntouched": true,
+  "qualifications": [
+    {
+      "at": "2026-11-05T11:08:17.960Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 305276,
+      "current": 306078,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 59509,
+          "after": 59666
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 59509,
+          "after": 59666
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 8009,
+          "after": 8033
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 8009,
+          "after": 8033
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 24027,
+          "after": 24099
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62075,
+          "after": 62233
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62017,
+          "after": 62175
+        },
+        {
+          "table": "event_occurrence",
+          "before": 7789,
+          "after": 7813
+        },
+        {
+          "table": "memory_chunk",
+          "before": 118,
+          "after": 119
+        },
+        {
+          "table": "memory_file",
+          "before": 118,
+          "after": 119
+        },
+        {
+          "table": "message",
+          "before": 1045,
+          "after": 1048
+        },
+        {
+          "table": "part",
+          "before": 2931,
+          "after": 2937
+        },
+        {
+          "table": "project",
+          "before": 122,
+          "after": 123
+        },
+        {
+          "table": "protocol_event",
+          "before": 2902,
+          "after": 2908
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 1003,
+          "after": 1005
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 1003,
+          "after": 1005
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 1061,
+          "after": 1064
+        },
+        {
+          "table": "session",
+          "before": 154,
+          "after": 155
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 810,
+          "after": 811
+        },
+        {
+          "table": "tool_part_request",
+          "before": 810,
+          "after": 811
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": false,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793875388052,
+          "reacquiredAt": 1793876635240,
+          "releasedAt": 1793876638886,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793875271941,
+          "reacquiredAt": 1793876543969,
+          "releasedAt": 1793876550729,
+          "ownedByRuntime": true
+        }
+      ],
+      "sourceDatabasePreserved": true,
+      "attachments": 293,
+      "projects": 122,
+      "filesystemExclusions": 0,
+      "requests": 3,
+      "cumulativeRequests": 1449,
+      "reserveMs": 4098514,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-zm35fWkg.js"
+    },
+    {
+      "at": "2026-11-05T11:17:59.598Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 306078,
+      "current": 306880,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 59666,
+          "after": 59823
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 59666,
+          "after": 59823
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 8033,
+          "after": 8057
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 8033,
+          "after": 8057
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 24099,
+          "after": 24171
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62233,
+          "after": 62391
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62175,
+          "after": 62333
+        },
+        {
+          "table": "event_occurrence",
+          "before": 7813,
+          "after": 7837
+        },
+        {
+          "table": "memory_chunk",
+          "before": 119,
+          "after": 120
+        },
+        {
+          "table": "memory_file",
+          "before": 119,
+          "after": 120
+        },
+        {
+          "table": "message",
+          "before": 1048,
+          "after": 1051
+        },
+        {
+          "table": "part",
+          "before": 2937,
+          "after": 2943
+        },
+        {
+          "table": "project",
+          "before": 123,
+          "after": 124
+        },
+        {
+          "table": "protocol_event",
+          "before": 2908,
+          "after": 2914
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 1005,
+          "after": 1007
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 1005,
+          "after": 1007
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 1064,
+          "after": 1067
+        },
+        {
+          "table": "session",
+          "before": 155,
+          "after": 156
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 811,
+          "after": 812
+        },
+        {
+          "table": "tool_part_request",
+          "before": 811,
+          "after": 812
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": false,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793876638886,
+          "reacquiredAt": 1793877219325,
+          "releasedAt": 1793877226932,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793876550729,
+          "reacquiredAt": 1793877051039,
+          "releasedAt": 1793877057606,
+          "ownedByRuntime": true
+        }
+      ],
+      "sourceDatabasePreserved": true,
+      "attachments": 295,
+      "projects": 123,
+      "filesystemExclusions": 0,
+      "requests": 3,
+      "cumulativeRequests": 1452,
+      "reserveMs": 3493052,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-Dd92rGWc.js"
+    }
+  ],
+  "checksPassed": [
+    "typecheck",
+    "ui-build-after",
+    "docs-check",
+    "architecture-index",
+    "api-routes",
+    "checkpoints-before-initial",
+    "checkpoints-before-final",
+    "checkpoints-after-initial",
+    "checkpoints-after-final",
+    "shutdown-before",
+    "shutdown-after",
+    "settle-before",
+    "settle-after"
+  ],
+  "ordinaryNodeBuilds": 1,
+  "finalUiEntry": "main-Dd92rGWc.js",
+  "originalNativeHandlesExitedZero": 2,
+  "pairedCredentialAndCompleteCatalogCopiesRetired": 4,
+  "actualModelRequests": 6,
+  "cumulativeModelRequests": 1452,
+  "actualRequestModel": "gpt-6.1-sol",
+  "allModelRequestsStreamingAndSettledEof": true,
+  "originalResultReceipts": [
+    {
+      "phase": "before",
+      "checkpoint": "finished",
+      "casePhase": "before",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "requestID": "que_g0Va5zBxp00WLcOPKzN7",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answers": [
+        [
+          "按原稿交付"
+        ],
+        [
+          "保留",
+          "补充排期"
+        ],
+        [
+          "图表",
+          "清单",
+          "补充资料"
+        ]
+      ],
+      "selectionStatus": "idle",
+      "expiryMs": 300000,
+      "repliedBeforeExpiryByMs": 216449,
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 3
+    },
+    {
+      "phase": "after",
+      "checkpoint": "finished",
+      "casePhase": "before",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "requestID": "que_g0Va5zBxp00WLcOPKzN7",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answers": [
+        [
+          "按原稿交付"
+        ],
+        [
+          "保留",
+          "补充排期"
+        ],
+        [
+          "图表",
+          "清单",
+          "补充资料"
+        ]
+      ],
+      "selectionStatus": "idle",
+      "expiryMs": 300000,
+      "repliedBeforeExpiryByMs": 216449,
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 3
+    },
+    {
+      "phase": "after",
+      "checkpoint": "finished",
+      "casePhase": "after",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "requestID": "que_g0Va61JpJ00qnjHGGp62",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answers": [
+        [
+          "按原稿交付"
+        ],
+        [],
+        [
+          "图表",
+          "清单",
+          "补充资料"
+        ]
+      ],
+      "selectionStatus": "idle",
+      "expiryMs": 300000,
+      "repliedBeforeExpiryByMs": 139976,
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 3
+    },
+    {
+      "phase": "after",
+      "checkpoint": "reloaded",
+      "casePhase": "before",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "requestID": "que_g0Va5zBxp00WLcOPKzN7",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answers": [
+        [
+          "按原稿交付"
+        ],
+        [
+          "保留",
+          "补充排期"
+        ],
+        [
+          "图表",
+          "清单",
+          "补充资料"
+        ]
+      ],
+      "selectionStatus": "idle",
+      "expiryMs": 300000,
+      "repliedBeforeExpiryByMs": 216449,
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 3
+    },
+    {
+      "phase": "after",
+      "checkpoint": "reloaded",
+      "casePhase": "after",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "requestID": "que_g0Va61JpJ00qnjHGGp62",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answers": [
+        [
+          "按原稿交付"
+        ],
+        [],
+        [
+          "图表",
+          "清单",
+          "补充资料"
+        ]
+      ],
+      "selectionStatus": "idle",
+      "expiryMs": 300000,
+      "repliedBeforeExpiryByMs": 139976,
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 3
+    }
+  ],
+  "manuallyReviewedScreenshots": [
+    "01-before-empty-real-three-question-form.png",
+    "02-before-visible-radio-circle-selects-one-question.png",
+    "03-before-clicking-selected-circle-keeps-answer.png",
+    "04-before-native-arrow-selects-other-option.png",
+    "05-before-combined-answers-no-clear-action.png",
+    "06-before-natural-completion-and-original-answers.png",
+    "07-after-english-three-filled-answers-and-clear-actions.png",
+    "08-after-english-clear-single-choice-and-text-two-of-three.png",
+    "09-after-chinese-clear-text-restores-question-focus.png",
+    "10-after-chinese-clear-multiple-options-and-text-zero-of-three.png",
+    "11-after-whitespace-answer-offers-clear-action.png",
+    "12-after-chinese-three-refilled-answers-and-clear-actions.png",
+    "13-after-keyboard-clear-single-question-keeps-two-of-three.png",
+    "14-after-real-cleared-answer-submitted-and-natural-completion.png",
+    "15-after-reload-retains-cleared-middle-answer.png"
+  ],
+  "businessCheckerCheckpoints": 36,
+  "priorRenameFactCheckpoints": 3,
+  "priorPartialAnswerFactCheckpoints": 3,
+  "priorClosedChoiceFactCheckpoints": 6,
+  "priorCombinedAnswerFactCheckpoints": 6,
+  "scope": {
+    "nativeCircleLabelAndArrowChoiceVerified": true,
+    "clearOnlyCurrentSharedQuestionSelectionAndText": true,
+    "clearNativeSingleTextAndMultipleAnswers": true,
+    "clearWhitespaceWithoutFillingQuestion": true,
+    "focusReturnedToSameQuestionInput": true,
+    "focusDidNotSelectAnEmptyRadio": true,
+    "englishDialogAndChineseInlineClear": true,
+    "escapeAndLocaleChangeRetainedDraft": true,
+    "perQuestionProgressSequence": [
+      3,
+      2,
+      1,
+      0,
+      3,
+      2
+    ],
+    "actualMiddleAnswerSavedAsEmptyArray": true,
+    "originalOtherQuestionValuesPreserved": true,
+    "ownReloadRetainsActualPartialHistory": true,
+    "localeFieldsPerLanguage": 2
+  },
+  "limitations": [
+    "Unavailable options, closed-custom pending questions, explicit automatic answers, busy-time clear, independent Task/Side Chat and simultaneous surface edits were not separately visually exercised.",
+    "Clipboard transmission was not independently exercised.",
+    "Some screenshots cover only their target portion, not the full question form or out-of-viewport progress.",
+    "Owned capacity slots were legitimately acquired/released; original business content and source databases were preserved, not all runtime-row bytes unchanged.",
+    "Version0.1.46 and unrelated backend/fixture changes belong to the separate release delivery; this change is not claimed to be in that package.",
+    "No backend/API/SDK/schema/migration/business-format or scheduling change."
+  ]
+}
