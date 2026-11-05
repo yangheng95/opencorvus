@@ -4751,7 +4751,16 @@ Manual interaction and screenshot review on the formal development `/ui` surface
 provide UI acceptance; API contract checks do not substitute for visual evidence.
 
 The launcher home keeps ordinary chat starters immediately after the real
-composer. Its short localized subtitle includes a visible Continuous goal button
+composer. Selecting a starter fills an empty input directly. Existing unsent text
+requires the shared application dialog's explicit replacement confirmation,
+including the actual example text for review;
+cancellation retains the original draft. Opening and applying the choice are
+bound to the original input, text, API authority, selection epoch, project and
+composer intent. A retired owner cannot apply the old example to another draft.
+The existing input event remains the sole draft update path; no Message or owner
+is created by the suggestion. Dialog-opening errors retain the draft and expose
+localized feedback with complete diagnostics in the current home surface.
+Its short localized subtitle includes a visible Continuous goal button
 that shares App's existing Goal-open request with the composer. It opens the same
 home form without creating an owner or changing the draft; it follows current
 connection availability. Goal creation also opens through the composer's + menu or the explicit

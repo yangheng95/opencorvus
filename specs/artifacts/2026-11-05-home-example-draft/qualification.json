@@ -1,0 +1,186 @@
+{
+  "at": "2026-11-05T06:35:49.897Z",
+  "singleAgent": true,
+  "userWindowAndDatabaseUntouched": true,
+  "qualifications": [
+    {
+      "at": "2026-11-05T06:13:13.287Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303657,
+      "current": 303659,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61751,
+          "after": 61752
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61693,
+          "after": 61694
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 4151530,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-D2xNTgoy.js"
+    },
+    {
+      "at": "2026-11-05T06:28:47.818Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303659,
+      "current": 303661,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61752,
+          "after": 61753
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61694,
+          "after": 61695
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 3431677,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CQXKM54Z.js"
+    },
+    {
+      "at": "2026-11-05T06:34:41.975Z",
+      "kind": "final",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303661,
+      "current": 303663,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61753,
+          "after": 61754
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61695,
+          "after": 61696
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 2843391,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CLJbP9j7.js"
+    }
+  ],
+  "checksPassed": [
+    "typecheck",
+    "typecheck-final",
+    "ui-build-after",
+    "ui-build-final",
+    "docs-check"
+  ],
+  "ordinaryNodeBuilds": 2,
+  "candidateUiEntry": "main-CQXKM54Z.js",
+  "finalUiEntry": "main-CLJbP9j7.js",
+  "originalNativeHandlesExitedZero": 3,
+  "pairedCredentialAndCompleteCatalogCopiesRetired": 6,
+  "actualModelRequests": 0,
+  "cumulativeModelRequests": 1440,
+  "manuallyReviewedScreenshots": [
+    "01-before-existing-unsent-home-draft.png",
+    "02-before-example-immediately-replaces-draft.png",
+    "03-before-reload-retains-replacement-not-original.png",
+    "04-after-empty-input-fills-example-directly.png",
+    "05-after-english-replacement-confirmation.png",
+    "06-after-english-keep-draft-and-focus.png",
+    "07-after-english-confirmed-example-applied.png",
+    "08-after-chinese-more-menu-confirmation.png",
+    "09-after-chinese-escape-preserves-original.png",
+    "10-after-reload-keeps-cancelled-original-draft.png",
+    "11-after-goal-prefills-preserved-original-draft.png",
+    "12-after-chinese-confirmed-more-example.png",
+    "13-after-goal-prefills-confirmed-new-example.png",
+    "14-final-english-actual-example-preview.png",
+    "15-final-english-cancel-preserves-original.png",
+    "16-final-english-confirmed-example.png",
+    "17-final-chinese-more-example-preview.png",
+    "18-final-chinese-escape-reload-original-draft.png",
+    "19-final-goal-prefills-preserved-draft.png",
+    "20-final-chinese-confirmed-menu-example.png",
+    "21-final-goal-prefills-confirmed-example.png",
+    "22-final-chinese-empty-input-fills-directly.png",
+    "23-final-original-question-and-file-summary.png",
+    "24-final-original-eight-file-review.png",
+    "25-final-original-four-question-count-and-answers.png",
+    "26-final-original-four-answers-visible.png"
+  ],
+  "businessCheckerCheckpoints": 54,
+  "priorRenameFactCheckpoints": 4,
+  "priorPartialAnswerFactCheckpoints": 4,
+  "priorClosedChoiceFactCheckpoints": 8,
+  "scope": {
+    "oneExistingHomeSuggestionHandler": true,
+    "emptyInputDirectFill": true,
+    "nonemptyDraftExplicitConfirmation": true,
+    "actualSelectedTextPreview": true,
+    "sharedApplicationDialog": true,
+    "originalDraftInputUpdatePath": true,
+    "bothLocalesCancelConfirmAndInputFocus": true,
+    "chineseMoreMenuEscapeReload": true,
+    "goalPrefillsOriginalAndConfirmedExample": true,
+    "originalFourQuestionsFourAnswersAndEightFilesVisuallyVerified": true,
+    "localeFieldsPerLanguage": 5
+  },
+  "limitations": [
+    "Owner change during an open confirmation has code guard review, but history.replaceState did not provide an independent real navigation sample; no hidden state or fake history was used.",
+    "Dialog-opening failure and attachments/references were not separately visually exercised.",
+    "No new model execution, Goal start, API, SDK, schema, migration, persistence, reply or scheduling change.",
+    "The earlier batch946 inline tool-result successful explicit online retry remains independently unverified."
+  ]
+}

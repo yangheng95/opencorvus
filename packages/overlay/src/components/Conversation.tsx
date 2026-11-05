@@ -28,6 +28,9 @@ import { AppLog } from "../utils/log"
 import { Icon } from "./ui/Icon"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { Button } from "./ui/Button"
+import { Feedback } from "./ui/Feedback"
+import { showAppDialog } from "../services/app-dialog"
+import { formatErrorDetails } from "../utils/error-details"
 import { StatusIndicator } from "./ui/StatusIndicator"
 import { projectDirectoryKey, projectDisplayName } from "../utils/project-directory"
 import { retrySelectedTaskSelection } from "../services/task"
@@ -745,9 +748,48 @@ export function Conversation(props: {
       prompt: t("chat.home_suggestion.presentation_prompt"),
     },
   ])
-  const fillHomeSuggestionPrompt = (value: string) => {
+  const homeSuggestionScope = () => JSON.stringify([
+    captureApiAuthority().revision,
+    boardStore.selectEpoch,
+    homeContentActive(),
+    homeProjectDirectory(),
+    props.launcherIntent.productPillar,
+    props.launcherIntent.conversationTarget,
+  ])
+  const [homeSuggestionFailure, setHomeSuggestionFailure] = createSignal<{ error: unknown } | null>(null)
+  createEffect(on(homeSuggestionScope, () => setHomeSuggestionFailure(null)))
+  const fillHomeSuggestionPrompt = async (value: string) => {
     const textarea = document.querySelector<HTMLTextAreaElement>("#solidChatComposer textarea")
     if (!textarea) return
+    const draft = textarea.value
+    const authority = captureApiAuthority()
+    const scope = homeSuggestionScope()
+    const ownsHome = () =>
+      textarea.isConnected &&
+      homeContentActive() &&
+      isApiAuthorityCurrent(authority) &&
+      homeSuggestionScope() === scope &&
+      document.querySelector("#solidChatComposer textarea") === textarea
+    const current = () => ownsHome() && textarea.value === draft
+    setHomeSuggestionFailure(null)
+    if (draft.trim()) {
+      try {
+        const result = await showAppDialog({
+          title: t("chat.home_suggestion.replace_title"),
+          message: t("chat.home_suggestion.replace_message", { example: value }),
+          okLabel: t("chat.home_suggestion.replace_confirm"),
+          cancelLabel: t("chat.home_suggestion.keep_draft"),
+          cancel: true,
+          openingGuard: current,
+          returnFocusTarget: () => ownsHome() ? textarea : null,
+        })
+        if (!result.confirmed) return
+      } catch (error) {
+        if (current()) setHomeSuggestionFailure({ error })
+        return
+      }
+    }
+    if (!current()) return
     textarea.value = value
     textarea.dispatchEvent(new Event("input", { bubbles: true }))
     textarea.focus()
@@ -1070,6 +1112,13 @@ export function Conversation(props: {
         {(mount) => (
           <Portal mount={mount}>
             <div class="chat-home-after" aria-label={t("chat.home_suggestions_label")}>
+              <Show when={homeSuggestionFailure()}>
+                {(failure) => (
+                  <Feedback tone="error" details={formatErrorDetails(failure().error)}>
+                    {t("chat.home_suggestion.confirm_failed")}
+                  </Feedback>
+                )}
+              </Show>
               <Show when={props.launcherIntent.conversationTarget === "mission"}>
                 <div class="chat-home-notice">
                   <Icon name="info-circle" size="large" />

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [首页示例草稿实页证据](2026-11-05-home-example-draft/README.md)：真实草稿与示例入口。
+
 - [历史来源与提问实页证据](2026-11-05-source-file-history/README.md)：原来源核验与完整提问详情。
 
 - [设置加载实页证据](2026-11-05-settings-page-load/README.md)：设置模块失败与就地重试。
