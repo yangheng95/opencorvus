@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [作答选择来源](2026-11-05-question-choice-intent.md)：新草稿、单选与共享作答进度。
+
 - [部分回答历史](2026-11-05-partial-question-history.md)：真实三题两答与未提供答案的呈现。
 
 - [文件摘要操作类型](2026-11-05-summary-operation-labels.md)：原状态投影、双语标签与真实导航。

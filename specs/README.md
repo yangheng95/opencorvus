@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [新问题草稿与实际选择](records/2026-11/2026-11-05-question-choice-intent.md)：原问题、初始进度与实际作答意图。
+
 - [部分作答后的问题历史](records/2026-11/2026-11-05-partial-question-history.md)：原问题位置、真实空答案与中文历史。
 
 - [对话摘要的操作类型](records/2026-11/2026-11-05-summary-operation-labels.md)：文件摘要直接辨认修改、重命名与删除。

@@ -143,7 +143,7 @@ export function InteractionCard(props: InteractionCardProps) {
     const key = JSON.stringify([captureApiAuthority().revision, target.directory, replyEndpoint(), target.id])
     let owner = questionDraftOwners.get(key)
     if (!owner) {
-      const [read, write] = createSignal<QuestionDraft>({ selected: initialQuestionDrafts(questions()), customText: [] })
+      const [read, write] = createSignal<QuestionDraft>({ selected: [], customText: [] })
       owner = { read, write, surfaces: 0 }
       questionDraftOwners.set(key, owner)
     }
@@ -476,13 +476,4 @@ function questionLabel(question: InteractionQuestion): string {
   if (header && primary && header !== primary) return `${header}: ${primary}`
   if (primary) return primary
   return header
-}
-
-function initialQuestionDrafts(questions: InteractionQuestion[]): string[][] {
-  return questions.map((question) => {
-    if (question.multiple === true || question.custom !== false) return []
-    const options = Array.isArray(question.options) ? question.options : []
-    const firstEnabled = options.find((option) => option.disabled !== true)
-    return firstEnabled ? [firstEnabled.value] : []
-  })
 }

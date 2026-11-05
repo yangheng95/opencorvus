@@ -1,0 +1,225 @@
+{
+  "at": "2026-11-05T00:24:52.541Z",
+  "phases": [
+    {
+      "phase": "before",
+      "port": 38732,
+      "uiEntry": "main-CxYlALPx.js",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 302005,
+      "rows": 302806,
+      "allOriginalRowsExact": false,
+      "businessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedProjects": 118,
+      "protectedConfigurations": 108,
+      "protectedAttachmentsAndMetadata": 285,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793835762260,
+          "reacquiredAt": 1793837819234,
+          "releasedAt": 1793837821857,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793835639522,
+          "reacquiredAt": 1793837788547,
+          "releasedAt": 1793837795649,
+          "ownedByRuntime": true
+        }
+      ],
+      "requests": 3,
+      "maximumRequests": 12,
+      "cumulativeRequests": 1437,
+      "allRequestsStreaming": true,
+      "allRequestsCompletedNormally": true,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "unusedAllowanceRetired": 9,
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalOutputRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "sourceCredentialMetadataPreserved": true,
+      "sourceCatalogBytesAndMetadataPreserved": true,
+      "reserveMs": 4088370
+    },
+    {
+      "phase": "after",
+      "port": 38733,
+      "uiEntry": "main-Ch0kkYbL.js",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 302806,
+      "rows": 303607,
+      "allOriginalRowsExact": false,
+      "businessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedProjects": 119,
+      "protectedConfigurations": 109,
+      "protectedAttachmentsAndMetadata": 287,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793837821857,
+          "reacquiredAt": 1793838082970,
+          "releasedAt": 1793838085784,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793837795649,
+          "reacquiredAt": 1793838041714,
+          "releasedAt": 1793838048033,
+          "ownedByRuntime": true
+        }
+      ],
+      "requests": 3,
+      "maximumRequests": 12,
+      "cumulativeRequests": 1440,
+      "allRequestsStreaming": true,
+      "allRequestsCompletedNormally": true,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "unusedAllowanceRetired": 9,
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalOutputRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "sourceCredentialMetadataPreserved": true,
+      "sourceCatalogBytesAndMetadataPreserved": true,
+      "reserveMs": 3778958
+    }
+  ],
+  "manualScreenshots": [
+    "01-before-untouched-three-of-three.png",
+    "02-before-sent-defaults.png",
+    "03-after-untouched-zero-of-three.png",
+    "04-after-space-selects-one.png",
+    "05-after-dismiss-keeps-one.png",
+    "06-after-actual-two-of-three.png",
+    "07-after-actual-partial-history.png",
+    "08-after-original-questions-and-answers.png",
+    "09-after-english-actual-history.png",
+    "10-after-chinese-history-after-reload.png"
+  ],
+  "manualReviewCompleted": true,
+  "uiAutomatedTestsUsed": false,
+  "presentationDraftInitializationChange": true,
+  "typecheckedPackages": 8,
+  "originalBusinessCheckerRuns": 36,
+  "realChoiceReplyChecks": 5,
+  "originalPartialHistoryChecks": 3,
+  "originalRenameCaseChecks": 3,
+  "actualNewQuestionCountPerCase": 3,
+  "actualNewQuestionTools": 2,
+  "questionShape": {
+    "multiple": false,
+    "custom": false,
+    "options": [
+      "保留",
+      "调整"
+    ]
+  },
+  "beforeUntouchedFilledCount": 3,
+  "beforeSentAnswers": [
+    [
+      "保留"
+    ],
+    [
+      "保留"
+    ],
+    [
+      "保留"
+    ]
+  ],
+  "afterManuallyConfirmedFilledCounts": [
+    0,
+    1,
+    2
+  ],
+  "spaceSelectsFirstOption": true,
+  "dismissedDialogRetainsSameDraft": true,
+  "afterActualAnswers": [
+    [
+      "保留"
+    ],
+    [],
+    [
+      "调整"
+    ]
+  ],
+  "positionsWithoutProvidedAnswer": [
+    2
+  ],
+  "questionExpiryMs": 300000,
+  "repliedBeforeExpiryByMs": [
+    277235,
+    265952
+  ],
+  "bothActualQuestionRepliesAndToolFactsExact": true,
+  "httpAndSseSnapshotsExact": true,
+  "priorBeforeReplyRetainedExactly": true,
+  "priorPartialCustomReplyRetainedExactly": true,
+  "englishAndChineseCompletedHistoryVisuallyConfirmed": true,
+  "chineseHistoryReloadVisuallyConfirmed": true,
+  "modelsRequestedThisBatch": 6,
+  "cumulativeModelRequests": 1440,
+  "unusedRequestAllowanceRetired": 18,
+  "newQaInitialization": {
+    "projects": 2,
+    "completeBinaryAttributesSeededBeforeInitialCommit": true,
+    "inputsGitIdentityIndexAndCleanStatusPreserved": true,
+    "configModelAndInitializedTerminalVerified": true
+  },
+  "userWindowAndDatabaseUntouched": true,
+  "independentTaskSideChatAutomaticDisabledOrMultipleChoiceVisualQualificationClaimed": false,
+  "changesToPublicApiSdkSchemaMigration": false
+}

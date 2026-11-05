@@ -1577,6 +1577,10 @@ The last surface releases the draft after the current microtask, allowing
 same-batch remounts to keep the editor. This is not persisted across page reloads
 or retirement of every surface; reply ownership and recorded answers continue
 through the canonical interaction service.
+New Question drafts start with empty selections and custom text. Disallowing
+custom input does not select an option; only actual answer input updates that
+draft. Mounting another surface retains the existing draft. Explicit automatic
+answers remain part of the original request and its existing timer contract.
 Question fieldsets identify their position within the original question array.
 The action row derives its filled count from that same shared draft: one question
 counts once when it has a selected option or nonempty custom text. The count
