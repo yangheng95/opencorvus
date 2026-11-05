@@ -717,8 +717,14 @@ populate this reference; incomplete combined intervals expose only their separat
 original records and do not claim one record as the combined final version.
 Single-file Review keeps the same selected diff owner without an inventory or
 filters that cannot change the selection. Multi-file inventories retain their
-search, status filters and independent scrolling. Incomplete Tool intervals with
-individual comparisons explain the missing combined comparison once; their
+search, status filters and independent scrolling.
+The multi-record inventory reports its visible and total record counts from the
+same filtered and unfiltered row collections, with localized numbers and a stable
+status region. These record counts do not replace the shared path totals or the
+unfiltered physical-status counts. Filtering, selection and reset keep their owners.
+The existing non-text control and result status share one wrapping row.
+Incomplete Tool intervals with individual comparisons explain the missing
+combined comparison once; their
 original comparisons remain separately expandable and keep their own counts.
 Conversation change summaries and multi-file Review label their shared totals as
 recorded change entries. The summary directs readers to select a file for its

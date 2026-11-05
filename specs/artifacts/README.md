@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [审阅筛选数量实页证据](2026-11-05-review-filter-count/README.md)：真实筛选、数量与原比较保全。
+
 - [作答选择来源实页证据](2026-11-05-question-choice-intent/README.md)：真实问题、初始状态及输入保持。
 
 - [部分回答历史实页证据](2026-11-05-partial-question-history/README.md)：三题两答、语言和原事实保全。

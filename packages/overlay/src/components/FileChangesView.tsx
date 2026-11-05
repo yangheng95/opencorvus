@@ -7,7 +7,7 @@ import {
   type VirtualizerHandle,
 } from "virtua/solid"
 import { changeGroupIdentity, summarizeChangeGroups, type ChangeGroup, type DiffTarget } from "../services/diff"
-import { t, tc } from "../utils/i18n"
+import { localeTag, t, tc } from "../utils/i18n"
 import { shortRelativePath } from "../utils/tool"
 import { ChangeLineStats, changeStatusLabel, type FileChange } from "./DiffView"
 import { Icon } from "./ui/Icon"
@@ -527,14 +527,22 @@ export function FileChangesView(props: FileChangesViewProps) {
                       })}
                     />
                   </div>
-                  <Checkbox
-                    class="changes-non-text-filter"
-                    data-ui="file-changes-non-text-filter"
-                    checked={hideNonTextFiles()}
-                    onChange={setHideNonTextFiles}
-                  >
-                    {t("files.hide_non_text")}
-                  </Checkbox>
+                  <div class="changes-filter-summary">
+                    <Checkbox
+                      class="changes-non-text-filter"
+                      data-ui="file-changes-non-text-filter"
+                      checked={hideNonTextFiles()}
+                      onChange={setHideNonTextFiles}
+                    >
+                      {t("files.hide_non_text")}
+                    </Checkbox>
+                    <p class="changes-status-explanation" role="status" aria-atomic="true">
+                      {t("files.filter_result_count", {
+                        shown: filteredRows().length.toLocaleString(localeTag()),
+                        total: allRows().length.toLocaleString(localeTag()),
+                      })}
+                    </p>
+                  </div>
                 </div>
               </Show>
 

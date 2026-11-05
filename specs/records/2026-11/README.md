@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [审阅筛选数量](2026-11-05-review-filter-count.md)：筛选结果、清除和中英状态说明。
+
 - [作答选择来源](2026-11-05-question-choice-intent.md)：新草稿、单选与共享作答进度。
 
 - [部分回答历史](2026-11-05-partial-question-history.md)：真实三题两答与未提供答案的呈现。

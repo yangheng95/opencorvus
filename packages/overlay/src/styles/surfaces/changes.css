@@ -229,6 +229,18 @@
   min-width: 0;
 }
 
+.changes-filter-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ui-gap-xs);
+}
+
+.changes-filter-summary .changes-status-explanation {
+  padding: 0;
+}
+
 .changes-status-filter-group > .changes-status-filter {
   display: flex;
   flex-wrap: wrap;
