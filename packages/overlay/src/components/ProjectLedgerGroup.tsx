@@ -351,24 +351,29 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
             </DropdownMenu.Root>
           </Show>
           <Show when={canCreateChat()}>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              tone="neutral"
-              data-chrome="icon-action"
-              data-ui="project-group-new-chat"
-              disabled={busy()}
-              data-project-new-chat={props.directory}
-              title={t("project.new_chat_button_title")}
-              aria-label={t("project.new_chat_button_title")}
-              onClick={(event) => {
-                event.stopPropagation()
-                runProjectAction(`new-chat:${props.directory}`, () => props.onCreateChat?.(props.directory))
-              }}
-            >
-              <Icon name="plus" />
-            </Button>
+            <Tooltip.Root placement="right" gutter={8} fitViewport>
+              <Tooltip.Trigger
+                as={Button}
+                type="button"
+                variant="ghost"
+                size="icon"
+                tone="neutral"
+                data-chrome="icon-action"
+                data-ui="project-group-new-chat"
+                disabled={busy()}
+                data-project-new-chat={props.directory}
+                aria-label={t("project.new_chat_button_title")}
+                onClick={(event) => {
+                  event.stopPropagation()
+                  runProjectAction(`new-chat:${props.directory}`, () => props.onCreateChat?.(props.directory))
+                }}
+              >
+                <Icon name="plus" />
+              </Tooltip.Trigger>
+              <Tooltip.Portal>
+                <Tooltip.Content>{t("project.new_chat_button_title")}</Tooltip.Content>
+              </Tooltip.Portal>
+            </Tooltip.Root>
           </Show>
         </div>
       </div>

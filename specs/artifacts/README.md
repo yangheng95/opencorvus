@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [对话入口语言实页证据](2026-11-05-conversation-entry-language/README.md)：真实入口、范围与双语复核。
+
 - [审阅来源空状态实页证据](2026-11-05-review-source-empty-state/README.md)：来源切换、空态与原记录保全。
 
 - [修改预览重试实页证据](2026-11-05-review-preview-retry/README.md)：真实错误、详情及就地重试。

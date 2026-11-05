@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [对话与项目入口语言](records/2026-11/2026-11-05-conversation-entry-language.md)：新对话、项目作用范围及创建时机。
+
 - [审阅来源与空状态](records/2026-11/2026-11-05-review-source-empty-state.md)：真实来源切换与双语文件修改提示。
 
 - [修改预览失败与恢复](records/2026-11/2026-11-05-review-preview-retry.md)：中文错误、原始诊断与原资源重试。

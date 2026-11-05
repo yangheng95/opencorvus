@@ -3336,6 +3336,10 @@ Work Ledger 顶层只保留 New Chat，并与标题栏和命令面板共享同�
 入口。每次调用只清除会话与 Project runtime selection、进入 directory-free launcher 并聚焦
 composer；没有实际提交时禁止调用任何 Project 或 Session 写路由。首次 Code / Work 发送分别
 通过 `/global/chat` 或 `/global/work` 原子创建一个新的 dated UUID 临时 Project 与 Session；
+入口说明使用当前界面的对话/工作用语，不要求用户理解子Task编排。顶层新对话与“从头开始”
+保持全局无目录语义，后者明确实际发送时才创建临时项目。项目行“＋”说明在该项目中开始工作，
+继续进入唯一的项目偏好草稿；它使用共享Tooltip，在悬浮或键盘聚焦时显示同一本地化用途，
+替代原生title，激活/Escape关闭沿用primitive，原按钮导航和焦点回归保持。
 directory-free launcher 从既有 Overlay settings 的 `lastSelectedModel` 恢复最后一次显式模型选择；
 主动选模型更新该偏好，浏览历史会话只投影其根 Session 配置。当前选择的 Model 作为这两个创建请求的可选 `model` 字段传递，并在
 返回前写入根 Session 的 config overlay。未显式选择时请求保持继承语义；后续 prompt 禁止再次
