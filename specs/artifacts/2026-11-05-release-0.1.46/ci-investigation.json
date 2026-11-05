@@ -1,0 +1,89 @@
+{
+  "historicalRunID": 41986161177,
+  "source": "e94b17b3d1ae6585c2e90893fce96f2ffd307b8b",
+  "macOSJobID": 127109554668,
+  "fullLogBytes": 10152225,
+  "failedFiles": [
+    "test/server/session-prompt-cross-process-owner.test.ts",
+    "test/server/build-observation-content-read.test.ts"
+  ],
+  "observations": [
+    "Actual persisted failed-control receipt retains SessionCompactionMaterialUnavailableError; only the fixture stack string loses its heading. Observer now records String(error).",
+    "Partial Git byte read returned HTTP422 with Process termination and physical settlement failed. Exact nested native error was not preserved by the old response.",
+    "Shared NodeProcess/ProcessFacade waits on physical and output settlement. Only this production caller waited inside its own stdout iterator; candidate returns that iterator before joining the same termination promise.",
+    "Every production await-terminate and direct stdout consumer in opencorvus/util was inspected; common run collectors and browser pipe drainers already run independently. Exact reader checks Task/Project and immutable object for every retry; no durable read queue or alternative state source."
+  ],
+  "localBufferedReproduction": [
+    {
+      "mode": "wait-inside-iterator",
+      "pid": 6284,
+      "bytes": 65536,
+      "elapsedMs": 41,
+      "terminal": {
+        "occurrenceID": "5c930ed7-5244-4ba2-85f1-1148ca5ad6fb",
+        "pid": 6284,
+        "reason": "terminated",
+        "exitCode": null,
+        "signal": "SIGTERM"
+      },
+      "stderrBytes": 0,
+      "dispose": {
+        "status": "fulfilled"
+      }
+    },
+    {
+      "mode": "return-iterator-before-join",
+      "pid": 26120,
+      "bytes": 65536,
+      "elapsedMs": 67,
+      "terminal": {
+        "occurrenceID": "4afac177-493e-4cdf-86c5-ed945483ba1a",
+        "pid": 26120,
+        "reason": "terminated",
+        "exitCode": null,
+        "signal": "SIGTERM"
+      },
+      "stderrBytes": 0,
+      "dispose": {
+        "status": "fulfilled"
+      }
+    }
+  ],
+  "nodeHostReproduction": [
+    {
+      "mode": "wait-inside-iterator",
+      "pid": 14804,
+      "bytes": 65536,
+      "elapsedMs": 64,
+      "terminal": {
+        "occurrenceID": "01c3a824-2d81-45fe-ab4b-ed9cbc29f3e3",
+        "pid": 14804,
+        "reason": "terminated",
+        "exitCode": null,
+        "signal": "SIGTERM"
+      },
+      "stderrBytes": 0,
+      "dispose": {
+        "status": "fulfilled"
+      }
+    },
+    {
+      "mode": "return-iterator-before-join",
+      "pid": 29860,
+      "bytes": 65536,
+      "elapsedMs": 62,
+      "terminal": {
+        "occurrenceID": "c63e9114-5d04-4b17-8e7d-93f5519d3e71",
+        "pid": 29860,
+        "reason": "terminated",
+        "exitCode": null,
+        "signal": "SIGTERM"
+      },
+      "stderrBytes": 0,
+      "dispose": {
+        "status": "fulfilled"
+      }
+    }
+  ],
+  "qualification": "Both orderings settle on local Windows; this does not reproduce or establish the exact macOS inner cause. Real three-platform targeted results remain required before calling the candidate native-verified."
+}

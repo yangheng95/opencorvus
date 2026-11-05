@@ -1,0 +1,45 @@
+{
+  "version": "0.1.46",
+  "previous": "0.1.45",
+  "date": "2026-11-05",
+  "reviewedProductHead": "9ead2cb3f6d0328a3c443e41eba79a9c6b0afcd5",
+  "databaseVersion": 10,
+  "dependencyGraphChanged": false,
+  "checks": {
+    "backend": {
+      "files": 2,
+      "tests": 6,
+      "assertions": 56,
+      "rangeFinalRerun": {
+        "tests": 1,
+        "assertions": 11
+      }
+    },
+    "versionNotes": {
+      "files": 2,
+      "tests": 15,
+      "assertions": 21
+    },
+    "frozenInstall": {
+      "installs": 1659,
+      "packages": 1905,
+      "changes": 0
+    },
+    "audit": {
+      "packages": 1732,
+      "vulnerabilities": 0
+    },
+    "generateExit": 0,
+    "generatedBusinessDiff": 0,
+    "docs": {
+      "operations": 352,
+      "groups": 26
+    },
+    "architectureDocuments": 20
+  },
+  "historyEntries": 82,
+  "newRealModelRequests": 0,
+  "credentialsTransferred": false,
+  "nativeQualification": "Additional native CI for the two backend files remains pending authorization/result; local Windows pass is not macOS proof",
+  "scope": "Local preparation only; no canonical native or website completion claimed"
+}

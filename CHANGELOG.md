@@ -4,6 +4,60 @@
 
 ## 未发布
 
+## 0.1.46 - 2026-11-05
+
+### zh-CN
+
+#### 新增
+
+- 提问历史按题展示原题文、原选项与说明，区分当时的单选、多选及自定义回答方式；保留原问题背景和原回答位置。
+
+#### 调整
+
+- 待答提问明确单选、多选与纯文字填写方式，说明补充文字会和所选项一起发送；填写进度仍按题计算。
+- 来源区明确读取或引用的资料与实际修改文件分开计数；展开和收起入口说明只作用于其余来源，保留首条预览与复制总量。
+- 文件读取正文使用当前语言显示实际行数或读取范围，和工具摘要共用已记录事实；完整原始读取说明可单独展开。
+- 设置页的网络代理和桌面通知说明使用更清楚的当前语言表述。
+- 历史构建文件按范围读取时先释放输出读取，再完成子进程清退，继续验证原始 Git 内容和项目归属。
+
+#### 修复
+
+- 设置页面按需加载失败时显示明确错误和重试入口，在原页面重新加载模块；加载期间提供提示，可继续切换其他设置页。
+- 首页输入框已有未发送内容时，选择示例先展示实际示例并确认替换；保留或按 Esc 取消后继续保留草稿，空输入框仍可直接填入示例。
+- 历史提问详情保留每题完整选项和说明，修复旧聚合展示只列题文、遗漏选项的问题。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 10，保留用户数据及现有自动迁移；本版界面改进不改变已保存的问题、回答或文件内容。
+- 已补验工具结果在恢复连接后的显式重试，读取同一已保存结果；未把自动恢复算作按钮成功。实际页面和流式验收仅覆盖已记录场景，不保证全部模型、历史及并发组合。
+- macOS 仍为临时签名，未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Show retained questions individually with their original text, options and descriptions, identifying single choice, multiple choice and custom-answer support while preserving request context and answer positions.
+
+#### Changed
+
+- Explain single-choice, multiple-choice and text-only answers, including how additional text is sent with selected options. Progress continues to count questions.
+- Clarify that read or referenced sources and changed files have separate counts. Expand and collapse controls identify additional sources while retaining the first preview and total copy count.
+- Localize actual read counts and ranges in file-result bodies using the same recorded facts as tool summaries. Keep the complete original read note separately expandable.
+- Use clearer localized descriptions for settings proxies and desktop notifications.
+- Release the output reader before joining child-process cleanup for historical Build ranges, retaining original Git content and project ownership checks.
+
+#### Fixed
+
+- Show explicit errors and retry for settings modules that fail to load, reloading the module within the same page. Provide loading feedback and allow switching to another settings page.
+- Preview and confirm a Home example before replacing unsent text. Keeping the draft or cancelling with Escape preserves it; empty inputs still accept examples directly.
+- Retain complete original options and descriptions in question history, fixing the earlier combined display that showed question text but omitted options.
+
+#### Upgrade impact and known limitations
+
+- Database version remains 10, retaining user data and existing automatic migrations. These interface improvements preserve saved questions, answers and file content.
+- Explicit tool-result retry after reconnection has now been reviewed against the same saved result; automatic recovery was not counted as a successful button click. Manual pages and streaming checks establish their recorded scope, not every model, history or concurrency combination.
+- macOS remains ad hoc signed without Apple notarization.
+
 ## 0.1.45 - 2026-11-05
 
 ### zh-CN

@@ -193,7 +193,7 @@ async function run() {
       app.onError((error, context) => {
         void fs.writeFile(
           path.join(barrierDirectory, `${label}.route-error.txt`),
-          error instanceof Error ? (error.stack ?? error.message) : String(error),
+          String(error),
         )
         return serverErrorResponse(error, context)
       })

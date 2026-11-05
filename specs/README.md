@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [0.1.46发布](records/2026-11/2026-11-05-release-0.1.46.md)：设置、提问、草稿与来源阅读改进及发布验收。
+
 - [提问填写方式与题数说明](records/2026-11/2026-11-05-question-answer-hints.md)：纯文字、选项和补充回答的真实呈现。
 
 - [工具结果恢复与读取说明](records/2026-11/2026-11-05-tool-result-online-retry.md)：显式重试验收与本地化读取范围。

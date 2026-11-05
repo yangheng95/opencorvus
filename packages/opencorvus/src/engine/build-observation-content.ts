@@ -107,10 +107,12 @@ export async function readBuildObservationContentRange(input: {
   }
 
   const stderrPromise = Process.readText(process.stderr)
+  void stderrPromise.catch(() => undefined)
   const chunks: Uint8Array[] = []
   let streamed = 0
   let retained = 0
   let terminatedAfterRange = false
+  let rangeTermination: Promise<void> | undefined
   try {
     for await (const rawChunk of process.stdout) {
       const chunk = Buffer.isBuffer(rawChunk) ? rawChunk : Buffer.from(rawChunk)
@@ -126,10 +128,14 @@ export async function readBuildObservationContentRange(input: {
       }
       if (streamed >= endExclusive && endExclusive < object.bytes) {
         terminatedAfterRange = true
-        await process.terminate()
+        rangeTermination = process.terminate()
+        void rangeTermination.catch(() => undefined)
         break
       }
     }
+    // Return the stdout iterator before joining termination, which also waits
+    // for output settlement. A suspended consumer must not hold that join open.
+    await rangeTermination
     const exitCode = await process.exited
     const stderr = await stderrPromise
     if (!terminatedAfterRange && exitCode !== 0) {
@@ -139,7 +145,7 @@ export async function readBuildObservationContentRange(input: {
       )
     }
   } catch (error) {
-    if (!terminatedAfterRange) await process.terminate().catch(() => undefined)
+    await Promise.allSettled([rangeTermination ?? process.terminate(), stderrPromise])
     if (error instanceof BuildObservationContentError) throw error
     throw new BuildObservationContentError(
       `git cat-file failed for Build observation object ${object.oid}: ${

@@ -24,8 +24,8 @@ test("cold Build observation reads preserve immutable Git bytes and Project owne
   await using other = await memoryProject("build-content-other64")
   const hello = "hello immutable resource!\n"
   const notes = Array.from(
-    { length: 20 },
-    (_, index) => `line ${String(index + 1).padStart(2, "0")} ${"x".repeat(17)}\n`,
+    { length: 8192 },
+    (_, index) => `line ${String(index + 1).padStart(5, "0")} ${"x".repeat(17)}\n`,
   ).join("")
   const fixture = await Instance.provideProjectIdentity({
     directory: project.path,
@@ -108,7 +108,7 @@ test("cold Build observation reads preserve immutable Git bytes and Project owne
       )
     for (const [file, text, bytes] of [
       ["hello.txt", hello, 26],
-      ["notes.txt", notes, 520],
+      ["notes.txt", notes, 237568],
     ] as const) {
       const object = fixture.diffs.find((diff) => diff.file === file)?.after
       if (!object) throw new Error(`Production observation has no after object for ${file}`)
@@ -155,6 +155,23 @@ test("cold Build observation reads preserve immutable Git bytes and Project owne
         object: again.headers.get("x-opencorvus-git-object"),
       }).toEqual({ status: 200, text, object: object.oid })
     }
+    const parallelRanges = await Promise.all(
+      ["hello.txt", "notes.txt"].map(async (file) => {
+        const response = await read(project.path, file, 3, 7)
+        return {
+          status: response.status,
+          text: await response.text(),
+          object: response.headers.get("x-opencorvus-git-object"),
+        }
+      }),
+    )
+    expect(parallelRanges).toEqual(
+      [["hello.txt", hello], ["notes.txt", notes]].map(([file, text]) => ({
+        status: 200,
+        text: text!.slice(3, 10),
+        object: fixture.diffs.find((diff) => diff.file === file)!.after!.oid,
+      })),
+    )
     const crossProject = await read(other.path, "hello.txt", 0, 26)
     expect({ status: crossProject.status, body: await crossProject.json() }).toEqual({
       status: 404,
