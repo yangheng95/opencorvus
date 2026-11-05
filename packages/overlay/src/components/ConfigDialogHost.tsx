@@ -1,34 +1,38 @@
-import { For, Show, createEffect, createMemo, createSignal, lazy, on, onCleanup } from "solid-js"
-import type { JSX } from "solid-js"
+import {
+  ErrorBoundary, For, Show, Suspense, createComponent, createEffect, createMemo,
+  createResource, createSignal, on, onCleanup,
+} from "solid-js"
+import type { Component, JSX } from "solid-js"
 // Settings panels are the largest components in the app and none of them render
 // until the operator opens this page and selects their tab, so they load on
 // that click instead of riding in the startup bundle.
-const ExpertSquadPanel = lazy(() => import("./settings/ExpertSquadPanel"))
-const ExpertSquadMarketPanel = lazy(() => import("./settings/ExpertSquadMarketPanel"))
-const ConversationCapabilityPanel = lazy(() => import("./settings/ConversationCapabilityPanel"))
-const McpResourceManagementPanel = lazy(async () => ({
+const ExpertSquadPanel = createSettingsPanel(() => import("./settings/ExpertSquadPanel"))
+const ExpertSquadMarketPanel = createSettingsPanel(() => import("./settings/ExpertSquadMarketPanel"))
+const ConversationCapabilityPanel = createSettingsPanel(() => import("./settings/ConversationCapabilityPanel"))
+const McpResourceManagementPanel = createSettingsPanel(async () => ({
   default: (await import("./settings/SkillMarketPanel")).McpResourceManagementPanel,
 }))
-const SkillResourceManagementPanel = lazy(async () => ({
+const SkillResourceManagementPanel = createSettingsPanel(async () => ({
   default: (await import("./settings/SkillMarketPanel")).SkillResourceManagementPanel,
 }))
-const ChannelsPanel = lazy(() => import("./settings/ChannelsPanel"))
-const MissionSkillPanel = lazy(() => import("./settings/MissionSkillPanel"))
-const ProvidersPanel = lazy(() => import("./settings/ProvidersPanel"))
-const GeneralPanel = lazy(() => import("./settings/GeneralPanel"))
-const AppearancePanel = lazy(() => import("./settings/AppearancePanel"))
-const NetworkPanel = lazy(() => import("./settings/NetworkPanel"))
-const ArchivePanel = lazy(() => import("./settings/ArchivePanel"))
-const ScheduledAutomationsPanel = lazy(() => import("./settings/ScheduledAutomationsPanel"))
-const MemoryContextPanel = lazy(async () => ({
+const ChannelsPanel = createSettingsPanel(() => import("./settings/ChannelsPanel"))
+const MissionSkillPanel = createSettingsPanel(() => import("./settings/MissionSkillPanel"))
+const ProvidersPanel = createSettingsPanel(() => import("./settings/ProvidersPanel"))
+const GeneralPanel = createSettingsPanel(() => import("./settings/GeneralPanel"))
+const AppearancePanel = createSettingsPanel(() => import("./settings/AppearancePanel"))
+const NetworkPanel = createSettingsPanel(() => import("./settings/NetworkPanel"))
+const ArchivePanel = createSettingsPanel(() => import("./settings/ArchivePanel"))
+const ScheduledAutomationsPanel = createSettingsPanel(() => import("./settings/ScheduledAutomationsPanel"))
+const MemoryContextPanel = createSettingsPanel(async () => ({
   default: (await import("./settings/MemoryContextPanel")).MemoryContextPanel,
 }))
-const DesktopUpdatePanel = lazy(() => import("./settings/DesktopUpdatePanel"))
-const ReleaseNotesPanel = lazy(() => import("./settings/ReleaseNotesPanel"))
-const UsagePanel = lazy(() => import("./settings/UsagePanel"))
+const DesktopUpdatePanel = createSettingsPanel(() => import("./settings/DesktopUpdatePanel"))
+const ReleaseNotesPanel = createSettingsPanel(() => import("./settings/ReleaseNotesPanel"))
+const UsagePanel = createSettingsPanel(() => import("./settings/UsagePanel"))
 import { SettingsEmpty, SettingsPanel, SettingsRow, SettingsSurface } from "./settings/layout"
 import { Disclosure } from "./ui/Disclosure"
 import { Button } from "./ui/Button"
+import { Feedback } from "./ui/Feedback"
 import { LinkButton } from "./ui/LinkButton"
 import { SearchField } from "./ui/SearchField"
 import { Tab, TabList, TabPanel, Tabs } from "./ui/Tabs"
@@ -46,6 +50,7 @@ import {
   type ConfigSection,
 } from "../store/dialog"
 import { getHostTransport } from "../services/host-transport-runtime"
+import { formatErrorDetails } from "../services/diagnostics"
 import { t } from "../utils/i18n"
 import {
   AUTHOR_EMAIL,
@@ -67,6 +72,52 @@ import {
 } from "../utils/config-sidebar-resizer"
 import type { AutomationRunSession } from "../services/automations"
 import type { WorkLedgerItemRow } from "../services/work-ledger"
+
+function createSettingsPanel<Props extends object>(load: () => Promise<{ default: Component<Props> }>): Component<Props> {
+  return (props) => {
+    const [panel, { refetch }] = createResource(load)
+    return (
+      <ErrorBoundary
+        fallback={(error, reset) => (
+          <SettingsPanel>
+            <Feedback
+              tone="error"
+              title={t("settings.page_load_failed")}
+              details={formatErrorDetails(error)}
+              actions={
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  tone="neutral"
+                  disabled={panel.loading}
+                  onClick={() => {
+                    void refetch()
+                    reset()
+                  }}
+                >
+                  {t(panel.loading ? "common.retrying" : "common.retry")}
+                </Button>
+              }
+            >
+              {t("settings.page_load_retry")}
+            </Feedback>
+          </SettingsPanel>
+        )}
+      >
+        <Suspense
+          fallback={
+            <SettingsPanel>
+              <Feedback>{t("settings.page_loading")}</Feedback>
+            </SettingsPanel>
+          }
+        >
+          <Show when={panel()}>{(loaded) => createComponent(loaded().default, props)}</Show>
+        </Suspense>
+      </ErrorBoundary>
+    )
+  }
+}
 
 interface ConfigTabDef extends ConfigSection {
   icon: IconName

@@ -1,0 +1,261 @@
+{
+  "at": "2026-11-05T05:21:10.168Z",
+  "singleAgent": true,
+  "userWindowAndDatabaseUntouched": true,
+  "qualifications": [
+    {
+      "at": "2026-11-05T04:46:03.628Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303643,
+      "current": 303645,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61744,
+          "after": 61745
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61686,
+          "after": 61687
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 4347551,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-Dn4hQ0R7.js"
+    },
+    {
+      "at": "2026-11-05T04:53:24.424Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303645,
+      "current": 303647,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61745,
+          "after": 61746
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61687,
+          "after": 61688
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 3904226,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DyKSPelv.js"
+    },
+    {
+      "at": "2026-11-05T05:09:16.378Z",
+      "kind": "recovery",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303647,
+      "current": 303649,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61746,
+          "after": 61747
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61688,
+          "after": 61689
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 2945774,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DyKSPelv.js"
+    },
+    {
+      "at": "2026-11-05T05:19:18.149Z",
+      "kind": "final",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303649,
+      "current": 303651,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61747,
+          "after": 61748
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61689,
+          "after": 61690
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 2365251,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DyKSPelv.js"
+    }
+  ],
+  "checksPassed": [
+    "typecheck",
+    "ui-build-after",
+    "ui-build-final",
+    "docs-check",
+    "docs-check-final",
+    "architecture-index",
+    "api-routes"
+  ],
+  "ordinaryNodeBuilds": 2,
+  "candidateUiEntry": "main-DyKSPelv.js",
+  "coreLoaderUnchangedBetweenAfterRecoveryAndFinal": true,
+  "finalLocaleCorrectionsBuiltSeparately": true,
+  "originalNativeHandlesExitedZero": 4,
+  "pairedCredentialAndCompleteCatalogCopiesRetired": 8,
+  "actualModelRequests": 0,
+  "cumulativeModelRequests": 1440,
+  "manuallyReviewedScreenshots": [
+    "01-before-chinese-ready-without-settings-import.png",
+    "02-before-cold-general-settings-empty-offline.png",
+    "03-before-cold-appearance-empty-offline.png",
+    "04-before-cold-network-empty-offline.png",
+    "05-after-chinese-candidate-before-settings-import.png",
+    "06-after-general-offline-error-and-retry.png",
+    "07-after-appearance-offline-error-and-retry.png",
+    "08-after-appearance-offline-retry-retains-feedback.png",
+    "09-after-original-settings-module-diagnostic.png",
+    "10-after-network-offline-error-and-retry.png",
+    "11-after-network-own-module-diagnostic.png",
+    "12-after-english-network-error-and-diagnostics.png",
+    "13-after-english-appearance-error.png",
+    "14-after-english-offline-retry-feedback.png",
+    "15-after-chinese-appearance-ready-for-recovery.png",
+    "16-recovery-original-settings-error-before-retry.png",
+    "17-recovery-appearance-after-explicit-retry.png",
+    "18-recovery-network-reentry-loads-original-controls.png",
+    "19-recovery-general-reentry-loads-original-controls.png",
+    "20-recovery-original-eight-file-review.png",
+    "21-recovery-four-real-question-answers.png",
+    "22-final-english-general-notification-language.png",
+    "23-final-english-network-proxy-language.png",
+    "24-final-english-appearance-controls.png",
+    "25-final-chinese-appearance-controls.png",
+    "26-final-chinese-network-proxy-language.png",
+    "27-final-chinese-general-notification-language.png",
+    "28-final-reloaded-chinese-settings.png",
+    "29-final-reloaded-eight-file-review.png",
+    "30-final-reloaded-four-real-answers.png"
+  ],
+  "businessCheckerCheckpoints": 72,
+  "priorRenameFactCheckpoints": 5,
+  "priorPartialAnswerFactCheckpoints": 5,
+  "priorClosedChoiceFactCheckpoints": 10,
+  "successfulExplicitSettingsRetry": {
+    "verified": true,
+    "clickAt": "2026-11-05T04:58:10.457Z",
+    "errorBeforeClickScreenshot": "16-recovery-original-settings-error-before-retry.png",
+    "controlsAfterClickScreenshot": "17-recovery-appearance-after-explicit-retry.png",
+    "sameUnrefreshedPage": true,
+    "originalModuleAssets": [
+      {
+        "name": "AppearancePanel-DM09FhBN.js",
+        "status": 200,
+        "bytes": 1768,
+        "originalPublishedBytesExact": true,
+        "browserReadAt": "2026-11-05T04:58:10.505Z"
+      },
+      {
+        "name": "NetworkPanel-6KiJY4Op.js",
+        "status": 200,
+        "bytes": 10206,
+        "originalPublishedBytesExact": true,
+        "browserReadAt": "2026-11-05T04:58:59.859Z"
+      },
+      {
+        "name": "GeneralPanel-DSIK0zP6.js",
+        "status": 200,
+        "bytes": 15155,
+        "originalPublishedBytesExact": true,
+        "browserReadAt": "2026-11-05T05:01:18.834Z"
+      }
+    ]
+  },
+  "scope": {
+    "coldGeneralAppearanceAndNetworkBeforeAndAfter": true,
+    "localizedErrorsAndOfflineRetryInBothLanguages": true,
+    "completeOriginalDiagnostics": true,
+    "onlineExplicitAppearanceRetry": true,
+    "networkAndGeneralReentry": true,
+    "finalGeneralAppearanceAndNetworkInBothLanguages": true,
+    "ownReload": true,
+    "originalFourAnswersAndEightFiles": true,
+    "localeFieldsPerLanguage": 8
+  },
+  "observerReceiptRecovery": "Two original recovery checker outputs completed but their initial exec session identifiers were not retained. The retirement guard stopped progress until identical read-only checkers were re-observed with fresh receipt names and exit zero; the native service was not restarted and distinct checkpoint counts remain 72.",
+  "limitations": [
+    "Transient loading/disabled state was not captured visually.",
+    "The shared 17-module mechanism covers 18 on-demand settings entries; only General, Appearance and Network were manually exercised.",
+    "No independent Task/Side Chat, screen-reader audio or all concurrency combinations claimed.",
+    "No new model execution, API, SDK, schema, migration, persistence or tool-execution change.",
+    "The earlier tool-result inline retry in batch946 recovered automatically; this settings retry does not replace that missing explicit-click evidence."
+  ]
+}

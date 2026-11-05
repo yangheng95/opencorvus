@@ -2954,6 +2954,15 @@ Disclosure and retain complete error text. A failed list retains existing data
 with an explicit stale-data notice. Unknown Provider counts are not displayed
 as a successful empty catalog. Composer presentation does not change the
 existing dispatch boundary or automatically retry a submission.
+Each mounted on-demand settings module has one resource using its original
+import callback, a Suspense loading notice and a local ErrorBoundary with complete
+diagnostics. Retry refetches that same module and resets only its rendered
+subtree; rejected imports have no separate sticky Promise cache. Existing props,
+navigation and configuration mutation owners remain unchanged, and successful
+imports retain native module caching.
+Network proxy and desktop-notification descriptions use ordinary current-locale
+capability names; persisted scope flags, routing and notification dispatch remain
+the existing configuration contracts.
 Composer reference catalog problems retain their exact load/search source in
 the single scope-keyed snapshot. A successful Squad search settles only its
 own problem; full-load failures and typed Skill issues remain visible until

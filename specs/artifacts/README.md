@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [设置加载实页证据](2026-11-05-settings-page-load/README.md)：设置模块失败与就地重试。
+
 - [0.1.45发布证据](2026-11-05-release-0.1.45/README.md)：冻结来源、原生矩阵、公开回读与三处版本日志。
 
 - [工具结果重试实页证据](2026-11-05-tool-result-retry/README.md)：原失败、双语动作及原页面恢复。
