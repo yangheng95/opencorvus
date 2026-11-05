@@ -77,6 +77,10 @@ interface ChangeRowCollectionNode {
   nextKey?: string
 }
 
+function fileSearchText(value: string): string {
+  return value.replaceAll("\\", "/").toLowerCase()
+}
+
 function splitFilePath(file: string): { fileName: string; directory: string } {
   const normalized = String(file || "").replace(/\\/g, "/")
   const idx = normalized.lastIndexOf("/")
@@ -263,7 +267,9 @@ export function FileChangesView(props: FileChangesViewProps) {
             : path.directory,
           groupLabel: label,
           groupTitle: title,
-          searchText: `${item.file} ${status} ${physicalStatus} ${label} ${title}`.toLowerCase(),
+          searchText: fileSearchText(
+            [item.file, item.openPath, item.previousPath ?? "", status, physicalStatus, label, title].join(" "),
+          ),
         }
         index += 1
         return row
@@ -271,7 +277,7 @@ export function FileChangesView(props: FileChangesViewProps) {
     })
   })
   const filteredRows = createMemo<ChangeRowModel[]>(() => {
-    const query = filterQuery().trim().toLowerCase()
+    const query = fileSearchText(filterQuery().trim())
     const status = statusFilter()
     return allRows().filter((row) => {
       if (status !== "all" && (row.item.status ?? "changed") !== status) return false

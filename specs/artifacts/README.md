@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [审阅路径搜索实页证据](2026-11-05-review-path-search/README.md)：完整路径搜索、原比较与中英文。
+
 - [重名项目实页证据](2026-11-05-project-name-context/README.md)：隔离页面、真实目录和项目操作。
 
 - [提问清空体验实页证据](2026-11-05-question-answer-reset/README.md)：实际选择、清空和原部分回复。

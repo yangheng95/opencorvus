@@ -728,6 +728,12 @@ original records and do not claim one record as the combined final version.
 Single-file Review keeps the same selected diff owner without an inventory or
 filters that cannot change the selection. Multi-file inventories retain their
 search, status filters and independent scrolling.
+The existing local search indexes each comparison label and its canonical open
+and recorded move-source paths, alongside the existing operation and group text.
+Query and search text share case-insensitive, slash-normalized literal matching;
+the original input, comparison identity, file admission and navigation remain
+unchanged. Search consumes the existing recorded path spellings; it does not
+construct a new absolute path from a comparison label.
 The multi-record inventory reports its visible and total record counts from the
 same filtered and unfiltered row collections, with localized numbers and a stable
 status region. These record counts do not replace the shared path totals or the

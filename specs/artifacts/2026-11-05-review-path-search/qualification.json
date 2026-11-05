@@ -1,0 +1,560 @@
+{
+  "at": "2026-11-05T12:49:22.669Z",
+  "scope": "Existing canonical file paths in Review local search",
+  "status": "real-page-verified",
+  "uiOnly": true,
+  "phases": [
+    {
+      "phase": "before",
+      "port": 38780,
+      "uiEntry": "main-CR5ehKzG.js",
+      "originalNativeExit": 0,
+      "qualification": {
+        "at": "2026-11-05T12:36:56.377Z",
+        "kind": "before",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 306895,
+        "current": 306897,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 62394,
+            "after": 62395
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 62336,
+            "after": 62337
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 297,
+        "projects": 127,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1452,
+        "reserveMs": 4095427,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-CR5ehKzG.js"
+      },
+      "publicShutdown": 200,
+      "pairedCopiesRetired": 2
+    },
+    {
+      "phase": "after",
+      "port": 38781,
+      "uiEntry": "main-Cp_61FBb.js",
+      "originalNativeExit": 0,
+      "qualification": {
+        "at": "2026-11-05T12:46:42.577Z",
+        "kind": "after",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 306897,
+        "current": 306899,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 62395,
+            "after": 62396
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 62337,
+            "after": 62338
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 297,
+        "projects": 127,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1452,
+        "reserveMs": 3512305,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-Cp_61FBb.js"
+      },
+      "publicShutdown": 200,
+      "pairedCopiesRetired": 2
+    }
+  ],
+  "checksPassed": [
+    "typecheck",
+    "ui-build-after",
+    "routes",
+    "architecture"
+  ],
+  "manuallyReviewedScreenshots": [
+    "01-before-original-three-records.png",
+    "02-before-forward-path-two-records.png",
+    "03-before-backslash-path-zero-records.png",
+    "04-before-full-original-path-zero-records.png",
+    "05-before-full-target-path-zero-records.png",
+    "06-after-english-search-label-and-three-records.png",
+    "07-after-backslash-path-two-records.png",
+    "08-after-full-original-path-case-and-whitespace.png",
+    "09-after-chinese-preserves-original-query.png",
+    "10-after-full-target-path-one-rename.png",
+    "11-after-original-target-file-reads-correctly.png",
+    "12-after-full-deleted-path-one-original-record.png",
+    "13-after-no-match-zero-records.png",
+    "14-after-clear-restores-three-and-list-focus.png",
+    "15-after-forward-path-combined-status-two-records.png",
+    "16-after-backslash-status-and-original-rename.png",
+    "17-after-original-file-name-still-two-records.png",
+    "18-after-reload-full-forward-target-one-record.png"
+  ],
+  "finalScreenshots": [
+    "06-after-english-search-label-and-three-records.png",
+    "07-after-backslash-path-two-records.png",
+    "08-after-full-original-path-case-and-whitespace.png",
+    "09-after-chinese-preserves-original-query.png",
+    "10-after-full-target-path-one-rename.png",
+    "11-after-original-target-file-reads-correctly.png",
+    "12-after-full-deleted-path-one-original-record.png",
+    "13-after-no-match-zero-records.png",
+    "14-after-clear-restores-three-and-list-focus.png",
+    "15-after-forward-path-combined-status-two-records.png",
+    "16-after-backslash-status-and-original-rename.png",
+    "17-after-original-file-name-still-two-records.png",
+    "18-after-reload-full-forward-target-one-record.png"
+  ],
+  "manualObservations": [
+    {
+      "input": "original file name",
+      "before": 2,
+      "after": 2,
+      "total": 3
+    },
+    {
+      "input": "forward-slash relative original path",
+      "before": 2,
+      "after": 2,
+      "total": 3
+    },
+    {
+      "input": "backslash relative original path",
+      "before": 0,
+      "after": 2,
+      "total": 3
+    },
+    {
+      "input": "complete original path",
+      "before": 0,
+      "after": 2,
+      "total": 3
+    },
+    {
+      "input": "complete rename destination",
+      "before": 0,
+      "after": 1,
+      "total": 3
+    },
+    {
+      "input": "complete deleted path",
+      "after": 1,
+      "total": 3
+    },
+    {
+      "input": "no match",
+      "after": 0,
+      "total": 3
+    },
+    {
+      "input": "clear all filters",
+      "after": 3,
+      "total": 3
+    }
+  ],
+  "additionalManualObservations": [
+    "Original old-name-missing hypothesis excluded; both source and destination labels were already in comparison identity",
+    "Uppercase complete original path and surrounding whitespace match2; original input is retained",
+    "English to Chinese switch retains the same real query and2 matches",
+    "Full target search selects original pending-to-confirmed rename comparison and3added/1deleted lines",
+    "Actual current-file action opens correct destination and complete original business facts",
+    "Clear all returns keyboard focus to original file list",
+    "Status plus either relative separator retains both modified/rename entries",
+    "Escape clears only query and keeps chosen Modified status",
+    "Own reload restores conversation; reopening Review and complete forward-slash destination search returns original rename1"
+  ],
+  "originalQuestionReceipts": [
+    {
+      "phase": "before",
+      "file": "before-finished-after-choice-private.json",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "file": "before-finished-after-prior-answer-private.json",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "file": "before-finished-after-prior-reset-private.json",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "file": "before-finished-before-choice-private.json",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        1,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "file": "before-finished-before-prior-answer-private.json",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "file": "before-finished-before-prior-reset-private.json",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "before",
+      "file": "before-finished-partial-private.json",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-after-choice-private.json",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-after-prior-answer-private.json",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-after-prior-reset-private.json",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-before-choice-private.json",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        1,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-before-prior-answer-private.json",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-before-prior-reset-private.json",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        2,
+        3
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    },
+    {
+      "phase": "after",
+      "file": "after-finished-partial-private.json",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questionCount": 3,
+      "answerSlots": 3,
+      "answerItemCounts": [
+        1,
+        0,
+        1
+      ],
+      "httpAndSseExact": true,
+      "originalMaterialsAndGitExact": true,
+      "modelRequests": 0
+    }
+  ],
+  "originalFileChangeReceipts": [
+    {
+      "phase": "before",
+      "sessionID": "ses_-zUPxA3vfzzX0tJ3NU3o",
+      "originalToolResults": 11,
+      "originalComparisons": [
+        {
+          "path": "draft/原始方案.md",
+          "type": "update",
+          "additions": 3,
+          "deletions": 1
+        },
+        {
+          "path": "deliverables/客户方案（已确认）.md",
+          "type": "move",
+          "additions": 3,
+          "deletions": 1
+        },
+        {
+          "path": "draft/临时记录.md",
+          "type": "delete",
+          "additions": 0,
+          "deletions": 1
+        }
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "httpAndFileContractsExact": true,
+      "materialsAndGitExact": true
+    },
+    {
+      "phase": "after",
+      "sessionID": "ses_-zUPxA3vfzzX0tJ3NU3o",
+      "originalToolResults": 11,
+      "originalComparisons": [
+        {
+          "path": "draft/原始方案.md",
+          "type": "update",
+          "additions": 3,
+          "deletions": 1
+        },
+        {
+          "path": "deliverables/客户方案（已确认）.md",
+          "type": "move",
+          "additions": 3,
+          "deletions": 1
+        },
+        {
+          "path": "draft/临时记录.md",
+          "type": "delete",
+          "additions": 0,
+          "deletions": 1
+        }
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "httpAndFileContractsExact": true,
+      "materialsAndGitExact": true
+    }
+  ],
+  "priorProjectStateReceipts": [
+    {
+      "phase": "before",
+      "modelRequests": 0,
+      "projects": [
+        {
+          "case": "A",
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "name": null,
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        },
+        {
+          "case": "B",
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "name": null,
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        },
+        {
+          "case": "C",
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "name": "独立资料",
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "modelRequests": 0,
+      "projects": [
+        {
+          "case": "A",
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "name": null,
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        },
+        {
+          "case": "B",
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "name": null,
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        },
+        {
+          "case": "C",
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "name": "独立资料",
+          "pinned": null,
+          "originalSourceFilesAndGitExact": true,
+          "originalModelConfiguration": true
+        }
+      ]
+    }
+  ],
+  "originalBusinessCheckpoints": 36,
+  "originalReplyCheckerCounts": {
+    "before": 8,
+    "after": 8
+  },
+  "actualModelRequests": 0,
+  "cumulativeModelRequests": 1452,
+  "pairedCopiesRetired": 4,
+  "originalNativeHandlesExitedZero": 2,
+  "protectedSourceProjects": 127,
+  "protectedSourceAttachments": 297,
+  "newRealProjects": 0,
+  "finalRows": 306899,
+  "schema": 10,
+  "tables": 92,
+  "userWindowAnd18571Untouched": true,
+  "boundaries": [
+    "Windows desktop and existing real Tool comparison sample",
+    "No new POSIX/macOS/UNC or more-than80-row visual acceptance",
+    "No new model start/continue acceptance in this UI-only batch",
+    "Existing counts, file identity and read admission remain canonical",
+    "No all-product completion or new installer release claim"
+  ]
+}
