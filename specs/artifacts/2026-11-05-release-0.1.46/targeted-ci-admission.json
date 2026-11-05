@@ -1,0 +1,15 @@
+{
+  "authorizedBy": "Explicit user reply authorizing existing three-platform selected backend CI; no real model requests",
+  "source": "f88a3b056ac16deab7c66142c9081dcadfcc6c5c",
+  "ref": "v0.1.46",
+  "workflow": "test.yml",
+  "selectedFiles": [
+    "test/server/session-prompt-cross-process-owner.test.ts",
+    "test/server/build-observation-content-read.test.ts"
+  ],
+  "startedAt": "2026-11-05T15:02:35.957Z",
+  "dispatched": true,
+  "runID": 42050923716,
+  "url": "https://github.com/yangheng95/opencorvus/actions/runs/42050923716",
+  "createdAt": "2026-11-05T15:02:38Z"
+}

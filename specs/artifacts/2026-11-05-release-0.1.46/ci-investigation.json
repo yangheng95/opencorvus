@@ -85,5 +85,17 @@
       }
     }
   ],
-  "qualification": "Both orderings settle on local Windows; this does not reproduce or establish the exact macOS inner cause. Real three-platform targeted results remain required before calling the candidate native-verified."
+  "qualification": "Both selected files now pass on actual Linux, macOS and Windows runners at f88 (6 tests/56 assertions per platform). The local Windows experiments still do not reproduce or establish the exact historical macOS inner cause; current native contract success is recorded separately from that unknown.",
+  "qualificationBeforeNativeRevalidation": "Both orderings settle on local Windows; this does not reproduce or establish the exact macOS inner cause. Real three-platform targeted results remain required before calling the candidate native-verified.",
+  "nativeRevalidation": {
+    "runID": 42050923716,
+    "source": "f88a3b056ac16deab7c66142c9081dcadfcc6c5c",
+    "result": "targeted-ci-result.json",
+    "conclusion": "success",
+    "platforms": [
+      "linux",
+      "macos",
+      "windows"
+    ]
+  }
 }

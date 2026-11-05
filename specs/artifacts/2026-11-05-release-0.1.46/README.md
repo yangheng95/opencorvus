@@ -3,7 +3,7 @@
 对应[方案](../../records/2026-11/2026-11-05-release-0.1.46.md)。**已完整公开交付**：正式42019654335、产品f88，23成功/6设计跳过；准确配对官网42022785904八成功。11:31:31Z→12:00:10Z，1719秒/28分39秒，原60分钟时钟内一次完成。
 
 - [本地准备](preparation.json)：版号/双语日志、原6项后端/15项版本日志、冻结安装/审计和生成固定点。
-- [既有CI调查](ci-investigation.json)：真实Mac两失败、共享消费/结算合同审计及Windows不能重现的诚实边界，原生复核待完成。
+- [既有CI调查](ci-investigation.json)：真实Mac两失败、共享消费/结算合同审计及Windows不能重现的诚实边界，后续三平台定向复核通过，历史具体内因未知边界保留。
 - [已交付实图复核](source-visual-review.json)：六张原真实页面图已实际查看；不是本轮公开包实页证明。
 - [真实缓存库存](caches-before.json)：Intel条目仍存在，不把缓存当本版构建成功。
 
@@ -16,7 +16,7 @@
 - [公开回读](public-readback.json)：GitHub latest46、29资源、实际SHA256SUMS与28对象身份、5平台stable=immutable、18下载与唯一生成器一致；body精确来自冻结根双语日志。
 - [实际公开包](published-cli-asset.json)、[真实运行](published-ui-runtime.json)、[正常关闭](published-ui-shutdown.json)、[独立物理清退](published-ui-physical-retirement.json)：145148318字节真实Windows基线包、exe46，原五分钟预算内结算并清退两进程/一监听和临时root。
 - [人工实页记录](manual-review.json)：实际包中英文日志、首页示例确认/保留原草稿、官网双语全文和46下载入口共九张图，均实际查看；没有UI自动化或真实模型新请求。
-- [另行CI资格](regular-ci-observation.json)：f88全量CI三平台unit取消、汇总guard失败；旧Mac两文件额外定向原生复核未授权未运行，不计通过。正式构建成功不替代该补充资格。
+- [另行CI资格](regular-ci-observation.json)：原f88全量CI三平台unit取消、汇总guard失败事实保留。后续用户授权的[定向准入](targeted-ci-admission.json)/[实际结果](targeted-ci-result.json)42050923716固定同源，8任务成功/1设计跳过；各平台两文件6项56断言通过。[Linux](targeted-linux.log)、[macOS](targeted-macos.log)、[Windows](targeted-windows.log)含真实输入、runner START/DONE、正向case和断言。该补充验证不等于全量套件通过。
 - [历史保全](cleanup.json)、[前库存](release-inventory-before.json)/[后库存](release-inventory-after.json)：原21对象身份/日期/标志保持，新版后22对象，82历史日志保留；本轮没有失败候选需要清退。
 
 ## 真实页面

@@ -1,0 +1,34 @@
+2026-11-05T15:12:44.3636907Z   SELECTED_TEST_FILES: test/server/session-prompt-cross-process-owner.test.ts
+test/server/build-observation-content-read.test.ts
+2026-11-05T15:13:07.0111896Z opencorvus:test: cache miss, executing 668b9b77f1333186
+2026-11-05T15:13:07.0212576Z opencorvus:test: $ bun script/run-tests.ts test/server/session-prompt-cross-process-owner.test.ts test/server/build-observation-content-read.test.ts
+2026-11-05T15:13:07.0840754Z opencorvus:test: [1/2] START test/server/session-prompt-cross-process-owner.test.ts
+2026-11-05T15:13:07.6105653Z opencorvus:test: bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+2026-11-05T15:13:07.6172189Z opencorvus:test:
+2026-11-05T15:13:07.6174032Z opencorvus:test: ::group::test\isolated-test-entry.test.ts:
+2026-11-05T15:13:31.4543343Z opencorvus:test: (pass) durable cross-process Session prompt ownership > a live backend serves duplicate and queued peer inputs through one Session owner [22229.82ms]
+2026-11-05T15:13:55.0744577Z opencorvus:test: (pass) durable cross-process Session prompt ownership > a standby owner settles a peer summarize request by its exact durable source [23620.03ms]
+2026-11-05T15:14:01.7720059Z opencorvus:test: (pass) durable cross-process Session prompt ownership > a first summarize with no compactable material persists its exact failed control [6697.55ms]
+2026-11-05T15:14:11.5043908Z opencorvus:test: (pass) durable cross-process Session prompt ownership > a standby peer receives the exact failed summarize control terminal [9732.41ms]
+2026-11-05T15:14:24.5280399Z opencorvus:test: (pass) durable cross-process Session prompt ownership > a peer takes over only after the exact owner process dies [13022.84ms]
+2026-11-05T15:14:24.5380661Z opencorvus:test:
+2026-11-05T15:14:24.5381535Z opencorvus:test: ::endgroup::
+2026-11-05T15:14:24.5382171Z opencorvus:test:
+2026-11-05T15:14:24.5382548Z opencorvus:test:  5 pass
+2026-11-05T15:14:24.5383294Z opencorvus:test:  0 fail
+2026-11-05T15:14:24.5386694Z opencorvus:test:  45 expect() calls
+2026-11-05T15:14:24.5387230Z opencorvus:test: Ran 5 tests across 1 file. [76.93s]
+2026-11-05T15:14:24.5770848Z opencorvus:test: [1/2] DONE test/server/session-prompt-cross-process-owner.test.ts exit=0 duration=77.49s
+2026-11-05T15:14:24.5772223Z opencorvus:test: [2/2] START test/server/build-observation-content-read.test.ts
+2026-11-05T15:14:24.6388725Z opencorvus:test: bun test v1.4.0 (34cbb9a40) 1x PARALLEL
+2026-11-05T15:14:24.6406086Z opencorvus:test:
+2026-11-05T15:14:24.6406800Z opencorvus:test: ::group::test\isolated-test-entry.test.ts:
+2026-11-05T15:14:34.9793271Z opencorvus:test: (pass) cold Build observation reads preserve immutable Git bytes and Project ownership without an execution model [7414.06ms]
+2026-11-05T15:14:34.9891299Z opencorvus:test:
+2026-11-05T15:14:34.9892060Z opencorvus:test: ::endgroup::
+2026-11-05T15:14:34.9904398Z opencorvus:test:
+2026-11-05T15:14:34.9905403Z opencorvus:test:  1 pass
+2026-11-05T15:14:34.9906753Z opencorvus:test:  0 fail
+2026-11-05T15:14:34.9907269Z opencorvus:test:  11 expect() calls
+2026-11-05T15:14:34.9907885Z opencorvus:test: Ran 1 test across 1 file. [10.36s]
+2026-11-05T15:14:35.0431022Z opencorvus:test: [2/2] DONE test/server/build-observation-content-read.test.ts exit=0 duration=10.47s

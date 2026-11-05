@@ -1,0 +1,526 @@
+{
+  "observedAt": "2026-11-05T15:15:56.178390+00:00",
+  "runID": 42050923716,
+  "url": "https://github.com/yangheng95/opencorvus/actions/runs/42050923716",
+  "source": "f88a3b056ac16deab7c66142c9081dcadfcc6c5c",
+  "ref": "v0.1.46",
+  "event": "workflow_dispatch",
+  "attempt": 1,
+  "createdAt": "2026-11-05T15:02:38Z",
+  "completedAt": "2026-11-05T15:14:46Z",
+  "conclusion": "success",
+  "selectedFiles": [
+    "test/server/session-prompt-cross-process-owner.test.ts",
+    "test/server/build-observation-content-read.test.ts"
+  ],
+  "jobCounts": {
+    "success": 8,
+    "skipped": 1
+  },
+  "jobs": [
+    {
+      "id": 127326503143,
+      "name": "changes",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Classify exact change range",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 127326509885,
+      "name": "dependency review",
+      "conclusion": "skipped",
+      "steps": []
+    },
+    {
+      "id": 127327378316,
+      "name": "dependency audit",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Audit locked dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 127327378373,
+      "name": "verify",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Scan tracked sources for credentials",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify documentation",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify versions and generated fixed point",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run typecheck",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify CI and release workflow contracts",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install critical build runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run critical builds",
+          "conclusion": "success"
+        },
+        {
+          "name": "Retain failed native first-run diagnostics",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Post Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 127329733730,
+      "name": "service tests",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run channel runtime tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run overlay unit tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 127329733942,
+      "name": "selected unit (windows)",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Enable tracked long paths on Windows",
+          "conclusion": "success"
+        },
+        {
+          "name": "Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Configure git identity",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install Linux test runtime dependencies",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Install macOS test runtime dependencies",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Setup Windows Python test runtime",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install Windows test runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run utility filesystem tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run unit tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Setup Windows Python test runtime",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 127329733997,
+      "name": "selected unit (macos)",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Enable tracked long paths on Windows",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Configure git identity",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install Linux test runtime dependencies",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Install macOS test runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Setup Windows Python test runtime",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Install Windows test runtime dependencies",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run utility filesystem tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run unit tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 127329734099,
+      "name": "selected unit (linux)",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Enable tracked long paths on Windows",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Configure git identity",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install Linux test runtime dependencies",
+          "conclusion": "success"
+        },
+        {
+          "name": "Install macOS test runtime dependencies",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Setup Windows Python test runtime",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Install Windows test runtime dependencies",
+          "conclusion": "skipped"
+        },
+        {
+          "name": "Run utility filesystem tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run unit tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Setup Bun",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Checkout repository",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 127333695898,
+      "name": "Selected CI passed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Verify applicable checks passed",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "platforms": [
+    {
+      "platform": "linux",
+      "jobID": 127329734099,
+      "url": "https://github.com/yangheng95/opencorvus/actions/runs/42050923716/job/127329734099",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T15:08:09Z",
+      "completedAt": "2026-11-05T15:11:03Z",
+      "passed": 6,
+      "assertions": 56,
+      "trace": "targeted-linux.log",
+      "files": [
+        {
+          "file": "test/server/session-prompt-cross-process-owner.test.ts",
+          "passed": 5,
+          "assertions": 45,
+          "cases": [
+            "durable cross-process Session prompt ownership > a live backend serves duplicate and queued peer inputs through one Session owner [10574.55ms]",
+            "durable cross-process Session prompt ownership > a standby owner settles a peer summarize request by its exact durable source [11546.30ms]",
+            "durable cross-process Session prompt ownership > a first summarize with no compactable material persists its exact failed control [3143.58ms]",
+            "durable cross-process Session prompt ownership > a standby peer receives the exact failed summarize control terminal [4759.23ms]",
+            "durable cross-process Session prompt ownership > a peer takes over only after the exact owner process dies [6188.49ms]"
+          ],
+          "start": "2026-11-05T15:10:20.4787022Z opencorvus:test: [1/2] START test/server/session-prompt-cross-process-owner.test.ts",
+          "done": "2026-11-05T15:10:57.5137195Z opencorvus:test: [1/2] DONE test/server/session-prompt-cross-process-owner.test.ts exit=0 duration=37.04s"
+        },
+        {
+          "file": "test/server/build-observation-content-read.test.ts",
+          "passed": 1,
+          "assertions": 11,
+          "cases": [
+            "cold Build observation reads preserve immutable Git bytes and Project ownership without an execution model [1444.57ms]"
+          ],
+          "start": "2026-11-05T15:10:57.5137874Z opencorvus:test: [2/2] START test/server/build-observation-content-read.test.ts",
+          "done": "2026-11-05T15:11:00.0492740Z opencorvus:test: [2/2] DONE test/server/build-observation-content-read.test.ts exit=0 duration=2.54s"
+        }
+      ]
+    },
+    {
+      "platform": "macos",
+      "jobID": 127329733997,
+      "url": "https://github.com/yangheng95/opencorvus/actions/runs/42050923716/job/127329733997",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T15:08:09Z",
+      "completedAt": "2026-11-05T15:13:29Z",
+      "passed": 6,
+      "assertions": 56,
+      "trace": "targeted-macos.log",
+      "files": [
+        {
+          "file": "test/server/session-prompt-cross-process-owner.test.ts",
+          "passed": 5,
+          "assertions": 45,
+          "cases": [
+            "durable cross-process Session prompt ownership > a live backend serves duplicate and queued peer inputs through one Session owner [23499.25ms]",
+            "durable cross-process Session prompt ownership > a standby owner settles a peer summarize request by its exact durable source [28476.30ms]",
+            "durable cross-process Session prompt ownership > a first summarize with no compactable material persists its exact failed control [8698.95ms]",
+            "durable cross-process Session prompt ownership > a standby peer receives the exact failed summarize control terminal [9095.40ms]",
+            "durable cross-process Session prompt ownership > a peer takes over only after the exact owner process dies [12281.77ms]"
+          ],
+          "start": "2026-11-05T15:11:49.4795780Z opencorvus:test: [1/2] START test/server/session-prompt-cross-process-owner.test.ts",
+          "done": "2026-11-05T15:13:13.4496710Z opencorvus:test: [1/2] DONE test/server/session-prompt-cross-process-owner.test.ts exit=0 duration=83.97s"
+        },
+        {
+          "file": "test/server/build-observation-content-read.test.ts",
+          "passed": 1,
+          "assertions": 11,
+          "cases": [
+            "cold Build observation reads preserve immutable Git bytes and Project ownership without an execution model [6046.99ms]"
+          ],
+          "start": "2026-11-05T15:13:13.4502640Z opencorvus:test: [2/2] START test/server/build-observation-content-read.test.ts",
+          "done": "2026-11-05T15:13:22.5399960Z opencorvus:test: [2/2] DONE test/server/build-observation-content-read.test.ts exit=0 duration=9.09s"
+        }
+      ]
+    },
+    {
+      "platform": "windows",
+      "jobID": 127329733942,
+      "url": "https://github.com/yangheng95/opencorvus/actions/runs/42050923716/job/127329733942",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T15:08:09Z",
+      "completedAt": "2026-11-05T15:14:40Z",
+      "passed": 6,
+      "assertions": 56,
+      "trace": "targeted-windows.log",
+      "files": [
+        {
+          "file": "test/server/session-prompt-cross-process-owner.test.ts",
+          "passed": 5,
+          "assertions": 45,
+          "cases": [
+            "durable cross-process Session prompt ownership > a live backend serves duplicate and queued peer inputs through one Session owner [22229.82ms]",
+            "durable cross-process Session prompt ownership > a standby owner settles a peer summarize request by its exact durable source [23620.03ms]",
+            "durable cross-process Session prompt ownership > a first summarize with no compactable material persists its exact failed control [6697.55ms]",
+            "durable cross-process Session prompt ownership > a standby peer receives the exact failed summarize control terminal [9732.41ms]",
+            "durable cross-process Session prompt ownership > a peer takes over only after the exact owner process dies [13022.84ms]"
+          ],
+          "start": "2026-11-05T15:13:07.0840754Z opencorvus:test: [1/2] START test/server/session-prompt-cross-process-owner.test.ts",
+          "done": "2026-11-05T15:14:24.5770848Z opencorvus:test: [1/2] DONE test/server/session-prompt-cross-process-owner.test.ts exit=0 duration=77.49s"
+        },
+        {
+          "file": "test/server/build-observation-content-read.test.ts",
+          "passed": 1,
+          "assertions": 11,
+          "cases": [
+            "cold Build observation reads preserve immutable Git bytes and Project ownership without an execution model [7414.06ms]"
+          ],
+          "start": "2026-11-05T15:14:24.5772223Z opencorvus:test: [2/2] START test/server/build-observation-content-read.test.ts",
+          "done": "2026-11-05T15:14:35.0431022Z opencorvus:test: [2/2] DONE test/server/build-observation-content-read.test.ts exit=0 duration=10.47s"
+        }
+      ]
+    }
+  ],
+  "qualification": "Both selected backend files executed through the real isolated runner on Linux, macOS and Windows, each 6 passing tests and 56 assertions. Standard verification, dependency audit, utility filesystem and service checks also passed. This is supplemental selected CI, not a full backend-suite result. The exact nested cause of the historical macOS aggregate settlement error was not independently reproduced. No new real-provider requests, release/tag changes or user-process operations."
+}

@@ -51,6 +51,17 @@
       "conclusion": "failure"
     }
   ],
-  "qualification": "Separate automatic full-unit CI canceled its three unit jobs; its aggregate guard failed. Not counted as passed. The additional two-file native CI was not dispatched because its separate authorization question has no reply. Local focused checks passed; no claim that the two historical macOS failures received exact native revalidation. Canonical release and paired website are evaluated separately.",
-  "cancellationRequester": "unknown; newer main and per-ref replacement configuration observed separately"
+  "qualification": "The original automatic full-unit CI remains cancelled and is not counted as passed. Subsequently authorized selected CI 42050923716 on the same f88 source passed all three platforms, each 6 tests/56 assertions, with 8 successful jobs and 1 expected skip. This supplemental result does not establish full-suite success.",
+  "cancellationRequester": "unknown; newer main and per-ref replacement configuration observed separately",
+  "qualificationAtPublication": "Separate automatic full-unit CI canceled its three unit jobs; its aggregate guard failed. Not counted as passed. The additional two-file native CI was not dispatched because its separate authorization question has no reply. Local focused checks passed; no claim that the two historical macOS failures received exact native revalidation. Canonical release and paired website are evaluated separately.",
+  "targetedFollowUp": {
+    "runID": 42050923716,
+    "url": "https://github.com/yangheng95/opencorvus/actions/runs/42050923716",
+    "conclusion": "success",
+    "result": "targeted-ci-result.json",
+    "selectedFiles": [
+      "test/server/session-prompt-cross-process-owner.test.ts",
+      "test/server/build-observation-content-read.test.ts"
+    ]
+  }
 }
