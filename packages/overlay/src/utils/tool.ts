@@ -528,6 +528,28 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
     const status = normalizeToolStatus(safeState.status)
     return detail || (status ? toolStatusLabel(status) : "")
   }
+  if (n === "panelcreatetask") {
+    const title = firstNonEmptyString(safeInput.title)
+    if (title) return title
+  }
+  if (n === "missionstate") {
+    const action = firstNonEmptyString(safeInput.action)
+    if (action === "snapshot" || action === "commit") {
+      const label = t(`tool.mission_state.${action}`)
+      const count = safeState.metadata?.count
+      return safeState.status === "completed" && Number.isSafeInteger(count) && count >= 0
+        ? `${label}${t("card.meta_separator")}${tc("tool.mission_state.file_count", count)}`
+        : label
+    }
+  }
+  if (n === "schedulermessage") {
+    const kind = firstNonEmptyString(safeInput.kind)
+    if (kind === "request" || kind === "reply" || kind === "notification") {
+      return [t(`tool.scheduler_message.${kind}`), firstNonEmptyString(safeInput.subject)]
+        .filter(Boolean)
+        .join(t("card.meta_separator"))
+    }
+  }
   if (n === "applypatch" && safeState.status === "completed") {
     const identity = conversationToolIdentity(name, safeInput, safeState.metadata)
     if (identity?.kind === "patch" && identity.path) return shortRelativePath(identity.path, base)

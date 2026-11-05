@@ -55,6 +55,9 @@ function boundedToolInput(value: unknown): Record<string, unknown> {
       "q",
       "glob",
       "action",
+      "title",
+      "kind",
+      "subject",
       "description",
       "prompt",
       "url",
@@ -136,7 +139,7 @@ function boundedToolMetadata(part: Message.ToolPart): Record<string, unknown> {
   )
   const retained = boundedRecord(source, {
     maxBytes: Object.keys(projected).length ? Math.max(0, remainingBytes + 1) : 1024,
-    keys: ["exit", "readType", "offset", "lines", "totalLines", "source", "title", "status", "browser", "computer"],
+    keys: ["exit", "readType", "offset", "lines", "totalLines", "count", "source", "title", "status", "browser", "computer"],
   })
   return { ...retained, ...projected }
 }

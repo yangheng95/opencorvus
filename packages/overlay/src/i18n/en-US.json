@@ -1109,6 +1109,15 @@
   "tool.action.complete_mission": "Complete Mission",
   "tool.action.block_mission": "Record Mission blocker",
   "tool.mission_blocker_recorded": "Blocker recorded",
+  "tool.mission_state.snapshot": "Read state snapshot",
+  "tool.mission_state.commit": "Save state files",
+  "tool.mission_state.file_count": {
+    "one": "{{count}} file",
+    "other": "{{count}} files"
+  },
+  "tool.scheduler_message.request": "Request",
+  "tool.scheduler_message.reply": "Reply",
+  "tool.scheduler_message.notification": "Notification",
   "tool.action.capability_search": "Find specialist capabilities",
   "tool.input_for": "Input · {{name}}",
   "tool.input": "Input",

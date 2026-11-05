@@ -1109,6 +1109,15 @@
   "tool.action.complete_mission": "完成多步任务",
   "tool.action.block_mission": "记录多步任务阻塞",
   "tool.mission_blocker_recorded": "已记录阻塞",
+  "tool.mission_state.snapshot": "读取状态快照",
+  "tool.mission_state.commit": "保存状态文件",
+  "tool.mission_state.file_count": {
+    "one": "{{count}} 个文件",
+    "other": "{{count}} 个文件"
+  },
+  "tool.scheduler_message.request": "请求",
+  "tool.scheduler_message.reply": "回复",
+  "tool.scheduler_message.notification": "通知",
   "tool.action.capability_search": "查找专业能力",
   "tool.input_for": "输入 · {{name}}",
   "tool.input": "输入",

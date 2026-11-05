@@ -49,6 +49,64 @@ function projectedTools(part: Message.ToolPart): Message.ToolPart[] {
   ] as Message.ToolPart[]
 }
 
+test.each([
+  {
+    tool: "panel_create_task",
+    input: { title: "订单精确计算与汇总交付", request: "完整任务要求。".repeat(1000) },
+    expectedInput: { title: "订单精确计算与汇总交付" },
+    metadata: { source: "accepted-task" },
+    expectedMetadata: { source: "accepted-task" },
+  },
+  {
+    tool: "mission_state",
+    input: { action: "snapshot" },
+    expectedInput: { action: "snapshot" },
+    metadata: { count: 0, detail: "完整状态数据。".repeat(1000) },
+    expectedMetadata: { count: 0 },
+  },
+  {
+    tool: "mission_state",
+    input: {
+      action: "commit",
+      updates: ["frontier.md", "tasks.md", "handoff.md", "notes.md"].map((file) => ({
+        file,
+        content: "状态正文。".repeat(1000),
+      })),
+    },
+    expectedInput: { action: "commit" },
+    metadata: { count: 4, detail: "完整状态数据。".repeat(1000) },
+    expectedMetadata: { count: 4 },
+  },
+  ...(["request", "reply", "notification"] as const).map((kind) => ({
+    tool: "scheduler_message",
+    input: { kind, subject: "请核对原始交付与批准记录", message: "完整原始通信正文。".repeat(1000) },
+    expectedInput: { kind, subject: "请核对原始交付与批准记录" },
+    metadata: { source: "scheduler-receipt" },
+    expectedMetadata: { source: "scheduler-receipt" },
+  })),
+])("retains structured $tool operation fields across every bounded transport", (row) => {
+  const part = completedTool({
+    id: "prt_work_operation",
+    tool: row.tool,
+    input: row.input,
+    output: "原始工具结果。".repeat(CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES),
+    metadata: row.metadata,
+  })
+  for (const projected of projectedTools(part)) {
+    expect(projected.state.input).toEqual(row.expectedInput)
+    const { [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: deferred, ...metadata } = projected.state.metadata
+    expect(metadata).toEqual(row.expectedMetadata)
+    expect(deferred).toMatchObject({ kind: "deferred", outputBytes: Buffer.byteLength(part.state.output) })
+    expect(Buffer.byteLength(JSON.stringify(projected.state.input))).toBeLessThanOrEqual(2048)
+    expect(Buffer.byteLength(JSON.stringify(metadata))).toBeLessThanOrEqual(1024)
+    expect(Buffer.byteLength(JSON.stringify(projected.state))).toBeLessThanOrEqual(
+      CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+    )
+  }
+  expect(part.state.input).toEqual(row.input)
+  expect(part.state.metadata).toEqual(row.metadata)
+})
+
 test.each(["answered", "expired"] as const)(
   "preserves four long questions and their %s outcome in every transport",
   (status) => {

@@ -529,6 +529,17 @@ contracts and canonical completed Tool state for localized result summaries.
 The same formatter handles bounded and full Parts without requiring a body read.
 The original immutable receipt, summary and evidence stay in the Tool disclosure;
 failure text and Mission/Task lifecycle projections remain unchanged.
+Task creation summaries identify the original requested task title. Mission state
+summaries identify snapshot or file-save actions, with file counts only from
+completed Tool metadata. Scheduler communication summaries identify the original
+request/reply/notification kind and authored subject across Mission and Task
+entry points. These compact identities do not claim target availability,
+delivery or business completion. Raw receipts, failures and protocol identities
+remain in the existing disclosure; bounded and full Parts share the formatter.
+Bounded Tool transport retains original title, kind and subject input fields and
+count metadata within its existing field and aggregate byte limits. Historical
+HTTP and live Part events use that same projection; full raw Parts remain the
+sole original input/result source when a field exceeds the compact budget.
 Compact model-usage counts share one Intl.NumberFormat formatter with the
 caller's current locale. Conversation turns, card metadata, title summaries and
 Usage settings use that same number format and current token-unit label;

@@ -1,0 +1,1253 @@
+{
+  "at": "2026-11-05T19:17:51.355Z",
+  "scope": "Canonical task titles, state actions/counts and scheduler communication kinds/subjects survive the existing bounded transport and share one localized compact formatter",
+  "checksPassed": [
+    "typecheck",
+    "typecheck-transport",
+    "transport-contract",
+    "transport-contract-final",
+    "ui-build-after",
+    "prepare-before",
+    "preflight-before",
+    "before-initial-resources",
+    "before-initial-empty",
+    "before-final",
+    "before-prior",
+    "before-context",
+    "before-goal-initial",
+    "before-goal-final",
+    "before-tool-facts",
+    "shutdown-before",
+    "native-before-ready",
+    "settle-before",
+    "retire-before",
+    "qualify-before",
+    "prepare-after",
+    "preflight-after",
+    "after-initial",
+    "after-final",
+    "after-prior",
+    "after-context",
+    "after-goal-initial",
+    "after-goal-final",
+    "after-tool-facts",
+    "shutdown-after",
+    "native-after-ready",
+    "settle-after",
+    "retire-after",
+    "qualify-after",
+    "after-transport-canonical"
+  ],
+  "screenshots": [
+    {
+      "file": "01-before-task-and-state-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "02-before-original-create-receipt.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "03-before-reply-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "04-before-state-save-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "05-before-task-tools-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "06-before-task-request-navigation.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "07-before-task-request-original.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "08-after-task-and-zero-snapshot-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "09-after-create-original-receipt.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "10-after-state-save-four-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "11-after-reply-subject-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "12-after-reply-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "13-after-zero-snapshot-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "14-after-english-read-position.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "15-after-zero-snapshot-en-visible.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "16-after-save-four-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "17-after-task-notification-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "18-after-collapsed-task-request-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "19-after-original-request-input.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "20-after-collapsed-request-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "21-after-notification-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "22-after-refresh-notification-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "23-after-refresh-original-request.png",
+      "manuallyReviewed": true
+    }
+  ],
+  "originalBusinessCheckpoints": 36,
+  "questionReceipts": [
+    {
+      "phase": "before",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    }
+  ],
+  "goalReceipts": [
+    {
+      "phase": "before",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "before",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    }
+  ],
+  "operationReceipts": [
+    {
+      "phase": "before",
+      "tools": [
+        {
+          "id": "prt_g0VZH4GJU00C76Cxpefc",
+          "sessionID": "ses_-zUQivmTBzzY0ljL6aD5",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZH4KKn00lZa77DAfc",
+          "sessionID": "ses_-zUQivmTBzzY0ljL6aD5",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZH4PgM00MX1rmSe86",
+          "sessionID": "ses_-zUQivmTBzzY0ljL6aD5",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZH6vEP00EoMX65Dn4",
+          "sessionID": "ses_-zUQivmTBzzY0ljL6aD5",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHAdRE00ALvTjAc00",
+          "sessionID": "ses_-zUQipPGEzzGzIBo7bzl",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHAhTe00xMW781xOo",
+          "sessionID": "ses_-zUQipPGEzzGzIBo7bzl",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHAmp800v2UAJ4HqI",
+          "sessionID": "ses_-zUQipPGEzzGzIBo7bzl",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHCfMO00W8IOuySNL",
+          "sessionID": "ses_-zUQipPGEzzGzIBo7bzl",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHNcD000PP0kmOb8E",
+          "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHNgLH00DTURn94u7",
+          "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHNmBW00D1L7PGGhB",
+          "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHPDoJ00h5OA7MYDs",
+          "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHcoGX001eBNa1blq",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHcsix00oSePTx38c",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHcymK00VPP8OPLGq",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHd1bu009KQ7XX9rq",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHda8o00TsOd9Wm4u",
+          "sessionID": "ses_-zUQiMuRdzzGjN2n2S7I",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "notification",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHddw000FPPIhgloa",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHdf3w00Z6H1TDY93",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHdtLY00Uxt06mHAx",
+          "sessionID": "ses_-zUQiMxojzzUOAPzHlA9",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "notification",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHdsyP00ixiZxuI2a",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHe9CL00cIkBZdjR6",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRQ9BD00JOevgtcOE",
+          "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRQEui00OR1XGfhVk",
+          "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRQMGs00nR4c6uehg",
+          "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRRCmy00Tydg2fGdM",
+          "sessionID": "ses_-zUQYZYLhzz8tokz8EUs",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "request",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRRGOi0015pwAiE2A",
+          "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "reply",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRSbV800e14WxarHN",
+          "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRw8rW00e1qkpj20x",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRwEpC000ZGpgPCDR",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRwMHa007ET7mKj4I",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZSDsDx005xOXFx9FX",
+          "sessionID": "ses_-zUQY3XbvzzjzAx20a7z",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "notification",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZSDzP4005tAx8yhzR",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "scheduler_message",
+          "status": "error",
+          "failure": "SchedulerMessageAuthorityError",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZSTrKY00y0WESzlXP",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "mission_state",
+          "status": "error",
+          "failure": "MessageAbortedError",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZSYWx000jwcDsEVX9",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZSYnZN00V319k8yty",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZT7EhU00whKKCvs5W",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZT7Jyu001n08Wk8Iv",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZT7Qzj00rpTAcFJ52",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZT974800x6TnrnLoA",
+          "sessionID": "ses_-zUQWsTcezzNPfRFa33B",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "request",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZTAUZD00faj6jSiFo",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "reply",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZTAYPA00XUIGnKuDr",
+          "sessionID": "ses_-zUQWsTcezzNPfRFa33B",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "notification",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZTArTL00crZ66e64m",
+          "sessionID": "ses_-zUQWsTcezzNPfRFa33B",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "notification",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZTBAHA00I90SeJVPB",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "tools": [
+        {
+          "id": "prt_g0VZH4GJU00C76Cxpefc",
+          "sessionID": "ses_-zUQivmTBzzY0ljL6aD5",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZH4KKn00lZa77DAfc",
+          "sessionID": "ses_-zUQivmTBzzY0ljL6aD5",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZH4PgM00MX1rmSe86",
+          "sessionID": "ses_-zUQivmTBzzY0ljL6aD5",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZH6vEP00EoMX65Dn4",
+          "sessionID": "ses_-zUQivmTBzzY0ljL6aD5",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHAdRE00ALvTjAc00",
+          "sessionID": "ses_-zUQipPGEzzGzIBo7bzl",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHAhTe00xMW781xOo",
+          "sessionID": "ses_-zUQipPGEzzGzIBo7bzl",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHAmp800v2UAJ4HqI",
+          "sessionID": "ses_-zUQipPGEzzGzIBo7bzl",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHCfMO00W8IOuySNL",
+          "sessionID": "ses_-zUQipPGEzzGzIBo7bzl",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHNcD000PP0kmOb8E",
+          "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHNgLH00DTURn94u7",
+          "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHNmBW00D1L7PGGhB",
+          "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHPDoJ00h5OA7MYDs",
+          "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHcoGX001eBNa1blq",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHcsix00oSePTx38c",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHcymK00VPP8OPLGq",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHd1bu009KQ7XX9rq",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHda8o00TsOd9Wm4u",
+          "sessionID": "ses_-zUQiMuRdzzGjN2n2S7I",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "notification",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHddw000FPPIhgloa",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHdf3w00Z6H1TDY93",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHdtLY00Uxt06mHAx",
+          "sessionID": "ses_-zUQiMxojzzUOAPzHlA9",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "notification",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHdsyP00ixiZxuI2a",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZHe9CL00cIkBZdjR6",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRQ9BD00JOevgtcOE",
+          "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRQEui00OR1XGfhVk",
+          "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRQMGs00nR4c6uehg",
+          "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRRCmy00Tydg2fGdM",
+          "sessionID": "ses_-zUQYZYLhzz8tokz8EUs",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "request",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRRGOi0015pwAiE2A",
+          "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "reply",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRSbV800e14WxarHN",
+          "sessionID": "ses_-zUQYZsqLzz6t3a5Qq9O",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRw8rW00e1qkpj20x",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRwEpC000ZGpgPCDR",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZRwMHa007ET7mKj4I",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZSDsDx005xOXFx9FX",
+          "sessionID": "ses_-zUQY3XbvzzjzAx20a7z",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "notification",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZSDzP4005tAx8yhzR",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "scheduler_message",
+          "status": "error",
+          "failure": "SchedulerMessageAuthorityError",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZSTrKY00y0WESzlXP",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "mission_state",
+          "status": "error",
+          "failure": "MessageAbortedError",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZSYWx000jwcDsEVX9",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZSYnZN00V319k8yty",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZT7EhU00whKKCvs5W",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "snapshot",
+          "count": 0,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZT7Jyu001n08Wk8Iv",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZT7Qzj00rpTAcFJ52",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "tool": "panel_create_task",
+          "status": "completed",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZT974800x6TnrnLoA",
+          "sessionID": "ses_-zUQWsTcezzNPfRFa33B",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "request",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZTAUZD00faj6jSiFo",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "reply",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZTAYPA00XUIGnKuDr",
+          "sessionID": "ses_-zUQWsTcezzNPfRFa33B",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "notification",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZTArTL00crZ66e64m",
+          "sessionID": "ses_-zUQWsTcezzNPfRFa33B",
+          "tool": "scheduler_message",
+          "status": "completed",
+          "inputKind": "notification",
+          "originalFullPartInputResultMetadataFailureExact": true
+        },
+        {
+          "id": "prt_g0VZTBAHA00I90SeJVPB",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "tool": "mission_state",
+          "status": "completed",
+          "inputKind": "commit",
+          "count": 4,
+          "originalFullPartInputResultMetadataFailureExact": true
+        }
+      ]
+    }
+  ],
+  "transportRuntime": {
+    "sessions": 12,
+    "canonicalParts": 44,
+    "deferredParts": 16,
+    "originalWorkFieldsRetained": true,
+    "httpAndSseConnectedSnapshotExact": true,
+    "originalFullPartsExact": true,
+    "historicalTaskPayloadExpectedOnlyEnrichedFromOriginalRequests": true,
+    "partUpdatedAndMovedCoveredByPureDataContract": true,
+    "actualLivePartUpdatesEmitted": 0
+  },
+  "protocolTests": {
+    "files": 1,
+    "passed": 29,
+    "assertions": 228,
+    "newCases": 6,
+    "pureDataOnly": true
+  },
+  "originalFileChangeReceipts": [
+    {
+      "phase": "before",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    },
+    {
+      "phase": "after",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    }
+  ],
+  "priorProjectReceipts": [
+    {
+      "phase": "before",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    }
+  ],
+  "sourceData": [
+    {
+      "phase": "before",
+      "originals": 309205,
+      "current": 309207,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62849,
+          "after": 62850
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62791,
+          "after": 62792
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    },
+    {
+      "phase": "after",
+      "originals": 309207,
+      "current": 309209,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62850,
+          "after": 62851
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62792,
+          "after": 62793
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    }
+  ],
+  "resources": {
+    "originalNativeHandlesExitedZero": 2,
+    "pairedCopiesRetired": 4,
+    "modelRequests": 0,
+    "cumulativeRequests": 1461,
+    "minimumReserveMs": 1734111,
+    "originalDeadlineAt": 1793907748602,
+    "sourceCredentialsAndCatalogUnchanged": true
+  },
+  "manualFindings": {
+    "originalTaskTitle": "批准后提交801",
+    "taskNameVisibleInCollapsedGroup": true,
+    "stateSnapshotExistingFiles": 0,
+    "stateSaveUpdatedFiles": 4,
+    "bothLocaleStateCountsVisible": true,
+    "requestReplyNotificationKindsAndOriginalSubjectsReviewedInBothLocales": true,
+    "rawCreatedReceiptIdentityPreserved": true,
+    "rawRequestInputAndPendingReceiptsPreserved": true,
+    "afterReloadOriginalTaskAndSameRequestInputReopened": true
+  },
+  "intermediateObservations": [
+    {
+      "observation": "before-initial first seven checks passed, then resource-proof lacked the preparation dependency snapshot-entry-discovery-private.json",
+      "resolution": "Preparation fixed to include existing immutable resource, empty-project and Mission facts; same instance/original timeout resource and empty checkers passed, first seven original receipts retained; full final nine passed; original command failure retained"
+    },
+    {
+      "observation": "First runtime collector traversed compact child activity as well as canonical transcript and overwrote the same Tool ID with depth-bounded failure fields",
+      "resolution": "Collector corrected to canonical transcript and exact native Session identity; same service and timeout yielded all44 canonical Parts and12 HTTP/SSE snapshots; full immutable Part failures unchanged; original failure retained"
+    },
+    {
+      "observation": "06 is a transient navigation render and tooltip;13 scrolls past the English snapshot header and14 puts it behind the composer",
+      "resolution": "These are not target visual proof;15 uses actual native keyboard reading position and shows Read state snapshot/0 files clearly"
+    },
+    {
+      "observation": "17 shows the later English notification and final delivery;22 shows that notification after reload",
+      "resolution": "Neither claimed as the earlier notification full receipt;21 confirms the earlier Chinese notification stays expanded and23 reopens the original request after refresh"
+    },
+    {
+      "observation": "A CardParts event was initially targeted with InlineToolPart chip classes and an English Expand label was guessed with a colon",
+      "resolution": "Fresh real DOM controls identified; only navigation selectors corrected, product unchanged;13/18 local original files manually viewed after subsequent tool action errors"
+    }
+  ],
+  "limitations": [
+    "Rare running/failure/recovered-target-unavailable states have no dedicated natural visual case; two original error records preserved through real APIs without claiming visual coverage",
+    "Original authored subject and protocol/brand/file identities retain their exact language; other Tool details such as Tasks/Expert Squad/Capability search/action=complete_task need separate contract investigation",
+    "Original512-byte per-field and aggregate budgets preserved; long subjects can require original full-Part disclosure and existing compact rows may show ellipsis;18 is not claimed to display every character",
+    "No new model workflow, business mutations, download, Goal creation, clipboard, user-window operation, branch, version or release",
+    "Historical navigation shows Pending execution8MGR under a completed Task; shared rail/live mapping read, persistent-occurrence and production-entry cross-audit remains next work; this batch makes no scheduling-correctness claim from that label"
+  ],
+  "uiAutomationAddedOrRun": false,
+  "userWindowUntouched": true
+}

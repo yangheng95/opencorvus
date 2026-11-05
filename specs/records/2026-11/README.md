@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [用工作事实说明工具操作](2026-11-06-tool-result-language.md)：原输入身份与中文摘要。
+
 - [工作操作的语言与键盘返回](2026-11-06-work-kind-language.md)：中文术语与菜单按键所有权。
 
 - [审阅中的完整重命名路径](2026-11-06-review-path-readability.md)：窄侧栏路径阅读。
