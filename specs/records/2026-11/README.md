@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [工作操作的语言与键盘返回](2026-11-06-work-kind-language.md)：中文术语与菜单按键所有权。
+
 - [审阅中的完整重命名路径](2026-11-06-review-path-readability.md)：窄侧栏路径阅读。
 
 - [提交回答后的数量与阅读顺序](2026-11-06-question-reply-summary.md)：已答、留空和真实原题。

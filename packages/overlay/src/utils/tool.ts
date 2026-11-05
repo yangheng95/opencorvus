@@ -108,12 +108,16 @@ function shortSha(value: unknown): string {
 }
 
 function displayToolResultDetail(name: string, state: Record<string, unknown>): string {
+  const n = toolNameKey(name)
+  if (state.status === "completed") {
+    if (n === "panelcompletemission") return toolStatusLabel("completed")
+    if (n === "panelblockmission") return t("tool.mission_blocker_recorded")
+  }
   const output = parseDisplayRecord(state.output)
   if (!output) return ""
   const status = firstNonEmptyString(output.status)
   if (!status) return ""
 
-  const n = toolNameKey(name)
   if (
     (n === "createcontinuousgoal" || n === "getcontinuousgoal" || n === "updatecontinuousgoal") &&
     ["active", "paused", "blocked", "complete", "budget_limited"].includes(status)

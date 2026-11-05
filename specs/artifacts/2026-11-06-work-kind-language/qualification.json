@@ -1,0 +1,643 @@
+{
+  "at": "2026-11-05T18:31:41.239Z",
+  "scope": "Work kind labels and Goal scope use the current language; completed Mission receipts use canonical Tool state; row keyboard shortcuts respect portaled menu event ownership",
+  "checksPassed": [
+    "typecheck",
+    "ui-build-after",
+    "docs-current",
+    "architecture-current",
+    "prepare-before",
+    "preflight-before",
+    "before-initial",
+    "before-final",
+    "before-prior",
+    "before-context",
+    "before-goal-initial",
+    "before-goal-final",
+    "shutdown-before",
+    "native-before-ready",
+    "settle-before",
+    "retire-before",
+    "qualify-before",
+    "prepare-after",
+    "preflight-after",
+    "after-initial-remaining",
+    "after-final",
+    "after-prior",
+    "after-context",
+    "after-goal-initial",
+    "after-goal-final",
+    "shutdown-after",
+    "native-after-ready",
+    "settle-after",
+    "retire-after",
+    "qualify-after",
+    "before-mission-tools-repaired",
+    "after-mission-tools"
+  ],
+  "screenshots": [
+    {
+      "file": "01-before-home-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "02-before-task-goal-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "03-before-mission-goal-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "04-before-mission-menu-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "05-before-rename-dialog-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "06-before-located-mission-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "07-before-sidebar-menu-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "08-before-escape-still-open.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "09-before-blocked-tool-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "10-after-mission-menu-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "11-after-mission-escape-focus.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "12-after-mission-row-focus.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "13-after-menu-arrow-ownership.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "14-after-task-escape-focus.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "15-after-chat-escape-focus.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "16-after-task-goal-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "17-after-current-task-menu-focus.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "18-after-mission-goal-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "19-after-rename-dialog-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "20-after-mission-goal-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "21-after-blocked-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "22-after-blocked-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "23-after-original-receipt.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "24-after-refresh-receipt-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "25-after-refresh-open-receipt.png",
+      "manuallyReviewed": true
+    }
+  ],
+  "originalBusinessCheckpoints": 36,
+  "questionReceipts": [
+    {
+      "phase": "before",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    }
+  ],
+  "goalReceipts": [
+    {
+      "phase": "before",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "before",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    }
+  ],
+  "missionToolReceipts": [
+    {
+      "phase": "before",
+      "tools": [
+        {
+          "id": "prt_g0VZH76cX00brWSh3wv1",
+          "tool": "panel_complete_mission",
+          "status": "completed",
+          "kind": "mission_completed",
+          "sessionID": "ses_-zUQivmTBzzY0ljL6aD5",
+          "originalReceiptInputSummaryEvidenceExact": true
+        },
+        {
+          "id": "prt_g0VZHCqeQ00pJbqVXtHQ",
+          "tool": "panel_complete_mission",
+          "status": "completed",
+          "kind": "mission_completed",
+          "sessionID": "ses_-zUQipPGEzzGzIBo7bzl",
+          "originalReceiptInputSummaryEvidenceExact": true
+        },
+        {
+          "id": "prt_g0VZHPNy000Qq5gecBem",
+          "tool": "panel_complete_mission",
+          "status": "completed",
+          "kind": "mission_completed",
+          "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+          "originalReceiptInputSummaryEvidenceExact": true
+        },
+        {
+          "id": "prt_g0VZHeLJ000OmFFVyT2O",
+          "tool": "panel_block_mission",
+          "status": "completed",
+          "kind": "mission_blocked",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "originalReceiptInputSummaryEvidenceExact": true
+        },
+        {
+          "id": "prt_g0VZSZ96m00VYGLVLVWV",
+          "tool": "panel_complete_mission",
+          "status": "completed",
+          "kind": "mission_completed",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "originalReceiptInputSummaryEvidenceExact": true
+        },
+        {
+          "id": "prt_g0VZTBMrz00IsnW03YKA",
+          "tool": "panel_complete_mission",
+          "status": "completed",
+          "kind": "mission_completed",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "originalReceiptInputSummaryEvidenceExact": true
+        }
+      ],
+      "scopes": [
+        {
+          "kind": "task",
+          "id": "tsk_g00VZHd0gV00QEPVDCEU",
+          "title": "订单精确计算与汇总交付",
+          "sessionID": "ses_-zUQiMz5bzzMH5K9ooZ0",
+          "goal": null,
+          "originalOwnerAndTitleExact": true
+        },
+        {
+          "kind": "mission",
+          "id": "ses_-zUQWu4cFzzezMvaudl6",
+          "title": "批准后提交801",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "goal": null,
+          "originalOwnerAndTitleExact": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "tools": [
+        {
+          "id": "prt_g0VZH76cX00brWSh3wv1",
+          "tool": "panel_complete_mission",
+          "status": "completed",
+          "kind": "mission_completed",
+          "sessionID": "ses_-zUQivmTBzzY0ljL6aD5",
+          "originalReceiptInputSummaryEvidenceExact": true
+        },
+        {
+          "id": "prt_g0VZHCqeQ00pJbqVXtHQ",
+          "tool": "panel_complete_mission",
+          "status": "completed",
+          "kind": "mission_completed",
+          "sessionID": "ses_-zUQipPGEzzGzIBo7bzl",
+          "originalReceiptInputSummaryEvidenceExact": true
+        },
+        {
+          "id": "prt_g0VZHPNy000Qq5gecBem",
+          "tool": "panel_complete_mission",
+          "status": "completed",
+          "kind": "mission_completed",
+          "sessionID": "ses_-zUQicQugzzzwNVRGmlu",
+          "originalReceiptInputSummaryEvidenceExact": true
+        },
+        {
+          "id": "prt_g0VZHeLJ000OmFFVyT2O",
+          "tool": "panel_block_mission",
+          "status": "completed",
+          "kind": "mission_blocked",
+          "sessionID": "ses_-zUQiNDP0zzyyPiL2nvx",
+          "originalReceiptInputSummaryEvidenceExact": true
+        },
+        {
+          "id": "prt_g0VZSZ96m00VYGLVLVWV",
+          "tool": "panel_complete_mission",
+          "status": "completed",
+          "kind": "mission_completed",
+          "sessionID": "ses_-zUQY3tNGzzGR1Ji7uTq",
+          "originalReceiptInputSummaryEvidenceExact": true
+        },
+        {
+          "id": "prt_g0VZTBMrz00IsnW03YKA",
+          "tool": "panel_complete_mission",
+          "status": "completed",
+          "kind": "mission_completed",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "originalReceiptInputSummaryEvidenceExact": true
+        }
+      ],
+      "scopes": [
+        {
+          "kind": "task",
+          "id": "tsk_g00VZHd0gV00QEPVDCEU",
+          "title": "订单精确计算与汇总交付",
+          "sessionID": "ses_-zUQiMz5bzzMH5K9ooZ0",
+          "goal": null,
+          "originalOwnerAndTitleExact": true
+        },
+        {
+          "kind": "mission",
+          "id": "ses_-zUQWu4cFzzezMvaudl6",
+          "title": "批准后提交801",
+          "sessionID": "ses_-zUQWu4cFzzezMvaudl6",
+          "goal": null,
+          "originalOwnerAndTitleExact": true
+        }
+      ]
+    }
+  ],
+  "originalFileChangeReceipts": [
+    {
+      "phase": "before",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    },
+    {
+      "phase": "after",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    }
+  ],
+  "priorProjectReceipts": [
+    {
+      "phase": "before",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    }
+  ],
+  "sourceData": [
+    {
+      "phase": "before",
+      "originals": 309201,
+      "current": 309203,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62847,
+          "after": 62848
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62789,
+          "after": 62790
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    },
+    {
+      "phase": "after",
+      "originals": 309203,
+      "current": 309205,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62848,
+          "after": 62849
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62790,
+          "after": 62791
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    }
+  ],
+  "resources": {
+    "originalNativeHandlesExitedZero": 2,
+    "pairedCopiesRetired": 4,
+    "modelRequests": 0,
+    "cumulativeRequests": 1461,
+    "minimumReserveMs": 743699,
+    "originalDeadlineAt": 1793904080660,
+    "sourceCredentialsAndCatalogUnchanged": true
+  },
+  "manualFindings": {
+    "originalTaskTitle": "订单精确计算与汇总交付",
+    "originalMissionTitle": "批准后提交801",
+    "taskScope": "作用于当前任务及其下属工作。",
+    "missionScope": "作用于当前多步任务及其下属工作。",
+    "englishScopeAndNeutralIntroReviewed": true,
+    "chineseMissionRenameDialogAndDownloadMenuReviewed": true,
+    "completedMission": "完成多步任务 · 已完成",
+    "blockedMission": "记录多步任务阻塞 · 已记录阻塞",
+    "englishBlocker": "Record Mission blocker · Blocker recorded",
+    "originalBlockReceiptExpandedBeforeAndAfterReload": true,
+    "taskMissionChatMenusNativeEscapeToTriggerThenRowVerified": true,
+    "arrowRightEnterArrowDownArrowLeftEscapeOwnershipVerified": true,
+    "headerMenuNativeLifecycleReviewed": true,
+    "originalNamesFactsAndKindsPreserved": true
+  },
+  "intermediateObservations": [
+    {
+      "observation": "before-mission-tools used an incorrect Task selection sessionID assumption",
+      "resolution": "Checker corrected to canonical Task selection id and Mission selection sessionID; original failure retained and repaired command passed; product API unchanged"
+    },
+    {
+      "observation": "after-initial completed read-proof, then inspect hit the existing 15-second read timeout during parallel warm-up reads",
+      "resolution": "Same live instance and original timeouts: remaining eight original checkers passed in after-initial-remaining; first successful receipt retained; original command failure retained; initial read latency cause not isolated"
+    },
+    {
+      "observation": "Task child peek collapsed after focus moved to Chat",
+      "resolution": "Navigated through formal Search and Locate current work to original Task741 and verified native first Escape and second row Escape in17"
+    },
+    {
+      "observation": "Menu exit accessibility nodes may persist briefly after native closure",
+      "resolution": "Fresh focus observation before further key input and screenshots show focus on trigger; immediate exiting nodes not treated as failed closure"
+    },
+    {
+      "observation": "English dialog locator omitted the article a",
+      "resolution": "Used actual Create a continuous goal title;20 manually viewed locally"
+    },
+    {
+      "observation": "24 is the collapsed Tool after a post-refresh toggle",
+      "resolution": "25 reopens the same original receipt with actual kind/session/summary; neither image misrepresented as the other state"
+    }
+  ],
+  "limitations": [
+    "Rare download and stop errors, model-unavailable, closed-Mission and empty-title states have no separate natural visual case; localized fields updated without claiming those screenshots",
+    "No new model workflow or original-object mutation; no download, pin, archive, rename, stop, Goal creation or operating-system clipboard action",
+    "Separate normal-Chat experience and submenu opening have no additional natural screenshot; shared Chat-kind row mechanism inspected, existing Work Chat verified",
+    "Other raw status strings such as Task created and mission_state commit remain visible in existing tool results; not claimed fully localized and retained as a concrete next investigation",
+    "No UI automated tests added or run; current changed main is after frozen v0.1.46 installer and no release performed"
+  ],
+  "uiAutomationAddedOrRun": false,
+  "userWindowUntouched": true
+}

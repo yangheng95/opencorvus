@@ -42,6 +42,10 @@ export function useTaskRowActionsKeyboard(hasActions: Accessor<boolean>) {
 
   function closeActionsFromKeyboardEvent(event: KeyboardEvent): void {
     if (event.key !== "Escape" && event.key !== "ArrowLeft") return
+    const container = event.currentTarget
+    const target = event.target
+    // Portaled menu keys belong to the menu, even when Solid bubbles through this row.
+    if (!(container instanceof HTMLElement) || !(target instanceof Node) || !container.contains(target)) return
     event.preventDefault()
     event.stopPropagation()
     closeActionsFromKeyboard()

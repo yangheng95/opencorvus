@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [工作操作实页证据](2026-11-06-work-kind-language/README.md)：原对象、目标范围和菜单键盘。
+
 - [审阅路径实页证据](2026-11-06-review-path-readability/README.md)：原目标路径、换行和语言切换。
 
 - [回答数量实页证据](2026-11-06-question-reply-summary/README.md)：部分回答、完整回答及语言切换。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [工作操作的语言与键盘返回](records/2026-11/2026-11-06-work-kind-language.md)：持续目标范围、工具结果及菜单键盘。
+
 - [审阅中的完整重命名路径](records/2026-11/2026-11-06-review-path-readability.md)：结构化原路径与目标路径。
 
 - [提交回答后的数量与阅读顺序](records/2026-11/2026-11-06-question-reply-summary.md)：原答案同源汇总与中文标点。

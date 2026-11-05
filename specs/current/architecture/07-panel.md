@@ -524,6 +524,11 @@ from their actual structured result through the same current locale labels as
 the Goal control. Authored reasons and original inputs/results remain unchanged
 and available through the existing Tool disclosure. This presentation does not
 derive Goal state from a requested status or alter execution and usage ownership.
+Successful Mission completion and blocker Tools use their declared producer
+contracts and canonical completed Tool state for localized result summaries.
+The same formatter handles bounded and full Parts without requiring a body read.
+The original immutable receipt, summary and evidence stay in the Tool disclosure;
+failure text and Mission/Task lifecycle projections remain unchanged.
 Compact model-usage counts share one Intl.NumberFormat formatter with the
 caller's current locale. Conversation turns, card metadata, title summaries and
 Usage settings use that same number format and current token-unit label;
@@ -3521,7 +3526,12 @@ row and contributes no grid width; the title body permanently reserves its hit
 area so revealing the trigger cannot move the main button beneath a pointer.
 Hover, focus, or keyboard action-open changes trigger visibility while the row
 bounds, leading icon, trailing indicator anchor, and adjacent-row positions
-remain unchanged. Stopping a Task, Mission, or Chat from this menu requires an
+remain unchanged. Row-action Escape and ArrowLeft handling applies only to keys
+whose actual DOM target is inside that action container. Portaled menu keys keep
+the native menu's dismissal, submenu and focus-return ownership even when Solid
+bubbles through the row's logical ancestors. Once the menu returns focus to its
+trigger, the row's existing Escape/ArrowLeft action can return to the main button.
+Stopping a Task, Mission, or Chat from this menu requires an
 item-named confirmation before dispatch. The row menu has no rename action;
 double-clicking the canonical row main button invokes its existing domain rename
 dialog while single click retains selection. Ordinary Chat/Work title PATCH uses
@@ -4800,6 +4810,11 @@ action labels. Continuation retirement remains separate from the original
 authorization decision and never changes that history into a new request.
 
 ## Continuous-goal presentation
+
+Chinese work-kind labels in Goal scopes and Work Ledger controls use the existing
+Task and Mission product names consistently. Scope text describes the current
+owner and its owned work; original titles, protocol identifiers, completion
+evidence and unclassified reasons remain unchanged.
 
 The shared Chat/Task/Mission conversation area and an opened SideChat expose the
 current continuous-goal HTTP projection and explicit create, pause, resume, budget
