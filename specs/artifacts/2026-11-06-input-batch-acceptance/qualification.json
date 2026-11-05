@@ -1,0 +1,116 @@
+{
+  "at": "2026-11-05T20:21:41.514Z",
+  "schema": 10,
+  "originalData": {
+    "rows": 309209,
+    "afterRows": 309211,
+    "projects": 129,
+    "attachments": 299,
+    "allOriginalBusinessContentPreserved": true,
+    "sourceDatabasePreserved": true
+  },
+  "coldProcessReadback": {
+    "tables": 92,
+    "beforeRows": 1570,
+    "afterRows": 1570,
+    "allOriginalRowsExact": true,
+    "publicConversationHttpAndSseExact": true,
+    "modelRequests": 0
+  },
+  "backendTests": {
+    "tests": 14,
+    "assertions": 47,
+    "runner": "repository isolated run-tests",
+    "success": true
+  },
+  "realModel": {
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "requests": 8,
+    "maximumRequests": 8,
+    "statuses": [
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200
+    ],
+    "cumulativeRequests": 1469,
+    "readersSettled": true
+  },
+  "screenshots": [
+    "01-partial-question-zh.png",
+    "02-file-summary-zh.png",
+    "03-rename-path-zh.png",
+    "04-live-project-one-zh.png",
+    "05-live-project-two-zh.png",
+    "06-live-project-two-clear-zh.png"
+  ],
+  "profiles": [
+    {
+      "phase": "before",
+      "requests": 0,
+      "maximumRequests": 0,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "reserveMs": 2448292,
+      "credentialAndCatalogRetired": true
+    },
+    {
+      "phase": "live",
+      "requests": 0,
+      "maximumRequests": 8,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "reserveMs": 3184302,
+      "credentialAndCatalogRetired": true
+    },
+    {
+      "phase": "live-recheck",
+      "requests": 0,
+      "maximumRequests": 8,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "reserveMs": 2997980,
+      "credentialAndCatalogRetired": true
+    },
+    {
+      "phase": "live-final",
+      "requests": 4,
+      "maximumRequests": 8,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "reserveMs": 2718708,
+      "credentialAndCatalogRetired": true
+    },
+    {
+      "phase": "live-public",
+      "requests": 4,
+      "maximumRequests": 4,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "reserveMs": 2448273,
+      "credentialAndCatalogRetired": true
+    },
+    {
+      "phase": "after",
+      "requests": 0,
+      "maximumRequests": 0,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "reserveMs": 2187990,
+      "credentialAndCatalogRetired": true
+    }
+  ],
+  "userWindowsOperated": false,
+  "uiAutomatedTestsRun": 0,
+  "oldHistoryRewritten": false,
+  "limitations": [
+    "Historical 8MGR acceptance remains original",
+    "Full Task/Mission orchestration and crash recovery not exercised",
+    "Mixed admission during automatic compaction not exercised"
+  ]
+}

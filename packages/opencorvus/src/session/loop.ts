@@ -1469,10 +1469,14 @@ export namespace SessionLoop {
     }
   }
 
-  /** Ordered user inputs after the newest prior assistant are one admission
-   * batch. This covers the cross-process first-owner race where two inputs can
-   * commit before either backend publishes the durable Session owner. */
-  function currentUnacceptedInputBatch(msgs: Message.WithParts[], lastUser: Message.User): readonly string[] {
+  /** Released queued inputs and all user inputs after the newest assistant form
+   * one ordered admission batch. A newly visible input may be unmarked (for
+   * example, a participant moved into this Session before a queued control). */
+  function currentUnacceptedInputBatch(
+    msgs: Message.WithParts[],
+    lastUser: Message.User,
+    deliver: readonly Message.WithParts[],
+  ): readonly string[] {
     let newestAssistantIndex = -1
     for (let index = msgs.length - 1; index >= 0; index--) {
       if (msgs[index]?.info.role === "assistant") {
@@ -1480,9 +1484,12 @@ export namespace SessionLoop {
         break
       }
     }
+    const deliveredIDs = new Set(deliver.map((message) => message.info.id))
     const ids = msgs
-      .slice(newestAssistantIndex + 1)
-      .filter((message): message is Message.WithParts & { info: Message.User } => message.info.role === "user")
+      .filter(
+        (message, index): message is Message.WithParts & { info: Message.User } =>
+          message.info.role === "user" && (index > newestAssistantIndex || deliveredIDs.has(message.info.id)),
+      )
       .map((message) => message.info.id)
     return ids.length > 0 ? ids : [lastUser.id]
   }
@@ -3424,9 +3431,9 @@ export namespace SessionLoop {
 
                 acceptedInputMessageIDs ??=
                   deliver.length > 0
-                    ? deliver.map((message) => message.info.id)
+                    ? currentUnacceptedInputBatch(msgs, lastUser, deliver)
                     : (failedAcceptedInputBatch(msgs, attachedTargets, lastUser.id) ??
-                      currentUnacceptedInputBatch(msgs, lastUser))
+                      currentUnacceptedInputBatch(msgs, lastUser, deliver))
                 turn = await processTurn({
                   step,
                   sessionID,
@@ -5844,6 +5851,7 @@ export namespace SessionLoop {
   export const TestHooks = {
     collectLoopState,
     partitionPendingDelivery,
+    currentUnacceptedInputBatch,
     failedAcceptedInputBatch,
     consumeCompletedCompactionControl,
     executeCompactionControl,

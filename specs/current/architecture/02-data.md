@@ -762,7 +762,11 @@ tool instance、callback 与 Promise 仍只属于当前进程。`session_prompt_
 尚有 `pendingDelivery` 的输入；执行中入队的消息可能早于该 Turn 的最终 assistant，不能仅凭最终
 assistant 的 timeline cursor 跳过它。该检查只唤醒现有循环，由原有原子 acceptance 消费输入；
 等待精确 compaction lease 的分支仍遵循该控制的唤醒/到期边界。进程内事件只用于
-降低唤醒延迟。reply peer 通过 accepted input Message identity 加入，summary peer 先按
+降低唤醒延迟。
+接纳批次按原可见时间线合并本次释放的排队输入和最新 assistant 之后的全部 user 输入；
+跨 Session 移入的真实参与者输入即使未带排队标记，也与同批控制输入共同接纳。
+队列标记只决定可见时机，不能缩小已交给本轮模型的新输入集合。失败重试仍复用原精确批次。
+reply peer 通过 accepted input Message identity 加入，summary peer 先按
 本次 exact Session control ID 加入其 consumed/failed 终态；consumed terminal 必须与
 该 control durable payload 中的 exact summary Message ID 绑定在同一个 immediate transaction。
 新 compaction 直接使用 checkpoint publisher 返回的 Message ID，禁止按 source、时间或排序

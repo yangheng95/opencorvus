@@ -22,7 +22,7 @@ import { markPendingDeliveryIfTurnInFlight } from "@/session/prompt/parts"
 import { SessionPromptState } from "@/session/prompt/state"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
 
-const { partitionPendingDelivery } = SessionLoop.TestHooks
+const { partitionPendingDelivery, currentUnacceptedInputBatch } = SessionLoop.TestHooks
 
 function user(id: string, pendingDelivery?: boolean): Message.WithParts {
   return { info: { id, role: "user", ...(pendingDelivery ? { pendingDelivery } : {}) } as Message.Info, parts: [] }
@@ -45,11 +45,10 @@ describe("partitionPendingDelivery", () => {
       assistant("a3", "u2"),
     ]
 
-    const { visible, deliver } = partitionPendingDelivery(history, new Set(["u2", "u3-queued"]))
+    const { visible } = partitionPendingDelivery(history, new Set(["u2", "u3-queued"]))
 
     // The Turn's own work stays visible — hiding it is what froze the prompt.
     expect(ids(visible)).toEqual(["u1", "a1", "u2", "a2", "a3"])
-    expect(deliver).toEqual([])
   })
 
   test("the prompt grows as the Turn produces work, so the context cannot freeze", () => {
@@ -84,10 +83,70 @@ describe("partitionPendingDelivery", () => {
   test("a history with no queued Messages passes through untouched", () => {
     const history = [user("u1"), assistant("a1", "u1"), assistant("a2", "u1")]
 
-    const { visible, deliver } = partitionPendingDelivery(history, new Set(["u1"]))
+    const { visible } = partitionPendingDelivery(history, new Set(["u1"]))
 
     expect(visible).toBe(history)
-    expect(deliver).toEqual([])
+  })
+})
+
+describe("current input admission batch", () => {
+  function admitted(history: Message.WithParts[], targets: string[] = []) {
+    const { visible, deliver } = partitionPendingDelivery(history, new Set(targets))
+    const lastUser = visible.findLast((message) => message.info.role === "user")!.info as Message.User
+    return currentUnacceptedInputBatch(visible, lastUser, deliver)
+  }
+
+  test("accepts the moved participant and queued control as one ordered batch", () => {
+    expect(
+      admitted([user("previous"), assistant("reply", "previous"), user("participant"), user("control", true)]),
+    ).toEqual(["participant", "control"])
+  })
+
+  test("accepts queued input before the previous final reply and new input after it", () => {
+    expect(admitted([user("previous"), user("queued", true), assistant("reply", "previous"), user("new")])).toEqual([
+      "queued",
+      "new",
+    ])
+  })
+
+  test("preserves timeline order for interleaved input kinds", () => {
+    expect(
+      admitted([
+        user("previous"),
+        user("queued-one", true),
+        assistant("reply", "previous"),
+        user("new-one"),
+        user("queued-two", true),
+        user("new-two"),
+      ]),
+    ).toEqual(["queued-one", "new-one", "queued-two", "new-two"])
+  })
+
+  test("accepts concurrent first inputs in the same Session", () => {
+    expect(admitted([user("first"), user("second"), user("third", true)])).toEqual(["first", "second", "third"])
+  })
+
+  test("accepts the next input after completed history", () => {
+    expect(admitted([user("previous"), assistant("reply", "previous"), user("next")])).toEqual(["next"])
+  })
+
+  test("retries the exact failed admission batch for an attached peer", () => {
+    const failed = assistant("failed", "tail")
+    failed.info = {
+      ...failed.info,
+      role: "assistant",
+      parentID: "tail",
+      acceptedInputMessageIDs: ["participant", "tail"],
+      finish: "error",
+      time: { created: 1, completed: 2 },
+    } as Message.Assistant
+    expect(
+      SessionLoop.TestHooks.failedAcceptedInputBatch(
+        [user("participant"), user("tail"), failed],
+        new Set(["participant"]),
+        "tail",
+      ),
+    ).toEqual(["participant", "tail"])
   })
 })
 
@@ -129,7 +188,7 @@ describe("markPendingDeliveryIfTurnInFlight", () => {
     })
   })
 
-  test("leaves a Message on an idle Session undeferred", async () => {
+  test("preserves the authored identity on an idle Session", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -137,7 +196,7 @@ describe("markPendingDeliveryIfTurnInFlight", () => {
         const session = await Session.create({ kind: "root", title: "pending delivery idle side" })
         const info = userInfo(session.id)
         markPendingDeliveryIfTurnInFlight(info)
-        expect(info.role === "user" && info.pendingDelivery).toBeFalsy()
+        expect(info).toMatchObject({ role: "user", sessionID: session.id, author: "operator", agent: "conversation" })
       },
     })
   })

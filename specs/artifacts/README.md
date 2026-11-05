@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [同轮输入与摘要实页证据](2026-11-06-input-batch-acceptance/README.md)：回答数量、修改路径及真实回复批次。
+
 - [工具操作实页证据](2026-11-06-tool-result-language/README.md)：原任务、文件数量和协调主题。
 
 - [工作操作实页证据](2026-11-06-work-kind-language/README.md)：原对象、目标范围和菜单键盘。
