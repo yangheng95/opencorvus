@@ -1646,6 +1646,12 @@ Partial array replies retain every known question and recorded answer position i
 that response phase. A position without a nonempty answer displays the localized
 absence label; it is not converted to a skipped request or written into the
 original response. Extra recorded answer positions keep their actual values.
+The same array projection supplies a localized submitted-reply summary: total
+answer positions, positions with a nonempty answer and positions left blank.
+Multiple selections and custom text within one position count once. The summary,
+answer-list punctuation and numeric formatting follow the current UI locale;
+original question labels and answer values remain unchanged. This presentation
+does not alter the recorded reply or reinterpret blank positions as rejection.
 Permission approvals and retained requests share the structured scope renderer.
 The canonical ledger Request supplies Tool identity, effect, exact scope and
 available decisions; Task live/history projections use one helper, and standalone

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [提交回答后的数量与阅读顺序](2026-11-06-question-reply-summary.md)：已答、留空和真实原题。
+
 - [模型用量的中文单位与数字](2026-11-05-usage-language-and-number-format.md)：数字、单位及原始事实保全。
 
 - [持续目标工具状态的界面语言](2026-11-05-goal-tool-status-language.md)：真实目标摘要和原始披露。

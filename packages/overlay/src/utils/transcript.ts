@@ -7,7 +7,7 @@
 // interactionAnswerLines – interaction answers → string[]
 // interactionResponseText – full interaction response → plain text
 
-import { t } from "./i18n"
+import { localeTag, t } from "./i18n"
 
 // ── Internal helpers ──
 
@@ -74,7 +74,25 @@ function questionAnswerText(question: any, answers: unknown): string {
       const option = options.find((candidate) => candidate?.value === value)
       return typeof option?.label === "string" && option.label.trim() ? option.label : value
     })
-    .join(", ")
+    .join(t("interaction.answer_separator"))
+}
+
+function questionAnswerHistory(questions: any[], answers: unknown[]) {
+  let answered = 0
+  const lines = Array.from({ length: Math.max(questions.length, answers.length) }, (_, index) => {
+    const question = record(questions[index]) ? questions[index] : null
+    const answer = questionAnswerText(question, answers[index])
+    if (answer) answered++
+    const value = answer || t("interaction.no_answer_provided")
+    const label =
+      typeof question?.header === "string" && question.header.trim()
+        ? question.header.trim()
+        : typeof question?.question === "string" && question.question.trim()
+          ? question.question.trim()
+          : ""
+    return label ? t("interaction.answer_line", { label, value }) : `- ${value}`
+  })
+  return { lines, answered, total: lines.length }
 }
 
 /** Build retained answer lines from the original option labels and custom text. */
@@ -83,17 +101,7 @@ export function interactionAnswerLines(interaction: any): string[] {
   const payload = record(interaction?.payload) ? interaction.payload : null
   const questions: any[] = Array.isArray(payload?.questions) ? payload.questions : []
   if (Array.isArray(response?.answers)) {
-    return Array.from({ length: Math.max(questions.length, response.answers.length) }, (_, index) => {
-      const question = record(questions[index]) ? questions[index] : null
-      const value = questionAnswerText(question, response.answers[index]) || t("interaction.no_answer_provided")
-      const label =
-        typeof question?.header === "string" && question.header.trim()
-          ? question.header.trim()
-          : typeof question?.question === "string" && question.question.trim()
-            ? question.question.trim()
-            : ""
-      return label ? `- **${label}**: ${value}` : `- ${value}`
-    })
+    return questionAnswerHistory(questions, response.answers).lines
   }
   if (record(response?.answers)) {
     return Object.entries(response.answers).flatMap(([key, item]: [string, any], index: number) => {
@@ -107,7 +115,7 @@ export function interactionAnswerLines(interaction: any): string[] {
           : typeof question?.question === "string" && question.question.trim()
             ? question.question.trim()
             : key
-      return [label ? `- **${label}**: ${value}` : `- ${value}`]
+      return [label ? t("interaction.answer_line", { label, value }) : `- ${value}`]
     })
   }
   const message = typeof response?.message === "string" ? response.message.trim() : ""
@@ -154,6 +162,16 @@ export function interactionResponseText(interaction: any): string {
     )
   }
   if (interaction?.status === "rejected") return prefix + t("interaction.skip")
+  if (interaction?.type === "question" && Array.isArray(interaction.response?.answers)) {
+    const questions = Array.isArray(interaction.payload?.questions) ? interaction.payload.questions : []
+    const history = questionAnswerHistory(questions, interaction.response.answers)
+    const summary = t("interaction.reply_summary", {
+      total: history.total.toLocaleString(localeTag()),
+      answered: history.answered.toLocaleString(localeTag()),
+      blank: (history.total - history.answered).toLocaleString(localeTag()),
+    })
+    return `${prefix}**${summary}**\n\n${history.lines.join("\n")}`
+  }
   const answers = interactionAnswerLines(interaction)
   if (answers.length > 0) return prefix + answers.join("\n")
   return prefix + t("interaction.answer")

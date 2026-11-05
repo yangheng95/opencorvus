@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [回答数量实页证据](2026-11-06-question-reply-summary/README.md)：部分回答、完整回答及语言切换。
+
 - [模型用量语言实页证据](2026-11-05-usage-language-and-number-format/README.md)：中文数量、单位和精确用量。
 
 - [持续目标状态语言实页证据](2026-11-05-goal-tool-status-language/README.md)：中文状态、英文切换和原始事实。

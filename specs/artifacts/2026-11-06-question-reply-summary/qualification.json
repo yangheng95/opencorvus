@@ -1,0 +1,428 @@
+{
+  "at": "2026-11-05T17:03:35.703Z",
+  "scope": "Submitted question reply counts and answer punctuation from one original array projection",
+  "checksPassed": [
+    "typecheck",
+    "ui-build-after",
+    "docs-current",
+    "architecture-current",
+    "prepare-before",
+    "preflight-before",
+    "before-initial",
+    "before-final",
+    "before-prior",
+    "before-context",
+    "before-goal-initial",
+    "before-goal-final",
+    "shutdown-before",
+    "native-before-ready",
+    "settle-before",
+    "retire-before",
+    "qualify-before",
+    "prepare-after",
+    "preflight-after",
+    "after-initial",
+    "after-final",
+    "after-prior",
+    "after-context",
+    "after-goal-initial",
+    "after-goal-final",
+    "shutdown-after",
+    "native-after-ready",
+    "settle-after",
+    "retire-after",
+    "qualify-after",
+    "after-reset-reloaded"
+  ],
+  "screenshots": [
+    {
+      "file": "01-before-partial-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "02-before-original-questions-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "03-after-partial-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "04-after-expanded-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "05-after-partial-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "06-after-complete-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "07-after-complete-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "08-after-complete-en-clear.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "09-after-reload-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "10-file-summary-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "11-file-rename-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "12-after-partial-reload-zh.png",
+      "manuallyReviewed": true
+    }
+  ],
+  "originalBusinessCheckpoints": 36,
+  "questionReceipts": [
+    {
+      "phase": "before",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    }
+  ],
+  "goalReceipts": [
+    {
+      "phase": "before",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "before",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    }
+  ],
+  "originalFileChangeReceipts": [
+    {
+      "phase": "before",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    },
+    {
+      "phase": "after",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    }
+  ],
+  "priorProjectReceipts": [
+    {
+      "phase": "before",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    }
+  ],
+  "sourceData": [
+    {
+      "phase": "before",
+      "originals": 309193,
+      "current": 309195,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62843,
+          "after": 62844
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62785,
+          "after": 62786
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    },
+    {
+      "phase": "after",
+      "originals": 309195,
+      "current": 309197,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62844,
+          "after": 62845
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62786,
+          "after": 62787
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    }
+  ],
+  "resources": {
+    "originalNativeHandlesExitedZero": 2,
+    "pairedCopiesRetired": 4,
+    "modelRequests": 0,
+    "cumulativeRequests": 1461,
+    "minimumReserveMs": 3020797,
+    "originalDeadlineAt": 1793901100371,
+    "sourceCredentialsAndCatalogUnchanged": true
+  },
+  "manualFindings": {
+    "partial": {
+      "total": 3,
+      "answered": 2,
+      "blank": 1,
+      "multipleSelectionsCountOnce": true
+    },
+    "complete": {
+      "total": 3,
+      "answered": 3,
+      "blank": 0
+    },
+    "chineseListPunctuation": "：、",
+    "englishProductLabelsAndPunctuation": true,
+    "originalQuestionLabelsAndAnswersPreserved": true,
+    "originalQuestionDisclosurePreserved": true,
+    "partialChineseReloadVerified": true,
+    "fileSummary": "3 recorded changes, +6/-3, explicit deleted/modified/renamed labels, original/destination path, correct diff opened"
+  },
+  "toolingCorrections": [
+    "An initial native launch validation was attempted while preparation was still running; it stopped on the missing launch file before launching any resource; the original preparation completed and the same declared native phase then started normally",
+    "Screenshot06 has a sidebar hover tooltip over part of the answers;08 is the clear English complete-reply evidence",
+    "The first reload followed an unfinished selection;09 correctly shows the previously loaded complete reply.12 follows confirmed loaded partial reply and proves its Chinese reload"
+  ],
+  "limitations": [
+    "No new model workflow; existing actual model questions and canonical receipts were read back unchanged",
+    "No natural Task question outcome in this source; shared formatter compiles, independent Task question visual acceptance not claimed",
+    "Missing trailing and extra recorded answer positions, all-blank and whole skipped/expired responses have no new visual scenarios",
+    "Existing object-shaped answer branch has unknown historical provenance and remains unchanged except shared localized punctuation",
+    "File summary was rechecked, not changed in this batch; main changes remain after frozen v0.1.46 installer with no release"
+  ],
+  "uiAutomationAddedOrRun": false,
+  "userWindowUntouched": true
+}

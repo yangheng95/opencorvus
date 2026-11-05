@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [提交回答后的数量与阅读顺序](records/2026-11/2026-11-06-question-reply-summary.md)：原答案同源汇总与中文标点。
+
 - [模型用量的中文单位与数字](records/2026-11/2026-11-05-usage-language-and-number-format.md)：当前语言的数量格式和真实用量。
 
 - [持续目标工具状态的界面语言](records/2026-11/2026-11-05-goal-tool-status-language.md)：规范状态复用现有翻译。
