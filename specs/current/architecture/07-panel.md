@@ -681,6 +681,19 @@ subjects. The shared summary counts unique known paths and leaves unknown or
 overlapping comparison totals null; all Review, conversation, inline Tool and
 Environment surfaces consume that same derivation.
 
+Conversation and Review headings name the number of listed change records, from
+their existing flattened comparison groups, rather than relabelling the summary's
+deduplicated path count. Filters retain their visible/total record cardinality.
+Review also names a single record. When aggregate line counts are unavailable,
+both surfaces explain inspecting individual records and avoiding duplicate sums
+of repeated edits. Original comparisons, path identities and nullable total
+derivation remain unchanged; labels and numbers follow the selected UI language.
+
+Shared compact skill-load details identify the exact requested skill name and
+optional supporting-file path. Both skill surface tools use their original
+structured arguments, with localized separators, instead of the producer's
+English success title. Original result disclosures and errors retain their facts.
+
 Published Task Artifact previews and downloads read exact immutable bytes through
 the existing Project-identity context. The POST byte-read request does not require
 an available execution model. Task/Project ownership, original snapshot identity,

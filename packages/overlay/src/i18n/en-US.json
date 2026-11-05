@@ -1390,9 +1390,10 @@
   "chat.artifacts.checksum": "SHA-256 checksum",
   "chat.artifacts.download": "Download",
   "files.recorded_count": {
-    "one": "File changes · {{count}} path",
-    "other": "File changes · {{count}} paths"
+    "one": "File changes · {{count}} record",
+    "other": "File changes · {{count}} records"
   },
+  "files.total_counts_unavailable": "Total line counts are unavailable. Inspect each change record; repeated edits to the same file cannot simply be added together.",
   "files.recorded_changes_hint": "Select a record to view the changes recorded at that time.",
   "files.recorded_comparison_hint": "These are recorded changes. “{{action}}” opens the current contents on disk.",
   "files.select_target": "Open a chat or task to view its recorded file changes.",

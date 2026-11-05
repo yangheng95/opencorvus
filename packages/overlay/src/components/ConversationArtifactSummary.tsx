@@ -13,7 +13,7 @@ import {
   currentConversationAgentChangeGroups,
   mergeChangeGroups,
 } from "../utils/file-change-summary"
-import { t, tc } from "../utils/i18n"
+import { localeTag, t, tc } from "../utils/i18n"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { FileRowContent } from "./ui/FileRow"
@@ -75,8 +75,8 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
           </span>
           <div class="conversation-artifact-summary__identity">
             <strong>
-              {totals().files > 0
-                ? tc("files.recorded_count", totals().files)
+              {fileRows().length > 0
+                ? tc("files.recorded_count", fileRows().length, { count: fileRows().length.toLocaleString(localeTag()) })
                 : t(deferred() ? "diff.deferred_title" : "diff.unresolved_title")}
             </strong>
             <span class="conversation-artifact-summary__totals">
@@ -115,6 +115,9 @@ export function ConversationArtifactSummary(props: { onContentChanged?: () => vo
         <div class="conversation-artifact-summary__section">
           <Show when={fileRows().length > 0}>
             <p class="conversation-artifact-summary__context">{t("files.recorded_changes_hint")}</p>
+            <Show when={totals().additions === null || totals().deletions === null}>
+              <p class="conversation-artifact-summary__context">{t("files.total_counts_unavailable")}</p>
+            </Show>
           </Show>
           <div class="conversation-artifact-summary__files">
             <For each={visibleFiles()}>

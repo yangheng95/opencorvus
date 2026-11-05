@@ -1,0 +1,71 @@
+{
+  "at": "2026-11-05T23:21:04.300Z",
+  "scope": "File record cardinality, aggregate explanation and original skill-load identity; question history regression",
+  "screenshots": 16,
+  "personallyReviewed": true,
+  "uiAutomationRun": false,
+  "uiEntry": "main-BQdqFSXc.js",
+  "phases": [
+    {
+      "kind": "before",
+      "originals": 309229,
+      "current": 309231,
+      "schema": 10,
+      "tables": 92,
+      "attachments": 299,
+      "projects": 129,
+      "requests": 0,
+      "cumulativeRequests": 1469,
+      "reserveMs": 3401971,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    },
+    {
+      "kind": "after",
+      "originals": 309231,
+      "current": 309233,
+      "schema": 10,
+      "tables": 92,
+      "attachments": 299,
+      "projects": 129,
+      "requests": 0,
+      "cumulativeRequests": 1469,
+      "reserveMs": 2581086,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    }
+  ],
+  "readback": {
+    "sessions": 3,
+    "canonicalParts": 8,
+    "originalQuestionAnswerArrayPreserved": true,
+    "originalMutationPartsPreserved": true,
+    "httpHistoryAndConnectedSnapshotExact": true,
+    "newConnectionEnvelopeValidatedSeparately": true
+  },
+  "checks": {
+    "eightPackageTypes": true,
+    "finalOverlayTypes": true,
+    "ordinaryNodeBuild": true,
+    "i18nLocales": 2,
+    "i18nKeys": 2892,
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "architectureDocuments": 20
+  },
+  "resources": {
+    "ownTabsClosed": 2,
+    "nativeShutdowns": 2,
+    "nativeAndLauncherExitZero": true,
+    "credentialAndCatalogCopiesRetired": 4,
+    "optionalFinalAllocated": false
+  },
+  "limits": [
+    "No natural overlapping-path cross-source raster; current real samples have matching path and record counts.",
+    "No natural mission_skill or skill search raster; original skill-load branch inspected.",
+    "Question UI is retained original history, not a new model request or active form submission.",
+    "No live tool-update, orchestration, retry or crash-recovery acceptance this batch."
+  ]
+}

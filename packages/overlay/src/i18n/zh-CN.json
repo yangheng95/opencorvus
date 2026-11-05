@@ -1389,9 +1389,10 @@
   "chat.artifacts.checksum": "SHA-256 校验值",
   "chat.artifacts.download": "下载",
   "files.recorded_count": {
-    "one": "文件修改 · {{count}} 项",
-    "other": "文件修改 · {{count}} 项"
+    "one": "文件修改 · {{count}} 条记录",
+    "other": "文件修改 · {{count}} 条记录"
   },
+  "files.total_counts_unavailable": "无法计算总行数，请查看各条修改记录；同一文件的多次修改不能直接相加。",
   "files.recorded_changes_hint": "点击记录查看当时的修改详情。",
   "files.recorded_comparison_hint": "这里显示已记录的修改；“{{action}}”打开磁盘上的当前内容。",
   "files.select_target": "打开一个对话或任务，查看已记录的文件修改。",

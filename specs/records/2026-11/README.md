@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [文件修改记录的数量含义](2026-11-06-change-record-count.md)：记录总数与行数说明。
+
 - [分派结果数量与原受理记录](2026-11-06-dispatch-result-summary.md)：数量含义及原受理结果。
 
 - [任务操作与产物摘要](2026-11-06-tool-operation-details.md)：原字段与界面语言。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件修改记录的数量含义](records/2026-11/2026-11-06-change-record-count.md)：标题与实际修改记录对应、提问数量复核。
+
 - [分派结果数量与原受理记录](records/2026-11/2026-11-06-dispatch-result-summary.md)：分派结果数量与成员状态。
 
 - [任务操作与产物摘要](records/2026-11/2026-11-06-tool-operation-details.md)：动作语义、原用途与实际文件数。

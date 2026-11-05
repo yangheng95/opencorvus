@@ -538,6 +538,11 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
       .join(t("card.meta_separator"))
     return detail || statusLabel
   }
+  if ((n === "skill" || n === "missionskill") && firstNonEmptyString(safeInput.name)) {
+    return [firstNonEmptyString(safeInput.name), firstNonEmptyString(safeInput.file)]
+      .filter(Boolean)
+      .join(t("card.meta_separator"))
+  }
   if (n === "panelcreatetask") {
     const title = firstNonEmptyString(safeInput.title)
     if (title) return title

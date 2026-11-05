@@ -452,23 +452,24 @@ export function FileChangesView(props: FileChangesViewProps) {
         <p class="empty-hint">{t("diff.unresolved_changes")}</p>
       </Show>
       <Show when={files().length > 0}>
-        <Show when={allRows().length > 1}>
-          <div class="changes-summary">
-            <span>{tc("files.recorded_count", summary().files)}</span>
-            <span class="changes-total">
-              <Show when={summaryCommitRef()}>
-                <span class="changes-commit" title={`${t("chat.git.commit")} ${summaryCommitRef()}`}>
-                  {t("chat.git.commit")} {shortCommit(summaryCommitRef())}
-                </span>
-              </Show>
-              <ChangeLineStats additions={summary().additions} deletions={summary().deletions} labelled />
-            </span>
-          </div>
-        </Show>
+        <div class="changes-summary">
+          <span>{tc("files.recorded_count", allRows().length, { count: allRows().length.toLocaleString(localeTag()) })}</span>
+          <span class="changes-total">
+            <Show when={summaryCommitRef()}>
+              <span class="changes-commit" title={`${t("chat.git.commit")} ${summaryCommitRef()}`}>
+                {t("chat.git.commit")} {shortCommit(summaryCommitRef())}
+              </span>
+            </Show>
+            <ChangeLineStats additions={summary().additions} deletions={summary().deletions} labelled />
+          </span>
+        </div>
 
         <p class="changes-context">
           {t("files.recorded_comparison_hint", { action: t("diff.open_current_file") })}
         </p>
+        <Show when={summary().additions === null || summary().deletions === null}>
+          <p class="changes-context">{t("files.total_counts_unavailable")}</p>
+        </Show>
         <div class="changes-review-workspace" data-single-file={allRows().length === 1 ? "true" : undefined}>
           <section class="changes-diff-pane" aria-label={t("workspace.diff")}>
             <Show

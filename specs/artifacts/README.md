@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件修改数量实页证据](2026-11-06-change-record-count/README.md)：记录计数、原问题和中文阅读。
+
 - [分派摘要实页证据](2026-11-06-dispatch-result-summary/README.md)：原分派、数量与成员结果。
 
 - [工具操作摘要实页证据](2026-11-06-tool-operation-details/README.md)：任务操作、产物用途与文件数。
