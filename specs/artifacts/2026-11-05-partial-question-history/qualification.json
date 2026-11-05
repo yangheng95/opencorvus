@@ -1,0 +1,157 @@
+{
+  "at": "2026-11-04T23:58:39.732Z",
+  "phases": [
+    {
+      "phase": "before",
+      "port": 38729,
+      "uiEntry": "main-Ccnwe6TS.js",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 301202,
+      "rows": 302003,
+      "allOriginalRowsExact": false,
+      "businessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedProjects": 117,
+      "protectedConfigurations": 107,
+      "protectedAttachmentsAndMetadata": 283,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793830068804,
+          "reacquiredAt": 1793835759469,
+          "releasedAt": 1793835762260,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793830025835,
+          "reacquiredAt": 1793835633387,
+          "releasedAt": 1793835639522,
+          "ownedByRuntime": true
+        }
+      ],
+      "requests": 3,
+      "maximumRequests": 12,
+      "cumulativeRequests": 1434,
+      "allRequestsStreaming": true,
+      "allRequestsCompletedNormally": true,
+      "requestOutcomes": [
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        },
+        {
+          "model": "gpt-6.1-sol",
+          "streaming": true,
+          "status": 200,
+          "readerState": "settled",
+          "terminal": "eof"
+        }
+      ],
+      "unusedAllowanceRetired": 9,
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalOutputRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "sourceCredentialMetadataPreserved": true,
+      "sourceCatalogBytesAndMetadataPreserved": true,
+      "reserveMs": 3941538
+    },
+    {
+      "phase": "after",
+      "port": 38730,
+      "uiEntry": "main-CxYlALPx.js",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 302003,
+      "rows": 302005,
+      "allOriginalRowsExact": true,
+      "businessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "protectedProjects": 118,
+      "protectedConfigurations": 108,
+      "protectedAttachmentsAndMetadata": 285,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "requests": 0,
+      "maximumRequests": 0,
+      "cumulativeRequests": 1434,
+      "allRequestsStreaming": true,
+      "allRequestsCompletedNormally": true,
+      "requestOutcomes": [],
+      "unusedAllowanceRetired": 0,
+      "publicShutdown": 200,
+      "originalNativeExit": 0,
+      "physicalOutputRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "sourceCredentialMetadataPreserved": true,
+      "sourceCatalogBytesAndMetadataPreserved": true,
+      "reserveMs": 3460135
+    }
+  ],
+  "manualScreenshots": [
+    "01-before-real-three-question-zero-progress.png",
+    "02-before-real-partial-two-of-three.png",
+    "03-before-history-drops-empty-middle-answer.png",
+    "04-before-original-three-questions-and-two-visible-answers.png",
+    "05-after-english-retains-empty-position.png",
+    "06-after-chinese-retains-empty-position.png",
+    "07-after-original-request-and-all-answer-positions.png",
+    "08-after-complete-four-answer-history.png",
+    "09-after-visible-complete-four-answer-history.png",
+    "10-after-chinese-partial-history-after-reload.png"
+  ],
+  "manualReviewCompleted": true,
+  "intermediateViewportScreenshot": "08-after-complete-four-answer-history.png",
+  "acceptedCompleteAnswerScreenshot": "09-after-visible-complete-four-answer-history.png",
+  "acceptedColdHistoryScreenshot": "10-after-chinese-partial-history-after-reload.png",
+  "uiAutomatedTestsUsed": false,
+  "presentationOnlyChange": true,
+  "typecheckedPackages": 8,
+  "originalBusinessCheckerRuns": 36,
+  "realPartialReplyChecks": 4,
+  "originalRenameCaseChecks": 4,
+  "actualQuestionCount": 3,
+  "actualAnswerSlots": 3,
+  "positionsWithoutProvidedAnswer": [
+    2
+  ],
+  "filledProgressManuallyConfirmed": [
+    0,
+    1,
+    2
+  ],
+  "actualQuestionTools": 1,
+  "questionExpiryMs": 300000,
+  "repliedBeforeExpiryByMs": 180900,
+  "originalPartialQuestionReplyAndToolFactsExact": true,
+  "httpAndSseSnapshotsExact": true,
+  "completeFourAnswerHistoryVisuallyConfirmed": true,
+  "absenceLabelsManuallyConfirmed": [
+    "未提供回答",
+    "No answer provided"
+  ],
+  "modelsRequestedThisBatch": 3,
+  "cumulativeModelRequests": 1434,
+  "newQaInitialization": {
+    "binaryRulesAdded": 11,
+    "initializedBeforeFirstUserMessage": true,
+    "originalSeedRetained": true,
+    "gitIdentityAndIndexPreserved": true,
+    "initializedStatePreservedOnReadback": true
+  },
+  "userWindowAndDatabaseUntouched": true,
+  "independentTaskAndSideChatOrUnrepresentedTailAnswerVisualQualificationClaimed": false
+}

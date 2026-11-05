@@ -96,17 +96,16 @@ export function interactionAnswerLines(interaction: any): string[] {
   const payload = record(interaction?.payload) ? interaction.payload : null
   const questions: any[] = Array.isArray(payload?.questions) ? payload.questions : []
   if (Array.isArray(response?.answers)) {
-    return response.answers.flatMap((answer: any, index: number) => {
+    return Array.from({ length: Math.max(questions.length, response.answers.length) }, (_, index) => {
       const question = record(questions[index]) ? questions[index] : null
-      const value = questionAnswerText(question, answer)
-      if (!value) return []
+      const value = questionAnswerText(question, response.answers[index]) || t("interaction.no_answer_provided")
       const label =
         typeof question?.header === "string" && question.header.trim()
           ? question.header.trim()
           : typeof question?.question === "string" && question.question.trim()
             ? question.question.trim()
             : ""
-      return [label ? `- **${label}**: ${value}` : `- ${value}`]
+      return label ? `- **${label}**: ${value}` : `- ${value}`
     })
   }
   if (record(response?.answers)) {

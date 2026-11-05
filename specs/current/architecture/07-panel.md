@@ -1585,6 +1585,10 @@ reply; sending and skipping keep their original contracts. Retained Question
 requests use the shared native Disclosure in a compact default state, with the
 original request formatter mounted when opened. Their original answer labels,
 custom text and response remain visible in their separate chronological phase.
+Partial array replies retain every known question and recorded answer position in
+that response phase. A position without a nonempty answer displays the localized
+absence label; it is not converted to a skipped request or written into the
+original response. Extra recorded answer positions keep their actual values.
 Permission approvals and retained requests share the structured scope renderer.
 The canonical ledger Request supplies Tool identity, effect, exact scope and
 available decisions; Task live/history projections use one helper, and standalone

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [部分作答后的问题历史](records/2026-11/2026-11-05-partial-question-history.md)：原问题位置、真实空答案与中文历史。
+
 - [对话摘要的操作类型](records/2026-11/2026-11-05-summary-operation-labels.md)：文件摘要直接辨认修改、重命名与删除。
 
 - [重命名记录的辨认与搜索](records/2026-11/2026-11-05-rename-reading.md)：操作名称、原路径与当前语言筛选。
