@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [侧栏排序与数量说明](records/2026-11/2026-11-05-ledger-created-order.md)：创建排序、组织范围与项目数量。
+
 - [对话与项目入口语言](records/2026-11/2026-11-05-conversation-entry-language.md)：新对话、项目作用范围及创建时机。
 
 - [审阅来源与空状态](records/2026-11/2026-11-05-review-source-empty-state.md)：真实来源切换与双语文件修改提示。

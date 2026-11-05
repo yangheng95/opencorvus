@@ -3453,6 +3453,22 @@ runtime admission. Pinned items remain inside their
 canonical Project group or one-list projection and sort before unpinned siblings
 without changing activity time.
 
+The sidebar's Created sort orders Project groups and their top-level work by
+canonical creation time, oldest first, after the existing pin priority. The same
+work-item comparator governs the grouped and one-list views, with a stable row
+identity tie-break. Mission-owned Task order remains the canonical nested order.
+The existing `manual` preference code owns this fixed ordering; its UI label
+describes creation time, not a drag-and-drop capability.
+
+Organization descriptions follow the Project pin boundary: the one-list view
+combines work from unpinned Projects, including anonymous Projects, and retains
+the canonical nested Task hierarchy. Priority descriptions reflect each Task's
+priority and each Mission's highest Task priority; Chats and empty Missions have
+normal priority. Project summaries count each top-level work item and each
+Mission-owned Task from the same group. Their visible count, accessible count
+and summary reuse the current-locale number formatter, and the summary explains
+that nested Tasks also count. These descriptions do not change domain facts.
+
 Work Ledger and the selected Conversation header expose one binary activity
 projection for Task and Mission: `Running` while execution is active and
 `Not running` otherwise. A running row may use the shared spinner. Task rows

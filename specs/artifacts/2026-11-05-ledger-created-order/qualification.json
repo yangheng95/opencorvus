@@ -1,0 +1,205 @@
+{
+  "at": "2026-11-05T03:57:54.821Z",
+  "qualification": "real project development /ui, hidden own IAB tabs, manual screenshots and real HTTP/SQLite business checks",
+  "singleAgent": true,
+  "userWindowAndDatabaseUntouched": true,
+  "schema": 10,
+  "tables": 92,
+  "actualModelRequests": 0,
+  "cumulativeModelRequests": 1440,
+  "originalNativeHandlesExitedZero": 3,
+  "pairedCredentialAndCompleteCatalogCopiesRetired": 6,
+  "qualifications": [
+    {
+      "at": "2026-11-05T03:08:49.833Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303629,
+      "current": 303631,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61737,
+          "after": 61738
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61679,
+          "after": 61680
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 3988341,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BTqRSMj5.js"
+    },
+    {
+      "at": "2026-11-05T03:38:04.064Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303631,
+      "current": 303633,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61738,
+          "after": 61739
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61680,
+          "after": 61681
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 2250550,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CrhUK05v.js"
+    },
+    {
+      "at": "2026-11-05T03:56:22.084Z",
+      "kind": "final",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303633,
+      "current": 303635,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61739,
+          "after": 61740
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61681,
+          "after": 61682
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 1141680,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-hA3cvDGG.js"
+    }
+  ],
+  "manuallyReviewedScreenshots": [
+    "01-before-manual-order-menu-and-description.png",
+    "02-before-project-groups-use-creation-order.png",
+    "03-before-project-creation-order-menu-closed.png",
+    "04-before-one-list-and-manual-selected.png",
+    "05-before-one-list-manual-keeps-recent-work-first.png",
+    "06-before-one-list-recent-update-same-leading-work.png",
+    "07-after-english-created-option-and-explanation.png",
+    "08-after-english-project-groups-oldest-first.png",
+    "09-after-english-one-list-creation-order.png",
+    "10-after-one-list-last-updated-restores-recent-work.png",
+    "11-after-one-list-created-restored.png",
+    "12-after-reload-retains-created-and-one-list-preferences.png",
+    "13-after-chinese-created-option-and-explanation.png",
+    "14-after-chinese-one-list-creation-order.png",
+    "15-after-chinese-project-groups-creation-order.png",
+    "16-after-created-order-keeps-pinned-project-first.png",
+    "17-after-project-unpinned-original-position-restored.png",
+    "18-after-chinese-reload-retains-created-preference.png",
+    "19-intermediate-one-list-description-misstates-scope.png",
+    "20-intermediate-project-group-description-mixes-terms.png",
+    "21-intermediate-priority-description-omits-workflow-priority.png",
+    "22-intermediate-project-work-count-mixes-entity-names.png",
+    "23-final-english-created-explanation.png",
+    "24-final-english-project-description.png",
+    "25-final-english-one-list-scope.png",
+    "26-final-english-priority-description.png",
+    "27-final-english-four-work-items-count.png",
+    "28-final-chinese-four-work-items-count.png",
+    "29-final-chinese-project-description.png",
+    "30-final-chinese-one-list-scope.png",
+    "31-final-chinese-priority-description.png",
+    "32-final-chinese-created-explanation.png",
+    "33-final-reload-keeps-one-list-and-created.png",
+    "34-final-eight-file-summary-and-original-comparison.png",
+    "35-final-four-question-answer-history.png"
+  ],
+  "checksPassed": [
+    "typecheck",
+    "typecheck-final",
+    "ui-build-after",
+    "ui-build-final",
+    "docs-check",
+    "docs-check-final",
+    "architecture-index",
+    "api-routes"
+  ],
+  "businessCheckerCheckpoints": 54,
+  "priorRenameFactCheckpoints": 5,
+  "priorPartialAnswerFactCheckpoints": 5,
+  "priorClosedChoiceFactCheckpoints": 10,
+  "completeLedgerReads": 9,
+  "ledgerPages": 2,
+  "ledgerRows": 225,
+  "projects": 120,
+  "topLevelWorkRows": 105,
+  "protectedConfigurations": 110,
+  "protectedAttachmentsAndMetadata": 289,
+  "actualCountCase": {
+    "projectID": "prj_hJdoxVnJqyVZSpiLlYXE",
+    "topLevelWorkflows": 2,
+    "nestedTasks": 2,
+    "displayedWorkItems": 4
+  },
+  "sortFacts": {
+    "groupedAndOneListOldestFirstVisuallyReviewed": true,
+    "recentUpdateSwitchVisuallyReviewed": true,
+    "reloadPersistenceVisuallyReviewed": true,
+    "projectPinAndRestoreVisuallyReviewed": true,
+    "originalCanonicalFactsRestored": true,
+    "existingPreferenceCode": "manual"
+  },
+  "limitations": [
+    "No new model execution; existing real model histories were re-read.",
+    "Project pin tested; individual work-item pin, screen-reader audio, large-number formatting, equal-time tie cases and full priority combinations not presented.",
+    "Nested task execution order and scheduling unchanged; no API, SDK, database schema or persisted format changes."
+  ]
+}

@@ -192,6 +192,9 @@ function compareLedgerItems(
     const priority = ledgerItemPriority(a) - ledgerItemPriority(b)
     if (priority !== 0) return priority
   }
+  if (sort === "manual") {
+    return a.created - b.created || rowKey(a).localeCompare(rowKey(b))
+  }
   return b.updated - a.updated || rowKey(b).localeCompare(rowKey(a))
 }
 

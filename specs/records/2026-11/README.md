@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [侧栏排序与数量说明](2026-11-05-ledger-created-order.md)：创建顺序、范围提示及子任务计数。
+
 - [对话与项目入口语言](2026-11-05-conversation-entry-language.md)：中文入口、编程草稿和项目提示。
 
 - [审阅来源与空状态](2026-11-05-review-source-empty-state.md)：普通对话和未选择来源的提示。

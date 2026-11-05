@@ -3,7 +3,7 @@ import { createEffect, createSignal, onCleanup, Show, type JSX } from "solid-js"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { showAppDialog, type AppDialogOpenOptions } from "../services/app-dialog"
 import { ApiAuthorityChangedError, ApiError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { projectDirectoryKey, projectDirectoryLabel, projectDisplayName } from "../utils/project-directory"
 import { workLedgerSummaryAnchorRect } from "../utils/work-ledger-summary-anchor"
 import { Icon } from "./ui/Icon"
@@ -138,7 +138,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
     }
   }
   const className = () => ["project-group", props.class].filter(Boolean).join(" ")
-  const countText = () => String(props.count)
+  const countText = () => new Intl.NumberFormat(localeTag()).format(props.count)
   const tooltipDirectory = () => props.directory.trim()
   const tooltipFolderName = () => (tooltipDirectory() ? projectDirectoryLabel(tooltipDirectory(), "").name.trim() : "")
   const hasTooltipSummary = () => Boolean(tooltipFolderName() || props.count > 0 || tooltipDirectory())
@@ -225,7 +225,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                   <div class="work-ledger-tooltip__fact" data-ui="project-group-summary-count">
                     <Icon name="message" size="medium" />
                     <span class="work-ledger-tooltip__fact-value">
-                      {t("work_ledger.tooltip.item_count", { count: String(props.count) })}
+                      {t("work_ledger.tooltip.item_count", { count: countText() })}
                     </span>
                   </div>
                 </Show>

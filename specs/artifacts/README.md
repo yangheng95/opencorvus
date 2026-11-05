@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [侧栏排序与数量实页证据](2026-11-05-ledger-created-order/README.md)：时间顺序、组织提示与真实数量。
+
 - [对话入口语言实页证据](2026-11-05-conversation-entry-language/README.md)：真实入口、范围与双语复核。
 
 - [审阅来源空状态实页证据](2026-11-05-review-source-empty-state/README.md)：来源切换、空态与原记录保全。
