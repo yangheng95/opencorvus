@@ -524,6 +524,16 @@ from their actual structured result through the same current locale labels as
 the Goal control. Authored reasons and original inputs/results remain unchanged
 and available through the existing Tool disclosure. This presentation does not
 derive Goal state from a requested status or alter execution and usage ownership.
+Compact model-usage counts share one Intl.NumberFormat formatter with the
+caller's current locale. Conversation turns, card metadata, title summaries and
+Usage settings use that same number format and current token-unit label;
+exact inspection values keep locale-aware digit grouping. The turn usage
+button's accessible name and title carry its exact total instead of its compact
+badge. Formatting does not change message contributions, costs or Goal ownership,
+and the pure aggregation module does not depend on UI locale state.
+The existing title tooltip trigger participates in keyboard tab order. Its
+current Tooltip primitive owns focus/blur and Escape behavior; the original
+double-click diagnostic action and conversation menu retain their owners.
 The event
 handler captures its existing Question reader before entering streamGlobalSSE;
 the stream runs outside Instance context and reads explicit Session/Project

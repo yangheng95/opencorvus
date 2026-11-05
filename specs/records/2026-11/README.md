@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [模型用量的中文单位与数字](2026-11-05-usage-language-and-number-format.md)：数字、单位及原始事实保全。
+
 - [持续目标工具状态的界面语言](2026-11-05-goal-tool-status-language.md)：真实目标摘要和原始披露。
 
 - [默认页到持续目标真实交付](2026-11-05-goal-entry-journey.md)：单代理Sol真实旅程与原数据保全。

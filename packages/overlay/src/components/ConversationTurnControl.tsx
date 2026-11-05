@@ -61,12 +61,12 @@ export function ConversationTurnControl(props: ConversationTurnControlProps) {
     const value = usage()
     if (!value) return ""
     const cost = formatDetailedCostUSD(value.costUSD)
-    return value.costUSD > 0 ? cost : formatTokenCount(value.totalTokens).toUpperCase()
+    return value.costUSD > 0 ? cost : formatTokenCount(value.totalTokens, localeTag())
   }
   const usageTriggerAriaValue = () => {
     const value = usage()
     if (!value) return ""
-    return value.costUSD > 0 ? formatDetailedCostUSD(value.costUSD) : `${usageTriggerValue()} ${t("usage.table_tokens")}`
+    return value.costUSD > 0 ? formatDetailedCostUSD(value.costUSD) : `${formatInteger(value.totalTokens)} ${t("usage.table_tokens")}`
   }
   const selectedModelLabel = () => {
     const model = selectedModel()
@@ -156,7 +156,7 @@ export function ConversationTurnControl(props: ConversationTurnControlProps) {
                 <div class="conversation-turn-usage-popover__heading">
                   <strong>{t("chat.turn_usage_title")}</strong>
                   <span>
-                    {formatTokenCount(usage()!.totalTokens)} {t("usage.table_tokens")} · {formatDetailedCostUSD(usage()!.costUSD)}
+                    {formatTokenCount(usage()!.totalTokens, localeTag())} {t("usage.table_tokens")} · {formatDetailedCostUSD(usage()!.costUSD)}
                   </span>
                 </div>
                 <Show when={models().length > 1}>

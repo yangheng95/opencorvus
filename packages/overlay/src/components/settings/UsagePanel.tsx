@@ -471,11 +471,11 @@ export default function UsagePanel() {
                   aria-live="polite"
                   title={exactNumber(resolved().current.summary.tokens.total)}
                 >
-                  <strong>{formatTokenCount(resolved().current.summary.tokens.total)}</strong>
+                  <strong>{formatTokenCount(resolved().current.summary.tokens.total, localeTag())}</strong>
                   <span class="usage-metric__label">{t("usage.total_tokens")}</span>
                 </div>
                 <div class="usage-metric">
-                  <strong>{formatTokenCount(peakBucket())}</strong>
+                  <strong>{formatTokenCount(peakBucket(), localeTag())}</strong>
                   <span class="usage-metric__label">{t("usage.peak_tokens")}</span>
                 </div>
                 <div class="usage-metric" title={formatDetailedCostUSD(resolved().current.summary.costUSD)}>
@@ -556,7 +556,7 @@ export default function UsagePanel() {
                       <h2>{t("usage.composition_title")}</h2>
                       <p>
                         {t("usage.average_per_call", {
-                          value: formatTokenCount(resolved().current.summary.averageTokensPerCall),
+                          value: formatTokenCount(resolved().current.summary.averageTokensPerCall, localeTag()),
                         })}
                       </p>
                     </div>

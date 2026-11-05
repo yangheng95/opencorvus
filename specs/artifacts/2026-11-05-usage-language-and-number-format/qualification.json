@@ -1,0 +1,1187 @@
+{
+  "at": "2026-11-05T15:22:13.564Z",
+  "scope": "One locale-aware compact formatter and translated usage units, exact turn labels, truthful session usage name and native keyboard tooltip entry",
+  "checksPassed": [
+    "typecheck",
+    "typecheck-keyboard",
+    "ui-build-after",
+    "ui-build-final",
+    "ui-build-keyboard",
+    "docs-current",
+    "architecture-current",
+    "prepare-before",
+    "preflight-before",
+    "before-initial",
+    "before-final",
+    "before-context",
+    "before-goal-initial",
+    "before-goal-final",
+    "observe-before",
+    "shutdown-before",
+    "native-before-ready",
+    "settle-before",
+    "retire-before",
+    "qualify-before",
+    "prepare-after",
+    "preflight-after",
+    "after-initial",
+    "after-final",
+    "after-context",
+    "after-goal-initial",
+    "after-goal-final",
+    "observe-after-initial",
+    "shutdown-after",
+    "native-after-ready",
+    "settle-after",
+    "retire-after",
+    "qualify-after",
+    "prepare-final",
+    "preflight-final",
+    "final-initial",
+    "final-final",
+    "final-context",
+    "final-goal-initial",
+    "final-goal-final",
+    "observe-final-initial",
+    "shutdown-final",
+    "native-final-ready",
+    "settle-final",
+    "retire-final",
+    "qualify-final",
+    "prepare-recovery",
+    "preflight-recovery",
+    "recovery-initial",
+    "recovery-final",
+    "recovery-context",
+    "recovery-goal-initial",
+    "recovery-goal-final",
+    "observe-recovery-initial",
+    "shutdown-recovery",
+    "native-recovery-ready",
+    "settle-recovery",
+    "retire-recovery",
+    "qualify-recovery",
+    "before-prior",
+    "after-prior",
+    "final-prior",
+    "recovery-prior-repaired",
+    "before-usage-initial-repaired",
+    "before-usage-final-repaired",
+    "after-usage-initial",
+    "after-usage-final",
+    "final-usage-initial",
+    "final-usage-final",
+    "recovery-usage-initial",
+    "recovery-usage-final"
+  ],
+  "screenshots": [
+    {
+      "file": "01-before-large-turn-usage.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "02-before-small-turn-usage.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "03-before-year-usage-overview.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "04-before-provider-and-model-labels.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "05-before-today-usage.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "06-after-chinese-large-turn-exact-total.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "07-after-title-usage-estimate-label.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "08-after-chinese-year-usage.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "09-after-chinese-provider-model-units.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "10-after-chinese-today-usage.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "11-final-english-session-model-usage.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "12-final-english-session-title-tooltip.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "13-final-english-exact-turn-usage.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "14-final-before-keyboard-title-entry.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "15-keyboard-english-session-model-usage.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "16-keyboard-build-english-year-usage.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "17-keyboard-chinese-session-model-usage.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "18-keyboard-build-chinese-small-turn.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "19-keyboard-build-reload-exact-small-usage.png",
+      "manuallyReviewed": true
+    }
+  ],
+  "originalBusinessCheckpoints": 72,
+  "questionReceipts": [
+    {
+      "phase": "before",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "final",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "final",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "final",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "final",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "final",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "final",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "final",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "recovery",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "recovery",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "recovery",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "recovery",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "recovery",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "recovery",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "recovery",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    }
+  ],
+  "goalReceipts": [
+    {
+      "phase": "before",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "turns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "before",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "turns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "turns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "turns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "final",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "turns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "final",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "turns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "recovery",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "turns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "recovery",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "turns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true
+    }
+  ],
+  "usageReceipts": [
+    {
+      "at": "2026-11-05T14:42:59.043Z",
+      "phase": "before",
+      "checkpoint": "initial",
+      "reports": [
+        {
+          "period": "day",
+          "calls": 94,
+          "tokens": {
+            "input": 745639,
+            "output": 14450,
+            "reasoning": 118,
+            "cacheRead": 2424192,
+            "cacheWrite": 0,
+            "total": 3184399
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        },
+        {
+          "period": "year",
+          "calls": 1076,
+          "tokens": {
+            "input": 9444178,
+            "output": 226852,
+            "reasoning": 8592,
+            "cacheRead": 39287680,
+            "cacheWrite": 0,
+            "total": 48967302
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        }
+      ],
+      "originalAssistantContributionsExact": true,
+      "assistantMessages": 9,
+      "totals": {
+        "input": 126622,
+        "output": 660,
+        "reasoning": 0,
+        "cacheRead": 215040,
+        "cacheWrite": 0,
+        "total": 342322,
+        "costUSD": 0
+      },
+      "excludedVolatileEnvelope": "Official remote account availability and reconciliation envelope retain their separate source contract; all nine local usage fields compared exactly"
+    },
+    {
+      "at": "2026-11-05T14:42:59.020Z",
+      "phase": "before",
+      "checkpoint": "final",
+      "reports": [
+        {
+          "period": "day",
+          "calls": 94,
+          "tokens": {
+            "input": 745639,
+            "output": 14450,
+            "reasoning": 118,
+            "cacheRead": 2424192,
+            "cacheWrite": 0,
+            "total": 3184399
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        },
+        {
+          "period": "year",
+          "calls": 1076,
+          "tokens": {
+            "input": 9444178,
+            "output": 226852,
+            "reasoning": 8592,
+            "cacheRead": 39287680,
+            "cacheWrite": 0,
+            "total": 48967302
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        }
+      ],
+      "originalAssistantContributionsExact": true,
+      "assistantMessages": 9,
+      "totals": {
+        "input": 126622,
+        "output": 660,
+        "reasoning": 0,
+        "cacheRead": 215040,
+        "cacheWrite": 0,
+        "total": 342322,
+        "costUSD": 0
+      },
+      "excludedVolatileEnvelope": "Official remote account availability and reconciliation envelope retain their separate source contract; all nine local usage fields compared exactly"
+    },
+    {
+      "at": "2026-11-05T14:44:24.592Z",
+      "phase": "after",
+      "checkpoint": "initial",
+      "reports": [
+        {
+          "period": "day",
+          "calls": 94,
+          "tokens": {
+            "input": 745639,
+            "output": 14450,
+            "reasoning": 118,
+            "cacheRead": 2424192,
+            "cacheWrite": 0,
+            "total": 3184399
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        },
+        {
+          "period": "year",
+          "calls": 1076,
+          "tokens": {
+            "input": 9444178,
+            "output": 226852,
+            "reasoning": 8592,
+            "cacheRead": 39287680,
+            "cacheWrite": 0,
+            "total": 48967302
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        }
+      ],
+      "originalAssistantContributionsExact": true,
+      "assistantMessages": 9,
+      "totals": {
+        "input": 126622,
+        "output": 660,
+        "reasoning": 0,
+        "cacheRead": 215040,
+        "cacheWrite": 0,
+        "total": 342322,
+        "costUSD": 0
+      },
+      "excludedVolatileEnvelope": "Official remote account availability and reconciliation envelope retain their separate source contract; all nine local usage fields compared exactly"
+    },
+    {
+      "at": "2026-11-05T14:49:57.279Z",
+      "phase": "after",
+      "checkpoint": "final",
+      "reports": [
+        {
+          "period": "day",
+          "calls": 94,
+          "tokens": {
+            "input": 745639,
+            "output": 14450,
+            "reasoning": 118,
+            "cacheRead": 2424192,
+            "cacheWrite": 0,
+            "total": 3184399
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        },
+        {
+          "period": "year",
+          "calls": 1076,
+          "tokens": {
+            "input": 9444178,
+            "output": 226852,
+            "reasoning": 8592,
+            "cacheRead": 39287680,
+            "cacheWrite": 0,
+            "total": 48967302
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        }
+      ],
+      "originalAssistantContributionsExact": true,
+      "assistantMessages": 9,
+      "totals": {
+        "input": 126622,
+        "output": 660,
+        "reasoning": 0,
+        "cacheRead": 215040,
+        "cacheWrite": 0,
+        "total": 342322,
+        "costUSD": 0
+      },
+      "excludedVolatileEnvelope": "Official remote account availability and reconciliation envelope retain their separate source contract; all nine local usage fields compared exactly"
+    },
+    {
+      "at": "2026-11-05T14:53:40.401Z",
+      "phase": "final",
+      "checkpoint": "initial",
+      "reports": [
+        {
+          "period": "day",
+          "calls": 94,
+          "tokens": {
+            "input": 745639,
+            "output": 14450,
+            "reasoning": 118,
+            "cacheRead": 2424192,
+            "cacheWrite": 0,
+            "total": 3184399
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        },
+        {
+          "period": "year",
+          "calls": 1076,
+          "tokens": {
+            "input": 9444178,
+            "output": 226852,
+            "reasoning": 8592,
+            "cacheRead": 39287680,
+            "cacheWrite": 0,
+            "total": 48967302
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        }
+      ],
+      "originalAssistantContributionsExact": true,
+      "assistantMessages": 9,
+      "totals": {
+        "input": 126622,
+        "output": 660,
+        "reasoning": 0,
+        "cacheRead": 215040,
+        "cacheWrite": 0,
+        "total": 342322,
+        "costUSD": 0
+      },
+      "excludedVolatileEnvelope": "Official remote account availability and reconciliation envelope retain their separate source contract; all nine local usage fields compared exactly"
+    },
+    {
+      "at": "2026-11-05T15:01:55.620Z",
+      "phase": "final",
+      "checkpoint": "final",
+      "reports": [
+        {
+          "period": "day",
+          "calls": 94,
+          "tokens": {
+            "input": 745639,
+            "output": 14450,
+            "reasoning": 118,
+            "cacheRead": 2424192,
+            "cacheWrite": 0,
+            "total": 3184399
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        },
+        {
+          "period": "year",
+          "calls": 1076,
+          "tokens": {
+            "input": 9444178,
+            "output": 226852,
+            "reasoning": 8592,
+            "cacheRead": 39287680,
+            "cacheWrite": 0,
+            "total": 48967302
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        }
+      ],
+      "originalAssistantContributionsExact": true,
+      "assistantMessages": 9,
+      "totals": {
+        "input": 126622,
+        "output": 660,
+        "reasoning": 0,
+        "cacheRead": 215040,
+        "cacheWrite": 0,
+        "total": 342322,
+        "costUSD": 0
+      },
+      "excludedVolatileEnvelope": "Official remote account availability and reconciliation envelope retain their separate source contract; all nine local usage fields compared exactly"
+    },
+    {
+      "at": "2026-11-05T15:05:52.185Z",
+      "phase": "recovery",
+      "checkpoint": "initial",
+      "reports": [
+        {
+          "period": "day",
+          "calls": 94,
+          "tokens": {
+            "input": 745639,
+            "output": 14450,
+            "reasoning": 118,
+            "cacheRead": 2424192,
+            "cacheWrite": 0,
+            "total": 3184399
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        },
+        {
+          "period": "year",
+          "calls": 1076,
+          "tokens": {
+            "input": 9444178,
+            "output": 226852,
+            "reasoning": 8592,
+            "cacheRead": 39287680,
+            "cacheWrite": 0,
+            "total": 48967302
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        }
+      ],
+      "originalAssistantContributionsExact": true,
+      "assistantMessages": 9,
+      "totals": {
+        "input": 126622,
+        "output": 660,
+        "reasoning": 0,
+        "cacheRead": 215040,
+        "cacheWrite": 0,
+        "total": 342322,
+        "costUSD": 0
+      },
+      "excludedVolatileEnvelope": "Official remote account availability and reconciliation envelope retain their separate source contract; all nine local usage fields compared exactly"
+    },
+    {
+      "at": "2026-11-05T15:19:24.192Z",
+      "phase": "recovery",
+      "checkpoint": "final",
+      "reports": [
+        {
+          "period": "day",
+          "calls": 94,
+          "tokens": {
+            "input": 745639,
+            "output": 14450,
+            "reasoning": 118,
+            "cacheRead": 2424192,
+            "cacheWrite": 0,
+            "total": 3184399
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        },
+        {
+          "period": "year",
+          "calls": 1076,
+          "tokens": {
+            "input": 9444178,
+            "output": 226852,
+            "reasoning": 8592,
+            "cacheRead": 39287680,
+            "cacheWrite": 0,
+            "total": 48967302
+          },
+          "costUSD": 0,
+          "modelRows": 1,
+          "allLocalPeriodFieldsExact": true
+        }
+      ],
+      "originalAssistantContributionsExact": true,
+      "assistantMessages": 9,
+      "totals": {
+        "input": 126622,
+        "output": 660,
+        "reasoning": 0,
+        "cacheRead": 215040,
+        "cacheWrite": 0,
+        "total": 342322,
+        "costUSD": 0
+      },
+      "excludedVolatileEnvelope": "Official remote account availability and reconciliation envelope retain their separate source contract; all nine local usage fields compared exactly"
+    }
+  ],
+  "originalFileChangeReceipts": [
+    {
+      "phase": "before",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    },
+    {
+      "phase": "after",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    },
+    {
+      "phase": "final",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    },
+    {
+      "phase": "recovery",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    }
+  ],
+  "priorProjectReceipts": [
+    {
+      "phase": "before",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    },
+    {
+      "phase": "recovery",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    }
+  ],
+  "sourceData": [
+    {
+      "phase": "before",
+      "originals": 309185,
+      "current": 309187,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62839,
+          "after": 62840
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62781,
+          "after": 62782
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    },
+    {
+      "phase": "after",
+      "originals": 309187,
+      "current": 309189,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62840,
+          "after": 62841
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62782,
+          "after": 62783
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    },
+    {
+      "phase": "final",
+      "originals": 309189,
+      "current": 309191,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62841,
+          "after": 62842
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62783,
+          "after": 62784
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    },
+    {
+      "phase": "recovery",
+      "originals": 309191,
+      "current": 309193,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62842,
+          "after": 62843
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62784,
+          "after": 62785
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    }
+  ],
+  "resources": {
+    "originalNativeHandlesExitedZero": 4,
+    "pairedCopiesRetired": 8,
+    "modelRequests": 0,
+    "cumulativeRequests": 1461,
+    "minimumReserveMs": 595014,
+    "originalDeadlineAt": 1793892640215,
+    "sourceCredentialsAndCatalogUnchanged": true
+  },
+  "manualFindings": {
+    "largeTurnCompactChinese": "34.2万",
+    "largeTurnExact": 342322,
+    "smallTurnCompactChinese": "3.8万",
+    "smallTurnExact": 37537,
+    "yearExact": 48967302,
+    "todayExact": 3184399,
+    "englishTitle": "Session model usage",
+    "chineseTitle": "会话模型用量",
+    "keyboardBefore": "Shift+Tab from More actions skipped title to leftPaneResizer",
+    "keyboardAfter": "Shift+Tab focuses chatViewTitle and opens current-locale tooltip; Escape closes; Tab moves to More actions",
+    "reloadSmallExactPreserved": true
+  },
+  "toolingCorrections": [
+    "Model usage checker reads the declared summary.tokens.total after its original failed direct tokens lookup",
+    "New fourth phase added to private prior-answer/prior-reset phase declarations; the four successful first receipts were retained and the remaining four were checked exactly"
+  ],
+  "limitations": [
+    "Screenshots11/12 are intermediate English backgrounds without the intended tooltip; screenshots15/17 prove final localized tooltip via keyboard",
+    "Structured CardHeader usage has no natural usage-bearing card in this dataset; all call sites compile through the same formatter, but its numeric tooltip is not claimed visually verified",
+    "One natural model and zero cost; multi-model and nonzero-cost visuals not fabricated",
+    "Official remote reconciliation envelope has its independent time-sensitive contract; nine local statistics fields compared exactly",
+    "Main changes are after frozen v0.1.46 installer; no release performed"
+  ],
+  "uiAutomationAddedOrRun": false,
+  "userWindowUntouched": true
+}

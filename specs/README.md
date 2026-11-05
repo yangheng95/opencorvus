@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [模型用量的中文单位与数字](records/2026-11/2026-11-05-usage-language-and-number-format.md)：当前语言的数量格式和真实用量。
+
 - [持续目标工具状态的界面语言](records/2026-11/2026-11-05-goal-tool-status-language.md)：规范状态复用现有翻译。
 
 - [默认页到持续目标真实交付](records/2026-11/2026-11-05-goal-entry-journey.md)：入口、上下文与真实本地成果。

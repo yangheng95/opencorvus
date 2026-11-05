@@ -5,7 +5,7 @@ import type { CardNode } from "../store/card-tree"
 import { useNowTick } from "../services/clock"
 import { cardDurationMs } from "../utils/card-timing"
 import { formatCostUSD, formatTokenCount } from "../utils/format-usage"
-import { t } from "../utils/i18n"
+import { localeTag, t } from "../utils/i18n"
 import { formatDuration, stamp } from "../utils/time"
 import { copyText } from "../services/clipboard"
 import { Icon } from "./ui/Icon"
@@ -141,8 +141,8 @@ export function CardHeaderChrome(props: {
     const total = usage.totalTokens ?? 0
     const input = usage.inputTokens ?? 0
     const output = usage.outputTokens ?? 0
-    if (total > 0) return formatTokenCount(total)
-    if (input > 0 || output > 0) return formatTokenCount(input + output)
+    if (total > 0) return formatTokenCount(total, localeTag())
+    if (input > 0 || output > 0) return formatTokenCount(input + output, localeTag())
     return ""
   }
   const usageCostLabel = () => {
@@ -156,13 +156,13 @@ export function CardHeaderChrome(props: {
     if (!usage) return ""
     const parts: string[] = []
     if ((usage.inputTokens ?? 0) > 0) {
-      parts.push(t("card.usage_input_tokens", { value: String(usage.inputTokens) }))
+      parts.push(t("card.usage_input_tokens", { value: usage.inputTokens.toLocaleString(localeTag()) }))
     }
     if ((usage.outputTokens ?? 0) > 0) {
-      parts.push(t("card.usage_output_tokens", { value: String(usage.outputTokens) }))
+      parts.push(t("card.usage_output_tokens", { value: usage.outputTokens.toLocaleString(localeTag()) }))
     }
     if ((usage.totalTokens ?? 0) > 0) {
-      parts.push(t("card.usage_total_tokens", { value: String(usage.totalTokens) }))
+      parts.push(t("card.usage_total_tokens", { value: usage.totalTokens.toLocaleString(localeTag()) }))
     }
     if ((usage.costUSD ?? 0) > 0) {
       parts.push(t("card.usage_cost", { value: formatCostUSD(usage.costUSD!) }))
@@ -171,16 +171,16 @@ export function CardHeaderChrome(props: {
   }
   const contextTokensTip = () =>
     t(props.node.contextTokensEstimated ? "card.context_tokens_tooltip_estimated" : "card.context_tokens_tooltip", {
-      value: String(props.node.contextTokens),
+      value: (props.node.contextTokens as number).toLocaleString(localeTag()),
     })
   const contextTokensLabel = () =>
     hasContextTokens()
-      ? `~${formatTokenCount(props.node.contextTokens as number)} tok${
+      ? `~${formatTokenCount(props.node.contextTokens as number, localeTag())} ${t("usage.table_tokens")}${
           props.node.contextTokensEstimated ? ` ${t("card.metadata_estimated")}` : ""
         }`
       : ""
   const usageLabel = () =>
-    [usageTotalLabel() ? `${usageTotalLabel()} tok` : "", usageCostLabel()]
+    [usageTotalLabel() ? `${usageTotalLabel()} ${t("usage.table_tokens")}` : "", usageCostLabel()]
       .filter(Boolean)
       .join(t("card.meta_separator"))
   const metadataSummaryLabel = () =>

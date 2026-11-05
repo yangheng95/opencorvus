@@ -74,7 +74,9 @@ function ChatViewTitle(props: {
   onRename: (row: WorkLedgerItemRow) => void | Promise<void>
   onArchive: (row: WorkLedgerItemRow) => void | Promise<void>
 }) {
-  const usageText = createMemo(() => formatUsageStrip(cardTreeStore.usageAggregate))
+  const usageText = createMemo(() =>
+    formatUsageStrip(cardTreeStore.usageAggregate, localeTag(), t("usage.table_tokens")),
+  )
   const [exporting, setExporting] = createSignal(false)
   const [searchOpen, setSearchOpen] = createSignal(false)
   const [itemActionBusy, setItemActionBusy] = createSignal(false)
@@ -250,6 +252,7 @@ function ChatViewTitle(props: {
         <Tooltip.Trigger
           as="span"
           class="chat-title chat-title-usage-trigger oc-surface-header__title"
+          tabIndex={0}
           id="chatViewTitle"
           data-copy-feedback={actionFeedback()?.kind}
           onDblClick={() => void copyDebugInfo()}
