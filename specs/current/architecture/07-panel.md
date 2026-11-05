@@ -519,6 +519,11 @@ original Part identity. Its instructions and byte limits are preserved verbatim;
 the interface does not parse that authored English note to infer read counts.
 Errors retain their canonical failure text. Expanded Input still shows the exact
 request locator and bounds. Main, child and card summaries share this owner.
+The create/get/update continuous-goal Tool summaries format known Goal statuses
+from their actual structured result through the same current locale labels as
+the Goal control. Authored reasons and original inputs/results remain unchanged
+and available through the existing Tool disclosure. This presentation does not
+derive Goal state from a requested status or alter execution and usage ownership.
 The event
 handler captures its existing Question reader before entering streamGlobalSSE;
 the stream runs outside Instance context and reads explicit Session/Project

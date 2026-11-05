@@ -114,6 +114,14 @@ function displayToolResultDetail(name: string, state: Record<string, unknown>): 
   if (!status) return ""
 
   const n = toolNameKey(name)
+  if (
+    (n === "createcontinuousgoal" || n === "getcontinuousgoal" || n === "updatecontinuousgoal") &&
+    ["active", "paused", "blocked", "complete", "budget_limited"].includes(status)
+  ) {
+    const label = t(`continuous_goal.status.${status}`)
+    const reason = firstNonEmptyString(output.reason)
+    return reason ? `${label}${t("card.meta_separator")}${shortValue(reason)}` : label
+  }
   if (n === "mergeback") {
     const primaryBranch = firstNonEmptyString(output.primary_branch, output.primaryBranch)
     if (status === "merged") {

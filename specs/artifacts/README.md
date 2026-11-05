@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [持续目标状态语言实页证据](2026-11-05-goal-tool-status-language/README.md)：中文状态、英文切换和原始事实。
+
 - [持续目标旅程实页证据](2026-11-05-goal-entry-journey/README.md)：默认页、表单和实际交付。
 
 - [审阅路径搜索实页证据](2026-11-05-review-path-search/README.md)：完整路径搜索、原比较与中英文。

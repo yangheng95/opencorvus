@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [持续目标工具状态的界面语言](2026-11-05-goal-tool-status-language.md)：真实目标摘要和原始披露。
+
 - [默认页到持续目标真实交付](2026-11-05-goal-entry-journey.md)：单代理Sol真实旅程与原数据保全。
 
 - [文件修改审阅路径搜索](2026-11-05-review-path-search.md)：原路径、目标路径和真实筛选数量。

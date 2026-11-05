@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标工具状态的界面语言](records/2026-11/2026-11-05-goal-tool-status-language.md)：规范状态复用现有翻译。
+
 - [默认页到持续目标真实交付](records/2026-11/2026-11-05-goal-entry-journey.md)：入口、上下文与真实本地成果。
 
 - [文件修改审阅路径搜索](records/2026-11/2026-11-05-review-path-search.md)：真实路径与Windows分隔符。

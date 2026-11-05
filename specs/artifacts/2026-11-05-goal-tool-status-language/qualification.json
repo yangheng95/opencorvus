@@ -1,0 +1,425 @@
+{
+  "at": "2026-11-05T14:19:13.260Z",
+  "scope": "Known structured continuous-goal Tool result status uses existing current locale labels; original reasons and raw records retained",
+  "checksPassed": [
+    "typecheck",
+    "ui-build-after",
+    "docs-final",
+    "routes-final",
+    "architecture-final",
+    "prepare-before",
+    "preflight-before",
+    "before-initial",
+    "before-final",
+    "before-prior",
+    "before-context",
+    "before-goal-initial",
+    "before-goal-final",
+    "shutdown-before",
+    "native-before-ready",
+    "settle-before",
+    "retire-before",
+    "qualify-before",
+    "prepare-after",
+    "preflight-after",
+    "after-initial",
+    "after-final",
+    "after-prior",
+    "after-context",
+    "after-goal-initial",
+    "after-goal-final",
+    "shutdown-after",
+    "native-after-ready",
+    "settle-after",
+    "retire-after",
+    "qualify-after"
+  ],
+  "screenshots": [
+    {
+      "file": "01-before-raw-goal-status.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "02-before-original-goal-tool-record.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "03-after-chinese-goal-status-and-file-count.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "04-after-chinese-summary-original-json-retained.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "05-after-english-goal-status.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "06-after-english-collapsed-file-summary.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "07-after-chinese-three-question-history.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "08-after-chinese-file-review-and-status.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "09-after-reload-chinese-status-and-summary.png",
+      "manuallyReviewed": true
+    }
+  ],
+  "originalBusinessCheckpoints": 36,
+  "originalQuestionReceipts": [
+    {
+      "phase": "before",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    }
+  ],
+  "originalFileChangeReceipts": [
+    {
+      "phase": "before",
+      "sessionID": "ses_-zUPxA3vfzzX0tJ3NU3o",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    },
+    {
+      "phase": "after",
+      "sessionID": "ses_-zUPxA3vfzzX0tJ3NU3o",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    }
+  ],
+  "priorProjectReceipts": [
+    {
+      "phase": "before",
+      "projects": [
+        {
+          "case": "A",
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "case": "B",
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "case": "C",
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "projects": [
+        {
+          "case": "A",
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "case": "B",
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "case": "C",
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    }
+  ],
+  "goalReceipts": [
+    {
+      "phase": "before",
+      "checkpoint": "initial",
+      "goalID": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "sessionID": "ses_-zUPtLR5Ozzcrjd2lP1j",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "automaticTurns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true,
+      "sharedHttpSseFieldsExact": true
+    },
+    {
+      "phase": "before",
+      "checkpoint": "final",
+      "goalID": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "sessionID": "ses_-zUPtLR5Ozzcrjd2lP1j",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "automaticTurns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true,
+      "sharedHttpSseFieldsExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "initial",
+      "goalID": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "sessionID": "ses_-zUPtLR5Ozzcrjd2lP1j",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "automaticTurns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true,
+      "sharedHttpSseFieldsExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "final",
+      "goalID": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "sessionID": "ses_-zUPtLR5Ozzcrjd2lP1j",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "automaticTurns": 1,
+      "tools": 8,
+      "events": 3,
+      "originalGoalToolsEventsArtifactExact": true,
+      "sharedHttpSseFieldsExact": true
+    }
+  ],
+  "sourceData": [
+    {
+      "phase": "before",
+      "originals": 309181,
+      "current": 309183,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62837,
+          "after": 62838
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62779,
+          "after": 62780
+        }
+      ],
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 129,
+      "protectedConfigurations": 119,
+      "attachments": 299,
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": []
+    },
+    {
+      "phase": "after",
+      "originals": 309183,
+      "current": 309185,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62838,
+          "after": 62839
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62780,
+          "after": 62781
+        }
+      ],
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 129,
+      "protectedConfigurations": 119,
+      "attachments": 299,
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": []
+    }
+  ],
+  "resources": {
+    "nativeOriginalHandlesExitedZero": 2,
+    "publicShutdowns": [
+      200,
+      200
+    ],
+    "pairedCopiesRetired": 4,
+    "requests": 0,
+    "cumulativeRequests": 1461,
+    "minimumReserveMs": 1998893,
+    "sourceCredentialsAndCatalogUnchanged": true
+  },
+  "visualObserved": {
+    "chineseStatus": "已完成",
+    "englishStatus": "Complete",
+    "chineseQuestionCount": "3 个问题",
+    "chineseFileCount": "文件修改 · 1 项",
+    "additions": 12,
+    "deletions": 0,
+    "rawJsonOriginalStatus": "complete",
+    "languageSwitchBackAndReload": true
+  },
+  "limitations": [
+    "Only the naturally available complete status was visually verified; other four statuses share existing labels but no fabricated records were used",
+    "Original model/user text, file identity, technical JSON keys and machine values remain verbatim",
+    "Source is main after the frozen v0.1.46 installer; no release performed"
+  ],
+  "userWindowUntouched": true,
+  "uiAutomationAddedOrRun": false
+}
