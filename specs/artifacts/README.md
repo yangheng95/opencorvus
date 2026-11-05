@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [工具结果重试实页证据](2026-11-05-tool-result-retry/README.md)：原失败、双语动作及原页面恢复。
+
 - [侧栏排序与数量实页证据](2026-11-05-ledger-created-order/README.md)：时间顺序、组织提示与真实数量。
 
 - [对话入口语言实页证据](2026-11-05-conversation-entry-language/README.md)：真实入口、范围与双语复核。

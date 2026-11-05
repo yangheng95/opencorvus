@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [工具结果读取重试](records/2026-11/2026-11-05-tool-result-retry.md)：已保存工具详情的错误提示与就地恢复。
+
 - [侧栏排序与数量说明](records/2026-11/2026-11-05-ledger-created-order.md)：创建排序、组织范围与项目数量。
 
 - [对话与项目入口语言](records/2026-11/2026-11-05-conversation-entry-language.md)：新对话、项目作用范围及创建时机。

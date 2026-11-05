@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [工具结果读取重试](2026-11-05-tool-result-retry.md)：真实断连、原结果与显式重试。
+
 - [侧栏排序与数量说明](2026-11-05-ledger-created-order.md)：创建顺序、范围提示及子任务计数。
 
 - [对话与项目入口语言](2026-11-05-conversation-entry-language.md)：中文入口、编程草稿和项目提示。

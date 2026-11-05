@@ -2773,6 +2773,11 @@ full and deferred records use the same question count, answered/expired outcome
 and target count. One target retains its exact path when it fits the identity
 budget. These summaries never parse producer titles or patch text,
 and expanded input, original output and comparisons keep their authored contents.
+Expanded Tool details expose a localized retry action when the retained Part read
+fails. The action refetches the same resource and immutable Part identity; it
+does not execute the Tool again or require closing the enclosing operation group.
+Loading uses the existing resource state, and complete original diagnostics stay
+available under the shared Feedback disclosure.
 Tool identities, expanded comparisons, deferred Part reads and session dialogs
 share the selected conversation's project directory: the frozen Task directory
 for Tasks and the admitted selected Session directory for ordinary conversations.

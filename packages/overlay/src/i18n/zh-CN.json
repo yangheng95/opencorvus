@@ -1119,7 +1119,7 @@
   "tool.recorded_output": "已记录输出",
   "tool.empty_result": "已完成 · 未返回输出",
   "tool.result_load_failed": "无法加载工具结果",
-  "tool.result_load_retry": "关闭并重新展开此工具可重试。你仍可以继续阅读对话。",
+  "tool.result_load_retry": "重试只会读取已保存的结果，不会再次执行工具。你仍可以继续阅读对话。",
   "tool.file_write_conflict": "文件已更改，请重新读取",
   "tool.metadata": "详情",
   "markdown.rendering": "正在渲染…",

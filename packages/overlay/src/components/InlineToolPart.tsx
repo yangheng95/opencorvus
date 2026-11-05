@@ -24,6 +24,7 @@ import {
   resolveResourceUrl,
 } from "../services/api"
 import { readToolPart } from "../services/tool-part"
+import { formatErrorDetails } from "../services/diagnostics"
 import { PreviewableImage } from "./ImagePreview"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
@@ -274,7 +275,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
       integrity: deferred,
     }
   }
-  const [persistedPart] = createResource(deferredSource, readToolPart)
+  const [persistedPart, { refetch }] = createResource(deferredSource, readToolPart)
   const part = () => (!persistedPart.loading && !persistedPart.error && persistedPart()) || props.part
   const state = () => part().state || {}
   const toolName = () => part().tool || "unknown"
@@ -450,7 +451,19 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
           <Feedback
             tone="error"
             title={t("tool.result_load_failed")}
-            details={String(persistedPart.error?.message || persistedPart.error)}
+            details={formatErrorDetails(persistedPart.error)}
+            actions={
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                disabled={persistedPart.loading}
+                onClick={() => void refetch()}
+              >
+                {t(persistedPart.loading ? "common.retrying" : "common.retry")}
+              </Button>
+            }
           >
             {t("tool.result_load_retry")}
           </Feedback>
