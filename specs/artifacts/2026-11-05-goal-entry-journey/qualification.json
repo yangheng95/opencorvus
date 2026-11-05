@@ -1,0 +1,560 @@
+{
+  "at": "2026-11-05T13:59:12.897Z",
+  "checksPassed": [
+    "typecheck",
+    "ui-build-after",
+    "before-initial",
+    "before-final",
+    "before-prior",
+    "before-context",
+    "after-initial",
+    "after-final",
+    "after-prior-finished",
+    "after-context",
+    "journey-finished-corrected",
+    "journey-reloaded",
+    "before-owned-project",
+    "after-owned-project",
+    "shutdown-before",
+    "native-before-ready",
+    "settle-before",
+    "retire-before",
+    "qualify-before",
+    "shutdown-after",
+    "native-after-ready",
+    "settle-after",
+    "retire-after",
+    "qualify-after"
+  ],
+  "scope": "UI guide hierarchy and true Home command label; existing native Disclosure, no new persisted state",
+  "screenshots": [
+    {
+      "file": "01-home-original-project.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "02-home-long-project-name-wraps.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "03-home-long-heading-actions-inspection.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "04-goal-form-long-project.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "05-goal-guide-chinese.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "06-home-long-title-actions-after-close.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "07-after-english-primary-guide.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "08-after-english-keyboard-other-entrypoints.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "09-after-chinese-prefill-project-and-sol.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "10-after-objective-and-three-turn-budget.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "11-after-chinese-primary-guide.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "12-after-chinese-keyboard-entrypoints.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "13-after-return-keeps-objective-and-budget.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "14-after-goal-start-request.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "15-after-real-goal-execution.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "16-after-goal-complete-file-summary.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "17-after-complete-details.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "18-after-delivered-file-in-app.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "19-after-reload-recorded-file-changes.png",
+      "manuallyReviewed": true
+    }
+  ],
+  "nativeOriginalHandlesExitedZero": 2,
+  "pairedCredentialCatalogCopiesRetired": 4,
+  "actualModelRequests": 9,
+  "cumulativeModelRequests": 1461,
+  "unusedAllowanceRetired": 39,
+  "minimumReserveMs": 2041525,
+  "sourceCredentialsAndCatalogUnchanged": true,
+  "sourceData": [
+    {
+      "phase": "before",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 306899,
+      "currentRows": 306904,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62396,
+          "after": 62397
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62338,
+          "after": 62339
+        },
+        {
+          "table": "memory_chunk",
+          "before": 123,
+          "after": 124
+        },
+        {
+          "table": "memory_file",
+          "before": 123,
+          "after": 124
+        },
+        {
+          "table": "project",
+          "before": 127,
+          "after": 128
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "protectedProjects": 127,
+      "protectedAttachments": 297
+    },
+    {
+      "phase": "after",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 306904,
+      "currentRows": 309181,
+      "changes": [
+        {
+          "table": "bus_publication_delivery_receipt",
+          "before": 59823,
+          "after": 60260
+        },
+        {
+          "table": "bus_publication_delivery",
+          "before": 59823,
+          "after": 60260
+        },
+        {
+          "table": "bus_publication_outbox",
+          "before": 8057,
+          "after": 8123
+        },
+        {
+          "table": "bus_publication_owner",
+          "before": 8057,
+          "after": 8123
+        },
+        {
+          "table": "bus_publication_phase_receipt",
+          "before": 24171,
+          "after": 24369
+        },
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62397,
+          "after": 62837
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62339,
+          "after": 62779
+        },
+        {
+          "table": "event_occurrence",
+          "before": 7837,
+          "after": 7903
+        },
+        {
+          "table": "memory_chunk",
+          "before": 124,
+          "after": 125
+        },
+        {
+          "table": "memory_file",
+          "before": 124,
+          "after": 125
+        },
+        {
+          "table": "message",
+          "before": 1051,
+          "after": 1061
+        },
+        {
+          "table": "part",
+          "before": 2943,
+          "after": 2967
+        },
+        {
+          "table": "permission_execution_result",
+          "before": 249,
+          "after": 251
+        },
+        {
+          "table": "permission_ledger",
+          "before": 1261,
+          "after": 1271
+        },
+        {
+          "table": "permission_policy",
+          "before": 62,
+          "after": 63
+        },
+        {
+          "table": "project",
+          "before": 128,
+          "after": 129
+        },
+        {
+          "table": "protocol_event",
+          "before": 2914,
+          "after": 2945
+        },
+        {
+          "table": "provider_activity_outcome",
+          "before": 1007,
+          "after": 1016
+        },
+        {
+          "table": "provider_activity_request",
+          "before": 1007,
+          "after": 1016
+        },
+        {
+          "table": "provider_usage_event",
+          "before": 1067,
+          "after": 1076
+        },
+        {
+          "table": "session_control_event",
+          "before": 72,
+          "after": 73
+        },
+        {
+          "table": "session_control_record",
+          "before": 71,
+          "after": 72
+        },
+        {
+          "table": "session",
+          "before": 156,
+          "after": 157
+        },
+        {
+          "table": "tool_part_outcome",
+          "before": 812,
+          "after": 820
+        },
+        {
+          "table": "tool_part_request",
+          "before": 812,
+          "after": 820
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": false,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793877226932,
+          "reacquiredAt": 1793886457686,
+          "releasedAt": 1793886464788,
+          "ownedByRuntime": true
+        }
+      ],
+      "protectedProjects": 128,
+      "protectedAttachments": 297
+    }
+  ],
+  "oldBusinessCheckpoints": 36,
+  "originalQuestionReceipts": [
+    {
+      "phase": "before",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalMaterialsAndGitExact": true,
+      "httpAndSseExact": true
+    }
+  ],
+  "originalFileChangeReceipts": [
+    {
+      "phase": "before",
+      "sessionID": "ses_-zUPxA3vfzzX0tJ3NU3o",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsAndFilesExact": true
+    },
+    {
+      "phase": "after",
+      "sessionID": "ses_-zUPxA3vfzzX0tJ3NU3o",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsAndFilesExact": true
+    }
+  ],
+  "priorProjectReceipts": [
+    {
+      "phase": "before",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    }
+  ],
+  "realJourney": {
+    "sessionID": "ses_-zUPtLR5Ozzcrjd2lP1j",
+    "goalID": "pev_g0Va6eZ8o00SDKe2xpAH",
+    "projectID": "prj_hw5q9H8N2WVHzZJnLql1",
+    "status": "complete",
+    "selection": "idle",
+    "automaticTurns": 1,
+    "turnBudget": 3,
+    "goalTokens": 303536,
+    "tools": 8,
+    "requests": 9,
+    "exactSolStreaming200Eof": true,
+    "artifact": "deliverables/客户核对.md",
+    "sourceFacts": [
+      "客户编号：C-956",
+      "联系人：沈佳",
+      "截止日期：2026-11-26",
+      "A-01：核对来源",
+      "A-02：确认交付"
+    ],
+    "additions": 12,
+    "deletions": 0,
+    "canonicalUserCreateAndModelCompletion": true,
+    "sharedHttpSseFieldsExact": true,
+    "reloadedGoalToolsEventsFileAndMutationExact": true
+  },
+  "toolingCorrections": [
+    {
+      "failure": "after-prior received final instead of the original finished checkpoint",
+      "repair": "Original checker rerun with finished; all eight original cases passed; no product or checker weakening"
+    },
+    {
+      "failure": "New journey checker compared whole HTTP response to its bounded SSE conversation snapshot",
+      "repair": "Read production session.connected contract; all seven declared SSE fields equal their HTTP counterparts, HTTP board remains exact canonical idle Session"
+    }
+  ],
+  "excludedHypotheses": [
+    "Existing long project heading wraps and Home actions open the form; no proven layout root cause",
+    "No observed execution, continuation, restart, concurrency or terminal convergence fault"
+  ],
+  "knownRemaining": [
+    "Goal update tool summary displays raw complete status in Chinese; next scoped iteration",
+    "Repository main change is outside the already frozen v0.1.46 installer; no release performed"
+  ],
+  "userWindowUntouched": true,
+  "uiAutomationAddedOrRun": false
+}

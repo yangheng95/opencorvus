@@ -4802,8 +4802,13 @@ the command moves its objective into the existing composer draft and does not
 submit a conversation Message. The menu shows `/goal` and the localized guide
 explains both entry points. The centered heading and suggested starter pills
 retain the real composer as the primary action. Goal explanation, model guidance
-and optional budgets remain within the original form and guide. Opening
-the home form preserves the composer draft and creates no owner, Message, or
+and optional budgets remain within the original form and guide.
+The guide keeps model selection, the correctly localized Home/header command,
+completion criteria and progress management in its three primary steps. Command
+search, the + menu and /goal remain available in the same guide through one
+initially collapsed native Disclosure. This optional help has no saved preference
+or effect on draft, owner, admission, budgets or execution.
+Opening the home form preserves the composer draft and creates no owner, Message, or
 goal; confirmation invokes the existing new-conversation/goal launch flow.
 The shared create form validates the trimmed objective against its existing
 16,000-character limit before either launching a new conversation or mutating

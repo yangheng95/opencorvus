@@ -750,6 +750,17 @@ export function ContinuousGoalControl(props: {
             <div class="continuous-goal__intro">
               <p>{t("continuous_goal.about")}</p>
               <GoalGuideSteps />
+              <Disclosure.Root>
+                <Disclosure.Trigger>{t("continuous_goal.guide.shortcuts.title")}</Disclosure.Trigger>
+                <Disclosure.Content>
+                  <p>
+                    {t("continuous_goal.guide.shortcuts.body", {
+                      createLabel: t("continuous_goal.title"),
+                      openLabel: t("continuous_goal.open"),
+                    })}
+                  </p>
+                </Disclosure.Content>
+              </Disclosure.Root>
               <p>{t("continuous_goal.pause_hint")}</p>
             </div>
           }

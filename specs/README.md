@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [默认页到持续目标真实交付](records/2026-11/2026-11-05-goal-entry-journey.md)：入口、上下文与真实本地成果。
+
 - [文件修改审阅路径搜索](records/2026-11/2026-11-05-review-path-search.md)：真实路径与Windows分隔符。
 
 - [侧栏重名项目目录上下文](records/2026-11/2026-11-05-project-name-context.md)：可见区分同名项目。
