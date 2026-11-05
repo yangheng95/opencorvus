@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [修改预览失败与恢复](records/2026-11/2026-11-05-review-preview-retry.md)：中文错误、原始诊断与原资源重试。
+
 - [审阅筛选结果数量](records/2026-11/2026-11-05-review-filter-count.md)：全部修改与当前可见记录的数量关系。
 
 - [新问题草稿与实际选择](records/2026-11/2026-11-05-question-choice-intent.md)：原问题、初始进度与实际作答意图。

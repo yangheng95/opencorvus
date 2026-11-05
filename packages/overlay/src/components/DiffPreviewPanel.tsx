@@ -71,7 +71,7 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
     null,
     { equals: (previous, current) => previous?.key === current?.key },
   )
-  const [change] = createResource<FileChange | null, DiffPreviewRequest | null>(
+  const [change, { refetch }] = createResource<FileChange | null, DiffPreviewRequest | null>(
     () => request()?.value ?? null,
     async (request) => {
       if (!request) return null
@@ -81,7 +81,6 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
 
   const item = createMemo(() => (change.loading || change.error ? null : (change() ?? null)))
   const loading = () => change.loading
-  const errorMessage = () => (change.error instanceof Error ? change.error.message : t("diff.load_failed"))
   const [opening, setOpening] = createSignal(false)
   const [openFailure, setOpenFailure] = createSignal<{ error: unknown } | null>(null)
   createEffect(
@@ -185,9 +184,17 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
             when={!change.error}
             fallback={
               <div class="diff-preview-empty">
-                <p class="empty-hint" role="alert">
-                  {errorMessage()}
-                </p>
+                <Feedback
+                  tone="error"
+                  details={formatErrorDetails(change.error)}
+                  actions={
+                    <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => refetch()}>
+                      {t("common.retry")}
+                    </Button>
+                  }
+                >
+                  {t("diff.preview_load_failed")}
+                </Feedback>
               </div>
             }
           >

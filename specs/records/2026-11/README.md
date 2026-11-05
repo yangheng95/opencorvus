@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [修改预览重试](2026-11-05-review-preview-retry.md)：真实断连与同一来源恢复。
+
 - [审阅筛选数量](2026-11-05-review-filter-count.md)：筛选结果、清除和中英状态说明。
 
 - [作答选择来源](2026-11-05-question-choice-intent.md)：新草稿、单选与共享作答进度。

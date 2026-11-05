@@ -702,6 +702,11 @@ observations without a recorded move retain their actual status.
 Existing dirty-draft confirmation applies before changing files. The action and its error
 feedback stay bound to the visible source, comparison and API authority; missing
 current files retain the workbench's normal read-error contract.
+Selected-comparison read failures use the shared localized Feedback, with complete
+original diagnostics in Details and explicit Retry through that resource's
+existing refetch. The loading branch owns pending retries; the original request
+key, comparison target, API authority and canonical Part reader retain ownership.
+Retry does not substitute current disk contents for the historical comparison.
 The file workbench distinguishes a structured 404/FileNotFoundError from unknown
 read failures. Its localized feedback names the selected path, explains possible
 moves/deletion and offers the existing retry after recovery. The original error
