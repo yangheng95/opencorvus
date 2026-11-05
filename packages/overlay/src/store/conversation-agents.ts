@@ -227,7 +227,7 @@ function agentRecordFromSession(session: ConversationAgentSessionView): AgentAct
   const targetMessageID = lastDisplayMessageID
   const targetObservedAt = targetMessageID ? Math.max(0, Number(session?.lastMessageTime ?? 0)) : 0
   const lastObservedAt = Math.max(startedAt, Number(session?.lastObservedAt ?? session?.lastMessageTime ?? 0))
-  const status = session.status || "pending"
+  const status = session.status || "unobserved"
   const inputPreviewText = String(session?.inputPreview?.text || "").trim()
   const terminal = status === "completed" || status === "error" || status === "skipped"
   const todos =
@@ -613,7 +613,7 @@ function upsertLiveConversationAgentIdentity(
       stage: input.stage,
       rawStage: input.rawStage,
       viewSource: "live",
-      status: "pending",
+      status: "unobserved",
       orderKey: input.orderKey,
       startedAt: input.observedAt,
       lastObservedAt: input.observedAt,
@@ -914,6 +914,7 @@ function applyDepth(records: AgentActivityRecord[]): AgentActivityRecord[] {
 
 function statusRank(status: AgentActivityStatus): number {
   const rank: Record<AgentActivityStatus, number> = {
+    unobserved: -1,
     pending: 0,
     idle: 1,
     skipped: 2,
@@ -929,6 +930,9 @@ function statusKeepsCompletedAt(status: AgentActivityStatus): boolean {
 }
 
 function existingRecordOwnsLifecycle(existing: AgentActivityRecord, hydrated: AgentActivityRecord): boolean {
+  const existingObserved = existing.status !== "unobserved"
+  const hydratedObserved = hydrated.status !== "unobserved"
+  if (existingObserved !== hydratedObserved) return existingObserved
   if (existing.lastObservedAt !== hydrated.lastObservedAt) {
     return existing.lastObservedAt > hydrated.lastObservedAt
   }

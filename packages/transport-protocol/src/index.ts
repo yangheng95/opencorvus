@@ -835,6 +835,18 @@ export type ConversationSeparatorMessagePartType = (typeof CONVERSATION_SEPARATO
  * session history remains owned by the session conversation route. */
 export const CONVERSATION_AGENT_ACTIVITY_LIMIT = 24 as const
 
+/** Message observations do not establish a queued or running execution. */
+export const CONVERSATION_AGENT_ACTIVITY_STATUSES = [
+  "unobserved",
+  "pending",
+  "running",
+  "idle",
+  "completed",
+  "error",
+  "skipped",
+] as const
+export type ConversationAgentActivityStatus = (typeof CONVERSATION_AGENT_ACTIVITY_STATUSES)[number]
+
 interface ConversationAgentActivityBase {
   id: string
   messageID: string

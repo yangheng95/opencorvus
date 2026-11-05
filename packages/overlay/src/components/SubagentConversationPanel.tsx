@@ -481,7 +481,7 @@ export function SubagentConversationPanel(props: {
           renderValue={(record) => (record ? <SubagentSessionIdentity identity={record} /> : "")}
           renderOptionLabel={(record) => <SubagentSessionIdentity identity={record} />}
           renderOptionDescription={(option) =>
-            t(`agent_rail.status.${recordForSession(option.sessionID)?.status ?? "pending"}`)
+            t(`agent_rail.status.${recordForSession(option.sessionID)?.status ?? "unobserved"}`)
           }
         />
       </div>

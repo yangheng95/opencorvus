@@ -6,6 +6,7 @@ import {
   parseConversationInteractiveArtifactMessagePart,
   projectConversationAgentActivityPart,
   type ConversationAgentActivityItem,
+  type ConversationAgentActivityStatus,
 } from "@opencorvus-ai/transport-protocol"
 import { HelperAgentRegistry } from "@/agent/helper-agent-registry"
 import { isMissionCallerReceiptParticipant } from "@/mission/caller-participant"
@@ -27,7 +28,7 @@ export interface ConversationSessionView {
   lastMessageTime: number
   firstObservedAt?: number
   lastObservedAt?: number
-  status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+  status?: ConversationAgentActivityStatus
   activity: ConversationAgentActivityItem[]
   todos: Todo.Info[]
   todoUpdatedAt: number
@@ -249,7 +250,7 @@ function applyLedgerSession(
       lastMessageTime: lastObservedAt,
       firstObservedAt: observedAt,
       lastObservedAt,
-      status: "pending",
+      status: "unobserved",
       activity: [],
       todos: [],
       todoUpdatedAt: 0,
@@ -261,7 +262,7 @@ function applyLedgerSession(
   }
   existing.firstObservedAt = Math.min(existing.firstObservedAt ?? existing.firstMessageTime, observedAt)
   existing.lastObservedAt = Math.max(existing.lastObservedAt ?? existing.lastMessageTime, lastObservedAt)
-  existing.status = existing.status || "pending"
+  existing.status = existing.status || "unobserved"
   if (!existing.parentSessionID && parentSessionID) existing.parentSessionID = parentSessionID
   applyLedgerLatestStatus(existing, ledger)
 }
@@ -524,7 +525,10 @@ export function projectConversationAgentView(
   }
   const executionSessions = new Map<string, ConversationSessionView>()
   const sessionsWithExecutions = new Set<string>()
-  const ensureExecution = (input: ConversationPreparedExecution): ConversationSessionView | undefined => {
+  const ensureExecution = (
+    input: ConversationPreparedExecution,
+    initialStatus: ConversationAgentActivityStatus = "pending",
+  ): ConversationSessionView | undefined => {
     const sessionID = String(input.sessionID || "")
     const inputMessageID = String(input.inputMessageID || "")
     const agentID = String(input.agent || "")
@@ -577,7 +581,7 @@ export function projectConversationAgentView(
       lastMessageTime: observedAt,
       firstObservedAt: observedAt,
       lastObservedAt: observedAt,
-      status: "pending",
+      status: initialStatus,
       inputPreview: inputMessage ? userMessageInputPreview(inputMessage) : undefined,
       activity: [],
     }
@@ -616,13 +620,17 @@ export function projectConversationAgentView(
     if (executionSessions.has(message.inputMessageID)) continue
     const owner = bySession.get(message.sessionID)
     if (!owner) continue
-    ensureExecution({
-      sessionID: message.sessionID,
-      inputMessageID: message.inputMessageID,
-      agent: owner.agentID,
-      kind: owner.stage,
-      preparedAt: message.time,
-    })
+    const input = transcriptByMessageID.get(message.inputMessageID)
+    ensureExecution(
+      {
+        sessionID: message.sessionID,
+        inputMessageID: message.inputMessageID,
+        agent: owner.agentID,
+        kind: owner.stage,
+        preparedAt: message.time,
+      },
+      input?.info?.role === "user" && input.info.pendingDelivery === true ? "pending" : "unobserved",
+    )
   }
   for (const [sessionID, session] of bySession) {
     if (!sessionsWithExecutions.has(sessionID)) executionSessions.set(`precommit:${sessionID}`, session)

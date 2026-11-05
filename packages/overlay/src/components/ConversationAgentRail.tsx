@@ -31,6 +31,7 @@ const AGENT_RAIL_MINIMUM_VISIBLE_RECORDS = 3
 const AGENT_RAIL_PROXIMITY_DEPTH = 3
 
 const AGENT_RAIL_STATUS_LABELS: Record<AgentActivityStatus, () => string> = {
+  unobserved: () => t("agent_rail.status.unobserved"),
   pending: () => t("agent_rail.status.pending"),
   running: () => t("agent_rail.status.running"),
   idle: () => t("agent_rail.status.idle"),
@@ -235,11 +236,15 @@ function AgentRailRow(props: {
       current.id,
       props.records().filter((peer) => peer.sessionID === current.sessionID).map((peer) => peer.id),
     )
-    return suffix ? t("agent_rail.execution", { id: suffix }) : ""
+    return suffix
+      ? t(current.status === "unobserved" ? "agent_rail.record" : "agent_rail.execution", { id: suffix })
+      : ""
   })
   const startedAtLabel = createMemo(() => {
     const time = preciseStamp(record().startedAt)
-    return time ? t("agent_rail.started_at", { time }) : ""
+    return time
+      ? t(record().status === "unobserved" ? "agent_rail.recorded_at" : "agent_rail.started_at", { time })
+      : ""
   })
   const accessibleLabel = () =>
     [
@@ -301,6 +306,9 @@ function AgentRailRow(props: {
                 {(label) => <span class="conversation-agent-rail-tooltip__time">{label()}</span>}
               </Show>
             </div>
+            <Show when={record().status === "unobserved"}>
+              <p class="conversation-agent-rail-tooltip__hint">{t("agent_rail.unobserved_hint")}</p>
+            </Show>
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>

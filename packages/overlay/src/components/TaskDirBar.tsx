@@ -279,14 +279,31 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     conversationAgentRecordsForSource(boardStore.selectedSource).filter(isSubagentActivityRecord),
   )
   const workingSubagentCount = createMemo(
-    () => subagentRecords().filter((record) => !isAgentActivityTerminalStatus(record.status)).length,
+    () => subagentRecords().filter(
+      (record) => record.status !== "unobserved" && !isAgentActivityTerminalStatus(record.status),
+    ).length,
   )
   const doneSubagentCount = createMemo(
     () => subagentRecords().filter((record) => isAgentActivityTerminalStatus(record.status)).length,
   )
-  const subagentConversationTarget = createMemo(
-    () => subagentRecords().find((record) => !isAgentActivityTerminalStatus(record.status)) ?? subagentRecords().at(-1),
+  const recordedSubagentCount = createMemo(
+    () => subagentRecords().filter((record) => record.status === "unobserved").length,
   )
+  const subagentConversationTarget = createMemo(
+    () => subagentRecords().find(
+      (record) => record.status !== "unobserved" && !isAgentActivityTerminalStatus(record.status),
+    ) ?? subagentRecords().at(-1),
+  )
+  const subagentSummaryLabel = createMemo(() => {
+    const counts = [
+      t("project_runtime.subagents_working", { count: workingSubagentCount() }),
+      t("project_runtime.subagents_done", { count: doneSubagentCount() }),
+    ]
+    if (recordedSubagentCount()) {
+      counts.push(t("project_runtime.subagents_recorded", { count: recordedSubagentCount() }))
+    }
+    return `${t("project_runtime.subagents")}: ${counts.join(", ")}`
+  })
   const hasGoalInformation = createMemo(() => {
     const goals = (boardStore.board as any)?.goals
     return Array.isArray(goals) && goals.length > 0
@@ -1576,9 +1593,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                 tone="neutral"
                 class="project-runtime-subagent-summary"
                 data-ui="project-runtime-subagent-summary"
-                aria-label={`${t("project_runtime.subagents")}: ${t("project_runtime.subagents_working", {
-                  count: workingSubagentCount(),
-                })}, ${t("project_runtime.subagents_done", { count: doneSubagentCount() })}`}
+                aria-label={subagentSummaryLabel()}
                 onClick={openSubagentSummary}
               >
                 <span class="project-runtime-subagent-avatars" aria-hidden="true">
@@ -1595,6 +1610,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                   <span class="project-runtime-subagent-done">
                     {t("project_runtime.subagents_done", { count: doneSubagentCount() })}
                   </span>
+                </Show>
+                <Show when={recordedSubagentCount() > 0}>
+                  <span>{t("project_runtime.subagents_recorded", { count: recordedSubagentCount() })}</span>
                 </Show>
               </Button>
             </section>

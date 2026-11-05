@@ -766,6 +766,10 @@ assistant 的 timeline cursor 跳过它。该检查只唤醒现有循环，由�
 接纳批次按原可见时间线合并本次释放的排队输入和最新 assistant 之后的全部 user 输入；
 跨 Session 移入的真实参与者输入即使未带排队标记，也与同批控制输入共同接纳。
 队列标记只决定可见时机，不能缩小已交给本轮模型的新输入集合。失败重试仍复用原精确批次。
+Conversation Agent 的状态集合由 transport-protocol 唯一定义。消息或 Session 身份本身只证明
+记录存在；没有精确执行状态时投影为 `unobserved`。准备好的 worker descriptor、输入上的
+`pendingDelivery` 标记分别证明待执行/待投递，可投影为 `pending`；精确 lifecycle 继续拥有
+对应轮次的运行和终态。父 Task 或 Session 最新状态不能替旧输入补写执行事实。
 reply peer 通过 accepted input Message identity 加入，summary peer 先按
 本次 exact Session control ID 加入其 consumed/failed 终态；consumed terminal 必须与
 该 control durable payload 中的 exact summary Message ID 绑定在同一个 immediate transaction。

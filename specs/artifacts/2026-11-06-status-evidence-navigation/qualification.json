@@ -1,0 +1,185 @@
+{
+  "at": "2026-11-05T21:38:40.497Z",
+  "purpose": "Evidence-based execution navigation and Chinese member label",
+  "manualVisualReview": {
+    "screenshots": 12,
+    "languages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "nativeDevUi": true,
+    "automatedUiTests": false,
+    "inputLocationAndOriginalContext": true,
+    "realIdleAndCompletedWorker": true,
+    "chineseMemberListReturn": true
+  },
+  "functionalChecks": {
+    "positiveBackendTests": 11,
+    "assertions": 18,
+    "typecheckPackages": 8,
+    "sdkAndOpenApiGenerated": true,
+    "canonicalNodeUiBuild": true,
+    "locales": 2,
+    "translationKeys": 2881,
+    "httpSamples": 6,
+    "navigationRecords": 32,
+    "changedUnsupportedPendingViews": 3,
+    "preservedObservedStatusViews": 29,
+    "connectedSessionSnapshots": 2,
+    "streamSnapshotRecords": 11
+  },
+  "modelRequests": 0,
+  "cumulativeRequests": 1469,
+  "phases": [
+    {
+      "label": "before",
+      "port": 38807,
+      "schema": 10,
+      "tableCount": 92,
+      "originalRows": 309211,
+      "currentRows": 309213,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62852,
+          "after": 62853
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62794,
+          "after": 62795
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "attachments": 299,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "cumulativeRequests": 1469,
+      "reserveMs": 3250030,
+      "sourceCredentialsAndCatalogPreserved": true,
+      "pairedCopiesRetired": true,
+      "publicShutdown": 200,
+      "nativeExitCode": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    {
+      "label": "after",
+      "port": 38808,
+      "schema": 10,
+      "tableCount": 92,
+      "originalRows": 309213,
+      "currentRows": 309215,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62853,
+          "after": 62854
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62795,
+          "after": 62796
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "attachments": 299,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "cumulativeRequests": 1469,
+      "reserveMs": 1524214,
+      "sourceCredentialsAndCatalogPreserved": true,
+      "pairedCopiesRetired": true,
+      "publicShutdown": 200,
+      "nativeExitCode": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    {
+      "label": "final",
+      "port": 38809,
+      "schema": 10,
+      "tableCount": 92,
+      "originalRows": 309215,
+      "currentRows": 309217,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62854,
+          "after": 62855
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62796,
+          "after": 62797
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "attachments": 299,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "cumulativeRequests": 1469,
+      "reserveMs": 500331,
+      "sourceCredentialsAndCatalogPreserved": true,
+      "pairedCopiesRetired": true,
+      "publicShutdown": 200,
+      "nativeExitCode": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    {
+      "label": "finalChinese",
+      "port": 38810,
+      "schema": 10,
+      "tableCount": 92,
+      "originalRows": 309217,
+      "currentRows": 309219,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62855,
+          "after": 62856
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62797,
+          "after": 62798
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "attachments": 299,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "cumulativeRequests": 1469,
+      "reserveMs": 1041403,
+      "sourceCredentialsAndCatalogPreserved": true,
+      "pairedCopiesRetired": true,
+      "publicShutdown": 200,
+      "nativeExitCode": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    }
+  ],
+  "limits": [
+    "No natural queued input visual sample",
+    "No natural unobserved child aggregate visual sample",
+    "New live event races, full orchestration, crash recovery and retry were not exercised in this batch",
+    "Historical messages and input acceptance arrays were not rewritten"
+  ]
+}

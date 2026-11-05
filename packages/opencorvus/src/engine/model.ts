@@ -16,6 +16,7 @@ import {
 import { TaskArtifactRefSchema } from "@opencorvus-ai/plugin/task-artifact"
 import {
   COMPOSER_FILE_ATTACHMENT_LIMIT,
+  CONVERSATION_AGENT_ACTIVITY_STATUSES,
   COMPOSER_FOLDER_ATTACHMENT_LIMIT,
   DIRECTORY_REFERENCE_MIME,
   VisibleComposerReferences,
@@ -917,7 +918,7 @@ const TaskConversationSessionViewBase = z.object({
   lastMessageTime: z.number(),
   firstObservedAt: z.number().optional(),
   lastObservedAt: z.number().optional(),
-  status: z.enum(["pending", "running", "idle", "completed", "error", "skipped"]).optional(),
+  status: z.enum(CONVERSATION_AGENT_ACTIVITY_STATUSES).optional(),
   activity: TaskConversationAgentActivityItem.array(),
   todos: Todo.Info.array(),
   todoUpdatedAt: z.number().int().nonnegative(),

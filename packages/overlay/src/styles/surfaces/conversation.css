@@ -660,6 +660,7 @@
 }
 
 .conversation-agent-rail__row[data-status="skipped"] .conversation-agent-rail__tick-line,
+.conversation-agent-rail__row[data-status="unobserved"] .conversation-agent-rail__tick-line,
 .conversation-agent-rail__row[data-status="idle"] .conversation-agent-rail__tick-line {
   opacity: var(--ui-opacity-dim);
 }
@@ -736,6 +737,14 @@
   min-width: 0;
   overflow: hidden;
   white-space: nowrap;
+}
+
+.conversation-agent-rail-tooltip__hint {
+  margin: var(--ui-gap-sm) 0 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .conversation-agent-rail-tooltip__header strong {

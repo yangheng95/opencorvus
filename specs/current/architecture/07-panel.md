@@ -3310,6 +3310,18 @@ every child body starts from the common flat content axis rather than adding a
 nested category indent. The catalog, board, worktree service, and task-scoped
 evidence remain the only sources for which rows exist.
 
+Conversation Agent navigation distinguishes saved message observations from
+observed execution states through the shared transport status contract.
+An `unobserved` record is neutral, labelled as having no recorded execution
+status, with its retained record identity, recorded time and an explanation that
+only message or Session records are available.
+It remains locatable and readable. Actual prepared or queued evidence still owns
+`pending`, and exact lifecycle facts own running, idle and terminal presentation.
+Hydration and live identity creation share the neutral default; reconciliation
+preserves an observed status over an unobserved record regardless of later message
+activity timestamps. No historical Message, input acceptance or Task state is
+rewritten to manufacture execution completion.
+
 The conditional Subagents menu region reads the selected conversation's
 canonical child-session records through the same conversation-Agent projection
 used by the main progress grid, Agent Rail, and aggregate `Squad agents` Right

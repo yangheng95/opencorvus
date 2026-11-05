@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [依执行证据显示导航状态](records/2026-11/2026-11-06-status-evidence-navigation.md)：消息记录与真实等待。
+
 - [同轮输入与回复接纳记录](records/2026-11/2026-11-06-input-batch-acceptance.md)：混合输入的真实回复身份。
 
 - [用工作事实说明工具操作](records/2026-11/2026-11-06-tool-result-language.md)：任务名、状态文件及协调主题。

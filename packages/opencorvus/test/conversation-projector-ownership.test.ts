@@ -5,6 +5,8 @@ import {
   type ConversationAgentSessionLedgerEntry,
 } from "../src/conversation/view"
 import { timelineOrderKey } from "../src/timeline/order"
+import { TaskConversationSessionView } from "../src/engine/model"
+import { Identifier } from "../src/id/id"
 
 const inputMessageID = "message_user_input"
 const assistantMessageID = "message_architect_reply"
@@ -145,14 +147,14 @@ test("conversation Agent occurrences preserve each durable input lifecycle", () 
   ])
 })
 
-test("an accepted input with visible content retains its pending occurrence until lifecycle arrival", () => {
+test("visible messages without execution evidence retain an unobserved record", () => {
   const view = projectConversationAgentView(transcript, [], ledgerSessions)
   expect(view.topLevelExecutionIDs).toEqual([inputMessageID])
   expect(view.sessions).toEqual([
     expect.objectContaining({
       executionID: inputMessageID,
       inputMessageID,
-      status: "pending",
+      status: "unobserved",
       messageIDs: [inputMessageID, assistantMessageID],
     }),
   ])
@@ -208,7 +210,7 @@ test("one reply acceptance batch projects its complete input messages under the 
   ).toEqual([inputMessageID, batchInputID, batchReplyID])
 })
 
-test("repeated reply steps retain batch identity while a later unaccepted input remains pending", () => {
+test("repeated reply steps retain batch identity alongside a later input observation", () => {
   const laterInputID = "message_waiting_input"
   const repeatedReplyID = "message_batch_tool_reply"
   const view = projectConversationAgentView(
@@ -231,7 +233,7 @@ test("repeated reply steps retain batch identity while a later unaccepted input 
       status: "idle",
       messageIDs: [inputMessageID, batchInputID, batchReplyID, repeatedReplyID],
     },
-    { inputMessageID: laterInputID, status: "pending", messageIDs: [laterInputID] },
+    { inputMessageID: laterInputID, status: "unobserved", messageIDs: [laterInputID] },
   ])
 })
 
@@ -265,7 +267,7 @@ test("a real earlier lifecycle retains its occurrence when a later reply accepts
   expect(view.messages.find((row) => row.messageID === inputMessageID)?.inputMessageID).toBe(inputMessageID)
 })
 
-test("prepared execution evidence and other Session input identities retain their own pending records", () => {
+test("prepared execution and another Session input preserve their distinct evidence", () => {
   const otherSessionID = "session_other_architect"
   const otherInputID = "message_other_input"
   const view = projectConversationAgentView(
@@ -294,7 +296,49 @@ test("prepared execution evidence and other Session input identities retain thei
     [
       { sessionID, inputMessageID, status: "pending" },
       { sessionID, inputMessageID: batchInputID, status: "idle" },
-      { sessionID: otherSessionID, inputMessageID: otherInputID, status: "pending" },
+      { sessionID: otherSessionID, inputMessageID: otherInputID, status: "unobserved" },
     ],
   )
+})
+
+test("a durable queued input projects a pending execution", () => {
+  const queued = { ...transcript[0]!, info: { ...transcript[0]!.info, pendingDelivery: true } }
+  const view = projectConversationAgentView([queued], [], ledgerSessions)
+  expect(view.sessions).toEqual([
+    expect.objectContaining({ inputMessageID, status: "pending", messageIDs: [inputMessageID] }),
+  ])
+})
+
+test("an exact lifecycle establishes the state of a queued input", () => {
+  const queued = { ...transcript[0]!, info: { ...transcript[0]!.info, pendingDelivery: true } }
+  const view = projectConversationAgentView(
+    [queued],
+    [
+      {
+        type: "agent.execution.lifecycle",
+        emittedAt: 1_200,
+        payload: { sessionID, inputMessageID, agentID: "architect", status: { type: "terminal", reason: "completed" } },
+      },
+    ],
+    ledgerSessions,
+  )
+  expect(view.sessions).toEqual([
+    expect.objectContaining({ inputMessageID, status: "completed", messageIDs: [inputMessageID] }),
+  ])
+})
+
+test("a ledger identity without execution facts is an unobserved record", () => {
+  const view = projectConversationAgentView([], [], ledgerSessions)
+  expect(view.sessions).toEqual([expect.objectContaining({ sessionID, agentID: "architect", status: "unobserved" })])
+})
+
+test("the public conversation schema carries the unobserved status", () => {
+  const inputID = Identifier.ascending("message")
+  const input = { ...transcript[0]!, info: { ...transcript[0]!.info, id: inputID } }
+  const row = projectConversationAgentView([input], [], ledgerSessions).sessions[0]!
+  expect(TaskConversationSessionView.parse(row)).toMatchObject({
+    executionID: inputID,
+    inputMessageID: inputID,
+    status: "unobserved",
+  })
 })

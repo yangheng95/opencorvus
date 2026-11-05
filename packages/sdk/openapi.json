@@ -16871,6 +16871,7 @@
                         },
                         "status": {
                           "enum": [
+                            "unobserved",
                             "pending",
                             "running",
                             "idle",
@@ -17301,6 +17302,7 @@
                         },
                         "status": {
                           "enum": [
+                            "unobserved",
                             "pending",
                             "running",
                             "idle",
@@ -18132,6 +18134,7 @@
                         },
                         "status": {
                           "enum": [
+                            "unobserved",
                             "pending",
                             "running",
                             "idle",
@@ -18562,6 +18565,7 @@
                         },
                         "status": {
                           "enum": [
+                            "unobserved",
                             "pending",
                             "running",
                             "idle",
@@ -103432,6 +103436,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -103862,6 +103867,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -105910,6 +105916,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -106340,6 +106347,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -107123,6 +107131,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -107553,6 +107562,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -125022,6 +125032,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -125452,6 +125463,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -130024,6 +130036,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -130454,6 +130467,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -131535,6 +131549,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -131965,6 +131980,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -132779,6 +132795,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",
@@ -133209,6 +133226,7 @@
                                   },
                                   "status": {
                                     "enum": [
+                                      "unobserved",
                                       "pending",
                                       "running",
                                       "idle",

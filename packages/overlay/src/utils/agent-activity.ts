@@ -1,7 +1,7 @@
-import type { ConversationAgentActivityItem } from "@opencorvus-ai/transport-protocol"
+import type { ConversationAgentActivityItem, ConversationAgentActivityStatus } from "@opencorvus-ai/transport-protocol"
 import type { TodoItem } from "./todos"
 
-export type AgentActivityStatus = "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+export type AgentActivityStatus = ConversationAgentActivityStatus
 
 export function isAgentActivityTerminalStatus(status: AgentActivityStatus): boolean {
   return status === "completed" || status === "error" || status === "skipped"

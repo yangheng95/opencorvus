@@ -4912,7 +4912,7 @@ export type SessionConversationConnectionSnapshot = {
           placement: "top_level"
           sessionID: string
           stage: string
-          status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+          status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
           todoUpdatedAt: number
           todos: Array<Todo>
         }
@@ -5007,7 +5007,7 @@ export type SessionConversationConnectionSnapshot = {
           placement: "top_level"
           sessionID: string
           stage: string
-          status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+          status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
           todoUpdatedAt: number
           todos: Array<Todo>
         }
@@ -5208,7 +5208,7 @@ export type SessionConversationConnectionSnapshot = {
           placement: "top_level"
           sessionID: string
           stage: string
-          status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+          status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
           todoUpdatedAt: number
           todos: Array<Todo>
         }
@@ -5303,7 +5303,7 @@ export type SessionConversationConnectionSnapshot = {
           placement: "top_level"
           sessionID: string
           stage: string
-          status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+          status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
           todoUpdatedAt: number
           todos: Array<Todo>
         }
@@ -29729,7 +29729,7 @@ export type SessionConversationResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -29824,7 +29824,7 @@ export type SessionConversationResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -30259,7 +30259,7 @@ export type SessionConversationResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -30354,7 +30354,7 @@ export type SessionConversationResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -30542,7 +30542,7 @@ export type SessionConversationHistoryResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -30637,7 +30637,7 @@ export type SessionConversationHistoryResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -36031,7 +36031,7 @@ export type TaskConversationResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -36126,7 +36126,7 @@ export type TaskConversationResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -37258,7 +37258,7 @@ export type TaskConversationResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -37353,7 +37353,7 @@ export type TaskConversationResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -37618,7 +37618,7 @@ export type TaskConversationHistoryResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -37713,7 +37713,7 @@ export type TaskConversationHistoryResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -37912,7 +37912,7 @@ export type TaskConversationSessionResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }
@@ -38007,7 +38007,7 @@ export type TaskConversationSessionResponses = {
             placement: "top_level"
             sessionID: string
             stage: string
-            status?: "pending" | "running" | "idle" | "completed" | "error" | "skipped"
+            status?: "unobserved" | "pending" | "running" | "idle" | "completed" | "error" | "skipped"
             todoUpdatedAt: number
             todos: Array<Todo>
           }

@@ -26,6 +26,7 @@ import { createStore, produce, reconcile } from "solid-js/store"
 import type { ScreenshotBrowserItem } from "../utils/screenshot-browser"
 import type { UsageAggregate } from "../utils/format-usage"
 import type { SessionStatus } from "@opencorvus-ai/sdk"
+import type { ConversationAgentActivityStatus } from "@opencorvus-ai/transport-protocol"
 
 export type CardKind =
   | "agent" // per-session agent card (orchestrator, build worker, planner, ...)
@@ -33,13 +34,9 @@ export type CardKind =
   | "message" // user / system message bubble
   | "review" // top-level running/completed review stream card
 
-export type CardStatus =
-  | "pending"
-  | "running" // LLM stream actively in flight (spinner ON)
-  | "idle" // session alive but between turns, awaiting next user message / wake (no spinner)
-  | "completed"
-  | "error"
-  | "skipped"
+/** Running owns stream activity; idle is between turns. An unobserved card
+ * retains its record without claiming a queued or running execution. */
+export type CardStatus = ConversationAgentActivityStatus
 
 export type SessionTerminalStatus = Extract<SessionStatus, { type: "terminal" }>
 export type SessionTerminalReason = SessionTerminalStatus["reason"] | "coordinated"

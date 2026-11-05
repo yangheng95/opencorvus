@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [依执行证据显示导航状态](2026-11-06-status-evidence-navigation.md)：缺省状态与真实执行证据。
+
 - [同轮输入与回复接纳记录](2026-11-06-input-batch-acceptance.md)：混合输入的完整接纳。
 
 - [用工作事实说明工具操作](2026-11-06-tool-result-language.md)：原输入身份与中文摘要。

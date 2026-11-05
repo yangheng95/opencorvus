@@ -31,20 +31,6 @@ function shouldUseCachedStats(node: CardNode): boolean {
   return node.subtreeCounts !== undefined
 }
 
-// ── Status normalisation ──
-
-function normStatus(raw: any): CardStatus | undefined {
-  const s = String(raw || "")
-    .trim()
-    .toLowerCase()
-  if (s === "pending" || s === "running" || s === "completed" || s === "error" || s === "skipped") {
-    return s as CardStatus
-  }
-  if (s === "failed" || s === "fail") return "error"
-  if (s === "done" || s === "ok" || s === "passed") return "completed"
-  return undefined
-}
-
 // Todo tools render a structured checklist; inline chips would hide the list,
 // and a collapsed completed card would hide the plan itself — so they stay
 // expanded regardless of completion status.
