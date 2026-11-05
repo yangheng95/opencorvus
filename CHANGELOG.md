@@ -4,6 +4,68 @@
 
 ## 未发布
 
+## 0.1.45 - 2026-11-05
+
+### zh-CN
+
+#### 新增
+
+- 新的文本文件读取来源保存读取时的有界摘录，可分别查看当时内容与磁盘上的当前文件，后续修改不会改写已保存的摘录。
+
+#### 调整
+
+- 审阅明确原行、新行、变更类型、总量与筛选结果；重命名记录同时显示原路径和目标路径，打开文件使用已记录的目标。
+- 文件交付阅读保留当前选择和浏览状态；读取失败提供清楚的诊断与显式重试，比较预览可在原位置恢复。
+- 模型服务商设置优先呈现已有配置，说明当前项目或全局的配置保存范围，以及登录和密钥的共享范围；模型不可用时提供当前语言的设置引导。
+- 侧栏创建时间排序与所选方向一致，组织方式说明覆盖真实项目范围，工作项数量明确包含子任务；对话、项目入口和工具摘要接入当前界面语言。
+- 原生发布准备仅排除历史验收产物，保留产品、当前架构和必要记录，减少无关检出输入；原有检查与一小时发布总时限保持。
+
+#### 修复
+
+- 关闭或按 Esc 收起提问弹窗后保留当前作答草稿；新问题按用户实际选择计算进度，未触碰的选项不会计为已回答。
+- 已回答提问在重新打开、刷新和重新连接后从原始请求与终态事实恢复；部分回复保留原题目位置，并明确显示未提供回答的项。
+- 长提问与大文件补丁的有界工具记录保留真实数量和目标身份，展开或刷新后摘要一致；审阅按需读取完整原始修改详情。
+- 已配置的终端方案和默认项在项目重新打开时保持，仅为尚未配置终端的项目初始化系统默认，修复按外观推断配置归属导致的改写。
+- 普通对话审阅空状态、修改记录筛选数量、文件操作名称和错误恢复提示与当前真实来源一致。
+- 工具结果读取失败时提供直接重试入口和完整诊断，读取已保存的结果，并保留对话阅读。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 10，保留用户数据与既有自动迁移。新的来源摘录只适用于新文本读取，历史来源不会补造摘录。
+- 自定义界面或 SDK（Software Development Kit，软件开发工具包）集成应同步升级，以读取完整的已终态提问快照。实际页面与流式复核仅证明各自验收范围，不保证全部模型、历史和并发组合均已覆盖。
+- 工具结果重试入口已复核断连状态；在线恢复时观察到自动重读，尚未单独验证在线点击成功。
+- macOS 仍为临时签名，未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Save a bounded excerpt with new text-file read sources, allowing the recorded content and current file on disk to be viewed separately. Later edits retain the saved excerpt.
+
+#### Changed
+
+- Clarify original and new line numbers, operation types, totals and filtered results in Review. Rename records show both paths and open the recorded destination.
+- Retain file-delivery selection and browsing state. Failed reads provide clear diagnostics and explicit retry, and comparison previews can recover in place.
+- Prioritize configured model providers and explain project or global configuration storage and shared sign-in and key scope. Unavailable-model guidance follows the current interface language.
+- Align sidebar creation-time sorting with the selected direction, explain the actual scope of organization modes, and identify work counts as including subtasks. Localize conversation and project entry points and tool summaries.
+- Exclude historical evidence artifacts from native release preparation while retaining product inputs, current architecture and required records. Preserve the existing checks and one-hour release budget.
+
+#### Fixed
+
+- Retain the current answer draft when a question dialog is dismissed or closed with Escape. Count progress from actual user choices, keeping untouched options unanswered.
+- Restore answered questions after reopening, refreshing and reconnecting from their original requests and terminal facts. Partial replies retain question positions and explicitly identify unanswered items.
+- Preserve genuine counts and target identity in bounded records of long questions and large file patches. Summaries remain consistent after expansion and refresh, and Review loads the complete original change details on demand.
+- Preserve configured terminal profiles and the selected default when reopening a project. Initialize system defaults only when profiles are unconfigured, fixing configuration rewrites caused by guessing ownership from appearance.
+- Align conversation Review empty states, filtered record counts, file-operation labels and recovery guidance with the actual selected source.
+- Provide direct retry and complete diagnostics for failed tool-result reads, reading the saved result while retaining conversation reading.
+
+#### Upgrade impact and known limitations
+
+- Database version remains 10, retaining user data and existing automatic migrations. Saved source excerpts apply to new text reads; historical sources are not backfilled.
+- Custom interfaces or SDK (Software Development Kit) integrations should upgrade together to consume complete resolved-question snapshots. Manual pages and streaming checks establish their specific reviewed scope, not coverage of every model, history and concurrent combination.
+- The tool-result retry control was reviewed while disconnected. Online recovery performed an automatic reread; a separate successful online button click was not verified.
+- macOS remains ad hoc signed without Apple notarization.
+
 ## 0.1.44 - 2026-11-04
 
 ### zh-CN

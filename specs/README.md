@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [0.1.45发布](records/2026-11/2026-11-05-release-0.1.45.md)：问答恢复、审阅与交付阅读的版本准备及完整发布验收。
+
 - [工具结果读取重试](records/2026-11/2026-11-05-tool-result-retry.md)：已保存工具详情的错误提示与就地恢复。
 
 - [侧栏排序与数量说明](records/2026-11/2026-11-05-ledger-created-order.md)：创建排序、组织范围与项目数量。

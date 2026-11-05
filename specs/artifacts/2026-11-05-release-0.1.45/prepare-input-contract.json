@@ -1,0 +1,69 @@
+{
+  "source": "14f646608407bcf4accdf9cdfb7f9531bf85590d",
+  "verifiedAt": "2026-11-05T04:29:43.925Z",
+  "checker": "Real Git sparse-checkout check-rules, current generated artifact registry and every current product/config/document input",
+  "rules": "/*\n!/specs/artifacts/\n",
+  "requiredProductFiles": 7058,
+  "selectedFiles": 7058,
+  "selectedUncompressedBytes": 174113683,
+  "generated": [
+    {
+      "path": "packages/sdk/openapi.json",
+      "files": 1
+    },
+    {
+      "path": "packages/sdk/js/src/gen",
+      "files": 15
+    },
+    {
+      "path": "packages/sdk/js/src/defaults.ts",
+      "files": 1
+    },
+    {
+      "path": "packages/sdk/js/src/route-policy.ts",
+      "files": 1
+    },
+    {
+      "path": "packages/opencorvus/generated/expert-squad-payload.ts",
+      "files": 1
+    },
+    {
+      "path": "packages/opencorvus/generated/expert-squad-revisions.ts",
+      "files": 1
+    },
+    {
+      "path": "packages/opencorvus/generated/expert-squad-search-localization.ts",
+      "files": 1
+    },
+    {
+      "path": "packages/opencorvus/src/skill/builtin-payload.ts",
+      "files": 1
+    },
+    {
+      "path": "packages/opencorvus/src/mission-skill/builtin-payload.ts",
+      "files": 1
+    },
+    {
+      "path": "templates/portable-expert-squad-template",
+      "files": 19
+    },
+    {
+      "path": "packages/web/src/content/docs/reference/api.mdx",
+      "files": 1
+    },
+    {
+      "path": "packages/web/src/content/docs/zh-cn/reference/api.mdx",
+      "files": 1
+    }
+  ],
+  "required": [
+    "CHANGELOG.md",
+    "package.json",
+    "bun.lock",
+    "packages/opencorvus/package.json",
+    "specs/current/architecture/README.md",
+    "specs/current/architecture/public-website.md",
+    "specs/records/2026-08/2026-08-12-opencorvus-production-database-bootstrap-configuration.md"
+  ],
+  "scope": "Positive retained input mapping; real canonical prepare/fixed-point execution remains required"
+}

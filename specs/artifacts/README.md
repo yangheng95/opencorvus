@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [0.1.45发布证据](2026-11-05-release-0.1.45/README.md)：冻结来源、原生矩阵、公开回读与三处版本日志。
+
 - [工具结果重试实页证据](2026-11-05-tool-result-retry/README.md)：原失败、双语动作及原页面恢复。
 
 - [侧栏排序与数量实页证据](2026-11-05-ledger-created-order/README.md)：时间顺序、组织提示与真实数量。

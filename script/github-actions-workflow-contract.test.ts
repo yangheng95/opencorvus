@@ -108,7 +108,7 @@ describe("GitHub Actions workflow contract", () => {
     })
   })
 
-  test("retains product inputs in native helpers and full evidence in release preparation", async () => {
+  test("retains product inputs in native helpers and current documentation in release preparation", async () => {
     const native = await readWorkflow("build.yml")
     const overlay = await readWorkflow("package-overlay.yml")
     const debug = await readWorkflow("build-overlays.yml")
@@ -129,6 +129,8 @@ describe("GitHub Actions workflow contract", () => {
     }
     expect(native.jobs?.prepare?.steps?.find(({ uses }) => uses?.startsWith("actions/checkout@"))?.with).toEqual({
       "persist-credentials": false,
+      "sparse-checkout": "/*\n!/specs/artifacts/\n",
+      "sparse-checkout-cone-mode": false,
     })
   })
 
