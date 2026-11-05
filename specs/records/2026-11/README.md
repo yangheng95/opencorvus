@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [审阅来源与空状态](2026-11-05-review-source-empty-state.md)：普通对话和未选择来源的提示。
+
 - [修改预览重试](2026-11-05-review-preview-retry.md)：真实断连与同一来源恢复。
 
 - [审阅筛选数量](2026-11-05-review-filter-count.md)：筛选结果、清除和中英状态说明。

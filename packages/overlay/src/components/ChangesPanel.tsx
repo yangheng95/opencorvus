@@ -1,5 +1,5 @@
 // ── ChangesPanel Component ──
-// Shows changed files for the selected task. Clicking a row resolves the same
+// Shows changed files for the selected conversation or task. Clicking a row resolves the same
 // shared diff data that the workspace preview uses; FileChangesView renders the
 // result inline below the row.
 
@@ -26,8 +26,6 @@ import { t } from "../utils/i18n"
 // ── ChangesPanel ──
 
 export interface ChangesPanelProps {
-  /** Whether a task is currently selected (affects empty-state messaging). */
-  hasSelectedTask?: boolean
   /** Whether the file changes surface is visible enough to run broad card-tree projections. */
   active?: () => boolean
 }
@@ -100,7 +98,7 @@ export function ChangesPanel(props: ChangesPanelProps) {
         groups={groups()}
         directory={boardStore.selectedSource?.directory?.trim() || selectedTaskDirectory().trim()}
         scopeKey={activeTaskID()}
-        hasSelectedTask={props.hasSelectedTask}
+        emptyMessage={t(boardStore.selectedSource ? "files.none" : "files.select_target")}
         focusEvent="acceptance:focus-changes"
         groupsSettled={panelActive() && !resolvedGroups.loading}
       />

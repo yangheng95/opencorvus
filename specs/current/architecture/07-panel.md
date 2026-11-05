@@ -2687,10 +2687,17 @@ The desktop Review workspace keeps one canonical split surface. The selected
 text diff owns the remaining leading width and one bounded two-axis native
 scrollport with visible theme-painted scrollbar geometry. The trailing file
 pane keeps the canonical searchable change inventory and its own vertical list
-scrollport. Status filters wrap within that file pane and the non-text filter
-occupies its own complete row, so neither control set can compress or clip the
-other. Selection and filtering continue to drive the same `DiffPreviewPanel`;
+scrollport. Status filters wrap within that file pane; the non-text control and
+visible/total record status share the wrapping summary row described above.
+Selection and filtering continue to drive the same `DiffPreviewPanel`;
 there is no alternate Review renderer or copied diff source.
+
+Review empty-state copy comes from the existing selected board source, rather
+than a host-supplied Task boolean. With a conversation or Task selected, it states
+that there are no recorded file changes yet; without a source, it guides the
+operator to open a conversation or Task. The shared inventory receives the
+localized message. Loading, unresolved records, errors and retries retain their
+existing owners and presentation conditions.
 
 The exact change-group collection rendered by a Review inventory is also that
 inventory's diff-resolution authority. Live Card Tree Tool/Patch groups keep

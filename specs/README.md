@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [审阅来源与空状态](records/2026-11/2026-11-05-review-source-empty-state.md)：真实来源切换与双语文件修改提示。
+
 - [修改预览失败与恢复](records/2026-11/2026-11-05-review-preview-retry.md)：中文错误、原始诊断与原资源重试。
 
 - [审阅筛选结果数量](records/2026-11/2026-11-05-review-filter-count.md)：全部修改与当前可见记录的数量关系。

@@ -10,7 +10,7 @@ export function FileChangesPanel(props: FileChangesPanelProps) {
     <section class="file-changes-panel" aria-label={t("section.files")}>
       <div class="file-changes-body">
         <div class="file-changes-view">
-          <ChangesPanel active={props.active} hasSelectedTask />
+          <ChangesPanel active={props.active} />
         </div>
       </div>
     </section>

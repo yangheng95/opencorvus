@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [审阅来源空状态实页证据](2026-11-05-review-source-empty-state/README.md)：来源切换、空态与原记录保全。
+
 - [修改预览重试实页证据](2026-11-05-review-preview-retry/README.md)：真实错误、详情及就地重试。
 
 - [审阅筛选数量实页证据](2026-11-05-review-filter-count/README.md)：真实筛选、数量与原比较保全。

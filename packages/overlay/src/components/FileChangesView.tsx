@@ -29,7 +29,7 @@ import {
 export interface FileChangesViewProps {
   groups: ChangeGroup[]
   directory: string
-  hasSelectedTask?: boolean
+  emptyMessage: string
   showHeading?: boolean
   focusEvent?: string
   scopeKey?: string
@@ -662,7 +662,7 @@ export function FileChangesView(props: FileChangesViewProps) {
         </div>
       </Show>
       <Show when={files().length === 0 && !summary().hasUnresolvedChanges}>
-        <p class="empty-hint">{props.hasSelectedTask ? t("files.none") : t("files.select_target")}</p>
+        <p class="empty-hint">{props.emptyMessage}</p>
       </Show>
     </div>
   )
