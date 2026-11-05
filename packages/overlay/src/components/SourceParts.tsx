@@ -621,6 +621,7 @@ export function SourceParts(props: { sources: ConversationSourcePart[]; contextS
                 )}
               </Key>
             </Disclosure.Content>
+            <p class="msg-sources__hint">{t("chat.sources_count_hint")}</p>
             <div class="msg-sources__actions">
               <Button
                 type="button"

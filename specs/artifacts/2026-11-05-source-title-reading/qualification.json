@@ -1,0 +1,196 @@
+{
+  "at": "2026-11-05T07:13:32.946Z",
+  "singleAgent": true,
+  "userWindowAndDatabaseUntouched": true,
+  "qualifications": [
+    {
+      "at": "2026-11-05T06:56:10.669Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303663,
+      "current": 303665,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61754,
+          "after": 61755
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61696,
+          "after": 61697
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 3954412,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CLJbP9j7.js"
+    },
+    {
+      "at": "2026-11-05T07:02:58.886Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303665,
+      "current": 303667,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61755,
+          "after": 61756
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61697,
+          "after": 61698
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 3549688,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-CLJbP9j7.js"
+    },
+    {
+      "at": "2026-11-05T07:11:19.372Z",
+      "kind": "final",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303667,
+      "current": 303669,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61756,
+          "after": 61757
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61698,
+          "after": 61699
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 3046996,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DjhejLO2.js"
+    }
+  ],
+  "checksPassed": [
+    "typecheck",
+    "typecheck-final",
+    "ui-build-after",
+    "ui-build-final",
+    "docs-check"
+  ],
+  "ordinaryNodeBuilds": 2,
+  "candidateUiEntry": "main-CLJbP9j7.js",
+  "finalUiEntry": "main-DjhejLO2.js",
+  "localeAssetsCopiedThroughExistingVitePlugin": true,
+  "originalNativeHandlesExitedZero": 3,
+  "pairedCredentialAndCompleteCatalogCopiesRetired": 6,
+  "actualModelRequests": 0,
+  "cumulativeModelRequests": 1440,
+  "manuallyReviewedScreenshots": [
+    "01-before-real-web-source-overview.png",
+    "02-before-old-source-session-link-error-details.png",
+    "03-before-real-chat-web-sources.png",
+    "04-before-real-two-web-source-disclosure.png",
+    "05-before-real-web-excerpt-expanded.png",
+    "06-before-chinese-web-source-disclosure.png",
+    "07-before-chinese-source-count-scope-ambiguity.png",
+    "08-before-multiple-file-source-count-scope.png",
+    "09-after-english-additional-source-count.png",
+    "10-after-english-bottom-hide-keeps-first-source.png",
+    "11-after-chinese-additional-source-count.png",
+    "12-after-chinese-top-hide-keeps-first-source.png",
+    "13-after-chinese-multiple-additional-source-count.png",
+    "14-final-english-source-scope-and-count-explanation.png",
+    "15-final-english-hide-keeps-first-and-compact-layout.png",
+    "16-final-chinese-source-scope-and-count-explanation.png",
+    "17-final-chinese-top-hide-keeps-first-source.png",
+    "18-final-chinese-nine-sources-eight-file-changes.png",
+    "19-final-open-original-csv-source-with-file-pane.png",
+    "20-final-multiple-bottom-hide-keeps-first-and-open-file.png",
+    "21-final-english-multiple-sources-count-and-open-file.png",
+    "22-final-english-multiple-top-hide-keeps-first.png",
+    "23-final-reloaded-chinese-source-count-explanation.png",
+    "24-final-original-eight-file-review-and-line-counts.png",
+    "25-final-original-four-questions-and-four-answers.png",
+    "26-final-original-web-source-excerpt-reading.png"
+  ],
+  "businessCheckerCheckpoints": 54,
+  "priorRenameFactCheckpoints": 4,
+  "priorPartialAnswerFactCheckpoints": 4,
+  "priorClosedChoiceFactCheckpoints": 8,
+  "scope": {
+    "existingSingleSourcePartsRenderer": true,
+    "collapseLabelsExplicitlyAdditionalSources": true,
+    "expandedOnlyReadOrReferencedVersusFileChangesHint": true,
+    "bothLocalesSingleAndMultipleSourceCounts": true,
+    "realTopAndBottomCollapseKeepFirstSource": true,
+    "originalNineSourcesAndEightChangedFilesDistinct": true,
+    "realOriginalCsvSourceOpenedInApplication": true,
+    "normalAndFilePaneReadingWidths": true,
+    "ownReloadAndOriginalWebExcerpt": true,
+    "originalFourQuestionsFourAnswersAndEightFileReview56Added0Deleted8Of8": true,
+    "localeFieldsPerLanguage": 4
+  },
+  "excludedLeads": {
+    "tooltipInheritsCanonicalWrapping": true,
+    "noRealOverflowClaim": true,
+    "storedWebSources": 6,
+    "storedFileSources": 237,
+    "storedDocumentSources": 0,
+    "tasksWithInputAttachments": 0,
+    "oldChatMisopenedAsWorkWasInspectorError": true
+  },
+  "limitations": [
+    "No independent Task input-attachment visual sample existed; its label was not changed.",
+    "Long unbroken web titles, document sources, separate Task/Side Chat source views, clipboard transmission and native external web activation were not independently exercised.",
+    "No new model execution, API, SDK, schema, migration, persistence, reply or scheduling change.",
+    "Earlier batch946 successful explicit online inline-tool retry remains independently unverified."
+  ]
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [来源列表阅读核验](records/2026-11/2026-11-05-source-title-reading.md)：真实来源、标题和文件阅读入口。
+
 - [首页示例与草稿](records/2026-11/2026-11-05-home-example-draft.md)：已有未发送内容时的示例操作。
 
 - [历史来源与提问详情](records/2026-11/2026-11-05-source-file-history.md)：来源核验、原问题和选项的完整阅读。

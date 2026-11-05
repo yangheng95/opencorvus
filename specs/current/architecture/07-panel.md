@@ -1927,7 +1927,10 @@ failure messages keep their shared precedence over this request detail.
 A source run keeps its first citation directly available with its complete
 readable identity and existing resource action. Additional sources use the shared
 native Disclosure, initially collapsed with an explicit remaining count;
-operator expansion state and exact source links remain available. Both portions
+both collapse controls explicitly refer to the additional sources, leaving the
+first citation visible. The expanded group explains in the current locale that
+read or referenced sources and file changes are counted separately.
+Operator expansion state and exact source links remain available. Both portions
 use the same identity-keyed source entry renderer. Individual
 excerpt disclosure remains scoped to the real source. Citation identity uses body
 typography; site and index metadata retain caption.
