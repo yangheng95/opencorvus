@@ -2847,6 +2847,15 @@ full and deferred records use the same question count, answered/expired outcome
 and target count. One target retains its exact path when it fits the identity
 budget. These summaries never parse producer titles or patch text,
 and expanded input, original output and comparisons keep their authored contents.
+Task-management summaries translate the exact canonical action into an operation,
+distinguishing delivery-goal edits from continuous goals. They do not certify
+business completion from a Tool's completed state. Artifact selection retains the
+original purpose; completed publication uses the producer's artifact type, and
+completed file snapshots use the producer's actual resource count. Request-time
+publication retains its requested artifact type. The bounded input/metadata
+contract preserves these original scalar fields within its existing budgets.
+These summaries do not parse program-generated English titles or result bodies;
+the original Tool input, title, result and failure remain available in disclosure.
 Expanded Tool details expose a localized retry action when the retained Part read
 fails. The action refetches the same resource and immutable Part identity; it
 does not execute the Tool again or require closing the enclosing operation group.

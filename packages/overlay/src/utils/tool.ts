@@ -435,6 +435,15 @@ const toolPresentations = new Map(
   TOOL_PRESENTATIONS.flatMap((entry) => entry.names.map((name) => [toolNameKey(name), entry] as const)),
 )
 
+const MANAGE_TASK_ACTION_LABELS = new Map([
+  ["complete_task", "tool.manage_task.complete_task"],
+  ["fail_task", "tool.manage_task.fail_task"],
+  ["cancel_task", "tool.manage_task.cancel_task"],
+  ["add_goal", "tool.manage_task.add_goal"],
+  ["modify_goal", "tool.manage_task.modify_goal"],
+  ["delete_goal", "tool.manage_task.delete_goal"],
+])
+
 export function displayToolIconName(name: string): IconName {
   return toolPresentations.get(toolNameKey(name))?.icon ?? "config-tool"
 }
@@ -517,6 +526,8 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
   const message = failure.message || shortValue((safeState as any).error)
   if (message) return singleLine(message)
   const n = toolNameKey(name)
+  const status = normalizeToolStatus(safeState.status)
+  const statusLabel = status ? toolStatusLabel(status) : ""
   if (n === "question") {
     const identity = conversationToolIdentity(name, safeInput, safeState.metadata)
     const detail = [
@@ -525,8 +536,7 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
     ]
       .filter(Boolean)
       .join(t("card.meta_separator"))
-    const status = normalizeToolStatus(safeState.status)
-    return detail || (status ? toolStatusLabel(status) : "")
+    return detail || statusLabel
   }
   if (n === "panelcreatetask") {
     const title = firstNonEmptyString(safeInput.title)
@@ -556,6 +566,18 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
     return identity ? tc("tool.changed_file_count", identity.count) : toolStatusLabel("completed")
   }
   if (n === "workartifactdeliver") return firstNonEmptyString(safeInput.title)
+  if (n === "artifactselect") return firstNonEmptyString(safeInput.purpose) || statusLabel
+  if (n === "artifactpublish") {
+    return (
+      firstNonEmptyString(status === "completed" ? safeState.metadata?.artifactType : safeInput.artifact_type) || statusLabel
+    )
+  }
+  if (n === "artifactsnapshot") {
+    const count = safeState.metadata?.resources
+    return status === "completed" && Number.isSafeInteger(count) && count >= 0
+      ? tc("tool.artifact.file_count", count, { count: count.toLocaleString(localeTag()) })
+      : statusLabel
+  }
   if (n === "workartifactinspect" || n === "workartifactvalidate") {
     const formatLabels: Record<string, string> = {
       "office.spreadsheet@1": "tool.office.spreadsheet",
@@ -575,7 +597,8 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
   }
   if (n === "managetask") {
     const action = firstNonEmptyString((safeInput as any).action)
-    if (action) return `action=${action}`
+    const label = MANAGE_TASK_ACTION_LABELS.get(action)
+    return label ? t(label) : statusLabel
   }
   if (path) {
     // A completed read owns its resolved resource name. Keep the exact request

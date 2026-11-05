@@ -1,0 +1,133 @@
+{
+  "at": "2026-11-05T22:11:35.766Z",
+  "purpose": "Localize task actions and present original artifact identities and successful file counts",
+  "implementation": {
+    "uiOnly": true,
+    "backendAndSdkChanges": false,
+    "schemasChanged": false,
+    "originalToolFactsRewritten": false,
+    "removedObsoleteUiAutomationFiles": 2,
+    "removedPresentationCases": 7,
+    "newUiAutomation": false
+  },
+  "manualVisualReview": {
+    "screenshots": 18,
+    "languages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "nativeDevUi": true,
+    "verifiedTaskActions": [
+      "complete_task",
+      "fail_task"
+    ],
+    "snapshotFileCount": 7,
+    "originalPurposeReadable": true,
+    "publicationType": "base/test-report",
+    "sourceInputAndOutputReadable": true,
+    "languageSwitchAndReopen": true,
+    "finalReopenFrame": 18,
+    "frames16And17DoNotProveHeaderVisibility": true
+  },
+  "functionalChecks": {
+    "canonicalOriginalToolParts": 102,
+    "originalRequestsOutcomesMetadataAndOutputsExact": true,
+    "httpSessions": 17,
+    "connectedSessionSnapshots": 17,
+    "deferredParts": 12,
+    "wholeSnapshotsExactAcrossBeforeAndAfter": true,
+    "toolCounts": {
+      "manage_task": 7,
+      "artifact_select": 74,
+      "artifact_snapshot": 13,
+      "artifact_publish": 8
+    },
+    "typecheckPackages": 8,
+    "finalOverlayTypecheck": true,
+    "canonicalNodeBuild": true,
+    "locales": 2,
+    "translationKeys": 2888
+  },
+  "modelRequests": 0,
+  "cumulativeRequests": 1469,
+  "phases": [
+    {
+      "label": "before",
+      "port": 38811,
+      "schema": 10,
+      "tableCount": 92,
+      "originalRows": 309219,
+      "currentRows": 309221,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62856,
+          "after": 62857
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62798,
+          "after": 62799
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "attachments": 299,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "cumulativeRequests": 1469,
+      "reserveMs": 3289314,
+      "sourceCredentialsAndCatalogPreserved": true,
+      "pairedCopiesRetired": true,
+      "publicShutdown": 200,
+      "nativeExitCode": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    {
+      "label": "after",
+      "port": 38812,
+      "schema": 10,
+      "tableCount": 92,
+      "originalRows": 309221,
+      "currentRows": 309223,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62857,
+          "after": 62858
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62799,
+          "after": 62800
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "attachments": 299,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "cumulativeRequests": 1469,
+      "reserveMs": 2457530,
+      "sourceCredentialsAndCatalogPreserved": true,
+      "pairedCopiesRetired": true,
+      "publicShutdown": 200,
+      "nativeExitCode": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    }
+  ],
+  "optionalFinalAllocated": false,
+  "limits": [
+    "Cancel task and three delivery-goal mutation actions had no natural visual sample",
+    "Publication before completion was not exercised",
+    "No new model, live PartUpdated/Moved, orchestration, retry or crash recovery in this batch"
+  ]
+}
