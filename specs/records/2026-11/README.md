@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [提问填写方式与题数说明](2026-11-05-question-answer-hints.md)：填写提示与每题一次的进度。
+
 - [工具结果恢复与读取说明](2026-11-05-tool-result-online-retry.md)：在线按钮恢复与原读取说明。
 
 - [来源列表阅读核验](2026-11-05-source-title-reading.md)：来源语义与完整身份的实际体验。

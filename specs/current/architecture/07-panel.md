@@ -1598,6 +1598,11 @@ custom input does not select an option; only actual answer input updates that
 draft. Mounting another surface retains the existing draft. Explicit automatic
 answers remain part of the original request and its existing timer contract.
 Question fieldsets identify their position within the original question array.
+Pending choice questions describe the original single/multiple selection mode
+and, where enabled, the existing combined option-and-custom-text reply behavior.
+The fieldset references that localized hint as its accessible description.
+Text-only questions retain a direct custom-answer placeholder without implying
+that absent options must be replaced. These hints do not change drafts or replies.
 The action row derives its filled count from that same shared draft: one question
 counts once when it has a selected option or nonempty custom text. The count
 describes the current draft, including existing selections, rather than a sent

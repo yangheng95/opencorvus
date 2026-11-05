@@ -298,7 +298,11 @@ export function InteractionCard(props: InteractionCardProps) {
                 const questionID = () => `${domIDPrefix()}-question-${qIdx()}`
                 const questionText = () => questionLabel(q)
                 return (
-                  <fieldset class="interaction-card__question" aria-labelledby={questionID()}>
+                  <fieldset
+                    class="interaction-card__question"
+                    aria-labelledby={questionID()}
+                    aria-describedby={opts.length > 0 ? `${questionID()}-mode` : undefined}
+                  >
                     <legend id={questionID()} class="interaction-card__question-text">
                       <span class="interaction-card__question-position">
                         {t("interaction.question_position", {
@@ -309,6 +313,12 @@ export function InteractionCard(props: InteractionCardProps) {
                       {questionText()}
                     </legend>
                     <Show when={opts.length > 0}>
+                      <p id={`${questionID()}-mode`} class="interaction-card__question-hint">
+                        {t(multi ? "interaction.select_multiple" : "interaction.select_single")}
+                        <Show when={allowCustom}>
+                          {" "}{t("interaction.custom_answer_hint")}
+                        </Show>
+                      </p>
                       <Show
                         when={multi}
                         fallback={

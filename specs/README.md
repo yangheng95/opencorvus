@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [提问填写方式与题数说明](records/2026-11/2026-11-05-question-answer-hints.md)：纯文字、选项和补充回答的真实呈现。
+
 - [工具结果恢复与读取说明](records/2026-11/2026-11-05-tool-result-online-retry.md)：显式重试验收与本地化读取范围。
 
 - [来源列表阅读核验](records/2026-11/2026-11-05-source-title-reading.md)：真实来源、标题和文件阅读入口。

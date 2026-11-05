@@ -1313,6 +1313,12 @@ body {
   color: var(--text);
   overflow-wrap: anywhere;
 }
+.interaction-card__question-hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  overflow-wrap: anywhere;
+}
 .interaction-card__options {
   display: flex;
   flex-direction: column;
