@@ -1597,8 +1597,14 @@ The action row derives its filled count from that same shared draft: one questio
 counts once when it has a selected option or nonempty custom text. The count
 describes the current draft, including existing selections, rather than a sent
 reply; sending and skipping keep their original contracts. Retained Question
-requests use the shared native Disclosure in a compact default state, with the
-original request formatter mounted when opened. Their original answer labels,
+requests use the shared native Disclosure in a compact default state. Opening
+mounts read-only groups from the original questions array: localized position,
+original header and Markdown question, ordered option labels and Markdown
+descriptions, original choice mode, unavailable-option flags and custom-answer
+availability. The derived aggregate title/body is not a substitute for these
+complete request facts. Independently authored request title/body context remains
+visible; only exact normalized duplicates of that array's aggregate text are
+omitted from the expanded view. Their original answer labels,
 custom text and response remain visible in their separate chronological phase.
 Partial array replies retain every known question and recorded answer position in
 that response phase. A position without a nonempty answer displays the localized

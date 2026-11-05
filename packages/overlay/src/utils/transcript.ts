@@ -3,7 +3,6 @@
 // boardArtifact – find a named artifact in board.artifacts
 // goalContextText – goals[] → plain text
 // permissionRequestTitle – original Tool identity → current-locale heading
-// interactionRequestText – interaction request → plain text
 // interactionReplyLabel – permission reply enum → label
 // interactionAnswerLines – interaction answers → string[]
 // interactionResponseText – full interaction response → plain text
@@ -49,18 +48,6 @@ export function goalContextText(goals: any[]): string {
     if (goal.goalObjective) lines.push(t("goal.context.criteria", { value: goal.goalObjective }))
   }
   return lines.join("\n")
-}
-
-/** Build retained Question request text. Permissions use their structured scope renderer. */
-export function interactionRequestText(interaction: any): string {
-  const title =
-    typeof interaction?.title === "string" && interaction.title.trim()
-      ? interaction.title.trim()
-      : interaction?.type === "question"
-        ? t("interaction.icon.question")
-        : t("detail.pending_interactions")
-  const body = typeof interaction?.body === "string" ? interaction.body.trim() : ""
-  return [title, body].filter(Boolean).join("\n\n")
 }
 
 /** Localize the product label while retaining the original technical Tool name. */

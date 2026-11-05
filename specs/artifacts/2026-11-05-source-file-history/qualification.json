@@ -1,0 +1,324 @@
+{
+  "at": "2026-11-05T05:56:32.003Z",
+  "singleAgent": true,
+  "userWindowAndDatabaseUntouched": true,
+  "qualifications": [
+    {
+      "at": "2026-11-05T05:36:01.264Z",
+      "kind": "before",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303651,
+      "current": 303653,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61748,
+          "after": 61749
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61690,
+          "after": 61691
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 4187357,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-DyKSPelv.js"
+    },
+    {
+      "at": "2026-11-05T05:43:28.265Z",
+      "kind": "after",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303653,
+      "current": 303655,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61749,
+          "after": 61750
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61691,
+          "after": 61692
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 3765948,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-BvDWdpVV.js"
+    },
+    {
+      "at": "2026-11-05T05:54:08.558Z",
+      "kind": "final",
+      "schema": 10,
+      "originalSchema": 10,
+      "tables": 92,
+      "originals": 303655,
+      "current": 303657,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 61750,
+          "after": 61751
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 61692,
+          "after": 61693
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [],
+      "sourceDatabasePreserved": true,
+      "attachments": 289,
+      "projects": 120,
+      "filesystemExclusions": 0,
+      "requests": 0,
+      "cumulativeRequests": 1440,
+      "reserveMs": 3096215,
+      "source": {
+        "catalogSameBytes": true,
+        "catalogSameMetadata": true,
+        "authSameMetadata": true
+      },
+      "uiEntry": "main-D2xNTgoy.js"
+    }
+  ],
+  "checksPassed": [
+    "typecheck",
+    "typecheck-final",
+    "typecheck-context",
+    "ui-build-after",
+    "ui-build-final",
+    "ui-build-final-context",
+    "docs-check"
+  ],
+  "ordinaryNodeBuilds": 3,
+  "candidateUiEntry": "main-BvDWdpVV.js",
+  "finalUiEntry": "main-D2xNTgoy.js",
+  "supersededUnstartedUiEntry": "main-BXS-abNQ.js",
+  "unstartedPublicationRetained": true,
+  "originalNativeHandlesExitedZero": 3,
+  "pairedCredentialAndCompleteCatalogCopiesRetired": 6,
+  "actualModelRequests": 0,
+  "cumulativeModelRequests": 1440,
+  "manuallyReviewedScreenshots": [
+    "01-before-chinese-original-rename-history.png",
+    "02-before-open-moved-source-current-file.png",
+    "03-before-saved-excerpt-versus-missing-current-file.png",
+    "04-before-partial-answers-with-old-file-pane.png",
+    "05-before-partial-answers-retain-empty-slot.png",
+    "06-before-expanded-original-question-details.png",
+    "07-after-english-structured-question-details.png",
+    "08-after-chinese-structured-first-question.png",
+    "09-after-collapsed-count-and-original-answers.png",
+    "10-final-english-compact-question-options.png",
+    "11-final-chinese-three-question-options.png",
+    "12-final-chinese-full-three-question-groups.png",
+    "13-final-collapsed-three-questions-original-answers.png",
+    "14-final-reloaded-chinese-question-details.png",
+    "15-final-real-multiple-choice-request.png",
+    "16-final-custom-answer-request-and-real-replies.png",
+    "17-final-english-real-multiple-choice-request.png",
+    "18-final-original-long-four-question-details.png",
+    "19-final-long-question-middle-groups.png",
+    "20-final-long-second-and-third-questions.png",
+    "21-final-long-fourth-question-and-real-answers.png",
+    "22-final-original-eight-file-review.png"
+  ],
+  "businessCheckerCheckpoints": 54,
+  "priorRenameFactCheckpoints": 4,
+  "priorPartialAnswerFactCheckpoints": 4,
+  "priorClosedChoiceFactCheckpoints": 8,
+  "originalRequestPayloadChecks": [
+    {
+      "phase": "after",
+      "checkpoint": "finished",
+      "cases": [
+        {
+          "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+          "status": 200,
+          "requests": [
+            {
+              "id": "que_g0Va3DX5c00eDKg6haoh",
+              "questions": 3,
+              "options": 6,
+              "optionDescriptions": 6,
+              "multiple": 0,
+              "custom": 3
+            }
+          ],
+          "fullOriginalQuestionsOptionsFlagsAndAnswersExact": true
+        },
+        {
+          "sessionID": "ses_-zUPyIGpizzL4fvXK63k",
+          "status": 200,
+          "requests": [
+            {
+              "id": "que_g0Va1hpT700uXi9xeziO",
+              "questions": 4,
+              "options": 6,
+              "optionDescriptions": 6,
+              "multiple": 1,
+              "custom": 1
+            },
+            {
+              "id": "que_g0Va1kFo000N4VkWUwV7",
+              "questions": 4,
+              "options": 6,
+              "optionDescriptions": 6,
+              "multiple": 1,
+              "custom": 4
+            }
+          ],
+          "fullOriginalQuestionsOptionsFlagsAndAnswersExact": true
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "checkpoint": "reloaded",
+      "cases": [
+        {
+          "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+          "status": 200,
+          "requests": [
+            {
+              "id": "que_g0Va3DX5c00eDKg6haoh",
+              "questions": 3,
+              "options": 6,
+              "optionDescriptions": 6,
+              "multiple": 0,
+              "custom": 3
+            }
+          ],
+          "fullOriginalQuestionsOptionsFlagsAndAnswersExact": true
+        },
+        {
+          "sessionID": "ses_-zUPyIGpizzL4fvXK63k",
+          "status": 200,
+          "requests": [
+            {
+              "id": "que_g0Va1hpT700uXi9xeziO",
+              "questions": 4,
+              "options": 6,
+              "optionDescriptions": 6,
+              "multiple": 1,
+              "custom": 1
+            },
+            {
+              "id": "que_g0Va1kFo000N4VkWUwV7",
+              "questions": 4,
+              "options": 6,
+              "optionDescriptions": 6,
+              "multiple": 1,
+              "custom": 4
+            }
+          ],
+          "fullOriginalQuestionsOptionsFlagsAndAnswersExact": true
+        }
+      ]
+    },
+    {
+      "phase": "final",
+      "checkpoint": "finished",
+      "cases": [
+        {
+          "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+          "status": 200,
+          "requests": [
+            {
+              "id": "que_g0Va3DX5c00eDKg6haoh",
+              "questions": 3,
+              "options": 6,
+              "optionDescriptions": 6,
+              "multiple": 0,
+              "custom": 3
+            }
+          ],
+          "fullOriginalQuestionsOptionsFlagsAndAnswersExact": true
+        },
+        {
+          "sessionID": "ses_-zUPyIGpizzL4fvXK63k",
+          "status": 200,
+          "requests": [
+            {
+              "id": "que_g0Va1hpT700uXi9xeziO",
+              "questions": 4,
+              "options": 6,
+              "optionDescriptions": 6,
+              "multiple": 1,
+              "custom": 1
+            },
+            {
+              "id": "que_g0Va1kFo000N4VkWUwV7",
+              "questions": 4,
+              "options": 6,
+              "optionDescriptions": 6,
+              "multiple": 1,
+              "custom": 4
+            }
+          ],
+          "fullOriginalQuestionsOptionsFlagsAndAnswersExact": true
+        }
+      ]
+    }
+  ],
+  "sourceAudit": {
+    "missingMovedCurrentFileExplained": true,
+    "savedOriginalExcerptReadable": true,
+    "sourceAndWorkbenchUnchanged": true
+  },
+  "scope": {
+    "retainedQuestionsReadFromOriginalArray": true,
+    "originalHeadersBodiesOptionLabelsDescriptionsAndFlags": true,
+    "localizedPositionSingleMultipleAndCustomLabels": true,
+    "readOnlyOptionsInsteadOfFormControls": true,
+    "compactDefaultCountAndOriginalResponsePhasePreserved": true,
+    "finalChineseAndEnglishSingleAndMultipleChoiceVisuallyVerified": true,
+    "ownReloadAndReopen": true,
+    "longFourQuestionDetailsAndFourRealAnswers": true,
+    "originalEightFileReview56Added0Deleted8Of8": true,
+    "localeFieldsPerLanguage": 4
+  },
+  "limitations": [
+    "No stored engine interaction requests existed in the isolated source, so independent activity-reconciliation context was preserved from the audited production contract but not visually exercised.",
+    "Unavailable option flags, independent Task/Side Chat history, screen-reader audio and all concurrency combinations were not separately visually exercised.",
+    "No new model execution, API, SDK, schema, migration, persistence, reply, expiry or scheduling change.",
+    "The earlier batch946 inline tool-result retry still lacks a separately verified successful explicit online click; this iteration does not claim to cover that path."
+  ]
+}

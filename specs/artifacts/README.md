@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [历史来源与提问实页证据](2026-11-05-source-file-history/README.md)：原来源核验与完整提问详情。
+
 - [设置加载实页证据](2026-11-05-settings-page-load/README.md)：设置模块失败与就地重试。
 
 - [0.1.45发布证据](2026-11-05-release-0.1.45/README.md)：23项原生/8项官网、29资源与5平台更新、公开包双语实图和历史保全。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [历史来源与提问详情](records/2026-11/2026-11-05-source-file-history.md)：来源核验、原问题和选项的完整阅读。
+
 - [设置页面加载与恢复](records/2026-11/2026-11-05-settings-page-load.md)：按需页面的加载、错误与重试。
 
 - [0.1.45发布](records/2026-11/2026-11-05-release-0.1.45.md)：问答恢复、原始来源和审阅改进，五平台与精确配对官网公开交付。
