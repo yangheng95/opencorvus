@@ -39,6 +39,18 @@
   gap: var(--ui-gap-3xs);
 }
 
+.diff-preview-copy--rename {
+  flex-basis: 100%;
+}
+
+.diff-preview-paths {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--ui-gap-xs) var(--ui-gap-md);
+  margin: 0;
+  min-width: 0;
+}
+
 /* File-scope context label inside the diff preview header. */
 .diff-preview-scope {
   font-size: var(--ui-font-body);
@@ -46,10 +58,11 @@
 }
 
 .diff-preview-path {
+  margin: 0;
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  user-select: text;
   font-family: var(--mono);
   font-size: var(--ui-font-body);
   color: var(--text-strong);

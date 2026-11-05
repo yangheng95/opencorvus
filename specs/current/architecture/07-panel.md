@@ -719,6 +719,13 @@ path. Physical status remains `modified`, including its existing count and filte
 that filter explains its inclusion of content changes and renames. Literal search
 indexes both the physical-status label and the visible operation label. Saved
 observations without a recorded move retain their actual status.
+The selected Review header presents a recorded move as separately labelled
+original and destination paths from `previousPath` and `openPath`. Both use the
+owning project's existing relative-path presentation; their complete recorded
+values remain available as titles. These paths occupy the available header
+width, wrap and permit text selection. Ordinary comparison paths share the same
+wrapping contract. The comparison identity still owns selection and requests;
+the display never parses its arrow label to reconstruct a destination.
 Existing dirty-draft confirmation applies before changing files. The action and its error
 feedback stay bound to the visible source, comparison and API authority; missing
 current files retain the workbench's normal read-error contract.

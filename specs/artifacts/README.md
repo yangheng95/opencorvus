@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [审阅路径实页证据](2026-11-06-review-path-readability/README.md)：原目标路径、换行和语言切换。
+
 - [回答数量实页证据](2026-11-06-question-reply-summary/README.md)：部分回答、完整回答及语言切换。
 
 - [模型用量语言实页证据](2026-11-05-usage-language-and-number-format/README.md)：中文数量、单位和精确用量。

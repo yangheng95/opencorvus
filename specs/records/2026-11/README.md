@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [审阅中的完整重命名路径](2026-11-06-review-path-readability.md)：窄侧栏路径阅读。
+
 - [提交回答后的数量与阅读顺序](2026-11-06-question-reply-summary.md)：已答、留空和真实原题。
 
 - [模型用量的中文单位与数字](2026-11-05-usage-language-and-number-format.md)：数字、单位及原始事实保全。

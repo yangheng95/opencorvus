@@ -22,6 +22,7 @@ import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { Feedback } from "./ui/Feedback"
 import { t } from "../utils/i18n"
+import { shortRelativePath } from "../utils/tool"
 import { formatErrorDetails } from "../utils/error-details"
 import { RecordedToolComparisons } from "./RecordedToolComparisons"
 import type { JSX } from "solid-js"
@@ -123,11 +124,26 @@ export function DiffPreviewPanel(props: DiffPreviewPanelProps) {
     if (!props.target?.filePath) return undefined
     return (
       <>
-        <span class="diff-preview-copy">
-          <span class="diff-preview-path" title={props.target?.filePath || ""}>
-            {props.target?.filePath}
-          </span>
-        </span>
+        <div class="diff-preview-copy" classList={{ "diff-preview-copy--rename": !!item()?.previousPath }}>
+          <Show when={item()?.previousPath} fallback={
+            <span class="diff-preview-path" title={props.target?.filePath || ""}>
+              {props.target?.filePath}
+            </span>
+          }>
+            {(previousPath) => (
+              <dl class="diff-preview-paths">
+                <dt class="diff-preview-scope">{t("diff.original_path")}</dt>
+                <dd class="diff-preview-path" title={previousPath()}>
+                  {shortRelativePath(previousPath(), props.directory)}
+                </dd>
+                <dt class="diff-preview-scope">{t("diff.destination_path")}</dt>
+                <dd class="diff-preview-path" title={item()!.openPath}>
+                  {shortRelativePath(item()!.openPath, props.directory)}
+                </dd>
+              </dl>
+            )}
+          </Show>
+        </div>
         <Show when={item()}>
           <span class="diff-preview-meta">
             <span class="change-status" data-status={item()!.status}>

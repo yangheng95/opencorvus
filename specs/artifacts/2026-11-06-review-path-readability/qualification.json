@@ -1,0 +1,436 @@
+{
+  "at": "2026-11-05T17:26:51.707Z",
+  "scope": "Selected Review header reads structured rename source and destination, with wrapping and localized labels",
+  "checksPassed": [
+    "typecheck",
+    "ui-build-after",
+    "docs-current",
+    "architecture-current",
+    "prepare-before",
+    "preflight-before",
+    "before-initial",
+    "before-final",
+    "before-prior",
+    "before-context",
+    "before-goal-initial",
+    "before-goal-final",
+    "shutdown-before",
+    "native-before-ready",
+    "settle-before",
+    "retire-before",
+    "qualify-before",
+    "prepare-after",
+    "preflight-after",
+    "after-initial",
+    "after-final",
+    "after-prior",
+    "after-context",
+    "after-goal-initial",
+    "after-goal-final",
+    "shutdown-after",
+    "native-after-ready",
+    "settle-after",
+    "retire-after",
+    "qualify-after",
+    "after-work-reloaded"
+  ],
+  "screenshots": [
+    {
+      "file": "01-before-rename-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "02-before-wide-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "03-after-rename-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "04-current-target-file-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "05-after-rename-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "06-after-modified-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "07-after-deleted-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "08-after-wide-en.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "09-after-minimum-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "10-after-reload-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "11-after-reopen-minimum-zh.png",
+      "manuallyReviewed": true
+    },
+    {
+      "file": "12-after-minimum-en.png",
+      "manuallyReviewed": true
+    }
+  ],
+  "originalBusinessCheckpoints": 36,
+  "questionReceipts": [
+    {
+      "phase": "before",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "before",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "partial",
+      "sessionID": "ses_-zUPwmVDOzz7whRe0ZhS",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-choice",
+      "sessionID": "ses_-zUPwdSZmzz36dtwU1nx",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-choice",
+      "sessionID": "ses_-zUPwcOj4zzABKx1aTI1",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-answer",
+      "sessionID": "ses_-zUPu8NEUzzInC0HTWtc",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-answer",
+      "sessionID": "ses_-zUPu6DAZzzyfu4rqCM0",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "before-prior-reset",
+      "sessionID": "ses_-zUPu0qX4zztr5NIW5Dh",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    },
+    {
+      "phase": "after",
+      "case": "after-prior-reset",
+      "sessionID": "ses_-zUPtyirFzzilPInqyzQ",
+      "questions": 3,
+      "answerSlots": 3,
+      "originalFactsFilesAndGitExact": true,
+      "httpAndSseExact": true
+    }
+  ],
+  "goalReceipts": [
+    {
+      "phase": "before",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "before",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "initial",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    },
+    {
+      "phase": "after",
+      "checkpoint": "final",
+      "id": "pev_g0Va6eZ8o00SDKe2xpAH",
+      "status": "complete",
+      "selection": "idle",
+      "tokens": 303536,
+      "tools": 8,
+      "originalGoalToolsEventsArtifactExact": true
+    }
+  ],
+  "originalFileChangeReceipts": [
+    {
+      "phase": "before",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    },
+    {
+      "phase": "after",
+      "types": [
+        "update",
+        "move",
+        "delete"
+      ],
+      "totals": {
+        "additions": 6,
+        "deletions": 3
+      },
+      "originalFactsFilesAndGitExact": true
+    }
+  ],
+  "priorProjectReceipts": [
+    {
+      "phase": "before",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    },
+    {
+      "phase": "after",
+      "projects": [
+        {
+          "id": "prj_hePmn9ZPAwl7pIcTOyXQ",
+          "case": "A",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_hvXo6NEOORYuWNgJ0hXP",
+          "case": "B",
+          "name": null,
+          "originalSourceFilesAndGitExact": true
+        },
+        {
+          "id": "prj_h77culXgsxYSq846s9qM",
+          "case": "C",
+          "name": "独立资料",
+          "originalSourceFilesAndGitExact": true
+        }
+      ]
+    }
+  ],
+  "sourceData": [
+    {
+      "phase": "before",
+      "originals": 309197,
+      "current": 309199,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62845,
+          "after": 62846
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62787,
+          "after": 62788
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    },
+    {
+      "phase": "after",
+      "originals": 309199,
+      "current": 309201,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62846,
+          "after": 62847
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62788,
+          "after": 62789
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "configurations": 119,
+      "attachments": 299,
+      "schema": 10,
+      "tables": 92
+    }
+  ],
+  "resources": {
+    "originalNativeHandlesExitedZero": 2,
+    "pairedCopiesRetired": 4,
+    "modelRequests": 0,
+    "cumulativeRequests": 1461,
+    "minimumReserveMs": 2848542,
+    "originalDeadlineAt": 1793902375208,
+    "sourceCredentialsAndCatalogUnchanged": true
+  },
+  "manualFindings": {
+    "originalPath": "draft/原始方案.md",
+    "destinationPath": "deliverables/客户方案（已确认）.md",
+    "chineseLabels": [
+      "原路径",
+      "目标路径"
+    ],
+    "englishLabels": [
+      "Original path",
+      "Destination path"
+    ],
+    "stableMinimumDockWidth": 280,
+    "pathWrapsCompletelyAtMinimumBothLocales": true,
+    "modifiedAndDeletedKeepOriginalSinglePath": true,
+    "currentDestinationFileActuallyOpenedReadOnly": true,
+    "currentFileFieldsPreserved": [
+      "客户方案936",
+      "C-936",
+      "林岚",
+      "2026-11-15",
+      "A-01：核对材料",
+      "A-02：确认排期",
+      "初审完成",
+      "交付说明：本地整理936；原字段保持。"
+    ],
+    "afterReloadExactComparisonReopenedFromSummary": true,
+    "summaryAlgorithmAndCountsUnchanged": true
+  },
+  "intermediateObservations": [
+    "Home/End width readings during the animated resize are transitional;11/12 are the stable 280px readback and screenshots",
+    "10 shows the normal closed tool panel after page reload, not an open Review;11 reopens the exact rename from its real summary row"
+  ],
+  "limitations": [
+    "No new model workflow; original actual model tool results and current files were read back unchanged",
+    "Independent Task rename header has no natural visual case; shared component and contract preserved without claiming that visual coverage",
+    "Very long single-segment and multiple-space paths have no separate natural visual sample; no operating-system clipboard interaction or copy acceptance claimed",
+    "No demonstrated unique-comparison-count defect; counts, grouping, line sums and record semantics deliberately unchanged",
+    "Main changes are after frozen v0.1.46 installer; no release"
+  ],
+  "uiAutomationAddedOrRun": false,
+  "userWindowUntouched": true
+}
