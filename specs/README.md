@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [分派结果数量与原受理记录](records/2026-11/2026-11-06-dispatch-result-summary.md)：分派结果数量与成员状态。
+
 - [任务操作与产物摘要](records/2026-11/2026-11-06-tool-operation-details.md)：动作语义、原用途与实际文件数。
 
 - [依执行证据显示导航状态](records/2026-11/2026-11-06-status-evidence-navigation.md)：消息记录与真实等待。

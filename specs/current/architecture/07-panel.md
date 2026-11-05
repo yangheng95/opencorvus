@@ -2856,6 +2856,14 @@ publication retains its requested artifact type. The bounded input/metadata
 contract preserves these original scalar fields within its existing budgets.
 These summaries do not parse program-generated English titles or result bodies;
 the original Tool input, title, result and failure remain available in disclosure.
+Dispatch-collection summaries distinguish requested dispatches from returned
+dispatch results. Pending/running requests use their declared dispatch-array
+count and retain the returned-result ratio from their canonical collection
+checkpoint; completed collections use the producer's frontier size. This result count
+does not certify worker completion or success: accepted and other typed outcomes
+remain in the original result and member lifecycle remains independently visible.
+The summary never parses the internal frontier title or treats completed_count
+as a count of successful workers.
 Expanded Tool details expose a localized retry action when the retained Part read
 fails. The action refetches the same resource and immutable Part identity; it
 does not execute the Tool again or require closing the enclosing operation group.

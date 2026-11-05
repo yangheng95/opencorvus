@@ -1,0 +1,165 @@
+{
+  "at": "2026-11-05T22:48:44.967Z",
+  "purpose": "Readable original dispatch result counts while preserving in-flight returned-result progress",
+  "implementation": {
+    "uiOnly": true,
+    "backendAndSdkChanges": false,
+    "schemasChanged": false,
+    "originalToolFactsRewritten": false,
+    "newUiAutomation": false
+  },
+  "manualVisualReview": {
+    "screenshots": 14,
+    "languages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "nativeDevUi": true,
+    "collectionSize": 1,
+    "originalOutcome": "accepted",
+    "sourceInputAndOutputReadable": true,
+    "memberCurrentStateReadable": true,
+    "languageSwitchRefreshAndReopen": true,
+    "finalBuildFrames": [
+      11,
+      12,
+      13,
+      14
+    ],
+    "inFlightVisualVerified": false
+  },
+  "functionalChecks": {
+    "canonicalOriginalToolParts": 13,
+    "originalRequestsOutcomesMetadataAndOutputsExact": true,
+    "httpSessions": 8,
+    "connectedSessionSnapshots": 8,
+    "deferredParts": 1,
+    "wholeSnapshotsExactAcrossAllPhases": true,
+    "originalPersistedMemberCheckpoints": 13,
+    "declaredCheckpointMemberIdentitiesExact": true,
+    "typecheckPackages": 8,
+    "finalOverlayTypecheck": true,
+    "canonicalNodeBuild": true,
+    "locales": 2,
+    "translationKeys": 2891
+  },
+  "modelRequests": 0,
+  "cumulativeRequests": 1469,
+  "phases": [
+    {
+      "label": "before",
+      "port": 38814,
+      "schema": 10,
+      "tableCount": 92,
+      "originalRows": 309223,
+      "currentRows": 309225,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62858,
+          "after": 62859
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62800,
+          "after": 62801
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "attachments": 299,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "cumulativeRequests": 1469,
+      "reserveMs": 3422749,
+      "sourceCredentialsAndCatalogPreserved": true,
+      "pairedCopiesRetired": true,
+      "publicShutdown": 200,
+      "nativeExitCode": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    {
+      "label": "after",
+      "port": 38815,
+      "schema": 10,
+      "tableCount": 92,
+      "originalRows": 309225,
+      "currentRows": 309227,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62859,
+          "after": 62860
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62801,
+          "after": 62802
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "attachments": 299,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "cumulativeRequests": 1469,
+      "reserveMs": 2960315,
+      "sourceCredentialsAndCatalogPreserved": true,
+      "pairedCopiesRetired": true,
+      "publicShutdown": 200,
+      "nativeExitCode": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    },
+    {
+      "label": "final",
+      "port": 38816,
+      "schema": 10,
+      "tableCount": 92,
+      "originalRows": 309227,
+      "currentRows": 309229,
+      "changes": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "before": 62860,
+          "after": 62861
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "before": 62802,
+          "after": 62803
+        }
+      ],
+      "allOriginalBusinessRowsPreserved": true,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "projects": 129,
+      "attachments": 299,
+      "filesystemExclusions": 0,
+      "modelRequests": 0,
+      "cumulativeRequests": 1469,
+      "reserveMs": 2222185,
+      "sourceCredentialsAndCatalogPreserved": true,
+      "pairedCopiesRetired": true,
+      "publicShutdown": 200,
+      "nativeExitCode": 0,
+      "physicalCompletion": true,
+      "outputDrainComplete": true,
+      "requestCleanupComplete": true
+    }
+  ],
+  "optionalFinalAllocated": true,
+  "limits": [
+    "No natural multi-member or in-flight visual sample",
+    "Historical progress facts and source audit are not live visual or execution validation",
+    "No new model, live PartUpdated/Moved, orchestration, retry or crash recovery",
+    "Direct singular dispatch has no natural sample and is unchanged"
+  ]
+}

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [分派结果数量与原受理记录](2026-11-06-dispatch-result-summary.md)：数量含义及原受理结果。
+
 - [任务操作与产物摘要](2026-11-06-tool-operation-details.md)：原字段与界面语言。
 
 - [依执行证据显示导航状态](2026-11-06-status-evidence-navigation.md)：缺省状态与真实执行证据。

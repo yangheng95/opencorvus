@@ -590,6 +590,26 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
   // The request URL identifies this fetch. Response media/encoding belongs to
   // the result disclosure rather than the compact transcript identity.
   if (n === "webfetch") return typeof safeInput.url === "string" ? safeInput.url : ""
+  if (n === "dispatchagents") {
+    const count = status === "completed"
+      ? safeState.metadata?.frontier_size
+      : (status === "pending" || status === "running") && Array.isArray(safeInput.dispatches)
+        ? safeInput.dispatches.length
+        : undefined
+    const members = safeState.metadata?.dispatch_collection?.members
+    const returned = Array.isArray(members) ? members.length : 0
+    if ((status === "pending" || status === "running") && Number.isSafeInteger(count) && returned > 0 && returned <= count) {
+      return t("tool.dispatch_collection.returned_count", {
+        returned: returned.toLocaleString(localeTag()),
+        total: count.toLocaleString(localeTag()),
+      })
+    }
+    return Number.isSafeInteger(count) && count > 0
+      ? tc(`tool.dispatch_collection.${status === "completed" ? "result_count" : "request_count"}`, count, {
+          count: count.toLocaleString(localeTag()),
+        })
+      : statusLabel
+  }
   if (n === "dispatchagent") {
     const dispatch = record((safeInput as any).dispatch) ? (safeInput as any).dispatch : {}
     const target = firstNonEmptyString((dispatch as any).target)
