@@ -1,0 +1,56 @@
+{
+  "observedAt": "2026-11-05T11:57:50.995804+00:00",
+  "runID": 42017438173,
+  "source": "f88a3b056ac16deab7c66142c9081dcadfcc6c5c",
+  "conclusion": "cancelled",
+  "completedAt": "2026-11-05T11:51:54Z",
+  "jobs": [
+    {
+      "id": 127211373212,
+      "name": "changes",
+      "conclusion": "success"
+    },
+    {
+      "id": 127211375338,
+      "name": "dependency review",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 127211931958,
+      "name": "verify",
+      "conclusion": "success"
+    },
+    {
+      "id": 127211932098,
+      "name": "dependency audit",
+      "conclusion": "success"
+    },
+    {
+      "id": 127214157164,
+      "name": "service tests",
+      "conclusion": "success"
+    },
+    {
+      "id": 127214157733,
+      "name": "unit (linux)",
+      "conclusion": "cancelled"
+    },
+    {
+      "id": 127214158055,
+      "name": "unit (windows)",
+      "conclusion": "cancelled"
+    },
+    {
+      "id": 127214158400,
+      "name": "unit (macos)",
+      "conclusion": "cancelled"
+    },
+    {
+      "id": 127228045170,
+      "name": "CI passed",
+      "conclusion": "failure"
+    }
+  ],
+  "qualification": "Separate automatic full-unit CI canceled its three unit jobs; its aggregate guard failed. Not counted as passed. The additional two-file native CI was not dispatched because its separate authorization question has no reply. Local focused checks passed; no claim that the two historical macOS failures received exact native revalidation. Canonical release and paired website are evaluated separately.",
+  "cancellationRequester": "unknown; newer main and per-ref replacement configuration observed separately"
+}

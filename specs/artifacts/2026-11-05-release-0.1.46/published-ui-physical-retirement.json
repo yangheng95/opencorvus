@@ -1,0 +1,42 @@
+{
+  "scope": "Exact owned executable directory, ephemeral listener and temporary root independently read back",
+  "after": {
+    "observedAt": "2026-11-05T12:04:10.8582614Z",
+    "ownedProcesses": [],
+    "temporaryRootExists": false,
+    "listeners": []
+  },
+  "before": {
+    "observedAt": "2026-11-05T12:01:21.1840865Z",
+    "processes": [
+      {
+        "ProcessId": 732,
+        "CreationDate": "2026-11-05T20:01:03.509118+08:00",
+        "ExecutablePath": "D:\\myhexin-local\\opencorvus\\.scratch\\release-0.1.46\\published-cli\\extracted\\opencorvus-process-supervisor.exe"
+      },
+      {
+        "ProcessId": 29580,
+        "CreationDate": "2026-11-05T20:01:03.524077+08:00",
+        "ExecutablePath": "D:\\myhexin-local\\opencorvus\\.scratch\\release-0.1.46\\published-cli\\extracted\\opencorvus.exe"
+      }
+    ],
+    "listeners": [
+      {
+        "LocalAddress": "127.0.0.1",
+        "LocalPort": 58367,
+        "OwningProcess": 29580
+      }
+    ],
+    "runtime": {
+      "version": "0.1.46",
+      "source": "f88a3b056ac16deab7c66142c9081dcadfcc6c5c",
+      "executable": "D:\\myhexin-local\\opencorvus\\.scratch\\release-0.1.46\\published-cli\\extracted\\opencorvus.exe",
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-release46-O8GfVW",
+      "url": "http://127.0.0.1:58367",
+      "startedAt": "2026-11-05T12:01:01.196Z",
+      "deadlineAt": "2026-11-05T12:06:01.196Z",
+      "credentialsTransferred": false,
+      "manualReview": "Bundled settings changelog only; no model conversation initiated; Provider request transport was not instrumented"
+    }
+  }
+}

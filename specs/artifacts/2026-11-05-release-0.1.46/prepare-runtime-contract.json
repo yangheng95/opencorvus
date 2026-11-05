@@ -1,0 +1,119 @@
+{
+  "runID": 42019654335,
+  "jobID": 127218925886,
+  "source": "f88a3b056ac16deab7c66142c9081dcadfcc6c5c",
+  "originalCreatedAt": "2026-11-05T11:31:31Z",
+  "originalDeadline": "2026-11-05T12:31:31.000Z",
+  "conclusion": "success",
+  "checks": [
+    {
+      "name": "Set up job",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:31:35Z",
+      "completedAt": "2026-11-05T11:31:36Z"
+    },
+    {
+      "name": "Run actions/checkout@v6",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:31:36Z",
+      "completedAt": "2026-11-05T11:31:46Z"
+    },
+    {
+      "name": "Run ./.github/actions/setup-bun",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:31:46Z",
+      "completedAt": "2026-11-05T11:32:02Z"
+    },
+    {
+      "name": "Resolve release version",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:02Z",
+      "completedAt": "2026-11-05T11:32:02Z"
+    },
+    {
+      "name": "Verify version alignment",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:02Z",
+      "completedAt": "2026-11-05T11:32:02Z"
+    },
+    {
+      "name": "Verify remaining release budget",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:02Z",
+      "completedAt": "2026-11-05T11:32:02Z"
+    },
+    {
+      "name": "Verify written release notes",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:02Z",
+      "completedAt": "2026-11-05T11:32:02Z"
+    },
+    {
+      "name": "Verify immutable release identity",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:02Z",
+      "completedAt": "2026-11-05T11:32:02Z"
+    },
+    {
+      "name": "Verify frozen dependency graph",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:02Z",
+      "completedAt": "2026-11-05T11:32:04Z"
+    },
+    {
+      "name": "Build generated Software Development Kit",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:04Z",
+      "completedAt": "2026-11-05T11:32:17Z"
+    },
+    {
+      "name": "Verify Ubuntu policy through sudo",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:17Z",
+      "completedAt": "2026-11-05T11:32:17Z"
+    },
+    {
+      "name": "Verify generated repository fixed point",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:17Z",
+      "completedAt": "2026-11-05T11:32:54Z"
+    },
+    {
+      "name": "Verify publication budget before claiming identity",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:54Z",
+      "completedAt": "2026-11-05T11:32:54Z"
+    },
+    {
+      "name": "Claim immutable release identity",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:54Z",
+      "completedAt": "2026-11-05T11:32:56Z"
+    },
+    {
+      "name": "Claim draft publication owner",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:56Z",
+      "completedAt": "2026-11-05T11:32:59Z"
+    },
+    {
+      "name": "Post Run ./.github/actions/setup-bun",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:32:59Z",
+      "completedAt": "2026-11-05T11:33:00Z"
+    },
+    {
+      "name": "Post Run actions/checkout@v6",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:33:00Z",
+      "completedAt": "2026-11-05T11:33:00Z"
+    },
+    {
+      "name": "Complete job",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T11:33:00Z",
+      "completedAt": "2026-11-05T11:33:00Z"
+    }
+  ],
+  "scope": "Real exact-source canonical prepare with original version/frozen install/SDK/generated fixed-point/tag+draft ownership checks"
+}

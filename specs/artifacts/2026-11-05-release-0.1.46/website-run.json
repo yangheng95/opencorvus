@@ -1,0 +1,1092 @@
+{
+  "run": {
+    "id": 42022785904,
+    "name": "deploy opencorvus.com",
+    "node_id": "WFR_kwLOTxi8As8AAAAJyMDTcA",
+    "head_branch": "main",
+    "head_sha": "ccba2cb1a60c929acb46523e88db2b3c7e317bc7",
+    "path": ".github/workflows/deploy-opencorvus-com.yml",
+    "display_title": "deploy opencorvus.com",
+    "run_number": 399,
+    "event": "workflow_dispatch",
+    "status": "completed",
+    "conclusion": "success",
+    "workflow_id": 331235754,
+    "check_suite_id": 113868671060,
+    "check_suite_node_id": "CS_kwDOTxi8As8AAAAagxoIVA",
+    "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904",
+    "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/42022785904",
+    "pull_requests": [],
+    "created_at": "2026-11-05T11:54:54Z",
+    "updated_at": "2026-11-05T11:59:48Z",
+    "actor": {
+      "login": "github-actions[bot]",
+      "id": 41898282,
+      "node_id": "MDM6Qm90NDE4OTgyODI=",
+      "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/github-actions%5Bbot%5D",
+      "html_url": "https://github.com/apps/github-actions",
+      "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
+      "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
+      "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
+      "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "run_attempt": 1,
+    "referenced_workflows": [],
+    "run_started_at": "2026-11-05T11:54:54Z",
+    "triggering_actor": {
+      "login": "github-actions[bot]",
+      "id": 41898282,
+      "node_id": "MDM6Qm90NDE4OTgyODI=",
+      "avatar_url": "https://avatars.githubusercontent.com/in/15368?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/github-actions%5Bbot%5D",
+      "html_url": "https://github.com/apps/github-actions",
+      "followers_url": "https://api.github.com/users/github-actions%5Bbot%5D/followers",
+      "following_url": "https://api.github.com/users/github-actions%5Bbot%5D/following{/other_user}",
+      "gists_url": "https://api.github.com/users/github-actions%5Bbot%5D/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/github-actions%5Bbot%5D/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/github-actions%5Bbot%5D/subscriptions",
+      "organizations_url": "https://api.github.com/users/github-actions%5Bbot%5D/orgs",
+      "repos_url": "https://api.github.com/users/github-actions%5Bbot%5D/repos",
+      "events_url": "https://api.github.com/users/github-actions%5Bbot%5D/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/github-actions%5Bbot%5D/received_events",
+      "type": "Bot",
+      "user_view_type": "public",
+      "site_admin": false
+    },
+    "jobs_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904/jobs",
+    "logs_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904/logs",
+    "check_suite_url": "https://api.github.com/repos/yangheng95/opencorvus/check-suites/113868671060",
+    "artifacts_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904/artifacts",
+    "cancel_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904/cancel",
+    "rerun_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904/rerun",
+    "previous_attempt_url": null,
+    "workflow_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/workflows/331235754",
+    "head_commit": {
+      "id": "ccba2cb1a60c929acb46523e88db2b3c7e317bc7",
+      "tree_id": "8879d4eceefd9a33128650c679f5e099386053fe",
+      "message": "feat(ui): clear individual question answers without losing other drafts",
+      "timestamp": "2026-11-05T11:35:15Z",
+      "author": {
+        "name": "Heng Yang",
+        "email": "yangheng2021@gmail.com"
+      },
+      "committer": {
+        "name": "Heng Yang",
+        "email": "yangheng2021@gmail.com"
+      }
+    },
+    "repository": {
+      "id": 1327021058,
+      "node_id": "R_kgDOTxi8Ag",
+      "name": "opencorvus",
+      "full_name": "yangheng95/opencorvus",
+      "private": false,
+      "owner": {
+        "login": "yangheng95",
+        "id": 51735130,
+        "node_id": "MDQ6VXNlcjUxNzM1MTMw",
+        "avatar_url": "https://avatars.githubusercontent.com/u/51735130?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/yangheng95",
+        "html_url": "https://github.com/yangheng95",
+        "followers_url": "https://api.github.com/users/yangheng95/followers",
+        "following_url": "https://api.github.com/users/yangheng95/following{/other_user}",
+        "gists_url": "https://api.github.com/users/yangheng95/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/yangheng95/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/yangheng95/subscriptions",
+        "organizations_url": "https://api.github.com/users/yangheng95/orgs",
+        "repos_url": "https://api.github.com/users/yangheng95/repos",
+        "events_url": "https://api.github.com/users/yangheng95/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/yangheng95/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/yangheng95/opencorvus",
+      "description": "DIY your own agent team harness for long-horizon agent work",
+      "fork": false,
+      "url": "https://api.github.com/repos/yangheng95/opencorvus",
+      "forks_url": "https://api.github.com/repos/yangheng95/opencorvus/forks",
+      "keys_url": "https://api.github.com/repos/yangheng95/opencorvus/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/yangheng95/opencorvus/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/yangheng95/opencorvus/teams",
+      "hooks_url": "https://api.github.com/repos/yangheng95/opencorvus/hooks",
+      "issue_events_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/yangheng95/opencorvus/events",
+      "assignees_url": "https://api.github.com/repos/yangheng95/opencorvus/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/yangheng95/opencorvus/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/yangheng95/opencorvus/tags",
+      "blobs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/yangheng95/opencorvus/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/yangheng95/opencorvus/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/yangheng95/opencorvus/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/yangheng95/opencorvus/languages",
+      "stargazers_url": "https://api.github.com/repos/yangheng95/opencorvus/stargazers",
+      "contributors_url": "https://api.github.com/repos/yangheng95/opencorvus/contributors",
+      "subscribers_url": "https://api.github.com/repos/yangheng95/opencorvus/subscribers",
+      "subscription_url": "https://api.github.com/repos/yangheng95/opencorvus/subscription",
+      "commits_url": "https://api.github.com/repos/yangheng95/opencorvus/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/yangheng95/opencorvus/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/yangheng95/opencorvus/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/yangheng95/opencorvus/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/yangheng95/opencorvus/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/yangheng95/opencorvus/merges",
+      "archive_url": "https://api.github.com/repos/yangheng95/opencorvus/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/yangheng95/opencorvus/downloads",
+      "issues_url": "https://api.github.com/repos/yangheng95/opencorvus/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/yangheng95/opencorvus/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/yangheng95/opencorvus/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/yangheng95/opencorvus/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/yangheng95/opencorvus/labels{/name}",
+      "releases_url": "https://api.github.com/repos/yangheng95/opencorvus/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/yangheng95/opencorvus/deployments"
+    },
+    "head_repository": {
+      "id": 1327021058,
+      "node_id": "R_kgDOTxi8Ag",
+      "name": "opencorvus",
+      "full_name": "yangheng95/opencorvus",
+      "private": false,
+      "owner": {
+        "login": "yangheng95",
+        "id": 51735130,
+        "node_id": "MDQ6VXNlcjUxNzM1MTMw",
+        "avatar_url": "https://avatars.githubusercontent.com/u/51735130?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/yangheng95",
+        "html_url": "https://github.com/yangheng95",
+        "followers_url": "https://api.github.com/users/yangheng95/followers",
+        "following_url": "https://api.github.com/users/yangheng95/following{/other_user}",
+        "gists_url": "https://api.github.com/users/yangheng95/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/yangheng95/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/yangheng95/subscriptions",
+        "organizations_url": "https://api.github.com/users/yangheng95/orgs",
+        "repos_url": "https://api.github.com/users/yangheng95/repos",
+        "events_url": "https://api.github.com/users/yangheng95/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/yangheng95/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "html_url": "https://github.com/yangheng95/opencorvus",
+      "description": "DIY your own agent team harness for long-horizon agent work",
+      "fork": false,
+      "url": "https://api.github.com/repos/yangheng95/opencorvus",
+      "forks_url": "https://api.github.com/repos/yangheng95/opencorvus/forks",
+      "keys_url": "https://api.github.com/repos/yangheng95/opencorvus/keys{/key_id}",
+      "collaborators_url": "https://api.github.com/repos/yangheng95/opencorvus/collaborators{/collaborator}",
+      "teams_url": "https://api.github.com/repos/yangheng95/opencorvus/teams",
+      "hooks_url": "https://api.github.com/repos/yangheng95/opencorvus/hooks",
+      "issue_events_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/events{/number}",
+      "events_url": "https://api.github.com/repos/yangheng95/opencorvus/events",
+      "assignees_url": "https://api.github.com/repos/yangheng95/opencorvus/assignees{/user}",
+      "branches_url": "https://api.github.com/repos/yangheng95/opencorvus/branches{/branch}",
+      "tags_url": "https://api.github.com/repos/yangheng95/opencorvus/tags",
+      "blobs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/blobs{/sha}",
+      "git_tags_url": "https://api.github.com/repos/yangheng95/opencorvus/git/tags{/sha}",
+      "git_refs_url": "https://api.github.com/repos/yangheng95/opencorvus/git/refs{/sha}",
+      "trees_url": "https://api.github.com/repos/yangheng95/opencorvus/git/trees{/sha}",
+      "statuses_url": "https://api.github.com/repos/yangheng95/opencorvus/statuses/{sha}",
+      "languages_url": "https://api.github.com/repos/yangheng95/opencorvus/languages",
+      "stargazers_url": "https://api.github.com/repos/yangheng95/opencorvus/stargazers",
+      "contributors_url": "https://api.github.com/repos/yangheng95/opencorvus/contributors",
+      "subscribers_url": "https://api.github.com/repos/yangheng95/opencorvus/subscribers",
+      "subscription_url": "https://api.github.com/repos/yangheng95/opencorvus/subscription",
+      "commits_url": "https://api.github.com/repos/yangheng95/opencorvus/commits{/sha}",
+      "git_commits_url": "https://api.github.com/repos/yangheng95/opencorvus/git/commits{/sha}",
+      "comments_url": "https://api.github.com/repos/yangheng95/opencorvus/comments{/number}",
+      "issue_comment_url": "https://api.github.com/repos/yangheng95/opencorvus/issues/comments{/number}",
+      "contents_url": "https://api.github.com/repos/yangheng95/opencorvus/contents/{+path}",
+      "compare_url": "https://api.github.com/repos/yangheng95/opencorvus/compare/{base}...{head}",
+      "merges_url": "https://api.github.com/repos/yangheng95/opencorvus/merges",
+      "archive_url": "https://api.github.com/repos/yangheng95/opencorvus/{archive_format}{/ref}",
+      "downloads_url": "https://api.github.com/repos/yangheng95/opencorvus/downloads",
+      "issues_url": "https://api.github.com/repos/yangheng95/opencorvus/issues{/number}",
+      "pulls_url": "https://api.github.com/repos/yangheng95/opencorvus/pulls{/number}",
+      "milestones_url": "https://api.github.com/repos/yangheng95/opencorvus/milestones{/number}",
+      "notifications_url": "https://api.github.com/repos/yangheng95/opencorvus/notifications{?since,all,participating}",
+      "labels_url": "https://api.github.com/repos/yangheng95/opencorvus/labels{/name}",
+      "releases_url": "https://api.github.com/repos/yangheng95/opencorvus/releases{/id}",
+      "deployments_url": "https://api.github.com/repos/yangheng95/opencorvus/deployments"
+    }
+  },
+  "jobs": [
+    {
+      "id": 127229441351,
+      "run_id": 42022785904,
+      "workflow_name": "deploy opencorvus.com",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAdn3c1Rw",
+      "head_sha": "ccba2cb1a60c929acb46523e88db2b3c7e317bc7",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/127229441351",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/42022785904/job/127229441351",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-05T11:54:55Z",
+      "started_at": "2026-11-05T11:54:57Z",
+      "completed_at": "2026-11-05T11:55:29Z",
+      "name": "resolve immutable website source",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T11:54:58Z",
+          "completed_at": "2026-11-05T11:54:58Z"
+        },
+        {
+          "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T11:54:58Z",
+          "completed_at": "2026-11-05T11:55:07Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T11:55:07Z",
+          "completed_at": "2026-11-05T11:55:25Z"
+        },
+        {
+          "name": "Resolve and verify website source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T11:55:25Z",
+          "completed_at": "2026-11-05T11:55:26Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-05T11:55:26Z",
+          "completed_at": "2026-11-05T11:55:26Z"
+        },
+        {
+          "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-05T11:55:26Z",
+          "completed_at": "2026-11-05T11:55:27Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-05T11:55:27Z",
+          "completed_at": "2026-11-05T11:55:27Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/127229441351",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000032013,
+      "runner_name": "GitHub Actions 1000032013",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 127229441635,
+      "run_id": 42022785904,
+      "workflow_name": "deploy opencorvus.com",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAdn3c2Yw",
+      "head_sha": "ccba2cb1a60c929acb46523e88db2b3c7e317bc7",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/127229441635",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/42022785904/job/127229441635",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-05T11:54:55Z",
+      "started_at": "2026-11-05T11:54:57Z",
+      "completed_at": "2026-11-05T11:59:47Z",
+      "name": "website deadline",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T11:54:58Z",
+          "completed_at": "2026-11-05T11:54:58Z"
+        },
+        {
+          "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T11:54:58Z",
+          "completed_at": "2026-11-05T11:55:08Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T11:55:08Z",
+          "completed_at": "2026-11-05T11:55:30Z"
+        },
+        {
+          "name": "Enforce the original website release deadline",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T11:55:30Z",
+          "completed_at": "2026-11-05T11:59:44Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-05T11:59:44Z",
+          "completed_at": "2026-11-05T11:59:44Z"
+        },
+        {
+          "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-05T11:59:44Z",
+          "completed_at": "2026-11-05T11:59:45Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-05T11:59:45Z",
+          "completed_at": "2026-11-05T11:59:45Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/127229441635",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000032014,
+      "runner_name": "GitHub Actions 1000032014",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 127229688507,
+      "run_id": 42022785904,
+      "workflow_name": "deploy opencorvus.com",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAdn3r6uw",
+      "head_sha": "ccba2cb1a60c929acb46523e88db2b3c7e317bc7",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/127229688507",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/42022785904/job/127229688507",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-05T11:55:29Z",
+      "started_at": "2026-11-05T11:55:30Z",
+      "completed_at": "2026-11-05T11:57:57Z",
+      "name": "build and verify database-backed release",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T11:55:31Z",
+          "completed_at": "2026-11-05T11:55:32Z"
+        },
+        {
+          "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T11:55:32Z",
+          "completed_at": "2026-11-05T11:55:42Z"
+        },
+        {
+          "name": "Run oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T11:55:42Z",
+          "completed_at": "2026-11-05T11:55:44Z"
+        },
+        {
+          "name": "Install frozen dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T11:55:44Z",
+          "completed_at": "2026-11-05T11:55:52Z"
+        },
+        {
+          "name": "Build SDK dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T11:55:52Z",
+          "completed_at": "2026-11-05T11:56:00Z"
+        },
+        {
+          "name": "Verify generated repository fixed point",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-05T11:56:00Z",
+          "completed_at": "2026-11-05T11:56:24Z"
+        },
+        {
+          "name": "Verify production configuration contract",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-05T11:56:24Z",
+          "completed_at": "2026-11-05T11:56:24Z"
+        },
+        {
+          "name": "Require a browser trust root",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-05T11:56:24Z",
+          "completed_at": "2026-11-05T11:56:24Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-05T11:56:24Z",
+          "completed_at": "2026-11-05T11:56:25Z"
+        },
+        {
+          "name": "Generate current public download manifest",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-05T11:56:25Z",
+          "completed_at": "2026-11-05T11:56:26Z"
+        },
+        {
+          "name": "Verify canonical Expert Squad archives",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-05T11:56:26Z",
+          "completed_at": "2026-11-05T11:56:30Z"
+        },
+        {
+          "name": "Verify website Registry database lifecycle",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-05T11:56:30Z",
+          "completed_at": "2026-11-05T11:56:49Z"
+        },
+        {
+          "name": "Verify RackNerd activation and rollback paths",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-05T11:56:49Z",
+          "completed_at": "2026-11-05T11:56:53Z"
+        },
+        {
+          "name": "Verify real Caddy release cache behavior",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-05T11:56:53Z",
+          "completed_at": "2026-11-05T11:56:54Z"
+        },
+        {
+          "name": "Check website",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-11-05T11:56:54Z",
+          "completed_at": "2026-11-05T11:57:09Z"
+        },
+        {
+          "name": "Build website and unsigned distribution",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16,
+          "started_at": "2026-11-05T11:57:09Z",
+          "completed_at": "2026-11-05T11:57:26Z"
+        },
+        {
+          "name": "Exercise packaged database runtime",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17,
+          "started_at": "2026-11-05T11:57:26Z",
+          "completed_at": "2026-11-05T11:57:32Z"
+        },
+        {
+          "name": "Rehearse exact signing and bundle assembly with temporary rotation keys",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-05T11:57:32Z",
+          "completed_at": "2026-11-05T11:57:50Z"
+        },
+        {
+          "name": "Verify static tree has only regular files and directories",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T11:57:50Z",
+          "completed_at": "2026-11-05T11:57:50Z"
+        },
+        {
+          "name": "Upload frozen unsigned site",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-11-05T11:57:50Z",
+          "completed_at": "2026-11-05T11:57:55Z"
+        },
+        {
+          "name": "Post Run oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 39,
+          "started_at": "2026-11-05T11:57:55Z",
+          "completed_at": "2026-11-05T11:57:55Z"
+        },
+        {
+          "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 40,
+          "started_at": "2026-11-05T11:57:55Z",
+          "completed_at": "2026-11-05T11:57:55Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 41,
+          "started_at": "2026-11-05T11:57:55Z",
+          "completed_at": "2026-11-05T11:57:55Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/127229688507",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000032015,
+      "runner_name": "GitHub Actions 1000032015",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 127229688522,
+      "run_id": 42022785904,
+      "workflow_name": "deploy opencorvus.com",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAdn3r6yg",
+      "head_sha": "ccba2cb1a60c929acb46523e88db2b3c7e317bc7",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/127229688522",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/42022785904/job/127229688522",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-05T11:55:29Z",
+      "started_at": "2026-11-05T11:55:32Z",
+      "completed_at": "2026-11-05T11:57:07Z",
+      "name": "canonical archive (macos-latest)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T11:55:32Z",
+          "completed_at": "2026-11-05T11:55:34Z"
+        },
+        {
+          "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T11:55:34Z",
+          "completed_at": "2026-11-05T11:55:48Z"
+        },
+        {
+          "name": "Run oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T11:55:48Z",
+          "completed_at": "2026-11-05T11:55:51Z"
+        },
+        {
+          "name": "Install frozen dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T11:55:51Z",
+          "completed_at": "2026-11-05T11:56:30Z"
+        },
+        {
+          "name": "Build SDK dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T11:56:30Z",
+          "completed_at": "2026-11-05T11:56:50Z"
+        },
+        {
+          "name": "Verify fixed canonical archive bytes",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-05T11:56:50Z",
+          "completed_at": "2026-11-05T11:57:00Z"
+        },
+        {
+          "name": "Post Run oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-05T11:57:00Z",
+          "completed_at": "2026-11-05T11:57:01Z"
+        },
+        {
+          "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-05T11:57:01Z",
+          "completed_at": "2026-11-05T11:57:02Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-05T11:57:02Z",
+          "completed_at": "2026-11-05T11:57:05Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/127229688522",
+      "labels": [
+        "macos-latest"
+      ],
+      "runner_id": 1000032016,
+      "runner_name": "GitHub Actions 1000032016",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 127229688574,
+      "run_id": 42022785904,
+      "workflow_name": "deploy opencorvus.com",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAdn3r6_g",
+      "head_sha": "ccba2cb1a60c929acb46523e88db2b3c7e317bc7",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/127229688574",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/42022785904/job/127229688574",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-05T11:55:29Z",
+      "started_at": "2026-11-05T11:55:31Z",
+      "completed_at": "2026-11-05T11:56:05Z",
+      "name": "canonical archive (ubuntu-latest)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T11:55:31Z",
+          "completed_at": "2026-11-05T11:55:32Z"
+        },
+        {
+          "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T11:55:32Z",
+          "completed_at": "2026-11-05T11:55:41Z"
+        },
+        {
+          "name": "Run oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T11:55:41Z",
+          "completed_at": "2026-11-05T11:55:42Z"
+        },
+        {
+          "name": "Install frozen dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T11:55:42Z",
+          "completed_at": "2026-11-05T11:55:51Z"
+        },
+        {
+          "name": "Build SDK dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T11:55:51Z",
+          "completed_at": "2026-11-05T11:55:59Z"
+        },
+        {
+          "name": "Verify fixed canonical archive bytes",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-05T11:55:59Z",
+          "completed_at": "2026-11-05T11:56:02Z"
+        },
+        {
+          "name": "Post Run oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-05T11:56:02Z",
+          "completed_at": "2026-11-05T11:56:02Z"
+        },
+        {
+          "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-05T11:56:02Z",
+          "completed_at": "2026-11-05T11:56:02Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-05T11:56:02Z",
+          "completed_at": "2026-11-05T11:56:02Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/127229688574",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000032018,
+      "runner_name": "GitHub Actions 1000032018",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 127229688643,
+      "run_id": 42022785904,
+      "workflow_name": "deploy opencorvus.com",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAdn3r7Qw",
+      "head_sha": "ccba2cb1a60c929acb46523e88db2b3c7e317bc7",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/127229688643",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/42022785904/job/127229688643",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-05T11:55:29Z",
+      "started_at": "2026-11-05T11:55:30Z",
+      "completed_at": "2026-11-05T11:58:18Z",
+      "name": "canonical archive (windows-latest)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T11:55:31Z",
+          "completed_at": "2026-11-05T11:55:32Z"
+        },
+        {
+          "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T11:55:32Z",
+          "completed_at": "2026-11-05T11:55:47Z"
+        },
+        {
+          "name": "Run oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T11:55:47Z",
+          "completed_at": "2026-11-05T11:55:49Z"
+        },
+        {
+          "name": "Install frozen dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T11:55:49Z",
+          "completed_at": "2026-11-05T11:57:21Z"
+        },
+        {
+          "name": "Build SDK dependency",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T11:57:21Z",
+          "completed_at": "2026-11-05T11:57:38Z"
+        },
+        {
+          "name": "Verify fixed canonical archive bytes",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-05T11:57:38Z",
+          "completed_at": "2026-11-05T11:58:14Z"
+        },
+        {
+          "name": "Post Run oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-05T11:58:14Z",
+          "completed_at": "2026-11-05T11:58:14Z"
+        },
+        {
+          "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-11-05T11:58:14Z",
+          "completed_at": "2026-11-05T11:58:16Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-11-05T11:58:16Z",
+          "completed_at": "2026-11-05T11:58:16Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/127229688643",
+      "labels": [
+        "windows-latest"
+      ],
+      "runner_id": 1000032017,
+      "runner_name": "GitHub Actions 1000032017",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 127230947419,
+      "run_id": 42022785904,
+      "workflow_name": "deploy opencorvus.com",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAdn44wWw",
+      "head_sha": "ccba2cb1a60c929acb46523e88db2b3c7e317bc7",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/127230947419",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/42022785904/job/127230947419",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-05T11:58:18Z",
+      "started_at": "2026-11-05T11:58:21Z",
+      "completed_at": "2026-11-05T11:59:38Z",
+      "name": "sign and deploy RackNerd release",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T11:58:22Z",
+          "completed_at": "2026-11-05T11:58:23Z"
+        },
+        {
+          "name": "Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T11:58:23Z",
+          "completed_at": "2026-11-05T11:58:31Z"
+        },
+        {
+          "name": "Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T11:58:31Z",
+          "completed_at": "2026-11-05T11:58:50Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T11:58:50Z",
+          "completed_at": "2026-11-05T11:58:50Z"
+        },
+        {
+          "name": "Download frozen unsigned site",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T11:58:50Z",
+          "completed_at": "2026-11-05T11:58:53Z"
+        },
+        {
+          "name": "Verify artifact tree before signing",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-05T11:58:53Z",
+          "completed_at": "2026-11-05T11:58:53Z"
+        },
+        {
+          "name": "Sign catalog and assemble content-addressed bundle",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-05T11:58:53Z",
+          "completed_at": "2026-11-05T11:58:54Z"
+        },
+        {
+          "name": "Freeze deploy archive and checksums",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-11-05T11:58:54Z",
+          "completed_at": "2026-11-05T11:59:01Z"
+        },
+        {
+          "name": "Verify remaining release budget",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-05T11:59:01Z",
+          "completed_at": "2026-11-05T11:59:01Z"
+        },
+        {
+          "name": "Deploy immutable release and atomically switch current",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-05T11:59:01Z",
+          "completed_at": "2026-11-05T11:59:35Z"
+        },
+        {
+          "name": "Post Run ./.github/actions/setup-bun",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-05T11:59:35Z",
+          "completed_at": "2026-11-05T11:59:36Z"
+        },
+        {
+          "name": "Post Run actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-11-05T11:59:36Z",
+          "completed_at": "2026-11-05T11:59:36Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-11-05T11:59:36Z",
+          "completed_at": "2026-11-05T11:59:36Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/127230947419",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000032019,
+      "runner_name": "GitHub Actions 1000032019",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 127231522470,
+      "run_id": 42022785904,
+      "workflow_name": "deploy opencorvus.com",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/yangheng95/opencorvus/actions/runs/42022785904",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOTxi8As8AAAAdn5b2pg",
+      "head_sha": "ccba2cb1a60c929acb46523e88db2b3c7e317bc7",
+      "url": "https://api.github.com/repos/yangheng95/opencorvus/actions/jobs/127231522470",
+      "html_url": "https://github.com/yangheng95/opencorvus/actions/runs/42022785904/job/127231522470",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-05T11:59:38Z",
+      "started_at": "2026-11-05T11:59:40Z",
+      "completed_at": "2026-11-05T11:59:42Z",
+      "name": "website result",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T11:59:40Z",
+          "completed_at": "2026-11-05T11:59:40Z"
+        },
+        {
+          "name": "Require the applicable website result",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T11:59:40Z",
+          "completed_at": "2026-11-05T11:59:41Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T11:59:41Z",
+          "completed_at": "2026-11-05T11:59:41Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/yangheng95/opencorvus/check-runs/127231522470",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000032020,
+      "runner_name": "GitHub Actions 1000032020",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

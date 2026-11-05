@@ -1,0 +1,14 @@
+{
+  "runID": 42017480794,
+  "source": "f88a3b056ac16deab7c66142c9081dcadfcc6c5c",
+  "elapsedSeconds": 925,
+  "createdAt": "2026-11-05T11:15:21Z",
+  "completedAt": "2026-11-05T11:30:46Z",
+  "evidence": [
+    "2026-11-05T11:19:05.6994830Z Cache hit for: v0-rust-build-Darwin-x64-825c9b43-e83e704d",
+    "2026-11-05T11:23:50.2167230Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "2026-11-05T11:29:49.1983220Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 5m 31s",
+    "2026-11-05T11:30:31.6700150Z Overlay assets validated for darwin-x64"
+  ],
+  "scope": "Exact-source native Intel debug build and first-run/restart. No debug artifacts transferred to canonical publication; exact historical backend failure cases remain a separate pending CI qualification."
+}
