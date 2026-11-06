@@ -4,6 +4,64 @@
 
 ## 未发布
 
+## 0.1.47 - 2026-11-06
+
+### zh-CN
+
+#### 新增
+
+- 提问支持逐题清空已选答案，同时保留其他题目的草稿；题目进度、提交后的回答数量和留空项说明更清楚。
+- 文件审阅可以收起记录列表以扩大比较正文；打开原始修改记录时默认展开最新一条，并展示其在完整记录中的位置。
+
+#### 调整
+
+- 来源摘录标明读取位置，可直接打开磁盘上的当前文件；对话修改后刷新已打开的文件，区分当时摘录、原始比较与当前正文。
+- 文件筛选同时匹配原路径、重命名目标与规范路径；同名项目显示真实目录，重命名记录保留完整路径，比较区改善换行、间距和窄侧栏阅读。
+- 提问、任务操作、协调请求、技能发现、产物查询与读取摘要按真实请求和数量显示；成员活动预览保留列表、表格等原文结构，并说明证据的阅读范围。
+- 持续目标说明创建与打开方式，预算、空目标及完成依据的校验反馈定位到对应输入；系统原因、用量数字和键盘提示使用当前界面语言。
+- 活动状态依据实际执行记录显示；仅有历史消息而缺少执行证据时明确标注，保留原始工作身份、作者与历史内容。
+
+#### 修复
+
+- 同一会话释放排队输入时，接纳集合包含这一批全部已可见的新输入，修复混合标记输入遗漏；保留原失败重试批次及同轮冻结的接纳事实。
+- 大型工具结果在原传输上限内优先保留完整文件修改摘要，避免多文件或长重命名路径导致已记录修改信息丢失；完整原结果仍按原入口读取。
+- 缺失文件读取使用统一的结构化错误，在界面显示本地化说明并保留真实路径及原始诊断。
+- 折叠选择及时保存；工作菜单恢复正确的键盘焦点归属；含糊的斜线文本保留为代码，避免被误解释为命令。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 10，保留用户数据和现有自动迁移；不会补造历史接纳记录、执行状态或来源内容。
+- 自定义客户端与 SDK（Software Development Kit，软件开发工具包）集成应同步升级，以识别新的 `unobserved` 执行证据状态。已记录的页面和流式复核覆盖对应场景，尚未覆盖混合输入的全部 Task/Mission 编排、崩溃恢复及自动压缩组合。
+- macOS 仍为临时签名，未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Clear an individual question answer while preserving drafts for the other questions. Clarify question progress, submitted answer counts and unanswered items.
+- Hide the record list to give file comparisons more space. Open the latest original change by default and show its position within the complete record list.
+
+#### Changed
+
+- Identify recorded source-excerpt locations and open the current file on disk directly. Refresh open files after conversation edits while distinguishing saved excerpts, original comparisons and current content.
+- Match original, renamed and canonical paths in file filters. Show real directories for identically named projects, retain complete rename paths and improve comparison wrapping, spacing and narrow-panel reading.
+- Describe questions, task operations, coordination requests, skill discovery and artifact queries or reads using their actual requests and counts. Preserve list and table structure in member previews and explain the scope of their evidence.
+- Explain continuous-goal creation and opening. Associate budget, empty-objective and completion-evidence validation with the relevant input. Localize system reasons, usage numbers and keyboard guidance.
+- Derive activity status from recorded execution evidence. Identify historical messages without execution evidence while retaining original work identities, authors and content.
+
+#### Fixed
+
+- Accept every newly visible input in the batch released from a session queue, fixing omissions when delivery markers differ. Preserve exact failed retry batches and the accepted inputs frozen for a turn.
+- Prioritize complete recorded file-change summaries within the existing tool transport limit, retaining multi-file and long rename details. Complete original results remain available through the existing reader.
+- Use the shared structured missing-file error, with localized explanations that retain the real path and original diagnostic.
+- Persist folding choices promptly, restore keyboard focus ownership in work menus and retain ambiguous slash text as code rather than treating it as a command.
+
+#### Upgrade impact and known limitations
+
+- Database version remains 10, retaining user data and existing automatic migrations. Historical acceptance records, execution states and source content are not reconstructed.
+- Update custom clients and SDK integrations together to recognize the new `unobserved` execution-evidence status. Recorded manual pages and streaming checks cover their specific scenarios, not every Task/Mission orchestration, crash-recovery or automatic-compaction combination with mixed input batches.
+- macOS remains ad hoc signed without Apple notarization.
+
 ## 0.1.46 - 2026-11-05
 
 ### zh-CN

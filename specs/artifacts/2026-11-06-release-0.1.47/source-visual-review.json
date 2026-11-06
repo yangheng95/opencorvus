@@ -1,0 +1,18 @@
+{
+  "kind": "Review of existing QA screenshots during release preparation",
+  "images": [
+    {
+      "path": "../2026-11-06-home-goal-validation/26-final-objective-error-chinese.png",
+      "observation": "Inline objective error and field focus visible in Chinese goal dialog"
+    },
+    {
+      "path": "../2026-11-06-source-current-file-navigation/19-final-chinese-hint.png",
+      "observation": "Saved source excerpt and current-file action distinguish their content and destination"
+    },
+    {
+      "path": "../2026-11-06-review-record-reading/13-after-return-to-second-comparison.png",
+      "observation": "Original second change expanded and readable with list hidden; actual record count retained"
+    }
+  ],
+  "qualification": "All three images actually viewed. These are prior source-scenario evidence, not screenshots of this published version; no UI automation or new model requests."
+}

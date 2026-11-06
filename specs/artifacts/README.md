@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [0.1.47发布证据](2026-11-06-release-0.1.47/README.md)：冻结来源、原生矩阵、配对官网与公开交付。
+
 - [目标提问交付实页](2026-11-06-goal-question-delivery/README.md)：后台隔离页面与实际数据证据。
 
 - [首页目标表单与预算校验实页](2026-11-06-home-goal-validation/README.md)

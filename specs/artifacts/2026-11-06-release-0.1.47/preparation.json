@@ -1,0 +1,34 @@
+{
+  "version": "0.1.47",
+  "date": "2026-11-06",
+  "previousVersion": "0.1.46",
+  "reviewedProductHead": "9de0824e9dbbf679c05e20c4978dd3bb86b92973",
+  "backend": {
+    "files": [
+      "test/session-pending-delivery.test.ts",
+      "test/conversation-projector-ownership.test.ts",
+      "test/conversation-transport-projection.test.ts",
+      "test/read-tool-error-contract.test.ts"
+    ],
+    "tests": 57,
+    "assertions": 300,
+    "runner": "original isolated run-tests.ts",
+    "conclusion": "success"
+  },
+  "versionChangelogProtocol": {
+    "files": [
+      "script/sync-version.test.ts",
+      "packages/util/test/changelog.test.ts",
+      "packages/transport-protocol/test/contract.test.ts"
+    ],
+    "tests": 50,
+    "assertions": 1195,
+    "conclusion": "success"
+  },
+  "frozenInstall": "1659 installs / 1905 packages; no changes",
+  "dependencyAudit": "1732 packages; 0 vulnerabilities",
+  "generate": "complete script/generate.ts exited 0; registered generated targets unchanged",
+  "documentation": "352 operations / 26 groups; 20 current architecture documents",
+  "historyEntries": 83,
+  "qualification": "Focused local checks only; canonical native and paired website results pending. No new real-provider requests."
+}
