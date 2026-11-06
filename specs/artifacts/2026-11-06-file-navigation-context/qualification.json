@@ -1,0 +1,198 @@
+{
+  "at": "2026-11-06T11:43:54.304Z",
+  "status": "passed",
+  "scope": "普通项目文件工作台显示独立整行路径，清楚区分不同目录的同名文件",
+  "singleAgent": true,
+  "userWindowsPort18571AndRealDatabaseUntouched": true,
+  "ui": {
+    "nativeDevelopmentUi": true,
+    "backgroundTabs": [
+      "95",
+      "96",
+      "97"
+    ],
+    "allOwnTabsClosed": true,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "manualInteractionAndScreenshotReview": true,
+    "automatedUiTests": false,
+    "screenshots": [
+      "01-current-file-context.png",
+      "02-real-missing-file-pane.png",
+      "03-open-original-change.png",
+      "04-current-file-after-missing.png",
+      "05-follow-source-from-delivery.png",
+      "06-real-same-name-search.png",
+      "07-current-summary-header-before.png",
+      "08-history-summary-header-before.png",
+      "09-current-summary-header-after.png",
+      "10-history-summary-header-after.png",
+      "11-source-search-header-after.png",
+      "12-narrow-path-header-after.png",
+      "13-history-header-final-380.png",
+      "14-history-header-final-320.png",
+      "15-current-header-final-320.png",
+      "16-current-find-final-320.png",
+      "17-three-question-recap-final.png",
+      "18-three-answers-final.png",
+      "19-file-summary-final.png",
+      "20-missing-file-final.png",
+      "21-review-summary-final.png",
+      "22-current-delivery-path-final.png",
+      "23-project-source-path-final.png",
+      "24-message-source-open-final.png",
+      "25-english-file-context-final.png"
+    ],
+    "hero": "14-history-header-final-320.png",
+    "failedFirstPass": "12-narrow-path-header-after.png",
+    "finalScreenshots": [
+      "13-history-header-final-380.png",
+      "14-history-header-final-320.png",
+      "15-current-header-final-320.png",
+      "16-current-find-final-320.png",
+      "17-three-question-recap-final.png",
+      "18-three-answers-final.png",
+      "19-file-summary-final.png",
+      "20-missing-file-final.png",
+      "21-review-summary-final.png",
+      "22-current-delivery-path-final.png",
+      "23-project-source-path-final.png",
+      "24-message-source-open-final.png",
+      "25-english-file-context-final.png"
+    ]
+  },
+  "checks": {
+    "typecheck-final-scope": 0,
+    "ui-build-final-project-scope": 0,
+    "locale-final": 0,
+    "docs-final": 0,
+    "architecture-final": 0
+  },
+  "readbacks": {
+    "phases": [
+      "before-initial",
+      "before-ended",
+      "after-initial",
+      "after-ended",
+      "final-initial",
+      "final-ended"
+    ],
+    "originalChecksEach": 9,
+    "retainedActualQuestions": 3,
+    "retainedAnswerValues": 5,
+    "retainedGoalStatus": "complete",
+    "retainedFileBytes": 559,
+    "retainedAddedLines": 23,
+    "retainedDeletedLines": 0,
+    "sameNameFiles": [
+      {
+        "path": "deliverables/summary.md",
+        "bytes": 2538
+      },
+      {
+        "path": "deliverables/history-before-B-006-closure/summary.md",
+        "bytes": 1803
+      }
+    ],
+    "sameNamePublicAndDiskContentExact": true
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "originalRows": 322517,
+      "currentRows": 322519,
+      "schema": 10,
+      "tables": 92,
+      "projects": 135,
+      "physicalAttachments": 315,
+      "originalRowsAndBusinessContentExact": true,
+      "sourceDatabaseExact": true,
+      "filesystemExclusions": 0,
+      "memoryTransitions": [],
+      "capacityReplacements": [],
+      "ownedRuntime": {
+        "leases": 1,
+        "grants": 1,
+        "allAddedRowsLinkedToOriginalNativeOccurrence": true
+      },
+      "modelRequests": 0,
+      "cumulativeRequests": 1524,
+      "reserveMs": 2566636,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": 2,
+      "uiEntry": "main-D4kmW2xg.js"
+    },
+    {
+      "phase": "after",
+      "originalRows": 322519,
+      "currentRows": 322521,
+      "schema": 10,
+      "tables": 92,
+      "projects": 135,
+      "physicalAttachments": 315,
+      "originalRowsAndBusinessContentExact": true,
+      "sourceDatabaseExact": true,
+      "filesystemExclusions": 0,
+      "memoryTransitions": [],
+      "capacityReplacements": [],
+      "ownedRuntime": {
+        "leases": 1,
+        "grants": 1,
+        "allAddedRowsLinkedToOriginalNativeOccurrence": true
+      },
+      "modelRequests": 0,
+      "cumulativeRequests": 1524,
+      "reserveMs": 1812121,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": 2,
+      "uiEntry": "main-eUH4-sDc.js"
+    },
+    {
+      "phase": "final",
+      "originalRows": 322521,
+      "currentRows": 322523,
+      "schema": 10,
+      "tables": 92,
+      "projects": 135,
+      "physicalAttachments": 315,
+      "originalRowsAndBusinessContentExact": true,
+      "sourceDatabaseExact": true,
+      "filesystemExclusions": 0,
+      "memoryTransitions": [],
+      "capacityReplacements": [],
+      "ownedRuntime": {
+        "leases": 1,
+        "grants": 1,
+        "allAddedRowsLinkedToOriginalNativeOccurrence": true
+      },
+      "modelRequests": 0,
+      "cumulativeRequests": 1524,
+      "reserveMs": 843659,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": 2,
+      "uiEntry": "main-BC9C-I1r.js"
+    }
+  ],
+  "resources": {
+    "newRequests": 0,
+    "cumulativeRequests": 1524,
+    "pairedCopiesRetired": 6,
+    "minimumReserveMs": 843659,
+    "absoluteDeadline": 1793966147163
+  },
+  "limits": [
+    "本轮只读回归已实际完成的模型交付，没有新模型请求。",
+    "普通项目来源跳转已实际覆盖；截图24仍是普通项目文件，不能当作绝对只读来源或附件缓存分支的视觉证据。",
+    "只读绝对来源保持原显示合同；本轮未实际打开该分支。",
+    "未覆盖未保存草稿、任意长度的外部路径和所有布局；长路径仍可按宽度省略，完整路径保留在文字与标题提示。",
+    "版本0.1.47由独立用户会话处理，本轮产品改动不属于其已冻结的发布来源。"
+  ]
+}

@@ -377,6 +377,14 @@ before the filename. Explicit displayName values remain authored presentation
 labels without further path splitting. Ordinary filenames use the existing
 server-path syntax and retain every character. The heading's full-path title
 keeps the resource location available without changing its identity.
+For ordinary project files whose target path differs from that title, the workbench
+also shows the target location on its own full-width secondary row. Same-named files in different directories
+remain visibly distinguishable after leaving the Explorer. The filename and dirty
+marker retain their own row; a long path truncates on its separate line and remains
+complete in accessible text and the original title. This reads the existing target
+under the server's path syntax, with no new navigation or resource identity.
+Read-only absolute Sources retain their existing authored name, badge and full-path
+title; internal attachment storage locations do not become new heading content.
 Body-reference click delegation also retains the exact already parsed path
 attribute, including whitespace decoded from an authored Markdown destination.
 Empty-attribute validation does not supply a trimmed replacement resource.

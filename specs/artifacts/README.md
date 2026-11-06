@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件导航上下文实页](2026-11-06-file-navigation-context/README.md)：实际文件错误、原比较和当前文件。
+
 - [0.1.47发布证据](2026-11-06-release-0.1.47/README.md)：冻结来源、原生矩阵、配对官网与公开交付。
 
 - [目标提问交付实页](2026-11-06-goal-question-delivery/README.md)：后台隔离页面与实际数据证据。

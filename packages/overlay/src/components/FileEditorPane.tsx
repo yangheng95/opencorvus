@@ -191,6 +191,9 @@ export function FileEditorPane() {
   const fileTitle = createMemo(() => displayName() ?? pathWithForwardSeparators(
     path(), target()?.sourceAbsolutePath || target()?.directory || "",
   ).split("/").at(-1) ?? "")
+  const fileLocation = createMemo(() => pathWithForwardSeparators(
+    path(), target()?.directory || "",
+  ))
   const textContent = createMemo(() => canEdit(content()))
   const markdownFile = () => textContent() && extToLang(path()) === "markdown"
   const previewVisible = () => markdownFile() && textView() === "preview"
@@ -706,6 +709,9 @@ export function FileEditorPane() {
           >
             <Icon name="close" />
           </Button>
+          <Show when={!target()?.sourceAbsolutePath && fileLocation() !== fileTitle()}>
+            <span class="file-editor-title-path" title={path()}>{fileLocation()}</span>
+          </Show>
         </header>
         <Show when={markdownFile()}>
           <div class="file-editor-text-toolbar">

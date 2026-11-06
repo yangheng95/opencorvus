@@ -270,15 +270,16 @@ code .file-link:focus-visible {
   flex: 0 0 auto;
   min-height: calc(36px * var(--ui-scale));
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--ui-gap-sm);
-  padding: 0 var(--ui-gap-sm);
+  padding: var(--ui-gap-xs) var(--ui-gap-sm);
   background: transparent;
   border-bottom: var(--oc-border-width) solid var(--divider-soft);
 }
 
 .file-editor-title {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-width: 0;
   display: inline-flex;
   align-items: center;
@@ -286,6 +287,16 @@ code .file-link:focus-visible {
   font-family: var(--mono);
   font-size: var(--ui-font-body);
   color: var(--text-strong);
+}
+
+.file-editor-title-path {
+  flex: 0 0 100%;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+  font-size: var(--ui-font-caption);
+  color: var(--text-muted);
 }
 
 .file-editor-title-name {
