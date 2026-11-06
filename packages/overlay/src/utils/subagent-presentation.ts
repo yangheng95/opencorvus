@@ -5,6 +5,7 @@ import { CONVERSATION_AGENT_ACTIVITY_LIMIT } from "@opencorvus-ai/transport-prot
 import { compareTimelineOrderKeys, requireTimelineOrderKey } from "./timeline-order"
 import { describeCurrentToolPart, type ToolDisplayStatus } from "./tool"
 import { distinctIdentitySuffix } from "./identity-suffix"
+import { markdownPreviewText } from "./markdown-preview"
 
 const SUBAGENT_PROGRESS_CARD_PREFIX = "subagent-session:"
 const SUBAGENT_PROGRESS_GRID_PREFIX = "subagent-grid:"
@@ -211,7 +212,7 @@ export function subagentProgressEvents(input: {
     const part = input.record.activity[index]
     const id = String(part?.id || `${input.record.sessionID}:${index}`)
     if (part?.type === "text") {
-      const text = compactProgressText(part.text)
+      const text = compactProgressText(markdownPreviewText(part.text))
       if (text) events.push({ id, kind: "text", text })
       continue
     }

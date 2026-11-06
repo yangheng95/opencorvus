@@ -1,5 +1,16 @@
 # 07 — Overlay Panels And Task Evidence
 
+Compact member text activity retains original Markdown line breaks and indentation
+within its existing 360-character transport budget. Historical bounded reads,
+full-history projection and live Part updates use the same transport projection.
+Only member text previews pass through the existing Marked lexer into synchronous
+plain text, then the existing 180-character row budget. Text activity uses the
+shared body typography and at most two visible lines; tool rows stay compact. Heading and
+inline labels remain readable; list items, table cells and rows retain separators,
+while code content retains its symbols. Tool details, paths, errors and the full
+original transcript keep their own display contracts. The preview adds no HTML
+mount, asynchronous renderer, request, persistent state or migration.
+
 The `/ui` document and its static resources share the server process's
 [immutable resource ownership](server-runtime-readiness.md#static-frontend-resource-ownership).
 Rebuilding an input directory does not switch a running page's module version;

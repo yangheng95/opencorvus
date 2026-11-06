@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [成员活动摘要的可读文本](records/2026-11/2026-11-06-member-activity-reading.md)：保留结构的有界活动和轻量文本预览。
+
 - [技能发现操作与结果摘要](records/2026-11/2026-11-06-skill-discovery-summary.md)：真实技能列表、搜索和数量阅读。
 
 - [文件修改记录的数量含义](records/2026-11/2026-11-06-change-record-count.md)：标题与实际修改记录对应、提问数量复核。

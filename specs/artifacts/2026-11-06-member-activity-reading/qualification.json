@@ -1,0 +1,106 @@
+{
+  "at": "2026-11-06T00:34:52.817Z",
+  "scope": "Readable original member activity and valid review column spacing",
+  "screenshots": 15,
+  "personallyReviewed": true,
+  "uiAutomationRun": false,
+  "uiEntry": "main-BuEPoVir.js",
+  "model": {
+    "newRequests": 0,
+    "cumulativeRequests": 1474,
+    "newAgents": 0,
+    "newMessages": 0
+  },
+  "protocol": {
+    "sessions": 8,
+    "activityTexts": 70,
+    "structuredTexts": 22,
+    "fullOriginalTexts": 142,
+    "originalPartTextExact": true,
+    "httpAndSseSnapshotExact": true,
+    "onlyActivityTextProjectionChanged": true,
+    "tablePartSeparatelyRead": true,
+    "originalQuestionFileSessions": 3,
+    "originalQuestionFileFullParts": 8
+  },
+  "checks": {
+    "positiveProtocolTests": 2,
+    "positiveAssertions": 6,
+    "typedPackages": 8,
+    "locales": 2,
+    "localeKeys": 2895,
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "currentArchitectureDocuments": 20,
+    "cssTokenReferences": 9183
+  },
+  "phases": [
+    {
+      "kind": "before",
+      "originals": 310406,
+      "current": 310408,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 3402187,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    },
+    {
+      "kind": "after",
+      "originals": 310408,
+      "current": 310410,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 3001768,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    },
+    {
+      "kind": "final",
+      "originals": 310410,
+      "current": 310412,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 2494876,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    }
+  ],
+  "retirement": {
+    "nativeAndLauncherExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "publicShutdownStatuses": [
+      200,
+      200,
+      200
+    ],
+    "pairedCredentialAndModelCatalogCopiesRetired": 6,
+    "ownedBrowserTabsClosed": 3,
+    "userWindowAndPort18571Untouched": true
+  },
+  "limits": [
+    "No new model execution or live PartUpdated/delta E2E sample.",
+    "Original incomplete Markdown at the 360-character boundary remains a bounded fragment.",
+    "Original technical HTML text is retained, and full transcript remains the complete reader.",
+    "Main card title-deduplicating previews are outside this member-only change.",
+    "read_agent_message fixed English summary remains a separately observed next candidate."
+  ]
+}

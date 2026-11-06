@@ -943,7 +943,10 @@ export function projectConversationAgentActivityPart(value: unknown): Conversati
   if (!id || !messageID || !orderKey) return null
   const base = { id, messageID, orderKey }
   if (part.type === "text") {
-    const text = compactConversationAgentActivityText(part.text, 360)
+    // Preserve block boundaries until the consumer interprets the Markdown.
+    // Flattening here turns headings, lists and tables into unrelated syntax.
+    const source = String(part.text ?? "").trim()
+    const text = source.length <= 360 ? source : `${source.slice(0, 357).trimEnd()}...`
     return text ? { ...base, type: "text", text } : null
   }
   if (part.type === "tool") {

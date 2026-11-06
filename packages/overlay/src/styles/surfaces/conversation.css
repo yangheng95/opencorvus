@@ -3426,6 +3426,27 @@
   white-space: nowrap;
 }
 
+.subagent-progress-event[data-kind="text"] {
+  align-items: start;
+  padding-block: var(--ui-gap-3xs);
+  color: var(--text);
+  font-size: var(--ui-font-body);
+  line-height: var(--ui-line-height-normal);
+}
+
+.subagent-progress-event[data-kind="text"] > svg {
+  align-self: start;
+  margin-top: calc((1em * var(--ui-line-height-normal) - 16px * var(--ui-scale)) / 2);
+}
+
+.subagent-progress-event[data-kind="text"] .subagent-progress-event__main {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .subagent-progress-event__main:has(.subagent-progress-event__label) {
   display: flex;
   gap: var(--ui-gap-sm);

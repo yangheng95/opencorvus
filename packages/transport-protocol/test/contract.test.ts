@@ -642,7 +642,7 @@ describe("conversation message part projection", () => {
     expect(isConversationRenderableMessagePartType("boundary")).toBe(true)
   })
 
-  test("agent progress activity normalizes text and bounds tool payloads", () => {
+  test("agent progress activity preserves text structure and bounds tool payloads", () => {
     expect(CONVERSATION_AGENT_ACTIVITY_LIMIT).toBe(24)
     expect(
       projectConversationAgentActivityPart({
@@ -657,7 +657,7 @@ describe("conversation message part projection", () => {
       messageID: "message_activity",
       orderKey: "v1:0000000000000100:0000000000000030:0000000000000000:part:part_text",
       type: "text",
-      text: "Inspecting the current layout",
+      text: "Inspecting\n\n the current layout",
     })
     const tool = projectConversationAgentActivityPart({
       id: "part_tool",
@@ -682,5 +682,24 @@ describe("conversation message part projection", () => {
       },
     })
     expect(JSON.stringify(tool).length).toBeLessThan(1_200)
+  })
+
+  test("agent progress text retains Markdown indentation within its character budget", () => {
+    const source = "## 进展\n\n- **已完成**\n  - `a * b`\n\n| 项目 | 结果 |\n| --- | --- |\n| 测试 | 通过 |"
+    const part = {
+      id: "part_structured_text",
+      messageID: "message_activity",
+      orderKey: "v1:0000000000000100:0000000000000030:0000000000000000:part:part_structured_text",
+      type: "text",
+      text: `  ${source}  `,
+    }
+    expect(projectConversationAgentActivityPart(part)).toEqual({
+      ...part,
+      text: source,
+    })
+    expect(projectConversationAgentActivityPart({ ...part, text: "甲".repeat(400) })).toEqual({
+      ...part,
+      text: "甲".repeat(357) + "...",
+    })
   })
 })
