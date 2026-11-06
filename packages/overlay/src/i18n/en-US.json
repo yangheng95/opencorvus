@@ -1466,7 +1466,7 @@
   "interaction.custom_allowed": "Custom answers allowed",
   "interaction.option_unavailable": "Unavailable in this request",
   "interaction.no_answer_provided": "No answer provided",
-  "interaction.reply_summary": "Reply submitted · Total: {{total}} · Answered: {{answered}} · Left blank: {{blank}}",
+  "interaction.reply_summary": "Reply submitted · Total questions: {{total}} · Answered: {{answered}} · Left blank: {{blank}}",
   "interaction.answer_line": "- **{{label}}**: {{value}}",
   "interaction.answer_separator": ", ",
   "interaction.question_position": "Question {{index}} of {{count}}",

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [三题回答到文件交付的真实旅程](records/2026-11/2026-11-06-question-delivery-journey.md)：真实模型、答案、修改摘要和交付正文。
+
 - [审阅到当前文件的阅读往返](records/2026-11/2026-11-06-current-file-reading.md)：当前正文、文件作用域和原记录。
 
 - [审阅区的阅读空间](records/2026-11/2026-11-06-review-reading-space.md)：原始记录、比较正文与窄侧栏。

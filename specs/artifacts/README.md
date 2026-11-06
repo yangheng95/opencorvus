@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [三题回答到文件交付实页](2026-11-06-question-delivery-journey/README.md)：精确Sol问答与文件实际结果。
+
 - [当前文件阅读往返实页](2026-11-06-current-file-reading/README.md)：原记录与当前文件实际阅读。
 
 - [审阅区阅读空间实页](2026-11-06-review-reading-space/README.md)：真实修改记录和比较阅读。

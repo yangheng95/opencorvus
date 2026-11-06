@@ -1,0 +1,176 @@
+{
+  "at": "2026-11-06T04:29:31.778Z",
+  "scope": "Real three-question answers through file delivery; explicit question and operation count units",
+  "productChange": {
+    "files": [
+      "packages/overlay/src/i18n/zh-CN.json",
+      "packages/overlay/src/i18n/en-US.json"
+    ],
+    "existingKeysChanged": 3,
+    "newLocaleKeys": 0,
+    "localeKeys": 2904,
+    "algorithmAndCanonicalFacts": "unchanged"
+  },
+  "actualWorkflow": {
+    "model": "openai/gpt-6.1-sol",
+    "streaming": true,
+    "newRequests": 7,
+    "workRequests": 6,
+    "existingProjectMemoryRequests": 1,
+    "allStatuses": 200,
+    "allReaders": "settled/eof",
+    "delegations": 0,
+    "newProjects": 1,
+    "newSessions": 1,
+    "questions": 3,
+    "answerValues": 5,
+    "answers": [
+      [
+        "按原简报交付"
+      ],
+      [
+        "保留原日期"
+      ],
+      [
+        "事实表",
+        "行动清单",
+        "附核对备注"
+      ]
+    ],
+    "replyBeforeExpiryMs": 184990,
+    "toolSequence": [
+      {
+        "tool": "read",
+        "outcome": "completed"
+      },
+      {
+        "tool": "question",
+        "outcome": "completed"
+      },
+      {
+        "tool": "read",
+        "outcome": "failed"
+      },
+      {
+        "tool": "apply_patch",
+        "outcome": "completed"
+      },
+      {
+        "tool": "read",
+        "outcome": "completed"
+      }
+    ],
+    "failedRead": "Model probed the not-yet-created deliverables directory; retained as an original tool error, followed by a successful create and readback",
+    "file": {
+      "path": "deliverables/客户确认.md",
+      "type": "add",
+      "bytes": 481,
+      "addedLines": 23,
+      "deletedLines": 0
+    },
+    "parsedFactRows": 5,
+    "parsedAnswerRows": 3,
+    "tables": 2,
+    "selection": "idle",
+    "publicHttpFullToolPartsAndConnectedEventSnapshotExact": true
+  },
+  "manual": {
+    "screenshots": 14,
+    "personallyReviewed": true,
+    "uiAutomationRun": false,
+    "desktopViewport": [
+      1280,
+      720
+    ],
+    "actualQuestionDialogEmptyFilledClearAndRestore": true,
+    "questionCounts": [
+      {
+        "answered": 0,
+        "total": 3
+      },
+      {
+        "answered": 3,
+        "total": 3
+      },
+      {
+        "answered": 2,
+        "total": 3
+      },
+      {
+        "answered": 3,
+        "total": 3
+      }
+    ],
+    "afterChineseSummary": "回答已提交 · 共 3 题 · 已答 3 题 · 留空 0 题",
+    "afterFailedOperation": "1 次失败",
+    "originalPartialAnswerSummary": "回答已提交 · 共 3 题 · 已答 2 题 · 留空 1 题",
+    "afterEnglishSummary": "Reply submitted · Total questions: 3 · Answered: 2 · Left blank: 1",
+    "reviewRecordCount": 1,
+    "reviewAddedLines": 23,
+    "reviewDeletedLines": 0,
+    "currentPreviewSourceAndAnswersPersonallyRead": true,
+    "closeFileReturnsToReview": true
+  },
+  "originalRegression": {
+    "sessions": 3,
+    "fullCanonicalQuestionAndFileTools": 8,
+    "originalFactsExactAtAfterStartAndEnd": true
+  },
+  "preservation": {
+    "rows": [
+      310440,
+      312112,
+      312114
+    ],
+    "schema": 10,
+    "tables": 92,
+    "originalProjectsProtected": 130,
+    "finalFullProjects": 131,
+    "originalPhysicalAttachmentFilesProtected": 301,
+    "finalFullPhysicalAttachmentFiles": 303,
+    "newPhysicalAttachmentFiles": 2,
+    "originalMaterialsAndGit": "exact",
+    "originalRuntimeCapacitySlots": "Two expired slots reacquired by this exact runtime and released normally; all original business content preserved",
+    "sourceDatabases": "preserved",
+    "filesystemExclusions": 0,
+    "allNewFactsBoundToOwnQaProject": true,
+    "afterAdds": "one normal runtime activation lease and one grant"
+  },
+  "retirement": {
+    "publicShutdown": [
+      200,
+      200
+    ],
+    "nativeAndLauncherExitCodes": [
+      0,
+      0
+    ],
+    "pairedCredentialAndCatalogCopiesRetired": 4,
+    "sourceCredentialMetadataAndCatalogBytesPreserved": true,
+    "ownTabsClosed": [
+      73,
+      74
+    ],
+    "minimumReserveMs": 2215652,
+    "optionalFinalNotAllocated": true,
+    "userWindowsProcessesPort18571AndRealDatabaseUntouched": true
+  },
+  "limits": [
+    "Only question summary and failed-operation count wording changed; current file-summary implementation was verified by a fresh real write, not replaced.",
+    "One original read failure remains visible; it did not prevent delivery. Raw technical errors and authored/model text preserve their language.",
+    "Native hidden-input check helper failed; real visible labels and native keyboard worked. No product checkbox/radio defect was inferred.",
+    "Initial partial-answer screenshot has a tooltip over the second answer; image13 shows the unobstructed original facts.",
+    "Private checker errors were corrected and original checks rerun: missing profiles triggered normal new-QA bootstrap; stored failed maps to public error; SQLite row prototype normalized without changing fields.",
+    "No new scheduler, migration, Task/Mission/Goal lifecycle, draft save or network-recovery acceptance. No version or release change."
+  ],
+  "checks": {
+    "typedPackages": 8,
+    "locales": 2,
+    "localeKeys": 2904,
+    "nodeProductionBundle": "passed",
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "currentArchitectureDocuments": 20,
+    "uiAutomationRun": false
+  }
+}
