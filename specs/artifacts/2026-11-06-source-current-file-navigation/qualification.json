@@ -1,0 +1,317 @@
+{
+  "at": "2026-11-06T06:04:36.233Z",
+  "scope": "Direct navigation from immutable saved file excerpts to the existing current-file workbench",
+  "product": {
+    "component": "SourceParts.SourceEntry",
+    "action": "Project files: Read current file; attachment sources: existing Open source file",
+    "flow": "Capture the original Source, close the excerpt, then call the existing source-opening function",
+    "data": "Original Source path/range/snippet and first-source-per-Message identity retained",
+    "ownership": "Same resource retains the current draft; different resources use the existing unsaved-edit decision",
+    "backendApiSdkPermissionsSchemaTools": "unchanged"
+  },
+  "actualModelWork": {
+    "newRequests": 0,
+    "cumulativeRequests": 1506,
+    "preexistingExactSolHistory": true,
+    "accountStatuses": [
+      200,
+      200,
+      200
+    ],
+    "projectedModel": "gpt-6.1-sol",
+    "delegations": 0
+  },
+  "manual": {
+    "screenshots": 22,
+    "viewport": [
+      1280,
+      720
+    ],
+    "personallyReviewed": true,
+    "uiAutomationRun": false,
+    "ordinaryInAppDialogs": true,
+    "finalEnglishAndChineseViewed": true,
+    "cleanNavigation": true,
+    "originalExcerptsRetained": true,
+    "twoReadingsOneFile": true,
+    "crossFileCancelRetainsDraftAndSourceFocus": true,
+    "explicitDiscardOpensSelectedSource": true,
+    "sameFileActionRetainsDraft": true,
+    "explicitDiscardReloadReadsOriginal287Bytes": true,
+    "movedOriginalPathHasReadableError": true,
+    "movedSourceExcerptStillReadable": true,
+    "escapeReturnsSourceFocus": true,
+    "clipboardUsed": false,
+    "ownTabsClosed": [
+      "79",
+      "80",
+      "81"
+    ]
+  },
+  "facts": {
+    "sourceSession": "ses_-zUPpdwu2zzKVC1xIH6G",
+    "sourceParts": 6,
+    "sameFileSavedReadings": 5,
+    "savedExcerptBytes": [
+      259,
+      259,
+      268,
+      268,
+      286
+    ],
+    "currentFileBytes": 287,
+    "readPreviewOmitsFinalNewline": true,
+    "otherPublicSources": 5,
+    "movedPathStatus": 404,
+    "actualCurrentMovedFileStatus": 200,
+    "actualCurrentMovedFileBytes": 227,
+    "originalPublicSessions": 6,
+    "originalFullTools": 28,
+    "originalQuestionsFilesAndFullPartsPreserved": true
+  },
+  "preservation": {
+    "schema": 10,
+    "tables": 92,
+    "initialRows": 318065,
+    "fullProjects": 133,
+    "fullPhysicalAttachments": 307,
+    "filesystemExclusions": 0,
+    "allOriginalRowsAndSourceDatabaseExact": true,
+    "allProjectFilesConfigurationGitAndAttachmentBytesExact": true,
+    "onlyNewRuntimeLeaseAndGrantPerPhase": true,
+    "phases": [
+      {
+        "at": "2026-11-06T05:48:29.082Z",
+        "kind": "before",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 318065,
+        "current": 318067,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 64599,
+            "after": 64600
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 64541,
+            "after": 64542
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 307,
+        "projects": 133,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1506,
+        "reserveMs": 4157461,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-JvTevNEq.js"
+      },
+      {
+        "at": "2026-11-06T05:56:12.709Z",
+        "kind": "after",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 318067,
+        "current": 318069,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 64600,
+            "after": 64601
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 64542,
+            "after": 64543
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 307,
+        "projects": 133,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1506,
+        "reserveMs": 3697625,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BkdLL8yR.js"
+      },
+      {
+        "at": "2026-11-06T06:04:13.149Z",
+        "kind": "final",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 318069,
+        "current": 318071,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 64601,
+            "after": 64602
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 64543,
+            "after": 64544
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 307,
+        "projects": 133,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1506,
+        "reserveMs": 3277121,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BkdLL8yR.js"
+      }
+    ]
+  },
+  "retirement": {
+    "publicShutdownStatuses": [
+      200,
+      200,
+      200
+    ],
+    "nativeAndLauncherExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "physicalOutputRequestSettled": true,
+    "pairedCredentialCatalogCopiesRetired": 6,
+    "minimumReserveMs": 3277121,
+    "deadlineUnchanged": true
+  },
+  "checks": {
+    "workspaceTypecheck": "8 packages passed",
+    "localeCatalogs": "2 locales / 2908 keys",
+    "ordinaryNodeBuilds": 2
+  },
+  "limits": [
+    "No new model execution; this batch reads retained real Sol history.",
+    "No saved attachment source with snippet was present, so attachment wording/navigation lacks a new visual sample.",
+    "Web excerpts, new streaming Sources, independent Side Chat/Task views, screen-reader audio and other platforms were not newly exercised.",
+    "External writes without canonical observations, save/conflict paths and concurrent model mutations are not this navigation qualification.",
+    "No new clipboard read/copy behavior was exercised."
+  ],
+  "screenshots": [
+    {
+      "file": "01-before-saved-excerpt.png",
+      "caption": "前态：保存摘录说明可打开当前文件，弹窗只有复制和关闭。"
+    },
+    {
+      "file": "02-before-current-file.png",
+      "caption": "前态：先关闭再激活原来源，当前文件实际为12月3日和待客户复核。"
+    },
+    {
+      "file": "03-after-english-excerpt-action.png",
+      "caption": "首版修后英文直接阅读动作，首轮原摘录保持。"
+    },
+    {
+      "file": "04-after-english-current-file.png",
+      "caption": "英文动作进入原工作台的当前文件。"
+    },
+    {
+      "file": "05-after-chinese-excerpt-action.png",
+      "caption": "首版修后中文动作和保存内容/当前文件区分。"
+    },
+    {
+      "file": "06-after-chinese-current-file.png",
+      "caption": "中文动作进入最新已记录的交付正文。"
+    },
+    {
+      "file": "07-unsaved-draft.png",
+      "caption": "仅编辑器内加入本人核验草稿，未保存。"
+    },
+    {
+      "file": "08-brief-excerpt-before-switch.png",
+      "caption": "脏文件存在时打开另一个真实来源的摘录。"
+    },
+    {
+      "file": "09-unsaved-navigation-decision.png",
+      "caption": "新动作先关闭摘录，再由原未保存确认拥有决定。"
+    },
+    {
+      "file": "10-cancel-keeps-draft.png",
+      "caption": "取消切换后原文件及草稿保持，焦点回来源入口；原悬停提示同时可见。"
+    },
+    {
+      "file": "11-discard-opens-brief.png",
+      "caption": "明确放弃后打开所选brief，原材料仍是原日期和行动。"
+    },
+    {
+      "file": "12-two-readings-one-file.png",
+      "caption": "同一路径两次来源展开，保留1/2和其余来源数量；与文件修改数量分开。"
+    },
+    {
+      "file": "13-later-reading-excerpt.png",
+      "caption": "后一次读取仍保存当时的更新说明，尚无后续待复核追加。"
+    },
+    {
+      "file": "14-later-reading-current-file.png",
+      "caption": "从后一次摘录进入当前文件，显示后续待客户复核追加。"
+    },
+    {
+      "file": "15-moved-source-saved-excerpt.png",
+      "caption": "原936真实已移动文件仍保留当时草稿摘录。"
+    },
+    {
+      "file": "16-moved-source-current-path-error.png",
+      "caption": "新动作读取原路径，工作台显示实际找不到文件及重试。"
+    },
+    {
+      "file": "17-moved-source-excerpt-preserved.png",
+      "caption": "当前路径404后再开原摘录仍可阅读；Escape后焦点回原入口。"
+    },
+    {
+      "file": "18-final-english-hint.png",
+      "caption": "最终英文明确阅读目的地为文件工作台，不把草稿称为磁盘最新。"
+    },
+    {
+      "file": "19-final-chinese-hint.png",
+      "caption": "最终中文说明与直接阅读动作，原首版摘录保持。"
+    },
+    {
+      "file": "20-same-file-excerpt-over-draft.png",
+      "caption": "最终构建，同一当前文件有未保存草稿时查看原摘录。"
+    },
+    {
+      "file": "21-same-file-action-keeps-draft.png",
+      "caption": "点击新动作返回同一工作台并保留原未保存草稿。"
+    },
+    {
+      "file": "22-final-original-file-restored.png",
+      "caption": "明确放弃并重新加载后读取原287字节正文，星号消失；磁盘从未保存临时草稿。"
+    }
+  ]
+}

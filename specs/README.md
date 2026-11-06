@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [来源摘录到当前文件](records/2026-11/2026-11-06-source-current-file-navigation.md)：历史摘录与当前阅读的真实往返。
+
 - [两轮文件交付与历史阅读](records/2026-11/2026-11-06-two-turn-file-revision.md)：真实首版、反馈修订和当前正文。
 
 - [三题回答到文件交付的真实旅程](records/2026-11/2026-11-06-question-delivery-journey.md)：真实模型、答案、修改摘要和交付正文。

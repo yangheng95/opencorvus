@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [来源摘录到当前文件](2026-11-06-source-current-file-navigation.md)：实际入口、草稿保护与历史保全。
+
 - [两轮文件交付与历史阅读](2026-11-06-two-turn-file-revision.md)：原始比较与最新文件。
 
 - [三题回答到文件交付的真实旅程](2026-11-06-question-delivery-journey.md)：规范回答、真实文件和实页阅读。

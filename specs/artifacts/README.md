@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [来源摘录阅读往返](2026-11-06-source-current-file-navigation/README.md)：真实旧内容与当前文件的页面核验。
+
 - [两轮文件修订实页](2026-11-06-two-turn-file-revision/README.md)：真实反馈、逐次修改与当前正文。
 
 - [三题回答到文件交付实页](2026-11-06-question-delivery-journey/README.md)：精确Sol问答与文件实际结果。

@@ -406,6 +406,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
   const expanded = () => cardExpanded(excerptKey(), false)
   const displayLabel = () => [sourceLabel(props.source), props.attachmentCaption].filter(Boolean).join(" · ")
   const excerptLabel = () => `${t("chat.source_excerpt")}: ${displayLabel()}`
+  const fileOpenLabel = () => props.source.origin === "attachment" ? t("chat.source_open_file") : t("chat.source_open_current_file")
   const location = () => sourceLocation(props.source)
   const excerptClipboard = createClipboardCopy({
     text: () => props.source.snippet || "",
@@ -481,6 +482,23 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
             wide
             footer={
               <>
+                <Show when={props.source.path}>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    tone="neutral"
+                    aria-label={`${fileOpenLabel()}: ${displayLabel()}`}
+                    onClick={() => {
+                      const source = props.source
+                      setFileExcerptOpen(false)
+                      void openSourceFile(source)
+                    }}
+                  >
+                    <Icon name="file-document" size="compact" />
+                    {fileOpenLabel()}
+                  </Button>
+                </Show>
                 <ExcerptCopyButton />
                 <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setFileExcerptOpen(false)}>
                   {t("common.close")}
@@ -488,7 +506,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
               </>
             }
           >
-            <p>{t("chat.source_saved_excerpt_hint")}</p>
+            <p>{t(props.source.origin === "attachment" ? "chat.source_saved_attachment_excerpt_hint" : "chat.source_saved_excerpt_hint")}</p>
             <p class="msg-source-excerpt__location">{location()}</p>
             <pre class="msg-source-excerpt__snapshot" role="region" aria-label={excerptLabel()} tabIndex={0}>
               {props.source.snippet}

@@ -2109,6 +2109,13 @@ The shared Dialog reads that exact Source snippet and full source location,
 reusing the same value-owned Copy excerpt action. It preserves whitespace and
 distinguishes the saved excerpt from opening the current file. File leaves retain
 their compact group layout; the dialog adds only transient presentation state.
+The file excerpt footer offers the existing source-opening action directly.
+Project sources call it Read current file and explain that file-workbench content
+can differ from the saved excerpt; attachment sources retain Open source file
+and describe the recorded attachment. Activation captures the original Source,
+closes the excerpt, then enters the same file-workbench navigation owner. Existing
+unsaved-edit decisions and current-path read errors remain authoritative; opening
+the current resource never replaces the historical snippet.
 The label alone carries the link underline. Hover strengthens that label's
 decoration while metadata remains visually secondary; the complete entry keeps
 its existing activation area and visible keyboard focus.
