@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [产物请求摘要实页](2026-11-06-artifact-request-summary/README.md)：中英数量与原结果核对。
+
 - [折叠选择保存实页](2026-11-06-fold-preference-save/README.md)：真实关闭时序与重开复核。
 
 - [成员读取范围实页](2026-11-06-member-evidence-summary/README.md)：真实输入、摘要及原始结果。

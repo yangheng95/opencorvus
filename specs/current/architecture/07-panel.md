@@ -721,6 +721,16 @@ skills are displayed, including zero, from canonical metadata.count; the catalog
 total is not a matched-result count. Named loads retain their existing identity.
 Both surface tools share these localized action, count and numeric conventions.
 
+Compact `artifact_search` and `artifact_read` details name the number of submitted
+query or read requests from their original `queries` or `reads` arrays. They use
+the current locale and plural rules for running/completed calls. These counts do
+not mean matching files, distinct Artifacts, complete content or finished work;
+the original result envelope retains its continuations and per-request results.
+Receiving arguments or a bounded input without the array retain the actual Tool
+status. Original failures have priority, and full input/output disclosures keep
+their original identities and producer titles. Main and member views share this
+one display projection, without parsing titles or changing persisted Tool facts.
+
 Published Task Artifact previews and downloads read exact immutable bytes through
 the existing Project-identity context. The POST byte-read request does not require
 an available execution model. Task/Project ownership, original snapshot identity,

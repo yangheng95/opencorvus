@@ -610,6 +610,15 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
       ? tc("tool.artifact.file_count", count, { count: count.toLocaleString(localeTag()) })
       : statusLabel
   }
+  if (n === "artifactsearch" || n === "artifactread") {
+    const requests = n === "artifactsearch" ? safeInput.queries : safeInput.reads
+    const countKey = n === "artifactsearch" ? "tool.artifact.query_request_count" : "tool.artifact.read_request_count"
+    return (status === "running" || status === "completed") && Array.isArray(requests) && requests.length > 0
+      ? tc(countKey, requests.length, {
+          count: requests.length.toLocaleString(localeTag()),
+        })
+      : statusLabel
+  }
   if (n === "workartifactinspect" || n === "workartifactvalidate") {
     const formatLabels: Record<string, string> = {
       "office.spreadsheet@1": "tool.office.spreadsheet",

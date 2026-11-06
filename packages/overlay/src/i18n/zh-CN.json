@@ -1111,6 +1111,8 @@
   "tool.manage_task.modify_goal": "修改交付目标",
   "tool.manage_task.delete_goal": "移除交付目标",
   "tool.artifact.file_count": { "one": "{{count}} 个文件", "other": "{{count}} 个文件" },
+  "tool.artifact.query_request_count": { "one": "{{count}} 项查询请求", "other": "{{count}} 项查询请求" },
+  "tool.artifact.read_request_count": { "one": "{{count}} 项读取请求", "other": "{{count}} 项读取请求" },
   "tool.action.no_action": "本轮无需操作",
   "tool.action.mission_state": "管理多步任务状态",
   "tool.action.artifact_search": "检索工作产物",

@@ -1,0 +1,138 @@
+{
+  "at": "2026-11-06T02:17:56.790Z",
+  "scope": "Artifact query and read request counts in the current locale",
+  "uiEntry": "main-C7lJnm6J.js",
+  "screenshots": 14,
+  "personallyReviewed": true,
+  "uiAutomationRun": false,
+  "manualObservations": {
+    "beforeChineseProducerTitles": [
+      "Artifact queries (1)",
+      "Artifacts (1)"
+    ],
+    "chineseQueryRequestCounts": [
+      1,
+      2
+    ],
+    "chineseReadRequestCounts": [
+      1,
+      5,
+      7
+    ],
+    "englishSingularAndPlural": true,
+    "mainAndMemberViews": true,
+    "narrowMemberPanel": true,
+    "partialRead": {
+      "requestedItems": 5,
+      "complete": false,
+      "nextReadItems": 1
+    },
+    "continuation": {
+      "requestedItems": 1,
+      "originalByteOffset": 4915
+    },
+    "originalReferenceErrorVisible": true,
+    "afterChineseReload": {
+      "source": "original completed readonly Task734",
+      "groupExpanded": true,
+      "requestCounts": [
+        2,
+        5,
+        1
+      ],
+      "partialResultPreserved": true
+    },
+    "rawInputAndResultDisclosures": true
+  },
+  "model": {
+    "newRequests": 0,
+    "cumulativeRequests": 1474,
+    "newAgents": 0,
+    "newMessages": 0
+  },
+  "originalEvidence": {
+    "canonicalToolParts": 60,
+    "sessions": 17,
+    "queryCalls": 23,
+    "readCalls": 37,
+    "completedCalls": 59,
+    "failedCalls": 1,
+    "queryRequestEntries": 26,
+    "readRequestEntries": 128,
+    "entriesArePerCallScopeNotFilesOrUniqueArtifacts": true,
+    "partialReadCalls": 1,
+    "fullRequestAndResultUnchanged": true,
+    "httpAndSseSnapshotsExact": true,
+    "primaryQuestionFileSessions": 3,
+    "primaryFullToolParts": 8,
+    "originalQuestionFileFactsExact": true,
+    "newLiveToolEventsEmitted": 0
+  },
+  "checks": {
+    "typedPackages": 8,
+    "locales": 2,
+    "localeKeys": 2901,
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "currentArchitectureDocuments": 20,
+    "cssTokenReferences": 9183
+  },
+  "phases": [
+    {
+      "kind": "before",
+      "originals": 310422,
+      "current": 310424,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 3323484,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    },
+    {
+      "kind": "after",
+      "originals": 310424,
+      "current": 310426,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 2327833,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    }
+  ],
+  "retirement": {
+    "publicShutdownStatuses": [
+      200,
+      200
+    ],
+    "nativeAndLauncherExitCodes": [
+      0,
+      0
+    ],
+    "pairedCredentialAndCatalogCopiesRetired": 4,
+    "ownedBrowserTabsClosed": [
+      63,
+      64,
+      65
+    ],
+    "userWindowAndPort18571Untouched": true
+  },
+  "limits": [
+    "No natural8-item batch, receiving/running or bounded-input-without-array visual sample; those cases code-audited only.",
+    "Mission panel artifact actions use distinct Tool IDs and are outside this display branch.",
+    "Original reference failure and prior execution history are historical facts, not new failures or fresh recovery acceptance.",
+    "Original technical fields, input/output, errors and user/model prose retain their actual language.",
+    "A child Session was initially supplied as a Work link and correctly rejected with404 Work session not found; subsequent actual Task navigation reached the original member.",
+    "No new LLM, delegation, live Tool events, execution or scheduling acceptance.",
+    "Question/file history has public-fact regression only this batch; its actual UI screenshots belong to972 and are not counted here."
+  ]
+}

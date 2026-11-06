@@ -1111,6 +1111,8 @@
   "tool.manage_task.modify_goal": "Edit delivery goal",
   "tool.manage_task.delete_goal": "Remove delivery goal",
   "tool.artifact.file_count": { "one": "{{count}} file", "other": "{{count}} files" },
+  "tool.artifact.query_request_count": { "one": "{{count}} search request", "other": "{{count}} search requests" },
+  "tool.artifact.read_request_count": { "one": "{{count}} read request", "other": "{{count}} read requests" },
   "tool.action.no_action": "No action needed",
   "tool.action.mission_state": "Manage Mission state",
   "tool.action.artifact_search": "Search work artifacts",

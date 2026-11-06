@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [产物查询与读取请求摘要](records/2026-11/2026-11-06-artifact-request-summary.md)：原请求项数和中文语义。
+
 - [关闭页面前保存折叠选择](records/2026-11/2026-11-06-fold-preference-save.md)：快速收起、关闭与重开时的原选择。
 
 - [成员记录读取范围摘要](records/2026-11/2026-11-06-member-evidence-summary.md)：区分原成员报告、分配前记录及指定内容。

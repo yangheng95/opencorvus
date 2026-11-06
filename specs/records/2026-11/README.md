@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [产物查询与读取请求摘要](2026-11-06-artifact-request-summary.md)：单项、多项及原读取结果。
+
 - [关闭页面前保存折叠选择](2026-11-06-fold-preference-save.md)：工具、来源和跨会话折叠保存。
 
 - [成员记录读取范围摘要](2026-11-06-member-evidence-summary.md)：读取用途、数量与双语真实历史复核。
