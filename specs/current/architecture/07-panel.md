@@ -1097,7 +1097,24 @@ workbench consumes that revision to reveal a hidden Dock. Repeated resource
 identity preserves the editor draft and loaded content; line citations also
 retain their existing exact range reveal behavior.
 FileEditorPane captures the current focus origin with that explicit reveal revision,
-before an asynchronous read can mount its CodeEditor. Both range-free file opens
+before an asynchronous read can mount its CodeEditor. Source excerpt navigation
+consumes its one explicit file-open intent in the existing dialog close-autofocus
+lifecycle, after checking the captured API authority, source selection epoch and
+directory. Reopening the excerpt or cleaning up its entry retires that intent.
+For a clean file, normal close restores its opener synchronously; existing
+asynchronous file admission then commits the reveal from that stable origin,
+including already mounted files. Dirty-file navigation still uses the existing
+unsaved decision before admission. Dialog and CodeEditor retain their sole focus
+lifecycles and the editor's protection for another control chosen during loading.
+The native Markdown preview consumes the same explicit reveal revision once when
+it is the visible, connected, sized and ready content view. Its existing pane
+origin/BODY/self guard owns the native focus handoff through the shared frame
+scheduler; other focused controls retain ownership and settle that reveal. A view
+toggle or ordinary content refresh does not create a new reveal. Hiding or
+cleaning up the pane cancels the scheduled preview action. The hidden CodeEditor
+retains its own layout/reveal lifecycle, and file-scoped Find still opens that
+same editor's search without another query or draft owner.
+Both range-free file opens
 and citations use that layout-measured reveal for keyboard handoff. A newly created
 file can receive input immediately; no synthetic line range is added. Artifact
 editors without an explicit workbench reveal revision retain their own focus flow.

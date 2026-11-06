@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [附件来源与只读阅读](records/2026-11/2026-11-06-attachment-source-reading.md)：原附件、保存摘录与只读文件的真实体验。
+
 - [文件保存与冲突恢复](records/2026-11/2026-11-06-file-save-recovery.md)：新隔离项目的真实保存、冲突及恢复体验。
 
 - [文件编辑与未保存决定](records/2026-11/2026-11-06-file-edit-decision.md)：源码、预览与切换/关闭的真实编辑体验。

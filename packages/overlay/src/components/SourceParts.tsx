@@ -401,6 +401,8 @@ function SourceExcerptBody(props: { source: ConversationSourcePart }) {
 
 function SourceEntry(props: { source: ConversationSourcePart; index: number; showIndex: boolean; omitDirectoryCaption: boolean; attachmentCaption: string }) {
   const [fileExcerptOpen, setFileExcerptOpen] = createSignal(false)
+  let pendingExcerptFileOpen: (() => void) | undefined
+  onCleanup(() => { pendingExcerptFileOpen = undefined })
   const expandableExcerpt = () => props.source.type !== "source-file" && Boolean(props.source.snippet)
   const excerptKey = () => conversationSourceExcerptKey(props.source)
   const expanded = () => cardExpanded(excerptKey(), false)
@@ -469,6 +471,7 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
             onClick={(event) => {
               event.stopPropagation()
               pauseAutoScrollForReading(event.currentTarget)
+              pendingExcerptFileOpen = undefined
               setFileExcerptOpen(true)
             }}
           >
@@ -478,6 +481,11 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
           <Dialog
             open={fileExcerptOpen()}
             onClose={() => setFileExcerptOpen(false)}
+            onCloseAutoFocus={() => {
+              const open = pendingExcerptFileOpen
+              pendingExcerptFileOpen = undefined
+              open?.()
+            }}
             title={t("chat.source_saved_excerpt_title", { source: displayLabel() })}
             wide
             footer={
@@ -491,8 +499,14 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
                     aria-label={`${fileOpenLabel()}: ${displayLabel()}`}
                     onClick={() => {
                       const source = props.source
+                      const authority = captureApiAuthority()
+                      const epoch = boardStore.selectEpoch
+                      const directory = sourceDirectory()
+                      pendingExcerptFileOpen = () => {
+                        if (!isApiAuthorityCurrent(authority) || boardStore.selectEpoch !== epoch || sourceDirectory() !== directory) return
+                        void openSourceFile(source)
+                      }
                       setFileExcerptOpen(false)
-                      void openSourceFile(source)
                     }}
                   >
                     <Icon name="file-document" size="compact" />

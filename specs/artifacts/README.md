@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [附件来源阅读实页](2026-11-06-attachment-source-reading/README.md)：后台独立页面及完整附件核对。
+
 - [文件保存恢复实页](2026-11-06-file-save-recovery/README.md)：真实保存、受控磁盘修改与冲突反馈。
 
 - [文件编辑决定实页](2026-11-06-file-edit-decision/README.md)：真实临时草稿、离开提示和重新打开。

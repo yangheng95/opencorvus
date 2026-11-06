@@ -1,0 +1,193 @@
+{
+  "at": "2026-11-06T14:35:27.662Z",
+  "status": "scoped reading fixes verified; ongoing iteration remains active",
+  "scope": "Excerpt close lifecycle admits the explicit file action once; visible native Markdown preview receives the existing explicit reveal revision",
+  "singleAgent": true,
+  "noDelegation": true,
+  "userWindowsProcessesPort18571AndRealDatabaseUntouched": true,
+  "ui": {
+    "nativeDevelopmentUi": true,
+    "backgroundTabs": [
+      "106",
+      "107",
+      "108",
+      "109"
+    ],
+    "allOwnTabsClosed": true,
+    "manualInteractionsAndIndividualScreenshotReview": true,
+    "automatedUiTests": false,
+    "screenshots": [
+      "01-saved-attachment-excerpt-before.png",
+      "02-original-readonly-file-before.png",
+      "03-find-query-entry-before.png",
+      "04-next-search-result-before.png",
+      "05-excerpt-file-keyboard-scope-before.png",
+      "06-direct-source-file-search-before.png",
+      "07-english-saved-excerpt-after.png",
+      "08-english-excerpt-file-search-after.png",
+      "09-excerpt-close-restores-opener-after.png",
+      "10-repeated-attachment-focus-failure-after.png",
+      "11-final-first-attachment-file-search.png",
+      "12-final-repeated-attachment-file-search.png",
+      "13-final-chinese-saved-excerpt.png",
+      "14-final-chinese-full-file-line57.png",
+      "15-final-project-preview-focus-failure.png",
+      "16-preview-receives-focus-english.png",
+      "17-preview-file-search-english.png",
+      "18-repeated-source-view-focus.png",
+      "19-repeated-preview-focus.png",
+      "20-reopened-preview-chinese.png",
+      "21-temporary-unsaved-draft.png",
+      "22-unsaved-file-switch-decision.png",
+      "23-continue-editing-preserves-draft.png",
+      "24-discard-to-original-attachment-line57.png",
+      "25-repeated-attachment-file-search.png",
+      "26-close-excerpt-restores-opener.png",
+      "27-original-delivery-preview-final.png"
+    ],
+    "hero": "20-reopened-preview-chinese.png",
+    "originalAttachment": "24-discard-to-original-attachment-line57.png",
+    "knownFailure": "23-continue-editing-preserves-draft.png"
+  },
+  "checks": {
+    "type-recovery": 0,
+    "ui-build-recovery": 0,
+    "docs-final": 0,
+    "architecture-final": 0,
+    "locale-final": 0
+  },
+  "docs": {
+    "operations": 352,
+    "groups": 26,
+    "architectureDocuments": 20
+  },
+  "locale": {
+    "locales": 2,
+    "keys": 2913,
+    "newProductStrings": 0
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "originalRows": 322854,
+      "currentRows": 322856,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 2875975,
+      "uiEntry": "main-8R5zSOwQ.js"
+    },
+    {
+      "phase": "after",
+      "originalRows": 322856,
+      "currentRows": 322858,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 2328556,
+      "uiEntry": "main-Bih3UDVZ.js"
+    },
+    {
+      "phase": "final",
+      "originalRows": 322858,
+      "currentRows": 322860,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 1444179,
+      "uiEntry": "main-ri2xIhrq.js"
+    },
+    {
+      "phase": "recovery",
+      "originalRows": 322860,
+      "currentRows": 322862,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 927138,
+      "uiEntry": "main-CPtiiFuE.js"
+    }
+  ],
+  "resources": {
+    "absoluteDeadline": 1793976495492,
+    "deadlineExtended": false,
+    "newModelRequests": 0,
+    "cumulativeRequests": 1524,
+    "pairedCopiesRetired": 8,
+    "minimumReserveMs": 927138
+  },
+  "retainedActualModelFacts": {
+    "freshModelInteraction": false,
+    "questions": 3,
+    "answerValues": 5,
+    "goalStatus": "complete",
+    "goalTokens": 271588,
+    "artifactBytes": 559,
+    "originalGoalAndToolRequestsExact": true
+  },
+  "verified": [
+    "TXT excerpt first and repeated explicit file navigation receives editor focus and file-scoped Find",
+    "Default Markdown preview first/repeated/reopened receives focus, English and Chinese file-scoped Find",
+    "User-selected source view is retained for same-resource reopen",
+    "View toggle retains its own focus rather than claiming another reveal",
+    "Plain excerpt close restores its opener",
+    "Unsaved cancel preserves temporary draft; discard opens original read-only attachment; direct project source restores original content"
+  ],
+  "limits": [
+    "Unsaved cancel keyboard continuity remains failed: page root owns focus; next iteration must audit shared close lifetime and verify old/fixed native behavior",
+    "No fresh model request, actual Save, download, clipboard or new slow-read alternate-focus verification",
+    "Before/after/final failed candidates are retained as failures; 03 is query input only; 18 preserves Source view; 27 contains a hover popover"
+  ]
+}

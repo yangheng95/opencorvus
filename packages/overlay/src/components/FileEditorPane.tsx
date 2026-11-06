@@ -21,6 +21,7 @@ import { toolFileChangesFromState } from "../utils/tool-file-changes"
 import { relativePathFrom } from "../utils/tool"
 import type { MarkdownImageReader } from "./MarkdownDocumentImages"
 import { bytesToArrayBuffer } from "../utils/binary"
+import { createAnimationFrameScheduler } from "../utils/animation-frame"
 import { extToLang } from "../utils/markdown"
 import { StaticTextPart } from "./TextPart"
 import { Icon } from "./ui/Icon"
@@ -143,6 +144,8 @@ export function FileEditorPane() {
   let activeTargetIdentity = ""
   let contentAuthority: ApiAuthority | undefined
   let downloadController: AbortController | undefined
+  let markdownPreview: HTMLElement | undefined
+  let previewRevealedRevision: number | undefined
 
   const contentTarget = createMemo(
     () => {
@@ -241,6 +244,24 @@ export function FileEditorPane() {
   const identityOf = (file: FileEditorTarget | null) => file
     ? `${file.directory}\u0000${file.path}\u0000${file.sourceAbsolutePath ?? ""}` : ""
   const resourceReady = () => !loading() && identityOf(target()) === activeTargetIdentity
+  const revealPreview = createAnimationFrameScheduler(() => {
+    const revision = fileEditorRevealRevision()
+    const preview = markdownPreview
+    if (
+      previewRevealedRevision === revision || !previewVisible() || !resourceReady() || fileEditorReserved() ||
+      !preview?.isConnected || !preview.clientWidth || !preview.clientHeight
+    ) return
+    previewRevealedRevision = revision
+    const active = document.activeElement
+    if (active === revealFocusOrigin() || active === document.body || active === preview) {
+      preview.focus({ preventScroll: true })
+    }
+  })
+  createEffect(() => {
+    fileEditorRevealRevision()
+    if (previewVisible() && resourceReady() && !fileEditorReserved()) revealPreview.schedule()
+    else revealPreview.cancel()
+  })
   const isBusy = () => !resourceReady() || saving() || reloading()
   const pendingRecordedUpdate = () => observationKey() !== null && observationKey() !== loadedObservationKey()
   const searchFile = () => {
@@ -512,6 +533,7 @@ export function FileEditorPane() {
     isBusy,
   })
   onCleanup(() => {
+    revealPreview.cancel()
     retireComparison()
     retireDownload()
     loadGeneration += 1
@@ -834,6 +856,7 @@ export function FileEditorPane() {
                   />
                   <Show when={previewVisible()}>
                     <section
+                      ref={(element) => { markdownPreview = element }}
                       class="file-editor-markdown-preview md-content"
                       tabIndex={0}
                       aria-label={`${fileTitle()} · ${t("file_editor.view_preview")}`}

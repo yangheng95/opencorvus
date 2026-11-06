@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [附件来源与只读阅读](2026-11-06-attachment-source-reading.md)：真实来源与完整原文阅读。
+
 - [文件保存与冲突恢复](2026-11-06-file-save-recovery.md)：实际文件写入和条件修订恢复。
 
 - [文件编辑与未保存决定](2026-11-06-file-edit-decision.md)：单代理后台实页和草稿收敛。
