@@ -1,0 +1,109 @@
+{
+  "at": "2026-11-06T01:08:00.619Z",
+  "scope": "Original member evidence reading scope in the current locale",
+  "screenshots": 16,
+  "personallyReviewed": true,
+  "uiAutomationRun": false,
+  "uiEntry": "main-pRmHMlgL.js",
+  "model": {
+    "newRequests": 0,
+    "cumulativeRequests": 1474,
+    "newAgents": 0,
+    "newMessages": 0
+  },
+  "originalEvidence": {
+    "canonicalToolParts": 42,
+    "sessions": 19,
+    "selectedReportSourceOccurrences": 27,
+    "selectedOriginSourceOccurrences": 23,
+    "countsArePerRequestScope": true,
+    "fullRequestAndResultUnchanged": true,
+    "httpAndSseSnapshotsExact": true,
+    "newLiveToolEventsEmitted": 0
+  },
+  "checks": {
+    "typedPackages": 8,
+    "finalOverlayTypecheck": true,
+    "locales": 2,
+    "localeKeys": 2899,
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "currentArchitectureDocuments": 20,
+    "cssTokenReferences": 9183
+  },
+  "phases": [
+    {
+      "kind": "before",
+      "originals": 310412,
+      "current": 310414,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 3346385,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    },
+    {
+      "kind": "after",
+      "originals": 310414,
+      "current": 310416,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 2944761,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    },
+    {
+      "kind": "final",
+      "originals": 310416,
+      "current": 310418,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 2145008,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    }
+  ],
+  "retirement": {
+    "publicShutdownStatuses": [
+      200,
+      200,
+      200
+    ],
+    "nativeAndLauncherExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "pairedCredentialAndCatalogCopiesRetired": 6,
+    "ownedBrowserTabsClosed": [
+      52,
+      53,
+      54,
+      55
+    ],
+    "userWindowAndPort18571Untouched": true
+  },
+  "limits": [
+    "No fresh running/receiving/error read_agent_message visual sample; existing42 Tool outcomes are completed.",
+    "No new LLM, delegated agent, live Tool update, execution or recovery acceptance claimed.",
+    "Narrow rows retain existing ellipsis for later source detail; requested excerpt count and unit take priority.",
+    "Raw technical input/output and original participant text retain their actual language.",
+    "Image15 is an intermediate refresh view without the target summary; image16 is the qualified reopened summary.",
+    "The original793 unfinished participant/error/question history remains original; Tool-read completion is not Task success."
+  ]
+}

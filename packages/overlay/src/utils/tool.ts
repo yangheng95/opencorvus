@@ -538,6 +538,26 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
       .join(t("card.meta_separator"))
     return detail || statusLabel
   }
+  if (n === "readagentmessage") {
+    const sources = safeInput.sources
+    if ((status !== "running" && status !== "completed") || !Array.isArray(sources) || sources.length === 0) {
+      return statusLabel
+    }
+    const reports = sources.filter((source) => source?.kind === "dispatch_result").length
+    const origins = sources.filter((source) => source?.kind === "dispatch_origin").length
+    if (reports + origins !== sources.length) return statusLabel
+    const detail: string[] = []
+    const excerpts = safeInput.evidence_reads
+    if (Array.isArray(excerpts) && excerpts.length > 0) {
+      detail.push(tc("tool.agent_evidence.excerpt_count", excerpts.length, { count: excerpts.length.toLocaleString(localeTag()) }))
+    }
+    if (Array.isArray(safeInput.inventory_before) && safeInput.inventory_before.length > 0) {
+      detail.push(t("tool.agent_evidence.earlier_records"))
+    }
+    if (reports) detail.push(tc("tool.agent_evidence.report_count", reports, { count: reports.toLocaleString(localeTag()) }))
+    if (origins) detail.push(tc("tool.agent_evidence.origin_count", origins, { count: origins.toLocaleString(localeTag()) }))
+    return detail.filter(Boolean).join(t("card.meta_separator"))
+  }
   if ((n === "skill" || n === "missionskill") && firstNonEmptyString(safeInput.name)) {
     return [firstNonEmptyString(safeInput.name), firstNonEmptyString(safeInput.file)]
       .filter(Boolean)

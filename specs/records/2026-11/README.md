@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [成员记录读取范围摘要](2026-11-06-member-evidence-summary.md)：读取用途、数量与双语真实历史复核。
+
 - [成员活动摘要的可读文本](2026-11-06-member-activity-reading.md)：历史与实时同一结构投影、真实成员阅读。
 
 - [技能发现操作与结果摘要](2026-11-06-skill-discovery-summary.md)：自然发现记录、零结果及双语摘要。

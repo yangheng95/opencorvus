@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [成员读取范围实页](2026-11-06-member-evidence-summary/README.md)：真实输入、摘要及原始结果。
+
 - [成员活动摘要实页](2026-11-06-member-activity-reading/README.md)：原消息、紧凑预览和完整阅读。
 
 - [技能发现实页证据](2026-11-06-skill-discovery-summary/README.md)：单代理真实发现与中文结果。

@@ -1,5 +1,16 @@
 # 07 — Overlay Panels And Task Evidence
 
+`read_agent_message` summaries describe the original selected reading scope in
+the current locale: member reports, pre-dispatch operation records, requested
+content excerpts and an earlier-page marker. Source counts come from the accepted
+request's typed `sources`, with excerpt and cursor context from `evidence_reads`
+and `inventory_before`. They do not count returned Messages, successful workers
+or completed reads. Running/completed calls share this one display projection;
+receiving arguments retain their status, and original failures keep priority.
+The producer title, exact input identities and full result remain unchanged.
+Requested excerpt counts and the earlier-page marker precede source categories,
+so compact rows retain the current read's quantity and unit before truncation.
+
 Compact member text activity retains original Markdown line breaks and indentation
 within its existing 360-character transport budget. Historical bounded reads,
 full-history projection and live Part updates use the same transport projection.

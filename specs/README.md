@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [成员记录读取范围摘要](records/2026-11/2026-11-06-member-evidence-summary.md)：区分原成员报告、分配前记录及指定内容。
+
 - [成员活动摘要的可读文本](records/2026-11/2026-11-06-member-activity-reading.md)：保留结构的有界活动和轻量文本预览。
 
 - [技能发现操作与结果摘要](records/2026-11/2026-11-06-skill-discovery-summary.md)：真实技能列表、搜索和数量阅读。
