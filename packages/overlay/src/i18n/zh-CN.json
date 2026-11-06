@@ -2344,6 +2344,8 @@
   "file_editor.discard": "放弃",
   "file_editor.unsaved_message": "离开前是否保存对 {{path}} 的更改？",
   "file_editor.reload": "从磁盘重新加载",
+  "file_editor.recorded_update": "此文件的修改记录已更新。重新加载以查看最新内容。",
+  "file_editor.recorded_update_dirty": "此文件的修改记录已更新。你的未保存编辑仍保留，可比较磁盘内容或重新加载。",
   "file_editor.reload_failed": "无法重新加载此文件。当前内容已保留。",
   "file_editor.discard_reload": "放弃并重新加载",
   "file_editor.reload_unsaved_message": "重新加载磁盘上的 {{path}}？请先保存更改，或放弃更改以读取当前文件。",

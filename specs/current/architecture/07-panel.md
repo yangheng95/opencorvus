@@ -798,6 +798,19 @@ comparison endpoints.
 Review offers an explicit current-file action using the comparison owner's project
 directory and the shared file-workbench navigation authority. Reading, editing or
 downloading the current disk file leaves the recorded comparison intact.
+The current-file owner also observes completed Tool file-change identities from
+the existing selected conversation source. Only matching project/resource paths
+invalidate its read; immutable source targets retain their separate contract.
+The identities are request-baseline metadata, not another file-content cache or
+combined comparison. Clean files reread the ordinary file-content endpoint when
+those observations change. Same-observation citations keep their range/reveal
+behavior without another read. Dirty or busy resources retain their draft,
+request ownership and leave decision, with localized updated-record feedback
+offering the existing disk comparison and reload. Successful reads, writes and
+adopted disk comparisons retain the observation identities captured when that
+request started; later observations therefore remain visibly pending. API and
+resource retirement keep their existing guards. This does not add a filesystem
+watch stream or claim discovery of unannounced external writes.
 FileChange projections retain a required `openPath` alongside the comparison
 identity `file`. A Tool rename keeps its original-to-target comparison label while
 opening the exact recorded target; saved-session and immutable-build observations

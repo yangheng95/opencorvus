@@ -2345,6 +2345,8 @@
   "file_editor.discard": "Discard",
   "file_editor.unsaved_message": "Save changes to {{path}} before leaving?",
   "file_editor.reload": "Reload from disk",
+  "file_editor.recorded_update": "This file has updated change records. Reload to view the latest content.",
+  "file_editor.recorded_update_dirty": "This file has updated change records. Your unsaved edits are preserved; compare with disk or reload.",
   "file_editor.reload_failed": "Could not reload this file. Your current contents are kept here.",
   "file_editor.discard_reload": "Discard and reload",
   "file_editor.reload_unsaved_message": "Reload {{path}} from disk? Save your changes first or discard them to load the current file.",

@@ -15,7 +15,10 @@ import { downloadBlob } from "../services/file-download"
 import { t } from "../utils/i18n"
 import { formatErrorDetails } from "../utils/error-details"
 import { restoreRightDockFocus } from "../utils/right-dock-focus"
-import { pathWithForwardSeparators, resolveDocumentFilePath } from "../utils/server-path"
+import { isAbsoluteServerPath, normalizeProjectFilePath, pathWithForwardSeparators, resolveDocumentFilePath } from "../utils/server-path"
+import { currentConversationFileChangeSource } from "../utils/file-change-summary"
+import { toolFileChangesFromState } from "../utils/tool-file-changes"
+import { relativePathFrom } from "../utils/tool"
 import type { MarkdownImageReader } from "./MarkdownDocumentImages"
 import { bytesToArrayBuffer } from "../utils/binary"
 import { extToLang } from "../utils/markdown"
@@ -102,6 +105,7 @@ type FileComparison = {
   target: FileEditorTarget
   authority: ApiAuthority
   controller: AbortController
+  observationKey: string | null
 } & (
   | { status: "loading" }
   | { status: "loaded"; content: FileContent | null }
@@ -136,6 +140,7 @@ export function FileEditorPane() {
   let saveGeneration = 0
   let reloadGeneration = 0
   let activeTargetIdentity = ""
+  let contentAuthority: ApiAuthority | undefined
   let downloadController: AbortController | undefined
 
   const contentTarget = createMemo(
@@ -154,6 +159,27 @@ export function FileEditorPane() {
   )
 
   const [content, setContent] = createSignal<FileContent | null>(null)
+  const [loadedObservationKey, setLoadedObservationKey] = createSignal<string | null>(null)
+  const observationKey = createMemo(() => {
+    const file = contentTarget()
+    if (!file || file.sourceAbsolutePath) return null
+    const source = currentConversationFileChangeSource()
+    if (source.directory !== file.directory) return null
+    const matchesPath = (path: string) => {
+      const relative = isAbsoluteServerPath(path) ? relativePathFrom(file.directory, path) : path
+      return Boolean(relative) && normalizeProjectFilePath(relative, file.directory) === file.path
+    }
+    const identities = source.inputs.flatMap(({ part }) => {
+      if (!part || typeof part !== "object") return []
+      const tool = part as { type?: unknown; id?: unknown; sessionID?: unknown; messageID?: unknown; state?: unknown }
+      if (tool.type !== "tool" || typeof tool.id !== "string" || typeof tool.sessionID !== "string" || typeof tool.messageID !== "string") return []
+      const affected = toolFileChangesFromState(tool.state, file.directory).some(
+        (change) => matchesPath(change.openPath) || Boolean(change.previousPath && matchesPath(change.previousPath)),
+      )
+      return affected ? [JSON.stringify([tool.sessionID, tool.messageID, tool.id])] : []
+    })
+    return identities.length ? JSON.stringify([...new Set(identities)].sort()) : null
+  })
   const [loading, setLoading] = createSignal(false)
   const target = createMemo(() => selectedFileTarget())
   const revealFocusOrigin = createMemo(() => {
@@ -212,6 +238,7 @@ export function FileEditorPane() {
     ? `${file.directory}\u0000${file.path}\u0000${file.sourceAbsolutePath ?? ""}` : ""
   const resourceReady = () => !loading() && identityOf(target()) === activeTargetIdentity
   const isBusy = () => !resourceReady() || saving() || reloading()
+  const pendingRecordedUpdate = () => observationKey() !== null && observationKey() !== loadedObservationKey()
   const searchFile = () => {
     const file = target()
     const search = editorSearch()
@@ -274,6 +301,7 @@ export function FileEditorPane() {
     batch(() => {
       setContent(disk)
       setSavedBaseline({ content: disk.content, revision })
+      setLoadedObservationKey(comparison()!.observationKey)
       retireComparison()
     })
   }
@@ -284,7 +312,7 @@ export function FileEditorPane() {
     if (resetMode) setComparisonMode("disk-draft")
     const authority = captureApiAuthority()
     const controller = new AbortController()
-    const request = { target: file, authority, controller }
+    const request = { target: file, authority, controller, observationKey: observationKey() }
     setComparison({ ...request, status: "loading" })
     const current = () => comparison()?.controller === controller && !controller.signal.aborted &&
       ownsFileTarget(file) && isApiAuthorityCurrent(authority)
@@ -343,7 +371,7 @@ export function FileEditorPane() {
     }
   }
 
-  const applyContent = (next: FileContent | null) => batch(() => {
+  const applyContent = (next: FileContent | null, observed: string | null) => batch(() => {
     if (next && textView() === null) {
       setTextView(
         canEdit(next) && next.content.length > 0 && extToLang(path()) === "markdown" && !target()?.range
@@ -352,6 +380,7 @@ export function FileEditorPane() {
       )
     }
     setContent(next)
+    setLoadedObservationKey(next ? observed : null)
     setError(null)
     draftRevision += 1
     setDraft(canEdit(next) ? next!.content : "")
@@ -361,15 +390,22 @@ export function FileEditorPane() {
   createEffect(() => {
     const file = contentTarget()
     const authority = captureApiAuthority()
+    const observed = observationKey()
+    fileEditorRevealRevision()
     untrack(() => {
+      const identity = identityOf(file)
+      if (identity === activeTargetIdentity && contentAuthority && isApiAuthorityCurrent(contentAuthority)) {
+        if (dirty() || saving() || reloading() || downloading() || fileEditorReserved()) return
+        if (content() && observed === loadedObservationKey()) return
+      }
       retireComparison()
       retireDownload()
-      const identity = identityOf(file)
       const retainDraft = identity === activeTargetIdentity && dirty()
       if (identity !== activeTargetIdentity) {
         setTextView(null)
       }
       activeTargetIdentity = identity
+      contentAuthority = authority
       const generation = ++loadGeneration
       saveGeneration += 1
       reloadGeneration += 1
@@ -378,13 +414,13 @@ export function FileEditorPane() {
       setLoading(false)
       finishLeaveDecision(false)
       if (retainDraft) return
-      applyContent(null)
+      applyContent(null, null)
       setLoadFailure(null)
       if (!file) return
       setLoading(true)
       const current = () => generation === loadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)
       void readFileContent(file, authority).then((next) => {
-        if (current()) applyContent(next)
+        if (current()) applyContent(next, observed)
       }, (cause) => {
         if (current()) setLoadFailure({ error: cause })
       }).finally(() => {
@@ -403,6 +439,7 @@ export function FileEditorPane() {
       return false
     }
     const authority = captureApiAuthority()
+    const observed = observationKey()
     const submittedDraft = draft()
     const submittedRevision = draftRevision
     const requestGeneration = ++saveGeneration
@@ -412,6 +449,7 @@ export function FileEditorPane() {
       const next = await writeFileContent(file, submittedDraft, expectedRevision, authority)
       if (requestGeneration !== saveGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return false
       setSavedBaseline({ content: next.content, revision: next.revision })
+      setLoadedObservationKey(observed)
       const ownsSubmittedDraft = draftRevision === submittedRevision
       if (ownsSubmittedDraft) setDraft(next.content)
       draftRevision += 1
@@ -485,6 +523,7 @@ export function FileEditorPane() {
     if (approvedRevision === null || approvedRevision !== draftRevision || fileEditorReserved()) return
     if (generation !== reloadGeneration || !ownsFileTarget(file) || !isApiAuthorityCurrent(authority)) return
     const requestedDraftRevision = draftRevision
+    const observed = observationKey()
     setReloading(true)
     setError(null)
     try {
@@ -495,7 +534,7 @@ export function FileEditorPane() {
         return
       }
       setLoadFailure(null)
-      applyContent(next)
+      applyContent(next, observed)
     } catch (cause) {
       if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) {
         if (loadFailure()) setLoadFailure({ error: cause })
@@ -684,6 +723,26 @@ export function FileEditorPane() {
               <span class="file-editor-preview-hint">{t("file_editor.preview_draft_hint")}</span>
             </Show>
           </div>
+        </Show>
+        <Show when={pendingRecordedUpdate() && content() && resourceReady()}>
+          <Feedback
+            class="file-editor-load-feedback"
+            tone="info"
+            actions={<>
+              <Show when={writable()}>
+                <Button type="button" variant="outline" size="sm" tone="neutral"
+                  disabled={isBusy() || fileEditorReserved()} onClick={() => void compareWithDisk()}>
+                  {t("file_editor.compare")}
+                </Button>
+              </Show>
+              <Button type="button" variant="outline" size="sm" tone="accent"
+                disabled={isBusy() || fileEditorReserved()} onClick={() => void reload()}>
+                {t("file_editor.reload")}
+              </Button>
+            </>}
+          >
+            {t(dirty() ? "file_editor.recorded_update_dirty" : "file_editor.recorded_update")}
+          </Feedback>
         </Show>
         <div class="file-editor-body">
           <Show

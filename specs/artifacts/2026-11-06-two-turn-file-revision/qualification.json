@@ -1,0 +1,225 @@
+{
+  "at": "2026-11-06T05:31:28.170Z",
+  "scope": "Current-file freshness after real conversation edits, with retained drafts and immutable comparisons",
+  "product": {
+    "component": "FileEditorPane",
+    "currentSource": "Existing selected conversation Tool file observations",
+    "refresh": "Ordinary file-content read after matching completed Tool identities change",
+    "retained": "Dirty, saving, reloading, downloading and reserved navigation keep their existing owners",
+    "pendingFeedback": "Localized updated-record feedback delegates to existing disk comparison/reload",
+    "sameObservationReferences": "Retain existing reveal/range behavior",
+    "newStreamsPollingCachesOrPersistedFacts": false,
+    "backendApiSdkSchemaAndToolContracts": "unchanged"
+  },
+  "actualModelWork": {
+    "provider": "openai",
+    "model": "gpt-6.1-sol",
+    "streaming": true,
+    "requests": 25,
+    "workRequests": 20,
+    "existingProjectMemoryRequests": 5,
+    "allHttpStatuses": 200,
+    "allResponseReaders": "settled/eof",
+    "delegations": 0,
+    "phases": [
+      {
+        "phase": "before",
+        "actualUserInputs": 2,
+        "requests": 10,
+        "tools": 6,
+        "comparisons": 2
+      },
+      {
+        "phase": "after",
+        "actualUserInputs": 3,
+        "requests": 15,
+        "tools": 9,
+        "comparisons": 3
+      },
+      {
+        "phase": "final",
+        "requests": 0,
+        "purpose": "Final frozen build readback only"
+      },
+      {
+        "phase": "captureVerification",
+        "requests": 0,
+        "purpose": "Read observation captured after unsaved approval; final code readback"
+      }
+    ]
+  },
+  "actualFiles": {
+    "title": "客户确认978",
+    "target": "deliverables/客户确认.md",
+    "first": {
+      "bytes": 260,
+      "deadline": "2026-11-30",
+      "actionTwo": "A-02：确认排期",
+      "note": "按原简报交付。"
+    },
+    "revised": {
+      "bytes": 269,
+      "deadline": "2026-12-03",
+      "actionTwo": "A-02：发送确认邮件",
+      "note": "按本次确认更新。"
+    },
+    "third": {
+      "bytes": 287,
+      "deadline": "2026-12-03",
+      "actionTwo": "A-02：发送确认邮件",
+      "note": "按本次确认更新，待客户复核。"
+    },
+    "sourceFactRows": 5,
+    "allOriginalSeedFilesAndGitExact": true,
+    "allMutationPathsExact": true,
+    "actualBeforeAfterEndpointChain": true,
+    "originalComparisons": [
+      {
+        "tool": "apply_patch",
+        "status": "add",
+        "additions": 15,
+        "deletions": 0
+      },
+      {
+        "tool": "apply_patch",
+        "status": "update",
+        "additions": 3,
+        "deletions": 3
+      },
+      {
+        "tool": "apply_patch",
+        "status": "update",
+        "additions": 1,
+        "deletions": 1
+      }
+    ],
+    "publicFileReadExact": true,
+    "naturalSelection": "idle"
+  },
+  "manual": {
+    "desktopViewport": [
+      1280,
+      720
+    ],
+    "screenshots": 27,
+    "personallyReviewed": true,
+    "uiAutomationRun": false,
+    "beforeStalePreviewAfterModelCompletion": true,
+    "beforeExplicitSameFileReadStillStale": true,
+    "beforeManualReloadReadCorrectNewFile": true,
+    "afterCleanPreviewUpdatesWithoutManualReload": true,
+    "afterUnsavedDraft": "草稿备注：待讨论。",
+    "afterNewMutationPreservesDraftAndShowsChineseFeedback": true,
+    "actualDiskDraftComparison": true,
+    "cancelReloadPreservesDraft": true,
+    "explicitDiscardReloadReadsLatest": true,
+    "latestSourceAndFormattedFileRead": true,
+    "allThreeOriginalComparisonsIndependentlyRead": true,
+    "finalSameFileReferenceRetainsLatestPreview": true,
+    "finalCloseFileReturnsToReview": true,
+    "postApprovalCaptureBuild": {
+      "entry": "main-JvTevNEq.js",
+      "cancelKeepsUnsavedDraft": true,
+      "explicitDiscardReloadReadsLatest": true,
+      "modelRequests": 0,
+      "newConcurrentMutationWhileDialogOpenSample": false
+    }
+  },
+  "regression": {
+    "originalPublicSessions": 6,
+    "originalFullTools": 28,
+    "original953QuestionAnd908936FileTools": 8,
+    "original977QuestionFileTools": 5,
+    "actualBeforeCohortTools": 6,
+    "actualAfterCohortTools": 9,
+    "publicFullPartsAndFileBytesExact": true
+  },
+  "preservation": {
+    "rows": [
+      312114,
+      314505,
+      318061,
+      318063,
+      318065
+    ],
+    "schema": 10,
+    "tables": 92,
+    "initialProtectedProjects": 131,
+    "initialProtectedPhysicalAttachmentFiles": 303,
+    "finalFullProjects": 133,
+    "finalFullPhysicalAttachmentFiles": 307,
+    "newQaProjects": 2,
+    "newProjectPhysicalAttachmentFiles": 4,
+    "allOriginalBusinessContentAndSourceDatabasesPreserved": true,
+    "filesystemExclusions": 0,
+    "expiredCapacitySlotReacquisitions": [
+      2,
+      2,
+      0,
+      0
+    ],
+    "allNewBusinessFactsBoundToOwnQa": true,
+    "busOccurrences": [
+      70,
+      104
+    ],
+    "successfulBusDeliveries": [
+      464,
+      691
+    ],
+    "finalAdds": "One normal runtime activation lease and one grant"
+  },
+  "checks": {
+    "typedPackages": 8,
+    "finalTypesPassed": true,
+    "locales": 2,
+    "localeKeys": 2906,
+    "newKeysPerLocale": 2,
+    "nodeBuilds": [
+      "main-Da5cov8Q.js",
+      "main-BkWlfjkv.js",
+      "main-JvTevNEq.js"
+    ],
+    "finalUiEntry": "main-JvTevNEq.js",
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "currentArchitectureDocuments": 20,
+    "uiAutomationRun": false,
+    "moduleTopology": "Base HEAD check passed; the new committed snapshot is checked by the normal push hook"
+  },
+  "retirement": {
+    "publicShutdownStatuses": [
+      200,
+      200,
+      200,
+      200
+    ],
+    "nativeAndLauncherExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "pairedCredentialAndCatalogCopiesRetired": 8,
+    "sourceAuthMetadataAndCatalogBytesPreserved": true,
+    "ownedTabsClosed": [
+      75,
+      76,
+      77,
+      78
+    ],
+    "minimumReserveMs": 520109,
+    "absoluteDeadlineUnchanged": true,
+    "finalAllocatedForReadback": true,
+    "userWindowsProcessesPort18571AndRealDatabaseUntouched": true
+  },
+  "limits": [
+    "Only matching completed canonical Tool file observations invalidate the current project file; unannounced external filesystem writes and writes without such observations are outside this acceptance.",
+    "Actual new write samples use apply_patch. Existing shared adapters retain write/edit/binary/move support, without new natural samples for those branches.",
+    "The live clean/draft scenarios used after build. Final adds download/reserved-navigation preservation guards and repeats actual file/reference/history reading with zero model requests; no concurrent large download sample.",
+    "Draft Cancel and Discard/Reload were exercised. Save conflict, adopting a disk base, stream reconnection, other platforms and Task/Mission/Goal scheduling are not new acceptance claims.",
+    "Two new English feedback strings were reviewed and pass locale checks; the new live feedback raster is Chinese. Authored/model text, filenames and original tool diagnostics retain their own language.",
+    "No version, release, tag, PR or remote management action.",
+    "Reload observation capture moved after the unsaved approval. The new code repeats Cancel/Discard/actual readback with zero model requests; a fresh concurrent Tool completion while that modal is open was not exercised."
+  ]
+}
