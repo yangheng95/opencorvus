@@ -1269,8 +1269,22 @@ existing content/base to that displayed snapshot and closes the comparison;
 the authored draft and pending leave decision remain owned by their existing
 signals. It writes no file or navigation approval. A later explicit Save still
 uses the unchanged conditional writer with that snapshot's revision, so a newer
-disk change produces the ordinary FileWriteConflictError. Source-only resources,
-failed/non-text reads, retired reads/authorities and reserved navigation cannot
+disk change produces the ordinary FileWriteConflictError.
+Adoption retires only the current save-conflict feedback tied to the former base;
+other action errors retain their existing lifecycle. It does not report a save
+or change the pending leave decision. A later conflict is presented by the same
+ordinary save failure owner.
+An explicit adoption binds a one-shot close-focus intent to the existing content
+load generation. The close hook consumes that intent only in the same generation;
+content/authority changes and cleanup already advance that generation. Ordinary
+closes retain their original opener lifecycle.
+After the feedback retires, this scoped close-autofocus intent returns
+focus to the current decision's available Keep editing action when that decision
+remains open, or to the current file pane's available Compare with disk action.
+Unresolved action errors retain the normal opener lifecycle. The current target
+must remain connected, visible and enabled. This uses the current control without
+delayed focus repair or another focus owner.
+Source-only resources, failed/non-text reads, retired reads/authorities and reserved navigation cannot
 provide this action. No automatic merge, forced write or second draft is added.
 Tool and VCS diffs retain their original FileChange evidence contract before
 delegating valid text endpoints to the same presentation; editor comparisons

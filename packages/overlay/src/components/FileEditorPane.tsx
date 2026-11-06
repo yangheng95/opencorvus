@@ -136,6 +136,7 @@ export function FileEditorPane() {
   } | undefined
   let decisionRevision = 0
   let loadGeneration = 0
+  let adoptedComparisonGeneration: number | undefined
   let draftRevision = 0
   let saveGeneration = 0
   let reloadGeneration = 0
@@ -305,12 +306,16 @@ export function FileEditorPane() {
       setContent(disk)
       setSavedBaseline({ content: disk.content, revision })
       setLoadedObservationKey(comparison()!.observationKey)
+      // The adopted snapshot replaces the base that produced this conflict.
+      if (error()?.messageKey === "file_editor.save_conflict") setError(null)
+      adoptedComparisonGeneration = loadGeneration
       retireComparison()
     })
   }
   const compareWithDisk = async (resetMode = true) => {
     const file = target()
     if (!file || !writable() || !savedBaseline() || isBusy() || fileEditorReserved()) return
+    adoptedComparisonGeneration = undefined
     comparison()?.controller.abort()
     if (resetMode) setComparisonMode("disk-draft")
     const authority = captureApiAuthority()
@@ -928,6 +933,22 @@ export function FileEditorPane() {
         wide
         formClass="file-comparison-frame"
         onClose={retireComparison}
+        onCloseAutoFocus={(event) => {
+          const generation = adoptedComparisonGeneration
+          adoptedComparisonGeneration = undefined
+          if (generation !== loadGeneration || error()) return
+          const action = document.querySelector<HTMLButtonElement>(
+            leaveDialogOpen()
+              ? '#fileEditorUnsavedDialog [data-ui="file-editor-leave-cancel"]'
+              : '#centerWorkbenchFile [data-ui="file-editor-compare"]',
+          )
+          if (
+            !action?.isConnected || action.disabled || action.getAttribute("aria-disabled") === "true" ||
+            !action.getClientRects().length
+          ) return
+          event.preventDefault()
+          action.focus({ preventScroll: true })
+        }}
         footer={
           <>
             <Button type="button" variant="ghost" size="md" tone="neutral"

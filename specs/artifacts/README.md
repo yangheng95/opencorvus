@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件保存恢复实页](2026-11-06-file-save-recovery/README.md)：真实保存、受控磁盘修改与冲突反馈。
+
 - [文件编辑决定实页](2026-11-06-file-edit-decision/README.md)：真实临时草稿、离开提示和重新打开。
 
 - [文件导航上下文实页](2026-11-06-file-navigation-context/README.md)：实际文件错误、原比较和当前文件。

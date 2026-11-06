@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [文件保存与冲突恢复](2026-11-06-file-save-recovery.md)：实际文件写入和条件修订恢复。
+
 - [文件编辑与未保存决定](2026-11-06-file-edit-decision.md)：单代理后台实页和草稿收敛。
 
 - [文件导航与审阅上下文](2026-11-06-file-navigation-context.md)：单代理后台实页与上下文检查。

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件保存与冲突恢复](records/2026-11/2026-11-06-file-save-recovery.md)：新隔离项目的真实保存、冲突及恢复体验。
+
 - [文件编辑与未保存决定](records/2026-11/2026-11-06-file-edit-decision.md)：源码、预览与切换/关闭的真实编辑体验。
 
 - [文件导航与审阅上下文](records/2026-11/2026-11-06-file-navigation-context.md)：缺失路径、当前文件和原变更的真实只读体验。
