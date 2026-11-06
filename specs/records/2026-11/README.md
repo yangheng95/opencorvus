@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [文件修改摘要的比较说明](2026-11-06-file-comparison-explanation.md)：聚合提示与逐次原比较的含义。
+
 - [来源摘录到当前文件](2026-11-06-source-current-file-navigation.md)：实际入口、草稿保护与历史保全。
 
 - [两轮文件交付与历史阅读](2026-11-06-two-turn-file-revision.md)：原始比较与最新文件。

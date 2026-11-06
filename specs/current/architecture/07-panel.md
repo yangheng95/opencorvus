@@ -716,6 +716,11 @@ Review also names a single record. When aggregate line counts are unavailable,
 both surfaces explain inspecting individual records and avoiding duplicate sums
 of repeated edits. Original comparisons, path identities and nullable total
 derivation remain unchanged; labels and numbers follow the selected UI language.
+The general unresolved notice describes availability of a combined comparison
+and directs the reader to individual records and their explanations. The summary
+boolean includes composition restrictions as well as missing evidence, so this
+notice does not assert that original Tool endpoints are missing. Typed reasons,
+the distinct deferred-loading notice and each original receipt remain authoritative.
 
 Review keeps record selection and comparison in the existing view. Its record
 list can be hidden to give the comparison the available space, and shown again

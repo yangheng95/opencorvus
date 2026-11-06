@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件修改摘要的比较说明](records/2026-11/2026-11-06-file-comparison-explanation.md)：统一比较限制与原始记录的实际核对。
+
 - [来源摘录到当前文件](records/2026-11/2026-11-06-source-current-file-navigation.md)：历史摘录与当前阅读的真实往返。
 
 - [两轮文件交付与历史阅读](records/2026-11/2026-11-06-two-turn-file-revision.md)：真实首版、反馈修订和当前正文。

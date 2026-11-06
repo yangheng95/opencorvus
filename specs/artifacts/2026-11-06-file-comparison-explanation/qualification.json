@@ -1,0 +1,312 @@
+{
+  "at": "2026-11-06T06:38:27.580Z",
+  "scope": "Accurate generic explanation of unavailable combined comparisons",
+  "product": {
+    "changedLocaleKey": "diff.unresolved_changes",
+    "consumers": [
+      "ConversationArtifactSummary unresolved notice",
+      "FileChangesView unavailable/empty-record notice"
+    ],
+    "meaning": "The combined comparison is unavailable; inspect individual records and their explanations",
+    "factAuthority": "Existing FileChange evidence/reasons/receipts and the existing summary boolean",
+    "algorithmsApiSdkSchemaPermissionsModelTools": "unchanged",
+    "deferredAndSpecificReasons": "existing distinct labels retained"
+  },
+  "manual": {
+    "screenshots": 19,
+    "viewport": [
+      1280,
+      720
+    ],
+    "personallyReviewed": true,
+    "uiAutomationRun": false,
+    "finalEnglishAndChineseTooltip": true,
+    "beforeOriginalMissingClaimContradictsAvailableOriginalComparisons": true,
+    "threeOriginalComparisonsRead": true,
+    "summaryAndOriginalComparisonReadTogether": true,
+    "officeMixedTextAndBinaryRecords": true,
+    "recordedBinaryVersionStillReadable": true,
+    "completeRenameRecordAndTotalsRead": true,
+    "ownPageRefresh": true,
+    "ownTabsClosed": [
+      "82",
+      "83"
+    ],
+    "userWindowsPort18571AndRealDatabase": "untouched"
+  },
+  "originalComparisonFacts": {
+    "at": "2026-11-06T06:35:41.964Z",
+    "phase": "after",
+    "checkpoint": "ended",
+    "receiptIDs": [
+      {
+        "sessionID": "ses_-zUPpdwu2zzKVC1xIH6G",
+        "messageID": "msg_g0VaAM54o00ys8NOwkPp",
+        "partID": "prt_g0VaAM63300yqHwMRbLE",
+        "tool": "apply_patch",
+        "status": "completed"
+      },
+      {
+        "sessionID": "ses_-zUPpdwu2zzKVC1xIH6G",
+        "messageID": "msg_g0VaAMJdg00O2SXC06UE",
+        "partID": "prt_g0VaAMKr3002hIZDgKsV",
+        "tool": "apply_patch",
+        "status": "completed"
+      },
+      {
+        "sessionID": "ses_-zUPpdwu2zzKVC1xIH6G",
+        "messageID": "msg_g0VaAMi9m00gDMyVI7Ai",
+        "partID": "prt_g0VaAMiu300irCbPZgPc",
+        "tool": "apply_patch",
+        "status": "completed"
+      }
+    ],
+    "originalComparisons": [
+      {
+        "type": "add",
+        "beforeBytes": 0,
+        "afterBytes": 260,
+        "additions": 15,
+        "deletions": 0
+      },
+      {
+        "type": "update",
+        "beforeBytes": 260,
+        "afterBytes": 269,
+        "additions": 3,
+        "deletions": 3
+      },
+      {
+        "type": "update",
+        "beforeBytes": 269,
+        "afterBytes": 287,
+        "additions": 1,
+        "deletions": 1
+      }
+    ],
+    "completeOriginalEndpointChain": true,
+    "lastAfterEqualsPublicFileAndDisk": true,
+    "actualMutationTools": "apply_patch",
+    "newModelRequests": 0
+  },
+  "regression": {
+    "originalPublicSessions": 6,
+    "fullOriginalToolParts": 28,
+    "publicSources": 11,
+    "originalQuestionAnswersSourcesFilesAndSnapshotsExact": true,
+    "latest978FileBytes": 287,
+    "current936FileBytes": 227,
+    "originalMovedPathStatus": 404,
+    "existing977DeliveryBytes": 481
+  },
+  "preservation": {
+    "schema": 10,
+    "tables": 92,
+    "fullProjects": 133,
+    "physicalAttachments": 307,
+    "initialRows": 318071,
+    "finalRows": 318075,
+    "allOriginalRowsAndSourceDatabasesExact": true,
+    "allProjectFilesGitConfigurationAndAttachmentBytesExact": true,
+    "filesystemExclusions": 0,
+    "onlyNormalRuntimeLeaseAndGrantPerInstance": true,
+    "phases": [
+      {
+        "at": "2026-11-06T06:22:54.823Z",
+        "kind": "before",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 318071,
+        "current": 318073,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 64602,
+            "after": 64603
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 64544,
+            "after": 64545
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 307,
+        "projects": 133,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1506,
+        "reserveMs": 3132437,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BkdLL8yR.js"
+      },
+      {
+        "at": "2026-11-06T06:36:34.566Z",
+        "kind": "after",
+        "schema": 10,
+        "originalSchema": 10,
+        "tables": 92,
+        "originals": 318073,
+        "current": 318075,
+        "changes": [
+          {
+            "table": "engine_control_activation_lease_grant",
+            "before": 64603,
+            "after": 64604
+          },
+          {
+            "table": "engine_control_activation_lease",
+            "before": 64545,
+            "after": 64546
+          }
+        ],
+        "allOriginalBusinessRowsPreserved": true,
+        "allOriginalBusinessContentPreserved": true,
+        "memoryAvailabilityTransitions": [],
+        "reusedExpiredCapacitySlots": [],
+        "sourceDatabasePreserved": true,
+        "attachments": 307,
+        "projects": 133,
+        "filesystemExclusions": 0,
+        "requests": 0,
+        "cumulativeRequests": 1506,
+        "reserveMs": 2296684,
+        "source": {
+          "catalogSameBytes": true,
+          "catalogSameMetadata": true,
+          "authSameMetadata": true
+        },
+        "uiEntry": "main-BkdLL8yR.js"
+      }
+    ]
+  },
+  "actualProvider": {
+    "newModelRequests": 0,
+    "cumulativeRequests": 1506,
+    "accountUsageStatuses": [
+      200,
+      200
+    ],
+    "projectedModel": "gpt-6.1-sol",
+    "pairedCredentialCatalogCopiesRetired": 4,
+    "delegations": 0
+  },
+  "retirement": {
+    "publicShutdownStatuses": [
+      200,
+      200
+    ],
+    "nativeAndLauncherExitCodes": [
+      0,
+      0
+    ],
+    "physicalOutputRequestSettled": true,
+    "minimumReserveMs": 2296684,
+    "commonDeadlineUnchanged": true,
+    "optionalFinalAllocated": false
+  },
+  "tooling": {
+    "initialAfterPreflight": "Started before the original native UI readiness receipt; failed before Provider admission",
+    "resolvedBy": "Followed the same live native handle to actual readiness, then completed Provider preflight",
+    "qualification": "The unique actual Provider receipt is checked for status/model/projection/budget/pairing and readiness/occurrence/time ownership",
+    "failedOperationLogRetained": true
+  },
+  "checks": {
+    "localeCatalogs": "2 locales / 2908 keys",
+    "ordinaryNodeBuilds": 1,
+    "productTypeScript": "unchanged; this is locale copy only"
+  },
+  "limits": [
+    "No new model execution; existing real Sol work is read through the native production API/UI.",
+    "All incomplete reason variants, the deferred-loading notice and the second consumer empty/unavailable state lack new independent visual samples.",
+    "No new Task/Side Chat view, provider failure, screen-reader audio or other-platform acceptance.",
+    "No new attachment excerpt or clipboard behavior acceptance."
+  ],
+  "screenshots": [
+    {
+      "file": "01-before-english-summary-hint.png",
+      "caption": "点击信息按钮后的前态英文摘要；本图尚未显示提示框，不单独证明其文字。"
+    },
+    {
+      "file": "02-before-english-tooltip.png",
+      "caption": "键盘聚焦后真实英文提示声称部分修改没有完整前后对比。"
+    },
+    {
+      "file": "03-before-chinese-tooltip.png",
+      "caption": "同一记录的中文提示同样声称缺少完整前后对比。"
+    },
+    {
+      "file": "04-before-first-original-comparison.png",
+      "caption": "同一条汇总中的首份原比较完整显示15行新增。"
+    },
+    {
+      "file": "05-before-second-original-comparison.png",
+      "caption": "第二份原比较+3/-3标题，正文尚在本视口下方。"
+    },
+    {
+      "file": "06-before-second-comparison-body.png",
+      "caption": "滚动后实际阅读第二份比较的日期、行动二和说明变化。"
+    },
+    {
+      "file": "07-before-third-original-comparison.png",
+      "caption": "第三份+1/-1标题和正文开头，末尾变化尚未进入视口。"
+    },
+    {
+      "file": "08-before-third-comparison-body.png",
+      "caption": "滚动后第三份说明从更新变为待客户复核，原前后内容完整。"
+    },
+    {
+      "file": "09-after-english-summary-tooltip.png",
+      "caption": "最终英文通用说明明确是汇总比较不可用。"
+    },
+    {
+      "file": "10-after-chinese-summary-tooltip.png",
+      "caption": "最终中文汇总说明和逐条阅读指引。"
+    },
+    {
+      "file": "11-after-third-original-comparison.png",
+      "caption": "修后仍可打开第三份原比较，+1/-1与实际说明变化保持。"
+    },
+    {
+      "file": "12-after-summary-and-original-comparison.png",
+      "caption": "修后汇总限制提示与可读的原始第三次比较同屏，语义一致。"
+    },
+    {
+      "file": "13-after-first-original-comparison.png",
+      "caption": "修后首版原始15行、+15/-0和原日期/行动保持。"
+    },
+    {
+      "file": "14-after-second-original-comparison.png",
+      "caption": "修后第二份+3/-3和前两处变化；说明末尾在视口下方。"
+    },
+    {
+      "file": "15-after-second-comparison-body.png",
+      "caption": "修后第二份说明变化和第三份原比较在滚动区域可读。"
+    },
+    {
+      "file": "16-after-office-mixed-file-summary.png",
+      "caption": "Office908三条真实文本/表格记录使用同一通用汇总说明。"
+    },
+    {
+      "file": "17-after-office-record-specific-detail.png",
+      "caption": "表格记录仍明确非文本与创建时文件版本，可下载原版本；未点击下载。"
+    },
+    {
+      "file": "18-after-complete-rename-records.png",
+      "caption": "936完整三记录总+6/-3，选中重命名+3/-1及原/目标路径保持。"
+    },
+    {
+      "file": "19-after-reload-chinese-tooltip.png",
+      "caption": "本人页刷新后中文说明、原一条记录及来源历史恢复。"
+    }
+  ]
+}

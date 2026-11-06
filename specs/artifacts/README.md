@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件修改比较说明实页](2026-11-06-file-comparison-explanation/README.md)：真实摘要、提示与原记录的页面核对。
+
 - [来源摘录阅读往返](2026-11-06-source-current-file-navigation/README.md)：真实旧内容与当前文件的页面核验。
 
 - [两轮文件修订实页](2026-11-06-two-turn-file-revision/README.md)：真实反馈、逐次修改与当前正文。
