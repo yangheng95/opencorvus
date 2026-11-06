@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [附件读取与问答交付](2026-11-06-attachment-question-delivery.md)：来源摘录可读性修复；自然回答与唯一文件验证。
+
 - [文件修改摘要的比较说明](2026-11-06-file-comparison-explanation.md)：聚合提示与逐次原比较的含义。
 
 - [来源摘录到当前文件](2026-11-06-source-current-file-navigation.md)：实际入口、草稿保护与历史保全。

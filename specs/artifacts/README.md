@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [附件问答交付实页](2026-11-06-attachment-question-delivery/README.md)：23张实页；中英文位置折叠、问答与修改摘要。
+
 - [文件修改比较说明实页](2026-11-06-file-comparison-explanation/README.md)：真实摘要、提示与原记录的页面核对。
 
 - [来源摘录阅读往返](2026-11-06-source-current-file-navigation/README.md)：真实旧内容与当前文件的页面核验。

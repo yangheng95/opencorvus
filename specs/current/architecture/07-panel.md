@@ -268,6 +268,10 @@ open one project target, preserving drafts across repeated citations. External
 absolute paths retain the source reader. Explicit attachment sources retain their
 original display names and source targets. Existing persisted source snapshots
 are not rewritten.
+The saved attachment excerpt dialog prioritizes its original filename and excerpt.
+Its exact physical source location is available in a localized, initially collapsed
+Attachment storage location disclosure. Ordinary project source locations remain
+directly visible; open/copy resource identity and stored excerpts retain their values.
 Composer uploads preserve every supplied nonempty original filename before
 metadata is stored; generated paste names apply only to unnamed inputs. Physical
 staging names remain the AttachmentStore's responsibility.

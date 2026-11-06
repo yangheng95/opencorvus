@@ -507,7 +507,17 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
             }
           >
             <p>{t(props.source.origin === "attachment" ? "chat.source_saved_attachment_excerpt_hint" : "chat.source_saved_excerpt_hint")}</p>
-            <p class="msg-source-excerpt__location">{location()}</p>
+            <Show
+              when={props.source.origin === "attachment"}
+              fallback={<p class="msg-source-excerpt__location">{location()}</p>}
+            >
+              <Disclosure.Root>
+                <Disclosure.Trigger>{t("chat.source_attachment_storage_location")}</Disclosure.Trigger>
+                <Disclosure.Content>
+                  <p class="msg-source-excerpt__location">{location()}</p>
+                </Disclosure.Content>
+              </Disclosure.Root>
+            </Show>
             <pre class="msg-source-excerpt__snapshot" role="region" aria-label={excerptLabel()} tabIndex={0}>
               {props.source.snippet}
             </pre>

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [附件读取、三题作答与文件交付](records/2026-11/2026-11-06-attachment-question-delivery.md)：真实Sol上传、三题/五值交付与附件存储位置折叠。
+
 - [文件修改摘要的比较说明](records/2026-11/2026-11-06-file-comparison-explanation.md)：统一比较限制与原始记录的实际核对。
 
 - [来源摘录到当前文件](records/2026-11/2026-11-06-source-current-file-navigation.md)：历史摘录与当前阅读的真实往返。

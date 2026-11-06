@@ -1,0 +1,132 @@
+{
+  "at": "2026-11-06T07:23:44.600Z",
+  "product": {
+    "change": "Saved attachment excerpts prioritize original filenames and text, with exact storage location in a localized initially collapsed disclosure",
+    "localeKeys": 2909,
+    "apiSchemaOrDataChanges": false
+  },
+  "journey": {
+    "model": "gpt-6.1-sol",
+    "streamingRequests": 7,
+    "workRequests": 6,
+    "existingMemoryRequests": 1,
+    "delegations": 0,
+    "naturalState": "idle",
+    "questions": 3,
+    "answerValues": 5,
+    "answers": [
+      [
+        "以附件原文为准"
+      ],
+      [
+        "保留原日期"
+      ],
+      [
+        "事实表",
+        "行动清单",
+        "附来源说明"
+      ]
+    ],
+    "outputBytes": 511,
+    "outputLines": 21,
+    "fileModificationRecords": 1,
+    "addedLines": 21,
+    "deletedLines": 0,
+    "markdownTables": 2,
+    "originalInputBytes": 2815,
+    "originalInputLines": 60,
+    "savedExcerptLines": 20,
+    "allInputReadLines": 60,
+    "allOriginalInputBytesExact": true,
+    "actualReplyBeforeExpiryByMs": 246405,
+    "httpAndSseBusinessReadbacksExact": true
+  },
+  "finalReadback": {
+    "modelRequests": 0,
+    "originalNaturalToolQuestionFileAndSourceFactsExact": true,
+    "originalInputBytes": 2815,
+    "outputBytes": 511,
+    "naturalState": "idle"
+  },
+  "corpus": {
+    "schema": 10,
+    "tables": 92,
+    "sourceRows": 318075,
+    "beforeRows": 319826,
+    "finalRows": 319828,
+    "sourceProjects": 133,
+    "finalProjects": 134,
+    "sourcePhysicalAttachmentFiles": 307,
+    "finalPhysicalAttachmentFiles": 311,
+    "sourceDatabaseAndOriginalProjectFilesGitConfigsAndAttachmentsPreserved": true,
+    "filesystemExclusions": 0,
+    "exactExpiredCapacitySlotsReused": 2,
+    "allOtherOriginalRowsExact": true,
+    "newBusinessOwnershipTables": 23,
+    "newQaProjects": 1,
+    "newQaSessions": 1,
+    "busOccurrences": 51,
+    "successfulBusDeliveries": 338,
+    "terminalPermissionAttempts": 2,
+    "addedPhysicalAttachments": [
+      "original text and metadata",
+      "production capability catalog and metadata"
+    ],
+    "finalAddedRows": {
+      "runtimeActivationLease": 1,
+      "matchingGrant": 1
+    },
+    "retainedPublicFullToolParts": 28,
+    "retainedSourceParts": 11,
+    "cumulativeRequests": 1513
+  },
+  "resources": {
+    "ownBrowserTabsClosed": [
+      "84",
+      "85"
+    ],
+    "nativeBeforeAndFinalPublicShutdown200": true,
+    "nativeAndLauncherExits": [
+      0,
+      0
+    ],
+    "pairedCredentialAndCatalogCopiesRetired": 4,
+    "userCredentialAndCatalogSourceMetadataPreserved": true,
+    "unusedAfterPhaseAllocated": false,
+    "minimumReserveMs": 3814703,
+    "absoluteDeadlineUnchanged": true
+  },
+  "manualVisualReview": {
+    "screenshots": 23,
+    "desktop": "1280 × 720",
+    "languages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "performed": [
+      "real upload and send",
+      "three questions answered with free text,single selection,multiple choices and custom text",
+      "collapsed attachment storage location",
+      "mouse and Enter expansion and Space collapse",
+      "full readonly original file",
+      "ordinary project source location and read-current-file action",
+      "one-file review and rendered Markdown",
+      "own-page refresh and original question details"
+    ],
+    "uiAutomatedTests": false
+  },
+  "checks": {
+    "overlayTypecheck": "passed",
+    "i18n": "2 locales /2909 keys",
+    "productionNodeBuild": "passed",
+    "rendererPublicSurface": "passed",
+    "docs": "352 operations /26 groups",
+    "architectureIndex": "20 current documents"
+  },
+  "limits": [
+    "Final phase is a zero-model readback of the natural before journey, not another model replay.",
+    "Hidden native-radio input targeting failed; visible labels completed the actual answers.",
+    "Initial dependent-source checker ordering and obsolete zero-model/source-displayName expectations were corrected; failed receipts retained privately.",
+    "No claim of a release, broad UI audit completion, user database mutation, or live user-window validation."
+  ]
+}
