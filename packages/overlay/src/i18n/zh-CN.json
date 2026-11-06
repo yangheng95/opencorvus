@@ -1306,7 +1306,7 @@
   "diff.before_line_hint": "修改前的行号",
   "diff.after_line_hint": "修改后的行号",
   "diff.original_changes": "逐次修改",
-  "diff.original_change": "第 {{index}} 次修改 · 逐行改动",
+  "diff.original_change": "第 {{index}} / {{count}} 次修改 · 逐行改动",
   "diff.original_changes_hint": "缺少完整的合并对比。可在上方阅读当前文件，或展开下方每次修改；行数仅代表该次改动。",
   "diff.open_current_file_hint": "在文件工作台阅读、编辑或下载磁盘上的当前文件；原变更比较保留在此处。",
   "diff.open_current_file_failed": "无法打开当前文件。",

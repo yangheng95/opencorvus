@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [文件修改记录的数量与阅读](2026-11-06-review-record-reading.md)
+
 - [多文件审阅](2026-11-06-multi-file-review.md)：冷读8条/56行统计修复，双文件与混合修改验证。
 
 - [附件读取与问答交付](2026-11-06-attachment-question-delivery.md)：来源摘录可读性修复；自然回答与唯一文件验证。

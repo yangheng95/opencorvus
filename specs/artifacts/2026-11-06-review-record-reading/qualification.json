@@ -1,0 +1,156 @@
+{
+  "at": "2026-11-06T08:56:03.791Z",
+  "status": "passed",
+  "scope": "A selected file with separately retained Tool comparisons starts with its last listed original comparison open; each heading identifies position and total.",
+  "singleAgent": true,
+  "userWindowsAndPort18571Untouched": true,
+  "ui": {
+    "nativeDevelopment": true,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "backgroundOwnTabs": [
+      "88",
+      "89"
+    ],
+    "ownTabsClosed": true,
+    "manualInteractionsAndIndividualScreenshotReview": true,
+    "screenshots": [
+      "01-before-multi-turn-record.png",
+      "02-before-manually-expanded-third-change.png",
+      "03-after-english-default-third-change.png",
+      "04-after-chinese-default-third-change.png",
+      "05-after-reader-collapses-third.png",
+      "06-after-keyboard-reopens-third.png",
+      "07-after-first-original-creation.png",
+      "08-after-second-original-edit.png",
+      "09-after-current-file-stays-separate.png",
+      "10-after-refresh-default-third-change.png",
+      "11-after-office-default-second-comparison.png",
+      "12-after-switch-to-recorded-binary.png",
+      "13-after-return-to-second-comparison.png",
+      "14-after-eight-file-cold-summary-preserved.png",
+      "15-after-three-question-summary-preserved.png",
+      "16-after-original-question-positions.png"
+    ],
+    "automatedUiTests": false,
+    "realCases": [
+      "three original comparisons (+15/-0, +3/-3, +1/-1)",
+      "two original comparisons in a three-file Office result; last +31/-19",
+      "binary creation version and current-file workbench",
+      "eight-file cold summary; 56 additions and 0 deletions",
+      "three questions: two answered, one blank, three values in one multi-select answer"
+    ],
+    "lastListedComparisonIsNotAUniversalChronologicalClaim": true
+  },
+  "checks": {
+    "frontendTypecheck": 0,
+    "locale": 0,
+    "nodeBuild": 0,
+    "docs": 0,
+    "architecture": 0,
+    "localeKeys": 2909,
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "architectureDocuments": 20,
+    "realReadbacks": [
+      {
+        "label": "before-initial",
+        "allDeclaredOriginalChecksPassed": true
+      },
+      {
+        "label": "after-initial",
+        "allDeclaredOriginalChecksPassed": true
+      },
+      {
+        "label": "after-ended",
+        "allDeclaredOriginalChecksPassed": true
+      }
+    ]
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 319832,
+      "currentRows": 319834,
+      "projects": 134,
+      "attachments": 311,
+      "filesystemExclusions": 0,
+      "allOriginalRowsAndContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "addedRows": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "added": 1
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "added": 1
+        }
+      ],
+      "allAddedRowsBoundToOriginalNativeOccurrence": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalOutputRequestsSettled": true,
+      "credentialAndFullCatalogCopiesRetired": 2,
+      "sourceCredentialAndCatalogPreserved": true,
+      "reserveMs": 5050269,
+      "modelRequests": 0,
+      "cumulativeRequests": 1513,
+      "uiEntry": "main-q9ncFp7j.js"
+    },
+    {
+      "phase": "after",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 319834,
+      "currentRows": 319836,
+      "projects": 134,
+      "attachments": 311,
+      "filesystemExclusions": 0,
+      "allOriginalRowsAndContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "addedRows": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "added": 1
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "added": 1
+        }
+      ],
+      "allAddedRowsBoundToOriginalNativeOccurrence": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalOutputRequestsSettled": true,
+      "credentialAndFullCatalogCopiesRetired": 2,
+      "sourceCredentialAndCatalogPreserved": true,
+      "reserveMs": 4497815,
+      "modelRequests": 0,
+      "cumulativeRequests": 1513,
+      "uiEntry": "main-Bl2xTHEJ.js"
+    }
+  ],
+  "resources": {
+    "absoluteDeadlineAt": "2026-11-06T10:07:45.038Z",
+    "declaredTotalModelBudget": 0,
+    "newModelRequests": 0,
+    "cumulativeRequests": 1513,
+    "retiredPairedCopies": 4,
+    "minimumReserveMs": 4497815,
+    "finalPhaseAllocated": false
+  },
+  "limits": [
+    "The file-record count remains distinct from the number of original comparisons within one record.",
+    "Original comparison order and nullable aggregate counts are unchanged.",
+    "No natural single-incomplete-comparison, error/retry, >80-row virtual inventory or wide-container scenario was visually qualified.",
+    "Question screenshot16 shows the first two original questions; the third continues below.",
+    "No new model execution, lifecycle replay, release or user-window verification."
+  ]
+}

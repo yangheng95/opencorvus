@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件修改记录的数量与阅读](records/2026-11/2026-11-06-review-record-reading.md)
+
 - [多文件修改摘要与筛选阅读](records/2026-11/2026-11-06-multi-file-review.md)：修复首次打开统计缺失，在原传输上限内保留完整文件清单。
 
 - [附件读取、三题作答与文件交付](records/2026-11/2026-11-06-attachment-question-delivery.md)：真实Sol上传、三题/五值交付与附件存储位置折叠。

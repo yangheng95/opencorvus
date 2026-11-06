@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件修改记录的数量与阅读实页证据](2026-11-06-review-record-reading/README.md)
+
 - [多文件审阅实页](2026-11-06-multi-file-review/README.md)：21张实页，首次统计、原比较、筛选与完整保全。
 
 - [附件问答交付实页](2026-11-06-attachment-question-delivery/README.md)：23张实页；中英文位置折叠、问答与修改摘要。

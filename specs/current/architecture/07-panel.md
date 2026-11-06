@@ -735,6 +735,15 @@ file and aggregate-count explanations live in the native Reading guide disclosur
 The actual record count, unknown aggregate indicator and individual-comparison
 evidence limitations remain visible. No separate data projection or window is used.
 
+When an interval requires separate original Tool comparisons, the existing
+receipt list retains its producer order. The last listed comparison starts open
+so selecting the file presents a concrete original change. Each localized heading
+names its position and the total number of original comparisons; this count is
+distinct from the file-record inventory and does not imply an aggregate diff.
+Every disclosure remains independently controlled by the reader. The default is
+local to its mount, with the same canonical Tool reader and content authority;
+it adds no chronological inference, current-file substitution or persisted state.
+
 Shared compact skill-load details identify the exact requested skill name and
 optional supporting-file path. Both skill surface tools use their original
 structured arguments, with localized separators, instead of the producer's
