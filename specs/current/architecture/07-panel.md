@@ -1098,13 +1098,14 @@ identity preserves the editor draft and loaded content; line citations also
 retain their existing exact range reveal behavior.
 FileEditorPane captures the current focus origin with that explicit reveal revision,
 before an asynchronous read can mount its CodeEditor. Source excerpt navigation
-consumes its one explicit file-open intent in the existing dialog close-autofocus
-lifecycle, after checking the captured API authority, source selection epoch and
-directory. Reopening the excerpt or cleaning up its entry retires that intent.
-For a clean file, normal close restores its opener synchronously; existing
-asynchronous file admission then commits the reveal from that stable origin,
-including already mounted files. Dirty-file navigation still uses the existing
-unsaved decision before admission. Dialog and CodeEditor retain their sole focus
+consumes its one explicit file-open intent in a microtask queued by the existing
+dialog close-autofocus lifecycle. Normal opener restoration and focus-scope
+retirement complete in that call stack before file admission can synchronously
+open an unsaved decision. Consumption requires the same pending action identity;
+reopening the excerpt or cleaning up its entry retires that action. The captured
+API authority, source selection epoch and directory must still be current.
+Clean and dirty files then share the existing file admission and reveal owners,
+including already mounted files. Dialog and CodeEditor retain their sole focus
 lifecycles and the editor's protection for another control chosen during loading.
 The native Markdown preview consumes the same explicit reveal revision once when
 it is the visible, connected, sized and ready content view. Its existing pane

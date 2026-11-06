@@ -1,0 +1,173 @@
+{
+  "at": "2026-11-06T15:08:19.246Z",
+  "status": "source close-action sequencing verified; continuous product iteration remains active",
+  "scope": "Consume the same pending excerpt file action in one microtask after close autofocus and focus-scope retirement, retaining action identity and original context guards",
+  "singleAgent": true,
+  "noDelegation": true,
+  "userWindowsProcessesPort18571AndRealDatabaseUntouched": true,
+  "ui": {
+    "nativeDevelopmentUi": true,
+    "backgroundTabs": [
+      "110",
+      "111",
+      "112"
+    ],
+    "allOwnTabsClosed": true,
+    "manualInteractionsAndIndividualScreenshotReview": true,
+    "automatedUiTests": false,
+    "screenshots": [
+      "01-before-chained-unsaved-decision.png",
+      "02-before-cancel-focus-lost.png",
+      "03-before-direct-close-cancel-control.png",
+      "04-after-candidate-cancel-focus-failure.png",
+      "05-final-cancel-restores-source-english.png",
+      "06-final-keyboard-reopens-excerpt.png",
+      "07-final-escape-cancel-keyboard-focus.png",
+      "08-conversation-search-returns-source.png",
+      "09-comparison-preserves-draft.png",
+      "10-comparison-close-restores-header.png",
+      "11-direct-close-cancel-retains-draft.png",
+      "12-chinese-chained-unsaved-decision.png",
+      "13-chinese-cancel-restores-source-focus.png",
+      "14-chinese-plain-excerpt-close.png",
+      "15-command-palette-restores-trigger.png",
+      "16-discard-to-readonly-attachment-line57.png",
+      "17-repeated-clean-attachment-search.png",
+      "18-original-markdown-preview-restored.png",
+      "19-segmented-choice-consumes-escape-clue.png",
+      "20-escape-from-close-restores-comparison.png",
+      "21-chinese-file-summary-original-preview.png"
+    ],
+    "hero": "13-chinese-cancel-restores-source-focus.png",
+    "summary": "21-chinese-file-summary-original-preview.png",
+    "retainedFailures": [
+      "02-before-cancel-focus-lost.png",
+      "04-after-candidate-cancel-focus-failure.png"
+    ],
+    "newIssue": "19-segmented-choice-consumes-escape-clue.png"
+  },
+  "checks": {
+    "type-final": 0,
+    "ui-build-final": 0,
+    "docs-final": 0,
+    "architecture-final": 0,
+    "locale-final": 0
+  },
+  "docs": {
+    "operations": 352,
+    "groups": 26,
+    "architectureDocuments": 20
+  },
+  "locale": {
+    "locales": 2,
+    "keys": 2913,
+    "newProductStrings": 0
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "uiResult": "reproduced original failure",
+      "originalRows": 322862,
+      "currentRows": 322864,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 3375993,
+      "uiEntry": "main-CPtiiFuE.js"
+    },
+    {
+      "phase": "after",
+      "uiResult": "candidate failed and was removed",
+      "originalRows": 322864,
+      "currentRows": 322866,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 2939018,
+      "uiEntry": "main-CXYsqH3C.js"
+    },
+    {
+      "phase": "final",
+      "uiResult": "scoped final behavior verified",
+      "originalRows": 322866,
+      "currentRows": 322868,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 2098699,
+      "uiEntry": "main-55SIcdlh.js"
+    }
+  ],
+  "resources": {
+    "absoluteDeadline": 1793979711626,
+    "deadlineExtended": false,
+    "newModelRequests": 0,
+    "cumulativeRequests": 1524,
+    "pairedCopiesRetired": 6,
+    "minimumReserveMs": 2098699
+  },
+  "retainedActualModelFacts": {
+    "freshModelInteraction": false,
+    "questions": 3,
+    "answerValues": 5,
+    "goalStatus": "complete",
+    "goalTokens": 271588,
+    "artifactBytes": 559,
+    "originalGoalAndToolRequestsExact": true
+  },
+  "verified": [
+    "English Keep editing and English/Chinese Escape cancellation return to surviving source-excerpt opener with draft preserved",
+    "Immediate Return reopens excerpt, Tab/Return initiates the same file decision, repeated cancellation returns correctly",
+    "Plain excerpt close restores opener",
+    "Conversation search and command palette restore original controls",
+    "Comparison Close button returns to header while preserving temporary draft; direct file-close cancellation retains its opener",
+    "Product Discard opens original read-only attachment; actual Find reaches line57; repeated same-file action retains file-scoped Find",
+    "Project excerpt restores original default Markdown preview and file-scoped Find",
+    "Chinese file summary shows1record21added0deleted lines; original delivered tables intact"
+  ],
+  "limits": [
+    "SegmentedControl selected option consumes Escape through nullable ToggleGroup collection; same comparison Escape from Close works. Next iteration must audit and fix the required-selection primitive contract",
+    "No fresh model call, actual Save, conflict/adoption, download/clipboard or new slow-read alternate-focus acceptance",
+    "Action context retirement is enforced by existing cleanup and exact pending-function identity; no synthetic retired UI callback was injected",
+    "Failed shared-Dialog candidate was entirely removed; no public Dialog interface change shipped"
+  ]
+}

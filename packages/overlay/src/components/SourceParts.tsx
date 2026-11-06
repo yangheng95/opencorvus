@@ -483,8 +483,12 @@ function SourceEntry(props: { source: ConversationSourcePart; index: number; sho
             onClose={() => setFileExcerptOpen(false)}
             onCloseAutoFocus={() => {
               const open = pendingExcerptFileOpen
-              pendingExcerptFileOpen = undefined
-              open?.()
+              if (!open) return
+              queueMicrotask(() => {
+                if (pendingExcerptFileOpen !== open) return
+                pendingExcerptFileOpen = undefined
+                open()
+              })
             }}
             title={t("chat.source_saved_excerpt_title", { source: displayLabel() })}
             wide

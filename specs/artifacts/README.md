@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [弹窗关闭焦点实页](2026-11-06-dialog-close-focus-continuity/README.md)：旧版复现与修复后的实际键盘连续性。
+
 - [附件来源阅读实页](2026-11-06-attachment-source-reading/README.md)：后台独立页面及完整附件核对。
 
 - [文件保存恢复实页](2026-11-06-file-save-recovery/README.md)：真实保存、受控磁盘修改与冲突反馈。
