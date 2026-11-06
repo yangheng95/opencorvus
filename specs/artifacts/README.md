@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [当前文件阅读往返实页](2026-11-06-current-file-reading/README.md)：原记录与当前文件实际阅读。
+
 - [审阅区阅读空间实页](2026-11-06-review-reading-space/README.md)：真实修改记录和比较阅读。
 
 - [协调请求摘要实页](2026-11-06-coordination-request-summary/README.md)：原成员请求与实际阅读。

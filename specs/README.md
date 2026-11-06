@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [审阅到当前文件的阅读往返](records/2026-11/2026-11-06-current-file-reading.md)：当前正文、文件作用域和原记录。
+
 - [审阅区的阅读空间](records/2026-11/2026-11-06-review-reading-space.md)：原始记录、比较正文与窄侧栏。
 
 - [协调请求的实际摘要](records/2026-11/2026-11-06-coordination-request-summary.md)：展示原问题，不把交回当决定。

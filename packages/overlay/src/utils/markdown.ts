@@ -348,6 +348,10 @@ function extractFileReference(text: string): { display: string; reference: FileR
   if (!/^(?:[A-Za-z]:[\\/])?[\p{L}\p{N}\p{M}_./\\@~-]+$/u.test(pathPart)) return null
   const hasSlash = /[\/\\]/.test(pathPart)
   const hasFileExt = FILE_EXT_RE.test(pathPart)
+  // A single rooted word also spells commands and routes. Auto-link only
+  // when an extension or cited location makes that otherwise ambiguous token
+  // a file reference; longer paths retain their existing path evidence.
+  if (/^\/[^/\\]+\/?$/.test(pathPart) && !hasFileExt && reference.line === undefined) return null
   const hasPathPrefix = /^(?:[A-Za-z]:[\\/]|[\\/]|\.{1,2}[\\/]|~[\\/])/.test(pathPart)
   // A bare filename can simply be code prose, and does not identify a file
   // in the current workspace. A separator also occurs in concepts and MIME

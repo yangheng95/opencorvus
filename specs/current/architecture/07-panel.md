@@ -376,6 +376,12 @@ keeps the resource location available without changing its identity.
 Body-reference click delegation also retains the exact already parsed path
 attribute, including whitespace decoded from an authored Markdown destination.
 Empty-attribute validation does not supply a trimmed replacement resource.
+Automatic code-span file links retain a single slash-rooted word as literal code
+unless a recognized file extension or explicit cited line identifies a file.
+Commands and routes therefore keep their authored code presentation without a
+command-name list. Longer explicit paths and the existing relative/location
+rules retain their links; authored Markdown destinations and Sources keep their
+separate explicit identities. This is one shared renderer rule, not path admission.
 After URL/resource classification, local Markdown file destinations and document-relative
 image paths decode URI components exactly once. Encoded filename characters such as
 `%23`, `%26` and `%2B` become literal `#`, `&` and `+`; `%2523` retains a literal `%23`.

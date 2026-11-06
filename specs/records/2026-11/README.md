@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [审阅到当前文件的阅读往返](2026-11-06-current-file-reading.md)：实际打开、阅读与返回审阅。
+
 - [审阅区的阅读空间](2026-11-06-review-reading-space.md)：窄侧栏实际阅读与记录选择。
 
 - [协调请求的实际摘要](2026-11-06-coordination-request-summary.md)：真实问题、原回执和中英阅读。

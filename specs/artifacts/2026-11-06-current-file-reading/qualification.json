@@ -1,0 +1,157 @@
+{
+  "at": "2026-11-06T03:52:37.350Z",
+  "scope": "Literal slash commands and real current-file reading roundtrip",
+  "uiEntry": "main-BYqSyfYb.js",
+  "screenshots": 12,
+  "personallyReviewed": true,
+  "uiAutomationRun": false,
+  "manualObservations": {
+    "desktopViewport": [
+      1280,
+      720
+    ],
+    "beforeOffice908CurrentFileAndReviewRoundtrip": true,
+    "beforeGoal870CommandsWereFileLinks": true,
+    "beforeActualGoalClickReplacedGuideWithMissingFile": true,
+    "afterEnglishAndChineseCommandsAreLiteralCode": true,
+    "afterActualCommandClicksKeepGuideVisible": true,
+    "authoredRelativeLink": {
+      "path": "../sources/UI-control.tsx",
+      "resolvedPath": "sources/UI-control.tsx",
+      "keyboardOpen": true,
+      "firstPointerAttempt": "not-qualified",
+      "pointerDiagnostic": {
+        "unionCenterTag": "TD",
+        "unionBox": {
+          "x": 926,
+          "y": 416.96875,
+          "width": 53.5,
+          "height": 31.59375
+        },
+        "actualTextClick": {
+          "x": 950,
+          "y": 442
+        }
+      },
+      "actualTextPointerOpen": true
+    },
+    "originalCitedFileLine": {
+      "path": "docs/goal-quickstart.zh-CN.md",
+      "line": 51,
+      "sourceViewAndHighlightConfirmed": true
+    },
+    "originalReviewSecondComparison": {
+      "additions": 62,
+      "deletions": 0,
+      "retainedAfterFileNavigation": true
+    },
+    "closeFileReturnsToOriginalReviewAndFocus": true
+  },
+  "model": {
+    "newRequests": 0,
+    "cumulativeRequests": 1474,
+    "newAgents": 0,
+    "newMessages": 0
+  },
+  "originalEvidence": {
+    "publicRegressionSessions": 3,
+    "fullCanonicalTools": 8,
+    "originalQuestionsAndFileFactsExact": true,
+    "httpHistoryAndSseConnectionSnapshotsExact": true,
+    "currentFileReads": [
+      {
+        "file": "docs/goal-quickstart.zh-CN.md",
+        "bytes": 15568,
+        "lines": 112,
+        "status": 200
+      },
+      {
+        "file": "sources/UI-control.tsx",
+        "bytes": 41748,
+        "lines": 1014,
+        "status": 200
+      },
+      {
+        "file": "deliverables/summary.md",
+        "bytes": 2538,
+        "lines": 48,
+        "status": 200
+      },
+      {
+        "file": "deliverables/客户方案（已确认）.md",
+        "bytes": 227,
+        "lines": 16,
+        "status": 200
+      }
+    ],
+    "allCurrentFileBytesMatchOriginalProtectedCorpus": true,
+    "newLiveToolEventsEmitted": 0
+  },
+  "checks": {
+    "typedPackages": 8,
+    "locales": 2,
+    "localeKeys": 2904,
+    "newLocaleKeys": 0,
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "currentArchitectureDocuments": 20,
+    "rendererPublicSurface": true
+  },
+  "phases": [
+    {
+      "kind": "before",
+      "originals": 310436,
+      "current": 310438,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 3157243,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    },
+    {
+      "kind": "after",
+      "originals": 310438,
+      "current": 310440,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 2420020,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    }
+  ],
+  "retirement": {
+    "publicShutdownStatuses": [
+      200,
+      200
+    ],
+    "nativeAndLauncherExitCodes": [
+      0,
+      0
+    ],
+    "pairedCredentialAndCatalogCopiesRetired": 4,
+    "ownedBrowserTabsClosed": [
+      71,
+      72
+    ],
+    "optionalFinalNotAllocated": true,
+    "userWindowAndPort18571Untouched": true
+  },
+  "limits": [
+    "Only single-segment slash-rooted auto code references without recognized extension or cited line change presentation; an extensionless root filename is likewise literal.",
+    "Root-extension, root-line, Windows/UNC/tilde and other-platform cases retain existing code branches but have no new natural visual sample this batch.",
+    "Shared renderer consumers were audited in code; actual new raster coverage is file Preview, with retained main message file/range links. No new side/member/Notebook raster.",
+    "No source/draft save, network recovery, new model execution, scheduler or migration acceptance.",
+    "First generic pointer attempt on the wrapped table link was not treated as success; actual text-area pointer click and keyboard both loaded the exact source.",
+    "Current original model prose and filenames retain their own language; no new product text or locale keys."
+  ]
+}
