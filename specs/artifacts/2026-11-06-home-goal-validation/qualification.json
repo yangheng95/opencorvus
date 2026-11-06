@@ -1,0 +1,249 @@
+{
+  "at": "2026-11-06T09:55:08.136Z",
+  "status": "passed",
+  "scope": [
+    "Field-level feedback and correction focus for semantically blank objectives and completion evidence",
+    "One shared current-language formatter for known unfinished Goal reasons; authored completion evidence and raw Tool results preserved"
+  ],
+  "singleAgent": true,
+  "userWindowsAndPort18571Untouched": true,
+  "ui": {
+    "nativeDevelopment": true,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "backgroundOwnTabs": [
+      "90",
+      "91",
+      "92"
+    ],
+    "ownTabsClosed": true,
+    "manualInteractionsAndIndividualScreenshotReview": true,
+    "automatedUiTests": false,
+    "screenshots": [
+      "01-before-project-home-english.png",
+      "02-before-required-objective-english.png",
+      "03-before-collapsed-zero-budget-submit.png",
+      "04-before-reopened-draft-chinese.png",
+      "05-before-zero-budget-chinese.png",
+      "06-before-guide-chinese.png",
+      "07-before-guide-return-draft-preserved.png",
+      "08-before-whitespace-objective-feedback.png",
+      "09-before-whitespace-completion-feedback.png",
+      "10-before-goal-reason-code-in-chinese.png",
+      "11-before-original-read-content.png",
+      "12-after-inline-objective-error-english.png",
+      "13-after-corrected-objective-and-budgets.png",
+      "14-after-collapsed-budget-error-preserved.png",
+      "15-after-inline-objective-error-chinese.png",
+      "16-after-corrected-draft-guide-return-chinese.png",
+      "17-after-inline-completion-error-chinese.png",
+      "18-after-completion-draft-corrected.png",
+      "19-after-goal-reason-chinese.png",
+      "20-after-original-goal-result-preserved.png",
+      "21-after-goal-reason-english.png",
+      "22-after-completed-evidence-verbatim.png",
+      "23-after-global-home-context.png",
+      "24-after-prefilled-length-error-preserved.png",
+      "25-final-objective-error-english.png",
+      "26-final-objective-error-chinese.png",
+      "27-final-goal-reason-chinese.png"
+    ],
+    "realCases": [
+      "English and Chinese native required/budget errors",
+      "Semantic whitespace objective and completion evidence",
+      "Input correction, close/reopen, guide return with keyboard, three-turn draft budget",
+      "Known turn_budget reason, original budget_limited/turn_budget JSON, completed authored evidence",
+      "Project and global home, 16014-character prefill against original16000 limit"
+    ],
+    "readOnlyLengthObservation": {
+      "characters": 16014,
+      "maximum": 16000,
+      "visualErrorAndFocusSeparatelyObserved": true
+    }
+  },
+  "checks": {
+    "frontendTypecheck": 0,
+    "locale": 0,
+    "nodeAfterBuild": 0,
+    "nodeFinalBuild": 0,
+    "docs": 0,
+    "architecture": 0
+  },
+  "localeKeys": 2909,
+  "docsOperations": 352,
+  "docsGroups": 26,
+  "architectureDocuments": 20,
+  "business": {
+    "completedReadbacks": [
+      {
+        "label": "before-initial",
+        "checks": 9,
+        "passed": true
+      },
+      {
+        "label": "final-initial-retry",
+        "checks": 9,
+        "passed": true
+      },
+      {
+        "label": "final-ended",
+        "checks": 9,
+        "passed": true
+      }
+    ],
+    "originalSessions": 7,
+    "originalFullToolParts": 33,
+    "originalSources": 13,
+    "additionalMultiFileCases": 3,
+    "additionalCurrentFiles": 12,
+    "originalGoals": [
+      {
+        "status": "complete",
+        "tokensUsed": 383698,
+        "turnsAccepted": 1,
+        "turnBudget": 12,
+        "sessionStatus": "idle"
+      },
+      {
+        "status": "paused",
+        "tokensUsed": 503626,
+        "turnsAccepted": 1,
+        "turnBudget": 2,
+        "sessionStatus": "idle"
+      }
+    ],
+    "canonicalGoalTools": 3,
+    "goalToolsOriginalRequestsAndJsonBytesExact": true,
+    "completeOriginalCorpusPreserved": true
+  },
+  "toolingCorrections": {
+    "afterEndChecksCompleted": 7,
+    "afterEndMissingSourcesCheckpoint": "failed due to old initial checkpoint reference; final stage completed the missing checks",
+    "finalFirstInitialSourcesCheckpoint": "failed due to cross-batch dynamic phase reference; fixed to current root/phase/label and rerun on the same live native instance",
+    "failedLogsRetained": true,
+    "noRuntimeRestartOrDeadlineExtension": true,
+    "retirementAfterAllFinalChecks": true,
+    "goalOutputVerifier": "Uses the real producer metadata.continuousGoal and exact JSON.stringify output contract; original incorrect inline outcome.output assumption retained as a verifier correction"
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 319836,
+      "currentRows": 319838,
+      "projects": 134,
+      "attachments": 311,
+      "filesystemExclusions": 0,
+      "allOriginalRowsAndBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "addedRows": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "added": 1
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "added": 1
+        }
+      ],
+      "allAddedRowsBoundToOriginalNativeOccurrence": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalOutputRequestsSettled": true,
+      "credentialAndFullCatalogCopiesRetired": 2,
+      "sourceCredentialAndCatalogPreserved": true,
+      "reserveMs": 4473161,
+      "modelRequests": 0,
+      "cumulativeRequests": 1513,
+      "uiEntry": "main-Bl2xTHEJ.js"
+    },
+    {
+      "phase": "after",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 319838,
+      "currentRows": 319840,
+      "projects": 134,
+      "attachments": 311,
+      "filesystemExclusions": 0,
+      "allOriginalRowsAndBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "addedRows": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "added": 1
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "added": 1
+        }
+      ],
+      "allAddedRowsBoundToOriginalNativeOccurrence": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalOutputRequestsSettled": true,
+      "credentialAndFullCatalogCopiesRetired": 2,
+      "sourceCredentialAndCatalogPreserved": true,
+      "reserveMs": 3684456,
+      "modelRequests": 0,
+      "cumulativeRequests": 1513,
+      "uiEntry": "main-CYDmZ234.js"
+    },
+    {
+      "phase": "final",
+      "schema": 10,
+      "tables": 92,
+      "originalRows": 319840,
+      "currentRows": 319842,
+      "projects": 134,
+      "attachments": 311,
+      "filesystemExclusions": 0,
+      "allOriginalRowsAndBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "addedRows": [
+        {
+          "table": "engine_control_activation_lease_grant",
+          "added": 1
+        },
+        {
+          "table": "engine_control_activation_lease",
+          "added": 1
+        }
+      ],
+      "allAddedRowsBoundToOriginalNativeOccurrence": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalOutputRequestsSettled": true,
+      "credentialAndFullCatalogCopiesRetired": 2,
+      "sourceCredentialAndCatalogPreserved": true,
+      "reserveMs": 3037805,
+      "modelRequests": 0,
+      "cumulativeRequests": 1513,
+      "uiEntry": "main-CYDmZ234.js"
+    }
+  ],
+  "resources": {
+    "absoluteDeadlineAt": "2026-11-06T10:39:57.906Z",
+    "declaredTotalModelBudget": 0,
+    "newModelRequests": 0,
+    "cumulativeRequests": 1513,
+    "retiredPairedCopies": 6,
+    "minimumReserveMs": 3037805,
+    "finalPhaseUsedAsOriginallyReserved": true,
+    "latestFullSource": "984-final",
+    "latestRows": 319842
+  },
+  "limits": [
+    "No valid goal creation/update, new model execution, recovery or release was exercised.",
+    "Only the natural turn_budget cause and authored completion text were visually covered, not every possible cause or completion evidence matching a known code.",
+    "SideChat and all network-failure branches were not visually qualified.",
+    "Screenshot11 is original read content and does not prove the Goal JSON view; screenshot20 supplies that actual view.",
+    "Long English compact text follows the existing truncation layout; original details remain readable."
+  ]
+}

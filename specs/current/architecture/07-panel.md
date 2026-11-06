@@ -553,8 +553,11 @@ Errors retain their canonical failure text. Expanded Input still shows the exact
 request locator and bounds. Main, child and card summaries share this owner.
 The create/get/update continuous-goal Tool summaries format known Goal statuses
 from their actual structured result through the same current locale labels as
-the Goal control. Authored reasons and original inputs/results remain unchanged
-and available through the existing Tool disclosure. This presentation does not
+the Goal control. Known unfinished system reasons share the control's single
+localized reason formatter. Completed reasons remain authored evidence even when
+their text matches a system code; unclassified reasons retain their original text.
+Original inputs/results remain unchanged and available through the existing Tool
+disclosure. This presentation does not
 derive Goal state from a requested status or alter execution and usage ownership.
 Successful Mission completion and blocker Tools use their declared producer
 contracts and canonical completed Tool state for localized result summaries.
@@ -5026,7 +5029,11 @@ the selected owner. This also covers programmatically prefilled composer drafts,
 which native maxlength validity may accept. A localized field error immediately
 below Objective retains the complete draft and budgets, keeps the current page,
 and focuses that field for correction. Other validation keeps its shared form
-feedback. The field and submit check share one client limit; the original
+feedback. Semantically blank objectives and completion evidence use their existing
+field's invalid state, localized error and correction focus too; native required
+validation and the existing trimmed submit rules retain their separate roles.
+Correcting the field clears the same validation source. The field and submit check
+share one client limit; the original
 server schema remains authoritative for HTTP and tool input.
 Selected conversations keep the owner-bound strip above their transcript.
 Their header also exposes a localized Continuous goal text action, including

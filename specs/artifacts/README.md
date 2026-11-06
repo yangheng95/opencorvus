@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [首页目标表单与预算校验实页](2026-11-06-home-goal-validation/README.md)
+
 - [文件修改记录的数量与阅读实页证据](2026-11-06-review-record-reading/README.md)
 
 - [多文件审阅实页](2026-11-06-multi-file-review/README.md)：21张实页，首次统计、原比较、筛选与完整保全。

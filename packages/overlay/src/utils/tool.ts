@@ -3,6 +3,7 @@
 
 import type { IconName } from "../components/ui/Icon"
 import { localeTag, t, tc } from "./i18n"
+import { continuousGoalReasonLabel } from "./continuous-goal-presentation"
 import { isWindowsPath, normalizeServerPath } from "./server-path"
 import {
   ReadToolResultFacts,
@@ -123,7 +124,7 @@ function displayToolResultDetail(name: string, state: Record<string, unknown>): 
     ["active", "paused", "blocked", "complete", "budget_limited"].includes(status)
   ) {
     const label = t(`continuous_goal.status.${status}`)
-    const reason = firstNonEmptyString(output.reason)
+    const reason = continuousGoalReasonLabel(status, firstNonEmptyString(output.reason))
     return reason ? `${label}${t("card.meta_separator")}${shortValue(reason)}` : label
   }
   if (n === "mergeback") {

@@ -28,6 +28,7 @@ import { workLedgerProject } from "../services/work-ledger"
 import { projectDisplayName } from "../utils/project-directory"
 import { randomUUID } from "../utils/random-id"
 import { localeTag, t } from "../utils/i18n"
+import { continuousGoalReasonLabel } from "../utils/continuous-goal-presentation"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Badge, type BadgeTone } from "./ui/Badge"
 import { Button } from "./ui/Button"
@@ -82,20 +83,6 @@ const tones: Record<ContinuousGoal["status"], BadgeTone> = {
   complete: "ok",
   budget_limited: "warn",
 }
-const systemReasons = new Set([
-  "owner_unavailable",
-  "owner_cancelled",
-  "owner_archived",
-  "mission_closed",
-  "token_budget",
-  "turn_budget",
-  "model_not_configured",
-  "model_unavailable",
-  "user_paused",
-  "user_resumed",
-  "budget_updated",
-  "budget_updated_and_resumed",
-])
 
 function needsBudgetIncrease(goal: ContinuousGoal): boolean {
   return (
@@ -186,7 +173,13 @@ export function ContinuousGoalControl(props: {
   const [busy, setBusy] = createSignal(false)
   const [failure, setFailure] = createSignal<unknown>()
   const [validation, setValidation] = createSignal("")
-  const objectiveLengthInvalid = () => validation() === "continuous_goal.validation.objective_length"
+  const objectiveError = () => {
+    const value = validation()
+    return value === "continuous_goal.validation.objective" || value === "continuous_goal.validation.objective_length"
+      ? value
+      : undefined
+  }
+  const completionInvalid = () => validation() === "continuous_goal.validation.reason"
   const [notice, setNotice] = createSignal("")
   let attempt: { key: string; requestID: string } | undefined
   let launchOwner: GoalLaunchContext | undefined
@@ -208,9 +201,7 @@ export function ContinuousGoalControl(props: {
   }
   const currentReason = () => {
     const current = goal()
-    const value = current?.reason
-    if (current?.status === "complete") return value
-    return value && systemReasons.has(value) ? t(`continuous_goal.reason.${value}`) : value
+    return continuousGoalReasonLabel(current?.status, current?.reason)
   }
   const owns = (key: string) => !disposed && source()?.key === key
   const initialLoading = () => projection.state === "pending" || (
@@ -539,7 +530,7 @@ export function ContinuousGoalControl(props: {
       const failedMode = mode()
       setValidation(message)
       queueMicrotask(() => {
-        const target = objectiveLengthInvalid() ? objectiveField : validationFeedback
+        const target = objectiveError() ? objectiveField : completionInvalid() ? completionField : validationFeedback
         if (disposed || mode() !== failedMode || validation() !== message ||
           !target?.isConnected || !dialog?.contains(target)) return
         target.focus()
@@ -818,7 +809,7 @@ export function ContinuousGoalControl(props: {
               <Show when={pendingComposerContext()}>
                 <p class="continuous-goal__hint">{t("continuous_goal.pending_context_hint")}</p>
               </Show>
-              <TextField.Root as="label" variant="multiline" invalid={objectiveLengthInvalid()}>
+              <TextField.Root as="label" variant="multiline" invalid={!!objectiveError()}>
                 <TextField.Label>{t("continuous_goal.objective")}</TextField.Label>
                 <AutoGrowTextarea
                   ref={(element) => { objectiveField = element }}
@@ -836,10 +827,12 @@ export function ContinuousGoalControl(props: {
                   placeholder={t("continuous_goal.objective_placeholder")}
                   readOnly={props.readOnly}
                 />
-                <Show when={objectiveLengthInvalid()}>
-                  <TextField.ErrorMessage role="alert">
-                    {t("continuous_goal.validation.objective_length", { limit: number(OBJECTIVE_MAX_LENGTH) })}
-                  </TextField.ErrorMessage>
+                <Show when={objectiveError()}>
+                  {(key) => (
+                    <TextField.ErrorMessage role="alert">
+                      {t(key(), { limit: number(OBJECTIVE_MAX_LENGTH) })}
+                    </TextField.ErrorMessage>
+                  )}
                 </Show>
               </TextField.Root>
             </Show>
@@ -963,7 +956,7 @@ export function ContinuousGoalControl(props: {
                 </>
               }
             >
-              <TextField.Root as="label" variant="multiline">
+              <TextField.Root as="label" variant="multiline" invalid={completionInvalid()}>
                 <TextField.Label>{t("continuous_goal.evidence")}</TextField.Label>
                 <AutoGrowTextarea
                   ref={(element) => { completionField = element }}
@@ -980,10 +973,13 @@ export function ContinuousGoalControl(props: {
                   disabled={busy()}
                   placeholder={t("continuous_goal.evidence_placeholder")}
                 />
+                <Show when={completionInvalid()}>
+                  <TextField.ErrorMessage role="alert">{t("continuous_goal.validation.reason")}</TextField.ErrorMessage>
+                </Show>
                 <TextField.Description>{t("continuous_goal.complete_hint")}</TextField.Description>
               </TextField.Root>
             </Show>
-            <Show when={validation() && !objectiveLengthInvalid()}>
+            <Show when={validation() && !objectiveError() && !completionInvalid()}>
               <Feedback ref={(element) => { validationFeedback = element }} tabIndex={-1}
                 tone="error" title={t("continuous_goal.validation.title")}>
                 {t(validation(), { max: number(Number.MAX_SAFE_INTEGER) })}

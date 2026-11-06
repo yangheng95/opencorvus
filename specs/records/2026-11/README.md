@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [首页目标表单与预算校验](2026-11-06-home-goal-validation.md)
+
 - [文件修改记录的数量与阅读](2026-11-06-review-record-reading.md)
 
 - [多文件审阅](2026-11-06-multi-file-review.md)：冷读8条/56行统计修复，双文件与混合修改验证。
