@@ -543,6 +543,13 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
       .filter(Boolean)
       .join(t("card.meta_separator"))
   }
+  if ((n === "skill" || n === "missionskill") && (status === "running" || status === "completed")) {
+    const count = safeState.metadata?.count
+    const result = status === "completed" && Number.isSafeInteger(count) && count >= 0
+      ? tc("tool.skill.result_count", count, { count: count.toLocaleString(localeTag()) })
+      : ""
+    return [firstNonEmptyString(safeInput.query), result].filter(Boolean).join(t("card.meta_separator")) || statusLabel
+  }
   if (n === "panelcreatetask") {
     const title = firstNonEmptyString(safeInput.title)
     if (title) return title
@@ -703,10 +710,15 @@ export function describeToolCall(name: string, input: unknown, state: unknown, b
     ? ReadToolResultFacts.safeParse(record(state) ? (state as any).metadata : undefined)
     : undefined
   const readsDirectory = readFacts?.success && readFacts.data.readType === "directory"
+  const skillInput = record(input) ? input as Record<string, unknown> : undefined
+  const skillDiscovery = (key === "skill" || key === "missionskill") && skillInput && !skillInput.name &&
+    (status === "running" || status === "completed")
   return {
     name: toolName,
-    icon: readsDirectory ? "folder-open" : displayToolIconName(toolName),
-    label: readsDirectory ? t("tool.action.read_directory") : displayToolLabel(toolName),
+    icon: readsDirectory ? "folder-open" : skillDiscovery ? "search" : displayToolIconName(toolName),
+    label: readsDirectory ? t("tool.action.read_directory") : skillDiscovery
+      ? t(firstNonEmptyString(skillInput?.query) ? "tool.action.skill_search" : "tool.action.skill_list")
+      : displayToolLabel(toolName),
     detail: displayToolDetail(toolName, input, state, base),
     status,
     cancelled,

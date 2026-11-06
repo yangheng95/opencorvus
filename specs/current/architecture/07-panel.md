@@ -693,6 +693,11 @@ Shared compact skill-load details identify the exact requested skill name and
 optional supporting-file path. Both skill surface tools use their original
 structured arguments, with localized separators, instead of the producer's
 English success title. Original result disclosures and errors retain their facts.
+Running/completed skill discovery calls with no requested name identify listing
+or searching from the original query. Their compact result count names how many
+skills are displayed, including zero, from canonical metadata.count; the catalog's
+total is not a matched-result count. Named loads retain their existing identity.
+Both surface tools share these localized action, count and numeric conventions.
 
 Published Task Artifact previews and downloads read exact immutable bytes through
 the existing Project-identity context. The POST byte-read request does not require

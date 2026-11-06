@@ -1,0 +1,118 @@
+{
+  "at": "2026-11-06T00:04:45.931Z",
+  "scope": "Skill discovery action and count presentation from original structured facts",
+  "screenshots": 14,
+  "personallyReviewed": true,
+  "uiAutomationRun": false,
+  "uiEntry": "main-D4TxIHCX.js",
+  "model": {
+    "requested": "gpt-6.1-sol",
+    "actual": "gpt-6.1-sol",
+    "allStreaming": true,
+    "requests": 5,
+    "maximumBefore": 8,
+    "unusedAllowanceRetired": 3,
+    "cumulativeRequests": 1474,
+    "afterRequests": 0,
+    "realSessionsCreated": 1,
+    "realToolQueries": 3,
+    "displayedCounts": [
+      1,
+      1,
+      0
+    ],
+    "compatibleCatalogTotal": 1
+  },
+  "phases": [
+    {
+      "kind": "before",
+      "originals": 309233,
+      "current": 310404,
+      "schema": 10,
+      "tables": 92,
+      "attachmentFiles": 299,
+      "protectedProjects": 129,
+      "requests": 5,
+      "cumulativeRequests": 1474,
+      "reserveMs": 3037231,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0,
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793886464788,
+          "reacquiredAt": 1793921786140,
+          "releasedAt": 1793921792011,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793877057606,
+          "reacquiredAt": 1793921778984,
+          "releasedAt": 1793921781616,
+          "ownedByRuntime": true
+        }
+      ]
+    },
+    {
+      "kind": "after",
+      "originals": 310404,
+      "current": 310406,
+      "schema": 10,
+      "tables": 92,
+      "attachmentFiles": 301,
+      "protectedProjects": 130,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 1882903,
+      "allOriginalBusinessContentPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0,
+      "reusedExpiredCapacitySlots": []
+    }
+  ],
+  "newProject": {
+    "binaryRulesAppendedByInitialization": 11,
+    "terminalProfilesInitializedInProjectConfig": true,
+    "modelAndOtherSeedContentPreserved": true,
+    "gitHeadRefIndexPreserved": true,
+    "gitStatus": "M .gitattributes",
+    "newCapabilityCatalogPhysicalFiles": 2,
+    "deliverableFilesCreatedByModel": 0
+  },
+  "readback": {
+    "newCanonicalParts": 3,
+    "oldCanonicalParts": 8,
+    "newCaseMessages": 5,
+    "sourceCaseAndOldHistoryQualified": true,
+    "normalShutdownIdleObservationQualified": true,
+    "shutdownObservationSequence": [
+      9,
+      10
+    ],
+    "oldSourceBaseline": "968-before retained intact through968-after and969-before; after fresh public checks"
+  },
+  "checks": {
+    "eightPackageTypes": true,
+    "ordinaryNodeBuild": true,
+    "i18nLocales": 2,
+    "i18nKeys": 2895,
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "architectureDocuments": 20
+  },
+  "resources": {
+    "nativeShutdowns": 2,
+    "nativeAndLauncherExitZero": true,
+    "credentialAndCatalogCopiesRetired": 4,
+    "ownTabsClosed": 2,
+    "optionalFinalAllocated": false
+  },
+  "limits": [
+    "No natural mission_skill raster; current real case used skill.",
+    "Completed-return UI validated; running/receiving/error discovery labels have no new final-UI visual acceptance.",
+    "Catalog contains one skill; capped five-result listing has no natural visual example.",
+    "Member Markdown preview remains a separate analyzed issue; no renderer or activity transport change."
+  ]
+}
