@@ -13,6 +13,7 @@ import { Feedback } from "../ui/Feedback"
 
 import { createEffect, createMemo, createSignal, For, Show, type JSX } from "solid-js"
 import { t } from "../../utils/i18n"
+import { expertSquadDescription } from "../../utils/expert-squad-description"
 import { renderMarkdown } from "../../utils/markdown"
 import {
   clearSessionExpertSquadOverride,
@@ -1560,7 +1561,7 @@ export default function ExpertSquadPanel() {
                               </Show>
                             </div>
                             <Show when={squad.description}>
-                              <p>{squad.description}</p>
+                              <p>{expertSquadDescription(squad)}</p>
                             </Show>
                             <div class="expert-squad-status-list">
                               <Show when={squad.system_role === "expert_squad_generator"}>

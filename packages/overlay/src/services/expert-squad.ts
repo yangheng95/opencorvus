@@ -79,12 +79,17 @@ export type ExpertSquadEvolutionMutationResult = ExpertSquadEvolutionMutationRes
 
 const EXPERT_SQUAD_PUBLIC_MARKET_ORIGIN = "https://opencorvus.com"
 
+export function expertSquadPublicPageURL(input: { locale: string; page: "market" | "publish" }): string {
+  const localePath = input.locale.toLocaleLowerCase().startsWith("zh") ? "/zh-cn" : ""
+  const pagePath = input.page === "market" ? "/market/" : "/expert-squads/publish/"
+  return `${EXPERT_SQUAD_PUBLIC_MARKET_ORIGIN}${localePath}${pagePath}`
+}
+
 export function expertSquadPublicMarketURL(input: { namespace: string; id: string; locale: string }): string {
   const namespace = input.namespace.trim()
   const id = input.id.trim()
   if (!namespace || !id) throw new Error("expertSquadPublicMarketURL: namespace and id are required")
-  const localePath = input.locale.toLocaleLowerCase().startsWith("zh") ? "/zh-cn" : ""
-  return `${EXPERT_SQUAD_PUBLIC_MARKET_ORIGIN}${localePath}/market/${encodeURIComponent(namespace)}/${encodeURIComponent(id)}/`
+  return `${expertSquadPublicPageURL({ locale: input.locale, page: "market" })}${encodeURIComponent(namespace)}/${encodeURIComponent(id)}/`
 }
 
 export interface ExpertSquadExportResult {

@@ -1,0 +1,190 @@
+{
+  "at": "2026-11-06T16:55:15.488Z",
+  "status": "shared current-locale descriptions and public destinations verified; continuous product iteration remains active",
+  "scope": "One reviewed translation authoring source and one description display function, bound to exact namespace/id and original whole field; localized public market and canonical author-guide destinations",
+  "singleAgent": true,
+  "noDelegation": true,
+  "userWindowsProcessesPort18571AndRealDatabaseUntouched": true,
+  "ui": {
+    "nativeDevelopmentUi": true,
+    "backgroundTabs": [
+      "116",
+      "117"
+    ],
+    "allOwnTabsClosed": true,
+    "manualInteractionsAndIndividualScreenshotReview": true,
+    "automatedUiTests": false,
+    "screenshots": [
+      "01-before-chinese-create-english-descriptions.png",
+      "02-before-chinese-detail-english-description.png",
+      "03-before-unfiltered-mention-skill-area.png",
+      "04-after-chinese-work-descriptions.png",
+      "05-after-create-scroll-position.png",
+      "06-after-chinese-lower-team-descriptions.png",
+      "07-after-code-chinese-search.png",
+      "08-after-code-contract-query.png",
+      "09-after-work-market-heading.png",
+      "10-after-natural-market-chinese-descriptions.png",
+      "11-after-chinese-market-entry.png",
+      "12-after-chinese-detail-and-tabs.png",
+      "13-after-live-english-detail.png",
+      "14-after-live-chinese-detail.png",
+      "15-after-chinese-filtered-mention.png",
+      "16-after-reference-chinese-search-clue.png",
+      "17-after-reference-selector-description.png",
+      "18-after-original-three-question-counts.png",
+      "19-after-original-file-summary.png",
+      "20-after-original-question-position.png",
+      "21-after-actual-answer-count-summary.png"
+    ],
+    "hero": "06-after-chinese-lower-team-descriptions.png",
+    "detail": "14-after-live-chinese-detail.png",
+    "retainedNewDefect": "16-after-reference-chinese-search-clue.png"
+  },
+  "checks": {
+    "generate-localizations": 0,
+    "generate-common": 0,
+    "url-contract": 0,
+    "catalog-contract-owned": 0,
+    "type-after": 0,
+    "ui-build-after": 0,
+    "docs-after": 0,
+    "architecture-after": 0,
+    "locale-after": 0
+  },
+  "docs": {
+    "operations": 352,
+    "groups": 26,
+    "architectureDocuments": 20
+  },
+  "locale": {
+    "locales": 2,
+    "keys": 2913,
+    "newProductKeys": 0,
+    "existingChineseKeysUpdated": 4,
+    "canonicalDescriptionIdentities": 122,
+    "longestOriginalDescriptionCharacters": 233,
+    "descriptionDisplayCallSites": 6,
+    "reviewedTopLevelDescriptionsUpdated": 5
+  },
+  "nonUiContracts": {
+    "urlCases": 4,
+    "urlAssertions": 8,
+    "actualMarketInstallCatalogSearchCases": 13,
+    "actualMarketAssertions": 503,
+    "initialCatalogRun": {
+      "passed": 12,
+      "failed": 1,
+      "cause": "Private wrapper duplicated the registered test runner isolation and produced a deep Windows validation working directory; original supervisor startup returned267"
+    },
+    "correction": "Invoke the same registered test entry once under its own isolation, deadline, physical supervisor and cleanup; unchanged original13cases then passed"
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "uiResult": "reproduced English descriptions in Chinese creation and detail",
+      "originalRows": 322874,
+      "currentRows": 322876,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 4156120,
+      "uiEntry": "main-Cj_Ewv-S.js"
+    },
+    {
+      "phase": "after",
+      "uiResult": "current-locale descriptions verified; separate Chinese alias search defect retained",
+      "originalRows": 322876,
+      "currentRows": 322878,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 2712439,
+      "uiEntry": "main-Cp27Xi2h.js"
+    }
+  ],
+  "resources": {
+    "absoluteDeadline": 1793986554690,
+    "deadlineExtended": false,
+    "newModelRequests": 0,
+    "cumulativeRequests": 1524,
+    "pairedCopiesRetired": 4,
+    "minimumReserveMs": 2712439,
+    "optionalFinalAndRecoveryAllocated": false
+  },
+  "retainedActualModelFacts": {
+    "freshModelInteraction": false,
+    "questions": 3,
+    "answerValues": 5,
+    "goalStatus": "complete",
+    "goalTokens": 271588,
+    "artifactBytes": 559,
+    "originalGoalAndToolRequestsExact": true
+  },
+  "publicDestinationReadback": [
+    {
+      "requested": "https://opencorvus.com/zh-cn/market/",
+      "status": 200,
+      "finalURL": "https://opencorvus.com/zh-cn/market/",
+      "title": "专家团市场 · OpenCorvus",
+      "bytes": 150091
+    },
+    {
+      "requested": "https://opencorvus.com/zh-cn/expert-squads/publish/",
+      "status": 200,
+      "finalURL": "https://opencorvus.com/zh-cn/expert-squads/publish/",
+      "title": "构建专家团 | OpenCorvus",
+      "bytes": 50600
+    },
+    {
+      "requested": "https://opencorvus.com/expert-squads/publish/",
+      "status": 200,
+      "finalURL": "https://opencorvus.com/expert-squads/publish/",
+      "title": "Build an Expert Squad | OpenCorvus",
+      "bytes": 50782
+    }
+  ],
+  "verified": [
+    "Five embedded team descriptions read naturally in Chinese creation while canonical brands, IDs and selection remain intact",
+    "Code and Work type switching retain current single-selection contract; Chinese project catalog query still returns actual candidates",
+    "Three natural uninstalled market suggestions show exact package identity/version and reviewed Chinese descriptions; no installation",
+    "Chinese market root and author guide use current-language canonical destinations; actual loopback page exposes exact links and remote readback returns200",
+    "Same Dynamic detail changes Chinese to original English and back through actual command palette without page refresh or identity replacement",
+    "Original conversation @Dynamic mention and new unsent launcher reference picker show Chinese descriptions; temporary input cleared",
+    "Original question record shows3total3answered0blank; original file summary shows1record21added0deleted lines"
+  ],
+  "limits": [
+    "Screenshot16 reproduces unresolved Chinese alias search failure in the reference picker: local label-only filtering drops the existing Research Studio candidate. Next iteration must repair shared discovery/search data flow",
+    "No natural installed custom package case, second reference-picker market-suggestion visual qualification, general arbitrary long-working-directory acceptance or fresh model execution",
+    "Skill/Mission Skill original source descriptions and full package/prompt source bodies remain authored content; this batch does not claim all product localization is complete",
+    "Screenshots03and08do not show Expert Squad suggestion acceptance;19is file summary and20question area with its visible original content;21is the actual answered count summary",
+    "First before Goal-tool read ran before its required baseline Goal file existed; ordered original readback rerun passed, failed log retained",
+    "Five canonical website description sources changed in the repository; no website deployment or release performed"
+  ]
+}

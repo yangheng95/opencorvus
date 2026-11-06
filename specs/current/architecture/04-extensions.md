@@ -576,6 +576,12 @@ export、uninstall 和普通 runtime routes 执行完整 bootstrap，但 bootstr
 namespace/id 身份，在唯一生成器中合并后读取既有 reviewed 翻译。Payload 字节库存排除 embedded
 包，不代表搜索库存排除它们；生成器不引入第二份嵌入包名单或改变安装与 capability 授权。
 
+`generate-expert-squad-localization.ts` 是该审校内容的唯一生成入口，同时产生原后端搜索投影和
+Overlay 的静态顶层说明资源；两者均从现有官网中文作者模块读取，不写入 package payload。
+界面说明按精确 namespace/id 与规范 manifest 的完整原 description 绑定，不能用显示名称、
+关键词或源码摘要推断用户包身份。显示层在当前界面语言为中文且原字段完全一致时使用该译文，
+其它作者原字段保持真实。品牌、包身份、提示词和原件正文不受显示翻译影响。
+
 Installed Expert Squads 在读取 runtime catalog 前调用 identity-only `POST /expert-squad/repair-bundled`，
 直接替换有当前 bundled namespace/id 来源且 manifest 数字 schema version 低于当前版本的安装，然后依据真实
 receipt 弹出版本、安装 scope 与备份提醒。它不是普通 bootstrap 的隐式写入，也不是通用自动升级：当前 schema

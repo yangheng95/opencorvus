@@ -1,11 +1,12 @@
 import { Feedback } from "../ui/Feedback"
 import { Show, createEffect, createSignal } from "solid-js"
-import { t } from "../../utils/i18n"
+import { localeTag, t } from "../../utils/i18n"
 import { expertSquadCatalogRequestKey, expertSquadCatalogScope } from "../../services/expert-squad-scope"
 import {
   importExpertSquadArchive,
   importExpertSquadFolder,
   loadExpertSquadMarket,
+  expertSquadPublicPageURL,
   type ExpertSquadInstallationScope,
 } from "../../services/expert-squad"
 import {
@@ -23,9 +24,6 @@ import { Icon } from "../ui/Icon"
 import { SelectField } from "../ui/SelectField"
 import { SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./layout"
 import { secureContextFailure } from "../../utils/secure-context"
-
-const EXPERT_SQUAD_MARKET_URL = "https://opencorvus.com/market/"
-const EXPERT_SQUAD_PUBLISH_URL = "https://opencorvus.com/publish/"
 
 type BusyAction = "import-folder" | "import-archive" | `handoff:${ExpertSquadInstallationScope}`
 
@@ -238,7 +236,7 @@ export default function ExpertSquadMarketPanel() {
               size="md"
               tone="neutral"
               data-ui="expert-squad-market-web"
-              href={EXPERT_SQUAD_MARKET_URL}
+              href={expertSquadPublicPageURL({ locale: localeTag(), page: "market" })}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -251,7 +249,7 @@ export default function ExpertSquadMarketPanel() {
               size="md"
               tone="neutral"
               data-ui="expert-squad-market-publish"
-              href={EXPERT_SQUAD_PUBLISH_URL}
+              href={expertSquadPublicPageURL({ locale: localeTag(), page: "publish" })}
               target="_blank"
               rel="noopener noreferrer"
             >

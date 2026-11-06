@@ -20,6 +20,7 @@ import { Popover } from "./ui/Popover"
 import { settingsStore } from "../store/settings"
 import { Slider } from "./ui/Slider"
 import { localeTag, t } from "../utils/i18n"
+import { expertSquadDescription } from "../utils/expert-squad-description"
 import { nativeMessage } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { messageStore, setChatAttachments } from "../store/messages"
@@ -718,7 +719,7 @@ export function ChatComposer(props: ChatComposerProps) {
         kind: "squad",
         id: squad.id,
         label: squad.name,
-        description: squad.description,
+        description: expertSquadDescription(squad),
       }),
     ),
   }))

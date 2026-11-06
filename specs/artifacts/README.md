@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [专家团说明实页](2026-11-07-expert-description-locale/README.md)：真实中文创建、选择与详情及完整来源资格。
+
 - [分段选择实页](2026-11-06-segmented-selection/README.md)：真实比较、筛选、表单和原数据资格。
 
 - [弹窗关闭焦点实页](2026-11-06-dialog-close-focus-continuity/README.md)：旧版复现与修复后的实际键盘连续性。

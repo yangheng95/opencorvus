@@ -100,7 +100,7 @@ export const publicMarketZhTranslations01To35 = {
   },
   "builtin/advanced": {
     label: "Advanced",
-    description: "内置的高级软件交付团队，保留能力匹配的需求到架构可追溯性，以及执行、测试、界面与独立审查边界。",
+    description: "内置的高级软件交付团队，覆盖需求与架构梳理、开发、测试、界面设计和独立审查。",
     selectorSummary:
       "用于需要从需求到架构可追溯、并行调查与实施证据及独立审查，但没有更窄已安装专家契约的高级软件交付。",
     agents: {
@@ -524,7 +524,7 @@ export const publicMarketZhTranslations01To35 = {
   "builtin/base": {
     label: "Base",
     description:
-      "Base 由任务负责人直接完成发现、规划和实际交付，再由独立测试方检查结果；有独立来源调查或研究需要时才委托规划与开发或并行研究。",
+      "由任务负责人完成实际交付，再独立验证结果；仅在需要时安排规划或并行研究。",
     selectorSummary: "适用于一个执行责任方完成、独立 Tester 验收的一项完整 Task；真实独立研究可选用并行研究图。",
     agents: {
       "base-researcher": {
@@ -1555,7 +1555,7 @@ export const publicMarketZhTranslations01To35 = {
   "builtin/dynamic": {
     label: "Dynamic 动态团队",
     description:
-      "根据当前任务即时描述最小临时 Agent 团队和依赖关系，并立即通过现有 Session 调度执行，不生成永久专家团包。",
+      "根据当前任务组建临时专家团队，明确成员职责与能力范围，并依据执行证据推进工作。",
     selectorSummary: "用于需要按本轮请求快速生成成员分工和工作流描述的调查、规划、实现、审查与综合任务。",
     agents: {
       "dynamic-generalist": {

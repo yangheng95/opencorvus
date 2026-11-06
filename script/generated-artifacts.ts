@@ -10,6 +10,7 @@ export const GENERATED_ARTIFACT_PATHS = [
   "packages/opencorvus/generated/expert-squad-payload.ts",
   "packages/opencorvus/generated/expert-squad-revisions.ts",
   "packages/opencorvus/generated/expert-squad-search-localization.ts",
+  "packages/overlay/src/generated/expert-squad-descriptions.ts",
   "packages/opencorvus/src/skill/builtin-payload.ts",
   "packages/opencorvus/src/mission-skill/builtin-payload.ts",
   "templates/portable-expert-squad-template",

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [专家团说明语言](2026-11-07-expert-description-locale.md)：原文身份、审校译文与全部共享显示入口。
+
 - [分段选择语义](2026-11-06-segmented-selection-semantics.md)：Esc 根因、原生选择与实际中文页面复核。
 
 - [弹窗关闭与焦点连续性](2026-11-06-dialog-close-focus-continuity.md)：真实取消、返回入口及公共弹窗回归。

@@ -714,6 +714,17 @@ effective package and actual first-message references; they do not claim a fixed
 launch assignment. Full catalog failure, a new scope and global drafts retire the
 prior package fact through the existing loader owner.
 
+Expert Squad top-level descriptions in creation, Composer candidates and mentions,
+installed detail and market suggestions share one current-locale display function.
+Its generated UI resource comes from the existing reviewed website translations
+and the canonical package manifests through the common localization generator.
+Exact namespace/id and complete original-field equality bind the translation;
+user-authored or changed descriptions retain their source text. The display
+projection leaves catalog responses, package identity, labels and model context
+unchanged, and subscribes to the existing locale sequence. Public market roots,
+author documentation and exact package URLs share one locale-aware destination
+builder; author links target the canonical expert-squads/publish route.
+
 Installed catalog feedback retains the original thrown value in one nullable
 failure record. Its presence controls the concise recovery hint; Details use the
 shared HTTP formatter on the original thrown value. Expert catalog/settings/market services preserve the original

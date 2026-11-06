@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [专家团说明语言](records/2026-11/2026-11-07-expert-description-locale.md)：规范原文绑定、共享中文说明与真实页面。
+
 - [分段选择语义](records/2026-11/2026-11-06-segmented-selection-semantics.md)：共享必选控件、键盘关闭与各实际表面。
 
 - [弹窗关闭与焦点连续性](records/2026-11/2026-11-06-dialog-close-focus-continuity.md)：来源摘录后的未保存取消与共享关闭生命周期。

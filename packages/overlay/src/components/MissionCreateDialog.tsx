@@ -10,6 +10,7 @@ import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/projec
 import { workLedgerProject } from "../services/work-ledger"
 import { formatErrorDetails } from "../services/diagnostics"
 import { localeTag, t } from "../utils/i18n"
+import { expertSquadDescription } from "../utils/expert-squad-description"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Badge } from "./ui/Badge"
 import { Button } from "./ui/Button"
@@ -180,7 +181,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     const options = expertSquads().map((squad) => ({
       value: squad.id,
       label: squad.display_label,
-      description: squad.description,
+      description: expertSquadDescription(squad),
       outsideSearch:
         Boolean(expertSquadQuery().trim()) &&
         !expertSquadLoading() &&
@@ -894,7 +895,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                       <small>
                         {item.namespace}/{item.id} · {item.version}
                       </small>
-                      <p>{item.description || item.label}</p>
+                      <p>{expertSquadDescription(item) || item.label}</p>
                     </div>
                     <div class="mission-create-form__market-actions">
                       <Button

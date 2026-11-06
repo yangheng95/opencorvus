@@ -477,7 +477,7 @@ export const publicMarketZhTranslations68To99 = {
   },
   "builtin/research-studio": {
     label: "研究工作室",
-    description: "一支负责研究规划、持久证据收集、可复现分析、计算后事实核查和模板驱动报告交付的 Squad。",
+    description: "开展研究规划、证据收集、可复现分析和事实核查，按报告模板交付成果。",
     selectorSummary: "适用于有来源支持的检索、可复现分析、综合和证据驱动的报告交付，不包含软件交付规划工作流。",
     agents: {
       "research-studio-planner": {
@@ -960,7 +960,7 @@ export const publicMarketZhTranslations68To99 = {
   },
   "builtin/squad-sdk": {
     label: "生成 Expert Squad",
-    description: "以证据为依据导入异构算法，并通过独立契约审查，规范生成项目自有、可追溯的 OpenCorvus Expert Squad。",
+    description: "依据证据导入异构算法，生成项目自有、可追溯的专家团，并完成独立契约审查。",
     selectorSummary: "适用于导入外部异构 Agent 算法，或通过规范 SDK 设计、验证并安装新的 OpenCorvus Expert Squad。",
     agents: {
       "squad-sdk-source-analyst": {

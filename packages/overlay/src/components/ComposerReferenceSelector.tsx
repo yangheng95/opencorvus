@@ -5,6 +5,7 @@ import type { ComposerExpertSquadPackage } from "../services/composer-expert-squ
 import { setComposerMentionDirectiveSelected, type ComposerMentionKind } from "../services/composer-mention"
 import { fuzzySearch } from "../services/fuzzy-search"
 import { t } from "../utils/i18n"
+import { expertSquadDescription } from "../utils/expert-squad-description"
 import { Button } from "./ui/Button"
 import { Icon } from "./ui/Icon"
 import { ListboxItem, ListboxRoot, ListboxSection } from "./ui/Listbox"
@@ -96,7 +97,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
       kind: "squad" as const,
       id: squad.id,
       label: squad.name,
-      description: squad.description,
+      description: expertSquadDescription(squad),
       typeLabel: t("chat.references.expert_squad"),
       systemRole: squad.system_role,
     })),
@@ -530,7 +531,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                               <span class="composer-reference-option-name">{item.name}</span>
                               <span class="composer-reference-option-meta">{t("expert_squad.market")}</span>
                             </span>
-                            <span class="composer-reference-option-description">{item.description}</span>
+                            <span class="composer-reference-option-description">{expertSquadDescription(item)}</span>
                           </span>
                           <Button
                             type="button"

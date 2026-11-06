@@ -18,6 +18,7 @@ const API_MDX_ARTIFACT_PATHS = new Set([
 const OPENCORVUS_BUILD_ARTIFACT_PATHS = new Set([
   "packages/opencorvus/generated/expert-squad-payload.ts",
   "packages/opencorvus/generated/expert-squad-search-localization.ts",
+  "packages/overlay/src/generated/expert-squad-descriptions.ts",
   "packages/opencorvus/src/skill/builtin-payload.ts",
   "packages/opencorvus/src/mission-skill/builtin-payload.ts",
 ])

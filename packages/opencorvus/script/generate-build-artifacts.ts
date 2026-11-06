@@ -28,15 +28,15 @@ async function generate(packageRoot: string, repoRoot: string) {
   // The build entry binds its validation environment before runtime-backed
   // generators evaluate Global and initialize application directories.
   const { generateExpertSquadPayloadModule } = await import("./generate-expert-squad-payload")
-  const { generateExpertSquadSearchLocalizationModule } = await import("./generate-expert-squad-search-localization")
+  const { generateExpertSquadLocalizationModules } = await import("./generate-expert-squad-localization")
   const { generateBuiltinSkillPayloadModule } = await import("./generate-builtin-skill-payload")
   const { generateBuiltinMissionSkillPayloadModule } = await import("./generate-builtin-mission-skill-payload")
   const { generateWorkArtifactQualificationMatrix } = await import("./generate-work-artifact-qualification-matrix")
 
   await generateExpertSquadPayloadModule(repoRoot)
   log("Generated expert-squad payload module")
-  await generateExpertSquadSearchLocalizationModule(repoRoot)
-  log("Generated expert-squad search localization module")
+  await generateExpertSquadLocalizationModules(repoRoot)
+  log("Generated expert-squad search and interface localization modules")
   await generateBuiltinSkillPayloadModule(repoRoot)
   log("Generated built-in Skill payload module")
   await generateBuiltinMissionSkillPayloadModule(repoRoot)
