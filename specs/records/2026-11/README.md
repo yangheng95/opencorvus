@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [持续目标中的提问与文件交付](2026-11-06-goal-question-delivery.md)：单会话真实模型流程及中文摘要核验。
+
 - [首页目标表单与预算校验](2026-11-06-home-goal-validation.md)
 
 - [文件修改记录的数量与阅读](2026-11-06-review-record-reading.md)

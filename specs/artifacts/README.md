@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [目标提问交付实页](2026-11-06-goal-question-delivery/README.md)：后台隔离页面与实际数据证据。
+
 - [首页目标表单与预算校验实页](2026-11-06-home-goal-validation/README.md)
 
 - [文件修改记录的数量与阅读实页证据](2026-11-06-review-record-reading/README.md)

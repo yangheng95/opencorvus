@@ -292,6 +292,13 @@ Drafts and reads retain their original selection ownership. This covers accepted
 responses in the current frontend process; external writers and responses lost to
 transport timeout require separate qualification.
 
+Read Tool missing-path errors use the existing canonical FileNotFoundError identity.
+The shared Tool failure formatter localizes its compact heading and path-bearing
+message from canonical error metadata. Original diagnostics and nearby-path
+suggestions remain in the existing details disclosure. Persisted generic Error
+history and unknown failures retain their original facts; text is never classified
+by matching English error messages.
+
 Shared Skill and MCP resource actions use one notice object with a message key,
 render-time variables, Feedback tone and optional original diagnostic. Rendering
 translates the summary; errors retain the already public message and, for a real

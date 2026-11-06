@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [持续目标中的提问与文件交付](records/2026-11/2026-11-06-goal-question-delivery.md)：真实目标、三题作答与文件摘要联合体验。
+
 - [首页目标表单与预算校验](records/2026-11/2026-11-06-home-goal-validation.md)
 
 - [文件修改记录的数量与阅读](records/2026-11/2026-11-06-review-record-reading.md)

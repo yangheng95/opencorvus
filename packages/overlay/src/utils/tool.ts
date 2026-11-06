@@ -50,13 +50,23 @@ export function toolFailurePresentation(value: unknown): {
 } {
   if (value === undefined) return { message: "", cancelled: false }
   const parsed = ToolFailureCause.safeParse(value)
-  if (parsed.success) return {
-    message: parsed.data.message,
-    ...(parsed.data.kind === "tool-execution" && parsed.data.name === "FileWriteConflictError"
-      ? { headline: t("tool.file_write_conflict") }
-      : {}),
-    diagnostic: renderToolFailureCause(parsed.data),
-    cancelled: parsed.data.kind === "MessageAbortedError" && parsed.data.name === "MessageAbortedError",
+  if (parsed.success) {
+    const missing = parsed.data.kind === "tool-execution" && parsed.data.name === "FileNotFoundError"
+    const metadata = parsed.data.data?.canonical_error_metadata
+    const path = record(metadata) ? (metadata as Record<string, unknown>).path : undefined
+    const headline = missing
+      ? t("tool.file_not_found")
+      : parsed.data.kind === "tool-execution" && parsed.data.name === "FileWriteConflictError"
+        ? t("tool.file_write_conflict")
+        : undefined
+    return {
+      message: missing
+        ? typeof path === "string" ? t("explorer.error.not_found", { path }) : headline!
+        : parsed.data.message,
+      ...(headline ? { headline } : {}),
+      diagnostic: renderToolFailureCause(parsed.data),
+      cancelled: parsed.data.kind === "MessageAbortedError" && parsed.data.name === "MessageAbortedError",
+    }
   }
   return { message: toolPayloadText(value), cancelled: false }
 }

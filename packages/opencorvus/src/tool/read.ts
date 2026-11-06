@@ -3,6 +3,7 @@ import { ReadToolResultFacts } from "@opencorvus-ai/transport-protocol"
 import * as path from "path"
 import { Tool } from "./tool"
 import { FileTime } from "../file/time"
+import { File } from "../file"
 import DESCRIPTION from "./read.txt"
 import { Instance } from "../project/instance"
 import { assertExternalDirectory } from "./external-directory"
@@ -101,11 +102,12 @@ export const ReadTool = Tool.define("read", {
           throw error
         })
 
-      if (suggestions.length > 0) {
-        throw new Error(`File not found: ${filepath}\n\nDid you mean one of these?\n${suggestions.join("\n")}`)
-      }
-
-      throw new Error(`File not found: ${filepath}`)
+      throw new File.EntryNotFoundError({
+        path: filepath,
+        message: suggestions.length > 0
+          ? `File not found: ${filepath}\n\nDid you mean one of these?\n${suggestions.join("\n")}`
+          : `File not found: ${filepath}`,
+      })
     }
 
     if (stat.isDirectory()) {

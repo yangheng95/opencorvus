@@ -1,0 +1,357 @@
+{
+  "at": "2026-11-06T10:45:08.667Z",
+  "status": "passed",
+  "scope": [
+    "Actual continuous-goal,three-question replies,file creation,readback and canonical completion",
+    "ReadTool reuses existing FileNotFoundError; summary/body localized by exact identity, original diagnostic retained"
+  ],
+  "singleAgent": true,
+  "noDelegation": true,
+  "userWindowsAndPort18571Untouched": true,
+  "realUserDatabaseUntouched": true,
+  "ui": {
+    "nativeDevelopmentUi": true,
+    "backgroundOwnTabs": [
+      "93",
+      "94"
+    ],
+    "ownTabsClosed": true,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "manualInteractionsAndIndividualScreenshotReview": true,
+    "automatedUiTests": false,
+    "screenshots": [
+      "01-chinese-home.png",
+      "02-goal-three-turn-budget.png",
+      "03-goal-running.png",
+      "04-two-of-three-questions.png",
+      "05-three-questions-five-values.png",
+      "06-submitted-answer-summary.png",
+      "07-english-file-error-before.png",
+      "08-completed-file-summary.png",
+      "09-file-review-current-record.png",
+      "10-read-delivered-current-file.png",
+      "11-localized-missing-file-summary.png",
+      "12-localized-missing-file-body.png",
+      "13-original-diagnostic-preserved.png",
+      "14-english-missing-file-body.png",
+      "15-reloaded-chinese-summary.png",
+      "16-reloaded-three-question-history.png"
+    ],
+    "hero": "15-reloaded-chinese-summary.png"
+  },
+  "checks": {
+    "focused-read-retry": 0,
+    "type-overlay": 0,
+    "ui-build-after": 0,
+    "locale-after": 0,
+    "docs-check": 0,
+    "architecture-check": 0,
+    "typed-read-after-reloaded": 0,
+    "transitions-after-live": 0,
+    "ownership-before-retired-qualified": 0,
+    "ownership-after-retired": 0
+  },
+  "focusedBackendTests": {
+    "passed": 10,
+    "expectations": 67,
+    "realReadToolAndNativeFilesystem": true
+  },
+  "locale": {
+    "languages": 2,
+    "keys": 2910
+  },
+  "docs": {
+    "operations": 352,
+    "groups": 26,
+    "architectureDocuments": 20
+  },
+  "business": {
+    "completedReadbacks": [
+      {
+        "label": "before-initial-retry",
+        "checks": 9,
+        "passed": true
+      },
+      {
+        "label": "before-ended",
+        "checks": 9,
+        "passed": true
+      },
+      {
+        "label": "after-initial",
+        "checks": 9,
+        "passed": true
+      },
+      {
+        "label": "after-ended",
+        "checks": 9,
+        "passed": true
+      }
+    ],
+    "originalSessions": 7,
+    "originalFullTools": 33,
+    "originalSources": 13,
+    "additionalMultiFileCases": 3,
+    "additionalCurrentFiles": 12,
+    "originalGoals": 2,
+    "originalGoalTools": 3,
+    "retainedFactsExact": true,
+    "currentGoal": {
+      "status": "complete",
+      "turnsAccepted": 1,
+      "turnBudget": 3,
+      "tokensUsed": 271588,
+      "canonicalUserCreation": true,
+      "realControllerAuthor": "goal-controller",
+      "actualModelCompletion": true,
+      "ownerStatus": "idle"
+    },
+    "currentQuestions": {
+      "requests": 1,
+      "questions": 3,
+      "answeredQuestions": 3,
+      "answerValues": 5,
+      "actualAnswers": [
+        [
+          "以来源原文为准"
+        ],
+        [
+          "保留原日期"
+        ],
+        [
+          "事实表",
+          "行动清单",
+          "附来源说明"
+        ]
+      ],
+      "repliedBeforeExpiryByMs": 242700
+    },
+    "currentFile": {
+      "path": "deliverables/客户确认.md",
+      "bytes": 559,
+      "addedLines": 23,
+      "deletedLines": 0,
+      "tables": 2,
+      "sourceFacts": 5,
+      "originalBytesPreservedAfterNewRead": true
+    },
+    "normalPreCreationReadFailure": {
+      "tool": "read",
+      "historicalErrorName": "Error",
+      "historyPreserved": true
+    },
+    "newRead": {
+      "tool": "read",
+      "path": "sources/缺失资料985.md",
+      "canonicalError": "FileNotFoundError",
+      "publicToolAndConversationFailureExact": true,
+      "workRequests": 2,
+      "nativeProjectMemoryOrganizerRequests": 1
+    },
+    "bootstrapMetadata": {
+      "ownedNewProjectOnly": true,
+      "ignoreRuleAppended": ".opencorvus/.r/",
+      "binaryAttributeRulesAppended": 11,
+      "sourceAndReadmeUnchanged": true,
+      "gitHeadRefAndIndexUnchanged": true,
+      "seedAndActualDiffReceiptsRetained": true
+    }
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "originalRows": 319842,
+      "currentRows": 321911,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 134,
+      "protectedPhysicalAttachments": 311,
+      "filesystemExclusions": 0,
+      "sourceDatabasePreserved": true,
+      "allOriginalBusinessRowsByteExact": false,
+      "unrelatedOriginalBusinessContentExact": true,
+      "declaredQaMutableTransitions": [],
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793948874218,
+          "reacquiredAt": 1793960119836,
+          "releasedAt": 1793960123637,
+          "ownedByRuntime": true
+        }
+      ],
+      "allNewRowsBoundToActualQaOrNative": true,
+      "ownedRowCounts": {
+        "bus_publication_delivery_receipt": 397,
+        "bus_publication_delivery": 397,
+        "bus_publication_outbox": 60,
+        "bus_publication_owner": 60,
+        "bus_publication_phase_receipt": 180,
+        "engine_control_activation_lease_grant": 400,
+        "engine_control_activation_lease": 400,
+        "event_occurrence": 60,
+        "memory_chunk": 1,
+        "memory_file": 1,
+        "message": 9,
+        "part": 21,
+        "permission_execution_result": 2,
+        "permission_ledger": 10,
+        "permission_policy": 1,
+        "project": 1,
+        "protocol_event": 28,
+        "provider_activity_outcome": 8,
+        "provider_activity_request": 8,
+        "provider_usage_event": 8,
+        "runtime_execution_capacity_lease": 1,
+        "session_control_event": 1,
+        "session_control_record": 1,
+        "session": 1,
+        "tool_part_outcome": 7,
+        "tool_part_request": 7
+      },
+      "actualRequests": 8,
+      "cumulativeRequests": 1521,
+      "allRequestsExactSolStreaming200Eof": true,
+      "pairedCredentialAndFullCatalogCopiesRetired": 2,
+      "sourceCredentialAndCatalogPreserved": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalOutputRequestsSettled": true,
+      "reserveMs": 4314177,
+      "uiEntry": "main-CYDmZ234.js"
+    },
+    {
+      "phase": "after",
+      "originalRows": 321911,
+      "currentRows": 322517,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 135,
+      "protectedPhysicalAttachments": 313,
+      "filesystemExclusions": 0,
+      "sourceDatabasePreserved": true,
+      "allOriginalBusinessRowsByteExact": false,
+      "unrelatedOriginalBusinessContentExact": true,
+      "declaredQaMutableTransitions": [
+        {
+          "table": "memory_chunk",
+          "id": "mck_hzA1zV0sqxaTNwnS60ST",
+          "kind": "Current QA Project Memory Organizer committed actual input coverage",
+          "projectID": "prj_hb55jLZkPuHKs7idyNax",
+          "inputID": "msg_536d4eb6-764c-4def-964b-c2c60534b429",
+          "beforeRevision": 0,
+          "afterRevision": 1,
+          "usageID": "pvu_g0VaBiFVo00mQyPQ4BNl",
+          "model": "gpt-6.1-sol",
+          "tokenCount": 321
+        },
+        {
+          "table": "memory_file",
+          "id": "mem_hjNNnXqFAnPChUAwuN6j",
+          "kind": "Current QA Project Memory Organizer committed actual input coverage",
+          "projectID": "prj_hb55jLZkPuHKs7idyNax",
+          "inputID": "msg_536d4eb6-764c-4def-964b-c2c60534b429",
+          "beforeRevision": 0,
+          "afterRevision": 1,
+          "usageID": "pvu_g0VaBiFVo00mQyPQ4BNl",
+          "model": "gpt-6.1-sol",
+          "tokenCount": 321
+        },
+        {
+          "table": "session",
+          "id": "ses_-zUPoMc1fzzesPdb2GxU",
+          "kind": "Actual manual input advances only Session.time_updated",
+          "inputID": "msg_536d4eb6-764c-4def-964b-c2c60534b429",
+          "before": 1793960123652,
+          "after": 1793961170296
+        }
+      ],
+      "memoryAvailabilityTransitions": [],
+      "reusedExpiredCapacitySlots": [
+        {
+          "slot": 0,
+          "priorExpiredAt": 1793960123637,
+          "reacquiredAt": 1793961160027,
+          "releasedAt": 1793961170813,
+          "ownedByRuntime": true
+        },
+        {
+          "slot": 1,
+          "priorExpiredAt": 1793948794627,
+          "reacquiredAt": 1793961165410,
+          "releasedAt": 1793961170271,
+          "ownedByRuntime": true
+        }
+      ],
+      "allNewRowsBoundToActualQaOrNative": true,
+      "ownedRowCounts": {
+        "bus_publication_delivery_receipt": 118,
+        "bus_publication_delivery": 118,
+        "bus_publication_outbox": 18,
+        "bus_publication_owner": 18,
+        "bus_publication_phase_receipt": 54,
+        "engine_control_activation_lease_grant": 119,
+        "engine_control_activation_lease": 119,
+        "event_occurrence": 18,
+        "memory_chunk": 1,
+        "memory_file": 1,
+        "message": 3,
+        "part": 6,
+        "protocol_event": 6,
+        "provider_activity_outcome": 2,
+        "provider_activity_request": 2,
+        "provider_usage_event": 3,
+        "runtime_execution_capacity_lease": 2,
+        "session": 1,
+        "tool_part_outcome": 1,
+        "tool_part_request": 1
+      },
+      "actualRequests": 3,
+      "cumulativeRequests": 1524,
+      "allRequestsExactSolStreaming200Eof": true,
+      "pairedCredentialAndFullCatalogCopiesRetired": 2,
+      "sourceCredentialAndCatalogPreserved": true,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "physicalOutputRequestsSettled": true,
+      "reserveMs": 3447646,
+      "uiEntry": "main-D4kmW2xg.js"
+    }
+  ],
+  "resources": {
+    "absoluteDeadlineAt": "2026-11-06T11:39:23.096Z",
+    "declaredTotalRequests": 48,
+    "newActualRequests": 11,
+    "cumulativeRequests": 1524,
+    "unusedAllowanceRetired": 37,
+    "finalPhaseNotAllocated": true,
+    "pairedCopiesRetired": 4,
+    "minimumReserveMs": 3447646,
+    "latestRows": 322517,
+    "latestProjects": 135,
+    "latestPhysicalAttachments": 315
+  },
+  "toolingCorrections": [
+    "Missing immutable cases input copied; all9checks rerun on same live instance",
+    "Original history and current journey receipt filenames separated",
+    "Initial read-only history checks use actual phase allowance; new real read proves exact3requests",
+    "Ownership verifier follows actual Part→Message, provider permission and Goal usage→actual usage relations",
+    "Live and retired counts separately qualify normal prompt-owner release",
+    "Exact owned QA Session timestamp and Memory revision/input/usage qualified; other rows exact",
+    "Paired old/current capability catalogs scoped to actual project/model; original attachments exact",
+    "Legacy Goal helper zero-count metadata corrected; authoritative request audit/retirement is8+3; old receipts retained"
+  ],
+  "limits": [
+    "Original generic Error history remains original; no text-matching rewrite or database migration",
+    "Nearby-path guidance is covered by actual backend ReadTool tests; no natural UI suggestion sample in this round",
+    "This qualifies the desktop main conversation, not every error kind or SideChat",
+    "UI source identities, authored content and original diagnostics remain original",
+    "No recovery, concurrent task dispatch, release or user-window exercise was performed"
+  ]
+}
