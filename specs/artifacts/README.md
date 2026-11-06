@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [分段选择实页](2026-11-06-segmented-selection/README.md)：真实比较、筛选、表单和原数据资格。
+
 - [弹窗关闭焦点实页](2026-11-06-dialog-close-focus-continuity/README.md)：旧版复现与修复后的实际键盘连续性。
 
 - [附件来源阅读实页](2026-11-06-attachment-source-reading/README.md)：后台独立页面及完整附件核对。

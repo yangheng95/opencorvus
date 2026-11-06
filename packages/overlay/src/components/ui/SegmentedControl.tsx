@@ -1,4 +1,9 @@
-import { Item as KobalteToggleGroupItem, Root as KobalteToggleGroupRoot } from "@kobalte/core/toggle-group"
+import {
+  Item as KobalteSegmentedItem,
+  ItemInput as KobalteSegmentedInput,
+  ItemLabel as KobalteSegmentedLabel,
+  Root as KobalteSegmentedRoot,
+} from "@kobalte/core/segmented-control"
 import { For } from "solid-js"
 import type { JSX } from "solid-js"
 
@@ -30,13 +35,28 @@ function classes(...values: Array<string | undefined>): string {
   return values.filter(Boolean).join(" ")
 }
 
+function onItemKeyDown(event: KeyboardEvent & { currentTarget: HTMLInputElement }): void {
+  if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+  if (event.key === "Enter") {
+    event.preventDefault()
+    event.currentTarget.click()
+    return
+  }
+  if (event.key !== "Home" && event.key !== "End") return
+  const inputs = event.currentTarget.closest('[role="radiogroup"]')?.querySelectorAll<HTMLInputElement>('input[type="radio"]:not(:disabled)')
+  const next = event.key === "Home" ? inputs?.[0] : inputs?.[(inputs?.length ?? 0) - 1]
+  if (!next) return
+  event.preventDefault()
+  next.focus()
+}
+
 export function SegmentedControl<T extends string>(props: SegmentedControlProps<T>): JSX.Element {
-  function handleChange(next: string | null) {
+  function handleChange(next: string) {
     if (next && next !== props.value) props.onChange?.(next as T)
   }
 
   return (
-    <KobalteToggleGroupRoot
+    <KobalteSegmentedRoot
       class={classes("oc-segmented", props.class)}
       value={props.value}
       onChange={handleChange}
@@ -45,7 +65,7 @@ export function SegmentedControl<T extends string>(props: SegmentedControlProps<
     >
       <For each={props.options}>
         {(option) => (
-          <KobalteToggleGroupItem
+          <KobalteSegmentedItem
             {...(props.itemAttributes?.(option) ?? {})}
             class={classes("oc-segmented__item", props.itemClass)}
             value={option.value}
@@ -53,12 +73,19 @@ export function SegmentedControl<T extends string>(props: SegmentedControlProps<
             data-value={option.value}
             title={option.title}
             disabled={option.disabled}
-            onClick={() => props.onActivate?.(option.value)}
           >
-            {props.renderOption ? props.renderOption(option) : option.label}
-          </KobalteToggleGroupItem>
+            <KobalteSegmentedInput
+              class="oc-segmented__input"
+              title={option.title}
+              onClick={() => props.onActivate?.(option.value)}
+              onKeyDown={onItemKeyDown}
+            />
+            <KobalteSegmentedLabel class="oc-segmented__label">
+              {props.renderOption ? props.renderOption(option) : option.label}
+            </KobalteSegmentedLabel>
+          </KobalteSegmentedItem>
         )}
       </For>
-    </KobalteToggleGroupRoot>
+    </KobalteSegmentedRoot>
   )
 }

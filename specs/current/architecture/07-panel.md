@@ -35,6 +35,21 @@ form therefore scrolls its content rather than the enclosing dialog frame; its
 header and actions keep their layout. Selection state and native keyboard behavior
 remain owned by the existing input primitives.
 
+The shared SegmentedControl uses the installed Kobalte native radio-based
+segmented primitive, with one caller-owned value. An intentionally unchosen
+initial value remains unchosen; activating a selected segment cannot clear it.
+Each visual item owns one native input and its primitive-registered label, which
+provides the input's name and original whole-item hit area. The same input click
+owns the existing repeated-activation callback, including keyboard Enter; Space,
+directional selection and group Tab behavior remain native. Unmodified Home/End
+retain the existing first/last enabled-input focus navigation without changing
+the selection. Escape retains its enclosing surface's normal ownership.
+Official `data-checked` and the actual input's `:focus-visible` drive the existing
+selection, counts, focus-ring and density tokens. Hidden inputs and label hit
+areas are positioned within their own items; the unique group name isolates instances.
+There is no nullable toggle implementation, parallel selection state or global
+keyboard routing for this capability.
+
 A complete `message.moved` bundle transfers the original Message and Parts from
 its named source Session to their authoritative target positions. Source-side
 full or Part-first projections retire before the target bundle is applied; a

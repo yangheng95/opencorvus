@@ -287,12 +287,12 @@
 }
 
 .changes-status-strip
-  .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-status="added"][data-pressed] {
+  .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-status="added"][data-checked] {
   background: color-mix(in srgb, var(--diff-add-fg) 12%, transparent);
 }
 
 .changes-status-strip
-  .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-status="deleted"][data-pressed] {
+  .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-status="deleted"][data-checked] {
   background: color-mix(in srgb, var(--diff-del-fg) 12%, transparent);
 }
 
@@ -307,16 +307,13 @@
 }
 
 .changes-status-strip
-  .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-pressed]
-  .changes-status-option-count,
-.changes-status-strip
-  .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-highlighted]
+  .oc-segmented__item[data-ui="file-changes-status-filter-option"][data-checked]
   .changes-status-option-count,
 .changes-status-strip
   .oc-segmented__item[data-ui="file-changes-status-filter-option"]:hover
   .changes-status-option-count,
 .changes-status-strip
-  .oc-segmented__item[data-ui="file-changes-status-filter-option"]:focus-visible
+  .oc-segmented__item[data-ui="file-changes-status-filter-option"]:has(.oc-segmented__input:focus-visible)
   .changes-status-option-count {
   color: var(--text-soft);
 }

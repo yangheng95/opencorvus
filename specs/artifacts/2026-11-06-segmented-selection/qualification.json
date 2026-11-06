@@ -1,0 +1,184 @@
+{
+  "at": "2026-11-06T16:11:33.960Z",
+  "status": "shared native single-selection semantics verified; continuous product iteration remains active",
+  "scope": "Replace the nullable toggle implementation with the installed native segmented-control primitive and its registered labels, preserving caller state, counts, whole-item hit area, activation and existing endpoint navigation",
+  "singleAgent": true,
+  "noDelegation": true,
+  "userWindowsProcessesPort18571AndRealDatabaseUntouched": true,
+  "ui": {
+    "nativeDevelopmentUi": true,
+    "backgroundTabs": [
+      "113",
+      "114",
+      "115"
+    ],
+    "allOwnTabsClosed": true,
+    "manualInteractionsAndIndividualScreenshotReview": true,
+    "automatedUiTests": false,
+    "screenshots": [
+      "01-before-choice-consumes-escape.png",
+      "02-before-end-key-last-choice.png",
+      "03-before-arrow-focus-and-activation.png",
+      "04-before-file-status-summary.png",
+      "05-before-eight-record-status-group.png",
+      "06-before-added-filter-selected.png",
+      "07-before-mission-list-layout.png",
+      "08-before-create-initial-groups.png",
+      "09-before-create-independent-selections.png",
+      "10-before-independent-automation-filters.png",
+      "11-before-two-filters-selected.png",
+      "12-before-usage-period-style.png",
+      "13-candidate-native-choices-missing-names.png",
+      "14-candidate-escape-returns-header.png",
+      "15-final-named-comparison-english.png",
+      "16-final-first-escape-returns-header.png",
+      "17-final-label-click-area.png",
+      "18-final-padding-click-selects-choice.png",
+      "19-final-end-focus-preserves-selection.png",
+      "20-final-keyboard-exit.png",
+      "21-final-chinese-current-permissions.png",
+      "22-final-chinese-week-period.png",
+      "23-final-chinese-independent-filters.png",
+      "24-final-chinese-board.png",
+      "25-final-chinese-create-unselected-type.png",
+      "26-final-chinese-create-independent-groups.png",
+      "27-final-chinese-eight-file-summary.png",
+      "28-final-chinese-added-repeat-selection.png",
+      "29-final-chinese-zero-record-filter.png",
+      "30-final-chinese-source-view.png",
+      "31-final-chinese-named-comparison.png"
+    ],
+    "hero": "27-final-chinese-eight-file-summary.png",
+    "comparison": "31-final-chinese-named-comparison.png",
+    "retainedFailures": [
+      "01-before-choice-consumes-escape.png",
+      "13-candidate-native-choices-missing-names.png"
+    ]
+  },
+  "checks": {
+    "type-final": 0,
+    "ui-build-final": 0,
+    "docs-final": 0,
+    "architecture-final": 0,
+    "locale-final": 0
+  },
+  "docs": {
+    "operations": 352,
+    "groups": 26,
+    "architectureDocuments": 20
+  },
+  "locale": {
+    "locales": 2,
+    "keys": 2913,
+    "newProductStrings": 0
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "uiResult": "reproduced original Escape failure",
+      "originalRows": 322868,
+      "currentRows": 322870,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 3436158,
+      "uiEntry": "main-55SIcdlh.js"
+    },
+    {
+      "phase": "after",
+      "uiResult": "native Escape worked; candidate lacked accessible names and was replaced",
+      "originalRows": 322870,
+      "currentRows": 322872,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 2572042,
+      "uiEntry": "main-BHzLPhKN.js"
+    },
+    {
+      "phase": "final",
+      "uiResult": "official input and label anatomy verified",
+      "originalRows": 322872,
+      "currentRows": 322874,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "onlyAddedRows": {
+        "nativeActivationLease": 1,
+        "matchingGrant": 1,
+        "linkedToOriginalNativeOccurrence": true
+      },
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 1676433,
+      "uiEntry": "main-Cj_Ewv-S.js"
+    }
+  ],
+  "resources": {
+    "absoluteDeadline": 1793983018503,
+    "deadlineExtended": false,
+    "newModelRequests": 0,
+    "cumulativeRequests": 1524,
+    "pairedCopiesRetired": 6,
+    "minimumReserveMs": 1676433
+  },
+  "retainedActualModelFacts": {
+    "freshModelInteraction": false,
+    "questions": 3,
+    "answerValues": 5,
+    "goalStatus": "complete",
+    "goalTokens": 271588,
+    "artifactBytes": 559,
+    "originalGoalAndToolRequestsExact": true
+  },
+  "verified": [
+    "First Escape on selected comparison input closes and returns header in English and Chinese",
+    "Official native input-label association exposes actual English and Chinese option names",
+    "Clicking the original whole-item padding selects the intended option",
+    "Home/End preserve focus-only endpoint navigation; Enter and Space select; arrows select and wrap; Tab and reverse Tab leave and re-enter the group",
+    "Repeated selected activation retains value and does not submit the actual creation form",
+    "Intentionally unchosen initial mission type remains unchosen; creation-mode and type groups select independently; form cancelled without save or start",
+    "Chinese eight-record file summary and counts remain accurate; selected Added8 repeats; Modified0 shows0of8 with clear-filter action",
+    "Original source and preview remain readable, permissions read-only value preserved, usage period switches and restores, mission layout switches and restores, two scheduled filters remain independent",
+    "Original four-question record shows four answered questions separately from two tool operations"
+  ],
+  "limits": [
+    "No natural multi-model turn among897actual single-model assistant messages, so ConversationTurnControl multi-model segment has no new visual qualification",
+    "No synthetic disabled transition, slow-read focus race, actual save, conflict/adoption, download or clipboard acceptance",
+    "No new draft was typed; unchanged SourceParts/FileEditorPane draft preservation comes from retained991contract, not new992draft acceptance",
+    "Chinese built-in Expert Squad descriptions remain English in actual creation form screenshot26; investigate canonical installed identity and user-owned metadata before localization",
+    "Two ownership checks were invoked before final qualification output existed; both failed and were retained. After original full qualification completed, ordered ownership check passed. No service restart or check bypass"
+  ]
+}

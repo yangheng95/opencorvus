@@ -777,7 +777,7 @@
   font-weight: var(--ui-font-weight-body);
 }
 
-.usage-period-control .oc-segmented__item[data-pressed] {
+.usage-period-control .oc-segmented__item[data-checked] {
   color: var(--text-strong);
   font-weight: var(--ui-font-weight-strong);
 }
