@@ -1,4 +1,5 @@
 import { visibleMentionDirectiveRanges, type VisibleMentionDirectiveRange } from "@opencorvus-ai/transport-protocol"
+import type { ComposerExpertSquadSearch } from "./composer-expert-squad-catalog"
 
 export type ComposerMentionKind = "skill" | "mission-skill" | "squad"
 
@@ -41,6 +42,7 @@ export interface ComposerMentionCatalog {
   skills: readonly ComposerMentionEntity[]
   missionSkills: readonly ComposerMentionEntity[]
   squads: readonly ComposerMentionEntity[]
+  squadSearch: ComposerExpertSquadSearch
 }
 
 export interface ComposerMentionDirectives {
@@ -114,7 +116,7 @@ export function findComposerMentionQuery(text: string, caret: number): ComposerM
   if (fragment.includes("\n") || fragment.includes("\r") || fragment.includes(")")) return null
 
   const categoryQuery = normalizeSearchText(fragment)
-  if (/^[A-Za-z0-9._-]*$/.test(categoryQuery)) {
+  if (/^[\p{L}\p{N}._-]*$/u.test(categoryQuery)) {
     const exactKind = mentionKindForSyntax(categoryQuery)
     if (exactKind) return { start, end, stage: "entity", kind: exactKind, query: "" }
     return { start, end, stage: "category", query: categoryQuery }
@@ -184,9 +186,23 @@ export function composerMentionOptions(
   query: ComposerMentionQuery,
   catalog: ComposerMentionCatalog,
 ): ComposerMentionOption[] {
+  let squadOptions: ComposerMentionOption[] = []
+  if (query.stage === "category" || query.kind === "squad") {
+    const search = catalog.squadSearch
+    if (search.status === "ready" && search.query === query.query.trim()) {
+      const byID = new Map(catalog.squads.map((entity) => [entity.id, entity]))
+      squadOptions = entityOptions(
+        search.matchingIDs.flatMap((id) => {
+          const entity = byID.get(id)
+          return entity ? [entity] : []
+        }),
+      )
+    }
+  }
+  if (query.stage === "entity" && query.kind === "squad") return squadOptions
   const candidates =
     query.stage === "category"
-      ? entityOptions([...catalog.skills, ...catalog.missionSkills, ...catalog.squads])
+      ? entityOptions([...catalog.skills, ...catalog.missionSkills])
       : entityOptions(
           query.kind === "skill"
             ? catalog.skills
@@ -200,6 +216,7 @@ export function composerMentionOptions(
     .filter((entry): entry is typeof entry & { score: number } => entry.score !== null)
     .sort((left, right) => left.score - right.score || left.index - right.index)
     .map((entry) => entry.option)
+    .concat(squadOptions)
 }
 
 export function applyComposerMentionOption(

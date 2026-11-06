@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import {
   composerReferenceCatalogError,
+  beginComposerExpertSquadSearch,
   composerExpertSquadCatalogForRequest,
   createComposerReferenceCatalogSnapshotFromSettled,
   createGlobalComposerReferenceCatalogSnapshot,
@@ -129,7 +130,7 @@ describe("Composer reference catalog source-qualified feedback", () => {
       { source: "chat-skills", kind: "request-failed", message: "Chat catalog unavailable" },
     ])
     const renamed = { ...option("assigned"), name: "New installed name" }
-    const searched = updateComposerExpertSquadSearch(snapshot, "task:one", {
+    const searched = updateComposerExpertSquadSearch(snapshot, "task:one", "", {
       status: "fulfilled",
       value: { ...page("assigned"), entries: [renamed] },
     })
@@ -157,6 +158,7 @@ describe("Composer reference catalog source-qualified feedback", () => {
     expect(failed).toEqual({
       ...emptyComposerExpertSquadCatalog(),
       requestKey: "task:one",
+      search: { query: "", status: "failed", matchingIDs: [] },
       problems: [
         { source: "expert-squads", kind: "request-failed", message: "Assigned package unavailable" },
         { source: "chat-skills", kind: "request-failed", message: "Chat catalog unavailable" },
@@ -171,6 +173,7 @@ describe("Composer reference catalog source-qualified feedback", () => {
     expect(global).toEqual({
       requestKey: "global:one",
       squads: page("base", "selected-reference").entries,
+      search: { query: "", status: "ready", matchingIDs: ["base", "selected-reference"] },
       skills: [{ name: "read-source", description: "Read the selected source" }],
       chatSkills: [{ name: "read-source", description: "Read the selected source" }],
       missionSkills: [{ name: "review", description: "Review the result" }],
@@ -185,6 +188,7 @@ describe("Composer reference catalog source-qualified feedback", () => {
     const next = updateComposerExpertSquadSearch(
       snapshot,
       "global:one",
+      "",
       { status: "fulfilled", value: page("query-result") },
       ["selected-reference"],
     )
@@ -200,7 +204,7 @@ describe("Composer reference catalog source-qualified feedback", () => {
 
   test("failed then successful search settles its own source while retaining full-load issues", () => {
     const initial = createGlobalComposerReferenceCatalogSnapshot("global:one", globalCatalog(true))
-    const failed = updateComposerExpertSquadSearch(initial, "global:one", {
+    const failed = updateComposerExpertSquadSearch(initial, "global:one", "", {
       status: "rejected",
       reason: new Error("Search unavailable"),
     })
@@ -209,7 +213,7 @@ describe("Composer reference catalog source-qualified feedback", () => {
       { source: "squad-search", kind: "request-failed", message: "Search unavailable" },
     ])
     expect(failed.squads).toEqual(initial.squads)
-    const recovered = updateComposerExpertSquadSearch(failed, "global:one", {
+    const recovered = updateComposerExpertSquadSearch(failed, "global:one", "", {
       status: "fulfilled",
       value: page("recovered"),
     })
@@ -250,11 +254,11 @@ describe("Composer reference catalog source-qualified feedback", () => {
 
   test("a result for an older request returns the current snapshot facts", () => {
     const current = createGlobalComposerReferenceCatalogSnapshot("global:current", globalCatalog(true))
-    const oldSuccess = updateComposerExpertSquadSearch(current, "global:old", {
+    const oldSuccess = updateComposerExpertSquadSearch(current, "global:old", "", {
       status: "fulfilled",
       value: page("old-result"),
     })
-    const oldFailure = updateComposerExpertSquadSearch(current, "global:old", {
+    const oldFailure = updateComposerExpertSquadSearch(current, "global:old", "", {
       status: "rejected",
       reason: new Error("Old request failed"),
     })
@@ -266,6 +270,84 @@ describe("Composer reference catalog source-qualified feedback", () => {
 })
 
 describe("Composer Expert Squad bounded catalog", () => {
+  test("publishes producer query membership and order separately from retained selection", () => {
+    const initial = createGlobalComposerReferenceCatalogSnapshot("global:one", globalCatalog(false))
+    const pending = beginComposerExpertSquadSearch(initial, "global:one", "  研究工作室  ")
+    expect(pending.search).toEqual({ query: "研究工作室", status: "pending", matchingIDs: [] })
+    expect(pending.squads).toEqual(initial.squads)
+    const ready = updateComposerExpertSquadSearch(
+      pending,
+      "global:one",
+      "研究工作室",
+      {
+        status: "fulfilled",
+        value: page("research-studio", "base", "dynamic", "advanced"),
+      },
+      ["selected-reference"],
+    )
+    expect(ready.search).toEqual({
+      query: "研究工作室",
+      status: "ready",
+      matchingIDs: ["research-studio", "base", "dynamic", "advanced"],
+    })
+    expect(ready.squads.map((squad) => squad.id)).toEqual([
+      "research-studio",
+      "base",
+      "dynamic",
+      "advanced",
+      "selected-reference",
+    ])
+    const cleared = updateComposerExpertSquadSearch(
+      beginComposerExpertSquadSearch(ready, "global:one", ""),
+      "global:one",
+      "",
+      { status: "fulfilled", value: page("base") },
+      ["selected-reference"],
+    )
+    expect(cleared.search).toEqual({ query: "", status: "ready", matchingIDs: ["base"] })
+    expect(cleared.squads.map((squad) => squad.id)).toEqual(["base", "selected-reference"])
+  })
+
+  test("search failure, retry and a newer query have explicit current query facts", () => {
+    const initial = createGlobalComposerReferenceCatalogSnapshot("global:one", globalCatalog(true))
+    const pending = beginComposerExpertSquadSearch(initial, "global:one", "事实核查")
+    const failed = updateComposerExpertSquadSearch(
+      pending,
+      "global:one",
+      "事实核查",
+      {
+        status: "rejected",
+        reason: new Error("Current search unavailable"),
+      },
+      ["selected-reference"],
+    )
+    expect({ search: failed.search, squads: failed.squads, problems: failed.problems }).toEqual({
+      search: { query: "事实核查", status: "failed", matchingIDs: [] },
+      squads: pending.squads,
+      problems: [
+        ...initial.problems,
+        { source: "squad-search", kind: "request-failed", message: "Current search unavailable" },
+      ],
+    })
+    const retry = beginComposerExpertSquadSearch(failed, "global:one", "事实核查")
+    expect({ search: retry.search, problems: retry.problems }).toEqual({
+      search: { query: "事实核查", status: "pending", matchingIDs: [] },
+      problems: initial.problems,
+    })
+    const newer = beginComposerExpertSquadSearch(retry, "global:one", "架构")
+    const late = updateComposerExpertSquadSearch(newer, "global:one", "事实核查", {
+      status: "fulfilled",
+      value: page("research-studio"),
+    })
+    expect(late).toBe(newer)
+    const accepted = updateComposerExpertSquadSearch(late, "global:one", "架构", {
+      status: "fulfilled",
+      value: page("advanced", "base"),
+    })
+    expect(accepted.search).toEqual({ query: "架构", status: "ready", matchingIDs: ["advanced", "base"] })
+    expect(beginComposerExpertSquadSearch(accepted, "another:scope", "old")).toBe(accepted)
+  })
+
   test("keeps the exact active and selected Squads alongside each bounded search page", () => {
     const initialPage = Array.from({ length: 20 }, (_, index) => option(`page-${index}`))
     const current = [...initialPage, option("active-after-first-page"), option("selected-reference")]

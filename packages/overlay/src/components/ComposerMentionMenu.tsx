@@ -15,6 +15,7 @@ export interface ComposerMentionMenuProps {
   options: ComposerMentionOption[]
   selectedKey: string
   error?: string
+  loading?: boolean
   onRetry?: () => void
   onHighlight: (option: ComposerMentionOption) => void
   onSelect: (option: ComposerMentionOption) => void
@@ -126,11 +127,20 @@ export function ComposerMentionMenu(props: ComposerMentionMenuProps) {
           <span class="composer-mention-menu-hint">{t("chat.mention.keyboard_hint")}</span>
         </div>
         <ComposerReferenceFeedback error={props.error} onRetry={props.onRetry} />
+        <Show when={props.loading && groups().length > 0}>
+          <div class="composer-mention-empty" role="status">
+            {t("expert_squad.loading")}
+          </div>
+        </Show>
         <Show
           when={groups().length > 0}
           fallback={
             <div class="composer-mention-empty" data-ui="composer-mention-empty" role="status">
-              {t("chat.mention.empty")}
+              {props.loading
+                ? t("expert_squad.loading")
+                : props.error
+                  ? t("chat.references.catalog_unavailable")
+                  : t("chat.mention.empty")}
             </div>
           }
         >

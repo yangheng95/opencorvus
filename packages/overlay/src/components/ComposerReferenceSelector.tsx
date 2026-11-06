@@ -1,7 +1,7 @@
-import { createEffect, createMemo, createSignal, For, onCleanup, Show, type JSX } from "solid-js"
+import { createEffect, createMemo, createSignal, For, on, onCleanup, Show, type JSX } from "solid-js"
 import type { VisibleComposerReferences } from "@opencorvus-ai/transport-protocol"
 import type { ExpertSquadMarketIndexItem, ExpertSquadOption } from "../services/expert-squad"
-import type { ComposerExpertSquadPackage } from "../services/composer-expert-squad-catalog"
+import type { ComposerExpertSquadPackage, ComposerExpertSquadSearch } from "../services/composer-expert-squad-catalog"
 import { setComposerMentionDirectiveSelected, type ComposerMentionKind } from "../services/composer-mention"
 import { fuzzySearch } from "../services/fuzzy-search"
 import { t } from "../utils/i18n"
@@ -28,6 +28,7 @@ interface ComposerReferenceOption {
   description?: string
   typeLabel: string
   systemRole?: "expert_squad_generator"
+  outsideSearch?: boolean
 }
 
 interface ComposerReferenceGroup {
@@ -44,6 +45,8 @@ export interface ComposerReferenceSelectorProps {
   skills: readonly ComposerReferenceSkillOption[]
   missionSkills: readonly ComposerReferenceSkillOption[]
   expertSquads: readonly ExpertSquadOption[]
+  expertSquadSearch: ComposerExpertSquadSearch
+  referenceCatalogKey: string
   onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
   onInstallMoreExpertSquads?: () => void
   // Searching only what is installed answers "which of mine fits" when the
@@ -57,7 +60,7 @@ export interface ComposerReferenceSelectorProps {
   readOnly: boolean
   disabled?: boolean
   catalogError?: string
-  onCatalogRetry?: () => void
+  onCatalogRetry?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
 }
 
 function referenceSearchText(option: ComposerReferenceOption): string {
@@ -112,7 +115,37 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
   })
   const selectedCount = createMemo(() => selectedKeys().size)
   const filteredSkillOptions = createMemo(() => fuzzySearch(skillOptions(), query(), referenceSearchText))
-  const filteredSquadOptions = createMemo(() => fuzzySearch(squadOptions(), query(), referenceSearchText))
+  const squadSearchCurrent = () => props.expertSquadSearch.query === query().trim()
+  const squadSearchLoading = () => !squadSearchCurrent() || props.expertSquadSearch.status === "pending"
+  const filteredSquadOptions = createMemo(() => {
+    const options = squadOptions()
+    const byID = new Map(options.map((option) => [option.id, option]))
+    const matchingIDs =
+      squadSearchCurrent() && props.expertSquadSearch.status === "ready" ? props.expertSquadSearch.matchingIDs : []
+    const matching = new Set(matchingIDs)
+    return [
+      ...matchingIDs.flatMap((id) => {
+        const option = byID.get(id)
+        return option ? [option] : []
+      }),
+      ...options
+        .filter((option) => selectedKeys().has(option.key) && !matching.has(option.id))
+        .map((option) => ({
+          ...option,
+          outsideSearch: squadSearchCurrent() && props.expertSquadSearch.status === "ready",
+        })),
+    ]
+  })
+  createEffect(
+    on(
+      () => props.referenceCatalogKey,
+      () => {
+        setQuery("")
+        if (open() && !props.readOnly) props.onExpertSquadQuery?.("", props.launchReferences.expertSquadIDs)
+      },
+    ),
+  )
+  const retryCatalog = () => props.onCatalogRetry?.(query(), props.launchReferences.expertSquadIDs)
   const editableGroups = createMemo<ComposerReferenceGroup[]>(() => [
     ...(filteredSkillOptions().length > 0
       ? [{ kind: "skills" as const, label: t("chat.references.skills"), options: filteredSkillOptions() }]
@@ -273,6 +306,9 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
         <span class="composer-reference-option-copy">
           <span class="composer-reference-option-heading">
             <span class="composer-reference-option-name">{option.label}</span>
+            <Show when={option.outsideSearch}>
+              <Badge size="sm">{t("chat.references.selected_outside_search")}</Badge>
+            </Show>
             <Show when={option.systemRole === "expert_squad_generator"}>
               <Badge class="composer-reference-option-system-badge" tone="accent" size="sm">
                 {t("chat.references.generator")}
@@ -340,7 +376,10 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
             <div class="composer-reference-controls">{props.controls}</div>
           </Show>
           <Show when={props.readOnly}>
-            <ComposerReferenceFeedback error={props.catalogError} onRetry={props.onCatalogRetry} />
+            <ComposerReferenceFeedback
+              error={props.catalogError}
+              onRetry={props.onCatalogRetry ? retryCatalog : undefined}
+            />
           </Show>
           <Show when={props.readOnly}>
             <div class="composer-reference-popover-heading">
@@ -430,152 +469,173 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                 </Show>
               </Disclosure.Trigger>
               <Disclosure.Content>
-              <div class="composer-reference-search">
-                <SearchField
-                  clearable
-                  value={query()}
-                  onValueChange={(value) => {
-                    setQuery(value)
-                    props.onExpertSquadQuery?.(value, props.launchReferences.expertSquadIDs)
-                  }}
-                  placeholder={t("chat.references.search_placeholder")}
-                  size="sm"
-                  inputRef={(element) => {
-                    searchInputRef = element
-                  }}
-                  onKeyDown={(event) => {
-                    if (handleReferenceEscape(event)) return
-                    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return
-                    const options = listboxElement?.querySelectorAll<HTMLElement>(
-                      '[role="option"]:not([aria-disabled="true"])',
-                    )
-                    const target = event.key === "ArrowDown" ? options?.[0] : options?.[options.length - 1]
-                    if (!target) return
-                    event.preventDefault()
-                    target.focus()
-                  }}
-                  inputDataUI="composer-reference-search-input"
-                  clearDataUI="composer-reference-search-clear"
-                />
-              </div>
-              <ComposerReferenceFeedback error={props.catalogError} onRetry={props.onCatalogRetry} />
-              <div ref={resultsElement} class="composer-reference-results">
-                <Show when={editableGroups().length > 0}>
-                  <ListboxRoot<ComposerReferenceOption, ComposerReferenceGroup>
-                    ref={listboxElement}
-                    scrollRef={() => resultsElement}
-                    class="composer-reference-listbox"
-                    id="composerReferenceListbox"
-                    density="rich"
-                    aria-label={t("chat.references.title")}
-                    options={editableGroups()}
-                    optionGroupChildren="options"
-                    optionValue={(option) => option.key}
-                    optionTextValue={(option) => option.label}
-                    value={selectedVisibleKeys()}
-                    selectionMode="multiple"
-                    selectionBehavior="toggle"
-                    shouldFocusWrap
-                    allowDuplicateSelectionEvents
-                    onChange={applyListboxSelection}
-                    onKeyDown={handleReferenceEscape}
-                    renderSection={(section) => (
-                      <ListboxSection class="composer-reference-section" data-reference-group={section.rawValue.kind}>
-                        <span class="composer-reference-section-title">{section.rawValue.label}</span>
-                      </ListboxSection>
-                    )}
-                    renderItem={(node) => {
-                      const option = node.rawValue as ComposerReferenceOption
-                      return (
-                        <ListboxItem
-                          item={node}
-                          class="composer-reference-option"
-                          data-reference-key={option.key}
-                          data-reference-kind={option.kind}
-                          data-system-role={option.systemRole}
-                        >
-                          <span class="composer-reference-option-selection" aria-hidden="true">
-                            <Show when={selectedKeys().has(option.key)}>
-                              <Icon name="check" size="compact" />
-                            </Show>
-                          </span>
-                          {renderOptionCopy(option)}
-                        </ListboxItem>
-                      )
+                <div class="composer-reference-search">
+                  <SearchField
+                    clearable
+                    value={query()}
+                    onValueChange={(value) => {
+                      setQuery(value)
+                      props.onExpertSquadQuery?.(value, props.launchReferences.expertSquadIDs)
                     }}
+                    placeholder={t("chat.references.search_placeholder")}
+                    size="sm"
+                    inputRef={(element) => {
+                      searchInputRef = element
+                    }}
+                    onKeyDown={(event) => {
+                      if (handleReferenceEscape(event)) return
+                      if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return
+                      const options = listboxElement?.querySelectorAll<HTMLElement>(
+                        '[role="option"]:not([aria-disabled="true"])',
+                      )
+                      const target = event.key === "ArrowDown" ? options?.[0] : options?.[options.length - 1]
+                      if (!target) return
+                      event.preventDefault()
+                      target.focus()
+                    }}
+                    inputDataUI="composer-reference-search-input"
+                    clearDataUI="composer-reference-search-clear"
                   />
-                </Show>
-                <Show when={editableGroups().length === 0 && marketOffers().length === 0 && !marketLoading()}>
-                  <div class="composer-reference-empty">{t("chat.references.no_matches")}</div>
-                </Show>
-                <Show when={marketLoading() || marketError() || marketOffers().length > 0}>
-                  <div class="composer-reference-market" data-ui="composer-reference-market">
-                    <div class="composer-reference-market-head">
-                      <span>{t("chat.references.market_results")}</span>
-                      <Show when={marketLoading()}>
-                        <Icon name="loading" size="compact" />
-                      </Show>
-                    </div>
-                    <Show when={marketError()}>
-                      <div class="composer-reference-market-error">{marketError()}</div>
-                    </Show>
-                    <For each={marketOffers()}>
-                      {(item) => (
-                        <div class="composer-reference-option" data-reference-kind="market">
-                          <span class="composer-reference-option-selection" aria-hidden="true" />
-                          <span class="composer-reference-option-icon" data-reference-kind="market" aria-hidden="true">
-                            <Icon name="expert-squad-catalog" size="compact" />
-                          </span>
-                          <span class="composer-reference-option-copy">
-                            <span class="composer-reference-option-heading">
-                              <span class="composer-reference-option-name">{item.name}</span>
-                              <span class="composer-reference-option-meta">{t("expert_squad.market")}</span>
-                            </span>
-                            <span class="composer-reference-option-description">{expertSquadDescription(item)}</span>
-                          </span>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            tone="accent"
-                            disabled={Boolean(marketInstallingID())}
-                            onClick={() => void installFromMarket(item)}
-                          >
-                            <Show when={marketInstallingID() === item.id}>
-                              <Icon name="loading" size="compact" />
-                            </Show>
-                            {t("chat.references.market_install")}
-                          </Button>
-                        </div>
-                      )}
-                    </For>
+                </div>
+                <ComposerReferenceFeedback
+                  error={props.catalogError}
+                  onRetry={props.onCatalogRetry ? retryCatalog : undefined}
+                />
+                <Show when={squadSearchLoading()}>
+                  <div class="composer-reference-empty" role="status">
+                    {t("expert_squad.loading")}
                   </div>
                 </Show>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="md"
-                  tone="neutral"
-                  class="composer-reference-option"
-                  data-ui="composer-reference-install-more"
-                  data-reference-kind="action"
-                  onClick={openExpertSquadMarket}
-                >
-                  <span class="composer-reference-option-selection" aria-hidden="true" />
-                  <span class="composer-reference-option-icon" data-reference-kind="action" aria-hidden="true">
-                    <Icon name="config-expert-squad-install" size="compact" />
-                  </span>
-                  <span class="composer-reference-option-copy">
-                    <span class="composer-reference-option-heading">
-                      <span class="composer-reference-option-name">{t("chat.references.install_more")}</span>
-                      <span class="composer-reference-option-meta">{t("expert_squad.market")}</span>
+                <div ref={resultsElement} class="composer-reference-results">
+                  <Show when={editableGroups().length > 0}>
+                    <ListboxRoot<ComposerReferenceOption, ComposerReferenceGroup>
+                      ref={listboxElement}
+                      scrollRef={() => resultsElement}
+                      class="composer-reference-listbox"
+                      id="composerReferenceListbox"
+                      density="rich"
+                      aria-label={t("chat.references.title")}
+                      options={editableGroups()}
+                      optionGroupChildren="options"
+                      optionValue={(option) => option.key}
+                      optionTextValue={(option) => option.label}
+                      value={selectedVisibleKeys()}
+                      selectionMode="multiple"
+                      selectionBehavior="toggle"
+                      shouldFocusWrap
+                      allowDuplicateSelectionEvents
+                      onChange={applyListboxSelection}
+                      onKeyDown={handleReferenceEscape}
+                      renderSection={(section) => (
+                        <ListboxSection class="composer-reference-section" data-reference-group={section.rawValue.kind}>
+                          <span class="composer-reference-section-title">{section.rawValue.label}</span>
+                        </ListboxSection>
+                      )}
+                      renderItem={(node) => {
+                        const option = node.rawValue as ComposerReferenceOption
+                        return (
+                          <ListboxItem
+                            item={node}
+                            class="composer-reference-option"
+                            data-reference-key={option.key}
+                            data-reference-kind={option.kind}
+                            data-system-role={option.systemRole}
+                          >
+                            <span class="composer-reference-option-selection" aria-hidden="true">
+                              <Show when={selectedKeys().has(option.key)}>
+                                <Icon name="check" size="compact" />
+                              </Show>
+                            </span>
+                            {renderOptionCopy(option)}
+                          </ListboxItem>
+                        )
+                      }}
+                    />
+                  </Show>
+                  <Show
+                    when={
+                      filteredSkillOptions().length === 0 &&
+                      filteredSquadOptions().every((option) => option.outsideSearch) &&
+                      marketOffers().length === 0 &&
+                      !marketLoading() &&
+                      !squadSearchLoading() &&
+                      !props.catalogError
+                    }
+                  >
+                    <div class="composer-reference-empty">{t("chat.references.no_matches")}</div>
+                  </Show>
+                  <Show when={marketLoading() || marketError() || marketOffers().length > 0}>
+                    <div class="composer-reference-market" data-ui="composer-reference-market">
+                      <div class="composer-reference-market-head">
+                        <span>{t("chat.references.market_results")}</span>
+                        <Show when={marketLoading()}>
+                          <Icon name="loading" size="compact" />
+                        </Show>
+                      </div>
+                      <Show when={marketError()}>
+                        <div class="composer-reference-market-error">{marketError()}</div>
+                      </Show>
+                      <For each={marketOffers()}>
+                        {(item) => (
+                          <div class="composer-reference-option" data-reference-kind="market">
+                            <span class="composer-reference-option-selection" aria-hidden="true" />
+                            <span
+                              class="composer-reference-option-icon"
+                              data-reference-kind="market"
+                              aria-hidden="true"
+                            >
+                              <Icon name="expert-squad-catalog" size="compact" />
+                            </span>
+                            <span class="composer-reference-option-copy">
+                              <span class="composer-reference-option-heading">
+                                <span class="composer-reference-option-name">{item.name}</span>
+                                <span class="composer-reference-option-meta">{t("expert_squad.market")}</span>
+                              </span>
+                              <span class="composer-reference-option-description">{expertSquadDescription(item)}</span>
+                            </span>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              tone="accent"
+                              disabled={Boolean(marketInstallingID())}
+                              onClick={() => void installFromMarket(item)}
+                            >
+                              <Show when={marketInstallingID() === item.id}>
+                                <Icon name="loading" size="compact" />
+                              </Show>
+                              {t("chat.references.market_install")}
+                            </Button>
+                          </div>
+                        )}
+                      </For>
+                    </div>
+                  </Show>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="md"
+                    tone="neutral"
+                    class="composer-reference-option"
+                    data-ui="composer-reference-install-more"
+                    data-reference-kind="action"
+                    onClick={openExpertSquadMarket}
+                  >
+                    <span class="composer-reference-option-selection" aria-hidden="true" />
+                    <span class="composer-reference-option-icon" data-reference-kind="action" aria-hidden="true">
+                      <Icon name="config-expert-squad-install" size="compact" />
                     </span>
-                    <span class="composer-reference-option-description">
-                      {t("chat.references.install_more_description")}
+                    <span class="composer-reference-option-copy">
+                      <span class="composer-reference-option-heading">
+                        <span class="composer-reference-option-name">{t("chat.references.install_more")}</span>
+                        <span class="composer-reference-option-meta">{t("expert_squad.market")}</span>
+                      </span>
+                      <span class="composer-reference-option-description">
+                        {t("chat.references.install_more_description")}
+                      </span>
                     </span>
-                  </span>
-                </Button>
-              </div>
+                  </Button>
+                </div>
               </Disclosure.Content>
             </Disclosure.Root>
           </Show>

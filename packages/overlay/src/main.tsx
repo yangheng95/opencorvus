@@ -255,6 +255,9 @@ import {
 } from "./services/expert-squad-scope"
 import {
   composerExpertSquadCatalogForRequest,
+  beginComposerExpertSquadSearch,
+  mergeComposerExpertSquadOptions,
+  type ComposerExpertSquadCatalogSnapshot,
   composerReferenceCatalogError,
   createGlobalComposerReferenceCatalogSnapshot,
   createComposerReferenceCatalogSnapshotFromSettled,
@@ -2092,18 +2095,27 @@ let expertSquadSearchSequence = 0
 async function refreshExpertSquads(
   scope: ExpertSquadCatalogScope | Extract<ComposerReferenceCatalogScopeState, { kind: "global" }>,
   requestKey: string,
+  selectedExpertSquadIDs: readonly string[] = [],
 ): Promise<void> {
   const authority = captureApiAuthority()
-  const owns = () => isApiAuthorityCurrent(authority) && requestKey === composerReferenceCatalogRequestKey()
+  const owns = () => isApiAuthorityCurrent(authority) &&
+    requestKey === composerReferenceCatalogRequestKey(composerIntent().productPillar)
   if (requestKey === expertSquadLoadedRequestKey) return
   if (expertSquadInFlight?.requestKey === requestKey) return await expertSquadInFlight.promise
+  const publish = (next: ComposerExpertSquadCatalogSnapshot) =>
+    setComposerExpertSquadCatalogSnapshot((current) => ({
+      ...next,
+      squads: mergeComposerExpertSquadOptions(
+        next.squads, current.requestKey === requestKey ? current.squads : [], selectedExpertSquadIDs,
+      ),
+    }))
   const sequence = ++expertSquadLoadSequence
   const promise = (async () => {
     try {
       if (scope.kind === "global") {
         const catalog = await loadGlobalComposerReferences(authority)
         if (sequence !== expertSquadLoadSequence || !owns()) return
-        setComposerExpertSquadCatalogSnapshot(createGlobalComposerReferenceCatalogSnapshot(requestKey, catalog))
+        publish(createGlobalComposerReferenceCatalogSnapshot(requestKey, catalog))
         expertSquadLoadedRequestKey = requestKey
         return
       }
@@ -2119,7 +2131,7 @@ async function refreshExpertSquads(
         activeInspectionPromise,
       ])
       if (sequence !== expertSquadLoadSequence || !owns()) return
-      setComposerExpertSquadCatalogSnapshot(
+      publish(
         createComposerReferenceCatalogSnapshotFromSettled(requestKey, composerExpertSquadCatalogSnapshot(), {
           catalog,
           squads,
@@ -2154,12 +2166,9 @@ async function refreshExpertSquads(
   await promise
 }
 
-function retryComposerReferenceCatalog(): void {
-  const requestKey = composerReferenceCatalogRequestKey()
-  const scope = composerReferenceCatalogScope()
-  if (scope.kind === "pending" || scope.kind === "unavailable") return
+function retryComposerReferenceCatalog(query: string, selectedExpertSquadIDs: readonly string[]): void {
   expertSquadLoadedRequestKey = ""
-  void refreshExpertSquads(scope, requestKey)
+  void searchComposerExpertSquads(query, selectedExpertSquadIDs)
 }
 
 /**
@@ -2194,39 +2203,50 @@ async function searchComposerExpertSquads(
   selectedExpertSquadIDs: readonly string[] = [],
 ): Promise<void> {
   const sequence = ++expertSquadSearchSequence
-  const requestKey = composerReferenceCatalogRequestKey()
+  const authority = captureApiAuthority()
+  const productPillar = composerIntent().productPillar
+  const requestKey = composerReferenceCatalogRequestKey(composerIntent().productPillar)
   const scope = composerReferenceCatalogScope()
   if (scope.kind === "pending" || scope.kind === "unavailable") return
+  const owns = () => sequence === expertSquadSearchSequence && isApiAuthorityCurrent(authority) &&
+    requestKey === composerReferenceCatalogRequestKey(composerIntent().productPillar)
   try {
+    await refreshExpertSquads(scope, requestKey, selectedExpertSquadIDs)
+    if (!owns()) return
+    setComposerExpertSquadCatalogSnapshot((current) => beginComposerExpertSquadSearch(current, requestKey, query))
     const page =
       scope.kind === "global"
         ? await searchGlobalComposerExpertSquads({
             query,
-            productPillar: composerIntent().productPillar,
+            productPillar,
+            authority,
             limit: 20,
           })
         : await searchExpertSquads({
             directory: scope.directory,
             query,
-            productPillar: composerIntent().productPillar,
+            productPillar,
+            authority,
             limit: 20,
           })
-    if (sequence !== expertSquadSearchSequence || requestKey !== composerReferenceCatalogRequestKey()) return
+    if (!owns()) return
     setComposerExpertSquadCatalogSnapshot((current) =>
       updateComposerExpertSquadSearch(
         current,
         requestKey,
+        query,
         { status: "fulfilled", value: page },
         selectedExpertSquadIDs,
       ),
     )
   } catch (error) {
-    if (sequence !== expertSquadSearchSequence || requestKey !== composerReferenceCatalogRequestKey()) return
+    if (!owns()) return
     const message = `expert squad search: ${runtimeErrorMessage(error)}`
     setComposerExpertSquadCatalogSnapshot((current) =>
       updateComposerExpertSquadSearch(
         current,
         requestKey,
+        query,
         { status: "rejected", reason: error },
         selectedExpertSquadIDs,
       ),
@@ -2360,7 +2380,7 @@ function OverlayRoot() {
   const composerExpertSquadCatalog = createMemo(() => {
     const catalog = composerExpertSquadCatalogForRequest(
       composerExpertSquadCatalogSnapshot(),
-      composerReferenceCatalogRequestKey(),
+      composerReferenceCatalogRequestKey(composerIntent().productPillar),
     )
     return {
       ...catalog,
@@ -2386,7 +2406,7 @@ function OverlayRoot() {
   })
 
   createEffect<string>((previousKey) => {
-    const requestKey = composerReferenceCatalogRequestKey()
+    const requestKey = composerReferenceCatalogRequestKey(composerIntent().productPillar)
     if (requestKey === previousKey) return previousKey
     const scope = composerReferenceCatalogScope()
     if (scope.kind === "pending" || scope.kind === "unavailable") {
@@ -2834,6 +2854,8 @@ function OverlayRoot() {
           referenceCatalogError={composerReferenceCatalogError(composerExpertSquadCatalog())}
           onReferenceCatalogRetry={retryComposerReferenceCatalog}
           expertSquads={composerExpertSquadCatalog().squads}
+          expertSquadSearch={composerExpertSquadCatalog().search}
+          referenceCatalogKey={composerReferenceCatalogRequestKey(composerIntent().productPillar)}
           onExpertSquadQuery={(query, selectedIDs) => void searchComposerExpertSquads(query, selectedIDs)}
           onMarketExpertSquadQuery={searchComposerMarketExpertSquads}
           onInstallMarketExpertSquad={installComposerMarketExpertSquad}

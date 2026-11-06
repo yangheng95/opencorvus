@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [输入框真实搜索匹配](records/2026-11/2026-11-07-composer-producer-matches.md)：保留中文查询生产者结果、已选引用及原顺序。
+
 - [专家团说明语言](records/2026-11/2026-11-07-expert-description-locale.md)：规范原文绑定、共享中文说明与真实页面。
 
 - [分段选择语义](records/2026-11/2026-11-06-segmented-selection-semantics.md)：共享必选控件、键盘关闭与各实际表面。

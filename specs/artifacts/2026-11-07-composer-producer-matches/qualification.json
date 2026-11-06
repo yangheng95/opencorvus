@@ -1,0 +1,160 @@
+{
+  "at": "2026-11-06T17:35:09.418Z",
+  "status": "Implementation and native producer-to-data projection verified; repaired UI visual acceptance is incomplete",
+  "singleAgent": true,
+  "noDelegation": true,
+  "userWindowsProcessesPort18571AndRealDatabaseUntouched": true,
+  "scope": "One request-owned search fact in the Composer catalog; server-ordered matched IDs distinct from retained active/selected identities; Unicode mention names; current-language reference chrome",
+  "ui": {
+    "nativeDevelopmentUiBefore": true,
+    "backgroundTabs": [
+      "118"
+    ],
+    "allOwnTabsClosed": true,
+    "manualBeforeInteractionsAndIndividualScreenshotReview": true,
+    "afterManualInteraction": false,
+    "afterScreenshots": 0,
+    "afterVisualAcceptance": false,
+    "automatedUiTests": false,
+    "screenshots": [
+      "01-before-global-chinese-query-empty.png",
+      "02-before-explicit-mention-empty.png"
+    ],
+    "blocker": "Official browser runtime returned Local browser use is disabled in Work settings after the browser tool namespace was withdrawn",
+    "userInputRequestedOnce": true
+  },
+  "checks": {
+    "contracts-unicode": 0,
+    "type-final": 0,
+    "type-workspace": 0,
+    "locale-current": 0,
+    "ui-build-after-current": 0,
+    "docs-final": 0,
+    "architecture-final": 0,
+    "projection-after-current": 0,
+    "admission-readback": 0
+  },
+  "nonUiContracts": {
+    "cases": 14,
+    "assertions": 53,
+    "actualNativeReadOnlyCases": 12,
+    "actualMentionProjections": 24,
+    "scopes": [
+      "global",
+      "project",
+      "original-session"
+    ],
+    "productPillars": [
+      "work",
+      "code"
+    ],
+    "queries": [
+      "研究工作室",
+      "事实核查"
+    ],
+    "actualProducerOrderAndExactDirectivePreserved": true,
+    "isVisualAcceptance": false
+  },
+  "locale": {
+    "locales": 2,
+    "keys": 2914,
+    "newBilingualProductKeys": 1,
+    "originalBrandsIDsAndAuthoredDescriptionsPreserved": true
+  },
+  "docs": {
+    "operations": 352,
+    "groups": 26,
+    "architectureDocuments": 20
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "uiAcceptance": "two failures reproduced and screenshots personally reviewed",
+      "originalRows": 322878,
+      "currentRows": 322880,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "addedRuntimeLeases": 1,
+      "matchingGrants": 1,
+      "admissionMode": "ui-runtime",
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 4234094,
+      "uiEntry": "main-Cp27Xi2h.js"
+    },
+    {
+      "phase": "after",
+      "uiAcceptance": "NOT COMPLETED: local browser access disabled",
+      "originalRows": 322880,
+      "currentRows": 322880,
+      "schema": 10,
+      "tables": 92,
+      "projects": 140,
+      "physicalAttachments": 315,
+      "allOriginalRowsAndSourceDatabaseExact": true,
+      "allOriginalProjectFilesAndGitExact": true,
+      "addedRuntimeLeases": 0,
+      "matchingGrants": 0,
+      "admissionMode": "identity-readers",
+      "publicShutdown": 200,
+      "nativeAndLauncherExit": 0,
+      "physicalOutputAndRequestsSettled": true,
+      "pairedCopiesRetired": 2,
+      "modelRequests": 0,
+      "reserveMs": 3156763,
+      "uiEntry": "main-FruI7c_4.js"
+    }
+  ],
+  "resources": {
+    "absoluteDeadline": 1793989326600,
+    "deadlineExtended": false,
+    "newModelRequests": 0,
+    "cumulativeRequests": 1524,
+    "pairedCopiesRetired": 4,
+    "minimumReserveMs": 3156763,
+    "optionalFinalAndRecoveryAllocated": false
+  },
+  "retainedActualModelFacts": {
+    "freshModelInteraction": false,
+    "questions": 3,
+    "answerValues": 5,
+    "goalStatus": "complete",
+    "goalTokens": 271588,
+    "artifactBytes": 559,
+    "originalGoalAndToolRequestsExact": true
+  },
+  "runtimeAdmissionAudit": {
+    "beforeRequests": 299,
+    "beforeRuntimeRoute": "GET /channel",
+    "beforeRuntimeBootstrapAt": "2026-11-06T17:09:00.024Z",
+    "beforeControlReconcileAndLeaseAt": "2026-11-06T17:09:00.277Z",
+    "afterRequests": 272,
+    "afterProjectAdmission": "identity",
+    "afterRows": 322880,
+    "allProductionJoinOwnersReviewed": [
+      "Task control driver",
+      "permission effect",
+      "Channel execution and recovery",
+      "Session deletion cleanup"
+    ],
+    "productSchedulerChanged": false,
+    "originalFailedUiOnlyCheckerRetained": true,
+    "correctedExplicitIdentityReadQualificationPassed": true
+  },
+  "limits": [
+    "Repaired UI interaction and visual review remain incomplete: Chinese result order, retained selection label, switching work type/scope, loading/error feedback, Chinese chrome and original question/file-summary visual regressions still need an isolated native page",
+    "Native HTTP and pure data projections, type/build/locale/docs checks and the two before screenshots do not satisfy UI visual acceptance",
+    "No fresh model execution, Task/session/message submission, package install or file save in this batch",
+    "Initial same-name helper used a nonexistent ended baseline; corrected to explicit before/baseline and reran with original byte/path contract",
+    "Initial real projection checker expected only a selected extra and omitted the actual active package; corrected the checker while preserving the correct product behavior",
+    "Original UI-only ownership checker expected an activation pair during identity-only native reads; whole current route/code/log/row audit proved the mode difference, and an explicit identity-reader qualification passed",
+    "No website deployment or product release performed"
+  ]
+}

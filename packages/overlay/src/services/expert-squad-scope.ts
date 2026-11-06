@@ -40,12 +40,15 @@ export function expertSquadSettingsScope():
 
 export function expertSquadCatalogScopeIdentity(scope: ExpertSquadCatalogScopeState): string {
   if (scope.kind === "project") return `project:${scope.directory}`
-  if (scope.kind === "session") return `session:${scope.directory}:${scope.sessionID}${scope.taskID ? `:task:${scope.taskID}` : ""}`
+  if (scope.kind === "session")
+    return `session:${scope.directory}:${scope.sessionID}${scope.taskID ? `:task:${scope.taskID}` : ""}`
   if (scope.kind === "pending") return `pending:${scope.directory}:${scope.taskID}`
   return scope.kind
 }
 
-export function expertSquadCatalogRequestKeyForScope(scope: Extract<ExpertSquadCatalogScopeState, { kind: "project" | "session" }>): string {
+export function expertSquadCatalogRequestKeyForScope(
+  scope: Extract<ExpertSquadCatalogScopeState, { kind: "project" | "session" }>,
+): string {
   return `expert-squad:catalog:${expertSquadCatalogScopeIdentity(scope)}:${expertSquadCatalogRefreshToken()}`
 }
 
@@ -63,9 +66,9 @@ export function composerReferenceCatalogScope(): ComposerReferenceCatalogScopeSt
   return scope.kind === "unavailable" && appStore.connected ? { kind: "global" } : scope
 }
 
-export function composerReferenceCatalogRequestKey(): string {
+export function composerReferenceCatalogRequestKey(productPillar: "code" | "work"): string {
   const authority = captureApiAuthority()
-  const prefix = `api:${authority.revision}:`
+  const prefix = `api:${authority.revision}:${productPillar}:`
   const scope = composerReferenceCatalogScope()
   if (scope.kind === "global") return `${prefix}composer-reference:global:${expertSquadCatalogRefreshToken()}`
   if (scope.kind === "unavailable") return ""

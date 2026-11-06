@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [输入框中文搜索实页](2026-11-07-composer-producer-matches/README.md)：生产者身份、前后实页及完整来源资格。
+
 - [专家团说明实页](2026-11-07-expert-description-locale/README.md)：真实中文创建、选择与详情及完整来源资格。
 
 - [分段选择实页](2026-11-06-segmented-selection/README.md)：真实比较、筛选、表单和原数据资格。

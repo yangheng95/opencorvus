@@ -1,0 +1,82 @@
+[
+  {
+    "scope": "global",
+    "query": "研究工作室",
+    "status": 200,
+    "total": 4,
+    "entries": [
+      {
+        "id": "research-studio",
+        "name": "Research Studio"
+      },
+      {
+        "id": "base",
+        "name": "Base"
+      },
+      {
+        "id": "dynamic",
+        "name": "Dynamic"
+      },
+      {
+        "id": "advanced",
+        "name": "Advanced"
+      }
+    ]
+  },
+  {
+    "scope": "global",
+    "query": "事实核查",
+    "status": 200,
+    "total": 2,
+    "entries": [
+      {
+        "id": "research-studio",
+        "name": "Research Studio"
+      },
+      {
+        "id": "advanced",
+        "name": "Advanced"
+      }
+    ]
+  },
+  {
+    "scope": "project",
+    "query": "研究工作室",
+    "status": 200,
+    "total": 4,
+    "entries": [
+      {
+        "id": "research-studio",
+        "name": "Research Studio"
+      },
+      {
+        "id": "base",
+        "name": "Base"
+      },
+      {
+        "id": "dynamic",
+        "name": "Dynamic"
+      },
+      {
+        "id": "advanced",
+        "name": "Advanced"
+      }
+    ]
+  },
+  {
+    "scope": "project",
+    "query": "事实核查",
+    "status": 200,
+    "total": 2,
+    "entries": [
+      {
+        "id": "research-studio",
+        "name": "Research Studio"
+      },
+      {
+        "id": "advanced",
+        "name": "Advanced"
+      }
+    ]
+  }
+]

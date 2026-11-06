@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [输入框真实搜索匹配](2026-11-07-composer-producer-matches.md)：目录查询事实、参考选择与提及。
+
 - [专家团说明语言](2026-11-07-expert-description-locale.md)：原文身份、审校译文与全部共享显示入口。
 
 - [分段选择语义](2026-11-06-segmented-selection-semantics.md)：Esc 根因、原生选择与实际中文页面复核。

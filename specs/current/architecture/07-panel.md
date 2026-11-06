@@ -714,6 +714,20 @@ effective package and actual first-message references; they do not claim a fixed
 launch assignment. Full catalog failure, a new scope and global drafts retire the
 prior package fact through the existing loader owner.
 
+The same Composer snapshot records the accepted Squad query, pending/ready/failed
+status and producer-ordered matching IDs separately from options retained for an
+active assignment or explicit draft selection. Reference pickers and explicit
+`@squad` and ordinary Unicode `@name` searches consume those actual matching IDs;
+they do not reapply a local
+English-name matcher to the server's localized results. Selected entries outside
+an accepted page remain visible with an explicit label and preserve their exact
+visible directive. Skill queries retain their local ranking. Pending reads show
+loading; source failures retain their diagnostic.
+The existing request key includes API authority, work type and catalog scope.
+Search waits for the owned initial catalog, then publishes under that key and
+the original sequence; retries reload and search the current query with its
+selected identities. A new scope retires the old query through the same owner.
+
 Expert Squad top-level descriptions in creation, Composer candidates and mentions,
 installed detail and market suggestions share one current-locale display function.
 Its generated UI resource comes from the existing reviewed website translations

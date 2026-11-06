@@ -1,7 +1,7 @@
 // ── ChatComposer Component ──
 // Solid.js port of renderChatComposer / renderChatAttachments / chatForm submit
 // and related attachment/keyboard logic
-import type { ComposerExpertSquadPackage } from "../services/composer-expert-squad-catalog"
+import type { ComposerExpertSquadPackage, ComposerExpertSquadSearch } from "../services/composer-expert-squad-catalog"
 
 import {
   createSignal,
@@ -211,8 +211,10 @@ export interface ChatComposerProps {
   skills: ComposerSkillOption[]
   missionSkills: ComposerSkillOption[]
   referenceCatalogError?: string
-  onReferenceCatalogRetry?: () => void
+  onReferenceCatalogRetry?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
   expertSquads: ExpertSquadOption[]
+  expertSquadSearch: ComposerExpertSquadSearch
+  referenceCatalogKey: string
   onMarketExpertSquadQuery?: (query: string) => Promise<readonly ExpertSquadMarketIndexItem[]>
   onInstallMarketExpertSquad?: (item: ExpertSquadMarketIndexItem) => Promise<void>
   onExpertSquadQuery?: (query: string, selectedExpertSquadIDs: readonly string[]) => void
@@ -714,6 +716,7 @@ export function ChatComposer(props: ChatComposerProps) {
         description: skill.description,
       }),
     ),
+    squadSearch: props.expertSquadSearch,
     squads: props.expertSquads.map(
       (squad): ComposerMentionEntity => ({
         kind: "squad",
@@ -727,16 +730,26 @@ export function ChatComposer(props: ChatComposerProps) {
     if (!focused() || !composerEnabled() || props.busy) return null
     return findComposerMentionQuery(text(), caretPosition())
   })
-  createEffect<string>((previousQuery) => {
+  const activeSquadMentionQuery = createMemo(() => {
     const mention = activeMentionQuery()
-    const query = mention?.stage === "entity" && mention.kind === "squad" ? mention.query : ""
-    if (query !== previousQuery) {
+    return mention && (mention.stage === "category" || mention.kind === "squad") ? mention : null
+  })
+  const squadMentionLoading = () => {
+    const mention = activeSquadMentionQuery()
+    return Boolean(mention && (
+      props.expertSquadSearch.status === "pending" || props.expertSquadSearch.query !== mention.query.trim()
+    ))
+  }
+  createEffect<string>((previousQuery) => {
+    const query = activeSquadMentionQuery()?.query ?? ""
+    const key = JSON.stringify([props.referenceCatalogKey, query])
+    if (key !== previousQuery) {
       const selectedExpertSquadIDs = composerMentionDirectiveRanges(text())
         .filter((directive) => directive.kind === "squad")
         .map((directive) => directive.value)
       props.onExpertSquadQuery?.(query, selectedExpertSquadIDs)
     }
-    return query
+    return key
   }, "")
   const activeMentionOptions = createMemo(() => {
     const query = activeMentionQuery()
@@ -1495,6 +1508,8 @@ export function ChatComposer(props: ChatComposerProps) {
         skills={props.skills}
         missionSkills={props.missionSkills}
         expertSquads={props.expertSquads}
+        expertSquadSearch={props.expertSquadSearch}
+        referenceCatalogKey={props.referenceCatalogKey}
         catalogError={props.referenceCatalogError}
         onCatalogRetry={props.onReferenceCatalogRetry}
         onExpertSquadQuery={props.onExpertSquadQuery}
@@ -1746,7 +1761,13 @@ export function ChatComposer(props: ChatComposerProps) {
                 options={activeMentionOptions()}
                 selectedKey={selectedMentionOption()?.key ?? ""}
                 error={props.referenceCatalogError}
-                onRetry={props.onReferenceCatalogRetry}
+                loading={squadMentionLoading()}
+                onRetry={props.onReferenceCatalogRetry ? () => props.onReferenceCatalogRetry?.(
+                  activeSquadMentionQuery()?.query ?? "",
+                  composerMentionDirectiveRanges(text())
+                    .filter((directive) => directive.kind === "squad")
+                    .map((directive) => directive.value),
+                ) : undefined}
                 onHighlight={(option) => setHighlightedMentionKey(option.key)}
                 onSelect={selectMentionOption}
               />

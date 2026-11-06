@@ -1,0 +1,541 @@
+{
+  "at": "2026-11-06T17:26:55.623Z",
+  "phase": "after",
+  "uiVisualAcceptance": false,
+  "actualNativeReadOnlyCases": 12,
+  "modelRequests": 0,
+  "facts": [
+    {
+      "scope": "global",
+      "pillar": "work",
+      "query": "研究工作室",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "",
+      "optionIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    },
+    {
+      "scope": "global",
+      "pillar": "work",
+      "query": "事实核查",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "",
+      "optionIDs": [
+        "research-studio",
+        "advanced",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    },
+    {
+      "scope": "global",
+      "pillar": "code",
+      "query": "研究工作室",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "",
+      "optionIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    },
+    {
+      "scope": "global",
+      "pillar": "code",
+      "query": "事实核查",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "",
+      "optionIDs": [
+        "research-studio",
+        "advanced",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    },
+    {
+      "scope": "project",
+      "pillar": "work",
+      "query": "研究工作室",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "dynamic",
+      "optionIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    },
+    {
+      "scope": "project",
+      "pillar": "work",
+      "query": "事实核查",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "dynamic",
+      "optionIDs": [
+        "research-studio",
+        "advanced",
+        "dynamic",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    },
+    {
+      "scope": "project",
+      "pillar": "code",
+      "query": "研究工作室",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "dynamic",
+      "optionIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    },
+    {
+      "scope": "project",
+      "pillar": "code",
+      "query": "事实核查",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "dynamic",
+      "optionIDs": [
+        "research-studio",
+        "advanced",
+        "dynamic",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    },
+    {
+      "scope": "session",
+      "pillar": "work",
+      "query": "研究工作室",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "dynamic",
+      "optionIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    },
+    {
+      "scope": "session",
+      "pillar": "work",
+      "query": "事实核查",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "dynamic",
+      "optionIDs": [
+        "research-studio",
+        "advanced",
+        "dynamic",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    },
+    {
+      "scope": "session",
+      "pillar": "code",
+      "query": "研究工作室",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "dynamic",
+      "optionIDs": [
+        "research-studio",
+        "base",
+        "dynamic",
+        "advanced",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "base",
+            "dynamic",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    },
+    {
+      "scope": "session",
+      "pillar": "code",
+      "query": "事实核查",
+      "status": 200,
+      "producerIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "acceptedIDs": [
+        "research-studio",
+        "advanced"
+      ],
+      "retainedID": "squad-sdk",
+      "activeID": "dynamic",
+      "optionIDs": [
+        "research-studio",
+        "advanced",
+        "dynamic",
+        "squad-sdk"
+      ],
+      "mentions": [
+        {
+          "syntax": "direct",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        },
+        {
+          "syntax": "explicit",
+          "ids": [
+            "research-studio",
+            "advanced"
+          ],
+          "directive": "@squad(\"research-studio\")"
+        }
+      ]
+    }
+  ]
+}

@@ -31,9 +31,16 @@ export interface ComposerReferenceCatalogProblem {
   message: string
 }
 
+export interface ComposerExpertSquadSearch {
+  query: string
+  status: "pending" | "ready" | "failed"
+  matchingIDs: readonly string[]
+}
+
 export interface ComposerExpertSquadCatalogSnapshot {
   requestKey: string
   squads: ExpertSquadOption[]
+  search: ComposerExpertSquadSearch
   skills: ComposerSkillOption[]
   chatSkills: ComposerSkillOption[]
   missionSkills: ComposerSkillOption[]
@@ -45,6 +52,7 @@ export interface ComposerExpertSquadCatalogSnapshot {
 const EMPTY_COMPOSER_EXPERT_SQUAD_CATALOG: ComposerExpertSquadCatalogSnapshot = {
   requestKey: "",
   squads: [],
+  search: { query: "", status: "pending", matchingIDs: [] },
   skills: [],
   chatSkills: [],
   missionSkills: [],
@@ -100,6 +108,7 @@ export function createComposerExpertSquadCatalogSnapshot(
   const facts = activeCatalogFacts(catalog)
   return {
     requestKey: key,
+    search: { query: "", status: "ready", matchingIDs: squadPage.entries.map((entry) => entry.id) },
     squads: mergeComposerExpertSquadOptions(squadPage.entries, activeInspection ? [activeInspection] : [], [
       facts.activeID,
     ]),
@@ -205,6 +214,16 @@ export function createComposerReferenceCatalogSnapshotFromSettled(
   return {
     requestKey: key,
     squads,
+    search: {
+      query: "",
+      status: activePackage && results.squads.status === "fulfilled" ? "ready" : "failed",
+      matchingIDs:
+        results.squads.status === "fulfilled"
+          ? results.squads.value.entries
+              .filter((entry) => squads.some((squad) => squad.id === entry.id))
+              .map((entry) => entry.id)
+          : [],
+    },
     skills,
     chatSkills,
     missionSkills,
@@ -214,19 +233,38 @@ export function createComposerReferenceCatalogSnapshotFromSettled(
   }
 }
 
+export function beginComposerExpertSquadSearch(
+  snapshot: ComposerExpertSquadCatalogSnapshot,
+  requestKey: string,
+  query: string,
+): ComposerExpertSquadCatalogSnapshot {
+  if (snapshot.requestKey !== requestKey) return snapshot
+  return {
+    ...snapshot,
+    search: { query: query.trim(), status: "pending", matchingIDs: [] },
+    problems: snapshot.problems.filter((problem) => problem.source !== "squad-search"),
+  }
+}
+
 export function updateComposerExpertSquadSearch(
   snapshot: ComposerExpertSquadCatalogSnapshot,
   requestKey: string,
+  query: string,
   result: PromiseSettledResult<ExpertSquadCatalogPage>,
   selectedExpertSquadIDs: readonly string[] = [],
 ): ComposerExpertSquadCatalogSnapshot {
-  if (snapshot.requestKey !== requestKey) return snapshot
+  if (snapshot.requestKey !== requestKey || snapshot.search.query !== query.trim()) return snapshot
   const problems = snapshot.problems.filter((problem) => problem.source !== "squad-search")
   if (result.status === "rejected") {
-    return { ...snapshot, problems: [...problems, requestProblem("squad-search", result.reason)] }
+    return {
+      ...snapshot,
+      search: { query: query.trim(), status: "failed", matchingIDs: [] },
+      problems: [...problems, requestProblem("squad-search", result.reason)],
+    }
   }
   return {
     ...snapshot,
+    search: { query: query.trim(), status: "ready", matchingIDs: result.value.entries.map((entry) => entry.id) },
     squads: mergeComposerExpertSquadOptions(result.value.entries, snapshot.squads, [
       snapshot.activeID,
       ...selectedExpertSquadIDs,
@@ -261,6 +299,7 @@ export function createGlobalComposerReferenceCatalogSnapshot(
   return {
     requestKey: key,
     squads: catalog.expert_squads.page.entries,
+    search: { query: "", status: "ready", matchingIDs: catalog.expert_squads.page.entries.map((entry) => entry.id) },
     skills,
     chatSkills: skills,
     missionSkills: catalog.mission_skills.mission_skills.map((skill) => ({
@@ -297,6 +336,7 @@ export function failedComposerReferenceCatalogSnapshot(
   return {
     requestKey: key,
     squads: [],
+    search: { query: "", status: "failed", matchingIDs: [] },
     skills: [],
     chatSkills: [],
     missionSkills: [],
