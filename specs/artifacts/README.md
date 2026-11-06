@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [折叠选择保存实页](2026-11-06-fold-preference-save/README.md)：真实关闭时序与重开复核。
+
 - [成员读取范围实页](2026-11-06-member-evidence-summary/README.md)：真实输入、摘要及原始结果。
 
 - [成员活动摘要实页](2026-11-06-member-activity-reading/README.md)：原消息、紧凑预览和完整阅读。

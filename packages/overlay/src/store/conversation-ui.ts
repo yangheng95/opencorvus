@@ -53,8 +53,6 @@ const MAX_UI_ENTRIES = 200
 const MAX_MAIN_READERS = 50
 let captureMainReader: (() => void) | undefined
 let recentConversations: string[] = []
-let saveTimer: any = null
-const SAVE_DEBOUNCE_MS = 400
 
 const currentState = () => store.conversations[store.activeKey]
 
@@ -125,35 +123,16 @@ function loadFromStorage(key: string): Record<string, boolean> {
   }
 }
 
-// Flush the same active record before selection changes, including changes
-// made within the save debounce window.
-function flushActiveConversationNow(): boolean {
+// Fold changes are explicit, bounded presentation choices. Commit the active
+// source's record before the page can close or change its selection.
+function saveActiveConversation(): void {
   const current = currentState()
-  if (!current || !isStorageAvailable()) return false
+  if (!current || !isStorageAvailable()) return
   try {
     window.localStorage.setItem(STORAGE_PREFIX + current.storageKey, JSON.stringify(current.expandedCards))
     bumpIndex(current.storageKey)
-    return true
   } catch {
     // ignore quota errors
-    return false
-  }
-}
-
-function scheduleSave(): void {
-  if (!currentState() || !isStorageAvailable()) return
-  if (saveTimer) clearTimeout(saveTimer)
-  saveTimer = setTimeout(() => {
-    saveTimer = null
-    flushActiveConversationNow()
-  }, SAVE_DEBOUNCE_MS)
-}
-
-function flushPendingSave(): void {
-  if (saveTimer) {
-    clearTimeout(saveTimer)
-    saveTimer = null
-    flushActiveConversationNow()
   }
 }
 
@@ -161,7 +140,6 @@ function flushPendingSave(): void {
 export function loadConversationUiStateForSource(source: Pick<BoardSource, "kind" | "id">, authority: ApiAuthority): void {
   const key = JSON.stringify([authority.revision, source.kind, source.id])
   if (store.activeKey === key) return
-  flushPendingSave()
   const storageKey = JSON.stringify([getServerUrl(), source.kind, source.id])
   const next = [...recentConversations.filter((item) => item !== key), key].slice(-MAX_CONVERSATIONS)
   batch(() => {
@@ -186,7 +164,6 @@ export function loadConversationUiStateForSource(source: Pick<BoardSource, "kind
 
 /** Deselect the current view; its bounded record remains available on return. */
 export function clearConversationUiState(): void {
-  flushPendingSave()
   setStore("activeKey", "")
 }
 
@@ -206,7 +183,7 @@ export function setCardExpanded(id: string, value: boolean): void {
   const current = currentState()
   if (!id || !current) return
   setStore("conversations", store.activeKey, "expandedCards", reconcile(remember(current.expandedCards, id, value), { merge: false }))
-  scheduleSave()
+  saveActiveConversation()
 }
 
 /** Read conversation-scoped execution/reasoning presentation state. Unlike card

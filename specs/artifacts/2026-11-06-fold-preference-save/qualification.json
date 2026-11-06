@@ -1,0 +1,161 @@
+{
+  "at": "2026-11-06T01:44:32.455Z",
+  "scope": "Commit bounded fold preferences at their only setter",
+  "uiEntry": "main-B-xKJnLe.js",
+  "screenshots": 13,
+  "personallyReviewed": true,
+  "uiAutomationRun": false,
+  "manualObservations": {
+    "timings": [
+      {
+        "phase": "before",
+        "kind": "tool-collapse",
+        "elapsedUpperBoundMs": 118,
+        "afterInput": "false"
+      },
+      {
+        "phase": "before",
+        "kind": "sources-collapse",
+        "elapsedUpperBoundMs": 157,
+        "afterInput": {
+          "key": "sources:ses_-zUQAbG2azzi3Fk21GU7:msg_g0VZphM3w00Z3b43SuZP:061b17e6802b8f50bdb939c6f1bf05d6945ac67dfa84a3eb87ef7c4f38236c49",
+          "open": [
+            false
+          ]
+        }
+      },
+      {
+        "phase": "after",
+        "kind": "tool-collapse",
+        "elapsedUpperBoundMs": 127,
+        "afterInput": "false"
+      },
+      {
+        "phase": "after",
+        "kind": "sources-collapse",
+        "elapsedUpperBoundMs": 145,
+        "afterInput": {
+          "key": "sources:ses_-zUQAbG2azzi3Fk21GU7:msg_g0VZphM3w00Z3b43SuZP:061b17e6802b8f50bdb939c6f1bf05d6945ac67dfa84a3eb87ef7c4f38236c49",
+          "open": [
+            false
+          ]
+        }
+      },
+      {
+        "phase": "after",
+        "kind": "tool-expand",
+        "elapsedUpperBoundMs": 160,
+        "afterInput": "true"
+      }
+    ],
+    "beforeReopened": {
+      "toolExpanded": true,
+      "sourcesExpanded": true
+    },
+    "afterReopened": {
+      "toolAfterCollapseExpanded": false,
+      "sourcesAfterCollapseExpanded": false,
+      "toolAfterExpansionExpanded": true
+    },
+    "sameOriginalSourceGroupAndTwoSourceIdentities": true,
+    "sameDocumentTaskWorkReturn": {
+      "toolExpanded": true,
+      "sourcesExpanded": false
+    },
+    "completedTaskMemberNavigation": true,
+    "originalQuestionSummary": {
+      "total": 3,
+      "answered": 2,
+      "blank": 1
+    },
+    "originalFileSummary": {
+      "records": 3,
+      "unknownLineTotalsExplained": true
+    }
+  },
+  "model": {
+    "newRequests": 0,
+    "cumulativeRequests": 1474,
+    "newAgents": 0,
+    "newMessages": 0
+  },
+  "originalEvidence": {
+    "canonicalToolParts": 42,
+    "sessions": 19,
+    "fullRequestAndResultUnchanged": true,
+    "httpAndSseSnapshotsExact": true,
+    "primaryQuestionFileSessions": 3,
+    "primaryFullToolParts": 8,
+    "originalQuestionFileFactsExact": true,
+    "newLiveToolEventsEmitted": 0
+  },
+  "checks": {
+    "typedPackages": 8,
+    "locales": 2,
+    "localeKeys": 2899,
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "currentArchitectureDocuments": 20,
+    "cssTokenReferences": 9183
+  },
+  "phases": [
+    {
+      "kind": "before",
+      "originals": 310418,
+      "current": 310420,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 3212532,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    },
+    {
+      "kind": "after",
+      "originals": 310420,
+      "current": 310422,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 2510275,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    }
+  ],
+  "retirement": {
+    "publicShutdownStatuses": [
+      200,
+      200
+    ],
+    "nativeAndLauncherExitCodes": [
+      0,
+      0
+    ],
+    "pairedCredentialAndCatalogCopiesRetired": 4,
+    "ownedBrowserTabsClosed": [
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62
+    ],
+    "userWindowAndPort18571Untouched": true
+  },
+  "limits": [
+    "Actual browser document close/reopen verified; no native-window or forced operating-system termination interaction claimed.",
+    "Mission/Goal/Requirements folding callers audited in code without a fresh natural visual sample.",
+    "Existing storage-unavailable/quota behavior unchanged; no new failure visual sample.",
+    "No new LLM, delegation, live Tool events, execution, scheduling or recovery acceptance.",
+    "Original user/model text, real participant names and technical identities retain their actual language."
+  ]
+}

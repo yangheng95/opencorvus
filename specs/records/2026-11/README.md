@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [关闭页面前保存折叠选择](2026-11-06-fold-preference-save.md)：工具、来源和跨会话折叠保存。
+
 - [成员记录读取范围摘要](2026-11-06-member-evidence-summary.md)：读取用途、数量与双语真实历史复核。
 
 - [成员活动摘要的可读文本](2026-11-06-member-activity-reading.md)：历史与实时同一结构投影、真实成员阅读。

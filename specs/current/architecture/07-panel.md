@@ -2347,9 +2347,15 @@ same-authority hydration retain that arrangement; another source, authority or
 snapshot selects its own state. These fields remain in memory only.
 The store retains fifty recently selected conversations, with two hundred entries
 per presentation field. Only card folds persist across reloads, under the server
-URL and source kind/ID; reading positions remain in memory. The previous bare
-Task-ID folding keys are no longer read, so that old presentation preference
-starts from its default on first use. There is no second active-state copy.
+URL and source kind/ID; reading positions remain in memory.
+Fold mutations commit this bounded record synchronously with the operator's
+choice, including Sources and execution groups. There is no delayed save or
+exit-only persistence window; source selection does not carry a pending write
+into another record. Existing storage keys, boolean values and limits stay the
+same, while the other presentation fields keep their in-memory lifetimes.
+The previous bare Task-ID folding keys are no longer read, so that old
+presentation preference starts from its default on first use. There is no
+second active-state copy.
 Board source selection writes a complete discriminated union through the one
 `setSelectedSource` store operation. It reconciles the incoming value instead
 of shallow-merging fields from the previously selected kind. Task, ordinary
