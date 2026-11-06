@@ -881,7 +881,7 @@ export function FileEditorPane() {
               aria-disabled={leaveSaving() || undefined}
               onClick={() => { if (!leaveSaving()) finishLeaveDecision(false) }}
             >
-              {t("common.cancel")}
+              {t("file_editor.keep_editing")}
             </Button>
             <Button
               type="button"
@@ -904,7 +904,7 @@ export function FileEditorPane() {
               data-ui="file-editor-save-and-leave"
               onClick={() => void saveAndLeave()}
             >
-              {leaveSaving() ? t("common.saving") : t("common.save")}
+              {leaveSaving() ? t("common.saving") : t(leaveReason() === "reload" ? "file_editor.save_reload" : "file_editor.save_continue")}
             </Button>
           </>
         }

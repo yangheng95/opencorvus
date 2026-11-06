@@ -1,0 +1,213 @@
+{
+  "at": "2026-11-06T12:13:23.075Z",
+  "status": "passed",
+  "scope": "未保存决定明确显示继续编辑、放弃更改、保存并继续与保存并重新加载；原决定和保存实现不变",
+  "singleAgent": true,
+  "noDelegation": true,
+  "userWindowsPort18571AndRealDatabaseUntouched": true,
+  "ui": {
+    "nativeDevelopmentUi": true,
+    "backgroundTabs": [
+      "98",
+      "99",
+      "100"
+    ],
+    "allOwnTabsClosed": true,
+    "viewport": {
+      "width": 1280,
+      "height": 720
+    },
+    "manualInteractionAndIndividualScreenshotReview": true,
+    "automatedUiTests": false,
+    "screenshots": [
+      "01-unsaved-source-before.png",
+      "02-unsaved-preview-before.png",
+      "03-draft-comparison-before.png",
+      "04-return-preview-before.png",
+      "05-close-decision-before.png",
+      "06-reload-decision-before.png",
+      "07-switch-decision-before.png",
+      "08-cancel-keeps-draft-before.png",
+      "09-reloaded-original-before.png",
+      "10-reopened-original-before.png",
+      "11-english-leave-after.png",
+      "12-english-reload-after.png",
+      "13-english-restored-original-after.png",
+      "14-chinese-leave-after.png",
+      "15-chinese-reload-after.png",
+      "16-chinese-switch-after.png",
+      "17-discard-switches-source-after.png",
+      "18-reopened-original-after.png",
+      "19-long-path-decision-after.png",
+      "20-discard-closes-file-after.png",
+      "21-history-original-reopened-after.png",
+      "22-final-live-comparison.png",
+      "23-final-comparison-retains-draft.png",
+      "24-final-discard-decision.png",
+      "25-final-original-restored.png"
+    ],
+    "hero": "15-chinese-reload-after.png",
+    "chineseLeave": "14-chinese-leave-after.png",
+    "englishLeave": "11-english-leave-after.png",
+    "longPath": "19-long-path-decision-after.png"
+  },
+  "checks": {
+    "type-overlay": 0,
+    "ui-build-after": 0,
+    "ui-build-final": 0,
+    "locale-after": 0,
+    "docs-final": 0,
+    "architecture-final": 0,
+    "ownership-before": 0,
+    "ownership-after": 0,
+    "ownership-final": 0
+  },
+  "locale": {
+    "languages": 2,
+    "keys": 2913
+  },
+  "docs": {
+    "operations": 352,
+    "groups": 26,
+    "architectureDocuments": 20
+  },
+  "readbacks": {
+    "phases": [
+      "before-initial",
+      "before-ended",
+      "after-initial",
+      "after-ended",
+      "final-initial",
+      "final-ended"
+    ],
+    "originalChecksEach": 9,
+    "originalGoals": 2,
+    "originalGoalTools": 3,
+    "retainedActualQuestions": 3,
+    "retainedAnswerValues": 5,
+    "retainedGoalStatus": "complete",
+    "retainedFileBytes": 559,
+    "retainedAddedLines": 23,
+    "retainedDeletedLines": 0,
+    "sameNameFiles": [
+      {
+        "path": "deliverables/summary.md",
+        "bytes": 2538
+      },
+      {
+        "path": "deliverables/history-before-B-006-closure/summary.md",
+        "bytes": 1803
+      }
+    ],
+    "sameNamePublicAndDiskContentExact": true
+  },
+  "manual": {
+    "sourceAndPreviewShareActualTemporaryDraft": true,
+    "diskComparisonShowsActualAddedDraftLine": true,
+    "closingComparisonRetainsDraftBeforeAndAfter": true,
+    "keepEditingRetainsActualInputInBothLanguages": true,
+    "discardAndReloadRestoresOriginal": true,
+    "discardCompletesPendingFileSwitch": true,
+    "discardCompletesPendingFileClose": true,
+    "reopeningCurrentAndHistoricalFilesReadsOriginalContent": true,
+    "longPathAndButtonsVisuallyReviewed": true,
+    "originalDiskFilesUnchanged": true
+  },
+  "phases": [
+    {
+      "phase": "before",
+      "originalRows": 322523,
+      "currentRows": 322525,
+      "schema": 10,
+      "tables": 92,
+      "projects": 135,
+      "physicalAttachments": 315,
+      "originalRowsAndBusinessContentExact": true,
+      "sourceDatabaseExact": true,
+      "filesystemExclusions": 0,
+      "memoryTransitions": [],
+      "capacityReplacements": [],
+      "ownedRuntime": {
+        "leases": 1,
+        "grants": 1,
+        "allAddedRowsLinkedToOriginalNativeOccurrence": true
+      },
+      "modelRequests": 0,
+      "cumulativeRequests": 1524,
+      "reserveMs": 3181797,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": 2,
+      "uiEntry": "main-BC9C-I1r.js"
+    },
+    {
+      "phase": "after",
+      "originalRows": 322525,
+      "currentRows": 322527,
+      "schema": 10,
+      "tables": 92,
+      "projects": 135,
+      "physicalAttachments": 315,
+      "originalRowsAndBusinessContentExact": true,
+      "sourceDatabaseExact": true,
+      "filesystemExclusions": 0,
+      "memoryTransitions": [],
+      "capacityReplacements": [],
+      "ownedRuntime": {
+        "leases": 1,
+        "grants": 1,
+        "allAddedRowsLinkedToOriginalNativeOccurrence": true
+      },
+      "modelRequests": 0,
+      "cumulativeRequests": 1524,
+      "reserveMs": 2714547,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": 2,
+      "uiEntry": "main-Cy_nRFCg.js"
+    },
+    {
+      "phase": "final",
+      "originalRows": 322527,
+      "currentRows": 322529,
+      "schema": 10,
+      "tables": 92,
+      "projects": 135,
+      "physicalAttachments": 315,
+      "originalRowsAndBusinessContentExact": true,
+      "sourceDatabaseExact": true,
+      "filesystemExclusions": 0,
+      "memoryTransitions": [],
+      "capacityReplacements": [],
+      "ownedRuntime": {
+        "leases": 1,
+        "grants": 1,
+        "allAddedRowsLinkedToOriginalNativeOccurrence": true
+      },
+      "modelRequests": 0,
+      "cumulativeRequests": 1524,
+      "reserveMs": 2319110,
+      "publicShutdown": 200,
+      "nativeExit": 0,
+      "launcherExit": 0,
+      "pairedCopiesRetired": 2,
+      "uiEntry": "main-Cy_nRFCg.js"
+    }
+  ],
+  "resources": {
+    "newRequests": 0,
+    "cumulativeRequests": 1524,
+    "pairedCopiesRetired": 6,
+    "minimumReserveMs": 2319110,
+    "absoluteDeadline": 1793969388569
+  },
+  "limits": [
+    "本轮所有临时编辑只在页面中，通过产品放弃流程结束，没有实际保存写入。",
+    "本轮未执行保存成功、保存冲突和保存错误分支，按钮截图不代表这些行为的新验收。",
+    "本轮三题、目标和文件交付为已存在的真实模型结果的只读回归，没有新模型端到端请求。",
+    "普通文件编辑与决定已覆盖；绝对只读来源、任意路径长度、所有文件类型及其他界面未作全覆盖声明。",
+    "04是返回预览后的截图，不是决定弹窗，也不是产品缺陷；final补齐的是原计划遗漏的修改后比较回归。"
+  ]
+}

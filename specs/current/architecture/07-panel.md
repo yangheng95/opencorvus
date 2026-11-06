@@ -1236,6 +1236,12 @@ draft and loaded baseline. Reload uses the same unsaved decision owner and only
 publishes a successful response still owned by the resource, generation and
 draft revision; failed or superseded reads retain input. Save-and-leave errors
 remain visible inside its decision dialog.
+The same unsaved decision names its actions by their consequence: Keep editing
+retains the current draft; Discard changes completes the pending operation without
+saving; Save and continue completes a pending navigation or file operation after
+saving. Reload uses its existing Discard and reload action and names the other
+choice Save and reload. These localized labels read the existing leave reason;
+they do not introduce another decision owner or change save, navigation or focus.
 
 File actions retain their native focus during transient save, reload and download
 work through the shared Button's ARIA disabled/busy states. The existing action
