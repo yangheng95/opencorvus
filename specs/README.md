@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [协调请求的实际摘要](records/2026-11/2026-11-06-coordination-request-summary.md)：展示原问题，不把交回当决定。
+
 - [产物查询与读取请求摘要](records/2026-11/2026-11-06-artifact-request-summary.md)：原请求项数和中文语义。
 
 - [关闭页面前保存折叠选择](records/2026-11/2026-11-06-fold-preference-save.md)：快速收起、关闭与重开时的原选择。

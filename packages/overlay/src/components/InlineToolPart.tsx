@@ -431,7 +431,7 @@ export function InlineToolPart(props: { part: any; mode?: "inline" | "block" | "
   return (
     <>
       <Show when={showChip()}>
-        <div class="msg-tool" data-status={status()}>
+        <div class="msg-tool" data-status={status()} data-tool={toolName()}>
           <span class="tool-icon" aria-hidden="true">
             <Icon name={icon()} />
           </span>

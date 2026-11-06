@@ -592,6 +592,11 @@ export function displayToolDetail(name: string, input: any, state: any, base = "
         .join(t("card.meta_separator"))
     }
   }
+  if (n === "requestorchestratordecision") {
+    return status === "running" || status === "completed"
+      ? firstNonEmptyString(safeInput.summary) || statusLabel
+      : statusLabel
+  }
   if (n === "applypatch" && safeState.status === "completed") {
     const identity = conversationToolIdentity(name, safeInput, safeState.metadata)
     if (identity?.kind === "patch" && identity.path) return shortRelativePath(identity.path, base)

@@ -233,7 +233,7 @@ function ExecutionToolIdentity(props: { tool: ToolDisplayModel; commandCodeInSta
       </span>
       <span class="msg-transcript-disclosure__label msg-work-details__tool-name" title={props.tool.name}>{props.tool.label}</span>
       <Show when={detail()}>
-        <span class="msg-work-details__tool-detail">{detail()}</span>
+        <span class="msg-work-details__tool-detail" data-tool={props.tool.name}>{detail()}</span>
       </Show>
     </>
   )

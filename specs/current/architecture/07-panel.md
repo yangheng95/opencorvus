@@ -731,6 +731,20 @@ status. Original failures have priority, and full input/output disclosures keep
 their original identities and producer titles. Main and member views share this
 one display projection, without parsing titles or changing persisted Tool facts.
 
+`request_orchestrator_decision` details identify the caller's original short
+`summary` while the Tool is running or completed. Receiving arguments or an
+unavailable summary retain the existing Tool status, with failures still taking
+priority. The localized action name describes the request; its recorded handoff
+does not establish that a decision was answered, the Task is currently blocked,
+or work is complete. Original model-authored summary language and the complete
+input/output and control receipt stay intact in the same shared display flow.
+The existing Tool identity marks its summary element. Coordination-request
+disclosures keep action, status and marker on their action row and give the
+original prose a separate, wrapping preview of at most two lines, using body
+text typography. The same preview applies to expanded Tool headers; other Tool
+details retain their compact layout. The original button, accessibility label,
+title, folding owner and full payload remain the reading and interaction contract.
+
 Published Task Artifact previews and downloads read exact immutable bytes through
 the existing Project-identity context. The POST byte-read request does not require
 an available execution model. Task/Project ownership, original snapshot identity,

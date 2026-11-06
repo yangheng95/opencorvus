@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [协调请求摘要实页](2026-11-06-coordination-request-summary/README.md)：原成员请求与实际阅读。
+
 - [产物请求摘要实页](2026-11-06-artifact-request-summary/README.md)：中英数量与原结果核对。
 
 - [折叠选择保存实页](2026-11-06-fold-preference-save/README.md)：真实关闭时序与重开复核。

@@ -1,0 +1,145 @@
+{
+  "at": "2026-11-06T02:57:26.219Z",
+  "scope": "Original coordination request summaries with a readable prose preview",
+  "uiEntry": "main-QRQYo5eN.js",
+  "screenshots": 10,
+  "personallyReviewed": true,
+  "uiAutomationRun": false,
+  "manualObservations": {
+    "beforeFixedEnglishTitle": true,
+    "intermediateSummaryClipped": [
+      3,
+      4
+    ],
+    "finalQualifiedScreenshots": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "originalSummaries": [
+      "修复及12项测试通过；禁止提交与构建强制提交规则冲突，资源发布待处理",
+      "真实修复已保存且两项测试通过，请协调审阅并由 Mission 获取用户本地提交确认"
+    ],
+    "summaryUtf8Bytes": [
+      98,
+      105
+    ],
+    "englishAndChineseActionLabels": true,
+    "originalModelLanguagePreserved": true,
+    "fullSummaryVisibleInNarrowMemberPanel": true,
+    "originalHandoffReceiptVisible": true,
+    "secondOriginalInputVisible": true,
+    "afterChineseRefresh": {
+      "originalTaskID": "tsk_g00VZRQQAP00yaqEnUZF",
+      "originalMember": "base-developer",
+      "groupExpanded": true,
+      "keyboardCollapseExpanded": false,
+      "summaryVisible": true
+    }
+  },
+  "model": {
+    "newRequests": 0,
+    "cumulativeRequests": 1474,
+    "newAgents": 0,
+    "newMessages": 0
+  },
+  "originalEvidence": {
+    "canonicalToolParts": 2,
+    "sessions": 2,
+    "fullRequestsAndHandoffOutputsUnchanged": true,
+    "httpAndSseSnapshotsExact": true,
+    "primaryQuestionFileSessions": 3,
+    "primaryFullToolParts": 8,
+    "originalQuestionFileFactsExact": true,
+    "newLiveToolEventsEmitted": 0
+  },
+  "checks": {
+    "typedPackages": 8,
+    "finalTypecheck": true,
+    "locales": 2,
+    "localeKeys": 2901,
+    "newLocaleKeys": 0,
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "currentArchitectureDocuments": 20,
+    "cssTokenReferences": 9188
+  },
+  "phases": [
+    {
+      "kind": "before",
+      "originals": 310426,
+      "current": 310428,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 3385045,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    },
+    {
+      "kind": "after",
+      "originals": 310428,
+      "current": 310430,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 2886759,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    },
+    {
+      "kind": "final",
+      "originals": 310430,
+      "current": 310432,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 2122364,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    }
+  ],
+  "retirement": {
+    "publicShutdownStatuses": [
+      200,
+      200,
+      200
+    ],
+    "nativeAndLauncherExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "pairedCredentialAndCatalogCopiesRetired": 6,
+    "ownedBrowserTabsClosed": [
+      66,
+      67,
+      68
+    ],
+    "userWindowAndPort18571Untouched": true
+  },
+  "limits": [
+    "Only two natural completed coordination Tools exist; no fresh receiving/running/error/replay visual sample.",
+    "No natural input above2KiB with an omitted summary; existing storage/transport budgets unchanged.",
+    "Summary text is the original caller claim and request identity, not proof of saved files, current blocking, answered decisions or Task completion.",
+    "Original Task793 unfinished/error/expired-question history and Task cancellation entry remain original; no new scheduling or recovery acceptance.",
+    "Other Tool rows retain their compact layout. The coordination preview is capped at two prose lines; no arbitrary-length full-text claim.",
+    "Question/file history has public-fact regression this batch; prior actual UI screenshots belong to972.",
+    "No new LLM, delegation, live Tool events, execution or backend/API/SDK/schema changes."
+  ]
+}
