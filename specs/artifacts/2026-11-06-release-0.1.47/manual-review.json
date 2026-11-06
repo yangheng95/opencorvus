@@ -1,0 +1,18 @@
+{
+  "observedAt": "2026-11-06T12:23:03.936163+00:00",
+  "version": "0.1.47",
+  "source": "77777692226e624b622d186b625492b969f7948e",
+  "method": "Actual page interaction and manual visual review in owned hidden in-app browser tabs; all seven screenshots actually viewed",
+  "images": {
+    "01-published-settings-en.jpg": "Public Windows baseline package: current 0.1.47, English authored notes",
+    "02-published-settings-en-limits.jpg": "English fixes, database impact, custom-client status and macOS limitation",
+    "03-published-settings-zh.jpg": "Same actual package: Chinese current-version notes and localized controls",
+    "04-published-settings-zh-limits.jpg": "Chinese complete fixes and upgrade limitations",
+    "05-published-web-zh.jpg": "Public Chinese version 47 page after deployment, complete body and date",
+    "06-published-web-en.jpg": "Public English version 47 page, complete body and date",
+    "07-published-download.jpg": "Actual public Windows download action identifies 0.1.47"
+  },
+  "scope": "Published package settings in both locales, public bilingual full notes and current download action. Not all product workflows, histories or concurrency combinations.",
+  "providerScope": "No credentials copied, no message sent or goal started; transport was not instrumented. Canonical first-run receipts separately record realProvider=false.",
+  "retirement": "Own settings and website tabs closed; public shutdown 200, original TTY exit 0, physical retirement independently verified. User windows, processes and port 18571 untouched."
+}

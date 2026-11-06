@@ -1,0 +1,57 @@
+{
+  "observedAt": "2026-11-06T11:59:54.038388+00:00",
+  "runID": 42208311285,
+  "source": "77777692226e624b622d186b625492b969f7948e",
+  "url": "https://github.com/yangheng95/opencorvus/actions/runs/42208311285",
+  "conclusion": "cancelled",
+  "completedAt": "2026-11-06T11:52:45Z",
+  "jobs": [
+    {
+      "id": 127860388311,
+      "name": "changes",
+      "conclusion": "success"
+    },
+    {
+      "id": 127860390697,
+      "name": "dependency review",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 127861111847,
+      "name": "verify",
+      "conclusion": "success"
+    },
+    {
+      "id": 127861111999,
+      "name": "dependency audit",
+      "conclusion": "success"
+    },
+    {
+      "id": 127863322954,
+      "name": "service tests",
+      "conclusion": "success"
+    },
+    {
+      "id": 127863323813,
+      "name": "unit (windows)",
+      "conclusion": "cancelled"
+    },
+    {
+      "id": 127863324055,
+      "name": "unit (macos)",
+      "conclusion": "cancelled"
+    },
+    {
+      "id": 127863324136,
+      "name": "unit (linux)",
+      "conclusion": "cancelled"
+    },
+    {
+      "id": 127877510756,
+      "name": "CI passed",
+      "conclusion": "failure"
+    }
+  ],
+  "qualification": "The three automatic full-suite unit jobs were cancelled and the aggregate guard failed. Not counted as passed. Local focused checks and canonical native publication are evaluated separately; no additional manual full-suite run was dispatched.",
+  "cancellationRequester": "unknown"
+}

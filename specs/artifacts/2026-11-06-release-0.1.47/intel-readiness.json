@@ -1,0 +1,51 @@
+{
+  "runID": 42208331651,
+  "source": "77777692226e624b622d186b625492b969f7948e",
+  "createdAt": "2026-11-06T11:11:06Z",
+  "completedAt": "2026-11-06T11:38:42Z",
+  "elapsedSeconds": 1656,
+  "conclusion": "success",
+  "jobs": [
+    {
+      "id": 127860464852,
+      "name": "select-platforms",
+      "conclusion": "success"
+    },
+    {
+      "id": 127860690908,
+      "name": "overlay (darwin-x64) / compile (darwin-x64)",
+      "conclusion": "success"
+    },
+    {
+      "id": 127871882075,
+      "name": "overlay (darwin-x64) / ${{ matrix.kind }} (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    },
+    {
+      "id": 127871882445,
+      "name": "overlay (darwin-x64) / validate installers (${{ inputs.platform }})",
+      "conclusion": "skipped"
+    }
+  ],
+  "firstRun": [
+    {
+      "firstRun": "passed",
+      "sessionsCreated": 4,
+      "persistedAcrossRestart": 2,
+      "realProvider": false
+    }
+  ],
+  "evidence": [
+    "2026-11-06T11:12:03.7877070Z Cache hit for restore-key: macOS-bun-39ea8a96d1e938302c2f2f6612cb12762a62b0a9cd76729b5c94a69402fec481",
+    "2026-11-06T11:18:15.4180650Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "2026-11-06T11:34:35.6374650Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 15m 46s",
+    "2026-11-06T11:35:58.6679610Z Overlay assets validated for darwin-x64"
+  ],
+  "scope": "Actual Intel GUI preflight with native version, first launch/restart and installer qualification; debug assets do not enter canonical publication",
+  "rustCacheEvidence": [
+    "2026-11-06T11:14:19.9665050Z Cache Key:",
+    "2026-11-06T11:14:20.1377950Z No cache found.",
+    "2026-11-06T11:36:26.4760620Z Cache Key:"
+  ],
+  "rustNativeBuild": "15m 46s; optimized release target; initial Rust cache miss"
+}
