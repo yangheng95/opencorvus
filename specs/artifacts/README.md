@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [多文件审阅实页](2026-11-06-multi-file-review/README.md)：21张实页，首次统计、原比较、筛选与完整保全。
+
 - [附件问答交付实页](2026-11-06-attachment-question-delivery/README.md)：23张实页；中英文位置折叠、问答与修改摘要。
 
 - [文件修改比较说明实页](2026-11-06-file-comparison-explanation/README.md)：真实摘要、提示与原记录的页面核对。

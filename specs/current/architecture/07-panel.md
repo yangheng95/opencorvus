@@ -787,8 +787,12 @@ incomplete; current Build nullable object evidence is validated at its sole adap
 
 Large completed Edit and Apply Patch results retain bounded per-file observations
 from their producer metadata: original file index, exact path/move path, explicit
-physical status and text-line counts. This shares the existing 1024-byte metadata
-budget; a complete observation that cannot fit remains explicitly unknown. It is
+physical status and text-line counts. The existing 4 KiB deferred Tool state budget
+prioritizes complete observations and identity after its bounded title, time and
+integrity marker. Ordinary metadata retains its 1 KiB ceiling; input receives up
+to 2 KiB from the actual remaining serialized space. Raw input bodies yield to
+complete comparison facts, while full input remains in the canonical Tool reader.
+A complete observation that cannot fit remains explicitly unknown. It is
 a projection of the canonical Tool receipt, never a second persisted change store.
 Single-receipt comparisons show those known counts and lazily read the exact
 immutable Part only when Review opens. Inline disclosure and Review share one

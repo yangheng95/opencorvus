@@ -1,0 +1,192 @@
+{
+  "at": "2026-11-06T08:16:57.303Z",
+  "product": {
+    "owner": "conversation/transport.ts",
+    "behavior": "Cold summaries retain complete file observations before raw patch bodies within the original shared state limit",
+    "maximumToolStateBytes": 4096,
+    "ordinaryMetadataMaximumBytes": 1024,
+    "inputMaximumBytes": 2048,
+    "publicFieldsOrSchemaChanges": false,
+    "persistedOrModelInputChanges": false
+  },
+  "realEightFileEvidence": {
+    "canonicalStateBytes": 21068,
+    "completeObservationMetadataBytes": 2240,
+    "before": {
+      "stateBytes": 2593,
+      "knownFileObservations": 0,
+      "rawPatchInputBytes": 1974,
+      "visible": "Details pending / Line counts unknown"
+    },
+    "after": {
+      "stateBytes": 2806,
+      "knownFileObservations": 8,
+      "visible": "8 records /56 lines added /0 lines deleted before Review"
+    },
+    "canonicalDeferredIntegrityMarkerExact": true,
+    "allOriginalFullToolsAndDiskBytesExact": true
+  },
+  "cases": [
+    {
+      "sessionID": "ses_-zUPyaHZAzzslSCcfE2O",
+      "files": 8,
+      "additions": 56,
+      "deletions": 0,
+      "physicalFileBytes": [
+        {
+          "path": "deliverables/行动卡927-01-客户交付责任与日期核对.md",
+          "bytes": 146
+        },
+        {
+          "path": "deliverables/行动卡927-02-客户交付责任与日期核对.md",
+          "bytes": 146
+        },
+        {
+          "path": "deliverables/行动卡927-03-客户交付责任与日期核对.md",
+          "bytes": 146
+        },
+        {
+          "path": "deliverables/行动卡927-04-客户交付责任与日期核对.md",
+          "bytes": 146
+        },
+        {
+          "path": "deliverables/行动卡927-05-客户交付责任与日期核对.md",
+          "bytes": 146
+        },
+        {
+          "path": "deliverables/行动卡927-06-客户交付责任与日期核对.md",
+          "bytes": 146
+        },
+        {
+          "path": "deliverables/行动卡927-07-客户交付责任与日期核对.md",
+          "bytes": 146
+        },
+        {
+          "path": "deliverables/行动卡927-08-客户交付责任与日期核对.md",
+          "bytes": 146
+        }
+      ],
+      "httpAndSseObservedFiles": 8,
+      "projectedStateBytes": 2806
+    },
+    {
+      "sessionID": "ses_-zUQQoMM4zz2OmWzwfcN",
+      "files": 2,
+      "additions": 44,
+      "deletions": 0,
+      "physicalFileBytes": [
+        {
+          "path": "duration.py",
+          "bytes": 401
+        },
+        {
+          "path": "test_duration.py",
+          "bytes": 928
+        }
+      ],
+      "httpAndSseObservedFiles": 2,
+      "projectedStateBytes": 2547
+    },
+    {
+      "sessionID": "ses_-zUQWsTcezzNPfRFa33B",
+      "files": 2,
+      "additions": 16,
+      "deletions": 1,
+      "physicalFileBytes": [
+        {
+          "path": "counter.py",
+          "bytes": 45
+        },
+        {
+          "path": "test_counter.py",
+          "bytes": 318
+        }
+      ],
+      "httpAndSseObservedFiles": 2,
+      "projectedStateBytes": 1343
+    }
+  ],
+  "verification": {
+    "focusedPositiveTransportTests": 38,
+    "assertions": 304,
+    "failedTests": 0,
+    "productionFamilies": [
+      "history",
+      "updated event",
+      "moved event"
+    ],
+    "realHttpAndSse": true,
+    "backendTypecheck": "passed",
+    "nodeProductionBuild": "passed",
+    "docs": "352 operations /26 groups",
+    "architectureIndex": "20 current documents",
+    "manualScreenshots": 21,
+    "desktop": "1280 × 720",
+    "languages": [
+      "zh-CN",
+      "en-US"
+    ],
+    "manuallyChecked": [
+      "cold first opening",
+      "own-page refresh",
+      "five visible plus three expanded records",
+      "exact eighth-file comparison and current-file reading",
+      "path filtering and clearing",
+      "empty-result recovery",
+      "Enter activation",
+      "two-file code conversation through actual application search",
+      "mixed modified and added Task comparison",
+      "physical status filters"
+    ],
+    "uiAutomatedTests": false,
+    "previousPublicFullToolParts": 33,
+    "previousSourceParts": 13,
+    "additionalFullMutationParts": 3,
+    "finalBoundaryRun": "An observation batch exceeding the entire state limit retains its exact bounded identity and deferred marker through all three production projections"
+  },
+  "preservation": {
+    "schema": 10,
+    "tables": 92,
+    "startingRows": 319828,
+    "beforeRows": 319830,
+    "afterRows": 319832,
+    "projects": 134,
+    "physicalAttachmentFiles": 311,
+    "allOriginalRowsAndSourceDatabasesExact": true,
+    "allProjectFilesGitConfigsAndAttachmentsExact": true,
+    "filesystemExclusions": 0,
+    "capacitySlotReplacements": 0,
+    "eachPhaseAddedRows": {
+      "nativeActivationLease": 1,
+      "matchingGrant": 1
+    },
+    "actualNewModelRequests": 0,
+    "cumulativeModelRequests": 1513
+  },
+  "resources": {
+    "ownBrowserTabsClosed": [
+      "86",
+      "87"
+    ],
+    "publicShutdown": [
+      200,
+      200
+    ],
+    "nativeAndLauncherExitCodes": [
+      0,
+      0
+    ],
+    "credentialAndFullCatalogCopiesRetired": 4,
+    "sourceCredentialAndCatalogMetadataPreserved": true,
+    "minimumReserveMs": 3129572,
+    "originalAbsoluteDeadlineUnchanged": true,
+    "optionalFinalAllocated": false
+  },
+  "limits": [
+    "The existing complete observation remains explicitly unavailable if it cannot fit the entire state budget.",
+    "No new model replay; these are retained real execution facts read through the current native API and UI.",
+    "One manually constructed URL used the wrong experience type; the application rejected it, and its actual search entry opened the correct code conversation. The rejected-link screenshot is retained.",
+    "Raw code, authored prose, filenames and actor identifiers retain their factual values. The untriggered Review focus error wording remains a separate investigation candidate.",
+    "No claim of all-product completion, virtual-list coverage beyond these actual cases, a release, or user-window validation."
+  ]
+}

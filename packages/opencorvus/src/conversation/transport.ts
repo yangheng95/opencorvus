@@ -33,9 +33,9 @@ function boundedRecord(value: unknown, input: { maxBytes: number; keys: string[]
   return projected
 }
 
-function boundedToolInput(value: unknown): Record<string, unknown> {
+function boundedToolInput(value: unknown, maxBytes: number): Record<string, unknown> {
   return boundedRecord(value, {
-    maxBytes: 2 * 1024,
+    maxBytes,
     keys: [
       "file_path",
       "filePath",
@@ -119,16 +119,16 @@ function observedFileChanges(part: Message.ToolPart): ConversationToolFileChange
   return changes
 }
 
-function boundedToolMetadata(part: Message.ToolPart): Record<string, unknown> {
+function boundedToolMetadata(part: Message.ToolPart, maxBytes: number): Record<string, unknown> {
   const value = part.state.status === "completed" ? part.state.metadata : {}
   const identity = conversationToolIdentity(part.tool, part.state.input, value)
   const changes = observedFileChanges(part)
   let projected: Record<string, unknown> = identity ? { [CONVERSATION_TOOL_IDENTITY_METADATA_KEY]: identity } : {}
   if (changes) {
     const observation = { ...projected, [CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY]: changes }
-    if (jsonBytes(observation) <= 1024) projected = observation
+    if (jsonBytes(observation) <= maxBytes) projected = observation
   }
-  const remainingBytes = 1024 - (Object.keys(projected).length ? jsonBytes(projected) : 0)
+  const remainingBytes = maxBytes - (Object.keys(projected).length ? jsonBytes(projected) : 0)
   const source = Object.fromEntries(
     Object.entries(value).filter(
       ([key]) =>
@@ -138,8 +138,20 @@ function boundedToolMetadata(part: Message.ToolPart): Record<string, unknown> {
     ),
   )
   const retained = boundedRecord(source, {
-    maxBytes: Object.keys(projected).length ? Math.max(0, remainingBytes + 1) : 1024,
-    keys: ["exit", "readType", "offset", "lines", "totalLines", "count", "source", "title", "status", "browser", "computer"],
+    maxBytes: Math.min(1024, Math.max(0, remainingBytes + (Object.keys(projected).length ? 1 : 0))),
+    keys: [
+      "exit",
+      "readType",
+      "offset",
+      "lines",
+      "totalLines",
+      "count",
+      "source",
+      "title",
+      "status",
+      "browser",
+      "computer",
+    ],
   })
   return { ...retained, ...projected }
 }
@@ -173,23 +185,37 @@ export function projectConversationTransportPart(part: Message.VisiblePart): Mes
   const serializedState = JSON.stringify(part.state)
   const stateBytes = Buffer.byteLength(serializedState, "utf8")
   if (stateBytes <= CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES) return part
+  const deferred = {
+    kind: "deferred",
+    outputBytes: outputBytes(part.state.output),
+    stateBytes,
+    stateSha256: createHash("sha256").update(serializedState, "utf8").digest("hex"),
+  }
+  const state = {
+    status: "completed" as const,
+    input: {},
+    output: "",
+    title: boundedToolTitle(part.state.title),
+    metadata: { [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: deferred },
+    time: part.state.time,
+  }
+  // Prefer complete comparison facts over raw input bodies within the same wire
+  // limit. Merging a nonempty metadata record adds its serialized bytes minus one;
+  // replacing the empty input record reclaims its two braces.
+  const metadataBudget = CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES - jsonBytes(state) + 1
+  const withMetadata = {
+    ...state,
+    metadata: {
+      ...boundedToolMetadata(part, metadataBudget),
+      [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: deferred,
+    },
+  }
+  const inputBudget = Math.min(2 * 1024, CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES - jsonBytes(withMetadata) + 2)
   return {
     ...part,
     state: {
-      status: "completed",
-      input: boundedToolInput(part.state.input),
-      output: "",
-      title: boundedToolTitle(part.state.title),
-      metadata: {
-        ...boundedToolMetadata(part),
-        [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: {
-          kind: "deferred",
-          outputBytes: outputBytes(part.state.output),
-          stateBytes,
-          stateSha256: createHash("sha256").update(serializedState, "utf8").digest("hex"),
-        },
-      },
-      time: part.state.time,
+      ...withMetadata,
+      input: boundedToolInput(part.state.input, inputBudget),
     },
   }
 }

@@ -140,7 +140,7 @@ test.each(["answered", "expired"] as const)(
   },
 )
 
-test("preserves distinct patch targets when a large batch exceeds the observation budget", () => {
+test("preserves distinct patch targets and complete observations within the shared state budget", () => {
   const files = Array.from({ length: 8 }, (_, i) => ({
     filePath: `C:/project/${"客户交付责任核对/".repeat(4)}action-${i}.md`,
     ...(i === 7 ? { movePath: "C:/project/deliverables/moved.md" } : {}),
@@ -164,7 +164,16 @@ test("preserves distinct patch targets when a large batch exceeds the observatio
     expect(marker).toMatchObject({ kind: "deferred" })
     expect(metadata[CONVERSATION_TOOL_IDENTITY_METADATA_KEY]).toEqual(expected)
     expect(conversationToolIdentity(projected.tool, projected.state.input, projected.state.metadata)).toEqual(expected)
-    expect(Buffer.byteLength(JSON.stringify(metadata))).toBeLessThanOrEqual(1024)
+    expect(conversationToolFileChanges(metadata)).toEqual(
+      files.map((file, fileIndex) => ({
+        fileIndex,
+        filePath: file.filePath,
+        ...(file.movePath ? { movePath: file.movePath } : {}),
+        status: file.type === "move" ? "modified" : "added",
+        additions: file.additions,
+        deletions: file.deletions,
+      })),
+    )
     expect(Buffer.byteLength(JSON.stringify(projected.state))).toBeLessThanOrEqual(
       CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
     )
@@ -266,7 +275,7 @@ test("retains bounded exact file observations in historical, updated and moved T
   }
 })
 
-test("bounds a complete file observation within the shared metadata budget", () => {
+test("shares the state budget with observations while retaining the ordinary metadata limit", () => {
   const part = completedTool({
     id: "prt_metadata_budget",
     output: "x".repeat(5000),
@@ -283,7 +292,92 @@ test("bounds a complete file observation within the shared metadata budget", () 
   expect(retained[CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY]).toEqual([
     { fileIndex: 0, filePath: "C:/project/result.md", additions: 1, deletions: 1 },
   ])
-  expect(Buffer.byteLength(JSON.stringify(retained))).toBeLessThanOrEqual(1024)
+  const { [CONVERSATION_TOOL_FILE_CHANGES_METADATA_KEY]: _changes, ...ordinary } = retained
+  expect(ordinary).toEqual({ source: "s".repeat(500), title: "t".repeat(500) })
+  expect(Buffer.byteLength(JSON.stringify(ordinary))).toBeLessThanOrEqual(1024)
+  expect(Buffer.byteLength(JSON.stringify(projected.state))).toBeLessThanOrEqual(
+    CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+  )
+})
+
+test("prioritizes complete file facts over a raw patch body across all transport families", () => {
+  const files = Array.from({ length: 8 }, (_, index) => ({
+    filePath: `C:/Users/test/quality/project/deliverables/${"客户交付责任与日期核对".repeat(4)}-${index}.md`,
+    type: "add",
+    before: "",
+    after: "行动卡正文\n".repeat(100),
+    additions: 100,
+    deletions: 0,
+  }))
+  const input = { filePath: "README.md", patchText: "x".repeat(1700) }
+  const part = completedTool({
+    id: "prt_shared_budget",
+    tool: "apply_patch",
+    input,
+    output: "批次完成",
+    metadata: { files },
+  })
+  const expected = files.map((file, fileIndex) => ({
+    fileIndex,
+    filePath: file.filePath,
+    status: "added",
+    additions: file.additions,
+    deletions: file.deletions,
+  }))
+  expect(Buffer.byteLength(JSON.stringify(input))).toBeLessThanOrEqual(2048)
+  expect(Buffer.byteLength(JSON.stringify(expected))).toBeGreaterThan(1024)
+  for (const projected of projectedTools(part)) {
+    expect(projected.state.input).toEqual({ filePath: "README.md" })
+    expect(conversationToolFileChanges(projected.state.metadata)).toEqual(expected)
+    expect(conversationToolIdentity(projected.tool, projected.state.input, projected.state.metadata)).toEqual({
+      kind: "patch",
+      count: 8,
+    })
+    expect(Buffer.byteLength(JSON.stringify(projected.state))).toBeLessThanOrEqual(
+      CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+    )
+  }
+  expect(part.state.input).toEqual(input)
+  expect(part.state.metadata).toEqual({ files })
+})
+
+test("retains bounded patch identity when complete observations exceed the entire state limit", () => {
+  const files = Array.from({ length: 8 }, (_, index) => ({
+    filePath: `C:/project/${"客户交付目录/".repeat(100)}card-${index}.md`,
+    type: "add",
+    before: "",
+    after: "正文\n",
+    additions: 1,
+    deletions: 0,
+  }))
+  const part = completedTool({
+    id: "prt_oversized_observations",
+    tool: "apply_patch",
+    output: "批次完成",
+    metadata: { files },
+  })
+  expect(Buffer.byteLength(JSON.stringify(files))).toBeGreaterThan(CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES)
+  for (const projected of projectedTools(part)) {
+    expect(projected.state).toMatchObject({
+      status: "completed",
+      input: { filePath: "README.md" },
+      metadata: {
+        [CONVERSATION_TOOL_IDENTITY_METADATA_KEY]: { kind: "patch", count: 8 },
+        [CONVERSATION_DEFERRED_TOOL_STATE_METADATA_KEY]: {
+          kind: "deferred",
+          stateBytes: Buffer.byteLength(JSON.stringify(part.state)),
+        },
+      },
+    })
+    expect(conversationToolIdentity(projected.tool, projected.state.input, projected.state.metadata)).toEqual({
+      kind: "patch",
+      count: 8,
+    })
+    expect(Buffer.byteLength(JSON.stringify(projected.state))).toBeLessThanOrEqual(
+      CONVERSATION_INLINE_TOOL_STATE_MAX_BYTES,
+    )
+  }
+  expect(part.state.metadata).toEqual({ files })
 })
 
 test.each([
