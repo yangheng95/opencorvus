@@ -1,0 +1,135 @@
+{
+  "at": "2026-11-06T03:25:05.633Z",
+  "scope": "Review reading space in the existing file-change view",
+  "uiEntry": "main-DZIFyh1g.js",
+  "screenshots": 11,
+  "personallyReviewed": true,
+  "uiAutomationRun": false,
+  "manualObservations": {
+    "desktopViewport": [
+      1280,
+      720
+    ],
+    "beforeCrowdedNarrowReview": true,
+    "englishListAndReading": true,
+    "chineseListAndReading": true,
+    "readingGuideExpandedAndKeyboardCollapsed": true,
+    "recordListKeyboardHideAndShow": true,
+    "selectedRecordAndExpandedOriginalComparisonRetained": true,
+    "retainedFilters": {
+      "query": "summary",
+      "status": "added",
+      "hideNonText": true,
+      "visibleRecords": 1,
+      "totalRecords": 3
+    },
+    "noMatchThenClearAllRestoresVisibleListAndFocus": true,
+    "conversationExactRecordRequestShowsHiddenListAndSelectsOriginalBinary": true,
+    "office908": {
+      "recordCount": 3,
+      "aggregateLineCounts": "unknown",
+      "originalComparisons": 2,
+      "secondComparison": {
+        "additions": 31,
+        "deletions": 19
+      }
+    },
+    "rename936": {
+      "recordCount": 3,
+      "aggregateAdditions": 6,
+      "aggregateDeletions": 3,
+      "originalPath": "draft/原始方案.md",
+      "destinationPath": "deliverables/客户方案（已确认）.md",
+      "selectedComparisonAdditions": 3,
+      "selectedComparisonDeletions": 1
+    },
+    "singleRecord870": {
+      "recordCount": 1,
+      "originalComparisons": 2,
+      "secondComparisonAdditions": 62,
+      "secondComparisonDeletions": 0
+    }
+  },
+  "model": {
+    "newRequests": 0,
+    "cumulativeRequests": 1474,
+    "newAgents": 0,
+    "newMessages": 0
+  },
+  "originalEvidence": {
+    "publicRegressionSessions": 3,
+    "fullCanonicalTools": 8,
+    "originalQuestionsAndFileFactsExact": true,
+    "httpHistoryAndSseConnectionSnapshotsExact": true,
+    "newLiveToolEventsEmitted": 0,
+    "allOriginalRowsFilesGitAndAttachmentsPreserved": true
+  },
+  "checks": {
+    "typedPackages": 8,
+    "locales": 2,
+    "localeKeys": 2904,
+    "newLocaleKeys": 3,
+    "docsOperations": 352,
+    "docsGroups": 26,
+    "currentArchitectureDocuments": 20,
+    "cssTokenReferences": 9194
+  },
+  "phases": [
+    {
+      "kind": "before",
+      "originals": 310432,
+      "current": 310434,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 3455184,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    },
+    {
+      "kind": "after",
+      "originals": 310434,
+      "current": 310436,
+      "schema": 10,
+      "tables": 92,
+      "protectedProjects": 130,
+      "physicalAttachmentFiles": 301,
+      "requests": 0,
+      "cumulativeRequests": 1474,
+      "reserveMs": 2816804,
+      "allOriginalBusinessRowsPreserved": true,
+      "sourceDatabasePreserved": true,
+      "filesystemExclusions": 0
+    }
+  ],
+  "retirement": {
+    "publicShutdownStatuses": [
+      200,
+      200
+    ],
+    "nativeAndLauncherExitCodes": [
+      0,
+      0
+    ],
+    "pairedCredentialAndCatalogCopiesRetired": 4,
+    "ownedBrowserTabsClosed": [
+      69,
+      70
+    ],
+    "optionalFinalNotAllocated": true,
+    "userWindowAndPort18571Untouched": true
+  },
+  "limits": [
+    "Actual narrow dock only; no new >=800px container visual acceptance.",
+    "No natural >80-row virtual list was exercised. Existing virtualization remains mounted when the list is hidden.",
+    "Changing project URLs reloads the isolated page; this is not proof of every in-place scope-transition branch.",
+    "The existing session-focus event branch was reviewed in code; the exact-record public UI path was exercised.",
+    "No new loading/error/network recovery/model execution or scheduling acceptance.",
+    "Original model prose, file identities and existing work runtime identity retain original language. No invented aggregate line counts.",
+    "No OS/current-window actions, real user database, backend/API/SDK/schema/model tool or scheduling change."
+  ]
+}

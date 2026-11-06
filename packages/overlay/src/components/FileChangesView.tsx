@@ -1,5 +1,5 @@
 import { ListboxItem, ListboxRoot } from "./ui/Listbox"
-import { createEffect, createMemo, createSignal, For, on, onCleanup, onMount, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, onMount, Show } from "solid-js"
 import {
   Virtualizer,
   type CustomContainerComponentProps,
@@ -18,6 +18,7 @@ import { SearchField } from "./ui/SearchField"
 import { Feedback } from "./ui/Feedback"
 import { Checkbox } from "./ui/Checkbox"
 import { DiffPreviewPanel } from "./DiffPreviewPanel"
+import { Disclosure } from "./ui/Disclosure"
 import {
   completeReviewFocus,
   failReviewFocus,
@@ -205,6 +206,8 @@ export function FileChangesView(props: FileChangesViewProps) {
   const [filterQuery, setFilterQuery] = createSignal("")
   const [statusFilter, setStatusFilter] = createSignal<ChangeStatusFilter>("all")
   const [hideNonTextFiles, setHideNonTextFiles] = createSignal(false)
+  const [fileListVisible, setFileListVisible] = createSignal(true)
+  const fileListID = createUniqueId()
   const resetFilters = () => {
     setFilterQuery("")
     setStatusFilter("all")
@@ -212,7 +215,10 @@ export function FileChangesView(props: FileChangesViewProps) {
   }
   const clearFilters = () => {
     resetFilters()
-    if (listEl?.isConnected) listEl.focus()
+    setFileListVisible(true)
+    window.requestAnimationFrame(() => {
+      if (listEl?.isConnected) listEl.focus()
+    })
   }
 
   createEffect(
@@ -221,6 +227,7 @@ export function FileChangesView(props: FileChangesViewProps) {
       () => {
         resetFilters()
         setSelectedRowKey("")
+        setFileListVisible(true)
       },
       { defer: true },
     ),
@@ -360,6 +367,7 @@ export function FileChangesView(props: FileChangesViewProps) {
 
   const focusExactRow = (row: ChangeRowModel) => {
     resetFilters()
+    setFileListVisible(true)
     setSelectedRowKey(row.key)
     window.requestAnimationFrame(() => {
       const position = filteredRows().findIndex((candidate) => candidate.key === row.key)
@@ -427,9 +435,12 @@ export function FileChangesView(props: FileChangesViewProps) {
       if (!requestedRunID) return
       const match = allRows().find((row) => row.group.sessionID === requestedRunID)
       if (!match) return
+      setFileListVisible(true)
       setSelectedRowKey(match.key)
-      const position = filteredRows().findIndex((row) => row.key === match.key)
-      if (position >= 0 && shouldVirtualizeRows()) rowVirtualizer?.scrollToIndex(position)
+      window.requestAnimationFrame(() => {
+        const position = filteredRows().findIndex((row) => row.key === match.key)
+        if (position >= 0 && shouldVirtualizeRows()) rowVirtualizer?.scrollToIndex(position)
+      })
     }
     window.addEventListener(props.focusEvent, handler as EventListener)
     onCleanup(() => window.removeEventListener(props.focusEvent!, handler as EventListener))
@@ -464,13 +475,33 @@ export function FileChangesView(props: FileChangesViewProps) {
           </span>
         </div>
 
-        <p class="changes-context">
-          {t("files.recorded_comparison_hint", { action: t("diff.open_current_file") })}
-        </p>
-        <Show when={summary().additions === null || summary().deletions === null}>
-          <p class="changes-context">{t("files.total_counts_unavailable")}</p>
-        </Show>
-        <div class="changes-review-workspace" data-single-file={allRows().length === 1 ? "true" : undefined}>
+        <div class="changes-review-toolbar">
+          <Show when={allRows().length > 1}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              tone="neutral"
+              aria-expanded={fileListVisible()}
+              aria-controls={fileListID}
+              onClick={() => setFileListVisible((visible) => !visible)}
+            >
+              {t(fileListVisible() ? "files.hide_record_list" : "files.show_record_list")}
+            </Button>
+          </Show>
+          <Disclosure.Root class="changes-reading-help">
+            <Disclosure.Trigger>{t("files.reading_help")}</Disclosure.Trigger>
+            <Disclosure.Content>
+              <p class="changes-context">
+                {t("files.recorded_comparison_hint", { action: t("diff.open_current_file") })}
+              </p>
+              <Show when={summary().additions === null || summary().deletions === null}>
+                <p class="changes-context">{t("files.total_counts_unavailable")}</p>
+              </Show>
+            </Disclosure.Content>
+          </Disclosure.Root>
+        </div>
+        <div class="changes-review-workspace" data-file-list-visible={allRows().length > 1 && fileListVisible()}>
           <section class="changes-diff-pane" aria-label={t("workspace.diff")}>
             <Show
               when={filteredRows().length > 0}
@@ -497,7 +528,7 @@ export function FileChangesView(props: FileChangesViewProps) {
           </section>
 
           <Show when={allRows().length > 1}>
-            <aside class="changes-file-pane" aria-label={t("section.files")}>
+            <aside id={fileListID} class="changes-file-pane" hidden={!fileListVisible()} aria-label={t("section.files")}>
               <Show when={shouldShowFilter()}>
                 <div class="changes-toolbar">
                   <SearchField

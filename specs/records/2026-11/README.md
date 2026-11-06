@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [审阅区的阅读空间](2026-11-06-review-reading-space.md)：窄侧栏实际阅读与记录选择。
+
 - [协调请求的实际摘要](2026-11-06-coordination-request-summary.md)：真实问题、原回执和中英阅读。
 
 - [产物查询与读取请求摘要](2026-11-06-artifact-request-summary.md)：单项、多项及原读取结果。

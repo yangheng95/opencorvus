@@ -711,6 +711,15 @@ both surfaces explain inspecting individual records and avoiding duplicate sums
 of repeated edits. Original comparisons, path identities and nullable total
 derivation remain unchanged; labels and numbers follow the selected UI language.
 
+Review keeps record selection and comparison in the existing view. Its record
+list can be hidden to give the comparison the available space, and shown again
+with its selection and filters intact. The list visibility is local presentation
+state, reset on scope changes; explicit record/session focus and clearing filters
+show the list before using its existing focus or scroll owner. Recorded/current
+file and aggregate-count explanations live in the native Reading guide disclosure.
+The actual record count, unknown aggregate indicator and individual-comparison
+evidence limitations remain visible. No separate data projection or window is used.
+
 Shared compact skill-load details identify the exact requested skill name and
 optional supporting-file path. Both skill surface tools use their original
 structured arguments, with localized separators, instead of the producer's
