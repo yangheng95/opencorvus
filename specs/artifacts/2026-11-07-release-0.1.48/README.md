@@ -1,20 +1,32 @@
 # 0.1.48 发布证据
 
-对应[方案与Recall](../../records/2026-11/2026-11-07-release-0.1.48.md)。准入修复和下列页面复核已完成；48原生及官网尚未准入，不能宣称已发布。
+正式版已于2026-11-07公开：[Release](https://github.com/yangheng95/opencorvus/releases/tag/v0.1.48)。产品来源固定为`7896ab63ef13b0fbf25ab7638838a2afcd2ba42c`。
 
-完整原生日志私存在.scratch/release-0.1.48，后续只归档有实际结果的聚焦合同、实页、原生、官网及公开回读，保留历史发布和无关工作区改动。
+- [原生发布42368349375](https://github.com/yangheng95/opencorvus/actions/runs/42368349375)：23成功、6非适用跳过，五平台图形界面/命令行及Linux三格式全部交付。
+- [准确返回的配对官网42370194000](https://github.com/yangheng95/opencorvus/actions/runs/42370194000)：8成功；日志验证产品source、原生parent和publisher实际返回ID一致。
+- 原始运行11:28:56Z至12:01:17Z，共1941秒（32分21），早于原截止12:28:56Z；正式发布仅1次准入、两工作流均第1次attempt。
+- 29公开资源、5更新平台、18官网实际下载响应200；GitHub双语正文精确匹配冻结根日志。83份旧日志逐项保留，总84份；原23发布对象全部保留，新增后24，无本轮失败正式候选。
 
-## 准备验收
+## 机器回执
 
-- `preparation.json`：原三平台失败、控制真实peer的归属与退出后数据库事实、正向合同及空实例结清。
-- `website-precheck.json`：独立官网checker发现并修正的只读夹具类型错误、104文件零错误、14例真实导入、工具目录71项及Intel域名解析失败重试。正式source将在准入回执中记录。
+- `release-result.json`、`native-run.json`、`website-run.json`：真实终态、13份首次运行/重启回执（每份4会话、2持久化，`realProvider=false`）、安装资源验证和配对官网激活。
+- `prepare-owner.json`：原始标签/空草稿归属；`public-readback.json`：29资源、有效不可变资源完整性、5更新平台和18官网映射；`public-downloads.json`：18个公开链接逐一跟随重定向后的真实200响应。
+- `release-inventory-before.json`、`release-inventory-after.json`、`cleanup.json`：历史ID、标签、发布时间和发布状态保全，没有清退健康历史对象。
+- `intel-preflight.json`、`intel-proof.json`：预检同run第2次成功、首轮域名解析失败及正式冻结source的Intel构建/首次运行事实；只复用依赖缓存，未移入debug资产。
+- `preparation.json`、`website-precheck.json`：三平台原失败的聚焦修复、真实peer归属、57后端案例/143断言、14目录导入案例/88断言、独立官网104文件零错误，以及71工具的目录事实。GitHub的64条提示全部属于保留的历史验收requirements快照，当前1732包冻结依赖审计零漏洞；未改写历史快照或告警状态。
+- `published-cli-asset.json`：145174404字节的正式Windows包与GitHub不可变对象身份一致；`published-ui-runtime.json`、`published-ui-settlement.json`：实际启动0.1.48、公开shutdown200、原PID31716/17964、51248监听及自有临时root均结清。
 
-- `dev-mention-zh.jpg`：全局中文提及命中Research Studio并展示中文说明，随后插入真实引用。
-- `dev-project-mention.jpg`：自有项目中“可复现分析”提及和中文候选。
-- `dev-reference-zh.jpg`：项目引用筛选保留生产者命中及Research Studio已选状态。
-- `dev-file-workbench.jpg`：加载完成的资源管理器显示完整项目目录及真实创建的文件。
-- `dev-unsaved-decision.jpg`：真实编辑后关闭，展示继续编辑、放弃更改、保存并继续；随后实际保存并重新打开。
-- `dev-native-file-preview.jpg`：原生单选通过方向键聚焦预览，实际显示保存文件。
-- `dev-changelog-zh.jpg`：本次workspace构建提供的48中文设置日志。
+## 真实页面
 
-以上7张均为当前构建、自有空实例、真实交互截图并已人工查看。原默认来源旧UI的`dev-reference-search.jpg`未作为证据提交。复杂历史来源/冲突场景未在空实例重放；未运行UI自动化，无模型请求。原生与官网公开48仍待准入及终态核验，不宣称已发布。
+以下11张均通过真实页面交互取得，并已逐张人工查看。没有运行UI自动化测试。
+
+- `published-settings-en.jpg`、`published-settings-zh.jpg`：正式下载包提供的中英48设置日志，包含71工具条目。
+- `website-changelog-en.jpg`、`website-changelog-zh.jpg`：对应冻结来源的官网中英48完整页面。
+- `dev-mention-zh.jpg`、`dev-project-mention.jpg`：全局和项目内的中文提及、Research Studio中文说明及真实引用插入。
+- `dev-reference-zh.jpg`：生产者匹配及已选引用状态；`dev-file-workbench.jpg`：完整项目目录和真实文件。
+- `dev-unsaved-decision.jpg`：真实编辑后的保存并继续，随后实际重新打开；`dev-native-file-preview.jpg`：原生单选的方向键切换及保存后的预览。
+- `dev-changelog-zh.jpg`：准备阶段的中文日志快照；最终随包内容以两个published-settings截图为准。首个默认来源旧UI的截图已排除。
+
+本地复核仅使用自有空实例，未复制模型凭据、发送消息或启动持续目标，零真实模型请求；自有页面和实例已关闭，未操作用户18571或现用窗口、进程、数据库。复杂历史来源摘录和冲突恢复未在空实例重放。常规全量单元CI与本次发布工作流分别记录，未将发布成功宣称为其已通过。
+
+方案、原始要求、修改前分析及阶段记录见[本版Recall](../../records/2026-11/2026-11-07-release-0.1.48.md)。

@@ -1,0 +1,27 @@
+{
+  "runID": 42366260810,
+  "source": "c3d9d5ac13edb0f0258c179cd730a9226e87031e",
+  "attempt": 2,
+  "conclusion": "success",
+  "createdAt": "2026-11-07T10:59:50Z",
+  "completedAt": "2026-11-07T11:28:04Z",
+  "jobID": 128386455907,
+  "originalFailedJobID": 128384996986,
+  "originalFailure": "setup-bun download failed with getaddrinfo ENOTFOUND github.com; full failed job set retried in the same run",
+  "finalNativeSource": "7896ab63ef13b0fbf25ab7638838a2afcd2ba42c",
+  "identicalCacheInputPaths": [
+    "bun.lock",
+    "packages/overlay/src-tauri/Cargo.lock",
+    "packages/opencorvus/native/process-supervisor/Cargo.lock",
+    ".github/actions/setup-bun/action.yml",
+    ".github/workflows/package-overlay.yml"
+  ],
+  "debugAssetsUsedForRelease": false,
+  "firstRunQualification": [
+    "2026-11-07T11:13:05.6202930Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}"
+  ],
+  "buildAndCacheEvidence": [
+    "2026-11-07T11:07:32.3285960Z Cache hit for restore-key: macOS-bun-ae58ff2334c7361889554309201a32e87d41df4924279fc56e0681cb38d5af7f",
+    "2026-11-07T11:07:43.9924550Z Cache Size: ~411 MB (430778183 B)"
+  ]
+}
