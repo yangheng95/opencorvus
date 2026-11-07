@@ -1,0 +1,29 @@
+{
+  "preparedSource": "c3d9d5ac13edb0f0258c179cd730a9226e87031e",
+  "originalWebsiteRun": 42366226772,
+  "failedJob": 128384895343,
+  "originalErrors": [
+    "TS2540: readonly expert-squad.jsonc assignment in the expanded registry fixture",
+    "TS2540: readonly README.md assignment in the expanded registry fixture"
+  ],
+  "correction": "Derive a prior package with explicit immutable file overrides, preserving the production source's readonly contract.",
+  "checker": "bun run --cwd packages/web check",
+  "checkedFiles": 104,
+  "errors": 0,
+  "warnings": 0,
+  "registry": { "tests": 14, "assertions": 88, "failures": 0 },
+  "platformFacts": { "tests": 2, "assertions": 3, "failures": 0, "builtInTools": 71 },
+  "intelPreflight": {
+    "runID": 42366260810,
+    "source": "c3d9d5ac13edb0f0258c179cd730a9226e87031e",
+    "firstAttempt": "setup-bun failed resolving github.com: getaddrinfo ENOTFOUND",
+    "retry": "same run, complete failed job set; debug assets are not release assets"
+  },
+  "securityAuditScope": {
+    "installedGraphPackages": 1732,
+    "installedGraphVulnerabilities": 0,
+    "githubAlerts": 64,
+    "githubAlertManifest": "specs/artifacts/2026-10-29-heavy-workbench-long/cases/L06/evaluator/reconstruction/product-quality-audit-20261031/codex-final/requirements-lock.txt",
+    "scope": "All 64 GitHub alerts point to this retained historical evaluation input; native checkout excludes specs and product dependencies do not reference this requirements snapshot. Historical evidence and alert state were preserved."
+  }
+}

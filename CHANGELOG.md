@@ -22,6 +22,7 @@
 - 打开来源文件前先完成弹窗关闭，保留摘录和比较区域的阅读位置；未保存更改的决定按钮更明确，冲突解决后及时收起对应记录并恢复比较焦点。
 - 专家团引用和提及保留服务端已经确认的匹配，避免本地再次筛选时遗漏中文说明和完整目录匹配。
 - 会话快照验收与真实执行证据状态一致；跨进程构建和重置恢复验收按实际就绪、进程退出及数据库收敛验证，修复三平台持续集成的过期断言和竞争假设。
+- 官网内置工具数量同步当前工具目录的 71 项。
 
 #### 升级影响与已知限制
 
@@ -44,6 +45,7 @@
 - Complete source-dialog dismissal before opening its file, preserve reading positions in excerpts and comparisons, clarify unsaved-change decisions, and retire resolved conflict records while restoring comparison focus.
 - Retain producer-confirmed Expert Squad reference and mention matches so local filtering preserves Chinese-description and complete-directory matches.
 - Align session snapshot checks with recorded execution evidence. Verify cross-process bundling and reset recovery against actual readiness, process exit and database settlement, correcting outdated assertions and race assumptions in three-platform continuous integration.
+- Synchronize the website's built-in tool count with the current catalog of 71 tools.
 
 #### Upgrade impact and known limitations
 

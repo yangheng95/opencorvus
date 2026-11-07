@@ -6,6 +6,9 @@
 
 ## 准备验收
 
+- `preparation.json`：原三平台失败、控制真实peer的归属与退出后数据库事实、正向合同及空实例结清。
+- `website-precheck.json`：独立官网checker发现并修正的只读夹具类型错误、104文件零错误、14例真实导入、工具目录71项及Intel域名解析失败重试。正式source将在准入回执中记录。
+
 - `dev-mention-zh.jpg`：全局中文提及命中Research Studio并展示中文说明，随后插入真实引用。
 - `dev-project-mention.jpg`：自有项目中“可复现分析”提及和中文候选。
 - `dev-reference-zh.jpg`：项目引用筛选保留生产者命中及Research Studio已选状态。

@@ -134,12 +134,17 @@ for (const id of ["evolution-lab", "advanced", "base", "dynamic", "research-stud
       if (!current) throw new Error(`${id} package source is missing`)
       const currentVersion = ExpertSquadRegistry.loadEmbeddedPackageDeclaration(current).manifest.version
       const priorVersion = "2026.09.02.1"
-      const prior = structuredClone(current)
-      prior.files["expert-squad.jsonc"] = prior.files["expert-squad.jsonc"].replace(
-        `"version": "${currentVersion}"`,
-        `"version": "${priorVersion}"`,
-      )
-      prior.files["README.md"] = `${prior.files["README.md"]}\nPrior immutable revision fixture.\n`
+      const prior = {
+        ...current,
+        files: {
+          ...current.files,
+          "expert-squad.jsonc": current.files["expert-squad.jsonc"].replace(
+            `"version": "${currentVersion}"`,
+            `"version": "${priorVersion}"`,
+          ),
+          "README.md": `${current.files["README.md"]}\nPrior immutable revision fixture.\n`,
+        },
+      }
 
       const priorRoot = path.join(sequenceRoot, "prior")
       const currentRoot = path.join(sequenceRoot, "current")
