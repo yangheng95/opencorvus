@@ -1,7 +1,9 @@
 import { expect, test } from "bun:test"
+import { Database as SQLite } from "bun:sqlite"
 import fs from "node:fs/promises"
 import path from "node:path"
 import { Global } from "@/global"
+import { Database } from "@/storage/db"
 import { removeManagedDirectoryTree } from "@opencorvus-ai/util/runtime-directories"
 
 async function prepare() {
@@ -79,8 +81,18 @@ test("a successor opens a completed reset and retries the same operation with re
       effects: recovered.result.effects,
       tracked: recovered.result.tracked,
       ready: recovered.result.readiness.ready,
-      admissions: recovered.result.admissions.length,
-    }).toEqual({ exit: 0, effects: 2, tracked: "retained reset operator bytes\n", ready: true, admissions: 0 })
+    }).toEqual({ exit: 0, effects: 2, tracked: "retained reset operator bytes\n", ready: true })
+    // Each result was captured while its peer could still be registering.
+    // Inspect cleanup only after both real processes exited, without opening an Instance that could recover a leak.
+    const database = new SQLite(
+      Global.provideRoot(p.env.OPENCORVUS_HOME, () => Database.Path()),
+      { readonly: true },
+    )
+    try {
+      expect(database.query("SELECT * FROM project_directory_admission").all()).toEqual([])
+    } finally {
+      database.close()
+    }
     const repeated = await p.output(p.spawn("reset-retry", "reset-completed"))
     expect({
       error: repeated.result.error,

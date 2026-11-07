@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [0.1.48发布与准入修复](records/2026-11/2026-11-07-release-0.1.48.md)：CI、不可变发布事实和完整原生/官网交付。
 - [输入框真实搜索匹配](records/2026-11/2026-11-07-composer-producer-matches.md)：保留中文查询生产者结果、已选引用及原顺序。
 
 - [专家团说明语言](records/2026-11/2026-11-07-expert-description-locale.md)：规范原文绑定、共享中文说明与真实页面。

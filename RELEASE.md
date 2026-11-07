@@ -9,6 +9,7 @@ For the full package-script and artifact-shape map, see [docs/packaging.md](/doc
 - Release version source of truth: [packages/opencorvus/package.json](/packages/opencorvus/package.json).
 - `script/sync-version.ts` owns the explicit OpenCorvus release-family target registry. It synchronizes the CLI, Overlay, internal workspace packages, Visual Studio Code extension, native process supervisor, Tauri configuration, and Bun/Cargo lock entries from that source.
 - `packages/web` keeps its independent documentation-site version and is not a release-family target.
+- An Expert Squad revision binds its public localized descriptions, agent/workflow facts and archive to the same manifest version. When reviewed copy outside the package changes, advance the affected manifest version before generation and deployment. Package-byte auto-stamping cannot detect external copy edits; the website's immutable revision conflict remains authoritative.
 
 Use:
 

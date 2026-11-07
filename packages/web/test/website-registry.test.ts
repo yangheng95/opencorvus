@@ -120,49 +120,65 @@ test("rejects a seed whose disposition facts were swapped outside the signed cat
   await expect(validateWebsiteRegistrySeed(tampered, distributionRoot)).rejects.toBeInstanceOf(WebsiteRegistryIntegrityError)
 })
 
-test("activates a new immutable Evolution Lab revision while retaining the prior revision", async () => {
-  const sequenceRoot = await mkdtemp(path.join(os.tmpdir(), "opencorvus-website-revision-sequence-"))
-  const sequenceRegistry = await WebsiteRegistry.open(path.join(sequenceRoot, "registry.sqlite3"), path.join(sequenceRoot, "data"))
-  try {
-    const current = structuredClone(payloadPackageSources.find((source) => source.id === "evolution-lab"))
-    if (!current) throw new Error("Evolution Lab payload source is missing")
-    const currentVersion = ExpertSquadRegistry.loadEmbeddedPackageDeclaration(current).manifest.version
-    const priorVersion = "2026.09.02.1"
-    const prior = structuredClone(current)
-    prior.files["expert-squad.jsonc"] = prior.files["expert-squad.jsonc"]
-      .replace(`"version": "${currentVersion}"`, `"version": "${priorVersion}"`)
-    prior.files["README.md"] = `${prior.files["README.md"]}\nPrior immutable revision fixture.\n`
+for (const id of ["evolution-lab", "advanced", "base", "dynamic", "research-studio", "squad-sdk"]) {
+  test(`activates a new immutable ${id} revision while retaining the prior revision`, async () => {
+    const sequenceRoot = await mkdtemp(path.join(os.tmpdir(), "opencorvus-website-revision-sequence-"))
+    const sequenceRegistry = await WebsiteRegistry.open(
+      path.join(sequenceRoot, "registry.sqlite3"),
+      path.join(sequenceRoot, "data"),
+    )
+    try {
+      const current = structuredClone(
+        [...builtInPackageSources, ...payloadPackageSources].find((source) => source.id === id),
+      )
+      if (!current) throw new Error(`${id} package source is missing`)
+      const currentVersion = ExpertSquadRegistry.loadEmbeddedPackageDeclaration(current).manifest.version
+      const priorVersion = "2026.09.02.1"
+      const prior = structuredClone(current)
+      prior.files["expert-squad.jsonc"] = prior.files["expert-squad.jsonc"].replace(
+        `"version": "${currentVersion}"`,
+        `"version": "${priorVersion}"`,
+      )
+      prior.files["README.md"] = `${prior.files["README.md"]}\nPrior immutable revision fixture.\n`
 
-    const priorRoot = path.join(sequenceRoot, "prior")
-    const currentRoot = path.join(sequenceRoot, "current")
-    const priorSeed = await singlePackagePublication(prior, priorRoot)
-    const currentSeed = await singlePackagePublication(current, currentRoot)
-    expect(priorSeed.packages[0]!.identity).toMatchObject({ id: "evolution-lab", version: priorVersion })
-    expect(currentSeed.packages[0]!.identity).toMatchObject({ id: "evolution-lab", version: currentVersion })
+      const priorRoot = path.join(sequenceRoot, "prior")
+      const currentRoot = path.join(sequenceRoot, "current")
+      const priorSeed = await singlePackagePublication(prior, priorRoot)
+      const currentSeed = await singlePackagePublication(current, currentRoot)
+      expect(priorSeed.packages[0]!.identity).toMatchObject({ id, version: priorVersion })
+      expect(currentSeed.packages[0]!.identity).toMatchObject({ id, version: currentVersion })
 
-    const priorPublication = await importWebsiteRegistryPublication(sequenceRegistry, priorSeed, priorRoot)
-    const currentPublication = await importWebsiteRegistryPublication(sequenceRegistry, currentSeed, currentRoot)
-    expect(currentPublication).toBe(priorPublication + 1)
-    expect(sequenceRegistry.squad("builtin", "evolution-lab")?.identity).toEqual(currentSeed.packages[0]!.identity)
-    expect(sequenceRegistry.sqlite.query<{ version: string; package_digest: string }, []>(
-      "SELECT version,package_digest FROM squad_revision WHERE namespace='builtin' AND squad_id='evolution-lab' ORDER BY version",
-    ).all()).toEqual([
-      { version: priorVersion, package_digest: priorSeed.packages[0]!.identity.digest },
-      { version: currentVersion, package_digest: currentSeed.packages[0]!.identity.digest },
-    ])
-    expect(sequenceRegistry.archive(
-      "builtin",
-      "evolution-lab",
-      currentSeed.packages[0]!.identity.version,
-      currentSeed.packages[0]!.identity.digest,
-    )).toMatchObject({ sha256: currentSeed.packages[0]!.archive.sha256 })
-  } finally {
-    sequenceRegistry.close()
-    Bun.gc(true)
-    await Bun.sleep(100)
-    await rm(sequenceRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
-  }
-}, 30_000)
+      const priorPublication = await importWebsiteRegistryPublication(sequenceRegistry, priorSeed, priorRoot)
+      const currentPublication = await importWebsiteRegistryPublication(sequenceRegistry, currentSeed, currentRoot)
+      expect(currentPublication).toBe(priorPublication + 1)
+      expect(sequenceRegistry.squad("builtin", id)?.identity).toEqual(currentSeed.packages[0]!.identity)
+      expect(
+        sequenceRegistry.sqlite
+          .query<
+            { version: string; package_digest: string },
+            [string]
+          >("SELECT version,package_digest FROM squad_revision WHERE namespace='builtin' AND squad_id=? ORDER BY version")
+          .all(id),
+      ).toEqual([
+        { version: priorVersion, package_digest: priorSeed.packages[0]!.identity.digest },
+        { version: currentVersion, package_digest: currentSeed.packages[0]!.identity.digest },
+      ])
+      expect(
+        sequenceRegistry.archive(
+          "builtin",
+          id,
+          currentSeed.packages[0]!.identity.version,
+          currentSeed.packages[0]!.identity.digest,
+        ),
+      ).toMatchObject({ sha256: currentSeed.packages[0]!.archive.sha256 })
+    } finally {
+      sequenceRegistry.close()
+      Bun.gc(true)
+      await Bun.sleep(100)
+      await rm(sequenceRoot, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 })
+    }
+  }, 30_000)
+}
 
 test(
   "imports, queries, counts, verifies, backs up, restores, and protects one immutable publication",

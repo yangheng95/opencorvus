@@ -4,6 +4,52 @@
 
 ## 未发布
 
+## 0.1.48 - 2026-11-07
+
+### zh-CN
+
+#### 新增
+
+- 文件工作台标题显示所属项目的真实目录，方便区分同名项目中的文件。
+
+#### 调整
+
+- 文件、提问和来源预览使用原生单选控件；专家团说明、公共链接和文件操作提示跟随当前界面语言。
+- 五个内置专家团的公开中文说明以新修订交付，保留官网已有不可变版本。
+
+#### 修复
+
+- 打开来源文件前先完成弹窗关闭，保留摘录和比较区域的阅读位置；未保存更改的决定按钮更明确，冲突解决后及时收起对应记录并恢复比较焦点。
+- 专家团引用和提及保留服务端已经确认的匹配，避免本地再次筛选时遗漏中文说明和完整目录匹配。
+- 会话快照验收与真实执行证据状态一致；跨进程构建和重置恢复验收按实际就绪、进程退出及数据库收敛验证，修复三平台持续集成的过期断言和竞争假设。
+
+#### 升级影响与已知限制
+
+- 数据库仍为版本 10，保留用户数据和现有迁移；本次不改变执行、恢复或模型调用协议。
+- macOS 仍为临时签名，未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Show the owning project's real directory in file workbench headings to distinguish files from identically named projects.
+
+#### Changed
+
+- Use native radio controls in file, question and source previews. Localize Expert Squad descriptions, public links and file action hints with the current interface language.
+- Deliver revised Chinese descriptions for five built-in Expert Squads as new revisions while retaining existing immutable website revisions.
+
+#### Fixed
+
+- Complete source-dialog dismissal before opening its file, preserve reading positions in excerpts and comparisons, clarify unsaved-change decisions, and retire resolved conflict records while restoring comparison focus.
+- Retain producer-confirmed Expert Squad reference and mention matches so local filtering preserves Chinese-description and complete-directory matches.
+- Align session snapshot checks with recorded execution evidence. Verify cross-process bundling and reset recovery against actual readiness, process exit and database settlement, correcting outdated assertions and race assumptions in three-platform continuous integration.
+
+#### Upgrade impact and known limitations
+
+- Database version remains 10, retaining user data and existing migrations. Execution, recovery and model request protocols remain unchanged.
+- macOS builds still use ad hoc signing and are not notarized by Apple.
+
 ## 0.1.47 - 2026-11-06
 
 ### zh-CN

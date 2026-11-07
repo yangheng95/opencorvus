@@ -102,54 +102,83 @@ describe("Browser Model Context Protocol Node sidecar bundle", () => {
         stderr: "pipe",
       }),
     )
+    // Drain both pipes from launch, including while imports reach the barrier.
+    const outputs = children.map(async (child) => {
+      const [exitCode, stdout, stderr] = await Promise.all([
+        child.exited,
+        new Response(child.stdout).text(),
+        new Response(child.stderr).text(),
+      ])
+      return { exitCode, stdout, stderr }
+    })
+    let timeout: ReturnType<typeof setTimeout> | undefined
+    let stopped = false
 
     try {
-      for (const workerID of ["one", "two"]) {
-        const ready = path.join(barrierRoot, `ready-${workerID}`)
-        const deadline = Date.now() + 10_000
-        while (true) {
-          try {
-            await fs.access(ready)
-            break
-          } catch (error) {
-            if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
-            if (Date.now() >= deadline) throw new Error(`Timed out waiting for Browser bundle worker ${workerID}`)
-            await Bun.sleep(10)
+      const publication = (async () => {
+        for (const workerID of ["one", "two"]) {
+          const ready = path.join(barrierRoot, `ready-${workerID}`)
+          while (true) {
+            if (stopped) throw new Error(`Browser bundle publication stopped before worker ${workerID} was ready`)
+            const index = workerID === "one" ? 0 : 1
+            if (children[index]!.exitCode !== null) {
+              const output = await outputs[index]!
+              throw new Error(
+                `Browser bundle worker ${workerID} exited before readiness (${output.exitCode}): ${output.stderr}`,
+              )
+            }
+            try {
+              await fs.access(ready)
+              break
+            } catch (error) {
+              if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error
+              await Bun.sleep(10)
+            }
           }
         }
-      }
-      await fs.writeFile(path.join(barrierRoot, "release"), "release", { flag: "wx" })
+        await fs.writeFile(path.join(barrierRoot, "release"), "release", { flag: "wx" })
 
-      const results = await Promise.all(
-        children.map(async (child) => {
-          const [exitCode, stdout, stderr] = await Promise.all([
-            child.exited,
-            new Response(child.stdout).text(),
-            new Response(child.stderr).text(),
-          ])
-          if (exitCode !== 0) throw new Error(`Browser bundle worker failed (${exitCode}): ${stderr}`)
-          return JSON.parse(stdout.trim().split(/\r?\n/).filter(Boolean).at(-1) ?? "null") as {
-            bundle: string
-            digest: string
-          }
+        return Promise.all(
+          outputs.map(async (output) => {
+            const { exitCode, stdout, stderr } = await output
+            if (exitCode !== 0) throw new Error(`Browser bundle worker failed (${exitCode}): ${stderr}`)
+            return JSON.parse(stdout.trim().split(/\r?\n/).filter(Boolean).at(-1) ?? "null") as {
+              bundle: string
+              digest: string
+            }
+          }),
+        )
+      })()
+      const results = await Promise.race([
+        publication,
+        new Promise<never>((_, reject) => {
+          timeout = setTimeout(
+            () => reject(new Error("Browser bundle workers exceeded the shared 30-second publication budget")),
+            30_000,
+          )
         }),
-      )
+      ])
 
       expect(results[0]).toEqual(results[1])
       expect(path.basename(results[0]!.bundle)).toBe(`stdio-${results[0]!.digest}.mjs`)
-      expect(createHash("sha256").update(await fs.readFile(results[0]!.bundle)).digest("hex")).toBe(
-        results[0]!.digest,
-      )
+      expect(
+        createHash("sha256")
+          .update(await fs.readFile(results[0]!.bundle))
+          .digest("hex"),
+      ).toBe(results[0]!.digest)
     } finally {
+      stopped = true
+      if (timeout) clearTimeout(timeout)
       for (const child of children) {
         try {
           child.kill()
         } catch {}
       }
       await Promise.all(children.map((child) => child.exited.catch(() => -1)))
+      await Promise.all(outputs)
       await fs.rm(isolatedRoot, { recursive: true, force: true })
     }
-  }, 30_000)
+  }, 60_000)
 
   test("reuses one canonical Browser connection across hashed Task provider aliases and reports its owner", async () => {
     await using project = await memoryProject()
@@ -163,7 +192,11 @@ describe("Browser Model Context Protocol Node sidecar bundle", () => {
             toolName,
           }
         })
-        const taskRoot = Session.prepareRootNext({ kind: "root", directory: Instance.directory, title: "Scoped Browser Task authority" })
+        const taskRoot = Session.prepareRootNext({
+          kind: "root",
+          directory: Instance.directory,
+          title: "Scoped Browser Task authority",
+        })
         const taskID = Identifier.ascending("task")
         const now = Date.now()
         persistTask({

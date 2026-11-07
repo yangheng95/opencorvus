@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [0.1.48发布证据](2026-11-07-release-0.1.48/README.md)：准入调查、真实页面、原生及官网终态。
 - [输入框中文搜索实页](2026-11-07-composer-producer-matches/README.md)：生产者身份、前后实页及完整来源资格。
 
 - [专家团说明实页](2026-11-07-expert-description-locale/README.md)：真实中文创建、选择与详情及完整来源资格。

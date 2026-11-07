@@ -1,0 +1,124 @@
+{
+  "version": "0.1.48",
+  "initialSource": "b7a459832ce59529804e158481670b71b3680182",
+  "nativeDispatched": false,
+  "originalCI": 42263539042,
+  "originalWebsite": 42257617708,
+  "focused": {
+    "distinctTests": 57,
+    "assertions": 143,
+    "sessionFinal": {
+      "tests": 13,
+      "assertions": 47
+    },
+    "browserBundle": {
+      "tests": 5,
+      "assertions": 10
+    },
+    "worktreeRecovery": {
+      "tests": 21,
+      "assertions": 57
+    },
+    "projectorOwnership": {
+      "tests": 11,
+      "assertions": 18
+    },
+    "revisionStamp": {
+      "tests": 7,
+      "assertions": 11
+    }
+  },
+  "registry": {
+    "tests": 14,
+    "assertions": 88
+  },
+  "releaseContracts": {
+    "tests": 45,
+    "assertions": 70
+  },
+  "generation": {
+    "passes": 2,
+    "registeredTargets": 13,
+    "driftAfterSecondGeneration": []
+  },
+  "audit": {
+    "packages": 1732,
+    "vulnerabilities": 0
+  },
+  "worktreeControlledActualPeer": {
+    "pids": {
+      "observer": 8572,
+      "peer": 11840
+    },
+    "observedRows": [
+      {
+        "directory_key": "c:\\users\\hengu\\appdata\\local\\opencorvus\\tmp\\worktree-receipt-xs9wxf\\project",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\opencorvus\\tmp\\worktree-receipt-xS9WXF\\project",
+        "generation": "60b74809-1082-4aa1-b489-61ff9f7d5e57",
+        "operation_id": "d09d5794-acbd-45f1-8c6b-1ad4eb902fc1",
+        "kind": "registration",
+        "owner_occurrence_id": "72115791-fbb1-4655-8166-0387ca52884d",
+        "owner_pid": 11840,
+        "owner_process_instance_id": "win32:639296448334628069",
+        "time_created": 1794048034068
+      }
+    ],
+    "settledRows": [],
+    "resetReady": true,
+    "effects": 2
+  },
+  "revisions": [
+    {
+      "id": "advanced",
+      "path": "packages/opencorvus/src/expert-squad/builtin/advanced/expert-squad.jsonc",
+      "prior": "2026.10.14.1",
+      "next": "2026.11.07.1"
+    },
+    {
+      "id": "base",
+      "path": "packages/opencorvus/src/expert-squad/builtin/base/expert-squad.jsonc",
+      "prior": "2026.10.14.1",
+      "next": "2026.11.07.1"
+    },
+    {
+      "id": "dynamic",
+      "path": "expert-squads/builtin/dynamic/expert-squad.jsonc",
+      "prior": "2026.10.28.1",
+      "next": "2026.11.07.1"
+    },
+    {
+      "id": "research-studio",
+      "path": "packages/opencorvus/src/expert-squad/builtin/research-studio/expert-squad.jsonc",
+      "prior": "2026.10.14.1",
+      "next": "2026.11.07.1"
+    },
+    {
+      "id": "squad-sdk",
+      "path": "expert-squads/builtin/squad-sdk/expert-squad.jsonc",
+      "prior": "2026.10.23.2",
+      "next": "2026.11.07.1"
+    }
+  ],
+  "review": {
+    "currentScreenshots": 7,
+    "modelRequests": 0,
+    "credentialsTransferred": false,
+    "instances": [
+      {
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-release48-dev-tP4xFv",
+        "pid": 31404,
+        "rootRetired": true,
+        "processSettled": true,
+        "closedAt": "2026-11-07T10:53:08.308Z"
+      },
+      {
+        "closedAt": "2026-11-07T10:53:07.758Z",
+        "pid": 32692,
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-release48-dev-ETY5D9",
+        "serverStopped": true,
+        "ownedRootRetired": true
+      }
+    ],
+    "limits": "Historical source-excerpt and resolved-conflict scenarios were not replayed in the empty review instance."
+  }
+}

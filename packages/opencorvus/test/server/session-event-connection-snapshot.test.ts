@@ -761,6 +761,9 @@ test("Session stream receives durable lifecycle and error facts for a non-Task S
         historicalChildProjection: hydration.agentView.sessions.find(
           (entry: { sessionID?: string }) => entry.sessionID === historicalChild.child.id,
         ),
+        reconnectedHistoricalChildProjection: reconnected.payload.conversationSnapshot.agentView.sessions.find(
+          (entry: { sessionID?: string }) => entry.sessionID === historicalChild.child.id,
+        ),
         settledChildProjection: hydration.agentView.sessions.find(
           (entry: { sessionID?: string }) => entry.sessionID === settledChild.child.id,
         ),
@@ -775,7 +778,12 @@ test("Session stream receives durable lifecycle and error facts for a non-Task S
         historicalChildProjection: expect.objectContaining({
           sessionID: historicalChild.child.id,
           inputMessageID: historicalChild.input.id,
-          status: "pending",
+          status: "unobserved",
+        }),
+        reconnectedHistoricalChildProjection: expect.objectContaining({
+          sessionID: historicalChild.child.id,
+          inputMessageID: historicalChild.input.id,
+          status: "unobserved",
         }),
         settledChildProjection: expect.objectContaining({
           sessionID: settledChild.child.id,
