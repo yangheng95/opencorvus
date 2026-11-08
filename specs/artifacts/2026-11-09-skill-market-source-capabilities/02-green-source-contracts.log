@@ -1,0 +1,25 @@
+$ bun script/run-tests.ts test/skill-market-builtin-authority.test.ts "--test-name-pattern=source-aware"
+[1/1] START test/skill-market-builtin-authority.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Skill Market authority > source-aware identity preserves website slugs and canonical repository identities [3.95ms]
+(pass) Skill Market authority > source-aware search preserves mixed candidates through service [20.53ms]
+(pass) Skill Market authority > source-aware search preserves mixed candidates through project [11.15ms]
+(pass) Skill Market authority > source-aware search preserves mixed candidates through global [2.63ms]
+(pass) Skill Market authority > source-aware search preserves mixed candidates through tool [3.62ms]
+(pass) Skill Market authority > source-aware inspect publishes the website source contract through service [8.46ms]
+(pass) Skill Market authority > source-aware inspect publishes the website source contract through project [4.80ms]
+(pass) Skill Market authority > source-aware inspect publishes the website source contract through global [3.14ms]
+(pass) Skill Market authority > source-aware inspect publishes the website source contract through tool [1.51ms]
+(pass) Skill Market authority > source-aware install publishes the website source contract through service [1.51ms]
+(pass) Skill Market authority > source-aware install publishes the website source contract through project [3.02ms]
+(pass) Skill Market authority > source-aware install publishes the website source contract through global [5.18ms]
+(pass) Skill Market authority > source-aware install publishes the website source contract through tool [2.11ms]
+
+ 13 pass
+ 7 filtered out
+ 0 fail
+ 18 expect() calls
+Ran 13 tests across 1 file. [4.08s]
+[1/1] DONE test/skill-market-builtin-authority.test.ts exit=0 duration=4.58s

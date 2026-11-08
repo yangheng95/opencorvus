@@ -197,12 +197,19 @@ Provider 特判或第二套请求实现。
 
 普通 Skill 市场和 git/URL Skill source 安装属于用户全局配置面。skills.sh 是当前唯一 Skill Market
 authority；全局与项目限定路由共用 `SkillManager` 的 provider、搜索、详情和精确安装契约。Market 搜索返回
-稳定候选 identity 和实时 installed projection；详情下载并校验精确候选 bundle；安装必须携带详情 digest，
+稳定候选 identity、source_type 和实时 installed projection；GitHub详情下载并校验精确候选 bundle；安装必须携带详情 digest，
 原子发布单个带 provenance 的 managed Skill，更新全局配置并失效 Skill discovery。运行时 Primary Agent 和
 Settings 共用该服务。不存在可配置的 fallback registry，也不通过 Market 路径安装整个 repository；普通
-path、URL index 和 git source import 保持为独立高级入口。Market identity 统一为小写并逐段映射到
+path、URL index 和 git source import 保持为独立高级入口。GitHub Market identity 统一为小写并逐段映射到
 `skills-market/skills-sh/<owner>/<repository>/<skill>`，替换或删除前必须由目标 manifest 证明同一 identity；
 上游网络、HTTP 或响应校验故障统一发布 `SkillMarketUpstreamError` 与 HTTP 502，不能退化为匿名 500。
+搜索候选按source_type区分github仓库与well-known网站来源，仅仓库候选提供真实repository。
+网站候选保留原host/slug身份、slug大小写和市场主页，当前只提供目录信息；不能检查精确包时明确显示当前语言说明，
+不合成GitHub仓库、丢弃网站候选或让一项合法网站来源阻断整批搜索。网站精确检查/安装及已安装来源移除输入发布
+SkillMarketSourceUnavailableError/HTTP400；同一领域Schema供两路由族与SDK，原上游故障仍为502。
+CatalogIdentity表达两个当前来源，统一identity解析后由repositoryIdentity收窄物理能力；网站身份不进入下载/目标/写入。
+搜索只接受上游提供的原id和安装量并核对source/skillId一致性；真实零安装量保留，缺失或不合法元数据发布原上游错误，不重建身份或补零。
+既有持久manifest继续使用原三段Identity验证和原大小写规则，GitHub目标路径、manifest字段和原hash保持，无数据格式迁移。
 新bundle路径的每个名称组件复用宿主名称分类的Windows规则，保留原始Unicode身份，
 在任何安装写入前拒绝设备别名；身份ASCII限制和原上游错误契约保持。
 

@@ -1,6 +1,7 @@
 import { resolver } from "hono-openapi"
 import z from "zod"
 import { NotFoundError } from "../storage/db"
+import { SkillMarket } from "../skill/market"
 
 function namedErrorSchema(name: string) {
   return resolver(
@@ -39,6 +40,15 @@ export const BAD_REQUEST_SCHEMA = z
   })
   .strict()
   .meta({ ref: "BadRequestError" })
+
+export const SkillMarketInputErrorResponse = {
+  description: "Invalid Skill Market input or unavailable source",
+  content: {
+    "application/json": {
+      schema: resolver(z.union([BAD_REQUEST_SCHEMA, SkillMarket.SourceUnavailableError.Schema])),
+    },
+  },
+} as const
 
 const WORKTREE_OWNERSHIP_OBSERVATION_SCHEMA = z
   .object({

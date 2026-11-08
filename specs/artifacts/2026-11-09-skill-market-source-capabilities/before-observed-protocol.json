@@ -1,0 +1,53 @@
+{
+  "query": "\"空<界面>&查询\"",
+  "upstream": {
+    "status": 200,
+    "body": {
+      "query": "\"空<界面>&查询\"",
+      "searchType": "fuzzy",
+      "searchVersion": "algolia",
+      "skills": [
+        {
+          "id": "open.feishu.cn/lark-wiki",
+          "source": "open.feishu.cn",
+          "skillId": "lark-wiki",
+          "name": "lark-wiki",
+          "installs": 871192
+        }
+      ],
+      "count": 1,
+      "duration_ms": 213,
+      "timings_ms": {
+        "rate_limit": 25.014518999960274,
+        "flags": 1.083436000160873,
+        "visibility": 7.183981999987736,
+        "retrieval": 211.7041049997788,
+        "algolia_processing": 149,
+        "repositories": 0.01973800011910498,
+        "ranking": 0.06888000015169382,
+        "search": 213,
+        "total": 238.1030820000451
+      },
+      "provider_duration_ms": 211.7041049997788
+    }
+  },
+  "local": {
+    "status": 502,
+    "requestID": "1bc16ba6-99b2-4a80-ac06-f3e1fb10eabf",
+    "body": {
+      "name": "SkillMarketUpstreamError",
+      "data": {
+        "operation": "search",
+        "endpoint": "https://skills.sh/api/search",
+        "message": "Skill Market search returned an invalid response."
+      }
+    }
+  },
+  "sampleDownload": {
+    "url": "https://skills.sh/api/download/open.feishu.cn/lark-wiki",
+    "status": 404,
+    "contentType": "text/html; charset=utf-8",
+    "bodyBytes": 31838
+  },
+  "operations": 352
+}

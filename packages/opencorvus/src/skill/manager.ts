@@ -109,9 +109,10 @@ export namespace SkillManager {
   export const MarketProvider = SkillMarket.Provider
   export const MarketSearchInput = SkillMarket.SearchInput
 
-  export const MarketEntry = SkillMarket.Candidate.extend({
-    installed: z.boolean(),
-  })
+  export const MarketEntry = z.discriminatedUnion("source_type", [
+    SkillMarket.Candidate.options[0].extend({ installed: z.boolean() }),
+    SkillMarket.Candidate.options[1].extend({ installed: z.boolean() }),
+  ])
 
   export const MarketDetail = z
     .object({
@@ -134,13 +135,13 @@ export namespace SkillManager {
 
   export const MarketInstallInput = z
     .object({
-      id: SkillMarket.Identity,
+      id: SkillMarket.CatalogIdentity,
       expected_hash: z.string().regex(/^[a-f0-9]{64}$/),
       policy: Policy.optional(),
     })
     .strict()
 
-  export const MarketInspectInput = z.object({ id: SkillMarket.Identity }).strict()
+  export const MarketInspectInput = z.object({ id: SkillMarket.CatalogIdentity }).strict()
 
   export const MarketInstallResult = z
     .object({
@@ -258,7 +259,7 @@ export namespace SkillManager {
 
   export async function installMarket(raw: z.input<typeof MarketInstallInput>) {
     const input = MarketInstallInput.parse(raw)
-    const identity = SkillMarket.identity(input.id)
+    const identity = SkillMarket.repositoryIdentity(input.id)
     const target = managedMarketTarget(identity.id)
     return withSkillCatalogMutation(() =>
       withSkillSourceMutation(`market:${identity.id}`, async () => {
@@ -798,7 +799,7 @@ function normalizeGit(value: string) {
 }
 
 async function inspectMarketBundle(rawID: string) {
-  const identity = SkillMarket.identity(rawID)
+  const identity = SkillMarket.repositoryIdentity(rawID)
   const bundle = await SkillMarket.download(identity.id)
   try {
     const roots = await readImportSkillRoots({
@@ -890,7 +891,7 @@ function managedGitTarget(source: string) {
 }
 
 function managedMarketTarget(rawID: string) {
-  const identity = SkillMarket.identity(rawID)
+  const identity = SkillMarket.repositoryIdentity(rawID)
   const root = path.join(SkillManager.managedRoot(), SkillMarket.ID)
   const target = path.resolve(root, identity.owner, identity.repository, identity.skillID)
   if (target === path.resolve(root) || !Filesystem.contains(root, target)) {
@@ -908,7 +909,7 @@ async function assertMarketTargetOwnership(target: string, expectedID: string) {
   let observedID: string | undefined
   if (manifest?.kind === "market" && manifest.market_id) {
     try {
-      observedID = SkillMarket.identity(manifest.market_id).id
+      observedID = SkillMarket.Identity.parse(manifest.market_id).toLowerCase()
     } catch {
       observedID = undefined
     }

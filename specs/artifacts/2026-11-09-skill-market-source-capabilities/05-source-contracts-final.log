@@ -1,0 +1,32 @@
+$ bun script/run-tests.ts test/skill-market-builtin-authority.test.ts
+[1/1] START test/skill-market-builtin-authority.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Skill Market authority > source-aware search reports an upstream identity contract error for a malformed record [6.14ms]
+(pass) Skill Market authority > source-aware identity preserves website slugs and canonical repository identities [1.77ms]
+(pass) Skill Market authority > source-aware search preserves mixed candidates through service [12.80ms]
+(pass) Skill Market authority > source-aware search preserves mixed candidates through project [15.23ms]
+(pass) Skill Market authority > source-aware search preserves mixed candidates through global [3.42ms]
+(pass) Skill Market authority > source-aware search preserves mixed candidates through tool [4.48ms]
+(pass) Skill Market authority > source-aware inspect publishes the website source contract through service [10.04ms]
+(pass) Skill Market authority > source-aware inspect publishes the website source contract through project [7.27ms]
+(pass) Skill Market authority > source-aware inspect publishes the website source contract through global [3.99ms]
+(pass) Skill Market authority > source-aware inspect publishes the website source contract through tool [2.36ms]
+(pass) Skill Market authority > source-aware install publishes the website source contract through service [2.55ms]
+(pass) Skill Market authority > source-aware install publishes the website source contract through project [4.59ms]
+(pass) Skill Market authority > source-aware install publishes the website source contract through global [3.64ms]
+(pass) Skill Market authority > source-aware install publishes the website source contract through tool [2.01ms]
+(pass) Skill Market authority > executes the runtime market search action through its strict service contract [390.84ms]
+(pass) Skill Market authority > executes the runtime market inspect action through its strict service contract [24.26ms]
+(pass) Skill Market authority > executes the runtime market install action through its strict service contract [216.21ms]
+(pass) Skill Market authority > searches, inspects, hash-pins, installs, and projects one exact skills.sh candidate through public routes [397.37ms]
+(pass) Skill Market authority > reports the first and newly downloaded digests when a candidate changes before install [98.11ms]
+(pass) Skill Market authority > keeps colliding legacy slugs as distinct canonical identities and guards target ownership [1079.62ms]
+(pass) Skill Market authority > maps unsafe upstream bundle paths and offline search to the public upstream error contract [5.60ms]
+
+ 21 pass
+ 0 fail
+ 50 expect() calls
+Ran 21 tests across 1 file. [6.81s]
+[1/1] DONE test/skill-market-builtin-authority.test.ts exit=0 duration=7.33s

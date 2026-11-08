@@ -52,6 +52,7 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "DatabaseUnavailableError") return 503
   if (err.name === "AuthReadError") return 503
   if (err.name === "SkillMarketUpstreamError") return 502
+  if (err.name === "SkillMarketSourceUnavailableError") return 400
   if (err.name === "SkillLocalSourceError") return 400
   if (err.name === "LogFileNotFoundError") return 404
   if (err.name === "ProviderModelNotFoundError") return 400

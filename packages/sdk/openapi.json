@@ -19743,6 +19743,44 @@
         ],
         "type": "object"
       },
+      "SkillMarketSourceUnavailableError": {
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "source": {
+                "type": "string"
+              },
+              "source_type": {
+                "const": "well-known",
+                "type": "string"
+              }
+            },
+            "required": [
+              "id",
+              "source",
+              "source_type",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "SkillMarketSourceUnavailableError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "SkillMarketUpstreamError": {
         "properties": {
           "data": {
@@ -84167,8 +84205,16 @@
             "name": "id",
             "required": true,
             "schema": {
-              "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
-              "type": "string"
+              "anyOf": [
+                {
+                  "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+                  "type": "string"
+                },
+                {
+                  "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+                  "type": "string"
+                }
+              ]
             }
           }
         ],
@@ -84311,11 +84357,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SkillMarketSourceUnavailableError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid Skill Market input or unavailable source"
           },
           "502": {
             "content": {
@@ -84352,8 +84405,16 @@
                     "type": "string"
                   },
                   "id": {
-                    "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+                        "type": "string"
+                      },
+                      {
+                        "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+                        "type": "string"
+                      }
+                    ]
                   },
                   "policy": {
                     "enum": [
@@ -84429,11 +84490,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SkillMarketSourceUnavailableError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid Skill Market input or unavailable source"
           },
           "502": {
             "content": {
@@ -84487,48 +84555,101 @@
               "application/json": {
                 "schema": {
                   "items": {
-                    "additionalProperties": false,
-                    "properties": {
-                      "homepage": {
-                        "format": "uri",
-                        "type": "string"
+                    "oneOf": [
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "homepage": {
+                            "format": "uri",
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "installed": {
+                            "type": "boolean"
+                          },
+                          "installs": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "repository": {
+                            "format": "uri",
+                            "type": "string"
+                          },
+                          "skill_id": {
+                            "type": "string"
+                          },
+                          "source": {
+                            "type": "string"
+                          },
+                          "source_type": {
+                            "const": "github",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "skill_id",
+                          "name",
+                          "source",
+                          "installs",
+                          "homepage",
+                          "source_type",
+                          "repository",
+                          "installed"
+                        ],
+                        "type": "object"
                       },
-                      "id": {
-                        "type": "string"
-                      },
-                      "installed": {
-                        "type": "boolean"
-                      },
-                      "installs": {
-                        "maximum": 9007199254740991,
-                        "minimum": 0,
-                        "type": "integer"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "repository": {
-                        "format": "uri",
-                        "type": "string"
-                      },
-                      "skill_id": {
-                        "type": "string"
-                      },
-                      "source": {
-                        "type": "string"
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "homepage": {
+                            "format": "uri",
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "installed": {
+                            "type": "boolean"
+                          },
+                          "installs": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "skill_id": {
+                            "type": "string"
+                          },
+                          "source": {
+                            "type": "string"
+                          },
+                          "source_type": {
+                            "const": "well-known",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "skill_id",
+                          "name",
+                          "source",
+                          "installs",
+                          "homepage",
+                          "source_type",
+                          "installed"
+                        ],
+                        "type": "object"
                       }
-                    },
-                    "required": [
-                      "id",
-                      "skill_id",
-                      "name",
-                      "source",
-                      "installs",
-                      "homepage",
-                      "repository",
-                      "installed"
-                    ],
-                    "type": "object"
+                    ]
                   },
                   "type": "array"
                 }
@@ -113128,8 +113249,16 @@
             "name": "id",
             "required": true,
             "schema": {
-              "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
-              "type": "string"
+              "anyOf": [
+                {
+                  "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+                  "type": "string"
+                },
+                {
+                  "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+                  "type": "string"
+                }
+              ]
             }
           }
         ],
@@ -113272,11 +113401,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SkillMarketSourceUnavailableError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid Skill Market input or unavailable source"
           },
           "502": {
             "content": {
@@ -113324,8 +113460,16 @@
                     "type": "string"
                   },
                   "id": {
-                    "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
-                    "type": "string"
+                    "anyOf": [
+                      {
+                        "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+                        "type": "string"
+                      },
+                      {
+                        "pattern": "^[a-z0-9_.-]+\\/[a-z0-9_.-]+$",
+                        "type": "string"
+                      }
+                    ]
                   },
                   "policy": {
                     "enum": [
@@ -113401,11 +113545,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SkillMarketSourceUnavailableError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid Skill Market input or unavailable source"
           },
           "502": {
             "content": {
@@ -113468,48 +113619,101 @@
               "application/json": {
                 "schema": {
                   "items": {
-                    "additionalProperties": false,
-                    "properties": {
-                      "homepage": {
-                        "format": "uri",
-                        "type": "string"
+                    "oneOf": [
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "homepage": {
+                            "format": "uri",
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "installed": {
+                            "type": "boolean"
+                          },
+                          "installs": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "repository": {
+                            "format": "uri",
+                            "type": "string"
+                          },
+                          "skill_id": {
+                            "type": "string"
+                          },
+                          "source": {
+                            "type": "string"
+                          },
+                          "source_type": {
+                            "const": "github",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "skill_id",
+                          "name",
+                          "source",
+                          "installs",
+                          "homepage",
+                          "source_type",
+                          "repository",
+                          "installed"
+                        ],
+                        "type": "object"
                       },
-                      "id": {
-                        "type": "string"
-                      },
-                      "installed": {
-                        "type": "boolean"
-                      },
-                      "installs": {
-                        "maximum": 9007199254740991,
-                        "minimum": 0,
-                        "type": "integer"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "repository": {
-                        "format": "uri",
-                        "type": "string"
-                      },
-                      "skill_id": {
-                        "type": "string"
-                      },
-                      "source": {
-                        "type": "string"
+                      {
+                        "additionalProperties": false,
+                        "properties": {
+                          "homepage": {
+                            "format": "uri",
+                            "type": "string"
+                          },
+                          "id": {
+                            "type": "string"
+                          },
+                          "installed": {
+                            "type": "boolean"
+                          },
+                          "installs": {
+                            "maximum": 9007199254740991,
+                            "minimum": 0,
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "skill_id": {
+                            "type": "string"
+                          },
+                          "source": {
+                            "type": "string"
+                          },
+                          "source_type": {
+                            "const": "well-known",
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "skill_id",
+                          "name",
+                          "source",
+                          "installs",
+                          "homepage",
+                          "source_type",
+                          "installed"
+                        ],
+                        "type": "object"
                       }
-                    },
-                    "required": [
-                      "id",
-                      "skill_id",
-                      "name",
-                      "source",
-                      "installs",
-                      "homepage",
-                      "repository",
-                      "installed"
-                    ],
-                    "type": "object"
+                    ]
                   },
                   "type": "array"
                 }
@@ -115032,6 +115236,23 @@
               }
             },
             "description": "Removed skill source"
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/SkillMarketSourceUnavailableError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Invalid Skill Market input or unavailable source"
           }
         },
         "summary": "Remove a skill source",

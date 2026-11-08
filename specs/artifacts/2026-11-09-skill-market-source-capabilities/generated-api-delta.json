@@ -1,0 +1,46 @@
+{
+  "operations": 352,
+  "changed": [
+    {
+      "operation": "skill.market.search",
+      "path": "/skill/market/search",
+      "method": "get"
+    },
+    {
+      "operation": "skill.market.detail",
+      "path": "/skill/market/detail",
+      "method": "get"
+    },
+    {
+      "operation": "skill.market.install",
+      "path": "/skill/market/install",
+      "method": "post"
+    },
+    {
+      "operation": "skill.remove",
+      "path": "/skill/remove",
+      "method": "post"
+    },
+    {
+      "operation": "global.skill.market.search",
+      "path": "/global/skill/market/search",
+      "method": "get"
+    },
+    {
+      "operation": "global.skill.market.detail",
+      "path": "/global/skill/market/detail",
+      "method": "get"
+    },
+    {
+      "operation": "global.skill.market.install",
+      "path": "/global/skill/market/install",
+      "method": "post"
+    }
+  ],
+  "components": {
+    "schemas": [
+      "SkillMarketSourceUnavailableError"
+    ]
+  },
+  "normalization": "Only CLI x-codeSamples removed."
+}

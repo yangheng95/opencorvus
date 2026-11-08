@@ -28,10 +28,24 @@ afterEach(async () => {
   await Instance.disposeAll()
 })
 
+function marketToolContext(): Tool.Context {
+  return {
+    sessionID: "market-tool-contract-session",
+    messageID: "market-tool-contract-message",
+    agent: "market-tool-contract",
+    abort: new AbortController().signal,
+    messages: [],
+    executionSurface: Tool.executionSurface([SkillMarketTool.id], []),
+    extra: { projectID: "market-tool-contract-project" },
+    metadata() {},
+  }
+}
+
 function marketFixture(input: {
   id: string
   name: string
   downloadFiles?: (download: number, skill: string) => Array<{ path: string; contents: string }>
+  extraSearchSkills?: Array<{ id: string; skillId: string; name: string; installs: number; source: string }>
 }) {
   const [owner, repository, skillID] = input.id.split("/")
   const skill = [
@@ -58,6 +72,7 @@ function marketFixture(input: {
             installs: 42,
             source: `${owner}/${repository}`,
           },
+          ...(input.extraSearchSkills ?? []),
         ],
       })
     }
@@ -77,6 +92,111 @@ function marketFixture(input: {
 }
 
 describe.serial("Skill Market authority", () => {
+  test.each([
+    ["identity", { source: "owner/repository", skillId: "skill", name: "Skill", installs: 7 }],
+    ["install count", { id: "owner/repository/skill", source: "owner/repository", skillId: "skill", name: "Skill" }],
+  ] as const)("source-aware search reports an upstream %s contract error for a malformed record", async (_field, record) => {
+    globalThis.fetch = (async () => Response.json({ skills: [record] })) as typeof fetch
+    await expect(SkillMarket.search({ query: "identity", limit: 5 })).rejects.toMatchObject({
+      name: "SkillMarketUpstreamError",
+      data: {
+        operation: "search",
+        endpoint: "https://skills.sh/api/search",
+        message: "Skill Market search returned an invalid response.",
+      },
+    })
+  })
+
+  test("source-aware identity preserves website slugs and canonical repository identities", () => {
+    expect(SkillMarket.identity("Owner/Repo/Skill")).toEqual({
+      source_type: "github", id: "owner/repo/skill", source: "owner/repo", owner: "owner", repository: "repo", skillID: "skill",
+    })
+    for (const [host, skillID] of [["Docs.Example", "Portal"], ["con.example", "NUL"]]) {
+      expect(SkillMarket.identity(`${host}/${skillID}`)).toEqual({
+        source_type: "well-known", id: `${host}/${skillID}`, source: host, skillID,
+      })
+    }
+  })
+
+  test.each(["service", "project", "global", "tool"] as const)("source-aware search preserves mixed candidates through %s", async (surface) => {
+    const id = "opencorvus-tests/market-fixtures/mixed-source"
+    marketFixture({
+      id, name: "mixed-source",
+      extraSearchSkills: [
+        { id: "docs.example/Portal", source: "docs.example", skillId: "Portal", name: "Portal", installs: 12345 },
+        { id: "other-owner/catalog/zero", source: "other-owner/catalog", skillId: "zero", name: "Zero", installs: 0 },
+      ],
+    })
+    let results: unknown
+    if (surface === "service") results = await SkillManager.searchMarket({ query: "mixed", limit: 5 })
+    else if (surface === "tool") {
+      const tool = await SkillMarketTool.init()
+      const result = await tool.execute({ action: "search", query: "mixed", limit: 5 }, marketToolContext())
+      expect(result.metadata).toMatchObject({ action: "search", query: "mixed", count: 3 })
+      results = JSON.parse(result.output).results
+    } else {
+      const app = new Hono().route("/skill", SkillRoutes()).route("/global", GlobalRoutes()).onError(serverErrorResponse)
+      const prefix = surface === "project" ? "/skill" : "/global/skill"
+      const response = await app.request(`${prefix}/market/search?query=mixed&limit=5`)
+      expect(response.status).toBe(200)
+      results = await response.json()
+    }
+    expect(results).toEqual([
+      { id, source_type: "github", skill_id: "mixed-source", name: "mixed-source", source: "opencorvus-tests/market-fixtures", installs: 42, homepage: `https://skills.sh/${id}`, repository: "https://github.com/opencorvus-tests/market-fixtures", installed: false },
+      { id: "docs.example/Portal", source_type: "well-known", skill_id: "Portal", name: "Portal", source: "docs.example", installs: 12345, homepage: "https://skills.sh/docs.example/Portal", installed: false },
+      { id: "other-owner/catalog/zero", source_type: "github", skill_id: "zero", name: "Zero", source: "other-owner/catalog", installs: 0, homepage: "https://skills.sh/other-owner/catalog/zero", repository: "https://github.com/other-owner/catalog", installed: false },
+    ])
+  })
+
+  for (const action of ["inspect", "install"] as const) {
+    test.each(["service", "project", "global", "tool"] as const)(`source-aware ${action} publishes the website source contract through %s`, async (surface) => {
+      const id = "opencorvus-tests/market-fixtures/source-input"
+      const webID = "docs.example/Portal"
+      marketFixture({ id, name: "source-input" })
+      const inspected = await SkillManager.inspectMarket({ id })
+      const input = action === "inspect"
+        ? { action, id: webID }
+        : { action, id: webID, expected_hash: inspected.hash, policy: "deny" as const }
+      const expected = {
+        name: "SkillMarketSourceUnavailableError",
+        data: { id: webID, source: "docs.example", source_type: "well-known", message: "This Skill Market source supports catalog listings only." },
+      }
+      if (surface === "service") {
+        const operation = action === "inspect"
+          ? SkillManager.inspectMarket({ id: webID })
+          : SkillManager.installMarket({ id: webID, expected_hash: inspected.hash, policy: "deny" })
+        await expect(operation).rejects.toMatchObject(expected)
+      } else if (surface === "tool") {
+        const tool = await SkillMarketTool.init()
+        await expect(tool.execute(input, marketToolContext())).rejects.toMatchObject(expected)
+      } else {
+        const app = new Hono().route("/skill", SkillRoutes()).route("/global", GlobalRoutes()).onError(serverErrorResponse)
+        const prefix = surface === "project" ? "/skill" : "/global/skill"
+        const response = action === "inspect"
+          ? await app.request(`${prefix}/market/detail?id=${encodeURIComponent(webID)}`)
+          : await app.request(`${prefix}/market/install`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: webID, expected_hash: inspected.hash, policy: "deny" }) })
+        expect({ status: response.status, body: await response.json() }).toEqual({ status: 400, body: expected })
+      }
+    })
+  }
+
+  test.each(["service", "project"] as const)("source-aware removal publishes the catalog-only source contract through %s", async (surface) => {
+    const input = { source: "docs.example/Portal", kind: "market" as const }
+    const expected = {
+      name: "SkillMarketSourceUnavailableError",
+      data: { id: input.source, source: "docs.example", source_type: "well-known", message: "This Skill Market source supports catalog listings only." },
+    }
+    if (surface === "service") {
+      await expect(SkillManager.remove(input)).rejects.toMatchObject(expected)
+      return
+    }
+    const app = new Hono().route("/skill", SkillRoutes()).onError(serverErrorResponse)
+    const response = await app.request("/skill/remove", {
+      method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(input),
+    })
+    expect({ status: response.status, body: await response.json() }).toEqual({ status: 400, body: expected })
+  })
+
   test.each(["search", "inspect", "install"] as const)("executes the runtime market %s action through its strict service contract", async (action) => {
     const id = `opencorvus-tests/market-fixtures/tool-${action}-${crypto.randomUUID()}`
     const name = `market-tool-${action}-${crypto.randomUUID()}`
@@ -85,22 +205,14 @@ describe.serial("Skill Market authority", () => {
     let installedPath = ""
     try {
       const tool = await SkillMarketTool.init()
-      const context: Tool.Context = {
-        sessionID: "market-tool-contract-session",
-        messageID: "market-tool-contract-message",
-        agent: "market-tool-contract",
-        abort: new AbortController().signal,
-        messages: [],
-        executionSurface: Tool.executionSurface([SkillMarketTool.id], []),
-        extra: { projectID: "market-tool-contract-project" },
-        metadata() {},
-      }
+      const context = marketToolContext()
       if (action === "search") {
         const result = await tool.execute({ action, query: "  exact  ", limit: 5 }, context)
         expect(result.metadata).toMatchObject({ action, query: "exact", count: 1 })
         expect(JSON.parse(result.output).results).toEqual([
           {
             id,
+            source_type: "github",
             skill_id: id.split("/")[2],
             name,
             source: "opencorvus-tests/market-fixtures",
@@ -185,6 +297,7 @@ describe.serial("Skill Market authority", () => {
       expect(await searchResponse.json()).toEqual([
         {
           id,
+          source_type: "github",
           skill_id: id.split("/")[2],
           name,
           source: "opencorvus-tests/market-fixtures",

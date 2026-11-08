@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [市场来源能力证据](2026-11-09-skill-market-source-capabilities/README.md)：真实来源、具名错误和桌面复核。
+
 - [市场工具输入证据](2026-11-09-skill-market-tool-inputs/README.md)：三个入口复现、真实读取与页面复核。
 
 - [Skill Market 空搜索证据](2026-11-09-skill-market-empty-results/README.md)：真实空结果、命中、错误及人工截图。

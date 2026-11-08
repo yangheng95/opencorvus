@@ -1,0 +1,13 @@
+{
+  "status": 400,
+  "requestID": "8e89a9fc-5829-4b95-abaf-a1d5be58153b",
+  "body": {
+    "name": "SkillMarketSourceUnavailableError",
+    "data": {
+      "id": "open.feishu.cn/lark-wiki",
+      "source": "open.feishu.cn",
+      "source_type": "well-known",
+      "message": "This Skill Market source supports catalog listings only."
+    }
+  }
+}

@@ -553,6 +553,7 @@ import type {
   SkillMarketSearchResponses,
   SkillMountsResponses,
   SkillPolicyResponses,
+  SkillRemoveErrors,
   SkillRemoveResponses,
   SkillSetMountOverrideResponses,
   SkillUpdateResponses,
@@ -7236,7 +7237,7 @@ export class Market extends HeyApiClient {
    */
   public detail<ThrowOnError extends boolean = false>(
     parameters: {
-      id: string
+      id: string | string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -7260,7 +7261,7 @@ export class Market extends HeyApiClient {
   public install<ThrowOnError extends boolean = false>(
     parameters: {
       expected_hash: string
-      id: string
+      id: string | string
       policy?: "allow" | "deny"
     },
     options?: Options<never, ThrowOnError>,
@@ -13632,7 +13633,7 @@ export class Market2 extends HeyApiClient {
   public detail<ThrowOnError extends boolean = false>(
     parameters: {
       directory?: string
-      id: string
+      id: string | string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -13663,7 +13664,7 @@ export class Market2 extends HeyApiClient {
     parameters: {
       directory?: string
       expected_hash: string
-      id: string
+      id: string | string
       policy?: "allow" | "deny"
     },
     options?: Options<never, ThrowOnError>,
@@ -14037,7 +14038,7 @@ export class Skill2 extends HeyApiClient {
         },
       ],
     )
-    return (options?.client ?? this.client).post<SkillRemoveResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).post<SkillRemoveResponses, SkillRemoveErrors, ThrowOnError>({
       url: "/skill/remove",
       ...options,
       ...params,

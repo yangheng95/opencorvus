@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [市场来源能力](2026-11-09-skill-market-source-capabilities.md)：网站来源事实、共享合同与不阻断搜索。
+
 - [市场工具输入适配](2026-11-09-skill-market-tool-inputs.md)：Tool入口正向契约与真实网络读取。
 
 - [Skill Market 空搜索](2026-11-09-skill-market-empty-results.md)：完成结果、当前语言与原查询。

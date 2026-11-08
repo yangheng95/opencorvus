@@ -5618,6 +5618,16 @@ export type SkillLocalSourceError = {
   name: "SkillLocalSourceError"
 }
 
+export type SkillMarketSourceUnavailableError = {
+  data: {
+    id: string
+    message: string
+    source: string
+    source_type: "well-known"
+  }
+  name: "SkillMarketSourceUnavailableError"
+}
+
 export type SkillMarketUpstreamError = {
   data: {
     [key: string]: unknown
@@ -22943,16 +22953,16 @@ export type GlobalSkillMarketDetailData = {
   body?: never
   path?: never
   query: {
-    id: string
+    id: string | string
   }
   url: "/global/skill/market/detail"
 }
 
 export type GlobalSkillMarketDetailErrors = {
   /**
-   * Bad request
+   * Invalid Skill Market input or unavailable source
    */
-  400: BadRequestError
+  400: BadRequestError | SkillMarketSourceUnavailableError
   /**
    * Upstream service failure
    */
@@ -22997,7 +23007,7 @@ export type GlobalSkillMarketDetailResponse = GlobalSkillMarketDetailResponses[k
 export type GlobalSkillMarketInstallData = {
   body: {
     expected_hash: string
-    id: string
+    id: string | string
     policy?: "allow" | "deny"
   }
   path?: never
@@ -23007,9 +23017,9 @@ export type GlobalSkillMarketInstallData = {
 
 export type GlobalSkillMarketInstallErrors = {
   /**
-   * Bad request
+   * Invalid Skill Market input or unavailable source
    */
-  400: BadRequestError
+  400: BadRequestError | SkillMarketSourceUnavailableError
   /**
    * Upstream service failure
    */
@@ -23063,16 +23073,29 @@ export type GlobalSkillMarketSearchResponses = {
   /**
    * Skill Market candidates
    */
-  200: Array<{
-    homepage: string
-    id: string
-    installed: boolean
-    installs: number
-    name: string
-    repository: string
-    skill_id: string
-    source: string
-  }>
+  200: Array<
+    | {
+        homepage: string
+        id: string
+        installed: boolean
+        installs: number
+        name: string
+        repository: string
+        skill_id: string
+        source: string
+        source_type: "github"
+      }
+    | {
+        homepage: string
+        id: string
+        installed: boolean
+        installs: number
+        name: string
+        skill_id: string
+        source: string
+        source_type: "well-known"
+      }
+  >
 }
 
 export type GlobalSkillMarketSearchResponse = GlobalSkillMarketSearchResponses[keyof GlobalSkillMarketSearchResponses]
@@ -32510,16 +32533,16 @@ export type SkillMarketDetailData = {
      * Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.
      */
     directory?: string
-    id: string
+    id: string | string
   }
   url: "/skill/market/detail"
 }
 
 export type SkillMarketDetailErrors = {
   /**
-   * Bad request
+   * Invalid Skill Market input or unavailable source
    */
-  400: BadRequestError
+  400: BadRequestError | SkillMarketSourceUnavailableError
   /**
    * Upstream service failure
    */
@@ -32564,7 +32587,7 @@ export type SkillMarketDetailResponse = SkillMarketDetailResponses[keyof SkillMa
 export type SkillMarketInstallData = {
   body: {
     expected_hash: string
-    id: string
+    id: string | string
     policy?: "allow" | "deny"
   }
   path?: never
@@ -32579,9 +32602,9 @@ export type SkillMarketInstallData = {
 
 export type SkillMarketInstallErrors = {
   /**
-   * Bad request
+   * Invalid Skill Market input or unavailable source
    */
-  400: BadRequestError
+  400: BadRequestError | SkillMarketSourceUnavailableError
   /**
    * Upstream service failure
    */
@@ -32638,16 +32661,29 @@ export type SkillMarketSearchResponses = {
   /**
    * Skill Market candidates
    */
-  200: Array<{
-    homepage: string
-    id: string
-    installed: boolean
-    installs: number
-    name: string
-    repository: string
-    skill_id: string
-    source: string
-  }>
+  200: Array<
+    | {
+        homepage: string
+        id: string
+        installed: boolean
+        installs: number
+        name: string
+        repository: string
+        skill_id: string
+        source: string
+        source_type: "github"
+      }
+    | {
+        homepage: string
+        id: string
+        installed: boolean
+        installs: number
+        name: string
+        skill_id: string
+        source: string
+        source_type: "well-known"
+      }
+  >
 }
 
 export type SkillMarketSearchResponse = SkillMarketSearchResponses[keyof SkillMarketSearchResponses]
@@ -33000,6 +33036,15 @@ export type SkillRemoveData = {
   }
   url: "/skill/remove"
 }
+
+export type SkillRemoveErrors = {
+  /**
+   * Invalid Skill Market input or unavailable source
+   */
+  400: BadRequestError | SkillMarketSourceUnavailableError
+}
+
+export type SkillRemoveError = SkillRemoveErrors[keyof SkillRemoveErrors]
 
 export type SkillRemoveResponses = {
   /**

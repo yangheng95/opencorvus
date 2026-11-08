@@ -1,0 +1,437 @@
+$ bun script/run-tests.ts test/skill-market-builtin-authority.test.ts "--test-name-pattern=source-aware"
+[1/1] START test/skill-market-builtin-authority.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+91 |   return { downloads: () => downloads }
+92 | }
+93 |
+94 | describe.serial("Skill Market authority", () => {
+95 |   test("source-aware identity preserves website slugs and canonical repository identities", () => {
+96 |     expect(SkillMarket.identity("Owner/Repo/Skill")).toEqual({
+                                                          ^
+error: expect(received).toEqual(expected)
+
+  {
+    "id": "owner/repo/skill",
+    "owner": "owner",
+    "repository": "repo",
+    "skillID": "skill",
+    "source": "owner/repo",
+-   "source_type": "github",
+  }
+
+- Expected  - 1
++ Received  + 0
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:96:54)
+(fail) Skill Market authority > source-aware identity preserves website slugs and canonical repository identities [4.55ms]
+296 |     return `${url.origin}${url.pathname}`
+297 |   }
+298 |
+299 |   function asUpstreamError(operation: "search" | "download", url: URL, error: unknown) {
+300 |     if (UpstreamError.isInstance(error)) return error
+301 |     return new UpstreamError(
+                 ^
+SkillMarketUpstreamError: SkillMarketUpstreamError: Skill Market search returned an invalid response.
+ data: {
+  operation: "search",
+  endpoint: "https://skills.sh/api/search",
+  message: "Skill Market search returned an invalid response.",
+},
+
+      at asUpstreamError (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\market.ts:301:12)
+      at search (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\market.ts:167:13)
+      at async searchMarket (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\manager.ts:245:42)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:113:61)
+
+122 |   }
+123 |
+124 |   export function identity(raw: string) {
+125 |     const id = raw.trim()
+126 |     const match = /^([a-z0-9_.-]+)\/([a-z0-9_.-]+)\/([a-z0-9_.-]+)$/i.exec(id)
+127 |     if (!match) throw new Error(`Invalid Skill Market identity: ${raw}`)
+                                ^
+error: Invalid Skill Market identity: docs.example/Portal
+      at identity (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\market.ts:127:27)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\market.ts:151:26)
+      at map (1:11)
+      at search (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\market.ts:150:25)
+      at async searchMarket (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\manager.ts:245:42)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:113:61)
+(fail) Skill Market authority > source-aware search preserves mixed candidates through service [5.61ms]
+118 |       results = JSON.parse(result.output).results
+119 |     } else {
+120 |       const app = new Hono().route("/skill", SkillRoutes()).route("/global", GlobalRoutes()).onError(serverErrorResponse)
+121 |       const prefix = surface === "project" ? "/skill" : "/global/skill"
+122 |       const response = await app.request(`${prefix}/market/search?query=mixed&limit=5`)
+123 |       expect(response.status).toBe(200)
+                                    ^
+error: expect(received).toBe(expected)
+
+Expected: 200
+Received: 502
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:123:31)
+(fail) Skill Market authority > source-aware search preserves mixed candidates through project [25.84ms]
+118 |       results = JSON.parse(result.output).results
+119 |     } else {
+120 |       const app = new Hono().route("/skill", SkillRoutes()).route("/global", GlobalRoutes()).onError(serverErrorResponse)
+121 |       const prefix = surface === "project" ? "/skill" : "/global/skill"
+122 |       const response = await app.request(`${prefix}/market/search?query=mixed&limit=5`)
+123 |       expect(response.status).toBe(200)
+                                    ^
+error: expect(received).toBe(expected)
+
+Expected: 200
+Received: 502
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:123:31)
+(fail) Skill Market authority > source-aware search preserves mixed candidates through global [5.76ms]
+296 |     return `${url.origin}${url.pathname}`
+297 |   }
+298 |
+299 |   function asUpstreamError(operation: "search" | "download", url: URL, error: unknown) {
+300 |     if (UpstreamError.isInstance(error)) return error
+301 |     return new UpstreamError(
+                 ^
+SkillMarketUpstreamError: SkillMarketUpstreamError: Skill Market search returned an invalid response.
+ data: {
+  operation: "search",
+  endpoint: "https://skills.sh/api/search",
+  message: "Skill Market search returned an invalid response.",
+},
+
+      at asUpstreamError (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\market.ts:301:12)
+      at search (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\market.ts:167:13)
+      at async searchMarket (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\manager.ts:245:42)
+      at async execute (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\skill-market.ts:39:42)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\tool.ts:113:28)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:116:33)
+
+122 |   }
+123 |
+124 |   export function identity(raw: string) {
+125 |     const id = raw.trim()
+126 |     const match = /^([a-z0-9_.-]+)\/([a-z0-9_.-]+)\/([a-z0-9_.-]+)$/i.exec(id)
+127 |     if (!match) throw new Error(`Invalid Skill Market identity: ${raw}`)
+                                ^
+error: Invalid Skill Market identity: docs.example/Portal
+      at identity (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\market.ts:127:27)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\market.ts:151:26)
+      at map (1:11)
+      at search (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\market.ts:150:25)
+      at async searchMarket (D:\myhexin-local\opencorvus\packages\opencorvus\src\skill\manager.ts:245:42)
+      at async execute (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\skill-market.ts:39:42)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\tool\tool.ts:113:28)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:116:33)
+(fail) Skill Market authority > source-aware search preserves mixed candidates through tool [3.90ms]
+144 |       }
+145 |       if (surface === "service") {
+146 |         const operation = action === "inspect"
+147 |           ? SkillManager.inspectMarket({ id: webID })
+148 |           : SkillManager.installMarket({ id: webID, expected_hash: inspected.hash, policy: "deny" })
+149 |         await expect(operation).rejects.toMatchObject(expected)
+                                              ^
+error: expect(received).toMatchObject(expected)
+
+- {
+-   "data": {
+-     "id": "docs.example/Portal",
+-     "message": "Exact bundle inspection is unavailable for this Skill Market source.",
+-     "source": "docs.example",
+-     "source_type": "well-known",
+-   },
+-   "name": "SkillMarketSourceUnavailableError",
+- }
++ [Definition: [
++   {
++     "origin": "string",
++     "code": "invalid_format",
++     "format": "regex",
++     "pattern": "/^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$/i",
++     "path": [
++       "id"
++     ],
++     "message": "Invalid string: must match pattern /^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$/i"
++   }
++ ]]
+
+- Expected  - 9
++ Received  + 12
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:149:41)
+(fail) Skill Market authority > source-aware inspect publishes the website source contract through service [36.47ms]
+154 |         const app = new Hono().route("/skill", SkillRoutes()).route("/global", GlobalRoutes()).onError(serverErrorResponse)
+155 |         const prefix = surface === "project" ? "/skill" : "/global/skill"
+156 |         const response = action === "inspect"
+157 |           ? await app.request(`${prefix}/market/detail?id=${encodeURIComponent(webID)}`)
+158 |           : await app.request(`${prefix}/market/install`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: webID, expected_hash: inspected.hash, policy: "deny" }) })
+159 |         expect({ status: response.status, body: await response.json() }).toEqual({ status: 400, body: expected })
+                                                                               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+-       "id": "docs.example/Portal",
+-       "message": "Exact bundle inspection is unavailable for this Skill Market source.",
+-       "source": "docs.example",
+-       "source_type": "well-known",
++       "message": "Request validation failed",
+      },
+-     "name": "SkillMarketSourceUnavailableError",
++     "error": [
++       {
++         "code": "invalid_format",
++         "message": "Invalid string: must match pattern /^[a-z0-9_.-]+\/[a-z0-9_.-]+\/[a-z0-9_.-]+$/i",
++         "path": [
++           "id",
++         ],
++       },
++     ],
++     "success": false,
+    },
+    "status": 400,
+  }
+
+- Expected  - 5
++ Received  + 11
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:159:74)
+(fail) Skill Market authority > source-aware inspect publishes the website source contract through project [5.01ms]
+154 |         const app = new Hono().route("/skill", SkillRoutes()).route("/global", GlobalRoutes()).onError(serverErrorResponse)
+155 |         const prefix = surface === "project" ? "/skill" : "/global/skill"
+156 |         const response = action === "inspect"
+157 |           ? await app.request(`${prefix}/market/detail?id=${encodeURIComponent(webID)}`)
+158 |           : await app.request(`${prefix}/market/install`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: webID, expected_hash: inspected.hash, policy: "deny" }) })
+159 |         expect({ status: response.status, body: await response.json() }).toEqual({ status: 400, body: expected })
+                                                                               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+-       "id": "docs.example/Portal",
+-       "message": "Exact bundle inspection is unavailable for this Skill Market source.",
+-       "source": "docs.example",
+-       "source_type": "well-known",
++       "message": "Request validation failed",
+      },
+-     "name": "SkillMarketSourceUnavailableError",
++     "error": [
++       {
++         "code": "invalid_format",
++         "message": "Invalid string: must match pattern /^[a-z0-9_.-]+\/[a-z0-9_.-]+\/[a-z0-9_.-]+$/i",
++         "path": [
++           "id",
++         ],
++       },
++     ],
++     "success": false,
+    },
+    "status": 400,
+  }
+
+- Expected  - 5
++ Received  + 11
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:159:74)
+(fail) Skill Market authority > source-aware inspect publishes the website source contract through global [4.64ms]
+147 |           ? SkillManager.inspectMarket({ id: webID })
+148 |           : SkillManager.installMarket({ id: webID, expected_hash: inspected.hash, policy: "deny" })
+149 |         await expect(operation).rejects.toMatchObject(expected)
+150 |       } else if (surface === "tool") {
+151 |         const tool = await SkillMarketTool.init()
+152 |         await expect(tool.execute(input, marketToolContext())).rejects.toMatchObject(expected)
+                                                                             ^
+error: expect(received).toMatchObject(expected)
+
+- {
+-   "data": {
+-     "id": "docs.example/Portal",
+-     "message": "Exact bundle inspection is unavailable for this Skill Market source.",
+-     "source": "docs.example",
+-     "source_type": "well-known",
+-   },
+-   "name": "SkillMarketSourceUnavailableError",
+- }
++ [Definition: [
++   {
++     "origin": "string",
++     "code": "invalid_format",
++     "format": "regex",
++     "pattern": "/^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$/i",
++     "path": [
++       "id"
++     ],
++     "message": "Invalid string: must match pattern /^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$/i"
++   }
++ ]]
+
+- Expected  - 9
++ Received  + 12
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:152:72)
+(fail) Skill Market authority > source-aware inspect publishes the website source contract through tool [2.19ms]
+144 |       }
+145 |       if (surface === "service") {
+146 |         const operation = action === "inspect"
+147 |           ? SkillManager.inspectMarket({ id: webID })
+148 |           : SkillManager.installMarket({ id: webID, expected_hash: inspected.hash, policy: "deny" })
+149 |         await expect(operation).rejects.toMatchObject(expected)
+                                              ^
+error: expect(received).toMatchObject(expected)
+
+- {
+-   "data": {
+-     "id": "docs.example/Portal",
+-     "message": "Exact bundle inspection is unavailable for this Skill Market source.",
+-     "source": "docs.example",
+-     "source_type": "well-known",
+-   },
+-   "name": "SkillMarketSourceUnavailableError",
+- }
++ [Definition: [
++   {
++     "origin": "string",
++     "code": "invalid_format",
++     "format": "regex",
++     "pattern": "/^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$/i",
++     "path": [
++       "id"
++     ],
++     "message": "Invalid string: must match pattern /^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$/i"
++   }
++ ]]
+
+- Expected  - 9
++ Received  + 12
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:149:41)
+(fail) Skill Market authority > source-aware install publishes the website source contract through service [2.49ms]
+154 |         const app = new Hono().route("/skill", SkillRoutes()).route("/global", GlobalRoutes()).onError(serverErrorResponse)
+155 |         const prefix = surface === "project" ? "/skill" : "/global/skill"
+156 |         const response = action === "inspect"
+157 |           ? await app.request(`${prefix}/market/detail?id=${encodeURIComponent(webID)}`)
+158 |           : await app.request(`${prefix}/market/install`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: webID, expected_hash: inspected.hash, policy: "deny" }) })
+159 |         expect({ status: response.status, body: await response.json() }).toEqual({ status: 400, body: expected })
+                                                                               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+-       "id": "docs.example/Portal",
+-       "message": "Exact bundle inspection is unavailable for this Skill Market source.",
+-       "source": "docs.example",
+-       "source_type": "well-known",
++       "message": "Request validation failed",
+      },
+-     "name": "SkillMarketSourceUnavailableError",
++     "error": [
++       {
++         "code": "invalid_format",
++         "message": "Invalid string: must match pattern /^[a-z0-9_.-]+\/[a-z0-9_.-]+\/[a-z0-9_.-]+$/i",
++         "path": [
++           "id",
++         ],
++       },
++     ],
++     "success": false,
+    },
+    "status": 400,
+  }
+
+- Expected  - 5
++ Received  + 11
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:159:74)
+(fail) Skill Market authority > source-aware install publishes the website source contract through project [4.01ms]
+154 |         const app = new Hono().route("/skill", SkillRoutes()).route("/global", GlobalRoutes()).onError(serverErrorResponse)
+155 |         const prefix = surface === "project" ? "/skill" : "/global/skill"
+156 |         const response = action === "inspect"
+157 |           ? await app.request(`${prefix}/market/detail?id=${encodeURIComponent(webID)}`)
+158 |           : await app.request(`${prefix}/market/install`, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ id: webID, expected_hash: inspected.hash, policy: "deny" }) })
+159 |         expect({ status: response.status, body: await response.json() }).toEqual({ status: 400, body: expected })
+                                                                               ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+-       "id": "docs.example/Portal",
+-       "message": "Exact bundle inspection is unavailable for this Skill Market source.",
+-       "source": "docs.example",
+-       "source_type": "well-known",
++       "message": "Request validation failed",
+      },
+-     "name": "SkillMarketSourceUnavailableError",
++     "error": [
++       {
++         "code": "invalid_format",
++         "message": "Invalid string: must match pattern /^[a-z0-9_.-]+\/[a-z0-9_.-]+\/[a-z0-9_.-]+$/i",
++         "path": [
++           "id",
++         ],
++       },
++     ],
++     "success": false,
+    },
+    "status": 400,
+  }
+
+- Expected  - 5
++ Received  + 11
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:159:74)
+(fail) Skill Market authority > source-aware install publishes the website source contract through global [4.73ms]
+147 |           ? SkillManager.inspectMarket({ id: webID })
+148 |           : SkillManager.installMarket({ id: webID, expected_hash: inspected.hash, policy: "deny" })
+149 |         await expect(operation).rejects.toMatchObject(expected)
+150 |       } else if (surface === "tool") {
+151 |         const tool = await SkillMarketTool.init()
+152 |         await expect(tool.execute(input, marketToolContext())).rejects.toMatchObject(expected)
+                                                                             ^
+error: expect(received).toMatchObject(expected)
+
+- {
+-   "data": {
+-     "id": "docs.example/Portal",
+-     "message": "Exact bundle inspection is unavailable for this Skill Market source.",
+-     "source": "docs.example",
+-     "source_type": "well-known",
+-   },
+-   "name": "SkillMarketSourceUnavailableError",
+- }
++ [Definition: [
++   {
++     "origin": "string",
++     "code": "invalid_format",
++     "format": "regex",
++     "pattern": "/^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$/i",
++     "path": [
++       "id"
++     ],
++     "message": "Invalid string: must match pattern /^[a-z0-9_.-]+\\/[a-z0-9_.-]+\\/[a-z0-9_.-]+$/i"
++   }
++ ]]
+
+- Expected  - 9
++ Received  + 12
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:152:72)
+(fail) Skill Market authority > source-aware install publishes the website source contract through tool [3.23ms]
+
+ 0 pass
+ 7 filtered out
+ 13 fail
+ 11 expect() calls
+Ran 13 tests across 1 file. [4.79s]
+[1/1] DONE test/skill-market-builtin-authority.test.ts exit=1 duration=5.29s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-ngC07U
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

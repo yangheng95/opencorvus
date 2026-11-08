@@ -23,6 +23,16 @@ export namespace SkillMarket {
       .strict(),
   )
 
+  export const SourceUnavailableError = NamedError.create(
+    "SkillMarketSourceUnavailableError",
+    z.object({
+      id: z.string(),
+      source: z.string(),
+      source_type: z.literal("well-known"),
+      message: z.string(),
+    }).strict(),
+  )
+
   export const Provider = z
     .object({
       id: z.literal(ID),
@@ -53,7 +63,16 @@ export namespace SkillMarket {
       message: "Skill Market identity segments must be portable directory names",
     })
 
-  export const Candidate = z
+  const WebsiteIdentity = z.string().trim()
+    .regex(/^[a-z0-9_.-]+\/[a-z0-9_.-]+$/i)
+    .refine((value) => {
+      const [host, slug] = value.split("/")
+      return z.hostname().safeParse(host).success && slug !== "." && slug !== ".."
+    }, { message: "Skill Market website identity must contain a hostname and a URL-safe skill slug" })
+
+  export const CatalogIdentity = z.union([Identity, WebsiteIdentity])
+
+  const CandidateBase = z
     .object({
       id: z.string(),
       skill_id: z.string(),
@@ -61,9 +80,13 @@ export namespace SkillMarket {
       source: z.string(),
       installs: z.number().int().nonnegative(),
       homepage: z.string().url(),
-      repository: z.string().url(),
     })
     .strict()
+
+  export const Candidate = z.discriminatedUnion("source_type", [
+    CandidateBase.extend({ source_type: z.literal("github"), repository: z.string().url() }),
+    CandidateBase.extend({ source_type: z.literal("well-known") }),
+  ])
 
   export const BundleFile = z
     .object({
@@ -86,10 +109,10 @@ export namespace SkillMarket {
   const SearchResponse = z.object({
     skills: z
       .object({
-        id: z.string().optional(),
+        id: z.string().min(1),
         skillId: z.string().min(1),
         name: z.string().min(1),
-        installs: z.number().int().nonnegative().default(0),
+        installs: z.number().int().nonnegative(),
         source: z.string().min(1),
       })
       .array(),
@@ -122,21 +145,32 @@ export namespace SkillMarket {
   }
 
   export function identity(raw: string) {
-    const id = raw.trim()
-    const match = /^([a-z0-9_.-]+)\/([a-z0-9_.-]+)\/([a-z0-9_.-]+)$/i.exec(id)
-    if (!match) throw new Error(`Invalid Skill Market identity: ${raw}`)
-    const segments = match.slice(1).map((segment) => segment!.toLowerCase())
-    if (segments.some((segment) => !portableIdentitySegment(segment))) {
-      throw new Error(`Invalid Skill Market identity: ${raw}`)
+    const id = CatalogIdentity.parse(raw)
+    const segments = id.split("/")
+    if (segments.length === 2) {
+      const [source, skillID] = segments as [string, string]
+      return { source_type: "well-known" as const, id, source, skillID }
     }
-    const [owner, repository, skillID] = segments as [string, string, string]
+    const [owner, repository, skillID] = segments.map((segment) => segment.toLowerCase()) as [string, string, string]
     return {
+      source_type: "github" as const,
       id: `${owner}/${repository}/${skillID}`,
       source: `${owner}/${repository}`,
       owner,
       repository,
       skillID,
     }
+  }
+
+  export function repositoryIdentity(raw: string) {
+    const parsed = identity(raw)
+    if (parsed.source_type === "github") return parsed
+    throw new SourceUnavailableError({
+      id: parsed.id,
+      source: parsed.source,
+      source_type: parsed.source_type,
+      message: "This Skill Market source supports catalog listings only.",
+    })
   }
 
   export async function search(raw: z.input<typeof SearchInput>) {
@@ -148,18 +182,20 @@ export namespace SkillMarket {
       const response = SearchResponse.parse(await requestJson(url, "search"))
       return Candidate.array().parse(
         response.skills.map((item) => {
-          const parsed = identity(item.id ?? `${item.source}/${item.skillId}`)
-          if (parsed.source !== item.source.toLowerCase() || parsed.skillID !== item.skillId.toLowerCase()) {
+          const parsed = identity(item.id)
+          const expectedSkillID = parsed.source_type === "github" ? item.skillId.toLowerCase() : item.skillId
+          if (parsed.source.toLowerCase() !== item.source.toLowerCase() || parsed.skillID !== expectedSkillID) {
             throw new Error(`Skill Market search identity mismatch: ${parsed.id}`)
           }
           return {
             id: parsed.id,
+            source_type: parsed.source_type,
             skill_id: parsed.skillID,
             name: item.name,
-            source: parsed.source,
+            source: parsed.source_type === "github" ? parsed.source : item.source,
             installs: item.installs,
             homepage: `${ORIGIN}/${parsed.id}`,
-            repository: `https://github.com/${parsed.source}`,
+            ...(parsed.source_type === "github" ? { repository: `https://github.com/${parsed.source}` } : {}),
           }
         }),
       )
@@ -169,7 +205,7 @@ export namespace SkillMarket {
   }
 
   export async function download(rawID: string) {
-    const parsed = identity(rawID)
+    const parsed = repositoryIdentity(rawID)
     const url = new URL(
       `/api/download/${encodeURIComponent(parsed.owner)}/${encodeURIComponent(parsed.repository)}/${encodeURIComponent(parsed.skillID)}`,
       ORIGIN,
@@ -212,7 +248,7 @@ export namespace SkillMarket {
   }
 
   export function invalidBundleError(rawID: string, cause: unknown) {
-    const parsed = identity(rawID)
+    const parsed = repositoryIdentity(rawID)
     const endpoint = new URL(
       `/api/download/${encodeURIComponent(parsed.owner)}/${encodeURIComponent(parsed.repository)}/${encodeURIComponent(parsed.skillID)}`,
       ORIGIN,

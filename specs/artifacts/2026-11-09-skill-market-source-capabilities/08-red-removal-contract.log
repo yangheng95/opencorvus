@@ -1,0 +1,71 @@
+$ bun script/run-tests.ts test/skill-market-builtin-authority.test.ts "--test-name-pattern=source-aware removal"
+[1/1] START test/skill-market-builtin-authority.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+185 |     const expected = {
+186 |       name: "SkillMarketSourceUnavailableError",
+187 |       data: { id: input.source, source: "docs.example", source_type: "well-known", message: "This Skill Market source supports catalog listings only." },
+188 |     }
+189 |     if (surface === "service") {
+190 |       await expect(SkillManager.remove(input)).rejects.toMatchObject(expected)
+                                                             ^
+error: expect(received).toMatchObject(expected)
+
+- {
+-   "data": {
+-     "id": "docs.example/Portal",
+-     "message": "This Skill Market source supports catalog listings only.",
+-     "source": "docs.example",
+-     "source_type": "well-known",
+-   },
+-   "name": "SkillMarketSourceUnavailableError",
+- }
++ [result: SkillMarketSourceUnavailableError: Exact bundle inspection is unavailable for this Skill Market source.]
+
+- Expected  - 9
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:190:56)
+(fail) Skill Market authority > source-aware removal publishes the catalog-only source contract through service [7.38ms]
+192 |     }
+193 |     const app = new Hono().route("/skill", SkillRoutes()).onError(serverErrorResponse)
+194 |     const response = await app.request("/skill/remove", {
+195 |       method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(input),
+196 |     })
+197 |     expect({ status: response.status, body: await response.json() }).toEqual({ status: 400, body: expected })
+                                                                           ^
+error: expect(received).toEqual(expected)
+
+  {
+    "body": {
+      "data": {
+        "id": "docs.example/Portal",
+-       "message": "This Skill Market source supports catalog listings only.",
++       "message": "Exact bundle inspection is unavailable for this Skill Market source.",
+        "source": "docs.example",
+        "source_type": "well-known",
+      },
+      "name": "SkillMarketSourceUnavailableError",
+    },
+    "status": 400,
+  }
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:197:70)
+(fail) Skill Market authority > source-aware removal publishes the catalog-only source contract through project [7.69ms]
+
+ 0 pass
+ 22 filtered out
+ 2 fail
+ 2 expect() calls
+Ran 2 tests across 1 file. [4.47s]
+[1/1] DONE test/skill-market-builtin-authority.test.ts exit=1 duration=4.99s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-H2sgbI
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

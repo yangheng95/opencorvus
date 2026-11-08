@@ -950,7 +950,14 @@ function SharedResourceManagementPanel(props: {
                         class="extension-settings-row"
                         title={candidate.name}
                         desc={candidate.source}
-                        meta={<small>{t("skill.market_installs", { count: marketNumber(candidate.installs) })}</small>}
+                        meta={
+                          <small>
+                            {t("skill.market_installs", { count: marketNumber(candidate.installs) })}
+                            <Show when={candidate.source_type === "well-known"}>
+                              {" · "}{t("skill.market_review_unavailable")}
+                            </Show>
+                          </small>
+                        }
                         interactive
                         actions={
                           <div class="extension-settings-actions">
@@ -962,7 +969,8 @@ function SharedResourceManagementPanel(props: {
                               variant="outline"
                               size="sm"
                               tone="neutral"
-                              disabled={marketLoading()}
+                              disabled={marketLoading() || candidate.source_type === "well-known"}
+                              title={candidate.source_type === "well-known" ? t("skill.market_review_unavailable") : undefined}
                               onClick={() => void handleMarketInspect(candidate)}
                             >
                               {t("skill.market_review")}

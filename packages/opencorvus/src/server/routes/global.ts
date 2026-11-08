@@ -27,6 +27,7 @@ import { Database } from "../../storage/db"
 import {
   AuthReadUnavailableResponse,
   BAD_REQUEST_SCHEMA,
+  SkillMarketInputErrorResponse,
   OwnedPromptControllersResponse,
   badRequestBody,
   badRequestOrNamedErrorResponse,
@@ -1093,6 +1094,7 @@ export const GlobalRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(SkillManager.MarketDetail) } },
           },
           ...errors(400, 502),
+          400: SkillMarketInputErrorResponse,
         },
       }),
       validator("query", SkillManager.MarketInspectInput),
@@ -1110,6 +1112,7 @@ export const GlobalRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(SkillManager.MarketInstallResult) } },
           },
           ...errors(400, 502),
+          400: SkillMarketInputErrorResponse,
         },
       }),
       validator("json", SkillManager.MarketInstallInput),

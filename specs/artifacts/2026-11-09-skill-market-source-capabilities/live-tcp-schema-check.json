@@ -1,0 +1,86 @@
+{
+  "validator": "Ajv2020",
+  "sdkRuntimePathsAndComponents": "exact after removing only CLI x-codeSamples",
+  "checks": [
+    {
+      "label": "project-website-search",
+      "route": "/skill/market/search",
+      "method": "GET",
+      "status": 200,
+      "schema": "valid",
+      "requestID": "8c415076-94a8-455a-9360-464a8a8a1268"
+    },
+    {
+      "label": "project-website-inspect",
+      "route": "/skill/market/detail",
+      "method": "GET",
+      "status": 400,
+      "schema": "valid",
+      "requestID": "314cd190-d458-4cc0-a39e-079f553ba9ce"
+    },
+    {
+      "label": "project-website-install",
+      "route": "/skill/market/install",
+      "method": "POST",
+      "status": 400,
+      "schema": "valid",
+      "requestID": "8e89a9fc-5829-4b95-abaf-a1d5be58153b"
+    },
+    {
+      "label": "global-website-search",
+      "route": "/global/skill/market/search",
+      "method": "GET",
+      "status": 200,
+      "schema": "valid",
+      "requestID": "cbfb1c99-e5f2-4413-a384-7afd57e35a68"
+    },
+    {
+      "label": "global-website-inspect",
+      "route": "/global/skill/market/detail",
+      "method": "GET",
+      "status": 400,
+      "schema": "valid",
+      "requestID": "151de372-d365-4b6e-a03d-0795fc5c032f"
+    },
+    {
+      "label": "global-website-install",
+      "route": "/global/skill/market/install",
+      "method": "POST",
+      "status": 400,
+      "schema": "valid",
+      "requestID": "700a4f69-50c0-4359-86c7-760df4ec1d3d"
+    },
+    {
+      "label": "repository-detail",
+      "route": "/global/skill/market/detail",
+      "method": "GET",
+      "status": 200,
+      "schema": "valid",
+      "requestID": "8436b7dc-ed93-459f-b36a-53808486c0ed"
+    },
+    {
+      "label": "repository-search",
+      "route": "/global/skill/market/search",
+      "method": "GET",
+      "status": 200,
+      "schema": "valid",
+      "requestID": "536b10ce-1215-4ed4-a21a-9639b4059507"
+    },
+    {
+      "label": "empty-search",
+      "route": "/global/skill/market/search",
+      "method": "GET",
+      "status": 200,
+      "schema": "valid",
+      "requestID": "aac9b4f5-e2ad-460f-88af-3e4fe4709368"
+    },
+    {
+      "label": "website-removal",
+      "route": "/skill/remove",
+      "method": "POST",
+      "status": 400,
+      "schema": "valid",
+      "requestID": "9042e71c-7841-4018-800e-9ce8d4335c51"
+    }
+  ]
+}

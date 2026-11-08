@@ -28,6 +28,7 @@ export const SkillMarketTool = Tool.define(SKILL_MARKET_TOOL_ID, {
   description: [
     "Search the current external Skill Market, inspect one exact candidate bundle, or request installation of that inspected candidate.",
     "Use search for an uninstalled capability that is not present in capability_search or the mounted skill Tool.",
+    "Search results identify source_type: github sources support exact bundle inspection and installation; well-known website sources are catalog listings with bundle inspection currently unavailable.",
     "Always inspect a candidate before installation and show the user its identity, repository, content hash, file/risk summary, and policy.",
     "Installation must reuse the exact hash returned by inspect. It is a separately authorized local mutation; never invent or alter the hash.",
     "A successful install refreshes the global catalog but the new Skill is available for mounting only on a subsequent turn, not this turn's frozen Skill surface.",

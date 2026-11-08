@@ -6,6 +6,7 @@
 // components own rendering, while this service only updates store data.
 
 import type {
+  GlobalSkillMarketSearchResponse,
   SkillMountsResponse,
   SkillSetMountOverrideData,
   SkillUpdateData,
@@ -26,16 +27,7 @@ export interface SkillDescriptor {
   [key: string]: any
 }
 
-export interface SkillMarketCandidate {
-  id: string
-  skill_id: string
-  name: string
-  source: string
-  installs: number
-  homepage: string
-  repository: string
-  installed: boolean
-}
+export type SkillMarketCandidate = GlobalSkillMarketSearchResponse[number]
 
 export interface SkillMarketDetail {
   id: string

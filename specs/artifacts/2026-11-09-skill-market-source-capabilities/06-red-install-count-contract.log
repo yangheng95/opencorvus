@@ -1,0 +1,31 @@
+$ bun script/run-tests.ts test/skill-market-builtin-authority.test.ts "--test-name-pattern=upstream install count contract"
+[1/1] START test/skill-market-builtin-authority.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+ 95 |   test.each([
+ 96 |     ["identity", { source: "owner/repository", skillId: "skill", name: "Skill", installs: 7 }],
+ 97 |     ["install count", { id: "owner/repository/skill", source: "owner/repository", skillId: "skill", name: "Skill" }],
+ 98 |   ] as const)("source-aware search reports an upstream %s contract error for a malformed record", async (_field, record) => {
+ 99 |     globalThis.fetch = (async () => Response.json({ skills: [record] })) as typeof fetch
+100 |     await expect(SkillMarket.search({ query: "identity", limit: 5 })).rejects.toMatchObject({
+                                                                                    ^
+error: expect(received).rejects.toMatchObject(expected)
+
+Expected promise that rejects
+Received promise that resolved: Promise { <resolved> }
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts:100:79)
+(fail) Skill Market authority > source-aware search reports an upstream install count contract error for a malformed record [5.19ms]
+
+ 0 pass
+ 21 filtered out
+ 1 fail
+Ran 1 test across 1 file. [4.06s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts
+[1/1] DONE test/skill-market-builtin-authority.test.ts exit=1 duration=4.55s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-RjOuiL
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

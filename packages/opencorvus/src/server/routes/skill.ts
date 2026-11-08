@@ -6,7 +6,7 @@ import { Skill } from "@/skill/skill"
 import { SkillManager } from "@/skill/manager"
 import { SkillMount } from "@/skill/mounts"
 import { assertActiveProjectSession } from "../active-project-session"
-import { BAD_REQUEST_SCHEMA, errors } from "../error"
+import { BAD_REQUEST_SCHEMA, SkillMarketInputErrorResponse, errors } from "../error"
 
 async function assertInputSessionInActiveProject(input: object): Promise<void> {
   if ("sessionID" in input && typeof input.sessionID === "string") {
@@ -189,6 +189,7 @@ export function SkillRoutes() {
             content: { "application/json": { schema: resolver(SkillManager.MarketDetail) } },
           },
           ...errors(400, 502),
+          400: SkillMarketInputErrorResponse,
         },
       }),
       validator("query", SkillManager.MarketInspectInput),
@@ -206,6 +207,7 @@ export function SkillRoutes() {
             content: { "application/json": { schema: resolver(SkillManager.MarketInstallResult) } },
           },
           ...errors(400, 502),
+          400: SkillMarketInputErrorResponse,
         },
       }),
       validator("json", SkillManager.MarketInstallInput),
@@ -307,6 +309,7 @@ export function SkillRoutes() {
         description: "Remove a configured skill source from global config and delete managed installs when applicable.",
         operationId: "skill.remove",
         responses: {
+          400: SkillMarketInputErrorResponse,
           200: {
             description: "Removed skill source",
             content: {

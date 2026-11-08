@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [市场来源能力](records/2026-11/2026-11-09-skill-market-source-capabilities.md)：完整来源候选与明确的精确检查边界。
+
 - [市场工具输入适配](records/2026-11/2026-11-09-skill-market-tool-inputs.md)：三个真实工具分支到严格服务输入的边界。
 
 - [Skill Market 空搜索](records/2026-11/2026-11-09-skill-market-empty-results.md)：真实成功零项的完成反馈与查询身份。
