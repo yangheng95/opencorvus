@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [目录搜索的可见路径优先级](records/2026-11/2026-11-08-directory-search-priority.md)：真实目录索引、截断根因和公开接口验收。
+
 - [0.1.48发布与准入修复](records/2026-11/2026-11-07-release-0.1.48.md)：CI、不可变发布事实和完整原生/官网交付。
 - [输入框真实搜索匹配](records/2026-11/2026-11-07-composer-producer-matches.md)：保留中文查询生产者结果、已选引用及原顺序。
 

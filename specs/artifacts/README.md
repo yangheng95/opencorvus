@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [目录搜索优先级证据](2026-11-08-directory-search-priority/README.md)：真实接口、功能测试和桌面页面复核。
+
 - [0.1.48发布证据](2026-11-07-release-0.1.48/README.md)：准入调查、真实页面、原生及官网终态。
 - [输入框中文搜索实页](2026-11-07-composer-producer-matches/README.md)：生产者身份、前后实页及完整来源资格。
 

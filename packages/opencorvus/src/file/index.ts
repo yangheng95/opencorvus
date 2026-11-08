@@ -1840,11 +1840,12 @@ export namespace File {
     const items =
       kind === "file" ? result.files : kind === "directory" ? result.dirs : [...result.files, ...result.dirs].sort()
 
-    const searchLimit = kind === "directory" && !preferHidden ? limit * 20 : limit
-    const sorted = Array.from(fuzzysort.go(query, items, { key: searchKey, limit: searchLimit }))
+    const match = (candidates: string[]) => Array.from(fuzzysort.go(query, candidates, { key: searchKey, limit }))
       .sort((a, b) => b.score - a.score || (a.obj < b.obj ? -1 : a.obj > b.obj ? 1 : 0))
       .map((r) => r.obj)
-    const output = kind === "directory" ? sortHiddenLast(sorted).slice(0, limit) : sorted
+    const output = kind === "directory" && !preferHidden
+      ? [...match(items.filter((item) => !hidden(item))), ...match(items.filter(hidden))].slice(0, limit)
+      : match(items)
 
     log.info("search", { query, kind, results: output.length })
     return output

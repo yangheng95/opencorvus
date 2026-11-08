@@ -69,8 +69,8 @@ async function api(directory: string) {
     fetch: (request) => Instance.provide({ directory, fn: () => app.fetch(request) }),
   })
   return {
-    async search(query: string) {
-      const response = await fetch(new URL(`/find/file?${new URLSearchParams({ query, type: "file", limit: "10" })}`, server.url), {
+    async search(query: string, type: "file" | "directory" = "file", limit = 10) {
+      const response = await fetch(new URL(`/find/file?${new URLSearchParams({ query, type, limit: String(limit) })}`, server.url), {
         signal: AbortSignal.timeout(20_000),
       })
       expect(response.status).toBe(200)
@@ -92,4 +92,28 @@ test("serves each project's exact original file paths through the public search 
   const expected = [[path.join("left", "entry.txt")], [path.join("right", "entry.txt")]]
   expect(await Promise.all([leftAPI.search("entry.txt"), rightAPI.search("entry.txt")])).toEqual(expected)
   expect(await Promise.all([leftAPI.search("left/entry.txt"), rightAPI.search("right/entry.txt")])).toEqual(expected)
+})
+
+test("ranks visible directory matches before hidden matches within every result window", async () => {
+  await using project = await memoryProject("directory-search-visible-priority")
+  for (let index = 0; index < 25; index++) {
+    const directory = path.join(project.path, ".hidden", `match-${index}`)
+    await fs.mkdir(directory, { recursive: true })
+    await fs.writeFile(path.join(directory, "seed.txt"), "hidden directory\n")
+  }
+  const visible = ["m-a-t-c-h/", "m-a-t-c-h-z/"]
+  for (const directory of visible) {
+    await fs.mkdir(path.join(project.path, directory))
+    await fs.writeFile(path.join(project.path, directory, "seed.txt"), "visible directory\n")
+  }
+  const firstHidden = `${path.join(".hidden", "match-0")}/`
+  await Instance.provide({ directory: project.path, fn: async () => {
+    expect(await File.search({ query: "match", type: "directory", limit: 1 })).toEqual(visible.slice(0, 1))
+    expect(await File.search({ query: "match", type: "directory", limit: 2 })).toEqual(visible)
+    expect(await File.search({ query: "match", type: "directory", limit: 3 })).toEqual([...visible, firstHidden])
+    expect(await File.search({ query: ".hidden/match-0", type: "directory", limit: 1 })).toEqual([firstHidden])
+  } })
+  await using publicAPI = await api(project.path)
+  expect(await publicAPI.search("match", "directory", 1)).toEqual(visible.slice(0, 1))
+  expect(await publicAPI.search("match", "directory", 2)).toEqual(visible)
 })

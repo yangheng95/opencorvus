@@ -1389,7 +1389,11 @@ Its fuzzy candidates therefore have deterministic input order for equal-score
 bounded windows, independent of parallel scan arrival. Returned fuzzy results
 keep higher matching scores first and use original path order to resolve equal
 scores. File windows retain their prefix when requesting an additional result.
-Directory results then apply their existing hidden-directory preference. Empty
+Directory searches without an explicit hidden-path query rank visible and hidden
+candidate groups separately under that same bounded matcher, then compose the
+visible group first within the requested limit. A high-scoring hidden candidate
+cannot displace a matching visible directory before that preference is applied.
+Explicit hidden-path queries retain the ordinary score ranking. Empty
 queries consume that same index order and preference. Matching scores and original identities retain their existing
 contract; this does not replace score ranking with alphabetical browsing or
 promise identical ordering across host platforms.
