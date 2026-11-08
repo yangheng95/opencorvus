@@ -831,6 +831,16 @@
   user-select: none;
 }
 
+.image-preview-dialog__download-failure {
+  flex: 0 0 auto;
+  margin: var(--ui-gap-md) var(--ui-gap-xl) 0;
+}
+
+.image-preview-dialog__download-failure .oc-feedback__diagnostic {
+  max-height: min(25vh, calc(160px * var(--ui-scale)));
+  overflow: auto;
+}
+
 .image-preview-dialog__body[data-panning="true"] {
   cursor: grabbing;
 }

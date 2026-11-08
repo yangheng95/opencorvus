@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [图片原件下载反馈](2026-11-08-image-download-feedback.md)：原图下载失败、同操作恢复与键盘接续。
+
 - [媒体附件原位恢复](2026-11-08-media-preview-retry.md)：原资源重读、窄附件错误和实际页面。
 
 - [下载文件名边界调查](2026-11-08-download-filename-whitespace.md)：Unicode空白实测、方案撤回与未满足项。

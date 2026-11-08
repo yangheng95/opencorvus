@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [图片原件下载反馈证据](2026-11-08-image-download-feedback/README.md)：自有SVG、实际下载失败及恢复原字节。
+
 - [媒体失败与原位恢复证据](2026-11-08-media-preview-retry/README.md)：自有PDF、实际失败和恢复截图。
 
 - [Unicode空白下载边界证据](2026-11-08-download-filename-whitespace/README.md)：原文件、实际落盘与否证结果。

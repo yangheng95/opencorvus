@@ -209,6 +209,9 @@ export function ImagePreviewHost() {
   const [bodyGeometry, setBodyGeometry] = createSignal<ImagePreviewBodyGeometry | null>(null)
   const [copyInFlight, setCopyInFlight] = createSignal(false)
   const [downloadInFlight, setDownloadInFlight] = createSignal(false)
+  const [downloadFailure, setDownloadFailure] = createSignal<{ cause: unknown } | null>(null)
+  let downloadButtonRef: HTMLButtonElement | undefined
+  let downloadRetryRef: HTMLButtonElement | undefined
   let downloadGeneration = 0
   let downloadController: AbortController | undefined
   const [copyFeedback, setCopyFeedback] = createSignal<CopyFeedback | null>(null)
@@ -250,6 +253,7 @@ export function ImagePreviewHost() {
     downloadController?.abort()
     downloadController = undefined
     setDownloadInFlight(false)
+    setDownloadFailure(null)
     setCopyInFlight(false)
     clearCopyFeedback()
     setPanStart(null)
@@ -513,7 +517,8 @@ export function ImagePreviewHost() {
     const controller = new AbortController()
     downloadController = controller
     const current = () => generation === downloadGeneration && imagePreviewState().open &&
-      imagePreviewState().revision === preview.revision && (!authority || isApiAuthorityCurrent(authority))
+      imagePreviewRequestIsCurrent(preview.revision) && imagePreviewState().revision === preview.revision &&
+      (!authority || isApiAuthorityCurrent(authority))
     setDownloadInFlight(true)
     try {
       const src = preview.resourceUrl
@@ -527,8 +532,11 @@ export function ImagePreviewHost() {
       document.body.append(download)
       download.click()
       download.remove()
+      const retryHasFocus = downloadRetryRef === document.activeElement
+      setDownloadFailure(null)
+      if (retryHasFocus) downloadButtonRef?.focus()
     } catch (error) {
-      if (current()) reportError({ title: t("file.download"), message: t("file.load_failed", { name: preview.alt }), details: formatErrorDetails(error) })
+      if (current()) setDownloadFailure({ cause: error })
     } finally {
       if (generation === downloadGeneration) {
         downloadController = undefined
@@ -602,9 +610,11 @@ export function ImagePreviewHost() {
             size="icon"
             tone="neutral"
             data-chrome="icon-action"
-            title={t("file.download")}
-            aria-label={t("file.download")}
-            disabled={!previewSource() || downloadInFlight()}
+            title={t(downloadInFlight() ? "file.downloading" : "file.download")}
+            aria-label={t(downloadInFlight() ? "file.downloading" : "file.download")}
+            disabled={!previewSource()}
+            aria-disabled={downloadInFlight() || undefined}
+            ref={(element) => { downloadButtonRef = element }}
             onClick={() => void downloadPreviewImage()}
           >
             <Icon name="download" />
@@ -625,6 +635,32 @@ export function ImagePreviewHost() {
         </>
       }
     >
+      <Show when={downloadFailure()}>
+        {(failure) => (
+          <Feedback
+            class="image-preview-dialog__download-failure"
+            tone="error"
+            title={t("file.download_failed")}
+            details={formatErrorDetails(failure().cause)}
+            actions={
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                aria-disabled={downloadInFlight() || undefined}
+                aria-label={`${t("file.retry_download")}: ${imagePreviewState().alt || t("image_preview.title")}`}
+                ref={(element) => { downloadRetryRef = element }}
+                onClick={() => void downloadPreviewImage()}
+              >
+                {t(downloadInFlight() ? "common.retrying" : "file.retry_download")}
+              </Button>
+            }
+          >
+            {imagePreviewState().alt || t("image_preview.title")}
+          </Feedback>
+        )}
+      </Show>
       <div
         class="image-preview-dialog__body"
         data-panning={panStart() ? "true" : "false"}

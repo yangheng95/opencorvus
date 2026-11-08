@@ -3600,6 +3600,16 @@ whole-image fit, original size, copy, pan, and modified-wheel zoom remain
 behaviors of that one host; consumers cannot introduce another lightbox or
 parallel image source.
 
+Original-image download failures remain visible in that same preview window,
+with localized Feedback, complete original diagnostics and a named retry of the
+current download operation. Pending retries retain their feedback and keyboard
+focus. Successful retry returns focus to the existing header download only when
+the retry button still owns it. Preview retirement clears the result through
+the existing source/revision lifecycle; download publication retains the current
+request revision, cancellation generation and captured connection authority.
+This action feedback sits outside the image's pan surface and bounds its own
+diagnostic scrolling, keeping the image and view controls reachable.
+
 PreviewableImage reports the current image element's native decode failure with
 a compact localized description while retaining its full-preview action. The
 single image preview host reports native decode failures and original resource
