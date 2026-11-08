@@ -3,7 +3,7 @@ import { Feedback } from "./ui/Feedback"
 // Project semantic knowledge: search, inline original content, and deletion.
 // The protected Project MEMORY.MD is read separately by MemoryContextPanel.
 
-import { createSignal, createMemo, createEffect, onCleanup, untrack, For, Show } from "solid-js"
+import { batch, createSignal, createMemo, createEffect, onCleanup, untrack, For, Show } from "solid-js"
 import { localeTag, t } from "../utils/i18n"
 import type { PanelKnowledgeMemoryListResponse, PanelKnowledgeMemorySearchResponse } from "@opencorvus-ai/sdk"
 import { apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
@@ -100,7 +100,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
   const [searchMode, setSearchMode] = createSignal(false)
   const [searchQuery, setSearchQuery] = createSignal("")
   const [loading, setLoading] = createSignal(false)
-  const [errorMessage, setErrorMessage] = createSignal("")
+  const [failure, setFailure] = createSignal<{ operation: "list" | "search"; cause: unknown }>()
   const [expandedFileId, setExpandedFileId] = createSignal<string | null>(null)
   const [detailStates, setDetailStates] = createSignal<Record<string, MemoryDetailState>>({})
   const [filesSource, setFilesSource] = createSignal<MemoryFilesSource | null>(null)
@@ -161,11 +161,14 @@ export function MemoryPanel(props: MemoryPanelProps) {
       setSearchMode(false)
       setExpandedFileId(null)
       setDetailStates({})
-      setErrorMessage("")
+      setFailure(undefined)
       setLoading(false)
       return
     }
-    setLoading(true)
+    batch(() => {
+      setFailure(undefined)
+      setLoading(true)
+    })
     try {
       const data = await apiJson<PanelKnowledgeMemoryListResponse>(memoryPath("panel/knowledge/memory", directory), { authority })
       if (!ownsLoad()) return
@@ -174,7 +177,6 @@ export function MemoryPanel(props: MemoryPanelProps) {
       setSearchMode(false)
       setExpandedFileId(null)
       setDetailStates({})
-      setErrorMessage("")
     } catch (err) {
       if (ownsLoad()) {
         setFiles([])
@@ -182,7 +184,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
         setSearchMode(false)
         setExpandedFileId(null)
         setDetailStates({})
-        setErrorMessage(err instanceof Error ? err.message : String(err))
+        setFailure({ operation: "list", cause: err })
       }
     } finally {
       if (ownsLoad()) {
@@ -206,10 +208,16 @@ export function MemoryPanel(props: MemoryPanelProps) {
     const token = Symbol("memory-search")
     memoryLoadOwner = token
     const ownsSearch = () => memoryLoadOwner === token && sourceMatches(source) && searchQuery().trim() === query
-    setLoading(true)
+    batch(() => {
+      setFiles([])
+      setFilesSource(null)
+      setSearchMode(true)
+      setExpandedFileId(null)
+      setDetailStates({})
+      setFailure(undefined)
+      setLoading(true)
+    })
     try {
-      // Body-only branch — no implicit fallback to old results, every search
-      // call either succeeds or surfaces the error to the operator below.
       const results = await apiJson<PanelKnowledgeMemorySearchResponse>(memoryPath("panel/knowledge/memory/search", directory), {
         authority: source.authority,
         method: "POST",
@@ -232,25 +240,14 @@ export function MemoryPanel(props: MemoryPanelProps) {
           snippet: result.content ? result.content.slice(0, 200) : "",
         })
       }
-      setFiles([...mapped.values()])
-      setFilesSource(source)
-      setSearchMode(true)
-      setExpandedFileId(null)
-      setDetailStates({})
-      setErrorMessage("")
+      batch(() => {
+        setFiles([...mapped.values()])
+        setFilesSource(source)
+      })
     } catch (err) {
       if (!ownsSearch()) return
-      const msg = err instanceof Error ? err.message : String(err)
-      setErrorMessage(msg)
+      setFailure({ operation: "search", cause: err })
       console.error("[MemoryPanel] search failed", err)
-      void showMemoryMessage(
-        "search-failed",
-        t("memory.search_failed", { error: msg }),
-        {
-          title: t("memory.search_failed_title"),
-        },
-        () => sourceMatches(source),
-      )
     } finally {
       if (memoryLoadOwner === token && sourceMatches(source)) {
         memoryLoadOwner = null
@@ -376,7 +373,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
     setDetailStates({})
     setDeletingKeys(new Set<string>())
     setLoading(false)
-    setErrorMessage("")
+    setFailure(undefined)
     if (active) untrack(() => void loadMemory())
     onCleanup(() => {
       sourceGeneration += 1
@@ -396,7 +393,8 @@ export function MemoryPanel(props: MemoryPanelProps) {
 
   const emptyHint = createMemo(() => {
     if (loading()) return t("common.loading")
-    if (errorMessage()) return errorMessage()
+    const currentFailure = failure()
+    if (currentFailure) return t(currentFailure.operation === "search" ? "memory.search_failed_title" : "memory.load_failed")
     if (searchMode()) return t("memory.no_results")
     if (!currentDirectory()) return t("memory.none_unselected")
     return t("memory.none")
@@ -404,8 +402,11 @@ export function MemoryPanel(props: MemoryPanelProps) {
 
   const emptyState = () => {
     if (props.compact) return <div class="empty-hint">{emptyHint()}</div>
-    if (errorMessage()) return <Feedback tone="error">{emptyHint()}</Feedback>
     if (loading()) return <Feedback>{emptyHint()}</Feedback>
+    const currentFailure = failure()
+    if (currentFailure) {
+      return <Feedback tone="error" details={formatErrorDetails(currentFailure.cause)}>{emptyHint()}</Feedback>
+    }
     if (!currentDirectory()) {
       return (
         <Feedback

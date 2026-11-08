@@ -1,0 +1,127 @@
+{
+  "phase": "before",
+  "project": {
+    "id": "prj_hnTATAvB5iPRpz2gKT0k",
+    "name": "Memory Search Recovery",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b46\\project-before"
+  },
+  "results": [
+    {
+      "operation": "List original files",
+      "status": 200,
+      "requestID": "d05dc8b1-00c3-4daa-8b96-a8bcf86ee4ab",
+      "body": [
+        {
+          "id": "mem_g0VaQX5PC00o6yWi24bh",
+          "projectId": "prj_hnTATAvB5iPRpz2gKT0k",
+          "scope": "project",
+          "title": "Next original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794180155398,
+          "timeUpdated": 1794180155399
+        },
+        {
+          "id": "mem_g0VaQX5P900Sr8P2XtnI",
+          "projectId": "prj_hnTATAvB5iPRpz2gKT0k",
+          "scope": "project",
+          "title": "Earlier original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794180155395,
+          "timeUpdated": 1794180155396
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "Real query oldsearchprobe",
+      "status": 200,
+      "requestID": "cf85ce20-8ff5-4232-8330-fa29f6cdcff2",
+      "body": [
+        {
+          "chunkId": "mck_g0VaQX5PB002uQ6yiHbR",
+          "fileId": "mem_g0VaQX5P900Sr8P2XtnI",
+          "fileTitle": "Earlier original note",
+          "content": "oldsearchprobe previous original search result.",
+          "scope": "project",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "score": 0.21694252321556215,
+          "timeCreated": 1794180155397
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "Complete original file mem_g0VaQX5P900Sr8P2XtnI",
+      "status": 200,
+      "requestID": "d5e55716-94cb-42f2-8d28-12008ecdeab8",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQX5P900Sr8P2XtnI",
+          "projectId": "prj_hnTATAvB5iPRpz2gKT0k",
+          "scope": "project",
+          "title": "Earlier original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794180155395,
+          "timeUpdated": 1794180155396
+        },
+        "content": "oldsearchprobe previous original search result."
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "Real query newsearchprobe",
+      "status": 200,
+      "requestID": "07ecf13d-ea53-490d-be2d-47e47b25e8d9",
+      "body": [
+        {
+          "chunkId": "mck_g0VaQX5PD00vTQxMtaHv",
+          "fileId": "mem_g0VaQX5PC00o6yWi24bh",
+          "fileTitle": "Next original note",
+          "content": "newsearchprobe current original search result.",
+          "scope": "project",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "score": 0.21694252321556215,
+          "timeCreated": 1794180155399
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "Complete original file mem_g0VaQX5PC00o6yWi24bh",
+      "status": 200,
+      "requestID": "46cf67aa-6877-40d9-9ad8-3b9a400cc351",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQX5PC00o6yWi24bh",
+          "projectId": "prj_hnTATAvB5iPRpz2gKT0k",
+          "scope": "project",
+          "title": "Next original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794180155398,
+          "timeUpdated": 1794180155399
+        },
+        "content": "newsearchprobe current original search result."
+      },
+      "schemaValid": true
+    }
+  ],
+  "qualification": "Actual healthy HTTP list/get/search for both owned queries. The offline case is observed in the manual page after normal shutdown, with no mocked response."
+}

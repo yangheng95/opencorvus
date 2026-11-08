@@ -2066,6 +2066,11 @@ The expanded original content is a named, focusable reading region. Its current
 language names the region with the original file title; native keyboard scrolling
 and text selection remain available inside the existing content boundary. Local
 selection and focus styling do not change the application chrome or clipboard.
+Submitting a Notes search retires the previous result and its file actions under
+the existing read owner. The current operation presents localized inline failure
+with the original diagnostic details. Search failure retains the query for the
+ordinary submit action; clearing it reads the ordinary list. Reconnecting does
+not publish a result for that query until its next actual read succeeds.
 The current popup receives Escape before the settings page. Closing a Tooltip
 preserves its trigger focus and any required activity selection; another Escape
 can dismiss its enclosing menu or settings page through that owner's lifecycle.

@@ -1,0 +1,72 @@
+{
+  "phase": "after",
+  "date": "2026-11-08T23:25:49.954Z",
+  "project": {
+    "id": "prj_hiFDAsqL7Ltm6Rn38YvR",
+    "name": "Memory Search Recovery",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b46\\project-after"
+  },
+  "files": [
+    {
+      "id": "mem_g0VaQXu1300gdrPkP55S",
+      "projectId": "prj_hiFDAsqL7Ltm6Rn38YvR",
+      "scope": "project",
+      "title": "Earlier original note",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794180349945,
+      "timeUpdated": 1794180349946,
+      "query": "oldsearchprobe",
+      "content": "oldsearchprobe previous original search result."
+    },
+    {
+      "id": "mem_g0VaQXu17002gyHDQCLf",
+      "projectId": "prj_hiFDAsqL7Ltm6Rn38YvR",
+      "scope": "project",
+      "title": "Next original note",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794180349949,
+      "timeUpdated": 1794180349949,
+      "query": "newsearchprobe",
+      "content": "newsearchprobe current original search result."
+    }
+  ],
+  "searches": {
+    "oldsearchprobe": [
+      {
+        "chunkId": "mck_g0VaQXu1500kxdS31Uk7",
+        "fileId": "mem_g0VaQXu1300gdrPkP55S",
+        "fileTitle": "Earlier original note",
+        "content": "oldsearchprobe previous original search result.",
+        "scope": "project",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "score": 0.21694252321556215,
+        "timeCreated": 1794180349947
+      }
+    ],
+    "newsearchprobe": [
+      {
+        "chunkId": "mck_g0VaQXu18005n3Qsl64B",
+        "fileId": "mem_g0VaQXu17002gyHDQCLf",
+        "fileTitle": "Next original note",
+        "content": "newsearchprobe current original search result.",
+        "scope": "project",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "score": 0.21694252321556215,
+        "timeCreated": 1794180349950
+      }
+    ]
+  },
+  "qualification": "Actual isolated Memory writer and FTS. Browser failures are caused only by normal shutdown of the owned server, not injected."
+}

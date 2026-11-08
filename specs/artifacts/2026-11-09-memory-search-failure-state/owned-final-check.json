@@ -1,0 +1,87 @@
+{
+  "phases": {
+    "before": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b46\\project-before",
+      "originalNotesBytes": 51,
+      "worktreeAndGitContentExact": true,
+      "head": "dad7b7a9f49f1181be8e1467c668d6a093760597",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "databaseCounts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "memory_file": 3,
+        "memory_chunk": 3
+      },
+      "configFiles": [],
+      "originalMemory": [
+        {
+          "id": "mem_g0VaQX5P900Sr8P2XtnI",
+          "projectID": "prj_hnTATAvB5iPRpz2gKT0k",
+          "title": "Earlier original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794180155395,
+          "content": "oldsearchprobe previous original search result.",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQX5PC00o6yWi24bh",
+          "projectID": "prj_hnTATAvB5iPRpz2gKT0k",
+          "title": "Next original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794180155398,
+          "content": "newsearchprobe current original search result.",
+          "identityContentCreationExact": true
+        }
+      ]
+    },
+    "after": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b46\\project-after",
+      "originalNotesBytes": 50,
+      "worktreeAndGitContentExact": true,
+      "head": "a245c446245283cc1bd63fc3b0c4448d9e4637fa",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "databaseCounts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "memory_file": 3,
+        "memory_chunk": 3
+      },
+      "configFiles": [],
+      "originalMemory": [
+        {
+          "id": "mem_g0VaQXu1300gdrPkP55S",
+          "projectID": "prj_hiFDAsqL7Ltm6Rn38YvR",
+          "title": "Earlier original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794180349945,
+          "content": "oldsearchprobe previous original search result.",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQXu17002gyHDQCLf",
+          "projectID": "prj_hiFDAsqL7Ltm6Rn38YvR",
+          "title": "Next original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794180349949,
+          "content": "newsearchprobe current original search result.",
+          "identityContentCreationExact": true
+        }
+      ]
+    }
+  },
+  "qualification": "Original owned file/identity/content/creation contracts. Mutable host project-memory metadata is recorded by its production owner and is not compared across observations. UI accepted only manually."
+}
