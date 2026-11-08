@@ -1,0 +1,35 @@
+[
+  {
+    "url": "http://localhost:38932/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png?variant=image-preview",
+    "status": 500,
+    "requestID": "35e88d6e-081e-4631-868d-eccc6eedf521",
+    "mime": "application/json",
+    "body": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "url": "http://localhost:38932/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png?variant=screenshot-browser-thumbnail",
+    "status": 500,
+    "requestID": "3c0ebb10-3175-4423-a2d8-e0e9088d753d",
+    "mime": "application/json",
+    "body": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "url": "http://localhost:38932/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+    "status": 200,
+    "requestID": "c2c21cdb-2485-4ba0-b27e-c12e5594f9c4",
+    "mime": "image/png",
+    "bytes": 48,
+    "sourceBytesEqual": true,
+    "disposition": "inline; filename*=UTF-8''unrenderable.png"
+  }
+]

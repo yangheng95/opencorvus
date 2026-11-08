@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [图像派生错误契约](records/2026-11/2026-11-08-image-rendition-error.md)：真实转换失败、安全公开结果与原件保全。
+
 - [图片原件下载反馈](records/2026-11/2026-11-08-image-download-feedback.md)：真实原件失败、当前下载诊断与显式恢复。
 
 - [媒体附件原位恢复](records/2026-11/2026-11-08-media-preview-retry.md)：真实读取失败、诊断和同源显式重试。

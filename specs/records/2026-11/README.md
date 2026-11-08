@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [图像派生错误契约](2026-11-08-image-rendition-error.md)：两种派生的具名失败与真实HTTP合同。
+
 - [图片原件下载反馈](2026-11-08-image-download-feedback.md)：原图下载失败、同操作恢复与键盘接续。
 
 - [媒体附件原位恢复](2026-11-08-media-preview-retry.md)：原资源重读、窄附件错误和实际页面。

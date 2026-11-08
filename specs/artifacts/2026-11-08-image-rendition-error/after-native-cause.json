@@ -1,0 +1,106 @@
+[
+  {
+    "level": "error",
+    "time": "2026-11-08T09:17:32.392Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "c7457e1a-ed87-4975-9156-12a4a7fa86e1",
+      "method": "GET",
+      "path": "/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+      "statusCode": 500,
+      "error": {
+        "type": "AttachmentImageRenditionError",
+        "message": "AttachmentImageRenditionError: Unable to generate an image rendition from this attachment.: Input file contains unsupported image format",
+        "stack": "AttachmentImageRenditionError: AttachmentImageRenditionError: Unable to generate an image rendition from this attachment.\n    at imageRendition (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\attachment-store.ts:596:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\attachment.ts:217:51)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\ncaused by: Error: Input file contains unsupported image format\n    at toBuffer (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\sharp@0.35.5+0cfa9f940267aaa3\\node_modules\\sharp\\dist\\output.cjs:159:17)\n    at imageRendition (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\attachment-store.ts:594:10)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\attachment.ts:217:51)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)",
+        "data": {
+          "type": "Object",
+          "message": "Unable to generate an image rendition from this attachment.",
+          "stack": "",
+          "url": "/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+          "variant": "screenshot-browser-thumbnail"
+        },
+        "name": "AttachmentImageRenditionError"
+      }
+    },
+    "message": "request failed"
+  },
+  {
+    "level": "error",
+    "time": "2026-11-08T09:18:45.342Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "402939b1-ab40-466c-8a80-f50eaf835ad9",
+      "method": "GET",
+      "path": "/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+      "statusCode": 500,
+      "error": {
+        "type": "AttachmentImageRenditionError",
+        "message": "AttachmentImageRenditionError: Unable to generate an image rendition from this attachment.: Input file contains unsupported image format",
+        "stack": "AttachmentImageRenditionError: AttachmentImageRenditionError: Unable to generate an image rendition from this attachment.\n    at imageRendition (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\attachment-store.ts:596:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\attachment.ts:217:51)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\ncaused by: Error: Input file contains unsupported image format\n    at toBuffer (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\sharp@0.35.5+0cfa9f940267aaa3\\node_modules\\sharp\\dist\\output.cjs:159:17)\n    at imageRendition (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\attachment-store.ts:594:10)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\attachment.ts:217:51)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)",
+        "data": {
+          "type": "Object",
+          "message": "Unable to generate an image rendition from this attachment.",
+          "stack": "",
+          "url": "/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+          "variant": "image-preview"
+        },
+        "name": "AttachmentImageRenditionError"
+      }
+    },
+    "message": "request failed"
+  },
+  {
+    "level": "error",
+    "time": "2026-11-08T09:18:47.368Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "919cb980-cbab-433d-9efd-0645af827cef",
+      "method": "GET",
+      "path": "/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+      "statusCode": 500,
+      "error": {
+        "type": "AttachmentImageRenditionError",
+        "message": "AttachmentImageRenditionError: Unable to generate an image rendition from this attachment.: Input file contains unsupported image format",
+        "stack": "AttachmentImageRenditionError: AttachmentImageRenditionError: Unable to generate an image rendition from this attachment.\n    at imageRendition (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\attachment-store.ts:596:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\attachment.ts:217:51)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\ncaused by: Error: Input file contains unsupported image format\n    at toBuffer (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\sharp@0.35.5+0cfa9f940267aaa3\\node_modules\\sharp\\dist\\output.cjs:159:17)\n    at imageRendition (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\attachment-store.ts:594:10)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\attachment.ts:217:51)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)",
+        "data": {
+          "type": "Object",
+          "message": "Unable to generate an image rendition from this attachment.",
+          "stack": "",
+          "url": "/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+          "variant": "screenshot-browser-thumbnail"
+        },
+        "name": "AttachmentImageRenditionError"
+      }
+    },
+    "message": "request failed"
+  },
+  {
+    "level": "error",
+    "time": "2026-11-08T09:19:40.180Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "f38bec86-db95-473a-a1eb-1fc2d8ce2541",
+      "method": "GET",
+      "path": "/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+      "statusCode": 500,
+      "error": {
+        "type": "AttachmentImageRenditionError",
+        "message": "AttachmentImageRenditionError: Unable to generate an image rendition from this attachment.: Input file contains unsupported image format",
+        "stack": "AttachmentImageRenditionError: AttachmentImageRenditionError: Unable to generate an image rendition from this attachment.\n    at imageRendition (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\attachment-store.ts:596:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\attachment.ts:217:51)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\ncaused by: Error: Input file contains unsupported image format\n    at toBuffer (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\sharp@0.35.5+0cfa9f940267aaa3\\node_modules\\sharp\\dist\\output.cjs:159:17)\n    at imageRendition (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\storage\\attachment-store.ts:594:10)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\attachment.ts:217:51)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)",
+        "data": {
+          "type": "Object",
+          "message": "Unable to generate an image rendition from this attachment.",
+          "stack": "",
+          "url": "/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+          "variant": "screenshot-browser-thumbnail"
+        },
+        "name": "AttachmentImageRenditionError"
+      }
+    },
+    "message": "request failed"
+  }
+]

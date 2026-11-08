@@ -530,6 +530,42 @@
         ],
         "type": "object"
       },
+      "AttachmentImageRenditionError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "variant": {
+                "enum": [
+                  "screenshot-browser-thumbnail",
+                  "image-preview"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "url",
+              "variant",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AttachmentImageRenditionError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "Auth": {
         "oneOf": [
           {
@@ -23475,6 +23511,23 @@
           },
           "404": {
             "description": "Not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/AttachmentImageRenditionError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/UnknownError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Image rendition generation or attachment storage failure"
           }
         },
         "summary": "Fetch a task attachment",

@@ -31,6 +31,8 @@ import { requireRuntimePackage } from "@/runtime/package-require"
 import { withKeyedLock } from "@/util/lock"
 import { projectInteractionRowInTransaction } from "@/engine/store"
 import { ATTACHMENT_ROUTE_PREFIX, attachmentNameFromUrl } from "./attachment-reference"
+import { NamedError } from "@opencorvus-ai/util/error"
+import z from "zod"
 
 const sharp = requireRuntimePackage<typeof import("sharp", { with: { "resolution-mode": "require" } })>("sharp")
 
@@ -133,6 +135,14 @@ export namespace AttachmentStore {
     [IMAGE_PREVIEW_VARIANT]: { width: 4096, height: 4096, webp: { lossless: true, effort: 4 } },
   } as const
   export type ImageRenditionVariant = keyof typeof IMAGE_RENDITION_PROFILES
+  export const ImageRenditionError = NamedError.create(
+    "AttachmentImageRenditionError",
+    z.object({
+      url: z.string(),
+      variant: z.enum(Object.keys(IMAGE_RENDITION_PROFILES) as ImageRenditionVariant[]),
+      message: z.string(),
+    }),
+  )
 
   export const TestHooks: {
     afterVerifiedBlobStat?: (input: { projectID: string; name: string; abs: string }) => void | Promise<void>
@@ -570,16 +580,25 @@ export namespace AttachmentStore {
       }
     }
 
-    const bytes = await sharp(sourceAbs, { failOn: "error" })
-      .rotate()
-      .resize({
-        width: profile.width,
-        height: profile.height,
-        fit: "inside",
-        withoutEnlargement: true,
-      })
-      .webp(profile.webp)
-      .toBuffer()
+    let bytes: Buffer
+    try {
+      bytes = await sharp(sourceAbs, { failOn: "error" })
+        .rotate()
+        .resize({
+          width: profile.width,
+          height: profile.height,
+          fit: "inside",
+          withoutEnlargement: true,
+        })
+        .webp(profile.webp)
+        .toBuffer()
+    } catch (cause) {
+      throw new ImageRenditionError({
+        url: `${ROUTE_PREFIX}/${projectID}/${name}`,
+        variant,
+        message: "Unable to generate an image rendition from this attachment.",
+      }, { cause })
+    }
 
     await fs.mkdir(derivedDir, { recursive: true })
     await fs.writeFile(derivedAbs, bytes, { flag: "wx" }).catch(async (error: NodeJS.ErrnoException) => {

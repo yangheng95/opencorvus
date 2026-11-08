@@ -1,12 +1,84 @@
 import { afterAll, expect, test } from "bun:test"
 import { Hono } from "hono"
 import sharp from "sharp"
+import fs from "node:fs/promises"
+import path from "node:path"
 import { Instance } from "../../src/project/instance"
 import { AttachmentRoutes } from "../../src/server/routes/attachment"
 import { AttachmentStore } from "../../src/storage/attachment-store"
 import { memoryProject, resetMemoryDatabase } from "../fixture/memory"
+import { serverErrorResponse } from "../../src/server/error-handler"
 
 afterAll(resetMemoryDatabase)
+
+test("image generation reports its named HTTP failure while original bytes and storage failures retain their contracts", async () => {
+  await using project = await memoryProject()
+  await Instance.provide({
+    directory: project.path,
+    fn: async () => {
+      const app = new Hono().onError(serverErrorResponse).route("/attachment", AttachmentRoutes())
+      const server = Bun.serve({
+        hostname: "127.0.0.1",
+        port: 0,
+        fetch: (request) => Instance.provide({ directory: project.path, fn: () => app.fetch(request) }),
+      })
+      try {
+        const bytes = Buffer.from("Local QA input: intentionally invalid PNG bytes\n")
+        const upload = await fetch(new URL("/attachment?filename=broken.png", server.url), {
+          method: "POST",
+          headers: { "content-type": "image/png" },
+          body: bytes,
+        })
+        expect(upload.status).toBe(200)
+        const reference = await upload.json() as AttachmentStore.Reference
+        expect({ mime: reference.mime, size: reference.size, filename: reference.filename }).toEqual({
+          mime: "image/png", size: bytes.length, filename: "broken.png",
+        })
+        for (const variant of [AttachmentStore.IMAGE_PREVIEW_VARIANT, AttachmentStore.SCREENSHOT_BROWSER_THUMBNAIL_VARIANT]) {
+          const response = await fetch(new URL(`${reference.url}?variant=${variant}`, server.url))
+          const expected = {
+            name: "AttachmentImageRenditionError",
+            data: { url: reference.url, variant, message: "Unable to generate an image rendition from this attachment." },
+          }
+          expect({ status: response.status, mime: response.headers.get("content-type"), body: await response.json() }).toEqual({
+            status: 500, mime: "application/json", body: expected,
+          })
+          expect(response.headers.get("x-opencorvus-request-id")).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
+          let failure: unknown
+          try {
+            await AttachmentStore.imageRendition(Instance.project.id, path.basename(reference.url), variant)
+          } catch (error) {
+            failure = error
+          }
+          expect(failure).toBeInstanceOf(AttachmentStore.ImageRenditionError)
+          const error = failure as InstanceType<typeof AttachmentStore.ImageRenditionError>
+          expect(error.cause).toBeInstanceOf(Error)
+          expect(error.toObject()).toEqual(expected)
+        }
+        const original = await fetch(new URL(reference.url, server.url))
+        expect({ status: original.status, mime: original.headers.get("content-type"), disposition: original.headers.get("content-disposition"), bytes: Buffer.from(await original.arrayBuffer()) }).toEqual({
+          status: 200, mime: "image/png", disposition: "inline; filename*=UTF-8''broken.png", bytes,
+        })
+
+        const healthyBytes = await sharp({ create: { width: 2, height: 2, channels: 3, background: "#3660ff" } }).png().toBuffer()
+        const healthy = await AttachmentStore.write(Instance.project.id, healthyBytes, "image/png", "healthy.png")
+        const healthyPath = AttachmentStore.resolveAbsolute(Instance.project.id, path.basename(healthy.url))
+        if (!healthyPath) throw new Error("Expected the current project's canonical image path")
+        await fs.writeFile(path.join(path.dirname(healthyPath), ".derived"), "owned storage failure input")
+        const storageFailure = await fetch(new URL(`${healthy.url}?variant=image-preview`, server.url))
+        expect({ status: storageFailure.status, body: await storageFailure.json() }).toEqual({
+          status: 500,
+          body: { name: "UnknownError", data: { message: "Internal server error. See x-opencorvus-request-id for diagnostics." } },
+        })
+        expect(storageFailure.headers.get("x-opencorvus-request-id")).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/)
+        const healthyOriginal = await fetch(new URL(healthy.url, server.url))
+        expect({ status: healthyOriginal.status, bytes: Buffer.from(await healthyOriginal.arrayBuffer()) }).toEqual({ status: 200, bytes: healthyBytes })
+      } finally {
+        await server.stop(true)
+      }
+    },
+  })
+})
 
 test("image preview and thumbnail serve their raster profiles while preserving the canonical SVG", async () => {
   await using project = await memoryProject()

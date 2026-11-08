@@ -1,0 +1,4 @@
+{
+  "diagnostic": "HTTP GET 500 /attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png?variant=screenshot-browser-thumbnail\n\nRequest ID: f38bec86-db95-473a-a1eb-1fc2d8ce2541\n\nApiError: API 500 /attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png?variant=screenshot-browser-thumbnail: Unable to generate an image rendition from this attachment.\n    at http://localhost:38933/ui/assets/main-CI32b5Sh.js:62:149054\n\nresponse body:\n{\n  \"name\": \"AttachmentImageRenditionError\",\n  \"data\": {\n    \"url\": \"/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png\",\n    \"variant\": \"screenshot-browser-thumbnail\",\n    \"message\": \"Unable to generate an image rendition from this attachment.\"\n  }\n}",
+  "focus": "Retry preview: unrenderable.png"
+}

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [图像派生错误证据](2026-11-08-image-rendition-error/README.md)：坏PNG、实际界面诊断和原件字节。
+
 - [图片原件下载反馈证据](2026-11-08-image-download-feedback/README.md)：自有SVG、实际下载失败及恢复原字节。
 
 - [媒体失败与原位恢复证据](2026-11-08-media-preview-retry/README.md)：自有PDF、实际失败和恢复截图。

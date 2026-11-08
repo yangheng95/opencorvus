@@ -287,7 +287,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 |---|---|---|---|
 | POST | `/attachment` | Upload a conversation attachment | `attachment.create` |
 | POST | `/attachment/directory-reference` | Reference a local directory Body: `path`. | `attachment.createDirectoryReference` |
-| GET | `/attachment/{projectID}/{name}` | Fetch a task attachment | `attachment.get` |
+| GET | `/attachment/{projectID}/{name}` | Fetch a task attachment Errors: `AttachmentImageRenditionError`, `UnknownError`. | `attachment.get` |
 
 ### Panel
 

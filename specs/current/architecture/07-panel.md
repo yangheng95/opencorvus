@@ -469,6 +469,14 @@ AttachmentStore's single image-rendition pipeline and namespace cache with the
 unchanged `screenshot-browser-thumbnail` profile. Originals and metadata remain
 the canonical bytes; derived images are disposable representations. FilePart
 also owns composer thumbnail presentation, using the same image reader.
+Failures inside the shared image-generation pipeline return the named
+`AttachmentImageRenditionError` with HTTP 500, canonical source URL, requested
+variant and a stable explanation. The original native cause remains in server
+diagnostics; public data contains no native message or physical path. Generation
+includes sharp's own source reading and does not classify the input as corrupt.
+Source stat and derived-cache publication errors retain their ordinary storage
+error contract. Upload continues to preserve raw bytes independently of image
+decodability, and original downloads remain the same verified resource.
 Image preview derives its display URL from the canonical stored filename's
 media extension, matching the original attachment route. FilePart, the image
 gallery and the global preview host use that single mapping, including records

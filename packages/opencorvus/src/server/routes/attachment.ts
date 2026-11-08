@@ -9,6 +9,7 @@ import { AttachmentStore } from "@/storage/attachment-store"
 import { lazy } from "../../util/lazy"
 import { DIRECTORY_REFERENCE_MIME } from "@opencorvus-ai/transport-protocol"
 import { WORK_ARTIFACT_PROFILE_IDS, WorkArtifactProfileRegistry } from "@/work-artifact/profile-registry"
+import { NamedError } from "@opencorvus-ai/util/error"
 
 const AttachmentReference = z.object({
   sha: z.string().length(64),
@@ -181,6 +182,14 @@ export const AttachmentRoutes = lazy(() =>
         responses: {
           200: { description: "Attachment bytes" },
           404: { description: "Not found" },
+          500: {
+            description: "Image rendition generation or attachment storage failure",
+            content: {
+              "application/json": {
+                schema: resolver(z.union([AttachmentStore.ImageRenditionError.Schema, NamedError.Unknown.Schema])),
+              },
+            },
+          },
         },
       }),
       validator(

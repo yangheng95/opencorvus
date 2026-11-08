@@ -145,6 +145,15 @@ export type AssistantMessage = {
   variant?: string
 }
 
+export type AttachmentImageRenditionError = {
+  data: {
+    message: string
+    url: string
+    variant: "screenshot-browser-thumbnail" | "image-preview"
+  }
+  name: "AttachmentImageRenditionError"
+}
+
 export type Auth = OAuth | ApiAuth | WellKnownAuth
 
 export type AuthReadError = {
@@ -6844,7 +6853,13 @@ export type AttachmentGetErrors = {
    * Not found
    */
   404: unknown
+  /**
+   * Image rendition generation or attachment storage failure
+   */
+  500: AttachmentImageRenditionError | UnknownError
 }
+
+export type AttachmentGetError = AttachmentGetErrors[keyof AttachmentGetErrors]
 
 export type AttachmentGetResponses = {
   /**

@@ -1,0 +1,78 @@
+[
+  {
+    "name": "unrenderable.png",
+    "url": "http://localhost:38933/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png?variant=image-preview",
+    "status": 500,
+    "mime": "application/json",
+    "requestID": "402939b1-ab40-466c-8a80-f50eaf835ad9",
+    "body": {
+      "name": "AttachmentImageRenditionError",
+      "data": {
+        "url": "/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+        "variant": "image-preview",
+        "message": "Unable to generate an image rendition from this attachment."
+      }
+    }
+  },
+  {
+    "name": "unrenderable.png",
+    "url": "http://localhost:38933/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png?variant=screenshot-browser-thumbnail",
+    "status": 500,
+    "mime": "application/json",
+    "requestID": "919cb980-cbab-433d-9efd-0645af827cef",
+    "body": {
+      "name": "AttachmentImageRenditionError",
+      "data": {
+        "url": "/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+        "variant": "screenshot-browser-thumbnail",
+        "message": "Unable to generate an image rendition from this attachment."
+      }
+    }
+  },
+  {
+    "name": "unrenderable.png",
+    "url": "http://localhost:38933/attachment/prj_hvVE3Fru8z3LDboke0SK/b7032f48fa4e1a61ce1ada3079444be14f46758252d1a2f795c52a0652c04a2d.png",
+    "status": 200,
+    "mime": "image/png",
+    "requestID": "7b74f700-8f2b-4256-9406-9dbe12506201",
+    "bytes": 48,
+    "sourceBytesEqual": true,
+    "disposition": "inline; filename*=UTF-8''unrenderable.png"
+  },
+  {
+    "name": "original-preview.svg",
+    "url": "http://localhost:38933/attachment/prj_hvVE3Fru8z3LDboke0SK/3ce7bec40d6a058bd6b0e225f5bab53133e545a27cbb7bcfe945cdd9446b857b.svg?variant=image-preview",
+    "status": 200,
+    "mime": "image/webp",
+    "requestID": "a3fb5675-23d1-4054-9a82-a485763fe9e6",
+    "encodedBytes": 10830,
+    "decodedFormat": "WEBP",
+    "decodedSize": [
+      640,
+      320
+    ]
+  },
+  {
+    "name": "original-preview.svg",
+    "url": "http://localhost:38933/attachment/prj_hvVE3Fru8z3LDboke0SK/3ce7bec40d6a058bd6b0e225f5bab53133e545a27cbb7bcfe945cdd9446b857b.svg?variant=screenshot-browser-thumbnail",
+    "status": 200,
+    "mime": "image/webp",
+    "requestID": "3bb8e423-eecc-44b2-8d41-c4f0bffa164a",
+    "encodedBytes": 4066,
+    "decodedFormat": "WEBP",
+    "decodedSize": [
+      360,
+      180
+    ]
+  },
+  {
+    "name": "original-preview.svg",
+    "url": "http://localhost:38933/attachment/prj_hvVE3Fru8z3LDboke0SK/3ce7bec40d6a058bd6b0e225f5bab53133e545a27cbb7bcfe945cdd9446b857b.svg",
+    "status": 200,
+    "mime": "application/octet-stream",
+    "requestID": "6db59d2a-29bc-4214-a0bb-232a8da76f02",
+    "bytes": 567,
+    "sourceBytesEqual": true,
+    "disposition": "attachment; filename*=UTF-8''original-preview.svg"
+  }
+]
