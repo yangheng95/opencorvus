@@ -2252,6 +2252,14 @@ export type File = {
   status: "added" | "deleted" | "modified"
 }
 
+export type FileConflictError = {
+  data: {
+    message: string
+    path: string
+  }
+  name: "FileConflictError"
+}
+
 export type FileContent = {
   content: string
   diff?: string
@@ -2291,6 +2299,14 @@ export type FileDiff = {
   status?: "added" | "deleted" | "modified"
 }
 
+export type FileInvalidPathError = {
+  data: {
+    message: string
+    path: string
+  }
+  name: "FileInvalidPathError"
+}
+
 export type FileListingNode = {
   absolute: string
   directoryTarget: boolean
@@ -2306,6 +2322,14 @@ export type FileNode = {
   name: string
   path: string
   type: "file" | "directory"
+}
+
+export type FileNotFoundError = {
+  data: {
+    message: string
+    path: string
+  }
+  name: "FileNotFoundError"
 }
 
 export type FilePart = {
@@ -2346,10 +2370,59 @@ export type FileSource = {
   type: "file"
 }
 
+export type FileUploadConflictError = {
+  data: {
+    message: string
+    path: string
+  }
+  name: "FileUploadConflictError"
+}
+
+export type FileUploadInvalidContentError = {
+  data: {
+    message: string
+    name: string
+  }
+  name: "FileUploadInvalidContentError"
+}
+
+export type FileUploadInvalidNameError = {
+  data: {
+    message: string
+    name: string
+  }
+  name: "FileUploadInvalidNameError"
+}
+
+export type FileUploadInvalidTargetError = {
+  data: {
+    message: string
+    targetDir: string
+  }
+  name: "FileUploadInvalidTargetError"
+}
+
+export type FileWriteConflictError = {
+  data: {
+    message: string
+    path: string
+  }
+  name: "FileWriteConflictError"
+}
+
 export type FormatterStatus = {
   enabled: boolean
   extensions: Array<string>
   name: string
+}
+
+export type GitSourceEnumerationError = {
+  data: {
+    message: string
+    path: string
+    reason: "git_failure" | "protocol_error" | "linked_ancestor" | "entry_changed" | "unsupported_entry"
+  }
+  name: "GitSourceEnumerationError"
 }
 
 export type GlobalEvent = {
@@ -19024,14 +19097,13 @@ export type FileListData = {
 
 export type FileListErrors = {
   /**
-   * Directory listing failed
+   * Bad request
    */
-  500: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "UnknownError"
-  }
+  400: BadRequestError
+  /**
+   * File operation failed
+   */
+  500: UnknownError
 }
 
 export type FileListError = FileListErrors[keyof FileListErrors]
@@ -19060,23 +19132,17 @@ export type FileReadData = {
 
 export type FileReadErrors = {
   /**
-   * File not found
+   * Bad request
    */
-  404: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "FileNotFoundError"
-  }
+  400: BadRequestError
   /**
-   * File read failed
+   * File entry not found
    */
-  500: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "UnknownError"
-  }
+  404: FileNotFoundError
+  /**
+   * File operation failed
+   */
+  500: UnknownError
 }
 
 export type FileReadError = FileReadErrors[keyof FileReadErrors]
@@ -19111,36 +19177,19 @@ export type FileWriteData = {
 
 export type FileWriteErrors = {
   /**
-   * Bad request
+   * Invalid file request
    */
-  400: BadRequestError
+  400: BadRequestError | FileInvalidPathError
   /**
-   * Not found
+   * File entry not found
    */
-  404:
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "NotFoundError"
-      }
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "LogFileNotFoundError"
-      }
+  404: FileNotFoundError
   /**
    * File changed since it was loaded
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "FileWriteConflictError"
-  }
+  409: FileWriteConflictError
   /**
-   * Internal server error
+   * File operation failed
    */
   500: UnknownError
 }
@@ -19171,34 +19220,17 @@ export type FileDownloadData = {
 
 export type FileDownloadErrors = {
   /**
-   * Invalid project file path
+   * Invalid file request
    */
-  400:
-    | BadRequestError
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "FileInvalidPathError"
-      }
+  400: BadRequestError | FileInvalidPathError
   /**
-   * File not found
+   * File entry not found
    */
-  404: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "FileNotFoundError"
-  }
+  404: FileNotFoundError
   /**
-   * File download failed
+   * File operation failed
    */
-  500: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "UnknownError"
-  }
+  500: UnknownError
 }
 
 export type FileDownloadError = FileDownloadErrors[keyof FileDownloadErrors]
@@ -19227,25 +19259,17 @@ export type FileDeleteData = {
 
 export type FileDeleteErrors = {
   /**
-   * Bad request
+   * Invalid file request
    */
-  400: BadRequestError
+  400: BadRequestError | FileInvalidPathError
   /**
-   * Not found
+   * File entry not found
    */
-  404:
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "NotFoundError"
-      }
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "LogFileNotFoundError"
-      }
+  404: FileNotFoundError
+  /**
+   * File operation failed
+   */
+  500: UnknownError
 }
 
 export type FileDeleteError = FileDeleteErrors[keyof FileDeleteErrors]
@@ -19278,34 +19302,21 @@ export type FileMoveData = {
 
 export type FileMoveErrors = {
   /**
-   * Bad request
+   * Invalid file request
    */
-  400: BadRequestError
+  400: BadRequestError | FileInvalidPathError
   /**
-   * Not found
+   * File entry not found
    */
-  404:
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "NotFoundError"
-      }
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "LogFileNotFoundError"
-      }
+  404: FileNotFoundError
   /**
-   * Conflict
+   * File destination already exists
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "TaskCancellationIncompleteError"
-  }
+  409: FileConflictError
+  /**
+   * File operation failed
+   */
+  500: UnknownError
 }
 
 export type FileMoveError = FileMoveErrors[keyof FileMoveErrors]
@@ -19341,34 +19352,21 @@ export type FileCreateData = {
 
 export type FileCreateErrors = {
   /**
-   * Bad request
+   * Invalid file request
    */
-  400: BadRequestError
+  400: BadRequestError | FileInvalidPathError
   /**
-   * Not found
+   * File entry not found
    */
-  404:
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "NotFoundError"
-      }
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "LogFileNotFoundError"
-      }
+  404: FileNotFoundError
   /**
-   * Conflict
+   * File destination already exists
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "TaskCancellationIncompleteError"
-  }
+  409: FileConflictError
+  /**
+   * File operation failed
+   */
+  500: UnknownError
 }
 
 export type FileCreateError = FileCreateErrors[keyof FileCreateErrors]
@@ -19399,34 +19397,21 @@ export type FileCopyData = {
 
 export type FileCopyErrors = {
   /**
-   * Bad request
+   * Invalid file request
    */
-  400: BadRequestError
+  400: BadRequestError | FileInvalidPathError
   /**
-   * Not found
+   * File entry not found
    */
-  404:
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "NotFoundError"
-      }
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "LogFileNotFoundError"
-      }
+  404: FileNotFoundError
   /**
-   * Conflict
+   * File destination already exists
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "TaskCancellationIncompleteError"
-  }
+  409: FileConflictError
+  /**
+   * File operation failed
+   */
+  500: UnknownError
 }
 
 export type FileCopyError = FileCopyErrors[keyof FileCopyErrors]
@@ -19459,27 +19444,15 @@ export type FileReadSourceData = {
 
 export type FileReadSourceErrors = {
   /**
-   * Invalid source file request
+   * Invalid file request
    */
-  400:
-    | BadRequestError
-    | {
-        data: {
-          [key: string]: unknown
-        }
-        name: "FileInvalidPathError"
-      }
+  400: BadRequestError | FileInvalidPathError
   /**
-   * Source file not found
+   * File entry not found
    */
-  404: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "FileNotFoundError"
-  }
+  404: FileNotFoundError
   /**
-   * Internal server error
+   * File operation failed
    */
   500: UnknownError
 }
@@ -19506,6 +19479,15 @@ export type FileStatusData = {
   }
   url: "/file/status"
 }
+
+export type FileStatusErrors = {
+  /**
+   * File status failed
+   */
+  500: UnknownError | GitSourceEnumerationError
+}
+
+export type FileStatusError = FileStatusErrors[keyof FileStatusErrors]
 
 export type FileStatusResponses = {
   /**
@@ -19537,18 +19519,17 @@ export type FileUploadData = {
 
 export type FileUploadErrors = {
   /**
-   * Bad request
+   * Invalid upload request
    */
-  400: BadRequestError
+  400: BadRequestError | FileUploadInvalidTargetError | FileUploadInvalidNameError | FileUploadInvalidContentError
   /**
-   * Conflict
+   * Upload destination already exists
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "TaskCancellationIncompleteError"
-  }
+  409: FileUploadConflictError
+  /**
+   * File operation failed
+   */
+  500: UnknownError
 }
 
 export type FileUploadError = FileUploadErrors[keyof FileUploadErrors]
@@ -19581,7 +19562,11 @@ export type FindTextData = {
 
 export type FindTextErrors = {
   /**
-   * Internal server error
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * File operation failed
    */
   500: UnknownError
 }
@@ -19631,7 +19616,11 @@ export type FindFilesData = {
 
 export type FindFilesErrors = {
   /**
-   * Internal server error
+   * Bad request
+   */
+  400: BadRequestError
+  /**
+   * File operation failed
    */
   500: UnknownError
 }

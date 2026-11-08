@@ -460,19 +460,19 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 
 | Method | 路径 | 说明 | operationId |
 |---|---|---|---|
-| GET | `/file` | List files 错误: `UnknownError`. | `file.list` |
-| GET | `/file/content` | Read file 错误: `FileNotFoundError`, `UnknownError`. | `file.read` |
-| PATCH | `/file/content` | Write file 请求体: `content`, `expectedRevision`, `path`; 错误: `BadRequestError`, `FileWriteConflictError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `file.write` |
+| GET | `/file` | List files 错误: `BadRequestError`, `UnknownError`. | `file.list` |
+| GET | `/file/content` | Read file 错误: `BadRequestError`, `FileNotFoundError`, `UnknownError`. | `file.read` |
+| PATCH | `/file/content` | Write file 请求体: `content`, `expectedRevision`, `path`; 错误: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `FileWriteConflictError`, `UnknownError`. | `file.write` |
 | GET | `/file/download` | Download an original project file 错误: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.download` |
-| DELETE | `/file/item` | Delete file item 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `file.delete` |
-| PATCH | `/file/item` | Move file item 请求体: `newPath`, `path`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.move` |
-| POST | `/file/item` | Create file item 请求体: `content`, `path`, `type`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.create` |
-| POST | `/file/item/copy` | Copy file item 请求体: `newPath`, `path`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.copy` |
+| DELETE | `/file/item` | Delete file item 错误: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.delete` |
+| PATCH | `/file/item` | Move file item 请求体: `newPath`, `path`; 错误: `BadRequestError`, `FileConflictError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.move` |
+| POST | `/file/item` | Create file item 请求体: `content`, `path`, `type`; 错误: `BadRequestError`, `FileConflictError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.create` |
+| POST | `/file/item/copy` | Copy file item 请求体: `newPath`, `path`; 错误: `BadRequestError`, `FileConflictError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.copy` |
 | GET | `/file/source-content` | Read an absolute source file 错误: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.readSource` |
-| GET | `/file/status` | Get file status | `file.status` |
-| POST | `/file/upload` | Upload files 请求体: `files`, `targetDir`; 错误: `BadRequestError`, `TaskCancellationIncompleteError`. | `file.upload` |
-| GET | `/find` | Find text 错误: `UnknownError`. | `find.text` |
-| GET | `/find/file` | Find files 错误: `UnknownError`. | `find.files` |
+| GET | `/file/status` | Get file status 错误: `GitSourceEnumerationError`, `UnknownError`. | `file.status` |
+| POST | `/file/upload` | Upload files 请求体: `files`, `targetDir`; 错误: `BadRequestError`, `FileUploadConflictError`, `FileUploadInvalidContentError`, `FileUploadInvalidNameError`, `FileUploadInvalidTargetError`, `UnknownError`. | `file.upload` |
+| GET | `/find` | Find text 错误: `BadRequestError`, `UnknownError`. | `find.text` |
+| GET | `/find/file` | Find files 错误: `BadRequestError`, `UnknownError`. | `find.files` |
 
 ### Experimental
 

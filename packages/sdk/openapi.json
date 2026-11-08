@@ -7941,6 +7941,34 @@
         ],
         "type": "object"
       },
+      "FileConflictError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "FileConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "FileContent": {
         "properties": {
           "content": {
@@ -8072,6 +8100,34 @@
         ],
         "type": "object"
       },
+      "FileInvalidPathError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "FileInvalidPathError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "FileListingNode": {
         "properties": {
           "absolute": {
@@ -8135,6 +8191,34 @@
           "absolute",
           "type",
           "ignored"
+        ],
+        "type": "object"
+      },
+      "FileNotFoundError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "FileNotFoundError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
         ],
         "type": "object"
       },
@@ -8275,6 +8359,146 @@
         ],
         "type": "object"
       },
+      "FileUploadConflictError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "FileUploadConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
+      "FileUploadInvalidContentError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "FileUploadInvalidContentError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
+      "FileUploadInvalidNameError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "name",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "FileUploadInvalidNameError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
+      "FileUploadInvalidTargetError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "targetDir": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "targetDir",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "FileUploadInvalidTargetError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
+      "FileWriteConflictError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "path",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "FileWriteConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "FormatterStatus": {
         "properties": {
           "enabled": {
@@ -8294,6 +8518,45 @@
           "name",
           "extensions",
           "enabled"
+        ],
+        "type": "object"
+      },
+      "GitSourceEnumerationError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "git_failure",
+                  "protocol_error",
+                  "linked_ancestor",
+                  "entry_changed",
+                  "unsupported_entry"
+                ],
+                "type": "string"
+              }
+            },
+            "required": [
+              "reason",
+              "path",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "GitSourceEnumerationError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
         ],
         "type": "object"
       },
@@ -72635,32 +72898,25 @@
             },
             "description": "Directory entries with current in-scope directory targets"
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
           "500": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "UnknownError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/UnknownError"
                 }
               }
             },
-            "description": "Directory listing failed"
+            "description": "File operation failed"
           }
         },
         "summary": "List files",
@@ -72706,59 +72962,35 @@
             },
             "description": "File content"
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
           "404": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "FileNotFoundError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/FileNotFoundError"
                 }
               }
             },
-            "description": "File not found"
+            "description": "File entry not found"
           },
           "500": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "UnknownError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/UnknownError"
                 }
               }
             },
-            "description": "File read failed"
+            "description": "File operation failed"
           }
         },
         "summary": "Read file",
@@ -72826,85 +73058,34 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
-                }
-              }
-            },
-            "description": "Bad request"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
                   "anyOf": [
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "NotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/BadRequestError"
                     },
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "LogFileNotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/FileInvalidPathError"
                     }
                   ]
                 }
               }
             },
-            "description": "Not found"
+            "description": "Invalid file request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileNotFoundError"
+                }
+              }
+            },
+            "description": "File entry not found"
           },
           "409": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "FileWriteConflictError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/FileWriteConflictError"
                 }
               }
             },
@@ -72918,7 +73099,7 @@
                 }
               }
             },
-            "description": "Internal server error"
+            "description": "File operation failed"
           }
         },
         "summary": "Write file",
@@ -72974,84 +73155,33 @@
                       "$ref": "#/components/schemas/BadRequestError"
                     },
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "FileInvalidPathError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/FileInvalidPathError"
                     }
                   ]
                 }
               }
             },
-            "description": "Invalid project file path"
+            "description": "Invalid file request"
           },
           "404": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "FileNotFoundError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/FileNotFoundError"
                 }
               }
             },
-            "description": "File not found"
+            "description": "File entry not found"
           },
           "500": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "UnknownError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/UnknownError"
                 }
               }
             },
-            "description": "File download failed"
+            "description": "File operation failed"
           }
         },
         "summary": "Download an original project file",
@@ -73109,62 +73239,38 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
-                }
-              }
-            },
-            "description": "Bad request"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
                   "anyOf": [
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "NotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/BadRequestError"
                     },
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "LogFileNotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/FileInvalidPathError"
                     }
                   ]
                 }
               }
             },
-            "description": "Not found"
+            "description": "Invalid file request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileNotFoundError"
+                }
+              }
+            },
+            "description": "File entry not found"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnknownError"
+                }
+              }
+            },
+            "description": "File operation failed"
           }
         },
         "summary": "Delete file item",
@@ -73242,89 +73348,48 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
-                }
-              }
-            },
-            "description": "Bad request"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
                   "anyOf": [
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "NotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/BadRequestError"
                     },
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "LogFileNotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/FileInvalidPathError"
                     }
                   ]
                 }
               }
             },
-            "description": "Not found"
+            "description": "Invalid file request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileNotFoundError"
+                }
+              }
+            },
+            "description": "File entry not found"
           },
           "409": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "TaskCancellationIncompleteError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/FileConflictError"
                 }
               }
             },
-            "description": "Conflict"
+            "description": "File destination already exists"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnknownError"
+                }
+              }
+            },
+            "description": "File operation failed"
           }
         },
         "summary": "Move file item",
@@ -73393,89 +73458,48 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
-                }
-              }
-            },
-            "description": "Bad request"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
                   "anyOf": [
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "NotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/BadRequestError"
                     },
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "LogFileNotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/FileInvalidPathError"
                     }
                   ]
                 }
               }
             },
-            "description": "Not found"
+            "description": "Invalid file request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileNotFoundError"
+                }
+              }
+            },
+            "description": "File entry not found"
           },
           "409": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "TaskCancellationIncompleteError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/FileConflictError"
                 }
               }
             },
-            "description": "Conflict"
+            "description": "File destination already exists"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnknownError"
+                }
+              }
+            },
+            "description": "File operation failed"
           }
         },
         "summary": "Create file item",
@@ -73555,89 +73579,48 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
-                }
-              }
-            },
-            "description": "Bad request"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
                   "anyOf": [
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "NotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/BadRequestError"
                     },
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "LogFileNotFoundError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/FileInvalidPathError"
                     }
                   ]
                 }
               }
             },
-            "description": "Not found"
+            "description": "Invalid file request"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileNotFoundError"
+                }
+              }
+            },
+            "description": "File entry not found"
           },
           "409": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "TaskCancellationIncompleteError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/FileConflictError"
                 }
               }
             },
-            "description": "Conflict"
+            "description": "File destination already exists"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnknownError"
+                }
+              }
+            },
+            "description": "File operation failed"
           }
         },
         "summary": "Copy file item",
@@ -73692,57 +73675,23 @@
                       "$ref": "#/components/schemas/BadRequestError"
                     },
                     {
-                      "properties": {
-                        "data": {
-                          "additionalProperties": {},
-                          "propertyNames": {
-                            "type": "string"
-                          },
-                          "type": "object"
-                        },
-                        "name": {
-                          "const": "FileInvalidPathError",
-                          "type": "string"
-                        }
-                      },
-                      "required": [
-                        "name",
-                        "data"
-                      ],
-                      "type": "object"
+                      "$ref": "#/components/schemas/FileInvalidPathError"
                     }
                   ]
                 }
               }
             },
-            "description": "Invalid source file request"
+            "description": "Invalid file request"
           },
           "404": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "FileNotFoundError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/FileNotFoundError"
                 }
               }
             },
-            "description": "Source file not found"
+            "description": "File entry not found"
           },
           "500": {
             "content": {
@@ -73752,7 +73701,7 @@
                 }
               }
             },
-            "description": "Internal server error"
+            "description": "File operation failed"
           }
         },
         "summary": "Read an absolute source file",
@@ -73792,6 +73741,23 @@
               }
             },
             "description": "File status"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/UnknownError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/GitSourceEnumerationError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "File status failed"
           }
         },
         "summary": "Get file status",
@@ -73896,38 +73862,44 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/FileUploadInvalidTargetError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/FileUploadInvalidNameError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/FileUploadInvalidContentError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid upload request"
           },
           "409": {
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
-                    },
-                    "name": {
-                      "const": "TaskCancellationIncompleteError",
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  "$ref": "#/components/schemas/FileUploadConflictError"
                 }
               }
             },
-            "description": "Conflict"
+            "description": "Upload destination already exists"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UnknownError"
+                }
+              }
+            },
+            "description": "File operation failed"
           }
         },
         "summary": "Upload files",
@@ -74043,6 +74015,16 @@
             },
             "description": "Matches"
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
           "500": {
             "content": {
               "application/json": {
@@ -74051,7 +74033,7 @@
                 }
               }
             },
-            "description": "Internal server error"
+            "description": "File operation failed"
           }
         },
         "summary": "Find text",
@@ -74131,6 +74113,16 @@
             },
             "description": "File paths"
           },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadRequestError"
+                }
+              }
+            },
+            "description": "Bad request"
+          },
           "500": {
             "content": {
               "application/json": {
@@ -74139,7 +74131,7 @@
                 }
               }
             },
-            "description": "Internal server error"
+            "description": "File operation failed"
           }
         },
         "summary": "Find files",

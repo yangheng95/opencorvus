@@ -1,0 +1,35 @@
+[
+  {
+    "path": "notes.txt",
+    "bytes": 33,
+    "equals_authored_bytes": true,
+    "public_status": 200,
+    "public_content": {
+      "type": "text",
+      "content": "b20 original note\r\n原始内容\r\n",
+      "revision": "60d6c1d1947d27a9340ab6a5ff1fc3cfa93ed083675b8162967e1b0a85eeff6f"
+    }
+  },
+  {
+    "path": "source.txt",
+    "bytes": 17,
+    "equals_authored_bytes": true,
+    "public_status": 200,
+    "public_content": {
+      "type": "text",
+      "content": "b20 source bytes\n",
+      "revision": "553585141f3ca6cfbf5bc360321fc6844c94c444b7f1e56ccb02a3282ecdadbc"
+    }
+  },
+  {
+    "path": "notes-b20-after-ok.txt",
+    "bytes": 0,
+    "equals_authored_bytes": true,
+    "public_status": 200,
+    "public_content": {
+      "type": "text",
+      "content": "",
+      "revision": "50febc004e4ee4a5065be9009704fd959946610c58581d21c3adf338dcf5a086"
+    }
+  }
+]

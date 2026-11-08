@@ -1,0 +1,159 @@
+{
+  "docStatus": 200,
+  "runtimeProtocolEqualsGeneratedProtocol": true,
+  "generatedDocumentationExtension": "x-codeSamples",
+  "documentationSamples": 352,
+  "cases": [
+    {
+      "label": "create conflict",
+      "input": {
+        "method": "POST",
+        "route": "/file/item",
+        "body": {
+          "path": "notes.txt",
+          "type": "file",
+          "content": "replacement"
+        }
+      },
+      "status": 409,
+      "requestID": "5e5f34be-f6ac-4a4d-97de-9a42a67d2d22",
+      "body": {
+        "name": "FileConflictError",
+        "data": {
+          "path": "notes.txt",
+          "message": "File destination already exists: notes.txt"
+        }
+      },
+      "declaredResponse": {
+        "description": "File destination already exists",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FileConflictError"
+            }
+          }
+        }
+      },
+      "schemaAcceptsActualResponse": true,
+      "validationErrors": null
+    },
+    {
+      "label": "create invalid path",
+      "input": {
+        "method": "POST",
+        "route": "/file/item",
+        "body": {
+          "path": "../outside.txt",
+          "type": "file"
+        }
+      },
+      "status": 400,
+      "requestID": "8c6b7594-f2ff-40fb-8921-f76d5e0ac038",
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "../outside.txt",
+          "message": "Access denied: path escapes project directory"
+        }
+      },
+      "declaredResponse": {
+        "description": "Invalid file request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/BadRequestError"
+                },
+                {
+                  "$ref": "#/components/schemas/FileInvalidPathError"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "schemaAcceptsActualResponse": true,
+      "validationErrors": null
+    },
+    {
+      "label": "copy missing source",
+      "input": {
+        "method": "POST",
+        "route": "/file/item/copy",
+        "body": {
+          "path": "missing.txt",
+          "newPath": "copy.txt"
+        }
+      },
+      "status": 404,
+      "requestID": "7549afed-d87e-4fac-bc1d-da4b05bf3740",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "missing.txt",
+          "message": "File entry not found: missing.txt"
+        }
+      },
+      "declaredResponse": {
+        "description": "File entry not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FileNotFoundError"
+            }
+          }
+        }
+      },
+      "schemaAcceptsActualResponse": true,
+      "validationErrors": null
+    },
+    {
+      "label": "create request validation",
+      "input": {
+        "method": "POST",
+        "route": "/file/item",
+        "body": {
+          "path": 25,
+          "type": "file"
+        }
+      },
+      "status": 400,
+      "requestID": "33e6f20a-6943-44e3-953b-c48bda9b88ba",
+      "body": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "invalid_type",
+            "path": [
+              "path"
+            ],
+            "message": "Invalid input: expected string, received number"
+          }
+        ],
+        "success": false
+      },
+      "declaredResponse": {
+        "description": "Invalid file request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/BadRequestError"
+                },
+                {
+                  "$ref": "#/components/schemas/FileInvalidPathError"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "schemaAcceptsActualResponse": true,
+      "validationErrors": null
+    }
+  ]
+}

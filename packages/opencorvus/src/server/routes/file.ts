@@ -7,9 +7,22 @@ import z from "zod"
 import { File } from "../../file"
 import { Ripgrep } from "../../file/ripgrep"
 import { Instance } from "../../project/instance"
-import { badRequestOrNamedErrorResponse, errors, namedErrorResponse } from "../error"
+import { BAD_REQUEST_SCHEMA, errors } from "../error"
 import { lazy } from "../../util/lazy"
 import { Plugin } from "../../plugin"
+import { NamedError } from "@opencorvus-ai/util/error"
+import { GitSourceEnumerationError } from "../../util/git-source-paths"
+
+function fileErrorResponse(description: string, schema: z.ZodType) {
+  return { description, content: { "application/json": { schema: resolver(schema) } } }
+}
+
+const fileMutationErrors = {
+  400: fileErrorResponse("Invalid file request", z.union([BAD_REQUEST_SCHEMA, File.InvalidPathError.Schema])),
+  404: fileErrorResponse("File entry not found", File.EntryNotFoundError.Schema),
+  409: fileErrorResponse("File destination already exists", File.ConflictError.Schema),
+  500: fileErrorResponse("File operation failed", NamedError.Unknown.Schema),
+}
 
 const initializeFileMutationPlugins = createMiddleware(async (_c, next) => {
   await Plugin.init()
@@ -33,7 +46,8 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
-          ...errors(500),
+          ...errors(400),
+          500: fileMutationErrors[500],
         },
       }),
       validator(
@@ -67,7 +81,8 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
-          ...errors(500),
+          ...errors(400),
+          500: fileMutationErrors[500],
         },
       }),
       validator(
@@ -108,7 +123,8 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
-          500: namedErrorResponse("Directory listing failed", "UnknownError"),
+          ...errors(400),
+          500: fileMutationErrors[500],
         },
       }),
       validator(
@@ -138,8 +154,9 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
-          404: namedErrorResponse("File not found", "FileNotFoundError"),
-          500: namedErrorResponse("File read failed", "UnknownError"),
+          ...errors(400),
+          404: fileMutationErrors[404],
+          500: fileMutationErrors[500],
         },
       }),
       validator(
@@ -158,24 +175,26 @@ export const FileRoutes = lazy(() =>
       "/file/download",
       describeRoute({
         summary: "Download an original project file",
-        description: "Stream the original bytes of a project-relative file as application/octet-stream, with its canonical filename in Content-Disposition, without preview conversion or execution model initialization.",
+        description:
+          "Stream the original bytes of a project-relative file as application/octet-stream, with its canonical filename in Content-Disposition, without preview conversion or execution model initialization.",
         operationId: "file.download",
         responses: {
           200: {
             description: "Original file bytes with the canonical filename in Content-Disposition",
             content: { "application/octet-stream": { schema: { type: "string", format: "binary" } } },
           },
-          400: badRequestOrNamedErrorResponse("Invalid project file path", "FileInvalidPathError"),
-          404: namedErrorResponse("File not found", "FileNotFoundError"),
-          500: namedErrorResponse("File download failed", "UnknownError"),
+          400: fileMutationErrors[400],
+          404: fileMutationErrors[404],
+          500: fileMutationErrors[500],
         },
       }),
       validator("query", z.object({ path: z.string() })),
       async (c) => {
         const download = await File.openDownload(c.req.valid("query").path, c.req.raw.signal)
         try {
-          const filename = encodeURIComponent(download.filename).replace(/[!'()*]/g, (character) =>
-            `%${character.charCodeAt(0).toString(16).toUpperCase()}`,
+          const filename = encodeURIComponent(download.filename).replace(
+            /[!'()*]/g,
+            (character) => `%${character.charCodeAt(0).toString(16).toUpperCase()}`,
           )
           // Node and Bun declare separate ambient types for the same Web stream.
           const body = Readable.toWeb(download.stream) as unknown as ReadableStream<Uint8Array>
@@ -206,9 +225,9 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
-          400: badRequestOrNamedErrorResponse("Invalid source file request", "FileInvalidPathError"),
-          404: namedErrorResponse("Source file not found", "FileNotFoundError"),
-          ...errors(500),
+          400: fileMutationErrors[400],
+          404: fileMutationErrors[404],
+          500: fileMutationErrors[500],
         },
       }),
       validator(
@@ -239,8 +258,10 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
-          ...errors(400, 404, 500),
-          409: namedErrorResponse("File changed since it was loaded", "FileWriteConflictError"),
+          400: fileMutationErrors[400],
+          404: fileMutationErrors[404],
+          409: fileErrorResponse("File changed since it was loaded", File.WriteConflictError.Schema),
+          500: fileMutationErrors[500],
         },
       }),
       validator(
@@ -273,7 +294,7 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
-          ...errors(400, 404, 409),
+          ...fileMutationErrors,
         },
       }),
       validator("json", File.CreateRequest),
@@ -299,7 +320,7 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
-          ...errors(400, 404, 409),
+          ...fileMutationErrors,
         },
       }),
       validator("json", File.CopyRequest),
@@ -325,7 +346,7 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
-          ...errors(400, 404, 409),
+          ...fileMutationErrors,
         },
       }),
       validator("json", File.MoveRequest),
@@ -351,7 +372,9 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
-          ...errors(400, 404),
+          400: fileMutationErrors[400],
+          404: fileMutationErrors[404],
+          500: fileMutationErrors[500],
         },
       }),
       validator(
@@ -382,7 +405,17 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
-          ...errors(400, 409),
+          400: fileErrorResponse(
+            "Invalid upload request",
+            z.union([
+              BAD_REQUEST_SCHEMA,
+              File.UploadInvalidTargetError.Schema,
+              File.UploadInvalidNameError.Schema,
+              File.UploadInvalidContentError.Schema,
+            ]),
+          ),
+          409: fileErrorResponse("Upload destination already exists", File.UploadConflictError.Schema),
+          500: fileMutationErrors[500],
         },
       }),
       validator("json", File.UploadRequest),
@@ -408,6 +441,10 @@ export const FileRoutes = lazy(() =>
               },
             },
           },
+          500: fileErrorResponse(
+            "File status failed",
+            z.union([NamedError.Unknown.Schema, GitSourceEnumerationError.Schema]),
+          ),
         },
       }),
       async (c) => {

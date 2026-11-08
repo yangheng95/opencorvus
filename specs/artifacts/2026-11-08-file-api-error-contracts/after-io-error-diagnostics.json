@@ -1,0 +1,24 @@
+[
+  {
+    "level": "error",
+    "time": "2026-11-08T14:26:05.827Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "db7c6c1f-ebbc-4a2a-bea3-677855c444eb",
+      "method": "GET",
+      "path": "/file/content",
+      "statusCode": 500,
+      "error": {
+        "type": "Error",
+        "message": "EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b20\\project-after\\notes.txt'",
+        "stack": "Error: EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b20\\project-after\\notes.txt'\n    at async readFileBytes (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:702:31)\n    at async readResolvedContent (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:990:25)\n    at async read (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\file\\index.ts:1112:26)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\file.ts:170:36)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)",
+        "code": "EBUSY",
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b20\\project-after\\notes.txt",
+        "syscall": "open",
+        "errno": -4082
+      }
+    },
+    "message": "request failed"
+  }
+]

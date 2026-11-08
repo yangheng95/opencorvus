@@ -252,6 +252,12 @@ the file. FileEditorPane adopts the returned formatted body only while its submi
 draft still owns the editor; a newer draft remains intact. File creation formats
 text explicitly. Attachment saves, upload, copy, move and removal retain their
 original byte-transfer semantics; edit notifications do not mutate these files.
+File and file-search HTTP response declarations reuse the existing domain error
+schemas, including validator bad requests, file path/not-found/conflict errors,
+upload errors and ordinary internal failures. File status also publishes the
+original GitSourceEnumerationError shape. Canonical OpenAPI, generated SDK types
+and API reference derive from those declarations; they do not change runtime
+error status, payload or file mutation behavior.
 The opaque content revision and FileWriteConflictError definition are shared with
 the Tool observed-byte precondition. This extraction preserves the GUI's existing
 resource-identity/byte algorithm and response shape. Tool read receipts remain

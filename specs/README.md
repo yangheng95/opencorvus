@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件公开错误合同](records/2026-11/2026-11-08-file-api-error-contracts.md)：真实领域响应、操作声明与生成客户端一致性。
+
 - [Mission保存提示关闭焦点](records/2026-11/2026-11-08-mission-save-dismiss-focus.md)：显式关闭反馈、原创建入口和真实草稿回读。
 
 - [项目下载菜单焦点](records/2026-11/2026-11-08-ledger-download-focus.md)：忙态可聚焦入口、菜单默认回焦与实际下载。

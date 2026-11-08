@@ -204,6 +204,7 @@ import type {
   FileReadResponses,
   FileReadSourceErrors,
   FileReadSourceResponses,
+  FileStatusErrors,
   FileStatusResponses,
   FileUploadErrors,
   FileUploadResponses,
@@ -4697,7 +4698,7 @@ export class File_ extends HeyApiClient {
     options?: Options<never, ThrowOnError>,
   ) {
     const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "directory" }] }])
-    return (options?.client ?? this.client).get<FileStatusResponses, unknown, ThrowOnError>({
+    return (options?.client ?? this.client).get<FileStatusResponses, FileStatusErrors, ThrowOnError>({
       url: "/file/status",
       ...options,
       ...params,

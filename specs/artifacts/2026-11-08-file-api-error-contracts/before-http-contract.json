@@ -1,0 +1,273 @@
+{
+  "docStatus": 200,
+  "cases": [
+    {
+      "label": "create conflict",
+      "input": {
+        "method": "POST",
+        "route": "/file/item",
+        "body": {
+          "path": "notes.txt",
+          "type": "file",
+          "content": "replacement"
+        }
+      },
+      "status": 409,
+      "requestID": "926ff89d-37e2-441b-9da4-f692ebfd9701",
+      "body": {
+        "name": "FileConflictError",
+        "data": {
+          "path": "notes.txt",
+          "message": "File destination already exists: notes.txt"
+        }
+      },
+      "declaredResponse": {
+        "description": "Conflict",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "const": "TaskCancellationIncompleteError"
+                },
+                "data": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string"
+                  },
+                  "additionalProperties": {}
+                }
+              },
+              "required": [
+                "name",
+                "data"
+              ]
+            }
+          }
+        }
+      },
+      "schemaAcceptsActualResponse": false,
+      "validationErrors": [
+        {
+          "instancePath": "/name",
+          "schemaPath": "#/properties/name/const",
+          "keyword": "const",
+          "params": {
+            "allowedValue": "TaskCancellationIncompleteError"
+          },
+          "message": "must be equal to constant"
+        }
+      ]
+    },
+    {
+      "label": "create invalid path",
+      "input": {
+        "method": "POST",
+        "route": "/file/item",
+        "body": {
+          "path": "../outside.txt",
+          "type": "file"
+        }
+      },
+      "status": 400,
+      "requestID": "59b6506a-3fcd-401f-9a36-bdb51e337312",
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "../outside.txt",
+          "message": "Access denied: path escapes project directory"
+        }
+      },
+      "declaredResponse": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestError"
+            }
+          }
+        }
+      },
+      "schemaAcceptsActualResponse": false,
+      "validationErrors": [
+        {
+          "instancePath": "",
+          "schemaPath": "#/components/schemas/BadRequestError/required",
+          "keyword": "required",
+          "params": {
+            "missingProperty": "error"
+          },
+          "message": "must have required property 'error'"
+        },
+        {
+          "instancePath": "",
+          "schemaPath": "#/components/schemas/BadRequestError/required",
+          "keyword": "required",
+          "params": {
+            "missingProperty": "success"
+          },
+          "message": "must have required property 'success'"
+        },
+        {
+          "instancePath": "",
+          "schemaPath": "#/components/schemas/BadRequestError/additionalProperties",
+          "keyword": "additionalProperties",
+          "params": {
+            "additionalProperty": "name"
+          },
+          "message": "must NOT have additional properties"
+        },
+        {
+          "instancePath": "/data",
+          "schemaPath": "#/components/schemas/BadRequestError/properties/data/additionalProperties",
+          "keyword": "additionalProperties",
+          "params": {
+            "additionalProperty": "path"
+          },
+          "message": "must NOT have additional properties"
+        }
+      ]
+    },
+    {
+      "label": "copy missing source",
+      "input": {
+        "method": "POST",
+        "route": "/file/item/copy",
+        "body": {
+          "path": "missing.txt",
+          "newPath": "copy.txt"
+        }
+      },
+      "status": 404,
+      "requestID": "34f59437-911d-42e8-a6d5-caf2ec501e31",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "missing.txt",
+          "message": "File entry not found: missing.txt"
+        }
+      },
+      "declaredResponse": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "NotFoundError"
+                    },
+                    "data": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ]
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "const": "LogFileNotFoundError"
+                    },
+                    "data": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "schemaAcceptsActualResponse": false,
+      "validationErrors": [
+        {
+          "instancePath": "/name",
+          "schemaPath": "#/anyOf/0/properties/name/const",
+          "keyword": "const",
+          "params": {
+            "allowedValue": "NotFoundError"
+          },
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "/name",
+          "schemaPath": "#/anyOf/1/properties/name/const",
+          "keyword": "const",
+          "params": {
+            "allowedValue": "LogFileNotFoundError"
+          },
+          "message": "must be equal to constant"
+        },
+        {
+          "instancePath": "",
+          "schemaPath": "#/anyOf",
+          "keyword": "anyOf",
+          "params": {},
+          "message": "must match a schema in anyOf"
+        }
+      ]
+    },
+    {
+      "label": "create request validation",
+      "input": {
+        "method": "POST",
+        "route": "/file/item",
+        "body": {
+          "path": 25,
+          "type": "file"
+        }
+      },
+      "status": 400,
+      "requestID": "39c62a15-010a-4819-a213-e70fd6f9835d",
+      "body": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "invalid_type",
+            "path": [
+              "path"
+            ],
+            "message": "Invalid input: expected string, received number"
+          }
+        ],
+        "success": false
+      },
+      "declaredResponse": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/BadRequestError"
+            }
+          }
+        }
+      },
+      "schemaAcceptsActualResponse": true,
+      "validationErrors": null
+    }
+  ]
+}

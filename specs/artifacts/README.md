@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件公开错误合同证据](2026-11-08-file-api-error-contracts/README.md)：自有文件、实际错误回执和桌面恢复截图。
+
 - [Mission保存提示关闭证据](2026-11-08-mission-save-dismiss-focus/README.md)：真实关闭焦点、截图与公开reader记录。
 
 - [项目下载菜单焦点证据](2026-11-08-ledger-download-focus/README.md)：自有归档输入、实际焦点观察和截图。

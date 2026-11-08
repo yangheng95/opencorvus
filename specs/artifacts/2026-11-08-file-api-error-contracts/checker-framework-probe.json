@@ -1,0 +1,28 @@
+{
+  "runtime": "bun 1.4.3 c6da4a4d3",
+  "probe_scope": "private isolated framework test, no app/UI/credentials",
+  "before": {
+    "status": 400,
+    "body": {
+      "success": false,
+      "data": {
+        "message": "original message"
+      },
+      "error": []
+    }
+  },
+  "observed_after_asymmetric_toMatchObject": {
+    "status": 400,
+    "body": {
+      "success": false,
+      "data": {
+        "message": {}
+      },
+      "error": {}
+    }
+  },
+  "after_message_type": "object",
+  "after_error_is_array": false,
+  "probe_exit": 1,
+  "fix": "Replace nested asymmetric matchers in the new focused response tests with concrete primitive type/array assertions; retain untouched JSON for Ajv. No runtime, global runner or dependency change."
+}

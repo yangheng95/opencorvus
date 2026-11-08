@@ -460,19 +460,19 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
-| GET | `/file` | List files Errors: `UnknownError`. | `file.list` |
-| GET | `/file/content` | Read file Errors: `FileNotFoundError`, `UnknownError`. | `file.read` |
-| PATCH | `/file/content` | Write file Body: `content`, `expectedRevision`, `path`; Errors: `BadRequestError`, `FileWriteConflictError`, `LogFileNotFoundError`, `NotFoundError`, `UnknownError`. | `file.write` |
+| GET | `/file` | List files Errors: `BadRequestError`, `UnknownError`. | `file.list` |
+| GET | `/file/content` | Read file Errors: `BadRequestError`, `FileNotFoundError`, `UnknownError`. | `file.read` |
+| PATCH | `/file/content` | Write file Body: `content`, `expectedRevision`, `path`; Errors: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `FileWriteConflictError`, `UnknownError`. | `file.write` |
 | GET | `/file/download` | Download an original project file Errors: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.download` |
-| DELETE | `/file/item` | Delete file item Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `file.delete` |
-| PATCH | `/file/item` | Move file item Body: `newPath`, `path`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.move` |
-| POST | `/file/item` | Create file item Body: `content`, `path`, `type`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.create` |
-| POST | `/file/item/copy` | Copy file item Body: `newPath`, `path`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `file.copy` |
+| DELETE | `/file/item` | Delete file item Errors: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.delete` |
+| PATCH | `/file/item` | Move file item Body: `newPath`, `path`; Errors: `BadRequestError`, `FileConflictError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.move` |
+| POST | `/file/item` | Create file item Body: `content`, `path`, `type`; Errors: `BadRequestError`, `FileConflictError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.create` |
+| POST | `/file/item/copy` | Copy file item Body: `newPath`, `path`; Errors: `BadRequestError`, `FileConflictError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.copy` |
 | GET | `/file/source-content` | Read an absolute source file Errors: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.readSource` |
-| GET | `/file/status` | Get file status | `file.status` |
-| POST | `/file/upload` | Upload files Body: `files`, `targetDir`; Errors: `BadRequestError`, `TaskCancellationIncompleteError`. | `file.upload` |
-| GET | `/find` | Find text Errors: `UnknownError`. | `find.text` |
-| GET | `/find/file` | Find files Errors: `UnknownError`. | `find.files` |
+| GET | `/file/status` | Get file status Errors: `GitSourceEnumerationError`, `UnknownError`. | `file.status` |
+| POST | `/file/upload` | Upload files Body: `files`, `targetDir`; Errors: `BadRequestError`, `FileUploadConflictError`, `FileUploadInvalidContentError`, `FileUploadInvalidNameError`, `FileUploadInvalidTargetError`, `UnknownError`. | `file.upload` |
+| GET | `/find` | Find text Errors: `BadRequestError`, `UnknownError`. | `find.text` |
+| GET | `/find/file` | Find files Errors: `BadRequestError`, `UnknownError`. | `find.files` |
 
 ### Experimental
 

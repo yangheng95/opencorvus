@@ -1,0 +1,91 @@
+{
+  "product_scope": [
+    "FileRoutes response declarations from original error Schema",
+    "private repeated file response builder/map",
+    "formal SDK/OpenAPI generation",
+    "API references and current architecture"
+  ],
+  "red": {
+    "command": "bun run test test/server/file-error-contracts.test.ts",
+    "pass": 1,
+    "fail": 3,
+    "assertions": 26,
+    "exit": 1,
+    "physical_output_settlement": true
+  },
+  "green": {
+    "command": "bun run test test/server/file-error-contracts.test.ts test/server/openapi-runtime-inventory.test.ts",
+    "files": [
+      {
+        "file": "file-error-contracts.test.ts",
+        "pass": 4,
+        "assertions": 124
+      },
+      {
+        "file": "openapi-runtime-inventory.test.ts",
+        "pass": 2,
+        "assertions": 9
+      }
+    ],
+    "exit": 0,
+    "scope": "Real Hono app and filesystem/Git/Ajv local checker; not TCP or UI end-to-end"
+  },
+  "checks": {
+    "backend_typecheck": 0,
+    "sdk_formal_build": 0,
+    "sdk_typecheck": 0,
+    "strict_sdk_consumer_typecheck": 0,
+    "docs_api": "generated two canonical reference pages",
+    "docs_check": "352 ops, 26 groups",
+    "architecture_index": "20 docs"
+  },
+  "actual_tcp": {
+    "before": "3 named-domain responses violate their operation schemas; validator response conforms",
+    "after": "same 4 requests conform; runtime protocol equals generated protocol after CLI x-codeSamples enrichment is separated",
+    "io500": "actual EBUSY/open -> UnknownError500 conforms; release -> current content200"
+  },
+  "actual_ui": {
+    "before": {
+      "tab": 42,
+      "port": 38958,
+      "bundle": "main-BuKeJYrJ.js",
+      "error_requestID": "e4659f96-11ce-40a4-8dd4-a57c3a5c08be",
+      "recovered_file": "notes-b20-before-ok.txt"
+    },
+    "after": {
+      "tab": 43,
+      "port": 38959,
+      "bundle": "main-BuKeJYrJ.js",
+      "error_requestID": "51afac67-7a79-4d6f-ba2e-ac4228fea1d2",
+      "recovered_file": "notes-b20-after-ok.txt"
+    },
+    "screenshots": 7,
+    "reviewed": true,
+    "scope": "Real duplicate create409, original diagnostics, in-place locale change, new-name creation and opened empty editor"
+  },
+  "resources": {
+    "before_serve": {
+      "session": 65641,
+      "exit": 0,
+      "tab_closed": true
+    },
+    "after_serve": {
+      "session": 24933,
+      "exit": 0,
+      "tab_closed": true
+    },
+    "exclusive_lock": {
+      "session": 51529,
+      "exit": 0,
+      "disposed": true
+    }
+  },
+  "limits": [
+    "Named domain/validator/status Git error matrix checked through actual Hono/Git, not all separately through TCP/UI",
+    "Create404 after publication disappearance timing not induced; missing parent correctly400InvalidPath",
+    "UI details viewport bounded; full original text retained separately",
+    "No nonempty create initial-content UI field or new text-admission policy",
+    "No arbitrary bootstrap/plugin failures enumerated",
+    "No models/credentials; prior open acceptance boundaries persist"
+  ]
+}

@@ -1,0 +1,33 @@
+Project files
+project-before
+C:\Users\hengu\AppData\Local\Temp\opencorvus-iteration-20261108-b20\project-before
+New
+No completed file changes were confirmed.
+notes.txt: The destination already exists: notes.txt
+Details
+HTTP POST 409 file/item?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b20%5Cproject-before
+
+Request ID: e4659f96-11ce-40a4-8dd4-a57c3a5c08be
+
+ApiError: API 409 file/item?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b20%5Cproject-before: File destination already exists: notes.txt
+    at Ze (http://localhost:38958/ui/assets/main-BuKeJYrJ.js:62:146241)
+    at async e9 (http://localhost:38958/ui/assets/main-BuKeJYrJ.js:64:19674)
+    at async http://localhost:38958/ui/assets/main-BuKeJYrJ.js:271:4658
+    at async Hn (http://localhost:38958/ui/assets/main-BuKeJYrJ.js:271:1397)
+    at async Gi (http://localhost:38958/ui/assets/main-BuKeJYrJ.js:271:4554)
+
+response body:
+{
+  "name": "FileConflictError",
+  "data": {
+    "path": "notes.txt",
+    "message": "File destination already exists: notes.txt"
+  }
+}
+.opencorvus
+.gitattributes
+.gitignore
+notes.txt
+source.txt
+
+↑ ↓ Browse · ← → Folders · Enter Open

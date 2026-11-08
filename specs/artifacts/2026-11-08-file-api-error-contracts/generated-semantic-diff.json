@@ -1,0 +1,85 @@
+{
+  "changed_operations": [
+    {
+      "path": "/file",
+      "method": "get",
+      "operationID": "file.list"
+    },
+    {
+      "path": "/file/content",
+      "method": "get",
+      "operationID": "file.read"
+    },
+    {
+      "path": "/file/content",
+      "method": "patch",
+      "operationID": "file.write"
+    },
+    {
+      "path": "/file/download",
+      "method": "get",
+      "operationID": "file.download"
+    },
+    {
+      "path": "/file/item",
+      "method": "delete",
+      "operationID": "file.delete"
+    },
+    {
+      "path": "/file/item",
+      "method": "patch",
+      "operationID": "file.move"
+    },
+    {
+      "path": "/file/item",
+      "method": "post",
+      "operationID": "file.create"
+    },
+    {
+      "path": "/file/item/copy",
+      "method": "post",
+      "operationID": "file.copy"
+    },
+    {
+      "path": "/file/source-content",
+      "method": "get",
+      "operationID": "file.readSource"
+    },
+    {
+      "path": "/file/status",
+      "method": "get",
+      "operationID": "file.status"
+    },
+    {
+      "path": "/file/upload",
+      "method": "post",
+      "operationID": "file.upload"
+    },
+    {
+      "path": "/find",
+      "method": "get",
+      "operationID": "find.text"
+    },
+    {
+      "path": "/find/file",
+      "method": "get",
+      "operationID": "find.files"
+    }
+  ],
+  "components": {
+    "added": [
+      "FileConflictError",
+      "FileInvalidPathError",
+      "FileNotFoundError",
+      "FileUploadConflictError",
+      "FileUploadInvalidContentError",
+      "FileUploadInvalidNameError",
+      "FileUploadInvalidTargetError",
+      "FileWriteConflictError",
+      "GitSourceEnumerationError"
+    ],
+    "changed": [],
+    "removed": []
+  },
+  "operation_inventory_equal": true
+}
