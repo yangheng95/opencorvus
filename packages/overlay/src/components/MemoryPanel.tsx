@@ -528,7 +528,14 @@ export function MemoryPanel(props: MemoryPanelProps) {
                               <span>{t("memory.created", { value: formatDateTime(d().timeCreated) })}</span>
                               <span>{t("memory.updated", { value: formatDateTime(d().timeUpdated) })}</span>
                             </div>
-                            <pre class="memory-detail-content">{d().content || t("memory.empty_value")}</pre>
+                            <pre
+                              class="memory-detail-content"
+                              role="region"
+                              aria-label={t("memory.original_content_label", { title: d().title })}
+                              tabIndex={0}
+                            >
+                              {d().content || t("memory.empty_value")}
+                            </pre>
                           </>
                         )}
                       </Show>

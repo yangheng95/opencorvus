@@ -873,6 +873,13 @@ button.s-row:focus-visible {
   white-space: pre-wrap;
   word-break: break-word;
   color: var(--text);
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.memory-detail-content:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(-1 * var(--oc-border-width));
 }
 
 .memory-panel[data-compact="true"] .memory-detail-content {

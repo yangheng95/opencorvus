@@ -2062,6 +2062,10 @@ file ID, using that file's first ranked chunk for its score and excerpt. File
 order follows those first appearances. Expansion and deletion retain file
 identity; expansion reads the complete original file. The backend's ranked chunk
 response and the existing twenty-chunk request window retain their semantics.
+The expanded original content is a named, focusable reading region. Its current
+language names the region with the original file title; native keyboard scrolling
+and text selection remain available inside the existing content boundary. Local
+selection and focus styling do not change the application chrome or clipboard.
 The current popup receives Escape before the settings page. Closing a Tooltip
 preserves its trigger focus and any required activity selection; another Escape
 can dismiss its enclosing menu or settings page through that owner's lifecycle.

@@ -1,0 +1,85 @@
+{
+  "phase": "after",
+  "project": {
+    "id": "prj_hMUANcf3RNInku2iywMA",
+    "name": "Original Memory Reading",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b44\\project-after"
+  },
+  "results": [
+    {
+      "operation": "List original files",
+      "status": 200,
+      "requestID": "0973fead-f124-4e39-80a3-5637a3b2f047",
+      "body": [
+        {
+          "id": "mem_g0VaQOm9h00uCQeeveFs",
+          "projectId": "prj_hMUANcf3RNInku2iywMA",
+          "scope": "project",
+          "title": "Long original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794178174777,
+          "timeUpdated": 1794178174778
+        },
+        {
+          "id": "mem_g0VaQOm9c00ti52EoGix",
+          "projectId": "prj_hMUANcf3RNInku2iywMA",
+          "scope": "project",
+          "title": "Following original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794178174772,
+          "timeUpdated": 1794178174773
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "Complete original file mem_g0VaQOm9c00ti52EoGix",
+      "status": 200,
+      "requestID": "d8274bd0-7900-4969-9930-60f288807845",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQOm9c00ti52EoGix",
+          "projectId": "prj_hMUANcf3RNInku2iywMA",
+          "scope": "project",
+          "title": "Following original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794178174772,
+          "timeUpdated": 1794178174773
+        },
+        "content": "The next original note remains separately reachable."
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "Complete original file mem_g0VaQOm9h00uCQeeveFs",
+      "status": 200,
+      "requestID": "69037791-a213-4230-87d6-1816ae2d1cc9",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQOm9h00uCQeeveFs",
+          "projectId": "prj_hMUANcf3RNInku2iywMA",
+          "scope": "project",
+          "title": "Long original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794178174777,
+          "timeUpdated": 1794178174778
+        },
+        "content": "Line 001: original memory content for reading, selecting, and reference.\nLine 002: original memory content for reading, selecting, and reference.\nLine 003: original memory content for reading, selecting, and reference.\nLine 004: original memory content for reading, selecting, and reference.\nLine 005: original memory content for reading, selecting, and reference.\nLine 006: original memory content for reading, selecting, and reference.\nLine 007: original memory content for reading, selecting, and reference.\nLine 008: original memory content for reading, selecting, and reference.\nLine 009: original memory content for reading, selecting, and reference.\nLine 010: original memory content for reading, selecting, and reference.\nLine 011: original memory content for reading, selecting, and reference.\nLine 012: original memory content for reading, selecting, and reference.\nLine 013: original memory content for reading, selecting, and reference.\nLine 014: original memory content for reading, selecting, and reference.\nLine 015: original memory content for reading, selecting, and reference.\nLine 016: original memory content for reading, selecting, and reference.\nLine 017: original memory content for reading, selecting, and reference.\nLine 018: original memory content for reading, selecting, and reference.\nLine 019: original memory content for reading, selecting, and reference.\nLine 020: original memory content for reading, selecting, and reference.\nLine 021: original memory content for reading, selecting, and reference.\nLine 022: original memory content for reading, selecting, and reference.\nLine 023: original memory content for reading, selecting, and reference.\nLine 024: original memory content for reading, selecting, and reference.\nLine 025: original memory content for reading, selecting, and reference.\nLine 026: original memory content for reading, selecting, and reference.\nLine 027: original memory content for reading, selecting, and reference.\nLine 028: original memory content for reading, selecting, and reference.\nLine 029: original memory content for reading, selecting, and reference.\nLine 030: original memory content for reading, selecting, and reference.\nLine 031: original memory content for reading, selecting, and reference.\nLine 032: original memory content for reading, selecting, and reference.\nLine 033: original memory content for reading, selecting, and reference.\nLine 034: original memory content for reading, selecting, and reference.\nLine 035: original memory content for reading, selecting, and reference.\nLine 036: original memory content for reading, selecting, and reference.\nLine 037: original memory content for reading, selecting, and reference.\nLine 038: original memory content for reading, selecting, and reference.\nLine 039: original memory content for reading, selecting, and reference.\nLine 040: original memory content for reading, selecting, and reference.\nLine 041: original memory content for reading, selecting, and reference.\nLine 042: original memory content for reading, selecting, and reference.\nLine 043: original memory content for reading, selecting, and reference.\nLine 044: original memory content for reading, selecting, and reference.\nLine 045: original memory content for reading, selecting, and reference.\nLine 046: original memory content for reading, selecting, and reference.\nLine 047: original memory content for reading, selecting, and reference.\nLine 048: original memory content for reading, selecting, and reference.\nLine 049: original memory content for reading, selecting, and reference.\nLine 050: original memory content for reading, selecting, and reference.\nLine 051: original memory content for reading, selecting, and reference.\nLine 052: original memory content for reading, selecting, and reference.\nLine 053: original memory content for reading, selecting, and reference.\nLine 054: original memory content for reading, selecting, and reference.\nLine 055: original memory content for reading, selecting, and reference.\nLine 056: original memory content for reading, selecting, and reference.\nLine 057: original memory content for reading, selecting, and reference.\nLine 058: original memory content for reading, selecting, and reference.\nLine 059: original memory content for reading, selecting, and reference.\nLine 060: original memory content for reading, selecting, and reference."
+      },
+      "schemaValid": true
+    }
+  ],
+  "qualification": "Actual HTTP preserves both original file identities and complete 60-line content. Keyboard and pointer selection are accepted separately through manual interaction."
+}
