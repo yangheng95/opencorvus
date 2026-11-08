@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [下载文件名边界调查](2026-11-08-download-filename-whitespace.md)：Unicode空白实测、方案撤回与未满足项。
+
 - [终端纯文本复制与导出](2026-11-08-terminal-plain-text.md)：完整正文、单一转换实现及端到端范围。
 
 - [成功刷新说明随时间推进](2026-11-08-provider-relative-time.md)：原分钟规则与真实页面静置。
