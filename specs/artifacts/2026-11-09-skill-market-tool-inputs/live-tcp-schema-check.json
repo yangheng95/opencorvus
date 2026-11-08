@@ -1,0 +1,19 @@
+{
+  "validator": "Ajv2020",
+  "checks": [
+    {
+      "route": "/global/skill/market/search",
+      "status": 200,
+      "requestID": "e9633659-e4ff-4a76-ab3d-3716a75de3c1",
+      "schema": "valid",
+      "exactDirectToolResult": true
+    },
+    {
+      "route": "/global/skill/market/detail",
+      "status": 200,
+      "requestID": "397808f4-579c-4960-bf8a-35f2ac6148bb",
+      "schema": "valid",
+      "exactDirectToolResult": true
+    }
+  ]
+}

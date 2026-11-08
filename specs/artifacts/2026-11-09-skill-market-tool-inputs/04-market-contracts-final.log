@@ -1,0 +1,18 @@
+$ bun script/run-tests.ts test/skill-market-builtin-authority.test.ts
+[1/1] START test/skill-market-builtin-authority.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Skill Market authority > executes the runtime market search action through its strict service contract [560.65ms]
+(pass) Skill Market authority > executes the runtime market inspect action through its strict service contract [33.38ms]
+(pass) Skill Market authority > executes the runtime market install action through its strict service contract [208.46ms]
+(pass) Skill Market authority > searches, inspects, hash-pins, installs, and projects one exact skills.sh candidate through public routes [364.46ms]
+(pass) Skill Market authority > reports the first and newly downloaded digests when a candidate changes before install [68.03ms]
+(pass) Skill Market authority > keeps colliding legacy slugs as distinct canonical identities and guards target ownership [591.62ms]
+(pass) Skill Market authority > maps unsafe upstream bundle paths and offline search to the public upstream error contract [9.94ms]
+
+ 7 pass
+ 0 fail
+ 31 expect() calls
+Ran 7 tests across 1 file. [6.15s]
+[1/1] DONE test/skill-market-builtin-authority.test.ts exit=0 duration=6.64s

@@ -10,6 +10,8 @@ import { GlobalRoutes } from "@/server/routes/global"
 import { Instance } from "@/project/instance"
 import { SkillMarket } from "@/skill/market"
 import { serverErrorResponse } from "@/server/error-handler"
+import { SkillMarketTool } from "@/tool/skill-market"
+import { Tool } from "@/tool/tool"
 
 const originalFetch = globalThis.fetch
 const temporaryProjectDirectories: string[] = []
@@ -75,6 +77,76 @@ function marketFixture(input: {
 }
 
 describe.serial("Skill Market authority", () => {
+  test.each(["search", "inspect", "install"] as const)("executes the runtime market %s action through its strict service contract", async (action) => {
+    const id = `opencorvus-tests/market-fixtures/tool-${action}-${crypto.randomUUID()}`
+    const name = `market-tool-${action}-${crypto.randomUUID()}`
+    marketFixture({ id, name })
+    const before = await Config.getGlobal()
+    let installedPath = ""
+    try {
+      const tool = await SkillMarketTool.init()
+      const context: Tool.Context = {
+        sessionID: "market-tool-contract-session",
+        messageID: "market-tool-contract-message",
+        agent: "market-tool-contract",
+        abort: new AbortController().signal,
+        messages: [],
+        executionSurface: Tool.executionSurface([SkillMarketTool.id], []),
+        extra: { projectID: "market-tool-contract-project" },
+        metadata() {},
+      }
+      if (action === "search") {
+        const result = await tool.execute({ action, query: "  exact  ", limit: 5 }, context)
+        expect(result.metadata).toMatchObject({ action, query: "exact", count: 1 })
+        expect(JSON.parse(result.output).results).toEqual([
+          {
+            id,
+            skill_id: id.split("/")[2],
+            name,
+            source: "opencorvus-tests/market-fixtures",
+            installs: 42,
+            homepage: `https://skills.sh/${id}`,
+            repository: "https://github.com/opencorvus-tests/market-fixtures",
+            installed: false,
+          },
+        ])
+        return
+      }
+      const inspected = await SkillManager.inspectMarket({ id })
+      if (action === "inspect") {
+        const result = await tool.execute({ action, id }, context)
+        expect(result.metadata).toMatchObject({ action, id, hash: inspected.hash, risk: "medium", count: 1 })
+        expect(JSON.parse(result.output)).toEqual(inspected)
+        return
+      }
+      const result = await tool.execute({ action, id, expected_hash: inspected.hash, policy: "deny" }, context)
+      const installed = JSON.parse(result.output) as { path: string }
+      installedPath = installed.path
+      expect(result.metadata).toMatchObject({ action, id, hash: inspected.hash, available: "next_turn", count: 1 })
+      expect(installed).toMatchObject({ id, name, hash: inspected.hash, policy: "deny", available: "next_turn" })
+      expect(JSON.parse(await readFile(path.join(installedPath, ".opencorvus-skill-source.json"), "utf8"))).toMatchObject({
+        kind: "market",
+        market_id: id,
+        hash: inspected.hash,
+        source: "https://github.com/opencorvus-tests/market-fixtures",
+      })
+      expect(await readFile(path.join(installedPath, "references/guide.md"), "utf8")).toBe(
+        "# Reviewed guide\n\nUse exact evidence.\n",
+      )
+    } finally {
+      if (installedPath) {
+        const relative = path.relative(SkillManager.managedRoot(), path.resolve(installedPath))
+        if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) {
+          throw new Error(`Market fixture target escaped the isolated managed root: ${installedPath}`)
+        }
+        await SkillManager.remove({ source: id, kind: "market" })
+      }
+      await Config.writeGlobal(before)
+      await SkillManager.refreshDiscoveryState()
+      await Instance.disposeAll()
+    }
+  })
+
   test("searches, inspects, hash-pins, installs, and projects one exact skills.sh candidate through public routes", async () => {
     const id = `opencorvus-tests/market-fixtures/exact-${crypto.randomUUID()}`
     const name = `market-exact-${crypto.randomUUID()}`

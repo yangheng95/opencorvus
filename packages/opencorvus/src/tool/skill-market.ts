@@ -36,7 +36,7 @@ export const SkillMarketTool = Tool.define(SKILL_MARKET_TOOL_ID, {
   async execute(params) {
     const input = Parameters.parse(params)
     if (input.action === "search") {
-      const results = await SkillManager.searchMarket(input)
+      const results = await SkillManager.searchMarket({ query: input.query, limit: input.limit })
       return {
         title: `Skill Market search: ${input.query}`,
         metadata: {
@@ -52,7 +52,7 @@ export const SkillMarketTool = Tool.define(SKILL_MARKET_TOOL_ID, {
       }
     }
     if (input.action === "inspect") {
-      const detail = await SkillManager.inspectMarket(input)
+      const detail = await SkillManager.inspectMarket({ id: input.id })
       return {
         title: `Skill Market candidate: ${detail.name}`,
         metadata: {
@@ -67,7 +67,11 @@ export const SkillMarketTool = Tool.define(SKILL_MARKET_TOOL_ID, {
         output: JSON.stringify(detail, null, 2),
       }
     }
-    const installed = await SkillManager.installMarket(input)
+    const installed = await SkillManager.installMarket({
+      id: input.id,
+      expected_hash: input.expected_hash,
+      policy: input.policy,
+    })
     return {
       title: `Installed Skill: ${installed.name}`,
       metadata: {

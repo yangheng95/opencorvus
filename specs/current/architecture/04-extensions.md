@@ -223,6 +223,8 @@ Skill Tool surface 不热更新。`/global/skill/install` 与项目安装路由�
 `SkillManager.install` owner。Skill mount matrix、project-local
 file/folder/ZIP import 和 MCP（Model Context Protocol，模型上下文协议）仍要求明确项目目录，不能因
 市场全局化而变成第二份全局投影。
+Tool的action属于其选择契约，三个分支向共享严格服务仅投影各自query/limit、id或id/expected_hash/policy；
+原工具输入和结果保留action，服务输入不接收该选择字段，不以放宽严格校验或改变prompt适配此边界。
 
 ## Expert Squad Package —— Agent 能力包
 

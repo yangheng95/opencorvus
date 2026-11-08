@@ -1,0 +1,105 @@
+$ bun script/run-tests.ts test/skill-market-builtin-authority.test.ts
+[1/1] START test/skill-market-builtin-authority.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Skill Market authority > executes the runtime market search action through its strict service contract [360.43ms]
+(pass) Skill Market authority > executes the runtime market inspect action through its strict service contract [37.44ms]
+(pass) Skill Market authority > executes the runtime market install action through its strict service contract [199.66ms]
+2882 |         ? path.join(Global.Path.home, configuredPath.slice(2))
+2883 |         : configuredPath
+2884 |       const resolved = path.isAbsolute(expanded) ? expanded : path.resolve(Global.Path.config, expanded)
+2885 |       if (Filesystem.contains(managedSkillRoot, resolved) && !(await Filesystem.isDir(resolved))) {
+2886 |         const { ConfigCandidateValidationError } = await import("@/config/candidate-validation")
+2887 |         throw new ConfigCandidateValidationError({
+                     ^
+ConfigCandidateValidationError: ConfigCandidateValidationError: Managed Skill path does not exist: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-ZCUYIr\test-21364-tff0Sd\runtime-root\config\skills-market\skills-sh\opencorvus-tests\market-fixtures\tool-install-d1a6d005-d8e7-4428-a7e0-29c36ab488b8
+ data: {
+  message: "Managed Skill path does not exist: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ZCUYIr\\test-21364-tff0Sd\\runtime-root\\config\\skills-market\\skills-sh\\opencorvus-tests\\market-fixtures\\tool-install-d1a6d005-d8e7-4428-a7e0-29c36ab488b8",
+},
+
+      at commitGlobalCandidate (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2887:15)
+      at async commit (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:3038:19)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2835:40)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2786:26)
+2882 |         ? path.join(Global.Path.home, configuredPath.slice(2))
+2883 |         : configuredPath
+2884 |       const resolved = path.isAbsolute(expanded) ? expanded : path.resolve(Global.Path.config, expanded)
+2885 |       if (Filesystem.contains(managedSkillRoot, resolved) && !(await Filesystem.isDir(resolved))) {
+2886 |         const { ConfigCandidateValidationError } = await import("@/config/candidate-validation")
+2887 |         throw new ConfigCandidateValidationError({
+                     ^
+ConfigCandidateValidationError: ConfigCandidateValidationError: Managed Skill path does not exist: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-ZCUYIr\test-21364-tff0Sd\runtime-root\config\skills-market\skills-sh\opencorvus-tests\market-fixtures\tool-install-d1a6d005-d8e7-4428-a7e0-29c36ab488b8
+ data: {
+  message: "Managed Skill path does not exist: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ZCUYIr\\test-21364-tff0Sd\\runtime-root\\config\\skills-market\\skills-sh\\opencorvus-tests\\market-fixtures\\tool-install-d1a6d005-d8e7-4428-a7e0-29c36ab488b8",
+},
+
+      at commitGlobalCandidate (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2887:15)
+      at async commit (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:3038:19)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2835:40)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2786:26)
+
+2882 |         ? path.join(Global.Path.home, configuredPath.slice(2))
+2883 |         : configuredPath
+2884 |       const resolved = path.isAbsolute(expanded) ? expanded : path.resolve(Global.Path.config, expanded)
+2885 |       if (Filesystem.contains(managedSkillRoot, resolved) && !(await Filesystem.isDir(resolved))) {
+2886 |         const { ConfigCandidateValidationError } = await import("@/config/candidate-validation")
+2887 |         throw new ConfigCandidateValidationError({
+                     ^
+ConfigCandidateValidationError: ConfigCandidateValidationError: Managed Skill path does not exist: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-ZCUYIr\test-21364-tff0Sd\runtime-root\config\skills-market\skills-sh\opencorvus-tests\market-fixtures\tool-install-d1a6d005-d8e7-4428-a7e0-29c36ab488b8
+ data: {
+  message: "Managed Skill path does not exist: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ZCUYIr\\test-21364-tff0Sd\\runtime-root\\config\\skills-market\\skills-sh\\opencorvus-tests\\market-fixtures\\tool-install-d1a6d005-d8e7-4428-a7e0-29c36ab488b8",
+},
+
+      at commitGlobalCandidate (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2887:15)
+      at async commit (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:3038:19)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2835:40)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2786:26)
+(fail) Skill Market authority > searches, inspects, hash-pins, installs, and projects one exact skills.sh candidate through public routes [143.73ms]
+2882 |         ? path.join(Global.Path.home, configuredPath.slice(2))
+2883 |         : configuredPath
+2884 |       const resolved = path.isAbsolute(expanded) ? expanded : path.resolve(Global.Path.config, expanded)
+2885 |       if (Filesystem.contains(managedSkillRoot, resolved) && !(await Filesystem.isDir(resolved))) {
+2886 |         const { ConfigCandidateValidationError } = await import("@/config/candidate-validation")
+2887 |         throw new ConfigCandidateValidationError({
+                     ^
+ConfigCandidateValidationError: ConfigCandidateValidationError: Managed Skill path does not exist: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-ZCUYIr\test-21364-tff0Sd\runtime-root\config\skills-market\skills-sh\opencorvus-tests\market-fixtures\tool-install-d1a6d005-d8e7-4428-a7e0-29c36ab488b8
+ data: {
+  message: "Managed Skill path does not exist: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ZCUYIr\\test-21364-tff0Sd\\runtime-root\\config\\skills-market\\skills-sh\\opencorvus-tests\\market-fixtures\\tool-install-d1a6d005-d8e7-4428-a7e0-29c36ab488b8",
+},
+
+      at commitGlobalCandidate (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2887:15)
+      at async commit (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:3038:19)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2835:40)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2786:26)
+(fail) Skill Market authority > reports the first and newly downloaded digests when a candidate changes before install [45.92ms]
+2882 |         ? path.join(Global.Path.home, configuredPath.slice(2))
+2883 |         : configuredPath
+2884 |       const resolved = path.isAbsolute(expanded) ? expanded : path.resolve(Global.Path.config, expanded)
+2885 |       if (Filesystem.contains(managedSkillRoot, resolved) && !(await Filesystem.isDir(resolved))) {
+2886 |         const { ConfigCandidateValidationError } = await import("@/config/candidate-validation")
+2887 |         throw new ConfigCandidateValidationError({
+                     ^
+ConfigCandidateValidationError: ConfigCandidateValidationError: Managed Skill path does not exist: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-ZCUYIr\test-21364-tff0Sd\runtime-root\config\skills-market\skills-sh\opencorvus-tests\market-fixtures\tool-install-d1a6d005-d8e7-4428-a7e0-29c36ab488b8
+ data: {
+  message: "Managed Skill path does not exist: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-test-run-ZCUYIr\\test-21364-tff0Sd\\runtime-root\\config\\skills-market\\skills-sh\\opencorvus-tests\\market-fixtures\\tool-install-d1a6d005-d8e7-4428-a7e0-29c36ab488b8",
+},
+
+      at commitGlobalCandidate (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2887:15)
+      at async commit (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:3038:19)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2835:40)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\config\config.ts:2786:26)
+(fail) Skill Market authority > keeps colliding legacy slugs as distinct canonical identities and guards target ownership [39.60ms]
+(pass) Skill Market authority > maps unsafe upstream bundle paths and offline search to the public upstream error contract [8.99ms]
+
+ 4 pass
+ 3 fail
+ 25 expect() calls
+Ran 7 tests across 1 file. [5.09s]
+[1/1] DONE test/skill-market-builtin-authority.test.ts exit=1 duration=5.61s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-ZCUYIr
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

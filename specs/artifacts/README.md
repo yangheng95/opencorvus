@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [市场工具输入证据](2026-11-09-skill-market-tool-inputs/README.md)：三个入口复现、真实读取与页面复核。
+
 - [Skill Market 空搜索证据](2026-11-09-skill-market-empty-results/README.md)：真实空结果、命中、错误及人工截图。
 
 - [Skill Market 本地化证据](2026-11-09-skill-market-locale/README.md)：公开接口与真实桌面截图。

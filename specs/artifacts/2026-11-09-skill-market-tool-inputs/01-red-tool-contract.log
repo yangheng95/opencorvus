@@ -1,0 +1,50 @@
+$ bun script/run-tests.ts test/skill-market-builtin-authority.test.ts "--test-name-pattern=executes the runtime market"
+[1/1] START test/skill-market-builtin-authority.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "action"
+    ],
+    "path": [],
+    "message": "Unrecognized key: \"action\""
+  }
+]
+(fail) Skill Market authority > executes the runtime market search action through its strict service contract [370.30ms]
+ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "action"
+    ],
+    "path": [],
+    "message": "Unrecognized key: \"action\""
+  }
+]
+(fail) Skill Market authority > executes the runtime market inspect action through its strict service contract [32.41ms]
+ZodError: [
+  {
+    "code": "unrecognized_keys",
+    "keys": [
+      "action"
+    ],
+    "path": [],
+    "message": "Unrecognized key: \"action\""
+  }
+]
+(fail) Skill Market authority > executes the runtime market install action through its strict service contract [20.12ms]
+
+ 0 pass
+ 4 filtered out
+ 3 fail
+Ran 3 tests across 1 file. [6.04s]
+[1/1] DONE test/skill-market-builtin-authority.test.ts exit=1 duration=6.57s
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\skill-market-builtin-authority.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-brGFSV
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1
