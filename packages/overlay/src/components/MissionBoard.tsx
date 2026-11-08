@@ -20,6 +20,7 @@ import { ContextMenu } from "./ui/ContextMenu"
 import { Icon } from "./ui/Icon"
 import { ComboboxControl } from "./ui/ComboboxControl"
 import { matchesSearchTerms } from "../services/text-search"
+import { useNowTick } from "../services/clock"
 import { SearchField } from "./ui/SearchField"
 import { Feedback } from "./ui/Feedback"
 import { appStore } from "../store/app"
@@ -100,6 +101,7 @@ function MissionBoardCard(props: {
   onEdit: () => void
   onDelete: () => void
 }) {
+  const now = useNowTick()
   const taskCounts = createMemo(() =>
     props.mission.tasks.reduce(
       (counts, task) => {
@@ -175,7 +177,7 @@ function MissionBoardCard(props: {
           </Show>
           <span class="mission-board-card__identity">
             <time datetime={new Date(props.mission.updated).toISOString()} title={detailStamp(props.mission.updated)}>
-              {relativeTime(props.mission.updated)}
+              {relativeTime(props.mission.updated, now())}
             </time>
           </span>
           <Show when={props.mission.tasks.length > 0}>

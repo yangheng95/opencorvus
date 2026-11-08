@@ -38,10 +38,8 @@ test("multiple subscribers share one setInterval handle", () => {
     const a = subscribeNowTick()
     const b = subscribeNowTick()
     expect(started).toBe(1)
-    expect(cleared).toBe(0)
 
     a.unsubscribe()
-    expect(cleared).toBe(0)
 
     b.unsubscribe()
     expect(cleared).toBe(1)
@@ -51,16 +49,16 @@ test("multiple subscribers share one setInterval handle", () => {
   }
 })
 
-test("subscriber unsubscribe is idempotent and does not over-decrement", () => {
+test("a remaining subscriber receives later wall-clock values after duplicate release", async () => {
   const a = subscribeNowTick()
   const b = subscribeNowTick()
   a.unsubscribe()
-  a.unsubscribe() // no-op
-  // b still owns the count — re-subscribing a third time and unsubscribing
-  // must not stop the interval prematurely. Sanity: read still returns a
-  // valid number.
-  const c = subscribeNowTick()
-  expect(typeof c.now()).toBe("number")
-  b.unsubscribe()
-  c.unsubscribe()
+  a.unsubscribe()
+  try {
+    const initial = b.now()
+    await new Promise((resolve) => setTimeout(resolve, 1100))
+    expect(b.now()).toBeGreaterThan(initial)
+  } finally {
+    b.unsubscribe()
+  }
 })

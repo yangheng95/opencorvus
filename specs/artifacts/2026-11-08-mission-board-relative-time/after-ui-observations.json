@@ -1,0 +1,65 @@
+[
+  {
+    "phase": "after-initial-list",
+    "observedAt": "2026-11-08T15:17:00.173Z",
+    "scripts": [
+      "http://localhost:38963/ui/assets/main-LHPnVMSt.js"
+    ],
+    "time": [
+      {
+        "datetime": "2026-11-08T15:16:53.216Z",
+        "text": "6s ago",
+        "title": "Nov 08, 2026, 11:16 PM"
+      }
+    ],
+    "visibility": "visible"
+  },
+  {
+    "phase": "after-idle-list-minute",
+    "observedAt": "2026-11-08T15:18:18.171Z",
+    "time": [
+      {
+        "datetime": "2026-11-08T15:16:53.216Z",
+        "text": "1m ago",
+        "title": "Nov 08, 2026, 11:16 PM"
+      }
+    ],
+    "visibility": "visible"
+  },
+  {
+    "phase": "after-idle-list-second-minute",
+    "observedAt": "2026-11-08T15:19:03.725Z",
+    "time": [
+      {
+        "datetime": "2026-11-08T15:16:53.216Z",
+        "text": "2m ago",
+        "title": "Nov 08, 2026, 11:16 PM"
+      }
+    ],
+    "visibility": "visible"
+  },
+  {
+    "phase": "after-board-zh-initial",
+    "observedAt": "2026-11-08T15:19:23.130Z",
+    "time": [
+      {
+        "datetime": "2026-11-08T15:16:53.216Z",
+        "text": "2 分钟前",
+        "title": "2026年11月08日 23:16"
+      }
+    ],
+    "visibility": "visible"
+  },
+  {
+    "phase": "after-board-zh-idle",
+    "observedAt": "2026-11-08T15:19:55.200Z",
+    "time": [
+      {
+        "datetime": "2026-11-08T15:16:53.216Z",
+        "text": "3 分钟前",
+        "title": "2026年11月08日 23:16"
+      }
+    ],
+    "visibility": "visible"
+  }
+]

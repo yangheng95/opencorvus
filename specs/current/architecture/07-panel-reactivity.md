@@ -41,6 +41,14 @@ stays visible, and reuse that clock's hidden pause and immediate visible resume.
 The timestamp component's lifetime owns the subscription; no success label means
 no subscription, and elapsed time never changes the accepted `fetchedAt`.
 
+Mission board cards use the same shared wall-clock tick for their existing
+localized relative update labels in both List and Board layouts. Their original
+`updated`, absolute `datetime` and full-date title retain the producer's values;
+elapsed display time changes no record, ordering or execution state. Card scope
+cleanup releases its subscription when the card unmounts. Switching the primary
+surface only hides the retained board, so those mounted cards keep subscribing;
+document visibility continues to own the shared clock's pause and resume.
+
 Chat, Work and Mission find-in-conversation reads the complete project-scoped
 Session snapshot; Task reads its existing complete project-scoped transcript
 with every participant's original Session identity. One message-array validator

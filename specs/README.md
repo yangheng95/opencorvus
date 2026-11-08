@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Mission看板静置时间](records/2026-11/2026-11-08-mission-board-relative-time.md)：真实可见墙钟观察、共享订阅和原更新时间。
+
 - [匿名项目转换合同](records/2026-11/2026-11-08-project-promotion-contracts.md)：真实转换错误、生成声明与诊断键盘调查。
 
 - [文件公开错误合同](records/2026-11/2026-11-08-file-api-error-contracts.md)：真实领域响应、操作声明与生成客户端一致性。

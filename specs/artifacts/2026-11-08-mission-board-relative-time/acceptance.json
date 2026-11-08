@@ -1,0 +1,73 @@
+{
+  "batch": 22,
+  "before": {
+    "bundle": "main-BuKeJYrJ.js",
+    "recordUnchanged": true,
+    "continuousVisibleSeconds": 72.446,
+    "label": "just now",
+    "recordAgeSeconds": 85.267
+  },
+  "after": {
+    "bundle": "main-LHPnVMSt.js",
+    "recordUnchanged": true,
+    "englishList": [
+      "6s ago",
+      "1m ago",
+      "2m ago"
+    ],
+    "chineseBoard": [
+      "2 分钟前",
+      "3 分钟前"
+    ],
+    "absoluteDatetime": "2026-11-08T15:16:53.216Z",
+    "englishTitle": "Nov 08, 2026, 11:16 PM",
+    "chineseTitle": "2026年11月08日 23:16",
+    "firstContinuousVisibleSeconds": 77.998,
+    "totalEnglishListVisibleSeconds": 123.552
+  },
+  "ui": {
+    "screenshotsViewed": 8,
+    "automatedUiTests": 0,
+    "normalDevelopmentPage": true
+  },
+  "positiveServiceChecker": {
+    "file": "test/services-clock.test.ts",
+    "passed": 3,
+    "assertions": 5,
+    "realWallClock": true
+  },
+  "checks": {
+    "overlayTypes": true,
+    "locales": {
+      "count": 2,
+      "keys": 2921
+    },
+    "normalBuild": true,
+    "buildSeconds": 66,
+    "rendererSurface": true,
+    "docsCheck": true,
+    "architectureIndex": true,
+    "independentDiffReview": "no required corrections"
+  },
+  "scope": {
+    "product": "MissionBoardCard shared clock subscription and existing relativeTime now argument",
+    "clockImplementationChanged": false,
+    "persistedRecordsChangedByElapsedDisplay": false
+  },
+  "modelRequests": 0,
+  "credentialsUsed": false,
+  "notQualified": [
+    "real document hidden/resume transition",
+    "hour/day/week transitions",
+    "Provider/Sol E2E authorization unanswered",
+    "other relativeTime consumers"
+  ],
+  "resources": {
+    "beforeServerExit": 0,
+    "afterServerExit": 0,
+    "tabsClosed": [
+      46,
+      47
+    ]
+  }
+}
