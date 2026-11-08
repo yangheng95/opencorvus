@@ -73079,11 +73079,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/FileInvalidPathError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid file request"
           },
           "404": {
             "content": {
@@ -73153,11 +73160,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/FileInvalidPathError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid file request"
           },
           "404": {
             "content": {

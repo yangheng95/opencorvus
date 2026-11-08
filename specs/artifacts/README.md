@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [读取路径拒绝证据](2026-11-09-file-read-path-errors/README.md)：真实响应、原文字节和桌面诊断。
+
 - [目录读取错误证据](2026-11-09-directory-read-errors/README.md)：真实目录读取、协议响应与人工截图。
 
 - [新建文件夹键盘证据](2026-11-09-folder-create-focus/README.md)：真实目录页面、截图和原文。

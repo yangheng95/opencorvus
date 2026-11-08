@@ -1,0 +1,68 @@
+{
+  "validator": "Ajv2020",
+  "checks": [
+    {
+      "operation": "file.read",
+      "path": "../outside-after/notes.txt",
+      "status": 400,
+      "requestID": "2ac935d4-6125-455c-a8f8-605cfac5249e",
+      "schema": "valid"
+    },
+    {
+      "operation": "file.list",
+      "path": "../outside-after/folder",
+      "status": 400,
+      "requestID": "34b65ec4-aa92-4fe5-b7f2-dc8d39f278a8",
+      "schema": "valid"
+    },
+    {
+      "operation": "file.read",
+      "path": "outside.txt",
+      "status": 400,
+      "requestID": "fa2cd7ff-170e-4b04-97df-049d61ea7758",
+      "schema": "valid"
+    },
+    {
+      "operation": "file.list",
+      "path": "outside-folder",
+      "status": 400,
+      "requestID": "b4c5467d-9fe3-4ceb-bc36-165986d8c35e",
+      "schema": "valid"
+    },
+    {
+      "operation": "file.read",
+      "path": "notes.txt",
+      "status": 200,
+      "requestID": "8e3c235f-4705-4cf7-9161-e01bcd7b3cad",
+      "schema": "valid"
+    },
+    {
+      "operation": "file.read",
+      "path": "inside.txt",
+      "status": 200,
+      "requestID": "ae3ffc61-8ef1-40e3-b2f7-39c11e673a87",
+      "schema": "valid"
+    },
+    {
+      "operation": "file.list",
+      "path": "folder",
+      "status": 200,
+      "requestID": "74d9b8c2-6e7d-44fe-a571-d5ff514515ff",
+      "schema": "valid"
+    },
+    {
+      "operation": "file.list",
+      "path": "missing-folder",
+      "status": 404,
+      "requestID": "e7ce02f4-f19e-481c-8a44-9a2315e300f8",
+      "schema": "valid"
+    },
+    {
+      "operation": "file.list",
+      "path": "",
+      "status": 200,
+      "requestID": "9803cce7-cdc3-41e8-90b2-70aa42ed4eb5",
+      "schema": "valid"
+    }
+  ]
+}

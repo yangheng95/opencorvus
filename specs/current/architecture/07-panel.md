@@ -1495,6 +1495,10 @@ The directory reader maps its own readdir ENOENT/ENOTDIR observation to the
 existing FileNotFoundError/HTTP 404 contract. Permission, I/O, ignore-rule and
 child-target observation failures retain their original error paths. Successful
 empty directories still publish their ordinary empty listing.
+Project file reads and directory listings publish their existing scope-denial
+facts as FileInvalidPathError/HTTP 400 with the original logical request path.
+Their canonical/physical observations and project/worktree bounds retain the
+same authority; original source-citation reads keep their separate contract.
 
 Empty normalized directory keys display the current-language root-folder label
 in Explorer destination, creation and directory-refresh feedback. Nonempty

@@ -1100,12 +1100,14 @@ export namespace File {
     const full = path.join(Instance.directory, file)
 
     if (!(await isPathAllowed(full))) {
-      throw new Error(`Access denied: path escapes project directory`)
+      throw fileInvalidPath({ path: file, message: `Access denied: path escapes project directory` })
     }
 
     const physical = await realpathIfExists(full)
     if (!physical) throw fileNotFound({ path: file })
-    if (!(await isPathAllowed(physical))) throw new Error(`Access denied: path escapes project directory`)
+    if (!(await isPathAllowed(physical))) {
+      throw fileInvalidPath({ path: file, message: `Access denied: path escapes project directory` })
+    }
     const result = await readResolvedContent(file, physical, normalizeCanonicalPath(physical))
     const displayName = await attachmentFileDisplayName(file, physical)
     if (displayName !== undefined) return { ...result, displayName }
@@ -1775,7 +1777,7 @@ export namespace File {
     const resolved = dir ? path.join(Instance.directory, dir) : Instance.directory
 
     if (!(await isPathAllowed(resolved))) {
-      throw new Error(`Access denied: path escapes project directory`)
+      throw fileInvalidPath({ path: dir ?? "", message: `Access denied: path escapes project directory` })
     }
 
     const entries = await fs.promises.readdir(resolved, {

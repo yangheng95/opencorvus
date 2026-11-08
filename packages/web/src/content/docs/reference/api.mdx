@@ -460,8 +460,8 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
-| GET | `/file` | List files Errors: `BadRequestError`, `FileNotFoundError`, `UnknownError`. | `file.list` |
-| GET | `/file/content` | Read file Errors: `BadRequestError`, `FileNotFoundError`, `UnknownError`. | `file.read` |
+| GET | `/file` | List files Errors: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.list` |
+| GET | `/file/content` | Read file Errors: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.read` |
 | PATCH | `/file/content` | Write file Body: `content`, `expectedRevision`, `path`; Errors: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `FileWriteConflictError`, `UnknownError`. | `file.write` |
 | GET | `/file/download` | Download an original project file Errors: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.download` |
 | DELETE | `/file/item` | Delete file item Errors: `BadRequestError`, `FileInvalidPathError`, `FileNotFoundError`, `UnknownError`. | `file.delete` |

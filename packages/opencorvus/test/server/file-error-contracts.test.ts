@@ -54,6 +54,59 @@ async function documentFor(directory: string) {
   return actual.body as Document
 }
 
+test.each([
+  { kind: "lexical file", operation: "file.read", route: "/file/content", directory: false, lexical: true },
+  { kind: "lexical directory", operation: "file.list", route: "/file", directory: true, lexical: true },
+  { kind: "file link", operation: "file.read", route: "/file/content", directory: false, lexical: false },
+  { kind: "directory link", operation: "file.list", route: "/file", directory: true, lexical: false },
+])("project read publishes its existing named path-denial response for $kind", async (entry) => {
+  await using project = await memoryProject("read-path-response")
+  await using outside = await memoryProject("outside-read-path-response")
+  const content = "owned outside original\r\n资料\r\n"
+  const original = "owned project original\r\n"
+  await fs.mkdir(path.join(outside.path, "folder"))
+  await fs.writeFile(path.join(outside.path, "notes.txt"), content)
+  await fs.writeFile(path.join(project.path, "notes.txt"), original)
+  const physical = path.join(outside.path, entry.directory ? "folder" : "notes.txt")
+  const target = entry.lexical
+    ? path.relative(project.path, physical)
+    : entry.directory ? "outside-folder" : "outside.txt"
+  if (!entry.lexical) {
+    await fs.symlink(physical, path.join(project.path, target), entry.directory ? process.platform === "win32" ? "junction" : "dir" : "file")
+  }
+  const document = await documentFor(project.path)
+  const actual = await request(project.path, "GET", `${entry.route}?path=${encodeURIComponent(target)}`)
+  expect(actual).toEqual({
+    status: 400,
+    body: { name: "FileInvalidPathError", data: { path: target, message: "Access denied: path escapes project directory" } },
+  })
+  conforms(document, entry.operation, actual)
+  expect(await fs.readFile(path.join(outside.path, "notes.txt"), "utf8")).toBe(content)
+  expect(await fs.readFile(path.join(project.path, "notes.txt"), "utf8")).toBe(original)
+}, 60_000)
+
+test("project read publishes exact ordinary and in-scope link content under its existing authority", async () => {
+  await using project = await memoryProject("read-path-success-response")
+  const content = "owned scoped original\r\n资料\r\n"
+  await fs.mkdir(path.join(project.path, "folder"))
+  await fs.writeFile(path.join(project.path, "folder", "notes.txt"), content)
+  await fs.symlink(path.join(project.path, "folder", "notes.txt"), path.join(project.path, "inside.txt"), "file")
+  const document = await documentFor(project.path)
+  for (const target of ["folder/notes.txt", "inside.txt"]) {
+    const actual = await request(project.path, "GET", `/file/content?path=${encodeURIComponent(target)}`)
+    expect(actual).toMatchObject({ status: 200, body: { type: "text", content } })
+    expect(typeof actual.body.revision).toBe("string")
+    conforms(document, "file.read", actual)
+  }
+  const listing = await request(project.path, "GET", "/file?path=folder")
+  expect(listing).toEqual({
+    status: 200,
+    body: [{ name: "notes.txt", path: path.join("folder", "notes.txt"), absolute: path.join(project.path, "folder", "notes.txt"), type: "file", ignored: false, directoryTarget: false }],
+  })
+  conforms(document, "file.list", listing)
+  expect(await fs.readFile(path.join(project.path, "folder", "notes.txt"), "utf8")).toBe(content)
+}, 60_000)
+
 test.each(["missing-dir", "notes.txt", "notes.txt/child"])(
   "directory listing publishes its named missing-entry response for %s",
   async (target) => {

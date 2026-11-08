@@ -1,0 +1,96 @@
+{
+  "responses": [
+    {
+      "route": "/file/content",
+      "path": "../outside-before/notes.txt",
+      "status": 500,
+      "requestID": "dbc8f283-a902-4210-8d86-9897db02af56",
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "route": "/file",
+      "path": "../outside-before/folder",
+      "status": 500,
+      "requestID": "92a22d56-0dbf-4746-b73f-bbf86445a987",
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "route": "/file/content",
+      "path": "outside.txt",
+      "status": 500,
+      "requestID": "3bdd00d0-c27c-4769-9d4e-23b81fee3ed0",
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "route": "/file",
+      "path": "outside-folder",
+      "status": 500,
+      "requestID": "63c555ed-f7b0-4c2e-97fe-dbaa5bc0fa0b",
+      "body": {
+        "name": "UnknownError",
+        "data": {
+          "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+        }
+      }
+    },
+    {
+      "route": "/file/content",
+      "path": "notes.txt",
+      "status": 200,
+      "requestID": "14f5d845-b7bf-4b93-a04d-ae7fbd1e3be9",
+      "body": {
+        "type": "text",
+        "content": "b29 project original\r\n范围内原文\r\n",
+        "revision": "21fcbf872b59fafbbc8599846ef343742fd4c3e2ab5629cb58006df129528e89"
+      }
+    },
+    {
+      "route": "/file/content",
+      "path": "inside.txt",
+      "status": 200,
+      "requestID": "a4fed216-d1bd-46f6-aa30-b7ad207620d4",
+      "body": {
+        "type": "text",
+        "content": "b29 scoped child\r\n资料\r\n",
+        "revision": "3452b4c65a2cc810a03cf244ba1ce8a600c015bcf03a1844a1095695266d0c70"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "project-before/notes.txt",
+      "content": "b29 project original\r\n范围内原文\r\n",
+      "bytes": 39
+    },
+    {
+      "path": "project-before/folder/notes.txt",
+      "content": "b29 scoped child\r\n资料\r\n",
+      "bytes": 26
+    },
+    {
+      "path": "outside-before/notes.txt",
+      "content": "b29 outside owned original\r\n自有外部资料\r\n",
+      "bytes": 48
+    },
+    {
+      "path": "outside-before/folder/marker.txt",
+      "content": "b29 outside owned directory\n",
+      "bytes": 28
+    }
+  ]
+}

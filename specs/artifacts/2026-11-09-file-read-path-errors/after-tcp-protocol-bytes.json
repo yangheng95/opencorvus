@@ -1,0 +1,212 @@
+{
+  "protocol": {
+    "operations": 352,
+    "changedOperations": [
+      "file.list",
+      "file.read"
+    ],
+    "changedStatus": 400,
+    "sharedSchemas": "exactly preserved",
+    "formalSDK": "same paths and components after removing CLI-only x-codeSamples"
+  },
+  "responses": [
+    {
+      "route": "/file/content",
+      "path": "../outside-after/notes.txt",
+      "status": 400,
+      "requestID": "4406feb6-372b-49d1-8f52-037d9e58ad0c",
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "../outside-after/notes.txt",
+          "message": "Access denied: path escapes project directory"
+        }
+      }
+    },
+    {
+      "route": "/file",
+      "path": "../outside-after/folder",
+      "status": 400,
+      "requestID": "71e0f213-05f3-4d54-9dcc-1bd3a741099a",
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "../outside-after/folder",
+          "message": "Access denied: path escapes project directory"
+        }
+      }
+    },
+    {
+      "route": "/file/content",
+      "path": "outside.txt",
+      "status": 400,
+      "requestID": "f098b30d-94a5-460c-99d6-6702c3b515fd",
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "outside.txt",
+          "message": "Access denied: path escapes project directory"
+        }
+      }
+    },
+    {
+      "route": "/file",
+      "path": "outside-folder",
+      "status": 400,
+      "requestID": "e7551bc1-38af-4055-b6c9-7c3922441041",
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "outside-folder",
+          "message": "Access denied: path escapes project directory"
+        }
+      }
+    },
+    {
+      "route": "/file/content",
+      "path": "notes.txt",
+      "status": 200,
+      "requestID": "ec057115-373e-4be0-8e09-921290ee4ec3",
+      "body": {
+        "type": "text",
+        "content": "b29 project original\r\n范围内原文\r\n",
+        "revision": "22b82e7dfaad8e676c4d93f539b300aa72a76bc52fcdde9654f7dacba0837376"
+      }
+    },
+    {
+      "route": "/file/content",
+      "path": "inside.txt",
+      "status": 200,
+      "requestID": "74a4dc08-3990-437b-8423-155a0acc57fa",
+      "body": {
+        "type": "text",
+        "content": "b29 scoped child\r\n资料\r\n",
+        "revision": "517cf3c8d925814c110d85f493803225a0f0e2fdfc7aaf86fc858800cd458516"
+      }
+    },
+    {
+      "route": "/file",
+      "path": "folder",
+      "status": 200,
+      "requestID": "6c26a5e2-1c22-4500-a9ec-f388c6f777f6",
+      "body": [
+        {
+          "name": "notes.txt",
+          "path": "folder\\notes.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b29\\project-after\\folder\\notes.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    {
+      "route": "/file",
+      "path": "missing-folder",
+      "status": 404,
+      "requestID": "d1c461ef-34b4-4268-ae50-eb3d45abb3a3",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "missing-folder",
+          "message": "Directory entry not found: missing-folder"
+        }
+      }
+    },
+    {
+      "route": "/file",
+      "path": "",
+      "status": 200,
+      "requestID": "59351108-04fa-439b-8d01-31793027c50b",
+      "body": [
+        {
+          "name": ".opencorvus",
+          "path": ".opencorvus",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b29\\project-after\\.opencorvus",
+          "type": "directory",
+          "ignored": true,
+          "directoryTarget": true
+        },
+        {
+          "name": "folder",
+          "path": "folder",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b29\\project-after\\folder",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b29\\project-after\\.gitattributes",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b29\\project-after\\.gitignore",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        },
+        {
+          "name": "inside.txt",
+          "path": "inside.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b29\\project-after\\inside.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        },
+        {
+          "name": "notes.txt",
+          "path": "notes.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b29\\project-after\\notes.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        },
+        {
+          "name": "outside-folder",
+          "path": "outside-folder",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b29\\project-after\\outside-folder",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        },
+        {
+          "name": "outside.txt",
+          "path": "outside.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b29\\project-after\\outside.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "project-after/notes.txt",
+      "content": "b29 project original\r\n范围内原文\r\n",
+      "bytes": 39
+    },
+    {
+      "path": "project-after/folder/notes.txt",
+      "content": "b29 scoped child\r\n资料\r\n",
+      "bytes": 26
+    },
+    {
+      "path": "outside-after/notes.txt",
+      "content": "b29 outside owned original\r\n自有外部资料\r\n",
+      "bytes": 48
+    },
+    {
+      "path": "outside-after/folder/marker.txt",
+      "content": "b29 outside owned directory\n",
+      "bytes": 28
+    }
+  ],
+  "restoredOutsideLink": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b29\\outside-after\\notes.txt"
+}

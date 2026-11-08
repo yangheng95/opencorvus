@@ -19142,9 +19142,9 @@ export type FileListData = {
 
 export type FileListErrors = {
   /**
-   * Bad request
+   * Invalid file request
    */
-  400: BadRequestError
+  400: BadRequestError | FileInvalidPathError
   /**
    * File entry not found
    */
@@ -19181,9 +19181,9 @@ export type FileReadData = {
 
 export type FileReadErrors = {
   /**
-   * Bad request
+   * Invalid file request
    */
-  400: BadRequestError
+  400: BadRequestError | FileInvalidPathError
   /**
    * File entry not found
    */
