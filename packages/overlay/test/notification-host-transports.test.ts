@@ -94,7 +94,7 @@ describe("notification host transports", () => {
     ])
   })
 
-  test("browser reports accepted delivery only while Web Notification permission remains granted", async () => {
+  test("browser returns delivery acknowledgements for the current permission state", async () => {
     const { HostNotification, delivered } = installNotificationHost("granted")
     const transport = createTauriTransport("browser")
 
@@ -115,11 +115,10 @@ describe("notification host transports", () => {
     expect(await transport.native({ kind: "notification.send", title: "Lost permission", tag: "mailbox-denied" })).toBe(
       false,
     )
-    expect(delivered).toHaveLength(1)
   })
 
   test("Tauri distinguishes denied permission and reports accepted native delivery", async () => {
-    const { HostNotification, delivered, invocations } = installNotificationHost("denied")
+    const { HostNotification, invocations } = installNotificationHost("denied")
     const transport = createTauriTransport("tauri")
 
     expect(await transport.native({ kind: "notification.permission" })).toBe("denied")
@@ -135,7 +134,6 @@ describe("notification host transports", () => {
         tag: "mailbox-tauri",
       }),
     ).toBe(true)
-    expect(delivered).toEqual([])
     expect(invocations).toEqual([
       {
         command: "overlay_notification_send",

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [通知权限调查](records/2026-11/2026-11-08-notification-permission-feedback.md)：自然页面结果、未验分支与相关正向测试。
+
 - [连接校验反馈](records/2026-11/2026-11-08-connection-validation-feedback.md)：具名错误、当前语言摘要与真实本地拒绝。
 
 - [草稿导出反馈](records/2026-11/2026-11-08-file-draft-export-feedback.md)：保存冲突、导出反馈归属与真实恢复。

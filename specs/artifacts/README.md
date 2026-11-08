@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [通知权限调查证据](2026-11-08-notification-permission-feedback/README.md)：自有页面的偏好结果与未验范围。
+
 - [连接校验反馈证据](2026-11-08-connection-validation-feedback/README.md)：真实本地地址错误、原地语言与截图。
 
 - [草稿导出反馈证据](2026-11-08-file-draft-export-feedback/README.md)：自有输入、冲突/下载与原字节回执。

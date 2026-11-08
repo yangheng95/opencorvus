@@ -1,0 +1,38 @@
+[
+  {
+    "step": "original-preference",
+    "enabled": true
+  },
+  {
+    "step": "natural-enable-result",
+    "enabled": true,
+    "scripts": [
+      "http://localhost:38950/ui/assets/main-BydIgfm3.js"
+    ],
+    "status": null
+  },
+  {
+    "step": "stable-visible-enable-result",
+    "enabled": true,
+    "status": null,
+    "title": "General"
+  },
+  {
+    "step": "same-visible-preference-chinese",
+    "enabled": true,
+    "status": null,
+    "title": "通用"
+  },
+  {
+    "step": "remounted-general-visible-preference",
+    "enabled": true,
+    "status": null,
+    "title": "通用"
+  },
+  {
+    "step": "original-language-and-enabled-value-restored",
+    "enabled": true,
+    "status": null,
+    "title": "General"
+  }
+]

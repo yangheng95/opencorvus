@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [通知权限调查](2026-11-08-notification-permission-feedback.md)：可见偏好状态与错误路径验收缺口。
+
 - [连接校验反馈](2026-11-08-connection-validation-feedback.md)：服务器地址准入、双语诊断与键盘接续。
 
 - [草稿导出反馈](2026-11-08-file-draft-export-feedback.md)：真实条件保存、下载与错误退休时机。
