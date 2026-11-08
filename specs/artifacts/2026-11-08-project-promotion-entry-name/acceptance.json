@@ -1,0 +1,97 @@
+{
+  "batch": 24,
+  "solo": true,
+  "startedLocalDate": "2026-11-08",
+  "finishedUiLocalDate": "2026-11-09",
+  "before": {
+    "fileInputStatus": 400,
+    "promotionStatus": 500,
+    "promotionError": "UnknownError",
+    "requestID": "f80b8aa9-b7f4-4240-926b-1a1b6288cf23",
+    "physicalError": "ENOENT during staging-to-invalid-name rename",
+    "durableTerminal": "rolled_back",
+    "fullProjectAndSourcePreserved": true,
+    "normalUiPromotionSuccess": true
+  },
+  "after": {
+    "promotionStatus": 400,
+    "promotionError": "AnonymousProjectPromotionError",
+    "reason": "invalid_name",
+    "fullProjectSnapshotAfterUiErrorsPreserved": true,
+    "normalUiPromotionSuccess": true,
+    "projectID": "prj_hAzpNpaYiJ1BmYUsccJt",
+    "sourceBytes": 38,
+    "publicOriginalFileStatus": 200,
+    "bundle": "main-DOreZipN.js"
+  },
+  "positiveChecks": {
+    "pureClassification": {
+      "passed": 25,
+      "assertions": 35,
+      "deviceNames": "classification only, zero device filesystem operations"
+    },
+    "realHonoContracts": {
+      "passed": 12,
+      "assertions": 230,
+      "files": [
+        "server/project-promotion-error-contracts.test.ts",
+        "server/file-error-contracts.test.ts",
+        "project-promoted-source-content.test.ts"
+      ]
+    },
+    "validRed": {
+      "failed": 1,
+      "filtered": 5,
+      "assertions": 10
+    },
+    "initialCheckerInputFailure": "incorrect copy URL corrected from route source; not counted as product red"
+  },
+  "ui": {
+    "screenshotsViewed": 6,
+    "englishSpecificNotice": true,
+    "chineseSpecificNotice": true,
+    "originalRequestIDsAndDetails": true,
+    "originalProjectButtonFocusAfterClose": true,
+    "normalNamedProjectAndSourceOpened": true,
+    "automatedUiTests": 0
+  },
+  "checks": {
+    "backendTypes": true,
+    "utilTypes": true,
+    "utilBuild": true,
+    "overlayTypes": true,
+    "locales": 2,
+    "localeKeys": 2923,
+    "normalUiBuild": true,
+    "buildSeconds": 78,
+    "rendererSurface": true,
+    "docsCheck": true,
+    "architectureIndex": true
+  },
+  "unchangedContracts": [
+    "File and Upload error names/fields/messages",
+    "portable SDK path policy",
+    "promotion journal/fence/rollback algorithm",
+    "schema and persisted data"
+  ],
+  "notQualified": [
+    "POSIX actual filesystem promotion (pure classification covered)",
+    "all historical Windows device-name variants across portable consumers; existing ASCII policy retained, follow-up needed",
+    "Provider/Sol E2E authorization unanswered",
+    "409 busy and other error UI branches after this patch (code equivalence and original HTTP owner tests only)"
+  ],
+  "openFindings": [
+    "physical empty directory discovery from b23 remains unimplemented",
+    "Windows superscript device-name policy remains follow-up across existing distinct naming consumers"
+  ],
+  "modelRequests": 0,
+  "credentialsUsed": false,
+  "resources": {
+    "beforeServerExit": 0,
+    "afterServerExit": 0,
+    "tabsClosed": [
+      51,
+      52
+    ]
+  }
+}

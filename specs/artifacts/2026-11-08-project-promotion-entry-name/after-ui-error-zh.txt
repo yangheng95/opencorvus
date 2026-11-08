@@ -1,0 +1,23 @@
+项目名称无效
+请使用当前系统支持的文件夹名称，再重新转换“匿名项目 ef8936”。
+详细信息
+HTTP POST 400 project/current/promote-anonymous?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b24%5Cprofile-after%5Cdata%5Cprojects%5C2026%5C11%5C09%5Cf9371295-7b98-483a-88e4-af0a61ef8936
+
+Request ID: 574eec7d-87a0-480e-afb4-0af278388332
+
+ApiError: API 400 project/current/promote-anonymous?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b24%5Cprofile-after%5Cdata%5Cprojects%5C2026%5C11%5C09%5Cf9371295-7b98-483a-88e4-af0a61ef8936: Project name is invalid on Windows: named?project
+    at Ze (http://localhost:38967/ui/assets/main-DOreZipN.js:62:146241)
+    at async g0e (http://localhost:38967/ui/assets/main-DOreZipN.js:143:8540)
+    at async Object.rXe (http://localhost:38967/ui/assets/main-DOreZipN.js:278:10896)
+    at async o (http://localhost:38967/ui/assets/main-DOreZipN.js:269:85069)
+
+response body:
+{
+  "name": "AnonymousProjectPromotionError",
+  "data": {
+    "message": "Project name is invalid on Windows: named?project",
+    "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-after\\data\\projects\\2026\\11\\09\\f9371295-7b98-483a-88e4-af0a61ef8936",
+    "reason": "invalid_name"
+  }
+}
+确定

@@ -289,6 +289,10 @@ owner sweep 不得释放它。任何 fence 都不得升级为 database path 或 
 Source、Message、Tool 的原观察路径与身份不改写；旧地址的文件存在性不参与位置选择。
 未提交/回滚、其他 Project/代或不同目标不能提供位置权威，重复匹配明确报错。
 
+宿主 basename 准入先使用与普通文件创建、复制、移动和上传相同的纯名称分类；
+明确的 invalid_name 在本次 beforeMove、promotion intent 和物理移动之前返回原领域错误。
+该分类按目标宿主保留现有名称语义，不替代更严格的可移植 project-relative path 合同。
+
 匿名 Project promotion 的唯一 Ready 决策是 durable publication terminal receipt。完整的
 Project/Session before-snapshot 和 source digest 先写入 immutable occurrence；随后一个 SQLite
 write transaction 重读并核对完整 snapshot、取得 promotion fence，首个 filesystem rename 只能

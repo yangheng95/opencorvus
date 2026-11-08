@@ -1,0 +1,21 @@
+Couldn't confirm the action
+Review the details, then retry the action for “Anonymous 2a4220”.
+Details
+HTTP POST 500 project/current/promote-anonymous?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b24%5Cprofile-before%5Cdata%5Cprojects%5C2026%5C11%5C08%5C3630ca84-b0ee-44d9-a35e-c13a6c2a4220
+
+Request ID: 3a5e047d-9a61-4e88-8c97-f37cc726260a
+
+ApiError: API 500 project/current/promote-anonymous?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b24%5Cprofile-before%5Cdata%5Cprojects%5C2026%5C11%5C08%5C3630ca84-b0ee-44d9-a35e-c13a6c2a4220: Internal server error. See x-opencorvus-request-id for diagnostics.
+    at Ze (http://localhost:38966/ui/assets/main-Dz-yHp9q.js:62:146241)
+    at async g0e (http://localhost:38966/ui/assets/main-Dz-yHp9q.js:143:8540)
+    at async Object.rXe (http://localhost:38966/ui/assets/main-Dz-yHp9q.js:278:10896)
+    at async o (http://localhost:38966/ui/assets/main-Dz-yHp9q.js:269:85069)
+
+response body:
+{
+  "name": "UnknownError",
+  "data": {
+    "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+  }
+}
+OK

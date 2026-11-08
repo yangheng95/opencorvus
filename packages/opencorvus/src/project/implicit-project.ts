@@ -4,6 +4,7 @@ import path from "node:path"
 import { isDeepStrictEqual } from "node:util"
 import z from "zod"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
 import { GlobalBus } from "@/bus/global"
 import { Global } from "@/global"
 import { Database, eq } from "@/storage/db"
@@ -689,15 +690,15 @@ export namespace ImplicitProject {
         reason: "not_anonymous",
       })
     }
-    if (
-      input.name === "." ||
-      input.name === ".." ||
-      input.name.includes("/") ||
-      input.name.includes("\\") ||
-      input.name.includes("\0")
-    ) {
+    const nameStatus = classifyEntryBasename(input.name, process.platform === "win32")
+    if (nameStatus !== "valid") {
       throw new PromotionError({
-        message: "Project name must be one directory segment.",
+        message:
+          nameStatus === "windows-invalid"
+            ? `Project name is invalid on Windows: ${input.name}`
+            : nameStatus === "windows-reserved"
+              ? `Project name is reserved on Windows: ${input.name}`
+              : "Project name must be one directory segment.",
         sourceDirectory: source,
         reason: "invalid_name",
       })

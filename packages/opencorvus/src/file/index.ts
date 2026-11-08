@@ -18,6 +18,7 @@ import { Ripgrep } from "./ripgrep"
 import fuzzysort from "fuzzysort"
 import { Global } from "../global"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
 import { randomUUID } from "node:crypto"
 import { isUtf8 } from "node:buffer"
 import { withKeyedLock } from "../util/lock"
@@ -597,9 +598,6 @@ export namespace File {
   }
 
   const base64Pattern = /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/
-  // Windows device names: CON (console), PRN (printer), AUX (auxiliary), NUL (null device),
-  // COM (communications port), and LPT (line printer port) cannot be created as normal files.
-  const windowsReservedDeviceNamePattern = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\..*)?$/i
 
   function entryNameKey(name: string): string {
     return process.platform === "win32" ? name.toLowerCase() : name
@@ -613,19 +611,18 @@ export namespace File {
       }
       return new InvalidPathError({ path: name, message })
     }
-    if (!name || name === "." || name === "..") {
-      throw createError(`Invalid ${label} name: ${name || "(empty)"}`)
+    switch (classifyEntryBasename(name, process.platform === "win32")) {
+      case "empty":
+        throw createError(`Invalid ${label} name: ${name || "(empty)"}`)
+      case "path":
+        throw createError(`${label} name must be a basename: ${name}`)
+      case "windows-invalid":
+        throw createError(`${label} name is invalid on Windows: ${name}`)
+      case "windows-reserved":
+        throw createError(`${label} name is reserved on Windows: ${name}`)
+      case "valid":
+        return name
     }
-    if (name.includes("/") || name.includes("\\") || path.isAbsolute(name) || name.includes("\0")) {
-      throw createError(`${label} name must be a basename: ${name}`)
-    }
-    if (process.platform === "win32" && /[<>:"|?*\x00-\x1F]/.test(name)) {
-      throw createError(`${label} name is invalid on Windows: ${name}`)
-    }
-    if (process.platform === "win32" && (/[. ]$/.test(name) || windowsReservedDeviceNamePattern.test(name))) {
-      throw createError(`${label} name is reserved on Windows: ${name}`)
-    }
-    return name
   }
 
   function assertUploadFileName(name: string): string {

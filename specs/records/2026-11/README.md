@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [转换名称准入](2026-11-08-project-promotion-entry-name.md)：普通非法名称、共享判定与真实错误恢复。
+
 - [文件移动键盘接续](2026-11-08-file-move-focus.md)：操作归属、刷新后行与原字节验收。
 
 - [Mission看板静置时间](2026-11-08-mission-board-relative-time.md)：草稿卡片静置调查与连续可见截图。

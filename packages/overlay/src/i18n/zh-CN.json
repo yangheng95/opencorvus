@@ -2195,6 +2195,8 @@
   "project.promote_anonymous_parent_title": "选择父目录",
   "project.promote_anonymous_parent_message": "项目将移入此父目录下名为“{{name}}”的新文件夹。",
   "project.promote_anonymous_busy_title": "项目仍有后台活动",
+  "project.promote_anonymous_invalid_name_title": "项目名称无效",
+  "project.promote_anonymous_invalid_name_message": "请使用当前系统支持的文件夹名称，再重新转换“{{title}}”。",
   "project.promote_anonymous_busy_message": "“{{title}}”中仍有运行或待机的对话。请在侧边栏逐个打开相关对话的“更多操作”菜单，停止其活动后再重试转换项目。显示“非进行中”的对话也可能处于后台待机。",
   "project.promote_anonymous_missing_directory": "转换匿名项目需要项目目录。",
   "project.promote_anonymous_success_title": "项目已转换",

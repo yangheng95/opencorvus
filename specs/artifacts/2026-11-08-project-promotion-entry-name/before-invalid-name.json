@@ -1,0 +1,79 @@
+{
+  "anonymous": {
+    "status": 201,
+    "requestID": "0fa08447-1a32-4ef5-bb70-45d143e57bab",
+    "body": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-before\\data\\projects\\2026\\11\\08\\3630ca84-b0ee-44d9-a35e-c13a6c2a4220",
+      "project": {
+        "id": "prj_hbBT0qNzrEBFhQZnDL26",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-before\\data\\projects\\2026\\11\\08\\3630ca84-b0ee-44d9-a35e-c13a6c2a4220",
+        "time": {
+          "created": 1794153101447,
+          "updated": 1794153101447
+        },
+        "sandboxes": []
+      }
+    }
+  },
+  "created": {
+    "status": 200,
+    "requestID": "508e6232-6031-4e75-ab48-486bd05647e6",
+    "body": {
+      "name": "identity-note.txt",
+      "path": "identity-note.txt",
+      "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-before\\data\\projects\\2026\\11\\08\\3630ca84-b0ee-44d9-a35e-c13a6c2a4220\\identity-note.txt",
+      "type": "file",
+      "ignored": false
+    }
+  },
+  "original": {
+    "status": 200,
+    "requestID": "9f08e8e5-5270-4aeb-9d3b-e78ee407b045",
+    "body": {
+      "id": "prj_hbBT0qNzrEBFhQZnDL26",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-before\\data\\projects\\2026\\11\\08\\3630ca84-b0ee-44d9-a35e-c13a6c2a4220",
+      "time": {
+        "created": 1794153101447,
+        "updated": 1794153101447
+      },
+      "sandboxes": []
+    }
+  },
+  "fileRejected": {
+    "status": 400,
+    "requestID": "57202b79-c160-4a76-bf0f-89deb7e0706a",
+    "body": {
+      "name": "FileInvalidPathError",
+      "data": {
+        "path": "named?project",
+        "message": "file entry name is invalid on Windows: named?project"
+      }
+    }
+  },
+  "failed": {
+    "status": 500,
+    "requestID": "f80b8aa9-b7f4-4240-926b-1a1b6288cf23",
+    "body": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  "current": {
+    "status": 200,
+    "requestID": "9680e18d-8865-4d37-a09d-0c0bcee41b3e",
+    "body": {
+      "id": "prj_hbBT0qNzrEBFhQZnDL26",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-before\\data\\projects\\2026\\11\\08\\3630ca84-b0ee-44d9-a35e-c13a6c2a4220",
+      "time": {
+        "created": 1794153101447,
+        "updated": 1794153101447
+      },
+      "sandboxes": []
+    }
+  },
+  "source": {
+    "content": "b24 anonymous original\r\n原始资料\r\n"
+  }
+}

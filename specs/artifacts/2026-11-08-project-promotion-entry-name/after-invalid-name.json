@@ -1,0 +1,81 @@
+{
+  "anonymous": {
+    "status": 201,
+    "requestID": "c05e4bef-9b01-43fb-b8a6-0c2bb4b552a2",
+    "body": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-after\\data\\projects\\2026\\11\\09\\f9371295-7b98-483a-88e4-af0a61ef8936",
+      "project": {
+        "id": "prj_hAzpNpaYiJ1BmYUsccJt",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-after\\data\\projects\\2026\\11\\09\\f9371295-7b98-483a-88e4-af0a61ef8936",
+        "time": {
+          "created": 1794153800559,
+          "updated": 1794153800559
+        },
+        "sandboxes": []
+      }
+    }
+  },
+  "created": {
+    "status": 200,
+    "requestID": "2bacdfb6-7120-47d3-8394-82952fdce803",
+    "body": {
+      "name": "identity-note.txt",
+      "path": "identity-note.txt",
+      "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-after\\data\\projects\\2026\\11\\09\\f9371295-7b98-483a-88e4-af0a61ef8936\\identity-note.txt",
+      "type": "file",
+      "ignored": false
+    }
+  },
+  "original": {
+    "status": 200,
+    "requestID": "e6455a1e-43d4-4be2-8b1c-b8bd8ec8428f",
+    "body": {
+      "id": "prj_hAzpNpaYiJ1BmYUsccJt",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-after\\data\\projects\\2026\\11\\09\\f9371295-7b98-483a-88e4-af0a61ef8936",
+      "time": {
+        "created": 1794153800559,
+        "updated": 1794153800559
+      },
+      "sandboxes": []
+    }
+  },
+  "fileRejected": {
+    "status": 400,
+    "requestID": "6c9ee98d-d442-49a9-9145-ca73d19df8df",
+    "body": {
+      "name": "FileInvalidPathError",
+      "data": {
+        "path": "named?project",
+        "message": "file entry name is invalid on Windows: named?project"
+      }
+    }
+  },
+  "failed": {
+    "status": 400,
+    "requestID": "3ac4a23c-250b-4766-a59b-62bd1684916b",
+    "body": {
+      "name": "AnonymousProjectPromotionError",
+      "data": {
+        "message": "Project name is invalid on Windows: named?project",
+        "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-after\\data\\projects\\2026\\11\\09\\f9371295-7b98-483a-88e4-af0a61ef8936",
+        "reason": "invalid_name"
+      }
+    }
+  },
+  "current": {
+    "status": 200,
+    "requestID": "2687b701-875b-4c8e-bc74-3788af6f7db0",
+    "body": {
+      "id": "prj_hAzpNpaYiJ1BmYUsccJt",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\profile-after\\data\\projects\\2026\\11\\09\\f9371295-7b98-483a-88e4-af0a61ef8936",
+      "time": {
+        "created": 1794153800559,
+        "updated": 1794153800559
+      },
+      "sandboxes": []
+    }
+  },
+  "source": {
+    "content": "b24 anonymous original\r\n原始资料\r\n"
+  }
+}

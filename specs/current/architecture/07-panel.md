@@ -5469,6 +5469,9 @@ validation or promotion-domain rejection at 400, prompt ownership or project
 admission conflicts at 409, and directory-admission or unknown failures at 500.
 Its OpenAPI and generated SDK reuse those domain schemas; runtime conversion,
 identity relocation and the visible diagnostic continue through their existing owners.
+The current conversion action presents a localized name-retry notice for its
+typed 400 `AnonymousProjectPromotionError` with reason `invalid_name`, retaining
+the original response details and the existing dialog scope and focus owner.
 Its API authority, directory and action generation own busy state and visible
 failure diagnostics; the Project pin adapter does not consume mutation errors.
 Rename, anonymous naming and delete confirmation pass the shared AppDialog's

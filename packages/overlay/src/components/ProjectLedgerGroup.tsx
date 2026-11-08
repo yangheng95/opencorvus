@@ -104,15 +104,38 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
       await action(presentation)
     } catch (error) {
       if (!ownsAction() || error instanceof ApiAuthorityChangedError || (error instanceof DOMException && error.name === "AbortError")) return
-      const ownedPrompt = owner === `promote:${directory}` && error instanceof ApiError && error.status === 409 &&
-        error.body !== null && typeof error.body === "object" && !Array.isArray(error.body) &&
-        (error.body as { name?: unknown }).name === "OwnedPromptControllersError"
-      const errorTitle = t(ownedPrompt ? "project.promote_anonymous_busy_title" : "work_ledger.action_failed_title")
-      const errorMessage = t(ownedPrompt ? "project.promote_anonymous_busy_message" : "work_ledger.action_failed_message", { title })
+      const promotionError = owner === `promote:${directory}` && error instanceof ApiError ? error : undefined
+      const body = promotionError?.body
+      const promotionBody =
+        body !== null && typeof body === "object" && !Array.isArray(body) ? (body as Record<string, unknown>) : undefined
+      const data = promotionBody?.data
+      const promotionData =
+        data !== null && typeof data === "object" && !Array.isArray(data) ? (data as Record<string, unknown>) : undefined
+      const ownedPrompt = promotionError?.status === 409 && promotionBody?.name === "OwnedPromptControllersError"
+      const invalidName =
+        promotionError?.status === 400 &&
+        promotionBody?.name === "AnonymousProjectPromotionError" &&
+        promotionData?.reason === "invalid_name"
+      const specificError = ownedPrompt || invalidName
+      const errorTitle = t(
+        ownedPrompt
+          ? "project.promote_anonymous_busy_title"
+          : invalidName
+            ? "project.promote_anonymous_invalid_name_title"
+            : "work_ledger.action_failed_title",
+      )
+      const errorMessage = t(
+        ownedPrompt
+          ? "project.promote_anonymous_busy_message"
+          : invalidName
+            ? "project.promote_anonymous_invalid_name_message"
+            : "work_ledger.action_failed_message",
+        { title },
+      )
       reportError({
         id: `project-ledger:${owner}`,
-        title: ownedPrompt ? errorTitle : t("common.error"),
-        message: ownedPrompt ? errorMessage : error instanceof Error ? error.message : String(error),
+        title: specificError ? errorTitle : t("common.error"),
+        message: specificError ? errorMessage : error instanceof Error ? error.message : String(error),
         details: formatErrorDetails(error),
       })
       await showAppDialog({

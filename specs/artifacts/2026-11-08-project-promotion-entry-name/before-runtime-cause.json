@@ -1,0 +1,65 @@
+{
+  "records": [
+    {
+      "level": "info",
+      "time": "2026-11-08T15:51:41.817Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f80b8aa9-b7f4-4240-926b-1a1b6288cf23",
+        "method": "POST",
+        "path": "/project/current/promote-anonymous",
+        "status": "started"
+      },
+      "message": "request"
+    },
+    {
+      "level": "error",
+      "time": "2026-11-08T15:51:42.790Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f80b8aa9-b7f4-4240-926b-1a1b6288cf23",
+        "method": "POST",
+        "path": "/project/current/promote-anonymous",
+        "statusCode": 500,
+        "error": {
+          "type": "Error",
+          "message": "ENOENT: no such file or directory, rename 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\destinations-before\\.opencorvus-promoting-ce07eb05-1189-42c7-92f7-1d6ee4acdf5b' -> 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\destinations-before\\named?project'",
+          "stack": "Error: ENOENT: no such file or directory, rename 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\destinations-before\\.opencorvus-promoting-ce07eb05-1189-42c7-92f7-1d6ee4acdf5b' -> 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\destinations-before\\named?project'\n    at async renameAfterTransientContention (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\util\\filesystem.ts:330:15)\n    at async promoteOwned (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\project\\implicit-project.ts:851:24)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\util\\src\\durable-publication.ts:242:24)\n    at async runSubjectCallback (D:\\myhexin-local\\opencorvus\\packages\\util\\src\\durable-publication.ts:251:20)\n    at async withSubjectLock (D:\\myhexin-local\\opencorvus\\packages\\util\\src\\durable-publication.ts:304:54)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\project.ts:232:33)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)",
+          "code": "ENOENT",
+          "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\destinations-before\\.opencorvus-promoting-ce07eb05-1189-42c7-92f7-1d6ee4acdf5b",
+          "dest": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b24\\destinations-before\\named?project",
+          "syscall": "rename",
+          "errno": -4058
+        }
+      },
+      "message": "request failed"
+    },
+    {
+      "level": "info",
+      "time": "2026-11-08T15:51:42.791Z",
+      "service": "server",
+      "logDomain": "non-session",
+      "data": {
+        "requestID": "f80b8aa9-b7f4-4240-926b-1a1b6288cf23",
+        "method": "POST",
+        "path": "/project/current/promote-anonymous",
+        "status": "completed",
+        "statusCode": 500,
+        "duration": 974
+      },
+      "message": "request"
+    }
+  ],
+  "terminal": {
+    "schemaVersion": 1,
+    "occurrenceID": "ce07eb05-1189-42c7-92f7-1d6ee4acdf5b",
+    "outcome": "rolled_back",
+    "payload": {
+      "projectID": "prj_hbBT0qNzrEBFhQZnDL26",
+      "projectGeneration": "79597f8d-fd18-4714-bf29-5f454343400d"
+    },
+    "timeCreated": 1794153102774
+  }
+}

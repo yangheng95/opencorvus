@@ -128,6 +128,77 @@ test("real promotion publishes the original project identity and source bytes", 
   expect(current).toMatchObject({ status: 200, body: { id: anonymous.project.id, worktree: directory } })
 }, 60_000)
 
+test.skipIf(process.platform !== "win32")(
+  "host name rejection preserves file errors and the anonymous project snapshot",
+  async () => {
+    await using parent = await memoryProject("promotion-host-name")
+    const anonymous = await anonymousProject(parent.path)
+    const document = await documentFor(anonymous.directory)
+    const content = "original host-name source\r\n原始资料\r\n"
+    await fs.writeFile(path.join(anonymous.directory, "identity-note.txt"), content)
+    const original = await request(anonymous.directory, "GET", "/project/current")
+    expect(original.status).toBe(200)
+    for (const entry of [
+      { method: "POST", route: "/file/item", body: { path: "named?project", type: "directory" } },
+      { method: "POST", route: "/file/item/copy", body: { path: "identity-note.txt", newPath: "named?project" } },
+      { method: "PATCH", route: "/file/item", body: { path: "identity-note.txt", newPath: "named?project" } },
+    ]) {
+      const actual = await request(anonymous.directory, entry.method, entry.route, entry.body)
+      expect(actual).toEqual({
+        status: 400,
+        body: {
+          name: "FileInvalidPathError",
+          data: { path: "named?project", message: "file entry name is invalid on Windows: named?project" },
+        },
+      })
+    }
+    const upload = await request(anonymous.directory, "POST", "/file/upload", {
+      targetDir: "",
+      files: [{ name: "named?project", contentBase64: "YQ==" }],
+    })
+    expect(upload).toEqual({
+      status: 400,
+      body: {
+        name: "FileUploadInvalidNameError",
+        data: { name: "named?project", message: "uploaded file name is invalid on Windows: named?project" },
+      },
+    })
+    for (const name of ["named?project", "trailing."]) {
+      const actual = await request(anonymous.directory, "POST", "/project/current/promote-anonymous", {
+        destinationParent: parent.path,
+        name,
+      })
+      expect(actual).toMatchObject({
+        status: 400,
+        body: {
+          name: "AnonymousProjectPromotionError",
+          data: { sourceDirectory: anonymous.directory, reason: "invalid_name" },
+        },
+      })
+      expect(typeof actual.body.data.message).toBe("string")
+      conforms(document, actual)
+      expect(await request(anonymous.directory, "GET", "/project/current")).toEqual(original)
+      expect(await fs.readFile(path.join(anonymous.directory, "identity-note.txt"), "utf8")).toBe(content)
+    }
+    const directory = path.join(parent.path, "valid project")
+    const promoted = await request(anonymous.directory, "POST", "/project/current/promote-anonymous", {
+      destinationParent: parent.path,
+      name: "valid project",
+    })
+    expect(promoted).toMatchObject({
+      status: 200,
+      body: {
+        directory,
+        sourceDirectory: anonymous.directory,
+        project: { id: anonymous.project.id, worktree: directory },
+      },
+    })
+    conforms(document, promoted)
+    expect(await fs.readFile(path.join(directory, "identity-note.txt"), "utf8")).toBe(content)
+  },
+  60_000,
+)
+
 for (const kind of ["assistant", "mission", "root"] as const) {
   test(`promotion reports the real active ${kind} controller through its published conflict`, async () => {
     await using parent = await memoryProject(`promotion-${kind}-controller`)
