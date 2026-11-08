@@ -1,0 +1,20 @@
+{
+  "status": 400,
+  "requestID": "a4d1835b-d981-4642-b014-dc483c3ef2ab",
+  "query": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+  "body": {
+    "data": {
+      "message": "Request validation failed"
+    },
+    "error": [
+      {
+        "code": "too_big",
+        "path": [
+          "query"
+        ],
+        "message": "Too big: expected string to have <=120 characters"
+      }
+    ],
+    "success": false
+  }
+}

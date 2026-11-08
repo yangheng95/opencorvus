@@ -522,7 +522,7 @@ function SharedResourceManagementPanel(props: {
     policy: "allow" as "allow" | "deny",
   })
   const [marketQuery, setMarketQuery] = createSignal("")
-  const [marketResults, setMarketResults] = createSignal<SkillMarketCandidate[]>([])
+  const [marketSearchResult, setMarketSearchResult] = createSignal<{ query: string; items: SkillMarketCandidate[] }>()
   const [marketDetail, setMarketDetail] = createSignal<SkillMarketDetail>()
   const [marketPolicy, setMarketPolicy] = createSignal<"allow" | "deny">("deny")
   const [marketLoading, setMarketLoading] = createSignal(false)
@@ -532,10 +532,10 @@ function SharedResourceManagementPanel(props: {
     if (query.length < 2) return
     setMarketLoading(true)
     setNotice(undefined)
-    setMarketResults([])
+    setMarketSearchResult(undefined)
     setMarketDetail(undefined)
     try {
-      setMarketResults(await searchSkillMarket(query))
+      setMarketSearchResult({ query, items: await searchSkillMarket(query) })
     } catch (error) {
       setPanelError(error)
     } finally {
@@ -577,7 +577,13 @@ function SharedResourceManagementPanel(props: {
       const directory = currentDirectory()
       if (directory) await reloadCurrentPanel({ directory })
       setMarketDetail({ ...detail, installed: true })
-      setMarketResults((items) => items.map((item) => (item.id === detail.id ? { ...item, installed: true } : item)))
+      setMarketSearchResult((result) => {
+        if (!result) return
+        return {
+          ...result,
+          items: result.items.map((item) => (item.id === detail.id ? { ...item, installed: true } : item)),
+        }
+      })
       notifyResourceChange()
     } catch (error) {
       setPanelError(error)
@@ -928,41 +934,46 @@ function SharedResourceManagementPanel(props: {
               )}
             </Show>
 
-            <Show when={marketResults().length > 0}>
-              <SettingsDetailSection
-                class="extension-list"
-                title={t("skill.market_results")}
-                actions={<Badge tone="neutral">{marketNumber(marketResults().length)}</Badge>}
-              >
-                <For each={marketResults()}>
-                  {(candidate) => (
-                    <SettingsRow
-                      class="extension-settings-row"
-                      title={candidate.name}
-                      desc={candidate.source}
-                      meta={<small>{t("skill.market_installs", { count: marketNumber(candidate.installs) })}</small>}
-                      interactive
-                      actions={
-                        <div class="extension-settings-actions">
-                          <Show when={candidate.installed}>
-                            <Badge tone="ok">{t("common.loaded")}</Badge>
-                          </Show>
-                          <Button
-                            type="button"
-                            variant="outline"
-                            size="sm"
-                            tone="neutral"
-                            disabled={marketLoading()}
-                            onClick={() => void handleMarketInspect(candidate)}
-                          >
-                            {t("skill.market_review")}
-                          </Button>
-                        </div>
-                      }
-                    />
-                  )}
-                </For>
-              </SettingsDetailSection>
+            <Show when={marketSearchResult()}>
+              {(result) => (
+                <SettingsDetailSection
+                  class="extension-list"
+                  title={t("skill.market_results")}
+                  actions={<Badge tone="neutral">{marketNumber(result().items.length)}</Badge>}
+                >
+                  <For
+                    each={result().items}
+                    fallback={<Feedback>{t("skill.market_no_results", { query: result().query })}</Feedback>}
+                  >
+                    {(candidate) => (
+                      <SettingsRow
+                        class="extension-settings-row"
+                        title={candidate.name}
+                        desc={candidate.source}
+                        meta={<small>{t("skill.market_installs", { count: marketNumber(candidate.installs) })}</small>}
+                        interactive
+                        actions={
+                          <div class="extension-settings-actions">
+                            <Show when={candidate.installed}>
+                              <Badge tone="ok">{t("common.loaded")}</Badge>
+                            </Show>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              size="sm"
+                              tone="neutral"
+                              disabled={marketLoading()}
+                              onClick={() => void handleMarketInspect(candidate)}
+                            >
+                              {t("skill.market_review")}
+                            </Button>
+                          </div>
+                        }
+                      />
+                    )}
+                  </For>
+                </SettingsDetailSection>
+              )}
             </Show>
           </div>
         </SettingsGroup>

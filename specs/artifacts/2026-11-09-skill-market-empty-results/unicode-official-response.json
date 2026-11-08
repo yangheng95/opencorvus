@@ -1,0 +1,31 @@
+{
+  "status": 200,
+  "content": {
+    "query": "\"空<界面>&查询\"",
+    "searchType": "fuzzy",
+    "searchVersion": "algolia",
+    "skills": [
+      {
+        "id": "open.feishu.cn/lark-wiki",
+        "source": "open.feishu.cn",
+        "skillId": "lark-wiki",
+        "name": "lark-wiki",
+        "installs": 871192
+      }
+    ],
+    "count": 1,
+    "duration_ms": 63,
+    "timings_ms": {
+      "rate_limit": 9.721645999932662,
+      "flags": 1.0705030000535771,
+      "visibility": 23.373650999972597,
+      "retrieval": 61.229295000084676,
+      "algolia_processing": 131,
+      "repositories": 0.020259000011719763,
+      "ranking": 0.16504800005350262,
+      "search": 63,
+      "total": 72.41353399993386
+    },
+    "provider_duration_ms": 61.229295000084676
+  }
+}

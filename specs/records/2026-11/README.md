@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [Skill Market 空搜索](2026-11-09-skill-market-empty-results.md)：完成结果、当前语言与原查询。
+
 - [Skill Market 本地化](2026-11-09-skill-market-locale.md)：真实公开候选和本地化展示边界。
 
 - [文件读取提示](2026-11-09-file-read-error-presentation.md)：同一读取原错误的可操作本地化展示。

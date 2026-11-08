@@ -214,6 +214,8 @@ path、URL index 和 git source import 保持为独立高级入口。Market iden
 Settings市场列表的安装量、结果数和详情字节使用当前界面语言的数字格式，保留精确计量和B单位；
 风险枚举仅在review标记与安装确认显示处映射为当前语言标签，确认策略复用既有策略标签。
 原候选身份、名称、描述、文件路径、仓库和内容hash保持原文；展示不改变风险算法、策略或精确安装授权。
+市场搜索的私有成功回执同时保留已提交query和候选items，成功空数组显示结果数0及当前语言建议；
+初始、新搜索开始或失败不具有成功回执。输入编辑不改写上次回执query，原失败继续独立诊断展示。
 
 运行时 `skill_market` Tool 提供搜索、检查和精确安装。搜索与检查是 network read；安装是经普通 Tool
 permission authority 单独授权的 local write。新安装 Skill 只在后续 turn 可被 mount；当前 turn 已冻结的

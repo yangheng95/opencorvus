@@ -1,0 +1,45 @@
+{
+  "validator": "Ajv2020",
+  "checks": [
+    {
+      "label": "empty",
+      "status": 200,
+      "requestID": "e8d20c4e-6fa4-42a1-ac0b-f924f5c8b8e3",
+      "schema": "valid",
+      "count": 0
+    },
+    {
+      "label": "hits",
+      "status": 200,
+      "requestID": "ec576f84-9417-41a1-b571-70457d23adcd",
+      "schema": "valid",
+      "count": 10
+    },
+    {
+      "label": "invalid",
+      "status": 400,
+      "requestID": "a4d1835b-d981-4642-b014-dc483c3ef2ab",
+      "schema": "valid",
+      "errorCode": "too_big",
+      "errorPath": [
+        "query"
+      ]
+    },
+    {
+      "label": "trimmed",
+      "status": 200,
+      "schema": "valid as same compiled search 200 schema from supplementary checker",
+      "count": 0,
+      "requestID": "fada6030-2b90-4599-a243-c8e25bc88edf"
+    },
+    {
+      "label": "observed-unsupported-identity",
+      "status": 502,
+      "schema": "valid",
+      "name": "SkillMarketUpstreamError",
+      "operation": "search",
+      "requestID": "31199614-4009-4779-8cc9-7acd92030d60",
+      "qualification": "Typed error contract only. Successful new-source search remains unresolved."
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Skill Market 空搜索](records/2026-11/2026-11-09-skill-market-empty-results.md)：真实成功零项的完成反馈与查询身份。
+
 - [Skill Market 本地化](records/2026-11/2026-11-09-skill-market-locale.md)：公开市场数量、风险及确认信息的当前语言展示。
 
 - [文件读取提示](records/2026-11/2026-11-09-file-read-error-presentation.md)：具名路径、缺失与未知故障的真实界面提示。

@@ -1,0 +1,13 @@
+{
+  "status": 502,
+  "query": "\"空<界面>&查询\"",
+  "requestID": "31199614-4009-4779-8cc9-7acd92030d60",
+  "body": {
+    "name": "SkillMarketUpstreamError",
+    "data": {
+      "operation": "search",
+      "endpoint": "https://skills.sh/api/search",
+      "message": "Skill Market search returned an invalid response."
+    }
+  }
+}

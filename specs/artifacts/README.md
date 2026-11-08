@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Skill Market 空搜索证据](2026-11-09-skill-market-empty-results/README.md)：真实空结果、命中、错误及人工截图。
+
 - [Skill Market 本地化证据](2026-11-09-skill-market-locale/README.md)：公开接口与真实桌面截图。
 
 - [文件读取提示证据](2026-11-09-file-read-error-presentation/README.md)：真实400/404/500及恢复原文截图。
