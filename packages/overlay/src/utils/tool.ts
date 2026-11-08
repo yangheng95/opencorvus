@@ -12,19 +12,6 @@ import {
   conversationToolIdentity,
 } from "@opencorvus-ai/transport-protocol"
 
-// ── ANSI stripping ──
-
-/** Strip ANSI escape sequences (colors, cursor, etc.) from terminal output. */
-export function stripAnsi(str: string): string {
-  if (!str) return ""
-  // Based on the strip-ansi npm package regex — covers CSI, OSC, and other escape sequences
-  // eslint-disable-next-line no-control-regex
-  return str.replace(
-    /[\u001B\u009B][[\]()#;?]*(?:(?:(?:(?:;[-a-zA-Z\d\/#&.:=?%@~_]+)*|[a-zA-Z\d]+(?:;[-a-zA-Z\d\/#&.:=?%@~_]*)*)?\u0007)|(?:(?:\d{1,4}(?:;\d{0,4})*)?[\dA-PR-TZcf-nq-uy=><~]))/g,
-    "",
-  )
-}
-
 // ── Helpers ──
 
 function record(value: any): boolean {

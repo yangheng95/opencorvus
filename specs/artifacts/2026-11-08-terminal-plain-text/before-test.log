@@ -1,0 +1,176 @@
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-de8e1c62b37fa17b\published\opencorvus-process-supervisor.exe
+$ bun run script/run-unit-tests.ts test/artifact-export.test.ts
+bun test v1.4.3 (c6da4a4d3)
+
+test\artifact-export.test.ts:
+(pass) Current workbook filename collections use the shared allocation [0.36ms]
+(pass) A workbook exceeding the CSV cell limit returns its explicit export error [0.71ms]
+(pass) Notebook references use the final distinct names for plot.png and plot.png [0.52ms]
+(pass) Notebook references use the final distinct names for plot.png and Plot.PNG [0.78ms]
+(pass) Notebook references use the final distinct names for p:lot.png and p?lot.png [0.24ms]
+(pass) Presentation references match both distinct companion downloads [0.27ms]
+(pass) Media references retain the first canonical download name for a repeated URL [0.11ms]
+(pass) Export collision suffixes preserve names already declared by the delivery [0.12ms]
+(pass) Spreadsheet exports retain every sheet under distinct sanitized filenames [0.33ms]
+(pass) Notebook media export preserves 图 #1 (& plan+.png and its plain label [0.19ms]
+(pass) Notebook media export preserves photo #1.png and its plain label [0.03ms]
+(pass) Notebook media export preserves literal%23.png and its plain label [0.03ms]
+(pass) Notebook media export preserves view(1).png and its plain label [0.21ms]
+(pass) Notebook media export preserves plain.png and its plain label [0.08ms]
+(pass) Presentation media export preserves 图 #1 (& plan+.png and its plain label [0.13ms]
+(pass) Presentation media export preserves photo #1.png and its plain label [0.04ms]
+(pass) Presentation media export preserves literal%23.png and its plain label [0.05ms]
+(pass) Presentation media export preserves view(1).png and its plain label [0.03ms]
+(pass) Presentation media export preserves plain.png and its plain label [0.02ms]
+(pass) documents and edited code export their actual text and useful filenames [0.10ms]
+(pass) CSV preserves multiline cells, quotes, numbers and literal formula-like text [0.18ms]
+(pass) attachment exports retain their canonical bytes locator and name [0.04ms]
+(pass) notebooks export a standard notebook with actual cells and outputs [0.09ms]
+(pass) MCP exports actual completed result text and data [0.11ms]
+(pass) terminal TXT exports the complete visible transcript for plain Unicode [0.07ms]
+(pass) terminal TXT exports the complete visible transcript for SGR colors [0.05ms]
+370 |   ["ST hyperlink", "\u001b]8;;https://example.com\u001b\\Open source\u001b]8;;\u001b\\\n", "Open source\n"],
+371 |   ["BEL hyperlink", "\u001b]8;;https://example.com\u0007开源\u001b]8;;\u0007\n", "开源\n"],
+372 |   ["8-bit CSI", "\u009b32mReady\u009b0m\n", "Ready\n"],
+373 |   ["empty transcript", "", ""],
+374 | ])("terminal TXT exports the complete visible transcript for %s", (_name, output, text) => {
+375 |   expect(artifactExports({ ...base, renderer: "terminal@1", output, columns: 100, rows: 10 })).toEqual([
+                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "filename": "Acceptance.txt",
+      "mime": "text/plain",
+      "text":
+- "Ready
++ "roject titleReady
+  "
+  ,
+    },
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\artifact-export.test.ts:375:96)
+(fail) terminal TXT exports the complete visible transcript for BEL title [0.45ms]
+370 |   ["ST hyperlink", "\u001b]8;;https://example.com\u001b\\Open source\u001b]8;;\u001b\\\n", "Open source\n"],
+371 |   ["BEL hyperlink", "\u001b]8;;https://example.com\u0007开源\u001b]8;;\u0007\n", "开源\n"],
+372 |   ["8-bit CSI", "\u009b32mReady\u009b0m\n", "Ready\n"],
+373 |   ["empty transcript", "", ""],
+374 | ])("terminal TXT exports the complete visible transcript for %s", (_name, output, text) => {
+375 |   expect(artifactExports({ ...base, renderer: "terminal@1", output, columns: 100, rows: 10 })).toEqual([
+                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "filename": "Acceptance.txt",
+      "mime": "text/plain",
+      "text":
+- "Ready
++ "roject titleeady
+  "
+  ,
+    },
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\artifact-export.test.ts:375:96)
+(fail) terminal TXT exports the complete visible transcript for ST title [0.16ms]
+370 |   ["ST hyperlink", "\u001b]8;;https://example.com\u001b\\Open source\u001b]8;;\u001b\\\n", "Open source\n"],
+371 |   ["BEL hyperlink", "\u001b]8;;https://example.com\u0007开源\u001b]8;;\u0007\n", "开源\n"],
+372 |   ["8-bit CSI", "\u009b32mReady\u009b0m\n", "Ready\n"],
+373 |   ["empty transcript", "", ""],
+374 | ])("terminal TXT exports the complete visible transcript for %s", (_name, output, text) => {
+375 |   expect(artifactExports({ ...base, renderer: "terminal@1", output, columns: 100, rows: 10 })).toEqual([
+                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "filename": "Acceptance.txt",
+      "mime": "text/plain",
+      "text":
+- "Open source
++ "ttps://example.compen source
+  "
+  ,
+    },
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\artifact-export.test.ts:375:96)
+(fail) terminal TXT exports the complete visible transcript for ST hyperlink [0.17ms]
+370 |   ["ST hyperlink", "\u001b]8;;https://example.com\u001b\\Open source\u001b]8;;\u001b\\\n", "Open source\n"],
+371 |   ["BEL hyperlink", "\u001b]8;;https://example.com\u0007开源\u001b]8;;\u0007\n", "开源\n"],
+372 |   ["8-bit CSI", "\u009b32mReady\u009b0m\n", "Ready\n"],
+373 |   ["empty transcript", "", ""],
+374 | ])("terminal TXT exports the complete visible transcript for %s", (_name, output, text) => {
+375 |   expect(artifactExports({ ...base, renderer: "terminal@1", output, columns: 100, rows: 10 })).toEqual([
+                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "filename": "Acceptance.txt",
+      "mime": "text/plain",
+      "text":
+- "开源
++ "ttps://example.com开源
+  "
+  ,
+    },
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\artifact-export.test.ts:375:96)
+(fail) terminal TXT exports the complete visible transcript for BEL hyperlink [0.16ms]
+370 |   ["ST hyperlink", "\u001b]8;;https://example.com\u001b\\Open source\u001b]8;;\u001b\\\n", "Open source\n"],
+371 |   ["BEL hyperlink", "\u001b]8;;https://example.com\u0007开源\u001b]8;;\u0007\n", "开源\n"],
+372 |   ["8-bit CSI", "\u009b32mReady\u009b0m\n", "Ready\n"],
+373 |   ["empty transcript", "", ""],
+374 | ])("terminal TXT exports the complete visible transcript for %s", (_name, output, text) => {
+375 |   expect(artifactExports({ ...base, renderer: "terminal@1", output, columns: 100, rows: 10 })).toEqual([
+                                                                                                     ^
+error: expect(received).toEqual(expected)
+
+  [
+    {
+      "filename": "Acceptance.txt",
+      "mime": "text/plain",
+      "text":
+- "Ready
++ "32mReady0m
+  "
+  ,
+    },
+  ]
+
+- Expected  - 1
++ Received  + 1
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\overlay\test\artifact-export.test.ts:375:96)
+(fail) terminal TXT exports the complete visible transcript for 8-bit CSI [0.14ms]
+(pass) terminal TXT exports the complete visible transcript for empty transcript [0.02ms]
+
+5 tests failed:
+(fail) terminal TXT exports the complete visible transcript for BEL title [0.45ms]
+(fail) terminal TXT exports the complete visible transcript for ST title [0.16ms]
+(fail) terminal TXT exports the complete visible transcript for ST hyperlink [0.17ms]
+(fail) terminal TXT exports the complete visible transcript for BEL hyperlink [0.16ms]
+(fail) terminal TXT exports the complete visible transcript for 8-bit CSI [0.14ms]
+
+ 27 pass
+ 5 fail
+ 36 expect() calls
+Ran 32 tests across 1 file. [293.00ms]
+error: script "test:unit" exited with code 1

@@ -1,4 +1,5 @@
 import { createMemo, createResource, For, Show } from "solid-js"
+import stripAnsi from "strip-ansi"
 import { ChangeLineStats, DiffView, changeStatusLabel } from "./DiffView"
 import { summarizeFileChanges } from "../services/diff"
 import {
@@ -7,7 +8,6 @@ import {
   readToolResultSummary,
   toolNameKey,
   toolInputCommand,
-  stripAnsi,
   toolFailurePresentation,
   toolPayloadText,
 } from "../utils/tool"

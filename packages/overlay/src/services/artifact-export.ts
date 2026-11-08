@@ -1,4 +1,5 @@
 import { createTwoFilesPatch } from "diff"
+import stripAnsi from "strip-ansi"
 import type { InteractiveArtifact, InteractiveArtifactPayload } from "./interactive-artifact"
 
 export type ArtifactExport = { filename: string; mime: string } & ({ text: string } | { url: string })
@@ -59,10 +60,6 @@ export function artifactCSV(rows: unknown[][]): string {
         .join(","),
     )
     .join("\r\n")
-}
-
-export function plainTerminalOutput(value: string): string {
-  return value.replace(/\u001B(?:[@-_][0-?]*[ -/]*[@-~]|\][^\u0007]*(?:\u0007|\u001B\\))/g, "")
 }
 
 export const CODE_EXTENSIONS = {
@@ -139,7 +136,7 @@ function rendererExports(payload: InteractiveArtifactPayload): ArtifactExportPla
         "text/x-diff",
       )
     case "terminal@1":
-      return text("txt", plainTerminalOutput(payload.output))
+      return text("txt", stripAnsi(payload.output))
     case "table@1":
       return csv([
         payload.columns.map((column) => column.label),

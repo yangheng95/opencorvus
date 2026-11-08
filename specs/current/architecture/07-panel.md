@@ -4683,6 +4683,11 @@ Closing a parent retires its submenu, while repeated submenu activation retains
 its established positioning.
 Terminal artifacts replay an immutable American National Standards Institute
 (ANSI) transcript and never create a shell, pseudoterminal, socket, or process.
+Their full-transcript copy and TXT export use the same declared `strip-ansi`
+dependency as plain tool-output, error, progress and diagnostic presentation.
+OSC titles and hyperlink controls are removed while visible text, Unicode and
+original line breaks remain intact. This is escape-code conversion, not terminal
+screen emulation or a change to the saved transcript or complete tool result.
 
 Model Context Protocol (MCP) Apps are created only when a real MCP tool declares
 one `ui://` resource. The Session processor materializes the artifact at

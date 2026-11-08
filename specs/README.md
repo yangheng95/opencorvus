@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [终端纯文本复制与导出](records/2026-11/2026-11-08-terminal-plain-text.md)：控制序列根因、共享库及真实导出合同。
+
 - [成功刷新说明随时间推进](records/2026-11/2026-11-08-provider-relative-time.md)：真实静置计时、共享时钟和原成功时间。
 
 - [刷新时间的语言与键盘阅读](records/2026-11/2026-11-08-provider-refresh-time.md)：真实成功时间、统一格式和公共提示层。

@@ -1,0 +1,18 @@
+请为这条测试对话发布一个只读终端产物，标题为 ANSI transcript。使用 publish_interactive_artifact，按下面 JSON 的真实转义字符发布；不要把 \u001b 作为六个可见字符，也不要改写正文。无需运行命令、联网取内容或委托成员。
+
+{
+  "artifact": {
+    "schemaVersion": "1",
+    "title": "ANSI transcript",
+    "content": {
+      "renderer": "terminal@1",
+      "output": "\u001b]0;Project title\u0007\u001b[32mReady\u001b[0m\n\u001b]8;;https://example.com\u001b\\Open source\u001b]8;;\u001b\\\n",
+      "columns": 80,
+      "rows": 10
+    }
+  }
+}
+
+发布完成后用一句中文告知已发布即可。预期终端可见正文、全文复制和 TXT 下载都是两行：
+Ready
+Open source

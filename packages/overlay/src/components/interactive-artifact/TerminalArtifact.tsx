@@ -1,6 +1,7 @@
 import { FitAddon } from "@xterm/addon-fit"
 import { SearchAddon } from "@xterm/addon-search"
 import { Terminal } from "@xterm/xterm"
+import stripAnsi from "strip-ansi"
 import "@xterm/xterm/css/xterm.css"
 import { createSignal, onCleanup, onMount } from "solid-js"
 import type { InteractiveArtifactPayload } from "../../services/interactive-artifact"
@@ -9,7 +10,6 @@ import { t } from "../../utils/i18n"
 import { Button } from "../ui/Button"
 import { SearchField } from "../ui/SearchField"
 import { ArtifactFrame } from "./ArtifactFrame"
-import { plainTerminalOutput } from "../../services/artifact-export"
 
 type TerminalPayload = Extract<InteractiveArtifactPayload, { renderer: "terminal@1" }>
 
@@ -35,7 +35,7 @@ export function TerminalArtifact(props: { payload: TerminalPayload }) {
   let resizeObserver: ResizeObserver | undefined
   let stopThemeObserver: (() => void) | undefined
   const [query, setQuery] = createSignal("")
-  const plain = plainTerminalOutput(props.payload.output)
+  const plain = stripAnsi(props.payload.output)
 
   const searchOptions = (incremental = false) => {
     if (!host) return { incremental }

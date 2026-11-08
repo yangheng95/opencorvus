@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [终端纯文本证据](2026-11-08-terminal-plain-text/README.md)：准确导出、原始记录和真实页面验收。
+
 - [刷新说明计时证据](2026-11-08-provider-relative-time/README.md)：原成功时间和连续静置截图。
 
 - [刷新时间阅读证据](2026-11-08-provider-refresh-time/README.md)：中文前态、双语后态和键盘提示。

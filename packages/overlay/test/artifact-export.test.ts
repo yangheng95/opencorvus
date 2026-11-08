@@ -4,7 +4,6 @@ import {
   artifactExports,
   artifactExportFilenames,
   artifactFilename,
-  plainTerminalOutput,
 } from "../src/services/artifact-export"
 import type { InteractiveArtifactPayload } from "../src/services/interactive-artifact"
 
@@ -361,5 +360,19 @@ test("MCP exports actual completed result text and data", () => {
     { filename: "Acceptance.txt", mime: "text/plain", text: "Ready\nTwo files" },
     { filename: "Acceptance.json", mime: "application/json", text: '{\n  "count": 2\n}' },
   ])
-  expect(plainTerminalOutput("\u001b[32mready\u001b[0m\n")).toBe("ready\n")
+})
+
+test.each([
+  ["plain Unicode", "就绪\nOpen source\n", "就绪\nOpen source\n"],
+  ["SGR colors", "\u001b[32mReady\u001b[0m\n", "Ready\n"],
+  ["BEL title", "\u001b]0;Project title\u0007Ready\n", "Ready\n"],
+  ["ST title", "\u001b]0;Project title\u001b\\Ready\n", "Ready\n"],
+  ["ST hyperlink", "\u001b]8;;https://example.com\u001b\\Open source\u001b]8;;\u001b\\\n", "Open source\n"],
+  ["BEL hyperlink", "\u001b]8;;https://example.com\u0007开源\u001b]8;;\u0007\n", "开源\n"],
+  ["8-bit CSI", "\u009b32mReady\u009b0m\n", "Ready\n"],
+  ["empty transcript", "", ""],
+])("terminal TXT exports the complete visible transcript for %s", (_name, output, text) => {
+  expect(artifactExports({ ...base, renderer: "terminal@1", output, columns: 100, rows: 10 })).toEqual([
+    { filename: "Acceptance.txt", mime: "text/plain", text },
+  ])
 })
