@@ -1,0 +1,122 @@
+[
+  {
+    "phase": "english-opener",
+    "active": true,
+    "connected": true,
+    "disabled": false,
+    "id": "dropdownmenu-cl-250-trigger",
+    "rowKey": "mission:a087d018778584b9"
+  },
+  {
+    "phase": "english-selection-busy",
+    "activeID": "dropdownmenu-cl-250-item-cl-267",
+    "activeTag": "BUTTON",
+    "ariaBusy": "true",
+    "ariaDisabled": "true",
+    "disabled": false,
+    "expanded": "false",
+    "triggerID": "dropdownmenu-cl-250-trigger"
+  },
+  {
+    "phase": "english-download-complete",
+    "activeID": "dropdownmenu-cl-250-trigger",
+    "activeLabel": "More actions",
+    "activeTag": "BUTTON",
+    "ariaBusy": null,
+    "ariaDisabled": null,
+    "disabled": false,
+    "expanded": "false",
+    "triggerID": "dropdownmenu-cl-250-trigger"
+  },
+  {
+    "phase": "english-after-reload",
+    "activeID": "dropdownmenu-cl-250-trigger",
+    "activeLabel": "More actions",
+    "activeTag": "BUTTON"
+  },
+  {
+    "phase": "english-menu-escape",
+    "activeID": "dropdownmenu-cl-250-item-cl-275",
+    "activeLabel": null,
+    "activeTag": "BUTTON"
+  },
+  {
+    "phase": "english-menu-escape-settled",
+    "activeID": "dropdownmenu-cl-250-trigger",
+    "activeLabel": "More actions",
+    "activeTag": "BUTTON"
+  },
+  {
+    "phase": "english-left-main",
+    "activeID": "",
+    "activeTag": "BUTTON",
+    "activeText": "b18 keyboard archive after"
+  },
+  {
+    "phase": "user-chooses-search-then-tab-during-download",
+    "activeID": "combobox-cl-55-input",
+    "activeLabel": "Filter by project",
+    "activeTag": "INPUT",
+    "ariaBusy": "true",
+    "expanded": "false"
+  },
+  {
+    "phase": "download-complete-retains-user-focus",
+    "activeID": "combobox-cl-55-input",
+    "activeLabel": "Filter by project",
+    "activeTag": "INPUT"
+  },
+  {
+    "phase": "chinese-recents-opener",
+    "active": true,
+    "id": "dropdownmenu-cl-256-trigger",
+    "rowKey": "mission:a087d018778584b9"
+  },
+  {
+    "phase": "chinese-recents-download-complete",
+    "activeID": "dropdownmenu-cl-256-trigger",
+    "activeLabel": "更多操作",
+    "activeTag": "BUTTON"
+  },
+  {
+    "phase": "chinese-recents-menu-escape-settled",
+    "activeID": "dropdownmenu-cl-256-trigger",
+    "activeLabel": "更多操作",
+    "activeTag": "BUTTON"
+  },
+  {
+    "phase": "chinese-recents-second-escape-main",
+    "activeTag": "BUTTON",
+    "activeText": "b18 keyboard archive after",
+    "rowKey": "mission:a087d018778584b9"
+  },
+  {
+    "phase": "real-read-error-dialog-initial",
+    "activeID": "btnAppDialogOk",
+    "activeTag": "BUTTON",
+    "activeText": "确定"
+  },
+  {
+    "phase": "error-tab-to-ok",
+    "activeID": "btnAppDialogOk",
+    "activeText": "确定"
+  },
+  {
+    "phase": "error-dialog-close-main",
+    "activeTag": "BUTTON",
+    "activeText": "b18 keyboard archive after",
+    "rowKey": "mission:a087d018778584b9"
+  },
+  {
+    "phase": "error-retry-success-focus",
+    "activeID": "dropdownmenu-cl-256-trigger",
+    "activeLabel": "更多操作",
+    "activeTag": "BUTTON"
+  },
+  {
+    "phase": "final-bundle",
+    "scripts": [
+      "./assets/main-BlBzKZtY.js"
+    ]
+  }
+]

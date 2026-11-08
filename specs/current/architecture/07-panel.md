@@ -3877,6 +3877,13 @@ whose actual DOM target is inside that action container. Portaled menu keys keep
 the native menu's dismissal, submenu and focus-return ownership even when Solid
 bubbles through the row's logical ancestors. Once the menu returns focus to its
 trigger, the row's existing Escape/ArrowLeft action can return to the main button.
+The row action trigger remains natively focusable while its operation is busy,
+with `aria-disabled` and `aria-busy` projecting that state. A single controlled
+menu disclosure always accepts closing and admits opening only when the row is
+not busy; menu items and the existing operation owner retain duplicate-action
+admission. Row or API authority retirement closes that same disclosure. Normal
+menu dismissal owns focus return, without a later completion forcing focus away
+from a control the user has selected in the meantime.
 Stopping a Task, Mission, or Chat from this menu requires an
 item-named confirmation before dispatch. The row menu has no rename action;
 double-clicking the canonical row main button invokes its existing domain rename

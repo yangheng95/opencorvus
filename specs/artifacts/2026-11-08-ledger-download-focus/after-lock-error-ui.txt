@@ -1,0 +1,20 @@
+未能确认操作结果
+请查看详细信息，再对“b18 keyboard archive after”重试操作。
+详细信息
+HTTP GET 500 mission/a087d018778584b9/project-archive?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b18%5Cproject-after
+
+Request ID: 3bdd1fd2-bca5-49c2-ae63-91e86feac078
+
+ApiError: API 500 mission/a087d018778584b9/project-archive?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b18%5Cproject-after: Internal server error. See x-opencorvus-request-id for diagnostics.
+    at o_e (http://localhost:38955/ui/assets/main-BlBzKZtY.js:139:12220)
+    at async Object.fXe (http://localhost:38955/ui/assets/main-BlBzKZtY.js:278:13876)
+    at async $ (http://localhost:38955/ui/assets/main-BlBzKZtY.js:269:100677)
+
+response body:
+{
+  "name": "UnknownError",
+  "data": {
+    "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+  }
+}
+确定

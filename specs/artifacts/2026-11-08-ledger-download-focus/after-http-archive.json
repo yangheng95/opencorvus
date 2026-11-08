@@ -1,0 +1,43 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/zip",
+    "Content-Disposition": "attachment; filename=\"a087d018778584b9-project.zip\"",
+    "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "Vary": "Origin",
+    "x-opencorvus-archive-file-count": "5",
+    "x-opencorvus-request-id": "6968247a-259b-4b76-8b52-bfaf3a6608c0",
+    "Date": "Sun, 08 Nov 2026 13:31:42 GMT",
+    "Content-Length": "33568854"
+  },
+  "archive_bytes": 33568854,
+  "source_files": [
+    {
+      "filename": "project/.gitattributes",
+      "bytes": 150,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/.gitignore",
+      "bytes": 29,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/.opencorvus/opencorvus.jsonc",
+      "bytes": 1355,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/keep.txt",
+      "bytes": 41,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/payload.bin",
+      "bytes": 33554432,
+      "equals_current_disk": true
+    }
+  ],
+  "missionID": "a087d018778584b9",
+  "projectFileCount": 5
+}

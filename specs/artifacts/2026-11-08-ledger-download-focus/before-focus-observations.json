@@ -1,0 +1,38 @@
+[
+  {
+    "phase": "keyboard-opener",
+    "active": true,
+    "connected": true,
+    "disabled": false,
+    "id": "dropdownmenu-cl-250-trigger",
+    "rowKey": "mission:866a27526605cafd"
+  },
+  {
+    "phase": "after-selection",
+    "activeID": "dropdownmenu-cl-250-item-cl-267",
+    "activeLabel": null,
+    "activeTag": "BUTTON",
+    "ariaBusy": null,
+    "ariaDisabled": null,
+    "disabled": true,
+    "expanded": "false",
+    "triggerID": "dropdownmenu-cl-250-trigger"
+  },
+  {
+    "phase": "closed-menu-observation",
+    "activeID": "",
+    "activeTag": "BODY",
+    "disabled": false,
+    "expanded": "false",
+    "menuVisible": false,
+    "triggerID": "dropdownmenu-cl-250-trigger"
+  },
+  {
+    "phase": "download-complete",
+    "activeID": "",
+    "activeTag": "BODY",
+    "disabled": false,
+    "expanded": "false",
+    "triggerID": "dropdownmenu-cl-250-trigger"
+  }
+]

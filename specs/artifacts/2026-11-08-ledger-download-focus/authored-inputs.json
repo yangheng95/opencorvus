@@ -1,0 +1,8 @@
+{
+  "keep_text": "b18 current archive input\r\n原始正文\r\n",
+  "keep_bytes": 41,
+  "payload_bytes": 33554432,
+  "payload_generator": "Python random.Random(180).randbytes(32 * 1024 * 1024)",
+  "line_endings": "Windows Path.write_text default CRLF",
+  "checker_correction": "Initial independent text expectation used LF although seed wrote CRLF; ZIP-to-current-disk byte checks already passed. Re-read raw owned seed, corrected expected authored line endings, reran full checker on the same downloaded object successfully."
+}

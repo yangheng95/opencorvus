@@ -1,0 +1,78 @@
+{
+  "product_scope": [
+    "WorkLedgerRowView single useDisclosure menu owner",
+    "aria-disabled/aria-busy native-focusable trigger",
+    "existing owner effect retires that same menu",
+    "current 07-panel contract"
+  ],
+  "checks": {
+    "overlay_typecheck": {
+      "exit": 0
+    },
+    "i18n": {
+      "exit": 0,
+      "locales": 2,
+      "keys": 2921
+    },
+    "build": {
+      "command": "bun run build",
+      "exit": 0,
+      "seconds": 69,
+      "actual_browser_bundle": "main-BlBzKZtY.js",
+      "renderer_public_surface": "1 assignment, 1 declared global"
+    },
+    "binary_services": {
+      "command": "bun run test:unit test/binary-api-error-services.test.ts",
+      "exit": 0,
+      "pass": 5,
+      "assertions": 40,
+      "scope": "pure Response-fixture error/binary data contracts; no DOM/render; not UI or end-to-end acceptance"
+    },
+    "docs": {
+      "exit": 0,
+      "operations": 352,
+      "groups": 26
+    },
+    "architecture": {
+      "exit": 0,
+      "documents": 20
+    }
+  },
+  "resources": {
+    "before": {
+      "port": 38954,
+      "session": 96406,
+      "tab": 38,
+      "closed": true,
+      "exit": 0
+    },
+    "after": {
+      "port": 38955,
+      "session": 98658,
+      "tab": 39,
+      "closed": true,
+      "exit": 0
+    },
+    "lock": {
+      "session": 44835,
+      "disposed": true,
+      "exit": 0
+    }
+  },
+  "manual_qualified": [
+    "English project Mission real download returns to original More trigger after reload",
+    "English Return reopens; menu Escape returns More; ArrowLeft returns main",
+    "Chinese Recents Mission real download returns to own More trigger",
+    "Chinese menu Escape returns More; second Escape returns main",
+    "User chooses search then Tab to project filter while aria-busy=true; completion retains project filter",
+    "Real EBUSY/open shows original diagnostic, initial OK; Tab/Return close returns main; unlocked retry returns own More",
+    "Actual browser ZIP entries all equal current files; authored random payload and CRLF keep original validated",
+    "Actual public archive HTTP200, header count5, content-length equals body"
+  ],
+  "limits": [
+    "Native menu reopen during busy not qualified: locator Enter refused aria-disabled and timed out before action; no bypass or product success claim",
+    "No cross-evaluate Node identity claim; only visible IDs and focus facts",
+    "Task/Chat/Work actions, one-list/nested rows, pin reorder, archive removal, stop/rename dialogs and API authority switch not separately exercised",
+    "Zero models/credentials; previous unqualified scopes remain open"
+  ]
+}

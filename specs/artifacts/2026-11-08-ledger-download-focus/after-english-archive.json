@@ -1,0 +1,60 @@
+{
+  "archive_bytes": 33568854,
+  "source_files": [
+    {
+      "filename": "project/.gitattributes",
+      "bytes": 150,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/.gitignore",
+      "bytes": 29,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/.opencorvus/opencorvus.jsonc",
+      "bytes": 1355,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/keep.txt",
+      "bytes": 41,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/payload.bin",
+      "bytes": 33554432,
+      "equals_current_disk": true
+    }
+  ],
+  "manifest": {
+    "schema": "opencorvus.mission-project-archive.v1",
+    "exportedAt": "2026-11-08T13:26:16.160Z",
+    "missionID": "a087d018778584b9",
+    "sessionID": "ses_-zUPbt7SmzzBLq357pQp",
+    "title": "b18 keyboard archive after",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b18\\project-after",
+    "project": {
+      "id": "prj_hDaGolxVn89pr0qJnLtv",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b18\\project-after"
+    },
+    "projectFileRoot": "project/",
+    "projectFileSelection": "Git index + Git ignore-filtered physical entries + OpenCorvus runtime filter",
+    "projectFileCount": 5,
+    "executionFlowRoot": "opencorvus-mission-execution-flow/",
+    "executionFiles": [
+      "manifest.json",
+      "mission.json",
+      "status.json",
+      "tasks.json",
+      "transcript.json"
+    ],
+    "executionFlowBounds": {
+      "maxStringChars": 16384,
+      "maxArrayItems": 500,
+      "maxDepth": 12
+    }
+  },
+  "payload_matches_authored_generator": true,
+  "keep_matches_authored_text": true
+}

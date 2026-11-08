@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [项目下载菜单焦点](records/2026-11/2026-11-08-ledger-download-focus.md)：忙态可聚焦入口、菜单默认回焦与实际下载。
+
 - [项目归档当前文件](records/2026-11/2026-11-08-project-archive-current-files.md)：索引删除项、真实 ZIP 与普通文件投影。
 
 - [通知权限调查](records/2026-11/2026-11-08-notification-permission-feedback.md)：自然页面结果、未验分支与相关正向测试。

@@ -71,6 +71,7 @@ import { ProgressiveList } from "./ui/ProgressiveList"
 import { LedgerRowMainButton } from "./LedgerRowMainButton"
 import { createProjectLedgerGroupCollapseState, ProjectLedgerGroup, type ProjectLedgerGroupProps } from "./ProjectLedgerGroup"
 import { useTaskRowActionsKeyboard } from "./useTaskRowActionsKeyboard"
+import { useDisclosure } from "../solid/disclosure"
 
 const WORK_LEDGER_PAGE_SIZE = 80
 
@@ -386,6 +387,7 @@ function WorkLedgerRowView(props: {
   const showDownloadActions = getHostTransport().kind !== "tauri"
   const hasActions = () => true
   const rowActions = useTaskRowActionsKeyboard(hasActions)
+  const rowMenu = useDisclosure()
 
   let actionGeneration = 0
   createEffect(() => {
@@ -393,6 +395,7 @@ function WorkLedgerRowView(props: {
     row()
     actionGeneration += 1
     setBusy(false)
+    rowMenu.close()
   })
   onCleanup(() => {
     actionGeneration += 1
@@ -633,7 +636,16 @@ function WorkLedgerRowView(props: {
             </span>
           </Show>
           <div class="task-row-actions work-row-actions" onKeyDown={rowActions.closeActionsFromKeyboardEvent}>
-            <DropdownMenu.Root placement="bottom-end" gutter={6} fitViewport>
+            <DropdownMenu.Root
+              placement="bottom-end"
+              gutter={6}
+              fitViewport
+              open={rowMenu.open()}
+              onOpenChange={(open) => {
+                if (!open) rowMenu.close()
+                else if (!busy()) rowMenu.openIt()
+              }}
+            >
               <DropdownMenu.Trigger
                 as={Button}
                 type="button"
@@ -642,7 +654,8 @@ function WorkLedgerRowView(props: {
                 tone="neutral"
                 data-chrome="icon-action"
                 data-ui="work-row-actions-menu-trigger"
-                disabled={busy()}
+                aria-disabled={busy() || undefined}
+                aria-busy={busy() || undefined}
                 tabIndex={rowActions.actionButtonTabIndex()}
                 title={t("work_ledger.action.more")}
                 aria-label={t("work_ledger.action.more")}

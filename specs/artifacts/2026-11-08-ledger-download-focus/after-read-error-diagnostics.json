@@ -1,0 +1,52 @@
+[
+  {
+    "level": "info",
+    "time": "2026-11-08T13:30:18.299Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "3bdd1fd2-bca5-49c2-ae63-91e86feac078",
+      "method": "GET",
+      "path": "/mission/a087d018778584b9/project-archive",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "error",
+    "time": "2026-11-08T13:30:18.776Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "3bdd1fd2-bca5-49c2-ae63-91e86feac078",
+      "method": "GET",
+      "path": "/mission/a087d018778584b9/project-archive",
+      "statusCode": 500,
+      "error": {
+        "type": "Error",
+        "message": "EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b18\\project-after\\keep.txt'",
+        "stack": "Error: EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b18\\project-after\\keep.txt'\n    at async readArrayBuffer (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\util\\filesystem.ts:150:23)\n    at async addProjectFile (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\task-project-archive.ts:116:44)\n    at async buildProjectArchive (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\task-project-archive.ts:259:15)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\mission.ts:347:33)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\hono-base.js:285:27)",
+        "code": "EBUSY",
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b18\\project-after\\keep.txt",
+        "syscall": "open",
+        "errno": -4082
+      }
+    },
+    "message": "request failed"
+  },
+  {
+    "level": "info",
+    "time": "2026-11-08T13:30:18.776Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "3bdd1fd2-bca5-49c2-ae63-91e86feac078",
+      "method": "GET",
+      "path": "/mission/a087d018778584b9/project-archive",
+      "status": "completed",
+      "statusCode": 500,
+      "duration": 477
+    },
+    "message": "request"
+  }
+]
