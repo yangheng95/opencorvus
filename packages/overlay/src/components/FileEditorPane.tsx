@@ -375,7 +375,6 @@ export function FileEditorPane() {
     const controller = new AbortController()
     downloadController = controller
     setDownloading(true)
-    setError(null)
     const current = () => downloadController === controller && ownsFileTarget(resource) && isApiAuthorityCurrent(authority)
     try {
       let blob: Blob
@@ -389,7 +388,10 @@ export function FileEditorPane() {
         if (!response.ok) throw new ApiError(response.status, requestPath, response.body, response.headers, "GET")
         blob = new Blob([bytesToArrayBuffer(response.body)], { type: response.headers["content-type"] ?? "application/octet-stream" })
       }
-      if (current()) downloadBlob(blob, filename)
+      if (current()) {
+        downloadBlob(blob, filename)
+        setError((failure) => failure?.messageKey === "file.download_failed" ? null : failure)
+      }
     } catch (cause) {
       if (current() && !controller.signal.aborted) setError({ messageKey: "file.download_failed", cause })
     } finally {

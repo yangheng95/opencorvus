@@ -1135,6 +1135,12 @@ the canonical path, streams an opened ordinary file and preserves AttachmentStor
 filenames through the same name reader as previews. Unknown absolute source files
 retain their existing preview contract. Original downloads represent the current
 file read, rather than an immutable historical Artifact snapshot.
+The same pane retains one current action failure. Starting a download does not
+retire it; a current successful browser download handoff retires only an existing
+download failure. Successful draft export preserves an unresolved save conflict,
+its original diagnostics and comparison action because it does not change the
+editing base or save the file. A new download failure remains the current action
+failure under the existing latest-failure contract.
 The original-byte route always returns `application/octet-stream`, matching its
 OpenAPI binary schema and default SDK Blob parsing even for TXT or JSON originals.
 The filename remains in Content-Disposition; preview MIME types remain separate.

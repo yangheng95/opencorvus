@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [草稿导出反馈](records/2026-11/2026-11-08-file-draft-export-feedback.md)：保存冲突、导出反馈归属与真实恢复。
+
 - [设置组合词发现](records/2026-11/2026-11-08-settings-multi-term-search.md)：共用目录匹配器、当前页保持与真实双语筛选。
 
 - [日志导出反馈](records/2026-11/2026-11-08-log-export-feedback.md)：原地语言切换、导出按钮焦点与真实归档。

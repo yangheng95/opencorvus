@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [草稿导出反馈证据](2026-11-08-file-draft-export-feedback/README.md)：自有输入、冲突/下载与原字节回执。
+
 - [设置组合词证据](2026-11-08-settings-multi-term-search/README.md)：真实双语搜索、当前页与表单交互截图。
 
 - [日志导出证据](2026-11-08-log-export-feedback/README.md)：自有日志输入、实际归档回执与反馈截图。

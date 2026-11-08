@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [草稿导出反馈](2026-11-08-file-draft-export-feedback.md)：真实条件保存、下载与错误退休时机。
+
 - [设置组合词发现](2026-11-08-settings-multi-term-search.md)：同页面元数据组合、显式导航与草稿保持。
 
 - [日志导出反馈](2026-11-08-log-export-feedback.md)：私有日志ZIP、忙态键盘与当前语言通知。

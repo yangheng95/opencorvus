@@ -1,0 +1,32 @@
+[
+  {
+    "step": "actual-save-conflict-before-download",
+    "detailsOpen": true,
+    "editor": "b14-draftShared line: readyLocal note: 保留草稿",
+    "feedback": "This file changed on disk. Your edits are kept here. Compare versions to review the changes before deciding what to keep.DetailsHTTP PATCH 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-before\n\nRequest ID: 85e15007-7e2d-496d-9f4a-388d644b6c63\n\nApiError: API 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-before: File changed since it was loaded: note.txt. Reload the current file before saving.\n    at Ge (http://localhost:38946/ui/assets/main-C3zpoJNv.js:62:146241)\n    at async aZe (http://localhost:38946/ui/assets/main-C3zpoJNv.js:274:5625)\n    at async qe (http://localhost:38946/ui/assets/main-C3zpoJNv.js:274:12991)\n\nresponse body:\n{\n  \"name\": \"FileWriteConflictError\",\n  \"data\": {\n    \"path\": \"note.txt\",\n    \"message\": \"File changed since it was loaded: note.txt. Reload the current file before saving.\"\n  }\n}Compare with disk",
+    "file": "note.txt*Save91234›b14-draftShared line: readyLocal note: 保留草稿Plain textThis file changed on disk. Your edits are kept here. Compare versions to review the changes before deciding what to keep.DetailsHTTP PATCH 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-before\n\nRequest ID: 85e15007-7e2d-496d-9f4a-388d644b6c63\n\nApiError: API 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-before: File changed since it was loaded: note.txt. Reload the current file before saving.\n    at Ge (http://localhost:38946/ui/assets/main-C3zpoJNv.js:62:146241)\n    at async aZe (http://localhost:38946/ui/assets/main-C3zpoJNv.js:274:5625)\n    at async qe (http://localhost:38946/ui/assets/main-C3zpoJNv.js:274:12991)\n\nresponse body:\n{\n  \"name\": \"FileWriteConflictError\",\n  \"data\": {\n    \"path\": \"note.txt\",\n    \"message\": \"File changed since it was loaded: note.txt. Reload the current file before saving.\"\n  }\n}Compare with disk",
+    "focus": {
+      "label": null,
+      "tag": "SUMMARY",
+      "text": "Details"
+    },
+    "scripts": [
+      "http://localhost:38946/ui/assets/main-C3zpoJNv.js"
+    ]
+  },
+  {
+    "step": "after-browser-draft-download",
+    "editor": "b14-draftShared line: readyLocal note: 保留草稿",
+    "feedback": null,
+    "focus": {
+      "label": "Download draft",
+      "tag": "BUTTON"
+    },
+    "unsaved": "note.txt*"
+  },
+  {
+    "step": "second-real-save-conflict",
+    "editor": "b14-draftShared line: readyLocal note: 保留草稿",
+    "feedback": "This file changed on disk. Your edits are kept here. Compare versions to review the changes before deciding what to keep.DetailsHTTP PATCH 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-before\n\nRequest ID: 8eda820c-89eb-4acf-a115-1b2fb63374fe\n\nApiError: API 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-before: File changed since it was loaded: note.txt. Reload the current file before saving.\n    at Ge (http://localhost:38946/ui/assets/main-C3zpoJNv.js:62:146241)\n    at async aZe (http://localhost:38946/ui/assets/main-C3zpoJNv.js:274:5625)\n    at async qe (http://localhost:38946/ui/assets/main-C3zpoJNv.js:274:12991)\n\nresponse body:\n{\n  \"name\": \"FileWriteConflictError\",\n  \"data\": {\n    \"path\": \"note.txt\",\n    \"message\": \"File changed since it was loaded: note.txt. Reload the current file before saving.\"\n  }\n}Compare with disk"
+  }
+]

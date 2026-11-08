@@ -1,0 +1,109 @@
+[
+  {
+    "step": "save-conflict-final-build",
+    "editor": "b14-draftShared line: readyLocal note: 保留草稿",
+    "feedback": "This file changed on disk. Your edits are kept here. Compare versions to review the changes before deciding what to keep.DetailsHTTP PATCH 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after\n\nRequest ID: d760a830-dd8a-4dc5-bb65-3311531accd1\n\nApiError: API 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after: File changed since it was loaded: note.txt. Reload the current file before saving.\n    at Ge (http://localhost:38947/ui/assets/main-C-qzEdCk.js:62:146241)\n    at async aZe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:5625)\n    at async qe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:13040)\n\nresponse body:\n{\n  \"name\": \"FileWriteConflictError\",\n  \"data\": {\n    \"path\": \"note.txt\",\n    \"message\": \"File changed since it was loaded: note.txt. Reload the current file before saving.\"\n  }\n}Compare with disk",
+    "scripts": [
+      "http://localhost:38947/ui/assets/main-C-qzEdCk.js"
+    ]
+  },
+  {
+    "step": "successful-download-retains-original-conflict",
+    "editor": "b14-draftShared line: readyLocal note: 保留草稿",
+    "feedback": "This file changed on disk. Your edits are kept here. Compare versions to review the changes before deciding what to keep.DetailsHTTP PATCH 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after\n\nRequest ID: d760a830-dd8a-4dc5-bb65-3311531accd1\n\nApiError: API 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after: File changed since it was loaded: note.txt. Reload the current file before saving.\n    at Ge (http://localhost:38947/ui/assets/main-C-qzEdCk.js:62:146241)\n    at async aZe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:5625)\n    at async qe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:13040)\n\nresponse body:\n{\n  \"name\": \"FileWriteConflictError\",\n  \"data\": {\n    \"path\": \"note.txt\",\n    \"message\": \"File changed since it was loaded: note.txt. Reload the current file before saving.\"\n  }\n}Compare with disk",
+    "focus": {
+      "label": "Download draft",
+      "tag": "BUTTON"
+    },
+    "unsaved": "note.txt*"
+  },
+  {
+    "step": "native-tab-after-draft-download",
+    "focus": {
+      "label": "Reload from disk",
+      "tag": "BUTTON"
+    }
+  },
+  {
+    "step": "same-request-chinese-diagnostic",
+    "detailsOpen": true,
+    "feedback": "磁盘上的文件已发生变化。你的编辑仍保留在这里。可以先比较版本，再决定保留哪些更改。详细信息HTTP PATCH 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after\n\nRequest ID: d760a830-dd8a-4dc5-bb65-3311531accd1\n\nApiError: API 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after: File changed since it was loaded: note.txt. Reload the current file before saving.\n    at Ge (http://localhost:38947/ui/assets/main-C-qzEdCk.js:62:146241)\n    at async aZe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:5625)\n    at async qe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:13040)\n\nresponse body:\n{\n  \"name\": \"FileWriteConflictError\",\n  \"data\": {\n    \"path\": \"note.txt\",\n    \"message\": \"File changed since it was loaded: note.txt. Reload the current file before saving.\"\n  }\n}与磁盘比较",
+    "scrollables": [
+      {
+        "class": "oc-feedback file-editor-error file-editor-compare-feedback",
+        "clientHeight": 289,
+        "overflow": "auto",
+        "scrollHeight": 627,
+        "tag": "DIV"
+      }
+    ]
+  },
+  {
+    "step": "native-end-reads-original-response",
+    "feedbackScrollTop": 338,
+    "focus": "SUMMARY"
+  },
+  {
+    "step": "ordinary-comparison-close-retains-conflict-and-opener",
+    "feedback": "磁盘上的文件已发生变化。你的编辑仍保留在这里。可以先比较版本，再决定保留哪些更改。详细信息HTTP PATCH 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after\n\nRequest ID: d760a830-dd8a-4dc5-bb65-3311531accd1\n\nApiError: API 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after: File changed since it was loaded: note.txt. Reload the current file before saving.\n    at Ge (http://localhost:38947/ui/assets/main-C-qzEdCk.js:62:146241)\n    at async aZe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:5625)\n    at async qe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:13040)\n\nresponse body:\n{\n  \"name\": \"FileWriteConflictError\",\n  \"data\": {\n    \"path\": \"note.txt\",\n    \"message\": \"File changed since it was loaded: note.txt. Reload the current file before saving.\"\n  }\n}与磁盘比较",
+    "focus": {
+      "insideFeedback": true,
+      "label": null,
+      "tag": "BUTTON",
+      "text": "与磁盘比较"
+    }
+  },
+  {
+    "step": "unsaved-decision-shows-same-preserved-conflict",
+    "dialog": "未保存的更改离开前是否保存对 note.txt 的更改？磁盘上的文件已发生变化。你的编辑仍保留在这里。可以先比较版本，再决定保留哪些更改。详细信息HTTP PATCH 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after\n\nRequest ID: d760a830-dd8a-4dc5-bb65-3311531accd1\n\nApiError: API 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after: File changed since it was loaded: note.txt. Reload the current file before saving.\n    at Ge (http://localhost:38947/ui/assets/main-C-qzEdCk.js:62:146241)\n    at async aZe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:5625)\n    at async qe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:13040)\n\nresponse body:\n{\n  \"name\": \"FileWriteConflictError\",\n  \"data\": {\n    \"path\": \"note.txt\",\n    \"message\": \"File changed since it was loaded: note.txt. Reload the current file before saving.\"\n  }\n}与磁盘比较继续编辑放弃更改保存并继续",
+    "feedback": "磁盘上的文件已发生变化。你的编辑仍保留在这里。可以先比较版本，再决定保留哪些更改。详细信息HTTP PATCH 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after\n\nRequest ID: d760a830-dd8a-4dc5-bb65-3311531accd1\n\nApiError: API 409 file/content?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after: File changed since it was loaded: note.txt. Reload the current file before saving.\n    at Ge (http://localhost:38947/ui/assets/main-C-qzEdCk.js:62:146241)\n    at async aZe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:5625)\n    at async qe (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:13040)\n\nresponse body:\n{\n  \"name\": \"FileWriteConflictError\",\n  \"data\": {\n    \"path\": \"note.txt\",\n    \"message\": \"File changed since it was loaded: note.txt. Reload the current file before saving.\"\n  }\n}与磁盘比较"
+  },
+  {
+    "step": "explicit-adoption-retires-conflict-retains-draft-and-header-focus",
+    "editor": "b14-draftShared line: readyLocal note: 保留草稿",
+    "feedback": null,
+    "focus": {
+      "dataUI": "file-editor-compare",
+      "label": "与磁盘比较",
+      "tag": "BUTTON"
+    },
+    "unsaved": "note.txt*"
+  },
+  {
+    "step": "explicit-save-completes-chosen-draft",
+    "editor": "b14-draftShared line: readyLocal note: 保留草稿",
+    "feedback": null,
+    "saveButton": "保存",
+    "title": "note.txt"
+  },
+  {
+    "step": "reopened-saved-file-complete-lines",
+    "editorLines": [
+      "b14-draft",
+      "Shared line: ready",
+      "Local note: 保留草稿",
+      ""
+    ],
+    "feedback": null,
+    "title": "note.txt"
+  },
+  {
+    "step": "binary-original-moved-real-download-404",
+    "feedback": "文件下载失败。详细信息HTTP GET 404 file/download?path=payload.bin&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after\n\nRequest ID: 19e82c4f-042c-4b86-9521-b9e5876bd2b9\n\nApiError: API 404 file/download?path=payload.bin&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b14%5Cproject-after: File entry not found: payload.bin\n    at Ce (http://localhost:38947/ui/assets/main-C-qzEdCk.js:274:11796)\n\nresponse body:\n{\n  \"name\": \"FileNotFoundError\",\n  \"data\": {\n    \"path\": \"payload.bin\",\n    \"message\": \"File entry not found: payload.bin\"\n  }\n}",
+    "focus": {
+      "tag": "SUMMARY",
+      "text": "详细信息"
+    },
+    "title": "payload.bin"
+  },
+  {
+    "step": "same-pane-header-retry-succeeds-retires-own-download-failure",
+    "feedback": null,
+    "focus": {
+      "insideHeader": true,
+      "label": "下载",
+      "tag": "BUTTON"
+    },
+    "title": "payload.bin"
+  }
+]
