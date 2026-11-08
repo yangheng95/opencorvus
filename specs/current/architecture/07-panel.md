@@ -2041,6 +2041,10 @@ open config tab or primary surface; Chats/Mission Board navigation closes the
 config page through its existing native-surface reveal lifecycle before opening
 the selected primary surface. Settings owns search focus, scoped Escape/Back
 and focus restoration; nested action dialogs keep the shared modal primitive.
+The Memory project picker derives display order from its loaded options and the
+current interface locale. Language changes reorder the same option objects,
+retaining the selected Project, document scope and open conversation. Loading
+owns the raw project data; locale changes do not reload it or replace selection.
 The current popup receives Escape before the settings page. Closing a Tooltip
 preserves its trigger focus and any required activity selection; another Escape
 can dismiss its enclosing menu or settings page through that owner's lifecycle.

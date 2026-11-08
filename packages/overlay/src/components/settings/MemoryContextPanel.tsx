@@ -27,6 +27,12 @@ function projectName(project: MemoryProjectOption): string {
 
 export function MemoryContextPanel() {
   const [projects, setProjects] = createSignal<MemoryProjectOption[]>([])
+  const projectOptions = createMemo(() => {
+    const locale = localeTag()
+    return projects().toSorted((left, right) =>
+      projectName(left).localeCompare(projectName(right), locale) || left.directory.localeCompare(right.directory),
+    )
+  })
   const [selectedProject, setSelectedProject] = createSignal<MemoryProjectOption | null>(null)
   const [loadingProjects, setLoadingProjects] = createSignal(true)
   const [projectLoadError, setProjectLoadError] = createSignal("")
@@ -62,9 +68,7 @@ export function MemoryContextPanel() {
         if (currentDirectory && !rows.has(currentKey)) {
           rows.set(currentKey, { key: currentKey, directory: currentDirectory })
         }
-        const options = [...rows.values()].sort((left, right) =>
-          projectName(left).localeCompare(projectName(right), localeTag()) || left.directory.localeCompare(right.directory),
-        )
+        const options = [...rows.values()]
         setProjects(options)
         setSelectedProject(options.find((project) => project.key === currentKey) ?? null)
       } catch (error) {
@@ -110,7 +114,7 @@ export function MemoryContextPanel() {
       >
         <div class="memory-project-picker">
           <SelectControl<MemoryProjectOption>
-            options={projects()}
+            options={projectOptions()}
             value={selectedProject()}
             onChange={setSelectedProject}
             optionValue="key"

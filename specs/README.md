@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [记忆项目语言排序](records/2026-11/2026-11-09-memory-project-locale-order.md)
 - [文件搜索键盘入口](records/2026-11/2026-11-09-explorer-search-keyboard-entry.md)
 - [Planner 会话归属](records/2026-11/2026-11-09-planner-session-ownership.md)
 - [Skill/MCP 完整错误诊断](records/2026-11/2026-11-09-extension-error-details.md)

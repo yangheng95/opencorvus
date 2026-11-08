@@ -1,0 +1,38 @@
+{
+  "checks": [
+    {
+      "projectID": "prj_hqLOdkjFWboeu2kRqwTY",
+      "name": "Alpha",
+      "storedFileID": "mem_hI3aWSqQHP1Jya6zzb7o",
+      "revision": 0,
+      "timeCreated": 1794171206520,
+      "httpTimeUpdated": 1794171207127,
+      "storedTimeUpdated": 1794171207127,
+      "observedAvailabilityGeneration": 1,
+      "ownedContentRevisionAndCreationExact": true
+    },
+    {
+      "projectID": "prj_hhjLFVooG5JQ0Wwfsi6l",
+      "name": "李四",
+      "storedFileID": "mem_h4NQxSzQvCMg7zTFoQSH",
+      "revision": 0,
+      "timeCreated": 1794171238260,
+      "httpTimeUpdated": 1794171238639,
+      "storedTimeUpdated": 1794171238639,
+      "observedAvailabilityGeneration": 1,
+      "ownedContentRevisionAndCreationExact": true
+    },
+    {
+      "projectID": "prj_hmu87UhWbjKA640jXZsB",
+      "name": "张三",
+      "storedFileID": "mem_hB24qwcDIDCaPE4ucdhd",
+      "revision": 0,
+      "timeCreated": 1794171283440,
+      "httpTimeUpdated": 1794171283440,
+      "storedTimeUpdated": 1794171342128,
+      "observedAvailabilityGeneration": 1,
+      "ownedContentRevisionAndCreationExact": true
+    }
+  ],
+  "qualification": "An optional audit first equated the final mutable timeUpdated with an earlier HTTP read. Config invalidation legitimately increments availabilityGeneration and updates that timestamp. The corrected check verifies exact owned content/revision/immutable creation and records current metadata; it does not gate on mutable timestamp equality. The precise notifying config event was not traced."
+}
