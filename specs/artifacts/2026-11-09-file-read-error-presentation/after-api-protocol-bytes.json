@@ -1,0 +1,59 @@
+{
+  "protocol": {
+    "operations": 352,
+    "paths": "exactly preserved",
+    "components": "exactly preserved"
+  },
+  "responses": [
+    {
+      "path": "sample.txt",
+      "status": 400,
+      "requestID": "38d38638-7bf8-4013-b2ce-61935f0c00c0",
+      "body": {
+        "name": "FileInvalidPathError",
+        "data": {
+          "path": "sample.txt",
+          "message": "Access denied: path escapes project directory"
+        }
+      }
+    },
+    {
+      "path": "notes.txt",
+      "status": 200,
+      "requestID": "59804d32-e621-4b99-a86a-53caf4129f41",
+      "body": {
+        "type": "text",
+        "content": "b30 project original\r\n资料保持\r\n",
+        "revision": "96783f4ddc367a3cee7016cdc1fb8f408f313ab42727048661607a16598d6832"
+      }
+    },
+    {
+      "path": "folder/notes.txt",
+      "status": 200,
+      "requestID": "9ac4fb12-223f-4fda-a48f-1055966df786",
+      "body": {
+        "type": "text",
+        "content": "b30 scoped original\r\n范围内资料\r\n",
+        "revision": "a40d047cdb73f635e0774c197179a9ad3def6b97622b8a5c342e23e6c8ce5857"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "project-after/notes.txt",
+      "content": "b30 project original\r\n资料保持\r\n",
+      "bytes": 36
+    },
+    {
+      "path": "project-after/folder/notes.txt",
+      "content": "b30 scoped original\r\n范围内资料\r\n",
+      "bytes": 38
+    },
+    {
+      "path": "outside-after/notes.txt",
+      "content": "b30 external own original\r\n自有外部原文\r\n",
+      "bytes": 47
+    }
+  ],
+  "restoredLink": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b30\\outside-after\\notes.txt"
+}

@@ -1,0 +1,30 @@
+{
+  "response": {
+    "status": 400,
+    "requestID": "48993333-d98c-4e3e-b51a-2fd705ad65b8",
+    "body": {
+      "name": "FileInvalidPathError",
+      "data": {
+        "path": "sample.txt",
+        "message": "Access denied: path escapes project directory"
+      }
+    }
+  },
+  "files": [
+    {
+      "path": "project-before/notes.txt",
+      "content": "b30 project original\r\n资料保持\r\n",
+      "bytes": 36
+    },
+    {
+      "path": "project-before/folder/notes.txt",
+      "content": "b30 scoped original\r\n范围内资料\r\n",
+      "bytes": 38
+    },
+    {
+      "path": "outside-before/notes.txt",
+      "content": "b30 external own original\r\n自有外部原文\r\n",
+      "bytes": 47
+    }
+  ]
+}

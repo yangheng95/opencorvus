@@ -935,9 +935,11 @@ original diagnostics in Details and explicit Retry through that resource's
 existing refetch. The loading branch owns pending retries; the original request
 key, comparison target, API authority and canonical Part reader retain ownership.
 Retry does not substitute current disk contents for the historical comparison.
-The file workbench distinguishes a structured 404/FileNotFoundError from unknown
-read failures. Its localized feedback names the selected path, explains possible
-moves/deletion and offers the existing retry after recovery. The original error
+The file workbench derives its read-failure title and hint from the same original
+error: 404/FileNotFoundError explains possible moves/deletion;
+400/FileInvalidPathError explains that the path cannot be opened here and asks
+the user to check its location and current Project. Its localized feedback names
+the selected path and offers the existing retry after recovery. The original error
 remains in Details; the loaded target, request authority and retry owner stay the
 same. Unknown read failures keep their operation-specific summary.
 The action is labelled as reading the current file, independently of historical edits.

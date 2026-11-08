@@ -283,11 +283,19 @@ export function FileEditorPane() {
     const failure = error()
     return failure && t(failure.messageKey)
   }
-  const missingReadTarget = createMemo(() => {
+  const readFailurePresentation = createMemo(() => {
     const cause = loadFailure()?.error
     const body = cause instanceof ApiError ? cause.body : undefined
-    return cause instanceof ApiError && cause.status === 404 && !!body && typeof body === "object" &&
-      (body as { name?: unknown }).name === "FileNotFoundError"
+    if (cause instanceof ApiError && body && typeof body === "object") {
+      const name = (body as { name?: unknown }).name
+      if (cause.status === 404 && name === "FileNotFoundError") {
+        return { titleKey: "file_editor.load_missing", hintKey: "file_editor.load_missing_hint" } as const
+      }
+      if (cause.status === 400 && name === "FileInvalidPathError") {
+        return { titleKey: "file_editor.load_invalid_path", hintKey: "file_editor.load_invalid_path_hint" } as const
+      }
+    }
+    return { titleKey: "file_editor.load_failed", hintKey: "file_editor.load_failed_hint" } as const
   })
 
   const comparisonPair = createMemo(() => {
@@ -795,7 +803,7 @@ export function FileEditorPane() {
                   class="file-editor-load-feedback"
                   data-ui="file-editor-load-error"
                   tone="error"
-                  title={t(missingReadTarget() ? "file_editor.load_missing" : "file_editor.load_failed")}
+                  title={t(readFailurePresentation().titleKey)}
                   details={loadFailure() ? formatErrorDetails(loadFailure()!.error) : undefined}
                   actions={
                     <Button
@@ -813,7 +821,7 @@ export function FileEditorPane() {
                   }
                 >
                   <div class="file-editor-failure-path">{target()?.sourceAbsolutePath || path()}</div>
-                  <div>{t(missingReadTarget() ? "file_editor.load_missing_hint" : "file_editor.load_failed_hint")}</div>
+                  <div>{t(readFailurePresentation().hintKey)}</div>
                 </Feedback>
               }
             >

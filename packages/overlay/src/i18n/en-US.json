@@ -2352,6 +2352,8 @@
   "file_editor.binary_download_hint": "Download this file to open it in another app.",
   "file_editor.load_failed": "Could not load this file",
   "file_editor.load_failed_hint": "Check the file path and access, then retry.",
+  "file_editor.load_invalid_path": "This file path cannot be opened here",
+  "file_editor.load_invalid_path_hint": "Check the file location and current project, then reopen it.",
   "file_editor.load_missing": "File not found at this path",
   "file_editor.load_missing_hint": "The file may have been moved or deleted. Check its current location, or retry after it is restored.",
   "file_editor.unsaved": "Unsaved changes",

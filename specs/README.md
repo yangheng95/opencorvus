@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件读取提示](records/2026-11/2026-11-09-file-read-error-presentation.md)：具名路径、缺失与未知故障的真实界面提示。
+
 - [读取路径拒绝合同](records/2026-11/2026-11-09-file-read-path-errors.md)：现有访问约束下的具名诊断与原路径。
 
 - [目录读取具名错误](records/2026-11/2026-11-09-directory-read-errors.md)：缺失/非目录读取、真实回执与公开错误合同。

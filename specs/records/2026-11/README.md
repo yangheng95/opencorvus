@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [文件读取提示](2026-11-09-file-read-error-presentation.md)：同一读取原错误的可操作本地化展示。
+
 - [读取路径拒绝合同](2026-11-09-file-read-path-errors.md)：词法/链接目标拒绝与真实读取边界。
 
 - [目录读取具名错误](2026-11-09-directory-read-errors.md)：系统错误分类、运行时接口与实际加载反馈。

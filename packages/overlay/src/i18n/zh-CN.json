@@ -2351,6 +2351,8 @@
   "file_editor.binary_download_hint": "下载此文件，在其他应用中打开。",
   "file_editor.load_failed": "无法加载此文件",
   "file_editor.load_failed_hint": "确认文件路径和访问权限后重试。",
+  "file_editor.load_invalid_path": "无法从此路径打开文件",
+  "file_editor.load_invalid_path_hint": "请确认文件位置与当前项目，再重新打开。",
   "file_editor.load_missing": "此路径下找不到文件",
   "file_editor.load_missing_hint": "文件可能已移动或删除。请确认其当前位置，或在文件恢复后重试。",
   "file_editor.unsaved": "未保存的更改",
