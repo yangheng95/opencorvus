@@ -1,0 +1,54 @@
+{
+  "files": [
+    {
+      "path": "dest/fresh.txt",
+      "status": 200,
+      "body": {
+        "type": "text",
+        "content": "b23 final build fresh source\n",
+        "revision": "f898daf3939379d539b64e6e02cfca55c24441083bbbe2c71b4f04d02e432b0a"
+      },
+      "bytes": 29,
+      "physicalContent": "b23 final build fresh source\n"
+    },
+    {
+      "path": "dest/notes.txt",
+      "status": 200,
+      "body": {
+        "type": "text",
+        "content": "b23 original note\r\n原始资料\r\n",
+        "revision": "107041a918d8d8622db13805d910ee496718d464c6a7adbe20e01dc82cb16619"
+      },
+      "bytes": 33,
+      "physicalContent": "b23 original note\r\n原始资料\r\n"
+    },
+    {
+      "path": "dest/资料.txt",
+      "status": 200,
+      "body": {
+        "type": "text",
+        "content": "b23 other original\n",
+        "revision": "ac388a215bc6ec8211625652f5191c277176d8579bbf92aa57d1ecfdf4644699"
+      },
+      "bytes": 19,
+      "physicalContent": "b23 other original\n"
+    },
+    {
+      "path": "dest/neighbor-renamed.txt",
+      "status": 200,
+      "body": {
+        "type": "text",
+        "content": "b23 destination neighbor\n",
+        "revision": "d5c66a705d6cb397487345687ee38a2f01b78e8e03a74d4ae1cdd7f7b2c2d1f8"
+      },
+      "bytes": 25,
+      "physicalContent": "b23 destination neighbor\n"
+    }
+  ],
+  "search": {
+    "status": 200,
+    "body": [
+      "dest\\资料.txt"
+    ]
+  }
+}

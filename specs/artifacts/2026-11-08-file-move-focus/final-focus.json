@@ -1,0 +1,49 @@
+[
+  {
+    "phase": "final-fresh-move",
+    "scripts": [
+      "http://localhost:38965/ui/assets/main-Dz-yHp9q.js"
+    ],
+    "tag": "BUTTON",
+    "text": "fresh.txt"
+  },
+  {
+    "phase": "final-search-match",
+    "query": "other",
+    "tag": "BUTTON",
+    "text": "other-retained.txtdest"
+  },
+  {
+    "phase": "final-search-rename",
+    "query": "other",
+    "tag": "BUTTON",
+    "text": "other-renamed.txtdest"
+  },
+  {
+    "phase": "final-search-exit",
+    "label": "Search files",
+    "tag": "INPUT",
+    "value": "other"
+  },
+  {
+    "phase": "final-chinese-move",
+    "tag": "BUTTON",
+    "text": "资料.txt"
+  },
+  {
+    "phase": "final-cancel",
+    "tag": "BUTTON",
+    "text": "notes.txt"
+  },
+  {
+    "phase": "final-conflict",
+    "tag": "BUTTON",
+    "text": "notes.txt"
+  },
+  {
+    "phase": "final-open-editor-move",
+    "activeTool": "文件",
+    "label": "neighbor-renamed.txt",
+    "tag": "DIV"
+  }
+]

@@ -1,0 +1,74 @@
+{
+  "created": {
+    "status": 200,
+    "requestID": "851ed5d2-6002-43f3-bac8-2ea0e59de68b",
+    "body": {
+      "name": "empty-target",
+      "path": "empty-target",
+      "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b23\\project-before\\empty-target",
+      "type": "directory",
+      "ignored": false
+    }
+  },
+  "listed": {
+    "status": 200,
+    "requestID": "09c22e90-3d01-434d-865d-379d7a8918fe",
+    "body": [
+      {
+        "name": "dest",
+        "path": "dest",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b23\\project-before\\dest",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      {
+        "name": "empty-target",
+        "path": "empty-target",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b23\\project-before\\empty-target",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      {
+        "name": "notes.txt",
+        "path": "notes.txt",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b23\\project-before\\notes.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": "other.txt",
+        "path": "other.txt",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b23\\project-before\\other.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      }
+    ]
+  },
+  "emptySearch": {
+    "status": 200,
+    "requestID": "de513a22-dc7b-43c7-9710-8413c34be29b",
+    "body": []
+  },
+  "seed": {
+    "status": 200,
+    "requestID": "2564a6ab-68a2-4388-8065-d9ff80c89843",
+    "body": {
+      "name": "seed.txt",
+      "path": "empty-target\\seed.txt",
+      "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b23\\project-before\\empty-target\\seed.txt",
+      "type": "file",
+      "ignored": false
+    }
+  },
+  "seededSearch": {
+    "status": 200,
+    "requestID": "10f71fe4-5634-43af-ab6e-d95197b37cb2",
+    "body": [
+      "empty-target/"
+    ]
+  }
+}

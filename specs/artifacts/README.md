@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件移动键盘证据](2026-11-08-file-move-focus/README.md)：真实桌面接续、接口回执和自有原文。
+
 - [Mission看板静置时间证据](2026-11-08-mission-board-relative-time/README.md)：原记录、真实墙钟和人工视觉复核。
 
 - [匿名项目转换合同证据](2026-11-08-project-promotion-contracts/README.md)：原身份/字节、接口回执与实际键盘截图。

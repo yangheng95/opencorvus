@@ -1,0 +1,19 @@
+[
+  {
+    "phase": "after-move-stable",
+    "label": null,
+    "scripts": [
+      "http://localhost:38965/ui/assets/main-CpqLifGE.js"
+    ],
+    "tag": "BUTTON",
+    "text": "notes.txt"
+  },
+  {
+    "phase": "after-search-match",
+    "query": "",
+    "tag": "INPUT",
+    "text": "",
+    "observedExplorerQuery": "other",
+    "queryObservationScope": "initial query field read hit hidden Mission search; corrected to current Explorer"
+  }
+]

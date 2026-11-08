@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [文件移动键盘接续](2026-11-08-file-move-focus.md)：操作归属、刷新后行与原字节验收。
+
 - [Mission看板静置时间](2026-11-08-mission-board-relative-time.md)：草稿卡片静置调查与连续可见截图。
 
 - [匿名项目转换合同](2026-11-08-project-promotion-contracts.md)：正式匿名输入、目录转换与公开错误正向验收。

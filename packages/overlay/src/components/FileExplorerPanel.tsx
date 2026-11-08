@@ -1452,6 +1452,52 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
   }
 
+  function capturePathMutationFocus(scope: ExplorerOperationScope) {
+    const openingElement = document.activeElement
+    const opener = openingElement instanceof HTMLElement ? dialogOpeningFocusTarget(openingElement) : null
+    const openingQuery = query().trim()
+    let focusTarget = () => opener
+    const returnFocusTarget = () =>
+      ownsExplorerOperation(scope) && active() && query().trim() === openingQuery ? focusTarget() : null
+    return {
+      returnFocusTarget,
+      restore(path: string, reads: FileRefreshReceipt[], ownsOperation: () => boolean): void {
+        if (!ownsOperation() || !active() || query().trim() !== openingQuery || deferredQuery() !== openingQuery) return
+        const nextPath = normalizeExplorerPath(path)
+        const refreshed = reads.some(
+          (read) =>
+            read.state.status === "loaded" &&
+            (openingQuery
+              ? read.target.kind === "search" && read.target.query === openingQuery
+              : read.target.kind === "directory" && read.target.path === parentPath(nextPath)),
+        )
+        if (
+          !refreshed ||
+          !listElement?.clientWidth ||
+          !listElement.clientHeight ||
+          listElement.closest('[inert], [hidden], [aria-hidden="true"]')
+        )
+          return
+        const focused = document.activeElement
+        if (
+          !(focused instanceof HTMLElement) ||
+          (focused !== document.body && dialogOpeningFocusTarget(focused) !== opener)
+        )
+          return
+        const row = rows().find(
+          (entry) => normalizeExplorerPath(entry.kind === "node" ? entry.node.path : entry.path) === nextPath,
+        )
+        if (row) {
+          focusTarget = () => rowElements.get(row.key) ?? null
+          focusRow(row, focused)
+        } else if (openingQuery && searchInput?.isConnected && !searchInput.disabled) {
+          focusTarget = () => searchInput ?? null
+          searchInput.focus({ preventScroll: true })
+        }
+      },
+    }
+  }
+
   async function renameItem(item: ExplorerSelection | null): Promise<void> {
     if (!item) {
       setMutationValidation("selection")
@@ -1462,12 +1508,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationValidation("directory")
       return
     }
-    const openingElement = document.activeElement
-    const opener = openingElement instanceof HTMLElement ? dialogOpeningFocusTarget(openingElement) : null
-    const openingQuery = query().trim()
-    let focusTarget = () => opener
-    const returnFocusTarget = () =>
-      ownsExplorerOperation(scope) && active() && query().trim() === openingQuery ? focusTarget() : null
+    const focus = capturePathMutationFocus(scope)
     const result = await showAppDialog({
       kind: "file-rename",
       title: t("explorer.rename"),
@@ -1479,7 +1520,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputRequiredMessage: t("explorer.name_required"),
       okLabel: t("explorer.rename"),
       cancel: true,
-      returnFocusTarget,
+      returnFocusTarget: focus.returnFocusTarget,
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
@@ -1500,22 +1541,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       }
       outcome.completed.push(result)
       outcome.refresh = await applyMoveResults([result], scope, ownsOperation)
-      if (!ownsOperation() || !active() || query().trim() !== openingQuery || deferredQuery() !== openingQuery) return
-      const refreshed = outcome.refresh.some((read) => read.state.status === "loaded" && (openingQuery
-        ? read.target.kind === "search" && read.target.query === openingQuery
-        : read.target.kind === "directory" && read.target.path === parentPath(normalizeExplorerPath(result.path))))
-      if (!refreshed || !listElement?.clientWidth || !listElement.clientHeight ||
-        listElement.closest('[inert], [hidden], [aria-hidden="true"]')) return
-      const focused = document.activeElement
-      if (!(focused instanceof HTMLElement) || (focused !== document.body && dialogOpeningFocusTarget(focused) !== opener)) return
-      const row = rows().find((entry) => (entry.kind === "node" ? entry.node.path : entry.path) === normalizeExplorerPath(result.path))
-      if (row) {
-        focusTarget = () => rowElements.get(row.key) ?? null
-        focusRow(row, focused)
-      } else if (openingQuery && searchInput?.isConnected && !searchInput.disabled) {
-        focusTarget = () => searchInput ?? null
-        searchInput.focus({ preventScroll: true })
-      }
+      focus.restore(result.path, outcome.refresh, ownsOperation)
     })
   }
 
@@ -1529,6 +1555,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationValidation("directory")
       return
     }
+    const focus = capturePathMutationFocus(scope)
     const result = await showAppDialog({
       kind: "file-move",
       title: t("explorer.move"),
@@ -1540,6 +1567,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputRequiredMessage: t("explorer.name_required"),
       okLabel: t("explorer.move"),
       cancel: true,
+      returnFocusTarget: focus.returnFocusTarget,
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
@@ -1559,6 +1587,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       }
       outcome.completed.push(result)
       outcome.refresh = await applyMoveResults([result], scope, ownsOperation)
+      focus.restore(result.path, outcome.refresh, ownsOperation)
     })
   }
 

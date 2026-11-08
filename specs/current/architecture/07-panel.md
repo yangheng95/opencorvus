@@ -1576,7 +1576,8 @@ loading, error, depth and expansion updates do not replace the row owner. Actual
 removal, rename, type or scope changes retire it. Search/filter retirement
 and virtual-window retirement can remount rows; stable focus across those
 boundaries is not promised.
-Explicit rename hands keyboard focus to the new path only after its owned move
+Explicit rename and single-item Move dialogs share one operation focus owner.
+They hand keyboard focus to the new path only after the owned move
 receipt and current directory/search refresh have succeeded. It finds that row
 in the current projection and uses the same virtual focus request, scrolling
 and measured element registration. If the new path leaves the current bounded

@@ -1,0 +1,72 @@
+{
+  "batch": 23,
+  "product": "single-item Move dialog focus and common rename path identity comparison",
+  "actualUi": {
+    "before": "unopened other.txt move succeeds; stable BODY; ArrowDown/Enter stay BODY",
+    "firstBuild": "main-CpqLifGE.js",
+    "finalBuild": "main-Dz-yHp9q.js",
+    "final": [
+      "fresh move focuses current row; ArrowDown/Enter open original neighbor",
+      "Windows child search Move keeps query and focuses new result",
+      "same child search Rename keeps query and focuses new result",
+      "Move leaving matches returns original search input with other retained",
+      "Chinese Move focuses original-content Unicode path",
+      "Cancel and real409 retain original notes row",
+      "opened file Move keeps actual editor DIV focus"
+    ],
+    "screenshotsViewed": 13,
+    "firstAfterSearch": "failed new-row focus; retained as05; shared normalizer applied to both row and receipt before final rebuild"
+  },
+  "positiveChecker": {
+    "file": "test/server-path.test.ts",
+    "passed": 53,
+    "assertions": 55,
+    "scope": "pure server path mapping; Windows/POSIX filename identity"
+  },
+  "realFunctionalChecker": {
+    "publicFileReads": 4,
+    "physicalExactOriginals": 4,
+    "chineseRawSearchPath": [
+      "dest\\资料.txt"
+    ],
+    "originalConflictRequestID": "a852044d-e4de-491f-972d-07b83f620419"
+  },
+  "checks": {
+    "overlayTypes": true,
+    "localeKeys": 2921,
+    "locales": 2,
+    "normalBuild": true,
+    "firstBuildSeconds": 53.07,
+    "finalBuildSeconds": 61,
+    "rendererSurface": true,
+    "docsCheck": true,
+    "architectureIndex": true
+  },
+  "openFindings": [
+    {
+      "finding": "real empty folder omitted by directory search until seed file exists",
+      "evidence": "empty-directory-discovery.json",
+      "implemented": false,
+      "reason": "directory enumeration needs one authoritative ignore contract and startup scan-cost design; not a sorting regression"
+    }
+  ],
+  "notQualified": [
+    "multi-item Move; drop; Copy; contextual Create; Delete focus",
+    "late scope/query/new-focus race during slow filesystem operation",
+    "new virtual 100-row/case-only/dirty-editor matrix (b10 prior evidence not counted as this batch)",
+    "Provider/Sol E2E authorization unanswered"
+  ],
+  "credentialsUsed": false,
+  "modelRequests": 0,
+  "uiAutomatedTests": 0,
+  "resources": {
+    "beforeServerExit": 0,
+    "firstAfterServerExit": 0,
+    "finalAfterServerExit": 0,
+    "tabsClosed": [
+      48,
+      49,
+      50
+    ]
+  }
+}

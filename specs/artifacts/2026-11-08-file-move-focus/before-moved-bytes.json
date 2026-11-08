@@ -1,0 +1,32 @@
+[
+  {
+    "path": "dest/notes.txt",
+    "status": 200,
+    "body": {
+      "type": "text",
+      "content": "b23 original note\r\n原始资料\r\n",
+      "revision": "705fa2a7a87cc37ea7d20aa90ed9ceb6c955c5604be91d3dee6b7fbeb0349fad"
+    },
+    "physicalContent": "b23 original note\r\n原始资料\r\n"
+  },
+  {
+    "path": "dest/other.txt",
+    "status": 200,
+    "body": {
+      "type": "text",
+      "content": "b23 other original\n",
+      "revision": "714dedd95d93ae9230436cb48d64ebee26379f14617e1e4be5e4b8da3c08523c"
+    },
+    "physicalContent": "b23 other original\n"
+  },
+  {
+    "path": "dest/next.txt",
+    "status": 200,
+    "body": {
+      "type": "text",
+      "content": "b23 destination neighbor\n",
+      "revision": "a145d4c8e37226e801df36d268f57d7e8a6b02771622efe29f995e278076bb85"
+    },
+    "physicalContent": "b23 destination neighbor\n"
+  }
+]

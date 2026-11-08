@@ -1,0 +1,20 @@
+HTTP PATCH 409 file/item?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b23%5Cproject-after
+
+Request ID: a852044d-e4de-491f-972d-07b83f620419
+
+ApiError: API 409 file/item?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b23%5Cproject-after: File destination already exists: dest/fresh.txt
+    at Ze (http://localhost:38965/ui/assets/main-Dz-yHp9q.js:62:146241)
+    at async X_ (http://localhost:38965/ui/assets/main-Dz-yHp9q.js:64:20063)
+    at async http://localhost:38965/ui/assets/main-Dz-yHp9q.js:271:7236
+    at async Wn (http://localhost:38965/ui/assets/main-Dz-yHp9q.js:271:1393)
+    at async kd (http://localhost:38965/ui/assets/main-Dz-yHp9q.js:271:7189)
+    at async Jl (http://localhost:38965/ui/assets/main-Dz-yHp9q.js:271:7487)
+
+response body:
+{
+  "name": "FileConflictError",
+  "data": {
+    "path": "dest/fresh.txt",
+    "message": "File destination already exists: dest/fresh.txt"
+  }
+}
