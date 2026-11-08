@@ -13,6 +13,7 @@ import {
 } from "solid-js"
 import { ContextMenu } from "./ui/ContextMenu"
 import { DropdownMenu } from "./ui/DropdownMenu"
+import { dialogOpeningFocusTarget } from "./ui/Dialog"
 import { Virtualizer, type VirtualizerHandle, type CustomContainerComponentProps, type CustomItemComponentProps } from "virtua/solid"
 import { ApiError, apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { boardStore } from "../store/board"
@@ -470,6 +471,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const [focusedRowKey, setFocusedRowKey] = createSignal<string | null>(null)
   const rowElements = new Map<string, HTMLButtonElement>()
   let listElement: HTMLDivElement | undefined
+  let searchInput: HTMLInputElement | undefined
   let virtualizer: VirtualizerHandle | undefined
   let pendingFocus: { key: string; origin: Element; scope: ExplorerOperationScope; waitingForScroll: boolean } | undefined
 
@@ -478,15 +480,20 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (!request) return
     const element = rowElements.get(request.key)
     if (
-      !ownsExplorerOperation(request.scope) || !rowByKey().has(request.key) ||
-      !listElement?.clientWidth || !listElement.clientHeight || listElement.closest("[inert], [hidden]") ||
+      !ownsExplorerOperation(request.scope) || !active() || !rowByKey().has(request.key) ||
+      !listElement?.clientWidth || !listElement.clientHeight || listElement.closest('[inert], [hidden], [aria-hidden="true"]') ||
       (document.activeElement !== request.origin && document.activeElement !== document.body)
     ) {
       pendingFocus = undefined
       return
     }
-    if (request.waitingForScroll) return
     if (!element?.isConnected || getComputedStyle(element).visibility !== "visible") return
+    if (request.waitingForScroll) {
+      const rowRect = element.getBoundingClientRect()
+      const viewport = listElement.getBoundingClientRect()
+      if (!rowRect.height || rowRect.top < viewport.top || rowRect.bottom > viewport.bottom) return
+      request.waitingForScroll = false
+    }
     element.focus({ preventScroll: true })
     if (document.activeElement === element) pendingFocus = undefined
   }
@@ -517,7 +524,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     queueMicrotask(settleRowFocus)
   }
 
-  function focusRow(row: ExplorerRow, origin: HTMLButtonElement): void {
+  function focusRow(row: ExplorerRow, origin: Element): void {
     const scope = currentOperationScope()
     if (!scope) return
     const index = rowKeys().indexOf(row.key)
@@ -1455,6 +1462,12 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationValidation("directory")
       return
     }
+    const openingElement = document.activeElement
+    const opener = openingElement instanceof HTMLElement ? dialogOpeningFocusTarget(openingElement) : null
+    const openingQuery = query().trim()
+    let focusTarget = () => opener
+    const returnFocusTarget = () =>
+      ownsExplorerOperation(scope) && active() && query().trim() === openingQuery ? focusTarget() : null
     const result = await showAppDialog({
       kind: "file-rename",
       title: t("explorer.rename"),
@@ -1466,6 +1479,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputRequiredMessage: t("explorer.name_required"),
       okLabel: t("explorer.rename"),
       cancel: true,
+      returnFocusTarget,
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
@@ -1486,6 +1500,22 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       }
       outcome.completed.push(result)
       outcome.refresh = await applyMoveResults([result], scope, ownsOperation)
+      if (!ownsOperation() || !active() || query().trim() !== openingQuery || deferredQuery() !== openingQuery) return
+      const refreshed = outcome.refresh.some((read) => read.state.status === "loaded" && (openingQuery
+        ? read.target.kind === "search" && read.target.query === openingQuery
+        : read.target.kind === "directory" && read.target.path === parentPath(normalizeExplorerPath(result.path))))
+      if (!refreshed || !listElement?.clientWidth || !listElement.clientHeight ||
+        listElement.closest('[inert], [hidden], [aria-hidden="true"]')) return
+      const focused = document.activeElement
+      if (!(focused instanceof HTMLElement) || (focused !== document.body && dialogOpeningFocusTarget(focused) !== opener)) return
+      const row = rows().find((entry) => (entry.kind === "node" ? entry.node.path : entry.path) === normalizeExplorerPath(result.path))
+      if (row) {
+        focusTarget = () => rowElements.get(row.key) ?? null
+        focusRow(row, focused)
+      } else if (openingQuery && searchInput?.isConnected && !searchInput.disabled) {
+        focusTarget = () => searchInput ?? null
+        searchInput.focus({ preventScroll: true })
+      }
     })
   }
 
@@ -2140,6 +2170,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         actions={
           <>
             <SearchField
+              inputRef={(element) => { searchInput = element }}
               clearable
               class="file-explorer-search"
               value={query()}

@@ -1539,6 +1539,9 @@ The existing custom item style publication also signals measurement readiness:
 Virtua may mount an item with visibility hidden until its real size is known.
 Settlement requires visible computed style and actual activeElement ownership
 after focus; a connected but still hidden element cannot consume the request.
+When a refreshed listing remounts the virtualizer before its viewport is
+measured, the same settlement also accepts a measured row fully inside the
+actual list viewport. Such a row does not need a scroll event to become ready.
 All nonempty ready listings use this one Virtualizer, including small directories
 and search results. Growing or shrinking across a size threshold does not switch
 renderers or replace a surviving row. No previous-focus store, threshold handoff
@@ -1561,6 +1564,15 @@ loading, error, depth and expansion updates do not replace the row owner. Actual
 removal, rename, type or scope changes retire it. Search/filter retirement
 and virtual-window retirement can remount rows; stable focus across those
 boundaries is not promised.
+Explicit rename hands keyboard focus to the new path only after its owned move
+receipt and current directory/search refresh have succeeded. It finds that row
+in the current projection and uses the same virtual focus request, scrolling
+and measured element registration. If the new path leaves the current bounded
+search results, the unchanged search input receives focus. The original caller
+and shared dialog return target bridge either close/refresh order. Retired
+scope, changed query, hidden/inactive panel or a user's newly chosen control
+prevents the handoff; cancellation, unchanged names and failed moves retain
+their existing dialog return behavior.
 Successful token/scope-owned directory listings reconcile the existing selection
 Map with that exact parent's current members. Missing or type-replaced members
 and descendants under retired ancestors leave the selection; unchanged members

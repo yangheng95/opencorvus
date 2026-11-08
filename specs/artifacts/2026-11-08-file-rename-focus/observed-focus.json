@@ -1,0 +1,75 @@
+[
+  {
+    "case": "ordinary rename aa to aaa",
+    "tag": "BUTTON",
+    "text": "aaa.txt",
+    "title": "aaa.txt"
+  },
+  {
+    "case": "cancel",
+    "tag": "BUTTON",
+    "title": "aaa.txt"
+  },
+  {
+    "case": "search still matches",
+    "tag": "BUTTON",
+    "title": "aaa-renamed.txt"
+  },
+  {
+    "case": "search exit retains original query",
+    "label": "Search files",
+    "tag": "INPUT",
+    "value": "aaa"
+  },
+  {
+    "case": "100 member directory renamed first to last",
+    "rect": {
+      "bottom": 689.5,
+      "height": 32,
+      "left": 900,
+      "right": 1280,
+      "top": 657.5,
+      "width": 380,
+      "x": 900,
+      "y": 657.5
+    },
+    "scroll": 2817,
+    "tag": "BUTTON",
+    "title": "many/zed-entry.txt",
+    "viewport": {
+      "bottom": 689.5,
+      "height": 447,
+      "left": 900,
+      "right": 1280,
+      "top": 242.5,
+      "width": 380,
+      "x": 900,
+      "y": 242.5
+    }
+  },
+  {
+    "case": "destination conflict retains original row",
+    "tag": "BUTTON",
+    "title": "alpha.txt"
+  },
+  {
+    "case": "expanded directory rename",
+    "tag": "BUTTON",
+    "title": "renamed-folder"
+  },
+  {
+    "case": "unsaved descendant keep editing",
+    "tag": "BUTTON",
+    "title": "renamed-folder"
+  },
+  {
+    "case": "save descendant and case-only directory rename",
+    "tag": "DIV",
+    "title": null
+  },
+  {
+    "case": "Chinese UI and Unicode filename",
+    "tag": "BUTTON",
+    "title": "笔记.txt"
+  }
+]

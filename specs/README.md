@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [文件重命名键盘接续](records/2026-11/2026-11-08-file-rename-focus.md)：真实文件操作、行退休与当前焦点归属。
+
 - [全图读取归属与恢复](records/2026-11/2026-11-08-image-preview-read-owner.md)：删除重复预读、统一窗口加载与原位恢复。
 
 - [图像派生错误契约](records/2026-11/2026-11-08-image-rendition-error.md)：真实转换失败、安全公开结果与原件保全。

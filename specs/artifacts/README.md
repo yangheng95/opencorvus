@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [文件改名键盘证据](2026-11-08-file-rename-focus/README.md)：隔离文本文件、真实重命名和焦点截图。
+
 - [全图读取与恢复证据](2026-11-08-image-preview-read-owner/README.md)：真实原件失败、窗口重试和原字节下载。
 
 - [图像派生错误证据](2026-11-08-image-rendition-error/README.md)：坏PNG、实际界面诊断和原件字节。
