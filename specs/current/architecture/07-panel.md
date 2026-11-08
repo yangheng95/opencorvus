@@ -2694,6 +2694,18 @@ Full document Markdown is
 not clipped at the trace-preview limit. Worker errors remain visible instead
 of starting a synchronous parser path. Transcript prewarming is removed.
 
+TextPart and StaticTextPart own same-document section navigation across their
+rendered blocks. Ordinary nonempty fragment links use a fresh github-slugger
+sequence over that owner's current readable headings, including image alt text;
+nested text owners have independent sequences. Encoded fragments decode once.
+A matching heading scrolls into view and receives programmatic keyboard focus.
+Unknown, malformed or not-yet-rendered targets retain the current link and do
+not change the application's URL fragment or create deferred navigation work.
+Headings have no global page IDs, and worker caches contain no section counters.
+File links, source-line references and external URLs retain their existing
+delegates. Other direct HTML consumers, cross-file chapters and navigation across
+Notebook cells or Presentation slides do not gain this text-owner contract.
+
 Future assistant Markdown prose uses the existing shared observable-work-narrative
 guidance for valid emphasis boundaries: punctuation can follow a bold label, or
 whitespace can separate a punctuation-ending bold span from subsequent prose.

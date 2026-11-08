@@ -166,6 +166,9 @@ marked.use({
     },
   ],
   renderer: {
+    heading({ tokens, depth }) {
+      return `<h${depth} data-markdown-heading tabindex="-1">${this.parser.parseInline(tokens)}</h${depth}>\n`
+    },
     table({ header, rows }) {
       const renderRow = (cells: typeof header) =>
         this.tablerow({ text: cells.map((cell) => this.tablecell(cell)).join("") })

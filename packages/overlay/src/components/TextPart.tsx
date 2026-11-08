@@ -1,11 +1,20 @@
 /** @jsxImportSource solid-js */
 import { For, Show, type JSX } from "solid-js"
 import { t } from "../utils/i18n"
+import { markdownSectionIndex } from "../utils/markdown-section"
 import { createStreamingTextPartModel } from "./text-part-model"
 import { MarkdownBlock, type MarkdownImageReader } from "./MarkdownDocumentImages"
 
 function isStandaloneSourceFileMarkup(html: string): boolean {
   return /^&lt;source-file\b[\s\S]*\/&gt;$/.test(html.trim())
+}
+
+function headingLabel(node: Node): string {
+  if (node instanceof Element && node.hasAttribute("data-document-image-alt"))
+    return node.getAttribute("data-document-image-alt") ?? ""
+  if (node instanceof HTMLImageElement) return node.alt
+  if (node.nodeType === Node.TEXT_NODE) return node.nodeValue ?? ""
+  return Array.from(node.childNodes, headingLabel).join("")
 }
 
 /** Worker-backed Markdown formats every accepted token, including a growing tail.
@@ -24,8 +33,28 @@ export function StreamingMarkdownPart(props: {
 }) {
   const { frozenHtml, pending, error } = createStreamingTextPartModel(props)
 
+  function navigateSection(event: MouseEvent & { currentTarget: HTMLDivElement }): void {
+    if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return
+    const target = event.target
+    if (!(target instanceof Element) || target.closest("[data-image-preview-trigger]")) return
+    const owner = event.currentTarget
+    const anchor = target.closest<HTMLAnchorElement>("a[href]")
+    if (!anchor || anchor.closest("[data-markdown-owner]") !== owner) return
+    const href = anchor.getAttribute("href") ?? ""
+    if (!href.startsWith("#") || href.length < 2) return
+    event.preventDefault()
+    const headings = Array.from(owner.querySelectorAll<HTMLElement>("[data-markdown-heading]"))
+      .filter((heading) => heading.closest("[data-markdown-owner]") === owner)
+    const index = markdownSectionIndex(headings.map(headingLabel), href.slice(1))
+    if (index === undefined) return
+    const heading = headings[index]!
+    heading.scrollIntoView({ block: "start", inline: "nearest" })
+    heading.focus({ preventScroll: true })
+  }
+
   return (
-    <div class={props.className || "msg-text"} data-markdown-rendering={pending() ? "true" : undefined}>
+    <div class={props.className || "msg-text"} data-markdown-owner="true" onClick={navigateSection}
+      data-markdown-rendering={pending() ? "true" : undefined}>
       <For each={frozenHtml()}>
         {(html) => (
           <MarkdownBlock

@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Markdown 章节导航](records/2026-11/2026-11-08-markdown-section-navigation.md)：同文档链接、标题目标与真实预览阅读。
+
 - [文件重命名键盘接续](records/2026-11/2026-11-08-file-rename-focus.md)：真实文件操作、行退休与当前焦点归属。
 
 - [全图读取归属与恢复](records/2026-11/2026-11-08-image-preview-read-owner.md)：删除重复预读、统一窗口加载与原位恢复。

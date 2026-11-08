@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Markdown 章节证据](2026-11-08-markdown-section-navigation/README.md)：自有输入、真实预览和章节交互截图。
+
 - [文件改名键盘证据](2026-11-08-file-rename-focus/README.md)：隔离文本文件、真实重命名和焦点截图。
 
 - [全图读取与恢复证据](2026-11-08-image-preview-read-owner/README.md)：真实原件失败、窗口重试和原字节下载。

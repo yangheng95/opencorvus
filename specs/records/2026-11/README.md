@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [Markdown 章节导航](2026-11-08-markdown-section-navigation.md)：章节链接前态、文档作用域与导航证据。
+
 - [文件重命名键盘接续](2026-11-08-file-rename-focus.md)：成功改名后的当前行/筛选入口与实际文件。
 
 - [全图读取归属与恢复](2026-11-08-image-preview-read-owner.md)：缩略图打开失败、单窗口读取和键盘接续。
