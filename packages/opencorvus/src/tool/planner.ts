@@ -6,6 +6,7 @@ import { TaskPlan } from "@/memory/task-plan"
  * Planner tool — task decomposition and progress tracking.
  */
 const DESCRIPTION = `Task planner for complex multi-step goals.
+All actions operate on plans owned by the current session.
 
 **Task Planning** — decompose goals into a tree of subtasks, track status and progress:
 - **add_task**: Create a task (optionally as a subtask of an existing task)
@@ -18,12 +19,12 @@ export const PlannerTool = Tool.define("planner", {
     z.object({
       action: z.literal("add_task"),
       goal: z.string().describe("What this task should accomplish"),
-      parentId: z.string().optional().describe("Parent task ID for subtasks"),
+      parentId: z.string().optional().describe("Parent task ID from this session for subtasks"),
       priority: z.coerce.number().int().min(0).max(10).optional().describe("Priority 0-10 (higher = more important)"),
     }),
     z.object({
       action: z.literal("update_task"),
-      taskId: z.string().describe("Task ID to update"),
+      taskId: z.string().describe("Task ID from this session to update"),
       status: z
         .enum(["pending", "in_progress", "completed", "blocked", "cancelled"])
         .describe("Lifecycle state to assign to the task after this update.")
@@ -59,7 +60,7 @@ export const PlannerTool = Tool.define("planner", {
       }
 
       case "update_task": {
-        const updated = TaskPlan.update(params.taskId, {
+        const updated = TaskPlan.update(sessionID, params.taskId, {
           status: params.status,
           notes: params.notes,
           progressPct: params.progressPct,
@@ -104,7 +105,6 @@ export const PlannerTool = Tool.define("planner", {
           metadata: {},
         }
       }
-
     }
   },
 })

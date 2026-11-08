@@ -938,6 +938,12 @@ foreign attachment 来“修复”。Attachment bytes 的物理池在
 
 ## 辅助域
 
+`task_plan` 是按 Session 归属的计划记忆，不是 Engine 调度或执行终态事实。Planner 写入使用宿主
+上下文的 Session ID；get/update/remove 均以计划 ID 和该 Session ID 同时寻址。添加子计划时，
+同一事务验证父计划属于当前 Session 再插入；更新读取、写入和读回使用同一事务。其他 Session 的
+目标按既有未找到契约返回，父计划或精确删除目标无归属时发布 NotFoundError。列表和上下文树继续
+只读取当前 Session；历史计划格式和原始数据保持，不根据未知历史猜测恢复或重挂父子关系。
+
 | 表                                                            | 文件                         | 作用                                            |
 | ------------------------------------------------------------- | ---------------------------- | ----------------------------------------------- |
 | `decision_log`                                                | `decision-log/schema.ts`     | **全局共享上下文**，append-only，所有 agent R/W |

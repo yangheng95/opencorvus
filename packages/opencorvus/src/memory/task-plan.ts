@@ -1,4 +1,4 @@
-import { Database, eq } from "@/storage/db"
+import { Database, NotFoundError, and, eq } from "@/storage/db"
 import { TaskPlanTable } from "./task-plan.sql"
 import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
@@ -61,9 +61,13 @@ export namespace TaskPlan {
 
   export function add(input: { sessionID: string; parentID?: string; goal: string; priority?: number }): Task {
     const id = Identifier.ascending("task")
-    Database.use((db) =>
-      db
-        .insert(TaskPlanTable)
+    const task = Database.transaction((db) => {
+      if (input.parentID !== undefined && !get(input.sessionID, input.parentID)) {
+        throw new NotFoundError({
+          message: `Parent task ${input.parentID} not found for session ${input.sessionID}`,
+        })
+      }
+      db.insert(TaskPlanTable)
         .values({
           id,
           session_id: input.sessionID,
@@ -71,9 +75,9 @@ export namespace TaskPlan {
           goal: input.goal,
           priority: input.priority ?? 0,
         })
-        .run(),
-    )
-    const task = get(id)!
+        .run()
+      return get(input.sessionID, id)!
+    })
     log.info("task added", { id, goal: input.goal })
     Bus.publishOwned(Event.Updated, {
       task: { id, sessionID: input.sessionID, goal: input.goal, status: "pending" },
@@ -81,30 +85,40 @@ export namespace TaskPlan {
     return task
   }
 
-  export function get(taskID: string): Task | null {
-    const row = Database.use((db) => db.select().from(TaskPlanTable).where(eq(TaskPlanTable.id, taskID)).get())
+  export function get(sessionID: string, taskID: string): Task | null {
+    const row = Database.use((db) =>
+      db
+        .select()
+        .from(TaskPlanTable)
+        .where(and(eq(TaskPlanTable.id, taskID), eq(TaskPlanTable.session_id, sessionID)))
+        .get(),
+    )
     return row ? fromRow(row) : null
   }
 
   export function update(
+    sessionID: string,
     taskID: string,
     changes: Partial<Pick<Task, "status" | "notes" | "progressPct" | "goal" | "priority">>,
   ): Task | null {
-    const existing = get(taskID)
-    if (!existing) return null
+    const updated = Database.transaction((db) => {
+      if (!get(sessionID, taskID)) return null
+      const set: Record<string, unknown> = {}
+      if (changes.status !== undefined) set.status = changes.status
+      if (changes.notes !== undefined) set.notes = changes.notes
+      if (changes.progressPct !== undefined) set.progress_pct = changes.progressPct
+      if (changes.goal !== undefined) set.goal = changes.goal
+      if (changes.priority !== undefined) set.priority = changes.priority
 
-    const set: Record<string, unknown> = {}
-    if (changes.status !== undefined) set.status = changes.status
-    if (changes.notes !== undefined) set.notes = changes.notes
-    if (changes.progressPct !== undefined) set.progress_pct = changes.progressPct
-    if (changes.goal !== undefined) set.goal = changes.goal
-    if (changes.priority !== undefined) set.priority = changes.priority
-
-    if (Object.keys(set).length > 0) {
-      Database.use((db) => db.update(TaskPlanTable).set(set).where(eq(TaskPlanTable.id, taskID)).run())
-    }
-
-    const updated = get(taskID)!
+      if (Object.keys(set).length > 0) {
+        db.update(TaskPlanTable)
+          .set(set)
+          .where(and(eq(TaskPlanTable.id, taskID), eq(TaskPlanTable.session_id, sessionID)))
+          .run()
+      }
+      return get(sessionID, taskID)!
+    })
+    if (!updated) return null
     log.info("task updated", { id: taskID, changes })
     Bus.publishOwned(Event.Updated, {
       task: {
@@ -117,9 +131,15 @@ export namespace TaskPlan {
     return updated
   }
 
-  export function remove(taskID: string): void {
-    // Also removes child tasks via cascade or manual cleanup
-    Database.use((db) => db.delete(TaskPlanTable).where(eq(TaskPlanTable.id, taskID)).run())
+  export function remove(sessionID: string, taskID: string): void {
+    Database.transaction((db) => {
+      if (!get(sessionID, taskID)) {
+        throw new NotFoundError({ message: `Task ${taskID} not found for session ${sessionID}` })
+      }
+      db.delete(TaskPlanTable)
+        .where(and(eq(TaskPlanTable.id, taskID), eq(TaskPlanTable.session_id, sessionID)))
+        .run()
+    })
     log.info("task removed", { id: taskID })
   }
 

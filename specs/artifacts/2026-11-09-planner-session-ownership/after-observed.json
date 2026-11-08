@@ -1,0 +1,70 @@
+{
+  "date": "2026-11-08T20:17:32.617Z",
+  "projectID": "prj_htVKy9EBxWrwaQmQndM9",
+  "sessions": {
+    "a": "ses_-zUPaDUwPzzLoJGhQ342",
+    "b": "ses_-zUPaDUwFzz6jA90RNUt"
+  },
+  "foreignUpdate": {
+    "title": "Task not found",
+    "output": "{\"error\":\"Task tsk_g00VaPmV3q004QyZ6JRJ not found\"}",
+    "metadata": {
+      "truncated": false
+    }
+  },
+  "foreignChild": {
+    "name": "NotFoundError",
+    "data": {
+      "message": "Parent task tsk_g00VaPmV3q004QyZ6JRJ not found for session ses_-zUPaDUwFzz6jA90RNUt"
+    }
+  },
+  "aAfter": [
+    {
+      "id": "tsk_g00VaPmV3q004QyZ6JRJ",
+      "sessionID": "ses_-zUPaDUwPzzLoJGhQ342",
+      "parentID": null,
+      "goal": "Original A plan",
+      "status": "pending",
+      "priority": 0,
+      "notes": null,
+      "progressPct": 0,
+      "timeCreated": 1794169052603,
+      "timeUpdated": 1794169052603
+    }
+  ],
+  "bAfter": [
+    {
+      "id": "tsk_g00VaPmV3w00pWaYdWjA",
+      "sessionID": "ses_-zUPaDUwFzz6jA90RNUt",
+      "parentID": null,
+      "goal": "Original B plan",
+      "status": "pending",
+      "priority": 0,
+      "notes": null,
+      "progressPct": 0,
+      "timeCreated": 1794169052608,
+      "timeUpdated": 1794169052608
+    },
+    {
+      "id": "tsk_g00VaPmV3y00jkUzEz0i",
+      "sessionID": "ses_-zUPaDUwFzz6jA90RNUt",
+      "parentID": "tsk_g00VaPmV3w00pWaYdWjA",
+      "goal": "B owned child",
+      "status": "in_progress",
+      "priority": 0,
+      "notes": "Owned evidence",
+      "progressPct": 60,
+      "timeCreated": 1794169052610,
+      "timeUpdated": 1794169052613
+    }
+  ],
+  "bList": {
+    "title": "2 tasks",
+    "output": "{\"count\":2,\"tree\":\"<task-plan>\\n[ ] Original B plan [tsk_g00VaPmV3w00pWaYdWjA]\\n  [~] B owned child (60%) — Owned evidence [tsk_g00VaPmV3y00jkUzEz0i]\\n</task-plan>\\n\\nUse the planner tool to update task status, add subtasks, or modify the plan.\",\"tasks\":[{\"id\":\"tsk_g00VaPmV3w00pWaYdWjA\",\"goal\":\"Original B plan\",\"status\":\"pending\",\"parentID\":null,\"progressPct\":0,\"notes\":null},{\"id\":\"tsk_g00VaPmV3y00jkUzEz0i\",\"goal\":\"B owned child\",\"status\":\"in_progress\",\"parentID\":\"tsk_g00VaPmV3w00pWaYdWjA\",\"progressPct\":60,\"notes\":\"Owned evidence\"}]}",
+    "metadata": {
+      "truncated": false
+    }
+  },
+  "qualification": "Direct real Tool wrapper, Sessions and persisted database; no model, canonical Message or Tool Part.",
+  "instanceReloadExact": true
+}

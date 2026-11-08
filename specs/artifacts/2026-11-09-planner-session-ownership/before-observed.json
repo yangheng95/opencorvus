@@ -1,0 +1,72 @@
+{
+  "date": "2026-11-08T20:09:29.144Z",
+  "projectID": "prj_hrGalB2Grc1eYQ8VUbjH",
+  "sessions": {
+    "a": "ses_-zUPaFWiFzzJRTb4U16Q",
+    "b": "ses_-zUPaFWi6zzYzy94AHHD"
+  },
+  "before": [
+    {
+      "id": "tsk_g00VaPkTHz003418p2Rn",
+      "sessionID": "ses_-zUPaFWiFzzJRTb4U16Q",
+      "parentID": null,
+      "goal": "Original A plan",
+      "status": "pending",
+      "priority": 0,
+      "notes": null,
+      "progressPct": 0,
+      "timeCreated": 1794168569135,
+      "timeUpdated": 1794168569135
+    }
+  ],
+  "foreignUpdate": {
+    "title": "Updated: Original A plan",
+    "output": "{\"id\":\"tsk_g00VaPkTHz003418p2Rn\",\"goal\":\"Original A plan\",\"status\":\"completed\",\"progressPct\":0,\"notes\":\"Updated from B\"}",
+    "metadata": {
+      "truncated": false
+    }
+  },
+  "foreignChild": {
+    "title": "Task added: B child under A parent",
+    "output": "{\"id\":\"tsk_g00VaPkTI500FrbGP9j2\",\"goal\":\"B child under A parent\",\"parentID\":\"tsk_g00VaPkTHz003418p2Rn\",\"status\":\"pending\"}",
+    "metadata": {
+      "truncated": false
+    }
+  },
+  "aAfter": [
+    {
+      "id": "tsk_g00VaPkTHz003418p2Rn",
+      "sessionID": "ses_-zUPaFWiFzzJRTb4U16Q",
+      "parentID": null,
+      "goal": "Original A plan",
+      "status": "completed",
+      "priority": 0,
+      "notes": "Updated from B",
+      "progressPct": 0,
+      "timeCreated": 1794168569135,
+      "timeUpdated": 1794168569140
+    }
+  ],
+  "bAfter": [
+    {
+      "id": "tsk_g00VaPkTI500FrbGP9j2",
+      "sessionID": "ses_-zUPaFWi6zzYzy94AHHD",
+      "parentID": "tsk_g00VaPkTHz003418p2Rn",
+      "goal": "B child under A parent",
+      "status": "pending",
+      "priority": 0,
+      "notes": null,
+      "progressPct": 0,
+      "timeCreated": 1794168569141,
+      "timeUpdated": 1794168569141
+    }
+  ],
+  "bList": {
+    "title": "1 tasks",
+    "output": "{\"count\":1,\"tree\":\"<task-plan>\\n</task-plan>\\n\\nUse the planner tool to update task status, add subtasks, or modify the plan.\",\"tasks\":[{\"id\":\"tsk_g00VaPkTI500FrbGP9j2\",\"goal\":\"B child under A parent\",\"status\":\"pending\",\"parentID\":\"tsk_g00VaPkTHz003418p2Rn\",\"progressPct\":0,\"notes\":null}]}",
+    "metadata": {
+      "truncated": false
+    }
+  },
+  "qualification": "Direct production Tool wrapper and real Sessions/database; no model, canonical Message or fake Tool Part persisted."
+}

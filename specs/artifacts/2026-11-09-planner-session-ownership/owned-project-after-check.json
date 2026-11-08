@@ -1,0 +1,45 @@
+{
+  "before": {
+    "worktreeNotesBytes": 38,
+    "worktreeNotesExact": true,
+    "worktreeLineEnding": "CRLF",
+    "seedNotesBytes": 37,
+    "seedNotesExact": true,
+    "seedLineEnding": "LF",
+    "initialSeedHead": "cb97d4da7b4a74ea5f7b62a132c0efae394ec67c",
+    "gitReflog": [
+      "cb97d4da7b4a74ea5f7b62a132c0efae394ec67c commit (initial): Seed isolated planner audit"
+    ],
+    "profileConfigFiles": []
+  },
+  "after": {
+    "worktreeNotesBytes": 37,
+    "worktreeNotesExact": true,
+    "worktreeLineEnding": "CRLF",
+    "seedNotesBytes": 36,
+    "seedNotesExact": true,
+    "seedLineEnding": "LF",
+    "initialSeedHead": "9ef0366ab84f4db7fde7d4d352f24d80ef94661d",
+    "gitReflog": [
+      "9ef0366ab84f4db7fde7d4d352f24d80ef94661d commit (initial): Seed isolated planner audit"
+    ],
+    "profileConfigFiles": []
+  },
+  "qualification": {
+    "initialCheckerCorrection": "The first checker incorrectly equated worktree CRLF with Git-normalized LF; both are now verified independently against the original creation text. No original file or Git object was changed.",
+    "before": {
+      "port": 38992,
+      "execSession": 24576,
+      "shutdownStatus": 200,
+      "exitCode": 0
+    },
+    "after": {
+      "port": 38993,
+      "execSession": 51316,
+      "shutdownStatus": 200,
+      "exitCode": 0
+    },
+    "uiAsset": "main-Knc9Q_NS.js",
+    "uiScope": "Existing project files and memory settings only; no visual TaskPlan editor. No model or canonical messages."
+  }
+}

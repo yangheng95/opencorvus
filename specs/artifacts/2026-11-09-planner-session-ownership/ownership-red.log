@@ -1,0 +1,116 @@
+$ bun script/run-tests.ts test/memory/task-plan-ownership.test.ts
+[1/1] START test/memory/task-plan-ownership.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+50 |       tasks: [
+51 |         { id: root.id, goal: "Build report", status: "pending", parentID: null, progressPct: 0, notes: null },
+52 |         { id: child.id, goal: "Read evidence", status: "in_progress", parentID: root.id, progressPct: 25, notes: "Reading source" },
+53 |       ],
+54 |     })
+55 |     expect(TaskPlan.get(session.id, child.id)).toMatchObject({ sessionID: session.id, parentID: root.id, progressPct: 25 })
+     ^
+error: expect(received).toMatchObject(expected)
+
+Matcher error: received value must be a non-null object
+
+      at toMatchObject (unknown:1:1)
+      at D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\task-plan-ownership.test.ts:55:48
+(fail) current-session planner actions publish the owned tree and progress [1993.86ms]
+64 |     const root = await add(owner.id, "Owner original goal")
+65 |     const tool = await PlannerTool.init()
+66 |     const result = await tool.execute({
+67 |       action: "update_task", taskId: root.id, status: "completed", notes: "Foreign update",
+68 |     }, context(caller.id))
+69 |     expect(result.title).toBe("Task not found")
+                              ^
+error: expect(received).toBe(expected)
+
+Expected: "Task not found"
+Received: "Updated: Owner original goal"
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\task-plan-ownership.test.ts:69:26)
+(fail) another session receives the explicit task-not-found Tool result [1276.64ms]
+82 |     const parent = await add(owner.id, "Owner parent")
+83 |     const tool = await PlannerTool.init()
+84 |     for (const parentId of [parent.id, "tsk_unknown_parent"]) {
+85 |       const error = await tool.execute({ action: "add_task", parentId, goal: "Invalid child" }, context(caller.id))
+86 |         .catch((error: unknown) => error)
+87 |       expect(error).toBeInstanceOf(NotFoundError)
+                         ^
+error: expect(received).toBeInstanceOf(expected)
+
+Expected constructor: [class result extends NamedError]
+Received value: {
+  title: "Task added: Invalid child",
+  output: "{\"id\":\"tsk_g00VaPlsSK00eViG0jDp\",\"goal\":\"Invalid child\",\"parentID\":\"tsk_g00VaPlsSI00Sd4vRDf0\",\"status\":\"pending\"}",
+  metadata: {
+    truncated: false,
+  },
+}
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\task-plan-ownership.test.ts:87:21)
+(fail) foreign and unknown parents map to the named ownership error [1182.55ms]
+112 |   await Instance.provide({ directory: second.path, fn: async () => {
+113 |     projectIDs.push(Instance.project.id)
+114 |     const caller = await Session.create({ kind: "root", title: "Second project plan" })
+115 |     const tool = await PlannerTool.init()
+116 |     const result = await tool.execute({ action: "update_task", taskId: ownerTask, status: "cancelled" }, context(caller.id))
+117 |     expect(JSON.parse(result.output)).toEqual({ error: `Task ${ownerTask} not found` })
+                                            ^
+error: expect(received).toEqual(expected)
+
+  {
+-   "error": "Task tsk_g00VaPlt0D00WPhUXmLw not found",
++   "goal": "First project goal",
++   "id": "tsk_g00VaPlt0D00WPhUXmLw",
++   "notes": null,
++   "progressPct": 0,
++   "status": "cancelled",
+  }
+
+- Expected  - 1
++ Received  + 5
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\task-plan-ownership.test.ts:117:39)
+(fail) independent projects retain their own planner writes [2443.55ms]
+(pass) root and assistant sessions settle concurrent tool updates in their own plans [1240.77ms]
+151 |   let sessionID = ""
+152 |   let taskID = ""
+153 |   await Instance.provide({ directory: project.path, fn: async () => {
+154 |     sessionID = (await Session.create({ kind: "root", title: "Persisted plan" })).id
+155 |     taskID = (await add(sessionID, "Persisted goal")).id
+156 |     expect(TaskPlan.update(sessionID, taskID, { notes: "Saved evidence", progressPct: 60 })).toMatchObject({
+                                                                                                   ^
+error: expect(received).toMatchObject(expected)
+
+Matcher error: received value must be a non-null object
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\task-plan-ownership.test.ts:156:94)
+(fail) owned updates survive instance disposal and persisted reload [1187.71ms]
+172 |     const caller = await Session.create({ kind: "root", title: "Removal caller" })
+173 |     const root = TaskPlan.add({ sessionID: owner.id, goal: "Keep root" })
+174 |     const leaf = TaskPlan.add({ sessionID: owner.id, goal: "Remove leaf", parentID: root.id })
+175 |     let error: unknown
+176 |     try { TaskPlan.remove(caller.id, leaf.id) } catch (reason) { error = reason }
+177 |     expect(error).toBeInstanceOf(NotFoundError)
+                        ^
+error: expect(received).toBeInstanceOf(expected)
+
+Expected constructor: [class result extends NamedError]
+Received value: undefined
+
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\task-plan-ownership.test.ts:177:19)
+(fail) scoped removal returns a named error or the remaining owned root tree [1258.28ms]
+
+ 1 pass
+ 6 fail
+ 9 expect() calls
+Ran 7 tests across 1 file. [12.67s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\task-plan-ownership.test.ts
+[1/1] DONE test/memory/task-plan-ownership.test.ts exit=1 duration=13.14s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\task-plan-ownership.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-rXz9ot
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

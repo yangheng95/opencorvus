@@ -1,0 +1,18 @@
+$ bun script/run-tests.ts test/memory/task-plan-ownership.test.ts
+[1/1] START test/memory/task-plan-ownership.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) current-session planner actions publish the owned tree and progress [2009.31ms]
+(pass) another session receives the explicit task-not-found Tool result [1199.04ms]
+(pass) foreign and unknown parents map to the named ownership error [1151.10ms]
+(pass) independent projects retain their own planner writes [2447.42ms]
+(pass) root and assistant sessions settle concurrent tool updates in their own plans [1218.46ms]
+(pass) owned updates survive instance disposal and persisted reload [1357.06ms]
+(pass) scoped removal returns a named error or the remaining owned root tree [1322.23ms]
+
+ 7 pass
+ 0 fail
+ 22 expect() calls
+Ran 7 tests across 1 file. [12.77s]
+[1/1] DONE test/memory/task-plan-ownership.test.ts exit=0 duration=13.36s

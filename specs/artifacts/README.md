@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [Planner 会话归属证据](2026-11-09-planner-session-ownership/README.md)
 - [扩展面板完整错误诊断证据](2026-11-09-extension-error-details/README.md)
 - [市场来源能力证据](2026-11-09-skill-market-source-capabilities/README.md)：真实来源、具名错误和桌面复核。
 

@@ -1,0 +1,59 @@
+{
+  "date": "2026-11-08T20:19:16.756Z",
+  "results": [
+    {
+      "session": "a",
+      "status": 200,
+      "requestID": "a941a924-441a-402d-9fd4-a8eb69cdfd54",
+      "body": [
+        {
+          "id": "tsk_g00VaPmV3q004QyZ6JRJ",
+          "sessionID": "ses_-zUPaDUwPzzLoJGhQ342",
+          "parentID": null,
+          "goal": "Original A plan",
+          "status": "pending",
+          "priority": 0,
+          "notes": null,
+          "progressPct": 0,
+          "timeCreated": 1794169052603,
+          "timeUpdated": 1794169052603
+        }
+      ],
+      "schemaValid": true,
+      "directToolPersistenceExact": true
+    },
+    {
+      "session": "b",
+      "status": 200,
+      "requestID": "b8513677-61da-4c75-b1a3-c77941de3264",
+      "body": [
+        {
+          "id": "tsk_g00VaPmV3w00pWaYdWjA",
+          "sessionID": "ses_-zUPaDUwFzz6jA90RNUt",
+          "parentID": null,
+          "goal": "Original B plan",
+          "status": "pending",
+          "priority": 0,
+          "notes": null,
+          "progressPct": 0,
+          "timeCreated": 1794169052608,
+          "timeUpdated": 1794169052608
+        },
+        {
+          "id": "tsk_g00VaPmV3y00jkUzEz0i",
+          "sessionID": "ses_-zUPaDUwFzz6jA90RNUt",
+          "parentID": "tsk_g00VaPmV3w00pWaYdWjA",
+          "goal": "B owned child",
+          "status": "in_progress",
+          "priority": 0,
+          "notes": "Owned evidence",
+          "progressPct": 60,
+          "timeCreated": 1794169052610,
+          "timeUpdated": 1794169052613
+        }
+      ],
+      "schemaValid": true,
+      "directToolPersistenceExact": true
+    }
+  ]
+}
