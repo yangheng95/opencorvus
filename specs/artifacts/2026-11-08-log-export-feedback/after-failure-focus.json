@@ -1,0 +1,5 @@
+{
+  "focusTag": "BUTTON",
+  "notice": "日志导出失败：API 500 log/export: Internal server error. See x-opencorvus-request-id for diagnostics.详细信息HTTP GET 500 log/export\n\nRequest ID: b1515069-d569-4828-a828-ff8aec1310b1\n\nApiError: API 500 log/export: Internal server error. See x-opencorvus-request-id for diagnostics.\n    at o_e (http://localhost:38943/ui/assets/main-CwbrNz6g.js:139:12220)\n    at async HTMLButtonElement.P [as $$click] (http://localhost:38943/ui/assets/GeneralPanel-B-d2sSyF.js:1:13036)\n\nresponse body:\n{\n  \"name\": \"UnknownError\",\n  \"data\": {\n    \"message\": \"Internal server error. See x-opencorvus-request-id for diagnostics.\"\n  }\n}",
+  "ownsButtonFocus": true
+}

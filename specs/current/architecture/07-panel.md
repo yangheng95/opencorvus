@@ -2055,6 +2055,14 @@ page through its existing explicit activation. They do not change a preference
 or imply full-text search of every setting. Direct locale and theme commands
 retain their existing separate action semantics.
 
+General's log export keeps the same button focusable while its accepted request
+is busy, publishing aria-disabled/aria-busy and guarding repeat activation. The
+connection still controls native availability. Its one notice stores completion
+or the original failure cause; current-language message and tone derive at
+render time. Failed exports expose the existing typed HTTP diagnostic details,
+including request ID and response body, through the shared Feedback disclosure.
+Language changes do not replace the operation fact or retry the export.
+
 Appearance and direct locale commands share the supported-language descriptors
 in `utils/i18n.ts`. That same registry supplies the loader's supported IDs and
 the existing `SupportedLocale` type. Both controls render the current-language

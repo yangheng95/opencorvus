@@ -1,0 +1,12 @@
+{
+  "method": "GET",
+  "path": "log/export",
+  "status": 500,
+  "requestID": "9d59806b-099a-4921-bbc0-2df31d4cc19b",
+  "body": {
+    "name": "UnknownError",
+    "data": {
+      "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+    }
+  }
+}

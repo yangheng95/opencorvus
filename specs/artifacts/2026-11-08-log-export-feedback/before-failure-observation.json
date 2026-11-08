@@ -1,0 +1,5 @@
+{
+  "feedbackMarkup": "<div data-ui=\"settings-log-export-status\" class=\"oc-feedback\" data-tone=\"error\" role=\"alert\" aria-live=\"polite\" aria-atomic=\"true\"><div class=\"oc-feedback__copy\"><div class=\"oc-feedback__body\">日志导出失败：API 500 log/export: Internal server error. See x-opencorvus-request-id for diagnostics.</div></div></div>",
+  "focusTag": "BODY",
+  "notice": "日志导出失败：API 500 log/export: Internal server error. See x-opencorvus-request-id for diagnostics."
+}

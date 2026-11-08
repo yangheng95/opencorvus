@@ -1,0 +1,101 @@
+{
+  "source": "real same-button recovery after releasing owned read lock",
+  "archiveBytes": 119285,
+  "entries": [
+    "README.txt",
+    "logs/formatted/dev.log",
+    "logs/formatted/read-contract.log",
+    "logs/raw/dev.log",
+    "logs/raw/read-contract.log",
+    "manifest.json"
+  ],
+  "manifest": {
+    "schema": "opencorvus.log-support-bundle.v1",
+    "exportedAt": "2026-11-08T11:25:56.053Z",
+    "application": {
+      "version": "local",
+      "channel": "local"
+    },
+    "runtime": {
+      "platform": "win32",
+      "architecture": "x64",
+      "bun": "1.4.3"
+    },
+    "source": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b12\\profile-after\\log",
+      "current": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b12\\profile-after\\log\\dev.log",
+      "retention": "current log plus the 10 most recently modified production logs; dev.log is retained separately"
+    },
+    "totals": {
+      "fileCount": 2,
+      "byteCount": 1779615,
+      "lineCount": 4959,
+      "parsedLineCount": 4958,
+      "unparsedLineCount": 1,
+      "levelCounts": {
+        "INFO": 231,
+        "DEBUG": 4720,
+        "WARN": 6,
+        "ERROR": 1
+      }
+    },
+    "files": [
+      {
+        "name": "dev.log",
+        "current": true,
+        "size": 1779585,
+        "modified": "2026-11-08T11:25:56.049Z",
+        "lineCount": 4958,
+        "parsedLineCount": 4958,
+        "unparsedLineCount": 0,
+        "levelCounts": {
+          "INFO": 231,
+          "DEBUG": 4720,
+          "WARN": 6,
+          "ERROR": 1
+        },
+        "services": [
+          "automation-service",
+          "bus",
+          "config",
+          "db",
+          "default",
+          "event-service",
+          "file.watcher",
+          "mission.caller-receipt",
+          "permission-authority",
+          "plugin",
+          "project",
+          "project.open",
+          "runtime.memory",
+          "scheduler",
+          "server",
+          "skill",
+          "skill-read-diagnostics",
+          "worktree.gc"
+        ],
+        "firstTimestamp": "2026-11-08T11:19:51.951Z",
+        "lastTimestamp": "2026-11-08T11:25:56.049Z",
+        "rawPath": "logs/raw/dev.log",
+        "formattedPath": "logs/formatted/dev.log"
+      },
+      {
+        "name": "read-contract.log",
+        "current": false,
+        "size": 30,
+        "modified": "2026-11-08T11:06:54.520Z",
+        "lineCount": 1,
+        "parsedLineCount": 0,
+        "unparsedLineCount": 1,
+        "levelCounts": {},
+        "services": [],
+        "firstTimestamp": null,
+        "lastTimestamp": null,
+        "rawPath": "logs/raw/read-contract.log",
+        "formattedPath": "logs/formatted/read-contract.log"
+      }
+    ]
+  },
+  "ownedRawLogBytes": 30,
+  "lockReleased": "released"
+}

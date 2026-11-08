@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [日志导出反馈](records/2026-11/2026-11-08-log-export-feedback.md)：原地语言切换、导出按钮焦点与真实归档。
+
 - [Markdown 章节导航](records/2026-11/2026-11-08-markdown-section-navigation.md)：同文档链接、标题目标与真实预览阅读。
 
 - [文件重命名键盘接续](records/2026-11/2026-11-08-file-rename-focus.md)：真实文件操作、行退休与当前焦点归属。

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [日志导出证据](2026-11-08-log-export-feedback/README.md)：自有日志输入、实际归档回执与反馈截图。
+
 - [Markdown 章节证据](2026-11-08-markdown-section-navigation/README.md)：自有输入、真实预览和章节交互截图。
 
 - [文件改名键盘证据](2026-11-08-file-rename-focus/README.md)：隔离文本文件、真实重命名和焦点截图。

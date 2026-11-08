@@ -1,0 +1,18 @@
+{
+  "uiRequestID": "b1515069-d569-4828-a828-ff8aec1310b1",
+  "nativeCause": [
+    {
+      "field": ".data.error.message",
+      "firstLine": "EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b12\\profile-after\\log\\read-contract.log'"
+    },
+    {
+      "field": ".data.error.stack",
+      "firstLine": "Error: EBUSY: resource busy or locked, open 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b12\\profile-after\\log\\read-contract.log'"
+    },
+    {
+      "field": ".data.error.path",
+      "firstLine": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b12\\profile-after\\log\\read-contract.log"
+    }
+  ],
+  "ownedLogBytes": 30
+}

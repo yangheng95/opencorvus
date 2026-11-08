@@ -1,5 +1,5 @@
 import { Feedback } from "../ui/Feedback"
-import { createSignal, For, onCleanup, Show } from "solid-js"
+import { createMemo, createSignal, For, onCleanup, Show } from "solid-js"
 import { t } from "../../utils/i18n"
 import { settingsStore, setSettingsStore, saveSettings } from "../../store/settings"
 import { ensureDesktopNotificationPermission } from "../../services/desktop-notifications"
@@ -10,6 +10,9 @@ import { Switch } from "../ui/Switch"
 import { PermissionsSettingsGroup } from "./PermissionsPanel"
 import { SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
 import { inSecureContext } from "../../utils/secure-context"
+import { formatErrorDetails } from "../../utils/error-details"
+
+type LogExportNotice = { status: "complete" } | { status: "failed"; error: unknown }
 
 let desktopNotificationAction = 0
 let persistedDesktopNotificationError = ""
@@ -19,8 +22,18 @@ export default function GeneralPanel() {
   const [desktopNotificationError, setDesktopNotificationError] = createSignal(persistedDesktopNotificationError)
   const [logExporting, setLogExporting] = createSignal(false)
   const [gitPreferenceError, setGitPreferenceError] = createSignal("")
-  const [logExportNotice, setLogExportNotice] = createSignal("")
-  const [logExportNoticeStatus, setLogExportNoticeStatus] = createSignal<"active" | "error">("active")
+  const [logExportNotice, setLogExportNotice] = createSignal<LogExportNotice | null>(null)
+  const logExportFeedback = createMemo(() => {
+    const notice = logExportNotice()
+    if (!notice) return undefined
+    return notice.status === "complete"
+      ? { tone: "success" as const, message: t("settings.log_export_complete"), details: undefined }
+      : {
+          tone: "error" as const,
+          message: t("settings.log_export_failed", { error: describeError(notice.error) }),
+          details: formatErrorDetails(notice.error),
+        }
+  })
   const receiveDesktopNotificationError = (value: string) => setDesktopNotificationError(value)
   desktopNotificationErrorSubscribers.add(receiveDesktopNotificationError)
   onCleanup(() => desktopNotificationErrorSubscribers.delete(receiveDesktopNotificationError))
@@ -66,15 +79,14 @@ export default function GeneralPanel() {
   }
 
   async function handleLogExport() {
+    if (logExporting() || !appStore.connected) return
     setLogExporting(true)
-    setLogExportNotice("")
+    setLogExportNotice(null)
     try {
       await downloadLogSupportBundle()
-      setLogExportNoticeStatus("active")
-      setLogExportNotice(t("settings.log_export_complete"))
+      setLogExportNotice({ status: "complete" })
     } catch (exportError) {
-      setLogExportNoticeStatus("error")
-      setLogExportNotice(t("settings.log_export_failed", { error: describeError(exportError) }))
+      setLogExportNotice({ status: "failed", error: exportError })
     } finally {
       setLogExporting(false)
     }
@@ -159,21 +171,24 @@ export default function GeneralPanel() {
               size="md"
               tone="neutral"
               data-ui="settings-log-export"
-              disabled={logExporting() || !appStore.connected}
+              disabled={!appStore.connected}
+              aria-disabled={logExporting() || undefined}
+              aria-busy={logExporting() || undefined}
               onClick={handleLogExport}
             >
               {logExporting() ? t("settings.log_export_running") : t("settings.log_export_button")}
             </Button>
           }
         />
-        {logExportNotice() ? (
+        <Show when={logExportFeedback()}>{(feedback) => (
           <Feedback
-            tone={logExportNoticeStatus() === "error" ? "error" : "success"}
+            tone={feedback().tone}
+            details={feedback().details}
             data-ui="settings-log-export-status"
           >
-            {logExportNotice()}
+            {feedback().message}
           </Feedback>
-        ) : null}
+        )}</Show>
       </SettingsGroup>
     </SettingsPanel>
   )
