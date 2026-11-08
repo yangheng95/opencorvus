@@ -1,0 +1,58 @@
+{
+  "source_files": [
+    {
+      "filename": "project/.gitattributes",
+      "bytes": 150,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/.gitignore",
+      "bytes": 28,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/.opencorvus/opencorvus.jsonc",
+      "bytes": 1355,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/keep.txt",
+      "bytes": 35,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/notes/保留 draft.txt",
+      "bytes": 29,
+      "equals_current_disk": true
+    }
+  ],
+  "manifest": {
+    "schema": "opencorvus.mission-project-archive.v1",
+    "exportedAt": "2026-11-08T13:13:27.717Z",
+    "missionID": "59b8100dd9fc89e0",
+    "sessionID": "ses_-zUPbwL2CzzWsVsRl6gu",
+    "title": "b17 archive after",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b17\\project-after",
+    "project": {
+      "id": "prj_haa7BZscYgBFpHlqiEtX",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b17\\project-after"
+    },
+    "projectFileRoot": "project/",
+    "projectFileSelection": "Git index + Git ignore-filtered physical entries + OpenCorvus runtime filter",
+    "projectFileCount": 5,
+    "executionFlowRoot": "opencorvus-mission-execution-flow/",
+    "executionFiles": [
+      "manifest.json",
+      "mission.json",
+      "status.json",
+      "tasks.json",
+      "transcript.json"
+    ],
+    "executionFlowBounds": {
+      "maxStringChars": 16384,
+      "maxArrayItems": 500,
+      "maxDepth": 12
+    }
+  },
+  "archive_bytes": 4225
+}

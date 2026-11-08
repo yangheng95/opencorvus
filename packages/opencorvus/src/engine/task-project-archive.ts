@@ -108,10 +108,17 @@ function boundArchiveValue(value: unknown, depth = 0): unknown {
 async function addProjectFile(zip: ZipWriter<Blob>, projectDir: string, relativePath: string): Promise<boolean> {
   assertRelativeProjectFile(relativePath)
   const absolute = path.join(projectDir, relativePath)
-  const stat = await fs.lstat(absolute)
-  if (stat.isSymbolicLink()) return false
-  if (!stat.isFile()) return false
-  const data = new Uint8Array(await Filesystem.readArrayBuffer(absolute))
+  let data: Uint8Array
+  try {
+    const stat = await fs.lstat(absolute)
+    if (stat.isSymbolicLink()) return false
+    if (!stat.isFile()) return false
+    data = new Uint8Array(await Filesystem.readArrayBuffer(absolute))
+  } catch (error) {
+    const code = (error as NodeJS.ErrnoException)?.code
+    if (code === "ENOENT" || code === "ENOTDIR") return false
+    throw error
+  }
   await zip.add(zipPath("project", ...relativePath.split(/[\\/]+/)), new Uint8ArrayReader(data))
   return true
 }

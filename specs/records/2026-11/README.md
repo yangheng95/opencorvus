@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [项目归档当前文件](2026-11-08-project-archive-current-files.md)：共享归档写入、当前源字节与生产入口验收。
+
 - [通知权限调查](2026-11-08-notification-permission-feedback.md)：可见偏好状态与错误路径验收缺口。
 
 - [连接校验反馈](2026-11-08-connection-validation-feedback.md)：服务器地址准入、双语诊断与键盘接续。

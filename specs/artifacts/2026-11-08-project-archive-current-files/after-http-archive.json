@@ -1,0 +1,43 @@
+{
+  "status": 200,
+  "headers": {
+    "Content-Type": "application/zip",
+    "Content-Disposition": "attachment; filename=\"59b8100dd9fc89e0-project.zip\"",
+    "Access-Control-Expose-Headers": "Content-Disposition,Content-Range,ETag,x-opencorvus-request-id",
+    "Vary": "Origin",
+    "x-opencorvus-archive-file-count": "5",
+    "x-opencorvus-request-id": "26d08f3b-4aac-45da-85b8-f0a7b9abd7e5",
+    "Date": "Sun, 08 Nov 2026 13:14:03 GMT",
+    "Content-Length": "4224"
+  },
+  "archive_bytes": 4224,
+  "source_files": [
+    {
+      "filename": "project/.gitattributes",
+      "bytes": 150,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/.gitignore",
+      "bytes": 28,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/.opencorvus/opencorvus.jsonc",
+      "bytes": 1355,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/keep.txt",
+      "bytes": 35,
+      "equals_current_disk": true
+    },
+    {
+      "filename": "project/notes/保留 draft.txt",
+      "bytes": 29,
+      "equals_current_disk": true
+    }
+  ],
+  "missionID": "59b8100dd9fc89e0",
+  "projectFileCount": 5
+}

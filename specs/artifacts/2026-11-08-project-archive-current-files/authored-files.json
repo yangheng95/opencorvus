@@ -1,0 +1,11 @@
+{
+  "tracked": {
+    ".gitignore": "ignored.txt\n",
+    "keep.txt": "b17-kept-source\n原始保留正文\n",
+    "removed.txt": "b17-tracked-source-before-deletion\n"
+  },
+  "untracked": {
+    "notes/保留 draft.txt": "b17-untracked-current-source\n",
+    "ignored.txt": "b17-ignored-local-input\n"
+  }
+}

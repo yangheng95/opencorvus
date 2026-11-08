@@ -1,0 +1,20 @@
+未能确认操作结果
+请查看详细信息，再对“b17 archive after”重试操作。
+详细信息
+HTTP GET 500 mission/59b8100dd9fc89e0/project-archive?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b17%5Cproject-after
+
+Request ID: a9a925fb-c22b-49fb-9e0d-efc1a13951f5
+
+ApiError: API 500 mission/59b8100dd9fc89e0/project-archive?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b17%5Cproject-after: Internal server error. See x-opencorvus-request-id for diagnostics.
+    at o_e (http://localhost:38953/ui/assets/main-BydIgfm3.js:139:12220)
+    at async Object.fXe (http://localhost:38953/ui/assets/main-BydIgfm3.js:278:13876)
+    at async I (http://localhost:38953/ui/assets/main-BydIgfm3.js:269:100659)
+
+response body:
+{
+  "name": "UnknownError",
+  "data": {
+    "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+  }
+}
+确定

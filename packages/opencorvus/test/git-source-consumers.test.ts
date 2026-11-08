@@ -106,6 +106,58 @@ test("a real Task ZIP reports the number of ordinary project files actually expo
   })
 }, 60_000)
 
+for (const missingSource of ["deleted-leaf", "deleted-parent", "replaced-parent"] as const) {
+  test(`a real Task ZIP exports current files after a tracked ${missingSource}`, async () => {
+    await using project = await memoryProject(`entry-source-archive-${missingSource}`)
+    await prepare(project.path, `entry-archive-${missingSource}`)
+    const relative = missingSource === "deleted-leaf" ? "removed.txt" : "removed-parent/child.txt"
+    const original = path.join(project.path, relative)
+    await fs.mkdir(path.dirname(original), { recursive: true })
+    await fs.writeFile(original, "tracked source before removal\n")
+    const staged = await hostGit(["add", "--", relative], { cwd: project.path })
+    expect(staged.exitCode).toBe(0)
+    await Instance.provide({
+      directory: project.path,
+      fn: async () => {
+        const taskID = await createEngineGitCheckpointTask({
+          projectPath: project.path,
+          title: `Current source archive: ${missingSource}`,
+        })
+        await fs.rm(missingSource === "deleted-leaf" ? original : path.dirname(original), { recursive: true })
+        if (missingSource === "replaced-parent") {
+          await fs.writeFile(path.dirname(original), "current ordinary replacement\n")
+        }
+        const archive = await buildTaskProjectArchive({ taskID, transcript: [] })
+        const reader = new ZipReader(new BlobReader(new Blob([archive.bytes])))
+        try {
+          const entries = await reader.getEntries()
+          const source = entries.filter((entry) => entry.filename.startsWith("project/"))
+          const files = ["project/.opencorvus-test-project-identity", "project/data/note.txt"]
+          if (missingSource === "replaced-parent") files.push("project/removed-parent")
+          expect({ count: archive.fileCount, files: source.map((entry) => entry.filename) }).toEqual({
+            count: files.length,
+            files,
+          })
+          const note = source.find((entry) => entry.filename === "project/data/note.txt")!
+          expect(await note.getData!(new TextWriter())).toBe(`entry-archive-${missingSource}\n`)
+          if (missingSource === "replaced-parent") {
+            const replacement = source.find((entry) => entry.filename === "project/removed-parent")!
+            expect(await replacement.getData!(new TextWriter())).toBe("current ordinary replacement\n")
+          }
+          const manifest = entries.find((entry) => entry.filename.endsWith("/manifest.json"))!
+          expect(JSON.parse(await manifest.getData!(new TextWriter()))).toMatchObject({
+            schema: "opencorvus.task-project-archive.v1",
+            taskID,
+            projectFileCount: files.length,
+          })
+        } finally {
+          await reader.close()
+        }
+      },
+    })
+  }, 60_000)
+}
+
 test("Task baseline and result checkpoints preserve terminal link blobs and current file bytes", async () => {
   await using project = await memoryProject("entry-source-checkpoint")
   await prepare(project.path, "entry-checkpoint")

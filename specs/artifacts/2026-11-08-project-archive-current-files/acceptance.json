@@ -1,0 +1,71 @@
+{
+  "before_regression": {
+    "command": "bun run test test/git-source-consumers.test.ts --test-name-pattern=\"tracked (deleted|replaced)\"",
+    "exit": 1,
+    "pass": 0,
+    "fail": 3,
+    "expect_calls": 6,
+    "cause": "ENOENT at addProjectFile lstat for each authored tracked deletion/replacement",
+    "physical_output_settlement": true
+  },
+  "after_functional": {
+    "command": "bun run test test/git-source-consumers.test.ts test/git-source-paths.test.ts",
+    "exit": 0,
+    "files": [
+      {
+        "path": "test/git-source-consumers.test.ts",
+        "pass": 6,
+        "expect_calls": 34
+      },
+      {
+        "path": "test/git-source-paths.test.ts",
+        "pass": 5,
+        "expect_calls": 20
+      }
+    ]
+  },
+  "typecheck": {
+    "command": "bun run typecheck",
+    "cwd": "packages/opencorvus",
+    "exit": 0
+  },
+  "docs": {
+    "command": "bun run docs:check",
+    "exit": 0,
+    "operations": 352,
+    "groups": 26
+  },
+  "architecture": {
+    "command": "bun run check:architecture-index",
+    "exit": 0,
+    "documents": 20
+  },
+  "resources": {
+    "before": {
+      "port": 38952,
+      "exec_session": 77281,
+      "exit": 0,
+      "tab": 36,
+      "closed": true
+    },
+    "after": {
+      "port": 38953,
+      "exec_session": 43294,
+      "exit": 0,
+      "tab": 37,
+      "closed": true
+    },
+    "exclusive_read_lock": {
+      "exec_session": 8190,
+      "exit": 0,
+      "disposed": true
+    }
+  },
+  "limits": [
+    "Task builder uses real filesystem/Git/ZIP via local fixture; Task public UI route not separately exercised",
+    "lstat-to-read disappearance timing not induced",
+    "Windows real missing parent returns ENOENT; ENOTDIR cross-platform classification follows shared producer contract but not induced here",
+    "Project ZIP success focus BODY remains next-batch candidate",
+    "No Provider credentials or model calls"
+  ]
+}

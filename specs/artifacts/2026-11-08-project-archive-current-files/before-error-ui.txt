@@ -1,0 +1,20 @@
+Couldn't confirm the action
+Review the details, then retry the action for “b17 archive before”.
+Details
+HTTP GET 500 mission/bfa710789ee305e8/project-archive?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b17%5Cproject-before
+
+Request ID: 256e7daf-c36d-4527-8031-b753b0a9c2bf
+
+ApiError: API 500 mission/bfa710789ee305e8/project-archive?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b17%5Cproject-before: Internal server error. See x-opencorvus-request-id for diagnostics.
+    at o_e (http://localhost:38952/ui/assets/main-BydIgfm3.js:139:12220)
+    at async Object.fXe (http://localhost:38952/ui/assets/main-BydIgfm3.js:278:13876)
+    at async I (http://localhost:38952/ui/assets/main-BydIgfm3.js:269:100659)
+
+response body:
+{
+  "name": "UnknownError",
+  "data": {
+    "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+  }
+}
+OK

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [项目归档当前文件证据](2026-11-08-project-archive-current-files/README.md)：自有 Git 输入、实际下载和完整归档回执。
+
 - [通知权限调查证据](2026-11-08-notification-permission-feedback/README.md)：自有页面的偏好结果与未验范围。
 
 - [连接校验反馈证据](2026-11-08-connection-validation-feedback/README.md)：真实本地地址错误、原地语言与截图。

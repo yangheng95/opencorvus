@@ -80,6 +80,10 @@ this selection and retain their existing raw-link blob and stable snapshot
 contracts. Task and Mission project archives share the same selection and runtime
 filter, export ordinary files, and report the actual exported file count from
 the single ZIP writer in both manifests and return values.
+An indexed path that is missing from the current worktree (`ENOENT` or
+`ENOTDIR` during source stat/read) contributes no archive entry. Other source
+read errors and ZIP writer errors remain observable failures. This archive
+projection does not change the index selection used by staging or checkpoints.
 
 VCS commit-message generation remains streaming. Its error event has the required
 code `model_not_configured` or `generation_failed`. The strict model resolver's

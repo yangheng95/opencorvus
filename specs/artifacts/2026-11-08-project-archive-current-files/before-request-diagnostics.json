@@ -1,0 +1,52 @@
+[
+  {
+    "level": "info",
+    "time": "2026-11-08T13:09:46.342Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "256e7daf-c36d-4527-8031-b753b0a9c2bf",
+      "method": "GET",
+      "path": "/mission/bfa710789ee305e8/project-archive",
+      "status": "started"
+    },
+    "message": "request"
+  },
+  {
+    "level": "error",
+    "time": "2026-11-08T13:09:46.809Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "256e7daf-c36d-4527-8031-b753b0a9c2bf",
+      "method": "GET",
+      "path": "/mission/bfa710789ee305e8/project-archive",
+      "statusCode": 500,
+      "error": {
+        "type": "Error",
+        "message": "ENOENT: no such file or directory, lstat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b17\\project-before\\removed.txt'",
+        "stack": "Error: ENOENT: no such file or directory, lstat 'C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b17\\project-before\\removed.txt'\n    at async addProjectFile (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\task-project-archive.ts:111:25)\n    at async buildProjectArchive (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\engine\\task-project-archive.ts:252:15)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\routes\\mission.ts:347:33)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\validator\\validator.js:60:16)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono-openapi@1.1.2+5626abba6ea2bfb5\\node_modules\\hono-openapi\\dist\\index.js:461:11)\n    at async dispatch (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\compose.js:35:17)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\node_modules\\.bun\\hono@4.13.11\\node_modules\\hono\\dist\\hono-base.js:285:27)\n    at async <anonymous> (D:\\myhexin-local\\opencorvus\\packages\\opencorvus\\src\\server\\server.ts:976:45)",
+        "code": "ENOENT",
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b17\\project-before\\removed.txt",
+        "syscall": "lstat",
+        "errno": -4058
+      }
+    },
+    "message": "request failed"
+  },
+  {
+    "level": "info",
+    "time": "2026-11-08T13:09:46.810Z",
+    "service": "server",
+    "logDomain": "non-session",
+    "data": {
+      "requestID": "256e7daf-c36d-4527-8031-b753b0a9c2bf",
+      "method": "GET",
+      "path": "/mission/bfa710789ee305e8/project-archive",
+      "status": "completed",
+      "statusCode": 500,
+      "duration": 468
+    },
+    "message": "request"
+  }
+]
