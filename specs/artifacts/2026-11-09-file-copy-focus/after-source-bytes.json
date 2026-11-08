@@ -1,0 +1,93 @@
+[
+  {
+    "path": "notes.txt",
+    "status": 200,
+    "publicContent": "b26 original source\r\n资料保持\r\n",
+    "physicalContent": "b26 original source\r\n资料保持\r\n",
+    "bytes": 35
+  },
+  {
+    "path": "notes-copy.txt",
+    "status": 200,
+    "publicContent": "b26 original source\r\n资料保持\r\n",
+    "physicalContent": "b26 original source\r\n资料保持\r\n",
+    "bytes": 35
+  },
+  {
+    "path": "editor-choice.txt",
+    "status": 200,
+    "publicContent": "b26 original source\r\n资料保持\r\n",
+    "physicalContent": "b26 original source\r\n资料保持\r\n",
+    "bytes": 35
+  },
+  {
+    "path": "other.txt",
+    "status": 200,
+    "publicContent": "b26 root neighbor\n",
+    "physicalContent": "b26 root neighbor\n",
+    "bytes": 18
+  },
+  {
+    "path": "资料.txt",
+    "status": 200,
+    "publicContent": "b26 中文原文\r\n",
+    "physicalContent": "b26 中文原文\r\n",
+    "bytes": 18
+  },
+  {
+    "path": "dest/other.txt",
+    "status": 200,
+    "publicContent": "b26 destination neighbor\n",
+    "physicalContent": "b26 destination neighbor\n",
+    "bytes": 25
+  },
+  {
+    "path": "dest/notes-matching.txt",
+    "status": 200,
+    "publicContent": "b26 original source\r\n资料保持\r\n",
+    "physicalContent": "b26 original source\r\n资料保持\r\n",
+    "bytes": 35
+  },
+  {
+    "path": "dest/unrelated.txt",
+    "status": 200,
+    "publicContent": "b26 original source\r\n资料保持\r\n",
+    "physicalContent": "b26 original source\r\n资料保持\r\n",
+    "bytes": 35
+  },
+  {
+    "path": "dest/资料副本.txt",
+    "status": 200,
+    "publicContent": "b26 中文原文\r\n",
+    "physicalContent": "b26 中文原文\r\n",
+    "bytes": 18
+  },
+  {
+    "path": "dest-copy/other.txt",
+    "status": 200,
+    "publicContent": "b26 destination neighbor\n",
+    "physicalContent": "b26 destination neighbor\n",
+    "bytes": 25
+  },
+  {
+    "path": "dest-copy/notes-matching.txt",
+    "status": 200,
+    "publicContent": "b26 original source\r\n资料保持\r\n",
+    "physicalContent": "b26 original source\r\n资料保持\r\n",
+    "bytes": 35
+  },
+  {
+    "path": "dest-copy/unrelated.txt",
+    "status": 200,
+    "publicContent": "b26 original source\r\n资料保持\r\n",
+    "physicalContent": "b26 original source\r\n资料保持\r\n",
+    "bytes": 35
+  },
+  {
+    "path": "dest-copy/资料副本.txt",
+    "status": 200,
+    "publicContent": "b26 中文原文\r\n",
+    "physicalContent": "b26 中文原文\r\n",
+    "bytes": 18
+  }
+]

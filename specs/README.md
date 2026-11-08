@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [复制键盘接续](records/2026-11/2026-11-09-file-copy-focus.md)：真实目标选择、键盘位置与单Copy焦点归属。
+
 - [Windows设备别名合同](records/2026-11/2026-11-09-windows-device-basename.md)：共享写入前名称分类与持久路径边界。
 
 - [转换名称准入](records/2026-11/2026-11-08-project-promotion-entry-name.md)：宿主basename与真实非法输入、身份原文保持。

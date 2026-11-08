@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [复制键盘接续](2026-11-09-file-copy-focus.md)：普通/搜索复制与真实键盘位置调查。
+
 - [Windows设备别名合同](2026-11-09-windows-device-basename.md)：上标数字别名、纯校验与正常Unicode原文。
 
 - [转换名称准入](2026-11-08-project-promotion-entry-name.md)：普通非法名称、共享判定与真实错误恢复。

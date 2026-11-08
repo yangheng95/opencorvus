@@ -1676,6 +1676,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationValidation("directory")
       return
     }
+    const focus = capturePathMutationFocus(scope)
     const result = await showAppDialog({
       kind: "file-copy",
       title: t("explorer.copy"),
@@ -1687,6 +1688,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputRequiredMessage: t("explorer.name_required"),
       okLabel: t("explorer.copy"),
       cancel: true,
+      returnFocusTarget: focus.returnFocusTarget,
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
@@ -1709,6 +1711,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       }
       outcome.completed.push(result)
       outcome.refresh = await applyCopyResults([result], scope, ownsOperation)
+      focus.restore(result.path, outcome.refresh, ownsOperation)
     })
   }
 
