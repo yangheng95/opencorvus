@@ -2051,6 +2051,9 @@ member and directory derived from the one loaded snapshot. A metadata refresh
 retains a present selection; directory and availability memos keep document and
 Notes input scope stable while labels change. New connection authority retires
 the old snapshot and reads before publishing another Project's options.
+Notes rows derive their date and relevance label/number from the current locale
+inside the row's reactive display. Language changes retain the original memory
+identity, source, content, query and expanded detail without another data read.
 The current popup receives Escape before the settings page. Closing a Tooltip
 preserves its trigger focus and any required activity selection; another Escape
 can dismiss its enclosing menu or settings page through that owner's lifecycle.

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [记忆条目语言更新](records/2026-11/2026-11-09-memory-row-live-localization.md)
 - [记忆项目实时更新](records/2026-11/2026-11-09-memory-project-live-updates.md)
 - [记忆项目语言排序](records/2026-11/2026-11-09-memory-project-locale-order.md)
 - [文件搜索键盘入口](records/2026-11/2026-11-09-explorer-search-keyboard-entry.md)

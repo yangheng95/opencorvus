@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [记忆条目语言更新](2026-11-09-memory-row-live-localization.md)
 - [记忆项目实时更新](2026-11-09-memory-project-live-updates.md)
 - [记忆项目语言排序](2026-11-09-memory-project-locale-order.md)
 - [文件搜索键盘入口](2026-11-09-explorer-search-keyboard-entry.md)

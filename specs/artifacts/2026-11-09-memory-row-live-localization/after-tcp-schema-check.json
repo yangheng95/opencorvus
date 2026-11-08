@@ -1,0 +1,85 @@
+{
+  "phase": "after",
+  "project": {
+    "id": "prj_hZnbHOIVy26F19uMxQkl",
+    "name": "Memory Locale Evidence",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b40\\project-after"
+  },
+  "results": [
+    {
+      "operation": "panel.knowledge.memory.list",
+      "status": 200,
+      "requestID": "b03b598e-e2bb-48c9-857a-d9f8453a852c",
+      "body": [
+        {
+          "id": "mem_g0VaQCbj600m8tiVC9zT",
+          "projectId": "prj_hZnbHOIVy26F19uMxQkl",
+          "scope": "project",
+          "title": "Another original fact",
+          "source": "user",
+          "kind": "fact",
+          "importance": 76,
+          "confidence": 80,
+          "timeCreated": 1794175274752,
+          "timeUpdated": 1794175274753
+        },
+        {
+          "id": "mem_g0VaQCbj300yc2zS7yGU",
+          "projectId": "prj_hZnbHOIVy26F19uMxQkl",
+          "scope": "project",
+          "title": "Original locale note / 原始记录",
+          "source": "user",
+          "kind": "note",
+          "importance": 75,
+          "confidence": 90,
+          "timeCreated": 1794175274749,
+          "timeUpdated": 1794175274749
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "panel.knowledge.memory.get",
+      "status": 200,
+      "requestID": "1b6ea01c-d326-499b-af89-f9c511af9f74",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQCbj300yc2zS7yGU",
+          "projectId": "prj_hZnbHOIVy26F19uMxQkl",
+          "scope": "project",
+          "title": "Original locale note / 原始记录",
+          "source": "user",
+          "kind": "note",
+          "importance": 75,
+          "confidence": 90,
+          "timeCreated": 1794175274749,
+          "timeUpdated": 1794175274749
+        },
+        "content": "corvuslocale evidence: keep this original bilingual note. 保留原始笔记内容。"
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "panel.knowledge.memory.search",
+      "status": 200,
+      "requestID": "aae7ee95-be23-4bb5-8ee3-fb638d2a935b",
+      "body": [
+        {
+          "chunkId": "mck_g0VaQCbj40059H6waUbC",
+          "fileId": "mem_g0VaQCbj300yc2zS7yGU",
+          "fileTitle": "Original locale note / 原始记录",
+          "content": "corvuslocale evidence: keep this original bilingual note. 保留原始笔记内容。",
+          "scope": "project",
+          "source": "user",
+          "kind": "note",
+          "importance": 75,
+          "confidence": 90,
+          "score": 0.24639561621802644,
+          "timeCreated": 1794175274750
+        }
+      ],
+      "schemaValid": true
+    }
+  ],
+  "qualification": "Real HTTP list/get/FTS only. UI accepted separately through manual interaction and personally viewed screenshots."
+}

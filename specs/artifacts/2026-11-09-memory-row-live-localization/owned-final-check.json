@@ -1,0 +1,87 @@
+{
+  "phases": {
+    "before": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b40\\project-before",
+      "originalNotesBytes": 50,
+      "worktreeAndGitContentExact": true,
+      "head": "51c591f45d6fa9e19f4c7b1bc0c01ccd1add7e5d",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "databaseCounts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "memory_file": 3,
+        "memory_chunk": 3
+      },
+      "configFiles": [],
+      "originalMemory": [
+        {
+          "id": "mem_g0VaQC0HV00KPJznk7w3",
+          "projectID": "prj_h4tJVvKRdLy7WBo8VMyc",
+          "title": "Original locale note / 原始记录",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794175130813,
+          "content": "corvuslocale evidence: keep this original bilingual note. 保留原始笔记内容。",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQC0HZ00Fapd5KnF3",
+          "projectID": "prj_h4tJVvKRdLy7WBo8VMyc",
+          "title": "Another original fact",
+          "source": "user",
+          "kind": "fact",
+          "timeCreated": 1794175130817,
+          "content": "Separate original evidence belongs to this isolated project.",
+          "identityContentCreationExact": true
+        }
+      ]
+    },
+    "after": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b40\\project-after",
+      "originalNotesBytes": 49,
+      "worktreeAndGitContentExact": true,
+      "head": "a1a602ca1a702aa8636bf595d8eef4cec260d95d",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "databaseCounts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "memory_file": 3,
+        "memory_chunk": 3
+      },
+      "configFiles": [],
+      "originalMemory": [
+        {
+          "id": "mem_g0VaQCbj300yc2zS7yGU",
+          "projectID": "prj_hZnbHOIVy26F19uMxQkl",
+          "title": "Original locale note / 原始记录",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794175274749,
+          "content": "corvuslocale evidence: keep this original bilingual note. 保留原始笔记内容。",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQCbj600m8tiVC9zT",
+          "projectID": "prj_hZnbHOIVy26F19uMxQkl",
+          "title": "Another original fact",
+          "source": "user",
+          "kind": "fact",
+          "timeCreated": 1794175274752,
+          "content": "Separate original evidence belongs to this isolated project.",
+          "identityContentCreationExact": true
+        }
+      ]
+    }
+  },
+  "qualification": "UI-only change; actual SQLite FTS and HTTP are integration evidence. No credentials, models or UI automation. Mutable host project-memory metadata is not compared across observations."
+}

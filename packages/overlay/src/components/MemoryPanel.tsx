@@ -440,12 +440,14 @@ export function MemoryPanel(props: MemoryPanelProps) {
         <Show when={files().length > 0} fallback={emptyState()}>
           <For each={files()}>
             {(f) => {
-              const time = formatDate(f.timeUpdated)
               const mode = searchMode() ? "search" : "list"
-              const scoreHint = f.score != null
-                ? ` · ${t("memory.score", { value: new Intl.NumberFormat(localeTag(), { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(f.score) })}`
-                : ""
-              const meta = `${f.source}${scoreHint}${time ? ` · ${time}` : ""}`
+              const meta = () => {
+                const time = formatDate(f.timeUpdated)
+                const scoreHint = f.score != null
+                  ? ` · ${t("memory.score", { value: new Intl.NumberFormat(localeTag(), { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(f.score) })}`
+                  : ""
+                return `${f.source}${scoreHint}${time ? ` · ${time}` : ""}`
+              }
               const detailState = () => detailStates()[f.id]
               const detail = () => detailState()?.detail ?? null
               const expanded = () => expandedFileId() === f.id
@@ -474,7 +476,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
                     >
                       <span class="knowledge-item-title">{f.title}</span>
                       <span class="knowledge-item-meta-row">
-                        <span class="knowledge-item-meta">{meta}</span>
+                        <span class="knowledge-item-meta">{meta()}</span>
                         <Badge class="knowledge-scope" tone="neutral" size="sm" data-scope={f.scope}>
                           {knowledgeScopeLabel(f.scope)}
                         </Badge>
