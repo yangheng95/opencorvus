@@ -1,0 +1,113 @@
+{
+  "phase": "after",
+  "date": "2026-11-08T22:23:46.380Z",
+  "projects": [
+    {
+      "role": "owner",
+      "id": "prj_h8Uy6FfUOm9Ldt6c3q1W",
+      "name": "Owner Notes",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-after-owner",
+      "file": {
+        "id": "mem_g0VaQIHbs00ZNYpXYuv1",
+        "projectId": "prj_h8Uy6FfUOm9Ldt6c3q1W",
+        "scope": "project",
+        "title": "Owner original note",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "timeCreated": 1794176627393,
+        "timeUpdated": 1794176627393
+      },
+      "originalContent": "Original Owner knowledge stays in its real project."
+    },
+    {
+      "role": "caller",
+      "id": "prj_hTAFb22jsZYtu6AmpHmV",
+      "name": "Caller Notes",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-after-caller",
+      "file": {
+        "id": "mem_g0VaQIHgy00LtWni2Ofl",
+        "projectId": "prj_hTAFb22jsZYtu6AmpHmV",
+        "scope": "project",
+        "title": "Caller original note",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "timeCreated": 1794176627708,
+        "timeUpdated": 1794176627708
+      },
+      "originalContent": "Original Caller knowledge stays in its real project."
+    }
+  ],
+  "qualification": "Actual isolated domain/SQLite/FTS. The production Tool passes correct pairs; this probe is not evidence of a public writeChunks API or an externally exploitable route.",
+  "foreignPair": {
+    "outcome": "error",
+    "name": "NotFoundError",
+    "data": {
+      "message": "Memory file mem_g0VaQIHbs00ZNYpXYuv1 not found for project prj_hTAFb22jsZYtu6AmpHmV"
+    },
+    "message": "NotFoundError: Memory file mem_g0VaQIHbs00ZNYpXYuv1 not found for project prj_hTAFb22jsZYtu6AmpHmV"
+  },
+  "ownedReplacement": [
+    {
+      "id": "mck_g0VaQIHh200n8sx3HQnt",
+      "fileId": "mem_g0VaQIHgy00LtWni2Ofl",
+      "projectId": "prj_hTAFb22jsZYtu6AmpHmV",
+      "content": "crosschunkprobe: legitimate Caller knowledge belongs to its own original file.",
+      "tokenCount": 20,
+      "timeCreated": 1794176627711,
+      "timeUpdated": 1794176627711
+    }
+  ],
+  "callerList": [
+    {
+      "id": "mem_g0VaQIHgy00LtWni2Ofl",
+      "projectId": "prj_hTAFb22jsZYtu6AmpHmV",
+      "scope": "project",
+      "title": "Caller original note",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794176627708,
+      "timeUpdated": 1794176627711
+    }
+  ],
+  "callerSearch": [
+    {
+      "chunkId": "mck_g0VaQIHh200n8sx3HQnt",
+      "fileId": "mem_g0VaQIHgy00LtWni2Ofl",
+      "fileTitle": "Caller original note",
+      "content": "crosschunkprobe: legitimate Caller knowledge belongs to its own original file.",
+      "scope": "project",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "score": 0.21694251164817405,
+      "timeCreated": 1794176627712
+    }
+  ],
+  "ownerChunks": [
+    {
+      "id": "mck_g0VaQIHbu00nes4HiG9U",
+      "fileId": "mem_g0VaQIHbs00ZNYpXYuv1",
+      "projectId": "prj_h8Uy6FfUOm9Ldt6c3q1W",
+      "content": "Original Owner knowledge stays in its real project.",
+      "tokenCount": 13,
+      "timeCreated": 1794176627394,
+      "timeUpdated": 1794176627394
+    }
+  ],
+  "callerStoredParents": [
+    {
+      "chunkID": "mck_g0VaQIHh200n8sx3HQnt",
+      "chunkProjectID": "prj_hTAFb22jsZYtu6AmpHmV",
+      "fileID": "mem_g0VaQIHgy00LtWni2Ofl",
+      "fileProjectID": "prj_hTAFb22jsZYtu6AmpHmV",
+      "title": "Caller original note"
+    }
+  ]
+}

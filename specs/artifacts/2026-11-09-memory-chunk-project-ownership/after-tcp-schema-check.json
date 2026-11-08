@@ -1,0 +1,126 @@
+{
+  "phase": "after",
+  "results": [
+    {
+      "operation": "Caller list",
+      "project": {
+        "id": "prj_hTAFb22jsZYtu6AmpHmV",
+        "role": "caller",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-after-caller"
+      },
+      "status": 200,
+      "requestID": "6231caae-1177-41eb-b96d-5ca854919f1f",
+      "body": [
+        {
+          "id": "mem_g0VaQIHgy00LtWni2Ofl",
+          "projectId": "prj_hTAFb22jsZYtu6AmpHmV",
+          "scope": "project",
+          "title": "Caller original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794176627708,
+          "timeUpdated": 1794176627711
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "Caller search",
+      "project": {
+        "id": "prj_hTAFb22jsZYtu6AmpHmV",
+        "role": "caller",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-after-caller"
+      },
+      "status": 200,
+      "requestID": "74876134-b44d-4550-89dd-7ff5b1440f05",
+      "body": [
+        {
+          "chunkId": "mck_g0VaQIHh200n8sx3HQnt",
+          "fileId": "mem_g0VaQIHgy00LtWni2Ofl",
+          "fileTitle": "Caller original note",
+          "content": "crosschunkprobe: legitimate Caller knowledge belongs to its own original file.",
+          "scope": "project",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "score": 0.21694251164817405,
+          "timeCreated": 1794176627712
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "Owner exact get",
+      "project": {
+        "id": "prj_h8Uy6FfUOm9Ldt6c3q1W",
+        "role": "owner",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-after-owner"
+      },
+      "status": 200,
+      "requestID": "86e571d3-a457-4364-8145-d17e791fcbd8",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQIHbs00ZNYpXYuv1",
+          "projectId": "prj_h8Uy6FfUOm9Ldt6c3q1W",
+          "scope": "project",
+          "title": "Owner original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794176627393,
+          "timeUpdated": 1794176627393
+        },
+        "content": "Original Owner knowledge stays in its real project."
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "Caller exact get",
+      "project": {
+        "id": "prj_hTAFb22jsZYtu6AmpHmV",
+        "role": "caller",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-after-caller"
+      },
+      "status": 200,
+      "requestID": "51218c3f-b079-4e8e-bac0-267f2aa07e3a",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQIHgy00LtWni2Ofl",
+          "projectId": "prj_hTAFb22jsZYtu6AmpHmV",
+          "scope": "project",
+          "title": "Caller original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794176627708,
+          "timeUpdated": 1794176627711
+        },
+        "content": "crosschunkprobe: legitimate Caller knowledge belongs to its own original file."
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "Caller foreign identity error",
+      "project": {
+        "id": "prj_hTAFb22jsZYtu6AmpHmV",
+        "role": "caller",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-after-caller"
+      },
+      "status": 404,
+      "requestID": "505b7018-c70f-4521-8331-329e1c2af37b",
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Memory file not found: mem_g0VaQIHbs00ZNYpXYuv1"
+        }
+      },
+      "schemaValid": true
+    }
+  ],
+  "qualification": "Actual scoped read/search/explicit error contracts. No public writeChunks endpoint; UI acceptance is separate manual interaction."
+}

@@ -1,0 +1,115 @@
+{
+  "phase": "before",
+  "date": "2026-11-08T22:19:49.960Z",
+  "projects": [
+    {
+      "role": "owner",
+      "id": "prj_hd3vQDsJdA8oFffisoVR",
+      "name": "Owner Notes",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-before-owner",
+      "file": {
+        "id": "mem_g0VaQHI3d00Yv27kn4Gi",
+        "projectId": "prj_hd3vQDsJdA8oFffisoVR",
+        "scope": "project",
+        "title": "Owner original note",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "timeCreated": 1794176390785,
+        "timeUpdated": 1794176390786
+      },
+      "originalContent": "Original Owner knowledge stays in its real project."
+    },
+    {
+      "role": "caller",
+      "id": "prj_h5q4vT3c1rwRyzOR4wY5",
+      "name": "Caller Notes",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-before-caller",
+      "file": {
+        "id": "mem_g0VaQHI8j00V5RmGSDRd",
+        "projectId": "prj_h5q4vT3c1rwRyzOR4wY5",
+        "scope": "project",
+        "title": "Caller original note",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "timeCreated": 1794176391101,
+        "timeUpdated": 1794176391101
+      },
+      "originalContent": "Original Caller knowledge stays in its real project."
+    }
+  ],
+  "qualification": "Actual isolated domain/SQLite/FTS. The production Tool passes correct pairs; this probe is not evidence of a public writeChunks API or an externally exploitable route.",
+  "foreignPair": {
+    "outcome": "accepted",
+    "chunks": [
+      {
+        "id": "mck_g0VaQHI8m004GoCsLp8r",
+        "fileId": "mem_g0VaQHI3d00Yv27kn4Gi",
+        "projectId": "prj_h5q4vT3c1rwRyzOR4wY5",
+        "content": "crosschunkprobe: mismatched parent identity in the owned diagnostic profile.",
+        "tokenCount": 19,
+        "timeCreated": 1794176391103,
+        "timeUpdated": 1794176391103
+      }
+    ]
+  },
+  "callerList": [
+    {
+      "id": "mem_g0VaQHI8j00V5RmGSDRd",
+      "projectId": "prj_h5q4vT3c1rwRyzOR4wY5",
+      "scope": "project",
+      "title": "Caller original note",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794176391101,
+      "timeUpdated": 1794176391101
+    }
+  ],
+  "callerSearch": [
+    {
+      "chunkId": "mck_g0VaQHI8m004GoCsLp8r",
+      "fileId": "mem_g0VaQHI3d00Yv27kn4Gi",
+      "fileTitle": "Owner original note",
+      "content": "crosschunkprobe: mismatched parent identity in the owned diagnostic profile.",
+      "scope": "project",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "score": 0.3794425855020101,
+      "timeCreated": 1794176391104
+    }
+  ],
+  "ownerChunks": [
+    {
+      "id": "mck_g0VaQHI3e00Ywd4kK8Se",
+      "fileId": "mem_g0VaQHI3d00Yv27kn4Gi",
+      "projectId": "prj_hd3vQDsJdA8oFffisoVR",
+      "content": "Original Owner knowledge stays in its real project.",
+      "tokenCount": 13,
+      "timeCreated": 1794176390786,
+      "timeUpdated": 1794176390786
+    }
+  ],
+  "callerStoredParents": [
+    {
+      "chunkID": "mck_g0VaQHI8k00ARjTH9z12",
+      "chunkProjectID": "prj_h5q4vT3c1rwRyzOR4wY5",
+      "fileID": "mem_g0VaQHI8j00V5RmGSDRd",
+      "fileProjectID": "prj_h5q4vT3c1rwRyzOR4wY5",
+      "title": "Caller original note"
+    },
+    {
+      "chunkID": "mck_g0VaQHI8m004GoCsLp8r",
+      "chunkProjectID": "prj_h5q4vT3c1rwRyzOR4wY5",
+      "fileID": "mem_g0VaQHI3d00Yv27kn4Gi",
+      "fileProjectID": "prj_hd3vQDsJdA8oFffisoVR",
+      "title": "Owner original note"
+    }
+  ]
+}

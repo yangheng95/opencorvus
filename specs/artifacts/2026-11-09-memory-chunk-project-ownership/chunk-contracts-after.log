@@ -1,0 +1,29 @@
+$ bun script/run-tests.ts test/memory/chunk-project-ownership.test.ts test/memory/search-filter-order.test.ts
+[1/2] START test/memory/chunk-project-ownership.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) owned chunks publish their original file identity and searchable content [2996.02ms]
+(pass) a file from another project maps to the explicit missing-parent error [3155.16ms]
+(pass) an unknown file maps to the same explicit missing-parent contract [1526.52ms]
+(pass) the owned host document retains its protected-write error and original content [2058.59ms]
+(pass) the production writeFile path updates the same keyed file and current full-text content [1398.82ms]
+
+ 5 pass
+ 0 fail
+ 16 expect() calls
+Ran 5 tests across 1 file. [13.52s]
+[1/2] DONE test/memory/chunk-project-ownership.test.ts exit=0 duration=14.18s
+[2/2] START test/memory/search-filter-order.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) Memory exact filter ordering > applies kind and source filters before the bounded full-text candidate window [2515.78ms]
+(pass) Memory exact filter ordering > ranks across kinds by relevance instead of letting kind weight override the score [1444.47ms]
+(pass) Memory exact filter ordering > rejects singleton document kinds instead of silently returning nothing for them [2079.68ms]
+
+ 3 pass
+ 0 fail
+ 7 expect() calls
+Ran 3 tests across 1 file. [7.25s]
+[2/2] DONE test/memory/search-filter-order.test.ts exit=0 duration=7.44s

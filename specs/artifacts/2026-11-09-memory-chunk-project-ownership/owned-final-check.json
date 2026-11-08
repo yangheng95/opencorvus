@@ -1,0 +1,154 @@
+{
+  "phases": {
+    "before": {
+      "gitProjects": [
+        {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-before-owner",
+          "originalNotesBytes": 48,
+          "originalFileAndGitContentExact": true,
+          "head": "d5922ca88cae83176bb0b49402c51da1bdee204d",
+          "status": [
+            "?? .gitattributes",
+            "?? .gitignore",
+            "?? .opencorvus/"
+          ]
+        },
+        {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-before-caller",
+          "originalNotesBytes": 49,
+          "originalFileAndGitContentExact": true,
+          "head": "bf348d718fb22d8a344fc229b1faaaa585ebe5e4",
+          "status": [
+            "?? .gitattributes",
+            "?? .gitignore",
+            "?? .opencorvus/"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "id": "mem_g0VaQHI3d00Yv27kn4Gi",
+          "projectID": "prj_hd3vQDsJdA8oFffisoVR",
+          "title": "Owner original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794176390785,
+          "originalIdentityAndCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQHI8j00V5RmGSDRd",
+          "projectID": "prj_h5q4vT3c1rwRyzOR4wY5",
+          "title": "Caller original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794176391101,
+          "originalIdentityAndCreationExact": true
+        }
+      ],
+      "chunks": [
+        {
+          "fileID": "mem_g0VaQHI3d00Yv27kn4Gi",
+          "chunkProjectID": "prj_hd3vQDsJdA8oFffisoVR",
+          "fileProjectID": "prj_hd3vQDsJdA8oFffisoVR",
+          "content": "Original Owner knowledge stays in its real project.",
+          "parentConsistent": true
+        },
+        {
+          "fileID": "mem_g0VaQHI3d00Yv27kn4Gi",
+          "chunkProjectID": "prj_h5q4vT3c1rwRyzOR4wY5",
+          "fileProjectID": "prj_hd3vQDsJdA8oFffisoVR",
+          "content": "crosschunkprobe: mismatched parent identity in the owned diagnostic profile.",
+          "parentConsistent": false
+        },
+        {
+          "fileID": "mem_g0VaQHI8j00V5RmGSDRd",
+          "chunkProjectID": "prj_h5q4vT3c1rwRyzOR4wY5",
+          "fileProjectID": "prj_h5q4vT3c1rwRyzOR4wY5",
+          "content": "Original Caller knowledge stays in its real project.",
+          "parentConsistent": true
+        }
+      ],
+      "exactExpectedDomainState": true,
+      "databaseCounts": {
+        "project": 2,
+        "session": 0,
+        "message": 0,
+        "memory_file": 4,
+        "memory_chunk": 5
+      },
+      "configFiles": []
+    },
+    "after": {
+      "gitProjects": [
+        {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-after-owner",
+          "originalNotesBytes": 47,
+          "originalFileAndGitContentExact": true,
+          "head": "ca6a10c021dd0d715fd02c646ba110db566ad88c",
+          "status": [
+            "?? .gitattributes",
+            "?? .gitignore",
+            "?? .opencorvus/"
+          ]
+        },
+        {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b42\\project-after-caller",
+          "originalNotesBytes": 48,
+          "originalFileAndGitContentExact": true,
+          "head": "82096483a174c78cd2ec8a96da8c81c4728fcf3a",
+          "status": [
+            "?? .gitattributes",
+            "?? .gitignore",
+            "?? .opencorvus/"
+          ]
+        }
+      ],
+      "files": [
+        {
+          "id": "mem_g0VaQIHbs00ZNYpXYuv1",
+          "projectID": "prj_h8Uy6FfUOm9Ldt6c3q1W",
+          "title": "Owner original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794176627393,
+          "originalIdentityAndCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQIHgy00LtWni2Ofl",
+          "projectID": "prj_hTAFb22jsZYtu6AmpHmV",
+          "title": "Caller original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794176627708,
+          "originalIdentityAndCreationExact": true
+        }
+      ],
+      "chunks": [
+        {
+          "fileID": "mem_g0VaQIHbs00ZNYpXYuv1",
+          "chunkProjectID": "prj_h8Uy6FfUOm9Ldt6c3q1W",
+          "fileProjectID": "prj_h8Uy6FfUOm9Ldt6c3q1W",
+          "content": "Original Owner knowledge stays in its real project.",
+          "parentConsistent": true
+        },
+        {
+          "fileID": "mem_g0VaQIHgy00LtWni2Ofl",
+          "chunkProjectID": "prj_hTAFb22jsZYtu6AmpHmV",
+          "fileProjectID": "prj_hTAFb22jsZYtu6AmpHmV",
+          "content": "crosschunkprobe: legitimate Caller knowledge belongs to its own original file.",
+          "parentConsistent": true
+        }
+      ],
+      "exactExpectedDomainState": true,
+      "databaseCounts": {
+        "project": 2,
+        "session": 0,
+        "message": 0,
+        "memory_file": 4,
+        "memory_chunk": 4
+      },
+      "configFiles": []
+    }
+  },
+  "qualification": "Before intentionally reproduces one inconsistent parent through the original domain writer, not direct SQL. After verifies the precise named error and legitimate Caller replacement. Unknown user historical records are neither inspected nor repaired. Mutable host-document times are not equality gates."
+}

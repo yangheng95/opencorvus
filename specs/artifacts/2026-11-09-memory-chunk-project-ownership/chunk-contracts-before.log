@@ -1,0 +1,82 @@
+$ bun script/run-tests.ts test/memory/chunk-project-ownership.test.ts
+[1/1] START test/memory/chunk-project-ownership.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) owned chunks publish their original file identity and searchable content [1768.83ms]
+50 |     directory: caller.path,
+51 |     fn: async () => {
+52 |       const projectID = Instance.project.id
+53 |       const local = Memory.writeFile({ projectId: projectID, title: "Caller note", source: "user", content: "calleroriginaltoken original caller content" })
+54 |       const error = writeError(ownerFileID, projectID)
+55 |       expect(error).toBeInstanceOf(NotFoundError)
+                         ^
+error: expect(received).toBeInstanceOf(expected)
+
+Expected constructor: [class result extends NamedError]
+Received value: undefined
+
+      at fn (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\chunk-project-ownership.test.ts:55:21)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1561:26)
+      at run (node:async_hooks:144:29)
+      at run (node:async_hooks:144:29)
+      at run (node:async_hooks:144:29)
+      at provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1541:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\chunk-project-ownership.test.ts:49:18)
+(fail) a file from another project maps to the explicit missing-parent error [2437.77ms]
+70 |   await Instance.provide({
+71 |     directory: project.path,
+72 |     fn: async () => {
+73 |       const projectID = Instance.project.id
+74 |       const error = writeError("mem_unknown_owned_file", projectID)
+75 |       expect(error).toBeInstanceOf(NotFoundError)
+                         ^
+error: expect(received).toBeInstanceOf(expected)
+
+Expected constructor: [class result extends NamedError]
+Received value: 76 | 	}
+77 | 	withStatement(callback) {
+78 | 		if (this.finalized) throw new Error("Cannot execute a finalized Bun SQLite prepared query");
+79 | 		let result;
+80 | 		try {
+81 | 			result = callback();
+                 ^
+SQLiteError: FOREIGN KEY constraint failed
+      errno: 787,
+ byteOffset: -1,
+       code: "SQLITE_CONSTRAINT_FOREIGNKEY"
+
+      at #run (bun:sqlite:187:20)
+      at withStatement (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+06fa307ed8f6659d\node_modules\drizzle-orm\bun-sqlite\session.js:81:13)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\memory\index.ts:380:12)
+      at run (node:async_hooks:144:29)
+      at provideDatabaseContext (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1660:26)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\storage\db.ts:1883:18)
+      at <anonymous> (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+06fa307ed8f6659d\node_modules\drizzle-orm\bun-sqlite\session.js:38:13)
+      at transaction (bun:sqlite:401:27)
+      at transaction (D:\myhexin-local\opencorvus\node_modules\.bun\drizzle-orm@1.0.0-beta.20+06fa307ed8f6659d\node_modules\drizzle-orm\bun-sqlite\session.js:39:25)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\chunk-project-ownership.test.ts:70:18)
+
+
+      at fn (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\chunk-project-ownership.test.ts:75:21)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1561:26)
+      at run (node:async_hooks:144:29)
+      at run (node:async_hooks:144:29)
+      at run (node:async_hooks:144:29)
+      at provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1541:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\chunk-project-ownership.test.ts:70:18)
+(fail) an unknown file maps to the same explicit missing-parent contract [1182.71ms]
+(pass) the owned host document retains its protected-write error and original content [1223.30ms]
+(pass) the production writeFile path updates the same keyed file and current full-text content [1212.80ms]
+
+ 3 pass
+ 2 fail
+ 10 expect() calls
+Ran 5 tests across 1 file. [10.06s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\chunk-project-ownership.test.ts
+[1/1] DONE test/memory/chunk-project-ownership.test.ts exit=1 duration=10.55s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\chunk-project-ownership.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-YjSEsG
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1

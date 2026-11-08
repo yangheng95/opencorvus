@@ -1,5 +1,5 @@
 import { Token } from "@/util/token"
-import { Database, and, desc, eq, sql } from "@/storage/db"
+import { Database, NotFoundError, and, desc, eq, sql } from "@/storage/db"
 import { MemoryFileTable, MemoryChunkTable } from "./memory.sql"
 import { Identifier } from "@/id/id"
 import { Log } from "@/util/log"
@@ -355,7 +355,10 @@ export namespace Memory {
         .from(MemoryFileTable)
         .where(and(eq(MemoryFileTable.id, fileId), eq(MemoryFileTable.project_id, projectId)))
         .get()
-      if (file && isHostOwnedMemoryKind(file.kind)) {
+      if (!file) {
+        throw new NotFoundError({ message: `Memory file ${fileId} not found for project ${projectId}` })
+      }
+      if (isHostOwnedMemoryKind(file.kind)) {
         throw new ProtectedProjectMemoryError({
           message: `Project memory ledger file ${fileId} is read-only`,
           code: "protected_project_memory",

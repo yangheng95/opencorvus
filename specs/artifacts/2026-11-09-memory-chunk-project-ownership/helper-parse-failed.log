@@ -1,0 +1,21 @@
+48 |  })
+       ^
+error: Expected "}" but found ")"
+    at C:\Users\hengu\AppData\Local\Temp\opencorvus-iteration-20261109-b42\initialize-and-probe.ts:48:3
+
+49 |  await fs.writeFile(`${root}/${phase}-domain-probe.json`,JSON.stringify(record,nu
+      ^
+error: Expected ")" but found "await"
+    at C:\Users\hengu\AppData\Local\Temp\opencorvus-iteration-20261109-b42\initialize-and-probe.ts:49:2
+
+49 |  await fs.writeFile(`${root}/${phase}-domain-probe.json`,JSON.stringify(record,null,2)+
+            ^
+error: Expected ";" but found "fs"
+    at C:\Users\hengu\AppData\Local\Temp\opencorvus-iteration-20261109-b42\initialize-and-probe.ts:49:8
+
+49 |  await fs.writeFile(`${root}/${phase}-domain-probe.json`,JSON.stringify(record,null,2)+"\
+              ^
+error: Unexpected .
+    at C:\Users\hengu\AppData\Local\Temp\opencorvus-iteration-20261109-b42\initialize-and-probe.ts:49:10
+
+Bun v1.4.3 (Windows x64)
