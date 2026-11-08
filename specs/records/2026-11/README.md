@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [文件搜索键盘入口](2026-11-09-explorer-search-keyboard-entry.md)
 - [Planner 会话归属](2026-11-09-planner-session-ownership.md)
 - [Skill/MCP 完整错误诊断](2026-11-09-extension-error-details.md)
 - [市场来源能力](2026-11-09-skill-market-source-capabilities.md)：网站来源事实、共享合同与不阻断搜索。

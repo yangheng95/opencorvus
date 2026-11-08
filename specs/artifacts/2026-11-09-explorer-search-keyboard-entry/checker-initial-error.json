@@ -1,0 +1,60 @@
+{
+  "status": 400,
+  "requestID": "66d340d5-701f-47b5-aafc-6621f59b067d",
+  "body": {
+    "name": "DirectoryRequiredError",
+    "data": {
+      "message": "Project-scoped route /find/file requires ?directory= query parameter or x-opencorvus-directory header"
+    }
+  },
+  "parameters": [
+    {
+      "name": "directory",
+      "in": "query",
+      "required": false,
+      "description": "Project directory for project-scoped routes. Equivalent to the x-opencorvus-directory request header.",
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "in": "query",
+      "name": "query",
+      "schema": {
+        "type": "string"
+      },
+      "required": true
+    },
+    {
+      "in": "query",
+      "name": "dirs",
+      "schema": {
+        "type": "string",
+        "enum": [
+          "true",
+          "false"
+        ]
+      }
+    },
+    {
+      "in": "query",
+      "name": "type",
+      "schema": {
+        "type": "string",
+        "enum": [
+          "file",
+          "directory"
+        ]
+      }
+    },
+    {
+      "in": "query",
+      "name": "limit",
+      "schema": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 200
+      }
+    }
+  ]
+}

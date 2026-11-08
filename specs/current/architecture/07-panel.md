@@ -1549,6 +1549,11 @@ that same current row order. Right expands a directory or enters its visible
 first child; Left collapses it or returns to its visible parent. Search results
 share the linear navigation. Focus stays independent of selection and the opened
 file; native Tab, Enter/Space and modified click selection retain their owners.
+For a completed, current nonempty search, unmodified Down/Up in the search input
+enters the first/last result through that same row-focus owner. Pending, failed
+or empty results retain native input behavior. Editing the query retires an
+unsettled row-focus request before publishing the new value. Search-mode keyboard
+help describes result navigation; normal directory help describes folders.
 Virtua's existing keepMounted and index scrolling retain the focused row and
 mount an off-screen destination. Deferred focus checks the original operation
 scope, current row key, visible list and unchanged focus origin. The row-ref map

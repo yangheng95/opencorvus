@@ -568,6 +568,19 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (next) focusRow(next, event.currentTarget)
   }
 
+  function handleSearchKeyDown(event: KeyboardEvent & { currentTarget: HTMLInputElement }): void {
+    if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return
+    const search = query().trim()
+    if (!search || search !== deferredQuery() || searchResults.loading || !currentSearchResult() || currentSearchFailure()) return
+    const visible = rows()
+    const row = event.key === "ArrowDown" ? visible[0] : visible.at(-1)
+    if (!row) return
+    event.preventDefault()
+    event.stopPropagation()
+    focusRow(row, event.currentTarget)
+  }
+
   function normalizeExplorerPath(path: string): string {
     return normalizeProjectFilePath(path, directory())
   }
@@ -2211,7 +2224,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
               value={query()}
               placeholder={t("explorer.search_placeholder")}
               disabled={!directory()}
-              onValueChange={setQuery}
+              onValueChange={(value) => {
+                pendingFocus = undefined
+                setQuery(value)
+              }}
+              onKeyDown={handleSearchKeyDown}
               clearDataUI="file-explorer-search-clear"
             />
             <DropdownMenu.Root placement="bottom-end" fitViewport>
@@ -2377,7 +2394,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
         {renderBackgroundContextMenu()}
       </ContextMenu.Root>
       <Show when={directory()}>
-        <p class="file-explorer-keyboard-hint">{t("explorer.keyboard_hint")}</p>
+        <p class="file-explorer-keyboard-hint">{t(deferredQuery() ? "explorer.search_keyboard_hint" : "explorer.keyboard_hint")}</p>
       </Show>
     </section>
   )

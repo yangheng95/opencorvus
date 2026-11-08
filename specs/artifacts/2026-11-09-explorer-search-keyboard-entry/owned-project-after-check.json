@@ -1,0 +1,46 @@
+{
+  "before": {
+    "originalFiles": 131,
+    "originalBytes": 5375,
+    "allOriginalBytesExact": true,
+    "gitHead": "7d08b6de741c772d7d164e63477f877d502460cb",
+    "initialHeadExact": true,
+    "trackedIdentitiesExact": true,
+    "projectGitStatus": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "profileConfigFiles": []
+  },
+  "after": {
+    "originalFiles": 131,
+    "originalBytes": 5374,
+    "allOriginalBytesExact": true,
+    "gitHead": "3b5653304297c35f0699ceaec63f1d9e3a67554c",
+    "initialHeadExact": true,
+    "trackedIdentitiesExact": true,
+    "projectGitStatus": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "profileConfigFiles": []
+  },
+  "qualification": {
+    "before": {
+      "port": 38994,
+      "execSession": 40392,
+      "shutdownStatus": 200,
+      "exitCode": 0
+    },
+    "after": {
+      "port": 38995,
+      "execSession": 92206,
+      "shutdownStatus": 200,
+      "exitCode": 0
+    },
+    "buildAsset": "main-B1jIp4MA.js",
+    "scope": "Genuine manual isolated /ui interaction and personally viewed screenshots; no UI automated tests, model or credentials."
+  }
+}
