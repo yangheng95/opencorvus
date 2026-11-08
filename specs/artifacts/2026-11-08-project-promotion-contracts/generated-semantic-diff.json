@@ -1,0 +1,14 @@
+{
+  "changedOperations": [
+    "project.current.promoteAnonymous"
+  ],
+  "operationCount": 352,
+  "addedSchemas": [
+    "AnonymousProjectPromotionError",
+    "OwnedPromptControllersError",
+    "ProjectDirectoryAdmissionClosedError",
+    "ProjectDurableAdmissionClosedError",
+    "ProjectRegisteredDirectoryConflictError"
+  ],
+  "commonSchemasChanged": []
+}

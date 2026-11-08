@@ -1,0 +1,90 @@
+{
+  "anonymous": {
+    "status": 201,
+    "requestID": "2ab91713-355b-4dc6-b700-1b2e10a5bbca",
+    "body": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-after\\data\\projects\\2026\\11\\08\\38606ea1-916d-4338-b711-9a552b815083",
+      "project": {
+        "id": "prj_hjXiPtD9dIEL10LfbgQ2",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-after\\data\\projects\\2026\\11\\08\\38606ea1-916d-4338-b711-9a552b815083",
+        "time": {
+          "created": 1794150178490,
+          "updated": 1794150178490
+        },
+        "sandboxes": []
+      }
+    }
+  },
+  "created": {
+    "status": 200,
+    "requestID": "863af90d-b192-461c-9042-83aed4e8118b",
+    "body": {
+      "name": "identity-note.txt",
+      "path": "identity-note.txt",
+      "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-after\\data\\projects\\2026\\11\\08\\38606ea1-916d-4338-b711-9a552b815083\\identity-note.txt",
+      "type": "file",
+      "ignored": false
+    }
+  },
+  "currentBefore": {
+    "status": 200,
+    "requestID": "85869c1d-3c5b-4bb4-94eb-2eb9210696e7",
+    "body": {
+      "id": "prj_hjXiPtD9dIEL10LfbgQ2",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-after\\data\\projects\\2026\\11\\08\\38606ea1-916d-4338-b711-9a552b815083",
+      "time": {
+        "created": 1794150178490,
+        "updated": 1794150178490
+      },
+      "sandboxes": []
+    }
+  },
+  "failed": {
+    "status": 400,
+    "requestID": "b2c1dfe6-d013-4b74-8121-964b0504745d",
+    "body": {
+      "name": "AnonymousProjectPromotionError",
+      "data": {
+        "message": "Destination already exists: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\destinations-after\\existing",
+        "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-after\\data\\projects\\2026\\11\\08\\38606ea1-916d-4338-b711-9a552b815083",
+        "destination": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\destinations-after\\existing",
+        "reason": "destination_exists"
+      }
+    }
+  },
+  "currentAfter": {
+    "status": 200,
+    "requestID": "a299f0f6-75f2-48a9-b70c-3ed30d2ac7f0",
+    "body": {
+      "id": "prj_hjXiPtD9dIEL10LfbgQ2",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-after\\data\\projects\\2026\\11\\08\\38606ea1-916d-4338-b711-9a552b815083",
+      "time": {
+        "created": 1794150178490,
+        "updated": 1794150178490
+      },
+      "sandboxes": []
+    }
+  },
+  "declaredResponse": {
+    "description": "Invalid anonymous project conversion request",
+    "content": {
+      "application/json": {
+        "schema": {
+          "anyOf": [
+            {
+              "$ref": "#/components/schemas/BadRequestError"
+            },
+            {
+              "$ref": "#/components/schemas/AnonymousProjectPromotionError"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "schemaAcceptsActualResponse": true,
+  "validationErrors": null,
+  "sourceBytes": 38,
+  "sourceMatchesAuthoredBytes": true,
+  "existingTargetMatchesAuthoredBytes": true
+}

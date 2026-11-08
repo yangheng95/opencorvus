@@ -1,0 +1,68 @@
+{
+  "batch": 21,
+  "focusedChecker": {
+    "passed": 7,
+    "assertions": 84,
+    "files": [
+      "test/server/project-promotion-error-contracts.test.ts",
+      "test/project-promoted-source-content.test.ts"
+    ],
+    "before": {
+      "passed": 1,
+      "failed": 4,
+      "assertions": 34
+    },
+    "settlementConfirmed": true
+  },
+  "tcp": {
+    "beforeActual400Conforms": false,
+    "afterActual400Conforms": true,
+    "promotionIdentityAndBytes": "public current reader plus physical bytes before/after success",
+    "runtimeMatchesGeneratedProtocol": true,
+    "excludedDocumentationExtension": "x-codeSamples"
+  },
+  "ui": {
+    "beforeEnglish": "actual conversion failure and retry success",
+    "afterChinese": "actual conversion failure and retry success, original file opened",
+    "screenshotsViewed": 10,
+    "diagnosticKeyboard": {
+      "tab": "natural diagnostic DIV",
+      "home": 0,
+      "pageDown": 175,
+      "end": 377,
+      "scrollHeight": 577,
+      "clientHeight": 200,
+      "shiftTab": "SUMMARY Details"
+    },
+    "implementationChanged": false
+  },
+  "checks": {
+    "sdkBuild": true,
+    "backendTypes": true,
+    "sdkTypes": true,
+    "strictSdkConsumerTypes": true,
+    "docsApi": true,
+    "docsCheck": true,
+    "architectureIndex": true
+  },
+  "notQualified": [
+    "internal durable/directory admission branches not forced through HTTP",
+    "Provider/Sol E2E: credential authorization unanswered",
+    "Chinese diagnostic keyboard scrolling not repeated",
+    "Registered conflict and Unknown IO failure not naturally triggered in promotion HTTP"
+  ],
+  "credentialsUsed": false,
+  "modelRequests": 0,
+  "resources": {
+    "beforeServerExit": 0,
+    "afterServerExit": 0,
+    "tabsClosed": [
+      44,
+      45
+    ]
+  },
+  "failures": {
+    "beforeRedRuntime": "retained for diagnostics; physical/output settlement true",
+    "pathInput": "one CUA JS backslash escaping failure; corrected visible forward slash input, not product issue"
+  }
+}

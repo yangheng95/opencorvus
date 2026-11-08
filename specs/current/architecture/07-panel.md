@@ -5463,6 +5463,11 @@ or rolled-back mutation. Closing the notice returns to the explicitly captured
 current header trigger or sidebar main button through the shared Dialog owner.
 
 Project-group actions likewise return their original promises to their component.
+The anonymous-project conversion operation publishes the original typed errors:
+validation or promotion-domain rejection at 400, prompt ownership or project
+admission conflicts at 409, and directory-admission or unknown failures at 500.
+Its OpenAPI and generated SDK reuse those domain schemas; runtime conversion,
+identity relocation and the visible diagnostic continue through their existing owners.
 Its API authority, directory and action generation own busy state and visible
 failure diagnostics; the Project pin adapter does not consume mutation errors.
 Rename, anonymous naming and delete confirmation pass the shared AppDialog's

@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [匿名项目转换合同证据](2026-11-08-project-promotion-contracts/README.md)：原身份/字节、接口回执与实际键盘截图。
+
 - [文件公开错误合同证据](2026-11-08-file-api-error-contracts/README.md)：自有文件、实际错误回执和桌面恢复截图。
 
 - [Mission保存提示关闭证据](2026-11-08-mission-save-dismiss-focus/README.md)：真实关闭焦点、截图与公开reader记录。

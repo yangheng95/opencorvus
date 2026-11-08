@@ -176,6 +176,48 @@
         ],
         "type": "object"
       },
+      "AnonymousProjectPromotionError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "destination": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "not_anonymous",
+                  "invalid_name",
+                  "invalid_destination",
+                  "destination_exists",
+                  "path_overlap"
+                ],
+                "type": "string"
+              },
+              "sourceDirectory": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "sourceDirectory",
+              "reason"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "AnonymousProjectPromotionError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "AnonymousProjectPromotionResult": {
         "properties": {
           "cleanupPending": {
@@ -14305,6 +14347,34 @@
         ],
         "type": "object"
       },
+      "OwnedPromptControllersError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "operation": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "operation"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "OwnedPromptControllersError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "Part": {
         "oneOf": [
           {
@@ -14857,6 +14927,49 @@
         ],
         "type": "object"
       },
+      "ProjectDirectoryAdmissionClosedError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "directory": {
+                "type": "string"
+              },
+              "kind": {
+                "enum": [
+                  "registration",
+                  "reclamation",
+                  "promotion_restore",
+                  "promotion_publish",
+                  "promotion_workspace"
+                ],
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "operationID": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "directory",
+              "operationID",
+              "kind",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "ProjectDirectoryAdmissionClosedError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "ProjectDiscovery": {
         "properties": {
           "defaultDirectory": {
@@ -14879,6 +14992,34 @@
         ],
         "type": "object"
       },
+      "ProjectDurableAdmissionClosedError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "projectID": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "projectID",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "ProjectDurableAdmissionClosedError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "ProjectInitGitResult": {
         "properties": {
           "created": {
@@ -14891,6 +15032,42 @@
         "required": [
           "created",
           "project"
+        ],
+        "type": "object"
+      },
+      "ProjectRegisteredDirectoryConflictError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "directory": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "projectIDs": {
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 2,
+                "type": "array"
+              }
+            },
+            "required": [
+              "directory",
+              "projectIDs",
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "ProjectRegisteredDirectoryConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
         ],
         "type": "object"
       },
@@ -97054,11 +97231,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/AnonymousProjectPromotionError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid anonymous project conversion request"
           },
           "404": {
             "content": {
@@ -97115,28 +97299,38 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "properties": {
-                    "data": {
-                      "additionalProperties": {},
-                      "propertyNames": {
-                        "type": "string"
-                      },
-                      "type": "object"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/OwnedPromptControllersError"
                     },
-                    "name": {
-                      "const": "TaskCancellationIncompleteError",
-                      "type": "string"
+                    {
+                      "$ref": "#/components/schemas/ProjectRegisteredDirectoryConflictError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProjectDurableAdmissionClosedError"
                     }
-                  },
-                  "required": [
-                    "name",
-                    "data"
-                  ],
-                  "type": "object"
+                  ]
                 }
               }
             },
-            "description": "Conflict"
+            "description": "Project conversion conflicts with current ownership or admission"
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/UnknownError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ProjectDirectoryAdmissionClosedError"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Project conversion failed"
           }
         },
         "summary": "Convert current anonymous project to a named project",

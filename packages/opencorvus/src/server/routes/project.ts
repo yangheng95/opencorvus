@@ -16,13 +16,19 @@ import { WorktreeGC } from "../../worktree/gc"
 import { deleteProject, ProjectDeleteResult } from "../../project/delete"
 import { PersistedProjectContext } from "@/server/persisted-project-context"
 import z from "zod"
-import { errors, namedErrorResponse, OwnedPromptControllersResponse } from "../error"
+import { BAD_REQUEST_SCHEMA, errors, namedErrorResponse, OwnedPromptControllersResponse } from "../error"
 import { requestID as resolveRequestID } from "../error-handler"
 import { lazy } from "../../util/lazy"
 import { NotFoundError } from "../../storage/db"
 import { ImplicitProject } from "../../project/implicit-project"
-import { hasProjectOwnedPromptControllers, ownedPromptControllersError } from "../../engine/runtime"
+import {
+  hasProjectOwnedPromptControllers,
+  ownedPromptControllersError,
+  OwnedPromptControllersError,
+} from "../../engine/runtime"
 import { ProcessSupervisor } from "../../shell/process-supervisor"
+import { NamedError } from "@opencorvus-ai/util/error"
+import { ProjectDirectoryAdmission } from "../../project/directory-admission"
 
 const OwnershipCandidate = z
   .object({
@@ -174,6 +180,37 @@ export const ProjectRoutes = lazy(() =>
           "Move the complete dated anonymous project into a named destination while preserving its project identity, sessions, tasks, and attachments.",
         operationId: "project.current.promoteAnonymous",
         responses: {
+          ...errors(404),
+          400: {
+            description: "Invalid anonymous project conversion request",
+            content: {
+              "application/json": {
+                schema: resolver(z.union([BAD_REQUEST_SCHEMA, ImplicitProject.PromotionError.Schema])),
+              },
+            },
+          },
+          409: {
+            description: "Project conversion conflicts with current ownership or admission",
+            content: {
+              "application/json": {
+                schema: resolver(
+                  z.union([
+                    OwnedPromptControllersError.Schema,
+                    Project.RegisteredDirectoryConflictError.Schema,
+                    Project.DurableAdmissionClosedError.Schema,
+                  ]),
+                ),
+              },
+            },
+          },
+          500: {
+            description: "Project conversion failed",
+            content: {
+              "application/json": {
+                schema: resolver(z.union([NamedError.Unknown.Schema, ProjectDirectoryAdmission.ClosedError.Schema])),
+              },
+            },
+          },
           200: {
             description: "Anonymous project converted",
             content: {
@@ -182,7 +219,6 @@ export const ProjectRoutes = lazy(() =>
               },
             },
           },
-          ...errors(400, 404, 409),
         },
       }),
       validator("json", ImplicitProject.PromotionInput),

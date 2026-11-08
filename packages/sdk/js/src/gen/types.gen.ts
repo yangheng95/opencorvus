@@ -54,6 +54,16 @@ export type AnonymousProject = {
   project: Project
 }
 
+export type AnonymousProjectPromotionError = {
+  data: {
+    destination?: string
+    message: string
+    reason: "not_anonymous" | "invalid_name" | "invalid_destination" | "destination_exists" | "path_overlap"
+    sourceDirectory: string
+  }
+  name: "AnonymousProjectPromotionError"
+}
+
 export type AnonymousProjectPromotionResult = {
   cleanupPending: boolean
   directory: string
@@ -4060,6 +4070,14 @@ export type OutputFormatText = {
   type: "text"
 }
 
+export type OwnedPromptControllersError = {
+  data: {
+    message: string
+    operation: string
+  }
+  name: "OwnedPromptControllersError"
+}
+
 export type Part =
   | TextPart
   | PartErrorPart
@@ -4226,15 +4244,42 @@ export type ProjectDeleteResult = {
   status: "committed" | "committed_with_residue"
 }
 
+export type ProjectDirectoryAdmissionClosedError = {
+  data: {
+    directory: string
+    kind: "registration" | "reclamation" | "promotion_restore" | "promotion_publish" | "promotion_workspace"
+    message: string
+    operationID: string
+  }
+  name: "ProjectDirectoryAdmissionClosedError"
+}
+
 export type ProjectDiscovery = {
   defaultDirectory: string
   projects: Array<DiscoveredProject>
   root: string
 }
 
+export type ProjectDurableAdmissionClosedError = {
+  data: {
+    message: string
+    projectID: string
+  }
+  name: "ProjectDurableAdmissionClosedError"
+}
+
 export type ProjectInitGitResult = {
   created: boolean
   project: Project
+}
+
+export type ProjectRegisteredDirectoryConflictError = {
+  data: {
+    directory: string
+    message: string
+    projectIDs: Array<string>
+  }
+  name: "ProjectRegisteredDirectoryConflictError"
 }
 
 export type ProjectSummary = {
@@ -27330,9 +27375,9 @@ export type ProjectCurrentPromoteAnonymousData = {
 
 export type ProjectCurrentPromoteAnonymousErrors = {
   /**
-   * Bad request
+   * Invalid anonymous project conversion request
    */
-  400: BadRequestError
+  400: BadRequestError | AnonymousProjectPromotionError
   /**
    * Not found
    */
@@ -27350,14 +27395,13 @@ export type ProjectCurrentPromoteAnonymousErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Conflict
+   * Project conversion conflicts with current ownership or admission
    */
-  409: {
-    data: {
-      [key: string]: unknown
-    }
-    name: "TaskCancellationIncompleteError"
-  }
+  409: OwnedPromptControllersError | ProjectRegisteredDirectoryConflictError | ProjectDurableAdmissionClosedError
+  /**
+   * Project conversion failed
+   */
+  500: UnknownError | ProjectDirectoryAdmissionClosedError
 }
 
 export type ProjectCurrentPromoteAnonymousError =

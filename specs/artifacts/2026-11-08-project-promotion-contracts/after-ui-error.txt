@@ -1,0 +1,24 @@
+未能确认操作结果
+请查看详细信息，再对“匿名项目 815083”重试操作。
+详细信息
+HTTP POST 400 project/current/promote-anonymous?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b21%5Cprofile-after%5Cdata%5Cprojects%5C2026%5C11%5C08%5C38606ea1-916d-4338-b711-9a552b815083
+
+Request ID: 4277994d-debe-4bc5-9f58-4fbe31d3e837
+
+ApiError: API 400 project/current/promote-anonymous?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b21%5Cprofile-after%5Cdata%5Cprojects%5C2026%5C11%5C08%5C38606ea1-916d-4338-b711-9a552b815083: Destination already exists: C:\Users\hengu\AppData\Local\Temp\opencorvus-iteration-20261108-b21\destinations-after\existing
+    at Ze (http://localhost:38961/ui/assets/main-BuKeJYrJ.js:62:146241)
+    at async h0e (http://localhost:38961/ui/assets/main-BuKeJYrJ.js:143:8540)
+    at async Object.rXe (http://localhost:38961/ui/assets/main-BuKeJYrJ.js:278:10896)
+    at async o (http://localhost:38961/ui/assets/main-BuKeJYrJ.js:269:85067)
+
+response body:
+{
+  "name": "AnonymousProjectPromotionError",
+  "data": {
+    "message": "Destination already exists: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\destinations-after\\existing",
+    "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-after\\data\\projects\\2026\\11\\08\\38606ea1-916d-4338-b711-9a552b815083",
+    "destination": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\destinations-after\\existing",
+    "reason": "destination_exists"
+  }
+}
+确定

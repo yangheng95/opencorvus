@@ -1,0 +1,138 @@
+{
+  "anonymous": {
+    "status": 201,
+    "requestID": "9b706a0a-fc20-43da-a5f5-c741fa622a1e",
+    "body": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-before\\data\\projects\\2026\\11\\08\\67fa1a8d-d3f3-4e46-a39c-50bcd67f3d01",
+      "project": {
+        "id": "prj_hnCGQY8nkXNkwrO6BBSb",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-before\\data\\projects\\2026\\11\\08\\67fa1a8d-d3f3-4e46-a39c-50bcd67f3d01",
+        "time": {
+          "created": 1794149600055,
+          "updated": 1794149600055
+        },
+        "sandboxes": []
+      }
+    }
+  },
+  "created": {
+    "status": 200,
+    "requestID": "3c4f4f37-7d1f-4957-91c4-9482497f3525",
+    "body": {
+      "name": "identity-note.txt",
+      "path": "identity-note.txt",
+      "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-before\\data\\projects\\2026\\11\\08\\67fa1a8d-d3f3-4e46-a39c-50bcd67f3d01\\identity-note.txt",
+      "type": "file",
+      "ignored": false
+    }
+  },
+  "currentBefore": {
+    "status": 200,
+    "requestID": "8d971cb6-dec2-4ef1-9d52-e7693f4568da",
+    "body": {
+      "id": "prj_hnCGQY8nkXNkwrO6BBSb",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-before\\data\\projects\\2026\\11\\08\\67fa1a8d-d3f3-4e46-a39c-50bcd67f3d01",
+      "time": {
+        "created": 1794149600055,
+        "updated": 1794149600055
+      },
+      "sandboxes": []
+    }
+  },
+  "failed": {
+    "status": 400,
+    "requestID": "18554170-a7a3-446b-b01c-c1ee09f295d0",
+    "body": {
+      "name": "AnonymousProjectPromotionError",
+      "data": {
+        "message": "Destination already exists: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\destinations-before\\existing",
+        "sourceDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-before\\data\\projects\\2026\\11\\08\\67fa1a8d-d3f3-4e46-a39c-50bcd67f3d01",
+        "destination": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\destinations-before\\existing",
+        "reason": "destination_exists"
+      }
+    }
+  },
+  "currentAfter": {
+    "status": 200,
+    "requestID": "8baffc71-64af-42fe-a17c-1b55a21cfa36",
+    "body": {
+      "id": "prj_hnCGQY8nkXNkwrO6BBSb",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b21\\profile-before\\data\\projects\\2026\\11\\08\\67fa1a8d-d3f3-4e46-a39c-50bcd67f3d01",
+      "time": {
+        "created": 1794149600055,
+        "updated": 1794149600055
+      },
+      "sandboxes": []
+    }
+  },
+  "declaredResponse": {
+    "description": "Bad request",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/components/schemas/BadRequestError"
+        }
+      }
+    }
+  },
+  "schemaAcceptsActualResponse": false,
+  "validationErrors": [
+    {
+      "instancePath": "",
+      "schemaPath": "#/components/schemas/BadRequestError/required",
+      "keyword": "required",
+      "params": {
+        "missingProperty": "error"
+      },
+      "message": "must have required property 'error'"
+    },
+    {
+      "instancePath": "",
+      "schemaPath": "#/components/schemas/BadRequestError/required",
+      "keyword": "required",
+      "params": {
+        "missingProperty": "success"
+      },
+      "message": "must have required property 'success'"
+    },
+    {
+      "instancePath": "",
+      "schemaPath": "#/components/schemas/BadRequestError/additionalProperties",
+      "keyword": "additionalProperties",
+      "params": {
+        "additionalProperty": "name"
+      },
+      "message": "must NOT have additional properties"
+    },
+    {
+      "instancePath": "/data",
+      "schemaPath": "#/components/schemas/BadRequestError/properties/data/additionalProperties",
+      "keyword": "additionalProperties",
+      "params": {
+        "additionalProperty": "sourceDirectory"
+      },
+      "message": "must NOT have additional properties"
+    },
+    {
+      "instancePath": "/data",
+      "schemaPath": "#/components/schemas/BadRequestError/properties/data/additionalProperties",
+      "keyword": "additionalProperties",
+      "params": {
+        "additionalProperty": "destination"
+      },
+      "message": "must NOT have additional properties"
+    },
+    {
+      "instancePath": "/data",
+      "schemaPath": "#/components/schemas/BadRequestError/properties/data/additionalProperties",
+      "keyword": "additionalProperties",
+      "params": {
+        "additionalProperty": "reason"
+      },
+      "message": "must NOT have additional properties"
+    }
+  ],
+  "sourceBytes": 38,
+  "sourceMatchesAuthoredBytes": true,
+  "existingTargetMatchesAuthoredBytes": true
+}

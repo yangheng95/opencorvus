@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [匿名项目转换合同](2026-11-08-project-promotion-contracts.md)：正式匿名输入、目录转换与公开错误正向验收。
+
 - [文件公开错误合同](2026-11-08-file-api-error-contracts.md)：13项入口横审、真实HTTP和OpenAPI正向验收。
 
 - [Mission保存提示关闭焦点](2026-11-08-mission-save-dismiss-focus.md)：初帧证伪、保存提示交接与中英验收。

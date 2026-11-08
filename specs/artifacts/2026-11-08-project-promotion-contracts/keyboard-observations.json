@@ -1,0 +1,69 @@
+[
+  {
+    "phase": "summary-expanded",
+    "activeClass": "oc-disclosure__trigger",
+    "activeTag": "SUMMARY",
+    "activeText": "Details",
+    "innerHeight": 200,
+    "innerScrollHeight": 577,
+    "innerTop": 0,
+    "outerTop": 0
+  },
+  {
+    "phase": "tab-from-summary",
+    "activeClass": "oc-disclosure__content oc-feedback__diagnostic",
+    "activeID": "",
+    "activeTag": "DIV",
+    "innerHeight": 200,
+    "innerScrollHeight": 577,
+    "innerTop": 0,
+    "isDiagnostic": true,
+    "outerTop": 31
+  },
+  {
+    "phase": "diagnostic-end",
+    "activeClass": "oc-disclosure__content oc-feedback__diagnostic",
+    "innerHeight": 200,
+    "innerScrollHeight": 577,
+    "innerTop": 288,
+    "isDiagnostic": true,
+    "outerTop": 37,
+    "textEnd": ")\n    at async Gi (http://localhost:38960/ui/assets/main-BuKeJYrJ.js:271:4554)\n\nresponse body:\n{\n  \"name\": \"FileConflictError\",\n  \"data\": {\n    \"path\": \"notes.txt\",\n    \"message\": \"File destination already exists: notes.txt\"\n  }\n}"
+  },
+  {
+    "phase": "diagnostic-home",
+    "innerTop": 179,
+    "textStart": "HTTP POST 409 file/item?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261108-b21%5Cproject-before\n\nRequest ID: 80d346c4-6cca-40de-af92-bd824f361f79\n\nApiError: API 409 file/item?directory=C%3A%5CUsers%5Chengu%5CAppData%5C"
+  },
+  {
+    "phase": "diagnostic-page-down",
+    "innerHeight": 200,
+    "innerTop": 77
+  },
+  {
+    "phase": "diagnostic-home-settled",
+    "activeClass": "oc-disclosure__content oc-feedback__diagnostic",
+    "innerHeight": 200,
+    "innerScrollHeight": 577,
+    "innerTop": 0
+  },
+  {
+    "phase": "diagnostic-page-down-settled",
+    "activeClass": "oc-disclosure__content oc-feedback__diagnostic",
+    "innerHeight": 200,
+    "innerScrollHeight": 577,
+    "innerTop": 175
+  },
+  {
+    "phase": "diagnostic-end-settled",
+    "activeClass": "oc-disclosure__content oc-feedback__diagnostic",
+    "innerHeight": 200,
+    "innerScrollHeight": 577,
+    "innerTop": 377
+  },
+  {
+    "phase": "shift-tab-summary",
+    "tag": "SUMMARY",
+    "text": "Details"
+  }
+]
