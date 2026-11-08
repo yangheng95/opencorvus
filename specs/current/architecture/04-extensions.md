@@ -211,6 +211,10 @@ path、URL index 和 git source import 保持为独立高级入口。Market iden
 跟随目录链接，并把其他IO故障原样传递；内置包、git/URL、发布替换和恢复故障不经此
 输入错误转换。公共错误Schema同时供OpenAPI和SDK生成使用，不另建错误DTO。
 
+Settings市场列表的安装量、结果数和详情字节使用当前界面语言的数字格式，保留精确计量和B单位；
+风险枚举仅在review标记与安装确认显示处映射为当前语言标签，确认策略复用既有策略标签。
+原候选身份、名称、描述、文件路径、仓库和内容hash保持原文；展示不改变风险算法、策略或精确安装授权。
+
 运行时 `skill_market` Tool 提供搜索、检查和精确安装。搜索与检查是 network read；安装是经普通 Tool
 permission authority 单独授权的 local write。新安装 Skill 只在后续 turn 可被 mount；当前 turn 已冻结的
 Skill Tool surface 不热更新。`/global/skill/install` 与项目安装路由仍调用同一个通用

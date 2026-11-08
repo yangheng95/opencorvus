@@ -1,0 +1,37 @@
+{
+  "validator": "Ajv2020",
+  "checks": [
+    {
+      "route": "/global/skill/market/search",
+      "status": 200,
+      "requestID": "dc79ac31-e60a-4a73-8cc5-a51186780a02",
+      "schema": "valid",
+      "count": 10,
+      "firstInstalls": 880329
+    },
+    {
+      "route": "/global/skill/market/detail",
+      "status": 200,
+      "requestID": "2fcd4631-25ff-4e31-90e3-d07cec97029b",
+      "schema": "valid",
+      "exactPriorDetail": true,
+      "files": 76,
+      "firstSize": 108261,
+      "risk": "medium",
+      "policy": "deny",
+      "installed": false
+    },
+    {
+      "route": "/global/skill/market/detail",
+      "id": "google-labs-code/stitch-skills/reactcomponents",
+      "status": 200,
+      "requestID": "7ef89926-53f1-4202-bf60-7df49c751b0b",
+      "schema": "valid",
+      "files": 11,
+      "risk": "high",
+      "hasScripts": true,
+      "policy": "deny",
+      "installed": false
+    }
+  ]
+}

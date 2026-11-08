@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Skill Market 本地化](records/2026-11/2026-11-09-skill-market-locale.md)：公开市场数量、风险及确认信息的当前语言展示。
+
 - [文件读取提示](records/2026-11/2026-11-09-file-read-error-presentation.md)：具名路径、缺失与未知故障的真实界面提示。
 
 - [读取路径拒绝合同](records/2026-11/2026-11-09-file-read-path-errors.md)：现有访问约束下的具名诊断与原路径。

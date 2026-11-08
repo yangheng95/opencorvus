@@ -11,7 +11,7 @@ import { createEffect, createSignal, createMemo, For, onCleanup, Show } from "so
 import { createStore } from "solid-js/store"
 import { Key } from "@solid-primitives/keyed"
 import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
-import { t } from "../../utils/i18n"
+import { localeTag, t } from "../../utils/i18n"
 import { ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority, configure as configureApi } from "../../services/api"
 import {
   pathRevealFailureText,
@@ -270,6 +270,8 @@ function SharedResourceManagementPanel(props: {
     { value: "url", label: t("skill.source.url") },
     { value: "git", label: t("skill.source.git") },
   ]
+  const marketNumber = (value: number) => new Intl.NumberFormat(localeTag()).format(value)
+  const marketRiskLabel = (level: SkillMarketDetail["risk"]["level"]) => t(`skill.market_risk.${level}`)
   const skillPolicyOptions = (): FormSelectOption[] => [
     { value: "allow", label: t("skill.policy.allow") },
     { value: "deny", label: t("skill.policy.deny") },
@@ -562,8 +564,8 @@ function SharedResourceManagementPanel(props: {
         name: detail.name,
         source: detail.repository,
         hash: detail.hash,
-        risk: detail.risk.level,
-        policy: marketPolicy(),
+        risk: marketRiskLabel(detail.risk.level),
+        policy: t(`skill.policy.${marketPolicy()}`),
       }),
     )
     if (!approved) return
@@ -886,7 +888,7 @@ function SharedResourceManagementPanel(props: {
                         selected().risk.level === "high" ? "bad" : selected().risk.level === "medium" ? "warn" : "ok"
                       }
                     >
-                      {t("skill.market_risk", { risk: selected().risk.level })}
+                      {t("skill.market_risk", { risk: marketRiskLabel(selected().risk.level) })}
                     </Badge>
                   }
                 >
@@ -895,7 +897,7 @@ function SharedResourceManagementPanel(props: {
                   <SettingsRow
                     title={t("skill.market_files")}
                     desc={selected()
-                      .files.map((file) => `${file.path} (${file.size} B)`)
+                      .files.map((file) => `${file.path} (${marketNumber(file.size)} B)`)
                       .join(" · ")}
                   />
                   <SettingsRow
@@ -930,7 +932,7 @@ function SharedResourceManagementPanel(props: {
               <SettingsDetailSection
                 class="extension-list"
                 title={t("skill.market_results")}
-                actions={<Badge tone="neutral">{marketResults().length}</Badge>}
+                actions={<Badge tone="neutral">{marketNumber(marketResults().length)}</Badge>}
               >
                 <For each={marketResults()}>
                   {(candidate) => (
@@ -938,7 +940,7 @@ function SharedResourceManagementPanel(props: {
                       class="extension-settings-row"
                       title={candidate.name}
                       desc={candidate.source}
-                      meta={<small>{t("skill.market_installs", { count: candidate.installs })}</small>}
+                      meta={<small>{t("skill.market_installs", { count: marketNumber(candidate.installs) })}</small>}
                       interactive
                       actions={
                         <div class="extension-settings-actions">
