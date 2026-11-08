@@ -1,0 +1,56 @@
+[
+  {
+    "path": "missing-dir",
+    "status": 500,
+    "requestID": "18832d5b-9d75-4c65-a1c1-cb5fe80728ff",
+    "body": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "path": "notes.txt",
+    "status": 500,
+    "requestID": "e8dbcea2-3aa0-4f9a-9102-b7b1f7442a97",
+    "body": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "path": "notes.txt/child",
+    "status": 500,
+    "requestID": "d9d43e87-8953-40cd-9203-3022ba2d2d2f",
+    "body": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  {
+    "path": "empty",
+    "status": 200,
+    "requestID": "c3249f41-a513-4867-9339-823a49172b21",
+    "body": []
+  },
+  {
+    "path": "gone",
+    "status": 200,
+    "requestID": "b387d80f-8062-46ae-a057-b4525db9978c",
+    "body": [
+      {
+        "name": "marker.txt",
+        "path": "gone\\marker.txt",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b28\\project-before\\gone\\marker.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      }
+    ]
+  }
+]

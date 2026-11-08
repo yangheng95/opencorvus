@@ -73085,6 +73085,16 @@
             },
             "description": "Bad request"
           },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FileNotFoundError"
+                }
+              }
+            },
+            "description": "File entry not found"
+          },
           "500": {
             "content": {
               "application/json": {

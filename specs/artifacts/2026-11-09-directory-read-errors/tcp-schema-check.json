@@ -1,0 +1,42 @@
+{
+  "operation": "file.list",
+  "validator": "Ajv2020",
+  "checks": [
+    {
+      "path": "missing-dir",
+      "status": 404,
+      "requestID": "d54fdf63-41ea-42ad-98f5-33d0f7de0c51",
+      "schema": "valid"
+    },
+    {
+      "path": "notes.txt",
+      "status": 404,
+      "requestID": "a1ba9842-d1e4-47d8-86c1-3ea870b8b181",
+      "schema": "valid"
+    },
+    {
+      "path": "notes.txt/child",
+      "status": 404,
+      "requestID": "88795015-14e2-42a2-8108-cf96a4c57ddb",
+      "schema": "valid"
+    },
+    {
+      "path": "empty",
+      "status": 200,
+      "requestID": "189a6932-6c2e-46fb-83f0-f33e4f4ac3c4",
+      "schema": "valid"
+    },
+    {
+      "path": "gone",
+      "status": 200,
+      "requestID": "737eb6cb-146a-4b39-94c8-39864a05ea62",
+      "schema": "valid"
+    },
+    {
+      "path": "",
+      "status": 200,
+      "requestID": "00d27296-e3ba-479d-8a0d-42e1eb85394b",
+      "schema": "valid"
+    }
+  ]
+}

@@ -214,7 +214,7 @@ function fileErrorSummary(error: unknown, operation: ExplorerFailureOperation): 
     const summary = (key: string, field: string) => {
       const value = data?.[field]
       return typeof value === "string"
-        ? t(key, { path: field === "targetDir" ? explorerDirectoryDisplayPath(value) : value })
+        ? t(key, { path: field === "targetDir" || (field === "path" && operation === "load") ? explorerDirectoryDisplayPath(value) : value })
         : operationFailureMessage(operation)
     }
     switch (body.name) {

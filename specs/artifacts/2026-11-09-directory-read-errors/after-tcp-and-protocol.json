@@ -1,0 +1,137 @@
+{
+  "protocol": {
+    "operations": 352,
+    "changedOperation": "file.list",
+    "newStatus": 404,
+    "sharedSchemas": "exactly preserved",
+    "formalSDK": "same paths and schemas after removing its CLI-only x-codeSamples extension"
+  },
+  "responses": [
+    {
+      "path": "missing-dir",
+      "status": 404,
+      "requestID": "bc95daa0-3770-4a4d-928c-828416b711e9",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "missing-dir",
+          "message": "Directory entry not found: missing-dir"
+        }
+      }
+    },
+    {
+      "path": "notes.txt",
+      "status": 404,
+      "requestID": "1cddf52f-ec3d-447b-9e77-abdb0da71ff6",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "notes.txt",
+          "message": "Directory entry not found: notes.txt"
+        }
+      }
+    },
+    {
+      "path": "notes.txt/child",
+      "status": 404,
+      "requestID": "1af08f7b-e5cc-4cef-b0f3-56bae1963f49",
+      "body": {
+        "name": "FileNotFoundError",
+        "data": {
+          "path": "notes.txt/child",
+          "message": "Directory entry not found: notes.txt/child"
+        }
+      }
+    },
+    {
+      "path": "empty",
+      "status": 200,
+      "requestID": "119b83b3-3759-4763-9aa9-e41cccc11f49",
+      "body": []
+    },
+    {
+      "path": "gone",
+      "status": 200,
+      "requestID": "787e5c56-9617-4113-84d4-bec634ed311f",
+      "body": [
+        {
+          "name": "marker.txt",
+          "path": "gone\\marker.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b28\\project-after\\gone\\marker.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    {
+      "path": "",
+      "status": 200,
+      "requestID": "dc4946d0-83d8-4167-a14d-f263a287f79a",
+      "body": [
+        {
+          "name": ".opencorvus",
+          "path": ".opencorvus",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b28\\project-after\\.opencorvus",
+          "type": "directory",
+          "ignored": true,
+          "directoryTarget": true
+        },
+        {
+          "name": "empty",
+          "path": "empty",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b28\\project-after\\empty",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        },
+        {
+          "name": "gone",
+          "path": "gone",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b28\\project-after\\gone",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b28\\project-after\\.gitattributes",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b28\\project-after\\.gitignore",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        },
+        {
+          "name": "notes.txt",
+          "path": "notes.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b28\\project-after\\notes.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    }
+  ],
+  "restoredFiles": [
+    {
+      "path": "notes.txt",
+      "status": 200,
+      "content": "b28 original note\r\n资料保持\r\n",
+      "bytes": 33
+    },
+    {
+      "path": "gone/marker.txt",
+      "status": 200,
+      "content": "b28 retained child\n",
+      "bytes": 19
+    }
+  ]
+}

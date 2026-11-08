@@ -1,4 +1,4 @@
-import { afterEach, expect, test } from "bun:test"
+import { afterEach, expect, spyOn, test } from "bun:test"
 import Ajv2020 from "ajv/dist/2020.js"
 import fs from "node:fs/promises"
 import path from "node:path"
@@ -53,6 +53,75 @@ async function documentFor(directory: string) {
   expect(actual.status).toBe(200)
   return actual.body as Document
 }
+
+test.each(["missing-dir", "notes.txt", "notes.txt/child"])(
+  "directory listing publishes its named missing-entry response for %s",
+  async (target) => {
+    await using project = await memoryProject("directory-missing-response")
+    const content = "original directory input\r\n资料\r\n"
+    await fs.writeFile(path.join(project.path, "notes.txt"), content)
+    const document = await documentFor(project.path)
+    const actual = await request(project.path, "GET", `/file?path=${encodeURIComponent(target)}`)
+    expect(actual).toEqual({
+      status: 404,
+      body: {
+        name: "FileNotFoundError",
+        data: { path: target, message: `Directory entry not found: ${target}` },
+      },
+    })
+    conforms(document, "file.list", actual)
+    expect(await fs.readFile(path.join(project.path, "notes.txt"), "utf8")).toBe(content)
+  },
+  60_000,
+)
+
+test("directory listing publishes exact ordinary and empty directory outputs", async () => {
+  await using project = await memoryProject("directory-success-response")
+  await fs.mkdir(path.join(project.path, "folder", "empty"), { recursive: true })
+  const content = "ordinary directory original\r\n资料\r\n"
+  await fs.writeFile(path.join(project.path, "folder", "资料.txt"), content)
+  const document = await documentFor(project.path)
+  const actual = await request(project.path, "GET", "/file?path=folder")
+  expect(actual).toEqual({
+    status: 200,
+    body: [
+      { name: "empty", path: path.join("folder", "empty"), absolute: path.join(project.path, "folder", "empty"), type: "directory", ignored: false, directoryTarget: true },
+      { name: "资料.txt", path: path.join("folder", "资料.txt"), absolute: path.join(project.path, "folder", "资料.txt"), type: "file", ignored: false, directoryTarget: false },
+    ],
+  })
+  conforms(document, "file.list", actual)
+  const empty = await request(project.path, "GET", "/file?path=folder%2Fempty")
+  expect(empty).toEqual({ status: 200, body: [] })
+  conforms(document, "file.list", empty)
+  expect(await fs.readFile(path.join(project.path, "folder", "资料.txt"), "utf8")).toBe(content)
+}, 60_000)
+
+test.each(["EACCES", "EIO"])("directory listing publishes the existing internal-error response for %s", async (code) => {
+  await using project = await memoryProject("directory-io-response")
+  const target = path.join(project.path, "io-probe")
+  await fs.mkdir(target)
+  const document = await documentFor(project.path)
+  const original = fs.readdir
+  let observed = 0
+  const probe = spyOn(fs, "readdir").mockImplementation(((input: unknown, ...args: unknown[]) => {
+    if (path.resolve(String(input)) === target) {
+      observed += 1
+      return Promise.reject(Object.assign(new Error(`Directory read probe: ${code}`), { code }))
+    }
+    return Reflect.apply(original, fs, [input, ...args])
+  }) as typeof fs.readdir)
+  try {
+    const actual = await request(project.path, "GET", "/file?path=io-probe")
+    expect(actual).toEqual({
+      status: 500,
+      body: { name: "UnknownError", data: { message: "Internal server error. See x-opencorvus-request-id for diagnostics." } },
+    })
+    expect(observed).toBe(1)
+    conforms(document, "file.list", actual)
+  } finally {
+    probe.mockRestore()
+  }
+}, 60_000)
 
 test("real file mutation errors satisfy each published operation response", async () => {
   await using project = await memoryProject("file-error-responses")

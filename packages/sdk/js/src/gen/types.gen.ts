@@ -19146,6 +19146,10 @@ export type FileListErrors = {
    */
   400: BadRequestError
   /**
+   * File entry not found
+   */
+  404: FileNotFoundError
+  /**
    * File operation failed
    */
   500: UnknownError

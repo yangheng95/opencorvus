@@ -1780,6 +1780,11 @@ export namespace File {
 
     const entries = await fs.promises.readdir(resolved, {
       withFileTypes: true,
+    }).catch((error) => {
+      if (isMissingPathError(error)) {
+        throw fileNotFound({ path: dir ?? "", message: `Directory entry not found: ${dir || "."}` })
+      }
+      throw error
     })
     const ignored = await createIgnoreMatcher(resolved)
     const nodes: ListingNode[] = []

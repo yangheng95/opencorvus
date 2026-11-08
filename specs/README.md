@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [目录读取具名错误](records/2026-11/2026-11-09-directory-read-errors.md)：缺失/非目录读取、真实回执与公开错误合同。
+
 - [新建文件夹键盘位置](records/2026-11/2026-11-09-folder-create-focus.md)：目录创建的真实选择与文件编辑器边界。
 
 - [复制键盘接续](records/2026-11/2026-11-09-file-copy-focus.md)：真实目标选择、键盘位置与单Copy焦点归属。

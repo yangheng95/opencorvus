@@ -124,6 +124,7 @@ export const FileRoutes = lazy(() =>
             },
           },
           ...errors(400),
+          404: fileMutationErrors[404],
           500: fileMutationErrors[500],
         },
       }),

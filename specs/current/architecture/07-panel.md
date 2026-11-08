@@ -1491,11 +1491,15 @@ with complete original diagnostics in the shared Details disclosure. Upload
 publication followed by reload failure retains its committed-upload meaning.
 Expanded directory failures derive from the current directory error Map;
 feedback and diagnostic scrolling stay within a bounded Explorer region.
+The directory reader maps its own readdir ENOENT/ENOTDIR observation to the
+existing FileNotFoundError/HTTP 404 contract. Permission, I/O, ignore-rule and
+child-target observation failures retain their original error paths. Successful
+empty directories still publish their ordinary empty listing.
 
 Empty normalized directory keys display the current-language root-folder label
 in Explorer destination, creation and directory-refresh feedback. Nonempty
 directory paths remain exact; a missing target is not a root fact. Only the
-typed upload-target directory field uses this display projection in errors.
+typed upload-target directory field and directory-load path field use this display projection in errors.
 API paths, completed receipts and original Details retain their identities.
 
 One Explorer action outcome retains its actual completed receipts, the failed

@@ -1,0 +1,14 @@
+[
+  {
+    "path": "notes.txt",
+    "status": 200,
+    "content": "b28 original note\r\n资料保持\r\n",
+    "bytes": 33
+  },
+  {
+    "path": "gone/marker.txt",
+    "status": 200,
+    "content": "b28 retained child\n",
+    "bytes": 19
+  }
+]
