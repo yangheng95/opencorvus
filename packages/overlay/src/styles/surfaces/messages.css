@@ -836,7 +836,8 @@
   margin: var(--ui-gap-md) var(--ui-gap-xl) 0;
 }
 
-.image-preview-dialog__download-failure .oc-feedback__diagnostic {
+.image-preview-dialog__download-failure .oc-feedback__diagnostic,
+.image-preview-dialog__failure .oc-feedback__diagnostic {
   max-height: min(25vh, calc(160px * var(--ui-scale)));
   overflow: auto;
 }

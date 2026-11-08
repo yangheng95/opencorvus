@@ -1,11 +1,9 @@
 import { afterEach, expect, test } from "bun:test"
-import { ApiAuthorityChangedError, captureApiAuthority, configure, renewApiAuthority } from "../src/services/api-state"
+import { configure, renewApiAuthority } from "../src/services/api-state"
 import {
-  beginImagePreviewRequest,
   closeImagePreview,
   imagePreviewState,
   openImagePreview,
-  openImagePreviewForRequest,
 } from "../src/services/image-preview"
 
 afterEach(() => {
@@ -13,62 +11,41 @@ afterEach(() => {
   configure({ serverUrl: "http://127.0.0.1:7878", username: "opencorvus", password: "", directory: "" })
 })
 
-test("a current request publishes its original resource identity with the resolved image", () => {
-  configure({ serverUrl: "http://owned-a.invalid" })
-  const authority = captureApiAuthority()
-  const revision = beginImagePreviewRequest()
-  const opened = openImagePreviewForRequest(revision, "blob:owned-image", "owned image", {
+test("synchronous image openings publish exact resources and sequential revisions", () => {
+  const revision = imagePreviewState().revision
+  openImagePreview("blob:owned-thumbnail", "owned image", "/attachment/owned/image.png")
+  expect(imagePreviewState()).toEqual({
+    open: true, src: "blob:owned-thumbnail", alt: "owned image", revision: revision + 1,
     resourceUrl: "/attachment/owned/image.png",
-    authority,
   })
-  expect({ opened, state: imagePreviewState() }).toEqual({
-    opened: true,
-    state: {
-      open: true,
-      src: "blob:owned-image",
-      alt: "owned image",
-      revision,
-      resourceUrl: "/attachment/owned/image.png",
-    },
+  openImagePreview("blob:next-thumbnail", "next image", "/attachment/owned/next.svg")
+  expect(imagePreviewState()).toEqual({
+    open: true, src: "blob:next-thumbnail", alt: "next image", revision: revision + 2,
+    resourceUrl: "/attachment/owned/next.svg",
   })
 })
 
-test("an API-retired pending image reports the typed original authority outcome", () => {
-  configure({ serverUrl: "http://owned-a.invalid" })
-  const authority = captureApiAuthority()
-  const revision = beginImagePreviewRequest()
-  renewApiAuthority()
+test("a relative image publishes its canonical source and closing advances to the exact closed state", () => {
+  const revision = imagePreviewState().revision
+  openImagePreview("/attachment/owned/direct.png", "direct image")
+  expect(imagePreviewState()).toEqual({
+    open: true, src: "/attachment/owned/direct.png", alt: "direct image", revision: revision + 1,
+    resourceUrl: "/attachment/owned/direct.png",
+  })
+  closeImagePreview()
+  expect(imagePreviewState()).toEqual({ open: false, src: "", alt: "", revision: revision + 2 })
+})
+
+test("an external URL supplied as an authorized resource returns its explicit integrity error", () => {
   let failure: unknown
   try {
-    openImagePreviewForRequest(revision, "blob:owned-old", "owned", {
-      resourceUrl: "/attachment/owned/image.png",
-      authority,
-    })
+    openImagePreview("blob:owned-thumbnail", "owned image", "https://external.invalid/image.png")
   } catch (error) {
     failure = error
   }
-  expect(failure).toBeInstanceOf(ApiAuthorityChangedError)
-  const error = failure as ApiAuthorityChangedError
-  expect({
-    name: error.name,
-    expected: error.expectedRevision,
-    current: error.currentRevision,
-    outcome: error.outcome,
-  }).toEqual({
-    name: "ApiAuthorityChangedError",
-    expected: authority.revision,
-    current: authority.revision + 1,
-    outcome: { phase: "before_dispatch" },
-  })
-})
-
-test("closing the modal settles a late request against the canonical closed revision", () => {
-  const revision = beginImagePreviewRequest()
-  closeImagePreview()
-  const result = openImagePreviewForRequest(revision, "blob:owned-late", "late")
-  expect({ result, state: imagePreviewState() }).toEqual({
-    result: false,
-    state: { open: false, src: "", alt: "", revision: revision + 1 },
+  expect(failure).toBeInstanceOf(Error)
+  expect({ name: (failure as Error).name, message: (failure as Error).message }).toEqual({
+    name: "Error", message: "Image preview resource must be host-relative",
   })
 })
 

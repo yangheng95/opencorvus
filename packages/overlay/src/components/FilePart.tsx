@@ -260,7 +260,6 @@ function AuthedImage(props: { url: string; name: string; alt: string; displayLab
               triggerClass={composerThumbnail() ? "composer-attachment-preview-trigger" : thumbnail() ? "msg-image-attachment__trigger" : undefined}
               imageClass={composerThumbnail() ? "chat-attachment-thumb" : thumbnail() ? "msg-image-attachment__image" : undefined}
               imageDataUI={composerThumbnail() ? "composer-image-attachment-thumbnail" : thumbnail() ? "message-image-attachment-thumbnail" : undefined}
-              previewLoader={thumbnail() ? () => fetchResourceAsObjectUrl(previewUrl()) : undefined}
             />
           </div>
         )}

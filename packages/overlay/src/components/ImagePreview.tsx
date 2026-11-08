@@ -1,16 +1,12 @@
 import { createEffect, createMemo, createResource, createSignal, onCleanup, Show } from "solid-js"
 import type { JSX } from "solid-js"
 import {
-  beginImagePreviewRequest,
-  cancelImagePreviewRequest,
   closeImagePreview,
-  imagePreviewRequestIsCurrent,
   imagePreviewState,
-  openImagePreviewForRequest,
+  openImagePreview,
 } from "../services/image-preview"
-import { formatErrorDetails, reportError } from "../services/diagnostics"
+import { formatErrorDetails } from "../utils/error-details"
 import {
-  ApiAuthorityChangedError,
   captureApiAuthority,
   fetchResourceAsObjectUrl,
   isApiAuthorityCurrent,
@@ -58,7 +54,6 @@ type CopyFeedback = {
 
 type PreviewableImageAttributes = JSX.ImgHTMLAttributes<HTMLImageElement> &
   Partial<Record<`data-${string}`, string | undefined>>
-type PreviewImageLoader = () => string | Promise<string>
 type ImagePreviewBodyGeometry = {
   left: number
   top: number
@@ -84,7 +79,6 @@ export function PreviewableImage(props: {
   imageClass?: string
   imageDataUI?: string
   imageAttributes?: PreviewableImageAttributes
-  previewLoader?: PreviewImageLoader
   resourceUrl?: string
 }) {
   const alt = () => props.alt || ""
@@ -95,49 +89,13 @@ export function PreviewableImage(props: {
   const imageAttributes = () => props.imageAttributes ?? {}
   const [failedSource, setFailedSource] = createSignal<string | null>(null)
   const failed = () => failedSource() === props.src
-  const delegatedPreview = () => !props.previewLoader && !props.resourceUrl
-  const loadPreviewSource = async () => (props.previewLoader ? await props.previewLoader() : props.src)
-  let pendingRequestRevision: number | null = null
+  const delegatedPreview = () => !props.resourceUrl
 
-  onCleanup(() => {
-    if (pendingRequestRevision !== null) cancelImagePreviewRequest(pendingRequestRevision)
-    pendingRequestRevision = null
-  })
-
-  async function handlePreviewOpen(event: MouseEvent): Promise<void> {
+  function handlePreviewOpen(event: MouseEvent): void {
     event.preventDefault()
     event.stopPropagation()
-    if (pendingRequestRevision !== null) cancelImagePreviewRequest(pendingRequestRevision)
-    const requestRevision = beginImagePreviewRequest()
     const resourceUrl = props.resourceUrl ?? (props.src.startsWith("/") ? props.src : undefined)
-    const authority = resourceUrl ? captureApiAuthority() : undefined
-    pendingRequestRevision = requestRevision
-    try {
-      const src = await loadPreviewSource()
-      if (pendingRequestRevision !== requestRevision) return
-      openImagePreviewForRequest(
-        requestRevision,
-        src,
-        alt(),
-        resourceUrl && authority ? { resourceUrl, authority } : undefined,
-      )
-    } catch (error) {
-      if (!imagePreviewRequestIsCurrent(requestRevision)) return
-      cancelImagePreviewRequest(requestRevision)
-      if (
-        isAbortError(error) ||
-        error instanceof ApiAuthorityChangedError ||
-        (authority && !isApiAuthorityCurrent(authority))
-      )
-        return
-      reportError({
-        title: t("image_preview.title"),
-        message: t("image_preview.copy_status.source_unavailable"),
-        details: formatErrorDetails(error),
-      })
-    } finally {
-      if (pendingRequestRevision === requestRevision) pendingRequestRevision = null
-    }
+    openImagePreview(props.src, alt(), resourceUrl)
   }
 
   return (
@@ -154,7 +112,7 @@ export function PreviewableImage(props: {
       data-image-failed={failed() ? "true" : undefined}
       title={failed() ? t("image_preview.load_failed") : trigger().label}
       aria-label={trigger().label}
-      onClick={(event) => void handlePreviewOpen(event)}
+      onClick={handlePreviewOpen}
     >
       <img
         {...imageAttributes()}
@@ -187,7 +145,7 @@ export function ImagePreviewHost() {
       closeArtifactWorkspace(workspace)
     }
   })
-  const [resource] = createResource(
+  const [resource, { refetch }] = createResource(
     () => {
       const state = imagePreviewState()
       return state.open && state.resourceUrl
@@ -476,7 +434,6 @@ export function ImagePreviewHost() {
     const ownsOperation = () =>
       operationGeneration === copyGeneration &&
       imagePreviewState().open &&
-      imagePreviewRequestIsCurrent(preview.revision) &&
       imagePreviewState().revision === preview.revision &&
       previewSource() === src &&
       (!authority || isApiAuthorityCurrent(authority))
@@ -517,7 +474,7 @@ export function ImagePreviewHost() {
     const controller = new AbortController()
     downloadController = controller
     const current = () => generation === downloadGeneration && imagePreviewState().open &&
-      imagePreviewRequestIsCurrent(preview.revision) && imagePreviewState().revision === preview.revision &&
+      imagePreviewState().revision === preview.revision &&
       (!authority || isApiAuthorityCurrent(authority))
     setDownloadInFlight(true)
     try {
@@ -543,6 +500,20 @@ export function ImagePreviewHost() {
         setDownloadInFlight(false)
       }
     }
+  }
+
+  async function retryPreview(event: MouseEvent & { currentTarget: HTMLButtonElement }): Promise<void> {
+    const preview = imagePreviewState()
+    if (!preview.resourceUrl || resource.loading || !resource.error) return
+    const authority = captureApiAuthority()
+    const button = event.currentTarget
+    const hadFocus = document.activeElement === button
+    await refetch()
+    if (
+      hadFocus && !button.isConnected && document.activeElement === document.body &&
+      imagePreviewState().open && imagePreviewState().revision === preview.revision &&
+      isApiAuthorityCurrent(authority) && !resource.loading && !resource.error
+    ) downloadButtonRef?.focus({ preventScroll: true })
   }
 
   function handleWheel(event: WheelEvent): void {
@@ -675,9 +646,12 @@ export function ImagePreviewHost() {
         <div class="image-preview-dialog__stage" style={stageStyle()}>
           <ContextMenu.Root>
             <ContextMenu.Trigger as="div" class="image-preview-dialog__image-menu-target">
+              <Show when={resource.loading && !resource.error}>
+                <div role="status">{t("common.loading")}</div>
+              </Show>
               <img
                 class="image-preview-dialog__image"
-                data-unavailable={imageUnavailable() ? "true" : undefined}
+                data-unavailable={!previewSource() || imageUnavailable() ? "true" : undefined}
                 src={previewSource() || undefined}
                 alt={imagePreviewState().alt}
                 ref={(element) => {
@@ -700,6 +674,21 @@ export function ImagePreviewHost() {
                   tone="error"
                   title={t("image_preview.load_failed")}
                   details={resource.error ? formatErrorDetails(resource.error) : undefined}
+                  actions={
+                    <Show when={imagePreviewState().resourceUrl && resource.error}>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        tone="neutral"
+                        aria-disabled={resource.loading || undefined}
+                        aria-label={`${t("file.retry_preview")}: ${imagePreviewState().alt || t("image_preview.title")}`}
+                        onClick={(event) => void retryPreview(event)}
+                      >
+                        {t(resource.loading ? "common.retrying" : "file.retry_preview")}
+                      </Button>
+                    </Show>
+                  }
                 >
                   {t("image_preview.load_failed_hint")}
                 </Feedback>

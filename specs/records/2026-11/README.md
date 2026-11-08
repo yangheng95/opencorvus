@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [全图读取归属与恢复](2026-11-08-image-preview-read-owner.md)：缩略图打开失败、单窗口读取和键盘接续。
+
 - [图像派生错误契约](2026-11-08-image-rendition-error.md)：两种派生的具名失败与真实HTTP合同。
 
 - [图片原件下载反馈](2026-11-08-image-download-feedback.md)：原图下载失败、同操作恢复与键盘接续。

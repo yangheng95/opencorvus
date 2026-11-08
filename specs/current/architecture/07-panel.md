@@ -3608,6 +3608,17 @@ whole-image fit, original size, copy, pan, and modified-wheel zoom remain
 behaviors of that one host; consumers cannot introduce another lightbox or
 parallel image source.
 
+Image triggers synchronously open this host with the displayed image identity
+and canonical resource URL. FilePart and Screenshot Browser do not pre-read the
+full image. The host alone owns its authorized full-image resource, localized
+loading state, complete read error and explicit same-resource retry. A thumbnail
+is never presented as a successfully loaded full image. HTTP retry retains the
+current error while busy; native decode failures retain their separate feedback.
+Synchronous open/close advance the single preview state's revision, which also
+retires copy/download work. A successful read retry may return focus from its
+removed button to the header download only for the same current preview and
+authority while the document has no newly focused control.
+
 Original-image download failures remain visible in that same preview window,
 with localized Feedback, complete original diagnostics and a named retry of the
 current download operation. Pending retries retain their feedback and keyboard
