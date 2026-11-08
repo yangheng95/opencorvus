@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Mission保存提示关闭焦点](records/2026-11/2026-11-08-mission-save-dismiss-focus.md)：显式关闭反馈、原创建入口和真实草稿回读。
+
 - [项目下载菜单焦点](records/2026-11/2026-11-08-ledger-download-focus.md)：忙态可聚焦入口、菜单默认回焦与实际下载。
 
 - [项目归档当前文件](records/2026-11/2026-11-08-project-archive-current-files.md)：索引删除项、真实 ZIP 与普通文件投影。

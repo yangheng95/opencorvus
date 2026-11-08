@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Mission保存提示关闭证据](2026-11-08-mission-save-dismiss-focus/README.md)：真实关闭焦点、截图与公开reader记录。
+
 - [项目下载菜单焦点证据](2026-11-08-ledger-download-focus/README.md)：自有归档输入、实际焦点观察和截图。
 
 - [项目归档当前文件证据](2026-11-08-project-archive-current-files/README.md)：自有 Git 输入、实际下载和完整归档回执。

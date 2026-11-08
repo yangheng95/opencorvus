@@ -333,6 +333,7 @@ export function MissionBoard(props: MissionBoardProps) {
   )
   const [actionError, setActionError] = createSignal("")
   const [editingDraft, setEditingDraft] = createSignal<MissionDraftEditTarget | null>(null)
+  let createButton: HTMLButtonElement | undefined
   let searchInput: HTMLInputElement | undefined
   let lanesElement: HTMLDivElement | undefined
   const laneHeadings: Partial<Record<MissionBoardLane, HTMLHeadingElement>> = {}
@@ -460,6 +461,7 @@ export function MissionBoard(props: MissionBoardProps) {
           size="md"
           tone="neutral"
           data-ui="mission-board-create"
+          ref={createButton}
           disabled={Boolean(pendingAction())}
           onClick={() => setCreateOpen(true)}
         >
@@ -562,7 +564,16 @@ export function MissionBoard(props: MissionBoardProps) {
               >
                 {t("mission_board.create.open_saved")}
               </Button>
-              <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={() => setSavedDraftReceipt(null)}>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                tone="neutral"
+                onClick={() => {
+                  setSavedDraftReceipt(null)
+                  createButton?.focus({ preventScroll: true })
+                }}
+              >
                 {t("common.dismiss")}
               </Button>
             </>

@@ -1,0 +1,61 @@
+{
+  "product_scope": "MissionBoard explicit saved acknowledgement Dismiss and private current Create ref; existing native focus rules",
+  "checks": {
+    "overlay_typecheck": {
+      "exit": 0
+    },
+    "i18n": {
+      "exit": 0,
+      "locales": 2,
+      "keys": 2921
+    },
+    "build": {
+      "command": "bun run build",
+      "exit": 0,
+      "seconds": 61,
+      "actual_bundle": "main-BuKeJYrJ.js",
+      "renderer": "1 assignment, 1 declared global"
+    },
+    "docs": {
+      "exit": 0,
+      "operations": 352,
+      "groups": 26
+    },
+    "architecture": {
+      "exit": 0,
+      "documents": 20
+    },
+    "functional": "Actual manual POST saves then public GET /mission exact full records, title/request/directory/session/backlog identity; before1/after2 retained through dismissal and reopen/cancel"
+  },
+  "resources": {
+    "before": {
+      "port": 38956,
+      "session": 96020,
+      "tab": 40,
+      "closed": true,
+      "exit": 0
+    },
+    "after": {
+      "port": 38957,
+      "session": 61781,
+      "tab": 41,
+      "closed": true,
+      "exit": 0
+    }
+  },
+  "falsified": [
+    "Create Dialog transient BODY: clean cancel and manual save settle to original Create; shared Dialog unchanged"
+  ],
+  "qualified": [
+    "Before success Dismiss native Return gives stable BODY with exact record/filter retention",
+    "After English and Chinese Dismiss focuses corresponding current Create with same query/project/Board",
+    "Return reopens existing clean creation form, Cancel returns same Create",
+    "Public records and original English/Chinese requests retained; still backlog with canonical current tasks arrays"
+  ],
+  "limits": [
+    "Concurrent pending dispatch/delete can disable Create; native unavailable-target behavior not induced in real page",
+    "Execution/delete error feedback Dismiss, API-authority retirement and other entry/mode matrices not separately qualified",
+    "No models/credentials or UI automated tests",
+    "Open Mission navigation unchanged but not re-exercised in this batch"
+  ]
+}

@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [Mission保存提示关闭焦点](2026-11-08-mission-save-dismiss-focus.md)：初帧证伪、保存提示交接与中英验收。
+
 - [项目下载菜单焦点](2026-11-08-ledger-download-focus.md)：真实成功路径、键盘接续与错误恢复。
 
 - [项目归档当前文件](2026-11-08-project-archive-current-files.md)：共享归档写入、当前源字节与生产入口验收。

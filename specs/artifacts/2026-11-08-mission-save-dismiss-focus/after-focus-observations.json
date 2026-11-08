@@ -1,0 +1,55 @@
+[
+  {
+    "phase": "english-saved-close-settled",
+    "activeTag": "BUTTON",
+    "activeText": "Create Mission",
+    "scripts": [
+      "./assets/main-BuKeJYrJ.js"
+    ]
+  },
+  {
+    "phase": "english-dismiss-opener",
+    "activeText": "Dismiss"
+  },
+  {
+    "phase": "english-dismiss-result",
+    "activeTag": "BUTTON",
+    "activeText": "Create Mission",
+    "activeUI": "mission-board-create",
+    "layout": "board",
+    "project": "project-after",
+    "search": "b19-filter-outside"
+  },
+  {
+    "phase": "english-reopened-clean-cancel-settled",
+    "activeText": "Create Mission",
+    "activeUI": "mission-board-create"
+  },
+  {
+    "phase": "chinese-dismiss-opener",
+    "activeText": "关闭"
+  },
+  {
+    "phase": "chinese-dismiss-result",
+    "activeTag": "BUTTON",
+    "activeText": "创建多步任务",
+    "activeUI": "mission-board-create",
+    "layout": "board",
+    "project": "project-after",
+    "search": "b19-filter-outside"
+  },
+  {
+    "phase": "chinese-reopened-clean-cancel-settled",
+    "activeText": "创建多步任务",
+    "activeUI": "mission-board-create"
+  },
+  {
+    "phase": "final-chinese-clean-cancel",
+    "activeTag": "BUTTON",
+    "activeText": "创建多步任务",
+    "activeUI": "mission-board-create",
+    "layout": "board",
+    "project": "project-after",
+    "search": "b19-filter-outside"
+  }
+]

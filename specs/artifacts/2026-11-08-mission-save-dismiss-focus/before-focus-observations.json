@@ -1,0 +1,39 @@
+[
+  {
+    "phase": "clean-cancel-settled",
+    "activeTag": "BUTTON",
+    "activeText": "Create Mission"
+  },
+  {
+    "phase": "saved-dialog-close-settled",
+    "activeID": "",
+    "activeTag": "BUTTON",
+    "activeText": "Create Mission"
+  },
+  {
+    "phase": "dismiss-opener",
+    "activeTag": "BUTTON",
+    "activeText": "Dismiss",
+    "layout": "board",
+    "project": "project-before",
+    "search": "b19-filter-outside"
+  },
+  {
+    "phase": "dismiss-immediate",
+    "activeTag": "BODY",
+    "activeText": null,
+    "layout": "board",
+    "project": "project-before"
+  },
+  {
+    "phase": "dismiss-settled-after-public-reader",
+    "activeID": "",
+    "activeTag": "BODY",
+    "layout": "board",
+    "project": "project-before",
+    "scripts": [
+      "./assets/main-BlBzKZtY.js"
+    ],
+    "search": "b19-filter-outside"
+  }
+]

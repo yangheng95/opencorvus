@@ -1,0 +1,28 @@
+{
+  "status": 200,
+  "path": "/mission",
+  "records": [
+    {
+      "missionID": "188f6c36ab630678",
+      "sessionID": "ses_-zUPbpNqVzzi8KTDtCkz",
+      "title": "b19 saved feedback before",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b19\\project-before",
+      "created": 1794145247060,
+      "updated": 1794145247085,
+      "interruptible": false,
+      "productPillar": "code",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "Keep this Mission as a draft. Preserve this original request while dismissing the saved acknowledgement."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  ],
+  "equals_saved_records": true
+}

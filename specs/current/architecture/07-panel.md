@@ -1675,7 +1675,9 @@ identity in the existing complete Mission reader. Search/project values stay
 unchanged and the existing navigation owns opening. A pending/failed reader
 does not rewrite the committed save; the action waits for its canonical record.
 Retired API authority invalidates the acknowledgement, and explicit dismissal
-removes it. There is no second record snapshot, forced navigation, persistence,
+removes it and focuses the existing Create Mission button when it is mounted,
+visible and enabled. Automatic retirement does not initiate focus.
+There is no second record snapshot, forced navigation, persistence,
 new loading owner or diagnostic-log substitute for visible success.
 
 Mission creation failures preserve the entered fields and focus the existing

@@ -1,0 +1,48 @@
+{
+  "status": 200,
+  "records": [
+    {
+      "missionID": "d1c652786de60ea9",
+      "sessionID": "ses_-zUPbo1bezzsoXc3x9bs",
+      "title": "b19 中文保存提示",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b19\\project-after",
+      "created": 1794145570877,
+      "updated": 1794145570898,
+      "interruptible": false,
+      "productPillar": "code",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "保持为草稿。关闭保存提示后，保留这段原始请求与筛选条件。"
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    },
+    {
+      "missionID": "0384869dfd50d548",
+      "sessionID": "ses_-zUPboKllzzh23QXmf4O",
+      "title": "b19 saved feedback after English",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261108-b19\\project-after",
+      "created": 1794145497215,
+      "updated": 1794145497240,
+      "interruptible": false,
+      "productPillar": "code",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "Keep this Mission as a draft. Preserve this original request while dismissing the saved acknowledgement."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  ],
+  "equals_chinese_saved_records": true
+}
