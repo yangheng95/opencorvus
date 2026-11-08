@@ -84,7 +84,9 @@ export const MemoryTool = Tool.define("memory", {
       title: z.string().describe("Short descriptive title"),
       content: z.string().describe("Markdown content containing reusable project knowledge"),
       kind: z.enum(MemoryKinds).optional().describe("Semantic-memory kind"),
-      key: z.string().optional().describe("Stable identifier for idempotent project-memory upserts"),
+      key: z.string().optional().describe(
+        "Stable identifier for idempotent project-memory upserts. Omit for a new file; a provided key must retain a Unicode letter or number after normalization.",
+      ),
     }),
     z.object({
       action: z.literal("list"),

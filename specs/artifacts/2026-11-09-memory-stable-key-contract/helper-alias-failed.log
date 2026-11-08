@@ -1,0 +1,48 @@
+{"level":"info","time":"2026-11-08T23:04:45.844Z","service":"default","logDomain":"non-session","data":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before"},"message":"creating instance"}
+{"level":"info","time":"2026-11-08T23:04:45.845Z","service":"project.open","logDomain":"non-session","data":{"stage":"project.from-directory","platform":"win32","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","status":"started"},"message":"project.open.stage"}
+{"level":"info","time":"2026-11-08T23:04:45.845Z","service":"project","logDomain":"non-session","data":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before"},"message":"fromDirectory"}
+{"level":"info","time":"2026-11-08T23:04:45.846Z","service":"db","logDomain":"non-session","data":{"path":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\profile-before\\data\\opencorvus.db"},"message":"opening database"}
+{"level":"info","time":"2026-11-08T23:04:46.065Z","service":"db","logDomain":"non-session","data":{"path":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\profile-before\\data\\opencorvus.db","action":"initialized","from":0,"to":10},"message":"database schema ready"}
+{"level":"info","time":"2026-11-08T23:04:46.416Z","service":"project.open","logDomain":"non-session","data":{"stage":"project.from-directory","platform":"win32","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","status":"completed","duration":571},"message":"project.open.stage"}
+{"level":"info","time":"2026-11-08T23:04:46.419Z","service":"project.open","logDomain":"non-session","data":{"stage":"engine.git.ensure-project-metadata","platform":"win32","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","projectID":"prj_hFArdJVjCaMYClvTf0k7","status":"started"},"message":"project.open.stage"}
+{"level":"info","time":"2026-11-08T23:04:46.421Z","service":"project.open","logDomain":"non-session","data":{"stage":"engine.git.ensure-project-metadata","platform":"win32","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","projectID":"prj_hFArdJVjCaMYClvTf0k7","status":"completed","duration":2},"message":"project.open.stage"}
+{"level":"info","time":"2026-11-08T23:04:46.462Z","service":"project.open","logDomain":"non-session","data":{"stage":"expert-squad.discover","platform":"win32","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","projectID":"prj_hFArdJVjCaMYClvTf0k7","status":"started"},"message":"project.open.stage"}
+{"level":"info","time":"2026-11-08T23:04:46.670Z","service":"project.open","logDomain":"non-session","data":{"stage":"expert-squad.discover","platform":"win32","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","projectID":"prj_hFArdJVjCaMYClvTf0k7","status":"completed","duration":208},"message":"project.open.stage"}
+{"level":"info","time":"2026-11-08T23:04:46.670Z","service":"project.open","logDomain":"non-session","data":{"stage":"attachment-store.sweep","platform":"win32","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","projectID":"prj_hFArdJVjCaMYClvTf0k7","status":"started"},"message":"project.open.stage"}
+{"level":"info","time":"2026-11-08T23:04:46.672Z","service":"project.open","logDomain":"non-session","data":{"stage":"attachment-store.sweep","platform":"win32","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","projectID":"prj_hFArdJVjCaMYClvTf0k7","status":"completed","duration":2},"message":"project.open.stage"}
+{"level":"info","time":"2026-11-08T23:04:46.672Z","service":"project.open","logDomain":"non-session","data":{"stage":"instance.init","platform":"win32","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","projectID":"prj_hFArdJVjCaMYClvTf0k7","status":"started"},"message":"project.open.stage"}
+{"level":"info","time":"2026-11-08T23:04:46.672Z","service":"project.open","logDomain":"non-session","data":{"stage":"instance.init","platform":"win32","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","worktree":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before","projectID":"prj_hFArdJVjCaMYClvTf0k7","status":"completed","duration":0},"message":"project.open.stage"}
+{"level":"info","time":"2026-11-08T23:04:46.676Z","service":"memory","logDomain":"non-session","data":{"id":"mem_g0VaQSbNj00b8zf5OaiY","title":"Retry note","source":"user","kind":"note"},"message":"created memory file"}
+{"level":"info","time":"2026-11-08T23:04:46.677Z","service":"memory","logDomain":"non-session","data":{"fileId":"mem_g0VaQSbNj00b8zf5OaiY","count":1},"message":"wrote memory chunks"}
+{"level":"info","time":"2026-11-08T23:04:46.679Z","service":"memory","logDomain":"non-session","data":{"id":"mem_g0VaQSbNm00piGI26zlx","title":"Retry note","source":"user","kind":"note"},"message":"created memory file"}
+{"level":"info","time":"2026-11-08T23:04:46.679Z","service":"memory","logDomain":"non-session","data":{"fileId":"mem_g0VaQSbNm00piGI26zlx","count":1},"message":"wrote memory chunks"}
+{"level":"info","time":"2026-11-08T23:04:46.681Z","service":"memory","logDomain":"non-session","data":{"id":"mem_g0VaQSbNp00KpQATiWPA","title":"Stable original note","source":"user","kind":"note","key":"re-sume-记录"},"message":"created memory file"}
+{"level":"info","time":"2026-11-08T23:04:46.682Z","service":"memory","logDomain":"non-session","data":{"fileId":"mem_g0VaQSbNp00KpQATiWPA","count":1},"message":"wrote memory chunks"}
+{"level":"info","time":"2026-11-08T23:04:46.683Z","service":"memory","logDomain":"non-session","data":{"id":"mem_g0VaQSbNq00W8pktqWFq","title":"Current stable original note","source":"user","kind":"note","key":"resume-记录"},"message":"created memory file"}
+{"level":"info","time":"2026-11-08T23:04:46.683Z","service":"memory","logDomain":"non-session","data":{"fileId":"mem_g0VaQSbNq00W8pktqWFq","count":1},"message":"wrote memory chunks"}
+{"level":"info","time":"2026-11-08T23:04:46.686Z","service":"default","logDomain":"non-session","message":"disposing all instances"}
+{"level":"info","time":"2026-11-08T23:04:46.687Z","service":"default","logDomain":"non-session","data":{"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before"},"message":"disposing instance"}
+32 |    assert.equal(new Set(retryAttempts.map(item=>item.file.id)).size,2)
+33 |   }else assert.deepEqual(retryAttempts.map(item=>item.outcome),["error","error"])
+34 |   const canonicalOriginal=Memory.writeFile({projectId:project.id,title:"Stable original note",content:"stablekeyprobe first original revision.",source:"user",key:"  RÉSUMÉ_记录!  "})
+35 |   const canonicalContent="stablekeyprobe current original revision."
+36 |   const canonicalCurrent=Memory.writeFile({projectId:project.id,title:"Current stable original note",content:canonicalContent,source:"user",key:"resume 记录"})
+37 |   assert.equal(canonicalCurrent.id,canonicalOriginal.id)
+              ^
+AssertionError: Expected values to be strictly equal:
++ actual - expected
+
++ 'mem_g0VaQSbNq00W8pktqWFq'
+- 'mem_g0VaQSbNp00KpQATiWPA'
+               ^
+
+ generatedMessage: true,
+     actual: "mem_g0VaQSbNq00W8pktqWFq",
+   expected: "mem_g0VaQSbNp00KpQATiWPA",
+   operator: "strictEqual",
+       diff: "simple",
+       code: "ERR_ASSERTION"
+
+      at C:\Users\hengu\AppData\Local\Temp\opencorvus-iteration-20261109-b45\initialize-and-probe.ts:37:10
+
+Bun v1.4.3 (Windows x64)

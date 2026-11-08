@@ -949,6 +949,11 @@ Project 的文件按现有 NotFoundError 领域合同返回，随后才进入原
 索引替换。生产 writeFile 的创建或按 key 更新继续委托同一 writer，不建立另一写路径。
 此写入约束不改数据库格式，也不猜测、删除或重写未知历史不一致数据的归属。
 
+语义记忆显式 key 复用唯一规范化算法，规范结果为空时返回 InvalidMemoryKeyError
+（`invalid_memory_key`）；只有省略或 undefined 表示无 key。合法 writeFile key 继续按同一
+Project、kind 与规范 key 更新原文件身份及全文内容；真正无 key 继续创建独立文件。Tool 声明
+说明同一合同，历史无 key 或重复记录不因新输入校验而被合并、删除或回填。
+
 | 表                                                            | 文件                         | 作用                                            |
 | ------------------------------------------------------------- | ---------------------------- | ----------------------------------------------- |
 | `decision_log`                                                | `decision-log/schema.ts`     | **全局共享上下文**，append-only，所有 agent R/W |

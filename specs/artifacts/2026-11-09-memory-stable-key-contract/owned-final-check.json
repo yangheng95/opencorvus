@@ -1,0 +1,135 @@
+{
+  "phases": {
+    "before": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before",
+      "originalNotesBytes": 47,
+      "worktreeAndGitContentExact": true,
+      "head": "b483da02040f66122015fbec7d2affa56e910092",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "databaseCounts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "memory_file": 6,
+        "memory_chunk": 6
+      },
+      "configFiles": [],
+      "originalMemory": [
+        {
+          "id": "mem_g0VaQT48200baXa9VnyC",
+          "projectID": "prj_hFArdJVjCaMYClvTf0k7",
+          "title": "Current stable original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794179197178,
+          "key": "re-sume-记录",
+          "content": "stablekeyprobe current original revision.",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQT48600Gdj8pUxX7",
+          "projectID": "prj_hFArdJVjCaMYClvTf0k7",
+          "title": "Unkeyed original note 1",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794179197182,
+          "key": null,
+          "content": "unkeyedprobe original item 1.",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQT487003PaQ0qhiF",
+          "projectID": "prj_hFArdJVjCaMYClvTf0k7",
+          "title": "Unkeyed original note 2",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794179197183,
+          "key": null,
+          "content": "unkeyedprobe original item 2.",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQT47v00w4QUJWM1K",
+          "projectID": "prj_hFArdJVjCaMYClvTf0k7",
+          "title": "Retry note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794179197172,
+          "key": null,
+          "content": "retrykeyprobe original attempt 1.",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQT47z00JlUBFpWLy",
+          "projectID": "prj_hFArdJVjCaMYClvTf0k7",
+          "title": "Retry note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794179197175,
+          "key": null,
+          "content": "retrykeyprobe original attempt 2.",
+          "identityContentCreationExact": true
+        }
+      ]
+    },
+    "after": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-after",
+      "originalNotesBytes": 46,
+      "worktreeAndGitContentExact": true,
+      "head": "4d8aa0d7573eea2e7e089a7d305d6af48b8e0bf9",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "databaseCounts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "memory_file": 4,
+        "memory_chunk": 4
+      },
+      "configFiles": [],
+      "originalMemory": [
+        {
+          "id": "mem_g0VaQUWN100H3BDnu2hZ",
+          "projectID": "prj_hKzcARmeBXgZMHEuQ9n5",
+          "title": "Current stable original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794179544067,
+          "key": "re-sume-记录",
+          "content": "stablekeyprobe current original revision.",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQUWN600TZqUac7bi",
+          "projectID": "prj_hKzcARmeBXgZMHEuQ9n5",
+          "title": "Unkeyed original note 1",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794179544073,
+          "key": null,
+          "content": "unkeyedprobe original item 1.",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQUWN900EYsylkhuL",
+          "projectID": "prj_hKzcARmeBXgZMHEuQ9n5",
+          "title": "Unkeyed original note 2",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794179544075,
+          "key": null,
+          "content": "unkeyedprobe original item 2.",
+          "identityContentCreationExact": true
+        }
+      ]
+    }
+  },
+  "qualification": "Original owned file/identity/content/creation contracts. Mutable host project-memory metadata is recorded by its production owner and is not compared across observations. UI accepted only manually."
+}

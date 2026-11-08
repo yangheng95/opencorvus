@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [记忆稳定键合同证据](2026-11-09-memory-stable-key-contract/README.md)
 - [记忆原文阅读证据](2026-11-09-memory-original-reading/README.md)
 - [记忆搜索文件身份的证据](2026-11-09-memory-search-file-identity/README.md)
 - [记忆分块项目归属证据](2026-11-09-memory-chunk-project-ownership/README.md)

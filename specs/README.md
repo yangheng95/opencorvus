@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [记忆稳定键合同](records/2026-11/2026-11-09-memory-stable-key-contract.md)
 - [记忆原文阅读](records/2026-11/2026-11-09-memory-original-reading.md)
 - [记忆搜索文件身份](records/2026-11/2026-11-09-memory-search-file-identity.md)
 - [记忆分块项目归属](records/2026-11/2026-11-09-memory-chunk-project-ownership.md)

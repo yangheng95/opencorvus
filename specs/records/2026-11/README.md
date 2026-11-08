@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [记忆稳定键合同](2026-11-09-memory-stable-key-contract.md)
 - [记忆原文阅读](2026-11-09-memory-original-reading.md)
 - [记忆搜索文件身份](2026-11-09-memory-search-file-identity.md)
 - [记忆分块项目归属](2026-11-09-memory-chunk-project-ownership.md)

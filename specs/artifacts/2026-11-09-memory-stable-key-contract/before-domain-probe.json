@@ -1,0 +1,185 @@
+{
+  "phase": "before",
+  "date": "2026-11-08T23:06:37.190Z",
+  "profilePath": "C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b45/profile-before-recheck",
+  "project": {
+    "id": "prj_hFArdJVjCaMYClvTf0k7",
+    "name": "Memory Stable Keys",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-before"
+  },
+  "retryAttempts": [
+    {
+      "attempt": 1,
+      "outcome": "accepted",
+      "file": {
+        "id": "mem_g0VaQT47v00w4QUJWM1K",
+        "projectId": "prj_hFArdJVjCaMYClvTf0k7",
+        "scope": "project",
+        "title": "Retry note",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "timeCreated": 1794179197172,
+        "timeUpdated": 1794179197172
+      },
+      "content": "retrykeyprobe original attempt 1."
+    },
+    {
+      "attempt": 2,
+      "outcome": "accepted",
+      "file": {
+        "id": "mem_g0VaQT47z00JlUBFpWLy",
+        "projectId": "prj_hFArdJVjCaMYClvTf0k7",
+        "scope": "project",
+        "title": "Retry note",
+        "source": "user",
+        "kind": "note",
+        "importance": 60,
+        "confidence": 72,
+        "timeCreated": 1794179197175,
+        "timeUpdated": 1794179197175
+      },
+      "content": "retrykeyprobe original attempt 2."
+    }
+  ],
+  "canonicalOriginal": {
+    "id": "mem_g0VaQT48200baXa9VnyC",
+    "projectId": "prj_hFArdJVjCaMYClvTf0k7",
+    "scope": "project",
+    "title": "Stable original note",
+    "source": "user",
+    "kind": "note",
+    "key": "re-sume-记录",
+    "importance": 60,
+    "confidence": 72,
+    "timeCreated": 1794179197178,
+    "timeUpdated": 1794179197178
+  },
+  "canonicalCurrent": {
+    "id": "mem_g0VaQT48200baXa9VnyC",
+    "projectId": "prj_hFArdJVjCaMYClvTf0k7",
+    "scope": "project",
+    "title": "Current stable original note",
+    "source": "user",
+    "kind": "note",
+    "key": "re-sume-记录",
+    "importance": 60,
+    "confidence": 72,
+    "timeCreated": 1794179197178,
+    "timeUpdated": 1794179197180
+  },
+  "stableSearch": [
+    {
+      "chunkId": "mck_g0VaQT48500pxiV6Rcjh",
+      "fileId": "mem_g0VaQT48200baXa9VnyC",
+      "fileTitle": "Current stable original note",
+      "content": "stablekeyprobe current original revision.",
+      "scope": "project",
+      "source": "user",
+      "kind": "note",
+      "key": "re-sume-记录",
+      "importance": 60,
+      "confidence": 72,
+      "score": 0.6385015116281793,
+      "timeCreated": 1794179197181
+    }
+  ],
+  "retrySearch": [
+    {
+      "chunkId": "mck_g0VaQT47z00iYpMKzcz6",
+      "fileId": "mem_g0VaQT47z00JlUBFpWLy",
+      "fileTitle": "Retry note",
+      "content": "retrykeyprobe original attempt 2.",
+      "scope": "project",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "score": 0.3209298986339741,
+      "timeCreated": 1794179197175
+    },
+    {
+      "chunkId": "mck_g0VaQT47x00zK0nRuOAc",
+      "fileId": "mem_g0VaQT47v00w4QUJWM1K",
+      "fileTitle": "Retry note",
+      "content": "retrykeyprobe original attempt 1.",
+      "scope": "project",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "score": 0.3209298986339741,
+      "timeCreated": 1794179197173
+    }
+  ],
+  "files": [
+    {
+      "id": "mem_g0VaQT48200baXa9VnyC",
+      "projectId": "prj_hFArdJVjCaMYClvTf0k7",
+      "scope": "project",
+      "title": "Current stable original note",
+      "source": "user",
+      "kind": "note",
+      "key": "re-sume-记录",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794179197178,
+      "timeUpdated": 1794179197180,
+      "content": "stablekeyprobe current original revision."
+    },
+    {
+      "id": "mem_g0VaQT48600Gdj8pUxX7",
+      "projectId": "prj_hFArdJVjCaMYClvTf0k7",
+      "scope": "project",
+      "title": "Unkeyed original note 1",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794179197182,
+      "timeUpdated": 1794179197182,
+      "content": "unkeyedprobe original item 1."
+    },
+    {
+      "id": "mem_g0VaQT487003PaQ0qhiF",
+      "projectId": "prj_hFArdJVjCaMYClvTf0k7",
+      "scope": "project",
+      "title": "Unkeyed original note 2",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794179197183,
+      "timeUpdated": 1794179197183,
+      "content": "unkeyedprobe original item 2."
+    },
+    {
+      "id": "mem_g0VaQT47v00w4QUJWM1K",
+      "projectId": "prj_hFArdJVjCaMYClvTf0k7",
+      "scope": "project",
+      "title": "Retry note",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794179197172,
+      "timeUpdated": 1794179197172,
+      "content": "retrykeyprobe original attempt 1."
+    },
+    {
+      "id": "mem_g0VaQT47z00JlUBFpWLy",
+      "projectId": "prj_hFArdJVjCaMYClvTf0k7",
+      "scope": "project",
+      "title": "Retry note",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794179197175,
+      "timeUpdated": 1794179197175,
+      "content": "retrykeyprobe original attempt 2."
+    }
+  ],
+  "qualification": "Actual isolated writer/SQLite/FTS. Provided empty-normalized key and intentionally omitted key are distinct contracts. No Session, message, Provider or model."
+}

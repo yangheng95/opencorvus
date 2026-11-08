@@ -1,0 +1,115 @@
+{
+  "phase": "after",
+  "date": "2026-11-08T23:12:24.080Z",
+  "profilePath": "C:/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b45/profile-after",
+  "project": {
+    "id": "prj_hKzcARmeBXgZMHEuQ9n5",
+    "name": "Memory Stable Keys",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-after"
+  },
+  "retryAttempts": [
+    {
+      "attempt": 1,
+      "outcome": "error",
+      "name": "InvalidMemoryKeyError",
+      "data": {
+        "message": "Memory key must contain at least one Unicode letter or number",
+        "code": "invalid_memory_key"
+      }
+    },
+    {
+      "attempt": 2,
+      "outcome": "error",
+      "name": "InvalidMemoryKeyError",
+      "data": {
+        "message": "Memory key must contain at least one Unicode letter or number",
+        "code": "invalid_memory_key"
+      }
+    }
+  ],
+  "canonicalOriginal": {
+    "id": "mem_g0VaQUWN100H3BDnu2hZ",
+    "projectId": "prj_hKzcARmeBXgZMHEuQ9n5",
+    "scope": "project",
+    "title": "Stable original note",
+    "source": "user",
+    "kind": "note",
+    "key": "re-sume-记录",
+    "importance": 60,
+    "confidence": 72,
+    "timeCreated": 1794179544067,
+    "timeUpdated": 1794179544067
+  },
+  "canonicalCurrent": {
+    "id": "mem_g0VaQUWN100H3BDnu2hZ",
+    "projectId": "prj_hKzcARmeBXgZMHEuQ9n5",
+    "scope": "project",
+    "title": "Current stable original note",
+    "source": "user",
+    "kind": "note",
+    "key": "re-sume-记录",
+    "importance": 60,
+    "confidence": 72,
+    "timeCreated": 1794179544067,
+    "timeUpdated": 1794179544071
+  },
+  "stableSearch": [
+    {
+      "chunkId": "mck_g0VaQUWN5002FRC4uxDt",
+      "fileId": "mem_g0VaQUWN100H3BDnu2hZ",
+      "fileTitle": "Current stable original note",
+      "content": "stablekeyprobe current original revision.",
+      "scope": "project",
+      "source": "user",
+      "kind": "note",
+      "key": "re-sume-记录",
+      "importance": 60,
+      "confidence": 72,
+      "score": 0.38574383530155043,
+      "timeCreated": 1794179544071
+    }
+  ],
+  "files": [
+    {
+      "id": "mem_g0VaQUWN100H3BDnu2hZ",
+      "projectId": "prj_hKzcARmeBXgZMHEuQ9n5",
+      "scope": "project",
+      "title": "Current stable original note",
+      "source": "user",
+      "kind": "note",
+      "key": "re-sume-记录",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794179544067,
+      "timeUpdated": 1794179544071,
+      "content": "stablekeyprobe current original revision."
+    },
+    {
+      "id": "mem_g0VaQUWN600TZqUac7bi",
+      "projectId": "prj_hKzcARmeBXgZMHEuQ9n5",
+      "scope": "project",
+      "title": "Unkeyed original note 1",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794179544073,
+      "timeUpdated": 1794179544073,
+      "content": "unkeyedprobe original item 1."
+    },
+    {
+      "id": "mem_g0VaQUWN900EYsylkhuL",
+      "projectId": "prj_hKzcARmeBXgZMHEuQ9n5",
+      "scope": "project",
+      "title": "Unkeyed original note 2",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794179544075,
+      "timeUpdated": 1794179544075,
+      "content": "unkeyedprobe original item 2."
+    }
+  ],
+  "qualification": "Actual isolated writer/SQLite/FTS. Provided empty-normalized key and intentionally omitted key are distinct contracts. No Session, message, Provider or model."
+}

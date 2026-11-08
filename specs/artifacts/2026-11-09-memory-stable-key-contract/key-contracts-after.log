@@ -1,0 +1,32 @@
+$ bun script/run-tests.ts test/memory/stable-key-contract.test.ts test/memory/chunk-project-ownership.test.ts
+[1/2] START test/memory/stable-key-contract.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) existing Unicode key aliases keep the same original file and current indexed content [1812.82ms]
+(pass) provided keys with no canonical letters or numbers return the explicit key error [1616.82ms]
+(pass) createFile shares the explicit key contract and accepts a valid canonical parent [1336.15ms]
+(pass) omitted and undefined keys still create separately owned files [1290.66ms]
+(pass) the production Memory Tool exposes the named error and then writes a valid stable identity [1362.83ms]
+(pass) structured and derived episode facts retain their original prefixed keys [1399.19ms]
+
+ 6 pass
+ 0 fail
+ 28 expect() calls
+Ran 6 tests across 1 file. [12.31s]
+[1/2] DONE test/memory/stable-key-contract.test.ts exit=0 duration=12.84s
+[2/2] START test/memory/chunk-project-ownership.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) owned chunks publish their original file identity and searchable content [1538.76ms]
+(pass) a file from another project maps to the explicit missing-parent error [2866.21ms]
+(pass) an unknown file maps to the same explicit missing-parent contract [1255.44ms]
+(pass) the owned host document retains its protected-write error and original content [1309.81ms]
+(pass) the production writeFile path updates the same keyed file and current full-text content [1251.03ms]
+
+ 5 pass
+ 0 fail
+ 16 expect() calls
+Ran 5 tests across 1 file. [9.01s]
+[2/2] DONE test/memory/chunk-project-ownership.test.ts exit=0 duration=9.14s

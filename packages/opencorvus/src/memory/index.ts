@@ -14,6 +14,8 @@ import type {
   MemorySource,
 } from "./types"
 import { ProtectedProjectMemoryError } from "./project-memory"
+import { NamedError } from "@opencorvus-ai/util/error"
+import z from "zod"
 
 export namespace Memory {
   const log = Log.create({ service: "memory" })
@@ -42,6 +44,11 @@ export namespace Memory {
   export type MemoryFile = MemoryFileRecord
   export type MemoryChunk = MemoryChunkRecord
   export type SearchResult = MemorySearchResult
+
+  export const InvalidKeyError = NamedError.create(
+    "InvalidMemoryKeyError",
+    z.object({ message: z.string(), code: z.literal("invalid_memory_key") }),
+  )
 
   function fromFile(row: typeof MemoryFileTable.$inferSelect): MemoryFile {
     return {
@@ -113,13 +120,20 @@ export namespace Memory {
   }
 
   function normalizeKey(raw: string) {
-    return raw
+    const key = raw
       .trim()
       .toLowerCase()
       .normalize("NFKD")
       .replace(/[^\p{L}\p{N}]+/gu, "-")
       .replace(/^-+|-+$/g, "")
       .slice(0, 120)
+    if (!key) {
+      throw new InvalidKeyError({
+        message: "Memory key must contain at least one Unicode letter or number",
+        code: "invalid_memory_key",
+      })
+    }
+    return key
   }
 
   function compactText(raw: string, max = 240) {
@@ -242,7 +256,7 @@ export namespace Memory {
       for (const entry of entries) {
         if (!shouldKeepAtomic(section.title, entry)) continue
         const key = normalizeKey(`${kind}-${entry}`)
-        if (!key || seen.has(key)) continue
+        if (seen.has(key)) continue
         seen.add(key)
         items.push({
           title: buildAtomicTitle(kind, entry),
@@ -274,7 +288,7 @@ export namespace Memory {
   }) {
     const kind = input.kind ?? "note"
     if (isHostOwnedMemoryKind(kind)) throw new Error(`${kind} memory is host-owned`)
-    const key = input.key ? normalizeKey(input.key) : undefined
+    const key = input.key === undefined ? undefined : normalizeKey(input.key)
     const id = Identifier.ascending("memory")
     const now = Date.now()
     Database.use((db) =>
@@ -333,7 +347,7 @@ export namespace Memory {
           title: input.title,
           source: input.source,
           kind: input.kind,
-          key: input.key ? normalizeKey(input.key) : null,
+          key: input.key === undefined ? null : normalizeKey(input.key),
           importance: MemorySearch.clampScore(input.importance, DEFAULT_IMPORTANCE[input.kind]),
           confidence: MemorySearch.clampScore(input.confidence, DEFAULT_CONFIDENCE[input.kind]),
           time_updated: now,
@@ -415,7 +429,7 @@ export namespace Memory {
     return Database.transaction(() => {
       const kind = input.kind ?? "note"
       if (isHostOwnedMemoryKind(kind)) throw new Error(`${kind} memory is host-owned`)
-      const key = input.key ? normalizeKey(input.key) : undefined
+      const key = input.key === undefined ? undefined : normalizeKey(input.key)
       const existing = key
         ? findByKey({
             projectId: input.projectId,
@@ -483,7 +497,7 @@ export namespace Memory {
         const text = compactText(atom.text)
         if (text.length < 24 || text.length > 260) return []
         const key = normalizeKey(`${atom.kind}-${text}`)
-        if (!key || seen.has(key)) return []
+        if (seen.has(key)) return []
         seen.add(key)
         return [
           writeFile({

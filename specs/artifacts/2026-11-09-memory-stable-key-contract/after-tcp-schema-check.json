@@ -1,0 +1,142 @@
+{
+  "phase": "after",
+  "project": {
+    "id": "prj_hKzcARmeBXgZMHEuQ9n5",
+    "name": "Memory Stable Keys",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b45\\project-after"
+  },
+  "results": [
+    {
+      "operation": "List original files",
+      "status": 200,
+      "requestID": "c9227ace-adbf-4197-978f-edc26cfaeb56",
+      "body": [
+        {
+          "id": "mem_g0VaQUWN900EYsylkhuL",
+          "projectId": "prj_hKzcARmeBXgZMHEuQ9n5",
+          "scope": "project",
+          "title": "Unkeyed original note 2",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794179544075,
+          "timeUpdated": 1794179544075
+        },
+        {
+          "id": "mem_g0VaQUWN600TZqUac7bi",
+          "projectId": "prj_hKzcARmeBXgZMHEuQ9n5",
+          "scope": "project",
+          "title": "Unkeyed original note 1",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794179544073,
+          "timeUpdated": 1794179544073
+        },
+        {
+          "id": "mem_g0VaQUWN100H3BDnu2hZ",
+          "projectId": "prj_hKzcARmeBXgZMHEuQ9n5",
+          "scope": "project",
+          "title": "Current stable original note",
+          "source": "user",
+          "kind": "note",
+          "key": "re-sume-记录",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794179544067,
+          "timeUpdated": 1794179544071
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "Stable-key current search",
+      "status": 200,
+      "requestID": "ca7b372c-9bc3-4620-a83e-e46041570054",
+      "body": [
+        {
+          "chunkId": "mck_g0VaQUWN5002FRC4uxDt",
+          "fileId": "mem_g0VaQUWN100H3BDnu2hZ",
+          "fileTitle": "Current stable original note",
+          "content": "stablekeyprobe current original revision.",
+          "scope": "project",
+          "source": "user",
+          "kind": "note",
+          "key": "re-sume-记录",
+          "importance": 60,
+          "confidence": 72,
+          "score": 0.38574383530155043,
+          "timeCreated": 1794179544071
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "Complete original file mem_g0VaQUWN100H3BDnu2hZ",
+      "status": 200,
+      "requestID": "c86e6035-3adc-41b1-90a7-7665e4eb27f9",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQUWN100H3BDnu2hZ",
+          "projectId": "prj_hKzcARmeBXgZMHEuQ9n5",
+          "scope": "project",
+          "title": "Current stable original note",
+          "source": "user",
+          "kind": "note",
+          "key": "re-sume-记录",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794179544067,
+          "timeUpdated": 1794179544071
+        },
+        "content": "stablekeyprobe current original revision."
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "Complete original file mem_g0VaQUWN600TZqUac7bi",
+      "status": 200,
+      "requestID": "d17d291f-d347-4b55-a4e0-755f023bfc8c",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQUWN600TZqUac7bi",
+          "projectId": "prj_hKzcARmeBXgZMHEuQ9n5",
+          "scope": "project",
+          "title": "Unkeyed original note 1",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794179544073,
+          "timeUpdated": 1794179544073
+        },
+        "content": "unkeyedprobe original item 1."
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "Complete original file mem_g0VaQUWN900EYsylkhuL",
+      "status": 200,
+      "requestID": "636b0d7a-e70d-42c4-b86f-75dc46951529",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQUWN900EYsylkhuL",
+          "projectId": "prj_hKzcARmeBXgZMHEuQ9n5",
+          "scope": "project",
+          "title": "Unkeyed original note 2",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794179544075,
+          "timeUpdated": 1794179544075
+        },
+        "content": "unkeyedprobe original item 2."
+      },
+      "schemaValid": true
+    }
+  ],
+  "qualification": "Actual persisted read and search contracts. Invalid key writes are checked directly in the domain, not through a public HTTP write route."
+}

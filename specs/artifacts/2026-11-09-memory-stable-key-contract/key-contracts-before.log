@@ -1,0 +1,107 @@
+$ bun script/run-tests.ts test/memory/stable-key-contract.test.ts
+[1/1] START test/memory/stable-key-contract.test.ts
+bun test v1.4.3 (c6da4a4d3) 1x PARALLEL
+
+test\isolated-test-entry.test.ts:
+(pass) existing Unicode key aliases keep the same original file and current indexed content [1857.48ms]
+15 |     return error
+16 |   }
+17 | }
+18 |
+19 | function expectKeyError(error: unknown) {
+20 |   expect(error).toBeInstanceOf(Error)
+                     ^
+error: expect(received).toBeInstanceOf(expected)
+
+Expected constructor: [class Error]
+Received value: {
+  id: "mem_g0VaQUAD900U90kOBpFj",
+  projectId: "prj_h7KAClRrWo8JZWVrMLmv",
+  scope: "project",
+  title: "Explicit key input",
+  source: "user",
+  kind: "note",
+  key: undefined,
+  importance: 60,
+  confidence: 72,
+  timeCreated: 1794179458887,
+  timeUpdated: 1794179458888,
+}
+
+      at expectKeyError (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\stable-key-contract.test.ts:20:17)
+      at fn (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\stable-key-contract.test.ts:71:9)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1561:26)
+      at run (node:async_hooks:144:29)
+      at run (node:async_hooks:144:29)
+      at run (node:async_hooks:144:29)
+      at provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1541:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\stable-key-contract.test.ts:66:18)
+(fail) provided keys with no canonical letters or numbers return the explicit key error [1775.64ms]
+15 |     return error
+16 |   }
+17 | }
+18 |
+19 | function expectKeyError(error: unknown) {
+20 |   expect(error).toBeInstanceOf(Error)
+                     ^
+error: expect(received).toBeInstanceOf(expected)
+
+Expected constructor: [class Error]
+Received value: {
+  id: "mem_g0VaQUAcn00MF2JCR7eN",
+  projectId: "prj_hhlGIpOHg91d0V623omC",
+  scope: "project",
+  title: "Explicit parent key",
+  source: "user",
+  kind: "note",
+  key: undefined,
+  importance: 60,
+  confidence: 72,
+  timeCreated: 1794179460477,
+  timeUpdated: 1794179460477,
+}
+
+      at expectKeyError (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\stable-key-contract.test.ts:20:17)
+      at fn (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\stable-key-contract.test.ts:94:9)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1561:26)
+      at run (node:async_hooks:144:29)
+      at run (node:async_hooks:144:29)
+      at run (node:async_hooks:144:29)
+      at provide (D:\myhexin-local\opencorvus\packages\opencorvus\src\project\instance.ts:1541:35)
+      at async <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\stable-key-contract.test.ts:89:18)
+(fail) createFile shares the explicit key contract and accepts a valid canonical parent [1600.17ms]
+(pass) omitted and undefined keys still create separately owned files [1498.78ms]
+15 |     return error
+16 |   }
+17 | }
+18 |
+19 | function expectKeyError(error: unknown) {
+20 |   expect(error).toBeInstanceOf(Error)
+                     ^
+error: expect(received).toBeInstanceOf(expected)
+
+Expected constructor: [class Error]
+Received value: {
+  title: "Saved: Invalid tool key",
+  output: "{\"fileId\":\"mem_g0VaQUBRz00ViOAyMtAi\",\"title\":\"Invalid tool key\",\"kind\":\"note\",\"importance\":60,\"confidence\":72}",
+  metadata: {
+    truncated: false,
+  },
+}
+
+      at expectKeyError (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\stable-key-contract.test.ts:20:17)
+      at <anonymous> (D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\stable-key-contract.test.ts:160:7)
+(fail) the production Memory Tool exposes the named error and then writes a valid stable identity [1686.07ms]
+(pass) structured and derived episode facts retain their original prefixed keys [1784.83ms]
+
+ 3 pass
+ 3 fail
+ 11 expect() calls
+Ran 6 tests across 1 file. [14.24s]
+OpenCorvus test file failed (exit=1): D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\stable-key-contract.test.ts
+[1/1] DONE test/memory/stable-key-contract.test.ts exit=1 duration=14.84s
+OpenCorvus failed test files (1):
+D:\myhexin-local\opencorvus\packages\opencorvus\test\memory\stable-key-contract.test.ts
+Test runtime retained after unsuccessful run: C:\Users\hengu\AppData\Local\Temp\opencorvus-test-run-wzBvcq
+Physical/output settlement confirmed: true
+error: script "test" exited with code 1
