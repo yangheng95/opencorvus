@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [连接校验反馈](records/2026-11/2026-11-08-connection-validation-feedback.md)：具名错误、当前语言摘要与真实本地拒绝。
+
 - [草稿导出反馈](records/2026-11/2026-11-08-file-draft-export-feedback.md)：保存冲突、导出反馈归属与真实恢复。
 
 - [设置组合词发现](records/2026-11/2026-11-08-settings-multi-term-search.md)：共用目录匹配器、当前页保持与真实双语筛选。

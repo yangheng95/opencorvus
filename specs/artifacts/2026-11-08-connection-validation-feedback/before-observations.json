@@ -1,0 +1,40 @@
+[
+  {
+    "step": "english-local-fragment-rejection",
+    "focus": {
+      "isSave": true,
+      "label": null,
+      "tag": "BUTTON"
+    },
+    "nativeSaveDisabled": false,
+    "scripts": [
+      "http://localhost:38948/ui/assets/main-C-qzEdCk.js"
+    ],
+    "status": "Settings could not be saved: Server URL must not include a fragment.",
+    "url": "http://localhost:38948#b15"
+  },
+  {
+    "step": "native-tab-after-local-rejection",
+    "focus": {
+      "id": "network-proxy-llm-provider",
+      "role": "switch",
+      "tag": "INPUT"
+    }
+  },
+  {
+    "step": "same-error-after-in-place-chinese-switch",
+    "status": "Settings could not be saved: Server URL must not include a fragment.",
+    "title": "网络",
+    "url": "http://localhost:38948#b15"
+  },
+  {
+    "step": "new-chinese-rejection-retains-english-validation-in-summary",
+    "focusIsSave": true,
+    "status": "设置保存失败：Server URL must not include a fragment.",
+    "url": "http://localhost:38948#b15"
+  },
+  {
+    "step": "restored-original-input-without-save",
+    "value": "http://localhost:38948"
+  }
+]

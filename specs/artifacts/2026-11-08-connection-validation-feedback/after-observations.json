@@ -1,0 +1,106 @@
+[
+  {
+    "step": "fragment-english",
+    "focusIsSave": true,
+    "scripts": [
+      "http://localhost:38949/ui/assets/main-BydIgfm3.js"
+    ],
+    "status": "Remove the fragment (#...) from the server URL.DetailsServerBaseUrlError: Server URL must not include a fragment.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:47112)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": "http://localhost:38949#b15"
+  },
+  {
+    "step": "native-tab-opens-original-details",
+    "value": {
+      "detailsOpen": true,
+      "focus": "SUMMARY"
+    }
+  },
+  {
+    "step": "same-fragment-chinese-with-details-open",
+    "detailsOpen": true,
+    "status": "请移除服务地址中的片段（#...）。详细信息ServerBaseUrlError: Server URL must not include a fragment.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:47112)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": "http://localhost:38949#b15"
+  },
+  {
+    "step": "same-fragment-back-to-english",
+    "detailsOpen": true,
+    "status": "Remove the fragment (#...) from the server URL.DetailsServerBaseUrlError: Server URL must not include a fragment.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:47112)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "title": "Network"
+  },
+  {
+    "step": "malformed-english",
+    "focusIsSave": true,
+    "status": "Enter a complete, valid server URL.DetailsServerBaseUrlError: Server URL is not a valid absolute URL.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:46901)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": "http://"
+  },
+  {
+    "step": "same-malformed-chinese",
+    "status": "请输入完整有效的服务地址。详细信息ServerBaseUrlError: Server URL is not a valid absolute URL.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:46901)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": "http://"
+  },
+  {
+    "step": "unsupported-protocol-english",
+    "focusIsSave": true,
+    "status": "Use http:// or https:// for the server URL.DetailsServerBaseUrlError: Server URL must use HTTP or HTTPS.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:46974)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": "ftp://127.0.0.1:38949/"
+  },
+  {
+    "step": "same-unsupported-protocol-chinese",
+    "status": "服务地址必须以 http:// 或 https:// 开头。详细信息ServerBaseUrlError: Server URL must use HTTP or HTTPS.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:46974)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": "ftp://127.0.0.1:38949/"
+  },
+  {
+    "step": "query-english",
+    "focusIsSave": true,
+    "status": "Remove the query (?...) from the server URL.DetailsServerBaseUrlError: Server URL must not include a query.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:47061)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": "http://localhost:38949?b15=public-placeholder"
+  },
+  {
+    "step": "same-query-chinese",
+    "status": "请移除服务地址中的查询部分（?...）。详细信息ServerBaseUrlError: Server URL must not include a query.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:47061)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": "http://localhost:38949?b15=public-placeholder"
+  },
+  {
+    "step": "public-username-only-user-info-english",
+    "focusIsSave": true,
+    "status": "Remove credentials from the server URL and use the separate Username and Password fields.DetailsServerBaseUrlError: Use the username and password fields instead of credentials in the server URL.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:47163)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": "http://b15-public-placeholder@127.0.0.1:38949/"
+  },
+  {
+    "step": "same-public-username-only-user-info-chinese",
+    "status": "请移除服务地址中的用户名或密码，改用独立的“用户名”和“密码”字段。详细信息ServerBaseUrlError: Use the username and password fields instead of credentials in the server URL.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:47163)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": "http://b15-public-placeholder@127.0.0.1:38949/"
+  },
+  {
+    "step": "empty-query-delimiter-chinese",
+    "status": "请移除服务地址中的查询部分（?...）。详细信息ServerBaseUrlError: Server URL must not include a query.\n    at j0 (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:47061)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134871\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": "http://localhost:38949?"
+  },
+  {
+    "step": "empty-address-structural-error-current-language",
+    "detailsOpen": true,
+    "focus": "SUMMARY",
+    "status": "连接更新未完成。请查看详细信息后重试。详细信息TypeError: persisted overlay settings payload is invalid\n    at LS (http://localhost:38949/ui/assets/main-BydIgfm3.js:61:54648)\n    at ek (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:136200)\n    at http://localhost:38949/ui/assets/main-BydIgfm3.js:62:134865\n    at So (http://localhost:38949/ui/assets/main-BydIgfm3.js:62:135175)\n    at async Ke (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:646)\n    at async F (http://localhost:38949/ui/assets/NetworkPanel-D5TKXP8n.js:1:2219)",
+    "url": ""
+  },
+  {
+    "step": "restored-original-url-without-saving-valid-endpoint",
+    "focus": "INPUT",
+    "passwordEmpty": true,
+    "status": null,
+    "url": "http://localhost:38949"
+  },
+  {
+    "step": "original-server-online-after-invalid-save-journey",
+    "connectionLabel": "连接诊断 · 在线 · 端口 38949",
+    "connectionText": "在线",
+    "pageUrl": "http://localhost:38949/ui/"
+  },
+  {
+    "step": "reopened-panel-reads-original-applied-url",
+    "passwordEmpty": true,
+    "status": null,
+    "title": "网络",
+    "url": "http://localhost:38949"
+  }
+]

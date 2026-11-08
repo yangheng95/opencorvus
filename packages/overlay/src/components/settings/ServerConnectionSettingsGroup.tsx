@@ -1,5 +1,6 @@
 import { Feedback } from "../ui/Feedback"
-import { createSignal, onCleanup } from "solid-js"
+import { createSignal, onCleanup, Show } from "solid-js"
+import { ServerBaseUrlError } from "@opencorvus-ai/transport-protocol"
 import { checkConnection } from "../../services/connection"
 import { refreshConnectionWorkspace } from "../../services/connection-projection"
 import { settingsStore, SettingsActivationError } from "../../store/settings"
@@ -7,12 +8,24 @@ import { saveConnectionSettings } from "../../services/connection-settings"
 import { isApiAuthorityCurrent, ApiAuthorityChangedError } from "../../services/api"
 import { FileEditorAdmissionError } from "../../services/file-workbench"
 import { t } from "../../utils/i18n"
+import { formatErrorDetails } from "../../utils/error-details"
 import { Button } from "../ui/Button"
 import { SettingsGroup, SettingsRow } from "./layout"
 import { TextField } from "../ui/TextField"
 
-function errorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error)
+function connectionFailureMessage(error: unknown): string {
+  if (error instanceof ServerBaseUrlError) {
+    switch (error.reason) {
+      case "malformed": return t("settings.server_url_error.malformed")
+      case "unsupported_protocol": return t("settings.server_url_error.unsupported_protocol")
+      case "query": return t("settings.server_url_error.query")
+      case "fragment": return t("settings.server_url_error.fragment")
+      case "user_info": return t("settings.server_url_error.user_info")
+    }
+  }
+  return t(error instanceof SettingsActivationError
+    ? "settings.connection_apply_failed"
+    : "settings.connection_update_failed")
 }
 
 export function ServerConnectionSettingsGroup() {
@@ -22,7 +35,7 @@ export function ServerConnectionSettingsGroup() {
     password: settingsStore.password,
   })
   const [saved, setSaved] = createSignal(false)
-  const [error, setError] = createSignal("")
+  const [error, setError] = createSignal<{ cause: unknown } | null>(null)
   const [saving, setSaving] = createSignal(false)
   const [referencesRetired, setReferencesRetired] = createSignal(false)
   let saveGeneration = 0
@@ -33,7 +46,7 @@ export function ServerConnectionSettingsGroup() {
     if (savedTimer) clearTimeout(savedTimer)
     savedTimer = undefined
     setSaved(false)
-    setError("")
+    setError(null)
     setReferencesRetired(false)
   }
 
@@ -44,7 +57,7 @@ export function ServerConnectionSettingsGroup() {
     const ownsSave = () => saveGeneration === generation
     setSaving(true)
     setSaved(false)
-    setError("")
+    setError(null)
     let persistenceConfirmed = false
     try {
       const { authority, retiredReferences } = await saveConnectionSettings(snapshot)
@@ -55,7 +68,7 @@ export function ServerConnectionSettingsGroup() {
       if (!ownsSave() || !isApiAuthorityCurrent(authority)) return
       if (connected) await refreshConnectionWorkspace(authority)
       if (!ownsSave() || !isApiAuthorityCurrent(authority)) return
-      setError("")
+      setError(null)
       setSaved(true)
       savedTimer = setTimeout(() => {
         if (ownsSave()) setSaved(false)
@@ -69,11 +82,7 @@ export function ServerConnectionSettingsGroup() {
         return
       }
       setSaved(false)
-      setError(
-        nextError instanceof SettingsActivationError
-          ? nextError.message
-          : t("settings.save_failed", { error: errorMessage(nextError) }),
-      )
+      setError({ cause: nextError })
     } finally {
       if (ownsSave()) setSaving(false)
     }
@@ -145,11 +154,11 @@ export function ServerConnectionSettingsGroup() {
           </Button>
         }
       />
-      {error() ? (
-        <Feedback tone="error" data-ui="settings-server-status">
-          {error()}
+      <Show when={error()}>{(failure) => (
+        <Feedback tone="error" data-ui="settings-server-status" details={formatErrorDetails(failure().cause)}>
+          {connectionFailureMessage(failure().cause)}
         </Feedback>
-      ) : null}
+      )}</Show>
       {referencesRetired() ? <Feedback tone="info">{t("settings.connection_references_retired")}</Feedback> : null}
     </SettingsGroup>
   )

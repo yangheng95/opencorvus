@@ -2966,6 +2966,15 @@ confirmed preference state after rejected admission. Explicit empty usernames
 remain empty across cold load and subsequent saves; password/header semantics
 stay with the existing authentication fields. These local errors do not invent
 a server response status or request ID.
+The Connection settings group retains the original current failure and projects
+its summary in the active interface language. Its private typed ServerBaseUrlError
+reason mapping supplies corrective address guidance; it does not parse the input
+again or match technical message text. Unknown failures describe an incomplete
+connection update because settlement can fail before or after persistence.
+SettingsActivationError keeps its distinct saved-but-not-applied fact. The same
+Feedback details retain the original diagnostic through the existing formatter;
+its stable content owner survives an in-place language change. Input editing and
+the existing save generation retire feedback through their original lifecycle.
 
 ## Current Surface Ownership
 
