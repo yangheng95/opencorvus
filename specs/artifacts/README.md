@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [新建文件夹键盘证据](2026-11-09-folder-create-focus/README.md)：真实目录页面、截图和原文。
+
 - [复制键盘接续证据](2026-11-09-file-copy-focus/README.md)：真实桌面截图、路径回执与原文字节。
 
 - [Windows设备别名证据](2026-11-09-windows-device-basename/README.md)：正向错误合同、普通名称实际页面和字节。

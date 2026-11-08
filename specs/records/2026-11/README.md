@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [新建文件夹键盘位置](2026-11-09-folder-create-focus.md)：工具栏/目录上下文和真实创建回执。
+
 - [复制键盘接续](2026-11-09-file-copy-focus.md)：普通/搜索复制与真实键盘位置调查。
 
 - [Windows设备别名合同](2026-11-09-windows-device-basename.md)：上标数字别名、纯校验与正常Unicode原文。

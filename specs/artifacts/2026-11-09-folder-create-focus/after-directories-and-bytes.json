@@ -1,0 +1,69 @@
+{
+  "directories": [
+    {
+      "parent": "",
+      "status": 200,
+      "node": {
+        "name": "new-folder",
+        "path": "new-folder",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b27\\project-after\\new-folder",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      "physicalType": "directory",
+      "physicalChildren": []
+    },
+    {
+      "parent": "",
+      "status": 200,
+      "node": {
+        "name": "search-folder",
+        "path": "search-folder",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b27\\project-after\\search-folder",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      "physicalType": "directory",
+      "physicalChildren": []
+    },
+    {
+      "parent": "dest",
+      "status": 200,
+      "node": {
+        "name": "资料目录",
+        "path": "dest\\资料目录",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b27\\project-after\\dest\\资料目录",
+        "type": "directory",
+        "ignored": false,
+        "directoryTarget": true
+      },
+      "physicalType": "directory",
+      "physicalChildren": []
+    }
+  ],
+  "files": [
+    {
+      "path": "notes.txt",
+      "status": 200,
+      "publicContent": "b27 original source\r\n资料保持\r\n",
+      "physicalContent": "b27 original source\r\n资料保持\r\n",
+      "bytes": 35
+    },
+    {
+      "path": "dest/other.txt",
+      "status": 200,
+      "publicContent": "b27 child original\n",
+      "physicalContent": "b27 child original\n",
+      "bytes": 19
+    },
+    {
+      "path": "dest/编辑.txt",
+      "status": 200,
+      "publicContent": "b27 saved file\n编辑保持\n",
+      "physicalContent": "b27 saved file\n编辑保持\n",
+      "bytes": 28
+    }
+  ]
+}

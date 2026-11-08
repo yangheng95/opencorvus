@@ -1405,6 +1405,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     const targetDir = normalizeExplorerPath(targetDirInput ?? contextTargetDirectory(selectedItemList()[0] ?? null))
+    const focus = type === "directory" ? capturePathMutationFocus(scope) : undefined
     const result = await showAppDialog({
       kind: `file-${type}-create`,
       title: type === "file" ? t("explorer.new_file") : t("explorer.new_folder"),
@@ -1416,6 +1417,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputRequiredMessage: t("explorer.name_required"),
       okLabel: type === "file" ? t("explorer.create_file") : t("explorer.create_folder"),
       cancel: true,
+      returnFocusTarget: focus?.returnFocusTarget,
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
@@ -1441,6 +1443,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setSingleSelection(selectionFromNode(node))
       outcome.refresh = await refreshFileViews([parent], scope)
       if (!ownsOperation()) return
+      focus?.restore(node.path, outcome.refresh, ownsOperation)
       if (type === "file") {
         try {
           const opened = await openFileEditor(node.path, scope)

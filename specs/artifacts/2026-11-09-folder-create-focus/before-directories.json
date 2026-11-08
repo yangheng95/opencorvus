@@ -1,0 +1,30 @@
+[
+  {
+    "parent": "",
+    "status": 200,
+    "node": {
+      "name": "new-folder",
+      "path": "new-folder",
+      "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b27\\project-before\\new-folder",
+      "type": "directory",
+      "ignored": false,
+      "directoryTarget": true
+    },
+    "physicalType": "directory",
+    "physicalChildren": []
+  },
+  {
+    "parent": "dest",
+    "status": 200,
+    "node": {
+      "name": "child-folder",
+      "path": "dest\\child-folder",
+      "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b27\\project-before\\dest\\child-folder",
+      "type": "directory",
+      "ignored": false,
+      "directoryTarget": true
+    },
+    "physicalType": "directory",
+    "physicalChildren": []
+  }
+]
