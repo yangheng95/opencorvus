@@ -1258,6 +1258,14 @@ neutral localized label. Unclassified original audit reasons remain recorded
 data in Operation details under localized labels; the main timeline uses the
 current language without rewriting participants' original content or the ledger.
 
+The app-lifetime WorkLedger notification stream has independent subscribers for
+its real typed events. Main retains its one task/handoff consumer; metadata
+views subscribe without replacing it or opening another physical stream.
+Dispatch keeps current authority and handle ownership, isolates consumer errors,
+and retires a removed subscriber. The final subscriber owns normal closure.
+Reconnect publishes the original connected event to the same current consumers;
+it does not fabricate another change event or advance a Protocol cursor.
+
 Documentation and non-UI contract checks may validate Board transport shape.
 Overlay presentation and interaction are accepted only through a real isolated
 page, direct interaction, screenshots bound to the changed region, and manual

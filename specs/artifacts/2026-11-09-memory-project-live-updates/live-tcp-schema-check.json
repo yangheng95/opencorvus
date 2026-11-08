@@ -1,0 +1,113 @@
+{
+  "date": "2026-11-08T21:52:55.240Z",
+  "results": [
+    {
+      "operation": "project.list",
+      "status": 200,
+      "requestID": "0d8c7c07-4309-4e6f-b3c9-c726c865bb0e",
+      "body": [
+        {
+          "id": "prj_hNfR2NrdSg09eBDWbUal",
+          "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-after-alpha",
+          "name": "Alpha",
+          "time": {
+            "created": 1794174091986,
+            "updated": 1794174092340
+          },
+          "sandboxes": []
+        },
+        {
+          "id": "prj_h4zIW31CpGSorqd81jMj",
+          "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-after-li",
+          "name": "Beta",
+          "time": {
+            "created": 1794174092699,
+            "updated": 1794174362861
+          },
+          "sandboxes": []
+        },
+        {
+          "id": "prj_hmbwFhKB9C27y5qvFaZp",
+          "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-after-zhang",
+          "name": "Gamma",
+          "time": {
+            "created": 1794174093011,
+            "updated": 1794174690179
+          },
+          "sandboxes": []
+        }
+      ],
+      "schemaValid": true,
+      "registeredIdentitiesExact": true
+    },
+    {
+      "operation": "experimental.projectMemory.get",
+      "project": {
+        "id": "prj_hNfR2NrdSg09eBDWbUal",
+        "name": "Alpha",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-after-alpha"
+      },
+      "status": 200,
+      "requestID": "1ed0a83f-5409-4e4d-a794-104ff43d4f09",
+      "body": {
+        "filename": "MEMORY.MD",
+        "scope": "project",
+        "content": "",
+        "revision": 0,
+        "tokenCount": 0,
+        "status": "idle",
+        "pendingCount": 0,
+        "droppedPendingCount": 0,
+        "timeCreated": 1794174253759,
+        "timeUpdated": 1794174254225
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "experimental.projectMemory.get",
+      "project": {
+        "id": "prj_h4zIW31CpGSorqd81jMj",
+        "name": "Beta",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-after-li"
+      },
+      "status": 200,
+      "requestID": "3eab152b-fb04-4b7b-b762-ca68be96290e",
+      "body": {
+        "filename": "MEMORY.MD",
+        "scope": "project",
+        "content": "",
+        "revision": 0,
+        "tokenCount": 0,
+        "status": "idle",
+        "pendingCount": 0,
+        "droppedPendingCount": 0,
+        "timeCreated": 1794174353275,
+        "timeUpdated": 1794174353618
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "experimental.projectMemory.get",
+      "project": {
+        "id": "prj_hmbwFhKB9C27y5qvFaZp",
+        "name": "Gamma",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-after-zhang"
+      },
+      "status": 200,
+      "requestID": "1133852f-b605-4cf8-af9a-8d029e063aec",
+      "body": {
+        "filename": "MEMORY.MD",
+        "scope": "project",
+        "content": "",
+        "revision": 0,
+        "tokenCount": 0,
+        "status": "idle",
+        "pendingCount": 0,
+        "droppedPendingCount": 0,
+        "timeCreated": 1794174727462,
+        "timeUpdated": 1794174727804
+      },
+      "schemaValid": true
+    }
+  ]
+}

@@ -233,7 +233,7 @@ import {
   type MissionWakeResult,
 } from "./services/mission"
 import type { WorkLedgerChatRow, WorkLedgerMissionRow, WorkLedgerTaskRow } from "./services/work-ledger"
-import { setWorkLedgerChangeHandler, startSSE, stopSSE, type WorkLedgerStreamEvent } from "./services/sse"
+import { subscribeWorkLedgerChanges, startSSE, stopSSE, type WorkLedgerStreamEvent } from "./services/sse"
 import { refreshProjectMemory } from "./services/project-memory"
 import { openImagePreview } from "./services/image-preview"
 import {
@@ -559,8 +559,7 @@ const [missionLauncherSubmitting, setMissionLauncherSubmitting] = createSignal(f
 const [expertSquadLauncherSubmitting, setExpertSquadLauncherSubmitting] = createSignal(false)
 const [assistantLauncherSubmitting, setAssistantLauncherSubmitting] = createSignal(false)
 const [acceptedComposerSubmissionRevision, setAcceptedComposerSubmissionRevision] = createSignal(0)
-setWorkLedgerChangeHandler(handleWorkLedgerStreamEvent)
-disposers.push(() => setWorkLedgerChangeHandler(null))
+disposers.push(subscribeWorkLedgerChanges(handleWorkLedgerStreamEvent))
 const [composerIntent, setComposerIntent] = createSignal<ComposerIntent>(DEFAULT_COMPOSER_INTENT)
 
 createEffect(() => {

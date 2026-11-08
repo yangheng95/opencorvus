@@ -561,7 +561,7 @@ export function parseWorkLedgerStreamEvent(value: unknown): WorkLedgerStreamEven
   return WorkLedgerActionEvent.parse(value)
 }
 
-let workLedgerChangeHandler: ((event: WorkLedgerStreamEvent) => void) | null = null
+const workLedgerChangeHandlers = new Set<(event: WorkLedgerStreamEvent) => void>()
 const mailboxChangeHandlers = new Set<() => void>()
 
 function dispatchMailboxRefresh(): void {
@@ -584,16 +584,32 @@ export function subscribeMailboxChanges(
   return () => mailboxChangeHandlers.delete(handler)
 }
 
-export function setWorkLedgerChangeHandler(handler: ((event: WorkLedgerStreamEvent) => void) | null): void {
-  workLedgerChangeHandler = handler
-  if (!handler) stopWorkLedgerSSE()
+export function subscribeWorkLedgerChanges(handler: (event: WorkLedgerStreamEvent) => void): () => void {
+  workLedgerChangeHandlers.add(handler)
+  return () => {
+    workLedgerChangeHandlers.delete(handler)
+    if (workLedgerChangeHandlers.size === 0) stopWorkLedgerSSE()
+  }
+}
+
+function reportWorkLedgerDispatchError(error: unknown, event: WorkLedgerStreamEvent): void {
+  const errorDetails = boundedErrorDetails(error)
+  AppLog.error("sse", "work ledger change handler failed", {
+    eventType: event.type,
+    error: errorDetails,
+    event: dispatchEventDiagnostic(event),
+    diagnosticID: "work-ledger-sse:dispatch-error",
+    diagnosticTitle: "Work Ledger event failed to render",
+    diagnosticMessage: "A Work Ledger change event threw while refreshing the sidebar.",
+    diagnosticDetails: dispatchNotificationDetails(errorDetails, event),
+  })
 }
 
 export function startWorkLedgerSSE(authority = captureApiAuthority()) {
   assertApiAuthorityCurrent(authority)
   if (workLedgerStream && isApiAuthorityCurrent(workLedgerStream.authority)) return
   stopWorkLedgerSSE()
-  if (!workLedgerChangeHandler) return
+  if (workLedgerChangeHandlers.size === 0) return
   const transport = getHostTransport()
   const handle = transport.openStream(
     { path: "work-ledger/events", authority },
@@ -637,18 +653,17 @@ export function startWorkLedgerSSE(authority = captureApiAuthority()) {
               selectedTaskRecoveryScheduler,
             )
           }
-          workLedgerChangeHandler?.(workLedgerEvent)
+          for (const handler of [...workLedgerChangeHandlers]) {
+            if (!isApiAuthorityCurrent(authority) || handle !== workLedgerStream?.handle) return
+            if (!workLedgerChangeHandlers.has(handler)) continue
+            try {
+              handler(workLedgerEvent)
+            } catch (error) {
+              reportWorkLedgerDispatchError(error, workLedgerEvent)
+            }
+          }
         } catch (err) {
-          const errorDetails = boundedErrorDetails(err)
-          AppLog.error("sse", "work ledger change handler failed", {
-            eventType: workLedgerEvent.type,
-            error: errorDetails,
-            event: dispatchEventDiagnostic(workLedgerEvent),
-            diagnosticID: "work-ledger-sse:dispatch-error",
-            diagnosticTitle: "Work Ledger event failed to render",
-            diagnosticMessage: "A Work Ledger change event threw while refreshing the sidebar.",
-            diagnosticDetails: dispatchNotificationDetails(errorDetails, workLedgerEvent),
-          })
+          reportWorkLedgerDispatchError(err, workLedgerEvent)
         }
       },
       onClose: (_reason, info) => {

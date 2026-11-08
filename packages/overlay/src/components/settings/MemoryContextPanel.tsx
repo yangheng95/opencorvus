@@ -1,9 +1,10 @@
 import { Feedback } from "../ui/Feedback"
-import { createEffect, createMemo, createSignal, onCleanup, Show } from "solid-js"
-import { captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
+import { batch, createEffect, createMemo, createSignal, onCleanup, Show, untrack } from "solid-js"
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { activeProjectDirectory } from "../../services/project-directory"
 import { refreshProjectMemory, type ProjectMemoryDocument } from "../../services/project-memory"
 import { loadWorkLedger, type WorkLedgerCursor } from "../../services/work-ledger"
+import { subscribeWorkLedgerChanges } from "../../services/sse"
 import { projectDirectoryKey, projectDisplayName } from "../../utils/project-directory"
 import { localeTag, t } from "../../utils/i18n"
 import { MemoryPanel } from "../MemoryPanel"
@@ -33,19 +34,42 @@ export function MemoryContextPanel() {
       projectName(left).localeCompare(projectName(right), locale) || left.directory.localeCompare(right.directory),
     )
   })
-  const [selectedProject, setSelectedProject] = createSignal<MemoryProjectOption | null>(null)
+  const [selectedProjectKey, setSelectedProjectKey] = createSignal<string | null>(null)
+  const selectedProject = createMemo(() => projects().find((project) => project.key === selectedProjectKey()) ?? null)
+  const selectedDirectory = createMemo(() => selectedProject()?.directory)
+  const [projectRefreshToken, setProjectRefreshToken] = createSignal(0)
   const [loadingProjects, setLoadingProjects] = createSignal(true)
+  const memoryPanelActive = createMemo(() => !loadingProjects() || projects().length > 0)
   const [projectLoadError, setProjectLoadError] = createSignal("")
   const [document, setDocument] = createSignal<ProjectMemoryDocument | null>(null)
   const [loadingDocument, setLoadingDocument] = createSignal(false)
   const [documentError, setDocumentError] = createSignal("")
+  let loadedProjectsAuthority: ApiAuthority | undefined
+
+  onCleanup(
+    subscribeWorkLedgerChanges((event) => {
+      if (
+        event.type === "work-ledger.connected" ||
+        (event.type === "work-ledger.changed" && event.sourceType === "project.updated")
+      ) {
+        setProjectRefreshToken((value) => value + 1)
+      }
+    }),
+  )
 
   createEffect(() => {
+    projectRefreshToken()
     const authority = captureApiAuthority()
+    const retainProjects = !!loadedProjectsAuthority && isApiAuthorityCurrent(loadedProjectsAuthority)
     const controller = new AbortController()
     const ownsLoad = () => !controller.signal.aborted && isApiAuthorityCurrent(authority)
-    setProjects([])
-    setSelectedProject(null)
+    if (!retainProjects) {
+      loadedProjectsAuthority = undefined
+      batch(() => {
+        setProjects([])
+        setSelectedProjectKey(null)
+      })
+    }
     onCleanup(() => controller.abort())
     void (async () => {
       setLoadingProjects(true)
@@ -69,12 +93,19 @@ export function MemoryContextPanel() {
           rows.set(currentKey, { key: currentKey, directory: currentDirectory })
         }
         const options = [...rows.values()]
-        setProjects(options)
-        setSelectedProject(options.find((project) => project.key === currentKey) ?? null)
+        const selectedKey = retainProjects ? untrack(selectedProjectKey) : currentKey
+        batch(() => {
+          loadedProjectsAuthority = authority
+          setProjects(options)
+          setSelectedProjectKey(options.find((project) => project.key === selectedKey)?.key ?? null)
+        })
       } catch (error) {
         if (!ownsLoad()) return
-        setProjects([])
-        setSelectedProject(null)
+        loadedProjectsAuthority = undefined
+        batch(() => {
+          setProjects([])
+          setSelectedProjectKey(null)
+        })
         setProjectLoadError(error instanceof Error ? error.message : String(error))
       } finally {
         if (ownsLoad()) setLoadingProjects(false)
@@ -83,16 +114,16 @@ export function MemoryContextPanel() {
   })
 
   createEffect(() => {
-    const project = selectedProject()
+    const directory = selectedDirectory()
     const authority = captureApiAuthority()
     let active = true
     onCleanup(() => { active = false })
-    const ownsLoad = () => active && isApiAuthorityCurrent(authority) && selectedProject() === project
+    const ownsLoad = () => active && isApiAuthorityCurrent(authority) && selectedDirectory() === directory
     setDocument(null)
     setDocumentError("")
-    setLoadingDocument(!!project)
-    if (!project) return
-    void refreshProjectMemory({ authority, directory: project.directory }).then(
+    setLoadingDocument(!!directory)
+    if (!directory) return
+    void refreshProjectMemory({ authority, directory }).then(
       (value) => { if (ownsLoad()) setDocument(value) },
       (error) => { if (ownsLoad()) setDocumentError(error instanceof Error ? error.message : String(error)) },
     ).finally(() => { if (ownsLoad()) setLoadingDocument(false) })
@@ -116,11 +147,11 @@ export function MemoryContextPanel() {
           <SelectControl<MemoryProjectOption>
             options={projectOptions()}
             value={selectedProject()}
-            onChange={setSelectedProject}
+            onChange={(project) => setSelectedProjectKey(project?.key ?? null)}
             optionValue="key"
             optionTextValue={(project) => `${projectName(project)} ${project.directory}`}
             disallowEmptySelection
-            disabled={loadingProjects() || projects().length === 0}
+            disabled={projects().length === 0}
             triggerDataUI="memory-project-picker"
             ariaLabel={t("memory.project_picker_label")}
             renderValue={(project) => <span>{project ? projectName(project) : pickerPlaceholder()}</span>}
@@ -173,7 +204,7 @@ export function MemoryContextPanel() {
         description={t("memory.saved_context_description")}
         contentInset
       >
-        <MemoryPanel directory={() => selectedProject()?.directory} active={!loadingProjects()} />
+        <MemoryPanel directory={selectedDirectory} active={memoryPanelActive()} />
       </SettingsGroup>
     </SettingsPanel>
   )

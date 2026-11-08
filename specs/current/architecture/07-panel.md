@@ -2045,6 +2045,12 @@ The Memory project picker derives display order from its loaded options and the
 current interface locale. Language changes reorder the same option objects,
 retaining the selected Project, document scope and open conversation. Loading
 owns the raw project data; locale changes do not reload it or replace selection.
+The same shared WorkLedger connection refreshes those raw options on Project
+updates and reconnect. Selection is the option's directory key, with its current
+member and directory derived from the one loaded snapshot. A metadata refresh
+retains a present selection; directory and availability memos keep document and
+Notes input scope stable while labels change. New connection authority retires
+the old snapshot and reads before publishing another Project's options.
 The current popup receives Escape before the settings page. Closing a Tooltip
 preserves its trigger focus and any required activity selection; another Escape
 can dismiss its enclosing menu or settings page through that owner's lifecycle.

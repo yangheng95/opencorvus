@@ -1,0 +1,98 @@
+{
+  "qualification": {
+    "ui": "Manual isolated development /ui and personally viewed screenshots; no UI automation.",
+    "models": "No credentials, Provider, model, Session, Message or Task/Mission execution acceptance.",
+    "mutableMetadata": "Current timeUpdated/availabilityGeneration may advance normally; no equality gate across observations."
+  },
+  "phases": {
+    "before": {
+      "projects": [
+        {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-before-alpha",
+          "originalNotesBytes": 54,
+          "worktreeAndGitContentExact": true,
+          "head": "96f4ddf1af159dd54609429f8edc9155c592acec",
+          "status": [
+            "?? .gitattributes",
+            "?? .gitignore",
+            "?? .opencorvus/"
+          ]
+        },
+        {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-before-li",
+          "originalNotesBytes": 51,
+          "worktreeAndGitContentExact": true,
+          "head": "887d1401151b2a610c29e32dfa45eeb446ea8933",
+          "status": [
+            "?? .gitattributes",
+            "?? .gitignore",
+            "?? .opencorvus/"
+          ]
+        },
+        {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-before-zhang",
+          "originalNotesBytes": 54,
+          "worktreeAndGitContentExact": true,
+          "head": "705671ced790f4a7cb2898f342ce2ccb9b5a4df2",
+          "status": [
+            "?? .gitattributes",
+            "?? .gitignore"
+          ]
+        }
+      ],
+      "databaseCounts": {
+        "project": 3,
+        "session": 0,
+        "message": 0,
+        "memory_file": 2,
+        "memory_chunk": 2
+      },
+      "configFiles": []
+    },
+    "after": {
+      "projects": [
+        {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-after-alpha",
+          "originalNotesBytes": 53,
+          "worktreeAndGitContentExact": true,
+          "head": "e69218553369e8f053be042534e9873d9d9a5ab5",
+          "status": [
+            "?? .gitattributes",
+            "?? .gitignore",
+            "?? .opencorvus/"
+          ]
+        },
+        {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-after-li",
+          "originalNotesBytes": 50,
+          "worktreeAndGitContentExact": true,
+          "head": "038733bcfb8f4b5c93db0fdb872b93ca2ca0fe9d",
+          "status": [
+            "?? .gitattributes",
+            "?? .gitignore",
+            "?? .opencorvus/"
+          ]
+        },
+        {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-after-zhang",
+          "originalNotesBytes": 53,
+          "worktreeAndGitContentExact": true,
+          "head": "7acb93c7f4add6523cbc7f204a441ee1b51b7eae",
+          "status": [
+            "?? .gitattributes",
+            "?? .gitignore",
+            "?? .opencorvus/"
+          ]
+        }
+      ],
+      "databaseCounts": {
+        "project": 3,
+        "session": 0,
+        "message": 0,
+        "memory_file": 3,
+        "memory_chunk": 3
+      },
+      "configFiles": []
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "phase": "before",
+  "date": "2026-11-08T21:32:16.720Z",
+  "target": {
+    "id": "prj_hGEiheFVqvFWvJLZxI5b",
+    "name": "李四",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-before-li"
+  },
+  "qualification": "A separate actual SSE checker client; browser interaction is manual. No UI interception, Session, model or credentials.",
+  "connected": {
+    "type": "work-ledger.connected",
+    "sourceType": "work-ledger.connected",
+    "sequence": 0
+  },
+  "response": {
+    "status": 200,
+    "requestID": "b95280e4-5c3b-485a-8f15-8fad09cae06a",
+    "body": {
+      "id": "prj_hGEiheFVqvFWvJLZxI5b",
+      "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-before-li",
+      "name": "Beta",
+      "time": {
+        "created": 1794173313313,
+        "updated": 1794173537314
+      },
+      "sandboxes": []
+    }
+  },
+  "event": {
+    "type": "work-ledger.changed",
+    "sourceType": "project.updated",
+    "projectID": "prj_hGEiheFVqvFWvJLZxI5b",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-before-li",
+    "sequence": 1794173537314
+  },
+  "events": [
+    {
+      "type": "work-ledger.connected",
+      "sourceType": "work-ledger.connected",
+      "sequence": 0
+    },
+    {
+      "type": "work-ledger.changed",
+      "sourceType": "project.updated",
+      "projectID": "prj_hGEiheFVqvFWvJLZxI5b",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b39\\project-before-li",
+      "sequence": 1794173537314
+    }
+  ],
+  "schemaValid": true,
+  "actualPublishedUpdateMatchesReceipt": true
+}

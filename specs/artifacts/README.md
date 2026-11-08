@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [记忆项目实时更新证据](2026-11-09-memory-project-live-updates/README.md)
 - [记忆项目语言排序证据](2026-11-09-memory-project-locale-order/README.md)
 - [文件搜索键盘入口证据](2026-11-09-explorer-search-keyboard-entry/README.md)
 - [Planner 会话归属证据](2026-11-09-planner-session-ownership/README.md)
