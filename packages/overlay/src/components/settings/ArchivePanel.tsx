@@ -1,5 +1,5 @@
 import { Feedback } from "../ui/Feedback"
-import { For, Show, createEffect, createSignal, onCleanup, untrack } from "solid-js"
+import { For, Show, createEffect, createSignal, onCleanup, untrack, type JSX } from "solid-js"
 import {
   ApiAuthorityChangedError,
   captureApiAuthority,
@@ -26,6 +26,25 @@ import { SettingsDetailSection, SettingsEmpty, SettingsPanel, SettingsRow } from
 const ARCHIVE_PAGE_SIZE = 100
 const DELETE_CONFIRM_WINDOW_MS = 3_000
 
+type ArchiveFailure = {
+  operation: "initial" | "append" | "refresh" | "restore" | "delete"
+  cause: unknown
+}
+
+function archiveFailureSummary(operation: ArchiveFailure["operation"]): string {
+  if (operation === "restore") return t("archive.restore_failed")
+  if (operation === "delete") return t("archive.delete_failed")
+  return t("archive.load_failed")
+}
+
+function ArchiveFailureFeedback(props: { failure: ArchiveFailure; actions?: JSX.Element }) {
+  return (
+    <Feedback tone="error" details={formatErrorDetails(props.failure.cause)} actions={props.actions}>
+      {archiveFailureSummary(props.failure.operation)}
+    </Feedback>
+  )
+}
+
 function kindIcon(row: WorkLedgerItemRow): IconName {
   if (row.kind === "mission") return "mission"
   if (row.kind === "chat") return conversationExperienceIcon(row.experience)
@@ -51,15 +70,35 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   const [nextCursor, setNextCursor] = createSignal<WorkLedgerCursor | null>(null)
   const [loading, setLoading] = createSignal(false)
   const [busyID, setBusyID] = createSignal("")
-  const [error, setError] = createSignal("")
+  const [failure, setFailure] = createSignal<ArchiveFailure>()
   const [committedAction, setCommittedAction] = createSignal<{ action: "restore" | "delete"; title: string }>()
   let requestGeneration = 0
   let controller: AbortController | undefined
   let panelElement: HTMLDivElement | undefined
   let headingElement: HTMLSpanElement | undefined
+  let continuationElement: HTMLDivElement | undefined
 
   const ownsRequest = (generation: number, authority: ApiAuthority) =>
     generation === requestGeneration && isApiAuthorityCurrent(authority)
+
+  const continuationFailure = () => {
+    const current = failure()
+    return current?.operation === "append" ? current : undefined
+  }
+  const panelFailure = () => {
+    const current = failure()
+    return current?.operation === "append" ? undefined : current
+  }
+
+  const recordFailure = (id: string, operation: ArchiveFailure["operation"], cause: unknown) => {
+    setFailure({ operation, cause })
+    reportError({
+      id,
+      title: archiveFailureSummary(operation),
+      message: cause instanceof Error ? cause.message : String(cause),
+      details: formatErrorDetails(cause),
+    })
+  }
 
   const readPages = async (input: {
     cursor: WorkLedgerCursor | null
@@ -130,7 +169,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     const generation = ++requestGeneration
     const authority = captureApiAuthority()
     setLoading(true)
-    setError("")
+    setFailure(undefined)
     try {
       const result = await readPages({
         search: search().trim(),
@@ -149,18 +188,14 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         cause instanceof ApiAuthorityChangedError
       )
         return
-      const message = cause instanceof Error ? cause.message : String(cause)
-      setError(message)
-      reportError({
-        id: "settings:archive:load",
-        title: t("archive.load_failed"),
-        message,
-        details: formatErrorDetails(cause),
-      })
+      recordFailure("settings:archive:load", append ? "append" : "initial", cause)
     } finally {
       if (ownsRequest(generation, authority)) {
         if (controller === requestController) controller = undefined
         setLoading(false)
+        if (append && continuationFailure() && continuationElement?.contains(document.activeElement)) {
+          continuationElement.scrollIntoView({ block: "nearest" })
+        }
       }
     }
   }
@@ -180,7 +215,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     const authority = captureApiAuthority()
     const ownsAction = () => ownsRequest(generation, authority)
     setBusyID(rowKey)
-    setError("")
+    setFailure(undefined)
     setCommittedAction(undefined)
     let committed = false
     try {
@@ -224,14 +259,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       committed = true
     } catch (cause) {
       if (!ownsAction() || cause instanceof ApiAuthorityChangedError) return
-      const message = cause instanceof Error ? cause.message : String(cause)
-      setError(message)
-      reportError({
-        id: `settings:archive:${action}:${row.kind}:${row.id}`,
-        title: action === "restore" ? t("archive.restore_failed") : t("archive.delete_failed"),
-        message,
-        details: formatErrorDetails(cause),
-      })
+      recordFailure(`settings:archive:${action}:${row.kind}:${row.id}`, action, cause)
       setBusyID("")
       focusAfterAction(rowKey, previousIndex, previousFocus, false, ownsAction)
       return
@@ -265,14 +293,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       setNextCursor(result.nextCursor)
     } catch (cause) {
       if (requestController.signal.aborted || !ownsAction() || cause instanceof ApiAuthorityChangedError) return
-      const message = cause instanceof Error ? cause.message : String(cause)
-      setError(message)
-      reportError({
-        id: `settings:archive:${action}:refresh:${row.kind}:${row.id}`,
-        title: t("archive.load_failed"),
-        message,
-        details: formatErrorDetails(cause),
-      })
+      recordFailure(`settings:archive:${action}:refresh:${row.kind}:${row.id}`, "refresh", cause)
     } finally {
       if (!ownsAction()) return
       if (controller === requestController) controller = undefined
@@ -307,7 +328,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     setNextCursor(null)
     setBusyID("")
     setLoading(false)
-    setError("")
+    setFailure(undefined)
     setCommittedAction(undefined)
     untrack(() => void load(false))
   })
@@ -328,8 +349,8 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
           </Feedback>
         )}
       </Show>
-      <Show when={error() && rows().length > 0}>
-        <Feedback tone="error">{error()}</Feedback>
+      <Show when={rows().length > 0 && panelFailure()}>
+        {(current) => <ArchiveFailureFeedback failure={current()} />}
       </Show>
       <SearchField
         clearable
@@ -347,17 +368,23 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         description={t("archive.description")}
         actions={<Badge tone="muted">{rows().length.toLocaleString(localeTag())}</Badge>}
       >
-        <Show when={!error() || rows().length > 0} fallback={
-          <Feedback tone="error" actions={
-            <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void load(false)}>
-              <Icon name="refresh" />{t("common.retry")}
-            </Button>
-          }>{error()}</Feedback>
-        }>
         <Show when={rows().length > 0} fallback={
-          <SettingsEmpty>
-            {loading() ? t("common.loading") : search().trim() ? t("archive.no_results") : t("archive.empty")}
-          </SettingsEmpty>
+          <Show when={panelFailure()} fallback={
+            <SettingsEmpty>
+              {loading() ? t("common.loading") : search().trim() ? t("archive.no_results") : t("archive.empty")}
+            </SettingsEmpty>
+          }>
+            {(current) => (
+              <ArchiveFailureFeedback
+                failure={current()}
+                actions={
+                  <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void load(false)}>
+                    <Icon name="refresh" />{t("common.retry")}
+                  </Button>
+                }
+              />
+            )}
+          </Show>
         }>
           <For each={rows()}>
             {(row) => (
@@ -443,10 +470,12 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
             )}
           </For>
         </Show>
-        </Show>
       </SettingsDetailSection>
       <Show when={nextCursor()}>
-        <div class="dialog-actions compact">
+        <div ref={continuationElement} class="dialog-actions compact archive-page-footer">
+          <Show when={continuationFailure()}>
+            {(current) => <ArchiveFailureFeedback failure={current()} />}
+          </Show>
           <Button
             type="button"
             variant="outline"

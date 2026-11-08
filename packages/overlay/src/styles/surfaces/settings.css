@@ -3343,6 +3343,16 @@ button.s-row:focus-visible {
   flex-wrap: nowrap;
 }
 
+.dialog-actions.compact.archive-page-footer {
+  flex-direction: column;
+  align-items: stretch;
+  scroll-margin-block-end: var(--ui-gap-3xl);
+}
+
+.archive-page-footer > [data-ui="archive-load-more"] {
+  align-self: flex-end;
+}
+
 /* ─────────────────────────────────────────────────────────────
    Extracted from styles.css 2026-05-04 (continuation slice).
    Settings / channel-config / acceptance / llm

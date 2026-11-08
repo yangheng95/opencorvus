@@ -1,0 +1,78 @@
+{
+  "phase": "after",
+  "point": "online",
+  "operation": "workLedger.listArchived",
+  "checks": [
+    {
+      "params": {
+        "limit": 100
+      },
+      "status": 200,
+      "schemaValid": true,
+      "rows": 100,
+      "first": {
+        "id": "ses_-zUPZPRdczzcULN0VzCW",
+        "title": "Archive proof 102",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b47\\project-after",
+        "archived": 1794180981686
+      },
+      "last": {
+        "id": "ses_-zUPZPRmfzzbuPKPpk2a",
+        "title": "Archive proof 003",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b47\\project-after",
+        "archived": 1794180981126
+      },
+      "cursor": {
+        "pinned": false,
+        "updated": 1794180981127,
+        "rowKey": "chat:ses_-zUPZPRmfzzbuPKPpk2a"
+      }
+    },
+    {
+      "params": {
+        "limit": 100,
+        "cursorPinned": false,
+        "cursorUpdated": 1794180981127,
+        "cursorRowKey": "chat:ses_-zUPZPRmfzzbuPKPpk2a"
+      },
+      "status": 200,
+      "schemaValid": true,
+      "rows": 2,
+      "first": {
+        "id": "ses_-zUPZPRmnzztDwpAOH9P",
+        "title": "Archive proof 002",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b47\\project-after",
+        "archived": 1794180981119
+      },
+      "last": {
+        "id": "ses_-zUPZPRnBzzOsYAqt4mC",
+        "title": "Archive proof 001",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b47\\project-after",
+        "archived": 1794180981103
+      },
+      "cursor": null
+    },
+    {
+      "params": {
+        "limit": 100,
+        "search": "Archive proof 002"
+      },
+      "status": 200,
+      "schemaValid": true,
+      "rows": 1,
+      "first": {
+        "id": "ses_-zUPZPRmnzztDwpAOH9P",
+        "title": "Archive proof 002",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b47\\project-after",
+        "archived": 1794180981119
+      },
+      "last": {
+        "id": "ses_-zUPZPRmnzztDwpAOH9P",
+        "title": "Archive proof 002",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b47\\project-after",
+        "archived": 1794180981119
+      },
+      "cursor": null
+    }
+  ]
+}

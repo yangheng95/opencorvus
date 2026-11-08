@@ -5354,6 +5354,11 @@ Continuation and post-mutation reload keep the current query. The shared search
 field stays editable during reads and is disabled during a row mutation; clearing
 it reloads the first unfiltered page. Empty results are localized separately from
 an empty archive. Restore/delete and their focus ownership remain unchanged.
+Archive failures present a localized operation summary with the original
+diagnostic details. A failed continuation keeps the accepted rows and cursor
+and presents its failure above the existing continuation action. When focus
+remains there, the footer is brought into view without moving focus. Retrying
+uses that same cursor and query; first-page failures use the existing list Retry.
 After a committed row action, the same reader follows canonical cursor pages
 through the previously loaded surviving tail, or through exhaustion. Its boundary
 uses the public pinned/updated/kind:id order, independently of directory-scoped
