@@ -440,7 +440,6 @@ export function MemoryPanel(props: MemoryPanelProps) {
         <Show when={files().length > 0} fallback={emptyState()}>
           <For each={files()}>
             {(f) => {
-              const mode = searchMode() ? "search" : "list"
               const meta = () => {
                 const time = formatDate(f.timeUpdated)
                 const scoreHint = f.score != null
@@ -456,7 +455,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
               return (
                 <div
                   class="knowledge-item"
-                  data-mode={mode}
+                  data-mode={searchMode() ? "search" : "list"}
                   data-id={f.id}
                   data-expanded={expanded() ? "true" : "false"}
                 >
@@ -474,7 +473,12 @@ export function MemoryPanel(props: MemoryPanelProps) {
                       disabled={!filesSourceActive()}
                       onClick={() => toggleMemoryDetail(f.id)}
                     >
-                      <span class="knowledge-item-title">{f.title}</span>
+                      <span class="knowledge-item-title">
+                        {f.title}
+                        <Show when={searchMode()}>
+                          <span class="knowledge-item-search-label">{` (${t("memory.search_result")})`}</span>
+                        </Show>
+                      </span>
                       <span class="knowledge-item-meta-row">
                         <span class="knowledge-item-meta">{meta()}</span>
                         <Badge class="knowledge-scope" tone="neutral" size="sm" data-scope={f.scope}>

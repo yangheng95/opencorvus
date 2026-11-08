@@ -881,15 +881,12 @@ button.s-row:focus-visible {
   font-size: var(--ui-font-code);
 }
 
-/* Search-result highlight: when the panel is in search mode, the
-   meta line greens to indicate a match and the title gets a
-   trailing "(search)" marker. */
+/* Current search results highlight their metadata and show a localized label. */
 .knowledge-item[data-mode="search"] .knowledge-item-meta {
   color: var(--good);
 }
 
-.knowledge-item[data-mode="search"] .knowledge-item-title::after {
-  content: " (search)";
+.knowledge-item-search-label {
   font-weight: var(--ui-font-weight-body);
   color: var(--text-muted);
   font-size: var(--ui-font-body);

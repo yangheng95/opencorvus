@@ -2054,6 +2054,9 @@ the old snapshot and reads before publishing another Project's options.
 Notes rows derive their date and relevance label/number from the current locale
 inside the row's reactive display. Language changes retain the original memory
 identity, source, content, query and expanded detail without another data read.
+The current search mode also owns each row's result styling and localized result
+label. List/search transitions derive both from that same mode; CSS supplies
+presentation while the component supplies the visible and accessible text.
 The current popup receives Escape before the settings page. Closing a Tooltip
 preserves its trigger focus and any required activity selection; another Escape
 can dismiss its enclosing menu or settings page through that owner's lifecycle.

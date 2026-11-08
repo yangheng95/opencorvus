@@ -1,0 +1,49 @@
+{
+  "phase": "after",
+  "project": {
+    "id": "prj_hQSj4A0tN18zNPVjcXoI",
+    "name": "Memory Search Evidence",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b41\\project-after"
+  },
+  "files": [
+    {
+      "id": "mem_g0VaQEw3x00e59c4tOoY",
+      "projectId": "prj_hQSj4A0tN18zNPVjcXoI",
+      "scope": "project",
+      "title": "Original locale note / 原始记录",
+      "source": "user",
+      "kind": "note",
+      "importance": 75,
+      "confidence": 90,
+      "timeCreated": 1794175829582,
+      "timeUpdated": 1794175829583
+    },
+    {
+      "id": "mem_g0VaQEw4300zzVFgLg28",
+      "projectId": "prj_hQSj4A0tN18zNPVjcXoI",
+      "scope": "project",
+      "title": "Another original fact",
+      "source": "user",
+      "kind": "fact",
+      "importance": 76,
+      "confidence": 80,
+      "timeCreated": 1794175829587,
+      "timeUpdated": 1794175829588
+    }
+  ],
+  "search": [
+    {
+      "chunkId": "mck_g0VaQEw4000LL0pZTvCr",
+      "fileId": "mem_g0VaQEw3x00e59c4tOoY",
+      "fileTitle": "Original locale note / 原始记录",
+      "content": "corvuslocale evidence: keep this original bilingual note. 保留原始笔记内容。",
+      "scope": "project",
+      "source": "user",
+      "kind": "note",
+      "importance": 75,
+      "confidence": 90,
+      "score": 0.24639561621802644,
+      "timeCreated": 1794175829584
+    }
+  ]
+}
