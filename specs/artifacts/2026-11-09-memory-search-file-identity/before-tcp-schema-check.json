@@ -1,0 +1,132 @@
+{
+  "phase": "before",
+  "project": {
+    "id": "prj_h0scNCnQSOqmk9ypkRkS",
+    "name": "Memory File Identity",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b43\\project-before"
+  },
+  "results": [
+    {
+      "operation": "List original files",
+      "status": 200,
+      "requestID": "4f6ec7fa-a72c-4999-bb31-0348eae555d9",
+      "body": [
+        {
+          "id": "mem_g0VaQKWPe00XUInS0Ses",
+          "projectId": "prj_h0scNCnQSOqmk9ypkRkS",
+          "scope": "project",
+          "title": "Separate original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 50,
+          "confidence": 75,
+          "timeCreated": 1794177160950,
+          "timeUpdated": 1794177160950
+        },
+        {
+          "id": "mem_g0VaQKWPb00fl1w7fLf1",
+          "projectId": "prj_h0scNCnQSOqmk9ypkRkS",
+          "scope": "project",
+          "title": "Multi-section original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 80,
+          "confidence": 90,
+          "timeCreated": 1794177160947,
+          "timeUpdated": 1794177160947
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "Ranked original chunks",
+      "status": 200,
+      "requestID": "07928b03-a9b3-42cd-b8d1-4c869c586a9c",
+      "body": [
+        {
+          "chunkId": "mck_g0VaQKWPd00oqUKAk46B",
+          "fileId": "mem_g0VaQKWPb00fl1w7fLf1",
+          "fileTitle": "Multi-section original note",
+          "content": "## Second section\nmultirowprobe second original evidence. 保留第二节原文。",
+          "scope": "project",
+          "source": "user",
+          "kind": "note",
+          "importance": 80,
+          "confidence": 90,
+          "score": 0.25163808198470206,
+          "timeCreated": 1794177160949
+        },
+        {
+          "chunkId": "mck_g0VaQKWPc00EceJx17rf",
+          "fileId": "mem_g0VaQKWPb00fl1w7fLf1",
+          "fileTitle": "Multi-section original note",
+          "content": "## First section\nmultirowprobe first original evidence. 保留第一节原文。",
+          "scope": "project",
+          "source": "user",
+          "kind": "note",
+          "importance": 80,
+          "confidence": 90,
+          "score": 0.25163808198470206,
+          "timeCreated": 1794177160948
+        },
+        {
+          "chunkId": "mck_g0VaQKWPe00cLHvARHvI",
+          "fileId": "mem_g0VaQKWPe00XUInS0Ses",
+          "fileTitle": "Separate original note",
+          "content": "multirowprobe evidence belongs to a separate original file.",
+          "scope": "project",
+          "source": "user",
+          "kind": "note",
+          "importance": 50,
+          "confidence": 75,
+          "score": 0.2092651264288843,
+          "timeCreated": 1794177160950
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "Complete original file mem_g0VaQKWPb00fl1w7fLf1",
+      "status": 200,
+      "requestID": "eb035d03-0660-4bc7-9ffa-84f301a2c0f4",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQKWPb00fl1w7fLf1",
+          "projectId": "prj_h0scNCnQSOqmk9ypkRkS",
+          "scope": "project",
+          "title": "Multi-section original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 80,
+          "confidence": 90,
+          "timeCreated": 1794177160947,
+          "timeUpdated": 1794177160947
+        },
+        "content": "## First section\nmultirowprobe first original evidence. 保留第一节原文。\n\n## Second section\nmultirowprobe second original evidence. 保留第二节原文。"
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "Complete original file mem_g0VaQKWPe00XUInS0Ses",
+      "status": 200,
+      "requestID": "29c0a2ef-17e8-4c02-8ca5-4e219b6a9fe6",
+      "body": {
+        "file": {
+          "id": "mem_g0VaQKWPe00XUInS0Ses",
+          "projectId": "prj_h0scNCnQSOqmk9ypkRkS",
+          "scope": "project",
+          "title": "Separate original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 50,
+          "confidence": 75,
+          "timeCreated": 1794177160950,
+          "timeUpdated": 1794177160950
+        },
+        "content": "multirowprobe evidence belongs to a separate original file."
+      },
+      "schemaValid": true
+    }
+  ],
+  "qualification": "Actual HTTP preserves the original 3 ranked chunks, 2 file identities and both complete files. UI accepted separately through manual interaction."
+}

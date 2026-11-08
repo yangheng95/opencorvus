@@ -1,0 +1,87 @@
+{
+  "phases": {
+    "before": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b43\\project-before",
+      "originalNotesBytes": 57,
+      "worktreeAndGitContentExact": true,
+      "head": "a08e756eff11298d83458b21e44064909eb29680",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "databaseCounts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "memory_file": 3,
+        "memory_chunk": 4
+      },
+      "configFiles": [],
+      "originalMemory": [
+        {
+          "id": "mem_g0VaQKWPb00fl1w7fLf1",
+          "projectID": "prj_h0scNCnQSOqmk9ypkRkS",
+          "title": "Multi-section original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794177160947,
+          "content": "## First section\nmultirowprobe first original evidence. 保留第一节原文。\n\n## Second section\nmultirowprobe second original evidence. 保留第二节原文。",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQKWPe00XUInS0Ses",
+          "projectID": "prj_h0scNCnQSOqmk9ypkRkS",
+          "title": "Separate original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794177160950,
+          "content": "multirowprobe evidence belongs to a separate original file.",
+          "identityContentCreationExact": true
+        }
+      ]
+    },
+    "after": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b43\\project-after",
+      "originalNotesBytes": 56,
+      "worktreeAndGitContentExact": true,
+      "head": "0fe7d4cdea366a1f97efcbecf651f86486fe2445",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "databaseCounts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "memory_file": 3,
+        "memory_chunk": 4
+      },
+      "configFiles": [],
+      "originalMemory": [
+        {
+          "id": "mem_g0VaQLBAB00WyTZq1i1e",
+          "projectID": "prj_hdp8x1QEGwGc5WF7RsH6",
+          "title": "Multi-section original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794177317595,
+          "content": "## First section\nmultirowprobe first original evidence. 保留第一节原文。\n\n## Second section\nmultirowprobe second original evidence. 保留第二节原文。",
+          "identityContentCreationExact": true
+        },
+        {
+          "id": "mem_g0VaQLBAG00LYTDIxzKI",
+          "projectID": "prj_hdp8x1QEGwGc5WF7RsH6",
+          "title": "Separate original note",
+          "source": "user",
+          "kind": "note",
+          "timeCreated": 1794177317600,
+          "content": "multirowprobe evidence belongs to a separate original file.",
+          "identityContentCreationExact": true
+        }
+      ]
+    }
+  },
+  "qualification": "Original owned file/identity/content/creation contracts. Mutable host project-memory metadata is recorded by its production owner and is not compared across observations. UI accepted only manually."
+}

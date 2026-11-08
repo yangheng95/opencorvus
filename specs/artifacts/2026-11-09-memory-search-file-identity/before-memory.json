@@ -1,0 +1,118 @@
+{
+  "phase": "before",
+  "date": "2026-11-08T22:32:40.953Z",
+  "project": {
+    "id": "prj_h0scNCnQSOqmk9ypkRkS",
+    "name": "Memory File Identity",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b43\\project-before"
+  },
+  "files": [
+    {
+      "id": "mem_g0VaQKWPb00fl1w7fLf1",
+      "projectId": "prj_h0scNCnQSOqmk9ypkRkS",
+      "scope": "project",
+      "title": "Multi-section original note",
+      "source": "user",
+      "kind": "note",
+      "importance": 80,
+      "confidence": 90,
+      "timeCreated": 1794177160947,
+      "timeUpdated": 1794177160947,
+      "content": "## First section\nmultirowprobe first original evidence. 保留第一节原文。\n\n## Second section\nmultirowprobe second original evidence. 保留第二节原文。"
+    },
+    {
+      "id": "mem_g0VaQKWPe00XUInS0Ses",
+      "projectId": "prj_h0scNCnQSOqmk9ypkRkS",
+      "scope": "project",
+      "title": "Separate original note",
+      "source": "user",
+      "kind": "note",
+      "importance": 50,
+      "confidence": 75,
+      "timeCreated": 1794177160950,
+      "timeUpdated": 1794177160950,
+      "content": "multirowprobe evidence belongs to a separate original file."
+    }
+  ],
+  "chunks": [
+    {
+      "fileID": "mem_g0VaQKWPb00fl1w7fLf1",
+      "chunks": [
+        {
+          "id": "mck_g0VaQKWPc00EceJx17rf",
+          "fileId": "mem_g0VaQKWPb00fl1w7fLf1",
+          "projectId": "prj_h0scNCnQSOqmk9ypkRkS",
+          "content": "## First section\nmultirowprobe first original evidence. 保留第一节原文。",
+          "tokenCount": 19,
+          "timeCreated": 1794177160948,
+          "timeUpdated": 1794177160948
+        },
+        {
+          "id": "mck_g0VaQKWPd00oqUKAk46B",
+          "fileId": "mem_g0VaQKWPb00fl1w7fLf1",
+          "projectId": "prj_h0scNCnQSOqmk9ypkRkS",
+          "content": "## Second section\nmultirowprobe second original evidence. 保留第二节原文。",
+          "tokenCount": 20,
+          "timeCreated": 1794177160949,
+          "timeUpdated": 1794177160949
+        }
+      ]
+    },
+    {
+      "fileID": "mem_g0VaQKWPe00XUInS0Ses",
+      "chunks": [
+        {
+          "id": "mck_g0VaQKWPe00cLHvARHvI",
+          "fileId": "mem_g0VaQKWPe00XUInS0Ses",
+          "projectId": "prj_h0scNCnQSOqmk9ypkRkS",
+          "content": "multirowprobe evidence belongs to a separate original file.",
+          "tokenCount": 15,
+          "timeCreated": 1794177160950,
+          "timeUpdated": 1794177160950
+        }
+      ]
+    }
+  ],
+  "search": [
+    {
+      "chunkId": "mck_g0VaQKWPd00oqUKAk46B",
+      "fileId": "mem_g0VaQKWPb00fl1w7fLf1",
+      "fileTitle": "Multi-section original note",
+      "content": "## Second section\nmultirowprobe second original evidence. 保留第二节原文。",
+      "scope": "project",
+      "source": "user",
+      "kind": "note",
+      "importance": 80,
+      "confidence": 90,
+      "score": 0.25163808198470206,
+      "timeCreated": 1794177160949
+    },
+    {
+      "chunkId": "mck_g0VaQKWPc00EceJx17rf",
+      "fileId": "mem_g0VaQKWPb00fl1w7fLf1",
+      "fileTitle": "Multi-section original note",
+      "content": "## First section\nmultirowprobe first original evidence. 保留第一节原文。",
+      "scope": "project",
+      "source": "user",
+      "kind": "note",
+      "importance": 80,
+      "confidence": 90,
+      "score": 0.25163808198470206,
+      "timeCreated": 1794177160948
+    },
+    {
+      "chunkId": "mck_g0VaQKWPe00cLHvARHvI",
+      "fileId": "mem_g0VaQKWPe00XUInS0Ses",
+      "fileTitle": "Separate original note",
+      "content": "multirowprobe evidence belongs to a separate original file.",
+      "scope": "project",
+      "source": "user",
+      "kind": "note",
+      "importance": 50,
+      "confidence": 75,
+      "score": 0.2092651264288843,
+      "timeCreated": 1794177160950
+    }
+  ],
+  "qualification": "Actual owned Memory writer, SQLite chunks and FTS. Original backend returns chunk results; UI is accepted separately through manual interaction."
+}

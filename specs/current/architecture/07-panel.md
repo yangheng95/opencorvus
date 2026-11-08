@@ -2057,6 +2057,11 @@ identity, source, content, query and expanded detail without another data read.
 The current search mode also owns each row's result styling and localized result
 label. List/search transitions derive both from that same mode; CSS supplies
 presentation while the component supplies the visible and accessible text.
+Within the returned relevance window, Notes search projects one row per original
+file ID, using that file's first ranked chunk for its score and excerpt. File
+order follows those first appearances. Expansion and deletion retain file
+identity; expansion reads the complete original file. The backend's ranked chunk
+response and the existing twenty-chunk request window retain their semantics.
 The current popup receives Escape before the settings page. Closing a Tooltip
 preserves its trigger focus and any required activity selection; another Escape
 can dismiss its enclosing menu or settings page through that owner's lifecycle.

@@ -220,15 +220,19 @@ export function MemoryPanel(props: MemoryPanelProps) {
         }),
       })
       if (!ownsSearch()) return
-      const mapped: MemoryFile[] = (Array.isArray(results) ? results : []).map((r) => ({
-        id: r.fileId,
-        title: r.fileTitle,
-        scope: r.scope,
-        source: r.source,
-        score: r.score,
-        snippet: r.content ? r.content.slice(0, 200) : "",
-      }))
-      setFiles(mapped)
+      const mapped = new Map<string, MemoryFile>()
+      for (const result of results) {
+        if (mapped.has(result.fileId)) continue
+        mapped.set(result.fileId, {
+          id: result.fileId,
+          title: result.fileTitle,
+          scope: result.scope,
+          source: result.source,
+          score: result.score,
+          snippet: result.content ? result.content.slice(0, 200) : "",
+        })
+      }
+      setFiles([...mapped.values()])
       setFilesSource(source)
       setSearchMode(true)
       setExpandedFileId(null)
