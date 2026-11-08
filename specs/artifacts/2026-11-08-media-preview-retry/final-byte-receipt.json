@@ -1,0 +1,30 @@
+{
+  "resources": [
+    {
+      "name": "media-recovery.pdf",
+      "status": 200,
+      "bytes": 1753,
+      "sourceBytesEqual": true,
+      "sidecar": true
+    },
+    {
+      "name": "media-recovery.wav",
+      "status": 200,
+      "bytes": 16044,
+      "sourceBytesEqual": true,
+      "sidecar": true
+    },
+    {
+      "name": "media-recovery.mp4",
+      "status": 200,
+      "bytes": 6368,
+      "sourceBytesEqual": true,
+      "sidecar": true
+    }
+  ],
+  "download": {
+    "bytes": 6368,
+    "sourceBytesEqual": true,
+    "name": "media-recovery.mp4"
+  }
+}

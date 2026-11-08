@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [媒体失败与原位恢复证据](2026-11-08-media-preview-retry/README.md)：自有PDF、实际失败和恢复截图。
+
 - [Unicode空白下载边界证据](2026-11-08-download-filename-whitespace/README.md)：原文件、实际落盘与否证结果。
 
 - [终端纯文本证据](2026-11-08-terminal-plain-text/README.md)：准确导出、原始记录和真实页面验收。

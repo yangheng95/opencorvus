@@ -1056,12 +1056,8 @@
 }
 
 .msg-file-error {
-  font-family: var(--mono);
-  font-size: var(--ui-font-body);
-  color: var(--bad);
-  padding: var(--ui-gap-xs) var(--ui-gap-sm);
-  border-radius: var(--oc-radius-soft);
-  background: var(--bad-dim);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .msg-text strong {

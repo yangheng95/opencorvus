@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [媒体附件原位恢复](2026-11-08-media-preview-retry.md)：原资源重读、窄附件错误和实际页面。
+
 - [下载文件名边界调查](2026-11-08-download-filename-whitespace.md)：Unicode空白实测、方案撤回与未满足项。
 
 - [终端纯文本复制与导出](2026-11-08-terminal-plain-text.md)：完整正文、单一转换实现及端到端范围。

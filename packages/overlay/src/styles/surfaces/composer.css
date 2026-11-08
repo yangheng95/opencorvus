@@ -21,6 +21,7 @@
    surface palette so it adapts per theme. */
 .chat-attachments {
   display: flex;
+  align-items: flex-start;
   flex-wrap: wrap;
   gap: var(--ui-gap-sm);
   width: 100%;
@@ -52,6 +53,26 @@
   object-fit: cover;
   border-radius: var(--oc-radius-soft);
   flex-shrink: 0;
+}
+
+.chat-attachment-item:has(> .msg-file-error) {
+  flex-wrap: wrap;
+  width: calc(220px * var(--ui-scale));
+}
+
+.chat-attachment-item > .msg-file-error {
+  flex-basis: 100%;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.chat-attachment-item > .msg-file-error .oc-feedback__diagnostic {
+  max-height: calc(160px * var(--ui-scale));
+  overflow: auto;
+}
+
+.chat-attachment-item:has(> .msg-file-error) > .chat-attachment-name {
+  flex: 1;
 }
 
 .composer-attachment-thumbnail {

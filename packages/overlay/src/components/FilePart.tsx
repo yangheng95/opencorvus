@@ -13,6 +13,9 @@ import { attachmentImagePreviewUrl } from "../utils/attachment-resource"
 import { Disclosure } from "./ui/Disclosure"
 import { ResourceTextPreview } from "./ResourceTextPreview"
 import { DownloadLink, OriginalFileDownload } from "./OriginalFileDownload"
+import { formatErrorDetails } from "../utils/error-details"
+import { Feedback } from "./ui/Feedback"
+import { Button } from "./ui/Button"
 
 const LazyPdfPreview = lazy(async () => ({ default: (await import("./PdfPreview")).PdfPreview }))
 
@@ -44,9 +47,8 @@ function PdfContent(props: { url: string; name: string }) {
 //   decodable text     → on-demand text review in user-message history
 //   anything else       → filename chip with a download affordance
 //
-// Failures are surfaced, not papered over: a fetch error prints to console
-// and replaces the media with a "Failed to load" chip. No fallback to the
-// raw URL, since that would mask the underlying origin/auth mistake.
+// Failed reads expose the original diagnostic and an explicit retry of the
+// same authorized resource. The shared cache continues to own Blob lifetime.
 
 type MediaKind = "image" | "video" | "audio" | "pdf" | "other"
 
@@ -132,7 +134,7 @@ export function FilePart(props: { part: MessageFilePart; presentation?: FilePart
         <TextAttachment url={url()} name={name()} displayLabel={props.displayLabel} mime={mimeOf(props.part)} />
       </Match>
       <Match when={kind() === "image" && url() && authed()}>
-        <AuthedImage url={url()} alt={alt()} displayLabel={props.displayLabel} presentation={props.presentation ?? "content"} />
+        <AuthedImage url={url()} name={name()} alt={alt()} displayLabel={props.displayLabel} presentation={props.presentation ?? "content"} />
       </Match>
       <Match when={kind() === "image" && url()}>
         <div class={composerThumbnail() ? "composer-attachment-thumbnail" : thumbnail() ? "msg-image-attachment" : "msg-img-wrap"}>
@@ -231,13 +233,13 @@ function PdfAttachment(props: { url: string; name: string; displayLabel?: string
 // `initialValue` seeds the resource signal from the cache so a cache-hit
 // path renders on the first tick without a spinner flash.
 
-function AuthedImage(props: { url: string; alt: string; displayLabel?: string; presentation: FilePartPresentation }) {
+function AuthedImage(props: { url: string; name: string; alt: string; displayLabel?: string; presentation: FilePartPresentation }) {
   const thumbnail = () => props.presentation !== "content"
   const composerThumbnail = () => props.presentation === "composer-thumbnail"
   const previewUrl = () => attachmentImagePreviewUrl(props.url)
   const displayUrl = () =>
     thumbnail() ? `${props.url}?variant=${SCREENSHOT_BROWSER_THUMBNAIL_VARIANT}` : previewUrl()
-  const [objectUrl] = createResource(
+  const [objectUrl, { refetch }] = createResource(
     () => ({ url: displayUrl(), authority: captureApiAuthority() }),
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     {
@@ -246,8 +248,8 @@ function AuthedImage(props: { url: string; alt: string; displayLabel?: string; p
   )
 
   return (
-    <Show when={!objectUrl.error} fallback={<LoadError name={props.alt} />}>
-      <Show when={!objectUrl.loading && objectUrl()} fallback={composerThumbnail() ? <span class="chat-attachment-icon">{props.alt.split(".").pop()?.toUpperCase()}</span> : undefined}>
+    <Show when={!objectUrl.error} fallback={<LoadError name={props.displayLabel ?? props.name} error={objectUrl.error} loading={objectUrl.loading} onRetry={() => void refetch()} />}>
+      <Show when={!objectUrl.loading && objectUrl()} fallback={composerThumbnail() ? <span class="chat-attachment-icon">{props.alt.split(".").pop()?.toUpperCase()}</span> : <div role="status">{t("common.loading")}</div>}>
         {(resolved) => (
           <div class={composerThumbnail() ? "composer-attachment-thumbnail" : thumbnail() ? "msg-image-attachment" : "msg-img-wrap"}>
             <PreviewableImage
@@ -268,7 +270,7 @@ function AuthedImage(props: { url: string; alt: string; displayLabel?: string; p
 }
 
 function AuthedVideo(props: { url: string; name: string; displayLabel?: string; mime: string }) {
-  const [objectUrl] = createResource(
+  const [objectUrl, { refetch }] = createResource(
     () => ({ url: props.url, authority: captureApiAuthority() }),
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     {
@@ -276,8 +278,8 @@ function AuthedVideo(props: { url: string; name: string; displayLabel?: string; 
     },
   )
   return (
-    <Show when={!objectUrl.error} fallback={<LoadError name={props.displayLabel ?? props.name} />}>
-      <Show when={!objectUrl.loading && objectUrl()}>
+    <Show when={!objectUrl.error} fallback={<LoadError name={props.displayLabel ?? props.name} error={objectUrl.error} loading={objectUrl.loading} onRetry={() => void refetch()} />}>
+      <Show when={!objectUrl.loading && objectUrl()} fallback={<div role="status">{t("common.loading")}</div>}>
         {(resolved) => (
           <div class="msg-video-wrap">
             <span class="msg-file-chip__name" title={props.displayLabel ?? props.name}>{props.displayLabel ?? props.name}</span>
@@ -293,7 +295,7 @@ function AuthedVideo(props: { url: string; name: string; displayLabel?: string; 
 }
 
 function AuthedAudio(props: { url: string; name: string; displayLabel?: string; mime: string }) {
-  const [objectUrl] = createResource(
+  const [objectUrl, { refetch }] = createResource(
     () => ({ url: props.url, authority: captureApiAuthority() }),
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     {
@@ -301,8 +303,8 @@ function AuthedAudio(props: { url: string; name: string; displayLabel?: string; 
     },
   )
   return (
-    <Show when={!objectUrl.error} fallback={<LoadError name={props.displayLabel ?? props.name} />}>
-      <Show when={!objectUrl.loading && objectUrl()}>
+    <Show when={!objectUrl.error} fallback={<LoadError name={props.displayLabel ?? props.name} error={objectUrl.error} loading={objectUrl.loading} onRetry={() => void refetch()} />}>
+      <Show when={!objectUrl.loading && objectUrl()} fallback={<div role="status">{t("common.loading")}</div>}>
         {(resolved) => (
           <div class="msg-audio-wrap">
             <span class="msg-file-chip__name" title={props.displayLabel ?? props.name}>{props.displayLabel ?? props.name}</span>
@@ -318,7 +320,7 @@ function AuthedAudio(props: { url: string; name: string; displayLabel?: string; 
 }
 
 function AuthedPdf(props: { url: string; name: string; displayLabel?: string }) {
-  const [objectUrl] = createResource(
+  const [objectUrl, { refetch }] = createResource(
     () => ({ url: props.url, authority: captureApiAuthority() }),
     (source) => fetchResourceAsObjectUrl(source.url, { authority: source.authority }),
     {
@@ -326,8 +328,8 @@ function AuthedPdf(props: { url: string; name: string; displayLabel?: string }) 
     },
   )
   return (
-    <Show when={!objectUrl.error} fallback={<LoadError name={props.displayLabel ?? props.name} />}>
-      <Show when={!objectUrl.loading && objectUrl()}>
+    <Show when={!objectUrl.error} fallback={<LoadError name={props.displayLabel ?? props.name} error={objectUrl.error} loading={objectUrl.loading} onRetry={() => void refetch()} />}>
+      <Show when={!objectUrl.loading && objectUrl()} fallback={<div role="status">{t("common.loading")}</div>}>
         {(resolved) => (
           <div class="msg-pdf-wrap">
             <PdfContent url={resolved()} name={props.displayLabel ?? props.name} />
@@ -355,6 +357,27 @@ function FallbackDownload(props: { url: string; name: string; displayLabel?: str
   )
 }
 
-function LoadError(props: { name: string }) {
-  return <div class="msg-file-error">{t("file.load_failed", { name: props.name })}</div>
+function LoadError(props: { name: string; error: unknown; loading: boolean; onRetry: () => void }) {
+  return (
+    <Feedback
+      class="msg-file-error"
+      tone="error"
+      details={formatErrorDetails(props.error)}
+      actions={
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          tone="neutral"
+          aria-disabled={props.loading || undefined}
+          aria-label={`${t("file.retry_preview")}: ${props.name}`}
+          onClick={() => { if (!props.loading) props.onRetry() }}
+        >
+          {t(props.loading ? "common.retrying" : "file.retry_preview")}
+        </Button>
+      }
+    >
+      {t("file.load_failed", { name: props.name })}
+    </Feedback>
+  )
 }

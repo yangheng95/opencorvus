@@ -326,6 +326,12 @@ the original bytes requires neither a new attachment identity nor a page reload.
 Short documents use their natural reading height; the editor's internal
 scroller bounds longer documents to the viewport. Other
 file presentations and unknown binary formats retain their current behavior.
+Authorized image, audio, video and PDF reads expose the same explicit source
+refetch through their current resource, retaining captured authority and shared
+Blob ownership. Localized Feedback includes complete read diagnostics, a named
+retry action and its busy state. Composer image failures keep retry, details and
+remove actions reachable within the attachment chip; diagnostics scroll inside
+that chip. Media decoding and PDF parsing retain their separate lifecycles.
 The shared PDF reader expresses page and zoom limits with guarded aria-disabled
 buttons and removes unavailable actions from the Tab sequence. Reaching a limit
 keeps the current button focused, allowing native Tab navigation to continue.
