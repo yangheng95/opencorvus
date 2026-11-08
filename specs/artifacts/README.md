@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [设置组合词证据](2026-11-08-settings-multi-term-search/README.md)：真实双语搜索、当前页与表单交互截图。
+
 - [日志导出证据](2026-11-08-log-export-feedback/README.md)：自有日志输入、实际归档回执与反馈截图。
 
 - [Markdown 章节证据](2026-11-08-markdown-section-navigation/README.md)：自有输入、真实预览和章节交互截图。

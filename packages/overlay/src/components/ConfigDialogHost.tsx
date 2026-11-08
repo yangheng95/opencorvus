@@ -51,6 +51,7 @@ import {
 } from "../store/dialog"
 import { getHostTransport } from "../services/host-transport-runtime"
 import { formatErrorDetails } from "../services/diagnostics"
+import { matchesSearchTerms, normalizeSearchText } from "../services/text-search"
 import { t } from "../utils/i18n"
 import {
   AUTHOR_EMAIL,
@@ -385,11 +386,11 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
   const settingsSearch = () => dialogStore.config.search
   const setSettingsSearch = (value: string) => setDialogStore("config", "search", value)
   let settingsSearchInput: HTMLInputElement | undefined
-  const normalizedSettingsSearch = createMemo(() => settingsSearch().trim().toLowerCase())
+  const normalizedSettingsSearch = createMemo(() => normalizeSearchText(settingsSearch()))
   const visibleConfigTabs = createMemo(() => {
     const query = normalizedSettingsSearch()
     if (!query) return CONFIG_TABS
-    return CONFIG_TABS.filter((tab) => configSectionSearchText(tab, t).toLowerCase().includes(query))
+    return CONFIG_TABS.filter((tab) => matchesSearchTerms(query, [configSectionSearchText(tab, t)]))
   })
   const visibleConfigTabIDs = createMemo(
     () => new Set([...visibleConfigTabs().map((tab) => tab.id), activeConfigTab()]),

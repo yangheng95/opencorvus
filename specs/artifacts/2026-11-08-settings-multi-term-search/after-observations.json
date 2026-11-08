@@ -1,0 +1,225 @@
+[
+  {
+    "step": "english-combined-general-active",
+    "focus": "Search settings pages...",
+    "query": "language appearance",
+    "scripts": [
+      "http://localhost:38945/ui/assets/main-C3zpoJNv.js"
+    ],
+    "status": null,
+    "tabs": [
+      {
+        "id": "general",
+        "label": "General",
+        "selected": "true"
+      },
+      {
+        "id": "appearance",
+        "label": "Appearance",
+        "selected": "false"
+      }
+    ],
+    "title": "General"
+  },
+  {
+    "step": "english-uppercase-unicode-whitespace",
+    "query": "  LANGUAGE \tTHEME  ",
+    "tabs": [
+      {
+        "id": "general",
+        "selected": "true"
+      },
+      {
+        "id": "appearance",
+        "selected": "false"
+      }
+    ],
+    "title": "General"
+  },
+  {
+    "step": "arrow-focus-before-explicit-activation",
+    "focusedTab": "appearance",
+    "selected": "general",
+    "title": "General"
+  },
+  {
+    "step": "general-control-label-combination",
+    "query": "notifications git",
+    "tabs": [
+      {
+        "id": "general",
+        "selected": "false"
+      },
+      {
+        "id": "appearance",
+        "selected": "true"
+      }
+    ],
+    "title": "Appearance"
+  },
+  {
+    "step": "network-control-label-combination",
+    "query": "proxy network",
+    "tabs": [
+      {
+        "id": "general",
+        "selected": "true"
+      },
+      {
+        "id": "network",
+        "selected": "false"
+      }
+    ],
+    "title": "General"
+  },
+  {
+    "step": "network-draft-under-matching-query",
+    "passwordFieldsEmpty": true,
+    "proxyUrl": "http://127.0.0.1:17996/b13-draft-only",
+    "query": "language appearance",
+    "switches": [
+      {
+        "checked": false,
+        "id": "network-proxy-llm-provider"
+      },
+      {
+        "checked": false,
+        "id": "network-proxy-web-research"
+      }
+    ],
+    "tabs": [
+      {
+        "id": "appearance",
+        "selected": "false"
+      },
+      {
+        "id": "network",
+        "selected": "true"
+      }
+    ],
+    "title": "Network"
+  },
+  {
+    "step": "different-pages-terms-current-network-pin",
+    "query": "language proxy",
+    "status": "No settings pages match this search.",
+    "tabs": [
+      {
+        "id": "network",
+        "selected": "true"
+      }
+    ],
+    "title": "Network",
+    "proxyUrl": "http://127.0.0.1:17996/b13-draft-only"
+  },
+  {
+    "step": "clear-restores-full-navigation-and-input-focus",
+    "focus": "Search settings pages...",
+    "query": "",
+    "selected": "network",
+    "visibleTabs": [
+      "general",
+      "appearance",
+      "network",
+      "usage",
+      "code",
+      "work",
+      "mission-skill",
+      "scheduled",
+      "expert-squad-install",
+      "expert-squad",
+      "providers",
+      "skill",
+      "mcp",
+      "channel",
+      "memory",
+      "archive",
+      "changelog",
+      "about"
+    ],
+    "proxyUrl": "http://127.0.0.1:17996/b13-draft-only"
+  },
+  {
+    "step": "nonempty-escape-preserves-network-draft",
+    "focus": "Search settings pages...",
+    "query": "",
+    "selected": "network",
+    "tabCount": 18,
+    "proxyUrl": "http://127.0.0.1:17996/b13-draft-only"
+  },
+  {
+    "step": "chinese-combination-retains-same-network-draft",
+    "query": "语言 主题",
+    "status": null,
+    "tabs": [
+      {
+        "id": "appearance",
+        "label": "外观",
+        "selected": "false"
+      },
+      {
+        "id": "network",
+        "label": "网络",
+        "selected": "true"
+      }
+    ],
+    "title": "网络",
+    "proxyUrl": "http://127.0.0.1:17996/b13-draft-only"
+  },
+  {
+    "step": "original-proxy-restored-before-leaving",
+    "value": ""
+  },
+  {
+    "step": "chinese-git-notification-combination",
+    "query": "Git 通知",
+    "tabs": [
+      {
+        "id": "general",
+        "label": "通用",
+        "selected": "false"
+      },
+      {
+        "id": "appearance",
+        "label": "外观",
+        "selected": "true"
+      }
+    ],
+    "title": "外观"
+  },
+  {
+    "step": "chinese-proxy-network-combination",
+    "query": "代理 网络",
+    "tabs": [
+      {
+        "id": "general",
+        "label": "通用",
+        "selected": "true"
+      },
+      {
+        "id": "network",
+        "label": "网络",
+        "selected": "false"
+      }
+    ],
+    "title": "通用"
+  },
+  {
+    "step": "final-chinese-explicit-network-original-input",
+    "passwordFieldsEmpty": true,
+    "query": "代理 网络",
+    "selected": "network",
+    "switches": [
+      {
+        "checked": false,
+        "id": "network-proxy-llm-provider"
+      },
+      {
+        "checked": false,
+        "id": "network-proxy-web-research"
+      }
+    ],
+    "title": "网络",
+    "proxyUrl": ""
+  }
+]

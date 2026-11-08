@@ -2047,7 +2047,11 @@ shared Tabs collection throughout the update.
 Settings navigation and the command palette derive their searchable section text
 from CONFIG_SECTIONS through configSectionSearchText. Page labels and referenced
 control labels resolve through the current interface language; existing aliases
-and identifiers remain searchable. The directory references actual translation
+and identifiers remain searchable. Both entry points use the shared
+matchesSearchTerms primitive: every whitespace-separated query term must match
+that same section's metadata, independent of term order and case. Filtering
+retains the canonical section order and the existing explicit activation and
+active-panel lifetime. The directory references actual translation
 keys instead of copying their text. General exposes its notification, permission, Git and
 diagnostic labels; Appearance exposes Theme and Language; Network exposes
 connection, server URL and proxy labels. These terms discover their owning
