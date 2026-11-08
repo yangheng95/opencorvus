@@ -1,0 +1,35 @@
+{
+  "phase": "empty",
+  "sourceCursor": {
+    "pinned": false,
+    "updated": 1794182106190,
+    "rowKey": "chat:ses_-zUPZKj6TzzUuuMwf6gB"
+  },
+  "originalCount": 100,
+  "restored": [
+    {
+      "status": 200,
+      "id": "ses_-zUPZKj6azzb2QDP27KZ",
+      "title": "Archive proof 002",
+      "projectID": "prj_hPm4LenTrWAsL9QEJbO1",
+      "created": 1794182106179,
+      "archived": null
+    },
+    {
+      "status": 200,
+      "id": "ses_-zUPZKj6vzzd3yBEMYVu",
+      "title": "Archive proof 001",
+      "projectID": "prj_hPm4LenTrWAsL9QEJbO1",
+      "created": 1794182106159,
+      "archived": null
+    }
+  ],
+  "finalCursorRead": {
+    "status": 200,
+    "rows": [],
+    "nextCursor": null
+  },
+  "finalFirstPageCount": 100,
+  "finalFirstPageCursor": null,
+  "schemaValid": true
+}

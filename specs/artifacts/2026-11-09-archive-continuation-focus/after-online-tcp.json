@@ -1,0 +1,106 @@
+{
+  "phase": "after",
+  "point": "online",
+  "operation": "workLedger.listArchived",
+  "checks": [
+    {
+      "params": {
+        "limit": 100
+      },
+      "status": 200,
+      "schemaValid": true,
+      "rows": 100,
+      "first": {
+        "id": "ses_-zUPZM1eYzzHwW3dHrI4",
+        "title": "Archive proof 202",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b48\\project-after",
+        "archived": 1794181796558
+      },
+      "last": {
+        "id": "ses_-zUPZM1t5zzSYq7F1L1h",
+        "title": "Archive proof 103",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b48\\project-after",
+        "archived": 1794181795658
+      },
+      "cursor": {
+        "pinned": false,
+        "updated": 1794181795659,
+        "rowKey": "chat:ses_-zUPZM1t5zzSYq7F1L1h"
+      }
+    },
+    {
+      "params": {
+        "limit": 100,
+        "cursorPinned": false,
+        "cursorUpdated": 1794181795659,
+        "cursorRowKey": "chat:ses_-zUPZM1t5zzSYq7F1L1h"
+      },
+      "status": 200,
+      "schemaValid": true,
+      "rows": 100,
+      "first": {
+        "id": "ses_-zUPZM1tCzzTrp6VPDzs",
+        "title": "Archive proof 102",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b48\\project-after",
+        "archived": 1794181795649
+      },
+      "last": {
+        "id": "ses_-zUPZM2BJzzJKRhx7Lhs",
+        "title": "Archive proof 003",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b48\\project-after",
+        "archived": 1794181794532
+      },
+      "cursor": {
+        "pinned": false,
+        "updated": 1794181794534,
+        "rowKey": "chat:ses_-zUPZM2BJzzJKRhx7Lhs"
+      }
+    },
+    {
+      "params": {
+        "limit": 100,
+        "cursorPinned": false,
+        "cursorUpdated": 1794181794534,
+        "cursorRowKey": "chat:ses_-zUPZM2BJzzJKRhx7Lhs"
+      },
+      "status": 200,
+      "schemaValid": true,
+      "rows": 2,
+      "first": {
+        "id": "ses_-zUPZM2BazzrABMwXysl",
+        "title": "Archive proof 002",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b48\\project-after",
+        "archived": 1794181794517
+      },
+      "last": {
+        "id": "ses_-zUPZM2CUzzcpal5TBRH",
+        "title": "Archive proof 001",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b48\\project-after",
+        "archived": 1794181794475
+      },
+      "cursor": null
+    },
+    {
+      "params": {
+        "limit": 100,
+        "search": "Archive proof 002"
+      },
+      "status": 200,
+      "schemaValid": true,
+      "rows": 1,
+      "first": {
+        "id": "ses_-zUPZM2BazzrABMwXysl",
+        "title": "Archive proof 002",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b48\\project-after",
+        "archived": 1794181794517
+      },
+      "last": {
+        "id": "ses_-zUPZM2BazzrABMwXysl",
+        "title": "Archive proof 002",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b48\\project-after",
+        "archived": 1794181794517
+      },
+      "cursor": null
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [归档成功续页焦点](records/2026-11/2026-11-09-archive-continuation-focus.md)
 - [归档分页读取失败](records/2026-11/2026-11-09-archive-page-read-failure.md)
 - [记忆搜索失败状态](records/2026-11/2026-11-09-memory-search-failure-state.md)
 - [记忆稳定键合同](records/2026-11/2026-11-09-memory-stable-key-contract.md)

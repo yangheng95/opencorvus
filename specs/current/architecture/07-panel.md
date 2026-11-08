@@ -5359,6 +5359,10 @@ diagnostic details. A failed continuation keeps the accepted rows and cursor
 and presents its failure above the existing continuation action. When focus
 remains there, the footer is brought into view without moving focus. Retrying
 uses that same cursor and query; first-page failures use the existing list Retry.
+Continuing while the Load more button has focus preserves that focus during the
+read. On success, if the operator is still on that button, focus moves to Open
+on the first appended row. If the cursor is exhausted with no new rows, focus
+moves to Open on the last retained row.
 After a committed row action, the same reader follows canonical cursor pages
 through the previously loaded surviving tail, or through exhaustion. Its boundary
 uses the public pinned/updated/kind:id order, independently of directory-scoped

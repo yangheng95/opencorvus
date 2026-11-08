@@ -77,6 +77,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
   let panelElement: HTMLDivElement | undefined
   let headingElement: HTMLSpanElement | undefined
   let continuationElement: HTMLDivElement | undefined
+  let continuationButton: HTMLButtonElement | undefined
 
   const ownsRequest = (generation: number, authority: ApiAuthority) =>
     generation === requestGeneration && isApiAuthorityCurrent(authority)
@@ -134,6 +135,10 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     } while (true)
   }
 
+  const findArchiveRow = (rowKey: string) =>
+    Array.from(panelElement?.querySelectorAll<HTMLElement>("[data-archive-row-key]") ?? [])
+      .find((element) => element.dataset.archiveRowKey === rowKey)
+
   const focusAfterAction = (
     rowKey: string,
     previousIndex: number,
@@ -149,9 +154,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       }
       const currentRows = rows()
       const nextRow = currentRows[Math.min(previousIndex, Math.max(0, currentRows.length - 1))]
-      const nextRowElement = Array.from(
-        panelElement?.querySelectorAll<HTMLElement>("[data-archive-row-key]") ?? [],
-      ).find((element) => element.dataset.archiveRowKey === (nextRow ? archiveRowKey(nextRow) : rowKey))
+      const nextRowElement = findArchiveRow(nextRow ? archiveRowKey(nextRow) : rowKey)
       const nextAction = nextRowElement?.querySelector<HTMLElement>(
         '[data-archive-action="restore"]:not([disabled]), [data-archive-action="delete"]:not([disabled])',
       )
@@ -168,6 +171,8 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
     controller = requestController
     const generation = ++requestGeneration
     const authority = captureApiAuthority()
+    const hadContinuationFocus = append && continuationButton === document.activeElement
+    let focusRow: WorkLedgerItemRow | undefined
     setLoading(true)
     setFailure(undefined)
     try {
@@ -179,8 +184,12 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
         authority,
       })
       if (!result || !ownsRequest(generation, authority)) return
+      const nextFocus = hadContinuationFocus && continuationButton === document.activeElement
+        ? result.rows[0] ?? (!result.nextCursor ? rows().at(-1) : undefined)
+        : undefined
       setRows((current) => (append ? [...current, ...result.rows] : result.rows))
       setNextCursor(result.nextCursor)
+      focusRow = nextFocus
     } catch (cause) {
       if (
         requestController.signal.aborted ||
@@ -193,7 +202,9 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
       if (ownsRequest(generation, authority)) {
         if (controller === requestController) controller = undefined
         setLoading(false)
-        if (append && continuationFailure() && continuationElement?.contains(document.activeElement)) {
+        if (focusRow) {
+          findArchiveRow(archiveRowKey(focusRow))?.querySelector<HTMLButtonElement>('[data-archive-action="open"]')?.focus()
+        } else if (append && continuationFailure() && continuationElement?.contains(document.activeElement)) {
           continuationElement.scrollIntoView({ block: "nearest" })
         }
       }
@@ -428,6 +439,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       size="sm"
                       tone="neutral"
                       aria-label={t("archive.open_item", { title: row.title || row.id })}
+                      data-archive-action="open"
                       disabled={!!busyID() || loading()}
                       onClick={() => void props.onOpenItem(row)}
                     >
@@ -477,12 +489,13 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
             {(current) => <ArchiveFailureFeedback failure={current()} />}
           </Show>
           <Button
+            ref={continuationButton}
             type="button"
             variant="outline"
             size="md"
             tone="neutral"
             data-ui="archive-load-more"
-            disabled={loading()}
+            aria-disabled={loading() || !!busyID() || undefined}
             onClick={() => void load(true)}
           >
             {loading() ? t("common.loading") : t("work_ledger.load_more")}
