@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [Skill/MCP 完整错误诊断](2026-11-09-extension-error-details.md)
 - [市场来源能力](2026-11-09-skill-market-source-capabilities.md)：网站来源事实、共享合同与不阻断搜索。
 
 - [市场工具输入适配](2026-11-09-skill-market-tool-inputs.md)：Tool入口正向契约与真实网络读取。

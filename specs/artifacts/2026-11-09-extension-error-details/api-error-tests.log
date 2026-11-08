@@ -1,0 +1,40 @@
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-de8e1c62b37fa17b\published\opencorvus-process-supervisor.exe
+$ bun run script/run-unit-tests.ts test/api-error.test.ts
+bun test v1.4.3 (c6da4a4d3)
+
+test\api-error.test.ts:
+(pass) generic error details preserve their ordinary error identity [0.29ms]
+(pass) validation response details preserve the exact field issue and request identity [0.37ms]
+(pass) retains actual GET dispatch identity in typed HTTP details [1.32ms]
+(pass) retains actual POST dispatch identity in typed HTTP details [0.14ms]
+(pass) retains actual PUT dispatch identity in typed HTTP details [0.11ms]
+(pass) retains actual PATCH dispatch identity in typed HTTP details [0.08ms]
+(pass) retains actual DELETE dispatch identity in typed HTTP details [0.07ms]
+(pass) concurrent same-path errors retain dispatched methods after caller init mutation [0.51ms]
+(pass) apiJson + ApiError > materializes one binary named UTF8 JSON body for every diagnostic [0.20ms]
+(pass) apiJson + ApiError > materializes one binary message JSON body for every diagnostic [0.05ms]
+(pass) apiJson + ApiError > materializes one binary problem JSON body for every diagnostic [0.03ms]
+(pass) apiJson + ApiError > materializes one binary plain authentication response body for every diagnostic [0.05ms]
+(pass) apiJson + ApiError > materializes one binary malformed JSON text body for every diagnostic [0.03ms]
+(pass) apiJson + ApiError > materializes one binary empty bytes body for every diagnostic [0.03ms]
+(pass) apiJson + ApiError > preserves the actual x-opencorvus-request-id response correlation in complete diagnostics [0.29ms]
+(pass) apiJson + ApiError > preserves the actual X-OpenCorvus-Request-ID response correlation in complete diagnostics [0.10ms]
+(pass) apiJson + ApiError > binary archive failure preserves decoded public body and its response correlation [0.38ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 500 diagnostic [0.09ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 400 diagnostic [0.04ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 502 diagnostic [0.03ms]
+(pass) apiJson + ApiError > derives a concise summary and preserves the complete 503 diagnostic [0.02ms]
+(pass) apiJson + ApiError > applies an explicit empty Basic Auth username [0.35ms]
+(pass) apiJson + ApiError > 2xx returns the parsed body unchanged [0.12ms]
+(pass) apiJson + ApiError > 4xx throws ApiError carrying status / path / body / readable message [0.19ms]
+(pass) apiJson + ApiError > ApiError prefers `message` over `error` when both are present [0.13ms]
+(pass) apiJson + ApiError > ApiError renders the message carried by a NamedError envelope [0.14ms]
+(pass) apiJson + ApiError > ApiError falls back to status + path when body is empty [0.16ms]
+(pass) apiJson + ApiError > ApiError with a string body uses the string as detail [0.12ms]
+(pass) apiJson + ApiError > apiJsonWithTimeout preserves ApiError status / path / body [0.34ms]
+
+ 29 pass
+ 0 fail
+ 109 expect() calls
+Ran 29 tests across 1 file. [302.00ms]

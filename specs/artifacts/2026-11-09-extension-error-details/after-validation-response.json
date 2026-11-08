@@ -1,0 +1,22 @@
+{
+  "phase": "after",
+  "date": "2026-11-08T20:02:44.525Z",
+  "status": 400,
+  "requestID": "dbebd730-1539-4c13-9545-94c92591418c",
+  "body": {
+    "data": {
+      "message": "Request validation failed"
+    },
+    "error": [
+      {
+        "code": "too_big",
+        "path": [
+          "query"
+        ],
+        "message": "Too big: expected string to have <=120 characters"
+      }
+    ],
+    "success": false
+  },
+  "schemaValid": true
+}

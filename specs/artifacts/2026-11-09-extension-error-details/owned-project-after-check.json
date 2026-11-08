@@ -1,0 +1,33 @@
+{
+  "before": {
+    "notesBytes": 38,
+    "worktreeNotesExact": true,
+    "seedNotesExact": true,
+    "gitHeadExact": true,
+    "gitHead": "7101509c6a3c94e1b3e8243d10afcbb5ebcb26f8",
+    "profileConfigFiles": []
+  },
+  "after": {
+    "notesBytes": 37,
+    "worktreeNotesExact": true,
+    "seedNotesExact": true,
+    "gitHeadExact": true,
+    "gitHead": "e69e15c9f2c1f007021c3b99d8ed606f45d4d2eb",
+    "profileConfigFiles": []
+  },
+  "qualification": {
+    "shutdownStatus": 200,
+    "originalExecSessions": {
+      "before": {
+        "session": 28312,
+        "exitCode": 0
+      },
+      "after": {
+        "session": 54245,
+        "exitCode": 0
+      }
+    },
+    "uiAsset": "main-Knc9Q_NS.js",
+    "notes": "Only owned isolated profiles and pages used."
+  }
+}

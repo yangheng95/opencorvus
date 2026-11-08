@@ -223,6 +223,8 @@ Settings市场列表的安装量、结果数和详情字节使用当前界面语
 原候选身份、名称、描述、文件路径、仓库和内容hash保持原文；展示不改变风险算法、策略或精确安装授权。
 市场搜索的私有成功回执同时保留已提交query和候选items，成功空数组显示结果数0及当前语言建议；
 初始、新搜索开始或失败不具有成功回执。输入编辑不改写上次回执query，原失败继续独立诊断展示。
+Skill/MCP 设置面板的失败详情直接使用共享错误诊断器，保留 HTTP 方法、状态、路径、请求编号和
+原公共响应正文；配置已提交回执沿同一诊断器仅展示 committed/message/failures，配置快照只留在业务回执。
 
 运行时 `skill_market` Tool 提供搜索、检查和精确安装。搜索与检查是 network read；安装是经普通 Tool
 permission authority 单独授权的 local write。新安装 Skill 只在后续 turn 可被 mount；当前 turn 已冻结的

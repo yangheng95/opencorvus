@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [扩展面板完整错误诊断证据](2026-11-09-extension-error-details/README.md)
 - [市场来源能力证据](2026-11-09-skill-market-source-capabilities/README.md)：真实来源、具名错误和桌面复核。
 
 - [市场工具输入证据](2026-11-09-skill-market-tool-inputs/README.md)：三个入口复现、真实读取与页面复核。

@@ -45,6 +45,26 @@ test("generic error details preserve their ordinary error identity", () => {
   expect(formatErrorDetails(error)).toBe("Error: Ordinary failure")
 })
 
+test("validation response details preserve the exact field issue and request identity", () => {
+  const body = {
+    data: { message: "Request validation failed" },
+    error: [{ code: "too_big", path: ["query"], message: "Too big: expected string to have <=120 characters" }],
+    success: false,
+  }
+  const error = new ApiError(
+    400,
+    "global/skill/market/search",
+    body,
+    { "x-opencorvus-request-id": "validation-query-1" },
+    "GET",
+  )
+  error.stack = "ApiError: Request validation failed"
+  expect(error.body).toBe(body)
+  expect(formatErrorDetails(error)).toBe(
+    `HTTP GET 400 global/skill/market/search\n\nRequest ID: validation-query-1\n\nApiError: Request validation failed\n\nresponse body:\n${JSON.stringify(body, null, 2)}`,
+  )
+})
+
 test.each(["GET", "POST", "PUT", "PATCH", "DELETE"] as const)(
   "retains actual %s dispatch identity in typed HTTP details",
   async (method) => {

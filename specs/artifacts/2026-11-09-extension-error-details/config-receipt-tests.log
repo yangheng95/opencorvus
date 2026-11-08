@@ -1,0 +1,25 @@
+$ bun ../opencorvus/script/prepare-test-process-supervisor.ts
+D:\myhexin-local\opencorvus\packages\opencorvus\native\process-supervisor\target\runtime-de8e1c62b37fa17b\published\opencorvus-process-supervisor.exe
+$ bun run script/run-unit-tests.ts test/config-mutation-receipt.test.ts
+bun test v1.4.3 (c6da4a4d3)
+
+test\config-mutation-receipt.test.ts:
+(pass) GlobalConfigCommittedReconcileError > decodes the complete receipt and preserves its exact business snapshot [0.93ms]
+(pass) GlobalConfigCommittedReconcileError > projects the explicit public diagnostic while preserving the original receipt [0.09ms]
+(pass) GlobalConfigCommittedReconcileError > formats the object receipt with precise request identity and public details [0.33ms]
+(pass) GlobalConfigCommittedReconcileError > formats the utf8 receipt with precise request identity and public details [0.27ms]
+(pass) GlobalConfigCommittedReconcileError > formats a directly supplied receipt as its exact public diagnostic [0.09ms]
+(pass) GlobalConfigCommittedReconcileError > accepts the producer's empty configuration and failure list [0.06ms]
+(pass) ProjectConfigCommittedReconcileError > decodes the complete receipt and preserves its exact business snapshot [0.03ms]
+(pass) ProjectConfigCommittedReconcileError > projects the explicit public diagnostic while preserving the original receipt [0.02ms]
+(pass) ProjectConfigCommittedReconcileError > formats the object receipt with precise request identity and public details [0.07ms]
+(pass) ProjectConfigCommittedReconcileError > formats the utf8 receipt with precise request identity and public details [0.09ms]
+(pass) ProjectConfigCommittedReconcileError > formats a directly supplied receipt as its exact public diagnostic [0.02ms]
+(pass) ProjectConfigCommittedReconcileError > accepts the producer's empty configuration and failure list
+(pass) ordinary HTTP errors retain their exact response and diagnostic contract [0.09ms]
+(pass) ordinary thrown values preserve their explicit diagnostic representations [0.07ms]
+
+ 14 pass
+ 0 fail
+ 42 expect() calls
+Ran 14 tests across 1 file. [411.00ms]

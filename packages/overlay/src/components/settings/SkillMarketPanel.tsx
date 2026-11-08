@@ -12,7 +12,7 @@ import { createStore } from "solid-js/store"
 import { Key } from "@solid-primitives/keyed"
 import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
 import { localeTag, t } from "../../utils/i18n"
-import { ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority, configure as configureApi } from "../../services/api"
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority, configure as configureApi } from "../../services/api"
 import {
   pathRevealFailureText,
   pathRevealLabelKey,
@@ -215,10 +215,6 @@ function isRemoteUrl(value: string): boolean {
   return /^https?:\/\//i.test(value)
 }
 
-function errorDetail(error: unknown): string {
-  return error instanceof Error ? error.message : String(error)
-}
-
 // ── Extension Settings Panels ──
 
 type ExtensionPanelMode = "skill" | "mcp"
@@ -313,11 +309,7 @@ function SharedResourceManagementPanel(props: {
     key = props.mode === "skill" ? "skill.action_failed" : "mcp.action_failed",
     source: Pick<ResourceNotice, "origin" | "directory"> = { origin: "panel" },
   ) {
-    const requestID = error instanceof ApiError ? error.requestID : undefined
-    const details = [errorDetail(error), requestID ? `x-opencorvus-request-id: ${requestID}` : ""]
-      .filter(Boolean)
-      .join("\n")
-    setPanelNotice(key, { ...source, details })
+    setPanelNotice(key, { ...source, details: formatErrorDetails(error) })
   }
 
   function currentDirectory(): string {
