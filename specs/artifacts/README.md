@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [刷新说明计时证据](2026-11-08-provider-relative-time/README.md)：原成功时间和连续静置截图。
+
 - [刷新时间阅读证据](2026-11-08-provider-refresh-time/README.md)：中文前态、双语后态和键盘提示。
 
 - [目录搜索优先级证据](2026-11-08-directory-search-priority/README.md)：真实接口、功能测试和桌面页面复核。

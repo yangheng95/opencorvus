@@ -8,6 +8,7 @@ import type { ProviderRemovalReceipt } from "@opencorvus-ai/sdk"
 import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, Show } from "solid-js"
 import { t, tc } from "../../utils/i18n"
 import { preciseStamp } from "../../utils/time"
+import { useNowTick } from "../../services/clock"
 import { appStore, dismissProviderAuth, setAppStore } from "../../store/app"
 import { committedConfigFromError, updateConfig, updateGlobalConfig } from "../../services/config"
 import { apiJson, ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
@@ -60,11 +61,21 @@ interface ProviderFeedback {
   details?: string
 }
 
-function RefreshTimestamp(props: { value: number; label: string }) {
+function formatRelative(ms: number, now: number): string {
+  const diff = now - ms
+  if (diff < 60_000) return t("provider.refresh.just_now")
+  const mins = Math.floor(diff / 60_000)
+  if (mins < 60) return t("provider.refresh.minutes_ago", { n: mins })
+  const hours = Math.floor(mins / 60)
+  return t("provider.refresh.hours_ago", { n: hours })
+}
+
+function RefreshTimestamp(props: { value: number; labelKey: "provider.catalog_refresh.last" | "provider.model_refresh.last" }) {
+  const now = useNowTick()
   return (
     <Tooltip.Root placement="bottom-start" gutter={6} fitViewport>
       <Tooltip.Trigger as="span" tabIndex={0} class="provider-refresh-meta">
-        {props.label}
+        {t(props.labelKey, { when: formatRelative(props.value, now()) })}
       </Tooltip.Trigger>
       <Tooltip.Portal>
         <Tooltip.Content>{preciseStamp(props.value)}</Tooltip.Content>
@@ -235,15 +246,6 @@ export default function ProvidersPanel() {
       if (committedConfigFromError(error)) observeCommit()
       throw error
     }
-  }
-
-  function formatRelative(ms: number): string {
-    const diff = Date.now() - ms
-    if (diff < 60_000) return t("provider.refresh.just_now")
-    const mins = Math.floor(diff / 60_000)
-    if (mins < 60) return t("provider.refresh.minutes_ago", { n: mins })
-    const hours = Math.floor(mins / 60)
-    return t("provider.refresh.hours_ago", { n: hours })
   }
 
   let providerRefreshSequence = 0
@@ -1233,12 +1235,12 @@ export default function ProvidersPanel() {
           <div class="provider-refresh-status" aria-live="polite">
             <Show when={lastProvidersRefreshedAt()}>
               {(ts) => (
-                <RefreshTimestamp value={ts()} label={t("provider.catalog_refresh.last", { when: formatRelative(ts()) })} />
+                <RefreshTimestamp value={ts()} labelKey="provider.catalog_refresh.last" />
               )}
             </Show>
             <Show when={lastModelsRefreshedAt()}>
               {(ts) => (
-                <RefreshTimestamp value={ts()} label={t("provider.model_refresh.last", { when: formatRelative(ts()) })} />
+                <RefreshTimestamp value={ts()} labelKey="provider.model_refresh.last" />
               )}
             </Show>
           </div>

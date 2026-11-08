@@ -35,6 +35,11 @@ presentation uses the current interface locale for the complete date and time
 to the second, while retaining the existing localized relative label. Keyboard
 focus opens that shared Tooltip; its ordinary Escape dismissal retains the
 settings page and trigger focus. It creates no separate timestamp persistence.
+While mounted, each successful refresh label subscribes to the existing shared
+wall-clock tick. Its original minute/hour floor buckets advance while the page
+stays visible, and reuse that clock's hidden pause and immediate visible resume.
+The timestamp component's lifetime owns the subscription; no success label means
+no subscription, and elapsed time never changes the accepted `fetchedAt`.
 
 Chat, Work and Mission find-in-conversation reads the complete project-scoped
 Session snapshot; Task reads its existing complete project-scoped transcript

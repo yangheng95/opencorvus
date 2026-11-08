@@ -1,5 +1,7 @@
 # 2026-11 Records
 
+- [成功刷新说明随时间推进](2026-11-08-provider-relative-time.md)：原分钟规则与真实页面静置。
+
 - [刷新时间的语言与键盘阅读](2026-11-08-provider-refresh-time.md)：当前界面语言和完整时间阅读。
 
 - [目录搜索的可见路径优先级](2026-11-08-directory-search-priority.md)：隐藏候选拥挤、原路径和有界输出。
