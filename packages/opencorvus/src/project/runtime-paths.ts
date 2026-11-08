@@ -1,5 +1,6 @@
 import path from "node:path"
 import { Identifier } from "@/id/id"
+import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
 
 type BranchInput = { taskID: string; sessionID: string }
 
@@ -22,14 +23,7 @@ function scopedKey(scope: string, input: string): string {
 
 function identitySegment(input: string): string {
   const segment = safeSegment(input)
-  const upper = segment.toUpperCase()
-  if (
-    segment !== input ||
-    segment === "." ||
-    segment === ".." ||
-    segment.endsWith(".") ||
-    /^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\.|$)/.test(upper)
-  ) {
+  if (segment !== input || classifyEntryBasename(segment, true) !== "valid") {
     throw new Error(`ProjectRuntimePaths: invalid identity segment ${input}`)
   }
   return segment

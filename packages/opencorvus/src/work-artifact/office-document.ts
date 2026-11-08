@@ -3,6 +3,7 @@ import type { SessionExecutionAuthority } from "@/engine/task-session-lineage"
 import fs from "node:fs/promises"
 import path from "node:path"
 import z from "zod"
+import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
 import { WorkArtifactProfileRegistry } from "./profile-registry"
 import {
   defaultWorkArtifactPresentationDependencies,
@@ -39,9 +40,8 @@ function filename(extension: "docx" | "xlsx") {
     .max(120)
     .refine(
       (value) =>
-        !/[<>:"/\\|?*\u0000-\u001f]/.test(value) &&
-        !/^[. ]|[. ]$/.test(value) &&
-        !/^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])\./i.test(value) &&
+        classifyEntryBasename(value, true) === "valid" &&
+        !/^[. ]/.test(value) &&
         value.toLowerCase().endsWith(`.${extension}`),
       `filename must be a safe ${extension} basename`,
     )

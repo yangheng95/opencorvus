@@ -1,13 +1,13 @@
 import { z } from "zod"
 import { ArtifactProducerSchema } from "./artifact-producer.js"
 import { ProjectRelativePathSchema } from "./project-path.js"
+import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
 
 // UUID means Universally Unique Identifier; SHA-256 means Secure Hash Algorithm 256-bit.
 // RFC means Request for Comments; media type names use the registered restricted-name grammar from RFC 6838.
 const TaskArtifactUUIDSchema = z.string().uuid()
 const TaskArtifactSHA256Schema = z.string().regex(/^[a-f0-9]{64}$/)
 const portableSegmentPattern = /^(?:[A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9._-]{0,253}[A-Za-z0-9])$/
-const windowsDeviceSegmentPattern = /^(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(?:\.|$)/i
 const utf8Encoder = new TextEncoder()
 
 export const TaskArtifactMediaTypeSchema = z
@@ -25,7 +25,7 @@ export const TaskArtifactPortableSegmentSchema = z
   .string()
   .min(1)
   .refine(
-    (value) => portableSegmentPattern.test(value) && !windowsDeviceSegmentPattern.test(value),
+    (value) => portableSegmentPattern.test(value) && classifyEntryBasename(value, true) === "valid",
     "must be one cross-platform portable path segment",
   )
 

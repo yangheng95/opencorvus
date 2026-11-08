@@ -292,6 +292,9 @@ Source、Message、Tool 的原观察路径与身份不改写；旧地址的文�
 宿主 basename 准入先使用与普通文件创建、复制、移动和上传相同的纯名称分类；
 明确的 invalid_name 在本次 beforeMove、promotion intent 和物理移动之前返回原领域错误。
 该分类按目标宿主保留现有名称语义，不替代更严格的可移植 project-relative path 合同。
+Windows设备别名判定覆盖COM/LPT族的普通数字及官方¹²³字形，并与新作者文件名、
+上游包路径、场景输入和Windows归档清单复用同一分类。已有ASCII身份/record字段的
+额外模式保持；已持久manifest使用的原始portable路径schema不得在无版本化升级时收紧。
 
 匿名 Project promotion 的唯一 Ready 决策是 durable publication terminal receipt。完整的
 Project/Session before-snapshot 和 source digest 先写入 immutable occurrence；随后一个 SQLite

@@ -203,6 +203,8 @@ Settings 共用该服务。不存在可配置的 fallback registry，也不通�
 path、URL index 和 git source import 保持为独立高级入口。Market identity 统一为小写并逐段映射到
 `skills-market/skills-sh/<owner>/<repository>/<skill>`，替换或删除前必须由目标 manifest 证明同一 identity；
 上游网络、HTTP 或响应校验故障统一发布 `SkillMarketUpstreamError` 与 HTTP 502，不能退化为匿名 500。
+新bundle路径的每个名称组件复用宿主名称分类的Windows规则，保留原始Unicode身份，
+在任何安装写入前拒绝设备别名；身份ASCII限制和原上游错误契约保持。
 
 本地path来源安装只在紧邻输入校验边界把缺失目录、非目录和空目录发布为
 `SkillLocalSourceError`（HTTP 400），包含原path、明确reason和message。共享目录校验
@@ -652,7 +654,10 @@ Advanced `source-investigator` 只有在 manifest 显式使用对应 runtime 且
 work_artifact_deliver` typed tools，不拥有第二套 serializer。profile registry 是格式、操作、Skill
   resource、runtime、限制和 qualification 的唯一公开目录；当前声明 `office.presentation@1`
   的新 PPTX、`office.document@1` 的新 DOCX 段落文档和 `office.spreadsheet@1` 的新 XLSX
-  字面值工作表 authoring，不声明 transform。DOCX 通过有序 title/heading/paragraph 计划写入；
+  字面值工作表 authoring，不声明 transform。
+  新DOCX/XLSX作者filename复用同一Windows名称组件分类，保留额外的首点/空白及扩展名限制，
+  在私有workspace写入前返回原schema校验错误；既有产物清单与源文件身份不改写。
+  DOCX 通过有序 title/heading/paragraph 计划写入；
   XLSX 通过有界工作表、列标题和显式字符串/数字/布尔/空单元格计划写入，不接受公式、宏或原始命令；
   同一 batch 在全部单元格完成后按实际内容 autofit 原生列宽。逐表 PNG 按内容宽度包含工作表名称，
   保持真实列宽与渲染限额，不把省略号或空白画布视为可读性通过。

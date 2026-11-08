@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import path from "node:path"
 import { z } from "zod"
+import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
 import { DispatchAdapterContractRegistry } from "../src/agent/dispatch-adapter-contract"
 import type { DispatchSettlementPayload } from "../src/engine/dispatch-settlement"
 
@@ -21,8 +22,10 @@ export function scenarioFixturePath(project: string, relative: string): string {
   const segments = relative.replaceAll("\\", "/").split("/")
   assert(relative && !path.isAbsolute(relative) && !path.win32.isAbsolute(relative), "Scenario fixture requires a relative portable file path")
   for (const segment of segments) {
-    assert(segment && ![".", ".."].includes(segment) && !/[. ]$/.test(segment) && !/[:<>"|?*\x00-\x1f]/.test(segment) &&
-      !/^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(segment), "Scenario fixture requires a relative portable file path")
+    assert(
+      classifyEntryBasename(segment, true) === "valid",
+      "Scenario fixture requires a relative portable file path",
+    )
     assert(!["agents.md", ".git", ".opencorvus"].includes(segment.toLowerCase()), "Scenario fixture must preserve runtime and acceptance ownership")
   }
   const target = path.resolve(project, ...segments)

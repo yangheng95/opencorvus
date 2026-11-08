@@ -1,0 +1,37 @@
+{
+  "phase": "after",
+  "host": [
+    {
+      "name": "COM¹",
+      "windows": "windows-reserved",
+      "posix": "valid"
+    },
+    {
+      "name": "com².txt",
+      "windows": "windows-reserved",
+      "posix": "valid"
+    },
+    {
+      "name": "COM³.tar.gz",
+      "windows": "windows-reserved",
+      "posix": "valid"
+    },
+    {
+      "name": "LPT¹",
+      "windows": "windows-reserved",
+      "posix": "valid"
+    },
+    {
+      "name": "lpt².xlsx",
+      "windows": "windows-reserved",
+      "posix": "valid"
+    },
+    {
+      "name": "LPT³.report.docx",
+      "windows": "windows-reserved",
+      "posix": "valid"
+    }
+  ],
+  "persistedPortablePath": "资料/COM¹.txt",
+  "qualification": "Pure classification and current serialized path schema only; no device filesystem calls"
+}

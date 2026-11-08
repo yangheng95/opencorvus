@@ -1,5 +1,7 @@
 # Artifact entry points
 
+- [Windows设备别名证据](2026-11-09-windows-device-basename/README.md)：正向错误合同、普通名称实际页面和字节。
+
 - [转换名称准入证据](2026-11-08-project-promotion-entry-name/README.md)：真实回执、源身份和当前语言诊断。
 
 - [文件移动键盘证据](2026-11-08-file-move-focus/README.md)：真实桌面接续、接口回执和自有原文。

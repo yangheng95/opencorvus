@@ -1,5 +1,7 @@
 # Specs Storage Index
 
+- [Windows设备别名合同](records/2026-11/2026-11-09-windows-device-basename.md)：共享写入前名称分类与持久路径边界。
+
 - [转换名称准入](records/2026-11/2026-11-08-project-promotion-entry-name.md)：宿主basename与真实非法输入、身份原文保持。
 
 - [文件移动键盘接续](records/2026-11/2026-11-08-file-move-focus.md)：真实移动焦点和目录发现能力调查。

@@ -40,3 +40,11 @@ test.each(["CON", "con.txt", "COM1.tar.gz", "LPT9", "trailing.", "trailing "])(
     expect(classifyEntryBasename(name, true)).toBe("windows-reserved")
   },
 )
+
+test.each(["COM¹", "com².txt", "COM³.tar.gz", "LPT¹", "lpt².xlsx", "LPT³.report.docx"])(
+  "classifies a Windows superscript device alias while retaining other host semantics: %s",
+  (name) => {
+    expect(classifyEntryBasename(name, true)).toBe("windows-reserved")
+    expect(classifyEntryBasename(name, false)).toBe("valid")
+  },
+)

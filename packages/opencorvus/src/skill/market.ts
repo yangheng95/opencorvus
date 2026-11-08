@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto"
 import { NamedError } from "@opencorvus-ai/util/error"
+import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
 import z from "zod"
 
 export namespace SkillMarket {
@@ -9,7 +10,6 @@ export namespace SkillMarket {
   const MAX_FILES = 200
   const MAX_FILE_BYTES = 2 * 1024 * 1024
   const MAX_BUNDLE_BYTES = 10 * 1024 * 1024
-  const WINDOWS_RESERVED_NAME = /^(?:con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\..*)?$/i
 
   export const UpstreamError = NamedError.create(
     "SkillMarketUpstreamError",
@@ -228,7 +228,7 @@ export namespace SkillMarket {
   }
 
   function portableIdentitySegment(segment: string) {
-    return segment !== "." && segment !== ".." && !/[. ]$/.test(segment) && !WINDOWS_RESERVED_NAME.test(segment)
+    return classifyEntryBasename(segment, true) === "valid"
   }
 
   function safeBundlePath(raw: string) {
@@ -236,18 +236,7 @@ export namespace SkillMarket {
       throw new Error(`Skill Market bundle contains an unsafe path: ${raw}`)
     }
     const segments = raw.split("/")
-    if (
-      segments.length === 0 ||
-      segments.some(
-        (segment) =>
-          !segment ||
-          segment === "." ||
-          segment === ".." ||
-          /[<>:"|?*\u0000-\u001f]/.test(segment) ||
-          /[. ]$/.test(segment) ||
-          WINDOWS_RESERVED_NAME.test(segment),
-      )
-    ) {
+    if (segments.some((segment) => classifyEntryBasename(segment, true) !== "valid")) {
       throw new Error(`Skill Market bundle contains an unsafe path: ${raw}`)
     }
     return segments.join("/")

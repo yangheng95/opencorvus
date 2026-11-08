@@ -1,7 +1,7 @@
 export type EntryBasenameStatus = "valid" | "empty" | "path" | "windows-invalid" | "windows-reserved"
 
 // Windows device aliases remain reserved when followed by a filename extension.
-const windowsReservedDeviceNamePattern = /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\..*)?$/i
+const windowsReservedDeviceNamePattern = /^(con|prn|aux|nul|com[1-9¹²³]|lpt[1-9¹²³])(?:\..*)?$/i
 
 /** Classify a component under the host file-mutation policy without runtime or filesystem access. */
 export function classifyEntryBasename(name: string, windows: boolean): EntryBasenameStatus {

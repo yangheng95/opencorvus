@@ -5,6 +5,7 @@ import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
+import { classifyEntryBasename } from "../packages/util/src/entry-basename"
 import {
   artifactBrowserMcpNodeExecutableName,
   artifactExecutableName,
@@ -392,12 +393,7 @@ export function assertNativeArchiveClosure(input: {
     normalizedPaths.add(collisionKey)
     if (input.platform === "win32") {
       for (const segment of entryPath.split("/")) {
-        const stem = segment.split(".", 1)[0]!.toUpperCase()
-        if (
-          /[\x00-\x1f<>:"|?*]/.test(segment) ||
-          /[ .]$/.test(segment) ||
-          /^(?:CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])$/.test(stem)
-        ) {
+        if (classifyEntryBasename(segment, true) !== "valid") {
           throw new Error(`Native archive ${input.archive} contains an unsafe Windows entry path: ${entryPath}`)
         }
       }
