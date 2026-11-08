@@ -7,6 +7,7 @@ import type { ProviderRemovalReceipt } from "@opencorvus-ai/sdk"
 
 import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, Show } from "solid-js"
 import { t, tc } from "../../utils/i18n"
+import { preciseStamp } from "../../utils/time"
 import { appStore, dismissProviderAuth, setAppStore } from "../../store/app"
 import { committedConfigFromError, updateConfig, updateGlobalConfig } from "../../services/config"
 import { apiJson, ApiError, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
@@ -47,6 +48,7 @@ import { DropdownMenu } from "../ui/DropdownMenu"
 import { Disclosure } from "../ui/Disclosure"
 import { SearchField } from "../ui/SearchField"
 import { TextField } from "../ui/TextField"
+import { Tooltip } from "../ui/Tooltip"
 import { getHostTransport } from "../../services/host-transport-runtime"
 import { formatErrorDetails } from "../../utils/error-details"
 import { implicitProjectSuffix, projectDirectoryLabel } from "../../utils/project-directory"
@@ -56,6 +58,19 @@ interface ProviderFeedback {
   key: string
   vars?: Record<string, string>
   details?: string
+}
+
+function RefreshTimestamp(props: { value: number; label: string }) {
+  return (
+    <Tooltip.Root placement="bottom-start" gutter={6} fitViewport>
+      <Tooltip.Trigger as="span" tabIndex={0} class="provider-refresh-meta">
+        {props.label}
+      </Tooltip.Trigger>
+      <Tooltip.Portal>
+        <Tooltip.Content>{preciseStamp(props.value)}</Tooltip.Content>
+      </Tooltip.Portal>
+    </Tooltip.Root>
+  )
 }
 
 function feedback(key: string, details?: string, vars?: Record<string, string>): ProviderFeedback[] {
@@ -1218,16 +1233,12 @@ export default function ProvidersPanel() {
           <div class="provider-refresh-status" aria-live="polite">
             <Show when={lastProvidersRefreshedAt()}>
               {(ts) => (
-                <span class="provider-refresh-meta" title={new Date(ts()).toLocaleString()}>
-                  {t("provider.catalog_refresh.last", { when: formatRelative(ts()) })}
-                </span>
+                <RefreshTimestamp value={ts()} label={t("provider.catalog_refresh.last", { when: formatRelative(ts()) })} />
               )}
             </Show>
             <Show when={lastModelsRefreshedAt()}>
               {(ts) => (
-                <span class="provider-refresh-meta" title={new Date(ts()).toLocaleString()}>
-                  {t("provider.model_refresh.last", { when: formatRelative(ts()) })}
-                </span>
+                <RefreshTimestamp value={ts()} label={t("provider.model_refresh.last", { when: formatRelative(ts()) })} />
               )}
             </Show>
           </div>

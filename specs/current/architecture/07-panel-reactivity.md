@@ -29,6 +29,13 @@ event retains that caller's policy. Empty queries leave Escape to the surroundin
 popup or page. Settings therefore clears the current search before its later
 Escape can close the page, without introducing a page-specific keyboard path.
 
+Provider catalog and online-model refresh timestamps retain their accepted
+producer `fetchedAt` and existing scope lifetime. Their common focusable Tooltip
+presentation uses the current interface locale for the complete date and time
+to the second, while retaining the existing localized relative label. Keyboard
+focus opens that shared Tooltip; its ordinary Escape dismissal retains the
+settings page and trigger focus. It creates no separate timestamp persistence.
+
 Chat, Work and Mission find-in-conversation reads the complete project-scoped
 Session snapshot; Task reads its existing complete project-scoped transcript
 with every participant's original Session identity. One message-array validator
