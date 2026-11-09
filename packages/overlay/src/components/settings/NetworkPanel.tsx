@@ -71,7 +71,7 @@ interface NetworkFeedback {
   details?: string
 }
 
-type ProxyCommit = "saved" | "deleted" | "inherited"
+type ProxyCommit = "saved" | "deleted" | "inherited" | "newer-draft"
 
 function describeFailure(error: unknown): string {
   if (error instanceof Error && error.message) return error.message
@@ -84,12 +84,14 @@ export default function NetworkPanel() {
   const [url, setUrl] = createSignal("")
   const [username, setUsername] = createSignal("")
   const [password, setPassword] = createSignal("")
-  const [saving, setSaving] = createSignal(false)
-  const [deleting, setDeleting] = createSignal(false)
+  const [write, setWrite] = createSignal<"save" | "delete">()
   const [testing, setTesting] = createSignal(false)
   const [commit, setCommit] = createSignal<ProxyCommit>()
   const [error, setError] = createSignal<NetworkFeedback | null>(null)
   const [testResult, setTestResult] = createSignal<NetworkProxyTestResult | null>(null)
+  const saving = () => write() === "save"
+  const deleting = () => write() === "delete"
+  const busy = () => !!write() || testing()
   const proxyConfigured = createMemo(() => !!(appStore.config as any)?.network?.proxy)
   const directory = createMemo(() => activeProjectDirectory().trim())
   const projectLabel = () => projectLedgerDisplayName({
@@ -100,6 +102,8 @@ export default function NetworkPanel() {
   })
   let operationGeneration = 0
   let draftGeneration = 0
+  // A newer authored draft stays independent of the last accepted configuration.
+  let adoptedDraftGeneration = 0
   let scopeIdentity = ""
   let feedbackTimer: ReturnType<typeof setTimeout> | undefined
 
@@ -110,8 +114,8 @@ export default function NetworkPanel() {
     if (scopeChanged) {
       scopeIdentity = nextScopeIdentity
       operationGeneration += 1
-      setSaving(false)
-      setDeleting(false)
+      setWrite(undefined)
+      adoptedDraftGeneration = draftGeneration
       setTesting(false)
       setError(null)
       setCommit(undefined)
@@ -119,7 +123,8 @@ export default function NetworkPanel() {
       feedbackTimer = undefined
     }
     const proxy = configuredProxy()
-    draftGeneration += 1
+    if (write() || adoptedDraftGeneration !== draftGeneration) return
+    adoptedDraftGeneration = ++draftGeneration
     setLlmProvider(proxy.llmProvider)
     setWebResearch(proxy.webResearch)
     setUrl(proxy.url)
@@ -153,14 +158,16 @@ export default function NetworkPanel() {
     return ownsScope(owner) && owner.draftGeneration === draftGeneration
   }
 
-  function recordProxyCommit(owner: NetworkOperationOwner, result: ProxyCommit): void {
-    const completionOwner = { ...owner, draftGeneration }
+  function recordProxyCommit(owner: NetworkOperationOwner, committed: Exclude<ProxyCommit, "newer-draft">): void {
+    const ownsDraft = ownsCurrentDraft(owner)
+    const result = ownsDraft ? committed : "newer-draft"
+    if (ownsDraft) adoptedDraftGeneration = draftGeneration
     if (feedbackTimer) clearTimeout(feedbackTimer)
     feedbackTimer = undefined
     setCommit(result)
-    if (result === "inherited") return
+    if (result === "inherited" || result === "newer-draft") return
     feedbackTimer = setTimeout(() => {
-      if (ownsCurrentDraft(completionOwner)) setCommit(undefined)
+      if (ownsScope(owner)) setCommit(undefined)
       feedbackTimer = undefined
     }, 1800)
   }
@@ -172,10 +179,14 @@ export default function NetworkPanel() {
   })
 
   function clearFeedback() {
-    draftGeneration += 1
     setError(null)
     setCommit(undefined)
     setTestResult(null)
+  }
+
+  function editDraft() {
+    draftGeneration += 1
+    clearFeedback()
   }
 
   function readProxyInput(): ProxyInput {
@@ -232,13 +243,13 @@ export default function NetworkPanel() {
   }
 
   async function saveProxy() {
-    if (saving() || deleting()) return
+    if (busy()) return
     clearFeedback()
     const input = readProxyInput()
     if (!validateProxyInput(input, false)) return
     const owner = captureOwner()
 
-    setSaving(true)
+    setWrite("save")
     try {
       const nextProxy = input.proxyUrl
         ? {
@@ -257,16 +268,16 @@ export default function NetworkPanel() {
     } catch (err) {
       if (ownsScope(owner)) setError({ key: "network.proxy.save_failed", details: formatErrorDetails(err) })
     } finally {
-      if (ownsScope(owner)) setSaving(false)
+      if (ownsScope(owner)) setWrite(undefined)
     }
   }
 
   async function deleteProxy() {
-    if (deleting() || saving() || testing() || !proxyConfigured()) return
+    if (busy() || !proxyConfigured()) return
     clearFeedback()
     const owner = captureOwner()
 
-    setDeleting(true)
+    setWrite("delete")
     try {
       const savedConfig = await patchConfig({ network: { proxy: null } }, { ...currentProjectConfigRequestOptions(), authority: owner.authority })
       if (!savedConfig) {
@@ -278,12 +289,12 @@ export default function NetworkPanel() {
     } catch (err) {
       if (ownsScope(owner)) setError({ key: "network.proxy.delete_failed", details: formatErrorDetails(err) })
     } finally {
-      if (ownsScope(owner)) setDeleting(false)
+      if (ownsScope(owner)) setWrite(undefined)
     }
   }
 
   async function testProxy() {
-    if (testing() || deleting()) return
+    if (busy()) return
     clearFeedback()
     const input = readProxyInput()
     if (!validateProxyInput(input, true)) return
@@ -334,7 +345,7 @@ export default function NetworkPanel() {
                 checked={llmProvider()}
                 onChange={(checked) => {
                   setLlmProvider(checked)
-                  clearFeedback()
+                  editDraft()
                 }}
               />
             }
@@ -351,7 +362,7 @@ export default function NetworkPanel() {
                 checked={webResearch()}
                 onChange={(checked) => {
                   setWebResearch(checked)
-                  clearFeedback()
+                  editDraft()
                 }}
               />
             }
@@ -366,7 +377,7 @@ export default function NetworkPanel() {
                 placeholder="http://127.0.0.1:7890"
                 onInput={(e) => {
                   setUrl(e.currentTarget.value)
-                  clearFeedback()
+                  editDraft()
                 }}
               />
             </TextField.Root>
@@ -381,7 +392,7 @@ export default function NetworkPanel() {
                 autocomplete="username"
                 onInput={(e) => {
                   setUsername(e.currentTarget.value)
-                  clearFeedback()
+                  editDraft()
                 }}
               />
             </TextField.Root>
@@ -396,7 +407,7 @@ export default function NetworkPanel() {
                 autocomplete="current-password"
                 onInput={(e) => {
                   setPassword(e.currentTarget.value)
-                  clearFeedback()
+                  editDraft()
                 }}
               />
             </TextField.Root>
@@ -404,9 +415,13 @@ export default function NetworkPanel() {
 
           {error() ? <Feedback tone="error" details={error()?.details}>{t(error()!.key)}</Feedback> : null}
 
-          <Show when={commit() === "deleted" || commit() === "inherited"}>
+          <Show when={commit() === "deleted" || commit() === "inherited" || commit() === "newer-draft"}>
             <Feedback tone={commit() === "deleted" ? "success" : "info"}>
-              {t(commit() === "deleted" ? "network.proxy.deleted" : "network.proxy.inherited_after_clear")}
+              {t(commit() === "deleted"
+                ? "network.proxy.deleted"
+                : commit() === "inherited"
+                  ? "network.proxy.inherited_after_clear"
+                  : "network.proxy.newer_draft_unsaved")}
             </Feedback>
           </Show>
 
@@ -426,7 +441,7 @@ export default function NetworkPanel() {
                   size="md"
                   tone="neutral"
                   onClick={() => void testProxy()}
-                  disabled={testing() || saving() || deleting()}
+                  disabled={busy()}
                   title={t("network.proxy.test_button_title")}
                 >
                   {testing() ? t("network.proxy.test_testing") : t("network.proxy.test_button")}
@@ -437,7 +452,7 @@ export default function NetworkPanel() {
                   size="md"
                   tone="danger"
                   onClick={() => void deleteProxy()}
-                  disabled={deleting() || saving() || testing() || !proxyConfigured()}
+                  disabled={busy() || !proxyConfigured()}
                   title={t("network.proxy.delete_button_title")}
                   aria-label={t("network.proxy.delete_button_title")}
                   data-ui="network-proxy-delete"
@@ -451,7 +466,8 @@ export default function NetworkPanel() {
                   size="md"
                   tone="accent"
                   onClick={() => void saveProxy()}
-                  disabled={saving() || testing() || deleting()}
+                  aria-disabled={busy() || undefined}
+                  aria-busy={saving() || undefined}
                 >
                   {saving() ? t("common.saving") : commit() === "saved" ? t("common.saved") : t("common.save")}
                 </Button>

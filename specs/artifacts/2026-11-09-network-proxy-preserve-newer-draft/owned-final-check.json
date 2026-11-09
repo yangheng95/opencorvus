@@ -1,0 +1,103 @@
+{
+  "projects": {
+    "before": {
+      "head": "cab2769d3e335b1dfc28a2a78e499474c908eb6c",
+      "originalBytes": 37,
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      },
+      "savedProxy": {
+        "url": "http://127.0.0.1:31302",
+        "llmProvider": false,
+        "webResearch": false
+      },
+      "orderedPatchReceipts": [
+        {
+          "time": "2026-11-09T08:34:02.474Z",
+          "requestID": "da9d0a1b-8cef-4c37-ad34-dccaa8ea5b8b",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 74
+        },
+        {
+          "time": "2026-11-09T08:34:16.757Z",
+          "requestID": "b55a9d33-f37a-4a17-a272-1f1d6382f669",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 70
+        }
+      ]
+    },
+    "after": {
+      "head": "480ee7620a2c3a42bee521f4e73aaf01c0b99481",
+      "originalBytes": 36,
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      },
+      "savedProxy": {
+        "url": "http://127.0.0.1:31303",
+        "llmProvider": false,
+        "webResearch": false
+      },
+      "orderedPatchReceipts": [
+        {
+          "time": "2026-11-09T08:39:05.765Z",
+          "requestID": "f82b483d-8e0b-455c-bf53-ef2765a9eeee",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 59
+        },
+        {
+          "time": "2026-11-09T08:39:21.571Z",
+          "requestID": "6117d8df-8cd6-45cb-bdcb-30a53aeba953",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 63
+        },
+        {
+          "time": "2026-11-09T08:39:39.112Z",
+          "requestID": "938c762a-f615-4ab5-bf22-b09bc3c46d50",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 59
+        }
+      ]
+    }
+  },
+  "shutdown": [
+    {
+      "port": 39125,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSnZtY00OLm8Dx8ra"
+      },
+      "status": 200
+    },
+    {
+      "port": 39126,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSnZuc00qAomOSiZJ"
+      },
+      "status": 200
+    }
+  ]
+}

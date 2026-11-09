@@ -1,0 +1,44 @@
+{
+  "initial": [
+    "\t\t\t\t\t\t\t\t\t78 text field (settable) Proxy URL, Value: http://127.0.0.1:31301",
+    "The focused UI element is 85 button Save"
+  ],
+  "firstBusy": {
+    "busy": "true",
+    "disabled": "true",
+    "text": "Saving…"
+  },
+  "firstSettled": [
+    "\t\t\t\t\t\t\t\t\t78 text field (settable) Proxy URL, Value: http://127.0.0.1:31301",
+    "\t\t\t\t\t\t\t\t\t85 button Saved",
+    "The focused UI element is 85 button Saved"
+  ],
+  "nextKey": [
+    "The focused UI element is 84 button Delete the saved proxy settings."
+  ],
+  "during": {
+    "busy": "Saving…",
+    "focus": true,
+    "value": "http://127.0.0.1:31303"
+  },
+  "settled": [
+    "\t\t\t\t\t\t\t\t\t78 text field (settable) Proxy URL, Value: http://127.0.0.1:31303",
+    "\t\t\t\t\t\t\t\t\t86 text The submitted proxy settings were saved. Your newer edits are still unsaved.",
+    "The focused UI element is 78 text field (settable) Proxy URL, Value: http://127.0.0.1:31303"
+  ],
+  "localized": [
+    "\t\t\t\t\t\t\t\t\t78 text field (settable) 代理 URL, Value: http://127.0.0.1:31303",
+    "\t\t\t\t\t\t\t\t\t86 text 已保存刚才提交的代理设置。之后的编辑尚未保存。"
+  ],
+  "explicit": [
+    "\t\t\t\t\t\t\t\t\t78 text field (settable) 代理 URL, Value: http://127.0.0.1:31303",
+    "\t\t\t\t\t\t\t\t\t85 button 已保存",
+    "The focused UI element is 85 button 已保存"
+  ],
+  "reopened": [
+    "\t\t\t\t\t\t\t\t\t104 button (collapsed) 代理改动保存到项目：project-after, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t105 text 代理改动保存到项目：project-after",
+    "\t\t\t\t\t\t\t\t\t113 text field (settable) 代理 URL, Value: http://127.0.0.1:31303",
+    "The focused UI element is 31 tab (selected, settable, boolean) 网络, Value: 1, ID: config-tab-network"
+  ]
+}

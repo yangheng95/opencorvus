@@ -3119,6 +3119,11 @@ Clearing a project proxy can leave an inherited proxy in the accepted effective
 configuration. The same mutation response supplies the existing field projection
 and a distinct localized receipt for that outcome. The receipt remains until
 the operator edits the draft, starts another operation, or leaves the scope.
+The proxy form adopts the confirmed configuration when there is no newer
+authored draft. If the operator edits during a write, the accepted configuration
+still updates independently, the newer draft stays in the form, and the receipt
+distinguishes the committed values from the unsaved edits. Save stays focusable
+while busy; all three proxy actions use the same busy admission.
 
 ## Current Surface Ownership
 

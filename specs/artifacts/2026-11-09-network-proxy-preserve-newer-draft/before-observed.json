@@ -1,0 +1,24 @@
+{
+  "focused": [
+    "\t\t\t\t\t\t\t\t\t78 text field (settable) Proxy URL, Value: http://127.0.0.1:31301",
+    "The focused UI element is 85 button Save"
+  ],
+  "afterSave": [
+    "\t\t\t\t\t\t\t\t\t78 text field (settable) Proxy URL, Value: http://127.0.0.1:31301",
+    "\t\t\t\t\t\t\t\t\t85 button Saved",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39125/ui/"
+  ],
+  "nextKey": [
+    "The focused UI element is 84 button Delete the saved proxy settings."
+  ],
+  "during": {
+    "busy": "Saving…",
+    "focus": true,
+    "value": "http://127.0.0.1:31303"
+  },
+  "settled": [
+    "\t\t\t\t\t\t\t\t\t78 text field (settable) Proxy URL, Value: http://127.0.0.1:31302",
+    "\t\t\t\t\t\t\t\t\t85 button Saved",
+    "The focused UI element is 78 text field (settable) Proxy URL, Value: http://127.0.0.1:31302"
+  ]
+}

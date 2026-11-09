@@ -1,0 +1,27 @@
+{
+  "phase": "after",
+  "step": "older",
+  "checks": [
+    {
+      "path": "/config",
+      "operationId": "config.get",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b96\\project-after",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "fa3dae00-aeae-478c-995b-48b2dcb5a35b",
+      "proxy": {
+        "url": "http://127.0.0.1:31302",
+        "llmProvider": false,
+        "webResearch": false
+      }
+    },
+    {
+      "path": "/global/config",
+      "operationId": "global.config.get",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "82b3c577-292e-40dd-ac5b-195758cff330",
+      "proxy": null
+    }
+  ]
+}
