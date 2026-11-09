@@ -1,0 +1,115 @@
+{
+  "operation": "global.projects.checkDirectory",
+  "receipts": [
+    {
+      "route": "/work-ledger",
+      "query": {
+        "limit": "80"
+      },
+      "status": 200,
+      "requestID": "5c1a69b0-8166-4578-88c1-818c4a22c926",
+      "data": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_hh6zffeI7apR5ugjMSV1",
+            "title": "",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\project-after",
+            "created": 1794222987011,
+            "updated": 1794222987011,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "route": "/global/projects/check-directory",
+      "query": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\target-after\\."
+      },
+      "status": 200,
+      "requestID": "b21dcf4e-f9d7-4c72-88f2-66208f89319b",
+      "data": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\target-after"
+      }
+    },
+    {
+      "route": "/global/projects/check-directory",
+      "query": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder"
+      },
+      "status": 400,
+      "requestID": "1b6b5c02-a10b-4799-be70-d004dafea1da",
+      "data": {
+        "name": "ProjectDirectoryIntegrityError",
+        "data": {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder",
+          "reason": "missing",
+          "message": "Project directory does not exist: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder"
+        }
+      }
+    },
+    {
+      "route": "/global/projects/check-directory",
+      "query": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\project-after\\note.txt"
+      },
+      "status": 400,
+      "requestID": "aadad82a-4d0f-4544-a091-a3339a64a1d9",
+      "data": {
+        "name": "ProjectDirectoryIntegrityError",
+        "data": {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\project-after\\note.txt",
+          "reason": "not-directory",
+          "message": "Project directory is not a directory: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\project-after\\note.txt"
+        }
+      }
+    },
+    {
+      "route": "/global/projects/check-directory",
+      "query": {
+        "path": "owned-relative-109"
+      },
+      "status": 400,
+      "requestID": "8a570cfe-25b2-4a77-a129-cfa9f5333152",
+      "data": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "custom",
+            "path": [
+              "path"
+            ],
+            "message": "Expected an absolute server directory"
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "route": "/work-ledger",
+      "query": {
+        "limit": "80"
+      },
+      "status": 200,
+      "requestID": "aa95654a-a452-4269-bd64-7044fc756a35",
+      "data": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_hh6zffeI7apR5ugjMSV1",
+            "title": "",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\project-after",
+            "created": 1794222987011,
+            "updated": 1794222987011,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    }
+  ]
+}

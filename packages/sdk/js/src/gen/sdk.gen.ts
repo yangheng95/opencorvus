@@ -257,6 +257,8 @@ import type {
   GlobalPrepareStreamErrors,
   GlobalPrepareStreamResponses,
   GlobalProjectsAnonymousResponses,
+  GlobalProjectsCheckDirectoryErrors,
+  GlobalProjectsCheckDirectoryResponses,
   GlobalProjectsDiscoverErrors,
   GlobalProjectsDiscoverResponses,
   GlobalProvidersAccountUsageErrors,
@@ -6711,6 +6713,29 @@ export class Projects extends HeyApiClient {
     return (options?.client ?? this.client).post<GlobalProjectsAnonymousResponses, unknown, ThrowOnError>({
       url: "/global/projects/anonymous",
       ...options,
+    })
+  }
+
+  /**
+   * Check an existing workspace directory
+   *
+   * Resolve an explicitly supplied absolute directory on the server without registering a project or opening a workspace.
+   */
+  public checkDirectory<ThrowOnError extends boolean = false>(
+    parameters: {
+      path: string
+    },
+    options?: Options<never, ThrowOnError>,
+  ) {
+    const params = buildClientParams([parameters], [{ args: [{ in: "query", key: "path" }] }])
+    return (options?.client ?? this.client).get<
+      GlobalProjectsCheckDirectoryResponses,
+      GlobalProjectsCheckDirectoryErrors,
+      ThrowOnError
+    >({
+      url: "/global/projects/check-directory",
+      ...options,
+      ...params,
     })
   }
 

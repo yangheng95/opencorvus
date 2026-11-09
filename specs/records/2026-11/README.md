@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [浏览器文件夹确认先校验真实目录](2026-11-09-browser-workspace-directory-admission.md)
 - [0.1.49 发布](2026-11-09-release-0.1.49.md)
 - [项目行操作显示目标身份](2026-11-09-project-row-action-identity.md)
 - [工作侧栏事件验收代理](2026-11-09-work-ledger-event-proxy.md)

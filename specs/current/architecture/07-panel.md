@@ -3990,6 +3990,10 @@ UI action. It selects the existing manualWorkspacePathEntry path dialog on
 browser hosts and the native picker on supported desktop hosts. Conversion names
 the destination parent separately from the new project folder; each dialog keeps
 the initiating project action's existing opening guard and return-focus target.
+Manual entry requires an absolute server path and keeps the dialog open while
+the global directory check confirms that it exists and is a directory. Failure
+preserves the input and current workspace. Only an accepted directory reaches
+workspace selection or conversion; the check does not register a Project.
 Converting the selected Project enters the existing selection-loading lifetime
 before the directory mutation starts. Selected-item and Goal readers retire
 while the directory moves; a rejected conversion restores that same selection's

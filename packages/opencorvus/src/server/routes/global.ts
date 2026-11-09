@@ -1,5 +1,6 @@
 import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
+import { isAbsolute } from "node:path"
 import { validator } from "@/server/validator"
 import { streamGlobalSSE } from "../sse"
 import z from "zod"
@@ -11,6 +12,7 @@ import { Instance } from "../../project/instance"
 import { Project } from "../../project/project"
 import { Installation } from "@/installation"
 import { Log } from "../../util/log"
+import { Filesystem } from "../../util/filesystem"
 import { lazy } from "../../util/lazy"
 import { Config } from "../../config/config"
 import { Auth } from "../../auth"
@@ -1172,6 +1174,32 @@ export const GlobalRoutes = lazy(() =>
         },
       }),
       async (c) => c.json(await Project.discoverFromLaunchDirectory()),
+    )
+    .get(
+      "/projects/check-directory",
+      describeRoute({
+        summary: "Check an existing workspace directory",
+        description: "Resolve an explicitly supplied absolute directory on the server without registering a project or opening a workspace.",
+        operationId: "global.projects.checkDirectory",
+        responses: {
+          200: {
+            description: "Existing workspace directory",
+            content: { "application/json": { schema: resolver(z.object({ directory: z.string() })) } },
+          },
+          400: badRequestOrNamedErrorResponse(
+            "Invalid or unavailable directory",
+            "ProjectDirectoryIntegrityError",
+            "InvalidDirectoryError",
+          ),
+          ...errors(500),
+        },
+      }),
+      validator("query", z.object({
+        path: z.string().trim().min(1).refine((value) => isAbsolute(Filesystem.windowsPath(value)), {
+          message: "Expected an absolute server directory",
+        }),
+      })),
+      async (c) => c.json({ directory: await Project.inspectWorkspaceDirectory(c.req.valid("query").path) }),
     )
     .post(
       "/projects/anonymous",

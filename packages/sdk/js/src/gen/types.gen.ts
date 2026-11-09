@@ -22268,6 +22268,54 @@ export type GlobalProjectsAnonymousResponses = {
 
 export type GlobalProjectsAnonymousResponse = GlobalProjectsAnonymousResponses[keyof GlobalProjectsAnonymousResponses]
 
+export type GlobalProjectsCheckDirectoryData = {
+  body?: never
+  path?: never
+  query: {
+    path: string
+  }
+  url: "/global/projects/check-directory"
+}
+
+export type GlobalProjectsCheckDirectoryErrors = {
+  /**
+   * Invalid or unavailable directory
+   */
+  400:
+    | BadRequestError
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "ProjectDirectoryIntegrityError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "InvalidDirectoryError"
+      }
+  /**
+   * Internal server error
+   */
+  500: UnknownError
+}
+
+export type GlobalProjectsCheckDirectoryError =
+  GlobalProjectsCheckDirectoryErrors[keyof GlobalProjectsCheckDirectoryErrors]
+
+export type GlobalProjectsCheckDirectoryResponses = {
+  /**
+   * Existing workspace directory
+   */
+  200: {
+    directory: string
+  }
+}
+
+export type GlobalProjectsCheckDirectoryResponse =
+  GlobalProjectsCheckDirectoryResponses[keyof GlobalProjectsCheckDirectoryResponses]
+
 export type GlobalProjectsDiscoverData = {
   body?: never
   path?: never

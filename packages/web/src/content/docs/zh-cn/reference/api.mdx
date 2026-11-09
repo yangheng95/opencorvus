@@ -38,6 +38,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/global/event` | Get global events | `global.event` |
 | GET | `/global/health` | Get health | `global.health` |
 | POST | `/global/projects/anonymous` | Create an anonymous project | `global.projects.anonymous` |
+| GET | `/global/projects/check-directory` | Check an existing workspace directory 错误: `BadRequestError`, `InvalidDirectoryError`, `ProjectDirectoryIntegrityError`, `UnknownError`. | `global.projects.checkDirectory` |
 | GET | `/global/projects/discover` | Discover local OpenCorvus projects 错误: `BadRequestError`, `UnknownError`. | `global.projects.discover` |
 | GET | `/global/providers` | List providers for a new global task | `global.providers.list` |
 | GET | `/global/providers/auth` | Get global Provider auth methods | `global.providers.auth` |

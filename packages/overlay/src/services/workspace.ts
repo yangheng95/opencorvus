@@ -775,6 +775,8 @@ export async function chooseWorkspaceDirectory(options: {
   presentation?: Pick<AppDialogOpenOptions, "openingGuard" | "returnFocusTarget">
 }): Promise<string> {
   if (!getHostTransport().capabilities.ui.manualWorkspacePathEntry) return pickDirectory(options.start)
+  const authority = captureApiAuthority()
+  let checkedDirectory = ""
   const result = await showAppDialog({
     ...options.presentation,
     title: options.title,
@@ -785,10 +787,19 @@ export async function chooseWorkspaceDirectory(options: {
     inputValue: options.start,
     inputRequired: true,
     inputRequiredMessage: t("cwd.path_required"),
+    validateInput: (value) => isAbsoluteServerPath(value.trim()) ? undefined : t("cwd.path_absolute_required"),
+    onConfirm: async (value) => {
+      assertApiAuthorityCurrent(authority)
+      const directory = String(value ?? "").trim()
+      const query = new URLSearchParams({ path: directory })
+      const checked = await apiJson<{ directory: string }>(`global/projects/check-directory?${query}`, { authority })
+      assertApiAuthorityCurrent(authority)
+      checkedDirectory = checked.directory
+    },
     cancel: true,
     okLabel: options.okLabel,
   })
-  return result.confirmed ? String(result.value || "").trim() : ""
+  return result.confirmed ? checkedDirectory : ""
 }
 
 /** Open a native multi-file picker. Returns the array of selected paths. */

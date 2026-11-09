@@ -1,0 +1,430 @@
+{
+  "before": {
+    "facts": {
+      "relativeAt": {
+        "at": "2026-11-09T11:07:06.551Z",
+        "requests": [
+          {
+            "route": "/expert-squad/catalog",
+            "requestID": "975fca5a-d936-48d7-a83a-7cfacf090fbd",
+            "time": "2026-11-09T11:07:06.789Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\isolated-working-directory\\owned-relative-109",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/expert-squad/search",
+            "requestID": "028bc9a6-a79b-469f-9a93-50ef56a7e82a",
+            "time": "2026-11-09T11:07:06.791Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\isolated-working-directory\\owned-relative-109",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/chat/capability",
+            "requestID": "2b5b3a11-3fa4-4be9-961a-3db4eaf2b30b",
+            "time": "2026-11-09T11:07:06.793Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\isolated-working-directory\\owned-relative-109",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/mission-skill/catalog",
+            "requestID": "046862c8-fecf-41c1-91bd-e758e3e193b7",
+            "time": "2026-11-09T11:07:06.800Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\isolated-working-directory\\owned-relative-109",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/channel",
+            "requestID": "f088f917-2194-48e5-b3dd-8b331b37fb51",
+            "time": "2026-11-09T11:07:06.802Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\isolated-working-directory\\owned-relative-109",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/config",
+            "requestID": "8324ea51-ee78-426d-b7b6-de188bbb65c4",
+            "time": "2026-11-09T11:07:06.805Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\isolated-working-directory\\owned-relative-109",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/skill/mounts",
+            "requestID": "360b45d4-aee6-42b0-a331-fc5c0868b591",
+            "time": "2026-11-09T11:07:06.807Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\isolated-working-directory\\owned-relative-109",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/path",
+            "requestID": "1a5f44ea-db7c-4f59-9c52-2ed484c1b2ba",
+            "time": "2026-11-09T11:07:06.816Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\isolated-working-directory\\owned-relative-109",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/mcp",
+            "requestID": "e79a2e1b-6c10-4647-9073-7332d6de4ea8",
+            "time": "2026-11-09T11:07:06.818Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\isolated-working-directory\\owned-relative-109",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/vcs",
+            "requestID": "581984ab-ccf8-4c98-8ace-bf3e41b58b81",
+            "time": "2026-11-09T11:07:06.820Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\isolated-working-directory\\owned-relative-109",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/experimental/project-memory",
+            "requestID": "709b3772-32da-4668-ad63-b0bfedb19daa",
+            "time": "2026-11-09T11:07:06.845Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\isolated-working-directory\\owned-relative-109",
+            "status": 400,
+            "reason": "missing"
+          }
+        ]
+      },
+      "absoluteMissingAt": {
+        "at": "2026-11-09T11:07:37.192Z",
+        "requests": [
+          {
+            "route": "/mission-skill/catalog",
+            "requestID": "a9a59d5b-03eb-4a78-8347-f0eaf82a110d",
+            "time": "2026-11-09T11:07:37.305Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/expert-squad/catalog",
+            "requestID": "7c88704b-baed-49fd-9bbf-7e196e5465e2",
+            "time": "2026-11-09T11:07:37.308Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/chat/capability",
+            "requestID": "b602ac1b-7e7f-4832-8f7a-b46d2b5d044c",
+            "time": "2026-11-09T11:07:37.311Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/config",
+            "requestID": "67eab231-0c16-46cc-8583-64d3943c00e8",
+            "time": "2026-11-09T11:07:37.313Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/channel",
+            "requestID": "54450940-1931-4ef2-82b3-cd5a83d880dc",
+            "time": "2026-11-09T11:07:37.326Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/skill/mounts",
+            "requestID": "26ddf603-db05-4575-9de7-04cc107e0ba9",
+            "time": "2026-11-09T11:07:37.352Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/mcp",
+            "requestID": "be75faac-84ba-4e64-9a91-d961639f25a2",
+            "time": "2026-11-09T11:07:37.355Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/path",
+            "requestID": "e209fb9f-b5e4-404a-a2c9-808e7da32ad1",
+            "time": "2026-11-09T11:07:37.358Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/expert-squad/search",
+            "requestID": "a9a688a7-98d4-491b-9d3b-2b7d7d32d346",
+            "time": "2026-11-09T11:07:37.362Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder",
+            "status": 400,
+            "reason": "missing"
+          },
+          {
+            "route": "/vcs",
+            "requestID": "bf2a384a-9089-4aca-8900-d172fe5a16ce",
+            "time": "2026-11-09T11:07:37.364Z",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\missing-owned-folder",
+            "status": 400,
+            "reason": "missing"
+          }
+        ]
+      }
+    },
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\project-before",
+        "gitHead": "4ec5e19594d5b0e16456e21e709ad9fdab4f0687",
+        "text": "Owned folder-choice target project-before\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\target-before",
+        "gitHead": "2cb6152c7d2d3252fe8af60c73f80e6166b62063",
+        "text": "Owned folder-choice target target-before\n"
+      }
+    ],
+    "tables": {
+      "project": 2,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b109-before",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39166",
+      "pid": 21212
+    },
+    "shutdown": {
+      "port": 39166,
+      "pid": 21212,
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTPDzT00WOtw0qg7W"
+      }
+    }
+  },
+  "after": {
+    "facts": {
+      "missingAt": {
+        "at": "2026-11-09T11:16:47.623Z",
+        "check": {
+          "requestID": "57cffc48-f7f3-45be-b4a7-3b5c2e53e2e2",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:16:47.643Z"
+        }
+      },
+      "fileAt": {
+        "at": "2026-11-09T11:17:05.021Z",
+        "check": {
+          "requestID": "fa6d99e6-c39c-4deb-b95c-029a7fdafdb9",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 2,
+          "time": "2026-11-09T11:17:05.042Z"
+        }
+      },
+      "validAt": {
+        "at": "2026-11-09T11:17:15.729Z",
+        "check": {
+          "requestID": "ac928e44-ac18-431d-b397-76889583ead1",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 0,
+          "time": "2026-11-09T11:17:15.752Z"
+        }
+      },
+      "promotionMissingAt": {
+        "at": "2026-11-09T11:18:02.437Z",
+        "check": {
+          "requestID": "6407ef96-a984-4e31-8207-0200d8778acb",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:18:02.455Z"
+        }
+      },
+      "promotionValidAt": {
+        "at": "2026-11-09T11:18:09.122Z",
+        "check": {
+          "requestID": "b3f6c15b-2a75-4674-8be9-5abf7507ec82",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 1,
+          "time": "2026-11-09T11:18:09.143Z"
+        },
+        "promotion": {
+          "requestID": "024c6995-57e3-4c75-8cc8-5dbadb61c730",
+          "method": "POST",
+          "path": "/project/current/promote-anonymous",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 757,
+          "time": "2026-11-09T11:18:09.930Z"
+        }
+      },
+      "liveChecker": [
+        {
+          "requestID": "5c1a69b0-8166-4578-88c1-818c4a22c926",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 3,
+          "time": "2026-11-09T11:16:39.748Z"
+        },
+        {
+          "requestID": "b21dcf4e-f9d7-4c72-88f2-66208f89319b",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2,
+          "time": "2026-11-09T11:16:39.817Z"
+        },
+        {
+          "requestID": "1b6b5c02-a10b-4799-be70-d004dafea1da",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 2,
+          "time": "2026-11-09T11:16:39.836Z"
+        },
+        {
+          "requestID": "aadad82a-4d0f-4544-a091-a3339a64a1d9",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:16:39.863Z"
+        },
+        {
+          "requestID": "8a570cfe-25b2-4a77-a129-cfa9f5333152",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:16:39.884Z"
+        },
+        {
+          "requestID": "aa95654a-a452-4269-bd64-7044fc756a35",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2,
+          "time": "2026-11-09T11:16:39.902Z"
+        },
+        {
+          "requestID": "3d83284b-a445-4275-9a4f-1cf4351fa1ab",
+          "method": "GET",
+          "path": "/work-ledger",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 3,
+          "time": "2026-11-09T11:18:55.222Z"
+        },
+        {
+          "requestID": "22a0e848-44d9-4eec-b612-0039f479379c",
+          "method": "GET",
+          "path": "/file/content",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 171,
+          "time": "2026-11-09T11:18:55.459Z"
+        },
+        {
+          "requestID": "2dffa04e-ce62-4fd8-9d69-7ae0ee86a9d5",
+          "method": "GET",
+          "path": "/file/content",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 138,
+          "time": "2026-11-09T11:18:55.618Z"
+        },
+        {
+          "requestID": "7837b3ad-9fa6-46ae-88ea-e5b9fc15d7c1",
+          "method": "GET",
+          "path": "/file/content",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 130,
+          "time": "2026-11-09T11:18:55.773Z"
+        }
+      ],
+      "promotedIdentity": {
+        "kind": "project",
+        "id": "prj_hPlwYm5OshtaTJTyNxd1",
+        "title": "named-workspace-109",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\promotion-parent\\named-workspace-109",
+        "created": 1794223061840,
+        "updated": 1794223089898,
+        "pinned": false
+      }
+    },
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\project-after",
+        "gitHead": "bf74bee56aee51f7ebafdf7579ccc815f66c03c4",
+        "text": "Owned folder-choice target project-after\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\target-after",
+        "gitHead": "746fa94433554e7ebcfc3585d7aea32018d60d77",
+        "text": "Owned folder-choice target target-after\n"
+      }
+    ],
+    "tables": {
+      "project": 3,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b109-after",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39167",
+      "pid": 31984
+    },
+    "shutdown": {
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTRQoz00HnVGGSpOq"
+      },
+      "pid": 31984,
+      "port": 39167,
+      "status": 200
+    }
+  }
+}

@@ -341,10 +341,16 @@ export namespace Project {
     return { sandbox, worktree, common }
   }
 
-  /** Read the selected directory's sandbox boundary without registering a Project. */
-  export async function worktreeBoundary(directory: string) {
+  /** Resolve an existing directory without registering a Project. */
+  export async function inspectWorkspaceDirectory(directory: string) {
     const resolved = Filesystem.resolve(directory)
     await assertDirectoryIntegrity(resolved)
+    return resolved
+  }
+
+  /** Read the selected directory's sandbox boundary without registering a Project. */
+  export async function worktreeBoundary(directory: string) {
+    const resolved = await inspectWorkspaceDirectory(directory)
     const repository = await discoverGitDirectory(resolved)
     return repository ? repository.sandbox : resolved
   }

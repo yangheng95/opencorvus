@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [浏览器文件夹确认先校验真实目录证据](2026-11-09-browser-workspace-directory-admission/README.md)
 - [0.1.49 发布证据](2026-11-09-release-0.1.49/README.md) · 原生、官网和正式包日志
 - [项目行操作显示目标身份证据](2026-11-09-project-row-action-identity/README.md)
 - [工作侧栏事件验收代理证据](2026-11-09-work-ledger-event-proxy/README.md)

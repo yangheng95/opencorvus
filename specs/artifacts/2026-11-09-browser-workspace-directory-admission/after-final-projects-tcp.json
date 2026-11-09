@@ -1,0 +1,87 @@
+{
+  "destination": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\promotion-parent\\named-workspace-109",
+  "receipts": [
+    {
+      "route": "/work-ledger",
+      "query": {
+        "limit": "80"
+      },
+      "status": 200,
+      "requestID": "3d83284b-a445-4275-9a4f-1cf4351fa1ab",
+      "data": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_hPlwYm5OshtaTJTyNxd1",
+            "title": "named-workspace-109",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\promotion-parent\\named-workspace-109",
+            "created": 1794223061840,
+            "updated": 1794223089898,
+            "pinned": false
+          },
+          {
+            "kind": "project",
+            "id": "prj_hr25QxZDVVYcfi4jibKo",
+            "title": "",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\target-after",
+            "created": 1794223036125,
+            "updated": 1794223036125,
+            "pinned": false
+          },
+          {
+            "kind": "project",
+            "id": "prj_hh6zffeI7apR5ugjMSV1",
+            "title": "",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\project-after",
+            "created": 1794222987011,
+            "updated": 1794222987011,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "route": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\promotion-parent\\named-workspace-109",
+        "path": "promotion-note.txt"
+      },
+      "status": 200,
+      "requestID": "22a0e848-44d9-4eec-b612-0039f479379c",
+      "data": {
+        "type": "text",
+        "content": "Owned anonymous workspace original note 109.\n",
+        "revision": "458eb1ac53370ce4143b191658d30de121ebd053680c4945fa1cb67337943455"
+      }
+    },
+    {
+      "route": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\project-after",
+        "path": "note.txt"
+      },
+      "status": 200,
+      "requestID": "2dffa04e-ce62-4fd8-9d69-7ae0ee86a9d5",
+      "data": {
+        "type": "text",
+        "content": "Owned folder-choice target project-after\n",
+        "revision": "a20506291927cf0fcccf2d514b0194f2dfb7a3d8074093200eb445268ddc3047"
+      }
+    },
+    {
+      "route": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\target-after",
+        "path": "note.txt"
+      },
+      "status": 200,
+      "requestID": "7837b3ad-9fa6-46ae-88ea-e5b9fc15d7c1",
+      "data": {
+        "type": "text",
+        "content": "Owned folder-choice target target-after\n",
+        "revision": "5f2809c41b73c965ef5bb7e298fbe0ebb92b44c15224c343c10c441f8bbc2179"
+      }
+    }
+  ]
+}

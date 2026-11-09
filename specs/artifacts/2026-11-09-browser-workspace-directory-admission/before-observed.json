@@ -1,0 +1,76 @@
+{
+  "initialDialog": [
+    "\t\t\t\t\t\t\t\t57 pop up button (collapsed) Description: Authorization mode, currently Full access, Help: Authorization mode: Full access, ID: dropdownmenu-cl-40-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t58 pop up button (collapsed) Description: OpenCorvus model Inherit configuration. Click to change., Help: OpenCorvus model: Inherit configuration, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t59 text Inherit configuration",
+    "\t\t\t\t\t\t\t\t60 button (disabled) Description: Send, Help: Type a message to enable Send., ID: chatSend",
+    "\t\t\t\t\t\t\t61 container Suggested chat starters",
+    "\t\t\t\t\t\t\t\t62 button Build a webpage",
+    "\t\t\t\t\t\t\t\t63 button Create an expert squad",
+    "\t\t\t\t\t\t\t\t64 button Fix a bug",
+    "\t\t\t\t\t\t\t\t65 pop up button (collapsed) More, ID: dropdownmenu-cl-134-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t66 container Continuous goal",
+    "\t\t67 container Working Directory, ID: appDialog",
+    "\t\t\t68 container",
+    "\t\t\t\t69 heading Working Directory, Value: 2, ID: dialog-cl-101-title",
+    "\t\t\t\t\t70 text Working Directory",
+    "\t\t\t\t71 text Choose a folder and use that directory as the project workspace.",
+    "\t\t\t\t72 container appDialogInputField",
+    "\t\t\t\t\t73 text Directory path",
+    "\t\t\t\t\t74 text field (settable) Directory path, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\project-before, ID: appDialogInput",
+    "\t\t\t\t75 button Cancel, ID: btnAppDialogCancel",
+    "\t\t\t\t76 button Use this folder, ID: btnAppDialogOk",
+    "",
+    "The focused UI element is 74 text field (settable) Directory path, Value: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\project-before, ID: appDialogInput"
+  ],
+  "relativeAt": "2026-11-09T11:07:06.551Z",
+  "relativeImmediate": [
+    "\t\t\t\t\t\t\t\t47 heading Let's work on owned-relative-109, Value: 1",
+    "\t\t\t\t\t\t\t\t\t48 text Let's work on owned-relative-109",
+    "\t\t67 container Working Directory, ID: appDialog",
+    "\t\t\t\t69 heading Working Directory, Value: 2, ID: dialog-cl-101-title",
+    "\t\t\t\t\t70 text Working Directory",
+    "\t\t\t\t71 text Choose a folder and use that directory as the project workspace.",
+    "\t\t\t\t\t73 text Directory path",
+    "\t\t\t\t\t74 text field (settable) Directory path, Value: owned-relative-109, ID: appDialogInput",
+    "The focused UI element is 76 button Use this folder, ID: btnAppDialogOk"
+  ],
+  "relativeSettled": [
+    "\t\t\t\t\t\t\t\t\t36 button (expanded) Description: Collapse project-before, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t37 button Open project: project-before",
+    "\t\t\t\t\t\t\t46 heading Let's work on owned-relative-109, Value: 1",
+    "\t\t\t\t\t\t\t\t47 text Let's work on owned-relative-109",
+    "The focused UI element is 34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-22-trigger, Secondary Actions: Expand"
+  ],
+  "absoluteMissingAt": "2026-11-09T11:07:37.192Z",
+  "absoluteImmediate": [
+    "\t\t\t\t\t\t\t\t\t36 button (expanded) Description: Collapse project-before, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t37 button Open project: project-before",
+    "\t\t\t\t\t\t\t46 heading What shall we work on?, Value: 1",
+    "\t\t\t\t\t\t\t\t47 text What shall we work on?",
+    "The focused UI element is 34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-22-trigger, Secondary Actions: Expand"
+  ],
+  "absoluteSettled": [
+    "\t\t\t\t\t\t\t\t\t36 button (expanded) Description: Collapse project-before, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t37 button Open project: project-before",
+    "\t\t\t\t\t\t\t46 heading What shall we work on?, Value: 1",
+    "\t\t\t\t\t\t\t\t47 text What shall we work on?",
+    "The focused UI element is 34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-22-trigger, Secondary Actions: Expand"
+  ],
+  "validAt": "2026-11-09T11:08:39.309Z",
+  "valid": [
+    "\t\t\t\t\t\t\t46 heading Let's work on target-before, Value: 1",
+    "\t\t\t\t\t\t\t\t47 text Let's work on target-before",
+    "The focused UI element is 34 pop up button (collapsed) Description: Create project, ID: dropdownmenu-cl-22-trigger, Secondary Actions: Expand"
+  ],
+  "validFiles": [
+    "\t\t\t\t\t\t\t\t\t\t44 button (expanded) Description: Collapse target-before, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t45 button Open project: target-before",
+    "\t\t\t\t\t\t\t\t54 heading Let's work on target-before, Value: 1",
+    "\t\t\t\t\t\t\t\t\t55 text Let's work on target-before",
+    "\t\t\t\t\t\t\t\t\t85 text Project files",
+    "\t\t\t\t\t\t\t\t\t86 text target-before",
+    "\t\t\t\t\t\t\t\t\t87 text C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b109\\target-before",
+    "\t\t\t\t\t\t\t\t\t\t95 button note.txt, ID: contextmenu-cl-290-trigger"
+  ]
+}
