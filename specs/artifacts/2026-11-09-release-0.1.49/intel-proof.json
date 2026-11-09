@@ -1,0 +1,12 @@
+{
+  "runID": 42611607513,
+  "source": "b0caf6d618802e131db6339982c6a2f82d5fcac1",
+  "jobID": 129141832225,
+  "evidence": [
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-11-09T11:50:13.5056750Z Cache hit for: v0-rust-build-Darwin-x64-825c9b43-e83e704d",
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-11-09T11:55:46.5152060Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 51.95s",
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-11-09T11:56:13.8333410Z {\"firstRun\":\"passed\",\"sessionsCreated\":4,\"persistedAcrossRestart\":2,\"realProvider\":false}",
+    "overlay (darwin-x64) / compile (darwin-x64)\tUNKNOWN STEP\t2026-11-09T12:03:59.0114290Z \u001b[1m\u001b[92m    Finished\u001b[0m `release` profile [optimized] target(s) in 7m 12s"
+  ],
+  "scope": "Real native frozen-source build and first-run/restart; actual cache observations retained"
+}
