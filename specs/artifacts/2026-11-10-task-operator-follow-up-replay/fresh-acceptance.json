@@ -1,0 +1,26 @@
+{
+  "task": {
+    "status": 202,
+    "trace": "6857b4b3-9ace-4a2c-9731-8d69ed3f7ce0",
+    "data": {
+      "task_id": "tsk_g00VaWOIL8008vsgNrBN",
+      "project_id": "prj_hmxOoCCT0TpeU6eE2K42",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b161\\project-fresh"
+    }
+  },
+  "model": "b161-fresh/offline",
+  "sends": [
+    {
+      "status": 202,
+      "trace": "51a83589-9c27-484b-b63f-df605535cf9f",
+      "ingressID": "art_hRZ9czNUfA60qpLw7F1k",
+      "messageID": "msg_hrIopogIyVRy9Zqp3u2O"
+    },
+    {
+      "status": 202,
+      "trace": "a219a9a8-43a1-467f-ad50-45a6268d1110",
+      "ingressID": "art_hRZ9czNUfA60qpLw7F1k",
+      "messageID": "msg_hrIopogIyVRy9Zqp3u2O"
+    }
+  ]
+}

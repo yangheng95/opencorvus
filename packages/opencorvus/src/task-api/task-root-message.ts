@@ -8,18 +8,23 @@ import { Database, and, desc, eq } from "@/storage/db"
 import { compareTimelineOrderKeys, timelineMessageOrderKey, timelinePartOrderKey } from "@/timeline/order"
 
 export async function getTaskRootMessage(task: Pick<TaskRow, "id" | "session_id" | "project_id">, messageID: string) {
+  return Database.transaction((db) => getTaskRootMessageInTransaction(db, task, messageID))
+}
+
+export function getTaskRootMessageInTransaction(
+  db: Database.TxOrDb,
+  task: Pick<TaskRow, "id" | "session_id" | "project_id">,
+  messageID: string,
+) {
   if (!task.session_id) throw new Error(`Task ${task.id} has no root Session.`)
-  const messageSessionID = Database.use(
-    (db) =>
-      db.select({ sessionID: MessageTable.session_id }).from(MessageTable).where(eq(MessageTable.id, messageID)).get()
-        ?.sessionID,
-  )
+  const messageSessionID = db.select({ sessionID: MessageTable.session_id })
+    .from(MessageTable).where(eq(MessageTable.id, messageID)).get()?.sessionID
   if (!messageSessionID) throw new Error(`Task-root Message ${messageID} does not exist.`)
-  const taskSessionIDs = await Session.treeInProject({ sessionID: task.session_id, projectID: task.project_id })
+  const taskSessionIDs = Session.treeInProjectInTransaction(db, { sessionID: task.session_id, projectID: task.project_id })
   if (!taskSessionIDs.includes(messageSessionID)) {
     throw new Error(`Task-root Message ${messageID} is outside Task ${task.id} Session lineage.`)
   }
-  return MessageStore.get({ sessionID: messageSessionID, messageID })
+  return MessageStore.getInTransaction(db, { sessionID: messageSessionID, messageID })
 }
 
 /**

@@ -168,6 +168,7 @@ Use `POST /task/{taskID}/message` when the user needs to add instructions while 
 ```typescript
 await client.task.message({
   taskID,
+  requestID: "prioritize-mobile-layout",
   source: "api",
   text: "Prioritize the mobile layout and keep desktop behavior unchanged.",
 })
@@ -179,7 +180,7 @@ await client.task.message({
 | ------ | -------------------------------------------------------- |
 | Cancel | `POST /task/{taskID}/cancel` with `surface` and `reason` |
 
-To continue after a blocker or correct a result, send ordinary input through the message route above. Accepted input can reopen a terminal Task while retaining its history and fixed Expert Squad. Check the message response and subsequent Task evidence before reporting completion.
+To continue after a blocker or correct a result, send ordinary input with a new `requestID`. New input can reopen a terminal Task while retaining its history and fixed Expert Squad. If a response is lost, repeat the original `requestID` and input to recover the same Message and ingress without reopening the Task. A changed input under the same ID returns a conflict.
 
 ```typescript
 await client.task.cancel({

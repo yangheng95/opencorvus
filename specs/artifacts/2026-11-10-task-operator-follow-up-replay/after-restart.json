@@ -1,0 +1,100 @@
+{
+  "beforeTask": {
+    "sessionID": "ses_-zUPTgHxOzzcrligONrn",
+    "status": "failed",
+    "lifecycle": {
+      "taskID": "tsk_g00VaWJhjt00MbZijE7x",
+      "epoch": 5,
+      "openedEventID": "pev_g0VaWN8vo00BWa2DR4fr",
+      "openedAt": 1794266443687,
+      "previousTerminal": {
+        "epoch": 4,
+        "status": "failed",
+        "terminalEventID": "pev_g0VaWMMcF00mnGAAmnQk",
+        "terminalAt": 1794266257961,
+        "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+        "terminalReason": "interrupted"
+      },
+      "status": "failed",
+      "terminalEventID": "pev_g0VaWNAdd00YL3TL3t2x",
+      "terminalAt": 1794266450248,
+      "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+      "terminalReason": "interrupted"
+    }
+  },
+  "original": {
+    "status": 202,
+    "trace": "83b3d972-dec4-4554-86a5-910b3de4ca20",
+    "ingressID": "art_h7m6r63gJswNOzDrmHBJ",
+    "wakeStatus": "accepted",
+    "user": {
+      "id": "msg_h7e58RhrUTM5y5fhkAyR",
+      "sessionID": "ses_-zUPTgGXAzzuI6n93QNX",
+      "model": {
+        "providerID": "b161-review",
+        "modelID": "offline"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VaWMKyZ00ABmrRaujb",
+          "type": "text",
+          "text": "B161 candidate acceptance on the upgraded historical Task"
+        }
+      ]
+    }
+  },
+  "replay": {
+    "status": 202,
+    "trace": "5ce97af8-9a1f-4c36-832c-a8099d735127",
+    "ingressID": "art_h7m6r63gJswNOzDrmHBJ",
+    "wakeStatus": "accepted",
+    "user": {
+      "id": "msg_h7e58RhrUTM5y5fhkAyR",
+      "sessionID": "ses_-zUPTgGXAzzuI6n93QNX",
+      "model": {
+        "providerID": "b161-review",
+        "modelID": "offline"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VaWMKyZ00ABmrRaujb",
+          "type": "text",
+          "text": "B161 candidate acceptance on the upgraded historical Task"
+        }
+      ]
+    }
+  },
+  "deletedReplay": {
+    "status": 404,
+    "trace": "f67fb90f-1cae-4d84-89ea-0086a8244e0f",
+    "data": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Task not found: tsk_g00VaWN8GT00f1gbecrz"
+      }
+    }
+  },
+  "afterTask": {
+    "sessionID": "ses_-zUPTgHxOzzcrligONrn",
+    "status": "failed",
+    "lifecycle": {
+      "taskID": "tsk_g00VaWJhjt00MbZijE7x",
+      "epoch": 5,
+      "openedEventID": "pev_g0VaWN8vo00BWa2DR4fr",
+      "openedAt": 1794266443687,
+      "previousTerminal": {
+        "epoch": 4,
+        "status": "failed",
+        "terminalEventID": "pev_g0VaWMMcF00mnGAAmnQk",
+        "terminalAt": 1794266257961,
+        "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+        "terminalReason": "interrupted"
+      },
+      "status": "failed",
+      "terminalEventID": "pev_g0VaWNAdd00YL3TL3t2x",
+      "terminalAt": 1794266450248,
+      "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+      "terminalReason": "interrupted"
+    }
+  }
+}

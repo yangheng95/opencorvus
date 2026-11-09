@@ -8878,6 +8878,8 @@ export class Task extends HeyApiClient {
 
   /**
    * Handle task message
+   *
+   * Use the same requestID and authored input to recover an accepted Message and ingress. A new input needs a new request ID.
    */
   public message<ThrowOnError extends boolean = false>(
     parameters: {
@@ -8900,6 +8902,7 @@ export class Task extends HeyApiClient {
         [key: string]: unknown
       }
       model?: string
+      requestID?: string
       resolvedRole?: string
       source: string
       text: string
@@ -8918,6 +8921,7 @@ export class Task extends HeyApiClient {
             { in: "body", key: "channel" },
             { in: "body", key: "metadata" },
             { in: "body", key: "model" },
+            { in: "body", key: "requestID" },
             { in: "body", key: "resolvedRole" },
             { in: "body", key: "source" },
             { in: "body", key: "text" },

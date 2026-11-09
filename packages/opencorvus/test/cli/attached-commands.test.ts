@@ -39,8 +39,8 @@ const mutations = [
     result: { task_id: "t1", directory: "/srv/project" },
   },
   {
-    args: ["task", "message", "t1", "--text", "Inspect"],
-    result: { wake_status: "not_woken", message: "Already awake" },
+    args: ["task", "message", "t1", "--text", "Inspect", "--request-id", "inspect-once"],
+    result: { wake_status: "accepted", message: "Operator message recorded and accepted for delivery." },
   },
   { args: ["task", "cancel", "t1", "--reason", "Done"], result: { taskID: "t1", status: "cancelling" } },
   { args: ["question", "reply", "q1", "--answers", '[["Use alpha, then beta"],["a,b"," c "]]'], result: true },
@@ -76,6 +76,9 @@ for (const item of mutations) {
       expect(directories).toEqual(["/a/project"])
       if (item.args[0] === "task" && item.args[1] === "create") {
         expect(bodies).toEqual([{ productPillar: "code", promptProfile: "base", request: "Inspect" }])
+      }
+      if (item.args[0] === "task" && item.args[1] === "message") {
+        expect(bodies).toEqual([{ text: "Inspect", source: "cli", requestID: "inspect-once" }])
       }
       if (item.args[0] === "task" && item.args[1] === "cancel") {
         const lines: string[] = []

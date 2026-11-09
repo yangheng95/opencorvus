@@ -2,7 +2,7 @@ import { afterEach, beforeEach, expect, test } from "bun:test"
 import { reconcile } from "solid-js/store"
 import { WorkLedgerMissionRow } from "@opencorvus-ai/transport-protocol"
 import { ApiError, captureApiAuthority, configure } from "../src/services/api"
-import { promptSessionMessage, retireChatRequestProjection, stopChatRequest } from "../src/services/chat"
+import { panelMessage, promptSessionMessage, retireChatRequestProjection, stopChatRequest } from "../src/services/chat"
 import { composerDraftStore, composerSubmission, setComposerDraftStore } from "../src/services/composer-draft"
 import { HOST_CAPABILITIES, type HostTransport, type TransportRequest, type TransportResponse } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
@@ -138,6 +138,31 @@ test("Mission wake retries use its existing request identity and acknowledge the
   expect(error.status).toBe(502)
   expect(await wakeMission(input)).toEqual(receipt)
   expect(sent).toEqual([sent[0], sent[0]])
+  expect(events).toEqual(["dispatch", "dispatch", "accepted"])
+})
+
+test("Task follow-up retries reuse the authored request and acknowledge the returned ingress", async () => {
+  const sent: Record<string, unknown>[] = []
+  const events: string[] = []
+  const receipt = {
+    wake_status: "accepted",
+    ingress_id: "art_owned_task_ingress",
+    user_message: { info: { id: "msg_owned_task_note" }, parts: [] },
+  }
+  transport((request) => {
+    expect(request.path).toBe("task/tsk_owned/message")
+    sent.push(body(request))
+    if (sent.length === 1) throw new TypeError("reply interrupted")
+    setBoardStore("selectEpoch", (epoch) => epoch + 1)
+    return response(receipt, 202)
+  })
+  const send = () => panelMessage("author input", [], { target: { taskID: "tsk_owned", directory } },
+    () => events.push("dispatch"), { composerDraftKey: "current", onAccepted: () => events.push("accepted") })
+  await expect(send()).rejects.toThrow("reply interrupted")
+  expect(await send()).toEqual(receipt)
+  expect(sent).toEqual(Array(2).fill({
+    text: "author input", source: "panel", requestID: composerDraftStore.drafts.current.submission!.messageID,
+  }))
   expect(events).toEqual(["dispatch", "dispatch", "accepted"])
 })
 

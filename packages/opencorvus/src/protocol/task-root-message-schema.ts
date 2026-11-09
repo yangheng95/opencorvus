@@ -16,6 +16,13 @@ export const SchedulerDeliveryReference = z
   .strict()
 export type SchedulerDeliveryReference = z.infer<typeof SchedulerDeliveryReference>
 
+export const TaskOperatorMessageRequest = z.object({
+  version: z.literal(1),
+  requestID: z.string().min(1).max(200).refine((value) => value.trim() === value),
+  fingerprint: z.string().regex(/^[a-f0-9]{64}$/),
+}).strict()
+export type TaskOperatorMessageRequest = z.infer<typeof TaskOperatorMessageRequest>
+
 export const TaskRootMessageProvenance = z
   .object({
     protocol: z.literal("task-root-message"),
@@ -23,7 +30,12 @@ export const TaskRootMessageProvenance = z
     kind: TaskRootMessageKind,
     source: z.string().min(1),
     schedulerDelivery: SchedulerDeliveryReference.optional(),
+    operatorRequest: TaskOperatorMessageRequest.optional(),
   })
   .strict()
+  .refine((value) => !value.operatorRequest || (value.kind === "operator" && !value.schedulerDelivery), {
+    path: ["operatorRequest"],
+    message: "A Task operator request belongs to a directly authored operator Message.",
+  })
 
 export type TaskRootMessageProvenance = z.infer<typeof TaskRootMessageProvenance>

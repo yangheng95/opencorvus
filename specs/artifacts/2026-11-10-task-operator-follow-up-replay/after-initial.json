@@ -1,0 +1,287 @@
+{
+  "terminal": {
+    "sessionID": "ses_-zUPTgHxOzzcrligONrn",
+    "status": "failed",
+    "lifecycle": {
+      "taskID": "tsk_g00VaWJhjt00MbZijE7x",
+      "epoch": 4,
+      "openedEventID": "pev_g0VaWMKyx00iYDwT2MLZ",
+      "openedAt": 1794266251682,
+      "previousTerminal": {
+        "epoch": 3,
+        "status": "failed",
+        "terminalEventID": "pev_g0VaWKAUS00pZ6rNLWLd",
+        "terminalAt": 1794265734695,
+        "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+        "terminalReason": "interrupted"
+      },
+      "status": "failed",
+      "terminalEventID": "pev_g0VaWMMcF00mnGAAmnQk",
+      "terminalAt": 1794266257961,
+      "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+      "terminalReason": "interrupted"
+    }
+  },
+  "moved": {
+    "status": 202,
+    "trace": "5475095a-1cff-4994-8add-7d40dbac6a21",
+    "ingressID": "art_h7m6r63gJswNOzDrmHBJ",
+    "wakeStatus": "accepted",
+    "user": {
+      "id": "msg_h7e58RhrUTM5y5fhkAyR",
+      "sessionID": "ses_-zUPTgGXAzzuI6n93QNX",
+      "model": {
+        "providerID": "b161-review",
+        "modelID": "offline"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VaWMKyZ00ABmrRaujb",
+          "type": "text",
+          "text": "B161 candidate acceptance on the upgraded historical Task"
+        }
+      ]
+    }
+  },
+  "distinctTask": "tsk_g00VaWN8GT00f1gbecrz",
+  "sameKeyOther": {
+    "status": 202,
+    "trace": "f6c58bef-4473-4941-9f0e-2d8ef97dc8b9",
+    "ingressID": "art_hrwEZe9abnpwCUuz21HH",
+    "wakeStatus": "accepted",
+    "user": {
+      "id": "msg_hLGPkKYby3xIvHr0caPs",
+      "sessionID": "ses_-zUPTcra7zzpKBh8ZDh9",
+      "model": {
+        "providerID": "b161-review",
+        "modelID": "offline"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VaWN8S3002CrPF0a3b",
+          "type": "text",
+          "text": "B161 candidate acceptance on the upgraded historical Task"
+        }
+      ]
+    }
+  },
+  "cancellation": {
+    "status": 202,
+    "trace": "ca1f31a8-1a84-4c8c-8642-6930ae5651f4",
+    "data": {
+      "requestEventID": "pev_g0VaWN8Ue00R77RKjkFy",
+      "requestedAt": 1794266442004,
+      "source": "task.cancel",
+      "requestID": "ca1f31a8-1a84-4c8c-8642-6930ae5651f4",
+      "actor": "user",
+      "surface": "api",
+      "reason": "Close the isolated acceptance comparison",
+      "status": "cancelled",
+      "terminalEventID": "pev_g0VaWN8Ur00aiMoQYv88",
+      "terminalAt": 1794266442015
+    }
+  },
+  "cancelled": {
+    "sessionID": "ses_-zUPTcra7zzpKBh8ZDh9",
+    "status": "cancelled",
+    "lifecycle": {
+      "taskID": "tsk_g00VaWN8GT00f1gbecrz",
+      "epoch": 1,
+      "openedEventID": "pev_g0VaWN8QP00dKcESnUR5",
+      "openedAt": 1794266441125,
+      "status": "cancelled",
+      "terminalEventID": "pev_g0VaWN8Ur00aiMoQYv88",
+      "terminalAt": 1794266442015,
+      "terminalError": "task cancelled"
+    }
+  },
+  "cancelledReplay": {
+    "status": 202,
+    "trace": "e29857ad-12e0-4c26-9896-248389e89e69",
+    "ingressID": "art_hrwEZe9abnpwCUuz21HH",
+    "wakeStatus": "accepted",
+    "user": {
+      "id": "msg_hLGPkKYby3xIvHr0caPs",
+      "sessionID": "ses_-zUPTcra7zzpKBh8ZDh9",
+      "model": {
+        "providerID": "b161-review",
+        "modelID": "offline"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VaWN8S3002CrPF0a3b",
+          "type": "text",
+          "text": "B161 candidate acceptance on the upgraded historical Task"
+        }
+      ]
+    }
+  },
+  "removed": {
+    "status": 200,
+    "trace": "5b5f0cd7-62d4-4ce2-adda-626ed3dabe5f",
+    "data": true
+  },
+  "deletedReplay": {
+    "status": 404,
+    "trace": "acb1a750-e7ea-479f-b3a9-e4765379473b",
+    "data": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Task not found: tsk_g00VaWN8GT00f1gbecrz"
+      }
+    }
+  },
+  "foreign": {
+    "status": 404,
+    "trace": "b200b0bf-eef2-4758-9e39-6aab9c5c86ab",
+    "data": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Task not found: tsk_g00VaWJhjt00MbZijE7x"
+      }
+    }
+  },
+  "unkeyedTask": "tsk_g00VaWN8Xa009KP00b4s",
+  "unkeyed": [
+    {
+      "status": 202,
+      "trace": "49138191-a375-4548-a75b-93d108610b46",
+      "ingressID": "art_hCo6xMkYHCU9il05g7Oc",
+      "wakeStatus": "accepted",
+      "user": {
+        "id": "msg_hoilrE7GfgdvFqr2l5DI",
+        "sessionID": "ses_-zUPTcrHezzk3mxHDOjy",
+        "model": {
+          "providerID": "b161-review",
+          "modelID": "offline"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VaWN8lD00N0NAX2lop",
+            "type": "text",
+            "text": "Explicitly independent unkeyed notes"
+          }
+        ]
+      }
+    },
+    {
+      "status": 202,
+      "trace": "626593e1-b0fe-4150-b6fd-2da6a4dea8f5",
+      "ingressID": "art_hz4jpMtkW22U3tgglEZH",
+      "wakeStatus": "accepted",
+      "user": {
+        "id": "msg_h4wAplqpLKzerxUnU7l3",
+        "sessionID": "ses_-zUPTcrHezzk3mxHDOjy",
+        "model": {
+          "providerID": "b161-review",
+          "modelID": "offline"
+        },
+        "parts": [
+          {
+            "id": "prt_g0VaWN8m300jYJECI15c",
+            "type": "text",
+            "text": "Explicitly independent unkeyed notes"
+          }
+        ]
+      }
+    }
+  ],
+  "projectModel": {
+    "configured": "b161-next/offline",
+    "projection": [
+      "b161-next/offline"
+    ]
+  },
+  "retired": {
+    "status": 202,
+    "trace": "784a42cd-6845-4864-b0cb-973a771985a3",
+    "ingressID": "art_h7m6r63gJswNOzDrmHBJ",
+    "wakeStatus": "accepted",
+    "user": {
+      "id": "msg_h7e58RhrUTM5y5fhkAyR",
+      "sessionID": "ses_-zUPTgGXAzzuI6n93QNX",
+      "model": {
+        "providerID": "b161-review",
+        "modelID": "offline"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VaWMKyZ00ABmrRaujb",
+          "type": "text",
+          "text": "B161 candidate acceptance on the upgraded historical Task"
+        }
+      ]
+    }
+  },
+  "drift": {
+    "status": 409,
+    "trace": "af506e5d-89d3-4a68-87c3-4c341731782b",
+    "data": {
+      "name": "TaskOperatorMessageRequestConflictError",
+      "data": {
+        "message": "Task tsk_g00VaWJhjt00MbZijE7x request b161-after-replay-v13 was already accepted with different input.",
+        "taskID": "tsk_g00VaWJhjt00MbZijE7x",
+        "requestID": "b161-after-replay-v13",
+        "messageID": "msg_h7e58RhrUTM5y5fhkAyR"
+      }
+    }
+  },
+  "freshRetired": {
+    "status": 400,
+    "trace": "ea2868f4-6eef-4566-b04a-f39d50d72591",
+    "data": {
+      "name": "ProviderModelNotFoundError",
+      "data": {
+        "providerID": "b161-review",
+        "modelID": "offline",
+        "suggestions": []
+      }
+    }
+  },
+  "fresh": {
+    "status": 202,
+    "trace": "96e67b09-7cce-4f89-b490-a0a98bbfce1f",
+    "ingressID": "art_ht2ZZJJiqooSomQylIcl",
+    "wakeStatus": "accepted",
+    "user": {
+      "id": "msg_h0rUVqUK7ahNDcdDg8dd",
+      "sessionID": "ses_-zUPTgHxOzzcrligONrn",
+      "model": {
+        "providerID": "b161-review",
+        "modelID": "offline"
+      },
+      "parts": [
+        {
+          "id": "prt_g0VaWN8vU00ei2ISkgDl",
+          "type": "text",
+          "text": "A distinct follow-up explicitly opens the next execution"
+        },
+        {
+          "id": "prt_g0VaWN8vU01h6j8XGXSu",
+          "type": "file",
+          "url": "/attachment/prj_hYRao4EopSNb3QyJgRxF/5820fffb89ea203374b63df4d914b3d9a4cd64402b7ff8e4051f4043e939da72.txt",
+          "filename": "follow-up.txt"
+        }
+      ]
+    }
+  },
+  "latest": {
+    "sessionID": "ses_-zUPTgHxOzzcrligONrn",
+    "status": "active",
+    "lifecycle": {
+      "taskID": "tsk_g00VaWJhjt00MbZijE7x",
+      "epoch": 5,
+      "openedEventID": "pev_g0VaWN8vo00BWa2DR4fr",
+      "openedAt": 1794266443687,
+      "previousTerminal": {
+        "epoch": 4,
+        "status": "failed",
+        "terminalEventID": "pev_g0VaWMMcF00mnGAAmnQk",
+        "terminalAt": 1794266257961,
+        "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+        "terminalReason": "interrupted"
+      },
+      "status": "active"
+    }
+  }
+}

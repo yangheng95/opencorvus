@@ -399,6 +399,7 @@ export const TaskAccepted = z.object({
 
 export const TaskMessageInput = z
   .object({
+    requestID: z.string().trim().min(1).max(200).optional(),
     text: z.string(),
     source: z.string().min(1),
     model: z

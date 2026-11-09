@@ -97,7 +97,7 @@ PASSIVE的busy/部分进度在下次周期继续；非暂态回写错误进入�
 
 ## 数据库版本化迁移
 
-当前版本为11，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
+当前版本为 13，从不可改写的版本 1 基线开始支持自动迁移。唯一 registry 位于
 `src/storage/migrations/index.ts`，每版保存完整、不可改写的目标 SQL；后续结构或持久
 payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一已完成版本，当前
 `SCHEMA_DDL` 与 typed schema 继续定义唯一业务 reader/writer。`check:database-migrations`
@@ -128,6 +128,11 @@ payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一�
 版本 12 为新手动 Mission 草稿的 `session.metadata.mission.draftCreation` 声明写入形状和不可变性。
 首次 Session 插入必须同时有标题、待执行请求和作者绑定；后续编辑、执行、归档及项目迁移不改绑定。
 原 Mission 行不回填请求身份。迁移只追加两个触发器，使用现有自动备份和事务升级。
+
+版本 13 为 Task 跟进的真实用户 Message 声明版本化 `task_root_message.operatorRequest`。
+首次插入校验请求绑定和原 Task 根 Session，后续不能改写。原 accepted Message 可随
+现 Task 根输入交付移动到 Orchestrator，会保留业务绑定和所有用户内容。迁移保留旧行，
+不为历史消息补配请求键，沿现备份和事务升级。
 
 所有 CLI、服务及子执行进程经 `Database.Client` 在业务访问/恢复前进入同一个迁移器。
 旧版文件升级要求实际 Write-Ahead Logging（WAL，预写日志）模式，在原连接上取得

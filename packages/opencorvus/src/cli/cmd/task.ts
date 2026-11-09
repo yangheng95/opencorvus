@@ -1,5 +1,6 @@
 import type { Argv } from "yargs"
 import { EOL } from "os"
+import { randomUUID } from "node:crypto"
 import { cmd } from "./cmd"
 import { UI } from "../ui"
 import { attach, printAttachedResult, withAttachOptions } from "./attach"
@@ -187,6 +188,7 @@ export const TaskMessageCommand = cmd({
     withAttachOptions(yargs)
       .positional("taskID", { describe: "Task ID", type: "string", demandOption: true })
       .option("text", { type: "string", describe: "message to deliver", demandOption: true })
+      .option("request-id", { type: "string", describe: "reuse for the same follow-up after a lost response" })
       .option("source", {
         type: "string",
         default: "cli",
@@ -199,6 +201,7 @@ export const TaskMessageCommand = cmd({
       "task message",
       server.client.task.message({
         taskID: args.taskID,
+        requestID: args.requestId ?? randomUUID(),
         text: args.text,
         source: args.source,
         model: args.model,

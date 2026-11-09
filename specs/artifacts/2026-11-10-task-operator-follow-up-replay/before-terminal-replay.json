@@ -1,0 +1,75 @@
+{
+  "failed": {
+    "status": "failed",
+    "life": {
+      "taskID": "tsk_g00VaWJhjt00MbZijE7x",
+      "epoch": 1,
+      "openedEventID": "pev_g0VaWJi3p00MBe0Bghp6",
+      "openedAt": 1794265624177,
+      "status": "failed",
+      "terminalEventID": "pev_g0VaWJkUm00G91gdM8zP",
+      "terminalAt": 1794265634770,
+      "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+      "terminalReason": "interrupted"
+    },
+    "sessionID": "ses_-zUPTgHxOzzcrligONrn"
+  },
+  "reopened": {
+    "status": 202,
+    "trace": "05c6b53c-960d-4593-97f2-dfa53ff77429",
+    "ingressID": "art_hFfzYGgcQiLjjxoL4EUj",
+    "wakeStatus": "accepted",
+    "userMessageID": "msg_g0VaWK7jN002ynujF7Dx",
+    "sessionID": "ses_-zUPTgHxOzzcrligONrn"
+  },
+  "secondFailure": {
+    "status": "failed",
+    "life": {
+      "taskID": "tsk_g00VaWJhjt00MbZijE7x",
+      "epoch": 2,
+      "openedEventID": "pev_g0VaWK7jZ00Ph2Mi7yx4",
+      "openedAt": 1794265724100,
+      "previousTerminal": {
+        "epoch": 1,
+        "status": "failed",
+        "terminalEventID": "pev_g0VaWJkUm00G91gdM8zP",
+        "terminalAt": 1794265634770,
+        "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+        "terminalReason": "interrupted"
+      },
+      "status": "failed",
+      "terminalEventID": "pev_g0VaWK94k00rIvgtf18t",
+      "terminalAt": 1794265729257,
+      "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+      "terminalReason": "interrupted"
+    },
+    "sessionID": "ses_-zUPTgHxOzzcrligONrn"
+  },
+  "repeated": {
+    "status": 202,
+    "trace": "87fa82c7-86d5-4747-8232-59faaaafc677",
+    "ingressID": "art_hqqI5iEkCeg5A5f13kMG",
+    "wakeStatus": "accepted",
+    "userMessageID": "msg_g0VaWK95d00YW0pfNUw3",
+    "sessionID": "ses_-zUPTgHxOzzcrligONrn"
+  },
+  "third": {
+    "status": "active",
+    "life": {
+      "taskID": "tsk_g00VaWJhjt00MbZijE7x",
+      "epoch": 3,
+      "openedEventID": "pev_g0VaWK95l00OagDvS45d",
+      "openedAt": 1794265729320,
+      "previousTerminal": {
+        "epoch": 2,
+        "status": "failed",
+        "terminalEventID": "pev_g0VaWK94k00rIvgtf18t",
+        "terminalAt": 1794265729257,
+        "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+        "terminalReason": "interrupted"
+      },
+      "status": "active"
+    },
+    "sessionID": "ses_-zUPTgHxOzzcrligONrn"
+  }
+}

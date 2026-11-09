@@ -1,0 +1,199 @@
+{
+  "facts": {
+    "tsk_g00VaWJhjt00MbZijE7x": {
+      "task": {
+        "id": "tsk_g00VaWJhjt00MbZijE7x",
+        "project_id": "prj_hYRao4EopSNb3QyJgRxF",
+        "session_id": "ses_-zUPTgHxOzzcrligONrn",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b161\\project-task"
+      },
+      "ingress": [
+        {
+          "id": "art_h8VwChkOGAYmiMFdiO6y",
+          "messageID": "msg_g0VaWJie700st3dRtiY8",
+          "execution_epoch": 1,
+          "sequence": 2,
+          "project_id": "prj_hYRao4EopSNb3QyJgRxF",
+          "messageSessionID": "ses_-zUPTgHxOzzcrligONrn",
+          "messageParentID": null,
+          "messageSessionKind": "root",
+          "kind": "operator",
+          "source": "panel",
+          "provider": "b161-review",
+          "model": "offline",
+          "text": "B161 exact operator note delivered after a missing receipt"
+        },
+        {
+          "id": "art_hMIBjcxauvPLeYpv3tK5",
+          "messageID": "msg_g0VaWJij400uoB2l522P",
+          "execution_epoch": 1,
+          "sequence": 3,
+          "project_id": "prj_hYRao4EopSNb3QyJgRxF",
+          "messageSessionID": "ses_-zUPTgHxOzzcrligONrn",
+          "messageParentID": null,
+          "messageSessionKind": "root",
+          "kind": "operator",
+          "source": "panel",
+          "provider": "b161-review",
+          "model": "offline",
+          "text": "B161 exact operator note delivered after a missing receipt"
+        },
+        {
+          "id": "art_hJMDhSTm09kSeJm8q8rD",
+          "messageID": "msg_g0VaWJipq00ReFXEbIj3",
+          "execution_epoch": 1,
+          "sequence": 4,
+          "project_id": "prj_hYRao4EopSNb3QyJgRxF",
+          "messageSessionID": "ses_-zUPTgHxOzzcrligONrn",
+          "messageParentID": null,
+          "messageSessionKind": "root",
+          "kind": "operator",
+          "source": "panel",
+          "provider": "b161-review",
+          "model": "offline",
+          "text": "B161 parallel exact operator note with one caller intent"
+        },
+        {
+          "id": "art_hXNtnST8pS3tBMd1FLum",
+          "messageID": "msg_g0VaWJiql00GyOE9ibF4",
+          "execution_epoch": 1,
+          "sequence": 5,
+          "project_id": "prj_hYRao4EopSNb3QyJgRxF",
+          "messageSessionID": "ses_-zUPTgHxOzzcrligONrn",
+          "messageParentID": null,
+          "messageSessionKind": "root",
+          "kind": "operator",
+          "source": "panel",
+          "provider": "b161-review",
+          "model": "offline",
+          "text": "B161 parallel exact operator note with one caller intent"
+        },
+        {
+          "id": "art_hFfzYGgcQiLjjxoL4EUj",
+          "messageID": "msg_g0VaWK7jN002ynujF7Dx",
+          "execution_epoch": 2,
+          "sequence": 1,
+          "project_id": "prj_hYRao4EopSNb3QyJgRxF",
+          "messageSessionID": "ses_-zUPTgGXAzzuI6n93QNX",
+          "messageParentID": "ses_-zUPTgHxOzzcrligONrn",
+          "messageSessionKind": "orchestrator",
+          "kind": "operator",
+          "source": "panel",
+          "provider": "b161-review",
+          "model": "offline",
+          "text": "B161 exact operator note delivered after a missing receipt"
+        },
+        {
+          "id": "art_hqqI5iEkCeg5A5f13kMG",
+          "messageID": "msg_g0VaWK95d00YW0pfNUw3",
+          "execution_epoch": 3,
+          "sequence": 1,
+          "project_id": "prj_hYRao4EopSNb3QyJgRxF",
+          "messageSessionID": "ses_-zUPTgGXAzzuI6n93QNX",
+          "messageParentID": "ses_-zUPTgHxOzzcrligONrn",
+          "messageSessionKind": "orchestrator",
+          "kind": "operator",
+          "source": "panel",
+          "provider": "b161-review",
+          "model": "offline",
+          "text": "B161 exact operator note delivered after a missing receipt"
+        }
+      ],
+      "lifecycleEvents": [
+        {
+          "id": "pev_g0VaWJi3p00MBe0Bghp6",
+          "type": "task.execution.opened",
+          "seq": 3,
+          "source": "engine.pipeline",
+          "epoch": 1
+        },
+        {
+          "id": "pev_g0VaWJkUm00G91gdM8zP",
+          "type": "task.failed",
+          "seq": 15,
+          "source": "state.task",
+          "epoch": 1
+        },
+        {
+          "id": "pev_g0VaWK7jZ00Ph2Mi7yx4",
+          "type": "task.execution.reopened",
+          "seq": 28,
+          "source": "engine.task-intent-open",
+          "epoch": 2
+        },
+        {
+          "id": "pev_g0VaWK94k00rIvgtf18t",
+          "type": "task.failed",
+          "seq": 36,
+          "source": "state.task",
+          "epoch": 2
+        },
+        {
+          "id": "pev_g0VaWK95l00OagDvS45d",
+          "type": "task.execution.reopened",
+          "seq": 38,
+          "source": "engine.task-intent-open",
+          "epoch": 3
+        },
+        {
+          "id": "pev_g0VaWKAUS00pZ6rNLWLd",
+          "type": "task.failed",
+          "seq": 45,
+          "source": "state.task",
+          "epoch": 3
+        }
+      ]
+    },
+    "tsk_g00VaWJiJp00MK0K0IEy": {
+      "task": {
+        "id": "tsk_g00VaWJiJp00MK0K0IEy",
+        "project_id": "prj_hmnNGSvgFYUtvjfT53uG",
+        "session_id": "ses_-zUPTgHQZzzsj2UWlwYM",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b161\\project-task-sibling"
+      },
+      "ingress": [
+        {
+          "id": "art_hZOhDgtndeB7Qg9JEPkw",
+          "messageID": "msg_g0VaWJiwb00LEY8SmbWK",
+          "execution_epoch": 1,
+          "sequence": 2,
+          "project_id": "prj_hmnNGSvgFYUtvjfT53uG",
+          "messageSessionID": "ses_-zUPTgHQZzzsj2UWlwYM",
+          "messageParentID": null,
+          "messageSessionKind": "root",
+          "kind": "operator",
+          "source": "panel",
+          "provider": "b161-review",
+          "model": "offline",
+          "text": "B161 exact operator note delivered after a missing receipt"
+        }
+      ],
+      "lifecycleEvents": [
+        {
+          "id": "pev_g0VaWJiaL00aOeAcZVSh",
+          "type": "task.execution.opened",
+          "seq": 3,
+          "source": "engine.pipeline",
+          "epoch": 1
+        },
+        {
+          "id": "pev_g0VaWJkvO00bbRSekoDK",
+          "type": "task.failed",
+          "seq": 13,
+          "source": "state.task",
+          "epoch": 1
+        }
+      ]
+    }
+  },
+  "counts": {
+    "session": 4,
+    "project": 2,
+    "engine_task": 2,
+    "automation_run": 0,
+    "provider_usage_event": 0
+  },
+  "version": 12,
+  "integrity": "ok",
+  "foreignKeyIssues": 0
+}

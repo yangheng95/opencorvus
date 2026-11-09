@@ -1,5 +1,5 @@
 import z from "zod"
-import { canonicalJSONValue } from "@/util/canonical-digest"
+import { canonicalDigestSource, canonicalJSONValue } from "@/util/canonical-digest"
 import {
   MissionAcceptanceExtensionRequestSchema,
   readMissionAcceptanceExtensionRequest,
@@ -65,7 +65,7 @@ import { ProjectTable } from "@/project/project.sql"
 import { Worktree } from "@/worktree"
 import { Question } from "@/question"
 import { Session } from "@/session"
-import { SessionTable } from "@/session/session.sql"
+import { MessageTable, SessionTable } from "@/session/session.sql"
 import {
   assertSessionDeletionAuthorityInTransaction,
   assertSessionDeletionPromptOwnersSettledInTransaction,
@@ -83,6 +83,7 @@ import {
 } from "@/session/deletion-cleanup"
 import { SessionContext } from "@/session/context"
 import { Message } from "@/session/message"
+import { MessageStore } from "@/session/message-store"
 import { decodeRawBase64Payload } from "@/session/text-mime"
 import { SessionPrompt } from "@/session/prompt"
 import { SessionStatus } from "@/session/status"
@@ -189,11 +190,12 @@ import { RuntimeExecutionSettlement } from "@/runtime/execution-settlement"
 import { ProjectMemory } from "@/memory/project-memory"
 import {
   SchedulerDeliveryReference,
+  type TaskOperatorMessageRequest,
   TaskRootMessageKind,
   TaskRootMessageProvenance,
   type SchedulerDeliveryReference as SchedulerDeliveryReferenceValue,
 } from "@/protocol/task-root-message-schema"
-import { deliverTaskRootMessageToOrchestratorSession, getTaskRootMessage } from "./task-root-message"
+import { deliverTaskRootMessageToOrchestratorSession, getTaskRootMessage, getTaskRootMessageInTransaction } from "./task-root-message"
 import {
   assertNoCallerSuppliedTaskCreatorMetadata,
   assertMissionTaskCreationOpenedOccurrence,
@@ -226,7 +228,7 @@ import {
 } from "@/engine/agent-coordination"
 import { createDecisionLog } from "@/decision-log"
 import { OperatorSteerTargetError } from "@/orchestrator/operator-steer"
-import { projectPersistedTaskMessage, type ProjectedTaskMessage } from "@/orchestrator/protocol/message-bridge"
+import { projectPersistedTaskMessage } from "@/orchestrator/protocol/message-bridge"
 import { OrchestratorEventSchema } from "@/orchestrator/event"
 import { sessionRole, taskIDForSession } from "@/engine/task-session-lineage"
 import {
@@ -319,13 +321,21 @@ type ResolvedTaskCreationAuthority = Awaited<ReturnType<typeof resolveTaskCreato
 
 const log = Log.create({ service: "assistant" })
 
-type TaskMessageWakeStatus = Extract<DispatchTaskLoopResult, "accepted"> | "not_woken"
-
 export const TaskEmptyMessageError = NamedError.create(
   "TaskEmptyMessageError",
   z.object({
     message: z.string(),
     taskID: z.string(),
+  }),
+)
+
+const TaskOperatorMessageRequestConflictError = NamedError.create(
+  "TaskOperatorMessageRequestConflictError",
+  z.object({
+    message: z.string(),
+    taskID: Identifier.schema("task"),
+    requestID: z.string().min(1),
+    messageID: Identifier.schema("message"),
   }),
 )
 
@@ -1071,30 +1081,63 @@ async function resolveOperatorSteerTarget(input: { task: TaskRow; sessionID: str
   return { session }
 }
 
-async function continueTaskMessage(
-  taskID: string,
-  text: string,
-  source: string,
-  attachments: AttachmentStore.Reference[] = [],
-  metadata?: Record<string, unknown>,
-  acceptanceEffects?: (db: Database.TxOrDb) => void,
-) {
-  const wake = await appendAndWakeTaskOperatorMessage({
-    taskID,
-    text,
-    attachments,
-    source,
-    metadata,
-    acceptanceEffects,
-  })
+type TaskOperatorMessageIdentity = {
+  messageID: string
+  request: TaskOperatorMessageRequest
+}
 
-  return {
-    mode: "scheduler" as const,
-    resumed: wake.resumed,
-    wakeStatus: wake.wakeStatus,
-    status: deriveTaskStatus(wake.task) as string,
-    user_message: wake.userMessage,
+function readAcceptedTaskOperatorMessage(
+  db: Database.TxOrDb,
+  task: TaskRow,
+  identity: TaskOperatorMessageIdentity,
+): { ingressID: string; message: Message.WithParts } | undefined {
+  const ingress = db.select({ id: EngineTaskRootIngressTable.id, projectID: EngineTaskRootIngressTable.project_id })
+    .from(EngineTaskRootIngressTable)
+    .where(and(
+      eq(EngineTaskRootIngressTable.task_id, task.id),
+      eq(EngineTaskRootIngressTable.source, "message"),
+      eq(EngineTaskRootIngressTable.source_id, identity.messageID),
+    )).get()
+  if (!ingress) {
+    const occupied = db.select({ id: MessageTable.id }).from(MessageTable).where(eq(MessageTable.id, identity.messageID)).get()
+    if (occupied) throw new Error(`Task operator Message ${identity.messageID} has no exact accepted ingress.`)
+    return undefined
   }
+  const message = getTaskRootMessageInTransaction(db, task, identity.messageID)
+  const owner = Session.readLiveInTransaction(db, { sessionID: message.info.sessionID, projectID: task.project_id })
+  const provenance = message.info.role === "user"
+    ? TaskRootMessageProvenance.safeParse(message.info.extra?.task_root_message)
+    : undefined
+  if (
+    ingress.projectID !== task.project_id ||
+    (owner.id !== task.session_id && (owner.kind !== "orchestrator" || owner.parentID !== task.session_id)) ||
+    !provenance?.success ||
+    provenance.data.taskID !== task.id ||
+    provenance.data.kind !== "operator" ||
+    provenance.data.operatorRequest?.requestID !== identity.request.requestID
+  ) throw new Error(`Task operator Message ${identity.messageID} has conflicting request ownership.`)
+  if (provenance.data.operatorRequest.fingerprint !== identity.request.fingerprint) {
+    throw new TaskOperatorMessageRequestConflictError({
+      message: `Task ${task.id} request ${identity.request.requestID} was already accepted with different input.`,
+      taskID: task.id,
+      requestID: identity.request.requestID,
+      messageID: identity.messageID,
+    })
+  }
+  return { ingressID: ingress.id, message }
+}
+
+async function finishTaskOperatorMessage(taskID: string, accepted: { ingressID: string; message: Message.WithParts }) {
+  const { ingressID, message } = accepted
+  if (message.info.role !== "user") {
+    throw new Error(`Task-root Message ${message.info.id} is not an accepted user Message.`)
+  }
+  const userMessage = projectPersistedTaskMessage({ info: message.info, parts: message.parts }, taskID)
+  const wakeStatus = await dispatchPersistedTaskLoop(taskID, ingressID)
+  if (wakeStatus === "ignored") {
+    throw new Error(`Task ${taskID} operator message was recorded, but the orchestrator wake was ignored.`)
+  }
+  return { ingressID, userMessage, wakeStatus }
 }
 
 async function appendAndWakeTaskOperatorMessage(input: {
@@ -1103,16 +1146,12 @@ async function appendAndWakeTaskOperatorMessage(input: {
   attachments?: AttachmentStore.Reference[]
   source: string
   metadata?: Record<string, unknown>
+  identity?: TaskOperatorMessageIdentity
   /** Caller-prepared durable facts that belong to this message's acceptance —
    *  model overlay, attachment references, reopen epoch — committed in the
    *  same transaction as the Message and its ingress. */
   acceptanceEffects?: (db: Database.TxOrDb) => void
-}): Promise<{
-  task: TaskRow
-  userMessage: ProjectedTaskMessage<Message.User>
-  resumed: boolean
-  wakeStatus: TaskMessageWakeStatus
-}> {
+}) {
   const task = requireTaskInCurrentProject(input.taskID)
   assertTaskOperatorMessageAccepted(task, input.text, input.attachments ?? [])
 
@@ -1124,10 +1163,18 @@ async function appendAndWakeTaskOperatorMessage(input: {
     "operator",
     input.attachments ?? [],
     input.metadata,
+    undefined,
+    input.identity,
   )
-  let ingressArtifactID: string | undefined
-  const persisted = await Session.persistMessageWithCommit(bundle, () => {
-    Database.use((db) => {
+  const accepted = Database.immediateTransaction((db) => {
+    const current = requireTaskInCurrentProject(task.id)
+    if (current.session_id !== task.session_id || current.project_id !== task.project_id) {
+      throw new Error(`Task ${task.id} changed its root Session or Project before operator acceptance.`)
+    }
+    const replay = input.identity && readAcceptedTaskOperatorMessage(db, current, input.identity)
+    if (replay) return replay
+    let ingressID: string | undefined
+    Session.persistMessageWithCommitInTransaction(bundle, () => {
       const now = bundle.info.time.created
       input.acceptanceEffects?.(db)
       appendTaskRewindClearedInTransaction(task.id, now, "service.message")
@@ -1136,30 +1183,20 @@ async function appendAndWakeTaskOperatorMessage(input: {
         { taskID: task.id, source, summary: "Operator message recorded", messageID: bundle.info.id },
         { taskID: task.id, source: "service.message" },
       )
-      ingressArtifactID = persistTaskRootMessageIngressInTransaction(db, {
-        task,
+      ingressID = persistTaskRootMessageIngressInTransaction(db, {
+        task: current,
         messageID: bundle.info.id,
         kind: "operator",
         now,
       })
     })
+    if (!ingressID) throw new Error(`Task ${task.id} operator message committed without a wake ingress.`)
+    return {
+      ingressID,
+      message: MessageStore.getInTransaction(db, { sessionID: bundle.info.sessionID, messageID: bundle.info.id }),
+    }
   })
-  if (persisted.info.role !== "user") {
-    throw new Error(`Task-root message ${persisted.info.id} persisted with role=${persisted.info.role}, expected user`)
-  }
-  if (!ingressArtifactID) throw new Error(`Task ${input.taskID} operator message committed without a wake artifact`)
-  const userMessage = projectPersistedTaskMessage({ info: persisted.info, parts: persisted.parts }, task.id)
-  const dispatchResult = await dispatchPersistedTaskLoop(input.taskID, ingressArtifactID)
-  if (dispatchResult === "ignored") {
-    throw new Error(`Task ${input.taskID} operator message was recorded, but the orchestrator wake was ignored.`)
-  }
-
-  return {
-    task: requireTaskInCurrentProject(input.taskID),
-    userMessage,
-    resumed: dispatchResult === "accepted",
-    wakeStatus: dispatchResult,
-  }
+  return finishTaskOperatorMessage(task.id, accepted)
 }
 
 function assertTaskOperatorMessageAccepted(task: TaskRow, text: string, attachments: readonly unknown[] = []) {
@@ -1179,7 +1216,7 @@ async function buildTaskSessionMessageBundle(
   attachments: AttachmentStore.Reference[] = [],
   metadata?: Record<string, unknown>,
   schedulerDelivery?: SchedulerDeliveryReferenceValue,
-  identity?: { messageID: string; textPartID: string; controlID?: string },
+  identity?: { messageID: string; textPartID?: string; controlID?: string; request?: TaskOperatorMessageRequest },
 ) {
   // Rule 7: no silent fallback. A task without a session_id or whose
   // session has lost its agent/model context cannot accept a message —
@@ -1217,6 +1254,7 @@ async function buildTaskSessionMessageBundle(
         kind,
         source,
         ...(schedulerDelivery ? { schedulerDelivery: SchedulerDeliveryReference.parse(schedulerDelivery) } : {}),
+        ...(identity?.request ? { operatorRequest: identity.request } : {}),
       }),
       ...(kind === "operator" ? ProjectMemory.userInputExtra({ surface: `task.${source}`, literalText: text }) : {}),
     },
@@ -1412,7 +1450,7 @@ export class PlannerFailureError extends Error {
 
 type ApiAttachmentInput = NonNullable<z.infer<typeof CreateTaskInput>["attachments"]>[number]
 
-function taskCreationRequestAttachments(attachments: ApiAttachmentInput[] | undefined) {
+function taskCallerRequestAttachments(attachments: ApiAttachmentInput[] | undefined, label: string) {
   return (attachments ?? []).map((attachment) => {
     if (!("data" in attachment)) {
       return {
@@ -1423,7 +1461,7 @@ function taskCreationRequestAttachments(attachments: ApiAttachmentInput[] | unde
     }
     return canonicalInlineUploadAttachment(
       attachment,
-      `Task creation attachment ${attachment.filename ?? attachment.mime}`,
+      `${label} ${attachment.filename ?? attachment.mime}`,
     )
   })
 }
@@ -1810,7 +1848,7 @@ export namespace EngineService {
     assertTaskCreatorExpertSquadAuthority({ creator, promptProfile: parsed.promptProfile })
     const caller: TaskCreationCallerInput =
       creator.actor !== "user" && creator.toolInput
-        ? panelTaskCreationCallerInput(creator.toolInput, taskCreationRequestAttachments(parsed.attachments))
+        ? panelTaskCreationCallerInput(creator.toolInput, taskCallerRequestAttachments(parsed.attachments, "Task creation attachment"))
         : {
             project: parsed.project,
             directory: parsed.directory,
@@ -1818,7 +1856,7 @@ export namespace EngineService {
             productPillar: parsed.productPillar,
             title: parsed.title,
             request: parsed.request,
-            attachments: taskCreationRequestAttachments(parsed.attachments),
+            attachments: taskCallerRequestAttachments(parsed.attachments, "Task creation attachment"),
             priority: parsed.priority,
             budget: parsed.budget,
             checks: parsed.checks,
@@ -4211,10 +4249,36 @@ export namespace EngineService {
     const task = requireTaskInCurrentProject(taskID)
     const rootSession = await assertTaskRootSessionLineageInCurrentProject(task)
     assertTaskOperatorMessageAccepted(task, input.text, input.attachments ?? [])
+    const requestID = input.requestID ?? randomUUID()
+    const attachmentLabel = `Task ${taskID} operator attachment`
+    const identity: TaskOperatorMessageIdentity = {
+      messageID: Identifier.deterministic("message", `task.operator.follow-up.v1\0${taskID}\0${rootSession.id}\0${requestID}`),
+      request: {
+        version: 1,
+        requestID,
+        fingerprint: canonicalDigestSource("task-operator-follow-up-v1", {
+          text: input.text,
+          source: input.source,
+          model: input.model ?? null,
+          userID: input.user_id ?? null,
+          attachments: taskCallerRequestAttachments(input.attachments, attachmentLabel),
+          metadata: input.metadata ?? {},
+        }).sha256,
+      },
+    }
+    const response = (note: Awaited<ReturnType<typeof finishTaskOperatorMessage>>) => ({
+      message: "Operator message recorded and accepted for delivery.",
+      wake_status: note.wakeStatus,
+      ingress_id: note.ingressID,
+      user_message: note.userMessage,
+    })
+    const accepted = Database.transaction((db) => readAcceptedTaskOperatorMessage(db, requireTaskInCurrentProject(taskID), identity))
+    if (accepted) return response(await finishTaskOperatorMessage(taskID, accepted))
+
     requireTaskPackageRevisionBinding(taskID)
     const attachmentRefs = await materializeApiAttachments({
       attachments: input.attachments,
-      label: `Task ${taskID} operator attachment`,
+      label: attachmentLabel,
       projectID: Instance.project.id,
     })
     const storedOverlay =
@@ -4258,42 +4322,21 @@ export namespace EngineService {
     }
     const preparedAttachments =
       attachmentRefs.length > 0 ? await prepareTaskAttachmentAppends(taskID, attachmentRefs) : undefined
-    {
-      // Every durable fact of this operator message — model overlay,
-      // attachment references, reopen epoch, the Message itself and its
-      // ingress — commits in ONE transaction. A process death leaves either
-      // the whole accepted occurrence or nothing; the next Turn can never
-      // observe overlay/attachment/reopen state for which no Message exists.
-      const note = await continueTaskMessage(taskID, input.text, input.source, attachmentRefs, input.metadata, (db) => {
+    // The operator Message, overlay, attachment references, reopened epoch and
+    // exact ingress either commit together or the original receipt wins.
+    return response(await appendAndWakeTaskOperatorMessage({
+      taskID,
+      text: input.text,
+      source: input.source,
+      attachments: attachmentRefs,
+      metadata: input.metadata,
+      identity,
+      acceptanceEffects: (db) => {
         preparedOverlay?.commitInTransaction(db)
         preparedAttachments?.commitInTransaction(db)
         reopenTerminalTaskForOperatorMessageInTransaction(db, taskID)
-      })
-      const ingressID = Database.use(
-        (db) =>
-          db
-            .select({ id: EngineTaskRootIngressTable.id })
-            .from(EngineTaskRootIngressTable)
-            .where(
-              and(
-                eq(EngineTaskRootIngressTable.task_id, taskID),
-                eq(EngineTaskRootIngressTable.source, "message"),
-                eq(EngineTaskRootIngressTable.source_id, note.user_message.info.id),
-              ),
-            )
-            .get()?.id,
-      )
-      const message =
-        note.wakeStatus === "accepted"
-          ? "Operator message recorded and accepted for delivery."
-          : "Operator message recorded."
-      return {
-        message,
-        wake_status: note.wakeStatus,
-        ...(ingressID ? { ingress_id: ingressID } : {}),
-        user_message: note.user_message,
-      }
-    }
+      },
+    }))
   }
 
   /** A real goal-controller Message and its exact epoch/ingress commit together. */
@@ -4361,7 +4404,7 @@ export namespace EngineService {
     const wake = await appendAndWakeTaskOperatorMessage({ taskID, text: message, source: "api_inject" })
     return {
       appended: true,
-      orchestratorWoken: wake.resumed,
+      orchestratorWoken: wake.wakeStatus === "accepted",
       status: deriveTaskStatus(requireTaskInCurrentProject(taskID)) as string,
     }
   }

@@ -23,7 +23,7 @@ afterEach(async () => {
 })
 
 describe("Task operator message acceptance is one transaction", () => {
-  test("a failed acceptance leaves no overlay or message, and the retry commits every fact together", async () => {
+  test("one author request commits the Message, overlay, attachment and reopened ingress together", async () => {
     await using project = await memoryProject()
     await Instance.provide({
       directory: project.path,
@@ -153,15 +153,15 @@ describe("Task operator message acceptance is one transaction", () => {
           mime: "text/plain",
           filename: "atomic.txt",
         }
+        const input = {
+          requestID: "one-atomic-operator-request",
+          source: "api",
+          text: "switch models and continue",
+          model: "overlay-test-provider/overlay-test-model",
+          attachments: [attachment],
+        }
         try {
-          await expect(
-            EngineService.handleTaskMessage(taskID, {
-              source: "api",
-              text: "switch models and continue",
-              model: "overlay-test-provider/overlay-test-model",
-              attachments: [attachment],
-            }),
-          ).rejects.toThrow("injected acceptance commit failure")
+          await expect(EngineService.handleTaskMessage(taskID, input)).rejects.toThrow("injected acceptance commit failure")
         } finally {
           Database.use((db) => db.run(sql.raw("DROP TRIGGER arc011_fail_after_message_ingress")))
         }
@@ -170,12 +170,14 @@ describe("Task operator message acceptance is one transaction", () => {
 
         // The retried message commits the Message, its ingress and the
         // overlay together.
-        const note = await EngineService.handleTaskMessage(taskID, {
-          source: "api",
-          text: "switch models and continue",
-          model: "overlay-test-provider/overlay-test-model",
-          attachments: [attachment],
-        })
+        const [note, replay] = await Promise.all([
+          EngineService.handleTaskMessage(taskID, input),
+          EngineService.handleTaskMessage(taskID, input),
+        ])
+        expect({ messageID: replay.user_message.info.id, ingressID: replay.ingress_id, status: replay.wake_status })
+          .toEqual({ messageID: note.user_message.info.id, ingressID: note.ingress_id, status: "accepted" })
+        await expect(EngineService.handleTaskMessage(taskID, { ...input, text: "a different operator intent" }))
+          .rejects.toMatchObject({ name: "TaskOperatorMessageRequestConflictError", data: { taskID, requestID: input.requestID } })
         await Database.awaitEffectIdle(5_000)
         const committed = await footprint()
         const committedMessageID = note.user_message.info.id
@@ -185,7 +187,7 @@ describe("Task operator message acceptance is one transaction", () => {
         expect({
           overlay: committed.overlay,
           userMessages: committed.userMessages,
-          hasIngress: typeof (note as { ingress_id?: string }).ingress_id === "string",
+          ingressID: committedIngress?.id,
           messageRole: note.user_message.info.role,
           attachment: committed.attachments[0] && {
             filename: committed.attachments[0].filename,
@@ -198,7 +200,7 @@ describe("Task operator message acceptance is one transaction", () => {
         }).toEqual({
           overlay: "overlay-test-provider/overlay-test-model",
           userMessages: baselineMessages + 1,
-          hasIngress: true,
+          ingressID: note.ingress_id,
           messageRole: "user",
           attachment: { filename: "atomic.txt", intent: "task_input", source: "user-upload" },
           lifecycle: { epoch: 2, status: "active" },

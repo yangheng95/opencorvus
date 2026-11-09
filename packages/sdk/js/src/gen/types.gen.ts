@@ -38652,6 +38652,7 @@ export type TaskMessageData = {
       [key: string]: unknown
     }
     model?: string
+    requestID?: string
     resolvedRole?: string
     source: string
     text: string
@@ -38691,9 +38692,15 @@ export type TaskMessageErrors = {
         name: "LogFileNotFoundError"
       }
   /**
-   * Task execution or immutable expert-squad profile conflict
+   * Task execution, request identity or immutable expert-squad profile conflict
    */
   409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "TaskOperatorMessageRequestConflictError"
+      }
     | {
         data: {
           [key: string]: unknown

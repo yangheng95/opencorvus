@@ -1,0 +1,170 @@
+{
+  "backup": "opencorvus.db.v12-to-v13.1794266223308.433620d6-d8e7-457f-8bce-1826f0f399fa.sqlite",
+  "oldBusinessRowsAndRowIDs": {
+    "project": 2,
+    "session": 4,
+    "engine_task": 2,
+    "message": 17,
+    "part": 17,
+    "engine_task_root_ingress": 9,
+    "protocol_event": 79
+  },
+  "migrated": {
+    "version": 13,
+    "integrity": "ok",
+    "foreignKeyIssues": 0
+  },
+  "preservedAcceptedOlderIngresses": 9,
+  "primary": {
+    "id": "art_h7m6r63gJswNOzDrmHBJ",
+    "task_id": "tsk_g00VaWJhjt00MbZijE7x",
+    "project_id": "prj_hYRao4EopSNb3QyJgRxF",
+    "execution_epoch": 4,
+    "sequence": 1,
+    "source_id": "msg_h7e58RhrUTM5y5fhkAyR",
+    "session_id": "ses_-zUPTgGXAzzuI6n93QNX",
+    "kind": "orchestrator",
+    "parent_id": "ses_-zUPTgHxOzzcrligONrn",
+    "requestID": "b161-after-replay-v13",
+    "provider": "b161-review",
+    "model": "offline",
+    "parts": [
+      {
+        "id": "prt_g0VaWMKyZ00ABmrRaujb",
+        "type": "text",
+        "text": "B161 candidate acceptance on the upgraded historical Task",
+        "filename": null
+      }
+    ],
+    "moves": [
+      {
+        "occurrence_id": "bus-occurrence:b8a6a007-41c3-4c41-a124-6644cb714feb",
+        "sourceSessionID": "ses_-zUPTgHxOzzcrligONrn",
+        "targetSessionID": "ses_-zUPTgGXAzzuI6n93QNX"
+      }
+    ]
+  },
+  "desktop": {
+    "sends": [
+      {
+        "time": "2026-11-09T23:23:27.462Z",
+        "attempt": 1,
+        "method": "POST",
+        "route": "/task/tsk_g00VaWJiJp00MK0K0IEy/message",
+        "upstreamStatus": 202,
+        "upstreamRequestID": "1011f15a-e0cf-4192-8f59-ed5fd2f925ab",
+        "sent": {
+          "key": "msg_2694203a-9a36-4b55-bf9e-85931da0881e",
+          "text": "B161 desktop follow-up: submit this one operator request exactly once.",
+          "model": "b161-review/offline"
+        },
+        "accepted": {
+          "taskID": "tsk_g00VaWJiJp00MK0K0IEy",
+          "sessionID": "ses_-zUPTgHQZzzsj2UWlwYM",
+          "userMessageID": "msg_hrJnmD1giDflSssDYsB6",
+          "ingressID": "art_h6LITgTlaAYLZSIgnutk",
+          "wakeStatus": "accepted"
+        },
+        "responseBytes": 1390,
+        "browserResponse": "truncated after 16 bytes"
+      },
+      {
+        "time": "2026-11-09T23:23:59.268Z",
+        "attempt": 2,
+        "method": "POST",
+        "route": "/task/tsk_g00VaWJiJp00MK0K0IEy/message",
+        "upstreamStatus": 202,
+        "upstreamRequestID": "49ed3677-078b-4dcb-bc6a-911ae698f557",
+        "sent": {
+          "key": "msg_2694203a-9a36-4b55-bf9e-85931da0881e",
+          "text": "B161 desktop follow-up: submit this one operator request exactly once.",
+          "model": "b161-review/offline"
+        },
+        "accepted": {
+          "taskID": "tsk_g00VaWJiJp00MK0K0IEy",
+          "sessionID": "ses_-zUPTgFqvzzIWOLEoyAm",
+          "userMessageID": "msg_hrJnmD1giDflSssDYsB6",
+          "ingressID": "art_h6LITgTlaAYLZSIgnutk",
+          "wakeStatus": "accepted"
+        },
+        "responseBytes": 1443,
+        "browserResponse": "complete"
+      }
+    ],
+    "beforeRetry": {
+      "lifecycle": {
+        "taskID": "tsk_g00VaWJiJp00MK0K0IEy",
+        "epoch": 2,
+        "openedEventID": "pev_g0VaWNpTG00CYnMCYxSR",
+        "openedAt": 1794266607208,
+        "previousTerminal": {
+          "epoch": 1,
+          "status": "failed",
+          "terminalEventID": "pev_g0VaWJkvO00bbRSekoDK",
+          "terminalAt": 1794265636421,
+          "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+          "terminalReason": "interrupted"
+        },
+        "status": "failed",
+        "terminalEventID": "pev_g0VaWNr1200maq3z1qN5",
+        "terminalAt": 1794266613146,
+        "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+        "terminalReason": "interrupted"
+      },
+      "taskID": "tsk_g00VaWJiJp00MK0K0IEy",
+      "rootSessionID": "ses_-zUPTgHQZzzsj2UWlwYM"
+    },
+    "afterRetry": {
+      "lifecycle": {
+        "taskID": "tsk_g00VaWJiJp00MK0K0IEy",
+        "epoch": 2,
+        "openedEventID": "pev_g0VaWNpTG00CYnMCYxSR",
+        "openedAt": 1794266607208,
+        "previousTerminal": {
+          "epoch": 1,
+          "status": "failed",
+          "terminalEventID": "pev_g0VaWJkvO00bbRSekoDK",
+          "terminalAt": 1794265636421,
+          "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+          "terminalReason": "interrupted"
+        },
+        "status": "failed",
+        "terminalEventID": "pev_g0VaWNr1200maq3z1qN5",
+        "terminalAt": 1794266613146,
+        "terminalError": "Orchestrator error: Tool schema payload (89777 chars, estimated 22447 tokens) exceeds 50% of model input budget (27904). Compaction does not shrink tool definitions; reduce the agent's tool surface or pick a model with a larger context window.",
+        "terminalReason": "interrupted"
+      },
+      "taskID": "tsk_g00VaWJiJp00MK0K0IEy",
+      "rootSessionID": "ses_-zUPTgHQZzzsj2UWlwYM"
+    },
+    "facts": {
+      "id": "art_h6LITgTlaAYLZSIgnutk",
+      "task_id": "tsk_g00VaWJiJp00MK0K0IEy",
+      "project_id": "prj_hmnNGSvgFYUtvjfT53uG",
+      "execution_epoch": 2,
+      "sequence": 1,
+      "source_id": "msg_hrJnmD1giDflSssDYsB6",
+      "session_id": "ses_-zUPTgFqvzzIWOLEoyAm",
+      "kind": "orchestrator",
+      "parent_id": "ses_-zUPTgHQZzzsj2UWlwYM",
+      "requestID": "msg_2694203a-9a36-4b55-bf9e-85931da0881e",
+      "provider": "b161-review",
+      "model": "offline",
+      "parts": [
+        {
+          "id": "prt_g0VaWNpSk00DrOElwNe5",
+          "type": "text",
+          "text": "B161 desktop follow-up: submit this one operator request exactly once.",
+          "filename": null
+        }
+      ],
+      "moves": [
+        {
+          "occurrence_id": "bus-occurrence:4e690bc4-f925-40da-b5a9-b0d5bc1639b2",
+          "sourceSessionID": "ses_-zUPTgHQZzzsj2UWlwYM",
+          "targetSessionID": "ses_-zUPTgFqvzzIWOLEoyAm"
+        }
+      ]
+    }
+  }
+}

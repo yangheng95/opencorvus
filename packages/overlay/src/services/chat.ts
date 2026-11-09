@@ -384,7 +384,31 @@ export async function panelMessage(
     if (!taskID) throw new Error("panelMessage: an Assistant session or task must be selected")
     setConnectionStatus("online")
     const directory = explicitTarget?.directory || taskOwningDirectory(taskID)
-    request = { ...requestBase, target: { kind: "task", taskID, directory } }
+    const body = {
+      text,
+      source: typeof requestMetadata.source === "string" ? requestMetadata.source : "panel",
+      model: currentOpenCorvusModel(),
+      ...(Object.keys(requestMetadata).length > 0 ? { metadata: requestMetadata } : {}),
+      ...(promptProfile ? { promptProfile } : {}),
+      ...(attachments.length > 0
+        ? {
+            attachments: attachments.map((att) => ({
+              mime: att.mime,
+              url: att.url,
+              ...(att.filename ? { filename: att.filename } : {}),
+            })),
+          }
+        : {}),
+    }
+    const authorRequestID = options.composerDraftKey
+      ? composerSubmission(options.composerDraftKey, JSON.stringify(body)).messageID
+      : requestID
+    request = {
+      ...requestBase,
+      target: { kind: "task", taskID, directory },
+      messageID: authorRequestID,
+      composerDraftKey: options.composerDraftKey,
+    }
     setChatRequest(request)
     // Every status (active, blocked, cancelled, completed, failed) →
     // send message directly to the task. Status is display/audit context, not
@@ -395,22 +419,7 @@ export async function panelMessage(
       authority,
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        text,
-        source: typeof requestMetadata.source === "string" ? requestMetadata.source : "panel",
-        model: currentOpenCorvusModel(),
-        ...(Object.keys(requestMetadata).length > 0 ? { metadata: requestMetadata } : {}),
-        ...(promptProfile ? { promptProfile } : {}),
-        ...(attachments.length > 0
-          ? {
-              attachments: attachments.map((att) => ({
-                mime: att.mime,
-                url: att.url,
-                ...(att.filename ? { filename: att.filename } : {}),
-              })),
-            }
-          : {}),
-      }),
+      body: JSON.stringify({ ...body, requestID: authorRequestID }),
       signal: controller.signal,
     })
     options.onAccepted?.()

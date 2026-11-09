@@ -1406,6 +1406,7 @@ export const EngineRoutes = lazy(() =>
       "/task/:taskID/message",
       describeRoute({
         summary: "Handle task message",
+        description: "Use the same requestID and authored input to recover an accepted Message and ingress. A new input needs a new request ID.",
         operationId: "task.message",
         responses: {
           202: {
@@ -1418,7 +1419,8 @@ export const EngineRoutes = lazy(() =>
           },
           ...errors(400, 404),
           409: namedErrorResponse(
-            "Task execution or immutable expert-squad profile conflict",
+            "Task execution, request identity or immutable expert-squad profile conflict",
+            "TaskOperatorMessageRequestConflictError",
             "TaskCancellationIncompleteError",
             "TaskPackageRevisionBindingError",
           ),

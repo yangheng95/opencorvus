@@ -135499,6 +135499,7 @@
     },
     "/task/{taskID}/message": {
       "post": {
+        "description": "Use the same requestID and authored input to recover an accepted Message and ingress. A new input needs a new request ID.",
         "operationId": "task.message",
         "parameters": [
           {
@@ -135586,6 +135587,11 @@
                     "type": "object"
                   },
                   "model": {
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
+                    "minLength": 1,
                     "type": "string"
                   },
                   "resolvedRole": {
@@ -135738,6 +135744,26 @@
                           "type": "object"
                         },
                         "name": {
+                          "const": "TaskOperatorMessageRequestConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
                           "const": "TaskCancellationIncompleteError",
                           "type": "string"
                         }
@@ -135772,7 +135798,7 @@
                 }
               }
             },
-            "description": "Task execution or immutable expert-squad profile conflict"
+            "description": "Task execution, request identity or immutable expert-squad profile conflict"
           }
         },
         "summary": "Handle task message",

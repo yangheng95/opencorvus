@@ -1307,16 +1307,16 @@ and retains the draft. After confirmed acceptance it says the message was
 received even if the response is incomplete. All three retain the original
 diagnostic when available; neither the error status nor its text establishes
 acceptance.
-Session and Mission retries retain the existing draft submission identity for
+Session, Mission and Task follow-up retries retain the existing draft submission identity for
 the exact serialized request content, including files and model. The existing
 submission.text stores that content identity; draft.text remains author prose.
 Before a Session dispatch without an explicit model, the request reads its exact
 Session's effective configuration through the existing config owner. Passive
 view projection completion cannot change the identity of an unchanged retry.
 An unresolved model retains the preparation error and authored input.
-No persisted fields or storage version change. Confirmed Stop retires its matching
-retry identity while preserving unaccepted prose. Task's existing message contract
-has no caller identity, so unknown-result Task retries do not claim this guarantee.
+Confirmed Stop retires its matching retry identity while preserving unaccepted
+prose. A Task follow-up uses its original business request ID for the accepted
+Message and ingress even after the Message moves to the Orchestrator Session.
 
 The registered file owner exposes its existing dirty memo for browser exit.
 Only dirty pages register cancellable beforeunload confirmation. Actual page

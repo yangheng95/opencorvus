@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [Task 跟进重发复用已接受的消息与轮次](records/2026-11/2026-11-10-task-operator-follow-up-replay.md)
 - [主输入区区分消息接收未确认与发送前失败](records/2026-11/2026-11-10-composer-delivery-uncertain-feedback.md)
 - [Mission 已接受请求在模型目录变更后的重放](records/2026-11/2026-11-10-mission-accepted-wake-catalog-replay.md)
 - [Mission 首次启动重发的项目作用域和执行目标](records/2026-11/2026-11-10-mission-first-wake-request-identity.md)

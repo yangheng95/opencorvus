@@ -2,6 +2,7 @@ import { SQL } from "drizzle-orm"
 import { getTableConfig, SQLiteSyncDialect, type AnySQLiteTable } from "drizzle-orm/sqlite-core"
 import { ENGINE_ARTIFACT_CATALOG_LABEL_INDEX_CODE_POINTS } from "@/engine/artifact-catalog-constants"
 import { ApplicationSchema } from "./schema"
+import taskOperatorMessageRequest from "./migrations/0013-task-operator-request.sql" with { type: "text" }
 
 type Column = ReturnType<typeof getTableConfig>["columns"][number]
 type IndexColumn = ReturnType<typeof getTableConfig>["indexes"][number]["config"]["columns"][number]
@@ -4821,4 +4822,4 @@ WHEN EXISTS (SELECT 1 FROM engine_task WHERE id=OLD.task_id)
 BEGIN SELECT RAISE(ABORT, 'engine_progress_snapshot: immutable authored checkpoint'); END;
 `
 
-export const SCHEMA_DDL = `${generatedSchemaDdl()}\n\n${STORAGE_EXTENSION_DDL}`
+export const SCHEMA_DDL = `${generatedSchemaDdl()}\n\n${STORAGE_EXTENSION_DDL}\n\n${taskOperatorMessageRequest}`

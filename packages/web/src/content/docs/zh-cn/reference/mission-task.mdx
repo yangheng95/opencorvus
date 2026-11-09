@@ -281,6 +281,7 @@ for await (const event of stream) {
 ```typescript
 await client.task.message({
   taskID,
+  requestID: "prioritize-mobile-layout",
   source: "api",
   text: "移动端优先，桌面端不要改布局。",
 })
@@ -288,13 +289,15 @@ await client.task.message({
 
 `source` 是必填字段，用来标识调用方，例如 `api`、`github-action` 或你的系统名。
 
+如果回执丢失，使用相同的 `requestID` 和输入重发，可找回原消息及入队标识，不会重新打开已结束的 Task。同一标识下修改输入会返回冲突。另一次跟进使用新的标识。
+
 curl：
 
 ```bash
 curl -X POST "http://127.0.0.1:7878/task/task_.../message" \
   -H "content-type: application/json" \
   -H "x-opencorvus-directory: D:\repo\my-project" \
-  -d "{\"source\":\"api\",\"text\":\"移动端优先，桌面端不要改布局。\"}"
+  -d "{\"requestID\":\"prioritize-mobile-layout\",\"source\":\"api\",\"text\":\"移动端优先，桌面端不要改布局。\"}"
 ```
 
 ## 下载 Task 代码

@@ -71,6 +71,15 @@ of the already-allocated directory.
 
 Durable operator-message, scheduler-delivery and Mission acceptance-resume receipts acknowledge the committed ingress, not completion of its model Turn. `dispatchPersistedTaskLoop` validates current-project ownership and the exact accepted ingress, then requests the existing detached project-owned scan. The reconciler, FIFO leases, replay and restart sweep remain the sole execution authority; request lifetime cannot own or block the enabled Turn.
 
+A Task follow-up's author request ID binds its immutable Message and ingress
+across physical delivery and execution epochs. Exact replay reads that pair
+before current model preflight, projects the real Message at its current Task
+Session location, and requests only the existing scan. It does not reopen a
+terminal Task. A different authored input under the same request ID is a
+conflict; a new request retains the ordinary terminal continuation contract.
+The Task tombstone still fences public access while preserving the accepted
+audit facts.
+
 A Mission acceptance-resume ingress references its real Mission-authored root Message. During normal activation and recovery, the Message's typed provenance resolves the exact same-transaction resume receipt by Task and ingress identity; that receipt and its named immutable ledger reconstruct `missionAcceptanceResume`. The loader validates Message/Task/Session ownership, ledger epoch, gap and reviewed terminal identity before acquisition. It does not downgrade a structured resume into a generic Mission follow-up or copy the event into a parallel inline payload. Source-integrity failures are reduced through the existing ingress evidence-fault contract. Ordinary participant messages and scheduler-delivery references retain their own event forms.
 
 ## Outcome and delegated input

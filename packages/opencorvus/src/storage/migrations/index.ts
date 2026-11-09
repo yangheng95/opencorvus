@@ -12,6 +12,7 @@ import { preserveInstallationMutationReceipts } from "./0008-installation-mutati
 import { preserveCopiedInteractiveArtifacts } from "./0009-copied-interactive-artifacts"
 import globalConversationCreation from "./0011-global-conversation-creation.sql" with { type: "text" }
 import missionDraftCreation from "./0012-mission-draft-creation.sql" with { type: "text" }
+import taskOperatorMessageRequest from "./0013-task-operator-request.sql" with { type: "text" }
 import type { SchemaMigration } from "../schema-migration"
 
 /** Published entries are immutable. Append a revision for every schema or stored-data change. */
@@ -34,4 +35,5 @@ export const DATABASE_MIGRATIONS: readonly SchemaMigration[] = [
   { version: 10, name: "Explicit Mission acceptance-resume Artifact delivery receipts", ddl: installationMutationReceipts },
   { version: 11, name: "Durable global Chat and Work creation allocations", ddl: `${installationMutationReceipts}\n${globalConversationCreation}` },
   { version: 12, name: "Durable manual Mission draft creation binding", ddl: `${installationMutationReceipts}\n${globalConversationCreation}\n${missionDraftCreation}` },
+  { version: 13, name: "Durable Task operator follow-up binding", ddl: `${installationMutationReceipts}\n${globalConversationCreation}\n${missionDraftCreation}\n${taskOperatorMessageRequest}` },
 ]

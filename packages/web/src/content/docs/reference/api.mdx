@@ -168,7 +168,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/task/{taskID}/events` | Subscribe to task events | `task.events` |
 | POST | `/task/{taskID}/inject` | Inject message into running task Body: `message`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.inject` |
 | GET | `/task/{taskID}/interactions` | List task interactions Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.interactions` |
-| POST | `/task/{taskID}/message` | Handle task message Body: `attachments`, `channel`, `metadata`, `model`, `resolvedRole`, `source`, `text`, `user_id`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`, `TaskPackageRevisionBindingError`. | `task.message` |
+| POST | `/task/{taskID}/message` | Handle task message Body: `attachments`, `channel`, `metadata`, `model`, `requestID`, `resolvedRole`, `source`, `text`, `user_id`; Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`, `TaskOperatorMessageRequestConflictError`, `TaskPackageRevisionBindingError`. | `task.message` |
 | GET | `/task/{taskID}/operator-model-context` | Get task operator model context Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.operatorModelContext` |
 | GET | `/task/{taskID}/progress` | Get task progress Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.progress` |
 | GET | `/task/{taskID}/project-archive` | Download task project archive Errors: `LogFileNotFoundError`, `NotFoundError`. | `task.projectArchive` |

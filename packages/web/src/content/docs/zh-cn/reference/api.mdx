@@ -168,7 +168,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/task/{taskID}/events` | Subscribe to task events | `task.events` |
 | POST | `/task/{taskID}/inject` | Inject message into running task 请求体: `message`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.inject` |
 | GET | `/task/{taskID}/interactions` | List task interactions 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.interactions` |
-| POST | `/task/{taskID}/message` | Handle task message 请求体: `attachments`, `channel`, `metadata`, `model`, `resolvedRole`, `source`, `text`, `user_id`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`, `TaskPackageRevisionBindingError`. | `task.message` |
+| POST | `/task/{taskID}/message` | Handle task message 请求体: `attachments`, `channel`, `metadata`, `model`, `requestID`, `resolvedRole`, `source`, `text`, `user_id`; 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`, `TaskOperatorMessageRequestConflictError`, `TaskPackageRevisionBindingError`. | `task.message` |
 | GET | `/task/{taskID}/operator-model-context` | Get task operator model context 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`, `TaskCancellationIncompleteError`. | `task.operatorModelContext` |
 | GET | `/task/{taskID}/progress` | Get task progress 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.progress` |
 | GET | `/task/{taskID}/project-archive` | Download task project archive 错误: `LogFileNotFoundError`, `NotFoundError`. | `task.projectArchive` |

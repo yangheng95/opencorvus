@@ -1,0 +1,138 @@
+{
+  "a": {
+    "status": 202,
+    "trace": "09a09666-e59b-4f59-840a-d521bcfc8afb",
+    "data": {
+      "message": "Operator message recorded and accepted for delivery.",
+      "wake_status": "accepted",
+      "ingress_id": "art_h7m6r63gJswNOzDrmHBJ",
+      "user_message": {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1794266251658
+          },
+          "agent": "orchestrator",
+          "model": {
+            "providerID": "b161-review",
+            "modelID": "offline"
+          },
+          "extra": {
+            "task_root_message": {
+              "protocol": "task-root-message",
+              "taskID": "tsk_g00VaWJhjt00MbZijE7x",
+              "kind": "operator",
+              "source": "panel",
+              "operatorRequest": {
+                "version": 1,
+                "requestID": "b161-after-replay-v13",
+                "fingerprint": "77309094ce39b0c7dfd481bbc8521d6ce05c2d81d3565769a6117f10bd3e7f0f"
+              }
+            },
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "task.panel",
+              "literalText": "B161 candidate acceptance on the upgraded historical Task"
+            }
+          },
+          "orderKey": "v1:0001794266251658:0000000000000030:0000000000000000:message:msg_h7e58RhrUTM5y5fhkAyR",
+          "id": "msg_h7e58RhrUTM5y5fhkAyR",
+          "sessionID": "ses_-zUPTgHxOzzcrligONrn",
+          "resolvedRole": "user",
+          "channel": "main",
+          "agentID": "orchestrator",
+          "sessionAgentID": "orchestrator",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VaWMKyZ00ABmrRaujb",
+            "sessionID": "ses_-zUPTgHxOzzcrligONrn",
+            "messageID": "msg_h7e58RhrUTM5y5fhkAyR",
+            "orderKey": "v1:0001794266251667:0000000000000031:0000000000000000:part:prt_g0VaWMKyZ00ABmrRaujb",
+            "type": "text",
+            "text": "B161 candidate acceptance on the upgraded historical Task",
+            "kind": "user_content",
+            "source": "user"
+          }
+        ]
+      }
+    }
+  },
+  "b": {
+    "status": 202,
+    "trace": "ef927552-d628-4743-b60a-ed677e60a061",
+    "data": {
+      "message": "Operator message recorded and accepted for delivery.",
+      "wake_status": "accepted",
+      "ingress_id": "art_h7m6r63gJswNOzDrmHBJ",
+      "user_message": {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1794266251658
+          },
+          "agent": "orchestrator",
+          "model": {
+            "providerID": "b161-review",
+            "modelID": "offline"
+          },
+          "extra": {
+            "task_root_message": {
+              "protocol": "task-root-message",
+              "taskID": "tsk_g00VaWJhjt00MbZijE7x",
+              "kind": "operator",
+              "source": "panel",
+              "operatorRequest": {
+                "version": 1,
+                "requestID": "b161-after-replay-v13",
+                "fingerprint": "77309094ce39b0c7dfd481bbc8521d6ce05c2d81d3565769a6117f10bd3e7f0f"
+              }
+            },
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "task.panel",
+              "literalText": "B161 candidate acceptance on the upgraded historical Task"
+            }
+          },
+          "orderKey": "v1:0001794266251658:0000000000000030:0000000000000000:message:msg_h7e58RhrUTM5y5fhkAyR",
+          "id": "msg_h7e58RhrUTM5y5fhkAyR",
+          "sessionID": "ses_-zUPTgHxOzzcrligONrn",
+          "resolvedRole": "user",
+          "channel": "main",
+          "agentID": "orchestrator",
+          "sessionAgentID": "orchestrator",
+          "originSource": ""
+        },
+        "parts": [
+          {
+            "id": "prt_g0VaWMKyZ00ABmrRaujb",
+            "sessionID": "ses_-zUPTgHxOzzcrligONrn",
+            "messageID": "msg_h7e58RhrUTM5y5fhkAyR",
+            "orderKey": "v1:0001794266251667:0000000000000031:0000000000000000:part:prt_g0VaWMKyZ00ABmrRaujb",
+            "type": "text",
+            "text": "B161 candidate acceptance on the upgraded historical Task",
+            "kind": "user_content",
+            "source": "user"
+          }
+        ]
+      }
+    }
+  },
+  "c": {
+    "status": 409,
+    "trace": "e83e5f04-b1c3-4034-bb5b-0cd7aca20d76",
+    "data": {
+      "name": "TaskOperatorMessageRequestConflictError",
+      "data": {
+        "message": "Task tsk_g00VaWJhjt00MbZijE7x request b161-after-replay-v13 was already accepted with different input.",
+        "taskID": "tsk_g00VaWJhjt00MbZijE7x",
+        "requestID": "b161-after-replay-v13",
+        "messageID": "msg_h7e58RhrUTM5y5fhkAyR"
+      }
+    }
+  },
+  "epoch": 4
+}
