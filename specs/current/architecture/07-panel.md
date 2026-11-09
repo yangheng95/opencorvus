@@ -2162,6 +2162,9 @@ view. The activity header, period controls and refresh button stay mounted
 while current-period data loads, preserving keyboard focus across consecutive
 selections and refreshes. Loading clears the prior data and appears within the
 activity section; a busy refresh remains focusable and suppresses repeat requests.
+Read failures present a localized summary and retain the original diagnostic
+details. Retry uses the existing refresh action and transfers its focused control
+to the persistent Refresh button before the error card leaves.
 Empty periods retain their actual zero-valued buckets. Official provider
 comparisons and model detail remain below the primary overview. No personal
 identity, subscription, streak or plugin usage is inferred from server credentials.

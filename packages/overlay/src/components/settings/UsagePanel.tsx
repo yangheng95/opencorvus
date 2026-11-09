@@ -7,6 +7,7 @@ import type { KeyboardDelegate } from "@kobalte/core"
 import { createListState } from "@kobalte/core"
 
 import { UsageServerVersionError, loadUsageStatistics, userTimeZone } from "../../services/usage"
+import { formatErrorDetails } from "../../utils/error-details"
 import { formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
 import { localeTag, t, tc } from "../../utils/i18n"
 import { Button } from "../ui/Button"
@@ -393,27 +394,28 @@ export default function UsagePanel() {
   const [revision, setRevision] = createSignal(0)
   const [data, setData] = createSignal<UsageStatistics>()
   const [loading, setLoading] = createSignal(true)
-  const [error, setError] = createSignal("")
+  const [failure, setFailure] = createSignal<{ cause: unknown }>()
   const timeZone = userTimeZone()
+  let refreshButton: HTMLButtonElement | undefined
+
+  const refreshUsage = (retryButton?: HTMLButtonElement) => {
+    if (loading()) return
+    if (retryButton && document.activeElement === retryButton) refreshButton?.focus()
+    setRevision((value) => value + 1)
+  }
 
   createEffect(() => {
     const requestedPeriod = period()
     revision()
     const controller = new AbortController()
     setLoading(true)
-    setError("")
+    setFailure(undefined)
     setData(undefined)
     loadUsageStatistics({ period: requestedPeriod, timeZone, signal: controller.signal })
       .then((result) => setData(result))
       .catch((reason) => {
         if (controller.signal.aborted) return
-        setError(
-          reason instanceof UsageServerVersionError
-            ? t("usage.server_restart_required")
-            : reason instanceof Error
-              ? reason.message
-              : String(reason),
-        )
+        setFailure({ cause: reason })
       })
       .finally(() => {
         if (!controller.signal.aborted) setLoading(false)
@@ -440,25 +442,28 @@ export default function UsagePanel() {
         </div>
       </section>
 
-      <Show when={error()}>
-        <Feedback
-          tone="error"
-          class="usage-error"
-          title={t("usage.load_failed")}
-          actions={
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              tone="neutral"
-              onClick={() => setRevision((value) => value + 1)}
-            >
-              {t("usage.retry")}
-            </Button>
-          }
-        >
-          {error()}
-        </Feedback>
+      <Show when={failure()}>
+        {(current) => (
+          <Feedback
+            tone="error"
+            class="usage-error"
+            title={t("usage.load_failed")}
+            details={formatErrorDetails(current().cause)}
+            actions={
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                tone="neutral"
+                onClick={(event) => refreshUsage(event.currentTarget)}
+              >
+                {t("usage.retry")}
+              </Button>
+            }
+          >
+            {current().cause instanceof UsageServerVersionError ? t("usage.server_restart_required") : null}
+          </Feedback>
+        )}
       </Show>
 
       <Show when={data()}>
@@ -517,6 +522,7 @@ export default function UsagePanel() {
               onChange={setPeriod}
             />
             <Button
+              ref={refreshButton}
               type="button"
               variant="ghost"
               size="icon"
@@ -525,9 +531,7 @@ export default function UsagePanel() {
               title={t("usage.refresh")}
               aria-disabled={loading() || undefined}
               aria-busy={loading() || undefined}
-              onClick={() => {
-                if (!loading()) setRevision((value) => value + 1)
-              }}
+              onClick={() => refreshUsage()}
             >
               <Icon name={loading() ? "loading" : "refresh"} class={loading() ? "is-spinning" : undefined} />
             </Button>
@@ -537,7 +541,7 @@ export default function UsagePanel() {
         <Show when={data()?.current.summary.calls === 0}>
           <p class="usage-coverage-note">{t("usage.empty_body")}</p>
         </Show>
-        <Show when={loading() && !data() && !error()}>
+        <Show when={loading() && !data() && !failure()}>
           <div class="usage-loading" role="status">
             <Icon name="loading" class="is-spinning" />
             <span>{t("usage.loading")}</span>

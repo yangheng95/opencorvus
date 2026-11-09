@@ -1,0 +1,202 @@
+{
+  "phase": "after",
+  "step": "recovered",
+  "operation": "global.usage",
+  "checks": [
+    {
+      "status": 200,
+      "period": "year",
+      "timeZone": "Asia/Shanghai",
+      "grain": "day",
+      "start": 1767196800000,
+      "end": 1798732800000,
+      "summary": {
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        },
+        "costUSD": 0,
+        "calls": 0,
+        "averageTokensPerCall": 0,
+        "billing": {
+          "pricedTokens": 0,
+          "unpricedTokens": 0,
+          "unknownTokens": 0,
+          "percent": null
+        }
+      },
+      "bucketCount": 365,
+      "first": {
+        "start": 1767196800000,
+        "end": 1767283200000,
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        },
+        "costUSD": 0,
+        "calls": 0
+      },
+      "last": {
+        "start": 1798646400000,
+        "end": 1798732800000,
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        },
+        "costUSD": 0,
+        "calls": 0
+      },
+      "officialStatuses": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "schemaValid": true
+    },
+    {
+      "status": 200,
+      "period": "day",
+      "timeZone": "Asia/Shanghai",
+      "grain": "hour",
+      "start": 1794153600000,
+      "end": 1794240000000,
+      "summary": {
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        },
+        "costUSD": 0,
+        "calls": 0,
+        "averageTokensPerCall": 0,
+        "billing": {
+          "pricedTokens": 0,
+          "unpricedTokens": 0,
+          "unknownTokens": 0,
+          "percent": null
+        }
+      },
+      "bucketCount": 24,
+      "first": {
+        "start": 1794153600000,
+        "end": 1794157200000,
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        },
+        "costUSD": 0,
+        "calls": 0
+      },
+      "last": {
+        "start": 1794236400000,
+        "end": 1794240000000,
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        },
+        "costUSD": 0,
+        "calls": 0
+      },
+      "officialStatuses": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "schemaValid": true
+    },
+    {
+      "status": 200,
+      "period": "week",
+      "timeZone": "UTC",
+      "grain": "day",
+      "start": 1794182400000,
+      "end": 1794787200000,
+      "summary": {
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        },
+        "costUSD": 0,
+        "calls": 0,
+        "averageTokensPerCall": 0,
+        "billing": {
+          "pricedTokens": 0,
+          "unpricedTokens": 0,
+          "unknownTokens": 0,
+          "percent": null
+        }
+      },
+      "bucketCount": 7,
+      "first": {
+        "start": 1794182400000,
+        "end": 1794268800000,
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        },
+        "costUSD": 0,
+        "calls": 0
+      },
+      "last": {
+        "start": 1794700800000,
+        "end": 1794787200000,
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        },
+        "costUSD": 0,
+        "calls": 0
+      },
+      "officialStatuses": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "schemaValid": true
+    }
+  ]
+}
