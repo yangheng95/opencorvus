@@ -1,0 +1,84 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b85\\project-before",
+    "head": "ac7425d29d75f9f042838726074c322f416490b2",
+    "moves": {
+      "move-bundle/item.txt": "move-dest/move-bundle/item.txt"
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "writes": [
+      {
+        "requestID": "a319d2ca-7693-45e4-9c64-425552796149",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 139
+      },
+      {
+        "requestID": "76828239-0b90-4f42-b7f8-aff2ed8fc3d9",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 76
+      }
+    ],
+    "trackedDiff": [
+      "D\tmove-bundle/item.txt"
+    ]
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b85\\project-after",
+    "head": "e73a5fb779d91bfd6d60f20d53a6904c063ec3fd",
+    "moves": {
+      "move-bundle/item.txt": "move-dest/move-bundle/item.txt",
+      "spare.txt": "copy-dest/spare.txt"
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "writes": [
+      {
+        "requestID": "f506de1a-f891-434a-b7cd-d86f0b7f5886",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 112
+      },
+      {
+        "requestID": "a0b4c117-2960-4bd0-99a0-2fdabb7932cf",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 95
+      },
+      {
+        "requestID": "1b4385c9-f499-4104-8d23-68215d76c337",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 70
+      }
+    ],
+    "trackedDiff": [
+      "D\tmove-bundle/item.txt",
+      "D\tspare.txt"
+    ]
+  }
+}

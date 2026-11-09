@@ -1604,6 +1604,10 @@ their existing dialog return behavior. Batch Move and Copy dialogs use the last
 completed result as both selection anchor and focus target, including when a
 later item fails. Pointer drops keep their own selection behavior without a
 dialog focus handoff.
+Batch Move and Copy confirmation and execution share the same ordered list of
+top-level source paths. Selected descendants are covered by their selected
+folder. A single effective path is named directly; the details of a batch with
+multiple effective paths list them in execution order.
 File creation continues through its editor admission and post-open result rather
 than handing focus back to an Explorer row.
 Successful token/scope-owned directory listings reconcile the existing selection

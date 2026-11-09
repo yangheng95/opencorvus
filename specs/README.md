@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [批量文件确认来源路径](records/2026-11/2026-11-09-file-batch-transfer-source-review.md)
 - [文件多选键盘操作提示](records/2026-11/2026-11-09-file-selection-keyboard-discovery.md)
 - [文件搜索结果外选区](records/2026-11/2026-11-09-file-search-outside-selection.md)
 - [批量移动后的键盘续接](records/2026-11/2026-11-09-file-multi-move-keyboard-continuity.md)

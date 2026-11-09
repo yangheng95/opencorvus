@@ -1,0 +1,82 @@
+{
+  "phase": "after",
+  "step": "verified",
+  "listing": {
+    "copy-dest": {
+      "requestID": "196a5595-634c-419e-b636-b835aeeb53cc",
+      "names": [
+        "bundle",
+        "anchor.txt",
+        "spare.txt"
+      ]
+    },
+    "copy-dest/bundle": {
+      "requestID": "1085bc14-e4a0-4d1c-920f-fc751cb9dc8d",
+      "names": [
+        "nested",
+        "inside.txt"
+      ]
+    },
+    "copy-dest/bundle/nested": {
+      "requestID": "7b5e5372-d181-44b0-bec5-7b5647a56ad7",
+      "names": [
+        "deep.txt"
+      ]
+    },
+    "move-dest": {
+      "requestID": "3c9ed7eb-afbf-433e-94e5-40d51171a451",
+      "names": [
+        "move-bundle",
+        "anchor.txt"
+      ]
+    },
+    "move-dest/move-bundle": {
+      "requestID": "1dd15ccc-ac5b-4689-8310-f0fe5dadc1d8",
+      "names": [
+        "item.txt"
+      ]
+    }
+  },
+  "files": {
+    "bundle/inside.txt": {
+      "requestID": "3e5d1ffa-709b-44db-9107-c18df3c20c93",
+      "length": 36,
+      "content": "Selected child of a copied folder.\r\n"
+    },
+    "bundle/nested/deep.txt": {
+      "requestID": "ee58adb4-3d75-4fc8-aa0c-7dacb9be5816",
+      "length": 42,
+      "content": "Another owned file beneath the same root.\n"
+    },
+    "copy-dest/anchor.txt": {
+      "requestID": "7bed09dc-65a4-4b05-a766-8025ec9d7f2f",
+      "length": 26,
+      "content": "Owned copy target anchor.\n"
+    },
+    "move-dest/move-bundle/item.txt": {
+      "requestID": "f30ceba5-c758-4fac-b0e6-71c848f052bd",
+      "length": 50,
+      "content": "Selected child of a moved folder.\n中文原文。\n"
+    },
+    "move-dest/anchor.txt": {
+      "requestID": "6e49ed01-0757-4a85-9ab3-2d646c736b3f",
+      "length": 26,
+      "content": "Owned move target anchor.\n"
+    },
+    "copy-dest/spare.txt": {
+      "requestID": "de6ee8bd-2c7a-4bed-8670-1c02e05741cf",
+      "length": 40,
+      "content": "Independent source for two-root review.\n"
+    },
+    "copy-dest/bundle/inside.txt": {
+      "requestID": "3aca53fa-97c1-457b-b423-ac6805a9b37c",
+      "length": 36,
+      "content": "Selected child of a copied folder.\r\n"
+    },
+    "copy-dest/bundle/nested/deep.txt": {
+      "requestID": "2e3195cd-3bd3-482c-a77b-b1f4a8f4a83f",
+      "length": 42,
+      "content": "Another owned file beneath the same root.\n"
+    }
+  }
+}

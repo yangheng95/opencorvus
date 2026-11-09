@@ -1,0 +1,26 @@
+{
+  "before": {
+    "files": {
+      "bundle/inside.txt": "Selected child of a copied folder.\r\n",
+      "bundle/nested/deep.txt": "Another owned file beneath the same root.\n",
+      "copy-dest/anchor.txt": "Owned copy target anchor.\n",
+      "move-bundle/item.txt": "Selected child of a moved folder.\n中文原文。\n",
+      "move-dest/anchor.txt": "Owned move target anchor.\n",
+      "spare.txt": "Independent source for two-root review.\n"
+    },
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b85\\project-before",
+    "head": "ac7425d29d75f9f042838726074c322f416490b2"
+  },
+  "after": {
+    "files": {
+      "bundle/inside.txt": "Selected child of a copied folder.\r\n",
+      "bundle/nested/deep.txt": "Another owned file beneath the same root.\n",
+      "copy-dest/anchor.txt": "Owned copy target anchor.\n",
+      "move-bundle/item.txt": "Selected child of a moved folder.\n中文原文。\n",
+      "move-dest/anchor.txt": "Owned move target anchor.\n",
+      "spare.txt": "Independent source for two-root review.\n"
+    },
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b85\\project-after",
+    "head": "e73a5fb779d91bfd6d60f20d53a6904c063ec3fd"
+  }
+}

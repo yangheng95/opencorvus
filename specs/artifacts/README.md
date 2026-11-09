@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [批量文件确认来源路径证据](2026-11-09-file-batch-transfer-source-review/README.md)
 - [文件多选键盘操作提示证据](2026-11-09-file-selection-keyboard-discovery/README.md)
 - [文件搜索结果外选区证据](2026-11-09-file-search-outside-selection/README.md)
 - [批量移动后的键盘续接证据](2026-11-09-file-multi-move-keyboard-continuity/README.md)

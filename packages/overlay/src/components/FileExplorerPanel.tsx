@@ -1138,6 +1138,18 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     )
   }
 
+  function describeBatchTransfer(action: "copy" | "move", targets: ExplorerSelection[], selectedCount: number) {
+    const [first] = targets
+    const count = new Intl.NumberFormat(localeTag()).format(targets.length)
+    const summary = targets.length === 1 && first
+      ? t(`explorer.${action}_message`, { path: first.path })
+      : t(`explorer.${action}_many_message`, { count })
+    return {
+      message: targets.length < selectedCount ? `${summary}\n${t("explorer.transfer_includes_children")}` : summary,
+      details: targets.length > 1 ? targets.map((item) => item.path).join("\n") : undefined,
+    }
+  }
+
   function contextTargetDirectory(item: ExplorerSelection | null): string {
     if (item?.source === "listing" && directoryTarget(item.path)) return item.path
     if (item) return parentPath(item.path)
@@ -1151,9 +1163,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     setDropStatus("move")
   }
 
-  function canPlaceSelectionsInDirectory(items: ExplorerSelection[], targetDirInput: string): boolean {
-    const targetDir = normalizeExplorerPath(targetDirInput)
-    return !topLevelActionSelections(items).some(
+  function canPlaceSelectionsInDirectory(targets: ExplorerSelection[], targetDir: string): boolean {
+    return !targets.some(
       (item) => item.type === "directory" && (targetDir === item.path || isPathOrDescendant(targetDir, item.path)),
     )
   }
@@ -1193,16 +1204,15 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   }
 
   async function moveSelectionsToDirectory(
-    items: ExplorerSelection[],
+    targets: ExplorerSelection[],
     targetDir: string,
     scope: ExplorerOperationScope,
     focus?: ReturnType<typeof capturePathMutationFocus>,
   ): Promise<void> {
-    if (items.length === 0) {
+    if (targets.length === 0) {
       setMutationValidation("selection")
       return
     }
-    const targets = topLevelActionSelections(items)
     if (!canPlaceSelectionsInDirectory(targets, targetDir)) {
       setMutationValidation("move-target")
       return
@@ -1657,10 +1667,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     const focus = capturePathMutationFocus(scope)
+    const targets = topLevelActionSelections(items)
     const result = await showAppDialog({
       kind: "file-move-many",
       title: t("explorer.move"),
-      message: t("explorer.move_many_message", { count: items.length }),
+      ...describeBatchTransfer("move", targets, items.length),
       input: true,
       inputLabel: t("explorer.destination_directory"),
       inputPlaceholder: "src",
@@ -1678,16 +1689,15 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     const targetDir = normalizeExplorerPath(targetDirInput)
-    await moveSelectionsToDirectory(items, targetDir, scope, focus)
+    await moveSelectionsToDirectory(targets, targetDir, scope, focus)
   }
 
   async function copySelectionsToDirectory(
-    items: ExplorerSelection[],
+    targets: ExplorerSelection[],
     targetDir: string,
     scope: ExplorerOperationScope,
     focus: ReturnType<typeof capturePathMutationFocus>,
   ): Promise<void> {
-    const targets = topLevelActionSelections(items)
     if (!canPlaceSelectionsInDirectory(targets, targetDir)) {
       setMutationValidation("copy-target")
       return
@@ -1778,10 +1788,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     const focus = capturePathMutationFocus(scope)
+    const targets = topLevelActionSelections(items)
     const result = await showAppDialog({
       kind: "file-copy-many",
       title: t("explorer.copy"),
-      message: t("explorer.copy_many_message", { count: items.length }),
+      ...describeBatchTransfer("copy", targets, items.length),
       input: true,
       inputLabel: t("explorer.destination_directory"),
       inputPlaceholder: "src",
@@ -1799,7 +1810,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     const targetDir = normalizeExplorerPath(targetDirInput)
-    await copySelectionsToDirectory(items, targetDir, scope, focus)
+    await copySelectionsToDirectory(targets, targetDir, scope, focus)
   }
 
   async function deleteItems(items: ExplorerSelection[], capturedScope?: ExplorerOperationScope): Promise<void> {
