@@ -1,0 +1,120 @@
+{
+  "beforeHealthy": [
+    "\t\t\t\t\t\t\t\t\t\t82 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-198-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t85 button (collapsed) archive, ID: contextmenu-cl-207-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t87 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-221-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t88 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t90 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-225-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t91 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-229-trigger",
+    "The focused UI element is 90 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-225-trigger, Secondary Actions: Collapse"
+  ],
+  "beforeFault": [
+    "\t\t\t\t\t\t\t\t\t\t82 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-198-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t98 text The requested file or folder is unavailable: missing-owned-root",
+    "\t\t\t\t\t\t\t\t\t\t101 button Retry",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39150/ui/"
+  ],
+  "beforePressedAt": "2026-11-09T10:28:05.331Z",
+  "beforeReturnedAt": "2026-11-09T10:28:05.408Z",
+  "beforeImmediate": [
+    "\t\t\t\t\t\t\t\t\t\t82 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-198-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t98 text Unable to load plans/drafts",
+    "\t\t\t\t\t\t\t\t\t\t99 text The requested file or folder is unavailable: missing-owned-plans-drafts",
+    "\t\t\t\t\t\t\t\t\t\t102 button Retry",
+    "\t\t\t\t\t\t\t\t\t\t103 text Unable to load plans",
+    "\t\t\t\t\t\t\t\t\t\t104 text The requested file or folder is unavailable: missing-owned-plans",
+    "\t\t\t\t\t\t\t\t\t\t107 button Retry",
+    "\t\t\t\t\t\t\t\t\t\t108 text Unable to load plans/reference",
+    "\t\t\t\t\t\t\t\t\t\t109 text The requested file or folder is unavailable: missing-owned-plans-reference",
+    "\t\t\t\t\t\t\t\t\t\t112 button Retry",
+    "\t\t\t\t\t\t\t\t\t\t115 button (collapsed) archive, ID: contextmenu-cl-244-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t119 button (expanded) drafts Error, Help: plans/drafts, ID: contextmenu-cl-252-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t120 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t122 button (expanded) Description: plans/reference · Selected for file actions · Error, Help: plans/reference, ID: contextmenu-cl-233-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t123 text reference",
+    "\t\t\t\t\t\t\t\t\t\t125 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-256-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39150/ui/"
+  ],
+  "beforeAfterTick": [
+    "\t\t\t\t\t\t\t\t\t\t82 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-198-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t115 button (collapsed) archive, ID: contextmenu-cl-244-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t119 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-252-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t120 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t122 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-233-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t125 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-256-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39150/ui/"
+  ],
+  "actions": {
+    "persistent": "2026-11-09T10:32:19.194Z",
+    "full": "2026-11-09T10:32:26.470Z",
+    "partial": "2026-11-09T10:32:42.050Z",
+    "child": "2026-11-09T10:33:11.965Z",
+    "archive": "2026-11-09T10:33:12.102Z"
+  },
+  "afterHealthy": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t87 button (collapsed) archive, ID: contextmenu-cl-214-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t89 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-228-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t90 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t92 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-232-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t93 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-236-trigger",
+    "The focused UI element is 92 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-232-trigger, Secondary Actions: Collapse"
+  ],
+  "afterFault": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t100 text The requested file or folder is unavailable: missing-owned-root",
+    "\t\t\t\t\t\t\t\t\t\t103 button Retry",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39151/ui/"
+  ],
+  "afterPersistent": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t100 text The requested file or folder is unavailable: missing-owned-root",
+    "\t\t\t\t\t\t\t\t\t\t103 button Retry",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39151/ui/"
+  ],
+  "afterFull": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t101 button (collapsed) archive, ID: contextmenu-cl-278-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t103 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-286-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t104 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t106 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-270-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t107 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-290-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39151/ui/"
+  ],
+  "afterFaultChinese": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: 新建, Help: 在 plans/reference 中新建, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t107 text 请求的文件或文件夹不可用：missing-owned-root",
+    "\t\t\t\t\t\t\t\t\t\t110 button 重试",
+    "The focused UI element is 101 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-360-trigger, Secondary Actions: Expand"
+  ],
+  "afterPartial": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: 新建, Help: 在 plans/reference 中新建, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t107 text 无法加载 plans/drafts 请求的文件或文件夹不可用：missing-owned-plans-drafts",
+    "\t\t\t\t\t\t\t\t\t\t110 button 重试",
+    "\t\t\t\t\t\t\t\t\t\t113 button (collapsed) archive, ID: contextmenu-cl-398-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t115 button (expanded) drafts 出错, Help: plans/drafts, ID: contextmenu-cl-406-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t116 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t118 button (expanded) Description: plans/reference · 已选作文件操作对象, Help: plans/reference, ID: contextmenu-cl-390-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t119 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-410-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39151/ui/"
+  ],
+  "afterChild": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: 新建, Help: 在 plans/reference 中新建, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t113 button (collapsed) archive, ID: contextmenu-cl-398-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t115 button (expanded) drafts 空目录, Help: plans/drafts, ID: contextmenu-cl-406-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t116 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t118 button (expanded) Description: plans/reference · 已选作文件操作对象, Help: plans/reference, ID: contextmenu-cl-390-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t119 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-410-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39151/ui/"
+  ],
+  "afterArchive": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: 新建, Help: 在 archive 中新建, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t113 button (expanded) Description: archive · 已选作文件操作对象, ID: contextmenu-cl-398-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t122 button archived.txt, Help: archive/archived.txt, ID: contextmenu-cl-428-trigger",
+    "\t\t\t\t\t\t\t\t\t\t115 button (expanded) drafts 空目录, Help: plans/drafts, ID: contextmenu-cl-406-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t116 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t118 button (expanded) reference, Help: plans/reference, ID: contextmenu-cl-390-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t119 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-410-trigger",
+    "The focused UI element is 113 button (expanded) Description: archive · 已选作文件操作对象, ID: contextmenu-cl-398-trigger, Secondary Actions: Collapse"
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "phase": "after",
+  "proxy": {
+    "port": 39151,
+    "status": 200,
+    "pid": 18004
+  },
+  "service": {
+    "body": {
+      "ok": true,
+      "occurrenceID": "cal_g0VaTFz0z00fj2V59KgD"
+    },
+    "port": 39149,
+    "status": 200,
+    "pid": 10064
+  }
+}

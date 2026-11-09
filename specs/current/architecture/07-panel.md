@@ -1657,6 +1657,11 @@ Before the first successful root directory listing, an active scoped Explorer
 shows pending loading, including the initial request scheduling interval. Empty
 state is derived from a successful empty list; a failed root list retains its
 error and Retry action. Cached successful rows stay visible during refresh.
+Root Retry starts the same scoped directory reads as the active poll, for the
+root and expanded paths with a listing or failure. The reads start together so
+old child failures yield to their own pending state, then each displays its
+current result. The child and search Retry actions remain scoped to their own
+directory and query, respectively.
 
 The existing CodeMirror editor selects syntax by filename using the shared
 `components/ui/code-editor-language.ts` registry. CodeMirror language-data owns

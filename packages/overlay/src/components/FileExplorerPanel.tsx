@@ -833,20 +833,23 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     onCleanup(() => window.clearTimeout(timer))
   })
 
+  function refreshActiveDirectoryListings(scope: ExplorerOperationScope): void {
+    batch(() => {
+      for (const path of new Set(["", ...expandedPaths()])) {
+        if (path === "" || childrenByPath().has(path) || directoryErrors().has(path)) {
+          void loadDirectory(path, { force: true, scope })
+        }
+      }
+    })
+  }
+
   createEffect(() => {
     const currentDirectory = directory()
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     if (!active() || !currentDirectory) return
     const scope = { directory: currentDirectory, authority, selectionEpoch }
-    const interval = window.setInterval(() => {
-      const paths = new Set(["", ...expandedPaths()])
-      for (const path of paths) {
-        if (path === "" || childrenByPath().has(path) || directoryErrors().has(path)) {
-          void loadDirectory(path, { force: true, scope })
-        }
-      }
-    }, ACTIVE_DIRECTORY_REFRESH_INTERVAL_MS)
+    const interval = window.setInterval(() => refreshActiveDirectoryListings(scope), ACTIVE_DIRECTORY_REFRESH_INTERVAL_MS)
     onCleanup(() => window.clearInterval(interval))
   })
 
@@ -1430,9 +1433,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     })
   }
 
-  async function retryRootDirectory(): Promise<void> {
+  function retryRootDirectory(): void {
     setMutationFeedback(null)
-    await loadDirectory("", { force: true })
+    const scope = currentOperationScope()
+    if (scope) refreshActiveDirectoryListings(scope)
   }
 
   function updateExpandedPathsAfterMove(previousPath: string, nextPath: string): void {

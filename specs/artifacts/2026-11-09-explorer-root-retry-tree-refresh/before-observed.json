@@ -1,0 +1,47 @@
+{
+  "beforeHealthy": [
+    "\t\t\t\t\t\t\t\t\t\t82 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-198-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t85 button (collapsed) archive, ID: contextmenu-cl-207-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t87 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-221-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t88 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t90 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-225-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t91 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-229-trigger",
+    "The focused UI element is 90 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-225-trigger, Secondary Actions: Collapse"
+  ],
+  "beforeFault": [
+    "\t\t\t\t\t\t\t\t\t\t82 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-198-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t98 text The requested file or folder is unavailable: missing-owned-root",
+    "\t\t\t\t\t\t\t\t\t\t101 button Retry",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39150/ui/"
+  ],
+  "beforePressedAt": "2026-11-09T10:28:05.331Z",
+  "beforeReturnedAt": "2026-11-09T10:28:05.408Z",
+  "beforeImmediate": [
+    "\t\t\t\t\t\t\t\t\t\t82 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-198-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t98 text Unable to load plans/drafts",
+    "\t\t\t\t\t\t\t\t\t\t99 text The requested file or folder is unavailable: missing-owned-plans-drafts",
+    "\t\t\t\t\t\t\t\t\t\t102 button Retry",
+    "\t\t\t\t\t\t\t\t\t\t103 text Unable to load plans",
+    "\t\t\t\t\t\t\t\t\t\t104 text The requested file or folder is unavailable: missing-owned-plans",
+    "\t\t\t\t\t\t\t\t\t\t107 button Retry",
+    "\t\t\t\t\t\t\t\t\t\t108 text Unable to load plans/reference",
+    "\t\t\t\t\t\t\t\t\t\t109 text The requested file or folder is unavailable: missing-owned-plans-reference",
+    "\t\t\t\t\t\t\t\t\t\t112 button Retry",
+    "\t\t\t\t\t\t\t\t\t\t115 button (collapsed) archive, ID: contextmenu-cl-244-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t119 button (expanded) drafts Error, Help: plans/drafts, ID: contextmenu-cl-252-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t120 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t122 button (expanded) Description: plans/reference · Selected for file actions · Error, Help: plans/reference, ID: contextmenu-cl-233-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t123 text reference",
+    "\t\t\t\t\t\t\t\t\t\t125 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-256-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39150/ui/"
+  ],
+  "beforeAfterTick": [
+    "\t\t\t\t\t\t\t\t\t\t82 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-198-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t115 button (collapsed) archive, ID: contextmenu-cl-244-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t119 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-252-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t120 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t122 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-233-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t125 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-256-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39150/ui/"
+  ]
+}
