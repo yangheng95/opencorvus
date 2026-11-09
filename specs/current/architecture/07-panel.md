@@ -1811,7 +1811,9 @@ yet. Editing retains the saved IDs and their order even when a Project moves or
 its display metadata is unavailable. Only pending directories enter the existing
 identity resolver at Save; its unique ordered IDs form the existing public
 payload. Listbox identity deduplicates registered Project aliases by ID, retains
-unrepresented saved targets, and edits only its current visible subset. Localized result and
+unrepresented saved targets, and edits only its current visible subset. The
+form retains the order of all still-selected targets, including hidden ones,
+and appends explicitly selected additions after them. Localized result and
 selection counts, empty feedback and search keyboard handoff use the existing
 SearchField/Listbox primitives. Search Enter keeps authoring in place, and
 Escape clears its query. An equivalent visible set retains its mounted options

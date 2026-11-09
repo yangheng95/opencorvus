@@ -1,0 +1,248 @@
+{
+  "before": {
+    "ownedProjects": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\cohort-alpha-before",
+        "id": "prj_hNC7c93ZmPmUgPoixkSb",
+        "head": "bb1270f121cac46afe1aa1f25220b045844301d1",
+        "originalTrackedFiles": 1
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\other-beta-before",
+        "id": "prj_hDDAuFN0PMEAFq9wDnuK",
+        "head": "d4eeebb91fd6926aafd26de23b83a471cba0e43c",
+        "originalTrackedFiles": 1
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\cohort-gamma-before",
+        "id": "prj_hJA66yJGEM0auESjW4uG",
+        "head": "9152a78baca46da1876fb774bfc02d0e1023f3fb",
+        "originalTrackedFiles": 1
+      }
+    ],
+    "definitions": [
+      [
+        "atm_g0VaRpYKR009w4leC6VO",
+        "atm_g0VaRpYKR009w4leC6VO",
+        1,
+        "active"
+      ],
+      [
+        "atm_g0VaRpYKR009w4leC6VO",
+        "atm_g0VaRpYKq00f9LtNxvhW",
+        2,
+        "paused"
+      ],
+      [
+        "atm_g0VaRpYKR009w4leC6VO",
+        "atm_g0VaRpgls00kZOiVrrt8",
+        3,
+        "paused"
+      ]
+    ],
+    "memberships": {
+      "atm_g0VaRpYKR009w4leC6VO": [
+        [
+          0,
+          "prj_hNC7c93ZmPmUgPoixkSb"
+        ],
+        [
+          1,
+          "prj_hDDAuFN0PMEAFq9wDnuK"
+        ]
+      ],
+      "atm_g0VaRpYKq00f9LtNxvhW": [
+        [
+          0,
+          "prj_hNC7c93ZmPmUgPoixkSb"
+        ],
+        [
+          1,
+          "prj_hDDAuFN0PMEAFq9wDnuK"
+        ]
+      ],
+      "atm_g0VaRpgls00kZOiVrrt8": [
+        [
+          0,
+          "prj_hDDAuFN0PMEAFq9wDnuK"
+        ],
+        [
+          1,
+          "prj_hNC7c93ZmPmUgPoixkSb"
+        ],
+        [
+          2,
+          "prj_hJA66yJGEM0auESjW4uG"
+        ]
+      ]
+    },
+    "originalFutureFire": [
+      "cal_automation_92a8956fe37899117630f6931aa6de40",
+      "atm_g0VaRpYKR009w4leC6VO",
+      "scheduled",
+      4071258000000
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "scheduleWrites": [
+      {
+        "time": "2026-11-09T04:42:12.827Z",
+        "requestID": "d99d8570-6bc6-4bf7-ae8e-f4ee752eb709",
+        "method": "POST",
+        "path": "/global/automations",
+        "status": "completed",
+        "statusCode": 201,
+        "duration": 16
+      },
+      {
+        "time": "2026-11-09T04:42:12.849Z",
+        "requestID": "bf6bc722-b02e-4164-9515-ebc9f034e894",
+        "method": "PATCH",
+        "path": "/global/automations/atm_g0VaRpYKR009w4leC6VO",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 15
+      },
+      {
+        "time": "2026-11-09T04:42:45.278Z",
+        "requestID": "63f0fad4-ed2e-4ffa-8d6f-fbc4f09c1842",
+        "method": "PATCH",
+        "path": "/global/automations/atm_g0VaRpYKR009w4leC6VO",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 14
+      }
+    ]
+  },
+  "after": {
+    "ownedProjects": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\cohort-alpha-after",
+        "id": "prj_htdNsjVmGDMiLHCx7Mwd",
+        "head": "7e440caae45cb739499c30735d34d7fb6eb0523e",
+        "originalTrackedFiles": 1
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\other-beta-after",
+        "id": "prj_hlvI8UuuB4ZCcxmVCOjA",
+        "head": "09fe613257c6adfe14eea7b55d9361c5badba37d",
+        "originalTrackedFiles": 1
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\cohort-gamma-after",
+        "id": "prj_hNvkmvpIL8G0QLeDEmc9",
+        "head": "7d01cd139eed1c5ff6a36471f6acec4e27d46e9c",
+        "originalTrackedFiles": 1
+      }
+    ],
+    "definitions": [
+      [
+        "atm_g0VaRqY5W00Bd69Sk4Xa",
+        "atm_g0VaRqY5W00Bd69Sk4Xa",
+        1,
+        "active"
+      ],
+      [
+        "atm_g0VaRqY5W00Bd69Sk4Xa",
+        "atm_g0VaRqY5y00piXMdSbnL",
+        2,
+        "paused"
+      ],
+      [
+        "atm_g0VaRqY5W00Bd69Sk4Xa",
+        "atm_g0VaRqgGp00lJoUP89K7",
+        3,
+        "paused"
+      ]
+    ],
+    "memberships": {
+      "atm_g0VaRqY5W00Bd69Sk4Xa": [
+        [
+          0,
+          "prj_htdNsjVmGDMiLHCx7Mwd"
+        ],
+        [
+          1,
+          "prj_hlvI8UuuB4ZCcxmVCOjA"
+        ]
+      ],
+      "atm_g0VaRqY5y00piXMdSbnL": [
+        [
+          0,
+          "prj_htdNsjVmGDMiLHCx7Mwd"
+        ],
+        [
+          1,
+          "prj_hlvI8UuuB4ZCcxmVCOjA"
+        ]
+      ],
+      "atm_g0VaRqgGp00lJoUP89K7": [
+        [
+          0,
+          "prj_htdNsjVmGDMiLHCx7Mwd"
+        ],
+        [
+          1,
+          "prj_hlvI8UuuB4ZCcxmVCOjA"
+        ],
+        [
+          2,
+          "prj_hNvkmvpIL8G0QLeDEmc9"
+        ]
+      ]
+    },
+    "originalFutureFire": [
+      "cal_automation_2d269994ca354139efc5a4e8074d457b",
+      "atm_g0VaRqY5W00Bd69Sk4Xa",
+      "scheduled",
+      4071258000000
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "scheduleWrites": [
+      {
+        "time": "2026-11-09T04:46:10.230Z",
+        "requestID": "5c783de4-94ec-4fbe-bf87-aa3c78ffd224",
+        "method": "POST",
+        "path": "/global/automations",
+        "status": "completed",
+        "statusCode": 201,
+        "duration": 16
+      },
+      {
+        "time": "2026-11-09T04:46:10.255Z",
+        "requestID": "489caf2b-f493-41a8-9839-e8c1fcfe2a57",
+        "method": "PATCH",
+        "path": "/global/automations/atm_g0VaRqY5W00Bd69Sk4Xa",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 17
+      },
+      {
+        "time": "2026-11-09T04:46:41.680Z",
+        "requestID": "d7348440-9c8f-41bd-8f7a-00e77e7d4e57",
+        "method": "PATCH",
+        "path": "/global/automations/atm_g0VaRqY5W00Bd69Sk4Xa",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 12
+      }
+    ]
+  }
+}

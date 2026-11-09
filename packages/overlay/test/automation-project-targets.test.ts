@@ -1,5 +1,41 @@
 import { expect, test } from "bun:test"
-import { resolveAutomationProjectTargets } from "../src/services/automation-project-targets"
+import {
+  applyVisibleAutomationProjectSelection,
+  projectTargetKey,
+  resolveAutomationProjectTargets,
+  type AutomationProjectTarget,
+} from "../src/services/automation-project-targets"
+
+const project = (projectID: string): AutomationProjectTarget => ({ kind: "project", projectID })
+const chosen = (...targets: AutomationProjectTarget[]) => new Set(targets.map(projectTargetKey))
+
+test("appends a filtered addition after the existing visible and hidden targets", () => {
+  const alpha = project("prj_alpha")
+  const beta = project("prj_beta")
+  const gamma = project("prj_gamma")
+  expect(applyVisibleAutomationProjectSelection([alpha, beta], [alpha, gamma], chosen(alpha, gamma)))
+    .toEqual([alpha, beta, gamma])
+})
+
+test("retains the order of remaining targets and appends a reselected target", () => {
+  const alpha = project("prj_alpha")
+  const beta = project("prj_beta")
+  const gamma = project("prj_gamma")
+  const visible = [gamma, beta, alpha]
+  const remaining = applyVisibleAutomationProjectSelection([alpha, beta, gamma], visible, chosen(gamma, alpha))
+  expect(remaining).toEqual([alpha, gamma])
+  expect(applyVisibleAutomationProjectSelection(remaining, visible, chosen(gamma, beta, alpha)))
+    .toEqual([alpha, gamma, beta])
+})
+
+test("keeps the originally selected directory identity across an equivalent Windows display path", () => {
+  const pending: AutomationProjectTarget = { kind: "directory", directory: "C:\\Work\\Beta" }
+  const displayed: AutomationProjectTarget = { kind: "directory", directory: "c:/work/beta" }
+  const alpha = project("prj_alpha")
+  const gamma = project("prj_gamma")
+  expect(applyVisibleAutomationProjectSelection([alpha, pending], [displayed, gamma], chosen(displayed, gamma)))
+    .toEqual([alpha, pending, gamma])
+})
 
 test("retains canonical project IDs in authored order", async () => {
   expect(await resolveAutomationProjectTargets([

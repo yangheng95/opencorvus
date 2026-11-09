@@ -1,0 +1,48 @@
+{
+  "before": {
+    "cohort-alpha": {
+      "head": "bb1270f121cac46afe1aa1f25220b045844301d1",
+      "files": {
+        "fixture-note.txt": "Isolated scheduled project order check for cohort-alpha-before.\n"
+      },
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\cohort-alpha-before"
+    },
+    "other-beta": {
+      "head": "d4eeebb91fd6926aafd26de23b83a471cba0e43c",
+      "files": {
+        "fixture-note.txt": "Isolated scheduled project order check for other-beta-before.\n"
+      },
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\other-beta-before"
+    },
+    "cohort-gamma": {
+      "head": "9152a78baca46da1876fb774bfc02d0e1023f3fb",
+      "files": {
+        "fixture-note.txt": "Isolated scheduled project order check for cohort-gamma-before.\n"
+      },
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\cohort-gamma-before"
+    }
+  },
+  "after": {
+    "cohort-alpha": {
+      "head": "7e440caae45cb739499c30735d34d7fb6eb0523e",
+      "files": {
+        "fixture-note.txt": "Isolated scheduled project order check for cohort-alpha-after.\n"
+      },
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\cohort-alpha-after"
+    },
+    "other-beta": {
+      "head": "09fe613257c6adfe14eea7b55d9361c5badba37d",
+      "files": {
+        "fixture-note.txt": "Isolated scheduled project order check for other-beta-after.\n"
+      },
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\other-beta-after"
+    },
+    "cohort-gamma": {
+      "head": "7d01cd139eed1c5ff6a36471f6acec4e27d46e9c",
+      "files": {
+        "fixture-note.txt": "Isolated scheduled project order check for cohort-gamma-after.\n"
+      },
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\cohort-gamma-after"
+    }
+  }
+}

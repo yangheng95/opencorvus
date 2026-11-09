@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [定时项目筛选保留既有目标顺序](2026-11-09-scheduled-project-selection-order.md)
 - [定时项目选择的键盘焦点](2026-11-09-scheduled-project-selection-focus.md)
 - [表单内搜索的回车归属](2026-11-09-form-search-enter-ownership.md)
 - [多步任务市场安装与草稿选择](2026-11-09-mission-market-install-draft-selection.md)

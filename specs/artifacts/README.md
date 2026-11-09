@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [定时项目筛选保留既有目标顺序证据](2026-11-09-scheduled-project-selection-order/README.md)
 - [定时项目选择的键盘焦点证据](2026-11-09-scheduled-project-selection-focus/README.md)
 - [表单内搜索的回车归属证据](2026-11-09-form-search-enter-ownership/README.md)
 - [多步任务市场安装与草稿选择证据](2026-11-09-mission-market-install-draft-selection/README.md)

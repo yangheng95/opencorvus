@@ -29,13 +29,18 @@ import {
   type AutomationRunView,
   type AutomationView,
 } from "../../services/automations"
-import { resolveAutomationProjectTargets, type AutomationProjectTarget } from "../../services/automation-project-targets"
+import {
+  applyVisibleAutomationProjectSelection,
+  projectTargetKey,
+  resolveAutomationProjectTargets,
+  type AutomationProjectTarget,
+} from "../../services/automation-project-targets"
 import { loadDiscoveredProjects, type DiscoveredProject } from "../../services/workspace"
 import { loadProviderInfo } from "../../services/config-load"
 import { connectedModelOptions, type ConnectedModelOption } from "../../services/llm"
 import { closeConfigDialog } from "../../services/config-dialog-control"
 import { localeTag, t } from "../../utils/i18n"
-import { projectDirectoryKey, projectLedgerDisplayName } from "../../utils/project-directory"
+import { projectLedgerDisplayName } from "../../utils/project-directory"
 import { matchesSearchTerms } from "../../services/text-search"
 import { ArmedConfirmButton } from "../ui/ArmedConfirmButton"
 import { AutoGrowTextarea } from "../ui/AutoGrowTextarea"
@@ -57,10 +62,6 @@ type AutomationFilter = "all" | "active" | "paused"
 type AutomationScopeFilter = "all" | AutomationScope
 
 type AutomationProjectOption = { key: string; target: AutomationProjectTarget; project?: DiscoveredProject }
-
-function projectTargetKey(target: AutomationProjectTarget): string {
-  return target.kind === "project" ? `project:${target.projectID}` : `directory:${projectDirectoryKey(target.directory)}`
-}
 
 function projectChoiceLabel(option: AutomationProjectOption): string {
   return option.project ? projectOptionLabel(option.project)
@@ -576,11 +577,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
   function applyProjectSelection(next: Set<string>): void {
     setError(null)
-    const visible = new Map(visibleProjects().map((option) => [option.key, option.target]))
-    setSelectedProjectTargets((current) => [
-      ...current.filter((target) => !visible.has(projectTargetKey(target))),
-      ...[...next].flatMap((key) => visible.has(key) ? [visible.get(key)!] : []),
-    ])
+    const visible = visibleProjects().map((option) => option.target)
+    setSelectedProjectTargets((current) => applyVisibleAutomationProjectSelection(current, visible, next))
   }
 
   function beginEdit(): void {

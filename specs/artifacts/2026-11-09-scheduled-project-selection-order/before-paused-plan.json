@@ -1,0 +1,57 @@
+{
+  "phase": "before",
+  "projects": {
+    "cohort-alpha": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\cohort-alpha-before",
+      "id": "prj_hNC7c93ZmPmUgPoixkSb",
+      "requestID": "ba3b5cb9-c33b-40d8-a3e3-9d1e29a0abc5"
+    },
+    "other-beta": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\other-beta-before",
+      "id": "prj_hDDAuFN0PMEAFq9wDnuK",
+      "requestID": "19dc6ae8-98e6-495f-88a1-ebff9e643f9f"
+    },
+    "cohort-gamma": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b77\\cohort-gamma-before",
+      "id": "prj_hJA66yJGEM0auESjW4uG",
+      "requestID": "3b4dbfd7-a6ba-4467-b4e2-6186addb4b4b"
+    }
+  },
+  "discovery": "e74f62ed-9814-43a8-b788-5e78b9441bbb",
+  "created": {
+    "status": 201,
+    "requestID": "d99d8570-6bc6-4bf7-ae8e-f4ee752eb709",
+    "body": {
+      "id": "atm_g0VaRpYKR009w4leC6VO",
+      "revisionId": "atm_g0VaRpYKR009w4leC6VO",
+      "name": "Isolated target order before 77",
+      "nextRun": 4071258000000
+    }
+  },
+  "paused": {
+    "status": 200,
+    "requestID": "bf6bc722-b02e-4164-9515-ebc9f034e894",
+    "body": {
+      "id": "atm_g0VaRpYKR009w4leC6VO",
+      "revisionId": "atm_g0VaRpYKq00f9LtNxvhW",
+      "name": "Isolated target order before 77",
+      "target": {
+        "scope": "project",
+        "projectIds": [
+          "prj_hNC7c93ZmPmUgPoixkSb",
+          "prj_hDDAuFN0PMEAFq9wDnuK"
+        ]
+      },
+      "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+      "executionMode": "local",
+      "model": null,
+      "reasoningEffort": null,
+      "prompt": "Fixture for checking authored order only. This paused plan is never run.",
+      "status": "paused",
+      "lastRun": null,
+      "nextRun": 4071258000000,
+      "failureCount": 0,
+      "lastError": null
+    }
+  }
+}

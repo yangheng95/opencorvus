@@ -1,0 +1,47 @@
+{
+  "phase": "after",
+  "response": {
+    "status": 200,
+    "requestID": "0afa571b-c70d-4c7d-8a1a-d73f288bb075",
+    "body": [
+      {
+        "id": "atm_g0VaRqY5W00Bd69Sk4Xa",
+        "revisionId": "atm_g0VaRqgGp00lJoUP89K7",
+        "name": "Isolated target order after 77",
+        "target": {
+          "scope": "project",
+          "projectIds": [
+            "prj_htdNsjVmGDMiLHCx7Mwd",
+            "prj_hlvI8UuuB4ZCcxmVCOjA",
+            "prj_hNvkmvpIL8G0QLeDEmc9"
+          ]
+        },
+        "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T090000\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "Fixture for checking authored order only. This paused plan is never run.",
+        "status": "paused",
+        "lastRun": null,
+        "nextRun": 4071258000000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "runs": {
+    "status": 200,
+    "requestID": "619f4631-e658-40c4-b7d0-25b7f2cba46c",
+    "body": []
+  },
+  "order": [
+    "prj_htdNsjVmGDMiLHCx7Mwd",
+    "prj_hlvI8UuuB4ZCcxmVCOjA",
+    "prj_hNvkmvpIL8G0QLeDEmc9"
+  ],
+  "expected": [
+    "prj_htdNsjVmGDMiLHCx7Mwd",
+    "prj_hlvI8UuuB4ZCcxmVCOjA",
+    "prj_hNvkmvpIL8G0QLeDEmc9"
+  ]
+}
