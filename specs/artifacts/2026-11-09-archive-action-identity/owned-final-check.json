@@ -1,0 +1,103 @@
+{
+  "before": {
+    "projects": [
+      {
+        "key": "north",
+        "projectTitle": "North Review",
+        "gitOriginalBytes": 50,
+        "head": "e885f2983be13f05d60739bd0eb4f108f7e30daf",
+        "status": [
+          "?? .gitattributes",
+          "?? .gitignore",
+          "?? .opencorvus/"
+        ]
+      },
+      {
+        "key": "south",
+        "projectTitle": "South Review",
+        "gitOriginalBytes": 50,
+        "head": "d0c5dabe430751ac390674cd8954093645ad6fd1",
+        "status": [
+          "?? .gitattributes",
+          "?? .gitignore"
+        ]
+      }
+    ],
+    "counts": {
+      "project": 2,
+      "session": 2,
+      "message": 0,
+      "engine_task": 0
+    },
+    "exactOriginalIdentityTitleAndCreation": [
+      {
+        "id": "ses_-zUPZIzQfzzqEqGDzTH2",
+        "title": "Shared archive review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-before-south",
+        "projectID": "prj_h6iihhB4v9qqS73eIQTb",
+        "created": 1794182520086,
+        "archived": 1794182520093
+      },
+      {
+        "id": "ses_-zUPZIzXLzz2yuaEzbQg",
+        "title": "Shared archive review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-before-north",
+        "projectID": "prj_hNKImb4zJy5KumLJeqko",
+        "created": 1794182519672,
+        "archived": 1794182519686
+      }
+    ],
+    "configFiles": []
+  },
+  "after": {
+    "projects": [
+      {
+        "key": "north",
+        "projectTitle": "North Review",
+        "gitOriginalBytes": 49,
+        "head": "95d13bc2c1d1026d9904e915993d83eef0d9475f",
+        "status": [
+          "?? .gitattributes",
+          "?? .gitignore",
+          "?? .opencorvus/"
+        ]
+      },
+      {
+        "key": "south",
+        "projectTitle": "South Review",
+        "gitOriginalBytes": 49,
+        "head": "57768f67241886db2f2cca455668df86a0bc079a",
+        "status": [
+          "?? .gitattributes",
+          "?? .gitignore",
+          "?? .opencorvus/"
+        ]
+      }
+    ],
+    "counts": {
+      "project": 2,
+      "session": 2,
+      "message": 0,
+      "engine_task": 0
+    },
+    "exactOriginalIdentityTitleAndCreation": [
+      {
+        "id": "ses_-zUPZIzQfzzK484eV7mp",
+        "title": "Shared archive review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-after-south",
+        "projectID": "prj_h59RQZNmWIcBeOvyg3fG",
+        "created": 1794182520086,
+        "archived": null
+      },
+      {
+        "id": "ses_-zUPZIzXKzzmF4gkPaR8",
+        "title": "Shared archive review",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-after-north",
+        "projectID": "prj_h1T61aDVqNntlyfhYBan",
+        "created": 1794182519673,
+        "archived": 1794182519686
+      }
+    ],
+    "configFiles": []
+  }
+}

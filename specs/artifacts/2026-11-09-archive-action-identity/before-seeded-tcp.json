@@ -1,0 +1,60 @@
+{
+  "phase": "before",
+  "step": "seeded",
+  "checks": [
+    {
+      "operationId": "workLedger.listArchived",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "search": "Shared archive review"
+      },
+      "records": [
+        {
+          "id": "ses_-zUPZIzQfzzqEqGDzTH2",
+          "title": "Shared archive review",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-before-south",
+          "archived": 1794182520093
+        },
+        {
+          "id": "ses_-zUPZIzXLzz2yuaEzbQg",
+          "title": "Shared archive review",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-before-north",
+          "archived": 1794182519686
+        }
+      ]
+    },
+    {
+      "operationId": "coding.chat.session.get",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-before-north"
+      },
+      "record": {
+        "id": "ses_-zUPZIzXLzz2yuaEzbQg",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-before-north",
+        "title": "Shared archive review",
+        "projectID": "prj_hNKImb4zJy5KumLJeqko",
+        "created": 1794182519672,
+        "archived": 1794182519686
+      }
+    },
+    {
+      "operationId": "coding.chat.session.get",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-before-south"
+      },
+      "record": {
+        "id": "ses_-zUPZIzQfzzqEqGDzTH2",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-before-south",
+        "title": "Shared archive review",
+        "projectID": "prj_h6iihhB4v9qqS73eIQTb",
+        "created": 1794182520086,
+        "archived": 1794182520093
+      }
+    }
+  ]
+}

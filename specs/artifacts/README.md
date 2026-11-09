@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [归档行操作对象证据](2026-11-09-archive-action-identity/README.md)
 - [归档成功续页焦点证据](2026-11-09-archive-continuation-focus/README.md)
 - [归档分页读取失败证据](2026-11-09-archive-page-read-failure/README.md)
 - [记忆搜索失败状态证据](2026-11-09-memory-search-failure-state/README.md)

@@ -1,0 +1,60 @@
+{
+  "phase": "after",
+  "step": "seeded",
+  "checks": [
+    {
+      "operationId": "workLedger.listArchived",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "search": "Shared archive review"
+      },
+      "records": [
+        {
+          "id": "ses_-zUPZIzQfzzK484eV7mp",
+          "title": "Shared archive review",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-after-south",
+          "archived": 1794182520091
+        },
+        {
+          "id": "ses_-zUPZIzXKzzmF4gkPaR8",
+          "title": "Shared archive review",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-after-north",
+          "archived": 1794182519686
+        }
+      ]
+    },
+    {
+      "operationId": "coding.chat.session.get",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-after-north"
+      },
+      "record": {
+        "id": "ses_-zUPZIzXKzzmF4gkPaR8",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-after-north",
+        "title": "Shared archive review",
+        "projectID": "prj_h1T61aDVqNntlyfhYBan",
+        "created": 1794182519673,
+        "archived": 1794182519686
+      }
+    },
+    {
+      "operationId": "coding.chat.session.get",
+      "status": 200,
+      "schemaValid": true,
+      "params": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-after-south"
+      },
+      "record": {
+        "id": "ses_-zUPZIzQfzzK484eV7mp",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b49\\project-after-south",
+        "title": "Shared archive review",
+        "projectID": "prj_h59RQZNmWIcBeOvyg3fG",
+        "created": 1794182520086,
+        "archived": 1794182520091
+      }
+    }
+  ]
+}

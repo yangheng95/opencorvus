@@ -5378,6 +5378,9 @@ from the canonical Project row. Archive rows present the existing canonical
 project display name with their complete real directory on a separate metadata
 line. This presentation uses the same fully loaded Work Ledger project projection
 as other project labels, without adding a second name store or changing row identity.
+The localized Open, Restore and permanent-delete accessible names identify the
+original item and the same displayed Project. The existing armed-delete
+description names that item and Project as well; its confirmation is unchanged.
 The command palette's Mission/child-Task relevance check reads that same current
 project name, so a server project-name match is not discarded by local descendant
 selection. Work hints use the canonical project display primitive; their original

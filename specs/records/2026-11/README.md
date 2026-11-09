@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [归档行操作对象](2026-11-09-archive-action-identity.md)
 - [归档成功续页焦点](2026-11-09-archive-continuation-focus.md)
 - [归档分页读取失败](2026-11-09-archive-page-read-failure.md)
 - [记忆搜索失败状态](2026-11-09-memory-search-failure-state.md)

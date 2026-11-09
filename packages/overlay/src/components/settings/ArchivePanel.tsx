@@ -57,6 +57,22 @@ function kindLabel(row: WorkLedgerItemRow): string {
   return t("work_ledger.kind.task")
 }
 
+function archiveProjectName(row: WorkLedgerItemRow): string {
+  return projectLedgerDisplayName({
+    directory: row.directory,
+    customName: workLedgerProject(row.directory)?.title,
+    unknownName: t("task.project.unknown"),
+    implicitProjectName: t("work_ledger.implicit_project"),
+  })
+}
+
+function archiveActionText(
+  key: "archive.open_item" | "archive.restore" | "archive.delete_permanently" | "archive.delete_confirm",
+  row: WorkLedgerItemRow,
+): string {
+  return t(key, { title: row.title || row.id, project: archiveProjectName(row) })
+}
+
 function archivedAt(row: WorkLedgerItemRow): number {
   if (typeof row.archived !== "number") {
     throw new Error(`Archived ${row.kind} row is missing its archive timestamp: ${row.id}`)
@@ -419,14 +435,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                 meta={
                   <>
                     <span>{kindLabel(row)}</span>
-                    <span class="archive-row-project">
-                      {projectLedgerDisplayName({
-                        directory: row.directory,
-                        customName: workLedgerProject(row.directory)?.title,
-                        unknownName: t("task.project.unknown"),
-                        implicitProjectName: t("work_ledger.implicit_project"),
-                      })}
-                    </span>
+                    <span class="archive-row-project">{archiveProjectName(row)}</span>
                     <span>{t("archive.archived_at", { time: detailStamp(archivedAt(row)) })}</span>
                     <span class="archive-row-directory">{row.directory}</span>
                   </>
@@ -438,7 +447,7 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       variant="outline"
                       size="sm"
                       tone="neutral"
-                      aria-label={t("archive.open_item", { title: row.title || row.id })}
+                      aria-label={archiveActionText("archive.open_item", row)}
                       data-archive-action="open"
                       disabled={!!busyID() || loading()}
                       onClick={() => void props.onOpenItem(row)}
@@ -453,8 +462,8 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       data-chrome="icon-action"
                       data-ui="archive-restore"
                       data-archive-action="restore"
-                      title={t("archive.restore")}
-                      aria-label={t("archive.restore")}
+                      title={archiveActionText("archive.restore", row)}
+                      aria-label={archiveActionText("archive.restore", row)}
                       disabled={!!busyID() || loading()}
                       onClick={() => void runRowAction(row, "restore")}
                     >
@@ -468,8 +477,8 @@ export default function ArchivePanel(props: { onOpenItem: (row: WorkLedgerItemRo
                       data-ui="archive-delete"
                       data-archive-action="delete"
                       disabled={!!busyID() || loading()}
-                      label={t("archive.delete_permanently")}
-                      armedDescription={t("archive.delete_confirm")}
+                      label={archiveActionText("archive.delete_permanently", row)}
+                      armedDescription={archiveActionText("archive.delete_confirm", row)}
                       confirmWindowMs={DELETE_CONFIRM_WINDOW_MS}
                       onConfirm={() => void runRowAction(row, "delete")}
                       confirmChildren={<Icon name="check" size="compact" />}
