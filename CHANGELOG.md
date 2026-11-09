@@ -23,6 +23,7 @@
 
 - 修复切换项目、读取重试、归档恢复和关闭菜单时的键盘焦点丢失。文件树的根目录重试同步重新读取已展开的子目录。
 - 项目菜单和开始工作按钮明确标出目标项目，同名项目会补充父目录以便区分。
+- 在浏览器里手动切换工作目录或选择匿名项目的转换位置时，先核对服务器上的目录。路径无效时保留原表单和项目，便于直接纠正。
 - 文件读取、图像预览、项目提升和传输失败提供更准确的错误。项目归档包含当前文件，正确处理已删除的跟踪文件。
 - 计划修改绑定当前会话，记忆内容更新校验项目归属。技能市场保留具备明确来源能力的候选。
 - 发布监控在同一截止时间内重试 GitHub 的临时只读错误，并按当前健康响应合同修正并发项目接纳测试。
@@ -49,6 +50,7 @@
 
 - Restore keyboard focus after project changes, read retries, archive restores, and menu dismissal. Retrying the root of the file tree also rereads expanded child directories.
 - Project menus and start-work buttons identify the target project and include the parent folder when names match.
+- When entering a directory in the browser to switch workspaces or convert an anonymous project, OpenCorvus checks the directory on the server first. Invalid paths keep the form open and leave the current project selected so you can correct the entry.
 - Report more precise errors for file reads, image previews, project promotion, and transfers. Project archives include the files currently present and handle deleted tracked files.
 - Bind plan edits to the calling session, validate project ownership before updating memory, and retain Skill Market candidates with explicit source capabilities.
 - Keep release monitoring active within the original deadline after temporary GitHub read errors, and align the concurrent project admission tests with the current health response contract.
