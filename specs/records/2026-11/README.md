@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [收件箱重试期间保留焦点和原诊断](2026-11-09-mailbox-retry-focus.md)
 - [日志刷新尊重当前阅读位置](2026-11-09-log-reading-position-on-refresh.md)
 - [日志刷新期间保留键盘焦点](2026-11-09-log-refresh-pending-focus.md)
 - [笔记退出搜索时立即回到列表读取](2026-11-09-memory-return-to-list-retires-results.md)

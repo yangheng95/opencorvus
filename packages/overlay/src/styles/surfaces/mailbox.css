@@ -159,6 +159,12 @@
   background-clip: padding-box;
 }
 
+.oc-feedback.mailbox-panel__load-feedback {
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--ui-gap-sm);
+}
+
 .mailbox-project-groups {
   display: grid;
   gap: var(--ui-gap-lg);

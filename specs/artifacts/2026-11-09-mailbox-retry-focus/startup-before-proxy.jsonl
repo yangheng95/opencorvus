@@ -1,0 +1,14 @@
+{"listenPort":39227,"upstreamPort":39226,"pid":20000,"holdMs":11000,"cutReceipts":[1,2]}
+{"time":"2026-11-09T13:55:11.197Z","receipt":1,"stage":"arrival","route":"/mailbox","query":{"view":"active","limit":"40"},"hold":false,"cut":true}
+{"time":"2026-11-09T13:55:11.334Z","receipt":1,"stage":"origin","route":"/mailbox","status":200,"requestID":"134f7eb5-1e01-4fbc-bd6e-2b601814147b"}
+{"time":"2026-11-09T13:55:11.335Z","receipt":1,"stage":"original-complete","bytes":80,"itemCount":0,"activeCount":0,"unreadCount":0,"archivedCount":0,"nextCursor":null}
+{"time":"2026-11-09T13:55:11.335Z","receipt":1,"stage":"partial-body","bytes":32}
+{"time":"2026-11-09T13:55:11.359Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T13:55:12.297Z","receipt":2,"stage":"arrival","route":"/mailbox","query":{"view":"active","limit":"40"},"hold":true,"cut":true}
+{"time":"2026-11-09T13:55:12.307Z","receipt":2,"stage":"origin","route":"/mailbox","status":200,"requestID":"fd3086e7-1826-4699-a2e3-56a2f63c414e"}
+{"time":"2026-11-09T13:55:12.308Z","receipt":2,"stage":"original-complete","bytes":80,"itemCount":0,"activeCount":0,"unreadCount":0,"archivedCount":0,"nextCursor":null}
+{"time":"2026-11-09T13:55:12.420Z","receipt":3,"stage":"arrival","route":"/mailbox","query":{"view":"active","limit":"40"},"hold":false,"cut":false}
+{"time":"2026-11-09T13:55:12.426Z","receipt":3,"stage":"origin","route":"/mailbox","status":200,"requestID":"ae7c35ad-5e44-43c6-b093-5c1a21c7f869"}
+{"time":"2026-11-09T13:55:12.427Z","receipt":3,"stage":"original-complete","bytes":80,"itemCount":0,"activeCount":0,"unreadCount":0,"archivedCount":0,"nextCursor":null}
+{"time":"2026-11-09T13:55:12.427Z","receipt":3,"stage":"released","bytes":80}
+{"time":"2026-11-09T13:55:23.311Z","receipt":2,"stage":"client-closed"}

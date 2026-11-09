@@ -1,0 +1,32 @@
+{
+  "originalFiles": [
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b124\\project-before",
+      "original": "Owned mailbox retry before\n",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "gitHead": "94a8ec34afaf13b2cca74a3d5130ad33b56eaa71",
+      "phase": "before"
+    },
+    {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b124\\project-after",
+      "original": "Owned mailbox retry after\n",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "gitHead": "a2d864bc500def2e09119151976e07f9a3d3a008",
+      "phase": "after"
+    }
+  ],
+  "portsReleased": [
+    39226,
+    39227,
+    39228,
+    39229
+  ]
+}

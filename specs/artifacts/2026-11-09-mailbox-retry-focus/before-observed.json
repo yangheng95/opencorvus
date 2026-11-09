@@ -1,0 +1,44 @@
+{
+  "cold": [
+    "\t\t\t\t\t\t25 button (expanded) Description: Mailbox, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t63 container Mailbox",
+    "\t\t\t\t\t\t\t\t65 container Inbox (0)",
+    "\t\t\t\t\t\t\t\t\t66 text Mailbox 0",
+    "The focused UI element is 25 button (expanded) Description: Mailbox, Secondary Actions: Collapse"
+  ],
+  "searchFailure": [
+    "\t\t\t\t\t\t25 button (expanded) Description: Mailbox, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t64 container Mailbox",
+    "\t\t\t\t\t\t\t\t66 container Inbox (0)",
+    "\t\t\t\t\t\t\t\t\t67 text Mailbox 0",
+    "\t\t\t\t\t\t\t\t71 text Could not load this list.",
+    "\t\t\t\t\t\t\t\t72 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t73 text Details",
+    "\t\t\t\t\t\t\t\t74 button Retry",
+    "The focused UI element is 69 search text field (settable) Description: Search messages…, Value: opencorvus-b124-retry"
+  ],
+  "pending": [
+    "\t\t\t\t\t\t25 button (expanded) Description: Mailbox, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t64 container Mailbox",
+    "\t\t\t\t\t\t\t\t66 container Inbox (0)",
+    "\t\t\t\t\t\t\t\t\t67 text Mailbox 0",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39227/ui/"
+  ],
+  "failedAgain": [
+    "\t\t\t\t\t\t25 button (expanded) Description: Mailbox, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t64 container Mailbox",
+    "\t\t\t\t\t\t\t\t66 container Inbox (0)",
+    "\t\t\t\t\t\t\t\t\t67 text Mailbox 0",
+    "\t\t\t\t\t\t\t\t71 text Could not load this list.",
+    "\t\t\t\t\t\t\t\t72 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t73 text Details",
+    "\t\t\t\t\t\t\t\t74 button Retry",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39227/ui/"
+  ],
+  "recovered": [
+    "\t\t\t\t\t\t\t\t69 search text field (settable) Description: Search messages…, Value: opencorvus-b124-retry",
+    "\t\t\t\t\t\t\t\t71 text No matching messages No mailbox messages match “opencorvus-b124-retry”.",
+    "\t\t\t\t\t\t\t\t72 button Clear search",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39227/ui/"
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "failure": [
+    "\t\t\t\t\t\t25 button (expanded) Description: Mailbox, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t63 container Mailbox",
+    "\t\t\t\t\t\t\t\t\t66 text Mailbox 0",
+    "\t\t\t\t\t\t\t\t68 search text field (settable) Description: Search messages…, Value: opencorvus-b124-retry",
+    "\t\t\t\t\t\t\t\t70 text Could not load the mailbox.",
+    "\t\t\t\t\t\t\t\t71 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t72 text Details",
+    "\t\t\t\t\t\t\t\t73 button Retry",
+    "The focused UI element is 68 search text field (settable) Description: Search messages…, Value: opencorvus-b124-retry"
+  ],
+  "pending": [
+    "\t\t\t\t\t\t25 button (expanded) Description: Mailbox, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t63 container Mailbox",
+    "\t\t\t\t\t\t\t\t\t66 text Mailbox 0",
+    "\t\t\t\t\t\t\t\t68 search text field (settable) Description: Search messages…, Value: opencorvus-b124-retry",
+    "\t\t\t\t\t\t\t\t70 text Could not load the mailbox.",
+    "\t\t\t\t\t\t\t\t71 button (expanded) Details, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t72 text Details",
+    "\t\t\t\t\t\t\t\t75 text TypeError: Failed to fetch",
+    "\t\t\t\t\t\t\t\t73 button (disabled) Retrying…",
+    "The focused UI element is 73 button (disabled) Retrying…"
+  ],
+  "repeatedFailure": [
+    "\t\t\t\t\t\t25 button (expanded) Description: Mailbox, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t63 container Mailbox",
+    "\t\t\t\t\t\t\t\t\t66 text Mailbox 0",
+    "\t\t\t\t\t\t\t\t68 search text field (settable) Description: Search messages…, Value: opencorvus-b124-retry",
+    "\t\t\t\t\t\t\t\t70 text Could not load the mailbox.",
+    "\t\t\t\t\t\t\t\t71 button (expanded) Details, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t72 text Details",
+    "\t\t\t\t\t\t\t\t75 text TypeError: Failed to fetch",
+    "\t\t\t\t\t\t\t\t73 button Retry",
+    "The focused UI element is 73 button Retry"
+  ],
+  "recovered": [
+    "\t\t\t\t\t\t25 button (expanded) Description: Mailbox, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t63 container Mailbox",
+    "\t\t\t\t\t\t\t\t\t66 text Mailbox 0",
+    "\t\t\t\t\t\t\t\t68 search text field (settable) Description: Search messages…, Value: opencorvus-b124-retry",
+    "\t\t\t\t\t\t\t\t76 text No matching messages No mailbox messages match “opencorvus-b124-retry”.",
+    "\t\t\t\t\t\t\t\t77 button Clear search",
+    "The focused UI element is 68 search text field (settable) Description: Search messages…, Value: opencorvus-b124-retry"
+  ],
+  "zhFailure": [
+    "\t\t\t\t\t\t24 button (expanded) Description: 收件箱, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t26 container 收件箱",
+    "\t\t\t\t\t\t\t\t28 container 收件箱 (0)",
+    "\t\t\t\t\t\t\t\t\t29 text 收件箱 0",
+    "\t\t\t\t\t\t\t\t30 button 关闭",
+    "\t\t\t\t\t\t\t\t33 text 无法加载收件箱。",
+    "\t\t\t\t\t\t\t\t34 button (collapsed) 详细信息, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t35 text 详细信息",
+    "\t\t\t\t\t\t\t\t36 button 重试",
+    "The focused UI element is 31 search text field (settable) Description: 搜索消息…, Value: opencorvus-b124-retry"
+  ],
+  "zhPending": [
+    "\t\t\t\t\t\t24 button (expanded) Description: 收件箱, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t26 container 收件箱",
+    "\t\t\t\t\t\t\t\t28 container 收件箱 (0)",
+    "\t\t\t\t\t\t\t\t\t29 text 收件箱 0",
+    "\t\t\t\t\t\t\t\t30 button 关闭",
+    "\t\t\t\t\t\t\t\t33 text 无法加载收件箱。",
+    "\t\t\t\t\t\t\t\t34 button (collapsed) 详细信息, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t35 text 详细信息",
+    "\t\t\t\t\t\t\t\t36 button (disabled) 重试中…",
+    "The focused UI element is 36 button (disabled) 重试中…"
+  ],
+  "zhUserFocus": [
+    "\t\t\t\t\t\t24 button (expanded) Description: 收件箱, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t26 container 收件箱",
+    "\t\t\t\t\t\t\t\t28 container 收件箱 (0)",
+    "\t\t\t\t\t\t\t\t\t29 text 收件箱 0",
+    "\t\t\t\t\t\t\t\t30 button 关闭",
+    "\t\t\t\t\t\t\t\t33 text 无法加载收件箱。",
+    "\t\t\t\t\t\t\t\t34 button (collapsed) 详细信息, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t35 text 详细信息",
+    "\t\t\t\t\t\t\t\t36 button (disabled) 重试中…",
+    "The focused UI element is 30 button 关闭"
+  ],
+  "zhRecovered": [
+    "\t\t\t\t\t\t24 button (expanded) Description: 收件箱, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t26 container 收件箱",
+    "\t\t\t\t\t\t\t\t28 container 收件箱 (0)",
+    "\t\t\t\t\t\t\t\t\t29 text 收件箱 0",
+    "\t\t\t\t\t\t\t\t30 button 关闭",
+    "\t\t\t\t\t\t\t\t66 text 没有匹配的消息 没有收件箱消息与“opencorvus-b124-retry”匹配。",
+    "\t\t\t\t\t\t\t\t67 button 清除搜索",
+    "The focused UI element is 30 button 关闭"
+  ],
+  "beforeQueryChange": [
+    "\t\t\t\t\t\t24 button (expanded) Description: 收件箱, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t26 container 收件箱",
+    "\t\t\t\t\t\t\t\t28 container 收件箱 (0)",
+    "\t\t\t\t\t\t\t\t\t29 text 收件箱 0",
+    "\t\t\t\t\t\t\t\t30 button 关闭",
+    "\t\t\t\t\t\t\t\t66 text 无法加载收件箱。",
+    "\t\t\t\t\t\t\t\t67 button (collapsed) 详细信息, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t68 text 详细信息",
+    "\t\t\t\t\t\t\t\t69 button (disabled) 重试中…",
+    "The focused UI element is 69 button (disabled) 重试中…"
+  ],
+  "queryChanged": [
+    "\t\t\t\t\t\t24 button (expanded) Description: 收件箱, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t26 container 收件箱",
+    "\t\t\t\t\t\t\t\t28 container 收件箱 (0)",
+    "\t\t\t\t\t\t\t\t\t29 text 收件箱 0",
+    "\t\t\t\t\t\t\t\t30 button 关闭",
+    "\t\t\t\t\t\t\t\t66 text 没有匹配的消息 没有收件箱消息与“opencorvus-b124-other”匹配。",
+    "\t\t\t\t\t\t\t\t67 button 清除搜索",
+    "The focused UI element is 31 search text field (settable) Description: 搜索消息…, Value: opencorvus-b124-other"
+  ],
+  "zhUnfiltered": [
+    "\t\t\t\t\t\t24 button (expanded) Description: 收件箱, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t26 container 收件箱",
+    "\t\t\t\t\t\t\t\t28 container 收件箱 (0)",
+    "\t\t\t\t\t\t\t\t\t29 text 收件箱 0",
+    "\t\t\t\t\t\t\t\t30 button 关闭",
+    "\t\t\t\t\t\t\t\t66 text 收件箱已清空 Squad 的进度、状态和通知会显示在这里。",
+    "The focused UI element is 31 search text field (settable) 搜索消息…"
+  ]
+}

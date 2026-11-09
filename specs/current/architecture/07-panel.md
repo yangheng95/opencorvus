@@ -3567,6 +3567,9 @@ remain siblings of the card's primary open action in both views. Cards lead with
 the Mission title and retain identity, time, project and execution details.
 Mailbox uses the shared Feedback and
 neutral navigation selection while retaining unread and attention facts.
+Retrying a failed read in the same Mailbox scope keeps the original diagnostic
+and the same focusable action. A successful read retires that action and returns
+its focus to the current Mailbox search control if focus is still on Retry.
 Project choices retain directory identity: Mission board filters and creation
 menus show the existing compact parent label with wrapping and the full original
 directory in the shared Tooltip. Parent context belongs to the option's accessible

@@ -92,12 +92,13 @@ export function MailboxPanel(props: MailboxPanelProps) {
   const [deletePending, setDeletePending] = createSignal(false)
   const [selectedMessageIDs, setSelectedMessageIDs] = createSignal<ReadonlySet<string>>(new Set<string>())
   const [expandedMessageIDs, setExpandedMessageIDs] = createSignal<ReadonlySet<string>>(new Set<string>())
-  const [loadError, setLoadError] = createSignal("")
+  const [loadIssue, setLoadIssue] = createSignal<{ cause: unknown } | null>(null)
   const requestOwner = createMailboxRequestOwner()
   let unsubscribeMailboxChanges: (() => void) | undefined
   let refreshTimer: ReturnType<typeof setTimeout> | undefined
   let searchInput: HTMLInputElement | undefined
   let searchToggle: HTMLButtonElement | undefined
+  let retryButton: HTMLButtonElement | undefined
   let disposed = false
   const mailboxActionOperations = new Map<string, MailboxActionOperation>()
 
@@ -105,6 +106,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
   const currentSearch = createMemo(() => query().trim())
   const visibleItems = items
   const currentRequestScope = () => ({ authority: currentAuthority(), view: MAILBOX_VIEW, search: currentSearch() })
+  const retryUnavailable = () => loading() || !appStore.connected
 
   const visibleProjectGroups = createMemo<MailboxProjectGroup[]>(() => {
     const grouped = new Map<string, MailboxProjectGroup>()
@@ -211,7 +213,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
             setLoadedAuthorityRevision(undefined)
             setExpandedMessageIDs(new Set<string>())
           }
-          setLoadError("")
+          setLoadIssue(null)
           setLoading(true)
           setLoadingMore(false)
         })
@@ -219,7 +221,6 @@ export function MailboxPanel(props: MailboxPanelProps) {
       if (!base.scopeChanged) {
         retainedTail = previousTail
         batch(() => {
-          setLoadError("")
           setLoading(true)
           setLoadingMore(false)
         })
@@ -228,7 +229,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
     })()
     if (append) {
       setLoadingMore(true)
-      setLoadError("")
+      setLoadIssue(null)
     }
     try {
       let page: MailboxPage
@@ -250,10 +251,17 @@ export function MailboxPanel(props: MailboxPanelProps) {
           (oldest.createdAt === retainedTail.createdAt && oldest.id <= retainedTail.id)) break
       } while (true)
       const committed = request.commit(currentRequestScope(), () => {
-        setItems((current) => (append ? mergeItems(current, refreshed) : refreshed))
-        setCursor(nextCursor)
-        setCounts({ unread: page.unreadCount, active: page.activeCount, archived: page.archivedCount })
-        if (!append) setLoadedAuthorityRevision(authority.revision)
+        const hadRetryFocus = document.activeElement === retryButton
+        batch(() => {
+          setItems((current) => (append ? mergeItems(current, refreshed) : refreshed))
+          setCursor(nextCursor)
+          setCounts({ unread: page.unreadCount, active: page.activeCount, archived: page.archivedCount })
+          if (!append) setLoadedAuthorityRevision(authority.revision)
+          setLoadIssue(null)
+        })
+        if (hadRetryFocus && document.activeElement === document.body) {
+          (searchOpen() ? searchInput : searchToggle)?.focus()
+        }
       })
       if (!committed) return
       if (!append) {
@@ -267,7 +275,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
     } catch (error) {
       if (disposed) return
       request.commit(currentRequestScope(), () => {
-        setLoadError(error instanceof Error ? error.message : String(error))
+        setLoadIssue({ cause: error })
       })
     } finally {
       const ownsCurrentScope = !disposed && request.owns(currentRequestScope())
@@ -424,7 +432,7 @@ export function MailboxPanel(props: MailboxPanelProps) {
         setItems([])
         setCursor(null)
         setCounts({ unread: 0, active: 0, archived: 0 })
-        setLoadError("")
+        setLoadIssue(null)
         setLoadedAuthorityRevision(undefined)
         setExpandedMessageIDs(new Set<string>())
         setLoading(false)
@@ -581,20 +589,34 @@ export function MailboxPanel(props: MailboxPanelProps) {
       </header>
 
       <div class="mailbox-panel__body" aria-busy={loading()}>
-        <Show when={loadError()}>
-          <Feedback
-            tone="error"
-            details={loadError()}
-            actions={
-              <Button variant="outline" size="sm" tone="neutral" onClick={() => void refresh()}>
-                {t("common.retry")}
-              </Button>
-            }
-          >
-            {t("ledger.load_failed")}
-          </Feedback>
+        <Show when={loadIssue()}>
+          {(issue) => (
+            <Feedback
+              tone="error"
+              class="mailbox-panel__load-feedback"
+              details={formatErrorDetails(issue().cause)}
+              actions={
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  tone="neutral"
+                  ref={(element) => (retryButton = element)}
+                  aria-disabled={retryUnavailable() || undefined}
+                  aria-busy={loading() || undefined}
+                  onClick={() => {
+                    if (!retryUnavailable()) void refresh()
+                  }}
+                >
+                  {t(loading() ? "common.retrying" : "common.retry")}
+                </Button>
+              }
+            >
+              {t("mailbox.load_failed")}
+            </Feedback>
+          )}
         </Show>
-        <Show when={!loadError()}>
+        <Show when={!loadIssue()}>
           <Show
             when={visibleItems().length > 0}
             fallback={

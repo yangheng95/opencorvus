@@ -1,0 +1,52 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "3e8dc8e7-3551-489b-9085-480e8ee1f746",
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "requestID": "1d859d64-d744-4e74-8198-568bf39437db",
+      "schemaValid": true
+    },
+    {
+      "route": "/mailbox",
+      "operationId": "mailbox.list",
+      "status": 200,
+      "requestID": "b9c544bd-9d4d-4bf8-89eb-fd0f409e49ef",
+      "schemaValid": true
+    },
+    {
+      "route": "/mailbox",
+      "operationId": "mailbox.list",
+      "status": 200,
+      "requestID": "2e8b71a0-79a3-42b0-910e-6ec97683636e",
+      "schemaValid": true
+    }
+  ],
+  "unfiltered": {
+    "items": [],
+    "nextCursor": null,
+    "unreadCount": 0,
+    "activeCount": 0,
+    "archivedCount": 0
+  },
+  "filtered": {
+    "items": [],
+    "nextCursor": null,
+    "unreadCount": 0,
+    "activeCount": 0,
+    "archivedCount": 0
+  },
+  "project": {
+    "id": "prj_huUAQgkZMlWezf3UQFTo",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b124\\project-after"
+  },
+  "listedProjectCount": 1
+}

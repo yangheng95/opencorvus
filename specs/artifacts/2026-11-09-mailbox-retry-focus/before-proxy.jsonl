@@ -1,0 +1,14 @@
+{"listenPort":39227,"upstreamPort":39226,"pid":21728,"holdMs":11000,"search":"opencorvus-b124-retry","cutReceipts":[1,2]}
+{"time":"2026-11-09T13:56:32.761Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T13:56:41.919Z","receipt":1,"stage":"arrival","route":"/mailbox","query":{"view":"active","limit":"40","search":"opencorvus-b124-retry"},"hold":false,"cut":true}
+{"time":"2026-11-09T13:56:41.924Z","receipt":1,"stage":"origin","route":"/mailbox","status":200,"requestID":"b9e723c5-a7f5-448f-b2a4-74d75dbfcace"}
+{"time":"2026-11-09T13:56:41.924Z","receipt":1,"stage":"original-complete","bytes":80,"itemCount":0,"activeCount":0,"unreadCount":0,"archivedCount":0,"nextCursor":null}
+{"time":"2026-11-09T13:56:41.925Z","receipt":1,"stage":"partial-body","bytes":32}
+{"time":"2026-11-09T13:56:45.809Z","receipt":2,"stage":"arrival","route":"/mailbox","query":{"view":"active","limit":"40","search":"opencorvus-b124-retry"},"hold":true,"cut":true}
+{"time":"2026-11-09T13:56:45.812Z","receipt":2,"stage":"origin","route":"/mailbox","status":200,"requestID":"31643869-e9f6-4d5c-ad80-de582ab4477f"}
+{"time":"2026-11-09T13:56:45.812Z","receipt":2,"stage":"original-complete","bytes":80,"itemCount":0,"activeCount":0,"unreadCount":0,"archivedCount":0,"nextCursor":null}
+{"time":"2026-11-09T13:56:56.814Z","receipt":2,"stage":"partial-body","bytes":32}
+{"time":"2026-11-09T13:57:04.781Z","receipt":3,"stage":"arrival","route":"/mailbox","query":{"view":"active","limit":"40","search":"opencorvus-b124-retry"},"hold":false,"cut":false}
+{"time":"2026-11-09T13:57:04.783Z","receipt":3,"stage":"origin","route":"/mailbox","status":200,"requestID":"3563f4d9-48c0-46ed-9f4f-2780b1ea0d9a"}
+{"time":"2026-11-09T13:57:04.784Z","receipt":3,"stage":"original-complete","bytes":80,"itemCount":0,"activeCount":0,"unreadCount":0,"archivedCount":0,"nextCursor":null}
+{"time":"2026-11-09T13:57:04.784Z","receipt":3,"stage":"released","bytes":80}
