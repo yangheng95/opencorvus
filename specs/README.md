@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [笔记搜索读取期间保留输入焦点](records/2026-11/2026-11-09-memory-search-pending-focus.md)
 - [笔记列表重试保留搜索草稿](records/2026-11/2026-11-09-memory-notes-list-retry.md)
 - [项目记忆文档失败后原地重试](records/2026-11/2026-11-09-project-memory-document-read-retry.md)
 - [笔记原文读取失败后在原条目重试](records/2026-11/2026-11-09-memory-original-read-retry.md)

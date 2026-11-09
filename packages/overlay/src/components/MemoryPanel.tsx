@@ -479,7 +479,8 @@ export function MemoryPanel(props: MemoryPanelProps) {
           value={searchQuery()}
           inputRef={(element) => { searchInput = element }}
           placeholder={t("memory.search_placeholder")}
-          disabled={loading() || !currentDirectory()}
+          disabled={!currentDirectory()}
+          readOnly={loading()}
           onValueChange={setSearchQuery}
           onClear={handleSearchClear}
           clearDataUI="memory-search-clear"

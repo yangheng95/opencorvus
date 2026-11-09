@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [笔记搜索读取期间保留输入焦点证据](2026-11-09-memory-search-pending-focus/README.md)
 - [笔记列表重试保留搜索草稿证据](2026-11-09-memory-notes-list-retry/README.md)
 - [项目记忆文档失败后原地重试证据](2026-11-09-project-memory-document-read-retry/README.md)
 - [笔记原文读取失败后在原条目重试证据](2026-11-09-memory-original-read-retry/README.md)

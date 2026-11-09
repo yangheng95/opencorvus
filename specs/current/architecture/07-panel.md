@@ -2165,11 +2165,14 @@ The search field keeps a concise visible hint and a complete accessible name.
 Shared SearchField uses explicit `clearable` for its clear affordance; optional
 `onClear` owns only a domain action after the single empty-value publication.
 Clear restores the same connected, enabled input synchronously and shares the
-input's disabled state. Outside text composition, Enter belongs to an explicit
-search submit action or a SearchField associated with a form. It cannot activate
-that form's default submit button. Caller keyboard handlers can still claim an
-event before the primitive handles it. External input refs remain available to
-navigation owners. Memory retains its clear-triggered list reload; Mailbox retains its
+input's disabled state. A read-only search input remains focusable while clear
+and submit are unavailable; Notes uses this during its own reads so the search
+input keeps focus through submit and clear. Outside text composition, Enter
+belongs to an explicit search submit action or a SearchField associated with a
+form. It cannot activate that form's default submit button. Caller keyboard
+handlers can still claim an event before the primitive handles it. External input
+refs remain available to navigation owners. Memory retains its clear-triggered
+list reload; Mailbox retains its
 existing search dismissal without a clear button. There is no delayed focus
 recovery or consumer-specific duplicate focus implementation.
 Its resize separator projects the mounted sidebar's actual width and applied

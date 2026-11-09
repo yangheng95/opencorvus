@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [笔记搜索读取期间保留输入焦点](2026-11-09-memory-search-pending-focus.md)
 - [笔记列表重试保留搜索草稿](2026-11-09-memory-notes-list-retry.md)
 - [项目记忆文档失败后原地重试](2026-11-09-project-memory-document-read-retry.md)
 - [笔记原文读取失败后在原条目重试](2026-11-09-memory-original-read-retry.md)

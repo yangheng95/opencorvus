@@ -17,6 +17,7 @@ export interface SearchFieldProps {
   inputDataTestID?: string
   inputRef?: (element: HTMLInputElement) => void
   disabled?: boolean
+  readOnly?: boolean
   clearable?: boolean
   clearLabel?: string
   clearDataUI?: string
@@ -37,12 +38,16 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
   let input: HTMLInputElement | undefined
   const clearLabel = () => props.clearLabel || t("common.clear")
   const submitLabel = () => props.submitLabel || t("common.search")
+  const actionsDisabled = () => props.disabled || props.readOnly
   const clear = () => {
+    if (actionsDisabled()) return
     props.onValueChange("")
     props.onClear?.()
     if (input?.isConnected && !props.disabled) input.focus()
   }
-  const submit = () => props.onSubmit?.()
+  const submit = () => {
+    if (!actionsDisabled()) props.onSubmit?.()
+  }
   const handleKeyDown: JSX.EventHandler<HTMLInputElement, KeyboardEvent> = (event) => {
     const handler = props.onKeyDown
     if (typeof handler === "function") handler(event)
@@ -84,6 +89,7 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
         data-ui={props.inputDataUI}
         data-testid={props.inputDataTestID}
         disabled={props.disabled}
+        readOnly={props.readOnly}
         onInput={(event) => props.onValueChange(event.currentTarget.value)}
         onKeyDown={handleKeyDown}
       />
@@ -97,7 +103,7 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
           data-ui={props.clearDataUI}
           data-testid={props.clearDataTestID}
           onClick={clear}
-          disabled={props.disabled}
+          disabled={actionsDisabled()}
           title={clearLabel()}
           aria-label={clearLabel()}
         >
@@ -115,7 +121,7 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
           onClick={submit}
           title={submitLabel()}
           aria-label={submitLabel()}
-          disabled={props.disabled}
+          disabled={actionsDisabled()}
         >
           <Icon name="search" />
         </Button>
