@@ -1,0 +1,449 @@
+{
+  "before": {
+    "reads": {
+      "archiveAt": {
+        "server": {
+          "time": "2026-11-09T12:20:29.614Z",
+          "receipt": 1,
+          "stage": "origin",
+          "route": "/work-ledger/archive",
+          "status": 200,
+          "requestID": "72cf9d27-24eb-42c0-b285-85c296a8ca0c"
+        },
+        "events": [
+          {
+            "time": "2026-11-09T12:20:29.607Z",
+            "receipt": 1,
+            "stage": "arrival",
+            "route": "/work-ledger/archive",
+            "method": "GET",
+            "query": {
+              "search": "Ledger deadline",
+              "limit": "100"
+            },
+            "responseDelay": 24000
+          },
+          {
+            "time": "2026-11-09T12:20:29.607Z",
+            "receipt": 1,
+            "stage": "forward",
+            "route": "/work-ledger/archive"
+          },
+          {
+            "time": "2026-11-09T12:20:29.614Z",
+            "receipt": 1,
+            "stage": "origin",
+            "route": "/work-ledger/archive",
+            "status": 200,
+            "requestID": "72cf9d27-24eb-42c0-b285-85c296a8ca0c"
+          },
+          {
+            "time": "2026-11-09T12:20:53.627Z",
+            "receipt": 1,
+            "stage": "delivered",
+            "route": "/work-ledger/archive"
+          },
+          {
+            "time": "2026-11-09T12:20:53.627Z",
+            "receipt": 1,
+            "stage": "payload",
+            "rows": [
+              {
+                "kind": "chat",
+                "id": "ses_-zUPWJj5dzzTqooO62Qn",
+                "title": "Ledger deadline chat 003",
+                "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-before"
+              },
+              {
+                "kind": "chat",
+                "id": "ses_-zUPWJj5qzzoV8arHh8Q",
+                "title": "Ledger deadline chat 002",
+                "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-before"
+              },
+              {
+                "kind": "chat",
+                "id": "ses_-zUPWJj6Lzz9TJXaZ5tX",
+                "title": "Ledger deadline chat 001",
+                "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-before"
+              }
+            ],
+            "nextCursor": null
+          }
+        ],
+        "terminalDelayMs": 24013
+      },
+      "paletteAt": {
+        "server": {
+          "time": "2026-11-09T12:20:29.801Z",
+          "receipt": 2,
+          "stage": "origin",
+          "route": "/work-ledger",
+          "status": 200,
+          "requestID": "7c204c9d-6d18-43ca-8d87-e0a6d84a0257"
+        },
+        "events": [
+          {
+            "time": "2026-11-09T12:20:29.798Z",
+            "receipt": 2,
+            "stage": "arrival",
+            "route": "/work-ledger",
+            "method": "GET",
+            "query": {
+              "search": "Ledger deadline",
+              "limit": "12"
+            },
+            "responseDelay": 24000
+          },
+          {
+            "time": "2026-11-09T12:20:29.798Z",
+            "receipt": 2,
+            "stage": "forward",
+            "route": "/work-ledger"
+          },
+          {
+            "time": "2026-11-09T12:20:29.801Z",
+            "receipt": 2,
+            "stage": "origin",
+            "route": "/work-ledger",
+            "status": 200,
+            "requestID": "7c204c9d-6d18-43ca-8d87-e0a6d84a0257"
+          },
+          {
+            "time": "2026-11-09T12:20:53.816Z",
+            "receipt": 2,
+            "stage": "delivered",
+            "route": "/work-ledger"
+          },
+          {
+            "time": "2026-11-09T12:20:53.816Z",
+            "receipt": 2,
+            "stage": "payload",
+            "rows": [
+              {
+                "kind": "project",
+                "id": "prj_hWvu36ta0f3QvZf5T0Bf",
+                "title": "Ledger deadline review",
+                "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-before"
+              }
+            ],
+            "nextCursor": null
+          }
+        ],
+        "terminalDelayMs": 24015
+      }
+    },
+    "checkerIDs": [],
+    "selectedArchive": [],
+    "counts": {
+      "project": 1,
+      "session": 3,
+      "message": 0,
+      "engine_task": 0,
+      "provider_activity_request": 0,
+      "provider_usage_event": 0
+    },
+    "file": {
+      "head": "e6552819a86f83ca96e0b4e7fb84945fa0c72179",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-before"
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b115-before",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39186",
+      "pid": 29968
+    },
+    "shutdown": {
+      "pid": 29968,
+      "port": 39186,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTh7LF00Tnyh2b4mF"
+      },
+      "status": 200
+    },
+    "proxy": {
+      "listenPort": 39187,
+      "upstreamPort": 39186,
+      "pid": 2016,
+      "delayMs": 24000,
+      "testedQuery": "Ledger deadline"
+    },
+    "proxyShutdown": {
+      "pid": 2016,
+      "body": "stopping",
+      "port": 39187,
+      "status": 200
+    }
+  },
+  "after": {
+    "reads": {
+      "archiveAt": {
+        "server": {
+          "time": "2026-11-09T12:24:54.515Z",
+          "receipt": 1,
+          "stage": "origin",
+          "route": "/work-ledger/archive",
+          "status": 200,
+          "requestID": "a0a34e6f-03e0-4255-a20b-da0a3970117c"
+        },
+        "events": [
+          {
+            "time": "2026-11-09T12:24:54.508Z",
+            "receipt": 1,
+            "stage": "arrival",
+            "route": "/work-ledger/archive",
+            "method": "GET",
+            "query": {
+              "search": "Ledger deadline",
+              "limit": "100"
+            },
+            "responseDelay": 24000
+          },
+          {
+            "time": "2026-11-09T12:24:54.508Z",
+            "receipt": 1,
+            "stage": "forward",
+            "route": "/work-ledger/archive"
+          },
+          {
+            "time": "2026-11-09T12:24:54.515Z",
+            "receipt": 1,
+            "stage": "origin",
+            "route": "/work-ledger/archive",
+            "status": 200,
+            "requestID": "a0a34e6f-03e0-4255-a20b-da0a3970117c"
+          },
+          {
+            "time": "2026-11-09T12:25:09.519Z",
+            "receipt": 1,
+            "stage": "client-closed",
+            "route": "/work-ledger/archive"
+          }
+        ],
+        "terminalDelayMs": 15004
+      },
+      "paletteAt": {
+        "server": {
+          "time": "2026-11-09T12:24:54.693Z",
+          "receipt": 2,
+          "stage": "origin",
+          "route": "/work-ledger",
+          "status": 200,
+          "requestID": "2303732d-478f-447d-99e2-4600904488d2"
+        },
+        "events": [
+          {
+            "time": "2026-11-09T12:24:54.689Z",
+            "receipt": 2,
+            "stage": "arrival",
+            "route": "/work-ledger",
+            "method": "GET",
+            "query": {
+              "search": "Ledger deadline",
+              "limit": "12"
+            },
+            "responseDelay": 24000
+          },
+          {
+            "time": "2026-11-09T12:24:54.690Z",
+            "receipt": 2,
+            "stage": "forward",
+            "route": "/work-ledger"
+          },
+          {
+            "time": "2026-11-09T12:24:54.693Z",
+            "receipt": 2,
+            "stage": "origin",
+            "route": "/work-ledger",
+            "status": 200,
+            "requestID": "2303732d-478f-447d-99e2-4600904488d2"
+          },
+          {
+            "time": "2026-11-09T12:25:09.707Z",
+            "receipt": 2,
+            "stage": "client-closed",
+            "route": "/work-ledger"
+          }
+        ],
+        "terminalDelayMs": 15014
+      },
+      "archiveRetryAt": {
+        "server": {
+          "time": "2026-11-09T12:25:36.932Z",
+          "receipt": 3,
+          "stage": "origin",
+          "route": "/work-ledger/archive",
+          "status": 200,
+          "requestID": "8c2191d8-f4d5-4ac3-88d1-a3e987d9e108"
+        },
+        "events": [
+          {
+            "time": "2026-11-09T12:25:36.927Z",
+            "receipt": 3,
+            "stage": "arrival",
+            "route": "/work-ledger/archive",
+            "method": "GET",
+            "query": {
+              "search": "Ledger deadline",
+              "limit": "100"
+            },
+            "responseDelay": 0
+          },
+          {
+            "time": "2026-11-09T12:25:36.927Z",
+            "receipt": 3,
+            "stage": "forward",
+            "route": "/work-ledger/archive"
+          },
+          {
+            "time": "2026-11-09T12:25:36.932Z",
+            "receipt": 3,
+            "stage": "origin",
+            "route": "/work-ledger/archive",
+            "status": 200,
+            "requestID": "8c2191d8-f4d5-4ac3-88d1-a3e987d9e108"
+          },
+          {
+            "time": "2026-11-09T12:25:36.933Z",
+            "receipt": 3,
+            "stage": "payload",
+            "rows": [
+              {
+                "kind": "chat",
+                "id": "ses_-zUPWJj5fzz690lOZS2m",
+                "title": "Ledger deadline chat 003",
+                "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after"
+              },
+              {
+                "kind": "chat",
+                "id": "ses_-zUPWJj5rzzDDBJ0ch7W",
+                "title": "Ledger deadline chat 002",
+                "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after"
+              },
+              {
+                "kind": "chat",
+                "id": "ses_-zUPWJj6OzzH9BJyR7Bl",
+                "title": "Ledger deadline chat 001",
+                "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after"
+              }
+            ],
+            "nextCursor": null
+          }
+        ],
+        "terminalDelayMs": 1
+      },
+      "paletteRetryAt": {
+        "server": {
+          "time": "2026-11-09T12:25:43.200Z",
+          "receipt": 4,
+          "stage": "origin",
+          "route": "/work-ledger",
+          "status": 200,
+          "requestID": "4d57a1e4-2cd6-46b0-a82b-fe661544e52d"
+        },
+        "events": [
+          {
+            "time": "2026-11-09T12:25:43.195Z",
+            "receipt": 4,
+            "stage": "arrival",
+            "route": "/work-ledger",
+            "method": "GET",
+            "query": {
+              "search": "Ledger deadline",
+              "limit": "12"
+            },
+            "responseDelay": 0
+          },
+          {
+            "time": "2026-11-09T12:25:43.195Z",
+            "receipt": 4,
+            "stage": "forward",
+            "route": "/work-ledger"
+          },
+          {
+            "time": "2026-11-09T12:25:43.200Z",
+            "receipt": 4,
+            "stage": "origin",
+            "route": "/work-ledger",
+            "status": 200,
+            "requestID": "4d57a1e4-2cd6-46b0-a82b-fe661544e52d"
+          },
+          {
+            "time": "2026-11-09T12:25:43.201Z",
+            "receipt": 4,
+            "stage": "payload",
+            "rows": [
+              {
+                "kind": "project",
+                "id": "prj_hnXDej7QsUKg8PhF4mJj",
+                "title": "Ledger deadline review",
+                "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after"
+              }
+            ],
+            "nextCursor": null
+          }
+        ],
+        "terminalDelayMs": 1
+      }
+    },
+    "checkerIDs": [
+      "6d1480ae-d211-43f8-87e2-a175073268c9",
+      "7da03f7e-cba3-4995-bb0c-447180230c03",
+      "a48533bd-b3aa-449c-860e-36de0bc2cbc5",
+      "e19b7b8f-fa3c-47da-94a9-e6f4aa7cf811"
+    ],
+    "selectedArchive": [
+      {
+        "requestID": "8a76caaf-e977-41e2-9788-5fa3f9fa2cff",
+        "method": "GET",
+        "path": "/work-ledger/selection/session/ses_-zUPWJj5fzz690lOZS2m",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2,
+        "time": "2026-11-09T12:26:15.149Z"
+      }
+    ],
+    "counts": {
+      "project": 1,
+      "session": 3,
+      "message": 0,
+      "engine_task": 0,
+      "provider_activity_request": 0,
+      "provider_usage_event": 0
+    },
+    "file": {
+      "head": "ecb1cbb1ff1b72c0bc20f9d52d5ab3570fe069f3",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after"
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b115-after",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39188",
+      "pid": 24272
+    },
+    "shutdown": {
+      "pid": 24272,
+      "status": 200,
+      "port": 39188,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTiTc100n6H2T2TJc"
+      }
+    },
+    "proxy": {
+      "listenPort": 39189,
+      "upstreamPort": 39188,
+      "pid": 30092,
+      "delayMs": 24000,
+      "testedQuery": "Ledger deadline"
+    },
+    "proxyShutdown": {
+      "pid": 30092,
+      "status": 200,
+      "port": 39189,
+      "body": "stopping"
+    }
+  }
+}

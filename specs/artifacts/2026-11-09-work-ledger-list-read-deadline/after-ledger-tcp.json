@@ -1,0 +1,120 @@
+{
+  "phase": "after",
+  "reads": [
+    {
+      "route": "/work-ledger",
+      "query": {
+        "search": "Ledger deadline",
+        "limit": "12"
+      },
+      "status": 200,
+      "requestID": "6d1480ae-d211-43f8-87e2-a175073268c9",
+      "body": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_hnXDej7QsUKg8PhF4mJj",
+            "title": "Ledger deadline review",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after",
+            "created": 1794226673316,
+            "updated": 1794226673525,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "route": "/work-ledger/archive",
+      "query": {
+        "search": "Ledger deadline",
+        "limit": "100"
+      },
+      "status": 200,
+      "requestID": "7da03f7e-cba3-4995-bb0c-447180230c03",
+      "body": {
+        "rows": [
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_-zUPWJj5fzz690lOZS2m",
+            "sessionID": "ses_-zUPWJj5fzz690lOZS2m",
+            "title": "Ledger deadline chat 003",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after",
+            "created": 1794226673572,
+            "started": 1794226673572,
+            "updated": 1794226673581,
+            "pinned": false,
+            "archived": 1794226673580,
+            "status": "idle"
+          },
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_-zUPWJj5rzzDDBJ0ch7W",
+            "sessionID": "ses_-zUPWJj5rzzDDBJ0ch7W",
+            "title": "Ledger deadline chat 002",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after",
+            "created": 1794226673560,
+            "started": 1794226673560,
+            "updated": 1794226673569,
+            "pinned": false,
+            "archived": 1794226673568,
+            "status": "idle"
+          },
+          {
+            "kind": "chat",
+            "experience": "chat",
+            "id": "ses_-zUPWJj6OzzH9BJyR7Bl",
+            "sessionID": "ses_-zUPWJj6OzzH9BJyR7Bl",
+            "title": "Ledger deadline chat 001",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after",
+            "created": 1794226673527,
+            "started": 1794226673527,
+            "updated": 1794226673557,
+            "pinned": false,
+            "archived": 1794226673544,
+            "status": "idle"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "route": "/work-ledger/selection/session/ses_-zUPWJj5fzz690lOZS2m",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after"
+      },
+      "status": 200,
+      "requestID": "a48533bd-b3aa-449c-860e-36de0bc2cbc5",
+      "body": {
+        "kind": "chat",
+        "experience": "chat",
+        "id": "ses_-zUPWJj5fzz690lOZS2m",
+        "sessionID": "ses_-zUPWJj5fzz690lOZS2m",
+        "title": "Ledger deadline chat 003",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after",
+        "created": 1794226673572,
+        "started": 1794226673572,
+        "updated": 1794226673581,
+        "pinned": false,
+        "archived": 1794226673580,
+        "status": "idle"
+      }
+    },
+    {
+      "route": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b115\\project-after",
+        "path": "note.txt"
+      },
+      "status": 200,
+      "requestID": "e19b7b8f-fa3c-47da-94a9-e6f4aa7cf811",
+      "body": {
+        "type": "text",
+        "content": "Owned ledger read deadline after\n",
+        "revision": "d7933fc282171549939b7efc9347ae5291c707341a8cd5ca3ac518bf8f848d80"
+      }
+    }
+  ]
+}

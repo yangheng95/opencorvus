@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [工作列表读取保留现有截止](records/2026-11/2026-11-09-work-ledger-list-read-deadline.md)
 - [已恢复工作后的归档刷新可重试](records/2026-11/2026-11-09-archive-committed-refresh-retry.md)
 - [目录检查等待时可撤回切换](records/2026-11/2026-11-09-workspace-directory-check-cancel.md)
 - [侧栏项目摘要显示完整项目名](records/2026-11/2026-11-09-project-summary-display-name.md)

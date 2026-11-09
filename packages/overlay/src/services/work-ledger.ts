@@ -13,11 +13,12 @@ import {
   type WorkLedgerRow,
   type WorkLedgerTaskRow,
 } from "@opencorvus-ai/transport-protocol"
-import { apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "./api"
+import { apiJson, captureApiAuthority, isApiAuthorityCurrent, mergeAbortSignals, type ApiAuthority } from "./api"
 import { createSignal } from "solid-js"
 import { t } from "../utils/i18n"
 import { directoryScopedPath } from "./task-path"
 import { projectDirectoryKey } from "../utils/project-directory"
+import { DEFAULT_REQUEST_TIMEOUT_MILLISECONDS } from "./host-transport"
 
 export type WorkLedgerItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
 export type WorkLedgerTopLevelItemRow = WorkLedgerMissionRow | WorkLedgerTaskRow | WorkLedgerChatRow
@@ -136,31 +137,15 @@ export function workLedgerSessionInterruptible(sessionID: string): boolean {
   return row?.kind === "mission" ? row.interruptible : row?.status === "active"
 }
 
-export async function loadWorkLedger(
-  input: {
-    search?: string
-    limit?: number
-    cursor?: WorkLedgerCursor | null
-    signal?: AbortSignal
-    authority?: ApiAuthority
-  } = {},
-): Promise<WorkLedgerList> {
-  const params = new URLSearchParams()
-  const search = input.search?.trim()
-  if (search) params.set("search", search)
-  if (typeof input.limit === "number") params.set("limit", String(input.limit))
-  if (input.cursor) {
-    params.set("cursorPinned", String(input.cursor.pinned))
-    params.set("cursorUpdated", String(input.cursor.updated))
-    params.set("cursorRowKey", input.cursor.rowKey)
-  }
-  const suffix = params.toString() ? `?${params.toString()}` : ""
-  return WorkLedgerListSchema.parse(await apiJson<unknown>(`work-ledger${suffix}`, { signal: input.signal, authority: input.authority }))
+type WorkLedgerPageInput = {
+  search?: string
+  limit?: number
+  cursor?: WorkLedgerCursor | null
+  signal?: AbortSignal
+  authority?: ApiAuthority
 }
 
-export async function loadArchivedWorkLedger(
-  input: { search?: string; limit?: number; cursor?: WorkLedgerCursor | null; signal?: AbortSignal; authority?: ApiAuthority } = {},
-): Promise<WorkLedgerArchiveList> {
+function readWorkLedgerPage(path: "work-ledger" | "work-ledger/archive", input: WorkLedgerPageInput): Promise<unknown> {
   const params = new URLSearchParams()
   const search = input.search?.trim()
   if (search) params.set("search", search)
@@ -171,9 +156,16 @@ export async function loadArchivedWorkLedger(
     params.set("cursorRowKey", input.cursor.rowKey)
   }
   const suffix = params.toString() ? `?${params.toString()}` : ""
-  return WorkLedgerArchiveListSchema.parse(
-    await apiJson<unknown>(`work-ledger/archive${suffix}`, { signal: input.signal, authority: input.authority }),
-  )
+  const signal = input.signal && mergeAbortSignals(input.signal, AbortSignal.timeout(DEFAULT_REQUEST_TIMEOUT_MILLISECONDS))
+  return apiJson<unknown>(`${path}${suffix}`, { signal, authority: input.authority })
+}
+
+export async function loadWorkLedger(input: WorkLedgerPageInput = {}): Promise<WorkLedgerList> {
+  return WorkLedgerListSchema.parse(await readWorkLedgerPage("work-ledger", input))
+}
+
+export async function loadArchivedWorkLedger(input: WorkLedgerPageInput = {}): Promise<WorkLedgerArchiveList> {
+  return WorkLedgerArchiveListSchema.parse(await readWorkLedgerPage("work-ledger/archive", input))
 }
 
 export async function loadWorkLedgerSelection(input: { kind: "task" | "session"; id: string; directory: string; authority: ApiAuthority; signal: AbortSignal }): Promise<WorkLedgerItemRow> {
