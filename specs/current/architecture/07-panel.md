@@ -2102,6 +2102,9 @@ Tabs value and mounted panel, so typing or clearing a query preserves that
 panel's authored input. The selected trigger remains associated with the panel;
 matching results navigate only on explicit activation. An unmatched query shows
 its empty result beside the navigation while the active content stays available.
+With a matching query, Down and Up from the search field focus the first and
+last actual matching tabs in rail order. The active tab participates only if it
+matches. Focus keeps the current page open until the existing manual activation.
 Canonical navigation groups and tab objects retain their component identity
 across filtering and selection, keeping the active trigger registered in the
 shared Tabs collection throughout the update.

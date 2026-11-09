@@ -1,0 +1,22 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_hoKXVavW7jImHhnOK5JR",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b52\\project-after"
+  },
+  "listedProjectCount": 1
+}

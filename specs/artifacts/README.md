@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [设置搜索方向键证据](2026-11-09-settings-search-keyboard-entry/README.md)
 - [用量自然周期日期证据](2026-11-09-usage-natural-period-date-range/README.md)
 - [用量失败和重试焦点证据](2026-11-09-usage-retry-focus-and-diagnostic/README.md)
 - [归档行操作对象证据](2026-11-09-archive-action-identity/README.md)

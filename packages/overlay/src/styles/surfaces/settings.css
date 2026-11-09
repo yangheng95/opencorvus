@@ -1367,6 +1367,18 @@ button.s-row:focus-visible {
   margin-bottom: var(--ui-gap-lg);
 }
 
+.config-search.search-field:has(+ .config-search-keyboard-hint) {
+  margin-bottom: var(--ui-gap-xs);
+}
+
+.config-search-keyboard-hint {
+  margin: 0 0 var(--ui-gap-md);
+  padding-inline: var(--ui-gap-xs);
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+  line-height: var(--ui-line-height-normal);
+}
+
 .config-nav-group-title {
   margin: var(--ui-gap-xs) 0 var(--ui-gap-3xs);
   padding-inline: var(--ui-gap-md);

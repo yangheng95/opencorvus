@@ -392,9 +392,21 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
     if (!query) return CONFIG_TABS
     return CONFIG_TABS.filter((tab) => matchesSearchTerms(query, [configSectionSearchText(tab, t)]))
   })
+  const hasSettingsSearchMatches = () => Boolean(normalizedSettingsSearch() && visibleConfigTabs().length)
   const visibleConfigTabIDs = createMemo(
     () => new Set([...visibleConfigTabs().map((tab) => tab.id), activeConfigTab()]),
   )
+  const focusSettingsSearchMatch = (event: KeyboardEvent) => {
+    if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
+    if ((event.key !== "ArrowDown" && event.key !== "ArrowUp") || !hasSettingsSearchMatches()) return
+    const matchedIDs = new Set(visibleConfigTabs().map((tab) => configTabID(tab.id)))
+    const matches = Array.from(sidebarElement()?.querySelectorAll<HTMLButtonElement>("[data-config-tab]") ?? [])
+      .filter((tab) => matchedIDs.has(tab.id))
+    const target = event.key === "ArrowDown" ? matches[0] : matches.at(-1)
+    if (!target) return
+    event.preventDefault()
+    target.focus()
+  }
   const activeConfigTitle = createMemo(() => t(CONFIG_TAB_BY_ID.get(activeConfigTab())!.labelKey))
   let pageTitle: HTMLHeadingElement | undefined
   const openReleaseNotes = () => {
@@ -658,9 +670,14 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               inputRef={(element) => (settingsSearchInput = element)}
               placeholder={t("common.search")}
               ariaLabel={t("settings.search_placeholder")}
+              ariaDescribedBy={hasSettingsSearchMatches() ? "config-search-keyboard-hint" : undefined}
               onValueChange={setSettingsSearch}
+              onKeyDown={focusSettingsSearchMatch}
               clearDataUI="config-search-clear"
             />
+            <Show when={hasSettingsSearchMatches()}>
+              <p id="config-search-keyboard-hint" class="config-search-keyboard-hint">{t("settings.search_keyboard_hint")}</p>
+            </Show>
             <Show when={normalizedSettingsSearch() && visibleConfigTabs().length === 0}>
               <div role="status">
                 <SettingsEmpty>{t("settings.search_no_results")}</SettingsEmpty>

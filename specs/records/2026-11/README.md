@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [设置搜索方向键入口](2026-11-09-settings-search-keyboard-entry.md)
 - [用量自然周期日期](2026-11-09-usage-natural-period-date-range.md)
 - [用量失败和重试焦点](2026-11-09-usage-retry-focus-and-diagnostic.md)
 - [归档行操作对象](2026-11-09-archive-action-identity.md)
