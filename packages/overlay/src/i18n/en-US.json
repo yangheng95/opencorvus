@@ -2065,6 +2065,8 @@
   "explorer.name_required": "Enter a file browser path.",
   "explorer.select_required": "Select a file or folder first.",
   "explorer.selected_count": "{{count}} selected",
+  "explorer.selected_outside_results": "{{count}} selected · {{outside}} outside these results",
+  "explorer.deselect_outside_results": "Deselect outside results",
   "explorer.create_success": "Created {{path}}",
   "explorer.rename": "Rename",
   "explorer.rename_message": "Rename {{path}}",

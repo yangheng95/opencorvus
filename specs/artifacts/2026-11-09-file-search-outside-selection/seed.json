@@ -1,0 +1,20 @@
+{
+  "before": {
+    "head": "beec911f5260f985294a58e5e042d011955668a7",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b83\\project-before",
+    "files": {
+      "alpha.txt": "Alpha hidden selection fixture.\r\n",
+      "beta.txt": "Beta visible selection fixture.\n可见正文。\n",
+      "dest/anchor.txt": "Owned destination anchor.\n"
+    }
+  },
+  "after": {
+    "head": "beec911f5260f985294a58e5e042d011955668a7",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b83\\project-after",
+    "files": {
+      "alpha.txt": "Alpha hidden selection fixture.\r\n",
+      "beta.txt": "Beta visible selection fixture.\n可见正文。\n",
+      "dest/anchor.txt": "Owned destination anchor.\n"
+    }
+  }
+}

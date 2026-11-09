@@ -2064,6 +2064,8 @@
   "explorer.name_required": "请输入文件浏览器路径。",
   "explorer.select_required": "请先选择文件或文件夹。",
   "explorer.selected_count": "已选择 {{count}} 项",
+  "explorer.selected_outside_results": "已选择 {{count}} 项 · {{outside}} 项在结果之外",
+  "explorer.deselect_outside_results": "取消结果外的选择",
   "explorer.create_success": "已创建 {{path}}",
   "explorer.rename": "重命名",
   "explorer.rename_message": "重命名 {{path}}",

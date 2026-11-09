@@ -941,6 +941,20 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   })
   const selectedItemList = createMemo(() => Array.from(selectedItems().values()))
   const selectedItemPathSet = createMemo(() => new Set(selectedItems().keys()))
+  const settledSearchPaths = createMemo(() => {
+    const search = query().trim()
+    if (!search || search !== deferredQuery() || searchResults.loading) return undefined
+    const result = currentSearchResult()
+    if (!result || result.error) return undefined
+    return new Set(rows().map((row) => selectionFromRow(row).path))
+  })
+  const searchSelection = createMemo(() => {
+    const visible = settledSearchPaths()
+    if (!visible) return undefined
+    const selected = selectedItemList()
+    const outside = selected.filter((item) => !visible.has(item.path)).length
+    return outside > 0 ? { total: selected.length, outside } : undefined
+  })
   const currentFilePath = createMemo(() => {
     const target = selectedFileTarget()
     return target && target.directory === directory() ? normalizeExplorerPath(target.path) : ""
@@ -1090,8 +1104,29 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     return selectedItemPathSet().has(item.path) ? selectedItemList() : [item]
   }
 
+  function selectionCountLabel(total: number, outside: number): string {
+    const numbers = new Intl.NumberFormat(localeTag())
+    const count = numbers.format(total)
+    return outside > 0
+      ? t("explorer.selected_outside_results", { count, outside: numbers.format(outside) })
+      : t("explorer.selected_count", { count })
+  }
+
   function contextSelectionDetail(items: ExplorerSelection[]): string | undefined {
-    return items.length > 1 ? t("explorer.selected_count", { count: items.length }) : undefined
+    return items.length > 1 ? selectionCountLabel(items.length, searchSelection()?.outside ?? 0) : undefined
+  }
+
+  function deselectOutsideSearchResults(): void {
+    const visible = settledSearchPaths()
+    if (!visible || commandBusy()) return
+    const selection = selectedItems()
+    const kept = new Map([...selection].filter(([path]) => visible.has(path)))
+    if (kept.size === selection.size) return
+    batch(() => {
+      setSelectedItems(kept)
+      if (!kept.has(selectionAnchorPath())) setSelectionAnchorPath([...kept.keys()].at(-1) ?? "")
+    })
+    searchInput?.focus({ preventScroll: true })
   }
 
   function topLevelActionSelections(items: ExplorerSelection[]): ExplorerSelection[] {
@@ -2264,6 +2299,17 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           </>
         }
       />
+      <Show when={searchSelection()}>
+        {(selection) => (
+          <div class="file-explorer-search-selection">
+            <span role="status">{selectionCountLabel(selection().total, selection().outside)}</span>
+            <Button type="button" variant="ghost" size="sm" tone="neutral" disabled={commandBusy()}
+              onClick={deselectOutsideSearchResults}>
+              {t("explorer.deselect_outside_results")}
+            </Button>
+          </div>
+        )}
+      </Show>
       <Show when={uploading() || uploadFeedback() || mutationFeedback() || expandedDirectoryFailures().length > 0 || searchHasMore()}>
         <div class="file-explorer-feedback-stack">
           <Show when={uploading()}>

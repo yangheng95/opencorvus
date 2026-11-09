@@ -732,6 +732,18 @@
   flex: 0 0 auto;
 }
 
+.file-explorer-search-selection {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: var(--ui-gap-sm);
+  margin-inline: var(--ui-gap-md);
+  color: var(--text-muted);
+  font-size: var(--ui-font-caption);
+}
+
 .file-explorer-keyboard-hint {
   flex: 0 0 auto;
   margin: 0;

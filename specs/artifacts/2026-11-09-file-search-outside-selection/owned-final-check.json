@@ -1,0 +1,64 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b83\\project-before",
+    "head": "beec911f5260f985294a58e5e042d011955668a7",
+    "trackedOriginals": [
+      "alpha.txt",
+      "beta.txt",
+      "dest/anchor.txt"
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "copyWrites": [
+      {
+        "requestID": "c70fb7cd-9824-4f7c-9954-f1fa9bbf8a44",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 98
+      },
+      {
+        "requestID": "09bf0d69-8b2b-4c3e-92e0-7cd1d942cf10",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 70
+      }
+    ]
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b83\\project-after",
+    "head": "beec911f5260f985294a58e5e042d011955668a7",
+    "trackedOriginals": [
+      "alpha.txt",
+      "beta.txt",
+      "dest/anchor.txt"
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "copyWrites": [
+      {
+        "requestID": "7a686950-65f2-42e4-9604-ca195c23b78e",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 96
+      }
+    ]
+  }
+}

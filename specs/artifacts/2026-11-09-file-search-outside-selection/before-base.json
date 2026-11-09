@@ -1,0 +1,41 @@
+{
+  "phase": "before",
+  "step": "base",
+  "listing": {
+    "dest": {
+      "requestID": "2cd031b0-0154-4bb1-ae96-444876fd6868",
+      "names": [
+        "alpha.txt",
+        "anchor.txt",
+        "beta.txt"
+      ]
+    }
+  },
+  "files": {
+    "alpha.txt": {
+      "requestID": "56bcac6e-dbed-46bb-a858-0a0b2a81798c",
+      "length": 33,
+      "content": "Alpha hidden selection fixture.\r\n"
+    },
+    "beta.txt": {
+      "requestID": "0e15cce1-ab92-4a8c-95af-18d394ff4439",
+      "length": 48,
+      "content": "Beta visible selection fixture.\n可见正文。\n"
+    },
+    "dest/beta.txt": {
+      "requestID": "f496067f-d12d-4946-aa24-cf435545d240",
+      "length": 48,
+      "content": "Beta visible selection fixture.\n可见正文。\n"
+    },
+    "dest/anchor.txt": {
+      "requestID": "3fe5a32b-2333-43e0-b27f-82192948b550",
+      "length": 26,
+      "content": "Owned destination anchor.\n"
+    },
+    "dest/alpha.txt": {
+      "requestID": "57957bdb-b324-480d-92ab-88970746b294",
+      "length": 33,
+      "content": "Alpha hidden selection fixture.\r\n"
+    }
+  }
+}

@@ -1614,6 +1614,12 @@ do not establish retirement. Anchor and active drag/drop lifetime use the same
 listing fact. Already-entered filesystem actions retain their captured targets
 and guarded operation owner.
 
+A settled Explorer search discloses selected paths outside its displayed result
+set, including in multi-item menu details. Its explicit deselect action keeps
+the selection and anchor for matching paths, retains the query, and returns
+focus to the search input. Pending or failed searches cannot establish this
+partition.
+
 Before the first successful root directory listing, an active scoped Explorer
 shows pending loading, including the initial request scheduling interval. Empty
 state is derived from a successful empty list; a failed root list retains its
