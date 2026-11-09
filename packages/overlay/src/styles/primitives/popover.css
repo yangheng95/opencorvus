@@ -15,7 +15,8 @@
     animation: oc-floating-enter var(--ui-duration-base) ease-out;
   }
 
-  :is(.oc-popover, .oc-menu, .oc-select-content)[data-closed] {
+  /* Menu unmount returns keyboard focus; do not keep closed menus present. */
+  :is(.oc-popover, .oc-select-content)[data-closed] {
     animation: oc-floating-exit var(--ui-duration-fast) ease-in;
   }
 }

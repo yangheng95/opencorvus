@@ -1,0 +1,62 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b86\\project-before",
+    "head": "2d5b1870d22d45905e05f52deff3ecd40694d082",
+    "fileLengths": {
+      "alpha-row.txt": 20,
+      "beta-row.txt": 18,
+      "gamma-row.txt": 19,
+      "lambda-row.txt": 20
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "editorReads": [
+      {
+        "requestID": "b4fa33c5-1f1b-4882-a596-815753547563",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 159
+      }
+    ],
+    "fileWrites": [],
+    "trackedDiff": []
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b86\\project-after",
+    "head": "28a1c5070b378414377ff7073fd3930c91fedcd1",
+    "fileLengths": {
+      "alpha-row.txt": 20,
+      "beta-row.txt": 18,
+      "gamma-row.txt": 19,
+      "lambda-row.txt": 20
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "editorReads": [
+      {
+        "requestID": "62977285-f08f-4b23-9126-ff61cc9c4956",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 153
+      }
+    ],
+    "fileWrites": [],
+    "trackedDiff": []
+  }
+}

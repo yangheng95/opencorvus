@@ -3552,8 +3552,11 @@ does not repeat delegated input. Larger navigation rows scroll within the Rail;
 record order, targets, load ownership and historical status remain unchanged.
 
 Dialog scrims share the modal layer; menu, popover and select content sit above
-that layer. Shared Kobalte presence attributes drive short entry/exit effects,
-with reduced-motion support and no perpetual animation or live blur. Dialog
+that layer. Shared Kobalte presence attributes drive short entry effects and
+exit effects for dialogs, popovers and selects, with reduced-motion support
+and no perpetual animation or live blur.
+Menus skip the exit effect so Kobalte can unmount them and return keyboard focus
+without leaving closed menu items active during a fade. Dialog
 header/body/footer insets share their surface geometry. Screenshot panels retain
 virtualized rows and lazy thumbnail loading, with larger contained previews and
 separate owner/date/count metadata; full-size images still use ImagePreview.

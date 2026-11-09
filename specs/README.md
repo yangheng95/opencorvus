@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [菜单关闭后的键盘交接](records/2026-11/2026-11-09-menu-close-keyboard-handoff.md)
 - [批量文件确认来源路径](records/2026-11/2026-11-09-file-batch-transfer-source-review.md)
 - [文件多选键盘操作提示](records/2026-11/2026-11-09-file-selection-keyboard-discovery.md)
 - [文件搜索结果外选区](records/2026-11/2026-11-09-file-search-outside-selection.md)

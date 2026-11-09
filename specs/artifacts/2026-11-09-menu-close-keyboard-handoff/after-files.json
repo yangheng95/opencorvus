@@ -1,0 +1,62 @@
+{
+  "phase": "after",
+  "listing": {
+    "requestID": "553d0948-a583-4aad-ab2f-5a44d95a803a",
+    "entries": [
+      {
+        "name": "alpha-row.txt",
+        "path": "alpha-row.txt",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b86\\project-after\\alpha-row.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": "beta-row.txt",
+        "path": "beta-row.txt",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b86\\project-after\\beta-row.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": "gamma-row.txt",
+        "path": "gamma-row.txt",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b86\\project-after\\gamma-row.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      },
+      {
+        "name": "lambda-row.txt",
+        "path": "lambda-row.txt",
+        "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b86\\project-after\\lambda-row.txt",
+        "type": "file",
+        "ignored": false,
+        "directoryTarget": false
+      }
+    ]
+  },
+  "files": {
+    "alpha-row.txt": {
+      "requestID": "0dfa3aac-27d3-41bc-8b6d-d314449afcd3",
+      "length": 20,
+      "content": "isolated alpha row\r\n"
+    },
+    "beta-row.txt": {
+      "requestID": "be39f1f5-7663-49b4-814a-429a733ad53b",
+      "length": 18,
+      "content": "isolated beta row\n"
+    },
+    "gamma-row.txt": {
+      "requestID": "58403c0f-a31c-4b26-86c4-a7e36495ce2e",
+      "length": 19,
+      "content": "isolated gamma row\n"
+    },
+    "lambda-row.txt": {
+      "requestID": "d781e469-2a09-4b4b-97cb-7b9ba1c6f90f",
+      "length": 20,
+      "content": "isolated lambda row\n"
+    }
+  }
+}
