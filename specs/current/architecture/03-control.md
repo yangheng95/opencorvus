@@ -432,6 +432,12 @@ operation 与 `redispatch_worker` action。Orchestrator 随后通过当前投影
 Turn。Runtime 闭包不是可持久化的续跑协议；历史 terminal execution 只是前一条输入消息的执行证据，
 不能成为 Session 续跑准入条件。
 
+项目内 Chat/Work 的空会话创建可携带作者的 `requestID`。项目代次、目录、体验及请求身份
+定位唯一 Session；同输入重发先读取已接受事实，模型输入冲突返回 409，删除终态返回 410。
+插入和发布仍由现有 Session 事务负责，归档后的重发保留归档。项目内 composer 在同一创建
+请求中携带稳定身份；存在实际草稿时沿用其提交身份，待创建接受后按原草稿转移合同退役。
+这与全局临时项目分配和提交首条消息的执行轮次是不同的已有作用域。
+
 ## Trace — 追踪横切
 
 见 [02-data.md #Trace](02-data.md) — 此处不重复。

@@ -14949,6 +14949,70 @@
         ],
         "type": "object"
       },
+      "ProjectConversationCreationConflictError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "reason": {
+                "enum": [
+                  "identity",
+                  "deletion_in_progress"
+                ],
+                "type": "string"
+              },
+              "sessionID": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "sessionID",
+              "reason"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "ProjectConversationCreationConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
+      "ProjectConversationCreationUnavailableError": {
+        "properties": {
+          "data": {
+            "properties": {
+              "message": {
+                "type": "string"
+              },
+              "sessionID": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message",
+              "sessionID"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "ProjectConversationCreationUnavailableError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "ProjectDeleteResult": {
         "properties": {
           "deletedTaskCount": {
@@ -25589,7 +25653,7 @@
     },
     "/coding/chat/session": {
       "post": {
-        "description": "Create a project-bound Chat session for the right sidebar. Prompting and history use canonical /session routes.",
+        "description": "Create a project-bound Chat session for the right sidebar. Reuse requestID to recover the same accepted session after a lost response. Prompting and history use canonical /session routes.",
         "operationId": "coding.chat.session.create",
         "parameters": [
           {
@@ -25609,6 +25673,11 @@
                 "additionalProperties": false,
                 "properties": {
                   "model": {
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
+                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -25634,7 +25703,27 @@
                 }
               }
             },
-            "description": "Chat session"
+            "description": "Chat session accepted for this creation request"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectConversationCreationConflictError"
+                }
+              }
+            },
+            "description": "Creation input conflicts with the accepted identity or the accepted session is being deleted"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectConversationCreationUnavailableError"
+                }
+              }
+            },
+            "description": "The accepted session was deleted"
           },
           "503": {
             "content": {
@@ -26619,7 +26708,7 @@
     },
     "/coding/work/session": {
       "post": {
-        "description": "Create a project-bound Work session for the right sidebar. Prompting and history use canonical /session routes.",
+        "description": "Create a project-bound Work session for the right sidebar. Reuse requestID to recover the same accepted session after a lost response. Prompting and history use canonical /session routes.",
         "operationId": "coding.work.session.create",
         "parameters": [
           {
@@ -26639,6 +26728,11 @@
                 "additionalProperties": false,
                 "properties": {
                   "model": {
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
+                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -26664,7 +26758,27 @@
                 }
               }
             },
-            "description": "Work session"
+            "description": "Work session accepted for this creation request"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectConversationCreationConflictError"
+                }
+              }
+            },
+            "description": "Creation input conflicts with the accepted identity or the accepted session is being deleted"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectConversationCreationUnavailableError"
+                }
+              }
+            },
+            "description": "The accepted session was deleted"
           },
           "503": {
             "content": {

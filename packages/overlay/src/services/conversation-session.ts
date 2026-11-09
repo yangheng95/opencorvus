@@ -22,11 +22,12 @@ import {
 } from "./api"
 import { applyDirectory, ownsWorkspaceSelection } from "./workspace"
 import { AppLog } from "../utils/log"
+import { randomUUID } from "../utils/random-id"
 import { formatErrorDetails } from "./diagnostics"
 import type { WorkLedgerStreamEvent } from "./sse"
 import { clearComposerModelProjection, projectComposerModelFromSession } from "./composer-model"
 import { replaceWorkspaceLocation } from "./workspace-location"
-import { moveComposerDraft, workspaceComposerDraftKey } from "./composer-draft"
+import { captureComposerDraftRevision, composerSubmission, moveComposerDraft, workspaceComposerDraftKey } from "./composer-draft"
 
 type ConversationSessionResponse = {
   session: ConversationSessionInfo
@@ -286,7 +287,7 @@ async function createConversationSessionFromPath(options: {
   path: string
   experience: ConversationExperience
   signal?: AbortSignal
-  body?: Record<string, unknown>
+  body: () => Record<string, unknown>
   composerDraftKey?: string
   onSessionCreated?: (sessionID: string) => void
 }): Promise<string> {
@@ -298,12 +299,8 @@ async function createConversationSessionFromPath(options: {
   const response = (await apiJson(options.path, {
     authority,
     method: "POST",
-    ...(options.body
-      ? {
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(options.body),
-        }
-      : {}),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(options.body()),
     signal: options.signal,
   })) as ConversationSessionResponse
   if (!isApiAuthorityCurrent(authority)) return sessionIDFromResponse(response)
@@ -346,13 +343,20 @@ export async function createConversationSession(options: {
   const directory = options.directory.trim()
   if (!directory) throw new Error("createConversationSession: directory is required")
   const params = new URLSearchParams({ directory })
+  const model = options.model?.trim() || undefined
   return createConversationSessionFromPath({
     authority: options.authority,
     selectionEpoch: options.selectionEpoch,
     path: `coding/${options.experience}/session?${params.toString()}`,
     experience: options.experience,
     signal: options.signal,
-    body: options.model?.trim() ? { model: options.model.trim() } : {},
+    body: () => {
+      const draftKey = options.composerDraftKey
+      const requestID = draftKey && captureComposerDraftRevision(draftKey)
+        ? composerSubmission(draftKey, JSON.stringify(["project-conversation-creation-v1", directory, options.experience, model ?? null])).messageID
+        : randomUUID()
+      return { requestID, ...(model ? { model } : {}) }
+    },
     composerDraftKey: options.composerDraftKey,
     onSessionCreated: options.onSessionCreated,
   })
@@ -374,7 +378,7 @@ export async function createGlobalConversationSession(options: {
     path: `global/${options.experience}`,
     experience: options.experience,
     signal: options.signal,
-    body: model ? { model } : {},
+    body: () => model ? { model } : {},
     composerDraftKey: options.composerDraftKey,
     onSessionCreated: options.onSessionCreated,
   })

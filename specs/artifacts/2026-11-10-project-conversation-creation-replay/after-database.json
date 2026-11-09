@@ -1,0 +1,53 @@
+{
+  "counts": {
+    "session": 5,
+    "message": 0,
+    "engine_task": 0,
+    "provider_usage_event": 0
+  },
+  "sessions": [
+    [
+      "ses_hHGfRPkAsZhTvadLvxBK",
+      "prj_hfhuWhpGP9H9aSHhPPLp",
+      "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+      "Separate creation action",
+      null
+    ],
+    [
+      "ses_hIY8rJPUB6sM1NCX7ucB",
+      "prj_hfhuWhpGP9H9aSHhPPLp",
+      "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+      "Work",
+      1794259066357
+    ],
+    [
+      "ses_hJ06s19rmnU6Qzd7MPbh",
+      "prj_h2JFMLd9dLXyl9UDaczH",
+      "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-b",
+      "Chat",
+      null
+    ],
+    [
+      "ses_hV8JspIgZRAl0JFLB7ER",
+      "prj_h2JFMLd9dLXyl9UDaczH",
+      "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-b",
+      "One Work after parallel retry",
+      null
+    ],
+    [
+      "ses_hhVW2veMf1cqqtLJLOCp",
+      "prj_hfhuWhpGP9H9aSHhPPLp",
+      "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+      "One conversation after retry",
+      null
+    ]
+  ],
+  "deletedSessionFacts": [
+    [
+      "pev_g0VaVsBkL00OOd2OZPMW",
+      "ses_h6nwwC2s6bR0Ic2onurz",
+      "session.deleted"
+    ]
+  ],
+  "allFixtureProjectHeadsAndNotesPreserved": true
+}

@@ -241,7 +241,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 
 | Method | Path | Summary | operationId |
 |---|---|---|---|
-| POST | `/coding/chat/session` | Create right sidebar Chat session Body: `model`; Errors: `AuthReadError`. | `coding.chat.session.create` |
+| POST | `/coding/chat/session` | Create right sidebar Chat session Body: `model`, `requestID`; Errors: `AuthReadError`, `ProjectConversationCreationConflictError`, `ProjectConversationCreationUnavailableError`. | `coding.chat.session.create` |
 | DELETE | `/coding/chat/session/{sessionID}` | Delete right sidebar Chat session Errors: `LogFileNotFoundError`, `NotFoundError`, `SessionDeletionInProgressError`. | `coding.chat.session.delete` |
 | GET | `/coding/chat/session/{sessionID}` | Claim right sidebar Chat session Errors: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.get` |
 | PATCH | `/coding/chat/session/{sessionID}` | Update right sidebar Chat session Body: `title`; Errors: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.update` |
@@ -251,7 +251,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/coding/chat/sessions` | List right sidebar Chat sessions Errors: `BadRequestError`. | `coding.chat.sessions.list` |
 | POST | `/coding/cli/open` | Open coding CLI Body: `cliID`, `cwd`, `terminalProfileID`; Errors: `BadRequestError`. | `coding.cli.open` |
 | GET | `/coding/cli/profiles` | List installed coding CLIs Errors: `BadRequestError`. | `coding.cli.profiles` |
-| POST | `/coding/work/session` | Create right sidebar Work session Body: `model`; Errors: `AuthReadError`. | `coding.work.session.create` |
+| POST | `/coding/work/session` | Create right sidebar Work session Body: `model`, `requestID`; Errors: `AuthReadError`, `ProjectConversationCreationConflictError`, `ProjectConversationCreationUnavailableError`. | `coding.work.session.create` |
 | DELETE | `/coding/work/session/{sessionID}` | Delete right sidebar Work session Errors: `LogFileNotFoundError`, `NotFoundError`, `SessionDeletionInProgressError`. | `coding.work.session.delete` |
 | GET | `/coding/work/session/{sessionID}` | Claim right sidebar Work session Errors: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.get` |
 | PATCH | `/coding/work/session/{sessionID}` | Update right sidebar Work session Body: `title`; Errors: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.update` |

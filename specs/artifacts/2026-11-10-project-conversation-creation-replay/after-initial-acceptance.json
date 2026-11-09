@@ -1,0 +1,518 @@
+{
+  "aChat": {
+    "status": 201,
+    "requestID": "8414c519-6c16-42c3-bfec-69c6b23d13be",
+    "body": {
+      "session": {
+        "id": "ses_hhVW2veMf1cqqtLJLOCp",
+        "slug": "clever-pixel",
+        "version": "local",
+        "projectID": "prj_hfhuWhpGP9H9aSHhPPLp",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+        "title": "Chat",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "actual-same-create-request",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259065181,
+          "updated": 1794259065181
+        }
+      }
+    }
+  },
+  "replayA": {
+    "status": 201,
+    "requestID": "8288a654-8064-4791-9024-bdde9bc0451f",
+    "body": {
+      "session": {
+        "id": "ses_hhVW2veMf1cqqtLJLOCp",
+        "slug": "clever-pixel",
+        "projectID": "prj_hfhuWhpGP9H9aSHhPPLp",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+        "title": "Chat",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "actual-same-create-request",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259065181,
+          "updated": 1794259065181
+        }
+      }
+    }
+  },
+  "aNamed": {
+    "status": 200,
+    "requestID": "4d1ac4e6-c1d6-411a-9bbf-b2266ecf70ca",
+    "body": {
+      "session": {
+        "id": "ses_hhVW2veMf1cqqtLJLOCp",
+        "slug": "clever-pixel",
+        "projectID": "prj_hfhuWhpGP9H9aSHhPPLp",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+        "title": "One conversation after retry",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "actual-same-create-request",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259065181,
+          "updated": 1794259066411
+        }
+      }
+    }
+  },
+  "bWork": {
+    "status": 201,
+    "requestID": "9360e2d3-41f6-4915-8279-31573200b618",
+    "body": {
+      "session": {
+        "id": "ses_hV8JspIgZRAl0JFLB7ER",
+        "slug": "witty-panda",
+        "version": "local",
+        "projectID": "prj_h2JFMLd9dLXyl9UDaczH",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-b",
+        "title": "Work",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "actual-same-create-request",
+            "model": null
+          },
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259066068,
+          "updated": 1794259066068
+        }
+      }
+    }
+  },
+  "replayB": {
+    "status": 201,
+    "requestID": "eacfc9ea-ae56-4786-ae1a-c338a71474ba",
+    "body": {
+      "session": {
+        "id": "ses_hV8JspIgZRAl0JFLB7ER",
+        "slug": "witty-panda",
+        "projectID": "prj_h2JFMLd9dLXyl9UDaczH",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-b",
+        "title": "Work",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "actual-same-create-request",
+            "model": null
+          },
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259066068,
+          "updated": 1794259066068
+        }
+      }
+    }
+  },
+  "bNamed": {
+    "status": 200,
+    "requestID": "ee140a6f-5432-4a6b-908e-e3d268bdbb33",
+    "body": {
+      "session": {
+        "id": "ses_hV8JspIgZRAl0JFLB7ER",
+        "slug": "witty-panda",
+        "projectID": "prj_h2JFMLd9dLXyl9UDaczH",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-b",
+        "title": "One Work after parallel retry",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "actual-same-create-request",
+            "model": null
+          },
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259066068,
+          "updated": 1794259066463
+        }
+      }
+    }
+  },
+  "aWork": {
+    "status": 201,
+    "requestID": "f084a3f6-6525-4473-a355-bc028d15a37a",
+    "body": {
+      "session": {
+        "id": "ses_hIY8rJPUB6sM1NCX7ucB",
+        "slug": "silent-cactus",
+        "version": "local",
+        "projectID": "prj_hfhuWhpGP9H9aSHhPPLp",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+        "title": "Work",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "actual-same-create-request",
+            "model": null
+          },
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259065261,
+          "updated": 1794259065261
+        }
+      }
+    }
+  },
+  "bChat": {
+    "status": 201,
+    "requestID": "6490ba00-0342-46ce-900b-6b7fce4e1c4b",
+    "body": {
+      "session": {
+        "id": "ses_hJ06s19rmnU6Qzd7MPbh",
+        "slug": "kind-cactus",
+        "version": "local",
+        "projectID": "prj_h2JFMLd9dLXyl9UDaczH",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-b",
+        "title": "Chat",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "actual-same-create-request",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259066088,
+          "updated": 1794259066088
+        }
+      }
+    }
+  },
+  "independent": {
+    "status": 201,
+    "requestID": "50105e65-ab00-47cf-9961-018a6fe23930",
+    "body": {
+      "session": {
+        "id": "ses_hHGfRPkAsZhTvadLvxBK",
+        "slug": "calm-eagle",
+        "version": "local",
+        "projectID": "prj_hfhuWhpGP9H9aSHhPPLp",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+        "title": "Chat",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "independent-intent",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259066174,
+          "updated": 1794259066174
+        }
+      }
+    }
+  },
+  "independentNamed": {
+    "status": 200,
+    "requestID": "bfc0d9fb-c491-468f-8518-284e325c00b2",
+    "body": {
+      "session": {
+        "id": "ses_hHGfRPkAsZhTvadLvxBK",
+        "slug": "calm-eagle",
+        "projectID": "prj_hfhuWhpGP9H9aSHhPPLp",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+        "title": "Separate creation action",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "independent-intent",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259066174,
+          "updated": 1794259066507
+        }
+      }
+    }
+  },
+  "conflict": {
+    "status": 409,
+    "requestID": "305197f8-0bf2-439b-8b10-539fb6792433",
+    "body": {
+      "name": "ProjectConversationCreationConflictError",
+      "data": {
+        "message": "This conversation request is bound to a different creation input.",
+        "sessionID": "ses_hhVW2veMf1cqqtLJLOCp",
+        "reason": "identity"
+      }
+    }
+  },
+  "deleted": {
+    "status": 201,
+    "requestID": "16007f37-834c-4eed-addb-2072d0afeb32",
+    "body": {
+      "session": {
+        "id": "ses_h6nwwC2s6bR0Ic2onurz",
+        "slug": "nimble-meadow",
+        "version": "local",
+        "projectID": "prj_hfhuWhpGP9H9aSHhPPLp",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+        "title": "Chat",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "disposable-deleted-intent",
+            "model": null
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259066234,
+          "updated": 1794259066234
+        }
+      }
+    }
+  },
+  "terminal": {
+    "status": 200,
+    "requestID": "8b89831c-eaf9-41ff-8427-5535d6acd7fd",
+    "body": {
+      "ok": true,
+      "status": "physically_deleted",
+      "sessionID": "ses_h6nwwC2s6bR0Ic2onurz",
+      "sessionHistoryRetained": false,
+      "authorizationAuditRetained": true,
+      "cleanupOperationID": "cal_hSk8UXfzvBccd4ZwudOX",
+      "residue": []
+    }
+  },
+  "gone": {
+    "status": 410,
+    "requestID": "ed18449a-904e-418f-9cf8-fe99b4592b8d",
+    "body": {
+      "name": "ProjectConversationCreationUnavailableError",
+      "data": {
+        "message": "The accepted conversation was deleted.",
+        "sessionID": "ses_h6nwwC2s6bR0Ic2onurz"
+      }
+    }
+  },
+  "archived": {
+    "status": 200,
+    "requestID": "e64aa516-14b7-4bf4-8d79-99f70dde072b",
+    "body": {
+      "session": {
+        "id": "ses_hIY8rJPUB6sM1NCX7ucB",
+        "slug": "silent-cactus",
+        "projectID": "prj_hfhuWhpGP9H9aSHhPPLp",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+        "title": "Work",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "actual-same-create-request",
+            "model": null
+          },
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259065261,
+          "updated": 1794259066358,
+          "archived": 1794259066357
+        }
+      }
+    }
+  },
+  "archiveReplay": {
+    "status": 201,
+    "requestID": "6c9dec5a-9f1d-408c-80d5-0fa8e8e6942b",
+    "body": {
+      "session": {
+        "id": "ses_hIY8rJPUB6sM1NCX7ucB",
+        "slug": "silent-cactus",
+        "projectID": "prj_hfhuWhpGP9H9aSHhPPLp",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+        "title": "Work",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "projectConversationCreation": {
+            "version": 1,
+            "requestID": "actual-same-create-request",
+            "model": null
+          },
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          }
+        },
+        "time": {
+          "created": 1794259065261,
+          "updated": 1794259066358,
+          "archived": 1794259066357
+        }
+      }
+    }
+  },
+  "chats": {
+    "status": 200,
+    "requestID": "fc39069f-6f56-48e7-8f5d-9d85ead00664",
+    "body": {
+      "sessions": [
+        {
+          "id": "ses_hHGfRPkAsZhTvadLvxBK",
+          "slug": "calm-eagle",
+          "projectID": "prj_hfhuWhpGP9H9aSHhPPLp",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+          "title": "Separate creation action",
+          "version": "local",
+          "kind": "assistant",
+          "metadata": {
+            "projectConversationCreation": {
+              "version": 1,
+              "requestID": "independent-intent",
+              "model": null
+            },
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1794259066174,
+            "updated": 1794259066507
+          }
+        },
+        {
+          "id": "ses_hhVW2veMf1cqqtLJLOCp",
+          "slug": "clever-pixel",
+          "projectID": "prj_hfhuWhpGP9H9aSHhPPLp",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-a",
+          "title": "One conversation after retry",
+          "version": "local",
+          "kind": "assistant",
+          "metadata": {
+            "projectConversationCreation": {
+              "version": 1,
+              "requestID": "actual-same-create-request",
+              "model": null
+            },
+            "conversation": {
+              "experience": "chat",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1794259065181,
+            "updated": 1794259066411
+          }
+        }
+      ]
+    }
+  },
+  "work": {
+    "status": 200,
+    "requestID": "e39f9de1-86df-4f99-acd9-a0376277fdf5",
+    "body": {
+      "sessions": [
+        {
+          "id": "ses_hV8JspIgZRAl0JFLB7ER",
+          "slug": "witty-panda",
+          "projectID": "prj_h2JFMLd9dLXyl9UDaczH",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-after-b",
+          "title": "One Work after parallel retry",
+          "version": "local",
+          "kind": "assistant",
+          "metadata": {
+            "projectConversationCreation": {
+              "version": 1,
+              "requestID": "actual-same-create-request",
+              "model": null
+            },
+            "conversation": {
+              "experience": "work",
+              "surface": "right-sidebar"
+            }
+          },
+          "time": {
+            "created": 1794259066068,
+            "updated": 1794259066463
+          }
+        }
+      ]
+    }
+  }
+}

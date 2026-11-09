@@ -13,7 +13,9 @@ import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation
 import { requestID as resolveRequestID } from "../error-handler"
 import {
   RightSidebarConversationSessionResponse,
-  createRightSidebarConversationSession,
+  ProjectConversationCreationConflictError,
+  ProjectConversationCreationUnavailableError,
+  createProjectConversationSession,
   isRightSidebarConversationSession,
   listRightSidebarConversationSessions,
   rightSidebarConversationExperience,
@@ -47,6 +49,7 @@ const ConversationSessionSelectionInput = z.object({
 
 const ConversationSessionCreateInput = z
   .object({
+    requestID: z.string().trim().min(1).max(200).optional(),
     model: Config.ModelId.optional(),
   })
   .strict()
@@ -114,16 +117,24 @@ export function RightSidebarConversationRoutes(experience: ConversationExperienc
       "/session",
       describeRoute({
         summary: `Create right sidebar ${label} session`,
-        description: `Create a project-bound ${label} session for the right sidebar. Prompting and history use canonical /session routes.`,
+        description: `Create a project-bound ${label} session for the right sidebar. Reuse requestID to recover the same accepted session after a lost response. Prompting and history use canonical /session routes.`,
         operationId: `${operation}.session.create`,
         responses: {
           201: {
-            description: `${label} session`,
+            description: `${label} session accepted for this creation request`,
             content: {
               "application/json": {
                 schema: resolver(RightSidebarConversationSessionResponse),
               },
             },
+          },
+          409: {
+            description: "Creation input conflicts with the accepted identity or the accepted session is being deleted",
+            content: { "application/json": { schema: resolver(ProjectConversationCreationConflictError.Schema) } },
+          },
+          410: {
+            description: "The accepted session was deleted",
+            content: { "application/json": { schema: resolver(ProjectConversationCreationUnavailableError.Schema) } },
           },
           503: AuthReadUnavailableResponse,
         },
@@ -131,15 +142,19 @@ export function RightSidebarConversationRoutes(experience: ConversationExperienc
       validator("json", ConversationSessionCreateInput.optional()),
       async (c) => {
         const input = c.req.valid("json")
-        let initialOverlay: Record<string, unknown> | undefined
-        if (input?.model) {
-          const base = await Config.get()
-          const overlay = Config.Overlay.parse({ model: input.model })
-          const preview = Config.previewOverlayUpdate(base, {}, overlay)
-          await validateConfigModelReferences(preview.effective, "conversation.configOverlay")
-          initialOverlay = preview.nextOverlay
-        }
-        const session = await createRightSidebarConversationSession(experience, { configOverlay: initialOverlay })
+        const session = await createProjectConversationSession({
+          experience,
+          requestID: input?.requestID,
+          model: input?.model,
+          resolveConfigOverlay: async () => {
+            if (!input?.model) return undefined
+            const base = await Config.get()
+            const overlay = Config.Overlay.parse({ model: input.model })
+            const preview = Config.previewOverlayUpdate(base, {}, overlay)
+            await validateConfigModelReferences(preview.effective, "conversation.configOverlay")
+            return preview.nextOverlay
+          },
+        })
         return c.json({ session }, 201)
       },
     )

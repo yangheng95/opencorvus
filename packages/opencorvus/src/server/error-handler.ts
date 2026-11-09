@@ -68,6 +68,8 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "OwnedPromptControllersError") return 409
   if (err.name === "PublicSessionExecutionBusyError") return 409
   if (err.name === "PublicSessionPromptIdentityConflictError") return 409
+  if (err.name === "ProjectConversationCreationConflictError") return 409
+  if (err.name === "ProjectConversationCreationUnavailableError") return 410
   if (err.name === "GlobalChatStartIdentityConflictError") return 409
   if (err.name === "AnonymousProjectPromotionError") return 400
   if (err.name === "InvalidDirectoryError") return 400

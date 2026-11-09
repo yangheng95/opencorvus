@@ -1,8 +1,12 @@
 import type { Session } from "@/session"
 import type { SessionPrompt } from "@/session/prompt"
+import { randomUUID } from "node:crypto"
+import { NamedError } from "@opencorvus-ai/util/error"
 import z from "zod"
 import { Instance } from "@/project/instance"
+import { Identifier } from "@/id/id"
 import { Session as SessionApi } from "@/session"
+import { activeSessionDeletionFenceInTransaction } from "@/session/deletion-cleanup"
 import { SessionTable } from "@/session/session.sql"
 import { Database, NotFoundError, and, desc, eq, isNull, like, or, sql, type SQL } from "@/storage/db"
 import {
@@ -48,16 +52,19 @@ export const RightSidebarConversationSessionResponse = z.object({
   session: SessionApi.Info,
 })
 
-export async function createRightSidebarConversationSession(
+type RightSidebarConversationCreationOptions = {
+  id?: string
+  title?: string
+  configOverlay?: Record<string, unknown>
+  creationMetadata?: Record<string, unknown>
+  commitInTransaction?: (db: Database.TxOrDb, session: SessionApi.Info) => void
+}
+
+function persistRightSidebarConversationSession(
+  db: Database.TxOrDb,
   experience: ConversationExperience,
-  options?: {
-    id?: string
-    title?: string
-    configOverlay?: Record<string, unknown>
-    creationMetadata?: Record<string, unknown>
-    commitInTransaction?: (db: Database.TxOrDb, session: SessionApi.Info) => void
-  },
-) {
+  options?: RightSidebarConversationCreationOptions,
+): Session.Info {
   // The validated initial overlay is part of the creation input and commits
   // in the Session insert itself — a published conversation Session carries
   // its requested model from its first durable instant, with no post-create
@@ -73,11 +80,84 @@ export async function createRightSidebarConversationSession(
       ...(options?.configOverlay ? { configOverlay: options.configOverlay } : {}),
     },
   })
-  return Database.immediateTransaction((db) => {
-    const session = SessionApi.persistPreparedNextInTransaction(db, prepared)
-    options?.commitInTransaction?.(db, session)
-    return session
-  })
+  const session = SessionApi.persistPreparedNextInTransaction(db, prepared)
+  options?.commitInTransaction?.(db, session)
+  return session
+}
+
+export async function createRightSidebarConversationSession(
+  experience: ConversationExperience,
+  options?: RightSidebarConversationCreationOptions,
+) {
+  return Database.immediateTransaction((db) => persistRightSidebarConversationSession(db, experience, options))
+}
+
+const ProjectConversationCreation = z
+  .object({ version: z.literal(1), requestID: z.string(), model: z.string().nullable() })
+  .strict()
+
+export const ProjectConversationCreationConflictError = NamedError.create(
+  "ProjectConversationCreationConflictError",
+  z.object({ message: z.string(), sessionID: z.string(), reason: z.enum(["identity", "deletion_in_progress"]) }),
+)
+
+export const ProjectConversationCreationUnavailableError = NamedError.create(
+  "ProjectConversationCreationUnavailableError",
+  z.object({ message: z.string(), sessionID: z.string() }),
+)
+
+/** The project, directory and experience own one durable Session per explicit author intent. */
+export async function createProjectConversationSession(input: {
+  experience: ConversationExperience
+  requestID?: string
+  model?: string
+  resolveConfigOverlay: () => Promise<Record<string, unknown> | undefined>
+}): Promise<Session.Info> {
+  const { directory, project, projectGeneration } = Instance
+  const { experience } = input
+  const identity = { version: 1, requestID: input.requestID ?? randomUUID(), model: input.model ?? null } as const
+  const sessionID = Identifier.deterministic(
+    "session",
+    JSON.stringify(["project-conversation-creation-v1", project.id, projectGeneration, directory, experience, identity.requestID]),
+  )
+  const find = (db: Database.TxOrDb): Session.Info | undefined => {
+    if (SessionApi.deletedInTransaction(db, sessionID)) {
+      throw new ProjectConversationCreationUnavailableError({ message: "The accepted conversation was deleted.", sessionID })
+    }
+    if (activeSessionDeletionFenceInTransaction(db, sessionID)) {
+      throw new ProjectConversationCreationConflictError({
+        message: "Deletion of the accepted conversation is in progress.",
+        sessionID,
+        reason: "deletion_in_progress",
+      })
+    }
+    const row = db.select().from(SessionTable).where(eq(SessionTable.id, sessionID)).get()
+    if (!row) return undefined
+    const accepted = SessionApi.fromRow(row)
+    const binding = ProjectConversationCreation.safeParse(accepted.metadata?.projectConversationCreation)
+    if (
+      accepted.projectID !== project.id || accepted.directory !== directory || accepted.parentID !== undefined ||
+      rightSidebarConversationExperience(accepted) !== experience || !binding.success ||
+      binding.data.requestID !== identity.requestID || binding.data.model !== identity.model
+    ) {
+      throw new ProjectConversationCreationConflictError({
+        message: "This conversation request is bound to a different creation input.",
+        sessionID,
+        reason: "identity",
+      })
+    }
+    return accepted
+  }
+  const accepted = Database.use(find)
+  if (accepted) return accepted
+  const configOverlay = await input.resolveConfigOverlay()
+  return Database.immediateTransaction((db) =>
+    find(db) ?? persistRightSidebarConversationSession(db, experience, {
+      id: sessionID,
+      configOverlay,
+      creationMetadata: { projectConversationCreation: identity },
+    }),
+  )
 }
 
 export function applyRightSidebarConversationPromptOverlay<T extends Omit<SessionPrompt.PromptInput, "sessionID">>(

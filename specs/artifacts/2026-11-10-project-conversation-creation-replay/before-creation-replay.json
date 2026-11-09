@@ -1,0 +1,130 @@
+[
+  {
+    "mode": "project-chat",
+    "route": "/coding/chat/session",
+    "parallel": false,
+    "identity": "isolated-conversation-project-chat-intent",
+    "runs": [
+      {
+        "status": 201,
+        "requestID": "76124ecc-6fa5-4b5c-bc0d-b428cc3fba5a",
+        "session": {
+          "id": "ses_-zUPUAImJzzGUUNfVlYR",
+          "projectID": "prj_hWTrZZBJ3KWnqaZPfMpV",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-a",
+          "experience": "chat"
+        }
+      },
+      {
+        "status": 201,
+        "requestID": "8203ba22-1c09-4f94-bc03-e92bbc3df09b",
+        "session": {
+          "id": "ses_-zUPUAIl6zz3DfFdluKh",
+          "projectID": "prj_hWTrZZBJ3KWnqaZPfMpV",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-a",
+          "experience": "chat"
+        }
+      }
+    ],
+    "distinctSessions": 2,
+    "distinctProjects": 1,
+    "projected": [
+      "ses_-zUPUAIl6zz3DfFdluKh",
+      "ses_-zUPUAImJzzGUUNfVlYR"
+    ]
+  },
+  {
+    "mode": "project-work",
+    "route": "/coding/work/session",
+    "parallel": true,
+    "identity": "isolated-conversation-project-work-intent",
+    "runs": [
+      {
+        "status": 201,
+        "requestID": "04323903-956a-424c-a1bc-5a4588cd7c53",
+        "session": {
+          "id": "ses_-zUPUAIYrzzeIB3cI9jv",
+          "projectID": "prj_h6oUvBZoO5PSy0ZiMdVw",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-b",
+          "experience": "work"
+        }
+      },
+      {
+        "status": 201,
+        "requestID": "7c348c7b-80af-4c47-b506-1931651472ca",
+        "session": {
+          "id": "ses_-zUPUAIYfzzluLIhAN0d",
+          "projectID": "prj_h6oUvBZoO5PSy0ZiMdVw",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\project-b",
+          "experience": "work"
+        }
+      }
+    ],
+    "distinctSessions": 2,
+    "distinctProjects": 1,
+    "projected": [
+      "ses_-zUPUAIYfzzluLIhAN0d",
+      "ses_-zUPUAIYrzzeIB3cI9jv"
+    ]
+  },
+  {
+    "mode": "global-chat",
+    "route": "/global/chat",
+    "parallel": false,
+    "identity": "isolated-conversation-global-chat-intent",
+    "runs": [
+      {
+        "status": 201,
+        "requestID": "5bb639e8-5c82-415d-a7a4-dd227e55346f",
+        "session": {
+          "id": "ses_-zUPUAIFtzz5TuU3Q2k1",
+          "projectID": "prj_hi1gDEBo4HZjg5F79ich",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\profile-before-ready\\data\\projects\\2026\\11\\10\\14b1c424-3961-432c-8abf-beced0b196cb",
+          "experience": "chat"
+        }
+      },
+      {
+        "status": 201,
+        "requestID": "f0294cc6-0dd6-417e-975b-3abc6be190fd",
+        "session": {
+          "id": "ses_-zUPUAHvjzz6azsLhl66",
+          "projectID": "prj_hztSSdKqssm7o9S7goWk",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\profile-before-ready\\data\\projects\\2026\\11\\10\\726a67cf-b0f5-4af7-8351-f8685e0ff718",
+          "experience": "chat"
+        }
+      }
+    ],
+    "distinctSessions": 2,
+    "distinctProjects": 2
+  },
+  {
+    "mode": "global-work",
+    "route": "/global/work",
+    "parallel": true,
+    "identity": "isolated-conversation-global-work-intent",
+    "runs": [
+      {
+        "status": 201,
+        "requestID": "96981e08-40fe-431b-850a-e5f3786071e9",
+        "session": {
+          "id": "ses_-zUPUAHQUzzXo4TroJsp",
+          "projectID": "prj_hH75DDbi158m0QYm7KEn",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\profile-before-ready\\data\\projects\\2026\\11\\10\\5f4c19d1-2c3a-4b3b-8ce1-58d8263b0136",
+          "experience": "work"
+        }
+      },
+      {
+        "status": 201,
+        "requestID": "64cfdbf6-aed6-4cbd-b70f-119f185ad768",
+        "session": {
+          "id": "ses_-zUPUAHYOzzmwQ7ixF1Y",
+          "projectID": "prj_hJK3jRwAhXJmegwDho8R",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b154\\profile-before-ready\\data\\projects\\2026\\11\\10\\7edfdc4e-239c-4755-a1dd-5195178f59f2",
+          "experience": "work"
+        }
+      }
+    ],
+    "distinctSessions": 2,
+    "distinctProjects": 2
+  }
+]

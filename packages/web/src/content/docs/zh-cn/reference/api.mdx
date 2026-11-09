@@ -241,7 +241,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 
 | Method | 路径 | 说明 | operationId |
 |---|---|---|---|
-| POST | `/coding/chat/session` | Create right sidebar Chat session 请求体: `model`; 错误: `AuthReadError`. | `coding.chat.session.create` |
+| POST | `/coding/chat/session` | Create right sidebar Chat session 请求体: `model`, `requestID`; 错误: `AuthReadError`, `ProjectConversationCreationConflictError`, `ProjectConversationCreationUnavailableError`. | `coding.chat.session.create` |
 | DELETE | `/coding/chat/session/{sessionID}` | Delete right sidebar Chat session 错误: `LogFileNotFoundError`, `NotFoundError`, `SessionDeletionInProgressError`. | `coding.chat.session.delete` |
 | GET | `/coding/chat/session/{sessionID}` | Claim right sidebar Chat session 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.get` |
 | PATCH | `/coding/chat/session/{sessionID}` | Update right sidebar Chat session 请求体: `title`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.chat.session.update` |
@@ -251,7 +251,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/coding/chat/sessions` | List right sidebar Chat sessions 错误: `BadRequestError`. | `coding.chat.sessions.list` |
 | POST | `/coding/cli/open` | Open coding CLI 请求体: `cliID`, `cwd`, `terminalProfileID`; 错误: `BadRequestError`. | `coding.cli.open` |
 | GET | `/coding/cli/profiles` | List installed coding CLIs 错误: `BadRequestError`. | `coding.cli.profiles` |
-| POST | `/coding/work/session` | Create right sidebar Work session 请求体: `model`; 错误: `AuthReadError`. | `coding.work.session.create` |
+| POST | `/coding/work/session` | Create right sidebar Work session 请求体: `model`, `requestID`; 错误: `AuthReadError`, `ProjectConversationCreationConflictError`, `ProjectConversationCreationUnavailableError`. | `coding.work.session.create` |
 | DELETE | `/coding/work/session/{sessionID}` | Delete right sidebar Work session 错误: `LogFileNotFoundError`, `NotFoundError`, `SessionDeletionInProgressError`. | `coding.work.session.delete` |
 | GET | `/coding/work/session/{sessionID}` | Claim right sidebar Work session 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.get` |
 | PATCH | `/coding/work/session/{sessionID}` | Update right sidebar Work session 请求体: `title`; 错误: `LogFileNotFoundError`, `NotFoundError`. | `coding.work.session.update` |

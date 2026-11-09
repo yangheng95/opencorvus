@@ -1430,12 +1430,13 @@ export class Session extends HeyApiClient {
   /**
    * Create right sidebar Chat session
    *
-   * Create a project-bound Chat session for the right sidebar. Prompting and history use canonical /session routes.
+   * Create a project-bound Chat session for the right sidebar. Reuse requestID to recover the same accepted session after a lost response. Prompting and history use canonical /session routes.
    */
   public create<ThrowOnError extends boolean = false>(
     parameters?: {
       directory?: string
       model?: string
+      requestID?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -1446,6 +1447,7 @@ export class Session extends HeyApiClient {
           args: [
             { in: "query", key: "directory" },
             { in: "body", key: "model" },
+            { in: "body", key: "requestID" },
           ],
         },
       ],
@@ -1817,12 +1819,13 @@ export class Session2 extends HeyApiClient {
   /**
    * Create right sidebar Work session
    *
-   * Create a project-bound Work session for the right sidebar. Prompting and history use canonical /session routes.
+   * Create a project-bound Work session for the right sidebar. Reuse requestID to recover the same accepted session after a lost response. Prompting and history use canonical /session routes.
    */
   public create<ThrowOnError extends boolean = false>(
     parameters?: {
       directory?: string
       model?: string
+      requestID?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
@@ -1833,6 +1836,7 @@ export class Session2 extends HeyApiClient {
           args: [
             { in: "query", key: "directory" },
             { in: "body", key: "model" },
+            { in: "body", key: "requestID" },
           ],
         },
       ],

@@ -4253,6 +4253,23 @@ export type Project = {
   worktree: string
 }
 
+export type ProjectConversationCreationConflictError = {
+  data: {
+    message: string
+    reason: "identity" | "deletion_in_progress"
+    sessionID: string
+  }
+  name: "ProjectConversationCreationConflictError"
+}
+
+export type ProjectConversationCreationUnavailableError = {
+  data: {
+    message: string
+    sessionID: string
+  }
+  name: "ProjectConversationCreationUnavailableError"
+}
+
 export type ProjectDeleteResult = {
   deletedTaskCount: number
   directory: string
@@ -7562,6 +7579,7 @@ export type ChatCapabilityUpdateResponse = ChatCapabilityUpdateResponses[keyof C
 export type CodingChatSessionCreateData = {
   body?: {
     model?: string
+    requestID?: string
   }
   path?: never
   query?: {
@@ -7575,6 +7593,14 @@ export type CodingChatSessionCreateData = {
 
 export type CodingChatSessionCreateErrors = {
   /**
+   * Creation input conflicts with the accepted identity or the accepted session is being deleted
+   */
+  409: ProjectConversationCreationConflictError
+  /**
+   * The accepted session was deleted
+   */
+  410: ProjectConversationCreationUnavailableError
+  /**
    * Saved Provider credentials could not be observed safely
    */
   503: AuthReadError
@@ -7584,7 +7610,7 @@ export type CodingChatSessionCreateError = CodingChatSessionCreateErrors[keyof C
 
 export type CodingChatSessionCreateResponses = {
   /**
-   * Chat session
+   * Chat session accepted for this creation request
    */
   201: {
     session: Session
@@ -8009,6 +8035,7 @@ export type CodingCliProfilesResponse = CodingCliProfilesResponses[keyof CodingC
 export type CodingWorkSessionCreateData = {
   body?: {
     model?: string
+    requestID?: string
   }
   path?: never
   query?: {
@@ -8022,6 +8049,14 @@ export type CodingWorkSessionCreateData = {
 
 export type CodingWorkSessionCreateErrors = {
   /**
+   * Creation input conflicts with the accepted identity or the accepted session is being deleted
+   */
+  409: ProjectConversationCreationConflictError
+  /**
+   * The accepted session was deleted
+   */
+  410: ProjectConversationCreationUnavailableError
+  /**
    * Saved Provider credentials could not be observed safely
    */
   503: AuthReadError
@@ -8031,7 +8066,7 @@ export type CodingWorkSessionCreateError = CodingWorkSessionCreateErrors[keyof C
 
 export type CodingWorkSessionCreateResponses = {
   /**
-   * Work session
+   * Work session accepted for this creation request
    */
   201: {
     session: Session
