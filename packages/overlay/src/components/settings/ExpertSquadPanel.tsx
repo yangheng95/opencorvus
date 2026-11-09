@@ -4,14 +4,14 @@ import {
   parseSquadInstallationKey,
   type SquadRefreshSelection,
 } from "../../services/expert-squad-selection"
-import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
+import { ApiAuthorityChangedError, ApiError, captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
 import { formatErrorDetails } from "../../services/diagnostics"
 import { Feedback } from "../ui/Feedback"
 // ── ExpertSquadPanel ──
 // Dynamic expert-squad catalog surface. Active selection remains config-owned
 // via prompt_profile.active; this panel edits only that existing config field.
 
-import { createEffect, createMemo, createSignal, For, Show, type JSX } from "solid-js"
+import { batch, createEffect, createMemo, createSignal, For, onCleanup, Show, type JSX } from "solid-js"
 import { localeTag, t } from "../../utils/i18n"
 import { expertSquadDescription } from "../../utils/expert-squad-description"
 import { renderMarkdown } from "../../utils/markdown"
@@ -254,6 +254,23 @@ type InstalledSquadSection = "overview" | "agents" | "configuration" | "evolutio
 type CatalogDiscoveryIssue = Extract<ExpertSquadDiagnosticsPage["entries"][number], { kind: "issue" }>["issue"]
 type CatalogDiagnosticsSnapshot = Pick<ExpertSquadDiagnosticsPage, "entries" | "next_cursor" | "total_count">
 type DiagnosticContinuation = { kind: "loading" } | { kind: "failed"; error: unknown }
+type InstallationContinuationFailure = { error: unknown; action: "retry" | "refresh" }
+type InstallationContinuation =
+  | { kind: "loading"; failure?: InstallationContinuationFailure }
+  | { kind: "failed"; failure: InstallationContinuationFailure }
+
+function installationContinuationFailure(error: unknown): InstallationContinuationFailure {
+  if (error instanceof ApiError && error.body && typeof error.body === "object" && "name" in error.body) {
+    if (
+      (error.status === 409 && error.body.name === "ExpertSquadCatalogRevisionConflictError") ||
+      (error.status === 400 && error.body.name === "ExpertSquadCatalogCursorInvalidError")
+    ) {
+      return { error, action: "refresh" }
+    }
+  }
+  return { error, action: "retry" }
+}
+
 type InstalledDetailRead = { identity: string } & (
   | { kind: "loading" }
   | { kind: "failed" | "retrying"; error: unknown }
@@ -303,6 +320,15 @@ export default function ExpertSquadPanel() {
   const [catalog, setCatalog] = createSignal<ExpertSquadCatalog | null>(null)
   const [catalogEntries, setCatalogEntries] = createSignal<ExpertSquadOption[]>([])
   const [catalogNextCursor, setCatalogNextCursor] = createSignal<string | null>(null)
+  const [installationContinuation, setInstallationContinuation] = createSignal<InstallationContinuation>()
+  const installationPageBusy = () => installationContinuation()?.kind === "loading"
+  const installationPageFailure = () => installationContinuation()?.failure
+  const installationPageActionLabel = () => {
+    const failure = installationPageFailure()
+    if (installationPageBusy()) return t(failure ? "common.retrying" : "common.loading")
+    if (failure?.action === "refresh") return t("expert_squad.refresh_catalog")
+    return t(failure ? "common.retry" : "expert_squad.load_more")
+  }
   const [inventoryStatus, setInventoryStatus] = createSignal<ExpertSquadInventoryStatus | null>(null)
   const [catalogDiagnostics, setCatalogDiagnostics] = createSignal<CatalogDiagnosticsSnapshot | null>(null)
   const [catalogDiagnosticsOpen, setCatalogDiagnosticsOpen] = createSignal(false)
@@ -346,11 +372,17 @@ export default function ExpertSquadPanel() {
   let installedLayout: HTMLDivElement | undefined
   let installedBackButton: HTMLButtonElement | undefined
   let installedDetailHeading: HTMLHeadingElement | undefined
+  let installationsMoreButton: HTMLButtonElement | undefined
+  let installationsFooter: HTMLDivElement | undefined
   let diagnosticDisclosure: HTMLDetailsElement | undefined
   let diagnosticsMoreButton: HTMLButtonElement | undefined
 
   const currentScope = createMemo(() => expertSquadCatalogScope())
   const currentScopeIdentity = createMemo(() => catalogScopeIdentity(currentScope()))
+  onCleanup(() => {
+    loadSequence++
+    installedFocusSequence++
+  })
   createEffect(() => {
     currentScopeIdentity()
     installedFocusSequence++
@@ -384,6 +416,14 @@ export default function ExpertSquadPanel() {
     )
   }
 
+  function installedRow(key: string) {
+    return installedLayout?.querySelector<HTMLButtonElement>(`[data-squad-selection-key="${CSS.escape(key)}"]`)
+  }
+
+  function selectedInstalledFilter() {
+    return installedLayout?.querySelector<HTMLButtonElement>('[data-ui="expert-squad-catalog-filter"][aria-pressed="true"]')
+  }
+
   function returnToInstalledCatalog() {
     const key = installedOpenerKey
     changeInstalledView(
@@ -391,10 +431,7 @@ export default function ExpertSquadPanel() {
         installedOpenerKey = ""
         setDetailOpen(false)
       },
-      () => !detailOpen()
-        ? installedLayout?.querySelector<HTMLButtonElement>(`[data-squad-selection-key="${CSS.escape(key)}"]`)
-          ?? installedLayout?.querySelector<HTMLButtonElement>('[data-ui="expert-squad-catalog-filter"][aria-pressed="true"]')
-        : undefined,
+      () => !detailOpen() ? installedRow(key) ?? selectedInstalledFilter() : undefined,
     )
   }
 
@@ -598,6 +635,7 @@ export default function ExpertSquadPanel() {
     scope = expertSquadCatalogScope(),
     expectedScopeIdentity = catalogScopeIdentity(scope),
   ): Promise<void> {
+    setInstallationContinuation(undefined)
     if (scope.kind === "unavailable" || scope.kind === "pending") {
       loadSequence++
       setDiagnosticContinuation(null)
@@ -745,28 +783,79 @@ export default function ExpertSquadPanel() {
   async function loadMoreCatalog(): Promise<void> {
     const scope = currentScope()
     const cursor = catalogNextCursor()
-    if (!cursor || (scope.kind !== "project" && scope.kind !== "session") || loading()) return
+    if (!cursor || (scope.kind !== "project" && scope.kind !== "session") || loading() || installationPageBusy()) return
     const sequence = loadSequence
     const expectedScopeIdentity = currentScopeIdentity()
-    setLoading(true)
+    const authority = captureApiAuthority()
+    const origin = document.activeElement === installationsMoreButton ? installationsMoreButton : undefined
+    const owns = () =>
+      sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity && catalogNextCursor() === cursor
+    setInstallationContinuation({ kind: "loading", failure: installationPageFailure() })
     try {
       const page = await searchExpertSquads({
         directory: scope.directory,
         view: "installations",
         cursor,
         limit: 20,
+        authority,
       })
-      if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
-      setCatalogEntries((current) => {
-        const identities = new Set(current.map(squadSelectionKey))
-        return [...current, ...page.entries.filter((entry) => !identities.has(squadSelectionKey(entry)))]
-      })
-      setCatalogNextCursor(page.next_cursor)
+      if (!owns()) return
+      if (!isApiAuthorityCurrent(authority)) {
+        setInstallationContinuation(undefined)
+        return
+      }
+      const existing = new Set(squads().map(squadSelectionKey))
+      const additions = page.entries.filter((entry) => !existing.has(squadSelectionKey(entry)))
+      const accept = () =>
+        batch(() => {
+          setCatalogEntries((current) => [...current, ...additions])
+          setCatalogNextCursor(page.next_cursor)
+          setInstallationContinuation(undefined)
+        })
+      if (origin && document.activeElement === origin) {
+        const addedKeys = new Set(additions.map(squadSelectionKey))
+        changeInstalledView(accept, () => {
+          if (detailOpen()) return
+          const firstVisible = filteredSquads().find((entry) => addedKeys.has(squadSelectionKey(entry)))
+          return (firstVisible ? installedRow(squadSelectionKey(firstVisible)) : undefined)
+            ?? (installationsMoreButton?.isConnected ? installationsMoreButton : selectedInstalledFilter())
+        })
+      } else {
+        accept()
+      }
     } catch (error) {
-      if (!(error instanceof ApiAuthorityChangedError) && sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setCatalogError({ error })
-    } finally {
-      if (sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setLoading(false)
+      if (owns()) {
+        const failure = error instanceof ApiAuthorityChangedError || !isApiAuthorityCurrent(authority)
+          ? undefined
+          : installationContinuationFailure(error)
+        setInstallationContinuation(failure ? { kind: "failed", failure } : undefined)
+        if (failure && installationsFooter?.contains(document.activeElement)) {
+          installationsFooter.scrollIntoView({ block: "nearest" })
+        }
+      }
     }
+  }
+
+  async function runInstallationContinuationAction(): Promise<void> {
+    if (loading() || installationPageBusy()) return
+    if (installationPageFailure()?.action !== "refresh") return loadMoreCatalog()
+
+    const origin = document.activeElement === installationsMoreButton ? installationsMoreButton : undefined
+    const scope = currentScopeIdentity()
+    const authority = captureApiAuthority()
+    const navigation = installedFocusSequence
+    const refresh = refreshCatalog()
+    const sequence = loadSequence
+    try {
+      await refresh
+    } catch {
+      return // The full refresh owns its error feedback.
+    }
+    if (!origin || origin.isConnected || document.activeElement !== document.body || detailOpen()) return
+    if (sequence !== loadSequence || currentScopeIdentity() !== scope || navigation !== installedFocusSequence || !isApiAuthorityCurrent(authority)) return
+    if (!installedLayout?.isConnected) return
+    const target = installationsMoreButton?.isConnected ? installationsMoreButton : selectedInstalledFilter()
+    target?.focus()
   }
 
   async function loadMoreDiagnostics(): Promise<void> {
@@ -827,7 +916,7 @@ export default function ExpertSquadPanel() {
     if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity || !isApiAuthorityCurrent(authority)) return
     const target = diagnosticDisclosure?.isConnected
       ? diagnosticDisclosure.querySelector<HTMLElement>("summary")
-      : installedLayout?.querySelector<HTMLElement>('[data-ui="expert-squad-catalog-filter"][aria-pressed="true"]')
+      : selectedInstalledFilter()
     target?.focus()
   }
 
@@ -840,6 +929,7 @@ export default function ExpertSquadPanel() {
     if (scope.kind === "unavailable" || scope.kind === "pending") {
       loadSequence++
       marketLoadSequence++
+      setInstallationContinuation(undefined)
       setDiagnosticContinuation(null)
       setCatalog(null)
       setCatalogEntries([])
@@ -1672,15 +1762,29 @@ export default function ExpertSquadPanel() {
                       </For>
                     </SettingsSurface>
                     <Show when={catalogNextCursor()}>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="md"
-                        tone="neutral"
-                        onClick={() => void loadMoreCatalog()}
-                      >
-                        {t("expert_squad.load_more")}
-                      </Button>
+                      <div ref={installationsFooter} class="expert-squad-installation-footer">
+                        <Button
+                          ref={installationsMoreButton}
+                          type="button"
+                          variant="outline"
+                          size="md"
+                          tone="neutral"
+                          aria-disabled={installationPageBusy() || undefined}
+                          aria-busy={installationPageBusy() || undefined}
+                          onClick={() => void runInstallationContinuationAction()}
+                        >
+                          {installationPageActionLabel()}
+                        </Button>
+                        <Show when={installationPageFailure()}>
+                          {(failure) => (
+                            <Feedback tone="error" details={formatErrorDetails(failure().error)}>
+                              {t(failure().action === "refresh"
+                                ? "expert_squad.installation_page_refresh_needed"
+                                : "expert_squad.installation_page_failed")}
+                            </Feedback>
+                          )}
+                        </Show>
+                      </div>
                     </Show>
                   </Show>
                 </Show>

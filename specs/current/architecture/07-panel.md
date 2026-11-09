@@ -5372,6 +5372,11 @@ and the focusable Retry action. A successful retry moves still-owned focus from
 that retiring action to the recovered installation heading.
 Installed package rows identify each physical installation by its localized scope
 and canonical namespace/ID, including when several rows share a display name.
+An installed catalog continuation keeps the accepted rows and selected filter
+available during reads and failures. The footer retains the original diagnostic
+and retries the same page, or offers a full catalog refresh for a rejected cursor.
+A successful continuation hands its still-owned focus to the first new visible
+physical installation row.
 Expert Squad discovery issues and precedence notices belong to the catalog list.
 Issues show their localized discovery phase, exact location and expandable
 original diagnostics. The selected installation retains its own precedence feedback.

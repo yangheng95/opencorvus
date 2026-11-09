@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [已安装专家团续页保留可用目录](records/2026-11/2026-11-10-installed-expert-squad-catalog-continuation.md)
 - [已安装专家团详情重试保留诊断与焦点](records/2026-11/2026-11-10-installed-expert-squad-detail-retry.md)
 - [多步任务技能详情保持打开的身份](records/2026-11/2026-11-09-mission-skill-detail-identity.md)
 - [多步任务技能支持跨字段组合搜索](records/2026-11/2026-11-09-mission-skill-search-terms.md)

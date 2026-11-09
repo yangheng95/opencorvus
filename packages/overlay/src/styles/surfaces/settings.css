@@ -1976,6 +1976,12 @@ button.s-row:focus-visible {
   min-width: 0;
 }
 
+.expert-squad-installation-footer {
+  display: grid;
+  gap: var(--ui-gap-lg);
+  min-width: 0;
+}
+
 .expert-squad-market-entry-panel {
   max-width: none;
 }

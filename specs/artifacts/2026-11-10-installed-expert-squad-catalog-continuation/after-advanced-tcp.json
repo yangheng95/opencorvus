@@ -1,0 +1,70 @@
+{
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "fba16c3c-242b-4b91-9a29-d84e75a0b8e1",
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/catalog",
+      "operationId": "expertSquad.catalog",
+      "status": 200,
+      "requestID": "2985b631-d089-4462-9fa6-2312f1f71f73",
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/search",
+      "operationId": "expertSquad.search",
+      "status": 200,
+      "requestID": "ab04398b-3f96-4184-a6f4-05d3bbf05cf2",
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/search",
+      "operationId": "expertSquad.search",
+      "status": 200,
+      "requestID": "32c631b3-e7f7-409d-9186-50006d6f7301",
+      "schemaValid": true
+    }
+  ],
+  "projectRecord": "prj_hXYBF9Bf0LBu3H56dNBr",
+  "active": {
+    "project": "dynamic",
+    "effective": "dynamic"
+  },
+  "total": 28,
+  "first": [
+    "advanced",
+    "base",
+    "dynamic",
+    "research-studio",
+    "squad-sdk",
+    "deep-research",
+    "page-review-01",
+    "page-review-02",
+    "page-review-03",
+    "page-review-04",
+    "page-review-05",
+    "page-review-06",
+    "page-review-07",
+    "page-review-08",
+    "page-review-09",
+    "page-review-10",
+    "page-review-11",
+    "page-review-12",
+    "page-review-13",
+    "page-review-14"
+  ],
+  "second": [
+    "page-review-15",
+    "page-review-16",
+    "page-review-17",
+    "page-review-18",
+    "page-review-19",
+    "page-review-20",
+    "page-review-21",
+    "page-review-22"
+  ]
+}
