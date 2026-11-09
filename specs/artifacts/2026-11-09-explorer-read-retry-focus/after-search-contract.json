@@ -1,0 +1,34 @@
+{
+  "phase": "after",
+  "operation": "find.files",
+  "checks": [
+    {
+      "type": "file",
+      "status": 200,
+      "requestID": "0b6df5bf-bc4f-4b33-b4bd-0dbe06125210",
+      "data": [
+        "plans\\reference\\note.txt"
+      ]
+    },
+    {
+      "type": "owned-invalid-kind",
+      "status": 400,
+      "requestID": "c724e166-7a28-40a0-bcd4-4cc78a17dfbf",
+      "data": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "invalid_value",
+            "path": [
+              "type"
+            ],
+            "message": "Invalid option: expected one of \"file\"|\"directory\""
+          }
+        ],
+        "success": false
+      }
+    }
+  ]
+}

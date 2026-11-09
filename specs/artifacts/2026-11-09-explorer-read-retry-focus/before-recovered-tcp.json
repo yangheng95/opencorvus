@@ -1,0 +1,66 @@
+{
+  "phase": "before",
+  "state": "recovered",
+  "operation": "file.list",
+  "checks": [
+    {
+      "relative": "plans",
+      "status": 200,
+      "children": [
+        {
+          "name": "drafts",
+          "path": "plans\\drafts",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b106\\project-before\\plans\\drafts",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        },
+        {
+          "name": "reference",
+          "path": "plans\\reference",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b106\\project-before\\plans\\reference",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "relative": "plans/drafts",
+      "status": 200,
+      "children": [],
+      "schemaValid": true
+    },
+    {
+      "relative": "plans/reference",
+      "status": 200,
+      "children": [
+        {
+          "name": "note.txt",
+          "path": "plans\\reference\\note.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b106\\project-before\\plans\\reference\\note.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "relative": "archive",
+      "status": 200,
+      "children": [
+        {
+          "name": "archived.txt",
+          "path": "archive\\archived.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b106\\project-before\\archive\\archived.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ],
+      "schemaValid": true
+    }
+  ]
+}

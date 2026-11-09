@@ -1,0 +1,67 @@
+{
+  "searchFault": [
+    "\t\t\t\t\t\t\t\t\t\t83 search text field (settable) Description: Search files, Value: note",
+    "\t\t\t\t\t\t\t\t\t\t102 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t103 text Details",
+    "\t\t\t\t\t\t\t\t\t\t104 button Retry",
+    "The focused UI element is 83 search text field (settable) Description: Search files, Value: note"
+  ],
+  "searchPressedAt": "2026-11-09T10:41:00.559Z",
+  "searchSettled": [
+    "\t\t\t\t\t\t\t\t\t\t83 search text field (settable) Description: Search files, Value: note",
+    "\t\t\t\t\t\t\t\t\t102 button note.txt plans/reference, Help: plans\\reference\\note.txt, ID: contextmenu-cl-242-trigger",
+    "\t\t\t\t\t\t\t\t\t\t103 text note.txt",
+    "The focused UI element is 83 search text field (settable) Description: Search files, Value: note"
+  ],
+  "searchDown": "The focused UI element is 102 button note.txt plans/reference, Help: plans\\reference\\note.txt, ID: contextmenu-cl-242-trigger",
+  "rootFault": [
+    "\t\t\t\t\t\t\t\t\t\t83 search text field (settable) 搜索文件",
+    "\t\t\t\t\t\t\t\t\t\t107 text 请求的文件或文件夹不可用：missing-owned-root",
+    "\t\t\t\t\t\t\t\t\t\t108 button (collapsed) 详细信息, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t109 text 详细信息",
+    "\t\t\t\t\t\t\t\t\t\t110 button 重试",
+    "The focused UI element is 101 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-335-trigger, Secondary Actions: Expand"
+  ],
+  "rootPressedAt": "2026-11-09T10:41:21.383Z",
+  "rootSettled": [
+    "\t\t\t\t\t\t\t\t\t\t83 search text field (settable) 搜索文件",
+    "\t\t\t\t\t\t\t\t\t\t107 text 无法加载 plans/drafts 请求的文件或文件夹不可用：missing-owned-plans-drafts",
+    "\t\t\t\t\t\t\t\t\t\t108 button (collapsed) 详细信息, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t109 text 详细信息",
+    "\t\t\t\t\t\t\t\t\t\t110 button 重试",
+    "\t\t\t\t\t\t\t\t\t\t115 button (expanded) drafts 出错, Help: plans/drafts, ID: contextmenu-cl-377-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t116 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t119 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-385-trigger",
+    "The focused UI element is 83 search text field (settable) 搜索文件"
+  ],
+  "rootNextTab": "The focused UI element is 84 pop up button (collapsed) Description: 新建, Help: 在 plans/reference 中新建, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+  "childPressedAt": "2026-11-09T10:41:32.031Z",
+  "childSettled": [
+    "\t\t\t\t\t\t\t\t\t\t83 search text field (settable) 搜索文件",
+    "\t\t\t\t\t\t\t\t\t\t115 button (expanded) drafts 空目录, Help: plans/drafts, ID: contextmenu-cl-377-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t116 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t119 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-385-trigger",
+    "The focused UI element is 83 search text field (settable) 搜索文件"
+  ],
+  "backgroundStartedAt": "2026-11-09T10:41:36.414Z",
+  "backgroundComposerBefore": "The focused UI element is 55 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea",
+  "backgroundDuring": [
+    "\t\t\t\t\t\t\t\t\t\t83 search text field (settable) 搜索文件",
+    "\t\t\t\t\t\t\t\t\t\t123 text 无法加载 plans/drafts 请求的文件或文件夹不可用：missing-owned-plans-drafts",
+    "\t\t\t\t\t\t\t\t\t\t124 button (collapsed) 详细信息, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t125 text 详细信息",
+    "\t\t\t\t\t\t\t\t\t\t126 button 重试",
+    "\t\t\t\t\t\t\t\t\t\t115 button (expanded) drafts 出错, Help: plans/drafts, ID: contextmenu-cl-377-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t116 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t119 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-385-trigger",
+    "The focused UI element is 55 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea"
+  ],
+  "backgroundFinishedAt": "2026-11-09T10:42:08.219Z",
+  "backgroundRecovered": [
+    "\t\t\t\t\t\t\t\t\t\t83 search text field (settable) 搜索文件",
+    "\t\t\t\t\t\t\t\t\t\t115 button (expanded) drafts 空目录, Help: plans/drafts, ID: contextmenu-cl-377-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t116 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t119 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-385-trigger",
+    "The focused UI element is 55 text entry area (settable) Description: 支持拖拽文件 · 拖动上边缘调整输入框大小, ID: chatTextarea"
+  ]
+}

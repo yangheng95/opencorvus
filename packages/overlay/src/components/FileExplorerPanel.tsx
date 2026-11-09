@@ -1439,6 +1439,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
     if (scope) refreshActiveDirectoryListings(scope)
   }
 
+  function retryReadFromFeedback(button: HTMLButtonElement, retry: () => unknown): void {
+    if (document.activeElement === button) searchInput?.focus({ preventScroll: true })
+    void retry()
+  }
+
   function updateExpandedPathsAfterMove(previousPath: string, nextPath: string): void {
     const normalizedPrevious = normalizeExplorerPath(previousPath)
     const normalizedNext = normalizeExplorerPath(nextPath)
@@ -2429,7 +2434,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                     variant="outline"
                     size="sm"
                     tone="neutral"
-                    onClick={() => void loadDirectory(path, { force: true })}
+                    onClick={(event) =>
+                      retryReadFromFeedback(event.currentTarget, () => loadDirectory(path, { force: true }))
+                    }
                   >
                     {t("common.retry")}
                   </Button>
@@ -2486,7 +2493,9 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
                           size="sm"
                           tone="neutral"
                           data-ui={searchError() ? "file-explorer-search-retry" : "file-explorer-retry"}
-                          onClick={() => (searchError() ? void refetchSearch() : void retryRootDirectory())}
+                          onClick={(event) =>
+                            retryReadFromFeedback(event.currentTarget, searchError() ? refetchSearch : retryRootDirectory)
+                          }
                         >
                           {t("common.retry")}
                         </Button>

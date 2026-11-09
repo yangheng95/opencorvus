@@ -1662,6 +1662,9 @@ root and expanded paths with a listing or failure. The reads start together so
 old child failures yield to their own pending state, then each displays its
 current result. The child and search Retry actions remain scoped to their own
 directory and query, respectively.
+An activated read Retry that owns focus transfers it to the existing Explorer
+search field before its feedback can leave the page. The query and selection
+remain intact, and background reads do not perform this transfer.
 
 The existing CodeMirror editor selects syntax by filename using the shared
 `components/ui/code-editor-language.ts` registry. CodeMirror language-data owns

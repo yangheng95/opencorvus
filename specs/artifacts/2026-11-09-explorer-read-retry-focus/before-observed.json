@@ -1,0 +1,63 @@
+{
+  "healthy": [
+    "\t\t\t\t\t\t\t\t\t\t81 search text field (settable) Search files",
+    "\t\t\t\t\t\t\t\t\t\t87 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-221-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t88 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t91 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-229-trigger",
+    "The focused UI element is 90 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-225-trigger, Secondary Actions: Collapse"
+  ],
+  "searchFault": [
+    "\t\t\t\t\t\t\t\t\t\t81 search text field (settable) Description: Search files, Value: note",
+    "\t\t\t\t\t\t\t\t\t\t100 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t101 text Details",
+    "\t\t\t\t\t\t\t\t\t\t102 button Retry",
+    "The focused UI element is 81 search text field (settable) Description: Search files, Value: note"
+  ],
+  "searchPressedAt": "2026-11-09T10:36:25.225Z",
+  "searchRecovered": [
+    "\t\t\t\t\t\t\t\t\t\t81 search text field (settable) Description: Search files, Value: note",
+    "\t\t\t\t\t\t\t\t\t\t100 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t101 text Details",
+    "\t\t\t\t\t\t\t\t\t\t102 button Retry",
+    "The focused UI element is 102 button Retry"
+  ],
+  "searchNextTab": "The focused UI element is 100 button note.txt plans/reference, Help: plans\\reference\\note.txt, ID: contextmenu-cl-235-trigger",
+  "searchSecondPressedAt": "2026-11-09T10:36:44.541Z",
+  "searchSettled": [
+    "\t\t\t\t\t\t\t\t\t\t81 search text field (settable) Description: Search files, Value: note",
+    "\t\t\t\t\t\t\t\t\t100 button note.txt plans/reference, Help: plans\\reference\\note.txt, ID: contextmenu-cl-270-trigger",
+    "\t\t\t\t\t\t\t\t\t\t101 text note.txt",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39154/ui/"
+  ],
+  "searchSettledNextTab": "The focused UI element is 100 button note.txt plans/reference, Help: plans\\reference\\note.txt, ID: contextmenu-cl-270-trigger",
+  "rootFault": [
+    "\t\t\t\t\t\t\t\t\t\t81 search text field (settable) Search files",
+    "\t\t\t\t\t\t\t\t\t\t98 text The requested file or folder is unavailable: missing-owned-root",
+    "\t\t\t\t\t\t\t\t\t\t99 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t100 text Details",
+    "\t\t\t\t\t\t\t\t\t\t101 button Retry",
+    "The focused UI element is 81 search text field (settable) Search files"
+  ],
+  "rootPressedAt": "2026-11-09T10:37:20.807Z",
+  "rootSettled": [
+    "\t\t\t\t\t\t\t\t\t\t81 search text field (settable) Search files",
+    "\t\t\t\t\t\t\t\t\t\t98 text Unable to load plans/drafts The requested file or folder is unavailable: missing-owned-plans-drafts",
+    "\t\t\t\t\t\t\t\t\t\t99 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t100 text Details",
+    "\t\t\t\t\t\t\t\t\t\t101 button Retry",
+    "\t\t\t\t\t\t\t\t\t\t106 button (expanded) drafts Error, Help: plans/drafts, ID: contextmenu-cl-315-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t107 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t110 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-323-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39154/ui/"
+  ],
+  "rootNextTab": "The focused UI element is 103 button (collapsed) .opencorvus, ID: contextmenu-cl-303-trigger, Secondary Actions: Expand",
+  "childPressedAt": "2026-11-09T10:37:30.666Z",
+  "childSettled": [
+    "\t\t\t\t\t\t\t\t\t\t81 search text field (settable) Search files",
+    "\t\t\t\t\t\t\t\t\t\t106 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-315-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t107 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t110 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-323-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39154/ui/"
+  ],
+  "childNextTab": "The focused UI element is 103 button (collapsed) .opencorvus, ID: contextmenu-cl-303-trigger, Secondary Actions: Expand"
+}

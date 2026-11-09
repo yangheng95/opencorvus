@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [读取重试后的 Explorer 键盘焦点](2026-11-09-explorer-read-retry-focus.md)
 - [根读取重试同步刷新已展开目录](2026-11-09-explorer-root-retry-tree-refresh.md)
 - [项目根读取错误的呈现优先级](2026-11-09-explorer-root-error-priority.md)
 - [已展开空目录的状态反馈](2026-11-09-explorer-expanded-empty-folder-feedback.md)
