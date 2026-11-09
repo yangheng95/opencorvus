@@ -42,6 +42,7 @@ export type AppDialogOpenOptions = AppDialogOptions & {
   openingGuard?: () => boolean
   validateInput?: (value: string) => string | undefined
   onConfirm?: (value: string | null) => Promise<void>
+  confirmErrorSummary?: (error: unknown) => string
 }
 
 export type AppDialogResult = { confirmed: boolean; value: string | null }
@@ -54,6 +55,7 @@ type AppDialogCompletion = {
   reject: (reason: unknown) => void
   validateInput?: AppDialogOpenOptions["validateInput"]
   onConfirm?: AppDialogOpenOptions["onConfirm"]
+  confirmErrorSummary?: AppDialogOpenOptions["confirmErrorSummary"]
 }
 let activeDialog: AppDialogCompletion | null = null
 
@@ -136,7 +138,15 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
           resolve({ confirmed: false, value: null })
           return
         }
-        const completion = { epoch, occlusionOwner, resolve, reject, validateInput: options.validateInput, onConfirm: options.onConfirm }
+        const completion = {
+          epoch,
+          occlusionOwner,
+          resolve,
+          reject,
+          validateInput: options.validateInput,
+          onConfirm: options.onConfirm,
+          confirmErrorSummary: options.confirmErrorSummary,
+        }
         setDialogStore("app", {
           open: true,
           epoch,
@@ -259,7 +269,7 @@ async function finishAppDialog(confirmed: boolean, epoch: number): Promise<boole
       if (!ownsDialog(decision.completion)) return true
       setDialogStore("app", {
         submitting: false,
-        submitError: t("dialog.submit_failed"),
+        submitError: decision.completion.confirmErrorSummary?.(error) ?? t("dialog.submit_failed"),
         submitErrorDetails: formatErrorDetails(error),
       })
       return false

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [目录检查显示可操作的错误摘要证据](2026-11-09-workspace-directory-error-summary/README.md)
 - [浏览器文件夹确认先校验真实目录证据](2026-11-09-browser-workspace-directory-admission/README.md)
 - [0.1.49 发布证据](2026-11-09-release-0.1.49/README.md) · 原生、官网和正式包日志
 - [项目行操作显示目标身份证据](2026-11-09-project-row-action-identity/README.md)

@@ -1,0 +1,131 @@
+{
+  "operation": "global.projects.checkDirectory",
+  "receipts": [
+    {
+      "route": "/work-ledger",
+      "query": {
+        "limit": "80"
+      },
+      "status": 200,
+      "requestID": "84891e6f-0bc9-4ecc-a9e6-979850c7a950",
+      "data": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_hFnL6NB8FFzfjahLrREr",
+            "title": "",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\project-after",
+            "created": 1794223670939,
+            "updated": 1794223670939,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "route": "/global/projects/check-directory",
+      "query": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\target-after\\."
+      },
+      "status": 200,
+      "requestID": "9022db37-b2a0-4163-9a0d-aaf751202b73",
+      "data": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\target-after"
+      }
+    },
+    {
+      "route": "/global/projects/check-directory",
+      "query": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\missing-owned-folder"
+      },
+      "status": 400,
+      "requestID": "fa090332-3b5d-43e3-aeb0-2aaae2b545ec",
+      "data": {
+        "name": "ProjectDirectoryIntegrityError",
+        "data": {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\missing-owned-folder",
+          "reason": "missing",
+          "message": "Project directory does not exist: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\missing-owned-folder"
+        }
+      }
+    },
+    {
+      "route": "/global/projects/check-directory",
+      "query": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\project-after\\note.txt"
+      },
+      "status": 400,
+      "requestID": "77255c99-f6c1-4789-89d2-441d40160f22",
+      "data": {
+        "name": "ProjectDirectoryIntegrityError",
+        "data": {
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\project-after\\note.txt",
+          "reason": "not-directory",
+          "message": "Project directory is not a directory: C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\project-after\\note.txt"
+        }
+      }
+    },
+    {
+      "route": "/global/projects/check-directory",
+      "query": {
+        "path": "owned-relative-110"
+      },
+      "status": 400,
+      "requestID": "56d4bffd-0939-4046-b40d-b9aef43897d8",
+      "data": {
+        "data": {
+          "message": "Request validation failed"
+        },
+        "error": [
+          {
+            "code": "custom",
+            "path": [
+              "path"
+            ],
+            "message": "Expected an absolute server directory"
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "route": "/global/projects/check-directory",
+      "query": {
+        "path": "/unsupported-posix-folder-110"
+      },
+      "status": 400,
+      "requestID": "8b14efb2-8d28-471e-9470-139b2e9d3d92",
+      "data": {
+        "name": "InvalidDirectoryError",
+        "data": {
+          "value": "/unsupported-posix-folder-110",
+          "reason": "posix-path-on-windows",
+          "message": "Cannot resolve \"/unsupported-posix-folder-110\" on win32: this is a POSIX-style path that is not a recognized Git Bash / Cygwin / WSL mount. Set OPENCORVUS_WINDOWS_DRIVE_MOUNTS to add custom mount roots."
+        }
+      }
+    },
+    {
+      "route": "/work-ledger",
+      "query": {
+        "limit": "80"
+      },
+      "status": 200,
+      "requestID": "1524f769-9298-4bb8-8231-d83e6c60383b",
+      "data": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_hFnL6NB8FFzfjahLrREr",
+            "title": "",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\project-after",
+            "created": 1794223670939,
+            "updated": 1794223670939,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    }
+  ]
+}

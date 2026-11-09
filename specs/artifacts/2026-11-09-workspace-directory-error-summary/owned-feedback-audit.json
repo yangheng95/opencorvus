@@ -1,0 +1,249 @@
+{
+  "before": {
+    "checks": {
+      "missingAt": {
+        "at": "2026-11-09T11:23:06.642Z",
+        "actual": {
+          "requestID": "b14ce6bb-a279-4728-bf9c-ac2d66850e3e",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 3,
+          "time": "2026-11-09T11:23:06.711Z"
+        },
+        "type": "ProjectDirectoryIntegrityError",
+        "reason": "missing"
+      },
+      "fileAt": {
+        "at": "2026-11-09T11:23:15.809Z",
+        "actual": {
+          "requestID": "e4c5a616-c248-473b-b54a-8d081081006f",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 2,
+          "time": "2026-11-09T11:23:15.849Z"
+        },
+        "type": "ProjectDirectoryIntegrityError",
+        "reason": "not-directory"
+      },
+      "hostAt": {
+        "at": "2026-11-09T11:23:16.527Z",
+        "actual": {
+          "requestID": "ce1bc7ca-fcc1-4be8-9239-7279a276cd2c",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:23:16.559Z"
+        },
+        "type": "InvalidDirectoryError",
+        "reason": "posix-path-on-windows"
+      },
+      "chineseAt": {
+        "at": "2026-11-09T11:23:26.505Z",
+        "actual": {
+          "requestID": "10f7dc63-1feb-4568-9a1f-4df4e388a8ec",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:23:26.529Z"
+        },
+        "type": "ProjectDirectoryIntegrityError",
+        "reason": "missing"
+      }
+    },
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\project-before",
+        "gitHead": "1a40893b6c5a9cfa695ed35cf019b00400f7f800",
+        "text": "Owned directory feedback project-before\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\target-before",
+        "gitHead": "c8042b6ec0ab321e063bfccf03d9911756648a65",
+        "text": "Owned directory feedback target-before\n"
+      }
+    ],
+    "tables": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b110-before",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39168",
+      "pid": 22836
+    },
+    "shutdown": {
+      "port": 39168,
+      "pid": 22836,
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTScbs00EdKHvTi5g"
+      }
+    }
+  },
+  "after": {
+    "checks": {
+      "missingAt": {
+        "at": "2026-11-09T11:27:58.140Z",
+        "actual": {
+          "requestID": "27bb4c81-2d7e-4590-9535-71714c4af80d",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 2,
+          "time": "2026-11-09T11:27:58.159Z"
+        },
+        "type": "ProjectDirectoryIntegrityError",
+        "reason": "missing"
+      },
+      "fileAt": {
+        "at": "2026-11-09T11:28:12.061Z",
+        "actual": {
+          "requestID": "63f105ff-038a-4d38-b302-4ae4f6d7f9a3",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:28:12.083Z"
+        },
+        "type": "ProjectDirectoryIntegrityError",
+        "reason": "not-directory"
+      },
+      "hostAt": {
+        "at": "2026-11-09T11:28:12.213Z",
+        "actual": {
+          "requestID": "59256a74-f3a2-4586-bd08-809205f3ee54",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:28:12.231Z"
+        },
+        "type": "InvalidDirectoryError",
+        "reason": "posix-path-on-windows"
+      },
+      "chineseAt": {
+        "at": "2026-11-09T11:30:11.453Z",
+        "actual": {
+          "requestID": "59862333-6240-4f33-8eac-c94b3f8f1a31",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:30:11.472Z"
+        },
+        "type": "ProjectDirectoryIntegrityError",
+        "reason": "missing"
+      },
+      "chineseFileAt": {
+        "at": "2026-11-09T11:30:15.065Z",
+        "actual": {
+          "requestID": "737dc1a9-9a15-497b-9d24-7a15a8686f5a",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:30:15.084Z"
+        },
+        "type": "ProjectDirectoryIntegrityError",
+        "reason": "not-directory"
+      },
+      "chineseHostAt": {
+        "at": "2026-11-09T11:30:18.525Z",
+        "actual": {
+          "requestID": "aad5dcb1-6652-4d8e-b76c-2b6de4ee23aa",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 400,
+          "duration": 1,
+          "time": "2026-11-09T11:30:18.545Z"
+        },
+        "type": "InvalidDirectoryError",
+        "reason": "posix-path-on-windows"
+      },
+      "validAt": {
+        "at": "2026-11-09T11:30:24.104Z",
+        "actual": {
+          "requestID": "5e52a077-dbe1-4748-ac6b-5b33376894f5",
+          "method": "GET",
+          "path": "/global/projects/check-directory",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 1,
+          "time": "2026-11-09T11:30:24.125Z"
+        },
+        "type": null,
+        "reason": null
+      },
+      "offline": {
+        "at": "2026-11-09T11:30:47.306Z",
+        "shutdownResponse": {
+          "requestID": "c5705a6e-d4c2-49a8-8b1f-ffbc61b5a7e1",
+          "method": "POST",
+          "path": "/shutdown",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 1,
+          "time": "2026-11-09T11:30:43.400Z"
+        },
+        "browserFailure": "TypeError: Failed to fetch"
+      }
+    },
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\project-after",
+        "gitHead": "395d2e9bbab920c9a1f59600b38268ca31ef9596",
+        "text": "Owned directory feedback project-after\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b110\\target-after",
+        "gitHead": "8741c394add0e80cf360e6acd1eabd607a96e3a5",
+        "text": "Owned directory feedback target-after\n"
+      }
+    ],
+    "tables": {
+      "project": 2,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b110-after",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39169",
+      "pid": 16816
+    },
+    "shutdown": {
+      "status": 200,
+      "port": 39169,
+      "pid": 16816,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTUOeN00b6cBK2Njh"
+      }
+    }
+  }
+}

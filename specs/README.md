@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [目录检查显示可操作的错误摘要](records/2026-11/2026-11-09-workspace-directory-error-summary.md)
 - [浏览器文件夹确认先校验真实目录](records/2026-11/2026-11-09-browser-workspace-directory-admission.md)
 - [0.1.49 发布](records/2026-11/2026-11-09-release-0.1.49.md) · 准入修复和公开交付
 - [项目行操作显示目标身份](records/2026-11/2026-11-09-project-row-action-identity.md)

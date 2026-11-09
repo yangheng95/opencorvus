@@ -334,18 +334,48 @@ export async function openGlobalChatLauncher(selectionEpoch: number): Promise<vo
   refreshDirectoryFreeConfig(authority, selectionEpoch)
 }
 
-export function isMissingProjectDirectoryError(error: unknown, directory: string): boolean {
-  if (!(error instanceof ApiError) || error.status !== 400) return false
+type WorkspaceDirectoryFailure =
+  | { kind: "missing" | "not-directory"; directory: string }
+  | { kind: "host-path" }
+
+function readWorkspaceDirectoryFailure(error: unknown): WorkspaceDirectoryFailure | undefined {
+  if (!(error instanceof ApiError) || error.status !== 400) return
   const body = error.body
-  if (!body || typeof body !== "object" || Array.isArray(body)) return false
+  if (!body || typeof body !== "object" || Array.isArray(body)) return
   const envelope = body as Record<string, unknown>
   const data = envelope.data
-  if (envelope.name !== "ProjectDirectoryIntegrityError" || !data || typeof data !== "object" || Array.isArray(data)) {
-    return false
-  }
+  if (!data || typeof data !== "object" || Array.isArray(data)) return
   const detail = data as Record<string, unknown>
-  if (detail.reason !== "missing" || typeof detail.directory !== "string") return false
-  return projectDirectoryKey(detail.directory) === projectDirectoryKey(directory)
+  if (
+    envelope.name === "ProjectDirectoryIntegrityError" && typeof detail.directory === "string" &&
+    (detail.reason === "missing" || detail.reason === "not-directory")
+  ) {
+    return { kind: detail.reason, directory: detail.directory }
+  }
+  if (
+    envelope.name === "InvalidDirectoryError" && typeof detail.value === "string" &&
+    (detail.reason === "windows-path-on-posix" || detail.reason === "posix-path-on-windows")
+  ) {
+    return { kind: "host-path" }
+  }
+}
+
+export function isMissingProjectDirectoryError(error: unknown, directory: string): boolean {
+  const failure = readWorkspaceDirectoryFailure(error)
+  return failure?.kind === "missing" && projectDirectoryKey(failure.directory) === projectDirectoryKey(directory)
+}
+
+function workspaceDirectoryCheckSummary(error: unknown): string {
+  switch (readWorkspaceDirectoryFailure(error)?.kind) {
+    case "missing":
+      return t("cwd.path_missing")
+    case "not-directory":
+      return t("cwd.path_not_directory")
+    case "host-path":
+      return t("cwd.path_host_mismatch")
+    default:
+      return t("cwd.path_check_failed")
+  }
 }
 
 /**
@@ -788,6 +818,7 @@ export async function chooseWorkspaceDirectory(options: {
     inputRequired: true,
     inputRequiredMessage: t("cwd.path_required"),
     validateInput: (value) => isAbsoluteServerPath(value.trim()) ? undefined : t("cwd.path_absolute_required"),
+    confirmErrorSummary: workspaceDirectoryCheckSummary,
     onConfirm: async (value) => {
       assertApiAuthorityCurrent(authority)
       const directory = String(value ?? "").trim()

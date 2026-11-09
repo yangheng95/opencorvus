@@ -3994,6 +3994,10 @@ Manual entry requires an absolute server path and keeps the dialog open while
 the global directory check confirms that it exists and is a directory. Failure
 preserves the input and current workspace. Only an accepted directory reaches
 workspace selection or conversion; the check does not register a Project.
+The chooser summarizes a missing directory, a file path or an incompatible
+server path using the actual typed result and the current interface language.
+An unconfirmed read describes a directory check failure. The same dialog keeps
+the original diagnostics and focuses the entered path for correction.
 Converting the selected Project enters the existing selection-loading lifetime
 before the directory mutation starts. Selected-item and Goal readers retire
 while the directory moves; a rejected conversion restores that same selection's
