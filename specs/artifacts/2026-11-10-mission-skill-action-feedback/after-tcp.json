@@ -1,0 +1,62 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "4ae107f8-e5b7-482f-84d5-f45585cfd3e1",
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "requestID": "7ee13bf9-531d-4e7d-82d9-7c537f74d5ab",
+      "schemaValid": true
+    },
+    {
+      "route": "/mission-skill/settings",
+      "operationId": "missionSkill.settings",
+      "status": 200,
+      "requestID": "34c6286e-8c15-438f-bd16-966baeb50f05",
+      "schemaValid": true
+    }
+  ],
+  "skills": [
+    {
+      "name": "general",
+      "description": "Coordinate an operator-defined Mission through native Mission state and fixed-profile Tasks without imposing a domain-specific workflow.",
+      "required_tools": [
+        "panel_expert_squad_inspect",
+        "panel_multica_catalog",
+        "panel_create_task",
+        "panel_query_task",
+        "panel_query_task_artifacts",
+        "panel_read_task_artifact",
+        "panel_read_task_message",
+        "panel_read_task_dispatch_evidence",
+        "panel_complete_mission",
+        "panel_block_mission",
+        "panel_resume_task",
+        "panel_extend_task_acceptance",
+        "panel_cancel_task",
+        "panel_respond_interaction"
+      ],
+      "source": "built_in",
+      "location": null
+    },
+    {
+      "name": "inspection-demo",
+      "description": "Review a project handoff by comparing the source notes, acceptance criteria, and recorded deliverables. Retain the original filenames, keep the source sections in order, and report the exact record that supports each conclusion. Review a project handoff by comparing the source notes, acceptance criteria, and recorded deliverables. Retain the original filenames, keep the source sections in order, and report the exact record that supports each conclusion. Review a project handoff by comparing the source notes, acceptance criteria, and recorded deliverables. Retain the original filenames, keep the source sections in order, and report the exact record that supports each conclusion. Review a project handoff by comparing the source notes, acceptance criteria, and recorded deliverables. Retain the original filenames, keep the source sections in order, and report the exact record that supports each conclusion. Review a project handoff by comparing the source notes, acceptance criteria, and recorded deliverables. Retain the original filenames, keep the source sections in order, and report the exact record that supports each conclusion. Review a project handoff by comparing the source notes, acceptance criteria, and recorded deliverables. Retain the original filenames, keep the source sections in order, and report the exact record that supports each conclusion. Review a project handoff by comparing the source notes, acceptance criteria, and recorded deliverables. Retain the original filenames, keep the source sections in order, and report the exact record that supports each conclusion.",
+      "required_tools": [],
+      "source": "project",
+      "location": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b149\\project-after\\.opencorvus\\mission-skills\\inspection-demo\\SKILL.md"
+    }
+  ],
+  "project": {
+    "id": "prj_hIFahYYICS8cJEPVGTUc",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b149\\project-after"
+  },
+  "listedProjectCount": 1
+}

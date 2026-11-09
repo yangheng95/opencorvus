@@ -5403,6 +5403,11 @@ name in the current scope's accepted catalog independently of list filters. When
 that name leaves the catalog, its heading and Back to list remain with a localized
 unavailable message. Navigation focuses the opened heading and returns to the
 exact visible row or the current catalog search.
+Mission Skill invocation and path actions show their result at the action's
+detail section or directory row. The current interface language renders the
+result while preserving the exact invocation and filesystem path. The original
+diagnostic remains available on failure, and retiring the action's scope clears
+its result.
 Installed Expert Squad navigation focuses Back to list while the exact detail
 loads, then returns to the original physical installation row or selected filter.
 Retrying a failed detail read keeps the current installation's original diagnostic

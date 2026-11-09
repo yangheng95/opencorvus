@@ -1,0 +1,32 @@
+[
+  {
+    "label": "merged-duplicate",
+    "contentType": "application/json, application/json",
+    "status": 400,
+    "requestID": "05e98526-d758-40eb-b2ea-fa4f4238c4dc",
+    "body": {
+      "data": {
+        "message": "Request validation failed"
+      },
+      "error": [
+        {
+          "code": "invalid_value",
+          "path": [
+            "source"
+          ],
+          "message": "Invalid option: expected one of \"global\"|\"project\""
+        }
+      ],
+      "success": false
+    }
+  },
+  {
+    "label": "single-json",
+    "contentType": "application/json",
+    "status": 200,
+    "requestID": "157b999d-040e-4926-8aca-9e6f5dadbf49",
+    "body": {
+      "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b149\\project-after\\.opencorvus\\mission-skills"
+    }
+  }
+]

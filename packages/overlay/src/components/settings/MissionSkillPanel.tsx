@@ -5,7 +5,7 @@ import { captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
 import { expertSquadSettingsScope, type ExpertSquadCatalogScopeState } from "../../services/expert-squad-scope"
 import { ensureMissionSkillDirectory, loadMissionSkillSettings } from "../../services/mission-skill"
 import { matchesSearchTerms } from "../../services/text-search"
-import { pathRevealFailureText, pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../../services/workspace"
+import { pathRevealFailureKey, pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../../services/workspace"
 import { appStore } from "../../store/app"
 import { formatErrorDetails } from "../../utils/error-details"
 import { t, tc } from "../../utils/i18n"
@@ -28,6 +28,40 @@ import {
 type MissionSkillSettingsItem = MissionSkillSettingsResponse["mission_skills"][number]
 type MissionSkillSource = MissionSkillSettingsItem["source"]
 type MissionSkillFilter = "all" | MissionSkillSource
+type MissionSkillAction = "invocation" | "source" | "project-root" | "global-root"
+type MissionSkillActionResult = { action: MissionSkillAction } & (
+  | { status: "invocation-copied"; name: string }
+  | { status: "path-copied"; label: Exclude<ReturnType<typeof pathRevealNoticeKey>, "">; path: string }
+  | { status: "failed"; label: ReturnType<typeof pathRevealFailureKey> | "mission_skill.copy_failed"; cause: unknown }
+)
+
+function MissionSkillActionFeedback(props: { result: MissionSkillActionResult | undefined }) {
+  return (
+    <Show when={props.result}>
+      {(value) => {
+        const failure = () => {
+          const result = value()
+          return result.status === "failed" ? formatErrorDetails(result.cause) : undefined
+        }
+        const message = () => {
+          const result = value()
+          if (result.status === "failed") return t(result.label)
+          if (result.status === "invocation-copied") return t("mission_skill.copied", { name: result.name })
+          return t(result.label, { path: result.path })
+        }
+        return (
+          <Feedback
+            class="mission-skill-action-feedback"
+            tone={value().status === "failed" ? "error" : "success"}
+            details={failure()}
+          >
+            {message()}
+          </Feedback>
+        )
+      }}
+    </Show>
+  )
+}
 
 const catalogIssueLabels = {
   invalid_mission_skill: "mission_skill.issue.invalid",
@@ -68,8 +102,11 @@ export default function MissionSkillPanel() {
   const [filter, setFilter] = createSignal<MissionSkillFilter>("all")
   const [loading, setLoading] = createSignal(false)
   const [readFailure, setReadFailure] = createSignal<{ cause: unknown }>()
-  const [notice, setNotice] = createSignal("")
-  const [noticeTone, setNoticeTone] = createSignal<"active" | "error">("active")
+  const [actionResult, setActionResult] = createSignal<MissionSkillActionResult>()
+  const resultFor = (action: MissionSkillAction) => {
+    const current = actionResult()
+    return current?.action === action ? current : undefined
+  }
   let loadSequence = 0
   let operationGeneration = 0
   let focusGeneration = 0
@@ -138,7 +175,7 @@ export default function MissionSkillPanel() {
     const authority = captureApiAuthority()
     const generation = ++operationGeneration
     const identity = operationIdentity(skillName)
-    setNotice("")
+    setActionResult(undefined)
     return {
       authority,
       owns: () =>
@@ -197,7 +234,7 @@ export default function MissionSkillPanel() {
     setSelectedName(undefined)
     operationGeneration += 1
     focusGeneration += 1
-    setNotice("")
+    setActionResult(undefined)
     untrack(() => void refresh(currentScope(), identity))
     return identity
   }, "")
@@ -206,7 +243,7 @@ export default function MissionSkillPanel() {
     const identity = operationIdentity(selectedSkill()?.name ?? "")
     if (identity === previousIdentity) return previousIdentity
     operationGeneration += 1
-    setNotice("")
+    setActionResult(undefined)
     return identity
   }, "")
 
@@ -216,36 +253,29 @@ export default function MissionSkillPanel() {
       if (!owner.owns()) return
       const outcome = await revealPath(target)
       if (!owner.owns()) return
-      const notice = pathRevealNoticeKey(outcome)
-      if (notice) {
-        setNoticeTone("active")
-        setNotice(t(notice, { path: target }))
-      }
+      const label = pathRevealNoticeKey(outcome)
+      if (label) setActionResult({ action: "source", status: "path-copied", label, path: target })
     } catch (cause) {
       if (!owner.owns()) return
-      setNoticeTone("error")
-      setNotice(pathRevealFailureText(cause))
+      setActionResult({ action: "source", status: "failed", label: pathRevealFailureKey(), cause })
     }
   }
 
   async function openRoot(source: "global" | "project"): Promise<void> {
     const scope = currentScope()
     if (scope.kind === "unavailable") return
+    const action = source === "project" ? "project-root" : "global-root"
     const owner = beginOperation(selectedSkill()?.name ?? "")
     try {
       const target = await ensureMissionSkillDirectory({ ...scope, authority: owner.authority }, source)
       if (!owner.owns()) return
       const outcome = await revealPath(target)
       if (!owner.owns()) return
-      const notice = pathRevealNoticeKey(outcome)
-      if (notice) {
-        setNoticeTone("active")
-        setNotice(t(notice, { path: target }))
-      }
+      const label = pathRevealNoticeKey(outcome)
+      if (label) setActionResult({ action, status: "path-copied", label, path: target })
     } catch (cause) {
       if (!owner.owns()) return
-      setNoticeTone("error")
-      setNotice(pathRevealFailureText(cause))
+      setActionResult({ action, status: "failed", label: pathRevealFailureKey(), cause })
     }
   }
 
@@ -255,12 +285,10 @@ export default function MissionSkillPanel() {
       if (!owner.owns()) return
       await copyText(invocation(skill.name))
       if (!owner.owns()) return
-      setNoticeTone("active")
-      setNotice(t("mission_skill.copied", { name: skill.name }))
+      setActionResult({ action: "invocation", status: "invocation-copied", name: skill.name })
     } catch (cause) {
       if (!owner.owns()) return
-      setNoticeTone("error")
-      setNotice(t("mission_skill.copy_failed", { error: cause instanceof Error ? cause.message : String(cause) }))
+      setActionResult({ action: "invocation", status: "failed", label: "mission_skill.copy_failed", cause })
     }
   }
 
@@ -295,9 +323,6 @@ export default function MissionSkillPanel() {
         </SettingsToolbar>
       </Show>
 
-      <Show when={notice()}>
-        <Feedback tone={noticeTone() === "error" ? "error" : "success"}>{notice()}</Feedback>
-      </Show>
       <Show when={readFailure()}>
         {(failure) => (
           <Feedback tone="error" data-ui="mission-skill-error" details={formatErrorDetails(failure().cause)}>
@@ -465,6 +490,7 @@ export default function MissionSkillPanel() {
                           <Icon name="copy" />
                           {t("mission_skill.copy_invocation")}
                         </Button>
+                        <MissionSkillActionFeedback result={resultFor("invocation")} />
                       </div>
                       <Disclosure.Root class="mission-skill-detail-section">
                         <Disclosure.Trigger>
@@ -490,6 +516,7 @@ export default function MissionSkillPanel() {
                               <Icon name="folder-open" />
                               {t(pathRevealLabelKey())}
                             </Button>
+                            <MissionSkillActionFeedback result={resultFor("source")} />
                           </div>
                         )}
                       </Show>
@@ -526,6 +553,7 @@ export default function MissionSkillPanel() {
                     </Button>
                   }
                 />
+                <MissionSkillActionFeedback result={resultFor("project-root")} />
                 <SettingsRow
                   title={t("mission_skill.source.global")}
                   desc={current().roots.global}
@@ -543,6 +571,7 @@ export default function MissionSkillPanel() {
                     </Button>
                   }
                 />
+                <MissionSkillActionFeedback result={resultFor("global-root")} />
               </SettingsSurface>
             </Disclosure.Content>
           </Disclosure.Root>

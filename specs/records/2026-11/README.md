@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [多步任务技能就近操作反馈](2026-11-10-mission-skill-action-feedback.md)
 - [任务需求与交付目标读取状态](2026-11-10-task-scope-board-read-status.md)
 - [浏览器预览地址草稿与反馈](2026-11-10-browser-preview-address-feedback.md)
 - [Git 分支菜单打开意图](2026-11-10-project-branch-menu-intent.md)
