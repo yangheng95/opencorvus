@@ -600,6 +600,12 @@ button.s-row:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.memory-project-document:focus-visible {
+  border-radius: var(--oc-radius-soft);
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: var(--ui-gap-xs);
+}
+
 .memory-project-meta {
   display: flex;
   flex-wrap: wrap;

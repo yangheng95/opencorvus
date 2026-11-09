@@ -1,0 +1,45 @@
+{
+  "entryScripts": [
+    "http://127.0.0.1:39201/ui/assets/main-DruPd-co.js"
+  ],
+  "primary": [
+    "\t\t\t\t\t\t\t\t\t61 pop up button (collapsed) Project Current Workspace, ID: select-cl-244-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t62 text Current Workspace",
+    "\t\t\t\t\t\t\t\t\t65 heading Project MEMORY.MD, Value: 2",
+    "\t\t\t\t\t\t\t\t\t\t66 text Project MEMORY.MD",
+    "\t\t\t\t\t\t\t\t\t68 text Revision 0 0 tokens Updated 11/9/2026, 8:53:53 PM No organized project context yet. It develops as you work in this project.",
+    "\t\t\t\t\t\t\t\t\t73 search text field (settable) Description: Search context…, ID: memorySearch",
+    "The focused UI element is 45 tab (selected, settable, boolean) Memory & Context, Value: 1, ID: config-tab-memory"
+  ],
+  "failed": [
+    "\t\t\t\t\t\t\t\t\t61 pop up button (collapsed) Project Research Memory, ID: select-cl-244-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t75 text Research Memory",
+    "\t\t\t\t\t\t\t\t\t63 text C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b118\\secondary-before",
+    "\t\t\t\t\t\t\t\t\t65 heading Project MEMORY.MD, Value: 2",
+    "\t\t\t\t\t\t\t\t\t\t66 text Project MEMORY.MD",
+    "\t\t\t\t\t\t\t\t\t76 text Could not load this project's MEMORY.MD.",
+    "\t\t\t\t\t\t\t\t\t73 search text field (settable) Description: Search context…, Value: keep-document-recovery-draft, ID: memorySearch",
+    "The focused UI element is 73 search text field (settable) Description: Search context…, Value: keep-document-recovery-draft, ID: memorySearch"
+  ],
+  "failedWhileOriginRecovers": [
+    "\t\t\t\t\t\t\t\t\t61 pop up button (collapsed) 项目 Research Memory, ID: select-cl-244-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t75 text Research Memory",
+    "\t\t\t\t\t\t\t\t\t63 text C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b118\\secondary-before",
+    "\t\t\t\t\t\t\t\t\t65 heading 项目 MEMORY.MD, Value: 2",
+    "\t\t\t\t\t\t\t\t\t\t66 text 项目 MEMORY.MD",
+    "\t\t\t\t\t\t\t\t\t76 text 无法加载此项目的 MEMORY.MD。",
+    "\t\t\t\t\t\t\t\t\t\t88 text Failed to fetch",
+    "\t\t\t\t\t\t\t\t\t73 search text field (settable) Description: 搜索上下文…, Value: keep-document-recovery-draft, ID: memorySearch",
+    "The focused UI element is 83 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-318-trigger, Secondary Actions: Expand"
+  ],
+  "recoveredAfterSwitch": [
+    "\t\t\t\t\t\t\t\t\t61 pop up button (collapsed) 项目 Research Memory, ID: select-cl-244-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t85 text Research Memory",
+    "\t\t\t\t\t\t\t\t\t63 text C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b118\\secondary-before",
+    "\t\t\t\t\t\t\t\t\t65 heading 项目 MEMORY.MD, Value: 2",
+    "\t\t\t\t\t\t\t\t\t\t66 text 项目 MEMORY.MD",
+    "\t\t\t\t\t\t\t\t\t86 text 版本 0 0 个 token 更新于 2026/11/9 20:54:03 项目上下文尚未整理；它会随项目中的工作逐渐积累。",
+    "\t\t\t\t\t\t\t\t\t73 search text field (settable) Description: 搜索上下文…, ID: memorySearch",
+    "The focused UI element is 61 pop up button (collapsed) 项目 Research Memory, ID: select-cl-244-trigger, Secondary Actions: Expand"
+  ]
+}

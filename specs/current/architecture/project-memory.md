@@ -342,7 +342,9 @@ read the protected Project document through the existing Project-memory service
 and public `experimental.projectMemory.get` contract, displaying its original
 content, revision, counts and localized update time as a read-only document.
 Document loading retires its previous selection and API authority; old responses
-cannot replace another Project's view. The separate notes-and-facts surface uses
+cannot replace another Project's view. A failed read can retry the same selected
+document in place, preserving the independent notes query and exposing the
+original read diagnostic. The separate notes-and-facts surface uses
 the existing project-scoped semantic list, search, detail and delete operations.
 It neither copies the protected document into semantic memory nor exposes it to
 generic deletion. Search preserves the actual source and Project scope; dates

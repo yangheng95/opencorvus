@@ -26,6 +26,11 @@ interface ProjectListFailure {
   operation: "initial" | "refresh"
 }
 
+type ProjectDocumentState =
+  | { status: "loading" }
+  | { status: "error" | "retrying"; cause: unknown }
+  | { status: "ready"; value: ProjectMemoryDocument }
+
 function projectName(project: MemoryProjectOption): string {
   return projectDisplayName({
     directory: project.directory,
@@ -51,13 +56,21 @@ export function MemoryContextPanel() {
   const [loadingProjects, setLoadingProjects] = createSignal(true)
   const memoryPanelActive = createMemo(() => !loadingProjects() || projects().length > 0)
   const [projectLoadError, setProjectLoadError] = createSignal<ProjectListFailure>()
-  const [document, setDocument] = createSignal<ProjectMemoryDocument | null>(null)
-  const [loadingDocument, setLoadingDocument] = createSignal(false)
-  const [documentError, setDocumentError] = createSignal("")
+  const [documentState, setDocumentState] = createSignal<ProjectDocumentState>()
+  const documentValue = createMemo(() => {
+    const state = documentState()
+    return state?.status === "ready" ? state.value : undefined
+  })
+  const documentFailure = createMemo(() => {
+    const state = documentState()
+    return state?.status === "error" || state?.status === "retrying" ? state : undefined
+  })
   let loadedProjectsAuthority: ApiAuthority | undefined
   let projectGroup: HTMLElement | undefined
   let projectTrigger: HTMLButtonElement | undefined
   let retryTrigger: HTMLButtonElement | undefined
+  let documentGroup: HTMLElement | undefined
+  let retryDocument: ((trigger: HTMLButtonElement) => void) | undefined
 
   onCleanup(
     subscribeWorkLedgerChanges((event) => {
@@ -135,16 +148,35 @@ export function MemoryContextPanel() {
     const directory = selectedDirectory()
     const authority = captureApiAuthority()
     let active = true
-    onCleanup(() => { active = false })
+    onCleanup(() => {
+      active = false
+      retryDocument = undefined
+    })
     const ownsLoad = () => active && isApiAuthorityCurrent(authority) && selectedDirectory() === directory
-    setDocument(null)
-    setDocumentError("")
-    setLoadingDocument(!!directory)
-    if (!directory) return
-    void refreshProjectMemory({ authority, directory }).then(
-      (value) => { if (ownsLoad()) setDocument(value) },
-      (error) => { if (ownsLoad()) setDocumentError(error instanceof Error ? error.message : String(error)) },
-    ).finally(() => { if (ownsLoad()) setLoadingDocument(false) })
+    if (!directory) {
+      setDocumentState(undefined)
+      return
+    }
+    const read = async (retry?: { trigger: HTMLButtonElement; cause: unknown }) => {
+      if (!ownsLoad()) return
+      setDocumentState(retry ? { status: "retrying", cause: retry.cause } : { status: "loading" })
+      let value: ProjectMemoryDocument
+      try {
+        value = await refreshProjectMemory({ authority, directory })
+      } catch (cause) {
+        if (ownsLoad()) setDocumentState({ status: "error", cause })
+        return
+      }
+      if (!ownsLoad()) return
+      const restoreFocus = retry && retry.trigger.ownerDocument.activeElement === retry.trigger
+      setDocumentState({ status: "ready", value })
+      if (restoreFocus) documentGroup?.focus({ preventScroll: true })
+    }
+    retryDocument = (trigger) => {
+      const state = documentState()
+      if (state?.status === "error") void read({ trigger, cause: state.cause })
+    }
+    void read()
   })
 
   const pickerPlaceholder = createMemo(() => {
@@ -216,13 +248,36 @@ export function MemoryContextPanel() {
       <SettingsGroup
         title={t("memory.project_document")}
         description={t("memory.project_document_description")}
+        aria-label={t("memory.project_document")}
+        class="memory-project-document"
+        tabIndex={-1}
+        ref={documentGroup}
         contentInset
       >
-        <Show when={loadingDocument()}><Feedback>{t("common.loading")}</Feedback></Show>
-        <Show when={documentError()}>
-          <Feedback tone="error" details={documentError()}>{t("memory.project_document_failed")}</Feedback>
+        <Show when={documentState()?.status === "loading"}><Feedback>{t("common.loading")}</Feedback></Show>
+        <Show when={documentFailure()}>
+          {(failure) => (
+            <Feedback
+              tone="error"
+              details={formatErrorDetails(failure().cause)}
+              actions={(
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  tone="neutral"
+                  aria-disabled={failure().status === "retrying" || undefined}
+                  onClick={(event) => retryDocument?.(event.currentTarget)}
+                >
+                  <Icon name="refresh" />{t(failure().status === "retrying" ? "common.loading" : "common.retry")}
+                </Button>
+              )}
+            >
+              {t("memory.project_document_failed")}
+            </Feedback>
+          )}
         </Show>
-        <Show when={document()}>
+        <Show when={documentValue()}>
           {(value) => (
             <>
               <div class="memory-project-meta">
