@@ -500,14 +500,17 @@
 
 .project-group-summary-tooltip__headline strong {
   min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  white-space: normal;
   font-weight: var(--ui-font-weight-medium);
 }
 
+.project-group-summary-tooltip__headline,
 .project-group-summary-tooltip__path {
   align-items: flex-start;
+}
+
+.project-group-summary-tooltip__path {
   padding-top: var(--ui-gap-md);
   border-top: var(--oc-border-width) solid var(--divider-soft);
 }

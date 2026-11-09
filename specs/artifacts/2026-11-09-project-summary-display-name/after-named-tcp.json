@@ -1,0 +1,100 @@
+{
+  "phase": "after",
+  "state": "named",
+  "reads": [
+    {
+      "route": "/work-ledger",
+      "query": {
+        "limit": "80"
+      },
+      "status": 200,
+      "requestID": "6ea250b6-ac19-4912-a1ec-1989ce79080c",
+      "data": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_hLJtxpP2NeNdkZS7wstg",
+            "title": "Quarterly portfolio planning and cross-project delivery review for North America",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-after",
+            "created": 1794224847276,
+            "updated": 1794224862293,
+            "pinned": false
+          },
+          {
+            "kind": "project",
+            "id": "prj_htIirE8OSd0zbB8l4HzG",
+            "title": "",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-after",
+            "created": 1794224862056,
+            "updated": 1794224862056,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "route": "/project/current",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-after"
+      },
+      "status": 200,
+      "requestID": "71f432f4-288a-4038-bf26-6fc467394246",
+      "data": {
+        "id": "prj_htIirE8OSd0zbB8l4HzG",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-after",
+        "time": {
+          "created": 1794224862056,
+          "updated": 1794224862056
+        },
+        "sandboxes": []
+      }
+    },
+    {
+      "route": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-after",
+        "path": "note.txt"
+      },
+      "status": 200,
+      "requestID": "b20dacf6-4b99-4ce1-8f54-73ea22c92d47",
+      "data": {
+        "type": "text",
+        "content": "Owned project summary reference-folder-after\n",
+        "revision": "40598878ae13bf35aa1ce5a2f706543e399c8392b195416aa813eb800f0ec1e2"
+      }
+    },
+    {
+      "route": "/project/current",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-after"
+      },
+      "status": 200,
+      "requestID": "7a48c9ec-4e5d-4387-98cf-407d9ea9ae82",
+      "data": {
+        "id": "prj_hLJtxpP2NeNdkZS7wstg",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-after",
+        "name": "Quarterly portfolio planning and cross-project delivery review for North America",
+        "time": {
+          "created": 1794224847276,
+          "updated": 1794224862293
+        },
+        "sandboxes": []
+      }
+    },
+    {
+      "route": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-after",
+        "path": "note.txt"
+      },
+      "status": 200,
+      "requestID": "b7925f60-4c65-4b44-bf97-f306beda3583",
+      "data": {
+        "type": "text",
+        "content": "Owned project summary planning-folder-after\n",
+        "revision": "774849907d73c16fcd8664764b3904ce661a87d2e77f2d7310ecfe724ac15096"
+      }
+    }
+  ]
+}

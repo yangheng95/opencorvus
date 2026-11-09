@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [侧栏项目摘要显示完整项目名证据](2026-11-09-project-summary-display-name/README.md)
 - [目录检查说明正在检查证据](2026-11-09-workspace-directory-check-progress/README.md)
 - [目录检查显示可操作的错误摘要证据](2026-11-09-workspace-directory-error-summary/README.md)
 - [浏览器文件夹确认先校验真实目录证据](2026-11-09-browser-workspace-directory-admission/README.md)

@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [侧栏项目摘要显示完整项目名](2026-11-09-project-summary-display-name.md)
 - [目录检查说明正在检查](2026-11-09-workspace-directory-check-progress.md)
 - [目录检查显示可操作的错误摘要](2026-11-09-workspace-directory-error-summary.md)
 - [浏览器文件夹确认先校验真实目录](2026-11-09-browser-workspace-directory-admission.md)

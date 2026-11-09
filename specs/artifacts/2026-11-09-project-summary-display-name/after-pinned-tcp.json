@@ -1,0 +1,101 @@
+{
+  "phase": "after",
+  "state": "pinned",
+  "reads": [
+    {
+      "route": "/work-ledger",
+      "query": {
+        "limit": "80"
+      },
+      "status": 200,
+      "requestID": "3988702d-6354-47fe-b5c9-96fdcec117a1",
+      "data": {
+        "rows": [
+          {
+            "kind": "project",
+            "id": "prj_hLJtxpP2NeNdkZS7wstg",
+            "title": "QuarterlyPortfolioPlanningAndCrossProjectDeliveryReviewForNorthAmericaWithCustomerEvidenceAndFollowUp",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-after",
+            "created": 1794224847276,
+            "updated": 1794224881296,
+            "pinned": true
+          },
+          {
+            "kind": "project",
+            "id": "prj_htIirE8OSd0zbB8l4HzG",
+            "title": "",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-after",
+            "created": 1794224862056,
+            "updated": 1794224862056,
+            "pinned": false
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    {
+      "route": "/project/current",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-after"
+      },
+      "status": 200,
+      "requestID": "1a0c7df4-a99a-412d-9ce8-c991278ba406",
+      "data": {
+        "id": "prj_htIirE8OSd0zbB8l4HzG",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-after",
+        "time": {
+          "created": 1794224862056,
+          "updated": 1794224862056
+        },
+        "sandboxes": []
+      }
+    },
+    {
+      "route": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-after",
+        "path": "note.txt"
+      },
+      "status": 200,
+      "requestID": "87a0aafd-69b6-40dd-98f7-3ebb946835ef",
+      "data": {
+        "type": "text",
+        "content": "Owned project summary reference-folder-after\n",
+        "revision": "40598878ae13bf35aa1ce5a2f706543e399c8392b195416aa813eb800f0ec1e2"
+      }
+    },
+    {
+      "route": "/project/current",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-after"
+      },
+      "status": 200,
+      "requestID": "fa115784-f679-4f53-90bf-792e15afcebf",
+      "data": {
+        "id": "prj_hLJtxpP2NeNdkZS7wstg",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-after",
+        "name": "QuarterlyPortfolioPlanningAndCrossProjectDeliveryReviewForNorthAmericaWithCustomerEvidenceAndFollowUp",
+        "time": {
+          "created": 1794224847276,
+          "updated": 1794224881296,
+          "pinned": 1794224886868
+        },
+        "sandboxes": []
+      }
+    },
+    {
+      "route": "/file/content",
+      "query": {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-after",
+        "path": "note.txt"
+      },
+      "status": 200,
+      "requestID": "9adbc55a-5054-499f-ac3e-0242ee0d4ab2",
+      "data": {
+        "type": "text",
+        "content": "Owned project summary planning-folder-after\n",
+        "revision": "774849907d73c16fcd8664764b3904ce661a87d2e77f2d7310ecfe724ac15096"
+      }
+    }
+  ]
+}

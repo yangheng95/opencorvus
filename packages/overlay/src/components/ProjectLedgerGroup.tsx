@@ -4,7 +4,7 @@ import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { showAppDialog, type AppDialogOpenOptions } from "../services/app-dialog"
 import { ApiAuthorityChangedError, ApiError, captureApiAuthority, isApiAuthorityCurrent } from "../services/api"
 import { localeTag, t } from "../utils/i18n"
-import { projectDirectoryKey, projectDirectoryLabel, projectDisplayName } from "../utils/project-directory"
+import { projectDirectoryKey, projectDisplayName } from "../utils/project-directory"
 import { workLedgerSummaryAnchorRect } from "../utils/work-ledger-summary-anchor"
 import { Icon } from "./ui/Icon"
 import { Button } from "./ui/Button"
@@ -162,8 +162,7 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
   const className = () => ["project-group", props.class].filter(Boolean).join(" ")
   const countText = () => new Intl.NumberFormat(localeTag()).format(props.count)
   const tooltipDirectory = () => props.directory.trim()
-  const tooltipFolderName = () => (tooltipDirectory() ? projectDirectoryLabel(tooltipDirectory(), "").name.trim() : "")
-  const hasTooltipSummary = () => Boolean(tooltipFolderName() || props.count > 0 || tooltipDirectory())
+  const hasTooltipSummary = () => Boolean(props.count > 0 || tooltipDirectory())
   const bodyElementID = () => projectLedgerGroupBodyElementID(props.directory, props.dataUi)
   const canCreateChat = () => !!props.onCreateChat && !!props.directory.trim()
   const canPinProject = () => !!props.onPinnedChange && !!props.directory.trim()
@@ -238,10 +237,10 @@ export function ProjectLedgerGroup(props: ProjectLedgerGroupProps) {
                 class="card-meta-tooltip project-group-summary-tooltip"
                 data-ui="project-group-summary-tooltip"
               >
-                <Show when={tooltipFolderName()}>
+                <Show when={tooltipDirectory()}>
                   <div class="project-group-summary-tooltip__headline">
                     <Icon name="folder" size="medium" />
-                    <strong>{tooltipFolderName()}</strong>
+                    <strong>{label().name}</strong>
                   </div>
                 </Show>
                 <Show when={props.count > 0}>

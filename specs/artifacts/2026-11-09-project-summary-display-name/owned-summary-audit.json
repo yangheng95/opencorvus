@@ -1,0 +1,171 @@
+{
+  "before": {
+    "browserRequests": {
+      "referenceAt": {
+        "requestID": "a5a3fa47-cef5-4cd5-a6ba-c35e669235ba",
+        "method": "GET",
+        "path": "/global/projects/check-directory",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1,
+        "time": "2026-11-09T11:42:47.704Z"
+      },
+      "renameAt": {
+        "requestID": "92a629cf-76e5-45c8-97f8-6ec08dd226ad",
+        "method": "PATCH",
+        "path": "/project/current",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 7,
+        "time": "2026-11-09T11:43:06.909Z"
+      }
+    },
+    "liveReadRequestIDs": [],
+    "projects": [
+      [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-before",
+        "Quarterly portfolio planning and cross-project delivery review for North America",
+        null
+      ],
+      [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-before",
+        null,
+        null
+      ]
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-before",
+        "gitHead": "4153104e08aab2495926574ddae4c7848e1236c1",
+        "content": "Owned project summary planning-folder-before\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-before",
+        "gitHead": "4aa56b55d033c0193ad5cf7fe9b04c219141f0eb",
+        "content": "Owned project summary reference-folder-before\n"
+      }
+    ],
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b112-before",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39174",
+      "pid": 8796
+    },
+    "shutdown": {
+      "status": 200,
+      "pid": 8796,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTXazL00F7kGNeDh7"
+      },
+      "port": 39174
+    }
+  },
+  "after": {
+    "browserRequests": {
+      "referenceAt": {
+        "requestID": "64a9eb13-c3ac-490c-a53f-4f9876ddde7a",
+        "method": "GET",
+        "path": "/global/projects/check-directory",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 1,
+        "time": "2026-11-09T11:47:41.707Z"
+      },
+      "renameAt": {
+        "requestID": "6b06f293-eb7e-428b-a0c4-f151e74e2f89",
+        "method": "PATCH",
+        "path": "/project/current",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 3,
+        "time": "2026-11-09T11:47:42.294Z"
+      },
+      "longRenameAt": {
+        "requestID": "bfaa5513-70cd-41ff-a1f9-ea1bb6723ed6",
+        "method": "PATCH",
+        "path": "/project/current",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5,
+        "time": "2026-11-09T11:48:01.300Z"
+      },
+      "pinAt": {
+        "requestID": "5e32920f-a71e-4c91-9e1e-58d1cd087e08",
+        "method": "PATCH",
+        "path": "/work-ledger/project/prj_hLJtxpP2NeNdkZS7wstg/pin",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 5,
+        "time": "2026-11-09T11:48:06.872Z"
+      }
+    },
+    "liveReadRequestIDs": [
+      "6ea250b6-ac19-4912-a1ec-1989ce79080c",
+      "71f432f4-288a-4038-bf26-6fc467394246",
+      "b20dacf6-4b99-4ce1-8f54-73ea22c92d47",
+      "7a48c9ec-4e5d-4387-98cf-407d9ea9ae82",
+      "b7925f60-4c65-4b44-bf97-f306beda3583",
+      "3988702d-6354-47fe-b5c9-96fdcec117a1",
+      "1a0c7df4-a99a-412d-9ce8-c991278ba406",
+      "87a0aafd-69b6-40dd-98f7-3ebb946835ef",
+      "fa115784-f679-4f53-90bf-792e15afcebf",
+      "9adbc55a-5054-499f-ac3e-0242ee0d4ab2"
+    ],
+    "projects": [
+      [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-after",
+        "QuarterlyPortfolioPlanningAndCrossProjectDeliveryReviewForNorthAmericaWithCustomerEvidenceAndFollowUp",
+        1794224886868
+      ],
+      [
+        "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-after",
+        null,
+        null
+      ]
+    ],
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "files": [
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\reference-folder-after",
+        "gitHead": "418433bb9191c4217e6b7e8071f646c368fd0cb6",
+        "content": "Owned project summary reference-folder-after\n"
+      },
+      {
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b112\\planning-folder-after",
+        "gitHead": "5422c8f8582567d83597b37cd2f25302735253ce",
+        "content": "Owned project summary planning-folder-after\n"
+      }
+    ],
+    "startup": {
+      "schemaVersion": 1,
+      "occurrenceID": "iteration-b112-after",
+      "outcome": "listening",
+      "url": "http://127.0.0.1:39175",
+      "pid": 16668
+    },
+    "shutdown": {
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaTYrQk00b5lc1Sjug"
+      },
+      "status": 200,
+      "pid": 16668,
+      "port": 39175
+    }
+  }
+}
