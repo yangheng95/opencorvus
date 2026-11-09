@@ -4,6 +4,52 @@
 
 ## 未发布
 
+## 0.1.50 - 2026-11-10
+
+### zh-CN
+
+#### 新增
+
+- 应用设置的版本历史支持按标准日期或当前界面语言显示的日期搜索，也可和版本号、日志关键词组合使用。
+- 多步任务技能支持组合搜索名称、说明、来源与工具。打开详情再返回时，保留搜索、来源筛选和原技能的位置。
+
+#### 调整
+
+- 通道目录区分读取中、读取失败和目录实际为空，支持在原位查看诊断并重试。授权模式和操作记录在刷新时保留当前上下文。能力分配的保存结果无法确认时，可以重新读取当前分配。
+- 项目摘要显示完整项目名。手填工作目录的等待状态可以取消。归档操作已成功但列表刷新失败时，可以单独重试刷新。
+
+#### 修复
+
+- 工作列表读取超时后可以用原查询重试。改进命令搜索、计划任务、邮箱、日志与记忆的重试和键盘焦点，并在刷新日志时保留阅读位置。
+- 文本预览区分读取失败和字符编码错误。原文件下载和 Markdown 本地图像重试保留当前目标。项目记忆和原始笔记读取失败后可以从原处重试。
+- 已安装专家团的分页和详情读取失败时保留已读目录，并提供重试。多步任务技能详情保留打开时的技能身份，目录刷新后仍能辨认原条目。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 10。macOS 安装包使用临时签名，尚未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Search release history in Settings by a `YYYY-MM-DD` date or the date shown in the current language. Combine a date with a version or keywords from the notes.
+- Search Mission Skills across names, descriptions, sources, and tools. Returning from a skill keeps the query, source filter, and position in the list.
+
+#### Changed
+
+- The channel catalog distinguishes loading, failed reads, and an empty catalog, with diagnostics and retry available in place. Authorization settings and records preserve context during refresh. When a capability assignment cannot be confirmed, you can reread the current assignments.
+- Project summaries show full project names. You can cancel a pending check when entering a workspace directory. If an archive action succeeds and the list refresh fails, you can retry the refresh on its own.
+
+#### Fixed
+
+- Retry a timed-out work list with the original query. Improve retry and keyboard focus in command search, scheduled tasks, the mailbox, logs, and memory. Refreshing logs preserves the reading position.
+- Text previews distinguish read failures from character encoding errors. Retrying an original download or a local Markdown image keeps the current target. Retry project memory and original note reads in place.
+- Installed Expert Squads retain the loaded catalog when a page or detail read fails, with a retry for the failed read. A Mission Skill detail keeps the identity of the skill you opened through a catalog refresh.
+
+#### Upgrade impact and known limitations
+
+- Database version remains 10. macOS installers ship with ad hoc signatures and have yet to be notarized by Apple.
+
 ## 0.1.49 - 2026-11-09
 
 ### zh-CN

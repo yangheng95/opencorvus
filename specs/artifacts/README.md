@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [0.1.50 发布证据](2026-11-10-release-0.1.50/README.md) · 原生、官网和正式包日志
 - [通道目录区分等待、读取失败与实际为空证据](2026-11-10-channel-catalog-read-retry/README.md)
 - [重新加载授权模式保留焦点与诊断证据](2026-11-10-permission-mode-reload-focus/README.md)
 - [审批与历史刷新保留已确认读取证据](2026-11-10-permission-ledger-refresh/README.md)
