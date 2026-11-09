@@ -3882,7 +3882,7 @@ export class ExpertSquad extends HeyApiClient {
   /**
    * Browse bundled expert squads
    *
-   * Returns a bounded manifest-derived page of bundled expert-squad payload packages. Rich package and update detail is loaded only for an exact selection.
+   * Returns a bounded page of bundled expert squads. Installation scopes identify the exact market package. Available results exclude installed packages and identities blocked in the current project. Rich detail is loaded only for an exact selection.
    */
   public market<ThrowOnError extends boolean = false>(
     parameters?: {

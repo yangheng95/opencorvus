@@ -50,6 +50,15 @@ async function catalogGet(directory: string, endpoint: string, params: Record<st
   return { status: response.status, body: await response.json() }
 }
 
+async function installBundledForProject(directory: string, id: string) {
+  const response = await Server.App().request("/expert-squad/install-payload", {
+    method: "POST",
+    headers: { "x-opencorvus-directory": directory, "content-type": "application/json" },
+    body: JSON.stringify({ id, installationScope: "project" }),
+  })
+  return { status: response.status, body: await response.json() }
+}
+
 test("cold inventory and diagnostics retain real project catalogue facts without an execution model", async () => {
   await using project = await memoryProject("inventory78")
   await using other = await memoryProject("inventory-other78")
@@ -228,12 +237,7 @@ test("market paging exposes query errors and stale revisions while keeping the c
       body: { success: false, error: [{ code: "too_small", path: ["limit"] }] },
     })
 
-    const install = await Server.App().request("/expert-squad/install-payload", {
-      method: "POST",
-      headers: { "x-opencorvus-directory": project.path, "content-type": "application/json" },
-      body: JSON.stringify({ id: "deep-research", installationScope: "project" }),
-    })
-    expect({ status: install.status, body: await install.json() }).toMatchObject({
+    expect(await installBundledForProject(project.path, "deep-research")).toMatchObject({
       status: 200,
       body: { operation: "installed", after: { id: "deep-research", namespace: "builtin", installationScope: "project" } },
     })
@@ -251,6 +255,89 @@ test("market paging exposes query errors and stale revisions while keeping the c
     expect(await read({ availability: "installed", limit: "20" })).toMatchObject({
       status: 200,
       body: { entries: [{ id: "deep-research", namespace: "builtin", installation_scopes: ["project"] }], total_count: 1 },
+    })
+  })
+})
+
+test("market recommendations distinguish the exact package from another scope's same logical ID", async () => {
+  await using project = await memoryProject("market-installation-identity")
+  await using occupied = await memoryProject("market-occupied-project")
+  const id = "deep-research"
+  const globalRoot = ExpertSquadPackageLocations.global().packagesRoot
+  const runtimeRoot = process.env.OPENCORVUS_TEST_PROCESS_ROOT
+  if (!runtimeRoot || !path.resolve(globalRoot).startsWith(path.resolve(runtimeRoot) + path.sep)) {
+    throw new Error("Market installation test requires an isolated global package root")
+  }
+  const first = await runOutsideInstanceContext(() => catalogGet(project.path, "market", { limit: "1" }))
+  expect(first.status).toBe(200)
+  const originalCursor = first.body.next_cursor as string
+  expect(typeof originalCursor).toBe("string")
+  const originalNext = await runOutsideInstanceContext(() =>
+    catalogGet(project.path, "market", { limit: "1", cursor: originalCursor }),
+  )
+  expect(originalNext.status).toBe(200)
+  for (const [root, namespace] of [
+    [globalRoot, "local"],
+    [ExpertSquadPackageLocations.project(occupied.path).packagesRoot, "workshop"],
+  ]) {
+    const definition = ownedPackageDefinition(id)
+    definition.manifest.namespace = namespace
+    await writeExpertSquadPackage({ directory: path.join(root, namespace, id), definition })
+  }
+  await ExpertSquadRegistry.invalidateAvailable()
+
+  await runOutsideInstanceContext(async () => {
+    const query = { query: id, limit: "20" }
+    const market = (directory: string, availability: "all" | "available" | "installed") =>
+      catalogGet(directory, "market", { ...query, availability })
+    const entry = (body: { entries: Array<{ id: string }> }) => body.entries.find((item) => item.id === id)
+    expect(await catalogGet(project.path, "market", { limit: "1", cursor: originalCursor })).toMatchObject({
+      status: 200,
+      body: { entries: originalNext.body.entries },
+    })
+    const available = await market(project.path, "available")
+    expect(available.status).toBe(200)
+    expect(entry(available.body)).toMatchObject({ id, namespace: "builtin", installation_scopes: [] })
+    const blockedMarket = await market(occupied.path, "available")
+    expect(blockedMarket).toMatchObject({ status: 200, body: { total_count: available.body.total_count - 1 } })
+    const blockedAll = await market(occupied.path, "all")
+    expect(entry(blockedAll.body)).toMatchObject({ id, namespace: "builtin", installation_scopes: [] })
+    expect(await installBundledForProject(occupied.path, id)).toMatchObject({
+      status: 400,
+      body: { name: "ExpertSquadPackageError", data: { message: expect.stringContaining("already exists") } },
+    })
+    const duplicate = ownedPackageDefinition(id)
+    duplicate.manifest.namespace = "quarantine"
+    await writeExpertSquadPackage({
+      directory: path.join(ExpertSquadPackageLocations.project(occupied.path).packagesRoot, "quarantine", id),
+      definition: duplicate,
+    })
+    await ExpertSquadRegistry.invalidateAvailable()
+    const diagnostics = await catalogGet(occupied.path, "diagnostics", { limit: "20" })
+    const duplicateNamespaces = diagnostics.body.entries
+      .filter((row: { kind: string; issue?: { id: string; phase: string } }) =>
+        row.kind === "issue" && row.issue?.id === id && row.issue.phase === "identity.duplicate",
+      )
+      .map((row: { issue: { namespace: string } }) => row.issue.namespace)
+      .sort()
+    expect(diagnostics.status).toBe(200)
+    expect(duplicateNamespaces).toEqual(["quarantine", "workshop"])
+    expect(await market(occupied.path, "available")).toMatchObject({
+      status: 200,
+      body: { total_count: blockedMarket.body.total_count },
+    })
+
+    expect(await installBundledForProject(project.path, id)).toMatchObject({
+      status: 200,
+      body: { operation: "installed", after: { id, namespace: "builtin", installationScope: "project" } },
+    })
+    const installed = await market(project.path, "installed")
+    expect(installed.status).toBe(200)
+    expect(entry(installed.body)).toMatchObject({ id, namespace: "builtin", installation_scopes: ["project"] })
+    const detail = await catalogGet(project.path, "market/detail", { id })
+    expect(detail).toMatchObject({
+      status: 200,
+      body: { namespace: "builtin", id, installations: [{ installation_scope: "project" }] },
     })
   })
 })

@@ -1,0 +1,53 @@
+{
+  "phase": "after",
+  "step": "initial",
+  "all": {
+    "requestID": "7e518d1c-da82-4223-97d4-4dfa87cf0d6d",
+    "total": 117,
+    "entry": {
+      "namespace": "builtin",
+      "id": "deep-research",
+      "name": "Deep Research",
+      "scopes": []
+    }
+  },
+  "available": {
+    "requestID": "b68eb8c9-e23d-4996-add0-9cce10aed0e9",
+    "total": 117,
+    "entry": {
+      "namespace": "builtin",
+      "id": "deep-research",
+      "name": "Deep Research",
+      "scopes": []
+    }
+  },
+  "installed": {
+    "requestID": "27dd45ff-f1e7-4dc1-aec9-495c933b895d",
+    "total": 0,
+    "entry": null
+  },
+  "detail": {
+    "requestID": "66369b83-1375-4dbc-a7fb-b96aa236dad5",
+    "namespace": "builtin",
+    "id": "deep-research",
+    "scopes": []
+  },
+  "physical": {
+    "requestID": "c6012e8b-e37a-4a45-b7a7-efaff136f825",
+    "entries": [
+      {
+        "id": "deep-research",
+        "name": "Local Research Notebook",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "global",
+          "namespace": "local"
+        }
+      }
+    ]
+  },
+  "active": {
+    "requestID": "fcd4b835-f03d-4076-ac43-153c84958776",
+    "effective": "dynamic"
+  }
+}

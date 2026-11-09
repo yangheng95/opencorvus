@@ -315,7 +315,9 @@ package 后通过可见 handoff 返回 Overlay，Overlay 校验 archive/package 
 `project | global` scope，再使用同一 Manager 安装协议按需安装 repository-hosted payload。Composer 与 Mission
 的 editable Expert Squad picker 提供打开这个 Market 入口的动作；Mission 创建入口还会把
 operator 输入的 Expert Squad 查询交给同一 Market 模糊检索；排序输入包括 manifest selector、package-owned Skill 与
-Agent prompt 的 bounded discovery text，并只返回未安装建议。每条建议提供精确 public Market 页面和显式 project-scope
+Agent prompt 的 bounded discovery text，并只返回未安装、当前项目范围可安装的建议。Market 的安装范围按精确
+namespace/ID 投影；异来源用户全局包不占用当前项目，同项目同 ID 包或该范围的安装诊断可阻止建议。
+撰写器与任务计划直接使用 Market 建议，不按运行逻辑 ID 二次过滤。每条建议提供精确 public Market 页面和显式 project-scope
 安装动作。该建议面不是第二个可浏览目录；安装完成后只刷新 picker catalog，不会把打开或安装动作写成 Squad 选择或
 激活 profile，也不会自动覆盖现有安装。Native argv、single-instance 与 deep-link producer 只更新一个 latest pending
 handoff；renderer listener 在全局启动 readiness barrier 之外异步安装，event 只负责唤醒同一个 reconciliation

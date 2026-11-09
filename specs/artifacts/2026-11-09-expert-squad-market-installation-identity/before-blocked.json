@@ -1,0 +1,69 @@
+{
+  "phase": "before",
+  "step": "blocked",
+  "all": {
+    "requestID": "c7f97611-8c21-4d91-8139-336272fb94d1",
+    "total": 117,
+    "entry": {
+      "namespace": "builtin",
+      "id": "deep-research",
+      "name": "Deep Research",
+      "scopes": [
+        "project",
+        "global"
+      ]
+    }
+  },
+  "available": {
+    "requestID": "07f25f12-dce1-468b-95c8-c0410c142982",
+    "total": 116,
+    "entry": null
+  },
+  "installed": {
+    "requestID": "c7ef23cc-6120-4d8b-b995-cc5b3127668c",
+    "total": 1,
+    "entry": {
+      "namespace": "builtin",
+      "id": "deep-research",
+      "name": "Deep Research",
+      "scopes": [
+        "project",
+        "global"
+      ]
+    }
+  },
+  "detail": {
+    "requestID": "1e0c532b-0918-4ca9-99f6-1e0622cb1ad4",
+    "scopes": []
+  },
+  "physical": [
+    {
+      "id": "deep-research",
+      "name": "Local Research Notebook",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "global",
+        "namespace": "local"
+      }
+    },
+    {
+      "id": "deep-research",
+      "name": "Workshop Research Notebook",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "project",
+        "namespace": "workshop"
+      }
+    }
+  ],
+  "install": {
+    "requestID": "2eaa06a1-ba13-4abe-b993-bf0ddf5b9afb",
+    "status": 400,
+    "body": {
+      "name": "ExpertSquadPackageError",
+      "data": {
+        "message": "Expert squad package id \"deep-research\" already exists at C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b72\\project-blocked-before\\.opencorvus\\expert-squads\\workshop\\deep-research; manifest id is unique across namespaces."
+      }
+    }
+  }
+}

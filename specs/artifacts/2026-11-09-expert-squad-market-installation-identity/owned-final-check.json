@@ -1,0 +1,112 @@
+{
+  "before": {
+    "projects": {
+      "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b72\\project-before": {
+        "head": "dbc95eb273a226db6228d20f4b26769d84225114",
+        "trackedFiles": 1
+      },
+      "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b72\\project-blocked-before": {
+        "head": "7879504c2ed955b6f43e47784f727192674f68a9",
+        "trackedFiles": 4
+      }
+    },
+    "globalOriginalFiles": [
+      "config/expert-squads/local/deep-research/README.md",
+      "config/expert-squads/local/deep-research/expert-squad.jsonc",
+      "config/expert-squads/local/deep-research/selector.md"
+    ],
+    "bundledProjectInstall": {
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b72\\project-before\\.opencorvus\\expert-squads\\builtin\\deep-research",
+      "files": [
+        "README.md",
+        "agents/deep-research-citation-reviewer/system.md",
+        "agents/deep-research-draft-writer/system.md",
+        "agents/deep-research-knowledge-curator/system.md",
+        "agents/deep-research-outline-editor/system.md",
+        "agents/deep-research-planner/system.md",
+        "agents/deep-research-report-writer/system.md",
+        "agents/orchestrator/system.md",
+        "expert-squad.jsonc",
+        "selector.md",
+        "skills/method/SKILL.md",
+        "skills/workflow/SKILL.md"
+      ]
+    },
+    "runtimeCounts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "actualInstallRequests": [
+      {
+        "method": "POST",
+        "path": "/expert-squad/install-payload",
+        "requestID": "de79b34d-4d88-4405-b32f-3328b81fa41e",
+        "statusCode": 200
+      },
+      {
+        "method": "POST",
+        "path": "/expert-squad/install-payload",
+        "requestID": "2eaa06a1-ba13-4abe-b993-bf0ddf5b9afb",
+        "statusCode": 400
+      }
+    ]
+  },
+  "after": {
+    "projects": {
+      "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b72\\project-after": {
+        "head": "dbc95eb273a226db6228d20f4b26769d84225114",
+        "trackedFiles": 1
+      },
+      "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b72\\project-blocked-after": {
+        "head": "e09b5c608ae1ec8e822ad03e72d508a167d33657",
+        "trackedFiles": 4
+      }
+    },
+    "globalOriginalFiles": [
+      "config/expert-squads/local/deep-research/README.md",
+      "config/expert-squads/local/deep-research/expert-squad.jsonc",
+      "config/expert-squads/local/deep-research/selector.md"
+    ],
+    "bundledProjectInstall": {
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b72\\project-after\\.opencorvus\\expert-squads\\builtin\\deep-research",
+      "files": [
+        "README.md",
+        "agents/deep-research-citation-reviewer/system.md",
+        "agents/deep-research-draft-writer/system.md",
+        "agents/deep-research-knowledge-curator/system.md",
+        "agents/deep-research-outline-editor/system.md",
+        "agents/deep-research-planner/system.md",
+        "agents/deep-research-report-writer/system.md",
+        "agents/orchestrator/system.md",
+        "expert-squad.jsonc",
+        "selector.md",
+        "skills/method/SKILL.md",
+        "skills/workflow/SKILL.md"
+      ]
+    },
+    "runtimeCounts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "actualInstallRequests": [
+      {
+        "method": "POST",
+        "path": "/expert-squad/install-payload",
+        "requestID": "19fc1a8e-e775-4d21-a657-77be466310ba",
+        "statusCode": 200
+      },
+      {
+        "method": "POST",
+        "path": "/expert-squad/install-payload",
+        "requestID": "2c4465a2-26d1-4571-a999-5205b2d2a575",
+        "statusCode": 400
+      }
+    ]
+  }
+}

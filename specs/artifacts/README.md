@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [专家团市场安装身份证据](2026-11-09-expert-squad-market-installation-identity/README.md)
 - [专家团市场游标契约证据](2026-11-09-expert-squad-market-cursor-contract/README.md)
 - [专家团目录游标错误契约证据](2026-11-09-expert-squad-catalog-cursor-contract/README.md)
 - [专家团诊断续页与目录恢复证据](2026-11-09-expert-squad-diagnostics-continuation-recovery/README.md)

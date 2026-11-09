@@ -1,0 +1,46 @@
+{
+  "before": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b72\\project-before",
+    "files": {
+      "notes.txt": "Market identity contract. Original isolated file.\n"
+    },
+    "globalFiles": {
+      "config/expert-squads/local/deep-research/expert-squad.jsonc": "{\n  \"schema_version\": 2,\n  \"namespace\": \"local\",\n  \"id\": \"deep-research\",\n  \"label\": \"Local Research Notebook\",\n  \"description\": \"Read-only market identity fixture.\",\n  \"version\": \"2026.11.09.1\",\n  \"product_pillars\": [\n    \"code\",\n    \"work\"\n  ],\n  \"readme\": \"README.md\",\n  \"selector\": {\n    \"summary\": \"Maintain a local research notebook.\",\n    \"selection_guidance\": \"Use only for local catalog identity verification.\",\n    \"instructions\": \"selector.md\"\n  },\n  \"capability_sets\": {},\n  \"capability_projection\": {\n    \"scheduler\": {\n      \"base_role\": \"orchestrator\",\n      \"capability_refs\": []\n    },\n    \"agents\": {},\n    \"virtual_workflows\": {}\n  }\n}\n",
+      "config/expert-squads/local/deep-research/README.md": "# Local Research Notebook\n",
+      "config/expert-squads/local/deep-research/selector.md": "# Local fixture selector\n"
+    },
+    "head": "dbc95eb273a226db6228d20f4b26769d84225114",
+    "blocked": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b72\\project-blocked-before",
+      "files": {
+        "notes.txt": "Separate project with a same-scope logical identity reservation.\n",
+        ".opencorvus/expert-squads/workshop/deep-research/expert-squad.jsonc": "{\n  \"schema_version\": 2,\n  \"namespace\": \"workshop\",\n  \"id\": \"deep-research\",\n  \"label\": \"Workshop Research Notebook\",\n  \"description\": \"Read-only market identity fixture.\",\n  \"version\": \"2026.11.09.1\",\n  \"product_pillars\": [\n    \"code\",\n    \"work\"\n  ],\n  \"readme\": \"README.md\",\n  \"selector\": {\n    \"summary\": \"Maintain a local research notebook.\",\n    \"selection_guidance\": \"Use only for local catalog identity verification.\",\n    \"instructions\": \"selector.md\"\n  },\n  \"capability_sets\": {},\n  \"capability_projection\": {\n    \"scheduler\": {\n      \"base_role\": \"orchestrator\",\n      \"capability_refs\": []\n    },\n    \"agents\": {},\n    \"virtual_workflows\": {}\n  }\n}\n",
+        ".opencorvus/expert-squads/workshop/deep-research/README.md": "# Workshop Research Notebook\n",
+        ".opencorvus/expert-squads/workshop/deep-research/selector.md": "# Workshop selector\n"
+      },
+      "head": "7879504c2ed955b6f43e47784f727192674f68a9"
+    }
+  },
+  "after": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b72\\project-after",
+    "files": {
+      "notes.txt": "Market identity contract. Original isolated file.\n"
+    },
+    "globalFiles": {
+      "config/expert-squads/local/deep-research/expert-squad.jsonc": "{\n  \"schema_version\": 2,\n  \"namespace\": \"local\",\n  \"id\": \"deep-research\",\n  \"label\": \"Local Research Notebook\",\n  \"description\": \"Read-only market identity fixture.\",\n  \"version\": \"2026.11.09.1\",\n  \"product_pillars\": [\n    \"code\",\n    \"work\"\n  ],\n  \"readme\": \"README.md\",\n  \"selector\": {\n    \"summary\": \"Maintain a local research notebook.\",\n    \"selection_guidance\": \"Use only for local catalog identity verification.\",\n    \"instructions\": \"selector.md\"\n  },\n  \"capability_sets\": {},\n  \"capability_projection\": {\n    \"scheduler\": {\n      \"base_role\": \"orchestrator\",\n      \"capability_refs\": []\n    },\n    \"agents\": {},\n    \"virtual_workflows\": {}\n  }\n}\n",
+      "config/expert-squads/local/deep-research/README.md": "# Local Research Notebook\n",
+      "config/expert-squads/local/deep-research/selector.md": "# Local fixture selector\n"
+    },
+    "head": "dbc95eb273a226db6228d20f4b26769d84225114",
+    "blocked": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b72\\project-blocked-after",
+      "files": {
+        "notes.txt": "Separate project with a same-scope logical identity reservation.\n",
+        ".opencorvus/expert-squads/workshop/deep-research/expert-squad.jsonc": "{\n  \"schema_version\": 2,\n  \"namespace\": \"workshop\",\n  \"id\": \"deep-research\",\n  \"label\": \"Workshop Research Notebook\",\n  \"description\": \"Read-only market identity fixture.\",\n  \"version\": \"2026.11.09.1\",\n  \"product_pillars\": [\n    \"code\",\n    \"work\"\n  ],\n  \"readme\": \"README.md\",\n  \"selector\": {\n    \"summary\": \"Maintain a local research notebook.\",\n    \"selection_guidance\": \"Use only for local catalog identity verification.\",\n    \"instructions\": \"selector.md\"\n  },\n  \"capability_sets\": {},\n  \"capability_projection\": {\n    \"scheduler\": {\n      \"base_role\": \"orchestrator\",\n      \"capability_refs\": []\n    },\n    \"agents\": {},\n    \"virtual_workflows\": {}\n  }\n}\n",
+        ".opencorvus/expert-squads/workshop/deep-research/README.md": "# Workshop Research Notebook\n",
+        ".opencorvus/expert-squads/workshop/deep-research/selector.md": "# Workshop selector\n"
+      },
+      "head": "e09b5c608ae1ec8e822ad03e72d508a167d33657"
+    }
+  }
+}

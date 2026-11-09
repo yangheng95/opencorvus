@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [专家团市场安装身份](2026-11-09-expert-squad-market-installation-identity.md)
 - [专家团市场游标契约](2026-11-09-expert-squad-market-cursor-contract.md)
 - [专家团目录游标错误契约](2026-11-09-expert-squad-catalog-cursor-contract.md)
 - [专家团诊断续页与目录恢复](2026-11-09-expert-squad-diagnostics-continuation-recovery.md)

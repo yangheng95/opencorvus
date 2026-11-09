@@ -1600,22 +1600,44 @@ export namespace ExpertSquadPackageManager {
     installedPackageDigest: string
   }
 
-  async function marketInstallationScopes(projectDirectory: string) {
-    const scopes = new Map<string, ExpertSquadPackageLocations.InstallationScope[]>()
-    const inventory = await ExpertSquadRegistry.discoverAvailableIdentities(projectDirectory, { view: "installations" })
-    for (const declaration of inventory.items) {
-      const current = scopes.get(declaration.id) ?? []
-      current.push(declaration.location)
-      scopes.set(declaration.id, current)
-    }
-    const scopeOrder: Record<ExpertSquadPackageLocations.InstallationScope, number> = { project: 0, global: 1 }
-    for (const current of scopes.values()) current.sort((left, right) => scopeOrder[left] - scopeOrder[right])
-    return scopes
-  }
-
   const payloadMarketDeclarations = payloadPackageSources.map((source) =>
     ExpertSquadRegistry.loadEmbeddedCatalogDeclaration(source),
   )
+  const payloadMarketNamespaces = new Map(payloadMarketDeclarations.map(({ id, namespace }) => [id, namespace]))
+
+  type MarketInstallation = {
+    scopes: ExpertSquadPackageLocations.InstallationScope[]
+    projectBlocked: boolean
+  }
+
+  async function marketInstallations(projectDirectory: string) {
+    const installations = new Map<string, MarketInstallation>()
+    const stateFor = (id: string) => {
+      let state = installations.get(id)
+      if (!state) {
+        state = { scopes: [], projectBlocked: false }
+        installations.set(id, state)
+      }
+      return state
+    }
+    const inventory = await ExpertSquadRegistry.discoverAvailableIdentities(projectDirectory, { view: "installations" })
+    for (const declaration of inventory.items) {
+      const namespace = payloadMarketNamespaces.get(declaration.id)
+      if (namespace === undefined) continue
+      if (namespace === declaration.namespace) stateFor(declaration.id).scopes.push(declaration.location)
+      else if (declaration.location === "project") stateFor(declaration.id).projectBlocked = true
+    }
+    const projectPackagesRoot = ExpertSquadPackageLocations.project(projectDirectory).packagesRoot
+    for (const issue of inventory.issues) {
+      if (issue.id && payloadMarketNamespaces.has(issue.id) && Filesystem.contains(projectPackagesRoot, issue.location)) {
+        stateFor(issue.id).projectBlocked = true
+      }
+    }
+    const scopeOrder: Record<ExpertSquadPackageLocations.InstallationScope, number> = { project: 0, global: 1 }
+    for (const state of installations.values()) state.scopes.sort((left, right) => scopeOrder[left] - scopeOrder[right])
+    return installations
+  }
+
   const MARKET_SELECTOR_SEARCH_LIMIT = 2_400
   const MARKET_SKILL_SEARCH_LIMIT = 8_000
   const MARKET_PROMPT_SEARCH_LIMIT = 14_000
@@ -1703,7 +1725,7 @@ export namespace ExpertSquadPackageManager {
       generation: number
       snapshot: Promise<{
         revision: string
-        installationScopes: Map<string, ExpertSquadPackageLocations.InstallationScope[]>
+        installations: Map<string, MarketInstallation>
         ranked: Map<string, typeof payloadMarketDeclarations>
       }>
     }
@@ -1715,16 +1737,16 @@ export namespace ExpertSquadPackageManager {
     const active = payloadMarketSnapshotCache.get(key)
     if (active?.generation === generation) return active.snapshot
     const snapshot = (async () => {
-      const installationScopes = await marketInstallationScopes(projectDirectory)
+      const installations = await marketInstallations(projectDirectory)
       const revision = createHash("sha256")
         .update(
           JSON.stringify({
             declarations: payloadMarketDeclarations.map(({ manifest: _manifest, ...entry }) => entry),
-            installation_scopes: [...installationScopes.entries()].sort(([left], [right]) => left.localeCompare(right)),
+            installations: [...installations.entries()].sort(([left], [right]) => left.localeCompare(right)),
           }),
         )
         .digest("hex")
-      return { revision, installationScopes, ranked: new Map<string, typeof payloadMarketDeclarations>() }
+      return { revision, installations, ranked: new Map<string, typeof payloadMarketDeclarations>() }
     })()
     payloadMarketSnapshotCache.delete(key)
     payloadMarketSnapshotCache.set(key, { generation, snapshot })
@@ -1758,8 +1780,9 @@ export namespace ExpertSquadPackageManager {
     if (!ranked) {
       ranked = payloadMarketDeclarations
         .filter((entry) => {
-          const installed = (snapshot.installationScopes.get(entry.id)?.length ?? 0) > 0
-          if (availability === "available") return !installed
+          const installation = snapshot.installations.get(entry.id)
+          const installed = (installation?.scopes.length ?? 0) > 0
+          if (availability === "available") return !installed && !installation?.projectBlocked
           if (availability === "installed") return installed
           return true
         })
@@ -1805,7 +1828,7 @@ export namespace ExpertSquadPackageManager {
         ...(entry.description?.length ? { description: entry.description.slice(0, 1_000) } : {}),
         version: entry.version.slice(0, 80),
         productPillars: [...entry.manifest.product_pillars],
-        installationScopes: snapshot.installationScopes.get(entry.id) ?? [],
+        installationScopes: snapshot.installations.get(entry.id)?.scopes ?? [],
       })),
       nextCursor:
         nextOffset < ranked.length

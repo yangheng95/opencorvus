@@ -190,13 +190,6 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
   const [marketInstallingID, setMarketInstallingID] = createSignal("")
   let marketSequence = 0
 
-  // A Squad already installed is offered by the list above; showing it again
-  // under "install" would invite an operator to install what they have.
-  const marketOffers = createMemo(() => {
-    const installed = new Set(props.expertSquads.map((squad) => squad.id))
-    return marketItems().filter((item) => !installed.has(item.id))
-  })
-
   createEffect(() => {
     const opened = open()
     const search = props.onMarketExpertSquadQuery
@@ -556,7 +549,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                     when={
                       filteredSkillOptions().length === 0 &&
                       filteredSquadOptions().every((option) => option.outsideSearch) &&
-                      marketOffers().length === 0 &&
+                      marketItems().length === 0 &&
                       !marketLoading() &&
                       !squadSearchLoading() &&
                       !props.catalogError
@@ -564,7 +557,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                   >
                     <div class="composer-reference-empty">{t("chat.references.no_matches")}</div>
                   </Show>
-                  <Show when={marketLoading() || marketError() || marketOffers().length > 0}>
+                  <Show when={marketLoading() || marketError() || marketItems().length > 0}>
                     <div class="composer-reference-market" data-ui="composer-reference-market">
                       <div class="composer-reference-market-head">
                         <span>{t("chat.references.market_results")}</span>
@@ -575,7 +568,7 @@ export function ComposerReferenceSelector(props: ComposerReferenceSelectorProps)
                       <Show when={marketError()}>
                         <div class="composer-reference-market-error">{marketError()}</div>
                       </Show>
-                      <For each={marketOffers()}>
+                      <For each={marketItems()}>
                         {(item) => (
                           <div class="composer-reference-option" data-reference-kind="market">
                             <span class="composer-reference-option-selection" aria-hidden="true" />

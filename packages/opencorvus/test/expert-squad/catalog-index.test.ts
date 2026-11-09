@@ -760,15 +760,26 @@ describe("Expert Squad catalog index", () => {
     })
   })
 
-  test("keeps Market scope ordering and revision deterministic across Resolver call order", async () => {
+  test("keeps exact Market scope ordering and continuation across Resolver call order", async () => {
     await using project = await catalogProject()
     const id = "review-debug"
-    const globalRoot = path.join(ExpertSquadPackageLocations.global().packagesRoot, "scale", id)
-    const projectRoot = path.join(ExpertSquadPackageLocations.project(project.path).packagesRoot, "scale", id)
+    const definition = scalePackageDefinition(id)
+    definition.manifest.namespace = "builtin"
+    const globalRoot = path.join(ExpertSquadPackageLocations.global().packagesRoot, definition.manifest.namespace, id)
+    const projectRoot = path.join(ExpertSquadPackageLocations.project(project.path).packagesRoot, definition.manifest.namespace, id)
+    const testRoot = process.env.OPENCORVUS_TEST_PROCESS_ROOT
+    if (!testRoot || !Filesystem.contains(path.resolve(testRoot), path.resolve(globalRoot))) {
+      throw new Error("Market scope test requires an isolated global package root")
+    }
     try {
-      await writeExpertSquadPackage({ directory: globalRoot, definition: scalePackageDefinition(id) })
-      await writeExpertSquadPackage({ directory: projectRoot, definition: scalePackageDefinition(id) })
+      await writeExpertSquadPackage({ directory: globalRoot, definition })
+      await writeExpertSquadPackage({ directory: projectRoot, definition })
       await ExpertSquadRegistry.invalidateAvailable()
+      const pagination = { projectDirectory: project.path, limit: 1 }
+      const firstPage = await ExpertSquadPackageManager.payloadMarketPage(pagination)
+      const cursor = firstPage.nextCursor!
+      expect(typeof cursor).toBe("string")
+      const continuation = await ExpertSquadPackageManager.payloadMarketPage({ ...pagination, cursor })
       const marketFirst = await ExpertSquadPackageManager.payloadMarketPage({
         projectDirectory: project.path,
         query: id,
@@ -779,16 +790,23 @@ describe("Expert Squad catalog index", () => {
         projectDirectory: project.path,
         query: id,
       })
-      const projection = (page: typeof marketFirst) => ({
-        revision: page.catalogRevision,
-        scopes: page.entries[0]?.installationScopes,
-      })
+      const projection = (page: typeof marketFirst) =>
+        page.entries.find((entry) => entry.namespace === "builtin" && entry.id === id)?.installationScopes
       expect([projection(marketFirst), projection(resolverFirst)]).toEqual([
-        { revision: marketFirst.catalogRevision, scopes: ["project", "global"] },
-        { revision: marketFirst.catalogRevision, scopes: ["project", "global"] },
+        ["project", "global"],
+        ["project", "global"],
       ])
+      expect((await ExpertSquadPackageManager.payloadMarketPage({ ...pagination, cursor })).entries).toEqual(
+        continuation.entries,
+      )
     } finally {
-      await rm(globalRoot, { recursive: true, force: true })
+      const resolved = await realpath(globalRoot).catch((error: NodeJS.ErrnoException) => {
+        if (error.code !== "ENOENT") throw error
+      })
+      if (resolved) {
+        if (!Filesystem.contains(await realpath(testRoot), resolved)) throw new Error("Market fixture escaped its runtime")
+        await removeManagedDirectoryTree(resolved)
+      }
       await ExpertSquadRegistry.invalidateAvailable()
     }
   })
