@@ -1,0 +1,20 @@
+{"listenPort":39208,"upstreamPort":39207,"pid":32244,"targetDirectory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b119\\project-after","cutLimit":2,"retryDelayMs":7000}
+{"time":"2026-11-09T13:09:26.111Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T13:09:35.031Z","receipt":1,"stage":"arrival","route":"/panel/knowledge/memory","method":"GET","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b119\\project-after","cut":true}
+{"time":"2026-11-09T13:09:35.035Z","receipt":1,"stage":"origin","route":"/panel/knowledge/memory","status":200,"requestID":"70c9fd6d-90cd-4ee7-8991-a46c42044df1"}
+{"time":"2026-11-09T13:09:35.036Z","receipt":1,"stage":"partial-body","route":"/panel/knowledge/memory","bytes":32}
+{"time":"2026-11-09T13:09:42.941Z","receipt":2,"stage":"arrival","route":"/panel/knowledge/memory","method":"GET","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b119\\project-after","cut":true}
+{"time":"2026-11-09T13:09:42.945Z","receipt":2,"stage":"origin","route":"/panel/knowledge/memory","status":200,"requestID":"90188300-e316-40f2-8074-ff3734793dd7"}
+{"time":"2026-11-09T13:09:49.947Z","receipt":2,"stage":"partial-body","route":"/panel/knowledge/memory","bytes":32}
+{"time":"2026-11-09T13:10:07.132Z","receipt":3,"stage":"arrival","route":"/panel/knowledge/memory","method":"GET","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b119\\project-after","cut":false}
+{"time":"2026-11-09T13:10:07.135Z","receipt":3,"stage":"origin","route":"/panel/knowledge/memory","status":200,"requestID":"8beaf8bf-416d-4334-bac5-df143cbc0557"}
+{"time":"2026-11-09T13:10:07.135Z","receipt":3,"stage":"memory","items":[{"id":"mem_g0VaTs2a100e5BoATwPz","title":"Project field notes"},{"id":"mem_g0VaTs2Zx000sOeUKDBR","title":"Neighbor original note"}]}
+{"time":"2026-11-09T13:10:17.953Z","receipt":4,"stage":"arrival","route":"/panel/knowledge/memory/mem_g0VaTs2a100e5BoATwPz","method":"GET","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b119\\project-after","cut":false}
+{"time":"2026-11-09T13:10:17.955Z","receipt":4,"stage":"origin","route":"/panel/knowledge/memory/mem_g0VaTs2a100e5BoATwPz","status":200,"requestID":"1abeaec8-99ff-4ceb-8660-22326fc02244"}
+{"time":"2026-11-09T13:10:17.956Z","receipt":4,"stage":"memory","items":[{"id":"mem_g0VaTs2a100e5BoATwPz","title":"Project field notes","content":"Field note 1: the survey starts at the northern trail marker.\nField note 2: the water sample remains sealed in the blue case.\nField note 3: the signed record stays in the field notebook.\nField note 4: the complete original is kept with the project."}]}
+{"time":"2026-11-09T13:10:18.088Z","receipt":5,"stage":"arrival","route":"/panel/knowledge/memory/search","method":"POST","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b119\\project-after","cut":false}
+{"time":"2026-11-09T13:10:18.090Z","receipt":5,"stage":"origin","route":"/panel/knowledge/memory/search","status":200,"requestID":"b7dd2a75-2f70-41fe-958d-ebf6ba5184ad"}
+{"time":"2026-11-09T13:10:18.090Z","receipt":5,"stage":"memory","items":[{"id":"mem_g0VaTs2a100e5BoATwPz","title":"Project field notes"}]}
+{"time":"2026-11-09T13:10:18.226Z","receipt":6,"stage":"arrival","route":"/panel/knowledge/memory","method":"GET","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b119\\project-after","cut":false}
+{"time":"2026-11-09T13:10:18.228Z","receipt":6,"stage":"origin","route":"/panel/knowledge/memory","status":200,"requestID":"44d94a61-efa6-4a3b-87d9-92a2a112702c"}
+{"time":"2026-11-09T13:10:18.229Z","receipt":6,"stage":"memory","items":[{"id":"mem_g0VaTs2a100e5BoATwPz","title":"Project field notes"},{"id":"mem_g0VaTs2Zx000sOeUKDBR","title":"Neighbor original note"}]}

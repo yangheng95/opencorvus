@@ -115,6 +115,8 @@ export function MemoryPanel(props: MemoryPanelProps) {
   }
   let memoryLoadOwner: symbol | null = null
   let sourceGeneration = 0
+  let listElement: HTMLDivElement | undefined
+  let searchInput: HTMLInputElement | undefined
 
   function captureSource(): MemoryFilesSource {
     return {
@@ -148,7 +150,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
 
   // ── Data loading ──
 
-  const loadMemory = async (source = captureSource()) => {
+  const loadMemory = async (source = captureSource(), retryTrigger?: HTMLButtonElement) => {
     if (!sourceMatches(source)) return
     const { directory, authority } = source
     const token = Symbol("memory-load")
@@ -165,17 +167,22 @@ export function MemoryPanel(props: MemoryPanelProps) {
       return
     }
     batch(() => {
-      setFailure(undefined)
+      if (!retryTrigger) setFailure(undefined)
       setLoading(true)
     })
+    let restoreFocus = false
     try {
       const data = await apiJson<PanelKnowledgeMemoryListResponse>(memoryPath("panel/knowledge/memory", directory), { authority })
       if (!ownsLoad()) return
-      setFiles(Array.isArray(data) ? data : [])
-      setFilesSource(source)
-      setSearchMode(false)
-      setExpandedFileId(null)
-      setDetailStates({})
+      restoreFocus = !!retryTrigger && retryTrigger.ownerDocument.activeElement === retryTrigger
+      batch(() => {
+        setFiles(Array.isArray(data) ? data : [])
+        setFilesSource(source)
+        setSearchMode(false)
+        setExpandedFileId(null)
+        setDetailStates({})
+        setFailure(undefined)
+      })
     } catch (err) {
       if (ownsLoad()) {
         setFiles([])
@@ -189,6 +196,10 @@ export function MemoryPanel(props: MemoryPanelProps) {
       if (ownsLoad()) {
         memoryLoadOwner = null
         setLoading(false)
+        if (restoreFocus) {
+          const destination = listElement?.querySelector<HTMLButtonElement>('[data-ui="memory-row-main"]') ?? searchInput
+          destination?.focus({ preventScroll: true })
+        }
       }
     }
   }
@@ -395,16 +406,21 @@ export function MemoryPanel(props: MemoryPanelProps) {
     return !!source && sourceMatches(source)
   })
 
+  const listFailure = createMemo(() => {
+    const current = failure()
+    return current?.operation === "list" ? current : undefined
+  })
+
   const emptyHint = createMemo(() => {
     if (loading()) return t("common.loading")
     const currentFailure = failure()
-    if (currentFailure) return t(currentFailure.operation === "search" ? "memory.search_failed_title" : "memory.load_failed")
+    if (currentFailure) return t(currentFailure.operation === "search" ? "memory.search_failed_title" : "memory.notes_list_load_failed")
     if (searchMode()) return t("memory.no_results")
     if (!currentDirectory()) return t("memory.none_unselected")
     return t("memory.none")
   })
 
-  const emptyState = () => {
+  const ordinaryEmptyState = () => {
     if (props.compact) return <div class="empty-hint">{emptyHint()}</div>
     if (loading()) return <Feedback>{emptyHint()}</Feedback>
     const currentFailure = failure()
@@ -424,6 +440,33 @@ export function MemoryPanel(props: MemoryPanelProps) {
     return <SettingsEmpty>{emptyHint()}</SettingsEmpty>
   }
 
+  const emptyState = () => (
+    <Show when={!props.compact && listFailure()} fallback={ordinaryEmptyState()}>
+      {(current) => (
+        <Feedback
+          tone="error"
+          details={formatErrorDetails(current().cause)}
+          actions={(
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              tone="neutral"
+              aria-disabled={loading() || undefined}
+              onClick={(event) => {
+                if (!loading()) void loadMemory(captureSource(), event.currentTarget)
+              }}
+            >
+              <Icon name="refresh" />{t(loading() ? "common.loading" : "common.retry")}
+            </Button>
+          )}
+        >
+          {t("memory.notes_list_load_failed")}
+        </Feedback>
+      )}
+    </Show>
+  )
+
   return (
     <div class="memory-panel" data-compact={props.compact ? "true" : "false"}>
       {/* Search toolbar */}
@@ -434,6 +477,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
           inputID="memorySearch"
           size={props.compact ? "sm" : "md"}
           value={searchQuery()}
+          inputRef={(element) => { searchInput = element }}
           placeholder={t("memory.search_placeholder")}
           disabled={loading() || !currentDirectory()}
           onValueChange={setSearchQuery}
@@ -445,7 +489,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
       </div>
 
       {/* List */}
-      <div id="memoryList" class="knowledge-list">
+      <div id="memoryList" class="knowledge-list" ref={listElement}>
         <Show when={files().length > 0} fallback={emptyState()}>
           <For each={files()}>
             {(f) => {

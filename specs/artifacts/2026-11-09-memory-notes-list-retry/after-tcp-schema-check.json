@@ -1,0 +1,106 @@
+{
+  "phase": "after",
+  "project": {
+    "id": "prj_hLIBQNI8A7DrO8bIjrE6",
+    "name": "Notes Recovery",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b119\\project-after"
+  },
+  "results": [
+    {
+      "operation": "List original files",
+      "status": 200,
+      "requestID": "51cf052d-f10f-47f6-a6b1-90f06497161c",
+      "body": [
+        {
+          "id": "mem_g0VaTs2a100e5BoATwPz",
+          "projectId": "prj_hLIBQNI8A7DrO8bIjrE6",
+          "scope": "project",
+          "title": "Project field notes",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794229478433,
+          "timeUpdated": 1794229478434
+        },
+        {
+          "id": "mem_g0VaTs2Zx000sOeUKDBR",
+          "projectId": "prj_hLIBQNI8A7DrO8bIjrE6",
+          "scope": "project",
+          "title": "Neighbor original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794229478429,
+          "timeUpdated": 1794229478430
+        }
+      ],
+      "schemaValid": true
+    },
+    {
+      "operation": "Complete original file mem_g0VaTs2Zx000sOeUKDBR",
+      "status": 200,
+      "requestID": "dab271e2-6b64-43b8-896c-8e6c1968f3a7",
+      "body": {
+        "file": {
+          "id": "mem_g0VaTs2Zx000sOeUKDBR",
+          "projectId": "prj_hLIBQNI8A7DrO8bIjrE6",
+          "scope": "project",
+          "title": "Neighbor original note",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794229478429,
+          "timeUpdated": 1794229478430
+        },
+        "content": "Neighbor note: the orange telescope remains in the south cabinet."
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "Complete original file mem_g0VaTs2a100e5BoATwPz",
+      "status": 200,
+      "requestID": "aba4eb31-6048-405d-938a-049af63c674a",
+      "body": {
+        "file": {
+          "id": "mem_g0VaTs2a100e5BoATwPz",
+          "projectId": "prj_hLIBQNI8A7DrO8bIjrE6",
+          "scope": "project",
+          "title": "Project field notes",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "timeCreated": 1794229478433,
+          "timeUpdated": 1794229478434
+        },
+        "content": "Field note 1: the survey starts at the northern trail marker.\nField note 2: the water sample remains sealed in the blue case.\nField note 3: the signed record stays in the field notebook.\nField note 4: the complete original is kept with the project."
+      },
+      "schemaValid": true
+    },
+    {
+      "operation": "Exact note found by the real full-text index",
+      "status": 200,
+      "requestID": "0f6801d5-31eb-4c7f-a9ae-59f86c4a9e7c",
+      "body": [
+        {
+          "chunkId": "mck_g0VaTs2a200YBb4IPJ32",
+          "fileId": "mem_g0VaTs2a100e5BoATwPz",
+          "fileTitle": "Project field notes",
+          "content": "Field note 1: the survey starts at the northern trail marker.\nField note 2: the water sample remains sealed in the blue case.\nField note 3: the signed record stays in the field notebook.\nField note 4: the complete original is kept with the project.",
+          "scope": "project",
+          "source": "user",
+          "kind": "note",
+          "importance": 60,
+          "confidence": 72,
+          "score": 0.2169428904519391,
+          "timeCreated": 1794229478434
+        }
+      ],
+      "schemaValid": true
+    }
+  ],
+  "qualification": "Actual HTTP preserves both original file identities and complete stored content. Desktop recovery is reviewed separately through manual interaction."
+}
