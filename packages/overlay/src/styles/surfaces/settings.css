@@ -1165,18 +1165,6 @@ button.s-row:focus-visible {
   word-break: break-all;
 }
 
-.log-error-banner {
-  flex: 0 0 auto;
-  padding: var(--ui-gap-md) var(--ui-gap-lg);
-  border: var(--oc-border-width) solid color-mix(in srgb, var(--bad) 48%, transparent);
-  border-radius: var(--oc-radius-soft);
-  background: color-mix(in srgb, var(--bad) 10%, var(--surface));
-  color: var(--bad);
-  font-size: var(--ui-font-body);
-  line-height: var(--ui-line-height-tight);
-  overflow-wrap: anywhere;
-}
-
 .log-copy-feedback {
   flex: 0 0 auto;
   padding: var(--ui-gap-md) var(--ui-gap-lg);

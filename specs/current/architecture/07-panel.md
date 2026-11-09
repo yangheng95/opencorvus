@@ -5324,6 +5324,11 @@ so the input and starters remain reachable with a desktop dock open.
 
 LogViewer reads the current backend event envelope and preserves nested subject `data`, actual ambient bindings and original raw record in Details. Elapsed duration comes from `data.duration`; subject time/level/service do not change the row header. Historical non-string event time has unknown chronology and its original value remains in details/raw. Unparsed output remains the actual raw diagnostic line without a parallel plaintext interpretation. The live component owns current aggregation/copy behavior; unused duplicate utility aggregation is retired.
 
+Log Viewer feedback distinguishes a failed server refresh from revealing the
+loaded log path. Both keep the original error in Details and render the current
+language in one location above the log list. A failed refresh retires the old
+server tail; any still-matching client or pipeline logs remain readable.
+
 Loaded logs have one local literal, case-insensitive query through the shared search primitive. The existing level-qualified aggregation depends only on original sources/level; query filters those records without re-parsing them, and empty/whitespace query returns that base result. The same matching result supplies list, Copy and no-match feedback, so Copy includes all loaded matches. Query covers header/message/structured fields/raw, is retired on close and is not persisted or sent to a backend. Search explicitly covers loaded logs; server tail remains bounded to the current fetch, not full-file history. Clear search and Clear logs keep distinct semantics; source read failures remain visible.
 
 Support ZIP exports exact retained raw files, canonical-time formatted records and original subject details. Historical timestamp/ts fields are diagnostic content rather than alternate clocks. Logging is diagnostic presentation; these records do not synthesize conversation participants or replace durable activity/occurrence timestamps.

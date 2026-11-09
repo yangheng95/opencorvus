@@ -12,15 +12,17 @@ import { appStore, setAppStore, filteredLogEntries } from "../store/app"
 import type { LogEntry, LogLevel, LogSource } from "../store/app"
 import { t } from "../utils/i18n"
 import { apiJson } from "../services/api"
-import { pathRevealFailureText, pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../services/workspace"
+import { pathRevealFailureKey, pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../services/workspace"
 import { useAsyncAction } from "../solid/async-action"
 import { Dialog } from "./ui/Dialog"
 import { Disclosure } from "./ui/Disclosure"
+import { Feedback } from "./ui/Feedback"
 import { Button } from "./ui/Button"
 import { SelectControl } from "./ui/SelectControl"
 import { SearchField } from "./ui/SearchField"
 import { fmtElapsed, logDetailFields, matchesLogEntrySearch, parseServerLogLine, stringifyLogValue } from "../utils/log"
 import { copyText } from "../services/clipboard"
+import { formatErrorDetails } from "../utils/error-details"
 
 // ── Re-export types so callers can use them without importing store/app ──
 export type { LogEntry, LogLevel, LogSource }
@@ -252,12 +254,14 @@ export interface LogViewerProps {
   onClose?: () => void
 }
 
+type LogIssue = { operation: "refresh" | "reveal"; cause: unknown }
+
 // ── LogViewer ──
 
 export function LogViewer(props: LogViewerProps) {
   const [searchQuery, setSearchQuery] = createSignal("")
   const [serverLogsSeq, setServerLogsSeq] = createSignal(0)
-  const [serverLogError, setServerLogError] = createSignal("")
+  const [logIssue, setLogIssue] = createSignal<LogIssue | null>(null)
   const [refreshPending, setRefreshPending] = createSignal(false)
   const [copyPending, setCopyPending] = createSignal(false)
   const [copyNotice, setCopyNotice] = createSignal<{ tone: "success" | "error"; message: string } | null>(null)
@@ -294,7 +298,7 @@ export function LogViewer(props: LogViewerProps) {
   const refreshServerLogs = async () => {
     const generation = ++refreshGeneration
     const ownsRefresh = () => generation === refreshGeneration && props.open === true
-    setServerLogError("")
+    setLogIssue(null)
     setRefreshPending(true)
     try {
       const next = await fetchServerLogs()
@@ -303,7 +307,7 @@ export function LogViewer(props: LogViewerProps) {
     } catch (error) {
       if (!ownsRefresh()) return
       _serverLogState = EMPTY_SERVER_LOG_STATE
-      setServerLogError(errorMessage(error))
+      setLogIssue({ operation: "refresh", cause: error })
     } finally {
       if (ownsRefresh()) {
         setRefreshPending(false)
@@ -317,12 +321,6 @@ export function LogViewer(props: LogViewerProps) {
     return _serverLogState.path.trim()
   })
 
-  const listLogError = createMemo(() => {
-    const message = serverLogError()
-    if (!message || entries().length === 0) return ""
-    return message
-  })
-
   /** Show a short-lived notice, replacing whatever one is on screen. */
   function flashNotice(tone: "success" | "error", message: string): void {
     if (copyNoticeTimer !== undefined) clearTimeout(copyNoticeTimer)
@@ -334,7 +332,7 @@ export function LogViewer(props: LogViewerProps) {
   }
 
   const openFileAction = useAsyncAction(async () => {
-    setServerLogError("")
+    setLogIssue(null)
     const path = currentServerLogPath()
     if (!path) throw new Error("Log file path is not loaded")
     const outcome = await revealPath(path)
@@ -344,7 +342,7 @@ export function LogViewer(props: LogViewerProps) {
 
   const handleOpenLogFile = () => {
     void openFileAction.run().catch((error) => {
-      setServerLogError(pathRevealFailureText(error))
+      setLogIssue({ operation: "reveal", cause: error })
     })
   }
 
@@ -516,28 +514,21 @@ export function LogViewer(props: LogViewerProps) {
           </div>
         )}
       </Show>
-      <Show when={listLogError()}>
-        {(message) => (
-          <div class="log-error-banner" role="alert">
-            {message()}
-          </div>
+      <Show when={logIssue()}>
+        {(issue) => (
+          <Feedback tone="error" details={formatErrorDetails(issue().cause)}>
+            {t(issue().operation === "refresh" ? "log.refresh_failed" : pathRevealFailureKey())}
+          </Feedback>
         )}
       </Show>
       <Show
         when={entries().length > 0}
         fallback={
-          <div id="logViewerBody" class="log-viewer">
-            <Show
-              when={serverLogError()}
-              fallback={<div class="empty-hint">{t(searchQuery().trim() ? "log.search_empty" : "log.empty")}</div>}
-            >
-              {(message) => (
-                <div class="empty-hint" role="alert">
-                  {message()}
-                </div>
-              )}
-            </Show>
-          </div>
+          <Show when={logIssue()?.operation !== "refresh"}>
+            <div id="logViewerBody" class="log-viewer">
+              <div class="empty-hint">{t(searchQuery().trim() ? "log.search_empty" : "log.empty")}</div>
+            </div>
+          </Show>
         }
       >
         <VList

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [日志读取失败反馈](records/2026-11/2026-11-09-log-tail-failure-feedback.md)
 - [关于页快捷键跟随宿主](records/2026-11/2026-11-09-about-host-shortcuts.md)
 - [更新日志版本与功能组合搜索](records/2026-11/2026-11-09-release-history-search-terms.md)
 - [关于页 Core 版本](records/2026-11/2026-11-09-about-core-version.md)
