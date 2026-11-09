@@ -1,0 +1,179 @@
+{
+  "projects": {
+    "before": {
+      "head": "ac7beca45bf01a023006fce7d3ad001f76d1099b",
+      "originalBytes": 28,
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0
+      },
+      "matchedProxyAndUpstream": [
+        {
+          "proxy": {
+            "source": "/global/usage?period=week&timeZone=Asia%2FShanghai",
+            "target": "/global/usage?period=year&timeZone=Asia%2FShanghai",
+            "status": 200,
+            "requestID": "2c47d8bc-1aa2-4dbe-9a4f-7aac545b2dfd"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:46:54.741Z",
+            "requestID": "2c47d8bc-1aa2-4dbe-9a4f-7aac545b2dfd",
+            "method": "GET",
+            "path": "/global/usage",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 31
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/usage?period=week&timeZone=Asia%2FShanghai",
+            "target": "/global/usage?period=year&timeZone=Asia%2FShanghai",
+            "status": 200,
+            "requestID": "8d37f057-077a-4772-9fee-fb7cc24bbdfb"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:47:13.927Z",
+            "requestID": "8d37f057-077a-4772-9fee-fb7cc24bbdfb",
+            "method": "GET",
+            "path": "/global/usage",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 29
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/usage?period=week&timeZone=Asia%2FShanghai",
+            "target": "/global/usage?period=year&timeZone=Asia%2FShanghai",
+            "status": 200,
+            "requestID": "a0d915b2-1174-430f-9e92-f9fef71833ee"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:50:47.267Z",
+            "requestID": "a0d915b2-1174-430f-9e92-f9fef71833ee",
+            "method": "GET",
+            "path": "/global/usage",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 23
+          }
+        }
+      ]
+    },
+    "after": {
+      "head": "187a72ac3ced0a6efb62bf494ed9497426a9f558",
+      "originalBytes": 27,
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0
+      },
+      "matchedProxyAndUpstream": [
+        {
+          "proxy": {
+            "source": "/global/usage?period=week&timeZone=Asia%2FShanghai",
+            "target": "/global/usage?period=year&timeZone=Asia%2FShanghai",
+            "status": 200,
+            "requestID": "f282d6b9-9c42-4dc3-8629-efff2a5d755b"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:51:19.242Z",
+            "requestID": "f282d6b9-9c42-4dc3-8629-efff2a5d755b",
+            "method": "GET",
+            "path": "/global/usage",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 25
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/usage?period=week&timeZone=Asia%2FShanghai",
+            "target": "/global/usage?period=year&timeZone=Asia%2FShanghai",
+            "status": 200,
+            "requestID": "8b70e793-6031-434b-bc94-9096214d7b8a"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:51:32.218Z",
+            "requestID": "8b70e793-6031-434b-bc94-9096214d7b8a",
+            "method": "GET",
+            "path": "/global/usage",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 29
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/usage?period=week&timeZone=Asia%2FShanghai",
+            "target": "/global/usage?period=week&timeZone=Asia%2FShanghai",
+            "status": 200,
+            "requestID": "6aa406ee-6791-4fed-8ea1-33fa78d69ea0"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:52:08.188Z",
+            "requestID": "6aa406ee-6791-4fed-8ea1-33fa78d69ea0",
+            "method": "GET",
+            "path": "/global/usage",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 5
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/usage?period=week&timeZone=Asia%2FShanghai",
+            "target": "/global/usage?period=week&timeZone=Asia%2FShanghai",
+            "status": 200,
+            "requestID": "a30f4570-3b08-4afb-8502-7e74c432af9f"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:52:35.687Z",
+            "requestID": "a30f4570-3b08-4afb-8502-7e74c432af9f",
+            "method": "GET",
+            "path": "/global/usage",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 3
+          }
+        }
+      ]
+    }
+  },
+  "routingCorrection": {
+    "mode": "direct",
+    "changedAt": "2026-11-09T08:51:57.4066067Z",
+    "proxyPort": 39130,
+    "upstreamPort": 39128
+  },
+  "shutdown": [
+    {
+      "status": 200,
+      "body": "stopping",
+      "port": 39129
+    },
+    {
+      "status": 200,
+      "body": "stopping",
+      "port": 39130
+    },
+    {
+      "status": 200,
+      "body": "{\"ok\":true,\"occurrenceID\":\"cal_g0VaSqad7009HYRmAq8b\"}",
+      "port": 39127
+    },
+    {
+      "status": 200,
+      "body": "{\"ok\":true,\"occurrenceID\":\"cal_g0VaSqadB00l4EfPv7pl\"}",
+      "port": 39128
+    }
+  ]
+}

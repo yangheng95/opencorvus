@@ -1,0 +1,48 @@
+{
+  "phase": "after",
+  "step": "recovered",
+  "checks": [
+    {
+      "base": "http://127.0.0.1:39130",
+      "requestedPeriod": "week",
+      "returnedPeriod": "week",
+      "timeZone": "Asia/Shanghai",
+      "status": 200,
+      "requestID": "a30f4570-3b08-4afb-8502-7e74c432af9f",
+      "grain": "day",
+      "start": 1794153600000,
+      "end": 1794758400000,
+      "bucketCount": 7,
+      "firstLocalDate": "2026-11-09",
+      "lastLocalDate": "2026-11-15",
+      "summary": {
+        "tokens": {
+          "input": 0,
+          "output": 0,
+          "reasoning": 0,
+          "cacheRead": 0,
+          "cacheWrite": 0,
+          "total": 0
+        },
+        "costUSD": 0,
+        "calls": 0,
+        "averageTokensPerCall": 0,
+        "billing": {
+          "pricedTokens": 0,
+          "unpricedTokens": 0,
+          "unknownTokens": 0,
+          "percent": null
+        }
+      },
+      "officialStatuses": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "schemaValid": true
+    }
+  ]
+}

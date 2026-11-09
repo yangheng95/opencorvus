@@ -2804,6 +2804,7 @@
   "usage.retry": "Try again",
   "usage.loading": "Loading usage…",
   "usage.load_failed": "Usage could not be loaded",
+  "usage.period_mismatch": "The response did not match the selected period. Retry to load that period.",
   "usage.server_restart_required": "This OpenCorvus backend does not include the usage API yet. Restart OpenCorvus to load the updated backend, then try again.",
   "usage.event_time_note": "API event time",
   "usage.summary_aria": "Usage summary",

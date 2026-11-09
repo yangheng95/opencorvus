@@ -6,7 +6,7 @@ import type { OfficialUsageSource, UsagePeriod, UsageStatistics } from "@opencor
 import type { KeyboardDelegate } from "@kobalte/core"
 import { createListState } from "@kobalte/core"
 
-import { UsageServerVersionError, loadUsageStatistics, userTimeZone } from "../../services/usage"
+import { USAGE_PERIODS, UsagePeriodMismatchError, UsageServerVersionError, loadUsageStatistics, userTimeZone } from "../../services/usage"
 import { formatErrorDetails } from "../../utils/error-details"
 import { formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
 import { localeTag, t, tc } from "../../utils/i18n"
@@ -16,8 +16,6 @@ import { ListboxItem, ListboxItemDescription, ListboxRoot } from "../ui/Listbox"
 import { SegmentedControl } from "../ui/SegmentedControl"
 import { Tooltip } from "../ui/Tooltip"
 import { SettingsPanel } from "./layout"
-
-const PERIODS: UsagePeriod[] = ["day", "week", "month", "year"]
 
 function exactNumber(value: number): string {
   return new Intl.NumberFormat(localeTag(), { maximumFractionDigits: 0 }).format(value)
@@ -461,7 +459,11 @@ export default function UsagePanel() {
               </Button>
             }
           >
-            {current().cause instanceof UsageServerVersionError ? t("usage.server_restart_required") : null}
+            {current().cause instanceof UsageServerVersionError
+              ? t("usage.server_restart_required")
+              : current().cause instanceof UsagePeriodMismatchError
+                ? t("usage.period_mismatch")
+                : null}
           </Feedback>
         )}
       </Show>
@@ -516,7 +518,7 @@ export default function UsagePanel() {
             <SegmentedControl
               class="usage-period-control"
               value={period()}
-              options={PERIODS.map((value) => ({ value, label: t(`usage.period.${value}`) }))}
+              options={USAGE_PERIODS.map((value) => ({ value, label: t(`usage.period.${value}`) }))}
               ariaLabel={t("usage.period_aria")}
               size="sm"
               onChange={setPeriod}

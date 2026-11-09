@@ -1,0 +1,44 @@
+{
+  "today": [
+    "\t\t\t\t\t\t\t\t\t74 text Nov 9, 2026 Asia/Shanghai Even with previous period",
+    "\t\t\t\t\t\t\t\t\t\t\t81 radio button (settable, integer) Description: Today, Value: 1, ID: radiogroup-cl-236-item-cl-238-input",
+    "The focused UI element is 81 radio button (settable, integer) Description: Today, Value: 1, ID: radiogroup-cl-236-item-cl-238-input"
+  ],
+  "failure": [
+    "\t\t\t\t\t\t\t\t\t95 text Usage could not be loaded The response did not match the selected period. Retry to load that period.",
+    "\t\t\t\t\t\t\t\t\t98 button Try again",
+    "\t\t\t\t\t\t\t\t\t\t\t84 radio button (settable, integer) Description: This week, Value: 1, ID: radiogroup-cl-236-item-cl-239-input",
+    "\t\t\t\t\t\t\t\t\t\t\t85 text This week",
+    "The focused UI element is 84 radio button (settable, integer) Description: This week, Value: 1, ID: radiogroup-cl-236-item-cl-239-input"
+  ],
+  "detail": [
+    "\t\t\t\t\t\t\t\t\t96 button (expanded) Details, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t97 text Details",
+    "\t\t\t\t\t\t\t\t\t99 text UsagePeriodMismatchError: Requested usage period week, received year.",
+    "The focused UI element is 96 button (expanded) Details, Secondary Actions: Collapse"
+  ],
+  "chinese": [
+    "\t\t\t\t\t\t\t\t\t95 text 无法加载用量统计 服务器返回的数据与所选周期不符。请重试以加载该周期。",
+    "\t\t\t\t\t\t\t\t\t99 text UsagePeriodMismatchError: Requested usage period week, received year.",
+    "\t\t\t\t\t\t\t\t\t98 button 重试",
+    "\t\t\t\t\t\t\t\t\t\t\t108 radio button (settable, integer) Description: 本周, Value: 1, ID: radiogroup-cl-236-item-cl-1105-input",
+    "\t\t\t\t\t\t\t\t\t\t\t109 text 本周"
+  ],
+  "retried": {
+    "buckets": 7,
+    "checked": "week",
+    "focus": "刷新用量",
+    "gridClass": "oc-listbox usage-activity__grid usage-activity__grid--week",
+    "metadata": "2026/11/9 – 2026/11/15Asia/Shanghai与上一周期持平"
+  },
+  "weekState": [
+    "\t\t\t\t\t\t\t\t\t130 text 2026/11/9 – 2026/11/15 Asia/Shanghai 与上一周期持平",
+    "\t\t\t\t\t\t\t\t\t\t\t108 radio button (settable, integer) Description: 本周, Value: 1, ID: radiogroup-cl-236-item-cl-1105-input",
+    "\t\t\t\t\t\t\t\t\t\t\t109 text 本周",
+    "\t\t\t\t\t\t\t\t\t92 button 刷新用量",
+    "The focused UI element is 92 button 刷新用量"
+  ],
+  "keyboard": [
+    "The focused UI element is 95 (selected) Value: 2026年11月9日 GMT+8 00:00 – 2026年11月10日 GMT+8 00:00 · 0 令牌, ID: listbox-cl-243-item-cl-1138"
+  ]
+}
