@@ -7,6 +7,7 @@ import type { KeyboardDelegate } from "@kobalte/core"
 import { createListState } from "@kobalte/core"
 
 import { USAGE_PERIODS, UsagePeriodMismatchError, UsageServerVersionError, loadUsageStatistics, userTimeZone } from "../../services/usage"
+import { useDisclosure } from "../../solid/disclosure"
 import { formatErrorDetails } from "../../utils/error-details"
 import { formatCostUSD, formatDetailedCostUSD, formatTokenCount } from "../../utils/format-usage"
 import { localeTag, t, tc } from "../../utils/i18n"
@@ -386,6 +387,7 @@ export default function UsagePanel() {
   const [data, setData] = createSignal<UsageStatistics>()
   const [loading, setLoading] = createSignal(true)
   const [failure, setFailure] = createSignal<{ cause: unknown }>()
+  const officialSourcesDisclosure = useDisclosure()
   const timeZone = userTimeZone()
   let refreshButton: HTMLButtonElement | undefined
 
@@ -631,7 +633,11 @@ export default function UsagePanel() {
             </Show>
 
             <Show when={visibleOfficialSources().length > 0}>
-              <Disclosure.Root class="usage-section usage-section--official">
+              <Disclosure.Root
+                class="usage-section usage-section--official"
+                open={officialSourcesDisclosure.open()}
+                onOpenChange={officialSourcesDisclosure.set}
+              >
                 <Disclosure.Trigger class="usage-section__head" indicatorPosition="end">
                   <div>
                     <h2>{t("usage.official_title")}</h2>

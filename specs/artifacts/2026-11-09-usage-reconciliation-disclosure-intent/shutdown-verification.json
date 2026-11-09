@@ -1,0 +1,56 @@
+[
+  {
+    "phase": "before",
+    "pid": 27040,
+    "port": 39133,
+    "processPresent": false,
+    "listenerPresent": false,
+    "shellExitCode": 0,
+    "httpShutdown": {
+      "port": 39133,
+      "processId": 27040,
+      "startupOccurrence": "iteration-b99-before",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSv0Ej00BMUILmdwi"
+      }
+    }
+  },
+  {
+    "phase": "after",
+    "pid": 28052,
+    "port": 39134,
+    "processPresent": false,
+    "listenerPresent": false,
+    "shellExitCode": 0,
+    "httpShutdown": {
+      "port": 39134,
+      "processId": 28052,
+      "startupOccurrence": "iteration-b99-after",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSvh7X00ac9B19W1h"
+      }
+    }
+  },
+  {
+    "phase": "after-recovered",
+    "pid": 20708,
+    "port": 39134,
+    "processPresent": false,
+    "listenerPresent": false,
+    "shellExitCode": 0,
+    "httpShutdown": {
+      "port": 39134,
+      "processId": 20708,
+      "startupOccurrence": "iteration-b99-after-recovered",
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSvsht00B1JYrKU0Y"
+      }
+    }
+  }
+]

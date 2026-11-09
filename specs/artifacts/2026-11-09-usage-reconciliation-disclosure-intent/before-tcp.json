@@ -1,0 +1,62 @@
+{
+  "phase": "before",
+  "operation": "global.usage",
+  "checks": [
+    {
+      "period": "day",
+      "buckets": 24,
+      "inventory": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "comparison": "compare_never_sum",
+      "schemaValid": true
+    },
+    {
+      "period": "week",
+      "buckets": 7,
+      "inventory": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "comparison": "compare_never_sum",
+      "schemaValid": true
+    },
+    {
+      "period": "month",
+      "buckets": 30,
+      "inventory": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "comparison": "compare_never_sum",
+      "schemaValid": true
+    },
+    {
+      "period": "year",
+      "buckets": 365,
+      "inventory": {
+        "openai-organization": "unconfigured",
+        "anthropic-organization": "unconfigured",
+        "openrouter-account": "unconfigured",
+        "aws-bedrock-control-plane": "requires_configuration",
+        "azure-openai-control-plane": "requires_configuration",
+        "vertex-ai-control-plane": "requires_configuration"
+      },
+      "comparison": "compare_never_sum",
+      "schemaValid": true
+    }
+  ]
+}

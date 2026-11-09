@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [用量对账的展开选择证据](2026-11-09-usage-reconciliation-disclosure-intent/README.md)
 - [用量图表随有效数据展示证据](2026-11-09-usage-chart-only-with-accepted-data/README.md)
 - [用量响应周期辨别证据](2026-11-09-usage-response-period-qualification/README.md)
 - [代理保存的焦点与较新草稿证据](2026-11-09-network-proxy-preserve-newer-draft/README.md)

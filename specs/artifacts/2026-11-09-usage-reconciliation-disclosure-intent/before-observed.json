@@ -1,0 +1,63 @@
+{
+  "initial": {
+    "focus": "radiogroup-cl-241-item-cl-244-input",
+    "open": false,
+    "period": "week",
+    "range": "Nov 9 – 15, 2026Asia/ShanghaiEven with previous period",
+    "sources": []
+  },
+  "open": {
+    "focus": "",
+    "open": true,
+    "period": "week",
+    "range": "Nov 9 – 15, 2026Asia/ShanghaiEven with previous period",
+    "sources": [
+      {
+        "name": "AWS Bedrock control plane",
+        "status": "Cloud scope needed"
+      },
+      {
+        "name": "Azure OpenAI control plane",
+        "status": "Cloud scope needed"
+      },
+      {
+        "name": "Google Vertex AI control plane",
+        "status": "Cloud scope needed"
+      }
+    ]
+  },
+  "afterPeriod": {
+    "focus": "radiogroup-cl-241-item-cl-243-input",
+    "open": false,
+    "period": "day",
+    "range": "Nov 9, 2026Asia/ShanghaiEven with previous period",
+    "sources": []
+  },
+  "beforeRefresh": {
+    "focus": "",
+    "open": true,
+    "period": "day",
+    "range": "Nov 9, 2026Asia/ShanghaiEven with previous period",
+    "sources": [
+      {
+        "name": "AWS Bedrock control plane",
+        "status": "Cloud scope needed"
+      },
+      {
+        "name": "Azure OpenAI control plane",
+        "status": "Cloud scope needed"
+      },
+      {
+        "name": "Google Vertex AI control plane",
+        "status": "Cloud scope needed"
+      }
+    ]
+  },
+  "afterRefresh": {
+    "focus": "Refresh usage",
+    "open": false,
+    "period": "day",
+    "range": "Nov 9, 2026Asia/ShanghaiEven with previous period",
+    "sources": []
+  }
+}

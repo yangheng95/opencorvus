@@ -1,0 +1,155 @@
+{
+  "projects": {
+    "before": {
+      "head": "ba26103364cb213ec665dcfd4b49a367518164d8",
+      "originalBytes": 42,
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0
+      },
+      "retainedLogRun": "baseline",
+      "actualUsageRequests": [
+        {
+          "time": "2026-11-09T09:09:20.398Z",
+          "requestID": "b6d81fb8-2b80-4f70-a52c-a6ffe6ab260b",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:09:20.410Z",
+          "requestID": "d99263a6-807c-45f0-b6a9-84a4e65be90a",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:09:20.417Z",
+          "requestID": "eb250688-c1b7-41fe-a552-89f1a1cc77a2",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:09:20.448Z",
+          "requestID": "ba3dfd49-8372-44a2-93c2-e2c1b6e301cc",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:09:32.606Z",
+          "requestID": "e1c7660d-d877-45f3-8adc-08d9ed9235c4",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:09:32.817Z",
+          "requestID": "4f53ce4b-157e-4fe3-bb41-a13103237444",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:09:45.402Z",
+          "requestID": "96cd3076-d649-4617-8d0e-fc91034832c2",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:09:51.323Z",
+          "requestID": "c1624c1c-ad09-4c79-a107-598577b73810",
+          "status": 200
+        }
+      ]
+    },
+    "after": {
+      "head": "ede67c8d80a838ee5af882a48a117af8ce1df4f1",
+      "originalBytes": 41,
+      "counts": {
+        "project": 1,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_usage_event": 0,
+        "provider_activity_request": 0
+      },
+      "retainedLogRun": "candidate-recovered",
+      "actualUsageRequests": [
+        {
+          "time": "2026-11-09T09:13:26.359Z",
+          "requestID": "4fef46a4-b6e2-402e-ace2-af9fddac33db",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:13:36.465Z",
+          "requestID": "ec1af455-92bc-40de-a3bb-b6deddcee6b8",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:13:36.475Z",
+          "requestID": "f71c681f-9eab-421d-a9c8-e80f518ccf98",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:13:36.481Z",
+          "requestID": "cbff6419-e73d-4cfb-88e8-34bd3479f528",
+          "status": 200
+        },
+        {
+          "time": "2026-11-09T09:13:36.516Z",
+          "requestID": "0ea057ac-be8a-4af3-b220-b421b6a97605",
+          "status": 200
+        }
+      ]
+    }
+  },
+  "shutdown": [
+    {
+      "phase": "before",
+      "pid": 27040,
+      "port": 39133,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "httpShutdown": {
+        "port": 39133,
+        "processId": 27040,
+        "startupOccurrence": "iteration-b99-before",
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VaSv0Ej00BMUILmdwi"
+        }
+      }
+    },
+    {
+      "phase": "after",
+      "pid": 28052,
+      "port": 39134,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "httpShutdown": {
+        "port": 39134,
+        "processId": 28052,
+        "startupOccurrence": "iteration-b99-after",
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VaSvh7X00ac9B19W1h"
+        }
+      }
+    },
+    {
+      "phase": "after-recovered",
+      "pid": 20708,
+      "port": 39134,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "httpShutdown": {
+        "port": 39134,
+        "processId": 20708,
+        "startupOccurrence": "iteration-b99-after-recovered",
+        "status": 200,
+        "body": {
+          "ok": true,
+          "occurrenceID": "cal_g0VaSvsht00B1JYrKU0Y"
+        }
+      }
+    }
+  ]
+}

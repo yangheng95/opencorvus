@@ -2235,8 +2235,11 @@ Read failures present a localized summary and retain the original diagnostic
 details. Retry uses the existing refresh action and transfers its focused control
 to the persistent Refresh button before the error card leaves.
 Empty periods retain their actual zero-valued buckets. Official provider
-comparisons and model detail remain below the primary overview. No personal
-identity, subscription, streak or plugin usage is inferred from server credentials.
+comparisons and model detail remain below the primary overview. The official
+comparison disclosure keeps the user's open or closed choice for the current
+panel across period changes and retries. Its source cards require accepted data.
+No personal identity, subscription, streak or plugin usage is inferred from server
+credentials.
 Activity buckets use one Listbox inspection collection with a single Tab entry,
 visual-direction arrows and chronological Home/End. Zero-valued buckets remain
 inspectable; year positions express real weekdays without synthetic options.

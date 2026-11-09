@@ -1,0 +1,151 @@
+{
+  "initial": {
+    "focus": "radiogroup-cl-241-item-cl-244-input",
+    "open": false,
+    "period": "week",
+    "range": "Nov 9 – 15, 2026Asia/ShanghaiEven with previous period",
+    "sources": []
+  },
+  "open": {
+    "focus": "",
+    "open": true,
+    "period": "week",
+    "range": "Nov 9 – 15, 2026Asia/ShanghaiEven with previous period",
+    "sources": [
+      {
+        "name": "AWS Bedrock control plane",
+        "status": "Cloud scope needed"
+      },
+      {
+        "name": "Azure OpenAI control plane",
+        "status": "Cloud scope needed"
+      },
+      {
+        "name": "Google Vertex AI control plane",
+        "status": "Cloud scope needed"
+      }
+    ]
+  },
+  "afterPeriod": {
+    "focus": "radiogroup-cl-241-item-cl-243-input",
+    "open": true,
+    "period": "day",
+    "range": "Nov 9, 2026Asia/ShanghaiEven with previous period",
+    "sources": [
+      {
+        "name": "AWS Bedrock control plane",
+        "status": "Cloud scope needed"
+      },
+      {
+        "name": "Azure OpenAI control plane",
+        "status": "Cloud scope needed"
+      },
+      {
+        "name": "Google Vertex AI control plane",
+        "status": "Cloud scope needed"
+      }
+    ]
+  },
+  "afterOpenRefresh": {
+    "focus": "Refresh usage",
+    "open": true,
+    "period": "day",
+    "range": "Nov 9, 2026Asia/ShanghaiEven with previous period",
+    "sources": [
+      {
+        "name": "AWS Bedrock control plane",
+        "status": "Cloud scope needed"
+      },
+      {
+        "name": "Azure OpenAI control plane",
+        "status": "Cloud scope needed"
+      },
+      {
+        "name": "Google Vertex AI control plane",
+        "status": "Cloud scope needed"
+      }
+    ]
+  },
+  "afterExplicitClose": {
+    "focus": "",
+    "open": false,
+    "period": "day",
+    "range": "Nov 9, 2026Asia/ShanghaiEven with previous period",
+    "sources": []
+  },
+  "afterClosedRefresh": {
+    "focus": "Refresh usage",
+    "open": false,
+    "period": "day",
+    "range": "Nov 9, 2026Asia/ShanghaiEven with previous period",
+    "sources": []
+  },
+  "chinese": {
+    "focus": "视图",
+    "open": true,
+    "period": "day",
+    "range": "2026年11月9日Asia/Shanghai与上一周期持平",
+    "sources": [
+      {
+        "name": "AWS Bedrock 控制面",
+        "status": "需要云作用域"
+      },
+      {
+        "name": "Azure OpenAI 控制面",
+        "status": "需要云作用域"
+      },
+      {
+        "name": "Google Vertex AI 控制面",
+        "status": "需要云作用域"
+      }
+    ],
+    "accessibility": [
+      "\t\t\t\t\t\t\t\t\t124 button (expanded) 官方数据源与对账 汇集模型服务商官方组织用量、财务账本、账户额度与云控制面覆盖状态。 只对账，不相加, Secondary Actions: Collapse",
+      "\t\t\t\t\t\t\t\t\t\t125 heading 官方数据源与对账, Value: 2",
+      "\t\t\t\t\t\t\t\t\t\t\t126 text 官方数据源与对账",
+      "\t\t\t\t\t\t\t\t\t\t128 text 只对账，不相加",
+      "\t\t\t\t\t\t\t\t\t\t130 text AWS Bedrock 控制面 amazon-bedrock 需要云作用域",
+      "\t\t\t\t\t\t\t\t\t\t134 link Description: 官方文档, Value: docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+      "\t\t\t\t\t\t\t\t\t\t136 text Azure OpenAI 控制面 azure 需要云作用域",
+      "\t\t\t\t\t\t\t\t\t\t140 link Description: 官方文档, Value: learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+      "\t\t\t\t\t\t\t\t\t\t142 text Google Vertex AI 控制面 google-vertex 需要云作用域",
+      "\t\t\t\t\t\t\t\t\t\t146 link Description: 官方文档, Value: cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list"
+    ]
+  },
+  "failure": {
+    "focus": "刷新用量",
+    "open": null,
+    "period": "day",
+    "range": null,
+    "sources": []
+  },
+  "recovered": {
+    "focus": "刷新用量",
+    "open": true,
+    "period": "day",
+    "range": "2026年11月9日Asia/Shanghai与上一周期持平",
+    "sources": [
+      {
+        "name": "AWS Bedrock 控制面",
+        "status": "需要云作用域"
+      },
+      {
+        "name": "Azure OpenAI 控制面",
+        "status": "需要云作用域"
+      },
+      {
+        "name": "Google Vertex AI 控制面",
+        "status": "需要云作用域"
+      }
+    ],
+    "accessibility": [
+      "\t\t\t\t\t\t\t\t\t139 button (expanded) 官方数据源与对账 汇集模型服务商官方组织用量、财务账本、账户额度与云控制面覆盖状态。 只对账，不相加, Secondary Actions: Collapse",
+      "\t\t\t\t\t\t\t\t\t\t140 heading 官方数据源与对账, Value: 2",
+      "\t\t\t\t\t\t\t\t\t\t\t141 text 官方数据源与对账",
+      "\t\t\t\t\t\t\t\t\t\t149 link Description: 官方文档, Value: docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-request-metadata.html",
+      "\t\t\t\t\t\t\t\t\t\t155 link Description: 官方文档, Value: learn.microsoft.com/en-us/azure/ai-services/openai/monitor-openai-reference",
+      "\t\t\t\t\t\t\t\t\t\t161 link Description: 官方文档, Value: cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.timeSeries/list",
+      "The focused UI element is 96 button 刷新用量"
+    ]
+  }
+}
