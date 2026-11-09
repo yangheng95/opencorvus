@@ -55,6 +55,23 @@
   flex: 1;
 }
 
+.conversation-search-reload {
+  min-inline-size: calc(60px * var(--ui-scale));
+}
+
+.conversation-search-feedback {
+  flex: 0 1 auto;
+  min-height: 0;
+  padding-inline: var(--ui-gap-2xl);
+  overflow: auto;
+}
+
+.conversation-search-feedback .oc-feedback__diagnostic {
+  max-height: calc(160px * var(--ui-scale));
+  overflow: auto;
+  overflow-wrap: anywhere;
+}
+
 .cmdk-backdrop {
   position: fixed;
   inset: 0;

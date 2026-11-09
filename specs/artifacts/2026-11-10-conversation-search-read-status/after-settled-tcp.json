@@ -1,0 +1,49 @@
+{
+  "phase": "after",
+  "mode": "settled",
+  "checks": [
+    {
+      "route": "/project/current",
+      "method": "get",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "72880bac-8f8d-4cb7-8cb2-ff6e89141cea",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}",
+      "method": "get",
+      "operationId": "task.get",
+      "status": 200,
+      "requestID": "eea0bfdc-82e3-4894-8a5f-163ef7550b70",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}/transcript",
+      "method": "get",
+      "operationId": "task.transcript",
+      "status": 200,
+      "requestID": "c641e049-1549-496c-93b2-56768e003c65",
+      "schemaValid": true
+    },
+    {
+      "route": "/export/session/{sessionID}",
+      "method": "get",
+      "operationId": "export.session",
+      "status": 200,
+      "requestID": "e9767c7d-5708-4d7c-a381-511fe61063af",
+      "schemaValid": true
+    }
+  ],
+  "projectID": "prj_hPyEHeOsOOpUZvi2z4n7",
+  "task": {
+    "id": "tsk_g00VaV8Qey009Hlp3yHl",
+    "status": "completed",
+    "messages": 0
+  },
+  "chat": {
+    "id": "ses_-zUPUqAR7zzemrOCcvgm",
+    "title": "Chat",
+    "messages": 0
+  }
+}

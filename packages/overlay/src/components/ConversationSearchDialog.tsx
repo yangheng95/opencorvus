@@ -20,21 +20,53 @@ import { getLocale, t } from "../utils/i18n"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
 import { conversationSourceExcerptKey, isConversationSourcePart } from "../utils/conversation-source"
 
+type ConversationSearchRead =
+  | { kind: "idle" }
+  | { kind: "loading"; retry: boolean }
+  | { kind: "ready"; snapshot: ConversationSearchSnapshot }
+  | { kind: "failed"; details: string }
+
 export function ConversationSearchDialog(props: {
   open: boolean
   target: () => { kind: "session" | "task"; id: string; directory: string } | null
   onClose: () => void
   returnFocusTarget: () => HTMLElement | null
 }) {
-  const [snapshot, setSnapshot] = createSignal<ConversationSearchSnapshot>()
+  const [read, setRead] = createSignal<ConversationSearchRead>({ kind: "idle" })
   const [query, setQuery] = createSignal("")
-  const [loading, setLoading] = createSignal(false)
   const [locating, setLocating] = createSignal("")
-  const [error, setError] = createSignal("")
+  const [locateError, setLocateError] = createSignal<{ details: string }>()
   let input: HTMLInputElement | undefined
   let controller: AbortController | undefined
   let ownsSnapshot: (() => boolean) | undefined
-  const hits = createMemo(() => snapshot() ? findConversationMessages(snapshot()!, query()) : [])
+  const snapshot = createMemo(() => {
+    const current = read()
+    return current.kind === "ready" ? current.snapshot : undefined
+  })
+  const hits = createMemo(() => {
+    const accepted = snapshot()
+    return accepted ? findConversationMessages(accepted, query()) : []
+  })
+  const usesRetryAction = () => {
+    const current = read()
+    return current.kind === "failed" || (current.kind === "loading" && current.retry)
+  }
+  const feedback = createMemo(() => {
+    const current = read(), failedLocate = locateError()
+    if (current.kind === "failed") return { key: "chat.search_failed" as const, details: current.details }
+    if (failedLocate) return { key: "chat.search_unavailable" as const, details: failedLocate.details }
+  })
+  const status = () => {
+    const current = read()
+    if (current.kind === "loading") return t("common.loading")
+    if (locating()) return t("chat.search_locating")
+    if (current.kind !== "ready") return
+    if (query().trim()) {
+      const count = hits().length
+      return t(count === 1 ? "chat.search_result" : "chat.search_results", { count: count.toLocaleString(getLocale()) })
+    }
+    return t("chat.search_ready", { count: current.snapshot.messages.length.toLocaleString(getLocale()) })
+  }
   const date = createMemo(() => new Intl.DateTimeFormat(getLocale(), { dateStyle: "medium", timeStyle: "short" }))
   const hitSource = (hit: ConversationSearchHit) => {
     if (!hit.sourceId) return undefined
@@ -58,24 +90,24 @@ export function ConversationSearchDialog(props: {
       isApiAuthorityCurrent(authority) && boardStore.selectEpoch === epoch &&
       props.target()?.kind === target.kind && props.target()?.id === target.id && props.target()?.directory === target.directory
     ownsSnapshot = owns
-    setSnapshot(undefined)
-    setLoading(true)
-    setError("")
+    setRead({ kind: "loading", retry: usesRetryAction() })
+    setLocateError(undefined)
     try {
       const path = target.kind === "task"
         ? taskScopedPath(target.id, target.directory, "/transcript")
         : directoryScopedPath(`export/session/${encodeURIComponent(target.id)}`, target.directory, "conversationSearch")
       const exported = await apiJson<unknown>(path, { authority, signal: request.signal })
-      if (owns()) setSnapshot(target.kind === "task"
+      if (owns()) setRead({ kind: "ready", snapshot: target.kind === "task"
         ? readTaskConversationSnapshot(exported)
-        : readConversationSnapshot(exported, target.id))
+        : readConversationSnapshot(exported, target.id) })
     } catch (cause) {
       if (owns()) {
-        setError(t("chat.search_failed"))
-        reportError({ title: t("chat.search_failed"), details: formatErrorDetails(cause) })
+        const details = formatErrorDetails(cause)
+        setRead({ kind: "failed", details })
+        reportError({ title: t("chat.search_failed"), details })
       }
     } finally {
-      if (controller === request) setLoading(false)
+      if (controller === request && read().kind === "loading") setRead({ kind: "idle" })
     }
   }
 
@@ -84,9 +116,10 @@ export function ConversationSearchDialog(props: {
     else {
       controller?.abort()
       controller = undefined
-      setSnapshot(undefined)
+      ownsSnapshot = undefined
+      setRead({ kind: "idle" })
       setQuery("")
-      setError("")
+      setLocateError(undefined)
       setLocating("")
     }
   }))
@@ -98,7 +131,7 @@ export function ConversationSearchDialog(props: {
     const snapshotTarget = props.target()
     if (!source || source.kind !== snapshotTarget?.kind || source.id !== snapshotTarget.id) return
     setLocating(hit.id)
-    setError("")
+    setLocateError(undefined)
     try {
       if (!ownsConversationHistory(source, authority)) throw new Error("Conversation history owner changed")
       const message = snapshot()?.messages.find(message => message.id === hit.id)
@@ -131,8 +164,9 @@ export function ConversationSearchDialog(props: {
       props.onClose()
     } catch (cause) {
       if (owns()) {
-        setError(t("chat.search_unavailable"))
-        reportError({ title: t("chat.search_unavailable"), details: formatErrorDetails(cause) })
+        const details = formatErrorDetails(cause)
+        setLocateError({ details })
+        reportError({ title: t("chat.search_unavailable"), details })
       }
     } finally {
       if (owns()) setLocating("")
@@ -162,17 +196,19 @@ export function ConversationSearchDialog(props: {
         <span>{hit.preview}</span>
       </span>}
       optionData={(hit) => ({ "data-message-id": hit.id })}
-      emptyContent={<Show when={!loading() && !error()}><div class="cmdk-empty">{t(query().trim() ? "chat.search_empty" : "chat.search_hint")}</div></Show>}
+      emptyContent={<Show when={snapshot()}>{(accepted) => <div class="cmdk-empty">{
+        t(query().trim() ? "chat.search_empty" : accepted().messages.length ? "chat.search_hint" : "chat.search_no_messages")
+      }</div>}</Show>}
     />
+    <Show when={feedback()}>{(error) => <Feedback class="conversation-search-feedback" tone="error" details={error().details}>
+      {t(error().key)}
+    </Feedback>}</Show>
     <div class="cmdk-footer conversation-search-footer">
-      <div role="status" aria-live="polite">{loading() ? t("common.loading") : locating() ? t("chat.search_locating") :
-        query().trim() ? t(hits().length === 1 ? "chat.search_result" : "chat.search_results", { count: hits().length.toLocaleString(getLocale()) }) :
-          t("chat.search_ready", { count: (snapshot()?.messages.length ?? 0).toLocaleString(getLocale()) })}</div>
-      <Button type="button" variant="ghost" size="sm" tone="neutral" aria-disabled={loading() || !!locating()} onClick={() => {
-        if (!loading() && !locating()) void load()
-      }}>{t("common.refresh")}</Button>
+      <div role="status" aria-live="polite">{status()}</div>
+      <Button class="conversation-search-reload" type="button" variant="ghost" size="sm" tone="neutral" aria-disabled={read().kind === "loading" || !!locating()} onClick={() => {
+        if (read().kind !== "loading" && !locating()) void load()
+      }}>{t(usesRetryAction() ? "common.retry" : "common.refresh")}</Button>
       <Button type="button" variant="ghost" size="sm" tone="neutral" onClick={props.onClose}>{t("common.close")}</Button>
     </div>
-    <Show when={error()}><Feedback tone="error">{error()}</Feedback></Show>
   </Dialog>
 }

@@ -1,0 +1,13 @@
+{"listenPort":39300,"upstreamPort":39298,"pid":17800}
+{"time":"2026-11-09T18:16:57.850Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:17:04.634Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:17:12.590Z","receipt":1,"stage":"arrival","path":"/task/tsk_g00VaV8Qf5006Wh4Ekpg/transcript","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b142\\project-before","delay":6500,"cut":true}
+{"time":"2026-11-09T18:17:12.597Z","receipt":1,"stage":"origin","status":200,"requestID":"859dbfd6-144e-4da3-a313-97cf4d077ce3","target":{"kind":"task","id":"tsk_g00VaV8Qf5006Wh4Ekpg","messageCount":0}}
+{"time":"2026-11-09T18:17:19.106Z","receipt":1,"stage":"cut","forwardedBytes":1,"target":{"kind":"task","id":"tsk_g00VaV8Qf5006Wh4Ekpg","messageCount":0}}
+{"time":"2026-11-09T18:17:30.755Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:17:37.295Z","receipt":2,"stage":"arrival","path":"/export/session/ses_-zUPUrPv4zzhVeWN0W0I","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b142\\project-before","delay":6500,"cut":true}
+{"time":"2026-11-09T18:17:37.298Z","receipt":2,"stage":"origin","status":200,"requestID":"301a80e6-2d30-48e8-a729-4d3552cb4726","target":{"kind":"session","id":"ses_-zUPUrPv4zzhVeWN0W0I","messageCount":0}}
+{"time":"2026-11-09T18:17:43.813Z","receipt":2,"stage":"cut","forwardedBytes":1,"target":{"kind":"session","id":"ses_-zUPUrPv4zzhVeWN0W0I","messageCount":0}}
+{"time":"2026-11-09T18:18:18.484Z","receipt":3,"stage":"arrival","path":"/export/session/ses_-zUPUrPv4zzhVeWN0W0I","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b142\\project-before","delay":0,"cut":false}
+{"time":"2026-11-09T18:18:18.487Z","receipt":3,"stage":"origin","status":200,"requestID":"3d34061f-989e-49b5-80d8-c8711bb63934","target":{"kind":"session","id":"ses_-zUPUrPv4zzhVeWN0W0I","messageCount":0}}
+{"time":"2026-11-09T18:18:18.487Z","receipt":3,"stage":"released","target":{"kind":"session","id":"ses_-zUPUrPv4zzhVeWN0W0I","messageCount":0}}

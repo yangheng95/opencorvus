@@ -1,0 +1,49 @@
+{
+  "phase": "before",
+  "mode": "baseline",
+  "checks": [
+    {
+      "route": "/project/current",
+      "method": "get",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "ed2caa97-3bac-46e3-ac98-01afe30314bc",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}",
+      "method": "get",
+      "operationId": "task.get",
+      "status": 200,
+      "requestID": "207017d1-fa51-4b14-bece-195d69464990",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}/transcript",
+      "method": "get",
+      "operationId": "task.transcript",
+      "status": 200,
+      "requestID": "f032956f-7042-4d5e-b94a-be581c00042b",
+      "schemaValid": true
+    },
+    {
+      "route": "/export/session/{sessionID}",
+      "method": "get",
+      "operationId": "export.session",
+      "status": 200,
+      "requestID": "b80aa2c4-d04e-48b4-b96c-7f9abe7015d9",
+      "schemaValid": true
+    }
+  ],
+  "projectID": "prj_hh65fGs2Tn4B0Vx5o2Pf",
+  "task": {
+    "id": "tsk_g00VaV8Qf5006Wh4Ekpg",
+    "status": "completed",
+    "messages": 0
+  },
+  "chat": {
+    "id": "ses_-zUPUrPv4zzhVeWN0W0I",
+    "title": "Chat",
+    "messages": 0
+  }
+}

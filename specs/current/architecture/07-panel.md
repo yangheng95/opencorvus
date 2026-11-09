@@ -3637,6 +3637,10 @@ also owns the displayed label. If the owner retains the selection, the label is
 projected again after Kobalte's native clear request; an accepted null selection
 keeps the existing clear behavior. Value-null command and conversation search
 surfaces retain their own query and Escape handlers.
+Conversation search reads the selected Task transcript or Chat session export.
+Only a successfully validated snapshot supplies result counts and empty states.
+A read failure keeps the typed query and shows a localized Retry action with
+the original diagnostic; locating a result can fail independently of that read.
 Transcript actor avatars use neutral chrome with the role glyph; elapsed times
 are caption metadata and activity disclosures use the shared compact row height.
 The existing pane layout effect observes settings hydration and zoom so resolved

@@ -1,0 +1,57 @@
+{
+  "phase": "after",
+  "mode": "create",
+  "checks": [
+    {
+      "route": "/project/current",
+      "method": "get",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "7a1d04cf-7400-49d7-9b58-527f7c4692ba",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}",
+      "method": "get",
+      "operationId": "task.get",
+      "status": 200,
+      "requestID": "eb7c46a7-d945-43dc-b9b4-8c569ee81658",
+      "schemaValid": true
+    },
+    {
+      "route": "/coding/chat/session",
+      "method": "post",
+      "operationId": "coding.chat.session.create",
+      "status": 201,
+      "requestID": "bdf132bc-219c-44a3-98a4-4ec1cb8a75fb",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}/transcript",
+      "method": "get",
+      "operationId": "task.transcript",
+      "status": 200,
+      "requestID": "6bb5a626-c59f-425c-a86a-31c4f2a33ef6",
+      "schemaValid": true
+    },
+    {
+      "route": "/export/session/{sessionID}",
+      "method": "get",
+      "operationId": "export.session",
+      "status": 200,
+      "requestID": "21ceb385-129a-43e4-8b27-b09aabccf4ad",
+      "schemaValid": true
+    }
+  ],
+  "projectID": "prj_hPyEHeOsOOpUZvi2z4n7",
+  "task": {
+    "id": "tsk_g00VaV8Qey009Hlp3yHl",
+    "status": "completed",
+    "messages": 0
+  },
+  "chat": {
+    "id": "ses_-zUPUqAR7zzemrOCcvgm",
+    "title": "Chat",
+    "messages": 0
+  }
+}
