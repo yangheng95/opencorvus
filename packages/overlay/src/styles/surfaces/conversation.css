@@ -3078,7 +3078,12 @@
 
 .project-runtime-local-environment-dialog {
   display: grid;
+  align-content: start;
   gap: var(--ui-gap-xl);
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
   padding: var(--ui-gap-2xl);
 }
 
@@ -3114,8 +3119,14 @@
   margin-bottom: var(--ui-gap-3xs);
 }
 
-.project-runtime-local-environment-actions {
-  margin-top: 0;
+.dialog-form.project-runtime-local-environment-dialog-form > .dialog-actions:not(.compact) {
+  flex-shrink: 0;
+  margin: 0;
+  padding: var(--ui-gap-lg) var(--ui-gap-2xl);
+}
+
+.project-runtime-local-environment-dialog-form > .dialog-actions > .oc-feedback {
+  flex-basis: 100%;
 }
 
 .dialog-form.project-runtime-git-dialog-form {

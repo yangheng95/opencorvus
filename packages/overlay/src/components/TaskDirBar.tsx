@@ -7,6 +7,7 @@ import {
   createMemo,
   createResource,
   createSignal,
+  createUniqueId,
   For,
   type JSX,
   onCleanup,
@@ -60,6 +61,7 @@ import { TaskProgressBar } from "./TaskProgressBar"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Section } from "./ui/Section"
 import { Dialog } from "./ui/Dialog"
+import { Feedback } from "./ui/Feedback"
 import { TextField } from "./ui/TextField"
 import { configDraftMergePatch, currentProjectConfigRequestOptions, patchConfig } from "../services/config"
 import { conversationAgentRecordsForSource } from "../store/conversation-agents"
@@ -169,6 +171,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const [panelOpen, setPanelOpen] = createSignal(false)
   const [panelExpanded, setPanelExpanded] = createSignal(true)
   let panelShell!: HTMLDivElement
+  let runtimePanelTrigger: HTMLButtonElement | undefined
   const [localMenuOpen, setLocalMenuOpen] = createSignal(false)
   const localMenuOwner = "project-runtime-local"
   let localMenuAnchor!: HTMLButtonElement
@@ -186,6 +189,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const [gitActionError, setGitActionError] = createSignal("")
   const [gitActionNotice, setGitActionNotice] = createSignal("")
   const [localEnvironmentOpen, setLocalEnvironmentOpen] = createSignal(false)
+  const localEnvironmentFormID = `project-runtime-local-environment-${createUniqueId()}`
+  let localEnvironmentNameInput: HTMLInputElement | undefined
   const runtimePanelOpen = createMemo(
     () => props.anchorVisible && panelOpen() && !gitActionOpen() && !localEnvironmentOpen(),
   )
@@ -439,6 +444,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const value = (appStore.config as any)?.local_environment
     return value && typeof value === "object" && !Array.isArray(value) ? value : undefined
   }
+
+  const editingLocalEnvironment = () =>
+    Boolean(localEnvironmentOpen() ? localEnvironmentBaseline : configuredLocalEnvironment())
+  const localEnvironmentActionLabel = () =>
+    t(editingLocalEnvironment() ? "project_runtime.local_environment_edit" : "project_runtime.local_environment_create")
 
   function openLocalEnvironmentEditor(): void {
     const environment = configuredLocalEnvironment()
@@ -1333,8 +1343,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         <DropdownMenu.Portal>
           <DropdownMenu.Content class="project-runtime-actions-menu">
             <DropdownMenu.Item as="button" type="button" onSelect={openLocalEnvironmentEditor}>
-              <Icon name="plus" />
-              {t("project_runtime.local_environment_create")}
+              <Icon name={editingLocalEnvironment() ? "edit" : "plus"} />
+              {localEnvironmentActionLabel()}
             </DropdownMenu.Item>
             <DropdownMenu.Item as="button" type="button" onSelect={() => void browseDirectory()}>
               <Icon name="folder" />
@@ -1790,6 +1800,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             tone="neutral"
             data-chrome="chat-header-toolbar-toggle"
             data-ui="project-runtime-status-dropdown"
+            ref={(element) => { runtimePanelTrigger = element }}
             data-vcs-tone={gitTone()}
             data-expanded={runtimePanelOpen() ? "" : undefined}
             title={triggerTitle()}
@@ -1816,17 +1827,49 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       <Dialog
         id="projectRuntimeLocalEnvironmentDialog"
         open={localEnvironmentOpen()}
-        title={t("project_runtime.local_environment_title")}
+        title={localEnvironmentActionLabel()}
         overlayClass="project-runtime-local-environment-dialog-overlay"
         formClass="project-runtime-local-environment-dialog-form"
         draggable={false}
         onOpenAutoFocus={(event) => {
           event.preventDefault()
-          document.querySelector<HTMLInputElement>('[data-ui="project-runtime-local-environment-name"]')?.focus()
+          localEnvironmentNameInput?.focus()
         }}
+        returnFocusTarget={() => props.anchorVisible ? runtimePanelTrigger : undefined}
         onClose={() => closeLocalEnvironmentEditor()}
+        footer={
+          <>
+            <Show when={localEnvironmentError()}>
+              <Feedback tone="error" data-ui="project-runtime-local-environment-error">
+                {localEnvironmentError()}
+              </Feedback>
+            </Show>
+            <Button
+              type="button"
+              variant="outline"
+              size="md"
+              tone="neutral"
+              disabled={localEnvironmentBusy()}
+              onClick={closeLocalEnvironmentEditor}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button
+              type="submit"
+              form={localEnvironmentFormID}
+              variant="solid"
+              size="md"
+              tone="accent"
+              data-ui="project-runtime-local-environment-save"
+              disabled={localEnvironmentBusy()}
+            >
+              {localEnvironmentBusy() ? t("common.saving") : t("common.save")}
+            </Button>
+          </>
+        }
       >
         <form
+          id={localEnvironmentFormID}
           class="project-runtime-local-environment-dialog"
           data-ui="project-runtime-local-environment-dialog"
           onSubmit={(event) => {
@@ -1841,6 +1884,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             <TextField.Label>{t("project_runtime.local_environment_name")}</TextField.Label>
             <TextField.Input
               data-ui="project-runtime-local-environment-name"
+              ref={(element) => { localEnvironmentNameInput = element }}
               value={localEnvironmentName()}
               placeholder={t("project_runtime.local_environment_default_name")}
               disabled={localEnvironmentBusy()}
@@ -1925,7 +1969,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               data-ui="project-runtime-local-environment-setup-script"
               rows={5}
               value={localEnvironmentSetupScript()}
-              placeholder={t("project_runtime.local_environment_setup_script_placeholder")}
               disabled={localEnvironmentBusy()}
               onInput={(event) => {
                 setLocalEnvironmentSetupScript(event.currentTarget.value)
@@ -1934,34 +1977,6 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
             />
             <TextField.Description>{t("project_runtime.local_environment_setup_script_hint")}</TextField.Description>
           </TextField.Root>
-          <Show when={localEnvironmentError()}>
-            <div class="project-runtime-operation-error" data-ui="project-runtime-local-environment-error" role="alert">
-              <Icon name="status-failed" />
-              <span>{localEnvironmentError()}</span>
-            </div>
-          </Show>
-          <div class="dialog-actions compact project-runtime-local-environment-actions">
-            <Button
-              type="button"
-              variant="outline"
-              size="md"
-              tone="neutral"
-              disabled={localEnvironmentBusy()}
-              onClick={closeLocalEnvironmentEditor}
-            >
-              {t("common.cancel")}
-            </Button>
-            <Button
-              type="submit"
-              variant="solid"
-              size="md"
-              tone="accent"
-              data-ui="project-runtime-local-environment-save"
-              disabled={localEnvironmentBusy()}
-            >
-              {localEnvironmentBusy() ? t("common.saving") : t("common.save")}
-            </Button>
-          </div>
         </form>
       </Dialog>
       <Dialog

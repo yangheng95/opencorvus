@@ -1,0 +1,72 @@
+{
+  "long": {
+    "config": {
+      "status": 200,
+      "requestID": "e7f4dffe-21f5-48b7-a1d7-c1ee3afbc70f",
+      "local_environment": {
+        "name": "Desktop environment layout review",
+        "variables": {
+          "OPENCORVUS_REVIEW_ROW_01": "seed-01",
+          "OPENCORVUS_REVIEW_ROW_02": "seed-02",
+          "OPENCORVUS_REVIEW_ROW_03": "seed-03",
+          "OPENCORVUS_REVIEW_ROW_04": "seed-04",
+          "OPENCORVUS_REVIEW_ROW_05": "seed-05",
+          "OPENCORVUS_REVIEW_ROW_06": "seed-06",
+          "OPENCORVUS_REVIEW_ROW_07": "seed-07",
+          "OPENCORVUS_REVIEW_ROW_08": "seed-08",
+          "OPENCORVUS_REVIEW_ROW_09": "seed-09",
+          "OPENCORVUS_REVIEW_ROW_10": "seed-10",
+          "OPENCORVUS_REVIEW_ROW_11": "seed-11",
+          "OPENCORVUS_REVIEW_ROW_12": "desktop-edited-12"
+        },
+        "setup_script": "# Isolated draft; do not run"
+      },
+      "locale": "en-US"
+    },
+    "file": {
+      "local_environment": {
+        "name": "Desktop environment layout review",
+        "variables": {
+          "OPENCORVUS_REVIEW_ROW_01": "seed-01",
+          "OPENCORVUS_REVIEW_ROW_02": "seed-02",
+          "OPENCORVUS_REVIEW_ROW_03": "seed-03",
+          "OPENCORVUS_REVIEW_ROW_04": "seed-04",
+          "OPENCORVUS_REVIEW_ROW_05": "seed-05",
+          "OPENCORVUS_REVIEW_ROW_06": "seed-06",
+          "OPENCORVUS_REVIEW_ROW_07": "seed-07",
+          "OPENCORVUS_REVIEW_ROW_08": "seed-08",
+          "OPENCORVUS_REVIEW_ROW_09": "seed-09",
+          "OPENCORVUS_REVIEW_ROW_10": "seed-10",
+          "OPENCORVUS_REVIEW_ROW_11": "seed-11",
+          "OPENCORVUS_REVIEW_ROW_12": "desktop-edited-12"
+        },
+        "setup_script": "# Isolated draft; do not run"
+      },
+      "locale": "en-US"
+    },
+    "conversation": {
+      "status": 200,
+      "messages": 0
+    }
+  },
+  "new": {
+    "config": {
+      "status": 200,
+      "requestID": "38b15e4c-5508-457a-a517-0cc56acdcb45",
+      "local_environment": {
+        "name": "New desktop environment"
+      },
+      "locale": "en-US"
+    },
+    "file": {
+      "local_environment": {
+        "name": "New desktop environment"
+      },
+      "locale": "en-US"
+    },
+    "conversation": {
+      "status": 200,
+      "messages": 0
+    }
+  }
+}
