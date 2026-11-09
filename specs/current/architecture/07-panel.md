@@ -2217,6 +2217,12 @@ page through its existing explicit activation. They do not change a preference
 or imply full-text search of every setting. Direct locale and theme commands
 retain their existing separate action semantics.
 
+Chat and Work capability settings keep the last confirmed assignments visible
+when a write response cannot be confirmed. The explicit Check current assignments
+action reads the same Project and role, keeps the original diagnostic, and uses
+the accepted read to enable editing again. It does not repeat the assignment
+write. A failed initial read also offers an in-place retry.
+
 General's log export keeps the same button focusable while its accepted request
 is busy, publishing aria-disabled/aria-busy and guarding repeat activation. The
 connection still controls native availability. Its one notice stores completion

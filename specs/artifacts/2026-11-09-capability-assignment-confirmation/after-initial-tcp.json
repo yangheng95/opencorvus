@@ -1,0 +1,69 @@
+{
+  "phase": "after",
+  "step": "initial",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "381008a8-32cb-4317-99c8-1cd4f5198f9d",
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "requestID": "9b786878-bee6-49cb-bf76-c36779f8bc94",
+      "schemaValid": true
+    },
+    {
+      "route": "/chat/capability",
+      "operationId": "chat.capability.get",
+      "status": 200,
+      "requestID": "61823ac0-0ff1-4794-9d41-1908237c5417",
+      "schemaValid": true
+    },
+    {
+      "route": "/work/capability",
+      "operationId": "work.capability.get",
+      "status": 200,
+      "requestID": "3eb0b827-5e89-4b20-8797-0cffa8e78f65",
+      "schemaValid": true
+    }
+  ],
+  "report": {
+    "chat": {
+      "skills": [],
+      "mcp": [],
+      "toolCount": 37,
+      "installed": [
+        "browser-use",
+        "computer-use",
+        "design-taste-frontend",
+        "grill-me",
+        "research-report",
+        "work-artifacts"
+      ]
+    },
+    "work": {
+      "skills": [
+        "work-artifacts"
+      ],
+      "mcp": [],
+      "toolCount": 41,
+      "installed": [
+        "browser-use",
+        "computer-use",
+        "design-taste-frontend",
+        "grill-me",
+        "research-report",
+        "work-artifacts"
+      ]
+    }
+  },
+  "project": {
+    "id": "prj_hgliYPDSDW4JhgqsMkND",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b127\\project-after"
+  },
+  "listedProjectCount": 1
+}

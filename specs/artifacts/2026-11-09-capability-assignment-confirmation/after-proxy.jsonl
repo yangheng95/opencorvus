@@ -1,0 +1,14 @@
+{"listenPort":39241,"upstreamPort":39240,"pid":11956,"holdMs":11000,"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b127\\project-after","chatCutRead":2,"chatHeldRead":3}
+{"time":"2026-11-09T14:40:48.812Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T14:40:48.815Z","receipt":1,"experience":"chat","type":"read","stage":"arrival","route":"/chat/capability","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b127\\project-after","hold":false,"cut":false}
+{"time":"2026-11-09T14:40:48.828Z","receipt":1,"experience":"chat","type":"read","stage":"origin","route":"/chat/capability","status":200,"requestID":"93725454-3d9b-4c05-a9c0-6d073e27c050"}
+{"time":"2026-11-09T14:40:48.829Z","receipt":1,"experience":"chat","type":"read","stage":"original-complete","bytes":29623,"agent":"chat","skillRefs":[],"mcpRefs":[]}
+{"time":"2026-11-09T14:40:48.830Z","receipt":1,"experience":"chat","type":"read","stage":"released","bytes":29623}
+{"time":"2026-11-09T14:40:55.104Z","receipt":2,"experience":"chat","type":"read","stage":"arrival","route":"/chat/capability","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b127\\project-after","hold":false,"cut":true}
+{"time":"2026-11-09T14:40:55.112Z","receipt":2,"experience":"chat","type":"read","stage":"origin","route":"/chat/capability","status":200,"requestID":"9f2d3298-a73c-493e-85d0-b3db800d9d7d"}
+{"time":"2026-11-09T14:40:55.112Z","receipt":2,"experience":"chat","type":"read","stage":"original-complete","bytes":29623,"agent":"chat","skillRefs":[],"mcpRefs":[]}
+{"time":"2026-11-09T14:40:55.113Z","receipt":2,"experience":"chat","type":"read","stage":"partial-body","bytes":32}
+{"time":"2026-11-09T14:41:01.506Z","receipt":3,"experience":"chat","type":"read","stage":"arrival","route":"/chat/capability","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b127\\project-after","hold":true,"cut":false}
+{"time":"2026-11-09T14:41:01.517Z","receipt":3,"experience":"chat","type":"read","stage":"origin","route":"/chat/capability","status":200,"requestID":"95e1e90c-bbf2-46af-93fa-544d68b8495c"}
+{"time":"2026-11-09T14:41:01.517Z","receipt":3,"experience":"chat","type":"read","stage":"original-complete","bytes":29623,"agent":"chat","skillRefs":[],"mcpRefs":[]}
+{"time":"2026-11-09T14:41:12.531Z","receipt":3,"experience":"chat","type":"read","stage":"released","bytes":29623}

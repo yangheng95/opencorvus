@@ -1,0 +1,32 @@
+{
+  "portsReleased": [
+    39238,
+    39239,
+    39240,
+    39241
+  ],
+  "originalFiles": [
+    {
+      "phase": "before",
+      "original": "Owned capability assignment before\n",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b127\\project-before",
+      "gitHead": "d8b4ed8fadcf446e41281de2da7750526d5eb24f"
+    },
+    {
+      "phase": "after",
+      "original": "Owned capability assignment after\n",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ],
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b127\\project-after",
+      "gitHead": "e337d7d4bb7754d4631effb050c8dc2678ddf2e3"
+    }
+  ]
+}

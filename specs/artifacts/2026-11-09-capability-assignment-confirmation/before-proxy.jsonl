@@ -1,0 +1,11 @@
+{"listenPort":39239,"upstreamPort":39238,"pid":29592,"holdMs":11000,"directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b127\\project-before","holdReceipts":[1],"cutReceipts":[1]}
+{"time":"2026-11-09T14:31:52.437Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T14:32:06.934Z","receipt":1,"stage":"arrival","route":"/work/capability","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b127\\project-before","hold":true,"cut":true}
+{"time":"2026-11-09T14:32:07.007Z","receipt":1,"stage":"origin","route":"/work/capability","status":200,"requestID":"839907aa-8d50-48d9-af92-7c8f0a380de0"}
+{"time":"2026-11-09T14:32:07.008Z","receipt":1,"stage":"original-complete","bytes":29747,"agent":"work","skillRefs":["work-artifacts","grill-me"],"mcpRefs":[]}
+{"time":"2026-11-09T14:32:18.014Z","receipt":1,"stage":"partial-body","bytes":32}
+{"time":"2026-11-09T14:32:33.071Z","receipt":2,"stage":"arrival","route":"/work/capability","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b127\\project-before","hold":false,"cut":false}
+{"time":"2026-11-09T14:32:33.148Z","receipt":2,"stage":"origin","route":"/work/capability","status":200,"requestID":"09e8af54-868e-4b51-a151-71a37212235a"}
+{"time":"2026-11-09T14:32:33.148Z","receipt":2,"stage":"original-complete","bytes":29736,"agent":"work","skillRefs":["work-artifacts"],"mcpRefs":[]}
+{"time":"2026-11-09T14:32:33.149Z","receipt":2,"stage":"released","bytes":29736}
+{"time":"2026-11-09T14:32:51.400Z","stage":"upgrade","route":"/global/transport/stream","status":101}

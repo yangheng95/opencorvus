@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [能力分配保存未确认时可原地核对证据](2026-11-09-capability-assignment-confirmation/README.md)
 - [全局搜索的工作结果重试保持焦点证据](2026-11-09-palette-ledger-retry-focus/README.md)
 - [定时列表重试保持原焦点证据](2026-11-09-scheduled-list-retry-focus/README.md)
 - [收件箱重试期间保留焦点和原诊断证据](2026-11-09-mailbox-retry-focus/README.md)
