@@ -5,6 +5,8 @@ import { captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
 import { expertSquadSettingsScope, type ExpertSquadCatalogScopeState } from "../../services/expert-squad-scope"
 import { ensureMissionSkillDirectory, loadMissionSkillSettings } from "../../services/mission-skill"
 import { pathRevealFailureText, pathRevealLabelKey, pathRevealNoticeKey, revealPath } from "../../services/workspace"
+import { appStore } from "../../store/app"
+import { formatErrorDetails } from "../../utils/error-details"
 import { t, tc } from "../../utils/i18n"
 import { Badge } from "../ui/Badge"
 import { Disclosure } from "../ui/Disclosure"
@@ -57,7 +59,7 @@ export default function MissionSkillPanel() {
   const [query, setQuery] = createSignal("")
   const [filter, setFilter] = createSignal<MissionSkillFilter>("all")
   const [loading, setLoading] = createSignal(false)
-  const [error, setError] = createSignal("")
+  const [readFailure, setReadFailure] = createSignal<{ cause: unknown }>()
   const [notice, setNotice] = createSignal("")
   const [noticeTone, setNoticeTone] = createSignal<"active" | "error">("active")
   let loadSequence = 0
@@ -161,14 +163,14 @@ export default function MissionSkillPanel() {
       setCatalog(null)
       setCatalogIdentity("")
       setLoading(false)
-      setError("")
+      setReadFailure(undefined)
       return
     }
     const sequence = ++loadSequence
     const owns = () =>
       sequence === loadSequence && currentScopeIdentity() === expectedIdentity && isApiAuthorityCurrent(authority)
     setLoading(true)
-    setError("")
+    setReadFailure(undefined)
     try {
       const next = await loadMissionSkillSettings({ ...scope, authority })
       if (!owns()) return
@@ -178,9 +180,7 @@ export default function MissionSkillPanel() {
         next.mission_skills.some((skill) => skill.name === current) ? current : (next.mission_skills[0]?.name ?? ""),
       )
     } catch (cause) {
-      if (owns()) {
-        setError(cause instanceof Error ? cause.message : String(cause))
-      }
+      if (owns()) setReadFailure({ cause })
     } finally {
       if (owns()) setLoading(false)
     }
@@ -260,9 +260,8 @@ export default function MissionSkillPanel() {
   }
 
   const scopeStatus = createMemo(() => {
-    const scope = currentScope()
-    if (scope.kind === "unavailable") return t("mission_skill.scope_unavailable")
-    return ""
+    if (currentScope().kind !== "unavailable") return ""
+    return t(appStore.connected ? "mission_skill.scope_unavailable" : "mission_skill.scope_disconnected")
   })
 
   return (
@@ -288,10 +287,12 @@ export default function MissionSkillPanel() {
       <Show when={notice()}>
         <Feedback tone={noticeTone() === "error" ? "error" : "success"}>{notice()}</Feedback>
       </Show>
-      <Show when={error()}>
-        <Feedback tone="error" data-ui="mission-skill-error">
-          {error()}
-        </Feedback>
+      <Show when={readFailure()}>
+        {(failure) => (
+          <Feedback tone="error" data-ui="mission-skill-error" details={formatErrorDetails(failure().cause)}>
+            {t("mission_skill.load_failed")}
+          </Feedback>
+        )}
       </Show>
       <For each={catalogIssues()}>
         {(issue) => (
@@ -307,7 +308,7 @@ export default function MissionSkillPanel() {
       <SettingsGroup
         title={!detailOpen() ? t("mission_skill.catalog_title") : undefined}
         actions={
-          !detailOpen() ? (
+          !detailOpen() && scopedCatalog() ? (
             <Badge tone="muted">{t("mission_skill.count", { count: filteredSkills().length })}</Badge>
           ) : undefined
         }
@@ -351,7 +352,7 @@ export default function MissionSkillPanel() {
           <Show
             when={!scopeStatus()}
             fallback={
-              <Feedback tone="warning" title={t("expert_squad.scope_unavailable_title")}>
+              <Feedback tone="warning" title={t("mission_skill.scope_unavailable_title")}>
                 {scopeStatus()}
               </Feedback>
             }
@@ -360,7 +361,9 @@ export default function MissionSkillPanel() {
               <Show
                 when={skills().length > 0}
                 fallback={
-                  <SettingsEmpty>{error() ? t("mission_skill.load_failed") : t("mission_skill.empty")}</SettingsEmpty>
+                  <Show when={scopedCatalog()}>
+                    <SettingsEmpty>{t("mission_skill.empty")}</SettingsEmpty>
+                  </Show>
                 }
               >
                 <Show

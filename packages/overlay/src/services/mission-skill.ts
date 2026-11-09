@@ -4,7 +4,7 @@ import type {
   MissionSkillSettingsResponse,
 } from "@opencorvus-ai/sdk"
 import { appStore } from "../store/app"
-import { apiJson, ApiAuthorityChangedError, assertApiAuthorityCurrent, captureApiAuthority, type ApiAuthority } from "./api"
+import { apiJson, assertApiAuthorityCurrent, captureApiAuthority, type ApiAuthority } from "./api"
 import type { ExpertSquadCatalogScope } from "./expert-squad"
 
 const pendingMissionSkillCatalogLoads = new Map<string, { authority: ApiAuthority; promise: Promise<MissionSkillCatalogResponse> }>()
@@ -34,14 +34,6 @@ export function missionSkillDirectoryPath(scope: ExpertSquadCatalogScope): strin
   return missionSkillPath(scope, "directory")
 }
 
-function missionSkillGet<T>(path: string, authority: ApiAuthority): Promise<T> {
-  return apiJson<T>(path, { authority }).catch((error) => {
-    if (error instanceof ApiAuthorityChangedError) throw error
-    const message = error instanceof Error ? error.message : String(error)
-    throw new Error(`GET /${path} failed: ${message}`)
-  })
-}
-
 export async function loadMissionSkillCatalog(scope: ExpertSquadCatalogScope): Promise<MissionSkillCatalogResponse> {
   const authority = scope.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
@@ -49,7 +41,7 @@ export async function loadMissionSkillCatalog(scope: ExpertSquadCatalogScope): P
   const path = missionSkillCatalogPath(scope)
   const pending = pendingMissionSkillCatalogLoads.get(path)
   if (pending?.authority.revision === authority.revision) return await pending.promise
-  const promise = missionSkillGet<MissionSkillCatalogResponse>(path, authority)
+  const promise = apiJson<MissionSkillCatalogResponse>(path, { authority })
   const entry = { authority, promise }
   pendingMissionSkillCatalogLoads.set(path, entry)
   try {
@@ -66,7 +58,7 @@ export async function loadMissionSkillSettings(scope: ExpertSquadCatalogScope): 
   const path = missionSkillSettingsPath(scope)
   const pending = pendingMissionSkillSettingsLoads.get(path)
   if (pending?.authority.revision === authority.revision) return await pending.promise
-  const promise = missionSkillGet<MissionSkillSettingsResponse>(path, authority)
+  const promise = apiJson<MissionSkillSettingsResponse>(path, { authority })
   const entry = { authority, promise }
   pendingMissionSkillSettingsLoads.set(path, entry)
   try {

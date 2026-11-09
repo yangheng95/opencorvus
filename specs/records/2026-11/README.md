@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [多步任务技能目录读取诊断](2026-11-09-mission-skill-read-diagnostics.md)
 - [Mission Skill 详情焦点](2026-11-09-mission-skill-detail-focus.md)
 - [通道编辑返回焦点](2026-11-09-channel-editor-return-focus.md)
 - [通道目录操作名称](2026-11-09-channel-catalog-action-identity.md)

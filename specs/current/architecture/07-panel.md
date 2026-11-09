@@ -5183,6 +5183,10 @@ button clusters. Settings content has a single reading column: Mission Skills
 and installed Expert Squads show a list, then open the selected resource in the
 same column with a Back to list action. Mission Skill navigation focuses the
 opened heading and returns to the exact visible row or the current catalog search.
+Mission Skill reads retain original transport errors for localized inline feedback
+with expandable diagnostics. A failed read keeps only the current scope's accepted
+catalog and filters; the count describes accepted data. An unavailable scope
+distinguishes disconnection from a missing project.
 Browsing details never activates a Squad.
 Independent capability groups, usage sections and settings forms flow vertically;
 the settings navigation rail and ordinary label/value rows retain their roles. Skill

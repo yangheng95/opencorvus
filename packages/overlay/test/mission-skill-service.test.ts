@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, test } from "bun:test"
+import { ApiError } from "../src/services/api"
 import type { HostTransport, TransportRequest, TransportResponse } from "../src/services/host-transport"
 import { HOST_CAPABILITIES } from "../src/services/host-transport"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
@@ -99,60 +100,54 @@ describe.serial("Mission Skill service request ownership", () => {
     await expect(Promise.all([firstProject, session, secondProject])).resolves.toEqual([response, response, response])
   })
 
-  test("returns the same wrapped settings failure to every coalesced caller and clears the pending request", async () => {
-    setAppStore({ connected: true })
-    const gate = deferred<void>()
-    const requests: TransportRequest[] = []
-    __setHostTransportForTest(
-      transport(async (request) => {
-        requests.push(request)
-        await gate.promise
-        return { status: 503, ok: false, headers: {}, body: { error: "settings unavailable" } }
-      }),
-    )
-    const scope = { kind: "project" as const, directory: "D:/project" }
-    const first = loadMissionSkillSettings(scope)
-    const second = loadMissionSkillSettings(scope)
+  for (const [kind, load] of [["settings", loadMissionSkillSettings], ["catalog", loadMissionSkillCatalog]] as const) {
+    test(`shares the original typed ${kind} failure and accepts the next successful response`, async () => {
+      setAppStore({ connected: true })
+      const gate = deferred<void>()
+      const requests: TransportRequest[] = []
+      const body = { name: "CatalogUnavailable", data: { message: `${kind} unavailable` } }
+      const requestID = `req_${kind}`
+      const skill = { name: "review", description: "Review the current project.", required_tools: [] }
+      const recovered = kind === "settings"
+        ? {
+            issues: [],
+            roots: { global: "D:/global/mission-skills", project: "D:/project/.opencorvus/mission-skills" },
+            mission_skills: [{ ...skill, source: "project", location: "D:/project/.opencorvus/mission-skills/review/SKILL.md" }],
+          }
+        : { issues: [], mission_skills: [skill] }
+      __setHostTransportForTest(
+        transport(async (request) => {
+          requests.push(request)
+          if (requests.length > 1) return { status: 200, ok: true, headers: {}, body: recovered }
+          await gate.promise
+          return { status: 503, ok: false, headers: { "x-opencorvus-request-id": requestID }, body }
+        }),
+      )
+      const scope = { kind: "project" as const, directory: "D:/project" }
+      const first = load(scope)
+      const second = load(scope)
+      gate.resolve()
 
-    await new Promise((resolve) => setTimeout(resolve, 0))
-    expect(requests).toHaveLength(1)
-    gate.resolve()
+      const [failure, joined] = await Promise.allSettled([first, second])
+      if (failure.status !== "rejected" || joined.status !== "rejected") {
+        throw new Error("Expected both coalesced reads to return the HTTP failure")
+      }
+      expect(failure.reason).toBeInstanceOf(ApiError)
+      expect(failure.reason).toMatchObject({
+        status: 503,
+        method: "GET",
+        path: `mission-skill/${kind}?directory=D%3A%2Fproject`,
+        requestID,
+        body,
+      })
+      expect(joined.reason).toBe(failure.reason)
+      expect(requests).toHaveLength(1)
 
-    const settled = await Promise.allSettled([first, second])
-    expect(settled.map((result) => (result.status === "rejected" ? result.reason.message : ""))).toEqual([
-      "GET /mission-skill/settings?directory=D%3A%2Fproject failed: API 503 mission-skill/settings?directory=D%3A%2Fproject: settings unavailable",
-      "GET /mission-skill/settings?directory=D%3A%2Fproject failed: API 503 mission-skill/settings?directory=D%3A%2Fproject: settings unavailable",
-    ])
-
-    await expect(loadMissionSkillSettings(scope)).rejects.toThrow("settings unavailable")
-    expect(requests).toHaveLength(2)
-  })
-
-  test("returns the same wrapped catalog failure to every coalesced caller", async () => {
-    setAppStore({ connected: true })
-    const gate = deferred<void>()
-    const requests: TransportRequest[] = []
-    __setHostTransportForTest(
-      transport(async (request) => {
-        requests.push(request)
-        await gate.promise
-        return { status: 500, ok: false, headers: {}, body: { error: "catalog unavailable" } }
-      }),
-    )
-    const scope = { kind: "project" as const, directory: "D:/project" }
-    const first = loadMissionSkillCatalog(scope)
-    const second = loadMissionSkillCatalog(scope)
-
-    await new Promise((resolve) => setTimeout(resolve, 0))
-    expect(requests).toHaveLength(1)
-    gate.resolve()
-
-    const settled = await Promise.allSettled([first, second])
-    expect(settled.every((result) => result.status === "rejected")).toBe(true)
-    expect(
-      settled.every(
-        (result) => result.status === "rejected" && result.reason.message.includes("GET /mission-skill/catalog?"),
-      ),
-    ).toBe(true)
-  })
+      await expect(load(scope)).resolves.toEqual(recovered)
+      expect(requests.map((request) => ({ path: request.path, directory: request.query?.directory }))).toEqual([
+        { path: `mission-skill/${kind}`, directory: scope.directory },
+        { path: `mission-skill/${kind}`, directory: scope.directory },
+      ])
+    })
+  }
 })
