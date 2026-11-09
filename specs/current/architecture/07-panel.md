@@ -5409,7 +5409,8 @@ lazy panel bundles root CHANGELOG.md through the shared util parser and uses the
 existing safe Markdown renderer. It starts at the installed Overlay version;
 searchable descending history and selected details use the same single-column
 list-to-detail pattern. History search matches all terms against the same entry's
-version identifiers and current language notes. Website and GitHub links
+version identifiers, canonical and displayed release dates, and current language
+notes. Website and GitHub links
 supplement the offline reading surface rather than providing another content/cache
 authority.
 

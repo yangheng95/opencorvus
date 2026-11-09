@@ -1,0 +1,24 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "ed5fc054-f1c7-4660-9049-d64b3fca98ec",
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "requestID": "bc8456bf-51ef-44b1-b62b-119278690632",
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_hQdE7RdBjtba5Cr9sQdm",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b128\\project-after"
+  },
+  "listedProjectCount": 1
+}

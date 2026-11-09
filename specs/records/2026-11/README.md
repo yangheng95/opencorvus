@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [更新日志按发布日期查找](2026-11-09-release-history-date-search.md)
 - [能力分配保存未确认时可原地核对](2026-11-09-capability-assignment-confirmation.md)
 - [全局搜索的工作结果重试保持焦点](2026-11-09-palette-ledger-retry-focus.md)
 - [定时列表重试保持原焦点](2026-11-09-scheduled-list-retry-focus.md)

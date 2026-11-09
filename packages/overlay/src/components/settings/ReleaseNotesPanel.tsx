@@ -20,12 +20,17 @@ const installed = requireReleaseNotes(history, OVERLAY_VERSION)
 export default function ReleaseNotesPanel() {
   const locale = () => appStore.locale as keyof ChangelogEntry["notes"]
   const markdown = (entry: ChangelogEntry) => standaloneReleaseNotes(entry, locale())
-  const date = (entry: ChangelogEntry) => new Intl.DateTimeFormat(locale(), { dateStyle: "medium", timeZone: "UTC" }).format(new Date(`${entry.date}T00:00:00Z`))
+  const dateFormatter = createMemo(() => new Intl.DateTimeFormat(locale(), { dateStyle: "medium", timeZone: "UTC" }))
+  const date = (entry: ChangelogEntry) => dateFormatter().format(new Date(`${entry.date}T00:00:00Z`))
   const [selected, setSelected] = createSignal<ChangelogEntry | null>(installed)
   const [query, setQuery] = createSignal("")
-  const filteredHistory = createMemo(() =>
-    history.filter((entry) => matchesSearchTerms(query(), [entry.displayVersion, entry.version, markdown(entry)])),
-  )
+  const filteredHistory = createMemo(() => {
+    const term = query().trim()
+    if (!term) return history
+    return history.filter((entry) =>
+      matchesSearchTerms(term, [entry.displayVersion, entry.version, entry.date, date(entry), markdown(entry)]),
+    )
+  })
   let panel: HTMLDivElement | undefined
   let versionHeading: HTMLHeadingElement | undefined
   let historySearchInput: HTMLInputElement | undefined
