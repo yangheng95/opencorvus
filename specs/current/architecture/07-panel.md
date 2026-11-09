@@ -4464,11 +4464,15 @@ This keeps project-name searches current after a rename without another stream,
 synthetic Mailbox message, or name cache. Server search reads the current name
 through its existing registered-Project join; it does not add it to stored mail.
 
-The Browser Preview panel discovers the selected task's canonical backend
-preview target while the Right Dock is closed. A new ready target reveals the
-existing Browser tab through the shared Dock owner. Historical ready targets
-form the first-snapshot baseline and do not interrupt task selection. Preview
-evidence reads and the native WebView surface remain active-panel-only, so
+The workspace owns one read of the selected task's canonical backend preview
+target, even while the Right Dock is closed. The Environment shortcut and fixed
+Browser tab consume the same Task, directory, selection and connection scope.
+Environment shows a pending or failed read and opens the fixed tab without a
+second request. A failed target read offers its original diagnostic and an
+in-place retry; the webpage reload continues to operate on the current page.
+A new ready target reveals the existing Browser tab through the shared Dock
+owner. The first accepted target read is a baseline and does not interrupt task
+selection. Preview evidence and the native WebView remain active-panel-only, so
 background discovery does not create a hidden renderer or a second target.
 
 The Right Dock Browser and Task Preview have separate identities. Each native

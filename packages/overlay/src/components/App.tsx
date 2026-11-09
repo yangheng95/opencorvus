@@ -25,6 +25,7 @@ import { TitlebarNavigation } from "./titlebar/TitlebarNavigation"
 import { WindowControls } from "./WindowControls"
 import { WorkspaceEditorLaunchers, workspaceEditorLaunchersAvailable } from "./WorkspaceEditorLaunchers"
 import { ProjectRuntimeToolbarActions } from "./TaskDirBar"
+import type { TaskBrowserPreviewRead } from "../services/browser-preview-target-read"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
@@ -383,6 +384,7 @@ export interface AppProps {
   rightDock: JSX.Element
   logViewer: JSX.Element
   onOpenRightDockPanel: (panel: RightDockPanel) => void
+  taskBrowserPreview: TaskBrowserPreviewRead
   onOpenSubagentConversation: (sessionID: string) => void
   onOpenRightDockAddMenu: () => void
   onNewChat: () => Promise<void>
@@ -732,6 +734,7 @@ export function App(props: AppProps) {
                                         !dialogStore.config.open
                                       }
                                       onOpenRightDockPanel={props.onOpenRightDockPanel}
+                                      taskBrowserPreview={props.taskBrowserPreview}
                                       onOpenSubagentConversation={props.onOpenSubagentConversation}
                                       onOpenRightDockAddMenu={props.onOpenRightDockAddMenu}
                                       trailingAction={

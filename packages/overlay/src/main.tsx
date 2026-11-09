@@ -57,7 +57,7 @@ import {
   browserPreviewNativeSurfaceAvailable,
   browserPreviewNativeUrlNavigationAvailable,
 } from "./services/browser-preview-native"
-import { browserPreviewRevision } from "./services/browser-preview"
+import { createTaskBrowserPreviewRead } from "./services/browser-preview-target-read"
 import { ScreenshotBrowserPanel } from "./components/ScreenshotBrowserPanel"
 import { SubagentConversationPanel } from "./components/SubagentConversationPanel"
 import { SideChatPanel, type SideChatRequest } from "./components/SideChatPanel"
@@ -2313,6 +2313,34 @@ const paneCallbacks = {
 }
 
 function OverlayRoot() {
+  const taskBrowserPreview = createTaskBrowserPreviewRead(() => {
+    const taskID = activeBrowserPreviewTaskID()
+    const directory = activeDirectory().trim()
+    if (!taskID || !directory || !appStore.connected || boardStore.taskSwitching) return undefined
+    return { taskID, directory, authority: captureApiAuthority(), selectionEpoch: boardStore.selectEpoch }
+  })
+  let previewPresentationScope: ReturnType<typeof taskBrowserPreview.scope>
+  let previewBaselineAccepted = false
+  const seenReadyTargets = new Set<string>()
+  createEffect(() => {
+    const scope = taskBrowserPreview.scope()
+    if (scope !== previewPresentationScope) {
+      previewPresentationScope = scope
+      previewBaselineAccepted = false
+      seenReadyTargets.clear()
+    }
+    const target = taskBrowserPreview.target()
+    if (!target) return
+    const key = target.status === "ready" && target.url ? target.id ?? target.url : undefined
+    if (!previewBaselineAccepted) {
+      previewBaselineAccepted = true
+      if (key) seenReadyTargets.add(key)
+    } else if (key && !seenReadyTargets.has(key)) {
+      seenReadyTargets.add(key)
+      presentRightDockPanel("browser")
+    }
+  })
+
   const selectionRequest = createMemo(() => {
     const source = boardStore.selectedSource
     const authority = captureApiAuthority()
@@ -3132,14 +3160,13 @@ function OverlayRoot() {
                   rightDockOpen() && !rightDockOverflowMenuOpen() && selectedCenterWorkbenchTab()?.id === "browser"
                 }
                 directory={activeDirectory}
-                refreshKey={browserPreviewRevision}
                 scrollElement={() => document.querySelector<HTMLElement>(".right-dock-body")}
                 taskID={() => activeBrowserPreviewTaskID() || undefined}
+                targetRead={taskBrowserPreview}
                 registerController={registerPrimaryBrowserPreviewController}
                 onPageTitleChange={(title) =>
                   setBrowserPreviewPageTitles((current) => ({ ...current, browser: title }))
                 }
-                onReady={() => presentRightDockPanel("browser")}
                 onCommentDraft={(text) => {
                   const key = panelComposerDraftKey()
                   const existing = composerDraftText(key)
@@ -3166,7 +3193,6 @@ function OverlayRoot() {
                       rightDockOpen() && !rightDockOverflowMenuOpen() && selectedCenterWorkbenchTab()?.id === tab.id
                     }
                     directory={activeDirectory}
-                    refreshKey={browserPreviewRevision}
                     scrollElement={() => document.querySelector<HTMLElement>(".right-dock-body")}
                     taskID={() => undefined}
                     onPageTitleChange={(title) =>
@@ -3277,6 +3303,7 @@ function OverlayRoot() {
         </RightDock>
       }
       onOpenRightDockPanel={openRightDockPanel}
+      taskBrowserPreview={taskBrowserPreview}
       onOpenSubagentConversation={openSubagentConversation}
       onOpenRightDockAddMenu={openRightDockAddMenu}
       logViewer={<LogViewer open={logOpen()} onClose={() => setLogOpen(false)} />}

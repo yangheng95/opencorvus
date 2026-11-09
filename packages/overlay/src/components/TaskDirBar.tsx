@@ -43,7 +43,7 @@ import {
   resolveCurrentChangeGroups,
   summarizeChangeGroups,
 } from "../services/diff"
-import { browserPreviewRevision, loadTaskBrowserPreviewTarget } from "../services/browser-preview"
+import type { TaskBrowserPreviewRead } from "../services/browser-preview-target-read"
 import { fileWorkbenchRevision, loadFileDirectory, selectedFileTarget } from "../services/file-workbench"
 import { focusGoalSummary } from "../services/goal-summary-focus"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
@@ -103,10 +103,6 @@ interface ProjectRuntimeToolShortcut {
   resource: boolean
 }
 
-type ProjectRuntimeBrowserInformation =
-  | { status: "loaded"; taskID: string; directory: string; url: string }
-  | { status: "failed"; taskID: string; directory: string; error: string }
-
 type ProjectRuntimeFileInformation =
   | { status: "loaded"; directory: string; count: number }
   | { status: "failed"; directory: string; error: string }
@@ -114,6 +110,7 @@ type ProjectRuntimeFileInformation =
 interface ProjectRuntimeStatusPanelProps {
   anchorVisible: boolean
   onOpenRightDockPanel: (panel: RightDockPanel) => void
+  taskBrowserPreview: TaskBrowserPreviewRead
   onOpenSubagentConversation: (sessionID: string) => void
   onOpenRightDockAddMenu: () => void
   trailingAction: JSX.Element
@@ -334,61 +331,15 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     }
     return shortcuts
   })
-  const browserInformationScope = createMemo(() => {
-    const taskID = activeTaskID().trim()
-    const directory = dir().trim()
-    if (!appStore.connected || !runtimePanelOpen() || !taskID || !directory) return undefined
-    return {
-      taskID,
-      directory,
-      refreshKey: browserPreviewRevision(),
-      authority: captureApiAuthority(),
-      selectionEpoch: boardStore.selectEpoch,
-    }
+  const browserCanInspect = createMemo(() => {
+    const read = props.taskBrowserPreview
+    const scope = read.scope()
+    return !!scope && scope.taskID === activeTaskID() && scope.directory === dir().trim() &&
+      (read.loading() || !!read.failure() || !!read.target()?.url?.trim())
   })
-  const [browserInformation] = createResource(
-    browserInformationScope,
-    async (scope): Promise<ProjectRuntimeBrowserInformation | undefined> => {
-      try {
-        const target = await loadTaskBrowserPreviewTarget({
-          taskID: scope.taskID,
-          directory: scope.directory,
-          authority: scope.authority,
-        })
-        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== browserInformationScope())
-          return undefined
-        return {
-          status: "loaded",
-          taskID: scope.taskID,
-          directory: scope.directory,
-          url: target.url?.trim() ?? "",
-        }
-      } catch (error) {
-        if (!ownsProject(scope.authority, scope.directory, scope.selectionEpoch) || scope !== browserInformationScope())
-          return undefined
-        const message = errorMessage(error)
-        AppLog.warn("ui", "Failed to load project Browser information", {
-          taskID: scope.taskID,
-          directory: scope.directory,
-          error: message,
-        })
-        return { status: "failed", taskID: scope.taskID, directory: scope.directory, error: message }
-      }
-    },
-  )
-  const browserHasInformation = createMemo(() => {
-    const scope = browserInformationScope()
-    const information = browserInformation()
-    return Boolean(
-      scope &&
-        ownsAuthority(scope.authority) &&
-        !browserInformation.loading &&
-        information?.status === "loaded" &&
-        information?.taskID === scope.taskID &&
-        information.directory === scope.directory &&
-        information.url,
-    )
-  })
+  const browserReadSummary = () => props.taskBrowserPreview.loading()
+    ? t("common.loading")
+    : props.taskBrowserPreview.failure() ? t("browser_preview.target_read_status") : ""
   const fileInformationScope = createMemo(() => {
     const directory = dir().trim()
     if (!appStore.connected || !runtimePanelOpen() || !directory) return undefined
@@ -435,7 +386,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     () =>
       new Set<RightDockPanel>([
         ...taskScopeShortcuts().map((shortcut) => shortcut.id),
-        ...(browserHasInformation() ? (["browser"] as const) : []),
+        ...(browserCanInspect() ? (["browser"] as const) : []),
         ...(changedFileCount() > 0 ? (["diff"] as const) : []),
         ...(filesHaveInformation() ? (["explorer"] as const) : []),
         ...(cardTreeStore.screenshotItems.length > 0 ? (["screenshots"] as const) : []),
@@ -1788,7 +1739,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
                           <span class="project-runtime-tool-shortcut-label project-runtime-section-title oc-section-heading">
                             {shortcut.label}
                           </span>
-                          <span class="project-runtime-tool-shortcut-summary">{shortcut.summary}</span>
+                          <span class="project-runtime-tool-shortcut-summary">
+                            {shortcut.id === "browser" ? browserReadSummary() : shortcut.summary}
+                          </span>
                         </Button>
                       )}
                     </For>

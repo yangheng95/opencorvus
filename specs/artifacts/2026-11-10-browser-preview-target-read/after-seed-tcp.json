@@ -1,0 +1,71 @@
+{
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "21f4f43b-a618-41f4-b822-241b9f73780a",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}",
+      "operationId": "task.get",
+      "status": 200,
+      "requestID": "e880bed5-5c25-4a04-ab35-b36a9def2ccf",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}/browser-preview/target",
+      "operationId": "browserPreview.selectTaskTarget",
+      "status": 200,
+      "requestID": "c3b9df69-f9b8-46cc-8cbf-4ea8773043e9",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}/browser-preview",
+      "operationId": "browserPreview.taskTarget",
+      "status": 200,
+      "requestID": "85871936-a63d-4253-842d-6933143c254a",
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_hCR0yHGUNnnjKn1zqNEi",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b140\\project-after"
+  },
+  "task": {
+    "id": "tsk_g00VaUxlB300378BVhNL",
+    "title": "Browser preview target review",
+    "status": "completed"
+  },
+  "accepted": {
+    "id": "art_g0VaV0amS00BJm7poACM",
+    "taskID": "tsk_g00VaUxlB300378BVhNL",
+    "latestEvidenceIDs": {},
+    "kind": "task-url",
+    "status": "ready",
+    "projectRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b140\\project-after",
+    "url": "http://127.0.0.1:39291/ui/?preview=owned-after",
+    "viewports": [
+      {
+        "id": "desktop",
+        "labelKey": "desktop",
+        "width": 1280,
+        "height": 720
+      }
+    ],
+    "diagnostics": [
+      "Using task browser preview target art_g0VaV0amS00BJm7poACM."
+    ],
+    "candidates": [
+      {
+        "id": "art_g0VaV0amS00BJm7poACM",
+        "url": "http://127.0.0.1:39291/ui/?preview=owned-after",
+        "source": "engine-artifact",
+        "selected": true,
+        "timeUpdated": 1794246292860
+      }
+    ],
+    "source": "engine-artifact"
+  }
+}

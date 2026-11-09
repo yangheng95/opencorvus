@@ -1,13 +1,12 @@
 import { createEffect, createMemo, createResource, createSignal, For, Match, onCleanup, Show, Switch } from "solid-js"
 import {
-  loadTaskBrowserPreviewTarget,
   loadTaskBrowserPreviewEvidence,
   loadTaskBrowserPreviewEvidenceCaptureObjectUrl,
   type BrowserPreviewEvidence,
-  type BrowserPreviewTarget,
   type BrowserPreviewViewport,
   type BrowserPreviewViewportID,
 } from "../services/browser-preview"
+import type { ScopedBrowserPreviewTarget, TaskBrowserPreviewRead } from "../services/browser-preview-target-read"
 import {
   browserPreviewNativeCurrentPageAvailable,
   browserPreviewNativeNavigationAvailable,
@@ -41,6 +40,7 @@ import { observeAppliedTheme } from "../services/theme"
 import { t } from "../utils/i18n"
 import { nativeOpen } from "../utils/native"
 import { createAnimationFrameScheduler } from "../utils/animation-frame"
+import { formatErrorDetails } from "../utils/error-details"
 import { Icon } from "./ui/Icon"
 import { PreviewableImage } from "./ImagePreview"
 import { Button } from "./ui/Button"
@@ -48,8 +48,6 @@ import { TextField } from "./ui/TextField"
 import { Feedback } from "./ui/Feedback"
 import { randomUUID } from "../utils/random-id"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
-
-type BrowserPreviewScopedTarget = BrowserPreviewTarget & { directory: string; authority: ApiAuthority }
 
 type BrowserPreviewEvidenceImage = {
   directory: string
@@ -134,13 +132,12 @@ export interface BrowserPreviewPanelProps {
   tabID: string
   active: () => boolean
   directory: () => string
-  refreshKey: () => unknown
   scrollElement: () => HTMLElement | null
   taskID: () => string | undefined
+  targetRead?: TaskBrowserPreviewRead
   registerController?: (controller: BrowserPreviewPanelController) => () => void
   onCommentDraft?: (text: string) => void
   onPageTitleChange?: (title: string) => void
-  onReady?: (target: BrowserPreviewTarget) => void
 }
 
 export interface BrowserPreviewPanelController {
@@ -165,8 +162,6 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
   onCleanup(observeAppliedTheme(setAppliedTheme))
   const [viewportID, setViewportID] = createSignal<BrowserPreviewViewportID>("desktop")
   const [viewportScopeKey, setViewportScopeKey] = createSignal("")
-  const readyTargetPresentationScopes = new Set<string>()
-  const presentedReadyTargetKeys = new Set<string>()
   const [nativePreviewError, setNativePreviewError] = createSignal("")
   const [nativePreviewCleanupError, setNativePreviewCleanupError] = createSignal("")
   const [nativeLeaseTransitionFailure, setNativeLeaseTransitionFailure] = createSignal<{ error: unknown }>()
@@ -191,72 +186,29 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     nativeLeaseRevision()
     return activeNativeLease
   }
-  const [targetLoadError, setTargetLoadError] = createSignal<{
-    taskID: string
-    directory: string
-    message: string
-    authority: ApiAuthority
-  }>()
-  let targetLoadSequence = 0
   const panelActive = createMemo(() => props.active())
-  const [target] = createResource(
-    () => {
-      const taskID = props.taskID()
-      const directory = props.directory()
-      if (!taskID || !directory) return undefined
-      return { taskID, directory, refreshKey: props.refreshKey(), authority: captureApiAuthority() }
-    },
-    async (scope) => {
-      const sequence = ++targetLoadSequence
-      const owns = () =>
-        sequence === targetLoadSequence &&
-        isApiAuthorityCurrent(scope.authority) &&
-        props.taskID() === scope.taskID &&
-        props.directory() === scope.directory
-      setTargetLoadError(undefined)
-      try {
-        return {
-          ...(await loadTaskBrowserPreviewTarget(scope)),
-          directory: scope.directory,
-          authority: scope.authority,
-        } satisfies BrowserPreviewScopedTarget
-      } catch (error) {
-        if (owns())
-          setTargetLoadError({
-            taskID: scope.taskID,
-            directory: scope.directory,
-            message: String(error),
-            authority: scope.authority,
-          })
-        return undefined
-      }
-    },
-  )
-  const scopedTarget = createMemo(() => {
-    const taskID = props.taskID()
-    const directory = props.directory()
-    if (!taskID || !directory) return undefined
-    const resolved = target()
-    if (
-      !resolved ||
-      !isApiAuthorityCurrent(resolved.authority) ||
-      resolved.taskID !== taskID ||
-      resolved.directory !== directory
-    )
-      return undefined
-    return resolved
-  })
-  const currentTarget = createMemo(scopedTarget)
-  const currentTargetError = createMemo(() => {
-    if (target.loading) return undefined
-    const taskID = props.taskID()
-    const directory = props.directory()
-    if (!taskID || !directory) return undefined
-    const loadError = targetLoadError()
-    if (loadError?.taskID === taskID && loadError.directory === directory && isApiAuthorityCurrent(loadError.authority))
-      return loadError.message
-    return target.error
-  })
+  const currentTarget = () => props.targetRead?.target()
+  const targetLoading = () => props.targetRead?.loading() ?? false
+  const targetReadFailure = () => props.targetRead?.failure()
+  let addressInput: HTMLInputElement | undefined
+  let retryFocus: { button: HTMLButtonElement; owned: boolean } | undefined
+
+  async function retryTarget(button: HTMLButtonElement): Promise<void> {
+    const read = props.targetRead
+    const scope = read?.scope()
+    if (!read || !scope || !targetReadFailure() || targetLoading()) return
+    const focus = { button, owned: document.activeElement === button }
+    retryFocus = focus
+    try {
+      const accepted = await read.retry()
+      if (!accepted || read.scope() !== scope || retryFocus !== focus || !focus.owned || !panelActive()) return
+      if (document.activeElement !== button && document.activeElement !== document.body) return
+      if (addressInput?.isConnected && !addressInput.disabled) addressInput.focus()
+    } finally {
+      if (retryFocus === focus) retryFocus = undefined
+    }
+  }
+  onCleanup(() => { retryFocus = undefined })
   const latestEvidenceScope = createMemo<BrowserPreviewLatestEvidenceScope | undefined>(() => {
     if (!panelActive()) return undefined
     const taskID = props.taskID()
@@ -402,7 +354,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
   const currentLatestEvidenceLoading = createMemo(() =>
     Boolean(latestEvidenceScope() && latestEvidence.loading && !renderedEvidence()),
   )
-  const previewActionPending = createMemo(() => Boolean(target.loading || currentLatestEvidenceLoading()))
+  const previewActionPending = createMemo(() => targetLoading() || currentLatestEvidenceLoading())
   const nativePreviewScope = createMemo<BrowserPreviewNativeScope | undefined>(
     () => {
       const taskID = props.taskID()
@@ -471,9 +423,9 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
   // value per flush and each <Match> only inspects that value — so a condition
   // can never flip between the guard check and the keyed child's read.
   type BrowserPreviewStageView =
-    | { kind: "target-load-failed"; error: unknown }
+    | { kind: "target-load-failed" }
     | { kind: "target-loading" }
-    | { kind: "target-failed"; resolved: BrowserPreviewScopedTarget }
+    | { kind: "target-failed"; resolved: ScopedBrowserPreviewTarget }
     | { kind: "evidence-loading" }
     | { kind: "evidence-load-failed"; error: BrowserPreviewLatestEvidenceResult & { status: "failed" } }
     | { kind: "native-error"; error: string }
@@ -482,9 +434,8 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     | { kind: "unavailable" }
     | { kind: "empty" }
   const stageView = createMemo<BrowserPreviewStageView>(() => {
-    const loadError = currentTargetError()
-    if (loadError) return { kind: "target-load-failed", error: loadError }
-    if (target.loading) return { kind: "target-loading" }
+    if (targetReadFailure()) return { kind: "target-load-failed" }
+    if (targetLoading()) return { kind: "target-loading" }
     const failed = failedTarget()
     if (failed) return { kind: "target-failed", resolved: failed }
     if (currentLatestEvidenceLoading()) return { kind: "evidence-loading" }
@@ -599,29 +550,6 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     return result.message
   })
 
-  createEffect(() => {
-    const taskID = props.taskID()
-    const directory = props.directory()
-    if (!taskID || !directory) {
-      setTargetLoadError(undefined)
-      return
-    }
-  })
-
-  createEffect(() => {
-    const taskID = props.taskID()
-    const directory = props.directory()
-    const resolved = target()
-    if (
-      taskID &&
-      directory &&
-      resolved?.taskID === taskID &&
-      resolved.directory === directory &&
-      isApiAuthorityCurrent(resolved.authority)
-    )
-      setTargetLoadError(undefined)
-  })
-
   createEffect<BrowserPreviewEvidenceImage | undefined>((previous) => {
     const current = captureImage()
     if (previous?.url && (current?.status !== "loaded" || previous.url !== current.url))
@@ -636,26 +564,6 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
     const current = captureImage()
     if (current?.status === "loaded") URL.revokeObjectURL(current.url)
     setCaptureImage(undefined)
-  })
-
-  createEffect(() => {
-    const resolved = scopedTarget()
-    const taskID = props.taskID()
-    const directory = props.directory()
-    if (!taskID || !directory || !resolved) return
-    const presentationScope = `${taskID}\u0000${directory}`
-    const readyTargetKey =
-      resolved.status === "ready" && resolved.url
-        ? `${presentationScope}\u0000${resolved.id ?? resolved.url}`
-        : undefined
-    if (!readyTargetPresentationScopes.has(presentationScope)) {
-      readyTargetPresentationScopes.add(presentationScope)
-      if (readyTargetKey) presentedReadyTargetKeys.add(readyTargetKey)
-      return
-    }
-    if (!readyTargetKey || presentedReadyTargetKeys.has(readyTargetKey)) return
-    presentedReadyTargetKeys.add(readyTargetKey)
-    props.onReady?.(resolved)
   })
 
   createEffect(() => {
@@ -1413,7 +1321,6 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
 
   onCleanup(() => {
     latestEvidenceAbort?.abort()
-    targetLoadSequence += 1
     captureImageAbort?.abort()
     nativePanelDisposed = true
     setBrowserMenuOpen(false)
@@ -1445,7 +1352,6 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
   createEffect<string>((previous) => {
     const key = taskScopeKey()
     if (previous !== key) {
-      setTargetLoadError(undefined)
       setNativePreviewError("")
       if (key) {
         setBrowserTabRequested(false)
@@ -1698,6 +1604,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
           >
             <TextField.Root class="browser-preview-address-field" size="sm" disabled={!addressInputAvailable()}>
               <TextField.Input
+                ref={addressInput}
                 class="browser-preview-address-input"
                 data-ui="browser-preview-address-input"
                 type="text"
@@ -1779,7 +1686,7 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
             </code>
           )}
         </Show>
-        <Show when={target.loading}>
+        <Show when={targetLoading()}>
           <div class="browser-preview-progress" data-ui="browser-preview-progress" />
         </Show>
       </div>
@@ -1789,10 +1696,30 @@ export function BrowserPreviewPanel(props: BrowserPreviewPanelProps) {
           fallback={<div class="browser-preview-new-tab" data-status="missing" data-ui="browser-preview-new-tab" />}
         >
           <Match when={stageKind() === "target-load-failed"}>
-            <div class="browser-preview-empty" data-status="failed" data-ui="browser-preview-target-load-failed">
-              <Icon name="status-failed" size="medium" />
-              <p>{t("browser_preview.empty.failed")}</p>
-              <code>{String(currentTargetError())}</code>
+            <div class="browser-preview-empty browser-preview-target-read" data-status="failed" data-ui="browser-preview-target-load-failed">
+              <Feedback
+                class="browser-preview-target-feedback"
+                tone="error"
+                details={formatErrorDetails(targetReadFailure()?.cause)}
+                actions={
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    tone="neutral"
+                    aria-disabled={targetLoading() || undefined}
+                    aria-busy={targetLoading() || undefined}
+                    onBlur={(event) => {
+                      if (targetReadFailure() && retryFocus?.button === event.currentTarget) retryFocus.owned = false
+                    }}
+                    onClick={(event) => void retryTarget(event.currentTarget)}
+                  >
+                    {t(targetLoading() ? "common.retrying" : "common.retry")}
+                  </Button>
+                }
+              >
+                {t("browser_preview.target_read_failed")}
+              </Feedback>
             </div>
           </Match>
           <Match when={stageKind() === "target-loading"}>

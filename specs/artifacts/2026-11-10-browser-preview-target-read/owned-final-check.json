@@ -1,0 +1,163 @@
+{
+  "before": {
+    "task": "tsk_g00VaUxlAk00bG7CP573",
+    "gitOriginalCommit": "c8ffe14d4bbd313a2cfb74e75996628d29018192",
+    "originalTrackedBytes": 29,
+    "counts": {
+      "project": 1,
+      "session": 1,
+      "engine_task": 1,
+      "message": 0,
+      "provider_activity_request": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0,
+      "permission_policy": 0
+    },
+    "targetIDs": [
+      "art_g0VaUy3Dr00ax2QehDLm"
+    ],
+    "targetReadReceipts": [
+      {
+        "id": "9d6dccc8-0454-4a58-be2c-be239a9db8b8",
+        "target": {
+          "taskID": "tsk_g00VaUxlAk00bG7CP573",
+          "id": "art_g0VaUy3Dr00ax2QehDLm",
+          "status": "ready",
+          "url": "http://127.0.0.1:39290/ui/?preview=owned-before"
+        },
+        "outcome": "cut"
+      },
+      {
+        "id": "4cf26caf-592b-4614-976f-2c9bf80678bc",
+        "target": {
+          "taskID": "tsk_g00VaUxlAk00bG7CP573",
+          "id": "art_g0VaUy3Dr00ax2QehDLm",
+          "status": "ready",
+          "url": "http://127.0.0.1:39290/ui/?preview=owned-before"
+        },
+        "outcome": "released"
+      },
+      {
+        "id": "cd4dd85a-27a5-4e4f-aa99-385c2fc76ca6",
+        "target": {
+          "taskID": "tsk_g00VaUxlAk00bG7CP573",
+          "id": "art_g0VaUy3Dr00ax2QehDLm",
+          "status": "ready",
+          "url": "http://127.0.0.1:39290/ui/?preview=owned-before"
+        },
+        "outcome": "cut"
+      },
+      {
+        "id": "5869a4d5-9eb8-4d0f-8191-4fc9653c4472",
+        "target": {
+          "taskID": "tsk_g00VaUxlAk00bG7CP573",
+          "id": "art_g0VaUy3Dr00ax2QehDLm",
+          "status": "ready",
+          "url": "http://127.0.0.1:39290/ui/?preview=owned-before"
+        },
+        "outcome": "released"
+      },
+      {
+        "id": "2f0590a9-993b-45b9-8e5b-3c8b5bc9cd9d",
+        "target": {
+          "taskID": "tsk_g00VaUxlAk00bG7CP573",
+          "id": "art_g0VaUy3Dr00ax2QehDLm",
+          "status": "ready",
+          "url": "http://127.0.0.1:39290/ui/?preview=owned-before"
+        },
+        "outcome": "released"
+      }
+    ]
+  },
+  "after": {
+    "task": "tsk_g00VaUxlB300378BVhNL",
+    "gitOriginalCommit": "c88851b6de6fe0f3f55d86b8a8cbceab5f8879fc",
+    "originalTrackedBytes": 28,
+    "counts": {
+      "project": 1,
+      "session": 1,
+      "engine_task": 1,
+      "message": 0,
+      "provider_activity_request": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0,
+      "permission_policy": 0
+    },
+    "targetIDs": [
+      "art_g0VaV0amS00BJm7poACM",
+      "art_g0VaV1ZmP00Q6YfiaOGl"
+    ],
+    "targetReadReceipts": [
+      {
+        "id": "f22adff9-4b98-43e1-b242-e6bcd7c1cc3f",
+        "target": {
+          "taskID": "tsk_g00VaUxlB300378BVhNL",
+          "id": "art_g0VaV0amS00BJm7poACM",
+          "status": "ready",
+          "url": "http://127.0.0.1:39291/ui/?preview=owned-after"
+        },
+        "outcome": "cut"
+      },
+      {
+        "id": "c2bfbe2b-8213-4fe0-99f9-1939bfdc96b1",
+        "target": {
+          "taskID": "tsk_g00VaUxlB300378BVhNL",
+          "id": "art_g0VaV0amS00BJm7poACM",
+          "status": "ready",
+          "url": "http://127.0.0.1:39291/ui/?preview=owned-after"
+        },
+        "outcome": "cut"
+      },
+      {
+        "id": "397de2bc-50c5-4208-bb13-24911c6398d6",
+        "target": {
+          "taskID": "tsk_g00VaUxlB300378BVhNL",
+          "id": "art_g0VaV0amS00BJm7poACM",
+          "status": "ready",
+          "url": "http://127.0.0.1:39291/ui/?preview=owned-after"
+        },
+        "outcome": "released"
+      },
+      {
+        "id": "27b605bb-7a7d-42ef-a70e-98f3ac6ecbd8",
+        "target": {
+          "taskID": "tsk_g00VaUxlB300378BVhNL",
+          "id": "art_g0VaV0amS00BJm7poACM",
+          "status": "ready",
+          "url": "http://127.0.0.1:39291/ui/?preview=owned-after"
+        },
+        "outcome": "cut"
+      },
+      {
+        "id": "65d12b90-71a1-431f-893d-78fbb3206a66",
+        "target": {
+          "taskID": "tsk_g00VaUxlB300378BVhNL",
+          "id": "art_g0VaV0amS00BJm7poACM",
+          "status": "ready",
+          "url": "http://127.0.0.1:39291/ui/?preview=owned-after"
+        },
+        "outcome": "released"
+      },
+      {
+        "id": "33d1b276-82aa-49ff-872e-9751ec4b1095",
+        "target": {
+          "taskID": "tsk_g00VaUxlB300378BVhNL",
+          "id": "art_g0VaV0amS00BJm7poACM",
+          "status": "ready",
+          "url": "http://127.0.0.1:39291/ui/?preview=owned-after"
+        },
+        "outcome": "released"
+      },
+      {
+        "id": "b0add8e4-2743-45c1-b9f5-532362cb1a02",
+        "target": {
+          "taskID": "tsk_g00VaUxlB300378BVhNL",
+          "id": "art_g0VaV1ZmP00Q6YfiaOGl",
+          "status": "ready",
+          "url": "http://127.0.0.1:39291/ui/?preview=owned-after-new"
+        },
+        "outcome": "released"
+      }
+    ]
+  }
+}

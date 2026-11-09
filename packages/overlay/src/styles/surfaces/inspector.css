@@ -615,6 +615,18 @@
   color: var(--text);
 }
 
+.browser-preview-target-read {
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  text-align: start;
+}
+
+.browser-preview-target-feedback .oc-button {
+  min-inline-size: calc(72px * var(--ui-scale));
+}
+
 .browser-preview-empty code {
   max-width: 100%;
   display: block;

@@ -1,0 +1,78 @@
+{
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "a0ac9d0c-7270-4c7e-8db0-fa9dc8f50858",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}",
+      "operationId": "task.get",
+      "status": 200,
+      "requestID": "313cdeb6-887b-4659-8f7d-1613e84ec2c5",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}/browser-preview/target",
+      "operationId": "browserPreview.selectTaskTarget",
+      "status": 200,
+      "requestID": "d19510f3-6557-484d-97cd-c58089da5fd4",
+      "schemaValid": true
+    },
+    {
+      "route": "/task/{taskID}/browser-preview",
+      "operationId": "browserPreview.taskTarget",
+      "status": 200,
+      "requestID": "ca34efe1-c93e-4d50-b586-0438384207ae",
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_hCR0yHGUNnnjKn1zqNEi",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b140\\project-after"
+  },
+  "task": {
+    "id": "tsk_g00VaUxlB300378BVhNL",
+    "title": "Browser preview target review",
+    "status": "completed"
+  },
+  "accepted": {
+    "id": "art_g0VaV1ZmP00Q6YfiaOGl",
+    "taskID": "tsk_g00VaUxlB300378BVhNL",
+    "latestEvidenceIDs": {},
+    "kind": "task-url",
+    "status": "ready",
+    "projectRoot": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b140\\project-after",
+    "url": "http://127.0.0.1:39291/ui/?preview=owned-after-new",
+    "viewports": [
+      {
+        "id": "desktop",
+        "labelKey": "desktop",
+        "width": 1280,
+        "height": 720
+      }
+    ],
+    "diagnostics": [
+      "Using task browser preview target art_g0VaV1ZmP00Q6YfiaOGl."
+    ],
+    "candidates": [
+      {
+        "id": "art_g0VaV1ZmP00Q6YfiaOGl",
+        "url": "http://127.0.0.1:39291/ui/?preview=owned-after-new",
+        "source": "engine-artifact",
+        "selected": true,
+        "timeUpdated": 1794246527341
+      },
+      {
+        "id": "art_g0VaV0amS00BJm7poACM",
+        "url": "http://127.0.0.1:39291/ui/?preview=owned-after",
+        "source": "engine-artifact",
+        "selected": false,
+        "timeUpdated": 1794246292860
+      }
+    ],
+    "source": "engine-artifact"
+  }
+}
