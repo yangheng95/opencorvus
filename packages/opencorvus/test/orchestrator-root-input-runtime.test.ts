@@ -22,12 +22,17 @@ afterEach(async () => {
   await resetMemoryDatabase()
 })
 
-test("an operator input retains its Task-root owner during scheduler preparation, then receives its exact runtime reply", async () => {
+test("operator inputs move to their exact runtime reply, and a newer model selection applies to the next Turn", async () => {
   await using project = await memoryProject()
   await Instance.provide({
     directory: project.path,
     fn: async () => {
       let calls = 0
+      const heldPrompt = Promise.withResolvers<void>()
+      const releasePrompt = Promise.withResolvers<void>()
+      const heldScope = Promise.withResolvers<void>()
+      const releaseScope = Promise.withResolvers<void>()
+      const modelRequests: Array<{ input: string; model: string; stream: boolean }> = []
       // Explicit streamed protocol input; every Tool result and persisted effect
       // below comes from the production Task, Session and no_action writers.
       const server = Bun.serve({
@@ -37,7 +42,22 @@ test("an operator input retains its Task-root owner during scheduler preparation
           const body = (await request.json()) as any
           const messages = body.messages ?? []
           const isMemory = controlledProviderRequestKind(messages) === "memory"
-          const action = body.tools?.some((tool: any) => tool.function?.name === "no_action")
+          const userHistory = JSON.stringify(messages.filter((message: { role?: string }) => message.role === "user"))
+          const input = userHistory.includes("Review the separate scope edit.") ? "scope"
+            : userHistory.includes("Use the revised delivery date.") ? "date"
+            : userHistory.includes("Use the current budget of 1200.") ? "budget" : undefined
+          const firstBudget = !isMemory && input === "budget" && modelRequests.every((request) => request.input !== "budget")
+          const firstScope = !isMemory && input === "scope" && modelRequests.every((request) => request.input !== "scope")
+          if (!isMemory && input) modelRequests.push({ input, model: body.model, stream: body.stream })
+          if (firstBudget) {
+            heldPrompt.resolve()
+            await releasePrompt.promise
+          }
+          if (firstScope) {
+            heldScope.resolve()
+            await releaseScope.promise
+          }
+          const action = !firstBudget && !firstScope && body.tools?.some((tool: any) => tool.function?.name === "no_action")
           const task = action ? Database.use((db) => db.select().from(EngineTaskTable).get())! : undefined
           const text = isMemory ? controlledMemoryReply(messages) : "Local input delivered."
           const toolCall = action
@@ -59,7 +79,7 @@ test("an operator input retains its Task-root owner during scheduler preparation
               id: "local-input-runtime",
               object: "chat.completion.chunk",
               created: 1,
-              model: "fixture",
+              model: body.model,
               choices: [{ index: 0, delta, finish_reason: null }],
             }),
           )
@@ -67,7 +87,7 @@ test("an operator input retains its Task-root owner during scheduler preparation
             id: "local-input-runtime",
             object: "chat.completion.chunk",
             created: 1,
-            model: "fixture",
+            model: body.model,
             choices: [{ index: 0, delta: {}, finish_reason: toolCall ? "tool_calls" : "stop" }],
           }
           return new Response(
@@ -89,6 +109,12 @@ test("an operator input retains its Task-root owner during scheduler preparation
               models: {
                 fixture: {
                   name: "Local fixture",
+                  tool_call: true,
+                  modalities: { input: ["text"], output: ["text"] },
+                  limit: { context: 1_000_000, output: 4096 },
+                },
+                "next-fixture": {
+                  name: "Next local fixture",
                   tool_call: true,
                   modalities: { input: ["text"], output: ["text"] },
                   limit: { context: 1_000_000, output: 4096 },
@@ -123,6 +149,12 @@ test("an operator input retains its Task-root owner during scheduler preparation
         for (let pass = 0; pass < 3; pass++) await waitForIngressDeliveryHooksForTest()
         await Database.awaitEffectIdle(30_000)
         const task = await EngineService.getTask(taskID)
+        const perAgentModel = await Session.prepareConfigOverlayMergeInProject({
+          sessionID: task.sessionID!,
+          projectID: Instance.project.id,
+          patch: { agent: { orchestrator: { model: "input-runtime/fixture" } } },
+        })
+        Database.immediateTransaction((db) => perAgentModel.commitInTransaction(db))
         const entered = Promise.withResolvers<void>(),
           release = Promise.withResolvers<void>()
         const original = Projection.resolvePinnedTaskSchedulerTurnProjection
@@ -143,6 +175,7 @@ test("an operator input retains its Task-root owner during scheduler preparation
           })
         })
         let accepted: Awaited<ReturnType<typeof EngineService.handleTaskMessage>> | undefined
+        let next: Awaited<ReturnType<typeof EngineService.handleTaskMessage>> | undefined
         try {
           accepted = await EngineService.handleTaskMessage(taskID, {
             text: "Use the current budget of 1200.",
@@ -156,8 +189,21 @@ test("an operator input retains its Task-root owner during scheduler preparation
             sessionID: source.session_id,
             body: accepted.user_message.parts[0]?.type === "text" ? accepted.user_message.parts[0].text : undefined,
           }).toEqual({ sessionID: task.sessionID, body: "Use the current budget of 1200." })
+          release.resolve()
+          await heldPrompt.promise
+          next = await EngineService.handleTaskMessage(taskID, {
+            text: "Use the revised delivery date.",
+            source: "api",
+            requestID: "next-root-input-model",
+            model: "input-runtime/next-fixture",
+          })
+          expect(next.user_message.info).toMatchObject({
+            role: "user",
+            model: { providerID: "input-runtime", modelID: "next-fixture" },
+          })
         } finally {
           release.resolve()
+          releasePrompt.resolve()
           for (let pass = 0; pass < 3; pass++) await waitForIngressDeliveryHooksForTest()
           await Database.awaitEffectIdle(30_000)
           unsubscribe()
@@ -167,17 +213,62 @@ test("an operator input retains its Task-root owner during scheduler preparation
           taskID,
           accepted!.ingress_id!,
         )!
-        expect(moved).toEqual([{ messageID: accepted!.user_message.info.id, runtimeInput: current.messageID, taskID }])
+        const successor = currentOrchestratorControlMessage(
+          { rootMessage: { messageID: next!.user_message.info.id, kind: "operator" } },
+          taskID,
+          next!.ingress_id!,
+        )!
+        expect(moved).toEqual([
+          { messageID: accepted!.user_message.info.id, runtimeInput: current.messageID, taskID },
+          { messageID: next!.user_message.info.id, runtimeInput: successor.messageID, taskID },
+        ])
         const located = Database.use((db) =>
           db.select().from(MessageTable).where(eq(MessageTable.id, accepted!.user_message.info.id)).get(),
         )!
-        const replies = (await Session.messages({ sessionID: located.session_id })).filter(
-          (message) =>
-            message.info.role === "assistant" &&
-            message.info.parentID === current.messageID &&
-            message.info.time.completed,
+        const parents = [current.messageID, successor.messageID]
+        const replies = (await Session.messages({ sessionID: located.session_id })).flatMap(({ info, parts }) =>
+          info.role === "assistant" && parents.includes(info.parentID) && info.time.completed
+            ? [{ parentID: info.parentID, agent: info.agent, model: info.modelID,
+                completedTextSteps: parts.filter((part) => part.type === "step-finish" && part.reason === "stop").length,
+                decisions: parts.flatMap((part) => part.type === "tool" && part.state.status === "completed" ? [part.tool] : []) }]
+            : [],
         )
-        expect(replies.map((message) => message.info.agent)).toEqual(["orchestrator"])
+        expect(replies).toEqual([
+          { parentID: current.messageID, agent: "orchestrator", model: "fixture", completedTextSteps: 1, decisions: ["no_action"] },
+          { parentID: successor.messageID, agent: "orchestrator", model: "next-fixture", completedTextSteps: 0, decisions: ["no_action"] },
+        ])
+        expect(modelRequests).toEqual([
+          { input: "budget", model: "fixture", stream: true },
+          { input: "budget", model: "fixture", stream: true },
+          { input: "date", model: "next-fixture", stream: true },
+        ])
+        const scope = await EngineService.handleTaskMessage(taskID, {
+          text: "Review the separate scope edit.",
+          source: "api",
+        })
+        try {
+          await heldScope.promise
+          const scopeEdit = await Session.prepareConfigOverlayMergeInProject({
+            sessionID: task.sessionID!,
+            projectID: Instance.project.id,
+            patch: { model: "input-runtime/fixture", prompt: { chat: "Changed prompt scope." } },
+          })
+          Database.immediateTransaction((db) => scopeEdit.commitInTransaction(db))
+        } finally {
+          releaseScope.resolve()
+          for (let pass = 0; pass < 3; pass++) await waitForIngressDeliveryHooksForTest()
+          await Database.awaitEffectIdle(30_000)
+        }
+        const scopeInput = currentOrchestratorControlMessage(
+          { rootMessage: { messageID: scope.user_message.info.id, kind: "operator" } }, taskID, scope.ingress_id!,
+        )!
+        const scopeReply = (await Session.messages({ sessionID: located.session_id })).find(
+          ({ info }) => info.role === "assistant" && info.parentID === scopeInput.messageID,
+        )
+        expect(scopeReply?.info).toMatchObject({
+          role: "assistant", modelID: "next-fixture", time: { completed: expect.any(Number) },
+          error: { name: "StaleCatalogOccurrenceError", data: { mismatches: ["materialization_scope.config_revision"] } },
+        })
       } finally {
         await server.stop(true)
       }

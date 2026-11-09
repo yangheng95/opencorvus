@@ -189,6 +189,7 @@ describe("Task operator message acceptance is one transaction", () => {
           userMessages: committed.userMessages,
           ingressID: committedIngress?.id,
           messageRole: note.user_message.info.role,
+          messageModel: note.user_message.info.role === "user" ? note.user_message.info.model : undefined,
           attachment: committed.attachments[0] && {
             filename: committed.attachments[0].filename,
             intent: committed.attachments[0].intent,
@@ -202,6 +203,7 @@ describe("Task operator message acceptance is one transaction", () => {
           userMessages: baselineMessages + 1,
           ingressID: note.ingress_id,
           messageRole: "user",
+          messageModel: { providerID: "overlay-test-provider", modelID: "overlay-test-model" },
           attachment: { filename: "atomic.txt", intent: "task_input", source: "user-upload" },
           lifecycle: { epoch: 2, status: "active" },
           rewindCursor: null,

@@ -21,6 +21,7 @@ import type { ExpertSquadPackageRevision } from "@/expert-squad/package-revision
 import { ExpertSquadInstallLock } from "@/expert-squad/install-lock"
 import { ExpertSquadPackageManager } from "@/expert-squad/manager"
 import { resolveAgentModelRef, resolveConfiguredModelRef } from "@/agent/model"
+import { parseModelReference } from "@/provider/model-ref"
 import { Bus } from "@/bus"
 import { Config } from "@/config/config"
 import { HostSessionMcpRuntime } from "@/mcp/host-session-runtime"
@@ -1147,6 +1148,7 @@ async function appendAndWakeTaskOperatorMessage(input: {
   source: string
   metadata?: Record<string, unknown>
   identity?: TaskOperatorMessageIdentity
+  explicitModel?: NonNullable<Message.User["model"]>
   /** Caller-prepared durable facts that belong to this message's acceptance —
    *  model overlay, attachment references, reopen epoch — committed in the
    *  same transaction as the Message and its ingress. */
@@ -1165,6 +1167,7 @@ async function appendAndWakeTaskOperatorMessage(input: {
     input.metadata,
     undefined,
     input.identity,
+    input.explicitModel,
   )
   const accepted = Database.immediateTransaction((db) => {
     const current = requireTaskInCurrentProject(task.id)
@@ -1217,6 +1220,7 @@ async function buildTaskSessionMessageBundle(
   metadata?: Record<string, unknown>,
   schedulerDelivery?: SchedulerDeliveryReferenceValue,
   identity?: { messageID: string; textPartID?: string; controlID?: string; request?: TaskOperatorMessageRequest },
+  explicitModel?: NonNullable<Message.User["model"]>,
 ) {
   // Rule 7: no silent fallback. A task without a session_id or whose
   // session has lost its agent/model context cannot accept a message —
@@ -1231,7 +1235,7 @@ async function buildTaskSessionMessageBundle(
       `Task ${task.id} has no root session — cannot append operator message; recreate the task or repair task.session_id`,
     )
   }
-  const ctx = await messageContext(task.session_id, task.id)
+  const ctx = await messageContext(task.session_id, task.id, explicitModel)
   if (!ctx) {
     throw new Error(
       `Task ${task.id} session ${task.session_id} has no agent/model context — cannot append operator message`,
@@ -1322,7 +1326,7 @@ async function buildTaskSessionMessageBundle(
  * — never reused from history. Strict — a missing model config is a hard
  * project-setup error that must surface, not be papered over.
  */
-async function messageContext(sessionID: string, taskID: string) {
+async function messageContext(sessionID: string, taskID: string, explicitModel?: NonNullable<Message.User["model"]>) {
   const task = requireTaskInCurrentProject(taskID)
   if (task.session_id !== sessionID) {
     throw new NotFoundError({ message: `Task ${taskID} is not bound to session ${sessionID}` })
@@ -1333,7 +1337,7 @@ async function messageContext(sessionID: string, taskID: string) {
   }
   const config = await EffectiveConfig.effective({ taskID, sessionID })
   const agent = await HostAgentRegistry.get("orchestrator", { config })
-  const model = await resolveAgentModelRef(agent.name, { taskID })
+  const model = await resolveAgentModelRef(agent.name, { taskID, explicitModel })
   if (!model) throw new Error("Task operator message requires an orchestrator model")
   return {
     agent: agent.name,
@@ -4302,6 +4306,7 @@ export namespace EngineService {
         return typeof model === "string" ? [[agentID, model] as const] : []
       }),
     )
+    const explicitModel = input.model ? parseModelReference(input.model) : undefined
     let preparedOverlay: Awaited<ReturnType<typeof Session.prepareConfigOverlayMergeInProject>> | undefined
     if (input.model) {
       const agentModelClearPatch = Object.fromEntries(
@@ -4331,6 +4336,7 @@ export namespace EngineService {
       attachments: attachmentRefs,
       metadata: input.metadata,
       identity,
+      explicitModel,
       acceptanceEffects: (db) => {
         preparedOverlay?.commitInTransaction(db)
         preparedAttachments?.commitInTransaction(db)

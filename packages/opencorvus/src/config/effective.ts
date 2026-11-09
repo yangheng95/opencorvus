@@ -33,6 +33,34 @@ export namespace EffectiveConfig {
     return Config.mergeOverlay(baseConfig, sessionOverlay ?? {})
   }
 
+  /** Bind only the fixed-role model selectors of a live Task-root Turn. Tool,
+   * permission and Provider configuration are still read at each step. */
+  export function bindTurnModelSelection(initial: Config.Info): (current: Config.Info) => Config.Info {
+    const model = initial.model
+    const hadAgents = initial.agent !== undefined
+    const agentModels = new Map(Object.entries(initial.agent ?? {}).map(([name, agent]) => [
+      name, agent && "model" in agent ? agent.model : undefined,
+    ]))
+    return (current) => {
+      const { model: _model, agent: currentAgents, ...rest } = current
+      const live = new Map(Object.entries(currentAgents ?? {}))
+      const agent = Object.fromEntries([...new Set([...live.keys(), ...agentModels.keys()])].flatMap((name) => {
+        const currentAgent = live.get(name)
+        const settings = { ...currentAgent }
+        if ("model" in settings) delete settings.model
+        const selected = agentModels.get(name)
+        if (selected !== undefined) return [[name, { ...settings, model: selected }]]
+        if (currentAgent && (agentModels.has(name) || Object.keys(settings).length > 0)) return [[name, settings]]
+        return []
+      }))
+      return {
+        ...rest,
+        ...(model === undefined ? {} : { model }),
+        ...(hadAgents || Object.keys(agent).length > 0 ? { agent } : {}),
+      }
+    }
+  }
+
   export async function directory(opts?: { taskID?: string; sessionID?: string }): Promise<string> {
     const sessionID = await rootSessionID(opts)
     if (!sessionID) return Instance.directory

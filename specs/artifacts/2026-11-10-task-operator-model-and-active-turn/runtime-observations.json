@@ -1,0 +1,991 @@
+{
+  "baseline": {
+    "task": {
+      "id": "tsk_g00VaWPVWX00bwZMIGo0",
+      "rootSessionID": "ses_-zUPTaUGKzzmqZOoeyRh",
+      "events": [
+        {
+          "id": "pev_g0VaWPVkW00VFK6KWhyF",
+          "seq": 3,
+          "type": "task.execution.opened",
+          "payload": {
+            "execution_epoch": 1
+          }
+        },
+        {
+          "id": "pev_g0VaWPXRm00Q6XYqR5gU",
+          "seq": 12,
+          "type": "task.failed",
+          "payload": {
+            "execution_epoch": 1,
+            "summary": "Orchestrator execution interrupted: Task-root activation act_g0VaWPVlL00MZJUnqf6L open assistant msg_hSTYyGm0Ff0ecl0LAOXN identity changed before its next Provider step",
+            "error": "Orchestrator error: Task-root activation act_g0VaWPVlL00MZJUnqf6L open assistant msg_hSTYyGm0Ff0ecl0LAOXN identity changed before its next Provider step",
+            "terminalReason": "interrupted"
+          }
+        }
+      ],
+      "messages": [
+        {
+          "id": "msg_g0VaWPWZ300ftpkzRyO9",
+          "sessionID": "ses_-zUPTaTSWzzlQCXU7z23",
+          "role": "user",
+          "model": {
+            "providerID": "b162-review",
+            "modelID": "model-a"
+          },
+          "time": {
+            "created": 1794267011189
+          }
+        },
+        {
+          "id": "msg_task-root-control_art_hkY8toWVKZ6hRZ74mQjS_art_hkY8toWVKZ6hRZ74mQjS",
+          "sessionID": "ses_-zUPTaTSWzzlQCXU7z23",
+          "role": "user",
+          "model": {
+            "providerID": "b162-review",
+            "modelID": "model-a"
+          },
+          "time": {
+            "created": 1794267011191
+          }
+        },
+        {
+          "id": "msg_hSTYyGm0Ff0ecl0LAOXN",
+          "sessionID": "ses_-zUPTaTSWzzlQCXU7z23",
+          "role": "assistant",
+          "model": {
+            "providerID": "b162-review",
+            "modelID": "model-a"
+          },
+          "parentID": "msg_task-root-control_art_hkY8toWVKZ6hRZ74mQjS_art_hkY8toWVKZ6hRZ74mQjS",
+          "activationID": "act_g0VaWPVlL00MZJUnqf6L",
+          "time": {
+            "created": 1794267011252,
+            "completed": 1794267012355
+          },
+          "error": {
+            "name": "UnknownError",
+            "data": {
+              "message": "Error: Task-root activation act_g0VaWPVlL00MZJUnqf6L open assistant msg_hSTYyGm0Ff0ecl0LAOXN identity changed before its next Provider step"
+            }
+          },
+          "parts": [
+            {
+              "partID": "prt_g0VaWPWjz00JmH8G41v2",
+              "stepFinish": "stop"
+            },
+            {
+              "partID": "prt_g0VaWPWqe000xKPaZa4t",
+              "stepFinish": "stop"
+            }
+          ]
+        },
+        {
+          "id": "msg_h4p9NOxudvoHEvPJ1NaB",
+          "sessionID": "ses_-zUPTaUGKzzmqZOoeyRh",
+          "role": "user",
+          "model": {
+            "providerID": "b162-review",
+            "modelID": "model-a"
+          },
+          "time": {
+            "created": 1794267012131
+          },
+          "requestID": "b162-explicit-model"
+        },
+        {
+          "id": "msg_hXeqUrujHxUCM9Syfbwi",
+          "sessionID": "ses_-zUPTaTSWzzlQCXU7z23",
+          "role": "user",
+          "model": {
+            "providerID": "b162-review",
+            "modelID": "model-b"
+          },
+          "time": {
+            "created": 1794267101608
+          },
+          "requestID": "b162-sequential-model"
+        },
+        {
+          "id": "msg_task-root-control_art_h3639n3BEYoJcvTjWQ1F_art_h3639n3BEYoJcvTjWQ1F",
+          "sessionID": "ses_-zUPTaTSWzzlQCXU7z23",
+          "role": "user",
+          "model": {
+            "providerID": "b162-review",
+            "modelID": "model-c"
+          },
+          "time": {
+            "created": 1794267101609
+          }
+        },
+        {
+          "id": "msg_hiSgc2ltHV3GaipJRGG6",
+          "sessionID": "ses_-zUPTaTSWzzlQCXU7z23",
+          "role": "assistant",
+          "model": {
+            "providerID": "b162-review",
+            "modelID": "model-c"
+          },
+          "parentID": "msg_task-root-control_art_h3639n3BEYoJcvTjWQ1F_art_h3639n3BEYoJcvTjWQ1F",
+          "activationID": "act_g0VaWPtHW00BF1KkfYi7",
+          "time": {
+            "created": 1794267101651,
+            "completed": 1794267102785
+          },
+          "parts": [
+            {
+              "partID": "prt_g0VaWPuD300X8mQPxRfV",
+              "stepFinish": "stop"
+            },
+            {
+              "partID": "prt_g0VaWPuIB00aSeCUQS5I",
+              "stepFinish": "stop"
+            },
+            {
+              "partID": "prt_g0VaWPuNm00yFsYJD3DG",
+              "stepFinish": "stop"
+            }
+          ]
+        }
+      ],
+      "ingresses": [
+        {
+          "id": "art_hkY8toWVKZ6hRZ74mQjS",
+          "project_id": "prj_hHuEYLX28fvVUK8tjxnf",
+          "source": "task",
+          "source_id": "tsk_g00VaWPVWX00bwZMIGo0",
+          "execution_epoch": 1
+        },
+        {
+          "id": "art_h3639n3BEYoJcvTjWQ1F",
+          "project_id": "prj_hHuEYLX28fvVUK8tjxnf",
+          "source": "message",
+          "source_id": "msg_hXeqUrujHxUCM9Syfbwi",
+          "execution_epoch": 2
+        },
+        {
+          "id": "art_hX2JSSJL3i1VUtwRcSeT",
+          "project_id": "prj_hHuEYLX28fvVUK8tjxnf",
+          "source": "message",
+          "source_id": "msg_h4p9NOxudvoHEvPJ1NaB",
+          "execution_epoch": 1
+        },
+        {
+          "id": "art_hPIIm3RQ6NmNG9IGUiMa",
+          "project_id": "prj_hHuEYLX28fvVUK8tjxnf",
+          "source": "engine_artifact",
+          "source_id": "art_g0VaWRZJg00SqgC2N5d0",
+          "execution_epoch": 2
+        }
+      ]
+    },
+    "requests": [
+      {
+        "id": 1,
+        "model": "model-a",
+        "stream": true,
+        "kind": "memory",
+        "sample": "initial"
+      },
+      {
+        "id": 2,
+        "model": "model-a",
+        "stream": true,
+        "kind": "prompt",
+        "sample": "initial"
+      },
+      {
+        "id": 3,
+        "model": "model-b",
+        "stream": true,
+        "kind": "memory",
+        "sample": "explicit"
+      },
+      {
+        "id": 4,
+        "model": "model-a",
+        "stream": true,
+        "kind": "prompt",
+        "sample": "initial"
+      },
+      {
+        "id": 5,
+        "model": "model-c",
+        "stream": true,
+        "kind": "memory",
+        "sample": "explicit"
+      },
+      {
+        "id": 6,
+        "model": "model-c",
+        "stream": true,
+        "kind": "prompt",
+        "sample": "explicit"
+      },
+      {
+        "id": 7,
+        "model": "model-c",
+        "stream": true,
+        "kind": "prompt",
+        "sample": "explicit"
+      },
+      {
+        "id": 8,
+        "model": "model-c",
+        "stream": true,
+        "kind": "prompt",
+        "sample": "explicit"
+      }
+    ]
+  },
+  "intermediate": {
+    "task": {
+      "id": "tsk_g00VaWRzI500FHFstFCm",
+      "rootSessionID": "ses_-zUPTY0Uwzz6lmaegWpu",
+      "events": [
+        {
+          "id": "pev_g0VaWRzVl00agQv3iiJj",
+          "seq": 3,
+          "type": "task.execution.opened",
+          "payload": {
+            "execution_epoch": 1
+          }
+        },
+        {
+          "id": "pev_g0VaWS1Bc00fYzJsLeFl",
+          "seq": 10,
+          "type": "task.failed",
+          "payload": {
+            "execution_epoch": 1,
+            "summary": "Orchestrator execution interrupted: Catalog occurrence materialization scope is stale: materialization_scope.config_revision.",
+            "error": "Orchestrator error: Catalog occurrence materialization scope is stale: materialization_scope.config_revision.",
+            "terminalReason": "interrupted"
+          }
+        }
+      ],
+      "messages": [
+        {
+          "id": "msg_g0VaWS0Q200trPQPzBG9",
+          "sessionID": "ses_-zUPTXzbnzz88LJ4qtLS",
+          "role": "user",
+          "model": {
+            "providerID": "b162-review",
+            "modelID": "model-a"
+          },
+          "time": {
+            "created": 1794267602607
+          }
+        },
+        {
+          "id": "msg_task-root-control_art_hnjRYpwrd9BUjfEsiVPK_art_hnjRYpwrd9BUjfEsiVPK",
+          "sessionID": "ses_-zUPTXzbnzz88LJ4qtLS",
+          "role": "user",
+          "model": {
+            "providerID": "b162-review",
+            "modelID": "model-a"
+          },
+          "time": {
+            "created": 1794267602609
+          }
+        },
+        {
+          "id": "msg_hfy9hVWsX4mtd5VTT5Ev",
+          "sessionID": "ses_-zUPTXzbnzz88LJ4qtLS",
+          "role": "assistant",
+          "model": {
+            "providerID": "b162-review",
+            "modelID": "model-a"
+          },
+          "parentID": "msg_task-root-control_art_hnjRYpwrd9BUjfEsiVPK_art_hnjRYpwrd9BUjfEsiVPK",
+          "activationID": "act_g0VaWRzWZ00agCBIA2Gj",
+          "time": {
+            "created": 1794267602671,
+            "completed": 1794267603737
+          },
+          "error": {
+            "name": "StaleCatalogOccurrenceError",
+            "data": {
+              "message": "Catalog occurrence materialization scope is stale: materialization_scope.config_revision.",
+              "mismatches": [
+                "materialization_scope.config_revision"
+              ]
+            }
+          },
+          "parts": [
+            {
+              "partID": "prt_g0VaWS0gG006Mj2Hc05D",
+              "stepFinish": "stop"
+            }
+          ]
+        },
+        {
+          "id": "msg_hQ2FeYmrg0fxYPEHtk9f",
+          "sessionID": "ses_-zUPTY0Uwzz6lmaegWpu",
+          "role": "user",
+          "model": {
+            "providerID": "b162-review",
+            "modelID": "model-b"
+          },
+          "time": {
+            "created": 1794267603426
+          },
+          "requestID": "b162-api-next"
+        }
+      ],
+      "ingresses": [
+        {
+          "id": "art_hnjRYpwrd9BUjfEsiVPK",
+          "project_id": "prj_hHuEYLX28fvVUK8tjxnf",
+          "source": "task",
+          "source_id": "tsk_g00VaWRzI500FHFstFCm",
+          "execution_epoch": 1
+        },
+        {
+          "id": "art_h6tEiohIi90xPXGVFBws",
+          "project_id": "prj_hHuEYLX28fvVUK8tjxnf",
+          "source": "message",
+          "source_id": "msg_hQ2FeYmrg0fxYPEHtk9f",
+          "execution_epoch": 1
+        }
+      ]
+    },
+    "requests": [
+      {
+        "id": 1,
+        "key": "api",
+        "phase": "initial",
+        "n": 0,
+        "stream": true,
+        "model": "model-a",
+        "kind": "memory",
+        "hold": false
+      },
+      {
+        "id": 2,
+        "key": "api",
+        "phase": "initial",
+        "n": 1,
+        "stream": true,
+        "model": "model-a",
+        "kind": "prompt",
+        "hold": true
+      },
+      {
+        "id": 3,
+        "key": "api",
+        "phase": "next",
+        "n": 0,
+        "stream": true,
+        "model": "model-b",
+        "kind": "memory",
+        "hold": false
+      },
+      {
+        "id": 4,
+        "key": "other",
+        "phase": "initial",
+        "n": 0,
+        "stream": true,
+        "model": "model-c",
+        "kind": "memory",
+        "hold": false
+      },
+      {
+        "id": 5,
+        "key": "other",
+        "phase": "initial",
+        "n": 1,
+        "stream": true,
+        "model": "model-c",
+        "kind": "prompt",
+        "hold": false
+      }
+    ]
+  },
+  "candidate": {
+    "tasks": {
+      "api": {
+        "id": "tsk_g00VaWTDfl00POd3v3bs",
+        "rootSessionID": "ses_-zUPTWm3Fzz8Hp38CdBx",
+        "events": [
+          {
+            "id": "pev_g0VaWTDxm00lJ3MdJe11",
+            "seq": 3,
+            "type": "task.execution.opened",
+            "payload": {
+              "execution_epoch": 1
+            }
+          }
+        ],
+        "messages": [
+          {
+            "id": "msg_g0VaWTFGB00nYvgRWTG1",
+            "sessionID": "ses_-zUPTWkm2zzWzxzzjfPY",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-a"
+            },
+            "time": {
+              "created": 1794267897983
+            }
+          },
+          {
+            "id": "msg_task-root-control_art_hjqYR12SX9NM2UeevVMY_art_hjqYR12SX9NM2UeevVMY",
+            "sessionID": "ses_-zUPTWkm2zzWzxzzjfPY",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-a"
+            },
+            "time": {
+              "created": 1794267897985
+            }
+          },
+          {
+            "id": "msg_hVFfUlgZvrwj9qMacDD8",
+            "sessionID": "ses_-zUPTWkm2zzWzxzzjfPY",
+            "role": "assistant",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-a"
+            },
+            "parentID": "msg_task-root-control_art_hjqYR12SX9NM2UeevVMY_art_hjqYR12SX9NM2UeevVMY",
+            "activationID": "act_g0VaWTDyR00ejndT90zI",
+            "time": {
+              "created": 1794267898041,
+              "completed": 1794267899426
+            },
+            "parts": [
+              {
+                "partID": "prt_g0VaWTFXC006pDhpH7jU",
+                "stepFinish": "stop"
+              },
+              {
+                "partID": "prt_g0VaWTFcy00c6icVBadI",
+                "outcomeID": "prt_hp5SC49S8aWRuO9shSrp",
+                "tool": "no_action",
+                "status": "completed"
+              }
+            ]
+          },
+          {
+            "id": "msg_hBEbH9o3gJiYwpHeONQ2",
+            "sessionID": "ses_-zUPTWkm2zzWzxzzjfPY",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-b"
+            },
+            "time": {
+              "created": 1794267899654
+            },
+            "requestID": "b162-api-next"
+          },
+          {
+            "id": "msg_task-root-control_art_hQ2MsTV5fMSK1bW1fjCq_art_hQ2MsTV5fMSK1bW1fjCq",
+            "sessionID": "ses_-zUPTWkm2zzWzxzzjfPY",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-b"
+            },
+            "time": {
+              "created": 1794267899655
+            }
+          },
+          {
+            "id": "msg_h7OQ9IPl45iI7mair49J",
+            "sessionID": "ses_-zUPTWkm2zzWzxzzjfPY",
+            "role": "assistant",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-b"
+            },
+            "parentID": "msg_task-root-control_art_hQ2MsTV5fMSK1bW1fjCq_art_hQ2MsTV5fMSK1bW1fjCq",
+            "activationID": "act_g0VaWTFf300bLgmkdwMK",
+            "time": {
+              "created": 1794267899712,
+              "completed": 1794267900285
+            },
+            "parts": [
+              {
+                "partID": "prt_g0VaWTFqj007yESkrF7z",
+                "outcomeID": "prt_hLwNsmS4LwUg7GN2OW2n",
+                "tool": "no_action",
+                "status": "completed"
+              }
+            ]
+          },
+          {
+            "id": "msg_h8fTHRSfq4DavAHKcP00",
+            "sessionID": "ses_-zUPTWkm2zzWzxzzjfPY",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-b"
+            },
+            "time": {
+              "created": 1794267900616
+            },
+            "requestID": "b162-api-inherited"
+          },
+          {
+            "id": "msg_task-root-control_art_hn3uxcu3LdghWe2TXXcJ_art_hn3uxcu3LdghWe2TXXcJ",
+            "sessionID": "ses_-zUPTWkm2zzWzxzzjfPY",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-b"
+            },
+            "time": {
+              "created": 1794267900617
+            }
+          },
+          {
+            "id": "msg_hljdNbFCTJgo1tOMpruq",
+            "sessionID": "ses_-zUPTWkm2zzWzxzzjfPY",
+            "role": "assistant",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-b"
+            },
+            "parentID": "msg_task-root-control_art_hn3uxcu3LdghWe2TXXcJ_art_hn3uxcu3LdghWe2TXXcJ",
+            "activationID": "act_g0VaWTFv500P9QHdCjk9",
+            "time": {
+              "created": 1794267900699,
+              "completed": 1794267901428
+            },
+            "parts": [
+              {
+                "partID": "prt_g0VaWTG9D00I5dhD0QbO",
+                "outcomeID": "prt_hu9LM2RSowzeNH0njpMI",
+                "tool": "no_action",
+                "status": "completed"
+              }
+            ]
+          }
+        ],
+        "ingresses": [
+          {
+            "id": "art_hjqYR12SX9NM2UeevVMY",
+            "project_id": "prj_hHuEYLX28fvVUK8tjxnf",
+            "source": "task",
+            "source_id": "tsk_g00VaWTDfl00POd3v3bs",
+            "execution_epoch": 1
+          },
+          {
+            "id": "art_hQ2MsTV5fMSK1bW1fjCq",
+            "project_id": "prj_hHuEYLX28fvVUK8tjxnf",
+            "source": "message",
+            "source_id": "msg_hBEbH9o3gJiYwpHeONQ2",
+            "execution_epoch": 1
+          },
+          {
+            "id": "art_hn3uxcu3LdghWe2TXXcJ",
+            "project_id": "prj_hHuEYLX28fvVUK8tjxnf",
+            "source": "message",
+            "source_id": "msg_h8fTHRSfq4DavAHKcP00",
+            "execution_epoch": 1
+          }
+        ]
+      },
+      "desktop": {
+        "id": "tsk_g00VaWTXK400eWwoveCh",
+        "rootSessionID": "ses_-zUPTWSSIzz1tDUl08dC",
+        "events": [
+          {
+            "id": "pev_g0VaWTXYL009Pi9aGKbE",
+            "seq": 3,
+            "type": "task.execution.opened",
+            "payload": {
+              "execution_epoch": 1
+            }
+          }
+        ],
+        "messages": [
+          {
+            "id": "msg_g0VaWTYNQ0057MvJiiF6",
+            "sessionID": "ses_-zUPTWReKzzCioPswE6F",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-a"
+            },
+            "time": {
+              "created": 1794267971468
+            }
+          },
+          {
+            "id": "msg_task-root-control_art_hkIxyAfWTA50NHAa9Z2v_art_hkIxyAfWTA50NHAa9Z2v",
+            "sessionID": "ses_-zUPTWReKzzCioPswE6F",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-a"
+            },
+            "time": {
+              "created": 1794267971470
+            }
+          },
+          {
+            "id": "msg_h9RfzQecHibM6xkDrvMK",
+            "sessionID": "ses_-zUPTWReKzzCioPswE6F",
+            "role": "assistant",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-a"
+            },
+            "parentID": "msg_task-root-control_art_hkIxyAfWTA50NHAa9Z2v_art_hkIxyAfWTA50NHAa9Z2v",
+            "activationID": "act_g0VaWTXZ500QK2sfPEpq",
+            "time": {
+              "created": 1794267971532,
+              "completed": 1794268001373
+            },
+            "parts": [
+              {
+                "partID": "prt_g0VaWTg2b00dcjmLe6o1",
+                "stepFinish": "stop"
+              },
+              {
+                "partID": "prt_g0VaWTg8z00u455Ne8N3",
+                "outcomeID": "prt_hvTrK8xhAeCkdNdE0uH3",
+                "tool": "no_action",
+                "status": "completed"
+              }
+            ]
+          },
+          {
+            "id": "msg_h7yTafttL2haHp1MAnmG",
+            "sessionID": "ses_-zUPTWReKzzCioPswE6F",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-b"
+            },
+            "time": {
+              "created": 1794268001580
+            },
+            "requestID": "msg_7c99ed20-87aa-4317-aaf0-7c1b6f36090a"
+          },
+          {
+            "id": "msg_task-root-control_art_hjieIfWYvcf1o5Wvxj06_art_hjieIfWYvcf1o5Wvxj06",
+            "sessionID": "ses_-zUPTWReKzzCioPswE6F",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-b"
+            },
+            "time": {
+              "created": 1794268001581
+            }
+          },
+          {
+            "id": "msg_hJhRvXkNwNI4EOFADKlC",
+            "sessionID": "ses_-zUPTWReKzzCioPswE6F",
+            "role": "assistant",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-b"
+            },
+            "parentID": "msg_task-root-control_art_hjieIfWYvcf1o5Wvxj06_art_hjieIfWYvcf1o5Wvxj06",
+            "activationID": "act_g0VaWTgBX00O5lACK5J0",
+            "time": {
+              "created": 1794268001624,
+              "completed": 1794268002224
+            },
+            "parts": [
+              {
+                "partID": "prt_g0VaWTgMz00vNP93mhKn",
+                "outcomeID": "prt_hBJilz90ujx5QBnUCK3w",
+                "tool": "no_action",
+                "status": "completed"
+              }
+            ]
+          }
+        ],
+        "ingresses": [
+          {
+            "id": "art_hkIxyAfWTA50NHAa9Z2v",
+            "project_id": "prj_hHuEYLX28fvVUK8tjxnf",
+            "source": "task",
+            "source_id": "tsk_g00VaWTXK400eWwoveCh",
+            "execution_epoch": 1
+          },
+          {
+            "id": "art_hjieIfWYvcf1o5Wvxj06",
+            "project_id": "prj_hHuEYLX28fvVUK8tjxnf",
+            "source": "message",
+            "source_id": "msg_h7yTafttL2haHp1MAnmG",
+            "execution_epoch": 1
+          }
+        ]
+      },
+      "otherProject": {
+        "id": "tsk_g00VaWTDRz000EwoMGRq",
+        "rootSessionID": "ses_-zUPTWmHEzzUu1QKx4HP",
+        "events": [
+          {
+            "id": "pev_g0VaWTDjz00AEfzS8vED",
+            "seq": 3,
+            "type": "task.execution.opened",
+            "payload": {
+              "execution_epoch": 1
+            }
+          }
+        ],
+        "messages": [
+          {
+            "id": "msg_g0VaWTErZ00e5SW9w9kv",
+            "sessionID": "ses_-zUPTWlAlzzve4U64uzU",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-c"
+            },
+            "time": {
+              "created": 1794267896457
+            }
+          },
+          {
+            "id": "msg_task-root-control_art_hjMAdmDKqvlbYbcrbab5_art_hjMAdmDKqvlbYbcrbab5",
+            "sessionID": "ses_-zUPTWlAlzzve4U64uzU",
+            "role": "user",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-c"
+            },
+            "time": {
+              "created": 1794267896460
+            }
+          },
+          {
+            "id": "msg_hgvND8s0MRldm5JJnlr5",
+            "sessionID": "ses_-zUPTWlAlzzve4U64uzU",
+            "role": "assistant",
+            "model": {
+              "providerID": "b162-review",
+              "modelID": "model-c"
+            },
+            "parentID": "msg_task-root-control_art_hjMAdmDKqvlbYbcrbab5_art_hjMAdmDKqvlbYbcrbab5",
+            "activationID": "act_g0VaWTDl800RpjPgqgAg",
+            "time": {
+              "created": 1794267896528,
+              "completed": 1794267897652
+            },
+            "parts": [
+              {
+                "partID": "prt_g0VaWTF9f00ednLbiBV1",
+                "outcomeID": "prt_hxsO0zcgw1h0U6txb6Jx",
+                "tool": "no_action",
+                "status": "completed"
+              }
+            ]
+          }
+        ],
+        "ingresses": [
+          {
+            "id": "art_hjMAdmDKqvlbYbcrbab5",
+            "project_id": "prj_hhDY4XbomnwduCQ25vzr",
+            "source": "task",
+            "source_id": "tsk_g00VaWTDRz000EwoMGRq",
+            "execution_epoch": 1
+          }
+        ]
+      }
+    },
+    "requests": [
+      {
+        "id": 1,
+        "key": "other",
+        "phase": "initial",
+        "n": 0,
+        "stream": true,
+        "model": "model-c",
+        "kind": "memory",
+        "hold": false
+      },
+      {
+        "id": 2,
+        "key": "api",
+        "phase": "initial",
+        "n": 0,
+        "stream": true,
+        "model": "model-a",
+        "kind": "memory",
+        "hold": false
+      },
+      {
+        "id": 3,
+        "key": "other",
+        "phase": "initial",
+        "n": 1,
+        "stream": true,
+        "model": "model-c",
+        "kind": "prompt",
+        "hold": false
+      },
+      {
+        "id": 4,
+        "key": "api",
+        "phase": "initial",
+        "n": 1,
+        "stream": true,
+        "model": "model-a",
+        "kind": "prompt",
+        "hold": true
+      },
+      {
+        "id": 5,
+        "key": "api",
+        "phase": "next",
+        "n": 0,
+        "stream": true,
+        "model": "model-b",
+        "kind": "memory",
+        "hold": false
+      },
+      {
+        "id": 6,
+        "key": "api",
+        "phase": "initial",
+        "n": 2,
+        "stream": true,
+        "model": "model-a",
+        "kind": "prompt",
+        "hold": false
+      },
+      {
+        "id": 7,
+        "key": "api",
+        "phase": "next",
+        "n": 1,
+        "stream": true,
+        "model": "model-b",
+        "kind": "prompt",
+        "hold": false
+      },
+      {
+        "id": 8,
+        "key": "api",
+        "phase": "inherited",
+        "n": 0,
+        "stream": true,
+        "model": "model-b",
+        "kind": "memory",
+        "hold": false
+      },
+      {
+        "id": 9,
+        "key": "api",
+        "phase": "inherited",
+        "n": 1,
+        "stream": true,
+        "model": "model-b",
+        "kind": "prompt",
+        "hold": false
+      },
+      {
+        "id": 10,
+        "key": "desktop",
+        "phase": "initial",
+        "n": 0,
+        "stream": true,
+        "model": "model-a",
+        "kind": "memory",
+        "hold": false
+      },
+      {
+        "id": 11,
+        "key": "desktop",
+        "phase": "initial",
+        "n": 1,
+        "stream": true,
+        "model": "model-a",
+        "kind": "prompt",
+        "hold": true
+      },
+      {
+        "id": 12,
+        "key": "desktop",
+        "phase": "next",
+        "n": 0,
+        "stream": true,
+        "model": "model-b",
+        "kind": "memory",
+        "hold": false
+      },
+      {
+        "id": 13,
+        "key": "desktop",
+        "phase": "initial",
+        "n": 2,
+        "stream": true,
+        "model": "model-a",
+        "kind": "prompt",
+        "hold": false
+      },
+      {
+        "id": 14,
+        "key": "desktop",
+        "phase": "next",
+        "n": 1,
+        "stream": true,
+        "model": "model-b",
+        "kind": "prompt",
+        "hold": false
+      }
+    ],
+    "publicReceipts": {
+      "next": {
+        "status": 202,
+        "ingressID": "art_hQ2MsTV5fMSK1bW1fjCq",
+        "messageID": "msg_hBEbH9o3gJiYwpHeONQ2",
+        "sessionID": "ses_-zUPTWm3Fzz8Hp38CdBx",
+        "model": {
+          "providerID": "b162-review",
+          "modelID": "model-b"
+        }
+      },
+      "replay": {
+        "status": 202,
+        "ingressID": "art_hQ2MsTV5fMSK1bW1fjCq",
+        "messageID": "msg_hBEbH9o3gJiYwpHeONQ2",
+        "sessionID": "ses_-zUPTWm3Fzz8Hp38CdBx",
+        "model": {
+          "providerID": "b162-review",
+          "modelID": "model-b"
+        }
+      },
+      "inherit": {
+        "status": 202,
+        "ingressID": "art_hn3uxcu3LdghWe2TXXcJ",
+        "messageID": "msg_h8fTHRSfq4DavAHKcP00",
+        "sessionID": "ses_-zUPTWm3Fzz8Hp38CdBx",
+        "model": {
+          "providerID": "b162-review",
+          "modelID": "model-b"
+        }
+      }
+    },
+    "restartReceipt": {
+      "status": 202,
+      "ingressID": "art_hQ2MsTV5fMSK1bW1fjCq",
+      "messageID": "msg_hBEbH9o3gJiYwpHeONQ2",
+      "sessionID": "ses_-zUPTWkm2zzWzxzzjfPY",
+      "model": {
+        "providerID": "b162-review",
+        "modelID": "model-b"
+      }
+    },
+    "restartLifecycle": {
+      "taskID": "tsk_g00VaWTDfl00POd3v3bs",
+      "epoch": 1,
+      "openedEventID": "pev_g0VaWTDxm00lJ3MdJe11",
+      "openedAt": 1794267891881,
+      "status": "active"
+    },
+    "listenerBeforeRestart": 32048,
+    "listenerAfterRestart": 33624
+  }
+}

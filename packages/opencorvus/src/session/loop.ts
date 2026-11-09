@@ -1844,6 +1844,23 @@ export namespace SessionLoop {
     }
   }
 
+  async function readTaskRootActivationAssistant(sessionID: string, user: Message.User, activationID: string) {
+    const messageID = Identifier.deterministic("message", `task-root-assistant-v1\0${user.id}`)
+    const persisted = await MessageStore.get({ sessionID, messageID }).catch((error) => {
+      if (NotFoundError.isInstance(error as Error)) return undefined
+      throw error
+    })
+    if (!persisted) return undefined
+    const info = persisted.info
+    if (
+      info.role !== "assistant" || info.parentID !== user.id || info.activationID !== activationID ||
+      info.sessionID !== sessionID || info.author !== user.agent || info.agent !== user.agent
+    ) {
+      throw new Error(`Task-root assistant ${messageID} does not belong to activation ${activationID}`)
+    }
+    return { ...persisted, info }
+  }
+
   async function processTurn(input: {
     step: number
     sessionID: string
@@ -1853,10 +1870,12 @@ export namespace SessionLoop {
     lastFinished: Message.Assistant | undefined
     acceptedInputMessageIDs: readonly string[]
     model: Provider.Model
+    config: Config.Info
+    taskRootAssistant?: Awaited<ReturnType<typeof readTaskRootActivationAssistant>>
     abort: AbortSignal
   }) {
     let structured: unknown | undefined
-    const config = await EffectiveConfig.effective({ sessionID: input.sessionID })
+    const { config } = input
     const installedRuntimeContract = SessionRuntimeContractStore.get(input.sessionID)
     const installedRuntimeIdentity = installedRuntimeContract?.identity
     const requiresRuntimeContract = sessionKindRequiresRuntimeContract(input.session.kind)
@@ -1889,23 +1908,9 @@ export namespace SessionLoop {
       runtimeIdentity?.identityKind === "projected-scheduler" && runtimeIdentity.taskIngressID
         ? runtimeIdentity.taskIngressActivationID
         : undefined
-    let taskRootAssistant: (Message.WithParts & { info: Message.Assistant }) | undefined
-    if (taskRootActivation) {
-      const messageID = Identifier.deterministic("message", `task-root-assistant-v1\0${input.lastUser.id}`)
-      let persisted: Message.WithParts | undefined
-      try {
-        persisted = await MessageStore.get({ sessionID: input.sessionID, messageID })
-      } catch (error) {
-        if (!NotFoundError.isInstance(error as Error)) throw error
-      }
-      if (persisted) {
-        if (
-          persisted.info.role !== "assistant" || persisted.info.parentID !== input.lastUser.id ||
-          persisted.info.activationID !== taskRootActivation
-        )
-          throw new Error(`Task-root assistant ${messageID} does not belong to activation ${taskRootActivation}`)
-        taskRootAssistant = { ...persisted, info: persisted.info }
-      }
+    const taskRootAssistant = input.taskRootAssistant
+    if (taskRootAssistant && taskRootAssistant.info.activationID !== taskRootActivation) {
+      throw new Error(`Task-root assistant ${taskRootAssistant.info.id} does not belong to activation ${taskRootActivation}`)
     }
     if (taskRootAssistant?.info.time.completed !== undefined) return "stop" as const
     const openTaskRootAssistant = taskRootAssistant
@@ -1918,10 +1923,7 @@ export namespace SessionLoop {
         : undefined
     if (
       openTaskRootAssistant &&
-      (openTaskRootAssistant.info.sessionID !== input.sessionID ||
-        openTaskRootAssistant.info.author !== input.lastUser.agent ||
-        openTaskRootAssistant.info.agent !== input.lastUser.agent ||
-        openTaskRootAssistant.info.modelID !== input.model.id ||
+      (openTaskRootAssistant.info.modelID !== input.model.id ||
         openTaskRootAssistant.info.providerID !== input.model.providerID)
     ) {
       throw new Error(
@@ -3175,6 +3177,10 @@ export namespace SessionLoop {
       let needsReentry = false
       try {
         let step = 0
+        let taskRootTurnSelection: {
+          activationID: string
+          apply: ReturnType<typeof EffectiveConfig.bindTurnModelSelection>
+        } | undefined
         while (true) {
           const runActiveTurn = async () => {
             let finalizedTerminalTurn = false
@@ -3368,6 +3374,18 @@ export namespace SessionLoop {
                   validatedRuntimeContract,
                   "session model turn",
                 )
+                const scheduler = validatedRuntimeContract && isProjectedSchedulerRuntimeContract(validatedRuntimeContract)
+                  ? validatedRuntimeContract.identity
+                  : undefined
+                const activationID = scheduler?.taskIngressID ? scheduler.taskIngressActivationID : undefined
+                const taskRootAssistant = activationID
+                  ? await readTaskRootActivationAssistant(sessionID, lastUser, activationID)
+                  : undefined
+                // A new physical Turn uses the Task-root selection. Its open
+                // assistant is the exact model authority for subsequent steps.
+                const openAssistant = taskRootAssistant?.info.time.completed === undefined
+                  ? taskRootAssistant?.info
+                  : undefined
                 const model = await (
                   validatedRuntimeContract?.identity.identityKind === "projected-worker"
                     ? resolveProjectedWorkerModel(
@@ -3378,8 +3396,11 @@ export namespace SessionLoop {
                         },
                         { sessionID, explicitModel: lastUser.model },
                       )
-                    : validatedRuntimeContract && isProjectedSchedulerRuntimeContract(validatedRuntimeContract)
-                      ? resolveAgentModel(validatedRuntimeContract.identity.baseRole, { sessionID })
+                    : scheduler
+                      ? resolveAgentModel(scheduler.baseRole, {
+                          sessionID,
+                          explicitModel: openAssistant && { providerID: openAssistant.providerID, modelID: openAssistant.modelID },
+                        })
                       : resolveAgentModel(validatedRuntimeContract?.identity.baseRole ?? lastUser.agent, {
                           sessionID,
                           explicitModel: lastUser.model,
@@ -3434,6 +3455,16 @@ export namespace SessionLoop {
                     ? currentUnacceptedInputBatch(msgs, lastUser, deliver)
                     : (failedAcceptedInputBatch(msgs, attachedTargets, lastUser.id) ??
                       currentUnacceptedInputBatch(msgs, lastUser, deliver))
+                const currentConfig = await EffectiveConfig.effective({ sessionID })
+                if (!activationID) {
+                  taskRootTurnSelection = undefined
+                } else if (taskRootTurnSelection?.activationID !== activationID) {
+                  if (openAssistant) {
+                    throw new Error(`Task-root activation ${activationID} lost its open assistant's model selection`)
+                  }
+                  taskRootTurnSelection = { activationID, apply: EffectiveConfig.bindTurnModelSelection(currentConfig) }
+                }
+                const config = taskRootTurnSelection?.apply(currentConfig) ?? currentConfig
                 turn = await processTurn({
                   step,
                   sessionID,
@@ -3443,6 +3474,8 @@ export namespace SessionLoop {
                   lastFinished,
                   acceptedInputMessageIDs,
                   model,
+                  config,
+                  taskRootAssistant,
                   abort,
                 })
               }

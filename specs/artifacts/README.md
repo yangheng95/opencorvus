@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [Task 跟进模型回执与活动轮次模型证据](2026-11-10-task-operator-model-and-active-turn/README.md)
 - [Task 跟进重发复用已接受的消息与轮次证据](2026-11-10-task-operator-follow-up-replay/README.md)
 - [主输入区区分消息接收未确认与发送前失败证据](2026-11-10-composer-delivery-uncertain-feedback/README.md)
 - [Mission 已接受请求在模型目录变更后的重放证据](2026-11-10-mission-accepted-wake-catalog-replay/README.md)
