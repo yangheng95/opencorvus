@@ -372,7 +372,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
   const aboutTechnicalRows = createMemo(() => {
     const config = appStore.config
     const rows: Array<[string, string]> = [
-      [t("about.rt_core"), (config as any)?.version || t("about.rt_unavailable")],
+      [t("about.rt_core"), appStore.coreVersion || t("about.rt_unavailable")],
       [t("about.rt_server"), settingsStore.serverUrl || "-"],
       [t("about.rt_pid"), typeof appStore.serverPid === "number" ? String(appStore.serverPid) : "-"],
       [t("about.rt_directory"), settingsStore.directory || "-"],

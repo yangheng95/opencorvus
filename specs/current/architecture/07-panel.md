@@ -5191,7 +5191,8 @@ their independent presentation even when local call count is zero.
 About presents product identity, a concise runtime status summary and desktop
 updates first; exact server and workspace facts plus keyboard shortcuts remain
 available in disclosures. The runtime summary names the current host transport
-in the interface language while retaining its technical identity. Usage gives
+in the interface language while retaining its technical identity. The Core row
+displays the version from the current server's health probe verbatim. Usage gives
 the measured Token total and selected
 calendar period one dominant summary, keeps supporting metrics compact, and
 preserves official Provider reconciliation as a separate compare-only section.

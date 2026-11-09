@@ -83,7 +83,7 @@ export interface AppState {
   /** Monotonic counter incremented on each locale reload; used to sequence async loads */
   localeSeq: number
   // ── App info ──
-  /** Version string reported by the opencorvus core server */
+  /** Version reported by the current server's healthy probe; cleared on disconnect or authority change. */
   coreVersion: string
   /** Runtime-resolved on-disk paths the engine is using. Populated by
    *  /global/health response so debug tooling (task debug blob, support

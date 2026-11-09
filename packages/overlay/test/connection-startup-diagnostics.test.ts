@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from "bun:test"
 
-import { configure } from "../src/services/api"
+import { captureApiAuthority, configure } from "../src/services/api"
 import {
   HOST_CAPABILITIES,
   type HostTransport,
@@ -149,7 +149,7 @@ describe("managed server startup diagnostics", () => {
       },
       async request() {
         await healthPending
-        return { paths: { database: "db", data: "data", home: "home" } }
+        return { healthy: true, version: "local", paths: { database: "db", data: "data", home: "home" } }
       },
     })
     setConnectionStatus("online")
@@ -160,7 +160,45 @@ describe("managed server startup diagnostics", () => {
     expect(appStore.connectionStatus).toBe("online")
     releaseHealth()
     expect(await probe).toBe(true)
-    expect(appStore.connectionStatus).toBe("online")
+    expect(appStore).toMatchObject({ connectionStatus: "online", connected: true, coreVersion: "local" })
+  })
+
+  test("health publishes the exact current endpoint version when an earlier probe settles later", async () => {
+    const { checkConnection } = await import("../src/services/connection")
+    const firstUrl = "http://first.invalid"
+    const secondUrl = "http://second.invalid"
+    applySettings({ ...DEFAULT_SETTINGS, autoServer: false, serverUrl: firstUrl })
+    configure({ serverUrl: firstUrl })
+    const first = captureApiAuthority()
+    let markDispatched!: () => void
+    let releaseFirst!: () => void
+    const dispatched = new Promise<void>((resolve) => { markDispatched = resolve })
+    const firstPending = new Promise<void>((resolve) => { releaseFirst = resolve })
+    installTransport({
+      async request(request) {
+        const previous = request.authority?.revision === first.revision
+        if (previous) {
+          markDispatched()
+          await firstPending
+        }
+        return {
+          healthy: true,
+          version: previous ? "0.1.48" : "0.1.49+new",
+          paths: { database: "db", data: "data", home: "home" },
+        }
+      },
+    })
+    const previousProbe = checkConnection({ authority: first })
+    await dispatched
+    configure({ serverUrl: secondUrl })
+    const current = captureApiAuthority()
+    try {
+      expect(await checkConnection({ authority: current })).toBe(true)
+    } finally {
+      releaseFirst()
+      await previousProbe
+    }
+    expect(appStore).toMatchObject({ connectionStatus: "online", connected: true, coreVersion: "0.1.49+new" })
   })
 
   test("failed background health probe still transitions online state to offline", async () => {

@@ -15,9 +15,11 @@ import {
   captureApiAuthority,
   assertApiAuthorityCurrent,
   isApiAuthorityCurrent,
+  onAuthChange,
   renewApiAuthority,
   type ApiAuthority,
 } from "./api"
+import type { GlobalHealthResponse } from "@opencorvus-ai/sdk"
 import { batch } from "solid-js"
 import { appStore, setAppStore, setConnectionStatus } from "../store/app"
 import { settingsStore, setSettingsStore, saveSettings } from "../store/settings"
@@ -32,6 +34,8 @@ import { retireComposerModel } from "./composer-model"
 // ── Helpers ──
 
 const MANAGED_SERVER_DIAGNOSTIC_ID = "system:managed-server"
+
+onAuthChange(() => setAppStore("coreVersion", ""))
 
 function wait(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
@@ -269,7 +273,10 @@ export async function checkConnection(options: CheckConnectionOptions = {}): Pro
 
   for (let i = 0; i < attempts; i++) {
     try {
-      const health: any = await apiJson("global/health", { signal: AbortSignal.timeout(5000), authority })
+      const health = await apiJson<GlobalHealthResponse>("global/health", {
+        signal: AbortSignal.timeout(5000),
+        authority,
+      })
       if (!isApiAuthorityCurrent(authority)) return false
       const paths = health?.paths
       if (
@@ -288,7 +295,10 @@ export async function checkConnection(options: CheckConnectionOptions = {}): Pro
             : "database unavailable"
         throw new Error(`OpenCorvus health probe reported an unavailable database: ${detail}`)
       }
-      setConnectionStatus("online")
+      batch(() => {
+        setAppStore("coreVersion", health?.healthy === true && typeof health.version === "string" ? health.version : "")
+        setConnectionStatus("online")
+      })
       options.onHealthy?.(authority)
       return true
     } catch (e) {
@@ -301,7 +311,10 @@ export async function checkConnection(options: CheckConnectionOptions = {}): Pro
   }
 
   if (!isApiAuthorityCurrent(authority)) return false
-  setConnectionStatus("offline")
+  batch(() => {
+    setAppStore("coreVersion", "")
+    setConnectionStatus("offline")
+  })
   console.warn("[connection] connection failed", String(lastError))
   if (managed) {
     reportManagedServerFailure({ info: managedInfo, probeError: lastError })

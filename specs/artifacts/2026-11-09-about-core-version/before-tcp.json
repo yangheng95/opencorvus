@@ -1,0 +1,32 @@
+{
+  "phase": "before",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/global/health",
+      "operationId": "global.health",
+      "status": 200,
+      "schemaValid": true
+    }
+  ],
+  "health": {
+    "healthy": true,
+    "version": "local"
+  },
+  "project": {
+    "id": "prj_hh2T29wml7VQg3iVNKnK",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b54\\project-before"
+  },
+  "listedProjectCount": 1
+}

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [关于页 Core 版本证据](2026-11-09-about-core-version/README.md)
 - [关于页运行宿主证据](2026-11-09-about-runtime-language/README.md)
 - [设置搜索方向键证据](2026-11-09-settings-search-keyboard-entry/README.md)
 - [用量自然周期日期证据](2026-11-09-usage-natural-period-date-range/README.md)
