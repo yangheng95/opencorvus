@@ -1,0 +1,100 @@
+{
+  "phase": "before",
+  "step": "base",
+  "listing": {
+    "": {
+      "requestID": "32c71499-9bf6-4966-b83e-74067c1f1603",
+      "names": [
+        ".opencorvus",
+        "conflict-source",
+        "dest",
+        "drag-target",
+        "partial",
+        "search-target",
+        ".gitattributes",
+        ".gitignore"
+      ]
+    },
+    "dest": {
+      "requestID": "ff84fcc6-48ce-4d74-8731-cc311338e5d4",
+      "names": [
+        "alpha.txt",
+        "beta.txt",
+        "neighbor.txt"
+      ]
+    },
+    "conflict-source": {
+      "requestID": "88550077-6cb9-4468-9505-ea00bb5bcdc1",
+      "names": [
+        "omega.txt"
+      ]
+    },
+    "partial": {
+      "requestID": "47d75500-8b3c-4970-b9f9-5fb9f71dd21e",
+      "names": [
+        "gamma.txt",
+        "omega.txt"
+      ]
+    },
+    "drag-target": {
+      "requestID": "0038d53c-0dac-4637-a325-c71499ad76a7",
+      "names": [
+        "anchor.txt",
+        "drag.txt"
+      ]
+    },
+    "search-target": {
+      "requestID": "7ed3710f-40f5-489a-9d06-e97974c97ffe",
+      "names": [
+        "anchor.txt"
+      ]
+    }
+  },
+  "files": {
+    "dest/neighbor.txt": {
+      "requestID": "4c50515d-0c15-464f-80cd-ff50db668add",
+      "length": 28,
+      "content": "Owned destination neighbor.\n"
+    },
+    "dest/alpha.txt": {
+      "requestID": "8c8b45a6-2310-4c16-9d2b-d24b21eacaf6",
+      "length": 37,
+      "content": "Alpha owned move source.\r\nLine two.\r\n"
+    },
+    "dest/beta.txt": {
+      "requestID": "d692c69d-1ff8-4706-b901-4a5e1ffe97ab",
+      "length": 37,
+      "content": "Beta owned move source.\n第二行。\n"
+    },
+    "conflict-source/omega.txt": {
+      "requestID": "9d12c510-17b8-4c2d-9ac9-6bd61a69368e",
+      "length": 27,
+      "content": "Owned second partial move.\n"
+    },
+    "partial/gamma.txt": {
+      "requestID": "4a53e503-03ab-4021-a560-a283bf28a68f",
+      "length": 27,
+      "content": "Owned first partial move.\r\n"
+    },
+    "partial/omega.txt": {
+      "requestID": "c0f114b9-9152-4b00-95ea-bfc7c7b9a750",
+      "length": 41,
+      "content": "Owned conflicting destination original.\r\n"
+    },
+    "drag-target/anchor.txt": {
+      "requestID": "3af73a87-5b06-4e81-b79a-6776af2121fc",
+      "length": 29,
+      "content": "Owned pointer target anchor.\n"
+    },
+    "drag-target/drag.txt": {
+      "requestID": "8a1d1d88-bc03-404b-8ee9-9f6c3cf70597",
+      "length": 27,
+      "content": "Owned pointer move source.\n"
+    },
+    "search-target/anchor.txt": {
+      "requestID": "bbbef7e4-58c9-4c6c-8f7b-07ca4eff76e1",
+      "length": 28,
+      "content": "Owned search target anchor.\n"
+    }
+  }
+}

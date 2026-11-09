@@ -1,0 +1,100 @@
+{
+  "phase": "after",
+  "step": "search",
+  "listing": {
+    "": {
+      "requestID": "0addf5dc-eddb-4f0b-8be0-fda3701e6ef6",
+      "names": [
+        ".opencorvus",
+        "conflict-source",
+        "dest",
+        "drag-target",
+        "partial",
+        "search-target",
+        ".gitattributes",
+        ".gitignore"
+      ]
+    },
+    "dest": {
+      "requestID": "d96bf01f-9a0d-4920-9058-6c736047880d",
+      "names": [
+        "neighbor.txt"
+      ]
+    },
+    "conflict-source": {
+      "requestID": "c177ac34-9a29-4a04-bd56-cdd92561753d",
+      "names": [
+        "omega.txt"
+      ]
+    },
+    "partial": {
+      "requestID": "c1ac7624-a9d7-4a29-b712-28dfdd79246f",
+      "names": [
+        "gamma.txt",
+        "omega.txt"
+      ]
+    },
+    "drag-target": {
+      "requestID": "55a84934-4d6b-453d-aa16-d59cb2eef864",
+      "names": [
+        "anchor.txt",
+        "drag.txt"
+      ]
+    },
+    "search-target": {
+      "requestID": "9e9405d4-ffbd-454d-a07c-76f1db66caa2",
+      "names": [
+        "alpha.txt",
+        "anchor.txt",
+        "beta.txt"
+      ]
+    }
+  },
+  "files": {
+    "dest/neighbor.txt": {
+      "requestID": "2eb7d858-05b9-473c-b2a0-637499f94cc4",
+      "length": 28,
+      "content": "Owned destination neighbor.\n"
+    },
+    "conflict-source/omega.txt": {
+      "requestID": "9532b5a3-29ca-46d8-b636-53e45d33e910",
+      "length": 27,
+      "content": "Owned second partial move.\n"
+    },
+    "partial/gamma.txt": {
+      "requestID": "ad31ab84-b5de-4dbc-baf3-cd684bd13520",
+      "length": 27,
+      "content": "Owned first partial move.\r\n"
+    },
+    "partial/omega.txt": {
+      "requestID": "a9100d78-23e5-4ccd-9510-fdd006e641fd",
+      "length": 41,
+      "content": "Owned conflicting destination original.\r\n"
+    },
+    "drag-target/anchor.txt": {
+      "requestID": "b92daf8f-3b1b-43b1-86f9-e588e09db79d",
+      "length": 29,
+      "content": "Owned pointer target anchor.\n"
+    },
+    "drag-target/drag.txt": {
+      "requestID": "2b2d244a-d06e-4c53-8a68-95c42ed14b98",
+      "length": 27,
+      "content": "Owned pointer move source.\n"
+    },
+    "search-target/anchor.txt": {
+      "requestID": "4a704b08-935b-4637-8c7b-b76cc9d11a38",
+      "length": 28,
+      "content": "Owned search target anchor.\n"
+    },
+    "search-target/alpha.txt": {
+      "requestID": "dda7c697-3daa-4ca5-a406-b49720641485",
+      "length": 37,
+      "content": "Alpha owned move source.\r\nLine two.\r\n"
+    },
+    "search-target/beta.txt": {
+      "requestID": "e320b1f4-d99b-4675-a18c-c117dbfc23d3",
+      "length": 37,
+      "content": "Beta owned move source.\n第二行。\n"
+    }
+  }
+}

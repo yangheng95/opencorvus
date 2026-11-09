@@ -1158,19 +1158,14 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   async function moveSelectionsToDirectory(
     items: ExplorerSelection[],
-    targetDirInput: string,
-    capturedScope?: ExplorerOperationScope,
+    targetDir: string,
+    scope: ExplorerOperationScope,
+    focus?: ReturnType<typeof capturePathMutationFocus>,
   ): Promise<void> {
     if (items.length === 0) {
       setMutationValidation("selection")
       return
     }
-    const scope = capturedScope ?? currentOperationScope()
-    if (!scope) {
-      setMutationValidation("directory")
-      return
-    }
-    const targetDir = normalizeExplorerPath(targetDirInput)
     const targets = topLevelActionSelections(items)
     if (!canPlaceSelectionsInDirectory(targets, targetDir)) {
       setMutationValidation("move-target")
@@ -1191,7 +1186,11 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
           break
         }
       }
-      if (moved.length > 0) outcome.refresh = await applyMoveResults(moved, scope, ownsOperation)
+      const lastCompleted = moved.at(-1)
+      if (lastCompleted) {
+        outcome.refresh = await applyMoveResults(moved, scope, ownsOperation)
+        focus?.restore(lastCompleted.path, outcome.refresh, ownsOperation)
+      }
     })
   }
 
@@ -1621,6 +1620,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       setMutationValidation("directory")
       return
     }
+    const focus = capturePathMutationFocus(scope)
     const result = await showAppDialog({
       kind: "file-move-many",
       title: t("explorer.move"),
@@ -1632,6 +1632,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputRequiredMessage: t("explorer.name_required"),
       okLabel: t("explorer.move"),
       cancel: true,
+      returnFocusTarget: focus.returnFocusTarget,
     })
     if (!result.confirmed) return
     if (!ownsExplorerOperation(scope)) return
@@ -1641,7 +1642,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       return
     }
     const targetDir = normalizeExplorerPath(targetDirInput)
-    await moveSelectionsToDirectory(items, targetDir, scope)
+    await moveSelectionsToDirectory(items, targetDir, scope, focus)
   }
 
   async function copySelectionsToDirectory(

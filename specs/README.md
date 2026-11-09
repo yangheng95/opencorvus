@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [批量移动后的键盘续接](records/2026-11/2026-11-09-file-multi-move-keyboard-continuity.md)
 - [批量复制后的键盘续接](records/2026-11/2026-11-09-file-multi-copy-keyboard-continuity.md)
 - [定时日历重新选择同一天可补全日期](records/2026-11/2026-11-09-scheduled-calendar-draft-reselection.md)
 - [定时编辑器的鼠标时钟选择](records/2026-11/2026-11-09-scheduled-clock-pointer-picker.md)

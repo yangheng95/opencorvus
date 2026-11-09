@@ -1,0 +1,150 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b82\\project-before",
+    "head": "be3f547675d569d9f3d4ffe9f51c57a33101959c",
+    "finalMoves": {
+      "alpha.txt": "dest/alpha.txt",
+      "beta.txt": "dest/beta.txt",
+      "conflict-source/gamma.txt": "partial/gamma.txt",
+      "drag.txt": "drag-target/drag.txt"
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "moveWrites": [
+      {
+        "requestID": "d0a9944d-898a-48af-8bd7-68199864b899",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 98
+      },
+      {
+        "requestID": "68d9bcea-fc72-43d9-97e8-1bd7b2d82e78",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 72
+      },
+      {
+        "requestID": "521fcb72-2e48-485e-a3be-c3e19948951c",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 69
+      },
+      {
+        "requestID": "7d644a81-1468-48f6-aa55-7d416fabd4c7",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 409,
+        "duration": 5
+      },
+      {
+        "requestID": "88488fc9-0bbf-40a1-82f9-0f68ca815eab",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 71
+      }
+    ],
+    "trackedDiff": [
+      "D\talpha.txt",
+      "D\tbeta.txt",
+      "D\tconflict-source/gamma.txt",
+      "D\tdrag.txt"
+    ]
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b82\\project-after",
+    "head": "be3f547675d569d9f3d4ffe9f51c57a33101959c",
+    "finalMoves": {
+      "alpha.txt": "search-target/alpha.txt",
+      "beta.txt": "search-target/beta.txt",
+      "conflict-source/gamma.txt": "partial/gamma.txt",
+      "drag.txt": "drag-target/drag.txt"
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "moveWrites": [
+      {
+        "requestID": "a4113b45-bf06-49be-9be7-bb1d6d78dfcd",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 116
+      },
+      {
+        "requestID": "1899280e-364f-4f27-9665-0658117a00b4",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 66
+      },
+      {
+        "requestID": "6962240f-1926-479a-9bf6-44e81e77a332",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 69
+      },
+      {
+        "requestID": "ef3e4173-4cfb-4cfd-a889-dd0e1ffce487",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 409,
+        "duration": 5
+      },
+      {
+        "requestID": "6c5ad62f-ba7b-48a1-8385-97b8bb405adc",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 66
+      },
+      {
+        "requestID": "7b75c5ec-02c4-45f5-85f7-364ad93a38b2",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 67
+      },
+      {
+        "requestID": "f9f938f2-2092-453f-898b-19189936c4b1",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 72
+      }
+    ],
+    "trackedDiff": [
+      "D\talpha.txt",
+      "D\tbeta.txt",
+      "D\tconflict-source/gamma.txt",
+      "D\tdrag.txt"
+    ]
+  }
+}

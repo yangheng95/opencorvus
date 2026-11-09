@@ -1,0 +1,32 @@
+{
+  "before": {
+    "files": {
+      "alpha.txt": "Alpha owned move source.\r\nLine two.\r\n",
+      "beta.txt": "Beta owned move source.\n第二行。\n",
+      "dest/neighbor.txt": "Owned destination neighbor.\n",
+      "conflict-source/gamma.txt": "Owned first partial move.\r\n",
+      "conflict-source/omega.txt": "Owned second partial move.\n",
+      "partial/omega.txt": "Owned conflicting destination original.\r\n",
+      "search-target/anchor.txt": "Owned search target anchor.\n",
+      "drag.txt": "Owned pointer move source.\n",
+      "drag-target/anchor.txt": "Owned pointer target anchor.\n"
+    },
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b82\\project-before",
+    "head": "be3f547675d569d9f3d4ffe9f51c57a33101959c"
+  },
+  "after": {
+    "files": {
+      "alpha.txt": "Alpha owned move source.\r\nLine two.\r\n",
+      "beta.txt": "Beta owned move source.\n第二行。\n",
+      "dest/neighbor.txt": "Owned destination neighbor.\n",
+      "conflict-source/gamma.txt": "Owned first partial move.\r\n",
+      "conflict-source/omega.txt": "Owned second partial move.\n",
+      "partial/omega.txt": "Owned conflicting destination original.\r\n",
+      "search-target/anchor.txt": "Owned search target anchor.\n",
+      "drag.txt": "Owned pointer move source.\n",
+      "drag-target/anchor.txt": "Owned pointer target anchor.\n"
+    },
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b82\\project-after",
+    "head": "be3f547675d569d9f3d4ffe9f51c57a33101959c"
+  }
+}
