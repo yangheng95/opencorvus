@@ -1071,7 +1071,10 @@ Explorer exposes its existing file/folder creation commands through a visible
 New menu beside search. It uses the same current selection and project-scoped
 createEntry operation as directory/background context menus. The trigger describes
 the target directory and the existing naming dialog confirms it before writing:
-a selected directory, a selected file's parent, or the project root. Busy and
+a selected directory, a selected file's parent, or the project root. Create
+and Rename validate the unmodified name using the same single-component rules
+as the file service. A name cannot change the selected or original parent;
+the Move command is the explicit path-changing operation. Busy and
 navigation-reservation boundaries, mutation feedback, refresh and post-create
 editor admission remain owned by that existing operation.
 The Files tool identifies its current Project above the existing toolbar using

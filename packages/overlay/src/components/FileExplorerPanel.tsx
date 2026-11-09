@@ -11,6 +11,7 @@ import {
   untrack,
   type Accessor,
 } from "solid-js"
+import { classifyEntryBasename } from "@opencorvus-ai/util/entry-basename"
 import { ContextMenu } from "./ui/ContextMenu"
 import { DropdownMenu } from "./ui/DropdownMenu"
 import { dialogOpeningFocusTarget } from "./ui/Dialog"
@@ -42,7 +43,7 @@ import {
   type FileRefreshTarget,
   type FileUploadResult,
 } from "../services/file-workbench"
-import { classifyProjectPathInput, normalizeProjectFilePath } from "../utils/server-path"
+import { classifyProjectPathInput, isWindowsPath, normalizeProjectFilePath } from "../utils/server-path"
 import { projectDisplayName } from "../utils/project-directory"
 import { currentUIScale } from "../utils/layout-tokens"
 import { localeTag, t, tc } from "../utils/i18n"
@@ -588,6 +589,20 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   function validateTransferDestination(path: string, scope: FileOperationScope): string | undefined {
     if (classifyProjectPathInput(path, scope.directory) === "rooted") return t("explorer.destination_relative_required")
+  }
+
+  function validateEntryName(name: string, scope: FileOperationScope): string | undefined {
+    switch (classifyEntryBasename(name, isWindowsPath(scope.directory))) {
+      case "empty":
+      case "path":
+        return t("explorer.entry_name_only")
+      case "windows-invalid":
+        return t("explorer.entry_name_windows_invalid")
+      case "windows-reserved":
+        return t("explorer.entry_name_windows_reserved")
+      case "valid":
+        return
+    }
   }
 
   function joinExplorerPath(parent: string, child: string): string {
@@ -1476,7 +1491,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputLabel: type === "file" ? t("explorer.file_name") : t("explorer.folder_name"),
       inputPlaceholder: type === "file" ? t("explorer.file_name_placeholder") : t("explorer.folder_name_placeholder"),
       inputRequired: true,
-      inputRequiredMessage: t("explorer.name_required"),
+      inputRequiredMessage: t("explorer.entry_name_only"),
+      validateInput: (value) => validateEntryName(value, scope),
       okLabel: type === "file" ? t("explorer.create_file") : t("explorer.create_folder"),
       cancel: true,
       returnFocusTarget: focus?.returnFocusTarget,
@@ -1582,7 +1598,8 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputLabel: t("explorer.new_name"),
       inputValue: item.name,
       inputRequired: true,
-      inputRequiredMessage: t("explorer.name_required"),
+      inputRequiredMessage: t("explorer.entry_name_only"),
+      validateInput: (value) => validateEntryName(value, scope),
       okLabel: t("explorer.rename"),
       cancel: true,
       returnFocusTarget: focus.returnFocusTarget,

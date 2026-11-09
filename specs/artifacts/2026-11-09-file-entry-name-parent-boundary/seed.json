@@ -1,0 +1,22 @@
+{
+  "before": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b88\\project-before",
+    "head": "8f6206afd799723d9abe2c63f45aff88cc07bdfb",
+    "files": {
+      "scope-target/rename-source.txt": "isolated rename original\r\n",
+      "scope-target/anchor.txt": "selected target\n",
+      "sibling/anchor.txt": "separate target\n",
+      "untouched.txt": "original root file\n"
+    }
+  },
+  "after": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b88\\project-after",
+    "head": "8f6206afd799723d9abe2c63f45aff88cc07bdfb",
+    "files": {
+      "scope-target/rename-source.txt": "isolated rename original\r\n",
+      "scope-target/anchor.txt": "selected target\n",
+      "sibling/anchor.txt": "separate target\n",
+      "untouched.txt": "original root file\n"
+    }
+  }
+}

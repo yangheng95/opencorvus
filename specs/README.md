@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [新建和重命名的目录边界](records/2026-11/2026-11-09-file-entry-name-parent-boundary.md)
 - [文件转移的项目相对目的路径](records/2026-11/2026-11-09-file-transfer-project-relative-destination.md)
 - [菜单关闭后的键盘交接](records/2026-11/2026-11-09-menu-close-keyboard-handoff.md)
 - [批量文件确认来源路径](records/2026-11/2026-11-09-file-batch-transfer-source-review.md)

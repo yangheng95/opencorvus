@@ -1,0 +1,62 @@
+{
+  "phase": "before",
+  "listing": {
+    "": {
+      "requestID": "271497b6-d616-49fc-a790-0a972b789503",
+      "names": [
+        ".opencorvus",
+        "scope-target",
+        "sibling",
+        ".gitattributes",
+        ".gitignore",
+        "untouched.txt"
+      ]
+    },
+    "scope-target": {
+      "requestID": "b88edb63-48f3-4472-8e7e-557079e77ac6",
+      "names": [
+        "anchor.txt"
+      ]
+    },
+    "sibling": {
+      "requestID": "f800f488-34d5-4e58-a73d-ec35f9b858a6",
+      "names": [
+        "wrong-folder",
+        "anchor.txt",
+        "wrong-file.txt",
+        "wrong-rename.txt"
+      ]
+    },
+    "sibling/wrong-folder": {
+      "requestID": "12fd499a-4b88-41ed-bbd9-7d4186939a2a",
+      "names": []
+    }
+  },
+  "files": {
+    "sibling/wrong-rename.txt": {
+      "requestID": "f4a54c57-7dfb-49e1-8ff1-676f4de586a6",
+      "length": 26,
+      "content": "isolated rename original\r\n"
+    },
+    "scope-target/anchor.txt": {
+      "requestID": "46200aaa-dea3-4b86-907c-74b02b1d39a6",
+      "length": 16,
+      "content": "selected target\n"
+    },
+    "sibling/anchor.txt": {
+      "requestID": "38e763af-d4f5-4151-9207-1b40184f758d",
+      "length": 16,
+      "content": "separate target\n"
+    },
+    "untouched.txt": {
+      "requestID": "db3c1607-f7dc-4f3d-a39a-777e4103351a",
+      "length": 19,
+      "content": "original root file\n"
+    },
+    "sibling/wrong-file.txt": {
+      "requestID": "c0d840f1-1050-4a05-9c11-77f09f705c98",
+      "length": 0,
+      "content": ""
+    }
+  }
+}

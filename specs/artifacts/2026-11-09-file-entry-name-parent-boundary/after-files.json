@@ -1,0 +1,62 @@
+{
+  "phase": "after",
+  "listing": {
+    "": {
+      "requestID": "0d322f4e-ba14-41a2-894b-d64504501bfc",
+      "names": [
+        ".opencorvus",
+        "scope-target",
+        "sibling",
+        ".gitattributes",
+        ".gitignore",
+        "untouched.txt"
+      ]
+    },
+    "scope-target": {
+      "requestID": "19be9412-ba0d-465a-afd5-2b6bec2f35d0",
+      "names": [
+        "kept folder",
+        "anchor.txt",
+        "新建 文件.txt",
+        "重命名 原稿.txt"
+      ]
+    },
+    "sibling": {
+      "requestID": "122f3ba4-215f-45bd-93d1-4334dd9a7abf",
+      "names": [
+        "anchor.txt"
+      ]
+    },
+    "scope-target/kept folder": {
+      "requestID": "162d59d8-7598-49cd-86c0-6c545a3720c4",
+      "names": []
+    }
+  },
+  "files": {
+    "scope-target/重命名 原稿.txt": {
+      "requestID": "9d1617b7-97a7-4b2b-8267-ffe2cd8d6a48",
+      "length": 26,
+      "content": "isolated rename original\r\n"
+    },
+    "scope-target/anchor.txt": {
+      "requestID": "26eae7a3-98a8-4dcd-8d88-c738e4f8d6ff",
+      "length": 16,
+      "content": "selected target\n"
+    },
+    "sibling/anchor.txt": {
+      "requestID": "3d5628c0-42d6-49e9-a262-f61924b537b7",
+      "length": 16,
+      "content": "separate target\n"
+    },
+    "untouched.txt": {
+      "requestID": "8171344e-f1aa-4861-b4de-deef98cd1c2b",
+      "length": 19,
+      "content": "original root file\n"
+    },
+    "scope-target/新建 文件.txt": {
+      "requestID": "32d9fb3c-c14e-4265-81ed-8d42e39500ed",
+      "length": 0,
+      "content": ""
+    }
+  }
+}

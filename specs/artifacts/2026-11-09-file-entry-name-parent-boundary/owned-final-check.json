@@ -1,0 +1,118 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b88\\project-before",
+    "head": "8f6206afd799723d9abe2c63f45aff88cc07bdfb",
+    "fileLengths": {
+      "sibling/wrong-rename.txt": 26,
+      "scope-target/anchor.txt": 16,
+      "sibling/anchor.txt": 16,
+      "untouched.txt": 19
+    },
+    "folder": "sibling/wrong-folder",
+    "renamed": "sibling/wrong-rename.txt",
+    "created": "sibling/wrong-file.txt",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "requests": [
+      {
+        "requestID": "6c19be22-ce36-4b08-9c1b-6e09db3e88a6",
+        "method": "POST",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 60
+      },
+      {
+        "requestID": "0f34997b-4b0e-4621-aaad-953162478d1a",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 89
+      },
+      {
+        "requestID": "a5ac4067-877c-4c7a-b531-9894124a0a31",
+        "method": "POST",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 46
+      },
+      {
+        "requestID": "924af5b2-2e35-43e1-80ab-95f98e6a2c70",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 165
+      }
+    ],
+    "trackedDiff": [
+      "D\tscope-target/rename-source.txt"
+    ]
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b88\\project-after",
+    "head": "8f6206afd799723d9abe2c63f45aff88cc07bdfb",
+    "fileLengths": {
+      "scope-target/\u91cd\u547d\u540d \u539f\u7a3f.txt": 26,
+      "scope-target/anchor.txt": 16,
+      "sibling/anchor.txt": 16,
+      "untouched.txt": 19
+    },
+    "folder": "scope-target/kept folder",
+    "renamed": "scope-target/\u91cd\u547d\u540d \u539f\u7a3f.txt",
+    "created": "scope-target/\u65b0\u5efa \u6587\u4ef6.txt",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "requests": [
+      {
+        "requestID": "7d9f4254-84e0-41c7-8eda-fc8f1e7c7ce2",
+        "method": "POST",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 62
+      },
+      {
+        "requestID": "8ac1f58e-0501-456b-9d15-6212f3d276e8",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 86
+      },
+      {
+        "requestID": "4ca9f22a-e42d-4658-af6f-761f73c80b0a",
+        "method": "POST",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 57
+      },
+      {
+        "requestID": "e95190d8-63c2-46df-bfae-ea47aba5a750",
+        "method": "GET",
+        "path": "/file/content",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 154
+      }
+    ],
+    "trackedDiff": [
+      "D\tscope-target/rename-source.txt"
+    ]
+  }
+}
