@@ -1,0 +1,196 @@
+{
+  "initial": {
+    "focus": "",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-029",
+      "opencorvus-b123-after-reading-030",
+      "opencorvus-b123-after-reading-031",
+      "opencorvus-b123-after-reading-032"
+    ],
+    "top": 2885,
+    "total": 3432
+  },
+  "older": {
+    "focus": "",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-017",
+      "opencorvus-b123-after-reading-018",
+      "opencorvus-b123-after-reading-019",
+      "opencorvus-b123-after-reading-020",
+      "opencorvus-b123-after-reading-021"
+    ],
+    "top": 1765,
+    "total": 3792
+  },
+  "whilePending": {
+    "focus": "btnLogRefresh",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-012",
+      "opencorvus-b123-after-reading-013",
+      "opencorvus-b123-after-reading-014",
+      "opencorvus-b123-after-reading-015"
+    ],
+    "top": 1245,
+    "total": 3992
+  },
+  "pendingControl": [
+    "\t\t\t\t73 button (disabled) Refreshing…, ID: btnLogRefresh",
+    "The focused UI element is 73 button (disabled) Refreshing…, ID: btnLogRefresh"
+  ],
+  "historyRefreshed": {
+    "focus": "btnLogRefresh",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-012",
+      "opencorvus-b123-after-reading-013",
+      "opencorvus-b123-after-reading-014",
+      "opencorvus-b123-after-reading-015"
+    ],
+    "top": 1245,
+    "total": 4696
+  },
+  "returnedToTail": {
+    "focus": "btnLogRefresh",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-037",
+      "opencorvus-b123-after-reading-038",
+      "opencorvus-b123-after-reading-039",
+      "opencorvus-b123-after-reading-040"
+    ],
+    "top": 4469,
+    "total": 5016
+  },
+  "followedNew": {
+    "focus": "btnLogRefresh",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-043",
+      "opencorvus-b123-after-reading-044",
+      "opencorvus-b123-after-reading-045",
+      "opencorvus-b123-after-reading-046"
+    ],
+    "top": 5237,
+    "total": 5784
+  },
+  "beforeNarrow": {
+    "focus": "btnLogRefresh",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-032",
+      "opencorvus-b123-after-reading-033",
+      "opencorvus-b123-after-reading-034",
+      "opencorvus-b123-after-reading-035"
+    ],
+    "top": 3797,
+    "total": 5784
+  },
+  "narrow": {
+    "focus": "",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-043",
+      "opencorvus-b123-after-reading-044",
+      "opencorvus-b123-after-reading-045",
+      "opencorvus-b123-after-reading-046"
+    ],
+    "top": 365,
+    "total": 912
+  },
+  "cleared": {
+    "focus": "",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-045",
+      "opencorvus-b123-after-reading-046"
+    ],
+    "top": 17157,
+    "total": 17704
+  },
+  "beforeLevel": {
+    "focus": "logLevelFilter-trigger",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-032",
+      "opencorvus-b123-after-reading-033",
+      "opencorvus-b123-after-reading-034",
+      "opencorvus-b123-after-reading-035"
+    ],
+    "top": 3317,
+    "total": 5304
+  },
+  "warningLevel": {
+    "focus": "logLevelFilter-trigger",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-043",
+      "opencorvus-b123-after-reading-044",
+      "opencorvus-b123-after-reading-045",
+      "opencorvus-b123-after-reading-046"
+    ],
+    "top": 4757,
+    "total": 5304
+  },
+  "afterLevel": {
+    "focus": "logLevelFilter-trigger",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-043",
+      "opencorvus-b123-after-reading-044",
+      "opencorvus-b123-after-reading-045",
+      "opencorvus-b123-after-reading-046"
+    ],
+    "top": 4757,
+    "total": 5304
+  },
+  "zhReopened": {
+    "focus": "",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-043",
+      "opencorvus-b123-after-reading-044",
+      "opencorvus-b123-after-reading-045",
+      "opencorvus-b123-after-reading-046"
+    ],
+    "top": 4117,
+    "total": 4664
+  },
+  "zhHistory": {
+    "focus": "",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-031",
+      "opencorvus-b123-after-reading-032",
+      "opencorvus-b123-after-reading-033",
+      "opencorvus-b123-after-reading-034",
+      "opencorvus-b123-after-reading-035"
+    ],
+    "top": 2997,
+    "total": 5024
+  },
+  "zhFailure": [
+    "\t\t\t\t73 button 刷新, ID: btnLogRefresh",
+    "\t\t\t\t80 text 无法读取服务端日志。选择「刷新」重试。",
+    "\t\t\t\t81 button (collapsed) 详细信息, Secondary Actions: Expand",
+    "\t\t\t\t\t82 text 详细信息",
+    "The focused UI element is 73 button 刷新, ID: btnLogRefresh"
+  ],
+  "zhRecovered": {
+    "focus": "btnLogRefresh",
+    "height": 547,
+    "markers": [
+      "opencorvus-b123-after-reading-047",
+      "opencorvus-b123-after-reading-048",
+      "opencorvus-b123-after-reading-049",
+      "opencorvus-b123-after-reading-050"
+    ],
+    "top": 4469,
+    "total": 5016
+  },
+  "closed": [
+    "The focused UI element is 8 (collapsed) Description: 帮助, ID: menubar-cl-1-menubar-menu-cl-542-trigger, Secondary Actions: Expand"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "originalFiles": [
+    {
+      "phase": "before",
+      "original": "Owned log reading position before\n",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b123\\project-before",
+      "gitHead": "fd1fc2896c2eaa16c48e30c889fca70edfee7851",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ]
+    },
+    {
+      "phase": "after",
+      "original": "Owned log reading position after\n",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b123\\project-after",
+      "gitHead": "aa25a163acccca8dde19e5e57a3e60d8887119e6",
+      "status": [
+        "?? .gitattributes",
+        "?? .gitignore",
+        "?? .opencorvus/"
+      ]
+    }
+  ],
+  "portsReleased": [
+    39222,
+    39224,
+    39225
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "ac121120-6925-4b5c-8fdc-61b23b31b664",
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "requestID": "ac576755-fe1d-4e4c-9c13-ba2de8c9ba63",
+      "schemaValid": true
+    },
+    {
+      "route": "/log/tail",
+      "operationId": "log.tail",
+      "status": 200,
+      "requestID": "c4120835-437f-417f-bf0d-88a0bd5c76a3",
+      "schemaValid": true
+    }
+  ],
+  "logTail": {
+    "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b123\\profile-after\\log\\dev.log",
+    "lineCount": 243,
+    "markers": [
+      "opencorvus-b123-after-reading-001",
+      "opencorvus-b123-after-reading-002",
+      "opencorvus-b123-after-reading-003",
+      "opencorvus-b123-after-reading-004",
+      "opencorvus-b123-after-reading-005",
+      "opencorvus-b123-after-reading-006",
+      "opencorvus-b123-after-reading-007",
+      "opencorvus-b123-after-reading-008",
+      "opencorvus-b123-after-reading-009",
+      "opencorvus-b123-after-reading-010",
+      "opencorvus-b123-after-reading-011",
+      "opencorvus-b123-after-reading-012",
+      "opencorvus-b123-after-reading-013",
+      "opencorvus-b123-after-reading-014",
+      "opencorvus-b123-after-reading-015",
+      "opencorvus-b123-after-reading-016",
+      "opencorvus-b123-after-reading-017",
+      "opencorvus-b123-after-reading-018",
+      "opencorvus-b123-after-reading-019",
+      "opencorvus-b123-after-reading-020",
+      "opencorvus-b123-after-reading-021",
+      "opencorvus-b123-after-reading-022",
+      "opencorvus-b123-after-reading-023",
+      "opencorvus-b123-after-reading-024",
+      "opencorvus-b123-after-reading-025",
+      "opencorvus-b123-after-reading-026",
+      "opencorvus-b123-after-reading-027",
+      "opencorvus-b123-after-reading-028",
+      "opencorvus-b123-after-reading-029",
+      "opencorvus-b123-after-reading-030",
+      "opencorvus-b123-after-reading-031",
+      "opencorvus-b123-after-reading-032",
+      "opencorvus-b123-after-reading-033",
+      "opencorvus-b123-after-reading-034",
+      "opencorvus-b123-after-reading-035",
+      "opencorvus-b123-after-reading-036",
+      "opencorvus-b123-after-reading-037",
+      "opencorvus-b123-after-reading-038",
+      "opencorvus-b123-after-reading-039",
+      "opencorvus-b123-after-reading-040",
+      "opencorvus-b123-after-reading-041",
+      "opencorvus-b123-after-reading-042",
+      "opencorvus-b123-after-reading-043",
+      "opencorvus-b123-after-reading-044",
+      "opencorvus-b123-after-reading-045",
+      "opencorvus-b123-after-reading-046",
+      "opencorvus-b123-after-reading-047",
+      "opencorvus-b123-after-reading-048",
+      "opencorvus-b123-after-reading-049",
+      "opencorvus-b123-after-reading-050"
+    ]
+  },
+  "project": {
+    "id": "prj_hSodyhersRvE4Th9di1M",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b123\\project-after"
+  },
+  "listedProjectCount": 1
+}

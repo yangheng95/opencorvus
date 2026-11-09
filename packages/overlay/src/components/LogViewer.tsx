@@ -5,7 +5,7 @@
 // supporting helpers (parseServerLogLine, stringifyLogValue, etc., lines
 // 10795–10926).
 
-import { createEffect, createSignal, createMemo, For, onCleanup, Show } from "solid-js"
+import { createEffect, createSignal, createMemo, For, on, onCleanup, Show } from "solid-js"
 import type { JSX } from "solid-js"
 import { VList, type VListHandle } from "virtua/solid"
 import { appStore, setAppStore, filteredLogEntries } from "../store/app"
@@ -28,6 +28,7 @@ import { formatErrorDetails } from "../utils/error-details"
 export type { LogEntry, LogLevel, LogSource }
 
 const LOG_LEVEL_OPTIONS: LogLevel[] = ["debug", "info", "warn", "error"]
+const LOG_TAIL_TOLERANCE = 8
 type LogLevelSelectOption = { value: LogLevel; label: string }
 const LOG_LEVEL_SELECT_OPTIONS: LogLevelSelectOption[] = LOG_LEVEL_OPTIONS.map((level) => ({
   value: level,
@@ -270,6 +271,7 @@ export function LogViewer(props: LogViewerProps) {
   const [copyPending, setCopyPending] = createSignal(false)
   const [copyNotice, setCopyNotice] = createSignal<{ tone: "success" | "error"; message: string } | null>(null)
   let logList: VListHandle | undefined
+  let followTail = true
   let refreshGeneration = 0
   let copyGeneration = 0
   let copyNoticeTimer: ReturnType<typeof setTimeout> | undefined
@@ -415,13 +417,21 @@ export function LogViewer(props: LogViewerProps) {
     invalidateCopy()
   })
 
-  createEffect(() => {
-    if (!props.open) return
-    const count = entries().length
-    if (count > 0) {
-      queueMicrotask(() => logList?.scrollToIndex(count - 1, { align: "end" }))
-    }
-  })
+  createEffect(
+    on(
+      () => [props.open, searchQuery().trim(), appStore.logFilterLevel, entries()] as const,
+      ([open, query, level, rows], previous) => {
+        if (!open) return
+        if (!previous?.[0] || previous[1] !== query || previous[2] !== level || !rows.length) followTail = true
+        if (!followTail || !rows.length) return
+        queueMicrotask(() => {
+          if (!props.open || !followTail) return
+          const last = entries().length - 1
+          if (last >= 0) logList?.scrollToIndex(last, { align: "end" })
+        })
+      },
+    ),
+  )
 
   return (
     <Dialog
@@ -544,6 +554,9 @@ export function LogViewer(props: LogViewerProps) {
           data={entries()}
           itemSize={88}
           bufferSize={88 * 8}
+          onScroll={(offset) => {
+            if (logList) followTail = logList.scrollSize - logList.viewportSize - offset <= LOG_TAIL_TOLERANCE
+          }}
           ref={(handle) => {
             logList = handle
           }}
