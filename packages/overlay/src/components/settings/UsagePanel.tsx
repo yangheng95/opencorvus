@@ -68,25 +68,23 @@ function UsageBucketDetails(props: { tokens: number; interval: string }) {
   )
 }
 
-function UsageActivityGrid(props: { data?: UsageStatistics; period: UsagePeriod; loading: boolean }) {
+function UsageActivityGrid(props: { data: UsageStatistics }) {
   const bucketElements = new Map<string, HTMLLIElement>()
-  const buckets = createMemo(() => props.data?.buckets ?? [])
-  const intervalFormatter = createMemo(() => {
-    const data = props.data
-    if (!data) return undefined
-    return new Intl.DateTimeFormat(localeTag(), {
-      timeZone: data.timeZone,
+  const buckets = () => props.data.buckets
+  const intervalFormatter = createMemo(() =>
+    new Intl.DateTimeFormat(localeTag(), {
+      timeZone: props.data.timeZone,
       year: "numeric",
       month: "short",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
       timeZoneName: "shortOffset",
-    })
-  })
+    }),
+  )
   const intervalLabel = (bucket: UsageStatistics["buckets"][number]) => {
     const formatter = intervalFormatter()
-    return formatter ? `${formatter.format(bucket.start)} – ${formatter.format(bucket.end)}` : ""
+    return `${formatter.format(bucket.start)} – ${formatter.format(bucket.end)}`
   }
   const bucketText = (bucket: UsageStatistics["buckets"][number]) =>
     `${intervalLabel(bucket)} · ${exactNumber(bucket.tokens.total)} ${t("usage.table_tokens")}`
@@ -97,9 +95,6 @@ function UsageActivityGrid(props: { data?: UsageStatistics; period: UsagePeriod;
     dataSource: buckets,
     getKey: () => (bucket: UsageStatistics["buckets"][number]) => bucket.start.toString(),
     getTextValue: () => bucketText,
-  })
-  createEffect(() => {
-    if (!props.data) listState.selectionManager().clearSelection()
   })
   const keyInDirection = (key: string, axis: "horizontal" | "vertical", direction: -1 | 1) => {
     const current = bucketElements.get(key)?.getBoundingClientRect()
@@ -129,7 +124,6 @@ function UsageActivityGrid(props: { data?: UsageStatistics; period: UsagePeriod;
   const peak = createMemo(() => Math.max(0, ...buckets().map((bucket) => bucket.tokens.total)))
   const labels = createMemo(() => {
     const data = props.data
-    if (!data) return []
     const buckets = data.buckets
     if (buckets.length === 0) return []
     if (data.period === "year") {
@@ -154,7 +148,7 @@ function UsageActivityGrid(props: { data?: UsageStatistics; period: UsagePeriod;
   }
   const yearOffset = createMemo(() => {
     const data = props.data
-    if (!data || data.period !== "year" || data.buckets.length === 0) return 0
+    if (data.period !== "year" || data.buckets.length === 0) return 0
     const day = new Intl.DateTimeFormat("en-US", {
       timeZone: data.timeZone,
       weekday: "short",
@@ -162,17 +156,16 @@ function UsageActivityGrid(props: { data?: UsageStatistics; period: UsagePeriod;
     return ({ Mon: 0, Tue: 1, Wed: 2, Thu: 3, Fri: 4, Sat: 5, Sun: 6 } as Record<string, number>)[day] ?? 0
   })
   const labelPosition = (index: number) =>
-    props.period === "year"
+    props.data.period === "year"
       ? Math.floor((index + yearOffset()) / 7) / Math.max(1, Math.ceil((buckets().length + yearOffset()) / 7) - 1)
       : index / Math.max(1, buckets().length - 1)
 
   return (
     <div class="usage-activity" data-ui="usage-token-activity">
       <ListboxRoot<UsageStatistics["buckets"][number]>
-        class={`usage-activity__grid usage-activity__grid--${props.period}`}
+        class={`usage-activity__grid usage-activity__grid--${props.data.period}`}
         density="default"
         aria-label={t("usage.chart_aria")}
-        aria-busy={props.loading || undefined}
         state={listState}
         selectOnFocus
         disallowEmptySelection={listState.selectionManager().disallowEmptySelection()}
@@ -191,7 +184,7 @@ function UsageActivityGrid(props: { data?: UsageStatistics; period: UsagePeriod;
                 ref={(element) => bucketElements.set(item.key, element)}
                 class={`usage-activity__cell usage-activity__cell--${level(item.rawValue.tokens.total)}`}
                 style={
-                  props.period === "year"
+                  props.data.period === "year"
                     ? {
                         "grid-row": String((position() % 7) + 1),
                         "grid-column": String(Math.floor(position() / 7) + 1),
@@ -539,9 +532,15 @@ export default function UsagePanel() {
             </Button>
           </div>
         </header>
-        <UsageActivityGrid data={data()} period={period()} loading={loading()} />
-        <Show when={data()?.current.summary.calls === 0}>
-          <p class="usage-coverage-note">{t("usage.empty_body")}</p>
+        <Show when={data()}>
+          {(resolved) => (
+            <>
+              <UsageActivityGrid data={resolved()} />
+              <Show when={resolved().current.summary.calls === 0}>
+                <p class="usage-coverage-note">{t("usage.empty_body")}</p>
+              </Show>
+            </>
+          )}
         </Show>
         <Show when={loading() && !data() && !failure()}>
           <div class="usage-loading" role="status">

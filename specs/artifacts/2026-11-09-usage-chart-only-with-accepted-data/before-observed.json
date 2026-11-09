@@ -1,0 +1,32 @@
+{
+  "beforeZero": {
+    "buckets": 7,
+    "checked": "week",
+    "focus": null,
+    "legend": "LessMore",
+    "metadata": "Nov 9 – 15, 2026Asia/ShanghaiEven with previous period"
+  },
+  "beforeFailure": {
+    "buckets": 0,
+    "checked": "week",
+    "focus": "Refresh usage",
+    "legend": "LessMore",
+    "metadata": null,
+    "accessibility": [
+      "\t\t\t\t\t16 pop up button (collapsed) Description: More, ID: dropdownmenu-cl-124-trigger, Secondary Actions: Expand",
+      "\t\t\t\t\t\t\t\t\t61 text Usage could not be loaded",
+      "\t\t\t\t\t\t\t\t\t62 button (collapsed) Details, Secondary Actions: Expand",
+      "\t\t\t\t\t\t\t\t\t\t63 text Details",
+      "\t\t\t\t\t\t\t\t\t64 button Try again",
+      "\t\t\t\t\t\t\t\t\t82 button Refresh usage",
+      "The focused UI element is 82 button Refresh usage"
+    ]
+  },
+  "beforeDetails": [
+    "\t\t\t\t\t\t\t\t\t61 text Usage could not be loaded",
+    "\t\t\t\t\t\t\t\t\t88 text TypeError: Failed to fetch",
+    "\t\t\t\t\t\t\t\t\t66 heading Token activity, Value: 2",
+    "\t\t\t\t\t\t\t\t\t\t67 text Token activity",
+    "\t\t\t\t\t\t\t\t\t83 list Description: Token activity heatmap, ID: listbox-cl-251"
+  ]
+}

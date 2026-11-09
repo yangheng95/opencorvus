@@ -1,0 +1,87 @@
+{
+  "afterZero": {
+    "buckets": 7,
+    "checked": "week",
+    "focus": null,
+    "legend": "LessMore",
+    "metadata": "Nov 9 – 15, 2026Asia/ShanghaiEven with previous period"
+  },
+  "today": {
+    "buckets": 24,
+    "checked": "day",
+    "focus": null,
+    "legend": "LessMore",
+    "metadata": "Nov 9, 2026Asia/ShanghaiEven with previous period"
+  },
+  "year": {
+    "buckets": 365,
+    "checked": "year",
+    "focus": null,
+    "legend": "LessMore",
+    "metadata": "Jan 1 – Dec 31, 2026Asia/ShanghaiEven with previous period"
+  },
+  "afterFailure": {
+    "buckets": null,
+    "checked": "week",
+    "focus": "Refresh usage",
+    "legend": null,
+    "metadata": null,
+    "accessibility": [
+      "\t\t\t\t\t\t\t\t\t61 text Usage could not be loaded",
+      "\t\t\t\t\t\t\t\t\t62 button (collapsed) Details, Secondary Actions: Expand",
+      "\t\t\t\t\t\t\t\t\t\t63 text Details",
+      "\t\t\t\t\t\t\t\t\t64 button Try again",
+      "\t\t\t\t\t\t\t\t\t82 button Refresh usage",
+      "The focused UI element is 82 button Refresh usage"
+    ]
+  },
+  "chineseFailure": {
+    "buckets": null,
+    "checked": "week",
+    "focus": "视图",
+    "legend": null,
+    "metadata": null,
+    "accessibility": [
+      "\t\t\t22 container Description: 用量统计, ID: configDialog",
+      "\t\t\t\t\t\t\t32 tab (selected, settable, boolean) 用量统计, Value: 1, ID: config-tab-usage",
+      "\t\t\t\t\t\t52 heading 用量统计, Value: 1",
+      "\t\t\t\t\t\t\t53 text 用量统计",
+      "\t\t\t\t\t\t54 container Description: 用量统计, ID: config-panel-usage",
+      "\t\t\t\t\t\t\t\t\t61 text 无法加载用量统计",
+      "\t\t\t\t\t\t\t\t\t64 button 重试",
+      "\t\t\t\t\t\t\t\t\t66 heading 令牌用量活跃度, Value: 2",
+      "\t\t\t\t\t\t\t\t\t\t67 text 令牌用量活跃度",
+      "\t\t\t\t\t\t\t\t\t69 Description: 用量周期, ID: radiogroup-cl-241",
+      "\t\t\t\t\t\t\t\t\t\t\t74 radio button (settable, integer) Description: 本周, Value: 1, ID: radiogroup-cl-241-item-cl-1890-input",
+      "\t\t\t\t\t\t\t\t\t\t\t75 text 本周",
+      "\t\t\t\t\t\t\t\t\t82 button 刷新用量",
+      "The focused UI element is 9 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-1883-trigger, Secondary Actions: Expand"
+    ]
+  },
+  "recovered": {
+    "buckets": 7,
+    "checked": "week",
+    "focus": "刷新用量",
+    "legend": "较少较多",
+    "metadata": "2026/11/9 – 2026/11/15Asia/Shanghai与上一周期持平",
+    "accessibility": [
+      "\t\t\t\t\t\t\t\t\t\t\t84 radio button (settable, integer) Description: 本周, Value: 1, ID: radiogroup-cl-241-item-cl-1890-input",
+      "\t\t\t\t\t\t\t\t\t\t\t85 text 本周",
+      "\t\t\t\t\t\t\t\t\t92 button 刷新用量",
+      "The focused UI element is 92 button 刷新用量"
+    ]
+  },
+  "keyboardInterval": [
+    "\t\t\t\t\t\t\t\t\t\t\t95 (selected) Value: 2026年11月9日 GMT+8 00:00 – 2026年11月10日 GMT+8 00:00 · 0 令牌, ID: listbox-cl-1929-item-cl-1931",
+    "\t\t\t\t\t\t\t\t\t\t\t96 Value: 2026年11月10日 GMT+8 00:00 – 2026年11月11日 GMT+8 00:00 · 0 令牌, ID: listbox-cl-1929-item-cl-1933",
+    "\t\t\t\t\t\t\t\t\t\t\t97 Value: 2026年11月11日 GMT+8 00:00 – 2026年11月12日 GMT+8 00:00 · 0 令牌, ID: listbox-cl-1929-item-cl-1935",
+    "\t\t\t\t\t\t\t\t\t\t\t98 Value: 2026年11月12日 GMT+8 00:00 – 2026年11月13日 GMT+8 00:00 · 0 令牌, ID: listbox-cl-1929-item-cl-1937"
+  ],
+  "month": {
+    "buckets": 30,
+    "checked": "month",
+    "focus": null,
+    "legend": "较少较多",
+    "metadata": "2026/11/1 – 2026/11/30Asia/Shanghai与上一周期持平"
+  }
+}

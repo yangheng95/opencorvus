@@ -2229,6 +2229,8 @@ The activity header, period controls and refresh button stay mounted
 while current-period data loads, preserving keyboard focus across consecutive
 selections and refreshes. Loading clears the prior data and appears within the
 activity section; a busy refresh remains focusable and suppresses repeat requests.
+The activity grid, axes and legend mount only for accepted data, using that
+response's period for layout. Pending and failed reads retain the controls.
 Read failures present a localized summary and retain the original diagnostic
 details. Retry uses the existing refresh action and transfers its focused control
 to the persistent Refresh button before the error card leaves.

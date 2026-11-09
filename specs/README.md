@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [用量图表随有效数据展示](records/2026-11/2026-11-09-usage-chart-only-with-accepted-data.md)
 - [用量响应周期辨别](records/2026-11/2026-11-09-usage-response-period-qualification.md)
 - [代理保存的焦点与较新草稿](records/2026-11/2026-11-09-network-proxy-preserve-newer-draft.md)
 - [清除项目代理后的继承回执](records/2026-11/2026-11-09-network-proxy-inherited-clear-receipt.md)
