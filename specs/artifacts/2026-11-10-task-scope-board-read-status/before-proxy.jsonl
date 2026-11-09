@@ -1,0 +1,11 @@
+{"listenPort":39321,"upstreamPort":39320,"pid":27148}
+{"time":"2026-11-09T19:42:16.066Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T19:42:22.634Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T19:42:34.637Z","receipt":1,"stage":"arrival","path":"/task/tsk_g00VaVToYj00Gndnr8mq/conversation","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b148\\project-before","delay":24000,"cut":false}
+{"time":"2026-11-09T19:42:34.656Z","receipt":1,"stage":"origin","status":200,"requestID":"1c3b2769-2823-4af4-ac83-5c2f717fc589","target":{"taskID":"tsk_g00VaVToYj00Gndnr8mq","status":"completed","requirements":0,"goals":0}}
+{"time":"2026-11-09T19:42:58.666Z","receipt":1,"stage":"released","target":{"taskID":"tsk_g00VaVToYj00Gndnr8mq","status":"completed","requirements":0,"goals":0}}
+{"time":"2026-11-09T19:42:58.698Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T19:43:14.815Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T19:43:17.639Z","receipt":2,"stage":"arrival","path":"/task/tsk_g00VaVToYj00Gndnr8mq/conversation","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b148\\project-before","delay":1000,"cut":true}
+{"time":"2026-11-09T19:43:17.661Z","receipt":2,"stage":"origin","status":200,"requestID":"99aeeea1-0662-47da-b612-3bfec95773cf","target":{"taskID":"tsk_g00VaVToYj00Gndnr8mq","status":"completed","requirements":0,"goals":0}}
+{"time":"2026-11-09T19:43:18.666Z","receipt":2,"stage":"cut","forwardedBytes":32,"target":{"taskID":"tsk_g00VaVToYj00Gndnr8mq","status":"completed","requirements":0,"goals":0}}

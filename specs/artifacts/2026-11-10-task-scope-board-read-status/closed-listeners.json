@@ -1,0 +1,36 @@
+{
+  "processes": [
+    {
+      "pid": 24512,
+      "phase": "before",
+      "wrapperStillPresent": false,
+      "processStillPresent": false,
+      "wrapper": 29540
+    },
+    {
+      "pid": 19080,
+      "phase": "after",
+      "wrapperStillPresent": false,
+      "processStillPresent": false,
+      "wrapper": 3924
+    },
+    {
+      "pid": 11096,
+      "phase": "final",
+      "wrapperStillPresent": false,
+      "processStillPresent": false,
+      "wrapper": 32732
+    },
+    {
+      "pid": 27148,
+      "phase": "before-proxy",
+      "processStillPresent": false
+    },
+    {
+      "pid": 29820,
+      "phase": "after-proxy",
+      "processStillPresent": false
+    }
+  ],
+  "listeners": []
+}

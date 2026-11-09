@@ -1,0 +1,44 @@
+{
+  "stage": "final",
+  "taskID": "tsk_g00VaVVMYB002P8OcO1p",
+  "projectID": "prj_h88CN99TI82ocWU491y8",
+  "status": "completed",
+  "requirements": [],
+  "goals": [],
+  "sessions": [
+    "ses_-zUPUUHXAzzOcx5Wfz3b",
+    "ses_-zUPUUdS4zzMjgH4bIU3"
+  ],
+  "checks": [
+    {
+      "operationID": "project.current",
+      "status": 200,
+      "requestID": "ef7c4585-07bc-419f-ba5d-5250e0e8c860",
+      "schemaValid": true
+    },
+    {
+      "operationID": "task.conversation",
+      "status": 200,
+      "requestID": "47578ab2-9310-4b68-8037-42d8b191719f",
+      "schemaValid": true
+    },
+    {
+      "operationID": "task.board",
+      "status": 200,
+      "requestID": "fb93fbbc-ed09-481c-a892-e5c0602b7478",
+      "schemaValid": true
+    },
+    {
+      "operationID": "session.messages",
+      "status": 200,
+      "requestID": "e04980ea-15c6-489f-9a3d-6f176ffe8262",
+      "schemaValid": true
+    },
+    {
+      "operationID": "session.messages",
+      "status": 200,
+      "requestID": "f3cc7fe1-c155-4a03-8069-3a3ac4be4ae6",
+      "schemaValid": true
+    }
+  ]
+}

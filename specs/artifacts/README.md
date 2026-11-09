@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [任务需求与交付目标读取状态证据](2026-11-10-task-scope-board-read-status/README.md)
 - [浏览器预览地址草稿与反馈证据](2026-11-10-browser-preview-address-feedback/README.md)
 - [Git 分支菜单打开意图证据](2026-11-10-project-branch-menu-intent/README.md)
 - [会话诊断复制归属证据](2026-11-10-conversation-diagnostics-copy-ownership/README.md)
