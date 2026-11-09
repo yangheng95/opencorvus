@@ -1,0 +1,120 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/catalog",
+      "operationId": "expertSquad.catalog",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/search",
+      "operationId": "expertSquad.search",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/settings/detail",
+      "operationId": "expertSquad.settingsDetail",
+      "status": 200,
+      "schemaValid": true
+    },
+    {
+      "route": "/expert-squad/settings/detail",
+      "operationId": "expertSquad.settingsDetail",
+      "status": 200,
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_hg08KoJW8vMB67ZflHhu",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b65\\project-after"
+  },
+  "active": {
+    "effective": "dynamic",
+    "project": "dynamic",
+    "scope": {
+      "kind": "project",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b65\\project-after"
+    }
+  },
+  "entries": [
+    {
+      "id": "advanced",
+      "name": "Advanced",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "base",
+      "name": "Base",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "dynamic",
+      "name": "Dynamic",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "research-studio",
+      "name": "Research Studio",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "squad-sdk",
+      "name": "Generate Expert Squads",
+      "source": {
+        "kind": "built_in"
+      }
+    }
+  ],
+  "details": [
+    {
+      "id": "research-studio",
+      "name": "Research Studio",
+      "version": "2026.11.07.1",
+      "source": {
+        "kind": "built_in"
+      },
+      "effectiveIdentity": {
+        "id": "research-studio",
+        "source": {
+          "kind": "built_in"
+        }
+      }
+    },
+    {
+      "id": "dynamic",
+      "name": "Dynamic",
+      "version": "2026.11.07.1",
+      "source": {
+        "kind": "built_in"
+      },
+      "effectiveIdentity": {
+        "id": "dynamic",
+        "source": {
+          "kind": "built_in"
+        }
+      }
+    }
+  ]
+}

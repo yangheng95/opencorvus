@@ -4,7 +4,7 @@ import {
   parseSquadInstallationKey,
   type SquadRefreshSelection,
 } from "../../services/expert-squad-selection"
-import { ApiAuthorityChangedError } from "../../services/api"
+import { ApiAuthorityChangedError, captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
 import { formatErrorDetails } from "../../services/diagnostics"
 import { Feedback } from "../ui/Feedback"
 // ── ExpertSquadPanel ──
@@ -322,13 +322,59 @@ export default function ExpertSquadPanel() {
   let marketDetailLoadSequence = 0
   let configurationLoadSequence = 0
   let configurationSaveSequence = 0
+  let installedFocusSequence = 0
+  let installedOpenerKey = ""
+  let installedLayout: HTMLDivElement | undefined
+  let installedBackButton: HTMLButtonElement | undefined
 
   const currentScope = createMemo(() => expertSquadCatalogScope())
   const currentScopeIdentity = createMemo(() => catalogScopeIdentity(currentScope()))
   createEffect(() => {
     currentScopeIdentity()
+    installedFocusSequence++
+    installedOpenerKey = ""
     setDetailOpen(false)
   })
+
+  function changeInstalledView(change: () => void, target: () => HTMLElement | null | undefined) {
+    const authority = captureApiAuthority()
+    const scope = currentScopeIdentity()
+    const origin = document.activeElement
+    const sequence = ++installedFocusSequence
+    change()
+    queueMicrotask(() => {
+      if (sequence !== installedFocusSequence || currentScopeIdentity() !== scope || !isApiAuthorityCurrent(authority)) return
+      if (!installedLayout?.isConnected || (document.activeElement !== origin && document.activeElement !== document.body)) return
+      const element = target()
+      if (element?.isConnected) element.focus()
+    })
+  }
+
+  function openInstalledDetail(key: string) {
+    changeInstalledView(
+      () => {
+        installedOpenerKey = key
+        setSelectedSquadID(key)
+        setDetailOpen(true)
+      },
+      () => detailOpen() ? installedBackButton : undefined,
+    )
+  }
+
+  function returnToInstalledCatalog() {
+    const key = installedOpenerKey
+    changeInstalledView(
+      () => {
+        installedOpenerKey = ""
+        setDetailOpen(false)
+      },
+      () => !detailOpen()
+        ? installedLayout?.querySelector<HTMLButtonElement>(`[data-squad-selection-key="${CSS.escape(key)}"]`)
+          ?? installedLayout?.querySelector<HTMLButtonElement>('[data-ui="expert-squad-catalog-filter"][aria-pressed="true"]')
+        : undefined,
+    )
+  }
+
   const writableScopeAvailable = createMemo(() => {
     const scope = currentScope()
     return scope.kind === "project" || scope.kind === "session"
@@ -1432,7 +1478,7 @@ export default function ExpertSquadPanel() {
               <div class="empty-hint">{t("expert_squad.none")}</div>
             </Show>
             <Show when={!scopeStatus() && !catalogError() && squads().length > 0}>
-              <div class="expert-squad-layout" data-ui="expert-squad-panel">
+              <div ref={installedLayout} class="expert-squad-layout" data-ui="expert-squad-panel">
                 <Show when={!detailOpen()}>
                   <div class="expert-squad-list-toolbar expert-squad-catalog-toolbar">
                     <div
@@ -1467,6 +1513,7 @@ export default function ExpertSquadPanel() {
                     <SettingsSurface class="expert-squad-list" data-ui="expert-squad-list">
                       <For each={filteredSquads()}>
                         {(squad) => {
+                          const selectionKey = squadSelectionKey(squad)
                           return (
                             <SettingsRow
                               as="button"
@@ -1497,10 +1544,8 @@ export default function ExpertSquadPanel() {
                               }
                               data-ui="expert-squad-select"
                               data-squad-id={squad.id}
-                              onClick={() => {
-                                setSelectedSquadID(squadSelectionKey(squad))
-                                setDetailOpen(true)
-                              }}
+                              data-squad-selection-key={selectionKey}
+                              onClick={() => openInstalledDetail(selectionKey)}
                             />
                           )
                         }}
@@ -1521,12 +1566,13 @@ export default function ExpertSquadPanel() {
                 </Show>
                 <Show when={detailOpen()}>
                   <Button
+                    ref={installedBackButton}
                     class="s-detail-back"
                     type="button"
                     variant="ghost"
                     size="sm"
                     tone="neutral"
-                    onClick={() => setDetailOpen(false)}
+                    onClick={returnToInstalledCatalog}
                   >
                     <Icon name="nav-back" />
                     {t("settings.back_to_list")}
