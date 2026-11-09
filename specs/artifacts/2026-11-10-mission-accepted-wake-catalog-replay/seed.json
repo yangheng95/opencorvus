@@ -1,0 +1,233 @@
+{
+  "config": {
+    "status": 200,
+    "trace": "d94a1279-7d0a-459d-9064-b1a08318b6ea",
+    "data": {
+      "model": "b159-retired/offline",
+      "disabled": []
+    }
+  },
+  "siblingConfig": {
+    "status": 200,
+    "trace": "a6aad8be-4078-4df0-9fd1-42f1c5d8080c",
+    "data": {
+      "model": "b159-retired/offline",
+      "disabled": []
+    }
+  },
+  "catalog": {
+    "status": 200,
+    "trace": "ee18447b-521a-43d2-b39c-8a4f639f957f",
+    "data": [
+      "b159-current/offline",
+      "b159-retired/offline"
+    ]
+  },
+  "first": {
+    "status": 200,
+    "trace": "35dfecde-ef27-4b4d-8d29-afc1e53dd14d",
+    "data": {
+      "missionID": "wake-456e03f2e9de155fd2954f190f4cf56a",
+      "sessionID": "ses_-zUPTmoTazzfYtpCOIuD",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "replay": {
+    "status": 200,
+    "trace": "46e2cfcd-7501-4f0b-b6bd-ac27a82bcc36",
+    "data": {
+      "missionID": "wake-456e03f2e9de155fd2954f190f4cf56a",
+      "sessionID": "ses_-zUPTmoTazzfYtpCOIuD",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "implicit": {
+    "status": 200,
+    "trace": "693b133f-e1e8-41ef-b190-45c66071065f",
+    "data": {
+      "missionID": "wake-878c0eb6028ce90249a9a5e32ce3ee43",
+      "sessionID": "ses_-zUPTmoFLzz9SmV7ndt6",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "draft": {
+    "status": 200,
+    "trace": "28f076be-e2a9-42aa-a7cc-1cfe83daae77",
+    "data": {
+      "missionID": "draft-94b87b9a463c6cb2aac7630603415173",
+      "sessionID": "ses_hmYp4WLznUvAzdgIKSyF",
+      "title": "B159 accepted dispatch",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b159\\project-primary",
+      "created": 1794264071647,
+      "updated": 1794264071647,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "Keep this accepted manual Mission dispatch after the catalog change"
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  },
+  "dispatch": {
+    "status": 200,
+    "trace": "8a1baa38-38b3-4c85-8ba3-307d2d9d9d88",
+    "data": {
+      "missionID": "draft-94b87b9a463c6cb2aac7630603415173",
+      "sessionID": "ses_hmYp4WLznUvAzdgIKSyF",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "dispatchReplay": {
+    "status": 200,
+    "trace": "8c5c51c6-1fcb-438b-93ec-db84a2d7040b",
+    "data": {
+      "missionID": "draft-94b87b9a463c6cb2aac7630603415173",
+      "sessionID": "ses_hmYp4WLznUvAzdgIKSyF",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "terminal": {
+    "status": 200,
+    "trace": "5e8d5ab3-06ce-4f37-b60e-53bd113e240f",
+    "data": {
+      "missionID": "wake-e56f9c4f2ebc866be8143bfef056fae6",
+      "sessionID": "ses_-zUPTmo0HzzA7YdsMBcI",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "close": {
+    "status": 200,
+    "trace": "55c35f54-6728-4fd2-b2ab-4ed5d538706f",
+    "data": true
+  },
+  "closed": {
+    "status": 409,
+    "trace": "04ef0459-7979-46c2-9aaf-2cba39066e4a",
+    "data": {
+      "name": "MissionExecutionWakeClosedError",
+      "data": {
+        "message": "Mission wake-e56f9c4f2ebc866be8143bfef056fae6 operator request b159-closed already belongs to closed occurrence b3145c6f-130f-45a6-b3a1-3ef7c8d5d981.",
+        "missionID": "wake-e56f9c4f2ebc866be8143bfef056fae6",
+        "sessionID": "ses_-zUPTmo0HzzA7YdsMBcI",
+        "state": "closed",
+        "operationID": "b3145c6f-130f-45a6-b3a1-3ef7c8d5d981",
+        "closureEventID": "pev_g0VaWDD3M00h4oPqWY7D"
+      }
+    }
+  },
+  "sibling": {
+    "status": 200,
+    "trace": "c7855eed-c70a-4b95-b901-c0e39442c5df",
+    "data": {
+      "missionID": "wake-86f75f5dc3041d36733c312e5e076eec",
+      "sessionID": "ses_-zUPTmmpQzzAU1H5kxbK",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "messages": [
+    {
+      "status": 200,
+      "trace": "4f3e39b9-cf74-4ee5-b4f9-8cb93b657330",
+      "data": [
+        {
+          "id": "msg_h2P4r54CngSVDSbpPs5O",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-real-wake",
+          "openedEventID": "pev_h4UNRo9hWTBKFAxRRj0R",
+          "text": [
+            "Keep this accepted Mission wake after the catalog change"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "635b0fd8-c0eb-450d-8058-bc11f62400e9",
+      "data": [
+        {
+          "id": "msg_hWL4HRPOiVTYIC90hDdT",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-implicit-model",
+          "openedEventID": "pev_hLqiffQa3JezkNWTLB1s",
+          "text": [
+            "Keep this accepted Mission with the original implicit model"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "91ec9553-a980-454a-8a70-d7e64cd2c288",
+      "data": [
+        {
+          "id": "msg_hZYCzWHlsaaCqU14QIgW",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-real-dispatch",
+          "openedEventID": "pev_hXnobc3RIVieaXB2FDEF",
+          "text": [
+            "Keep this accepted manual Mission dispatch after the catalog change"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "ab6619fc-45cc-4ab0-8e20-e2bfd9de05db",
+      "data": [
+        {
+          "id": "msg_hQE7UMsUB7smo4kdzKLn",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-closed",
+          "openedEventID": "pev_h0l3JGkeUnSUPPNBZiQj",
+          "text": [
+            "Keep this closed Mission outcome after the catalog change"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "1f4c7c1a-c3c2-41a3-8529-ea7b92f52491",
+      "data": [
+        {
+          "id": "msg_hGvpHHKwJvZoMGdmnPEO",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-real-wake",
+          "openedEventID": "pev_h5zGlZo8KSKmPKuhUbn2",
+          "text": [
+            "Keep this accepted Mission wake after the catalog change"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "sends": [
+    {
+      "time": "2026-11-09T22:53:01.070Z",
+      "receipt": 1,
+      "method": "POST",
+      "route": "/mission/wake",
+      "upstreamStatus": 200,
+      "upstreamRequestID": "5d0d2913-c38e-4dfe-9037-bf99925a8526",
+      "sent": {
+        "requestID": "msg_b4e96874-6459-4c86-b623-e8c25e825def",
+        "text": "Desktop review: preserve this accepted Mission after retiring the selected model.",
+        "model": "b159-retired/offline",
+        "productPillar": "work"
+      },
+      "accepted": {
+        "missionID": "wake-d31ba5af9758245d9d25b6014a75c58c",
+        "sessionID": "ses_-zUPTjpiqzzr9Y851xUi",
+        "created": true,
+        "productPillar": "work"
+      },
+      "responseBytes": 130,
+      "browserResponse": "truncated after 16 bytes"
+    },
+    {
+      "time": "2026-11-09T22:53:09.731Z",
+      "receipt": 2,
+      "method": "POST",
+      "route": "/mission/wake",
+      "upstreamStatus": 200,
+      "upstreamRequestID": "851d0d37-ff4a-4d01-82dc-855fd6510584",
+      "sent": {
+        "requestID": "msg_b4e96874-6459-4c86-b623-e8c25e825def",
+        "text": "Desktop review: preserve this accepted Mission after retiring the selected model.",
+        "model": "b159-retired/offline",
+        "productPillar": "work"
+      },
+      "accepted": {
+        "missionID": "wake-d31ba5af9758245d9d25b6014a75c58c",
+        "sessionID": "ses_-zUPTjpiqzzr9Y851xUi",
+        "created": true,
+        "productPillar": "work"
+      },
+      "responseBytes": 130,
+      "browserResponse": "complete"
+    }
+  ],
+  "catalog": {
+    "time": "2026-11-09T22:53:09.721Z",
+    "kind": "catalog-changed-between-attempts",
+    "changeStatus": 200,
+    "model": "b159-current/offline",
+    "projection": [
+      "b159-current"
+    ]
+  },
+  "replay": {
+    "missionID": "wake-d31ba5af9758245d9d25b6014a75c58c",
+    "sessionID": "ses_-zUPTjpiqzzr9Y851xUi",
+    "created": true,
+    "productPillar": "work"
+  },
+  "user": {
+    "id": "msg_hU3Dbw6Cz8uJnPUAIyFw",
+    "model": {
+      "providerID": "b159-retired",
+      "modelID": "offline"
+    },
+    "openedEventID": "pev_h1QFVADatPvGx7gymIPL"
+  },
+  "assistant": {
+    "id": "msg_g0VaWGAIp00g17nKhi3o",
+    "parentID": "msg_hU3Dbw6Cz8uJnPUAIyFw",
+    "error": "ToolSchemaBudgetError"
+  },
+  "fresh": {
+    "missionID": "wake-adfada3dd10866c909f6b993295ea1b8",
+    "sessionID": "ses_-zUPTjL33zzyxHoE0VUs",
+    "created": true,
+    "productPillar": "work",
+    "userMessageID": "msg_hMtBcrpHCxlqHH79pbHT",
+    "model": {
+      "providerID": "b159-current",
+      "modelID": "offline"
+    }
+  }
+}

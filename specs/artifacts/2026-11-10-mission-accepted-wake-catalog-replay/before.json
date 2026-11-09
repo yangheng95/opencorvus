@@ -1,0 +1,318 @@
+{
+  "change": {
+    "status": 200,
+    "trace": "801b878c-c5c6-4f00-9b64-62ac2b21c1b8",
+    "data": {
+      "model": "b159-current/offline",
+      "disabled": []
+    }
+  },
+  "catalog": {
+    "status": 200,
+    "trace": "d5d2653d-1ff2-43b6-b58c-f36476540c79",
+    "data": [
+      "b159-current/offline"
+    ]
+  },
+  "siblingCatalog": {
+    "status": 200,
+    "trace": "b50e2fcc-d689-466f-a86d-fbbc9e05796a",
+    "data": [
+      "b159-current/offline",
+      "b159-retired/offline"
+    ]
+  },
+  "replay": {
+    "status": 400,
+    "trace": "e79f006d-aa00-40d7-9a71-573ea0cbe726",
+    "data": {
+      "data": {
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+      },
+      "error": [
+        {
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+        }
+      ],
+      "success": false
+    }
+  },
+  "parallel": [
+    {
+      "status": 400,
+      "trace": "63baba6d-a29b-424e-b6a9-44c180a03cc1",
+      "data": {
+        "data": {
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+        },
+        "error": [
+          {
+            "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+          }
+        ],
+        "success": false
+      }
+    },
+    {
+      "status": 400,
+      "trace": "8903f6af-bfa6-4d0a-8ba1-80c7f15cbbac",
+      "data": {
+        "data": {
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+        },
+        "error": [
+          {
+            "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+          }
+        ],
+        "success": false
+      }
+    }
+  ],
+  "explicit": {
+    "status": 400,
+    "trace": "b561ca2b-6875-44c5-8e05-7fe65991a527",
+    "data": {
+      "data": {
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+      },
+      "error": [
+        {
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+        }
+      ],
+      "success": false
+    }
+  },
+  "implicit": {
+    "status": 200,
+    "trace": "69d725b8-69f6-49af-b1c1-d2c40a7b5f2e",
+    "data": {
+      "missionID": "wake-878c0eb6028ce90249a9a5e32ce3ee43",
+      "sessionID": "ses_-zUPTmoFLzz9SmV7ndt6",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "dispatchReplay": {
+    "status": 400,
+    "trace": "a34bcf68-adaf-41fd-9c04-f190115276a7",
+    "data": {
+      "data": {
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+      },
+      "error": [
+        {
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+        }
+      ],
+      "success": false
+    }
+  },
+  "closed": {
+    "status": 400,
+    "trace": "c23578c7-05c0-4799-9bad-081d88e02046",
+    "data": {
+      "data": {
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+      },
+      "error": [
+        {
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+        }
+      ],
+      "success": false
+    }
+  },
+  "closedChanged": {
+    "status": 400,
+    "trace": "a68f8efe-a2c5-42a4-b936-ce9f937f09c5",
+    "data": {
+      "data": {
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+      },
+      "error": [
+        {
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+        }
+      ],
+      "success": false
+    }
+  },
+  "wakeChanged": {
+    "status": 400,
+    "trace": "d8caae29-5713-4ada-a906-2d9774141d06",
+    "data": {
+      "data": {
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+      },
+      "error": [
+        {
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+        }
+      ],
+      "success": false
+    }
+  },
+  "dispatchChanged": {
+    "status": 409,
+    "trace": "1ddddc51-ffc2-4410-9085-0f9fa9d05889",
+    "data": {
+      "name": "MissionExecutionWakeInputConflictError",
+      "data": {
+        "message": "Mission draft-94b87b9a463c6cb2aac7630603415173 operator request b159-real-dispatch was already accepted with different input.",
+        "missionID": "draft-94b87b9a463c6cb2aac7630603415173",
+        "sessionID": "ses_hmYp4WLznUvAzdgIKSyF",
+        "requestID": "b159-real-dispatch",
+        "acceptedFingerprint": "f4bb23b9766eaa3790c42ac891210ac96c7e1e96f1058a834786b9ab07eeb3fa",
+        "receivedFingerprint": "ebc860a1dc9ec2ab9ecb8136e7b31581389680414b94b1a9be79e2fde0347612",
+        "closureEventID": "pev_hXnobc3RIVieaXB2FDEF"
+      }
+    }
+  },
+  "invalidFresh": {
+    "status": 400,
+    "trace": "870fcea8-0d47-4d42-bb92-19093f4efb83",
+    "data": {
+      "data": {
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+      },
+      "error": [
+        {
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+        }
+      ],
+      "success": false
+    }
+  },
+  "currentFresh": {
+    "status": 200,
+    "trace": "be38d7c2-b63e-4638-9326-626b4f1939d2",
+    "data": {
+      "missionID": "wake-2f2cd63d537cd69f39f0d7fb0798508a",
+      "sessionID": "ses_-zUPTmki0zzCKQx28lSn",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "sibling": {
+    "status": 200,
+    "trace": "17690070-56a8-495f-b76a-548ede3c2e15",
+    "data": {
+      "missionID": "wake-86f75f5dc3041d36733c312e5e076eec",
+      "sessionID": "ses_-zUPTmmpQzzAU1H5kxbK",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "messages": [
+    {
+      "status": 200,
+      "trace": "94d803e5-f9ed-4d25-8d8a-6735f30f0ec6",
+      "data": [
+        {
+          "id": "msg_h2P4r54CngSVDSbpPs5O",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-real-wake",
+          "openedEventID": "pev_h4UNRo9hWTBKFAxRRj0R",
+          "text": [
+            "Keep this accepted Mission wake after the catalog change"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "d104cd2a-dd85-44c3-abf0-a7ae849190d4",
+      "data": [
+        {
+          "id": "msg_hWL4HRPOiVTYIC90hDdT",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-implicit-model",
+          "openedEventID": "pev_hLqiffQa3JezkNWTLB1s",
+          "text": [
+            "Keep this accepted Mission with the original implicit model"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "f905fb6f-40b2-477a-815a-a4e036a26f8e",
+      "data": [
+        {
+          "id": "msg_hZYCzWHlsaaCqU14QIgW",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-real-dispatch",
+          "openedEventID": "pev_hXnobc3RIVieaXB2FDEF",
+          "text": [
+            "Keep this accepted manual Mission dispatch after the catalog change"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "f71cfada-bad6-42a5-9ea1-331607c55851",
+      "data": [
+        {
+          "id": "msg_hQE7UMsUB7smo4kdzKLn",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-closed",
+          "openedEventID": "pev_h0l3JGkeUnSUPPNBZiQj",
+          "text": [
+            "Keep this closed Mission outcome after the catalog change"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "ceca3dd7-cccc-4fe3-8a73-d6e798a45681",
+      "data": [
+        {
+          "id": "msg_hGvpHHKwJvZoMGdmnPEO",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-real-wake",
+          "openedEventID": "pev_h5zGlZo8KSKmPKuhUbn2",
+          "text": [
+            "Keep this accepted Mission wake after the catalog change"
+          ]
+        }
+      ]
+    }
+  ],
+  "freshMessage": {
+    "status": 200,
+    "trace": "d3eb72ea-c348-4b47-9d91-423e1c1e3347",
+    "data": [
+      {
+        "id": "msg_hCAZNlBnKLwpn2lY6EbX",
+        "model": {
+          "providerID": "b159-current",
+          "modelID": "offline"
+        },
+        "requestID": "b159-new-current-model",
+        "openedEventID": "pev_hwKb62qZRXIykYyX48La",
+        "text": [
+          "A newly admitted Mission uses the current catalog"
+        ]
+      }
+    ]
+  }
+}

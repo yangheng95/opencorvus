@@ -270,8 +270,14 @@ test("HTTP dispatch replays the accepted Message after draft consumption and ret
       },
       draft: { text: nextDraft },
     })
-    // Release the initialized project and SQLite connection, then replay through
-    // the same HTTP handler using only the retained database facts.
+    await Instance.provide({
+      directory: project.path,
+      fn: () => Config.updateProjectPatch({
+        model: "dispatch-replay/changed",
+        provider: { "dispatch-replay": { models: { base: null } } },
+      }),
+    })
+    // Reopen the database after retiring the model that accepted this draft.
     await Instance.disposeAll()
     await Database.awaitEffectIdle(20_000)
     Database.close()

@@ -27,11 +27,13 @@ import { Config } from "@/config/config"
 import { Session } from "@/session"
 import { consumeMissionPendingPromptInTransaction } from "./session"
 import { MessageStore } from "@/session/message-store"
+import type { Message } from "@/session/message"
 import { Instance } from "@/project/instance"
 import { Project } from "@/project/project"
 import { runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
 import type { UserMessagePersistenceHooks } from "@/session/prompt/parts"
 import { PersistedWakeReplay } from "@/session/persisted-wake-replay"
+import type { SessionWake } from "@/session/wake"
 import {
   MissionExecutionCloseProvenance,
   MissionExecutionCloseSource,
@@ -554,6 +556,50 @@ function assertMissionExecutionWakeAdmissionInTransaction(
   }
 }
 
+function assertOperatorWakeMessageBundle(input: {
+  admission: Pick<MissionExecutionWakeAdmissionBase, "messageID" | "textPartID" | "closureEventID">
+  acceptedInput: z.output<typeof MissionOperatorAcceptedInput>
+  missionID: string
+  sessionID: string
+  requestID: string
+  requestFingerprint: string
+  message: Message.User
+  parts: readonly Message.Part[]
+}) {
+  const { admission, acceptedInput, message, parts, missionID, sessionID, requestID, requestFingerprint } = input
+  if (message.id !== admission.messageID) {
+    throw new Error(`Mission operator request ${requestID} persisted an unexpected Message identity`)
+  }
+  const textPart = parts.find((part) => part.id === admission.textPartID && part.type === "text")
+  const text = textPart?.type === "text" ? textPart.text : undefined
+  const attachments = missionOperatorAttachmentInputs(parts.filter((part) => part.type === "file"))
+  const reason = message.extra?.wake_reason
+  const modelReference = `${message.model.providerID}/${message.model.modelID}`
+  const expectedReason = MissionOperatorWakeReason.parse({
+    source: "mission.operator",
+    missionID,
+    requestID,
+    requestFingerprint,
+    openedEventID: admission.closureEventID,
+  })
+  if (
+    text !== acceptedInput.text ||
+    canonicalJSONValue(attachments) !== canonicalJSONValue(acceptedInput.attachments) ||
+    (acceptedInput.model !== null && modelReference !== acceptedInput.model) ||
+    canonicalJSONValue(reason) !== canonicalJSONValue(expectedReason)
+  ) {
+    throw new MissionExecutionWakeInputConflictError({
+      message: `Mission ${missionID} operator request ${requestID} Message bundle differs from its accepted input.`,
+      missionID,
+      sessionID,
+      requestID,
+      acceptedFingerprint: requestFingerprint,
+      receivedFingerprint: canonicalDigestSource("mission-operator-message-bundle-v1", { text, attachments }).sha256,
+      closureEventID: admission.closureEventID,
+    })
+  }
+}
+
 function missionExecutionWakeAdmission(
   closure: Extract<MissionExecutionClosure, { state: "opened" }>,
   identityKey: string,
@@ -587,44 +633,6 @@ function missionExecutionWakeAdmission(
     messageID: Identifier.deterministic("message", `${identityKey}\0message`),
     textPartID: Identifier.deterministic("part", `${identityKey}\0text`),
     controlID: Identifier.deterministic("session_control", `${identityKey}\0control`),
-  }
-  let messageExistedBeforeBundle = false
-  const assertAcceptedBundle = (message: { id: string }, parts: Array<Record<string, unknown>>) => {
-    if (!operator) return
-    if (message.id !== input.messageID) {
-      throw new Error(`Mission operator request ${closure.requestID} persisted an unexpected Message identity`)
-    }
-    const text = parts.find((part) => part.id === input.textPartID && part.type === "text")?.text
-    const attachments = missionOperatorAttachmentInputs(parts.filter((part) => part.type === "file"))
-    const reason = (message as { extra?: { wake_reason?: unknown } }).extra?.wake_reason
-    const model = (message as { model?: { providerID?: unknown; modelID?: unknown } }).model
-    const modelReference =
-      typeof model?.providerID === "string" && typeof model.modelID === "string"
-        ? `${model.providerID}/${model.modelID}`
-        : undefined
-    const expectedReason = {
-      source: "mission.operator",
-      missionID: closure.missionID,
-      requestID: operator.requestID,
-      requestFingerprint: operator.requestFingerprint,
-      openedEventID: closure.eventID,
-    }
-    if (
-      text !== operator.acceptedInput.text ||
-      canonicalJSONValue(attachments) !== canonicalJSONValue(operator.acceptedInput.attachments) ||
-      (operator.acceptedInput.model !== null && modelReference !== operator.acceptedInput.model) ||
-      canonicalJSONValue(reason) !== canonicalJSONValue(expectedReason)
-    ) {
-      throw new MissionExecutionWakeInputConflictError({
-        message: `Mission ${closure.missionID} operator request ${closure.requestID} Message bundle differs from its accepted input.`,
-        missionID: closure.missionID,
-        sessionID: closure.sessionID,
-        requestID: closure.requestID,
-        acceptedFingerprint: closure.requestFingerprint,
-        receivedFingerprint: canonicalDigestSource("mission-operator-message-bundle-v1", { text, attachments }).sha256,
-        closureEventID: closure.eventID,
-      })
-    }
   }
   const ownerLifecycle = (owner: AbortSignal): Disposable => {
     const observe = () => {
@@ -670,17 +678,15 @@ function missionExecutionWakeAdmission(
     textPartID: input.textPartID,
     controlID: input.controlID,
     preflightBundle: (message, parts) => {
-      assertAcceptedBundle(message, parts as Array<Record<string, unknown>>)
+      if (operator) assertOperatorWakeMessageBundle({ ...input, ...operator, admission: input, message, parts })
       Database.use((db) => {
         assertMissionExecutionWakeAdmissionInTransaction(db, input)
-        messageExistedBeforeBundle = Boolean(
-          db.select({ id: MessageTable.id }).from(MessageTable).where(eq(MessageTable.id, input.messageID)).get(),
-        )
-        if (messageExistedBeforeBundle) throw new PersistedWakeReplay(input.sessionID, input.messageID)
+        const persisted = db.select({ id: MessageTable.id }).from(MessageTable).where(eq(MessageTable.id, input.messageID)).get()
+        if (persisted) throw new PersistedWakeReplay(input.sessionID, input.messageID)
       })
     },
     commitBundle: () => {
-      if (!messageExistedBeforeBundle) Database.use((db) => operator?.commitInputInTransaction(db))
+      if (operator) Database.use((db) => operator.commitInputInTransaction(db))
     },
     ownerPreflight: (db) => assertMissionExecutionWakeAdmissionInTransaction(db, input),
     ownerLifecycle,
@@ -797,57 +803,22 @@ function operatorRequestIdentityKey(input: {
   return `mission-operator-request\0${input.sessionID}\0${input.source}\0${input.requestID}`
 }
 
-/** Read a consumed draft from its canonical accepted request, including after restart. */
-export async function acceptedMissionDispatchPrompt(input: {
-  missionID: string
-  sessionID: string
-  requestID: string
-}): Promise<{ text: string } | undefined> {
-  await Session.assertLineageInProject({ sessionID: input.sessionID, projectID: Instance.project.id })
-  const identityKey = operatorRequestIdentityKey({ ...input, source: "mission.dispatch" })
-  const messageID = Identifier.deterministic("message", `${identityKey}\0message`)
-  const message = await MessageStore.get({ sessionID: input.sessionID, messageID }).catch((error) => {
-    if (NotFoundError.isInstance(error)) return undefined
-    throw error
-  })
-  if (!message) return undefined
-  const exact = exactOperatorRequestClosure({ ...input, source: "mission.dispatch", messageID })
-  if (!exact || exact.opened.missionID !== input.missionID) {
-    throw new Error(`Mission dispatch Message ${messageID} has no matching opened authority`)
-  }
-  const textPartID = Identifier.deterministic("part", `${identityKey}\0text`)
-  const part = message.parts.find((part) => part.id === textPartID)
-  if (part?.type !== "text") throw new Error(`Mission dispatch Message ${messageID} has no accepted prompt Part`)
-  return { text: part.text }
-}
-
-function prepareOperatorWakeAdmission(input: {
+type MissionOperatorWakeIdentity = {
   missionID: string
   sessionID: string
   source: "mission.dispatch" | "mission.wake"
   requestID: string
-  requestFingerprint: string
-  acceptedInput: z.output<typeof MissionOperatorAcceptedInput>
-  commitInputInTransaction: (db: Database.TxOrDb) => void
-}): MissionOperatorWakeAdmission {
-  const occurrenceIdentityKey = `mission-operator-wake\0${input.sessionID}\0${input.source}\0${input.requestID}\0${input.requestFingerprint}`
-  const requestIdentityKey = operatorRequestIdentityKey(input)
-  const plannedOpenedEventID = Identifier.deterministic("protocol_event", `${occurrenceIdentityKey}\0opened`)
-  const plannedMessageID = Identifier.deterministic("message", `${requestIdentityKey}\0message`)
-  const exactRequest = exactOperatorRequestClosure({
-    sessionID: input.sessionID,
-    source: input.source,
-    requestID: input.requestID,
-    messageID: plannedMessageID,
-  })
-  const current = currentMissionExecutionClosure(input.sessionID)
-  if (current && current.missionID !== input.missionID) {
-    throw new Error(`Mission execution closure for Session ${input.sessionID} belongs to Mission ${current.missionID}`)
-  }
-  if (exactRequest && exactRequest.opened.missionID !== input.missionID) {
+}
+
+function assertExactOperatorRequestOpen(
+  input: MissionOperatorWakeIdentity & { requestFingerprint: string },
+  exactRequest: NonNullable<ReturnType<typeof exactOperatorRequestClosure>>,
+  current: MissionExecutionClosure | undefined,
+) {
+  if (exactRequest.opened.missionID !== input.missionID) {
     throw new Error(`Mission operator request ${input.requestID} belongs to Mission ${exactRequest.opened.missionID}`)
   }
-  if (exactRequest && exactRequest.requestFingerprint !== input.requestFingerprint) {
+  if (exactRequest.requestFingerprint !== input.requestFingerprint) {
     throw new MissionExecutionWakeInputConflictError({
       message: `Mission ${input.missionID} operator request ${input.requestID} was already accepted with different input.`,
       missionID: input.missionID,
@@ -858,10 +829,10 @@ function prepareOperatorWakeAdmission(input: {
       closureEventID: exactRequest.opened.eventID,
     })
   }
-  if (current?.state === "opened" && exactRequest?.opened.eventID === current.eventID) {
-    return missionExecutionWakeAdmission(current, requestIdentityKey, input)
+  if (current?.state === "opened" && exactRequest.opened.eventID === current.eventID) {
+    return current
   }
-  if (exactRequest?.terminal) {
+  if (exactRequest.terminal) {
     throw new MissionExecutionWakeClosedError({
       message: `Mission ${input.missionID} operator request ${input.requestID} already belongs to ${exactRequest.terminal.state} occurrence ${exactRequest.terminal.operationID}.`,
       missionID: input.missionID,
@@ -871,8 +842,25 @@ function prepareOperatorWakeAdmission(input: {
       closureEventID: exactRequest.terminal.eventID,
     })
   }
+  throw new Error(`Mission operator request ${input.requestID} was superseded without its terminal closure fact`)
+}
+
+function prepareOperatorWakeAdmission(input: MissionOperatorWakeIdentity & {
+  requestFingerprint: string
+  acceptedInput: z.output<typeof MissionOperatorAcceptedInput>
+  commitInputInTransaction: (db: Database.TxOrDb) => void
+}): MissionOperatorWakeAdmission {
+  const occurrenceIdentityKey = `mission-operator-wake\0${input.sessionID}\0${input.source}\0${input.requestID}\0${input.requestFingerprint}`
+  const requestIdentityKey = operatorRequestIdentityKey(input)
+  const plannedOpenedEventID = Identifier.deterministic("protocol_event", `${occurrenceIdentityKey}\0opened`)
+  const plannedMessageID = Identifier.deterministic("message", `${requestIdentityKey}\0message`)
+  const exactRequest = exactOperatorRequestClosure({ ...input, messageID: plannedMessageID })
+  const current = currentMissionExecutionClosure(input.sessionID)
+  if (current && current.missionID !== input.missionID) {
+    throw new Error(`Mission execution closure for Session ${input.sessionID} belongs to Mission ${current.missionID}`)
+  }
   if (exactRequest) {
-    throw new Error(`Mission operator request ${input.requestID} was superseded without its terminal closure fact`)
+    return missionExecutionWakeAdmission(assertExactOperatorRequestOpen(input, exactRequest, current), requestIdentityKey, input)
   }
   if (current?.state === "closing") {
     throw new MissionExecutionClosingError({
@@ -967,15 +955,55 @@ function prepareOperatorWakeAdmission(input: {
   }
 }
 
-export async function openMissionExecutionWithWake<Receipt extends { activation: Promise<unknown> }>(input: {
-  missionID: string
-  sessionID: string
-  source: "mission.dispatch" | "mission.wake"
-  requestID: string
-  acceptedInput: MissionOperatorAcceptedInput
-  wake: (admission: MissionOperatorWakeAdmission) => Promise<Receipt>
-}): Promise<Receipt> {
-  const acceptedInput = MissionOperatorAcceptedInput.parse(input.acceptedInput)
+export async function openMissionExecutionWithWake(input: MissionOperatorWakeIdentity & {
+  acceptedInput: MissionOperatorAcceptedInput |
+    ((persisted: { text: string } | undefined) => Promise<MissionOperatorAcceptedInput>)
+  wake: (admission: MissionOperatorWakeAdmission) => Promise<SessionWake.WakeReceipt>
+}): Promise<SessionWake.WakeReceipt> {
+  const session = await Session.assertLineageInProject({ sessionID: input.sessionID, projectID: Instance.project.id })
+  const identityKey = operatorRequestIdentityKey(input)
+  const messageID = Identifier.deterministic("message", `${identityKey}\0message`)
+  const message = await MessageStore.get({ sessionID: session.id, messageID }).catch((error) => {
+    if (NotFoundError.isInstance(error)) return undefined
+    throw error
+  })
+  const textPartID = Identifier.deterministic("part", `${identityKey}\0text`)
+  const part = message?.parts.find((part) => part.id === textPartID)
+  const userMessage = message?.info.role === "user" && part?.type === "text" ? { info: message.info, text: part.text } : undefined
+  if (message && !userMessage) throw new Error(`Mission operator Message ${messageID} has no accepted user text Part`)
+  const acceptedInput = MissionOperatorAcceptedInput.parse(
+    typeof input.acceptedInput === "function"
+      ? await input.acceptedInput(userMessage)
+      : input.acceptedInput,
+  )
+  const requestFingerprint = operatorAcceptedInputFingerprint(acceptedInput)
+  if (message && userMessage) {
+    const opened = Database.transaction((db) => {
+      const exact = exactOperatorRequestClosure({ ...input, messageID })
+      if (!exact) throw new Error(`Mission operator Message ${messageID} has no matching opened authority`)
+      return assertExactOperatorRequestOpen(
+        { ...input, requestFingerprint }, exact, currentMissionExecutionClosureInTransaction(db, session.id),
+      )
+    })
+    const admission = missionExecutionWakeAdmission(opened, identityKey)
+    assertOperatorWakeMessageBundle({
+      ...input, acceptedInput, requestFingerprint, admission, message: userMessage.info, parts: message.parts,
+    })
+    const { SessionWake } = await import("@/session/wake")
+    const receipt = {
+      sessionID: session.id,
+      messageID,
+      ...SessionWake.resumePersistedWakeWithReceipt({
+        sessionID: session.id,
+        messageID,
+        directory: session.directory,
+        ownerPreflight: admission.ownerPreflight,
+        ownerLifecycle: admission.ownerLifecycle,
+      }),
+    }
+    await receipt.activation
+    return receipt
+  }
   const preparedConfig = await Session.prepareConfigOverlayMergeInProject({
     sessionID: input.sessionID,
     projectID: Instance.project.id,
@@ -984,7 +1012,7 @@ export async function openMissionExecutionWithWake<Receipt extends { activation:
   const admission = prepareOperatorWakeAdmission({
     ...input,
     acceptedInput,
-    requestFingerprint: operatorAcceptedInputFingerprint(acceptedInput),
+    requestFingerprint,
     commitInputInTransaction: (db) => {
       preparedConfig.commitInTransaction(db)
       if (input.source === "mission.dispatch") {

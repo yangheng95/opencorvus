@@ -287,6 +287,15 @@ config overlay and opened authority. A changed or missing draft returns
 Existing-Message replay retains later drafts, and activation never clears a
 draft afterward. Other Mission wake entry points do not consume drafts.
 
+For both Mission operator ingress routes, accepted Message/Part identity and
+its opened occurrence are resolved before validating a new model selection or
+reading a live Expert Squad catalog. An exact replay uses the persisted
+Message's existing Prompt owner path and does not rewrite its model or overlay.
+The Mission's immutable held set validates an explicit squad selection on
+replay. A changed input and a closed occurrence keep their distinct responses
+after catalog changes. A new input still validates the current model and
+catalog before accepting its Message bundle.
+
 The existing Session metadata writer remains the single owner. Draft setters
 read the current row inside that transaction before replacing the Mission
 subobject, preserving concurrent metadata rather than rebuilding a stale

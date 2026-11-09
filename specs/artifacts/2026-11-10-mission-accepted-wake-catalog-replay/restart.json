@@ -1,0 +1,287 @@
+{
+  "catalog": {
+    "status": 200,
+    "trace": "2c212a96-75a0-4ef5-aeff-31f9e147d35f",
+    "data": [
+      "b159-current/offline"
+    ]
+  },
+  "siblingCatalog": {
+    "status": 200,
+    "trace": "858bc738-b493-4768-ad61-1b755d3d11fc",
+    "data": [
+      "b159-current/offline",
+      "b159-retired/offline"
+    ]
+  },
+  "replay": {
+    "status": 200,
+    "trace": "942bbea7-939f-4298-bbcb-59f456414f37",
+    "data": {
+      "missionID": "wake-456e03f2e9de155fd2954f190f4cf56a",
+      "sessionID": "ses_-zUPTmoTazzfYtpCOIuD",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "parallel": [
+    {
+      "status": 200,
+      "trace": "4a795f51-cf0b-48b8-a874-7466ca3ece38",
+      "data": {
+        "missionID": "wake-456e03f2e9de155fd2954f190f4cf56a",
+        "sessionID": "ses_-zUPTmoTazzfYtpCOIuD",
+        "created": true,
+        "productPillar": "work"
+      }
+    },
+    {
+      "status": 200,
+      "trace": "d0033f53-f9eb-4a6c-b313-5b4cb77f2c40",
+      "data": {
+        "missionID": "wake-456e03f2e9de155fd2954f190f4cf56a",
+        "sessionID": "ses_-zUPTmoTazzfYtpCOIuD",
+        "created": true,
+        "productPillar": "work"
+      }
+    }
+  ],
+  "explicit": {
+    "status": 200,
+    "trace": "f3d56f5f-d031-44ea-8606-312f4b8a8c74",
+    "data": {
+      "missionID": "wake-456e03f2e9de155fd2954f190f4cf56a",
+      "sessionID": "ses_-zUPTmoTazzfYtpCOIuD",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "implicit": {
+    "status": 200,
+    "trace": "571d4973-f43d-4db5-b119-7b30bc5e2a84",
+    "data": {
+      "missionID": "wake-878c0eb6028ce90249a9a5e32ce3ee43",
+      "sessionID": "ses_-zUPTmoFLzz9SmV7ndt6",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "dispatchReplay": {
+    "status": 200,
+    "trace": "e3dddc59-c1f4-4a73-9306-d6a261f8ae60",
+    "data": {
+      "missionID": "draft-94b87b9a463c6cb2aac7630603415173",
+      "sessionID": "ses_hmYp4WLznUvAzdgIKSyF",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "closed": {
+    "status": 409,
+    "trace": "c34b5543-7129-4e31-bcba-d18ac77cc0fa",
+    "data": {
+      "name": "MissionExecutionWakeClosedError",
+      "data": {
+        "message": "Mission wake-e56f9c4f2ebc866be8143bfef056fae6 operator request b159-closed already belongs to closed occurrence b3145c6f-130f-45a6-b3a1-3ef7c8d5d981.",
+        "missionID": "wake-e56f9c4f2ebc866be8143bfef056fae6",
+        "sessionID": "ses_-zUPTmo0HzzA7YdsMBcI",
+        "state": "closed",
+        "operationID": "b3145c6f-130f-45a6-b3a1-3ef7c8d5d981",
+        "closureEventID": "pev_g0VaWDD3M00h4oPqWY7D"
+      }
+    }
+  },
+  "closedChanged": {
+    "status": 409,
+    "trace": "480be33e-6cff-4261-a499-2b88eafee73e",
+    "data": {
+      "name": "MissionExecutionWakeInputConflictError",
+      "data": {
+        "message": "Mission wake-e56f9c4f2ebc866be8143bfef056fae6 operator request b159-closed was already accepted with different input.",
+        "missionID": "wake-e56f9c4f2ebc866be8143bfef056fae6",
+        "sessionID": "ses_-zUPTmo0HzzA7YdsMBcI",
+        "requestID": "b159-closed",
+        "acceptedFingerprint": "e6fd86f903a4c0c906b407502a0ec6eacc02a5efcbaa09479f93a5c1e018252f",
+        "receivedFingerprint": "b2733356f0d89634e5ccd6b1a93f5bc4bad79e636d9ba1a1fa668ef6b9a40a60",
+        "closureEventID": "pev_h0l3JGkeUnSUPPNBZiQj"
+      }
+    }
+  },
+  "wakeChanged": {
+    "status": 409,
+    "trace": "5d11845f-c8dd-4086-a44a-b13035099aed",
+    "data": {
+      "name": "MissionExecutionWakeInputConflictError",
+      "data": {
+        "message": "Mission wake-456e03f2e9de155fd2954f190f4cf56a operator request b159-real-wake was already accepted with different input.",
+        "missionID": "wake-456e03f2e9de155fd2954f190f4cf56a",
+        "sessionID": "ses_-zUPTmoTazzfYtpCOIuD",
+        "requestID": "b159-real-wake",
+        "acceptedFingerprint": "7a5dd83c6c051a41c040c4f14e2d826c698279a463491303be7e9fe828842ab2",
+        "receivedFingerprint": "06ca228ca30d279417a7d9d39908920040580dddb6e4193baa9adf218617e55f",
+        "closureEventID": "pev_h4UNRo9hWTBKFAxRRj0R"
+      }
+    }
+  },
+  "dispatchChanged": {
+    "status": 409,
+    "trace": "9521a549-080e-4752-b2d9-847d4a9b1c95",
+    "data": {
+      "name": "MissionExecutionWakeInputConflictError",
+      "data": {
+        "message": "Mission draft-94b87b9a463c6cb2aac7630603415173 operator request b159-real-dispatch was already accepted with different input.",
+        "missionID": "draft-94b87b9a463c6cb2aac7630603415173",
+        "sessionID": "ses_hmYp4WLznUvAzdgIKSyF",
+        "requestID": "b159-real-dispatch",
+        "acceptedFingerprint": "f4bb23b9766eaa3790c42ac891210ac96c7e1e96f1058a834786b9ab07eeb3fa",
+        "receivedFingerprint": "ebc860a1dc9ec2ab9ecb8136e7b31581389680414b94b1a9be79e2fde0347612",
+        "closureEventID": "pev_hXnobc3RIVieaXB2FDEF"
+      }
+    }
+  },
+  "invalidFresh": {
+    "status": 400,
+    "trace": "81896b2a-89bc-45d5-8cd2-0eb7c84b6d8b",
+    "data": {
+      "data": {
+        "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+      },
+      "error": [
+        {
+          "message": "ProviderModelNotFoundError: {\"providerID\":\"b159-retired\",\"modelID\":\"offline\",\"suggestions\":[]}"
+        }
+      ],
+      "success": false
+    }
+  },
+  "currentFresh": {
+    "status": 200,
+    "trace": "fbd19d17-ccec-4655-b24d-1e0541869ac8",
+    "data": {
+      "missionID": "wake-2f2cd63d537cd69f39f0d7fb0798508a",
+      "sessionID": "ses_-zUPTmki0zzCKQx28lSn",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "sibling": {
+    "status": 200,
+    "trace": "a0aab3eb-8500-4cd5-adea-2540cacc0a12",
+    "data": {
+      "missionID": "wake-86f75f5dc3041d36733c312e5e076eec",
+      "sessionID": "ses_-zUPTmmpQzzAU1H5kxbK",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "messages": [
+    {
+      "status": 200,
+      "trace": "5f9133a1-1594-4d8d-af45-de0c75b19259",
+      "data": [
+        {
+          "id": "msg_h2P4r54CngSVDSbpPs5O",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-real-wake",
+          "openedEventID": "pev_h4UNRo9hWTBKFAxRRj0R",
+          "text": [
+            "Keep this accepted Mission wake after the catalog change"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "f5f45baf-eec6-4350-ad41-507272e34f02",
+      "data": [
+        {
+          "id": "msg_hWL4HRPOiVTYIC90hDdT",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-implicit-model",
+          "openedEventID": "pev_hLqiffQa3JezkNWTLB1s",
+          "text": [
+            "Keep this accepted Mission with the original implicit model"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "de68012e-a1d5-40f5-95fa-e330a17b9e9a",
+      "data": [
+        {
+          "id": "msg_hZYCzWHlsaaCqU14QIgW",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-real-dispatch",
+          "openedEventID": "pev_hXnobc3RIVieaXB2FDEF",
+          "text": [
+            "Keep this accepted manual Mission dispatch after the catalog change"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "0d30e8fe-8db4-4c07-afc9-61a45aa48665",
+      "data": [
+        {
+          "id": "msg_hQE7UMsUB7smo4kdzKLn",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-closed",
+          "openedEventID": "pev_h0l3JGkeUnSUPPNBZiQj",
+          "text": [
+            "Keep this closed Mission outcome after the catalog change"
+          ]
+        }
+      ]
+    },
+    {
+      "status": 200,
+      "trace": "ab6ac579-a680-4d67-9672-dafc7cc6fe23",
+      "data": [
+        {
+          "id": "msg_hGvpHHKwJvZoMGdmnPEO",
+          "model": {
+            "providerID": "b159-retired",
+            "modelID": "offline"
+          },
+          "requestID": "b159-real-wake",
+          "openedEventID": "pev_h5zGlZo8KSKmPKuhUbn2",
+          "text": [
+            "Keep this accepted Mission wake after the catalog change"
+          ]
+        }
+      ]
+    }
+  ],
+  "freshMessage": {
+    "status": 200,
+    "trace": "dce71e31-68b1-4048-8e1b-ed7c67b8bc12",
+    "data": [
+      {
+        "id": "msg_hCAZNlBnKLwpn2lY6EbX",
+        "model": {
+          "providerID": "b159-current",
+          "modelID": "offline"
+        },
+        "requestID": "b159-new-current-model",
+        "openedEventID": "pev_hwKb62qZRXIykYyX48La",
+        "text": [
+          "A newly admitted Mission uses the current catalog"
+        ]
+      }
+    ]
+  }
+}

@@ -1,4 +1,4 @@
-import { Hono } from "hono"
+import { Hono, type Context } from "hono"
 import { HTTPException } from "hono/http-exception"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
@@ -61,7 +61,6 @@ import {
 } from "@opencorvus-ai/transport-protocol"
 import {
   closeMissionExecutionOperation,
-  acceptedMissionDispatchPrompt,
   currentMissionExecutionClosure,
   missionOperatorAttachmentInputs,
   missionOperatorWakeReason,
@@ -157,6 +156,33 @@ type MissionSessionRecord = Awaited<ReturnType<typeof getMissionSessionByDirecto
 
 function missionRouteSession(missionID: string): Promise<MissionSessionRecord> {
   return getMissionSessionByDirectory({ missionID, directory: Instance.directory })
+}
+
+function missionWakeBadRequest(c: Context, error: unknown): never {
+  if (Auth.findReadError(error)) throw error
+  const body = error instanceof MissionExpertSquadSnapshotMismatchError
+    ? error.toObject()
+    : badRequestBody(error instanceof Error ? error.message : String(error))
+  throw new HTTPException(400, { res: c.json(body, 400), cause: error })
+}
+
+async function validateNewMissionWakeModel(
+  c: Context,
+  session: Session.Info | undefined,
+  model: string | undefined,
+  patch: z.input<typeof Config.Overlay>,
+) {
+  try {
+    const storedOverlay = Config.Overlay.parse(session?.metadata?.configOverlay ?? {})
+    const preview = Config.previewOverlayUpdate(await Config.get(), storedOverlay, patch)
+    await validateConfigModelReferences(preview.effective, "mission.configOverlay")
+  } catch (error) {
+    missionWakeBadRequest(c, error)
+  }
+  await resolveAgentModel("mission", {
+    sessionID: session?.id,
+    explicitModel: model ? Provider.parseModel(model) : undefined,
+  })
 }
 
 async function missionTranscript(sessionID: string) {
@@ -563,7 +589,8 @@ export function MissionRoutes() {
         summary: "Dispatch a Mission draft",
         description:
           "Consume the Mission's pending operator prompt through the canonical visible user-message and streaming Mission wake path. " +
-          "Supply requestID to replay one exact accepted input; reusing it with changed model or prompt facts returns a conflict.",
+          "Supply requestID to replay one exact accepted input even after the model catalog changes; " +
+          "reusing it with changed model or prompt facts returns a conflict.",
         operationId: "mission.dispatch",
         responses: {
           200: {
@@ -588,39 +615,26 @@ export function MissionRoutes() {
         const input = c.req.valid("json")
         const session = await missionRouteSession(missionID)
         const requestID = input.requestID ?? resolveRequestID(c)
-        const acceptedPrompt = await acceptedMissionDispatchPrompt({ missionID, sessionID: session.id, requestID })
-        const pendingPrompt = acceptedPrompt ?? missionPendingPrompt(session)
-        if (!pendingPrompt) {
-          return c.json(badRequestBody(`Mission ${missionID} has no pending operator prompt.`), 400)
-        }
-        const storedOverlay = Config.Overlay.parse(
-          ((session.metadata as Record<string, unknown> | undefined)?.configOverlay as unknown) ?? {},
-        )
         const configPatch: z.input<typeof Config.Overlay> = { prompt_profile: null }
         if (input.model) configPatch.model = input.model
-        try {
-          const preview = Config.previewOverlayUpdate(await Config.get(), storedOverlay, configPatch)
-          await validateConfigModelReferences(preview.effective, "mission.configOverlay")
-        } catch (error) {
-          if (Auth.findReadError(error)) throw error
-          const message = error instanceof Error ? error.message : String(error)
-          return c.json(badRequestBody(message), 400)
-        }
-        await resolveAgentModel("mission", {
-          sessionID: session.id,
-          explicitModel: input.model ? Provider.parseModel(input.model) : undefined,
-        })
+        let prompt: string
         await openMissionExecutionWithWake({
           missionID,
           sessionID: session.id,
           source: "mission.dispatch",
           requestID,
-          acceptedInput: {
-            text: pendingPrompt.text,
-            model: input.model ?? null,
-            attachments: [],
-            configPatch,
-            context: { surface: "mission.dispatch" },
+          acceptedInput: async (persisted) => {
+            const pending = persisted ?? missionPendingPrompt(session)
+            if (!pending) missionWakeBadRequest(c, new Error(`Mission ${missionID} has no pending operator prompt.`))
+            if (!persisted) await validateNewMissionWakeModel(c, session, input.model, configPatch)
+            prompt = pending.text
+            return {
+              text: prompt,
+              model: input.model ?? null,
+              attachments: [],
+              configPatch,
+              context: { surface: "mission.dispatch" },
+            }
           },
           wake: async (admission) => {
             return SessionWake.wakeWithReceipt({
@@ -628,7 +642,7 @@ export function MissionRoutes() {
               messageID: admission.messageID,
               textPartID: admission.textPartID,
               controlID: admission.controlID,
-              prompt: pendingPrompt.text,
+              prompt,
               author: "user",
               agent: "mission",
               model: input.model ? Provider.parseModel(input.model) : undefined,
@@ -660,7 +674,7 @@ export function MissionRoutes() {
           "Start (or resume) a Mission agent session and inject a user prompt. " +
           "Omit `missionID` to start a new mission; supply it to resume an existing one. " +
           "On a first start, reuse requestID to join the same Mission in the same Project and directory. " +
-          "Supply requestID to join one exact accepted prompt, model, attachment and config input; " +
+          "Supply requestID to join one exact accepted prompt, model, attachment and config input even after the model catalog changes; " +
           "reusing it with drift returns a conflict.",
         operationId: "mission.wake",
         responses: {
@@ -690,88 +704,79 @@ export function MissionRoutes() {
         const missionID = input.missionID ?? firstMissionWakeID(requestID)
         const existingSessionID = findExistingMissionSession({ missionID, directory: Instance.directory })
         const existingSession = existingSessionID ? await Session.get(existingSessionID) : undefined
-        const storedOverlay = Config.Overlay.parse(
-          ((existingSession?.metadata as Record<string, unknown> | undefined)?.configOverlay as unknown) ?? {},
-        )
         const configPatch: z.input<typeof Config.Overlay> = { prompt_profile: null }
-        let launchHeldExpertSquadIDs: MissionVisibleExpertSquadIDs | undefined
         if (input.model) configPatch.model = input.model
-        try {
-          if (existingSession) {
-            if (missionProductPillar(existingSession) !== input.productPillar) {
-              throw new Error(`Mission ${missionID} already holds a different immutable product pillar.`)
-            }
-            const heldExpertSquadIDs = missionVisibleExpertSquadIDs(existingSession)
-            launchHeldExpertSquadIDs =
-              input.expertSquadIDs === undefined
-                ? heldExpertSquadIDs
-                : await resolveMissionLaunchExpertSquadIDs({
-                    projectDirectory: Instance.project.worktree,
-                    productPillar: input.productPillar,
-                    requestedExpertSquadIDs: input.expertSquadIDs,
-                  })
-            assertMissionExpertSquadSnapshot(missionID, heldExpertSquadIDs, launchHeldExpertSquadIDs)
-          } else {
-            launchHeldExpertSquadIDs = await resolveMissionLaunchExpertSquadIDs({
+        const resolveLaunchSquads = async () => {
+          try {
+            return await resolveMissionLaunchExpertSquadIDs({
               projectDirectory: Instance.project.worktree,
               productPillar: input.productPillar,
               requestedExpertSquadIDs: input.expertSquadIDs,
             })
+          } catch (error) {
+            missionWakeBadRequest(c, error)
           }
-        } catch (error) {
-          if (error instanceof MissionExpertSquadSnapshotMismatchError) return c.json(error.toObject(), 400)
-          if (Auth.findReadError(error)) throw error
-          const message = error instanceof Error ? error.message : String(error)
-          return c.json(badRequestBody(message), 400)
         }
-        try {
-          const preview = Config.previewOverlayUpdate(await Config.get(), storedOverlay, configPatch)
-          await validateConfigModelReferences(preview.effective, "mission.configOverlay")
-        } catch (error) {
-          if (Auth.findReadError(error)) throw error
-          const message = error instanceof Error ? error.message : String(error)
-          return c.json(badRequestBody(message), 400)
+        let session = existingSession
+        let initialSquads: MissionVisibleExpertSquadIDs | undefined
+        if (!session) {
+          initialSquads = await resolveLaunchSquads()
+          await validateNewMissionWakeModel(c, undefined, input.model, configPatch)
+          try {
+            session = await ensureMissionSession({
+              missionID,
+              defaultCwd: Instance.directory,
+              productPillar: input.productPillar,
+              heldExpertSquadIDs: initialSquads,
+            })
+          } catch (error) {
+            if (error instanceof MissionExpertSquadSnapshotMismatchError) missionWakeBadRequest(c, error)
+            throw error
+          }
         }
-        await resolveAgentModel("mission", {
-          sessionID: existingSessionID,
-          explicitModel: input.model ? Provider.parseModel(input.model) : undefined,
-        })
-        // Snapshot existence BEFORE ensureMissionSession so the response
-        // distinguishes "started" from "resumed". The lookup and the ensure
-        // call both use the active request directory, so linked worktrees do
-        // not resume each other's Mission session.
-        let session
-        try {
-          session = await ensureMissionSession({
-            missionID,
-            defaultCwd: Instance.directory,
-            productPillar: input.productPillar,
-            heldExpertSquadIDs: launchHeldExpertSquadIDs,
-          })
-        } catch (error) {
-          if (error instanceof MissionExpertSquadSnapshotMismatchError) return c.json(error.toObject(), 400)
-          throw error
-        }
-        const attachmentParts = await materializeUserUploadParts(input.attachments, "mission wake attachment")
+        const missionSession = session
+        let attachmentParts: Awaited<ReturnType<typeof materializeUserUploadParts>>
         await openMissionExecutionWithWake({
           missionID,
-          sessionID: session.id,
+          sessionID: missionSession.id,
           source: "mission.wake",
           requestID,
-          acceptedInput: {
-            text: input.text,
-            model: input.model ?? null,
-            attachments: missionOperatorAttachmentInputs(attachmentParts),
-            configPatch,
-            context: {
-              surface: "mission.wake",
-              productPillar: input.productPillar,
-              heldExpertSquadIDs: launchHeldExpertSquadIDs ?? [],
-            },
+          acceptedInput: async (persisted) => {
+            let launchSquads = initialSquads
+            if (existingSession) {
+              try {
+                if (missionProductPillar(existingSession) !== input.productPillar) {
+                  throw new Error(`Mission ${missionID} already holds a different immutable product pillar.`)
+                }
+                const held = missionVisibleExpertSquadIDs(existingSession)
+                launchSquads = input.expertSquadIDs === undefined
+                  ? held
+                  : persisted
+                    ? MissionVisibleExpertSquadIDs.parse(input.expertSquadIDs)
+                    : await resolveLaunchSquads()
+                assertMissionExpertSquadSnapshot(missionID, held, launchSquads)
+              } catch (error) {
+                if (error instanceof HTTPException) throw error
+                missionWakeBadRequest(c, error)
+              }
+              if (!persisted) await validateNewMissionWakeModel(c, existingSession, input.model, configPatch)
+            }
+            attachmentParts = await materializeUserUploadParts(input.attachments, "mission wake attachment")
+            return {
+              text: input.text,
+              model: input.model ?? null,
+              attachments: missionOperatorAttachmentInputs(attachmentParts),
+              configPatch,
+              context: {
+                surface: "mission.wake",
+                productPillar: input.productPillar,
+                heldExpertSquadIDs: launchSquads,
+              },
+            }
           },
           wake: async (admission) => {
             return SessionWake.wakeWithReceipt({
-              sessionID: session.id,
+              sessionID: missionSession.id,
               messageID: admission.messageID,
               textPartID: admission.textPartID,
               controlID: admission.controlID,
@@ -793,9 +798,9 @@ export function MissionRoutes() {
         return c.json(
           MissionWakeResult.parse({
             missionID,
-            sessionID: session.id,
+            sessionID: missionSession.id,
             created: firstLaunch || !existingSessionID,
-            productPillar: session.productPillar,
+            productPillar: input.productPillar,
           }),
         )
       },

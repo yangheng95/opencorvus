@@ -1,0 +1,244 @@
+{
+  "version": 12,
+  "integrity": "ok",
+  "foreignKeyIssues": 0,
+  "counts": {
+    "session": 7,
+    "project": 3,
+    "engine_task": 0,
+    "automation_run": 0,
+    "provider_usage_event": 0
+  },
+  "facts": {
+    "first": {
+      "session": {
+        "id": "ses_-zUPTmoTazzfYtpCOIuD",
+        "project_id": "prj_hsrG1iqbu6Bas7xcMRKC",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b159\\project-primary",
+        "title": "Keep this accepted Mission wake after the catalog change",
+        "missionID": "wake-456e03f2e9de155fd2954f190f4cf56a",
+        "overlayModel": "b159-retired/offline"
+      },
+      "users": [
+        {
+          "id": "msg_h2P4r54CngSVDSbpPs5O",
+          "provider": "b159-retired",
+          "model": "offline",
+          "requestID": "b159-real-wake",
+          "openedEventID": "pev_h4UNRo9hWTBKFAxRRj0R"
+        }
+      ],
+      "events": [
+        {
+          "id": "pev_h4UNRo9hWTBKFAxRRj0R",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "3f3e6d3f-223c-5c23-b883-4cf7e59773f0"
+        }
+      ],
+      "assistant": [
+        {
+          "id": "msg_g0VaWDBa2002StUPsfpd",
+          "parentID": "msg_h2P4r54CngSVDSbpPs5O",
+          "error": "ToolSchemaBudgetError",
+          "completed": 1794264074216
+        }
+      ]
+    },
+    "implicit": {
+      "session": {
+        "id": "ses_-zUPTmoFLzz9SmV7ndt6",
+        "project_id": "prj_hsrG1iqbu6Bas7xcMRKC",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b159\\project-primary",
+        "title": "Keep this accepted Mission with the original implicit model",
+        "missionID": "wake-878c0eb6028ce90249a9a5e32ce3ee43",
+        "overlayModel": null
+      },
+      "users": [
+        {
+          "id": "msg_hWL4HRPOiVTYIC90hDdT",
+          "provider": "b159-retired",
+          "model": "offline",
+          "requestID": "b159-implicit-model",
+          "openedEventID": "pev_hLqiffQa3JezkNWTLB1s"
+        }
+      ],
+      "events": [
+        {
+          "id": "pev_hLqiffQa3JezkNWTLB1s",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "ccc4db19-485d-5c4d-8c6b-ef1015f461b9"
+        }
+      ],
+      "assistant": [
+        {
+          "id": "msg_g0VaWDBmd00nFbzuEi9Y",
+          "parentID": "msg_hWL4HRPOiVTYIC90hDdT",
+          "error": "ToolSchemaBudgetError",
+          "completed": 1794264075008
+        }
+      ]
+    },
+    "dispatch": {
+      "session": {
+        "id": "ses_hmYp4WLznUvAzdgIKSyF",
+        "project_id": "prj_hsrG1iqbu6Bas7xcMRKC",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b159\\project-primary",
+        "title": "B159 accepted dispatch",
+        "missionID": "draft-94b87b9a463c6cb2aac7630603415173",
+        "overlayModel": "b159-retired/offline"
+      },
+      "users": [
+        {
+          "id": "msg_hZYCzWHlsaaCqU14QIgW",
+          "provider": "b159-retired",
+          "model": "offline",
+          "requestID": "b159-real-dispatch",
+          "openedEventID": "pev_hXnobc3RIVieaXB2FDEF"
+        }
+      ],
+      "events": [
+        {
+          "id": "pev_hXnobc3RIVieaXB2FDEF",
+          "type": "mission.execution.opened",
+          "source": "mission.dispatch",
+          "seq": 1,
+          "correlation_id": "dcc20e14-8ca9-5483-8d8f-65a75add4599"
+        }
+      ],
+      "assistant": [
+        {
+          "id": "msg_g0VaWDBuX00wZowKbfjz",
+          "parentID": "msg_hZYCzWHlsaaCqU14QIgW",
+          "error": "ToolSchemaBudgetError",
+          "completed": 1794264075100
+        }
+      ]
+    },
+    "terminal": {
+      "session": {
+        "id": "ses_-zUPTmo0HzzA7YdsMBcI",
+        "project_id": "prj_hsrG1iqbu6Bas7xcMRKC",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b159\\project-primary",
+        "title": "Keep this closed Mission outcome after the catalog change",
+        "missionID": "wake-e56f9c4f2ebc866be8143bfef056fae6",
+        "overlayModel": "b159-retired/offline"
+      },
+      "users": [
+        {
+          "id": "msg_hQE7UMsUB7smo4kdzKLn",
+          "provider": "b159-retired",
+          "model": "offline",
+          "requestID": "b159-closed",
+          "openedEventID": "pev_h0l3JGkeUnSUPPNBZiQj"
+        }
+      ],
+      "events": [
+        {
+          "id": "pev_h0l3JGkeUnSUPPNBZiQj",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "c1649f2c-450d-5763-be6b-e16b5c1cf670"
+        },
+        {
+          "id": "pev_g0VaWDC9Z00QJKHcFjsq",
+          "type": "mission.execution.closing",
+          "source": "mission.abort",
+          "seq": 2,
+          "correlation_id": "b3145c6f-130f-45a6-b3a1-3ef7c8d5d981"
+        },
+        {
+          "id": "pev_g0VaWDD3M00h4oPqWY7D",
+          "type": "mission.execution.closed",
+          "source": "mission.abort",
+          "seq": 7,
+          "correlation_id": "b3145c6f-130f-45a6-b3a1-3ef7c8d5d981"
+        }
+      ],
+      "assistant": [
+        {
+          "id": "msg_g0VaWDC1Y00MZzU85HjY",
+          "parentID": "msg_hQE7UMsUB7smo4kdzKLn",
+          "error": "ToolSchemaBudgetError",
+          "completed": 1794264076193
+        }
+      ]
+    },
+    "sibling": {
+      "session": {
+        "id": "ses_-zUPTmmpQzzAU1H5kxbK",
+        "project_id": "prj_h1ZSzW8wwDVNTCv5v3n8",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b159\\project-sibling",
+        "title": "Keep this accepted Mission wake after the catalog change",
+        "missionID": "wake-86f75f5dc3041d36733c312e5e076eec",
+        "overlayModel": "b159-retired/offline"
+      },
+      "users": [
+        {
+          "id": "msg_hGvpHHKwJvZoMGdmnPEO",
+          "provider": "b159-retired",
+          "model": "offline",
+          "requestID": "b159-real-wake",
+          "openedEventID": "pev_h5zGlZo8KSKmPKuhUbn2"
+        }
+      ],
+      "events": [
+        {
+          "id": "pev_h5zGlZo8KSKmPKuhUbn2",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "3ca16b62-caeb-585f-a08d-b6c7bd27e3e3"
+        }
+      ],
+      "assistant": [
+        {
+          "id": "msg_g0VaWDDCL00IvYa6RntW",
+          "parentID": "msg_hGvpHHKwJvZoMGdmnPEO",
+          "error": "ToolSchemaBudgetError",
+          "completed": 1794264078340
+        }
+      ]
+    },
+    "currentFresh": {
+      "session": {
+        "id": "ses_-zUPTmki0zzCKQx28lSn",
+        "project_id": "prj_hsrG1iqbu6Bas7xcMRKC",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b159\\project-primary",
+        "title": "A newly admitted Mission uses the current catalog",
+        "missionID": "wake-2f2cd63d537cd69f39f0d7fb0798508a",
+        "overlayModel": "b159-current/offline"
+      },
+      "users": [
+        {
+          "id": "msg_hCAZNlBnKLwpn2lY6EbX",
+          "provider": "b159-current",
+          "model": "offline",
+          "requestID": "b159-new-current-model",
+          "openedEventID": "pev_hwKb62qZRXIykYyX48La"
+        }
+      ],
+      "events": [
+        {
+          "id": "pev_hwKb62qZRXIykYyX48La",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "0c8936cb-47c2-594a-a2cb-35d8323487e5"
+        }
+      ],
+      "assistant": [
+        {
+          "id": "msg_g0VaWDFJ100keRIqh02p",
+          "parentID": "msg_hCAZNlBnKLwpn2lY6EbX",
+          "error": "ToolSchemaBudgetError",
+          "completed": 1794264086968
+        }
+      ]
+    }
+  }
+}

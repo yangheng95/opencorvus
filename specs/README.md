@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [Mission 已接受请求在模型目录变更后的重放](records/2026-11/2026-11-10-mission-accepted-wake-catalog-replay.md)
 - [Mission 首次启动重发的项目作用域和执行目标](records/2026-11/2026-11-10-mission-first-wake-request-identity.md)
 - [保留删除的 Project 执行所有权与列表可见性](records/2026-11/2026-11-10-retained-execution-owner-and-readers.md)
 - [Mission 手动草稿创建的请求身份与原子提交](records/2026-11/2026-11-10-mission-draft-creation-replay.md)

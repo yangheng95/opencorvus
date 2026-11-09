@@ -252,7 +252,9 @@ Response fields:
 | `sessionID` | Session that carries the Mission agent conversation.                                   |
 | `created`   | `true` identifies a launch request, including a replay of that request; an explicit resume of an existing Mission returns `false`. |
 
-Mission IDs may only use lowercase letters, digits, and hyphens, with length 1 to 64. One `(project, directory, missionID)` maps to exactly one Mission Session. Replaying a request whose execution already closed returns the existing conflict; use a new request ID for a new action.
+Mission IDs may only use lowercase letters, digits, and hyphens, with length 1 to 64. One `(project, directory, missionID)` maps to exactly one Mission Session.
+
+After a wake or draft dispatch is accepted, the same request ID and input identify the original receipt even if the model catalog changes. Replaying an already closed execution returns its closed conflict. Use a new request ID and an available model for a new action.
 
 Equivalent HTTP request:
 

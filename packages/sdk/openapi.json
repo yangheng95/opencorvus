@@ -91710,7 +91710,7 @@
     },
     "/mission/wake": {
       "post": {
-        "description": "Start (or resume) a Mission agent session and inject a user prompt. Omit `missionID` to start a new mission; supply it to resume an existing one. On a first start, reuse requestID to join the same Mission in the same Project and directory. Supply requestID to join one exact accepted prompt, model, attachment and config input; reusing it with drift returns a conflict.",
+        "description": "Start (or resume) a Mission agent session and inject a user prompt. Omit `missionID` to start a new mission; supply it to resume an existing one. On a first start, reuse requestID to join the same Mission in the same Project and directory. Supply requestID to join one exact accepted prompt, model, attachment and config input even after the model catalog changes; reusing it with drift returns a conflict.",
         "operationId": "mission.wake",
         "parameters": [
           {
@@ -93032,7 +93032,7 @@
     },
     "/mission/{missionID}/dispatch": {
       "post": {
-        "description": "Consume the Mission's pending operator prompt through the canonical visible user-message and streaming Mission wake path. Supply requestID to replay one exact accepted input; reusing it with changed model or prompt facts returns a conflict.",
+        "description": "Consume the Mission's pending operator prompt through the canonical visible user-message and streaming Mission wake path. Supply requestID to replay one exact accepted input even after the model catalog changes; reusing it with changed model or prompt facts returns a conflict.",
         "operationId": "mission.dispatch",
         "parameters": [
           {

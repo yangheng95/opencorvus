@@ -26,14 +26,14 @@ test("first Mission wakes join the same authored occurrence across concurrent re
             name: "Mission first wake local catalog",
             npm: "@ai-sdk/openai-compatible",
             api: "http://127.0.0.1:1/v1",
-            models: {
-              offline: {
-                name: "Offline",
+            models: Object.fromEntries(["offline", "replacement"].map((id) => [
+              id, {
+                name: id,
                 tool_call: true,
                 modalities: { input: ["text"], output: ["text"] },
                 limit: { context: 32_000, output: 4_096 },
               },
-            },
+            ])),
           },
         },
       }),
@@ -61,6 +61,7 @@ test("first Mission wakes join the same authored occurrence across concurrent re
     productPillar: "work",
     expertSquadIDs: ["base"],
     model,
+    attachments: [{ mime: "text/plain", filename: "scope.txt", data: "U2NvcGU=" }],
   }
   const wake = (directory: string, body = input) => call(directory, "/mission/wake", body)
   const [first, parallel] = await Promise.all([wake(project.path), wake(project.path)])
@@ -80,10 +81,23 @@ test("first Mission wakes join the same authored occurrence across concurrent re
   expect(actual.closure).toMatchObject({
     state: "opened", source: "mission.wake", requestID: input.requestID, missionID: first.body.missionID,
   })
-  expect(actual.messages).toMatchObject([{ parts: [{ type: "text", text: input.text }] }])
+  expect(actual.messages).toMatchObject([{ parts: [
+    { type: "text", text: input.text },
+    { type: "file", mime: "text/plain", filename: "scope.txt", presentation: "attachment-index" },
+  ] }])
   const sibling = await wake(other.path)
   expect(sibling).toMatchObject({ status: 200, body: { created: true, productPillar: "work" } })
   expect(new Set([first.body.sessionID, sibling.body.sessionID]).size).toBe(2)
+  await Instance.provide({
+    directory: project.path,
+    fn: () => Config.updateProjectPatch({
+      model: "first-mission-replay/replacement",
+      provider: { "first-mission-replay": { models: { offline: null } } },
+    }),
+  })
+  expect(await Promise.all([wake(project.path), wake(project.path), wake(other.path)])).toEqual([first, first, sibling])
+  const retained = (await Session.messages({ sessionID: first.body.sessionID })).filter(({ info }) => info.role === "user")
+  expect(retained).toEqual(actual.messages)
   expect(await wake(project.path, { ...input, text: "A different author input." })).toMatchObject({
     status: 409, body: { name: "MissionExecutionWakeInputConflictError" },
   })
