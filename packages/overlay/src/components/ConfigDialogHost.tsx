@@ -490,7 +490,8 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
         return <ArchivePanel onOpenItem={props.onOpenArchivedItem} />
       case "changelog":
         return <ReleaseNotesPanel />
-      case "about":
+      case "about": {
+        const capabilities = getHostTransport().capabilities
         return (
           <SettingsPanel class="about-panel">
             <section class="about-hero">
@@ -577,10 +578,14 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
               <Disclosure.Trigger indicatorPosition="end">{t("about.shortcuts")}</Disclosure.Trigger>
               <Disclosure.Content>
                 <SettingsSurface>
-                  <SettingsRow align="center" title={<kbd>F12</kbd>} actions={t("about.shortcut_devtools")} />
-                  <SettingsRow align="center" title={<kbd>Ctrl +</kbd>} actions={t("about.shortcut_zoom_in")} />
-                  <SettingsRow align="center" title={<kbd>Ctrl -</kbd>} actions={t("about.shortcut_zoom_out")} />
-                  <SettingsRow align="center" title={<kbd>Ctrl 0</kbd>} actions={t("about.shortcut_zoom_reset")} />
+                  <Show when={capabilities.nativeCommands["devtools.toggle"]}>
+                    <SettingsRow align="center" title={<kbd>F12</kbd>} actions={t("about.shortcut_devtools")} />
+                  </Show>
+                  <Show when={capabilities.ui.overlayZoomHotkeys}>
+                    <SettingsRow align="center" title={<kbd>Ctrl +</kbd>} actions={t("about.shortcut_zoom_in")} />
+                    <SettingsRow align="center" title={<kbd>Ctrl -</kbd>} actions={t("about.shortcut_zoom_out")} />
+                    <SettingsRow align="center" title={<kbd>Ctrl 0</kbd>} actions={t("about.shortcut_zoom_reset")} />
+                  </Show>
                   <SettingsRow align="center" title={<kbd>Enter</kbd>} actions={t("about.shortcut_send")} />
                   <SettingsRow align="center" title={<kbd>Shift+Enter</kbd>} actions={t("about.shortcut_newline")} />
                   <SettingsRow align="center" title={<kbd>Esc</kbd>} actions={t("about.shortcut_close")} />
@@ -589,6 +594,7 @@ export function ConfigDialogHost(props: ConfigDialogHostProps) {
             </Disclosure.Root>
           </SettingsPanel>
         )
+      }
     }
   }
 

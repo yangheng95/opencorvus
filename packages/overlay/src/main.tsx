@@ -3450,7 +3450,7 @@ window.addEventListener(
       requestSideChat()
       return
     }
-    if (e.key === "F12") {
+    if (e.key === "F12" && getHostTransport().capabilities.nativeCommands["devtools.toggle"]) {
       e.preventDefault()
       runMainAsync("devtools.toggle", () => toggleDevtools())
     }
