@@ -1,0 +1,19 @@
+{
+  "html": [
+    "Browser tab: 208, Title: \"OpenCorvus\", URL: \"http://127.0.0.1:39117/ui/\".",
+    "0 AXWebArea OpenCorvus, URL: 127.0.0.1:39117/ui/",
+    "\t\t\t\t\t\t\t\t\t60 text field (settable) Server URL, Value: http://127.0.0.1:39117/ui",
+    "\t\t\t\t\t\t\t\t\t84 text Connection settings were saved, but the server did not pass the connection check. Check the server URL or try again when the server is available.",
+    "The focused UI element is 65 button Save"
+  ],
+  "misrouted": [
+    "\t\t\t\t\t\t\t\t\t60 text field (settable) Server URL, Value: http://127.0.0.1:39119",
+    "\t\t\t\t\t\t\t\t\t65 button Saved",
+    "The focused UI element is 65 button Saved"
+  ],
+  "online": [
+    "\t\t\t\t\t\t\t39 container Connection Diagnostics",
+    "\t\t\t\t\t\t\t\t40 container Description: Connection Diagnostics · Online · Port 39119, ID: connBadge",
+    "\t\t\t\t\t\t\t\t\t41 text Online"
+  ]
+}

@@ -1,0 +1,356 @@
+{
+  "projects": {
+    "after": {
+      "head": "5b1fcd4bd7c3437322973fc47423051ca9d6c063",
+      "originalBytes": 37,
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      },
+      "matchedProxyAndUpstream": [
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "3028f4a0-6356-4df3-8a17-1d7d404c8dca"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:05:42.860Z",
+            "requestID": "3028f4a0-6356-4df3-8a17-1d7d404c8dca",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "fcc9281b-8aaa-46e2-b6b0-2ac897b1dff4"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:05:56.717Z",
+            "requestID": "fcc9281b-8aaa-46e2-b6b0-2ac897b1dff4",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 0
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "6869dce0-ee2a-475a-bfe5-bfcd9cd8e0e1"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:05:57.740Z",
+            "requestID": "6869dce0-ee2a-475a-bfe5-bfcd9cd8e0e1",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "3d07540e-99c9-4869-bb87-0cb37e3685c5"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:06:07.749Z",
+            "requestID": "3d07540e-99c9-4869-bb87-0cb37e3685c5",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 0
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "753fa073-9e12-446b-9ef8-a3a9f4729088"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:06:15.154Z",
+            "requestID": "753fa073-9e12-446b-9ef8-a3a9f4729088",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        }
+      ]
+    },
+    "before": {
+      "head": "067a74bc1fe54ef5c0f0199e603f0c2f3a0ece31",
+      "originalBytes": 38,
+      "counts": {
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      },
+      "matchedProxyAndUpstream": [
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "103b2870-e57b-42db-93e3-b4aebc6a813d"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:02:22.114Z",
+            "requestID": "103b2870-e57b-42db-93e3-b4aebc6a813d",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 0
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "07aa982d-9c88-43d4-8cdd-9aebb6341e64"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:02:29.721Z",
+            "requestID": "07aa982d-9c88-43d4-8cdd-9aebb6341e64",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "947959f9-c840-49f3-aade-6b1aa0c700b3"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:02:38.126Z",
+            "requestID": "947959f9-c840-49f3-aade-6b1aa0c700b3",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 0
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "8bc23db4-b65f-48fe-b300-9dc43d5dd191"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:02:48.133Z",
+            "requestID": "8bc23db4-b65f-48fe-b300-9dc43d5dd191",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "a974abe0-b07b-46a1-a432-6c4c8d81e0d0"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:02:58.132Z",
+            "requestID": "a974abe0-b07b-46a1-a432-6c4c8d81e0d0",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "e7aef366-76a1-4020-8f2a-ff9f37e7c08d"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:03:08.133Z",
+            "requestID": "e7aef366-76a1-4020-8f2a-ff9f37e7c08d",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 0
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "782fba7c-4b21-4ae7-9d21-4b7c30bdf6d1"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:03:18.136Z",
+            "requestID": "782fba7c-4b21-4ae7-9d21-4b7c30bdf6d1",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "193dd0d7-0078-4dbb-ab91-af880e4230f9"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:03:28.141Z",
+            "requestID": "193dd0d7-0078-4dbb-ab91-af880e4230f9",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "93de1a0c-ee59-41b9-bc05-a027db3a3bba"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:03:38.136Z",
+            "requestID": "93de1a0c-ee59-41b9-bc05-a027db3a3bba",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "b5686844-7e76-4e36-b143-e323a6a593bc"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:03:48.125Z",
+            "requestID": "b5686844-7e76-4e36-b143-e323a6a593bc",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "3f49a135-2949-4f5f-94e8-95ec874fa14c"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:03:58.137Z",
+            "requestID": "3f49a135-2949-4f5f-94e8-95ec874fa14c",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "00cf432e-815c-42b4-a2d3-7f2439ae66ee"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:04:08.138Z",
+            "requestID": "00cf432e-815c-42b4-a2d3-7f2439ae66ee",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 0
+          }
+        },
+        {
+          "proxy": {
+            "source": "/global/health",
+            "target": "/global/automations",
+            "status": 200,
+            "requestID": "2d76c38d-328d-4a27-a445-e75abf24e3b4"
+          },
+          "upstream": {
+            "time": "2026-11-09T08:04:18.132Z",
+            "requestID": "2d76c38d-328d-4a27-a445-e75abf24e3b4",
+            "method": "GET",
+            "path": "/global/automations",
+            "status": "completed",
+            "statusCode": 200,
+            "duration": 1
+          }
+        }
+      ]
+    }
+  },
+  "shutdown": [
+    {
+      "body": "stopping",
+      "status": 200,
+      "port": 39119
+    },
+    {
+      "body": "stopping",
+      "status": 200,
+      "port": 39120
+    },
+    {
+      "body": "{\"ok\":true,\"occurrenceID\":\"cal_g0VaSf22B009m2RvCC0f\"}",
+      "status": 200,
+      "port": 39117
+    },
+    {
+      "body": "{\"ok\":true,\"occurrenceID\":\"cal_g0VaSf22E004dy6XXjqo\"}",
+      "status": 200,
+      "port": 39118
+    }
+  ]
+}

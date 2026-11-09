@@ -231,6 +231,30 @@ describe("managed server startup diagnostics", () => {
     expect(outcomes[0]?.cause).toBe(cause)
   })
 
+  test("a decoded non-health response produces a validation error and an offline connection", async () => {
+    const { checkConnection } = await import("../src/services/connection")
+    applySettings({ ...DEFAULT_SETTINGS, autoServer: false, serverUrl: "http://api.invalid" })
+    configure({ serverUrl: "http://api.invalid", directory: "" })
+    installTransport({
+      request() {
+        return []
+      },
+    })
+    setConnectionStatus("online")
+    const authority = captureApiAuthority()
+    let cause: unknown
+    const reachable = await checkConnection({
+      authority,
+      onUnavailable(_authority, error) {
+        cause = error
+        return undefined
+      },
+    })
+    expect({ reachable, status: appStore.connectionStatus }).toEqual({ reachable: false, status: "offline" })
+    expect(cause).toBeInstanceOf(TypeError)
+    expect((cause as TypeError).message).toBe("OpenCorvus health response must include a boolean healthy field.")
+  })
+
   test("durable database-unavailable health retains runtime paths and transitions offline", async () => {
     const { checkConnection } = await import("../src/services/connection")
     applySettings({ ...DEFAULT_SETTINGS, autoServer: false, serverUrl: "http://api.invalid" })

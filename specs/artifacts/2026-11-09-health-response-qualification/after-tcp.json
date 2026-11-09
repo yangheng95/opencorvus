@@ -1,0 +1,69 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "base": "http://127.0.0.1:39118",
+      "route": "/global/health",
+      "status": 200,
+      "requestID": "4cf337c7-cdba-4b85-8df8-0481e71d7484",
+      "contentType": "application/json",
+      "facts": {
+        "healthy": true,
+        "version": "local",
+        "healthSchema": "valid"
+      }
+    },
+    {
+      "base": "http://127.0.0.1:39118",
+      "route": "/global/automations",
+      "status": 200,
+      "requestID": "96839fc8-3aac-44c4-8613-d27e7ef01ba1",
+      "contentType": "application/json",
+      "facts": {
+        "automationSchema": "valid",
+        "records": []
+      }
+    },
+    {
+      "base": "http://127.0.0.1:39120",
+      "route": "/global/health",
+      "status": 200,
+      "requestID": "3028f4a0-6356-4df3-8a17-1d7d404c8dca",
+      "contentType": "application/json",
+      "facts": {
+        "actualBody": [],
+        "validationErrors": [
+          {
+            "keyword": "type",
+            "instancePath": "",
+            "params": {
+              "type": "object"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "base": "http://127.0.0.1:39118",
+      "route": "/project/current",
+      "status": 200,
+      "requestID": "5fa50cef-8ae4-4e1d-ad99-b030393370ba",
+      "contentType": "application/json",
+      "facts": {
+        "id": "prj_hN75V7Mf70tzt3BX7MN1",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b93\\project-after",
+        "projectSchema": "valid"
+      }
+    },
+    {
+      "base": "http://127.0.0.1:39118",
+      "route": "/ui/global/health",
+      "status": 200,
+      "requestID": "095ec7a9-c221-418e-9655-5b67ce0ad6cf",
+      "contentType": "text/html; charset=utf-8",
+      "facts": {
+        "documentBytes": 11898
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "invalid": [
+    "\t\t\t\t\t\t\t\t\t60 text field (settable) Server URL, Value: http://127.0.0.1:39120",
+    "\t\t\t\t\t\t\t\t\t66 text Connection settings were saved, but the server did not pass the connection check. Check the server URL or try again when the server is available.",
+    "The focused UI element is 65 button Save"
+  ],
+  "diagnostic": [
+    "\t\t\t\t\t\t\t\t\t\t88 button (expanded) Details, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t89 text Details",
+    "\t\t\t\t\t\t\t\t\t\t90 text TypeError: OpenCorvus health response must include a boolean healthy field.",
+    "The focused UI element is 88 button (expanded) Details, Secondary Actions: Collapse"
+  ],
+  "localized": [
+    "\t\t\t\t\t\t\t\t\t60 text field (settable) 服务地址, Value: http://127.0.0.1:39120",
+    "\t\t\t\t\t\t\t\t\t66 text 连接设置已保存，但服务器未通过连接检查。请核对服务地址，或等服务器可用后重试。",
+    "\t\t\t\t\t\t\t\t\t\t88 button (expanded) 详细信息, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t89 text 详细信息",
+    "\t\t\t\t\t\t\t\t\t\t90 text TypeError: OpenCorvus health response must include a boolean healthy field."
+  ],
+  "offline": [
+    "\t\t\t\t\t\t\t\t38 container Description: 连接诊断 · 离线, ID: connBadge",
+    "\t\t\t\t\t\t\t\t\t39 text 离线",
+    "\t\t\t\t65 text OpenCorvus 后端无法访问，实时数据暂不可用。"
+  ],
+  "coldInitial": [
+    "\t\t\t\t\t\t37 container 连接诊断",
+    "\t\t\t\t\t\t\t38 container Description: 连接诊断 · 连接中, ID: connBadge"
+  ],
+  "coldSetting": [
+    "\t\t\t\t\t\t\t\t\t60 text 服务地址",
+    "\t\t\t\t\t\t\t\t\t61 text field (settable) 服务地址, Value: http://127.0.0.1:39120"
+  ],
+  "correctSaved": [
+    "Browser tab: 209, Title: \"OpenCorvus\", URL: \"http://127.0.0.1:39118/ui/\".",
+    "1 AXWebArea OpenCorvus, URL: 127.0.0.1:39118/ui/",
+    "\t\t\t\t\t\t\t\t\t61 text field (settable) 服务地址, Value: http://127.0.0.1:39118",
+    "\t\t\t\t\t\t\t\t\t66 button 已保存",
+    "The focused UI element is 66 button 已保存"
+  ],
+  "correctOnline": [
+    "Browser tab: 209, Title: \"OpenCorvus\", URL: \"http://127.0.0.1:39118/ui/\".",
+    "1 AXWebArea OpenCorvus, URL: 127.0.0.1:39118/ui/",
+    "\t\t\t\t\t\t\t\t\t\t38 button (expanded) Description: 收起 project-after, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t39 button 打开项目: project-after",
+    "\t\t\t\t\t\t\t\t41 container Description: 连接诊断 · 在线 · 端口 39118, ID: connBadge",
+    "\t\t\t\t\t\t\t\t\t42 text 在线"
+  ]
+}

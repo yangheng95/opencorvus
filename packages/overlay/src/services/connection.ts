@@ -280,7 +280,10 @@ export async function checkConnection(options: CheckConnectionOptions = {}): Pro
         authority,
       })
       if (!isApiAuthorityCurrent(authority)) return false
-      const paths = health?.paths
+      if (typeof health?.healthy !== "boolean") {
+        throw new TypeError("OpenCorvus health response must include a boolean healthy field.")
+      }
+      const paths = health.paths
       if (
         paths &&
         typeof paths.database === "string" &&
@@ -289,8 +292,8 @@ export async function checkConnection(options: CheckConnectionOptions = {}): Pro
       ) {
         setAppStore("enginePaths", { database: paths.database, data: paths.data, home: paths.home })
       }
-      if (health?.healthy === false) {
-        const unavailable = health?.databaseUnavailable
+      if (!health.healthy) {
+        const unavailable = health.databaseUnavailable
         const detail =
           unavailable && typeof unavailable === "object"
             ? `${String(unavailable.code || "database unavailable")}: ${String(unavailable.message || "")}`
@@ -298,7 +301,7 @@ export async function checkConnection(options: CheckConnectionOptions = {}): Pro
         throw new Error(`OpenCorvus health probe reported an unavailable database: ${detail}`)
       }
       batch(() => {
-        setAppStore("coreVersion", health?.healthy === true && typeof health.version === "string" ? health.version : "")
+        setAppStore("coreVersion", typeof health.version === "string" ? health.version : "")
         setConnectionStatus("online")
       })
       options.onHealthy?.(authority)
