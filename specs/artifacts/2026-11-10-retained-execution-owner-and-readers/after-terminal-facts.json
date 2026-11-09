@@ -1,0 +1,330 @@
+{
+  "version": 12,
+  "integrity": "ok",
+  "foreignKeyIssues": 0,
+  "counts": {
+    "project": 4,
+    "session": 25,
+    "engine_task": 4,
+    "message": 4,
+    "provider_usage_event": 0,
+    "sessionTombstones": 12
+  },
+  "missions": {
+    "m2": {
+      "row": {
+        "id": "ses_hQAP9ZeAlGLNEilvI39f",
+        "project_id": "prj_hZY8z2XbiYlzGbWsJKrA",
+        "title": "Paging boundary retired",
+        "time_archived": null
+      },
+      "history": [
+        {
+          "type": "mission.execution.closing",
+          "correlation_id": "572e092f-0630-40b4-be19-8cd3243ab85c",
+          "seq": 1,
+          "source": "mission.delete"
+        },
+        {
+          "type": "mission.execution.closed",
+          "correlation_id": "572e092f-0630-40b4-be19-8cd3243ab85c",
+          "seq": 2,
+          "source": "mission.delete"
+        },
+        {
+          "type": "mission.retention.delete_requested",
+          "correlation_id": "342fa31b-a2ea-45d7-a554-38eb844f8d06",
+          "seq": 3,
+          "source": "mission.delete"
+        },
+        {
+          "type": "session.deleted",
+          "correlation_id": null,
+          "seq": 4,
+          "source": "session.delete"
+        }
+      ]
+    },
+    "archivedGone": {
+      "row": {
+        "id": "ses_hixEnkwsbauJCuWNJtA2",
+        "project_id": "prj_hZY8z2XbiYlzGbWsJKrA",
+        "title": "Archive visibility retire",
+        "time_archived": 1794262647119
+      },
+      "history": [
+        {
+          "type": "mission.execution.closing",
+          "correlation_id": "6ef972ec-6f10-49bc-bcaf-c2f66244aeb6",
+          "seq": 1,
+          "source": "mission.archive"
+        },
+        {
+          "type": "mission.execution.closed",
+          "correlation_id": "6ef972ec-6f10-49bc-bcaf-c2f66244aeb6",
+          "seq": 2,
+          "source": "mission.archive"
+        },
+        {
+          "type": "mission.retention.delete_requested",
+          "correlation_id": "207c558f-4d5f-4299-95ce-3bc813bb61d6",
+          "seq": 3,
+          "source": "mission.delete"
+        },
+        {
+          "type": "session.deleted",
+          "correlation_id": null,
+          "seq": 4,
+          "source": "session.delete"
+        }
+      ]
+    },
+    "concurrentTarget": {
+      "row": {
+        "id": "ses_hPFQr9t0TA0eXvZ0tp71",
+        "project_id": "prj_hZY8z2XbiYlzGbWsJKrA",
+        "title": "Parallel close target",
+        "time_archived": null
+      },
+      "history": [
+        {
+          "type": "mission.execution.closing",
+          "correlation_id": "049040ed-0bb9-4f59-8e81-01361717cd04",
+          "seq": 1,
+          "source": "mission.delete"
+        },
+        {
+          "type": "mission.execution.closed",
+          "correlation_id": "049040ed-0bb9-4f59-8e81-01361717cd04",
+          "seq": 2,
+          "source": "mission.delete"
+        },
+        {
+          "type": "mission.retention.delete_requested",
+          "correlation_id": "09b95ddf-f5c6-4aef-ad67-807d2f91dc69",
+          "seq": 3,
+          "source": "mission.delete"
+        },
+        {
+          "type": "session.deleted",
+          "correlation_id": null,
+          "seq": 4,
+          "source": "session.delete"
+        }
+      ]
+    },
+    "siblingAfterRestart": {
+      "row": {
+        "id": "ses_h6GXx8kwSNc1VTEKEmUG",
+        "project_id": "prj_hJv1A8RHlrL4UebKrj6T",
+        "title": "Disposable sibling after restart",
+        "time_archived": null
+      },
+      "history": [
+        {
+          "type": "mission.execution.closing",
+          "correlation_id": "8615c81d-c127-4eb3-b1ba-bb5fc638d47e",
+          "seq": 1,
+          "source": "mission.delete"
+        },
+        {
+          "type": "mission.execution.closed",
+          "correlation_id": "8615c81d-c127-4eb3-b1ba-bb5fc638d47e",
+          "seq": 2,
+          "source": "mission.delete"
+        },
+        {
+          "type": "mission.retention.delete_requested",
+          "correlation_id": "7fbdf945-4e2a-40a1-96a9-c6fd5cbacdf3",
+          "seq": 3,
+          "source": "mission.delete"
+        },
+        {
+          "type": "session.deleted",
+          "correlation_id": null,
+          "seq": 4,
+          "source": "session.delete"
+        }
+      ]
+    }
+  },
+  "visible": [
+    {
+      "id": "ses_hfEqkbceh41tzbZyhBTs",
+      "project_id": "prj_hZY8z2XbiYlzGbWsJKrA",
+      "title": "Paging boundary live",
+      "time_archived": null
+    },
+    {
+      "id": "ses_hBsJYBBnwXU2wbv2yas1",
+      "project_id": "prj_hZY8z2XbiYlzGbWsJKrA",
+      "title": "Archive visibility keep",
+      "time_archived": 1794262647083
+    }
+  ],
+  "tasks": {
+    "newDirect": {
+      "task": {
+        "id": "tsk_g00VaW7Dlk00E00RHEWw",
+        "project_id": "prj_hZY8z2XbiYlzGbWsJKrA",
+        "session_id": "ses_-zUPTslmBzzefoYzSUqq"
+      },
+      "history": [
+        {
+          "type": "task.execution.opened",
+          "correlation_id": null,
+          "seq": 3,
+          "source": "engine.pipeline"
+        },
+        {
+          "type": "task.cancellation.requested",
+          "correlation_id": "faf2e041-1fcb-4971-8ba6-8b4ac0704269",
+          "seq": 5,
+          "source": "task.delete"
+        },
+        {
+          "type": "task.cancelled",
+          "correlation_id": "faf2e041-1fcb-4971-8ba6-8b4ac0704269",
+          "seq": 6,
+          "source": "state.task"
+        },
+        {
+          "type": "task.deleted",
+          "correlation_id": null,
+          "seq": 7,
+          "source": "task.delete"
+        }
+      ],
+      "sessionHistory": []
+    },
+    "newRoot": {
+      "task": {
+        "id": "tsk_g00VaW7EPW00saCKtxzi",
+        "project_id": "prj_hZY8z2XbiYlzGbWsJKrA",
+        "session_id": "ses_-zUPTslESzzfFD0PTp5U"
+      },
+      "history": [
+        {
+          "type": "task.execution.opened",
+          "correlation_id": null,
+          "seq": 3,
+          "source": "engine.pipeline"
+        },
+        {
+          "type": "task.cancellation.requested",
+          "correlation_id": "728ad280-e59d-43e7-b83d-33dcde57589e",
+          "seq": 5,
+          "source": "session.delete"
+        },
+        {
+          "type": "task.cancelled",
+          "correlation_id": "728ad280-e59d-43e7-b83d-33dcde57589e",
+          "seq": 6,
+          "source": "state.task"
+        },
+        {
+          "type": "task.deleted",
+          "correlation_id": null,
+          "seq": 7,
+          "source": "task.delete"
+        }
+      ],
+      "sessionHistory": [
+        {
+          "type": "session.deleted",
+          "correlation_id": null,
+          "seq": 1,
+          "source": "session.delete"
+        }
+      ]
+    },
+    "oldDirect": {
+      "task": {
+        "id": "tsk_g00VaW4NBu00H99vHzw3",
+        "project_id": "prj_hZY8z2XbiYlzGbWsJKrA",
+        "session_id": "ses_-zUPTvcXizz3LHO78XzZ"
+      },
+      "history": [
+        {
+          "type": "task.execution.opened",
+          "correlation_id": null,
+          "seq": 3,
+          "source": "engine.pipeline"
+        },
+        {
+          "type": "task.cancellation.requested",
+          "correlation_id": "017954f9-dc39-4564-9c47-c4f42df48eb1",
+          "seq": 5,
+          "source": "task.delete"
+        },
+        {
+          "type": "task.cancelled",
+          "correlation_id": "017954f9-dc39-4564-9c47-c4f42df48eb1",
+          "seq": 12,
+          "source": "state.task"
+        },
+        {
+          "type": "task.deleted",
+          "correlation_id": null,
+          "seq": 21,
+          "source": "task.delete"
+        }
+      ],
+      "sessionHistory": []
+    },
+    "oldRoot": {
+      "task": {
+        "id": "tsk_g00VaW4beT00AG0YEAqv",
+        "project_id": "prj_hZY8z2XbiYlzGbWsJKrA",
+        "session_id": "ses_-zUPTvOBnzztR5BfgySI"
+      },
+      "history": [
+        {
+          "type": "task.execution.opened",
+          "correlation_id": null,
+          "seq": 3,
+          "source": "engine.pipeline"
+        },
+        {
+          "type": "task.cancellation.requested",
+          "correlation_id": "de1e6fef-db71-48a6-a7ec-e2718f5a4477",
+          "seq": 5,
+          "source": "session.delete"
+        },
+        {
+          "type": "task.cancelled",
+          "correlation_id": "de1e6fef-db71-48a6-a7ec-e2718f5a4477",
+          "seq": 8,
+          "source": "state.task"
+        },
+        {
+          "type": "task.deleted",
+          "correlation_id": null,
+          "seq": 9,
+          "source": "task.delete"
+        }
+      ],
+      "sessionHistory": [
+        {
+          "type": "session.deleted",
+          "correlation_id": null,
+          "seq": 1,
+          "source": "session.delete"
+        }
+      ]
+    }
+  },
+  "standalone": {
+    "sessionID": "ses_-zUPTskJJzzlWfecUUIr",
+    "receipt": [
+      {
+        "type": "session.deleted",
+        "correlation_id": null,
+        "seq": 1,
+        "source": "session.delete"
+      }
+    ],
+    "disposition": "physically_deleted"
+  },
+  "isolatedGitNotePreserved": true
+}

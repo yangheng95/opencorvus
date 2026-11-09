@@ -1,0 +1,86 @@
+{
+  "old": {
+    "status": 200,
+    "requestID": "c6ac8dca-f731-4d1c-8bb3-83c4d4a15f9f",
+    "data": [
+      {
+        "missionID": "draft-dbd281f9c3d3da9a1216386edf31b921",
+        "sessionID": "ses_hADvVjqC4JxWg4hf8qYC",
+        "title": "Scoped API review draft",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-other",
+        "created": 1794261315576,
+        "updated": 1794261315576,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Preserve this exact initial request during replay."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  },
+  "target": {
+    "status": 200,
+    "requestID": "61edf26e-14e3-4ee2-987e-3424fde74260",
+    "data": {
+      "missionID": "draft-2ee3d9a264f064fedad45eba14b0911b",
+      "sessionID": "ses_h6GXx8kwSNc1VTEKEmUG",
+      "title": "Disposable sibling after restart",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-other",
+      "created": 1794262761171,
+      "updated": 1794262761171,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "Isolated receipt proof."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  },
+  "closed": {
+    "status": 200,
+    "requestID": "a2f4464b-8478-4832-9afe-f19e6287859a",
+    "data": true
+  },
+  "retained": {
+    "status": 200,
+    "requestID": "4d96b31c-20ff-4a36-8f5c-fbcd8eff3056",
+    "data": [
+      {
+        "missionID": "draft-dbd281f9c3d3da9a1216386edf31b921",
+        "sessionID": "ses_hADvVjqC4JxWg4hf8qYC",
+        "title": "Scoped API review draft",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-other",
+        "created": 1794261315576,
+        "updated": 1794261315576,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Preserve this exact initial request during replay."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  }
+}

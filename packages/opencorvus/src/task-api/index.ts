@@ -2832,7 +2832,7 @@ export namespace EngineService {
         lifecycle,
       })
     }
-    const operation = cancelTaskWithIndependentProjectOwner(taskID, options)
+    const operation = cancelTask(taskID, options)
     let convergenceFailure: unknown
     void operation.catch((error) => {
       convergenceFailure = error
@@ -2947,16 +2947,10 @@ export namespace EngineService {
             projectDeletionAdmission: operationOptions.projectDeletionAdmission,
             fn: () => cancelTaskOnce(taskID, operationOptions),
           })
-        : cancelTaskOnce(taskID, operationOptions),
-    )
-  }
-
-  function cancelTaskWithIndependentProjectOwner(taskID: string, options: CancelTaskOptions): Promise<boolean> {
-    return joinTaskCancellation(taskID, options, (operationOptions) =>
-      runWithIndependentProjectIdentity({
-        directory: taskCwd(taskID),
-        fn: () => cancelTaskOnce(taskID, operationOptions),
-      }),
+        : runWithIndependentProjectIdentity({
+            directory: taskCwd(taskID),
+            fn: () => cancelTaskOnce(taskID, operationOptions),
+          }),
     )
   }
 
@@ -3035,6 +3029,12 @@ export namespace EngineService {
     })
     const parsedCancellation = findPendingTaskCancellationRequestEvent(taskID)
     if (!parsedCancellation || parsedCancellation.requested.id !== cancellationRequest.id) {
+      // A different process may have settled the same cancellation during
+      // Project identity acquisition or after the request transaction.
+      if (isTaskCancelled(requireTaskInCurrentProject(taskID))) {
+        await reconcileCancelledTaskPermissions(taskID)
+        return true
+      }
       throw new Error(
         `Task ${taskID} cancellation request ${cancellationRequest.id} is not the durable pending authority`,
       )

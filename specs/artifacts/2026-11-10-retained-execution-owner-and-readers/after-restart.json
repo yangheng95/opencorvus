@@ -1,0 +1,563 @@
+{
+  "known": [
+    {
+      "status": 200,
+      "requestID": "091185d9-a46f-4aa8-8425-20391e41f2b8",
+      "data": true
+    },
+    {
+      "status": 200,
+      "requestID": "58997583-db4f-4c98-8cde-48540a992a5e",
+      "data": true
+    },
+    {
+      "status": 200,
+      "requestID": "b5c7f57a-698d-42d6-910a-f79b3098c339",
+      "data": {
+        "ok": true,
+        "status": "tombstoned",
+        "sessionID": "ses_-zUPTslESzzfFD0PTp5U",
+        "sessionHistoryRetained": true,
+        "authorizationAuditRetained": true,
+        "residue": []
+      }
+    },
+    {
+      "status": 200,
+      "requestID": "badbe873-d004-4617-855b-6f0de58f34e2",
+      "data": {
+        "rows": [
+          {
+            "kind": "mission",
+            "id": "draft-fba2042809ac67bf7daffb3fc497c623",
+            "missionID": "draft-fba2042809ac67bf7daffb3fc497c623",
+            "sessionID": "ses_hBsJYBBnwXU2wbv2yas1",
+            "title": "Archive visibility keep",
+            "pendingPromptText": "Keep this exact draft pending during the retention check.",
+            "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention",
+            "created": 1794262647025,
+            "started": 1794262647025,
+            "updated": 1794262647083,
+            "pinned": false,
+            "archived": 1794262647083,
+            "interruptible": false,
+            "outcome": null,
+            "productPillar": "work",
+            "taskStats": {
+              "total": 0,
+              "running": 0,
+              "inactive": 0
+            },
+            "pendingInteractions": 0,
+            "tasks": []
+          }
+        ],
+        "nextCursor": null
+      }
+    }
+  ],
+  "current": {
+    "status": 200,
+    "requestID": "1c6e01d7-c190-46c4-b1d2-c7b54cd79c3f",
+    "data": [
+      {
+        "missionID": "draft-3b755ddbf746c3a68fc4c67f39498bdc",
+        "sessionID": "ses_hfEqkbceh41tzbZyhBTs",
+        "title": "Paging boundary live",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention",
+        "created": 1794262646849,
+        "updated": 1794262646849,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Keep this exact draft pending during the retention check."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "draft-8036dd5e7e777f720ed1f95e31976554",
+        "sessionID": "ses_h029idUs9UP9FkWdNHpz",
+        "title": "Keep this Mission visible",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention",
+        "created": 1794261916675,
+        "updated": 1794261916675,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "This isolated draft is for real retention acceptance."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "draft-36c5a27c47fc91b639e4cf0722eae204",
+        "sessionID": "ses_hoeVF2NviVIPx6VTfvPG",
+        "title": "Desktop retry review draft",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794261495290,
+        "updated": 1794261495290,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Keep this exact request pending after the save is retried."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "draft-4c77e44e945e32133a39098324dc2a07",
+        "sessionID": "ses_hvu3HJxW4Uzqy2LvVhnz",
+        "title": "Moved project review draft",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\promotion-destinations\\Mission move acceptance",
+        "created": 1794261419360,
+        "updated": 1794261419744,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Preserve this exact initial request during replay."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "draft-72583507b4461f1e90aeb976eb3f9156",
+        "sessionID": "ses_hwsc2nGW5dnzSJlSVYYP",
+        "title": "Scoped API review draft",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794261315145,
+        "updated": 1794261418101,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Current draft text after the operator edit."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "draft-dbd281f9c3d3da9a1216386edf31b921",
+        "sessionID": "ses_hADvVjqC4JxWg4hf8qYC",
+        "title": "Scoped API review draft",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-other",
+        "created": 1794261315576,
+        "updated": 1794261315576,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Preserve this exact initial request during replay."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "draft-fc8ba99090cbd68ef8e1c871397ef23b",
+        "sessionID": "ses_hn6PHYh2rEvzMG5a9GGv",
+        "title": "Scoped API review draft",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794261315191,
+        "updated": 1794261315191,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Preserve this exact initial request during replay."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "949ccd17d3dd4ff6",
+        "sessionID": "ses_-zUPU0qKKzz4NFthvE0R",
+        "title": "One parallel Mission draft request",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794260726659,
+        "updated": 1794260726680,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "The saved draft must stay pending for review."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "ea707271694436fc",
+        "sessionID": "ses_-zUPU0qKSzz9tMi41mWF",
+        "title": "One parallel Mission draft request",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794260726651,
+        "updated": 1794260726669,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "The saved draft must stay pending for review."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "5bf5b7b867620950",
+        "sessionID": "ses_-zUPU0qL0zzggOQAD36R",
+        "title": "One Mission draft request",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794260726617,
+        "updated": 1794260726631,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "The saved draft must stay pending for review."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  },
+  "ledger": {
+    "status": 200,
+    "requestID": "2f8fec65-587f-4ee5-b2a5-76a5f1e23fea",
+    "data": {
+      "rows": [
+        {
+          "kind": "mission",
+          "id": "draft-3b755ddbf746c3a68fc4c67f39498bdc",
+          "missionID": "draft-3b755ddbf746c3a68fc4c67f39498bdc",
+          "sessionID": "ses_hfEqkbceh41tzbZyhBTs",
+          "title": "Paging boundary live",
+          "pendingPromptText": "Keep this exact draft pending during the retention check.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention",
+          "created": 1794262646849,
+          "started": 1794262646849,
+          "updated": 1794262646849,
+          "pinned": false,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "mission",
+          "id": "draft-8036dd5e7e777f720ed1f95e31976554",
+          "missionID": "draft-8036dd5e7e777f720ed1f95e31976554",
+          "sessionID": "ses_h029idUs9UP9FkWdNHpz",
+          "title": "Keep this Mission visible",
+          "pendingPromptText": "This isolated draft is for real retention acceptance.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention",
+          "created": 1794261916675,
+          "started": 1794261916675,
+          "updated": 1794261916675,
+          "pinned": false,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "project",
+          "id": "prj_hZY8z2XbiYlzGbWsJKrA",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention",
+          "created": 1794261916646,
+          "updated": 1794261916646,
+          "pinned": false
+        },
+        {
+          "kind": "mission",
+          "id": "draft-36c5a27c47fc91b639e4cf0722eae204",
+          "missionID": "draft-36c5a27c47fc91b639e4cf0722eae204",
+          "sessionID": "ses_hoeVF2NviVIPx6VTfvPG",
+          "title": "Desktop retry review draft",
+          "pendingPromptText": "Keep this exact request pending after the save is retried.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+          "created": 1794261495290,
+          "started": 1794261495290,
+          "updated": 1794261495290,
+          "pinned": false,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "mission",
+          "id": "draft-4c77e44e945e32133a39098324dc2a07",
+          "missionID": "draft-4c77e44e945e32133a39098324dc2a07",
+          "sessionID": "ses_hvu3HJxW4Uzqy2LvVhnz",
+          "title": "Moved project review draft",
+          "pendingPromptText": "Preserve this exact initial request during replay.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\promotion-destinations\\Mission move acceptance",
+          "created": 1794261419360,
+          "started": 1794261419360,
+          "updated": 1794261419744,
+          "pinned": false,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "chat",
+          "experience": "work",
+          "id": "ses_h1QS0WboXulGuw7Auz0J",
+          "sessionID": "ses_h1QS0WboXulGuw7Auz0J",
+          "title": "Work",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\promotion-destinations\\Mission move acceptance",
+          "created": 1794261419298,
+          "started": 1794261419298,
+          "updated": 1794261419744,
+          "pinned": false,
+          "status": "idle"
+        },
+        {
+          "kind": "project",
+          "id": "prj_hljdDbXd99k65qUKmh6O",
+          "title": "Mission move acceptance",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\promotion-destinations\\Mission move acceptance",
+          "created": 1794261418680,
+          "updated": 1794261419743,
+          "pinned": false
+        },
+        {
+          "kind": "mission",
+          "id": "draft-72583507b4461f1e90aeb976eb3f9156",
+          "missionID": "draft-72583507b4461f1e90aeb976eb3f9156",
+          "sessionID": "ses_hwsc2nGW5dnzSJlSVYYP",
+          "title": "Scoped API review draft",
+          "pendingPromptText": "Current draft text after the operator edit.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+          "created": 1794261315145,
+          "started": 1794261315145,
+          "updated": 1794261418101,
+          "pinned": false,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "mission",
+          "id": "draft-dbd281f9c3d3da9a1216386edf31b921",
+          "missionID": "draft-dbd281f9c3d3da9a1216386edf31b921",
+          "sessionID": "ses_hADvVjqC4JxWg4hf8qYC",
+          "title": "Scoped API review draft",
+          "pendingPromptText": "Preserve this exact initial request during replay.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-other",
+          "created": 1794261315576,
+          "started": 1794261315576,
+          "updated": 1794261315576,
+          "pinned": false,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "project",
+          "id": "prj_hJv1A8RHlrL4UebKrj6T",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-other",
+          "created": 1794261315568,
+          "updated": 1794261315568,
+          "pinned": false
+        },
+        {
+          "kind": "mission",
+          "id": "draft-fc8ba99090cbd68ef8e1c871397ef23b",
+          "missionID": "draft-fc8ba99090cbd68ef8e1c871397ef23b",
+          "sessionID": "ses_hn6PHYh2rEvzMG5a9GGv",
+          "title": "Scoped API review draft",
+          "pendingPromptText": "Preserve this exact initial request during replay.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+          "created": 1794261315191,
+          "started": 1794261315191,
+          "updated": 1794261315191,
+          "pinned": false,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "mission",
+          "id": "949ccd17d3dd4ff6",
+          "missionID": "949ccd17d3dd4ff6",
+          "sessionID": "ses_-zUPU0qKKzz4NFthvE0R",
+          "title": "One parallel Mission draft request",
+          "pendingPromptText": "The saved draft must stay pending for review.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+          "created": 1794260726659,
+          "started": 1794260726659,
+          "updated": 1794260726680,
+          "pinned": false,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "mission",
+          "id": "ea707271694436fc",
+          "missionID": "ea707271694436fc",
+          "sessionID": "ses_-zUPU0qKSzz9tMi41mWF",
+          "title": "One parallel Mission draft request",
+          "pendingPromptText": "The saved draft must stay pending for review.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+          "created": 1794260726651,
+          "started": 1794260726651,
+          "updated": 1794260726669,
+          "pinned": false,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "mission",
+          "id": "5bf5b7b867620950",
+          "missionID": "5bf5b7b867620950",
+          "sessionID": "ses_-zUPU0qL0zzggOQAD36R",
+          "title": "One Mission draft request",
+          "pendingPromptText": "The saved draft must stay pending for review.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+          "created": 1794260726617,
+          "started": 1794260726617,
+          "updated": 1794260726631,
+          "pinned": false,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "project",
+          "id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+          "created": 1794260704022,
+          "updated": 1794260704022,
+          "pinned": false
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

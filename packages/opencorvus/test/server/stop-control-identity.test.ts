@@ -33,8 +33,12 @@ async function unavailableModel(directory: string) {
 }
 
 function stop(directory: string, route: string, body?: object) {
+  return retentionRequest(directory, route, "POST", body)
+}
+
+function retentionRequest(directory: string, route: string, method = "GET", body?: object) {
   return runOutsideInstanceContext(() => Server.App().request(route, {
-    method: "POST", headers: { "x-opencorvus-directory": directory, "Content-Type": "application/json" },
+    method, headers: { "x-opencorvus-directory": directory, "Content-Type": "application/json" },
     ...(body ? { body: JSON.stringify(body) } : {}),
   }))
 }
@@ -73,6 +77,60 @@ const provenance = { surface: "api", reason: "Operator stopped the original exec
 const origin = (id: string) => ({
   actor: "user" as const, source: "task.cancel" as const, requestID: `stop:${id}`, ...provenance,
 })
+
+for (const target of ["task", "session"] as const) {
+  test(`persisted ${target} deletion settles the original Task cancellation and returns its deletion receipt`, async () => {
+    await using project = await memoryProject(`retention-owner-${target}`)
+    const task = await Instance.provideProjectIdentity({ directory: project.path, fn: () => openedTask() })
+    await unavailableModel(project.path)
+    await Instance.disposeAll()
+    const route = target === "task" ? `/task/${task.id}` : `/session/${task.root.id}?deleteTasks=true`
+    const response = await retentionRequest(project.path, route, "DELETE", target === "task" ? provenance : undefined)
+    const body = await response.json()
+    expect(response.status).toBe(200)
+    if (target === "task") expect(body).toBe(true)
+    else expect(body).toMatchObject({ status: "tombstoned", sessionID: task.root.id })
+    const accepted = ProtocolStore.latestTaskEvent(task.id, "task.cancellation.requested")
+    expect(accepted).toMatchObject({
+      source: target === "task" ? "task.delete" : "session.delete",
+      payload: { reason: target === "task" ? provenance.reason : "Session deletion requested" },
+    })
+    expect(ProtocolStore.latestTaskEvent(task.id, "task.cancelled")).toMatchObject({
+      correlationID: accepted!.correlationID,
+      payload: { error: "task cancelled", execution_epoch: 1 },
+    })
+    const replay = await retentionRequest(project.path, route, "DELETE", target === "task" ? provenance : undefined)
+    expect({ status: replay.status, body: await replay.json() }).toMatchObject({ status: 200, body })
+  }, 60_000)
+}
+
+test("retained Mission deletion leaves live Mission and Session rows on the first page across the real readers", async () => {
+  await using project = await memoryProject("retention-owner-mission")
+  await using sibling = await memoryProject("retention-owner-other")
+  const create = (directory: string, missionID: string, title: string) =>
+    Instance.provideProjectIdentity({ directory, fn: () => ensureMissionSession({
+      missionID, initialTitle: title, defaultCwd: directory, productPillar: "work", heldExpertSquadIDs: ["base"],
+    }) })
+  const live = await create(project.path, "paging-live-mission", "Retention page keep")
+  const retired = await create(project.path, "paging-retired-mission", "Retention page retire")
+  const other = await create(sibling.path, "paging-other-mission", "Other Project Mission")
+  await unavailableModel(project.path)
+  await Instance.disposeAll()
+  const deleted = await retentionRequest(project.path, `/mission/${retired.missionID}`, "DELETE", provenance)
+  expect({ status: deleted.status, body: await deleted.json() }).toEqual({ status: 200, body: true })
+  expect(ProtocolStore.latestSessionEvent(retired.id, "session.deleted")?.aggregateID).toBe(retired.id)
+  const page = "limit=1&search=Retention%20page"
+  const [missions, sessions, ledger, otherProject] = await Promise.all([
+    retentionRequest(project.path, `/mission?${page}`),
+    retentionRequest(project.path, `/session?${page}`),
+    retentionRequest(project.path, `/work-ledger?${page}`),
+    retentionRequest(sibling.path, "/mission?search=Other%20Project%20Mission"),
+  ])
+  expect(await missions.json()).toMatchObject([{ missionID: live.missionID, sessionID: live.id }])
+  expect(await sessions.json()).toMatchObject([{ id: live.id, title: live.title }])
+  expect(await ledger.json()).toMatchObject({ rows: [{ kind: "mission", sessionID: live.id }], nextCursor: null })
+  expect(await otherProject.json()).toMatchObject([{ missionID: other.missionID, sessionID: other.id }])
+}, 60_000)
 
 for (const kind of ["chat", "work", "session"] as const) {
   test(`${kind} Stop cancels the exact original input through full Server middleware with an unavailable model`, async () => {

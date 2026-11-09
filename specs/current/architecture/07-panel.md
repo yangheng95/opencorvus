@@ -1690,6 +1690,12 @@ a retryable highlighting failure; grammar loading never owns file saving.
 
 ## Mission draft and schedule authoring
 
+Mission Board, Work Ledger and ordinary Session lists reduce the same terminal
+Session deletion fact before ordering, paging or applying archive scope.
+Preserved audit Sessions do not consume a visible page slot. Work Ledger uses
+one persisted read snapshot for candidates, exact Session projections and the
+next cursor; individual item reads still check that item's exact identity.
+
 Manual draft creation retains its request identity while the same submitted
 project, title, text, product pillar and Expert Squad selection remain in the
 open form. An uncertain response leaves the form open so the same Save action

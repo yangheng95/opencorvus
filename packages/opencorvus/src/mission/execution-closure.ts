@@ -18,6 +18,7 @@ import { abortAfterAny } from "@/util/abort"
 import { SessionPromptOwner } from "@/session/prompt/owner"
 import { findActiveMissionTaskIDInTransaction } from "@/engine/store"
 import { MessageTable, SessionTable } from "@/session/session.sql"
+import { sessionDeletedInTransaction } from "@/session/retention-read"
 import { SessionPromptState } from "@/session/prompt/state"
 import { createExecutionCancellationOrigin } from "@/session/prompt/cancellation"
 import { Log } from "@/util/log"
@@ -27,6 +28,8 @@ import { Session } from "@/session"
 import { consumeMissionPendingPromptInTransaction } from "./session"
 import { MessageStore } from "@/session/message-store"
 import { Instance } from "@/project/instance"
+import { Project } from "@/project/project"
+import { runWithIndependentProjectIdentity } from "@/project/independent-project-owner"
 import type { UserMessagePersistenceHooks } from "@/session/prompt/parts"
 import { PersistedWakeReplay } from "@/session/persisted-wake-replay"
 import {
@@ -39,7 +42,6 @@ import { Bus } from "@/bus"
 import {
   currentMissionDeleteRetentionIntentInTransaction,
   ensureMissionDeleteRetentionIntentInTransaction,
-  sessionDeletedInTransaction,
 } from "./retention-facts"
 
 export {
@@ -1045,17 +1047,20 @@ export async function closeMissionExecutionOperation(input: {
   provenance: z.input<typeof MissionExecutionCloseProvenance>
   signal?: AbortSignal
 }): Promise<MissionExecutionClosure> {
-  const closing = Database.immediateTransaction((db) => {
+  const { closing, projectOwner } = Database.immediateTransaction((db) => {
     const current = currentMissionExecutionClosureInTransaction(db, input.sessionID)
     if (current && current.missionID !== input.missionID) {
       throw new Error(
         `Mission execution closure for Session ${input.sessionID} belongs to Mission ${current.missionID}`,
       )
     }
-    if (current?.state === "closed" || current?.state === "closing") {
-      return current
+    if (current?.state === "closed") {
+      return { closing: current, projectOwner: undefined }
     }
-    const closure = appendMissionExecutionClosureInTransaction({
+    const projectOwner = db.select({ projectID: SessionTable.project_id, directory: SessionTable.directory })
+      .from(SessionTable).where(eq(SessionTable.id, input.sessionID)).get()
+    if (!projectOwner) throw new NotFoundError({ message: `Mission Session not found: ${input.sessionID}` })
+    const closing = current?.state === "closing" ? current : appendMissionExecutionClosureInTransaction({
       missionID: input.missionID,
       sessionID: input.sessionID,
       operationID: randomUUID(),
@@ -1064,11 +1069,25 @@ export async function closeMissionExecutionOperation(input: {
       requestID: input.requestID,
       provenance: input.provenance,
     })
-    return closure
+    return { closing, projectOwner }
   })
   if (closing.state === "closed") return closing
-  const { initializeProjectCleanupControl } = await import("@/project/bootstrap")
-  await initializeProjectCleanupControl()
+  if (!projectOwner || closing.state !== "closing") throw new Error("Mission close has no canonical Project owner.")
+  return runWithIndependentProjectIdentity({
+    directory: projectOwner.directory,
+    fn: () => {
+      if (Instance.project.id !== projectOwner.projectID || !Project.samePath(Instance.directory, projectOwner.directory)) {
+        throw new NotFoundError({ message: `Mission Session not found in its Project: ${closing.sessionID}` })
+      }
+      return settleMissionClosing(closing, input.signal)
+    },
+  })
+}
+
+async function settleMissionClosing(
+  closing: Extract<MissionExecutionClosure, { state: "closing" }>,
+  signal?: AbortSignal,
+): Promise<MissionExecutionClosure> {
   const ownerOccurrenceID = Identifier.ascending("call")
   const targetID = `mission:${closing.sessionID}`
   const leaseMilliseconds = 120_000
@@ -1121,7 +1140,7 @@ export async function closeMissionExecutionOperation(input: {
   }
   const ownedClosing = postAcquire
   const owner = new AbortController()
-  const deadline = abortAfterAny(120_000, owner.signal, ...(input.signal ? [input.signal] : []))
+  const deadline = abortAfterAny(120_000, owner.signal, ...(signal ? [signal] : []))
   let renewalFailure: unknown
   const renewal = setInterval(() => {
     if (renewalFailure) return
@@ -1143,6 +1162,11 @@ export async function closeMissionExecutionOperation(input: {
   renewal.unref()
   let settled = false
   try {
+    // A disconnected caller has already committed closing. Install its
+    // recovery owner before observing that caller's aborted signal.
+    const { initializeProjectCleanupControl } = await import("@/project/bootstrap")
+    await initializeProjectCleanupControl()
+    deadline.signal.throwIfAborted()
     await afterCloseLeaseAcquiredForTest?.(ownedClosing)
     await executeMissionClosingEffects({ closure: ownedClosing, signal: deadline.signal })
     if (renewalFailure) throw renewalFailure

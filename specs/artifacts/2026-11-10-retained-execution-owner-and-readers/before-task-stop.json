@@ -1,0 +1,26 @@
+{
+  "configuration": {
+    "status": 200,
+    "requestID": "455fa359-7e98-4e6a-a147-3ef429dd2e17",
+    "model": "b157-loopback/offline"
+  },
+  "created": {
+    "status": 202,
+    "requestID": "2b1e2e95-4eb1-4f96-b49b-90d5587c05bb",
+    "body": {
+      "task_id": "tsk_g00VaW4NBu00H99vHzw3",
+      "project_id": "prj_hZY8z2XbiYlzGbWsJKrA",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention"
+    }
+  },
+  "gone": {
+    "status": 500,
+    "requestID": "017954f9-dc39-4564-9c47-c4f42df48eb1",
+    "body": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  }
+}

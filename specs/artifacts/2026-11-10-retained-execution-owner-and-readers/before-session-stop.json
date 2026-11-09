@@ -1,0 +1,112 @@
+{
+  "create": {
+    "status": 200,
+    "requestID": "ee7df643-f6af-45b9-9727-26109637c883",
+    "body": {
+      "id": "ses_-zUPTvONdzzqwR1JAXiv",
+      "slug": "tidy-star",
+      "version": "local",
+      "projectID": "prj_hZY8z2XbiYlzGbWsJKrA",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention",
+      "title": "Disposable standalone Session",
+      "kind": "assistant",
+      "time": {
+        "created": 1794262025726,
+        "updated": 1794262025726
+      }
+    }
+  },
+  "standalone": {
+    "status": 200,
+    "requestID": "e263dffe-a5a3-4a37-9c83-ef6674000ef6",
+    "body": {
+      "ok": true,
+      "status": "physically_deleted",
+      "sessionID": "ses_-zUPTvONdzzqwR1JAXiv",
+      "sessionHistoryRetained": false,
+      "authorizationAuditRetained": true,
+      "cleanupOperationID": "cal_hTnTty2XbKOpbwTW28Lw",
+      "residue": []
+    }
+  },
+  "task": {
+    "status": 202,
+    "requestID": "3c68a5c4-3c29-41bf-88db-048666f0d15d",
+    "body": {
+      "task_id": "tsk_g00VaW4beT00AG0YEAqv",
+      "project_id": "prj_hZY8z2XbiYlzGbWsJKrA",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention"
+    }
+  },
+  "active": {
+    "status": 200,
+    "requestID": "a99d62ce-ac7d-49eb-8665-e80d0cd61120",
+    "body": {
+      "id": "tsk_g00VaW4beT00AG0YEAqv",
+      "orderKey": "v1:0001794262025857:0000000000000010:0000000000000000:task:tsk_g00VaW4beT00AG0YEAqv",
+      "projectID": "prj_hZY8z2XbiYlzGbWsJKrA",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention",
+      "sessionID": "ses_-zUPTvOBnzztR5BfgySI",
+      "requestID": "b157-root-session-delete-context",
+      "source": "api",
+      "productPillar": "work",
+      "title": "Isolated root Session delete before execution",
+      "request": "A disposable Task root for the local retention checker.",
+      "status": "active",
+      "executionLifecycle": {
+        "taskID": "tsk_g00VaW4beT00AG0YEAqv",
+        "epoch": 1,
+        "openedEventID": "pev_g0VaW4bor00cXfPcwlZU",
+        "openedAt": 1794262025857,
+        "status": "active"
+      },
+      "priority": "normal",
+      "packageRevisionBinding": {
+        "scope": "built_in",
+        "project_id": null,
+        "namespace": "builtin",
+        "id": "dynamic",
+        "version": "2026.11.07.1",
+        "package_digest": "c8a852be4aadf58f2a2cecc9d1149dcb66201dd1c26340ff397e203eea753070"
+      },
+      "metadata": {
+        "actor": "user",
+        "checks": {
+          "artifact": {
+            "require_changed_files": true,
+            "require_diff": true,
+            "mode": "strict"
+          },
+          "judge": {
+            "enabled": true,
+            "mode": "strict"
+          },
+          "spec_check": {
+            "enabled": true,
+            "mode": "strict"
+          }
+        }
+      },
+      "time": {
+        "created": 1794262025857,
+        "updated": 1794262025857,
+        "started": 1794262025857
+      }
+    }
+  },
+  "taskOwned": {
+    "status": 500,
+    "requestID": "de1e6fef-db71-48a6-a7ec-e2718f5a4477",
+    "body": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  "page": {
+    "status": 200,
+    "requestID": "22df3969-1e46-446a-80d6-2fb3c3c4ad4a",
+    "body": []
+  }
+}

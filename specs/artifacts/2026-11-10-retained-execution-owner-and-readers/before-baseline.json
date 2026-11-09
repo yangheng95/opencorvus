@@ -1,0 +1,119 @@
+{
+  "baseline": [
+    {
+      "status": 404,
+      "requestID": "06748317-0824-476c-8766-e67870648500",
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Session not found: ses_hqzBUx9t4Fz58JNBCIEC"
+        }
+      }
+    },
+    {
+      "status": 404,
+      "requestID": "8b594e21-8aa4-4db9-98b4-5239d1cffa17",
+      "body": {
+        "name": "NotFoundError",
+        "data": {
+          "message": "Session not found: ses_hqzBUx9t4Fz58JNBCIEC"
+        }
+      }
+    },
+    {
+      "status": 200,
+      "requestID": "f0d716c3-da6b-48c4-9bf0-1b4ab42279ff",
+      "body": {
+        "rows": [],
+        "nextCursor": null
+      }
+    }
+  ],
+  "visible": {
+    "status": 200,
+    "requestID": "f4c635a6-3e0c-457b-afc9-8ff4c78d39c4",
+    "body": {
+      "missionID": "draft-8036dd5e7e777f720ed1f95e31976554",
+      "sessionID": "ses_h029idUs9UP9FkWdNHpz",
+      "title": "Keep this Mission visible",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention",
+      "created": 1794261916675,
+      "updated": 1794261916675,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "This isolated draft is for real retention acceptance."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  },
+  "disposable": {
+    "status": 200,
+    "requestID": "54dab317-b39a-417b-ade0-77eaad447eec",
+    "body": {
+      "missionID": "draft-8f9a310661793c96b71abac04d6f0579",
+      "sessionID": "ses_hZZQyWuuaiH3zpluFTRM",
+      "title": "Disposable Mission retention test",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention",
+      "created": 1794261916703,
+      "updated": 1794261916703,
+      "interruptible": false,
+      "productPillar": "work",
+      "boardLane": "backlog",
+      "pendingInteractions": 0,
+      "pendingPrompt": {
+        "text": "This isolated draft is for real retention acceptance."
+      },
+      "tasks": [],
+      "taskStats": {
+        "total": 0,
+        "running": 0,
+        "inactive": 0
+      }
+    }
+  },
+  "deletion": {
+    "status": 500,
+    "requestID": "ee73e5b5-2606-49b7-b68b-3899e251ea4d",
+    "body": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    }
+  },
+  "scoped": {
+    "status": 200,
+    "requestID": "7d571ae4-ee66-4385-a63b-272b38e36979",
+    "body": [
+      {
+        "missionID": "draft-8f9a310661793c96b71abac04d6f0579",
+        "sessionID": "ses_hZZQyWuuaiH3zpluFTRM",
+        "title": "Disposable Mission retention test",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b157\\project-retention",
+        "created": 1794261916703,
+        "updated": 1794261916703,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "This isolated draft is for real retention acceptance."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  }
+}

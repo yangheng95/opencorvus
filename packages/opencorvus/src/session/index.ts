@@ -92,6 +92,7 @@ import { toolResultControl, toolResultDisposition, type ToolResultDisposition } 
 import { SessionPromptOwner } from "./prompt/owner"
 import { settleAbandonedProviderActivity } from "./provider-activity-facts"
 import { assertSessionDeletionAdmissionInTransaction } from "./deletion-cleanup"
+import { sessionDeletedInTransaction, sessionNotDeletedSql } from "./retention-read"
 import { sideChatIdentity, SideChatSourceError } from "@/chat/side-chat-identity"
 import { EffectiveConfig } from "@/config/effective"
 
@@ -114,13 +115,7 @@ export namespace Session {
 
   type SessionRow = typeof SessionTable.$inferSelect
 
-  export function deletedInTransaction(db: Database.TxOrDb, sessionID: string): boolean {
-    return Boolean(db.select({ id: ProtocolEventTable.id }).from(ProtocolEventTable).where(and(
-      eq(ProtocolEventTable.aggregate_type, "session"),
-      eq(ProtocolEventTable.aggregate_id, sessionID),
-      eq(ProtocolEventTable.type, "session.deleted"),
-    )).get())
-  }
+  export const deletedInTransaction = sessionDeletedInTransaction
 
   export function fromRow(row: SessionRow): Info {
     const summary =
@@ -705,31 +700,28 @@ export namespace Session {
     }
   }
 
-  export const getInProject = fn(SessionProjectInput, async ({ sessionID, projectID }) => {
-    const row = Database.use((db) => {
-      const persisted = db
-        .select()
-        .from(SessionTable)
-        .where(and(eq(SessionTable.id, sessionID), eq(SessionTable.project_id, projectID)))
-        .get()
-      return persisted && !deletedInTransaction(db, sessionID) ? persisted : undefined
-    })
+  export function readLiveInTransaction(db: Database.TxOrDb, input: { sessionID: string; projectID?: string }): Info {
+    const { sessionID, projectID } = input
+    const row = db.select().from(SessionTable).where(and(
+      eq(SessionTable.id, sessionID),
+      projectID === undefined ? undefined : eq(SessionTable.project_id, projectID),
+      sessionNotDeletedSql(SessionTable.id),
+    )).get()
     if (!row) throw new NotFoundError({ message: `Session not found: ${sessionID}` })
     return fromRow(row)
-  })
+  }
+
+  export const getInProject = fn(SessionProjectInput, async (input) =>
+    Database.use((db) => readLiveInTransaction(db, input)),
+  )
 
   export const assertLineageInProject = fn(SessionProjectInput, async ({ sessionID, projectID }) => {
     return (await lineageInProject({ sessionID, projectID }))[0]
   })
 
-  export const get = fn(Identifier.schema("session"), async (id) => {
-    const row = Database.use((db) => {
-      const persisted = db.select().from(SessionTable).where(eq(SessionTable.id, id)).get()
-      return persisted && !deletedInTransaction(db, id) ? persisted : undefined
-    })
-    if (!row) throw new NotFoundError({ message: `Session not found: ${id}` })
-    return fromRow(row)
-  })
+  export const get = fn(Identifier.schema("session"), async (sessionID) =>
+    Database.use((db) => readLiveInTransaction(db, { sessionID })),
+  )
 
   export function setTitleInTransaction(input: { sessionID: string; title: string; expectedTitle?: string }) {
     Database.requireActiveTransaction("Session.setTitleInTransaction")
@@ -1181,8 +1173,8 @@ export namespace Session {
     if (ids.length === 0) return {}
     const sessions = Database.use((db) =>
       db.select({ id: SessionTable.id }).from(SessionTable)
-        .where(and(eq(SessionTable.project_id, projectID), inArray(SessionTable.id, ids)))
-        .all().filter((session) => !deletedInTransaction(db, session.id)),
+        .where(and(eq(SessionTable.project_id, projectID), inArray(SessionTable.id, ids), sessionNotDeletedSql(SessionTable.id)))
+        .all(),
     )
     return Object.fromEntries(sessions.map((session) => [session.id, statuses[session.id]!]))
   }
@@ -1195,7 +1187,7 @@ export namespace Session {
     limit?: number
   }) {
     const project = Instance.project
-    const conditions = [eq(SessionTable.project_id, project.id)]
+    const conditions = [eq(SessionTable.project_id, project.id), sessionNotDeletedSql(SessionTable.id)]
 
     if (input?.roots) {
       conditions.push(isNull(SessionTable.parent_id))
@@ -1216,7 +1208,7 @@ export namespace Session {
         .where(and(...conditions, sessionDirectoryFilterCondition(db, input?.directory, project.id)))
         .orderBy(desc(SessionTable.time_updated))
         .limit(limit)
-        .all().filter((row) => !deletedInTransaction(db, row.id)),
+        .all(),
     )
     for (const row of rows) {
       yield fromRow(row)
@@ -1233,7 +1225,7 @@ export namespace Session {
     limit?: number
     archived?: boolean
   }) {
-    const conditions: SQL[] = []
+    const conditions: SQL[] = [sessionNotDeletedSql(SessionTable.id)]
 
     if (input?.roots) {
       conditions.push(isNull(SessionTable.parent_id))
@@ -1266,15 +1258,8 @@ export namespace Session {
     const rows = Database.transaction((db) => {
       const directoryCondition = sessionDirectoryFilterCondition(db, input?.directory)
       if (directoryCondition) conditions.push(directoryCondition)
-      const query =
-        conditions.length > 0
-          ? db
-              .select()
-              .from(SessionTable)
-              .where(and(...conditions))
-          : db.select().from(SessionTable)
-      return query.orderBy(desc(SessionTable.time_updated), desc(SessionTable.id)).limit(limit).all()
-        .filter((row) => !deletedInTransaction(db, row.id))
+      return db.select().from(SessionTable).where(and(...conditions))
+        .orderBy(desc(SessionTable.time_updated), desc(SessionTable.id)).limit(limit).all()
     })
 
     const ids = [...new Set(rows.map((row) => row.project_id))]
@@ -1309,10 +1294,10 @@ export namespace Session {
       db
         .select()
         .from(SessionTable)
-        .where(and(eq(SessionTable.project_id, project.id), eq(SessionTable.parent_id, parentID)))
+        .where(and(eq(SessionTable.project_id, project.id), eq(SessionTable.parent_id, parentID), sessionNotDeletedSql(SessionTable.id)))
         .all(),
     )
-    return rows.filter((row) => !Database.use((db) => deletedInTransaction(db, row.id))).map(fromRow)
+    return rows.map(fromRow)
   })
 
   // Flat list of session IDs in the subtree rooted at `sessionID`, parent
@@ -1461,10 +1446,10 @@ export namespace Session {
         db
           .select()
           .from(SessionTable)
-          .where(and(eq(SessionTable.project_id, projectID), eq(SessionTable.parent_id, parentID)))
+          .where(and(eq(SessionTable.project_id, projectID), eq(SessionTable.parent_id, parentID), sessionNotDeletedSql(SessionTable.id)))
           .all(),
       )
-      return rows.filter((row) => !Database.use((db) => deletedInTransaction(db, row.id))).map(fromRow)
+      return rows.map(fromRow)
     },
   )
 

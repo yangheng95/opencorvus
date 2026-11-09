@@ -1,0 +1,280 @@
+{
+  "httpFailureDiagnostics": [
+    {
+      "time": "2026-11-09T22:05:16.723Z",
+      "requestID": "ee73e5b5-2606-49b7-b68b-3899e251ea4d",
+      "method": "DELETE",
+      "path": "/mission/draft-8f9a310661793c96b71abac04d6f0579",
+      "error": "No context found for instance",
+      "stackFunctions": [
+        "at use",
+        "at use",
+        "at currentProjectDirectory",
+        "at fn",
+        "at configureTaskCancellationReconciler",
+        "at initializeProjectCleanupControl",
+        "at closeMissionExecutionOperation"
+      ]
+    },
+    {
+      "time": "2026-11-09T22:06:11.670Z",
+      "requestID": "017954f9-dc39-4564-9c47-c4f42df48eb1",
+      "method": "DELETE",
+      "path": "/task/tsk_g00VaW4NBu00H99vHzw3",
+      "error": "No context found for instance",
+      "stackFunctions": [
+        "at use",
+        "at use",
+        "at currentProjectDirectory",
+        "at fn",
+        "at configureTaskCancellationReconciler",
+        "at initializeProjectCleanupControl",
+        "at cancelTaskOnce",
+        "at async deleteTask",
+        "at async <anonymous>",
+        "at async dispatch",
+        "at async <anonymous>"
+      ]
+    },
+    {
+      "time": "2026-11-09T22:07:06.606Z",
+      "requestID": "de1e6fef-db71-48a6-a7ec-e2718f5a4477",
+      "method": "DELETE",
+      "path": "/session/ses_-zUPTvOBnzztR5BfgySI",
+      "error": "No context found for instance",
+      "stackFunctions": [
+        "at use",
+        "at use",
+        "at currentProjectDirectory",
+        "at fn",
+        "at configureTaskCancellationReconciler",
+        "at initializeProjectCleanupControl",
+        "at cancelTaskOnce",
+        "at async deleteSession",
+        "at async <anonymous>",
+        "at async dispatch",
+        "at async <anonymous>"
+      ]
+    }
+  ],
+  "missionEvents": [
+    {
+      "type": "mission.execution.closing",
+      "correlation_id": "0d6b0e4b-9791-4dd0-b5c7-d0769c16b1a8",
+      "seq": 1,
+      "source": "mission.delete"
+    },
+    {
+      "type": "mission.execution.closed",
+      "correlation_id": "0d6b0e4b-9791-4dd0-b5c7-d0769c16b1a8",
+      "seq": 2,
+      "source": "mission.delete"
+    },
+    {
+      "type": "mission.retention.delete_requested",
+      "correlation_id": "1469097a-3db9-4bb4-ae80-766ce5f29a33",
+      "seq": 3,
+      "source": "mission.delete"
+    },
+    {
+      "type": "session.deleted",
+      "correlation_id": null,
+      "seq": 4,
+      "source": "session.delete"
+    }
+  ],
+  "tasks": [
+    {
+      "owner": {
+        "id": "tsk_g00VaW4NBu00H99vHzw3",
+        "session_id": "ses_-zUPTvcXizz3LHO78XzZ",
+        "project_id": "prj_hZY8z2XbiYlzGbWsJKrA"
+      },
+      "taskEvents": [
+        {
+          "type": "artifact.persisted",
+          "correlation_id": null,
+          "seq": 1,
+          "source": "engine.artifact"
+        },
+        {
+          "type": "artifact.persisted",
+          "correlation_id": null,
+          "seq": 2,
+          "source": "engine.artifact"
+        },
+        {
+          "type": "task.execution.opened",
+          "correlation_id": null,
+          "seq": 3,
+          "source": "engine.pipeline"
+        },
+        {
+          "type": "task.created",
+          "correlation_id": null,
+          "seq": 4,
+          "source": "pipeline.active"
+        },
+        {
+          "type": "task.cancellation.requested",
+          "correlation_id": "017954f9-dc39-4564-9c47-c4f42df48eb1",
+          "seq": 5,
+          "source": "task.delete"
+        },
+        {
+          "type": "session.error",
+          "correlation_id": null,
+          "seq": 6,
+          "source": "session.bridge"
+        },
+        {
+          "type": "agent.execution.lifecycle",
+          "correlation_id": null,
+          "seq": 7,
+          "source": "session.bridge"
+        },
+        {
+          "type": "artifact.persisted",
+          "correlation_id": null,
+          "seq": 8,
+          "source": "engine.artifact"
+        },
+        {
+          "type": "session.error",
+          "correlation_id": null,
+          "seq": 9,
+          "source": "session.bridge"
+        },
+        {
+          "type": "session.error",
+          "correlation_id": null,
+          "seq": 10,
+          "source": "session.bridge"
+        },
+        {
+          "type": "session.error",
+          "correlation_id": null,
+          "seq": 11,
+          "source": "session.bridge"
+        },
+        {
+          "type": "task.cancelled",
+          "correlation_id": "017954f9-dc39-4564-9c47-c4f42df48eb1",
+          "seq": 12,
+          "source": "state.task"
+        },
+        {
+          "type": "session.error",
+          "correlation_id": null,
+          "seq": 13,
+          "source": "session.bridge"
+        },
+        {
+          "type": "session.error",
+          "correlation_id": null,
+          "seq": 14,
+          "source": "session.bridge"
+        },
+        {
+          "type": "session.error",
+          "correlation_id": null,
+          "seq": 15,
+          "source": "session.bridge"
+        },
+        {
+          "type": "session.error",
+          "correlation_id": null,
+          "seq": 16,
+          "source": "session.bridge"
+        },
+        {
+          "type": "session.error",
+          "correlation_id": null,
+          "seq": 17,
+          "source": "session.bridge"
+        },
+        {
+          "type": "session.error",
+          "correlation_id": null,
+          "seq": 18,
+          "source": "session.bridge"
+        }
+      ],
+      "sessionEvents": []
+    },
+    {
+      "owner": {
+        "id": "tsk_g00VaW4beT00AG0YEAqv",
+        "session_id": "ses_-zUPTvOBnzztR5BfgySI",
+        "project_id": "prj_hZY8z2XbiYlzGbWsJKrA"
+      },
+      "taskEvents": [
+        {
+          "type": "artifact.persisted",
+          "correlation_id": null,
+          "seq": 1,
+          "source": "engine.artifact"
+        },
+        {
+          "type": "artifact.persisted",
+          "correlation_id": null,
+          "seq": 2,
+          "source": "engine.artifact"
+        },
+        {
+          "type": "task.execution.opened",
+          "correlation_id": null,
+          "seq": 3,
+          "source": "engine.pipeline"
+        },
+        {
+          "type": "task.created",
+          "correlation_id": null,
+          "seq": 4,
+          "source": "pipeline.active"
+        },
+        {
+          "type": "task.cancellation.requested",
+          "correlation_id": "de1e6fef-db71-48a6-a7ec-e2718f5a4477",
+          "seq": 5,
+          "source": "session.delete"
+        },
+        {
+          "type": "agent.execution.lifecycle",
+          "correlation_id": null,
+          "seq": 6,
+          "source": "session.bridge"
+        },
+        {
+          "type": "artifact.persisted",
+          "correlation_id": null,
+          "seq": 7,
+          "source": "engine.artifact"
+        },
+        {
+          "type": "task.cancelled",
+          "correlation_id": "de1e6fef-db71-48a6-a7ec-e2718f5a4477",
+          "seq": 8,
+          "source": "state.task"
+        }
+      ],
+      "sessionEvents": []
+    }
+  ],
+  "standaloneSessionEvents": [
+    {
+      "type": "session.deleted",
+      "correlation_id": null,
+      "seq": 1,
+      "source": "session.delete"
+    }
+  ],
+  "counts": {
+    "session": 17,
+    "project": 4,
+    "message": 4,
+    "engine_task": 2,
+    "provider_usage_event": 0
+  },
+  "integrity": "ok"
+}

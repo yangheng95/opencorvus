@@ -96,20 +96,3 @@ export function ensureMissionDeleteRetentionIntentInTransaction(
     operationID,
   }
 }
-
-export function sessionDeletedInTransaction(db: Database.TxOrDb, sessionID: string): boolean {
-  return Boolean(
-    db
-      .select({ id: ProtocolEventTable.id })
-      .from(ProtocolEventTable)
-      .where(
-        and(
-          eq(ProtocolEventTable.aggregate_type, "session"),
-          eq(ProtocolEventTable.aggregate_id, sessionID),
-          eq(ProtocolEventTable.type, "session.deleted"),
-        ),
-      )
-      .limit(1)
-      .get(),
-  )
-}

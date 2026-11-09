@@ -9,6 +9,7 @@ import { Session } from "@/session"
 import { sessionDirectoryFilterCondition } from "@/session/directory-filter"
 import { activeSessionDeletionFenceInTransaction, assertSessionDeletionAdmissionInTransaction } from "@/session/deletion-cleanup"
 import { MessageTable, SessionTable } from "@/session/session.sql"
+import { sessionNotDeletedSql } from "@/session/retention-read"
 import { Filesystem } from "@/util/filesystem"
 import { Identifier } from "@/id/id"
 import { canonicalDigestSource, canonicalJSONValue } from "@/util/canonical-digest"
@@ -185,13 +186,16 @@ function canonicalMissionMetadata(input: MissionSessionCreation) {
   }
 }
 
-export async function requireMissionSession(sessionID: string): Promise<MissionSession> {
-  const session = await Session.get(sessionID)
+export function missionSessionFromInfo(session: Session.Info): MissionSession {
   const missionID = missionIDFromInfo(session)
   if (session.kind !== "mission" || !missionID) {
-    throw new Error(`Session ${sessionID} is not a Mission session with canonical metadata.mission.id.`)
+    throw new Error(`Session ${session.id} is not a Mission session with canonical metadata.mission.id.`)
   }
   return withMissionID(session, missionID)
+}
+
+export async function requireMissionSession(sessionID: string): Promise<MissionSession> {
+  return missionSessionFromInfo(await Session.get(sessionID))
 }
 
 export function missionVisibleExpertSquadIDs(session: Session.Info): MissionVisibleExpertSquadIDs {
@@ -369,35 +373,19 @@ function findMissionSessionIDByDirectory(input: { missionID: string; directory: 
   return Database.use((db) => findScopedMissionSessionID(db, input))
 }
 
-function findGlobalMissionSessionIDByDirectory(input: { missionID: string; directory: string }) {
-  return Database.use(
-    (db) =>
-      db
-        .select({ id: SessionTable.id })
-        .from(SessionTable)
-        .where(
-          and(
-            eq(SessionTable.directory, input.directory),
-            eq(SessionTable.kind, "mission"),
-            sql`json_extract(${SessionTable.metadata}, '$.mission.id') = ${input.missionID}`,
-          ),
-        )
-        .get()?.id,
-  )
+type MissionSessionListInput = {
+  directory?: string
+  search?: string
+  limit?: number
+  cursorUpdated?: number
+  cursorSessionID?: string
+  archived?: boolean
 }
 
-function missionSessionConditions(
-  input?: {
-    directory?: string
-    search?: string
-    cursorUpdated?: number
-    cursorSessionID?: string
-    archived?: boolean
-  },
-  projectID?: string,
-) {
+function missionSessionConditions(input?: MissionSessionListInput, projectID?: string) {
   const conditions = [
     eq(SessionTable.kind, "mission"),
+    sessionNotDeletedSql(SessionTable.id),
     sql`json_extract(${SessionTable.metadata}, '$.mission.id') IS NOT NULL`,
   ]
 
@@ -446,70 +434,40 @@ export async function getMissionSessionByDirectory(input: {
   directory: string
 }): Promise<MissionSession> {
   const directory = normalizeDirectory(input.directory)
-  const sessionID = findGlobalMissionSessionIDByDirectory({ missionID: input.missionID, directory })
-  if (!sessionID) throw new NotFoundError({ message: `Mission not found: ${input.missionID}` })
-  const session = await Session.get(sessionID)
-  const parsedMissionID = missionIDFromInfo(session)
-  if (parsedMissionID !== input.missionID || session.directory !== directory) {
-    throw new NotFoundError({ message: `Mission not found: ${input.missionID}` })
-  }
-  return withMissionID(session, parsedMissionID)
+  return Database.use((db) => {
+    const row = db.select().from(SessionTable).where(and(
+      eq(SessionTable.directory, directory),
+      eq(SessionTable.kind, "mission"),
+      sql`json_extract(${SessionTable.metadata}, '$.mission.id') = ${input.missionID}`,
+      sessionNotDeletedSql(SessionTable.id),
+    )).get()
+    if (!row) throw new NotFoundError({ message: `Mission not found: ${input.missionID}` })
+    return missionSessionFromInfo(Session.fromRow(row))
+  })
 }
 
-export async function* listMissionSessions(input?: {
-  directory?: string
-  search?: string
-  limit?: number
-  cursorUpdated?: number
-  cursorSessionID?: string
-  archived?: boolean
-}) {
-  const conditions = missionSessionConditions(input, Instance.project.id)
+export async function* listMissionSessions(input?: MissionSessionListInput) {
+  yield* readMissionSessionList(input, Instance.project.id)
+}
+
+export async function* listGlobalMissionSessions(input?: MissionSessionListInput) {
+  yield* readMissionSessionList(input)
+}
+
+function* readMissionSessionList(input?: MissionSessionListInput, projectID?: string) {
+  const conditions = missionSessionConditions(input, projectID)
   const limit = input?.limit ?? 100
   const rows = Database.transaction((db) =>
     db
-      .select({ id: SessionTable.id })
+      .select()
       .from(SessionTable)
-      .where(and(...conditions, sessionDirectoryFilterCondition(db, input?.directory, Instance.project.id)))
+      .where(and(...conditions, sessionDirectoryFilterCondition(db, input?.directory, projectID)))
       .orderBy(desc(SessionTable.time_updated), desc(SessionTable.id))
       .limit(limit)
       .all(),
   )
 
-  for (const row of rows) {
-    const session = await Session.get(row.id)
-    const missionID = missionIDFromInfo(session)
-    if (!missionID) continue
-    yield withMissionID(session, missionID)
-  }
-}
-
-export async function* listGlobalMissionSessions(input?: {
-  directory?: string
-  search?: string
-  limit?: number
-  cursorUpdated?: number
-  cursorSessionID?: string
-  archived?: boolean
-}) {
-  const conditions = missionSessionConditions(input)
-  const limit = input?.limit ?? 100
-  const rows = Database.transaction((db) =>
-    db
-      .select({ id: SessionTable.id })
-      .from(SessionTable)
-      .where(and(...conditions, sessionDirectoryFilterCondition(db, input?.directory)))
-      .orderBy(desc(SessionTable.time_updated), desc(SessionTable.id))
-      .limit(limit)
-      .all(),
-  )
-
-  for (const row of rows) {
-    const session = await Session.get(row.id)
-    const missionID = missionIDFromInfo(session)
-    if (!missionID) continue
-    yield withMissionID(session, missionID)
-  }
+  for (const row of rows) yield missionSessionFromInfo(Session.fromRow(row))
 }
 
 export type GlobalMissionProcessRecoveryCandidate = {
@@ -539,6 +497,7 @@ export function listGlobalMissionProcessRecoveryCandidates(input: {
       .where(
         and(
           eq(SessionTable.kind, "mission"),
+          sessionNotDeletedSql(SessionTable.id),
           input.scopeProjectID ? eq(SessionTable.project_id, input.scopeProjectID) : undefined,
           input.sessionID ? eq(SessionTable.id, input.sessionID) : undefined,
           input.afterSessionID ? sql`${SessionTable.id} > ${input.afterSessionID}` : undefined,
@@ -551,13 +510,6 @@ export function listGlobalMissionProcessRecoveryCandidates(input: {
                 WHERE delete_request.aggregate_type = 'session'
                   AND delete_request.aggregate_id = ${SessionTable.id}
                   AND delete_request.type = 'mission.retention.delete_requested'
-              )
-              AND NOT EXISTS (
-                SELECT 1
-                FROM protocol_event AS deleted_session
-                WHERE deleted_session.aggregate_type = 'session'
-                  AND deleted_session.aggregate_id = ${SessionTable.id}
-                  AND deleted_session.type = 'session.deleted'
               )
             )
             OR (

@@ -12,6 +12,7 @@ import {
 import { Identifier } from "@/id/id"
 import { Session } from "@/session"
 import { SessionTable } from "@/session/session.sql"
+import { sessionDeletedInTransaction } from "@/session/retention-read"
 import { Database, and, eq, sql } from "@/storage/db"
 import { abortAfterAny } from "@/util/abort"
 import { currentMissionExecutionClosureInTransaction, type MissionExecutionClosure } from "./execution-closure"
@@ -20,7 +21,6 @@ import {
   currentMissionDeleteRetentionIntent,
   currentMissionDeleteRetentionIntentInTransaction,
   ensureMissionDeleteRetentionIntentInTransaction,
-  sessionDeletedInTransaction,
   type MissionDeleteRetentionIntent,
 } from "./retention-facts"
 import type { MissionExecutionCloseProvenance } from "./execution-closure-schema"

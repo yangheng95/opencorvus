@@ -14,7 +14,7 @@ import { EngineTaskTable } from "@/engine/engine.sql"
 import { deriveTaskStatus } from "@/engine/task-status"
 import { findTask, listTaskRows, pendingInteractionCounts } from "@/engine/store"
 import { missionRecord, missionTaskBinding, type MissionTaskProjectionValue } from "@/mission/projection"
-import { getMissionSessionByDirectory } from "@/mission/session"
+import { missionSessionFromInfo } from "@/mission/session"
 import { ProjectTable } from "@/project/project.sql"
 import { Project } from "@/project/project"
 import { Instance } from "@/project/instance"
@@ -22,6 +22,7 @@ import { NotFoundError } from "@/storage/db"
 import { Session } from "@/session"
 import { resolveSessionActivityStatus } from "@/session/lifecycle"
 import { SessionTable } from "@/session/session.sql"
+import { sessionNotDeletedSql } from "@/session/retention-read"
 import { Database, eq, sql } from "@/storage/db"
 import { activityFromTaskExecution } from "@/status/task-status-snapshot"
 import { rightSidebarConversationExperience } from "@/chat/session"
@@ -50,27 +51,21 @@ export type WorkLedgerArchiveListValue = z.infer<typeof WorkLedgerArchiveList>
 /** The selected reader has its own identity; active sidebar membership is not ownership. */
 export async function readWorkLedgerSelection(input: { kind: "task" | "session"; id: string; directory: string }): Promise<WorkLedgerArchiveRowValue> {
   const unavailable = () => new NotFoundError({ message: "Selected Work Ledger item is unavailable in this Project and directory." })
-  const pending = pendingInteractionCounts()
-  if (input.kind === "task") {
-    const task = findTask(input.id)
-    if (!task || task.project_id !== Instance.project.id) throw unavailable()
-    const row = workLedgerTaskFromTaskID(task.id, pending)
-    if (!Project.samePath(row.directory, input.directory)) throw unavailable()
-    return row
-  }
-  const session = await Session.getInProject({ sessionID: input.id, projectID: Instance.project.id })
-  if (!Project.samePath(session.directory, input.directory)) throw unavailable()
-  const mission = session.metadata?.mission as { id?: string } | undefined
-  const kind = session.kind === "mission" && mission?.id ? "mission" : rightSidebarConversationExperience(session) ? "chat" : undefined
-  if (!kind) throw unavailable()
-  const candidate: WorkLedgerTopRowCandidate = {
-    kind, id: kind === "mission" ? mission!.id! : session.id, sessionID: session.id,
-    directory: session.directory, title: session.title, created: session.time.created,
-    updated: session.time.updated, pinned: session.time.pinned === undefined ? 0 : 1, rowKey: `${kind}:${session.id}`,
-  }
-  const row = kind === "mission" ? await workLedgerMissionFromCandidate(candidate, pending) : await workLedgerChatFromCandidate(candidate)
-  if (row.sessionID !== input.id) throw unavailable()
-  return row
+  return Database.transaction((db) => {
+    const pending = pendingInteractionCounts()
+    if (input.kind === "task") {
+      const task = findTask(input.id)
+      if (!task || task.project_id !== Instance.project.id) throw unavailable()
+      const row = workLedgerTaskFromTaskID(task.id, pending)
+      if (!Project.samePath(row.directory, input.directory)) throw unavailable()
+      return row
+    }
+    const session = Session.readLiveInTransaction(db, { sessionID: input.id, projectID: Instance.project.id })
+    if (!Project.samePath(session.directory, input.directory)) throw unavailable()
+    if (session.kind === "mission") return workLedgerMissionFromSession(session, pending)
+    if (rightSidebarConversationExperience(session)) return workLedgerChatFromSession(session)
+    throw unavailable()
+  })
 }
 
 type WorkLedgerTopRowCandidate = {
@@ -188,12 +183,11 @@ function workLedgerTaskFromTaskID(taskID: string, pendingInteractions: ReadonlyM
   })
 }
 
-async function workLedgerMissionFromCandidate(
-  candidate: WorkLedgerTopRowCandidate,
+function workLedgerMissionFromSession(
+  session: Session.Info,
   pendingInteractions: ReadonlyMap<string, number>,
 ) {
-  const session = await getMissionSessionByDirectory({ missionID: candidate.id, directory: candidate.directory })
-  const record = missionRecord(session)
+  const record = missionRecord(missionSessionFromInfo(session))
   const tasks = record.tasks.map((task) =>
     workLedgerTaskFromMissionTask(
       task,
@@ -212,7 +206,7 @@ async function workLedgerMissionFromCandidate(
     created: record.created,
     started: record.created,
     updated: record.updated,
-    pinned: candidate.pinned === 1,
+    pinned: session.time.pinned !== undefined,
     archived: record.archived,
     interruptible: record.interruptible,
     outcome: record.outcome?.kind ?? null,
@@ -223,11 +217,9 @@ async function workLedgerMissionFromCandidate(
   })
 }
 
-async function workLedgerChatFromCandidate(candidate: WorkLedgerTopRowCandidate) {
-  const sessionID = candidate.sessionID ?? candidate.id
-  const session = await Session.get(sessionID)
+function workLedgerChatFromSession(session: Session.Info) {
   const experience = rightSidebarConversationExperience(session)
-  if (!experience) throw new Error(`Work Ledger conversation candidate ${sessionID} is missing its experience`)
+  if (!experience) throw new Error(`Work Ledger conversation candidate ${session.id} is missing its experience`)
   return WorkLedgerChatRow.parse({
     kind: "chat",
     experience,
@@ -238,7 +230,7 @@ async function workLedgerChatFromCandidate(candidate: WorkLedgerTopRowCandidate)
     created: session.time.created,
     started: session.time.created,
     updated: session.time.updated,
-    pinned: candidate.pinned === 1,
+    pinned: session.time.pinned !== undefined,
     archived: session.time.archived,
     status: chatStatus(session.id),
   })
@@ -255,9 +247,8 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
     WHERE ${ProjectTable.id} = ${SessionTable.project_id}
       AND ${ProjectTable.name} LIKE ${search ?? null} ESCAPE '\\'
   )`
-  const sessionArchiveCondition = archivedOnly
-    ? sql`${SessionTable.time_archived} IS NOT NULL`
-    : sql`${SessionTable.time_archived} IS NULL`
+  const sessionArchiveCondition = sql`${sessionNotDeletedSql(SessionTable.id)} AND
+    ${archivedOnly ? sql`${SessionTable.time_archived} IS NOT NULL` : sql`${SessionTable.time_archived} IS NULL`}`
   const taskNotDeletedCondition = sql`NOT EXISTS (
     SELECT 1
     FROM ${ProtocolEventTable} AS deleted_task_event
@@ -461,7 +452,8 @@ function topRowCandidates(input: Required<Pick<WorkLedgerListInput, "limit">> & 
   )
 }
 
-async function workLedgerRowFromCandidate(
+function workLedgerRowFromCandidate(
+  db: Database.TxOrDb,
   candidate: WorkLedgerTopRowCandidate,
   pendingInteractions: ReadonlyMap<string, number>,
 ) {
@@ -475,9 +467,10 @@ async function workLedgerRowFromCandidate(
     case "project":
       return workLedgerProjectFromCandidate(candidate)
     case "mission":
-      return workLedgerMissionFromCandidate(candidate, pendingInteractions)
+      if (!candidate.sessionID) throw new Error(`Work Ledger Mission ${candidate.id} has no Session identity`)
+      return workLedgerMissionFromSession(Session.readLiveInTransaction(db, { sessionID: candidate.sessionID }), pendingInteractions)
     case "chat":
-      return workLedgerChatFromCandidate(candidate)
+      return workLedgerChatFromSession(Session.readLiveInTransaction(db, { sessionID: candidate.id }))
     case "task":
       return workLedgerTaskFromTaskID(candidate.id, pendingInteractions)
     default: {
@@ -487,35 +480,28 @@ async function workLedgerRowFromCandidate(
   }
 }
 
-async function listWorkLedgerProjection(input: WorkLedgerListInput) {
-  const limit = input.limit ?? 50
-  const candidates = topRowCandidates({ ...input, limit })
-  const visibleCandidates = candidates.slice(0, limit)
-  const interactionCounts = pendingInteractionCounts()
-  const rows: Array<WorkLedgerRowValue | WorkLedgerArchiveRowValue> = []
-  for (const candidate of visibleCandidates) {
-    rows.push(await workLedgerRowFromCandidate(candidate, interactionCounts))
-  }
-  const last = rows.at(-1)
-  return {
-    rows,
-    nextCursor:
-      candidates.length > limit && last
-        ? {
-            updated: last.updated,
-            pinned: last.pinned,
-            rowKey: rowKey(last),
-          }
+function listWorkLedgerProjection(input: WorkLedgerListInput) {
+  return Database.transaction((db) => {
+    const limit = input.limit ?? 50
+    const candidates = topRowCandidates({ ...input, limit })
+    const interactionCounts = pendingInteractionCounts()
+    const rows = candidates.slice(0, limit).map((candidate) => workLedgerRowFromCandidate(db, candidate, interactionCounts))
+    const last = rows.at(-1)
+    return {
+      rows,
+      nextCursor: candidates.length > limit && last
+        ? { updated: last.updated, pinned: last.pinned, rowKey: rowKey(last) }
         : null,
-  }
+    }
+  })
 }
 
 export async function listWorkLedger(input: WorkLedgerListInput = {}): Promise<WorkLedgerListValue> {
-  return WorkLedgerList.parse(await listWorkLedgerProjection({ ...input, archivedOnly: false }))
+  return WorkLedgerList.parse(listWorkLedgerProjection({ ...input, archivedOnly: false }))
 }
 
 export async function listArchivedWorkLedger(
   input: Omit<WorkLedgerListInput, "archivedOnly"> = {},
 ): Promise<WorkLedgerArchiveListValue> {
-  return WorkLedgerArchiveList.parse(await listWorkLedgerProjection({ ...input, archivedOnly: true }))
+  return WorkLedgerArchiveList.parse(listWorkLedgerProjection({ ...input, archivedOnly: true }))
 }

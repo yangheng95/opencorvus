@@ -21,7 +21,7 @@ import { Session } from "@/session"
 import { SessionPromptOwner } from "@/session/prompt/owner"
 import { SessionWake } from "@/session/wake"
 import { memoryProject, resetMemoryDatabase } from "./fixture/memory"
-import { sessionDeletedInTransaction } from "@/mission/retention-facts"
+import { sessionDeletedInTransaction } from "@/session/retention-read"
 import { Database } from "@/storage/db"
 import "@/task-api"
 

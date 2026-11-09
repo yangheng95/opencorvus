@@ -21,6 +21,7 @@ import {
 import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { ProtocolEventTable } from "@/protocol/protocol.sql"
 import { SessionPromptOwnerTable, SessionTable } from "@/session/session.sql"
+import { sessionDeletionEventIDInTransaction } from "@/session/retention-read"
 import { Database, and, eq, inArray, sql } from "@/storage/db"
 import { Filesystem } from "@/util/filesystem"
 
@@ -90,19 +91,9 @@ export function assertSessionDeletionAdmissionInTransaction(
       `Session ${sessionID} admission is fenced by deletion owner ${fence.ownerOccurrenceID}`,
     )
   }
-  const tombstone = db
-    .select({ id: ProtocolEventTable.id })
-    .from(ProtocolEventTable)
-    .where(
-      and(
-        eq(ProtocolEventTable.aggregate_type, "session"),
-        eq(ProtocolEventTable.aggregate_id, sessionID),
-        eq(ProtocolEventTable.type, "session.deleted"),
-      ),
-    )
-    .get()
+  const tombstone = sessionDeletionEventIDInTransaction(db, sessionID)
   if (tombstone) {
-    throw new SessionDeletionFenceError(`Session ${sessionID} admission is fenced by terminal deletion ${tombstone.id}`)
+    throw new SessionDeletionFenceError(`Session ${sessionID} admission is fenced by terminal deletion ${tombstone}`)
   }
 }
 
