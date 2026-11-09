@@ -302,6 +302,7 @@ export async function createMissionDraft(input: MissionDraftInput): Promise<Miss
     title,
     request,
     productPillar: input.productPillar,
+    ...(input.requestID !== undefined ? { requestID: input.requestID } : {}),
     ...(input.expertSquadIDs !== undefined ? { expertSquadIDs: input.expertSquadIDs } : {}),
   } satisfies MissionDraftBody
   const params = new URLSearchParams({ directory })

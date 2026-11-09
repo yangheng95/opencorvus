@@ -10035,7 +10035,7 @@ export class Mission extends HeyApiClient {
   /**
    * Create a Mission draft
    *
-   * Create a backlog Mission with an immutable Expert Squad snapshot and one pending operator prompt. No model is invoked until the operator dispatches the Mission.
+   * Create a backlog Mission with an immutable Expert Squad snapshot and one pending operator prompt. Reuse requestID to recover the same Mission after a lost response; different input conflicts. No model is invoked until the operator dispatches the Mission.
    */
   public createDraft<ThrowOnError extends boolean = false>(
     parameters: {
@@ -10043,6 +10043,7 @@ export class Mission extends HeyApiClient {
       expertSquadIDs?: Array<string>
       productPillar: "code" | "work"
       request: string
+      requestID?: string
       title: string
     },
     options?: Options<never, ThrowOnError>,
@@ -10056,6 +10057,7 @@ export class Mission extends HeyApiClient {
             { in: "body", key: "expertSquadIDs" },
             { in: "body", key: "productPillar" },
             { in: "body", key: "request" },
+            { in: "body", key: "requestID" },
             { in: "body", key: "title" },
           ],
         },

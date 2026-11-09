@@ -25360,6 +25360,7 @@ export type MissionCreateDraftData = {
     expertSquadIDs?: Array<string>
     productPillar: "code" | "work"
     request: string
+    requestID?: string
     title: string
   }
   path?: never
@@ -25377,6 +25378,24 @@ export type MissionCreateDraftErrors = {
    * Bad request
    */
   400: BadRequestError
+  /**
+   * The draft request is already bound or its Mission is being deleted
+   */
+  409: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionDraftCreationConflictError"
+  }
+  /**
+   * The accepted Mission has been deleted
+   */
+  410: {
+    data: {
+      [key: string]: unknown
+    }
+    name: "MissionDraftCreationUnavailableError"
+  }
 }
 
 export type MissionCreateDraftError = MissionCreateDraftErrors[keyof MissionCreateDraftErrors]

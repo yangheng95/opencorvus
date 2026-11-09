@@ -1,0 +1,196 @@
+{
+  "serial": [
+    {
+      "status": 200,
+      "requestID": "71109e3b-7f8d-4b41-8d26-75f4194a1411",
+      "data": {
+        "missionID": "7929ceeb730cf32c",
+        "sessionID": "ses_-zUPU0qLkzzdUr51bJpU",
+        "title": "One Mission draft request",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794260726571,
+        "updated": 1794260726595,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "The saved draft must stay pending for review."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    },
+    {
+      "status": 200,
+      "requestID": "de8b740f-2bbb-4198-b2dd-d7d9718467a7",
+      "data": {
+        "missionID": "5bf5b7b867620950",
+        "sessionID": "ses_-zUPU0qL0zzggOQAD36R",
+        "title": "One Mission draft request",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794260726617,
+        "updated": 1794260726631,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "The saved draft must stay pending for review."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    }
+  ],
+  "parallel": [
+    {
+      "status": 200,
+      "requestID": "f7ba7a95-f053-4008-a389-457fb507e5b6",
+      "data": {
+        "missionID": "ea707271694436fc",
+        "sessionID": "ses_-zUPU0qKSzz9tMi41mWF",
+        "title": "One parallel Mission draft request",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794260726651,
+        "updated": 1794260726669,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "The saved draft must stay pending for review."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    },
+    {
+      "status": 200,
+      "requestID": "798f163e-9450-4e1d-94fe-04c662cc7929",
+      "data": {
+        "missionID": "949ccd17d3dd4ff6",
+        "sessionID": "ses_-zUPU0qKKzz4NFthvE0R",
+        "title": "One parallel Mission draft request",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794260726659,
+        "updated": 1794260726680,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "The saved draft must stay pending for review."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    }
+  ],
+  "list": {
+    "status": 200,
+    "requestID": "92b69437-13d1-48db-8977-9235311cabbd",
+    "data": [
+      {
+        "missionID": "949ccd17d3dd4ff6",
+        "sessionID": "ses_-zUPU0qKKzz4NFthvE0R",
+        "title": "One parallel Mission draft request",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794260726659,
+        "updated": 1794260726680,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "The saved draft must stay pending for review."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "ea707271694436fc",
+        "sessionID": "ses_-zUPU0qKSzz9tMi41mWF",
+        "title": "One parallel Mission draft request",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794260726651,
+        "updated": 1794260726669,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "The saved draft must stay pending for review."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "5bf5b7b867620950",
+        "sessionID": "ses_-zUPU0qL0zzggOQAD36R",
+        "title": "One Mission draft request",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794260726617,
+        "updated": 1794260726631,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "The saved draft must stay pending for review."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "7929ceeb730cf32c",
+        "sessionID": "ses_-zUPU0qLkzzdUr51bJpU",
+        "title": "One Mission draft request",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "created": 1794260726571,
+        "updated": 1794260726595,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "The saved draft must stay pending for review."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  }
+}

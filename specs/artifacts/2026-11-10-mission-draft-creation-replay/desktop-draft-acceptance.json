@@ -1,0 +1,42 @@
+[
+  {
+    "receipt": 1,
+    "upstreamStatus": 200,
+    "upstreamRequestID": "85ab5450-5c77-4b4f-9d96-f5023d19d025",
+    "browserResponse": "truncated after 16 bytes",
+    "sent": {
+      "requestID": "77753657-83e4-47d7-bb30-a98619c03a14",
+      "title": "Desktop retry review draft",
+      "request": "Keep this exact request pending after the save is retried.",
+      "productPillar": "work",
+      "expertSquadIDs": [
+        "dynamic"
+      ]
+    },
+    "accepted": {
+      "missionID": "draft-36c5a27c47fc91b639e4cf0722eae204",
+      "sessionID": "ses_hoeVF2NviVIPx6VTfvPG",
+      "title": "Desktop retry review draft"
+    }
+  },
+  {
+    "receipt": 2,
+    "upstreamStatus": 200,
+    "upstreamRequestID": "36410139-3132-421d-9be4-ba5b072cf69f",
+    "browserResponse": "complete",
+    "sent": {
+      "requestID": "77753657-83e4-47d7-bb30-a98619c03a14",
+      "title": "Desktop retry review draft",
+      "request": "Keep this exact request pending after the save is retried.",
+      "productPillar": "work",
+      "expertSquadIDs": [
+        "dynamic"
+      ]
+    },
+    "accepted": {
+      "missionID": "draft-36c5a27c47fc91b639e4cf0722eae204",
+      "sessionID": "ses_hoeVF2NviVIPx6VTfvPG",
+      "title": "Desktop retry review draft"
+    }
+  }
+]

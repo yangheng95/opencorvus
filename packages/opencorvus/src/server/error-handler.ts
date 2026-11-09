@@ -107,6 +107,8 @@ export function namedErrorStatus(err: { name: string }): ContentfulStatusCode {
   if (err.name === "MissionExecutionWakeInputConflictError") return 409
   if (err.name === "MissionDispatchDraftConflictError") return 409
   if (err.name === "MissionDraftEditConflictError") return 409
+  if (err.name === "MissionDraftCreationConflictError") return 409
+  if (err.name === "MissionDraftCreationUnavailableError") return 410
   if (err.name === "MissionDeleteRetentionRequestedError") return 409
   if (err.name === "MissionDeleteRetentionOwnedError") return 409
   if (err.name === "MissionSessionAuthorityError") return 409

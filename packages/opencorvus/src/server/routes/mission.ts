@@ -1,4 +1,5 @@
 import { Hono } from "hono"
+import { HTTPException } from "hono/http-exception"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
 import z from "zod"
@@ -7,6 +8,7 @@ import { conversationMessageHasDisplay } from "@/conversation/view"
 import { Instance } from "@/project/instance"
 import {
   ensureMissionSession,
+  createMissionDraft,
   assertMissionExpertSquadSnapshot,
   MissionExpertSquadSnapshotMismatchError,
   findExistingMissionSession,
@@ -15,7 +17,6 @@ import {
   missionPendingPrompt,
   missionVisibleExpertSquadIDs,
   missionProductPillar,
-  setMissionPendingPrompt,
   editMissionPendingPrompt,
 } from "@/mission/session"
 import {
@@ -103,6 +104,7 @@ const MissionWakeResult = z.object({
 
 const MissionDraftInput = z
   .object({
+    requestID: z.string().trim().min(1).max(200).optional(),
     title: z.string().trim().min(1).max(200),
     request: MissionPendingPrompt.shape.text,
     productPillar: ProductPillarSchema,
@@ -189,6 +191,7 @@ export function MissionRoutes() {
         summary: "Create a Mission draft",
         description:
           "Create a backlog Mission with an immutable Expert Squad snapshot and one pending operator prompt. " +
+          "Reuse requestID to recover the same Mission after a lost response; different input conflicts. " +
           "No model is invoked until the operator dispatches the Mission.",
         operationId: "mission.createDraft",
         responses: {
@@ -197,35 +200,29 @@ export function MissionRoutes() {
             content: { "application/json": { schema: resolver(MissionRecord) } },
           },
           ...errors(400),
+          409: namedErrorResponse("The draft request is already bound or its Mission is being deleted", "MissionDraftCreationConflictError"),
+          410: namedErrorResponse("The accepted Mission has been deleted", "MissionDraftCreationUnavailableError"),
         },
       }),
       validator("json", MissionDraftInput),
       async (c) => {
         const input = c.req.valid("json")
-        let heldExpertSquadIDs: MissionVisibleExpertSquadIDs
-        try {
-          heldExpertSquadIDs = await resolveMissionLaunchExpertSquadIDs({
-            projectDirectory: Instance.project.worktree,
-            productPillar: input.productPillar,
-            requestedExpertSquadIDs: input.expertSquadIDs,
-          })
-        } catch (error) {
-          const message = error instanceof Error ? error.message : String(error)
-          return c.json(badRequestBody(message), 400)
-        }
-        const missionID = newMissionID()
-        const created = await ensureMissionSession({
-          missionID,
-          defaultCwd: Instance.directory,
-          productPillar: input.productPillar,
-          heldExpertSquadIDs,
+        const created = await createMissionDraft({
+          ...input,
+          resolveExpertSquadIDs: async () => {
+            try {
+              return await resolveMissionLaunchExpertSquadIDs({
+                projectDirectory: Instance.project.worktree,
+                productPillar: input.productPillar,
+                requestedExpertSquadIDs: input.expertSquadIDs,
+              })
+            } catch (error) {
+              const message = error instanceof Error ? error.message : String(error)
+              throw new HTTPException(400, { res: c.json(badRequestBody(message), 400), cause: error })
+            }
+          },
         })
-        const titled = await Session.setTitle({ sessionID: created.id, title: input.title })
-        const updated = await setMissionPendingPrompt({
-          session: titled,
-          pendingPrompt: { text: input.request },
-        })
-        return c.json(missionRecord({ ...updated, missionID, productPillar: missionProductPillar(updated) }))
+        return c.json(missionRecord(created))
       },
     )
     .get(

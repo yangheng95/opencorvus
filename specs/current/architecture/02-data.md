@@ -125,6 +125,10 @@ payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一�
 旧 Global Task、Global Chat Start 和 Automation 分配的所有列及行号由现有事务重建保留；
 升级前自动备份，保留原分配、项目和会话身份。新约束绑定请求体验、所属项目及初始配置事实。
 
+版本 12 为新手动 Mission 草稿的 `session.metadata.mission.draftCreation` 声明写入形状和不可变性。
+首次 Session 插入必须同时有标题、待执行请求和作者绑定；后续编辑、执行、归档及项目迁移不改绑定。
+原 Mission 行不回填请求身份。迁移只追加两个触发器，使用现有自动备份和事务升级。
+
 所有 CLI、服务及子执行进程经 `Database.Client` 在业务访问/恢复前进入同一个迁移器。
 旧版文件升级要求实际 Write-Ahead Logging（WAL，预写日志）模式，在原连接上取得
 EXCLUSIVE 物理锁后进入 `BEGIN IMMEDIATE`，排除持旧语义的空闲只读连接；仅 writer 锁

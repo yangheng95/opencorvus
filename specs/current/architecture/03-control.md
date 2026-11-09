@@ -248,6 +248,17 @@ Instance context 的 `git` 是所属 Project 主工作树 `project.worktree` 的
 
 ## Mission operator draft acceptance
 
+`mission.createDraft` resolves one manual author request in its Project
+generation and directory scope. Project-relative directory identity survives
+project relocation; outside worktrees have their own directory scope. The
+Mission Session commits the original title, pending request, held Expert Squad
+snapshot and immutable creation binding together before publication. A same
+input replay resolves that Session before rereading the installed catalog,
+returns its current state, and can finish runtime-directory materialization.
+Different input or deletion in progress returns 409; a committed Session
+tombstone returns 410. An omitted request ID denotes a separate save. No
+Message or execution occurrence is created by saving a draft.
+
 `mission.editDraft` updates only an existing pending operator text. The strict
 request carries the desired `request` and its opening `expectedRequest`. The
 existing immediate metadata transaction rereads and validates exact Session,

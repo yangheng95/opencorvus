@@ -7,24 +7,50 @@ import { ProjectRuntimePaths } from "@/project/runtime-paths"
 import { Project } from "@/project/project"
 import { Session } from "@/session"
 import { sessionDirectoryFilterCondition } from "@/session/directory-filter"
-import { assertSessionDeletionAdmissionInTransaction } from "@/session/deletion-cleanup"
+import { activeSessionDeletionFenceInTransaction, assertSessionDeletionAdmissionInTransaction } from "@/session/deletion-cleanup"
 import { MessageTable, SessionTable } from "@/session/session.sql"
 import { Filesystem } from "@/util/filesystem"
+import { Identifier } from "@/id/id"
+import { canonicalDigestSource, canonicalJSONValue } from "@/util/canonical-digest"
 import { MISSION_CONTROL_DEFAULT_TITLE } from "@/session/first-message-title"
 import {
   MissionID,
   MissionPendingPrompt,
+  MissionRequestedExpertSquadIDs,
   MissionVisibleExpertSquadIDs,
   ProductPillarSchema,
   type ProductPillar,
 } from "./schema"
 import type { SessionPrompt } from "@/session/prompt"
 import { missionExpertSquadSnapshotsMatch } from "./expert-squad-authority"
+import { currentMissionDeleteRetentionIntentInTransaction } from "./retention-facts"
 import { NamedError } from "@opencorvus-ai/util/error"
-import { createHash } from "node:crypto"
+import { createHash, randomUUID } from "node:crypto"
 import z from "zod"
 
 export type MissionSession = Session.Info & { missionID: string; productPillar: ProductPillar }
+
+const MissionDraftCreation = z.object({
+  version: z.literal(1),
+  requestID: z.string(),
+  fingerprint: z.string().regex(/^[a-f0-9]{64}$/),
+}).strict()
+
+const MissionDraftCreationTarget = z.object({
+  message: z.string(),
+  missionID: MissionID,
+  sessionID: Identifier.schema("session"),
+})
+
+export const MissionDraftCreationConflictError = NamedError.create(
+  "MissionDraftCreationConflictError",
+  MissionDraftCreationTarget.extend({ reason: z.enum(["identity", "deletion_in_progress"]) }),
+)
+
+export const MissionDraftCreationUnavailableError = NamedError.create(
+  "MissionDraftCreationUnavailableError",
+  MissionDraftCreationTarget,
+)
 
 export const MissionDraftEditConflictError = NamedError.create(
   "MissionDraftEditConflictError",
@@ -132,12 +158,18 @@ function missionIDFromInfo(session: Session.Info): string | undefined {
   return parsed.success ? parsed.data : undefined
 }
 
-function canonicalMissionMetadata(input: {
+type MissionSessionCreation = {
   missionID: MissionID
   directory: string
   productPillar: ProductPillar
   heldExpertSquadIDs: MissionVisibleExpertSquadIDs
-}) {
+  initialTitle?: string
+  initialConfigOverlay?: Record<string, unknown>
+  creationMetadata?: Record<string, unknown>
+  draft?: { binding: z.infer<typeof MissionDraftCreation>; pendingPrompt: MissionPendingPrompt }
+}
+
+function canonicalMissionMetadata(input: MissionSessionCreation) {
   return {
     mission: MissionLaunchMetadata.parse({
       id: input.missionID,
@@ -145,6 +177,10 @@ function canonicalMissionMetadata(input: {
       cwd: input.directory,
       productPillar: input.productPillar,
       visibleExpertSquadIDs: input.heldExpertSquadIDs,
+      ...(input.draft && {
+        draftCreation: input.draft.binding,
+        pendingPrompt: input.draft.pendingPrompt,
+      }),
     }),
   }
 }
@@ -314,22 +350,23 @@ function normalizeDirectory(directory: string) {
   return Filesystem.resolve(directory)
 }
 
+function findScopedMissionSessionID(db: Database.TxOrDb, input: { missionID: string; directory: string }) {
+  return db
+    .select({ id: SessionTable.id })
+    .from(SessionTable)
+    .where(
+      and(
+        eq(SessionTable.project_id, Instance.project.id),
+        eq(SessionTable.directory, input.directory),
+        eq(SessionTable.kind, "mission"),
+        sql`json_extract(${SessionTable.metadata}, '$.mission.id') = ${input.missionID}`,
+      ),
+    )
+    .get()?.id
+}
+
 function findMissionSessionIDByDirectory(input: { missionID: string; directory: string }) {
-  return Database.use(
-    (db) =>
-      db
-        .select({ id: SessionTable.id })
-        .from(SessionTable)
-        .where(
-          and(
-            eq(SessionTable.project_id, Instance.project.id),
-            eq(SessionTable.directory, input.directory),
-            eq(SessionTable.kind, "mission"),
-            sql`json_extract(${SessionTable.metadata}, '$.mission.id') = ${input.missionID}`,
-          ),
-        )
-        .get()?.id,
-  )
+  return Database.use((db) => findScopedMissionSessionID(db, input))
 }
 
 function findGlobalMissionSessionIDByDirectory(input: { missionID: string; directory: string }) {
@@ -607,32 +644,24 @@ export function listGlobalMissionProcessRecoveryCandidates(input: {
   return rows
 }
 
-async function ensureMissionSessionInner(input: {
-  missionID: MissionID
-  directory: string
-  productPillar: ProductPillar
-  heldExpertSquadIDs: MissionVisibleExpertSquadIDs
-  /** Committed in the Session insert, never patched in afterwards: a Mission
-   *  Session must carry its title and model overlay from its first durable
-   *  instant, or a death right after publication runs it on the base model. */
-  initialTitle?: string
-  initialConfigOverlay?: Record<string, unknown>
-  creationMetadata?: Record<string, unknown>
-}) {
+function persistNewMissionSession(db: Database.TxOrDb, input: MissionSessionCreation, id?: string): Session.Info {
+  return Session.persistPreparedNextInTransaction(db, Session.prepareRootNext({
+    id,
+    directory: input.directory,
+    title: input.initialTitle ?? MISSION_CONTROL_DEFAULT_TITLE,
+    kind: "mission",
+    metadata: {
+      ...(input.creationMetadata ?? {}),
+      ...canonicalMissionMetadata(input),
+      ...(input.initialConfigOverlay ? { configOverlay: input.initialConfigOverlay } : {}),
+    },
+  }))
+}
+
+async function ensureMissionSessionInner(input: MissionSessionCreation) {
   const missionID = input.missionID
   const session = Database.immediateTransaction((db) => {
-    const existingID = db
-      .select({ id: SessionTable.id })
-      .from(SessionTable)
-      .where(
-        and(
-          eq(SessionTable.project_id, Instance.project.id),
-          eq(SessionTable.directory, input.directory),
-          eq(SessionTable.kind, "mission"),
-          sql`json_extract(${SessionTable.metadata}, '$.mission.id') = ${missionID}`,
-        ),
-      )
-      .get()?.id
+    const existingID = findScopedMissionSessionID(db, input)
     if (existingID) {
       assertSessionDeletionAdmissionInTransaction(db, existingID)
       const row = db.select().from(SessionTable).where(eq(SessionTable.id, existingID)).get()!
@@ -643,28 +672,24 @@ async function ensureMissionSessionInner(input: {
       }
       return existing
     }
-    return Session.persistPreparedNextInTransaction(
-      db,
-      Session.prepareRootNext({
-        directory: input.directory,
-        title: input.initialTitle ?? MISSION_CONTROL_DEFAULT_TITLE,
-        kind: "mission",
-        metadata: {
-          ...(input.creationMetadata ?? {}),
-          ...canonicalMissionMetadata(input),
-          ...(input.initialConfigOverlay ? { configOverlay: input.initialConfigOverlay } : {}),
-        },
-      }),
-    )
+    return persistNewMissionSession(db, input)
   })
   if (missionProductPillar(session) !== input.productPillar) {
     throw new Error(`Mission ${missionID} already holds a different immutable product pillar.`)
   }
   assertMissionExpertSquadSnapshot(missionID, missionVisibleExpertSquadIDs(session), input.heldExpertSquadIDs)
+  return materializeMissionRuntime(withMissionID(session, missionID))
+}
+
+async function materializeMissionRuntime(
+  session: MissionSession,
+  admit: (db: Database.TxOrDb, sessionID: string) => void = assertSessionDeletionAdmissionInTransaction,
+): Promise<MissionSession> {
+  const { missionID } = session
   await beforeRuntimeMaterializationForTest?.({ sessionID: session.id, missionID })
   const createdRuntimeRoot = await ensureMissionRuntimeDirectory({ directory: session.directory, missionID })
   try {
-    Database.immediateTransaction((db) => assertSessionDeletionAdmissionInTransaction(db, session.id))
+    Database.immediateTransaction((db) => admit(db, session.id))
   } catch (error) {
     if (!createdRuntimeRoot) throw error
     try {
@@ -677,7 +702,88 @@ async function ensureMissionSessionInner(input: {
     }
     throw error
   }
-  return withMissionID(session, missionID)
+  return session
+}
+
+/** Save one manual draft before its first publication, with exact author replay. */
+export async function createMissionDraft(input: {
+  requestID?: string
+  title: string
+  request: string
+  productPillar: ProductPillar
+  expertSquadIDs?: MissionRequestedExpertSquadIDs
+  resolveExpertSquadIDs: () => Promise<MissionVisibleExpertSquadIDs>
+}): Promise<MissionSession> {
+  const { project, projectGeneration } = Instance
+  const directory = normalizeDirectory(Instance.directory)
+  const worktree = normalizeDirectory(project.worktree)
+  const contained = Filesystem.contains(worktree, directory)
+  const relative = contained ? path.relative(worktree, directory) : directory
+  const directoryScope = [contained ? "worktree" : "directory", process.platform === "win32" ? relative.toLowerCase() : relative]
+  const requestID = input.requestID ?? randomUUID()
+  const intent = [project.id, projectGeneration, directoryScope, requestID]
+  const missionID = MissionID.parse(`draft-${canonicalDigestSource("mission-draft-mission-v1", intent).sha256.slice(0, 32)}`)
+  const sessionID = Identifier.deterministic("session", canonicalJSONValue(["mission-draft-session-v1", intent]))
+  const pendingPrompt = MissionPendingPrompt.parse({ text: input.request })
+  const binding = {
+    version: 1,
+    requestID,
+    fingerprint: canonicalDigestSource("mission-draft-input-v1", [
+      input.title,
+      pendingPrompt.text,
+      input.productPillar,
+      input.expertSquadIDs ? [...input.expertSquadIDs].sort() : null,
+    ]).sha256,
+  } as const
+  const target = { missionID, sessionID }
+  const conflict = () => new MissionDraftCreationConflictError({
+    ...target,
+    message: "This Mission draft request is bound to a different creation input.",
+    reason: "identity",
+  })
+  const assertAvailable = (db: Database.TxOrDb) => {
+    if (Session.deletedInTransaction(db, sessionID)) {
+      throw new MissionDraftCreationUnavailableError({ ...target, message: "The accepted Mission draft was deleted." })
+    }
+    if (currentMissionDeleteRetentionIntentInTransaction(db, sessionID) || activeSessionDeletionFenceInTransaction(db, sessionID)) {
+      throw new MissionDraftCreationConflictError({
+        ...target,
+        message: "Deletion of the accepted Mission draft is in progress.",
+        reason: "deletion_in_progress",
+      })
+    }
+  }
+  const find = (db: Database.TxOrDb): MissionSession | undefined => {
+    assertAvailable(db)
+    const row = db.select().from(SessionTable).where(eq(SessionTable.id, sessionID)).get()
+    if (!row) {
+      if (findScopedMissionSessionID(db, { missionID, directory })) throw conflict()
+      return undefined
+    }
+    const accepted = Session.fromRow(row)
+    if (accepted.kind !== "mission" || accepted.projectID !== project.id || !Project.samePath(accepted.directory, directory)) {
+      throw conflict()
+    }
+    const receipt = MissionDraftCreation.safeParse(requireMissionLaunchMetadata(accepted).draftCreation)
+    if (missionIDFromInfo(accepted) !== missionID || !receipt.success ||
+      receipt.data.requestID !== binding.requestID || receipt.data.fingerprint !== binding.fingerprint) {
+      throw conflict()
+    }
+    return withMissionID(accepted, missionID)
+  }
+  let session = Database.immediateTransaction(find)
+  if (!session) {
+    const heldExpertSquadIDs = await input.resolveExpertSquadIDs()
+    session = Database.immediateTransaction((db) => find(db) ?? withMissionID(persistNewMissionSession(db, {
+      missionID,
+      directory,
+      productPillar: input.productPillar,
+      heldExpertSquadIDs,
+      initialTitle: input.title,
+      draft: { binding, pendingPrompt },
+    }, sessionID), missionID))
+  }
+  return materializeMissionRuntime(session, assertAvailable)
 }
 
 export async function ensureMissionSession(input: {

@@ -1,0 +1,197 @@
+{
+  "retentionEvents": {
+    "ses_hqzBUx9t4Fz58JNBCIEC": [
+      {
+        "id": "pev_g0VaW1ctt00KrMn4vH94",
+        "correlation_id": "a96342f4-74d5-4e34-91ce-f90ae72fcacd",
+        "type": "mission.execution.closing",
+        "source": "mission.delete"
+      },
+      {
+        "id": "pev_g0VaW1d9K00Tq2yPK3X6",
+        "correlation_id": "a96342f4-74d5-4e34-91ce-f90ae72fcacd",
+        "type": "mission.execution.closed",
+        "source": "mission.delete"
+      },
+      {
+        "id": "pev_g0VaW1d9L00GfgkwjtxB",
+        "correlation_id": "feddd659-006a-415c-85e5-1a957aa74173",
+        "type": "mission.retention.delete_requested",
+        "source": "mission.delete"
+      },
+      {
+        "id": "pev_g0VaW1dPg007xLokz52e",
+        "correlation_id": null,
+        "type": "session.deleted",
+        "source": "session.delete"
+      }
+    ],
+    "ses_-zUPU0qLkzzdUr51bJpU": [
+      {
+        "id": "pev_g0VaW1rTE00KCTPrHqbw",
+        "correlation_id": "0552ae0d-b379-46cf-a60d-78b5b87d6dd7",
+        "type": "mission.execution.closing",
+        "source": "mission.delete"
+      },
+      {
+        "id": "pev_g0VaW1rUq00MNr6bmHkp",
+        "correlation_id": "0552ae0d-b379-46cf-a60d-78b5b87d6dd7",
+        "type": "mission.execution.closed",
+        "source": "mission.delete"
+      },
+      {
+        "id": "pev_g0VaW1rUr00527MiyPpa",
+        "correlation_id": "fb069638-aae0-4169-a944-a56110880535",
+        "type": "mission.retention.delete_requested",
+        "source": "mission.delete"
+      },
+      {
+        "id": "pev_g0VaW1rlB006sncWxqr4",
+        "correlation_id": null,
+        "type": "session.deleted",
+        "source": "session.delete"
+      }
+    ]
+  },
+  "profile-after": {
+    "version": 12,
+    "integrity": "ok",
+    "foreignKeyIssues": 0,
+    "counts": {
+      "session": 11,
+      "project": 3,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0
+    },
+    "sessions": [
+      {
+        "id": "ses_hoeVF2NviVIPx6VTfvPG",
+        "title": "Desktop retry review draft",
+        "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "missionID": "draft-36c5a27c47fc91b639e4cf0722eae204",
+        "requestID": "77753657-83e4-47d7-bb30-a98619c03a14",
+        "prompt": "Keep this exact request pending after the save is retried.",
+        "deleted": 0
+      },
+      {
+        "id": "ses_hqzBUx9t4Fz58JNBCIEC",
+        "title": "Disposable API review draft",
+        "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "missionID": "draft-bf8b6671301e4a6873188daa495eb1d8",
+        "requestID": "isolated-deleted-manual-draft",
+        "prompt": "Preserve this exact initial request during replay.",
+        "deleted": 1
+      },
+      {
+        "id": "ses_hvu3HJxW4Uzqy2LvVhnz",
+        "title": "Moved project review draft",
+        "project_id": "prj_hljdDbXd99k65qUKmh6O",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\promotion-destinations\\Mission move acceptance",
+        "missionID": "draft-4c77e44e945e32133a39098324dc2a07",
+        "requestID": "isolated-movable-manual-draft",
+        "prompt": "Preserve this exact initial request during replay.",
+        "deleted": 0
+      },
+      {
+        "id": "ses_-zUPU0qL0zzggOQAD36R",
+        "title": "One Mission draft request",
+        "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "missionID": "5bf5b7b867620950",
+        "requestID": null,
+        "prompt": "The saved draft must stay pending for review.",
+        "deleted": 0
+      },
+      {
+        "id": "ses_-zUPU0qLkzzdUr51bJpU",
+        "title": "One Mission draft request",
+        "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "missionID": "7929ceeb730cf32c",
+        "requestID": null,
+        "prompt": "The saved draft must stay pending for review.",
+        "deleted": 1
+      },
+      {
+        "id": "ses_-zUPU0qKKzz4NFthvE0R",
+        "title": "One parallel Mission draft request",
+        "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "missionID": "949ccd17d3dd4ff6",
+        "requestID": null,
+        "prompt": "The saved draft must stay pending for review.",
+        "deleted": 0
+      },
+      {
+        "id": "ses_-zUPU0qKSzz9tMi41mWF",
+        "title": "One parallel Mission draft request",
+        "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "missionID": "ea707271694436fc",
+        "requestID": null,
+        "prompt": "The saved draft must stay pending for review.",
+        "deleted": 0
+      },
+      {
+        "id": "ses_hADvVjqC4JxWg4hf8qYC",
+        "title": "Scoped API review draft",
+        "project_id": "prj_hJv1A8RHlrL4UebKrj6T",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-other",
+        "missionID": "draft-dbd281f9c3d3da9a1216386edf31b921",
+        "requestID": "isolated-shared-manual-draft",
+        "prompt": "Preserve this exact initial request during replay.",
+        "deleted": 0
+      },
+      {
+        "id": "ses_hn6PHYh2rEvzMG5a9GGv",
+        "title": "Scoped API review draft",
+        "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "missionID": "draft-fc8ba99090cbd68ef8e1c871397ef23b",
+        "requestID": "isolated-independent-manual-draft",
+        "prompt": "Preserve this exact initial request during replay.",
+        "deleted": 0
+      },
+      {
+        "id": "ses_hwsc2nGW5dnzSJlSVYYP",
+        "title": "Scoped API review draft",
+        "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+        "missionID": "draft-72583507b4461f1e90aeb976eb3f9156",
+        "requestID": "isolated-shared-manual-draft",
+        "prompt": "Current draft text after the operator edit.",
+        "deleted": 0
+      }
+    ]
+  },
+  "profile-desktop-clean": {
+    "version": 12,
+    "integrity": "ok",
+    "foreignKeyIssues": 0,
+    "counts": {
+      "session": 1,
+      "project": 1,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0
+    },
+    "sessions": [
+      {
+        "id": "ses_hZO6XUjrffujepRpKGhB",
+        "title": "One desktop draft after retry",
+        "project_id": "prj_hJv1A8RHlrL4UebKrj6T",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-other",
+        "missionID": "draft-0688c0241324a50ea2cbfafbc2f3b37d",
+        "requestID": "7ee084c3-da1f-4122-879a-06e3f38cffeb",
+        "prompt": "Keep one visible Mission draft with this exact request.",
+        "deleted": 0
+      }
+    ]
+  },
+  "bothIsolationNotesAndGitHeadsPreserved": true
+}

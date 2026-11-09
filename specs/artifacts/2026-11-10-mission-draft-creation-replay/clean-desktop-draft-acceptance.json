@@ -1,0 +1,120 @@
+{
+  "desktop": [
+    {
+      "time": "2026-11-09T22:00:05.632Z",
+      "receipt": 1,
+      "method": "POST",
+      "route": "/mission/draft",
+      "upstreamStatus": 200,
+      "upstreamRequestID": "9fa0c21a-7c29-4592-a3ab-b813d1500b0d",
+      "sent": {
+        "requestID": "7ee084c3-da1f-4122-879a-06e3f38cffeb",
+        "title": "One desktop draft after retry",
+        "request": "Keep one visible Mission draft with this exact request.",
+        "productPillar": "work",
+        "expertSquadIDs": [
+          "dynamic"
+        ]
+      },
+      "accepted": {
+        "missionID": "draft-0688c0241324a50ea2cbfafbc2f3b37d",
+        "sessionID": "ses_hZO6XUjrffujepRpKGhB",
+        "title": "One desktop draft after retry"
+      },
+      "responseBytes": 519,
+      "browserResponse": "truncated after 16 bytes"
+    },
+    {
+      "time": "2026-11-09T22:00:10.972Z",
+      "receipt": 2,
+      "method": "POST",
+      "route": "/mission/draft",
+      "upstreamStatus": 200,
+      "upstreamRequestID": "05a749d7-196b-45d5-82d0-8fb9b424796e",
+      "sent": {
+        "requestID": "7ee084c3-da1f-4122-879a-06e3f38cffeb",
+        "title": "One desktop draft after retry",
+        "request": "Keep one visible Mission draft with this exact request.",
+        "productPillar": "work",
+        "expertSquadIDs": [
+          "dynamic"
+        ]
+      },
+      "accepted": {
+        "missionID": "draft-0688c0241324a50ea2cbfafbc2f3b37d",
+        "sessionID": "ses_hZO6XUjrffujepRpKGhB",
+        "title": "One desktop draft after retry"
+      },
+      "responseBytes": 519,
+      "browserResponse": "complete"
+    }
+  ],
+  "list": {
+    "status": 200,
+    "requestID": "e6909ede-5aa4-4500-a7e2-e067a8a3174f",
+    "body": [
+      {
+        "missionID": "draft-0688c0241324a50ea2cbfafbc2f3b37d",
+        "sessionID": "ses_hZO6XUjrffujepRpKGhB",
+        "title": "One desktop draft after retry",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-other",
+        "created": 1794261605567,
+        "updated": 1794261605567,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "Keep one visible Mission draft with this exact request."
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  },
+  "ledger": {
+    "status": 200,
+    "requestID": "7b928687-fdd4-4e93-8488-1d49f467255a",
+    "body": {
+      "rows": [
+        {
+          "kind": "mission",
+          "id": "draft-0688c0241324a50ea2cbfafbc2f3b37d",
+          "missionID": "draft-0688c0241324a50ea2cbfafbc2f3b37d",
+          "sessionID": "ses_hZO6XUjrffujepRpKGhB",
+          "title": "One desktop draft after retry",
+          "pendingPromptText": "Keep one visible Mission draft with this exact request.",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-other",
+          "created": 1794261605567,
+          "started": 1794261605567,
+          "updated": 1794261605567,
+          "pinned": false,
+          "interruptible": false,
+          "outcome": null,
+          "productPillar": "work",
+          "taskStats": {
+            "total": 0,
+            "running": 0,
+            "inactive": 0
+          },
+          "pendingInteractions": 0,
+          "tasks": []
+        },
+        {
+          "kind": "project",
+          "id": "prj_hJv1A8RHlrL4UebKrj6T",
+          "title": "",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-other",
+          "created": 1794261578210,
+          "updated": 1794261578210,
+          "pinned": false
+        }
+      ],
+      "nextCursor": null
+    }
+  }
+}

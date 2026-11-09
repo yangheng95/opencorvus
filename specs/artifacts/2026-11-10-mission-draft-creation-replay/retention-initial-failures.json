@@ -1,0 +1,21 @@
+{
+  "oldDelete": {
+    "status": 500,
+    "requestID": "cc2b344b-d32f-4e50-8033-70b37c92ff28",
+    "body": {
+      "name": "UnknownError",
+      "data": {
+        "message": "Internal server error. See x-opencorvus-request-id for diagnostics."
+      }
+    },
+    "missionID": "7929ceeb730cf32c",
+    "sessionID": "ses_-zUPU0qLkzzdUr51bJpU"
+  },
+  "oldAbort": {
+    "status": 200,
+    "requestID": "f23c292e-311f-4673-823a-f293ebeb2372",
+    "body": true,
+    "missionID": "5bf5b7b867620950",
+    "sessionID": "ses_-zUPU0qL0zzggOQAD36R"
+  }
+}

@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [Mission 手动草稿创建的请求身份与原子提交](records/2026-11/2026-11-10-mission-draft-creation-replay.md)
 - [无项目 Chat 与 Work 创建的持久分配与数据库升级](records/2026-11/2026-11-10-global-conversation-creation-allocation.md)
 - [项目本地环境变量编辑与保存](records/2026-11/2026-11-10-project-conversation-creation-replay.md)
 - [项目本地环境变量编辑与保存](records/2026-11/2026-11-10-local-environment-save-acknowledgement.md)

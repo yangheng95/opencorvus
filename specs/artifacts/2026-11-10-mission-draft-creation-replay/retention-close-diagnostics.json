@@ -1,0 +1,16 @@
+{
+  "source": "Structured dev.log observed before the normal restart",
+  "time": "2026-11-09T21:55:15.674Z",
+  "requestID": "7819d8c4-10e1-47ac-9690-d5da6a12b8b2",
+  "method": "DELETE",
+  "path": "/mission/draft-bf8b6671301e4a6873188daa495eb1d8",
+  "status": 500,
+  "rootError": "No context found for instance",
+  "callChain": [
+    "currentProjectDirectory",
+    "project state factory",
+    "configureTaskCancellationReconciler",
+    "initializeProjectCleanupControl",
+    "closeMissionExecutionOperation"
+  ]
+}

@@ -48,6 +48,7 @@ test("Mission wake, draft creation, editing, and dispatch settle on the authorit
   })
   await createMissionDraft({
     directory: "D:/project",
+    requestID: "one-board-draft",
     title: "Panel backlog",
     request: "Publish the backlog item",
     productPillar: "code",
@@ -73,6 +74,16 @@ test("Mission wake, draft creation, editing, and dispatch settle on the authorit
     { method: "POST", path: "mission/mission_board_acceptance/dispatch", timeoutMilliseconds: null },
     { method: "PATCH", path: "mission/mission_board_acceptance/draft", timeoutMilliseconds: null },
   ])
+  expect(requests[1]?.body).toEqual({
+    kind: "json",
+    value: {
+      requestID: "one-board-draft",
+      title: "Panel backlog",
+      request: "Publish the backlog item",
+      productPillar: "code",
+      expertSquadIDs: ["base"],
+    },
+  })
   expect(requests[3]?.query).toEqual({ directory: "D:/project" })
   expect(requests[3]?.body).toEqual({
     kind: "json",

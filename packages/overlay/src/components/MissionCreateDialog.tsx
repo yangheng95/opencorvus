@@ -12,6 +12,7 @@ import { projectDirectoryLabel, projectLedgerDisplayName } from "../utils/projec
 import { workLedgerProject } from "../services/work-ledger"
 import { formatErrorDetails } from "../services/diagnostics"
 import { localeTag, t } from "../utils/i18n"
+import { randomUUID } from "../utils/random-id"
 import { expertSquadDescription } from "../utils/expert-squad-description"
 import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Badge } from "./ui/Badge"
@@ -46,6 +47,7 @@ export interface MissionCreateRequest {
 
 export interface MissionManualCreateRequest extends MissionCreateRequest {
   title: string
+  requestID: string
 }
 
 export interface MissionCreateDialogProps {
@@ -108,6 +110,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   let leaveFeedback: HTMLDivElement | undefined
   let leaveAction: (() => void) | undefined
   let dialogGeneration = 0
+  let manualAttempt: { input: string; requestID: string } | undefined
   let expertSquadRequestSequence = 0
 
   function cancelLeave(): void {
@@ -378,6 +381,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           return
         }
         dialogGeneration += 1
+        manualAttempt = undefined
         expertSquadRequestSequence += 1
         const directories = props.projectDirectories
         const preferredDirectory = directories.includes(props.defaultProjectDirectory)
@@ -547,7 +551,10 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     }
     try {
       if (createMode === "manual") {
-        await props.onCreateManual({ ...common, title: title().trim() })
+        const draft = { ...common, title: title().trim() }
+        const input = JSON.stringify({ ...draft, expertSquadIDs: [...draft.expertSquadIDs].sort() })
+        if (manualAttempt?.input !== input) manualAttempt = { input, requestID: randomUUID() }
+        await props.onCreateManual({ ...draft, requestID: manualAttempt.requestID })
       } else {
         await props.onCreateWithAI(common)
       }

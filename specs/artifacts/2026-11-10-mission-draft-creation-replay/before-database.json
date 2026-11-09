@@ -1,0 +1,48 @@
+{
+  "version": 11,
+  "integrity": "ok",
+  "counts": {
+    "message": 0,
+    "engine_task": 0,
+    "automation_run": 0,
+    "provider_usage_event": 0
+  },
+  "sessions": [
+    {
+      "id": "ses_-zUPU0qKKzz4NFthvE0R",
+      "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+      "title": "One parallel Mission draft request",
+      "missionID": "949ccd17d3dd4ff6",
+      "prompt": "The saved draft must stay pending for review.",
+      "held": "[\"dynamic\"]"
+    },
+    {
+      "id": "ses_-zUPU0qKSzz9tMi41mWF",
+      "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+      "title": "One parallel Mission draft request",
+      "missionID": "ea707271694436fc",
+      "prompt": "The saved draft must stay pending for review.",
+      "held": "[\"dynamic\"]"
+    },
+    {
+      "id": "ses_-zUPU0qL0zzggOQAD36R",
+      "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+      "title": "One Mission draft request",
+      "missionID": "5bf5b7b867620950",
+      "prompt": "The saved draft must stay pending for review.",
+      "held": "[\"dynamic\"]"
+    },
+    {
+      "id": "ses_-zUPU0qLkzzdUr51bJpU",
+      "project_id": "prj_hqHyvnMCYNmswdQ0Rmrh",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b156\\project-mission",
+      "title": "One Mission draft request",
+      "missionID": "7929ceeb730cf32c",
+      "prompt": "The saved draft must stay pending for review.",
+      "held": "[\"dynamic\"]"
+    }
+  ]
+}

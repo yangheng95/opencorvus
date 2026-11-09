@@ -91279,7 +91279,7 @@
     },
     "/mission/draft": {
       "post": {
-        "description": "Create a backlog Mission with an immutable Expert Squad snapshot and one pending operator prompt. No model is invoked until the operator dispatches the Mission.",
+        "description": "Create a backlog Mission with an immutable Expert Squad snapshot and one pending operator prompt. Reuse requestID to recover the same Mission after a lost response; different input conflicts. No model is invoked until the operator dispatches the Mission.",
         "operationId": "mission.createDraft",
         "parameters": [
           {
@@ -91316,6 +91316,11 @@
                   },
                   "request": {
                     "maxLength": 32000,
+                    "minLength": 1,
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
                     "minLength": 1,
                     "type": "string"
                   },
@@ -91638,6 +91643,60 @@
               }
             },
             "description": "Bad request"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionDraftCreationConflictError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "The draft request is already bound or its Mission is being deleted"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "data": {
+                      "additionalProperties": {},
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "type": "object"
+                    },
+                    "name": {
+                      "const": "MissionDraftCreationUnavailableError",
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "data"
+                  ],
+                  "type": "object"
+                }
+              }
+            },
+            "description": "The accepted Mission has been deleted"
           }
         },
         "summary": "Create a Mission draft",

@@ -1,0 +1,30 @@
+{
+  "globalList": {
+    "status": 404,
+    "requestID": "34bbd6a9-2c3c-45f1-b91d-b998be12b681",
+    "body": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Session not found: ses_hqzBUx9t4Fz58JNBCIEC"
+      }
+    }
+  },
+  "globalLedger": {
+    "status": 404,
+    "requestID": "49e21a65-8caa-425e-be01-973e6c232b41",
+    "body": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Session not found: ses_hqzBUx9t4Fz58JNBCIEC"
+      }
+    }
+  },
+  "archive": {
+    "status": 200,
+    "requestID": "6335cb9e-3300-49b6-8cb9-c2aac6d845dc",
+    "body": {
+      "rows": [],
+      "nextCursor": null
+    }
+  }
+}
