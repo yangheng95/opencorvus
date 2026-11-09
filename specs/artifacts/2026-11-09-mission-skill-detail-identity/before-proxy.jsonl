@@ -1,0 +1,15 @@
+{"listenPort":39264,"upstreamPort":39262,"pid":29956}
+{"time":"2026-11-09T15:53:39.259Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T15:53:44.274Z","receipt":1,"stage":"arrival","path":"/mission-skill/settings","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b133\\project-before","delay":0}
+{"time":"2026-11-09T15:53:44.280Z","receipt":1,"stage":"origin","status":200,"requestID":"0f634bed-d55d-4883-9822-ce64567c7220","skills":[{"name":"general","source":"built_in"},{"name":"inspection-demo","source":"project"}]}
+{"time":"2026-11-09T15:53:44.280Z","receipt":1,"stage":"released","skills":[{"name":"general","source":"built_in"},{"name":"inspection-demo","source":"project"}]}
+{"time":"2026-11-09T15:54:39.878Z","receipt":2,"stage":"arrival","path":"/mission-skill/settings","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b133\\project-before","delay":15000}
+{"time":"2026-11-09T15:54:39.885Z","receipt":2,"stage":"origin","status":200,"requestID":"d27c65e9-3b9a-4dbb-8649-1e7ef0f14c5e","skills":[{"name":"general","source":"built_in"}]}
+{"time":"2026-11-09T15:54:54.890Z","receipt":2,"stage":"released","skills":[{"name":"general","source":"built_in"}]}
+{"time":"2026-11-09T15:55:17.373Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T15:55:22.386Z","receipt":3,"stage":"arrival","path":"/mission-skill/settings","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b133\\project-before","delay":0}
+{"time":"2026-11-09T15:55:22.392Z","receipt":3,"stage":"origin","status":200,"requestID":"f4ac118a-c2f6-4d1a-ac29-314aebaecd88","skills":[{"name":"general","source":"built_in"},{"name":"inspection-demo","source":"project"}]}
+{"time":"2026-11-09T15:55:22.392Z","receipt":3,"stage":"released","skills":[{"name":"general","source":"built_in"},{"name":"inspection-demo","source":"project"}]}
+{"time":"2026-11-09T15:55:37.271Z","receipt":4,"stage":"arrival","path":"/mission-skill/settings","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b133\\project-before","delay":5500}
+{"time":"2026-11-09T15:55:37.279Z","receipt":4,"stage":"origin","status":200,"requestID":"0d0b371e-96de-432e-8a7a-fde20ae60e4e","skills":[{"name":"general","source":"built_in"}]}
+{"time":"2026-11-09T15:55:42.795Z","receipt":4,"stage":"released","skills":[{"name":"general","source":"built_in"}]}

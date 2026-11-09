@@ -5360,8 +5360,11 @@ SettingsRow owns a distinct read-only value slot with a bounded label column and
 a wrapping value column. Long paths never compete with labels as unshrinkable
 button clusters. Settings content has a single reading column: Mission Skills
 and installed Expert Squads show a list, then open the selected resource in the
-same column with a Back to list action. Mission Skill navigation focuses the
-opened heading and returns to the exact visible row or the current catalog search.
+same column with a Back to list action. Mission Skill details resolve the opened
+name in the current scope's accepted catalog independently of list filters. When
+that name leaves the catalog, its heading and Back to list remain with a localized
+unavailable message. Navigation focuses the opened heading and returns to the
+exact visible row or the current catalog search.
 Installed Expert Squad navigation focuses Back to list while the exact detail
 loads, then returns to the original physical installation row or selected filter.
 Installed package rows identify each physical installation by its localized scope

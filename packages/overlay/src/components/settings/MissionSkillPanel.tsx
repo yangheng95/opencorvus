@@ -1,6 +1,6 @@
 import { Feedback } from "../ui/Feedback"
 import type { MissionSkillSettingsResponse } from "@opencorvus-ai/sdk"
-import { For, Show, createEffect, createMemo, createSignal, onCleanup, untrack } from "solid-js"
+import { For, Show, batch, createEffect, createMemo, createSignal, onCleanup, untrack } from "solid-js"
 import { captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
 import { expertSquadSettingsScope, type ExpertSquadCatalogScopeState } from "../../services/expert-squad-scope"
 import { ensureMissionSkillDirectory, loadMissionSkillSettings } from "../../services/mission-skill"
@@ -62,8 +62,8 @@ export default function MissionSkillPanel() {
   const currentScopeIdentity = createMemo(() => `${captureApiAuthority().revision}:${scopeIdentity(currentScope())}`)
   const [catalog, setCatalog] = createSignal<MissionSkillSettingsResponse | null>(null)
   const [catalogIdentity, setCatalogIdentity] = createSignal("")
-  const [selectedName, setSelectedName] = createSignal("")
-  const [detailOpen, setDetailOpen] = createSignal(false)
+  const [selectedName, setSelectedName] = createSignal<string>()
+  const detailOpen = () => selectedName() !== undefined
   const [query, setQuery] = createSignal("")
   const [filter, setFilter] = createSignal<MissionSkillFilter>("all")
   const [loading, setLoading] = createSignal(false)
@@ -74,6 +74,7 @@ export default function MissionSkillPanel() {
   let operationGeneration = 0
   let focusGeneration = 0
   let panel: HTMLDivElement | undefined
+  let detailSurface: HTMLDivElement | undefined
   let detailHeading: HTMLHeadingElement | undefined
   let searchInput: HTMLInputElement | undefined
   onCleanup(() => {
@@ -94,8 +95,8 @@ export default function MissionSkillPanel() {
     })
   })
   const selectedSkill = createMemo(() => {
-    const list = filteredSkills()
-    return list.find((skill) => skill.name === selectedName()) ?? list[0]
+    const name = selectedName()
+    return name === undefined ? undefined : skills().find((skill) => skill.name === name)
   })
 
   function changeCatalogView(change: () => void, target: () => HTMLElement | null | undefined) {
@@ -113,18 +114,16 @@ export default function MissionSkillPanel() {
 
   function openDetail(name: string) {
     changeCatalogView(
-      () => {
-        setSelectedName(name)
-        setDetailOpen(true)
-      },
-      () => detailOpen() && selectedSkill()?.name === name ? detailHeading : undefined,
+      () => setSelectedName(name),
+      () => selectedName() === name ? detailHeading : undefined,
     )
   }
 
   function returnToCatalog() {
     const name = selectedName()
+    if (name === undefined) return
     changeCatalogView(
-      () => setDetailOpen(false),
+      () => setSelectedName(undefined),
       () => !detailOpen()
         ? panel?.querySelector<HTMLButtonElement>(`[data-skill-name="${CSS.escape(name)}"]`) ?? searchInput
         : undefined,
@@ -170,11 +169,21 @@ export default function MissionSkillPanel() {
     try {
       const next = await loadMissionSkillSettings({ ...scope, authority })
       if (!owns()) return
-      setCatalog(next)
-      setCatalogIdentity(expectedIdentity)
-      setSelectedName((current) =>
-        next.mission_skills.some((skill) => skill.name === current) ? current : (next.mission_skills[0]?.name ?? ""),
-      )
+      const accept = () =>
+        batch(() => {
+          setCatalog(next)
+          setCatalogIdentity(expectedIdentity)
+        })
+      const name = selectedName()
+      const origin = document.activeElement
+      if (
+        origin && detailSurface?.contains(origin) && selectedSkill() &&
+        !next.mission_skills.some((skill) => skill.name === name)
+      ) {
+        changeCatalogView(accept, () => (!origin.isConnected && selectedName() === name ? detailHeading : undefined))
+      } else {
+        accept()
+      }
     } catch (cause) {
       if (owns()) setReadFailure({ cause })
     } finally {
@@ -185,7 +194,7 @@ export default function MissionSkillPanel() {
   createEffect<string>((previousIdentity) => {
     const identity = currentScopeIdentity()
     if (identity === previousIdentity) return previousIdentity
-    setDetailOpen(false)
+    setSelectedName(undefined)
     operationGeneration += 1
     focusGeneration += 1
     setNotice("")
@@ -358,31 +367,29 @@ export default function MissionSkillPanel() {
                 </For>
               </div>
             </SettingsToolbar>
-          </Show>
 
-          <Show
-            when={!scopeStatus()}
-            fallback={
-              <Feedback tone="warning" title={t("mission_skill.scope_unavailable_title")}>
-                {scopeStatus()}
-              </Feedback>
-            }
-          >
-            <Show when={!loading() || scopedCatalog()} fallback={<Feedback>{t("common.loading")}</Feedback>}>
-              <Show
-                when={skills().length > 0}
-                fallback={
-                  <Show when={scopedCatalog()}>
-                    <SettingsEmpty>{t("mission_skill.empty")}</SettingsEmpty>
-                  </Show>
-                }
-              >
+            <Show
+              when={!scopeStatus()}
+              fallback={
+                <Feedback tone="warning" title={t("mission_skill.scope_unavailable_title")}>
+                  {scopeStatus()}
+                </Feedback>
+              }
+            >
+              <Show when={!loading() || scopedCatalog()} fallback={<Feedback>{t("common.loading")}</Feedback>}>
                 <Show
-                  when={filteredSkills().length > 0}
-                  fallback={<SettingsEmpty>{t("mission_skill.no_results")}</SettingsEmpty>}
+                  when={skills().length > 0}
+                  fallback={
+                    <Show when={scopedCatalog()}>
+                      <SettingsEmpty>{t("mission_skill.empty")}</SettingsEmpty>
+                    </Show>
+                  }
                 >
-                  <div class="mission-skill-browser">
-                    <Show when={!detailOpen()}>
+                  <Show
+                    when={filteredSkills().length > 0}
+                    fallback={<SettingsEmpty>{t("mission_skill.no_results")}</SettingsEmpty>}
+                  >
+                    <div class="mission-skill-browser">
                       <SettingsSurface class="mission-skill-list">
                         <For each={filteredSkills()}>
                           {(skill) => (
@@ -407,79 +414,90 @@ export default function MissionSkillPanel() {
                           )}
                         </For>
                       </SettingsSurface>
-                    </Show>
-
-                    <Show when={detailOpen() ? selectedSkill() : undefined}>
-                      {(skill) => (
-                        <SettingsSurface class="mission-skill-detail" data-ui="mission-skill-detail">
-                          <Button
-                            class="s-detail-back"
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            tone="neutral"
-                            onClick={returnToCatalog}
-                          >
-                            <Icon name="nav-back" />
-                            {t("settings.back_to_list")}
-                          </Button>
-                          <header class="mission-skill-detail-head">
-                            <div>
-                              <span>{t("mission_skill.detail_eyebrow")}</span>
-                              <h3 ref={detailHeading} tabIndex={-1}>{skill().name}</h3>
-                            </div>
-                            <Badge tone="muted">{sourceLabel(skill().source)}</Badge>
-                          </header>
-                          <p class="mission-skill-detail-description">{skill().description}</p>
-                          <div class="mission-skill-detail-section mission-skill-invocation">
-                            <strong>{t("mission_skill.invoke_title")}</strong>
-                            <code>{invocation(skill().name)}</code>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              tone="neutral"
-                              data-ui="mission-skill-copy"
-                              onClick={() => void copyInvocation(skill())}
-                            >
-                              <Icon name="copy" />
-                              {t("mission_skill.copy_invocation")}
-                            </Button>
-                          </div>
-                          <Disclosure.Root class="mission-skill-detail-section">
-                            <Disclosure.Trigger>
-                              {tc("mission_skill.tools_count", skill().required_tools.length)}
-                            </Disclosure.Trigger>
-                            <Disclosure.Content>
-                              <SettingsReferenceList values={skill().required_tools} />
-                            </Disclosure.Content>
-                          </Disclosure.Root>
-                          <Show when={skill().location}>
-                            {(location) => (
-                              <div class="mission-skill-detail-section">
-                                <strong>{t("mission_skill.source_location")}</strong>
-                                <code class="mission-skill-path">{location()}</code>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  tone="neutral"
-                                  data-ui="mission-skill-open-source"
-                                  onClick={() => void openPath(location(), skill().name)}
-                                >
-                                  <Icon name="folder-open" />
-                                  {t(pathRevealLabelKey())}
-                                </Button>
-                              </div>
-                            )}
-                          </Show>
-                        </SettingsSurface>
-                      )}
-                    </Show>
-                  </div>
+                    </div>
+                  </Show>
                 </Show>
               </Show>
             </Show>
+          </Show>
+
+          <Show when={selectedName()}>
+            {(name) => (
+              <SettingsSurface ref={detailSurface} class="mission-skill-detail" data-ui="mission-skill-detail">
+                <Button
+                  class="s-detail-back"
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  tone="neutral"
+                  onClick={returnToCatalog}
+                >
+                  <Icon name="nav-back" />
+                  {t("settings.back_to_list")}
+                </Button>
+                <header class="mission-skill-detail-head">
+                  <div>
+                    <span>{t("mission_skill.detail_eyebrow")}</span>
+                    <h3 ref={detailHeading} tabIndex={-1}>{name()}</h3>
+                  </div>
+                  <Show when={selectedSkill()}>
+                    {(skill) => <Badge tone="muted">{sourceLabel(skill().source)}</Badge>}
+                  </Show>
+                </header>
+                <Show
+                  when={selectedSkill()}
+                  fallback={<Feedback tone="warning">{t("mission_skill.detail_unavailable")}</Feedback>}
+                >
+                  {(skill) => (
+                    <>
+                      <p class="mission-skill-detail-description">{skill().description}</p>
+                      <div class="mission-skill-detail-section mission-skill-invocation">
+                        <strong>{t("mission_skill.invoke_title")}</strong>
+                        <code>{invocation(skill().name)}</code>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          tone="neutral"
+                          data-ui="mission-skill-copy"
+                          onClick={() => void copyInvocation(skill())}
+                        >
+                          <Icon name="copy" />
+                          {t("mission_skill.copy_invocation")}
+                        </Button>
+                      </div>
+                      <Disclosure.Root class="mission-skill-detail-section">
+                        <Disclosure.Trigger>
+                          {tc("mission_skill.tools_count", skill().required_tools.length)}
+                        </Disclosure.Trigger>
+                        <Disclosure.Content>
+                          <SettingsReferenceList values={skill().required_tools} />
+                        </Disclosure.Content>
+                      </Disclosure.Root>
+                      <Show when={skill().location}>
+                        {(location) => (
+                          <div class="mission-skill-detail-section">
+                            <strong>{t("mission_skill.source_location")}</strong>
+                            <code class="mission-skill-path">{location()}</code>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="sm"
+                              tone="neutral"
+                              data-ui="mission-skill-open-source"
+                              onClick={() => void openPath(location(), skill().name)}
+                            >
+                              <Icon name="folder-open" />
+                              {t(pathRevealLabelKey())}
+                            </Button>
+                          </div>
+                        )}
+                      </Show>
+                    </>
+                  )}
+                </Show>
+              </SettingsSurface>
+            )}
           </Show>
         </SettingsSurface>
       </SettingsGroup>
