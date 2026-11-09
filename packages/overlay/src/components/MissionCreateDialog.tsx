@@ -39,6 +39,7 @@ type SelectOption = {
 type SquadSearchResult = { options: ExpertSquadOption[]; matchingIDs: readonly string[] }
 
 export interface MissionCreateRequest {
+  requestID: string
   directory: string
   request: string
   productPillar: ProductPillar
@@ -47,7 +48,6 @@ export interface MissionCreateRequest {
 
 export interface MissionManualCreateRequest extends MissionCreateRequest {
   title: string
-  requestID: string
 }
 
 export interface MissionCreateDialogProps {
@@ -110,7 +110,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   let leaveFeedback: HTMLDivElement | undefined
   let leaveAction: (() => void) | undefined
   let dialogGeneration = 0
-  let manualAttempt: { input: string; requestID: string } | undefined
+  let creationAttempt: { input: string; requestID: string } | undefined
   let expertSquadRequestSequence = 0
 
   function cancelLeave(): void {
@@ -381,7 +381,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
           return
         }
         dialogGeneration += 1
-        manualAttempt = undefined
+        creationAttempt = undefined
         expertSquadRequestSequence += 1
         const directories = props.projectDirectories
         const preferredDirectory = directories.includes(props.defaultProjectDirectory)
@@ -550,13 +550,14 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
       expertSquadIDs: [...expertSquadIDs()],
     }
     try {
+      const authoredTitle = createMode === "manual" ? title().trim() : ""
+      const input = JSON.stringify([createMode, { ...common, expertSquadIDs: [...common.expertSquadIDs].sort() }, authoredTitle])
+      if (creationAttempt?.input !== input) creationAttempt = { input, requestID: randomUUID() }
+      const submission = { ...common, requestID: creationAttempt.requestID }
       if (createMode === "manual") {
-        const draft = { ...common, title: title().trim() }
-        const input = JSON.stringify({ ...draft, expertSquadIDs: [...draft.expertSquadIDs].sort() })
-        if (manualAttempt?.input !== input) manualAttempt = { input, requestID: randomUUID() }
-        await props.onCreateManual({ ...draft, requestID: manualAttempt.requestID })
+        await props.onCreateManual({ ...submission, title: authoredTitle })
       } else {
-        await props.onCreateWithAI(common)
+        await props.onCreateWithAI(submission)
       }
       props.onClose()
     } catch (nextError) {

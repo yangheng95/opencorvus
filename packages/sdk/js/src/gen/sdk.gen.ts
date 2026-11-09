@@ -10078,7 +10078,7 @@ export class Mission extends HeyApiClient {
   /**
    * Wake the Mission agent
    *
-   * Start (or resume) a Mission agent session and inject a user prompt. Omit `missionID` to start a new mission; supply it to resume an existing one. The route is idempotent for (project, directory, missionID) — exactly one mission session is keyed per mission. Supply requestID to join one exact accepted prompt, model, attachment and config input; reusing it with drift returns a conflict.
+   * Start (or resume) a Mission agent session and inject a user prompt. Omit `missionID` to start a new mission; supply it to resume an existing one. On a first start, reuse requestID to join the same Mission in the same Project and directory. Supply requestID to join one exact accepted prompt, model, attachment and config input; reusing it with drift returns a conflict.
    */
   public wake<ThrowOnError extends boolean = false>(
     parameters: {

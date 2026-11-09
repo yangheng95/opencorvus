@@ -1696,12 +1696,13 @@ Preserved audit Sessions do not consume a visible page slot. Work Ledger uses
 one persisted read snapshot for candidates, exact Session projections and the
 next cursor; individual item reads still check that item's exact identity.
 
-Manual draft creation retains its request identity while the same submitted
-project, title, text, product pillar and Expert Squad selection remain in the
-open form. An uncertain response leaves the form open so the same Save action
-can recover the accepted draft. A changed submission or newly opened form
-represents another save. The accepted Mission drives the existing saved receipt
-and explicit open action; saving does not start execution.
+The creation form retains a request identity for the same submitted mode,
+project, title when present, text, product pillar and Expert Squad selection.
+An uncertain response leaves the form open so the same Save or Start action
+can recover the accepted target. A changed submission or newly opened form
+represents a separate author intent. The accepted draft drives the existing
+saved receipt and explicit open action; Start uses the accepted Mission's
+canonical Session for navigation.
 
 Mission Board card progress counts only completed Tasks against all Tasks in that
 Mission. Failed, cancelled and unfinished lifecycle counts are shown separately

@@ -1,0 +1,99 @@
+{
+  "version": 12,
+  "integrity": "ok",
+  "providerUsageEvents": 0,
+  "persistedLaunches": [
+    {
+      "session": {
+        "id": "ses_-zUPTrFZFzzdhYh0WkXU",
+        "project_id": "prj_hWGIAbLLXviBpvp5OFxM",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "title": "One first Mission invocation in serial.",
+        "missionID": "4dbda55dbf373c4a"
+      },
+      "userMessage": {
+        "id": "msg_h7nAHdpw91J5c5YlzQn1",
+        "provider": "b158-loopback",
+        "model": "offline",
+        "requestID": "b158-same-initial-wake",
+        "openedEventID": "pev_hG3shZqDBjYb7YhSpGnI"
+      },
+      "opened": {
+        "id": "pev_hG3shZqDBjYb7YhSpGnI",
+        "type": "mission.execution.opened",
+        "source": "mission.wake",
+        "correlation_id": "058c3209-c3f0-5915-9068-22d2e068d3bc",
+        "requestID": "b158-same-initial-wake"
+      }
+    },
+    {
+      "session": {
+        "id": "ses_-zUPTrFPGzz4wrdja24Q",
+        "project_id": "prj_hWGIAbLLXviBpvp5OFxM",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "title": "One first Mission invocation in serial.",
+        "missionID": "eb956e93e0115da1"
+      },
+      "userMessage": {
+        "id": "msg_hb8sNd2w5yjgfwodl3Dg",
+        "provider": "b158-loopback",
+        "model": "offline",
+        "requestID": "b158-same-initial-wake",
+        "openedEventID": "pev_h3ew47Hoi8pdTHSJjamT"
+      },
+      "opened": {
+        "id": "pev_h3ew47Hoi8pdTHSJjamT",
+        "type": "mission.execution.opened",
+        "source": "mission.wake",
+        "correlation_id": "73d3f1fa-679f-5daa-b892-d2229d9ae765",
+        "requestID": "b158-same-initial-wake"
+      }
+    },
+    {
+      "session": {
+        "id": "ses_-zUPTrFJbzzmgIwdoHx3",
+        "project_id": "prj_hWGIAbLLXviBpvp5OFxM",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "title": "One first Mission invocation in parallel.",
+        "missionID": "04c4d60f2967e348"
+      },
+      "userMessage": {
+        "id": "msg_hh5maQVUMfyK9wXu9kqF",
+        "provider": "b158-loopback",
+        "model": "offline",
+        "requestID": "b158-parallel-initial-wake",
+        "openedEventID": "pev_hy3f43qO4Nk0VYouzUtu"
+      },
+      "opened": {
+        "id": "pev_hy3f43qO4Nk0VYouzUtu",
+        "type": "mission.execution.opened",
+        "source": "mission.wake",
+        "correlation_id": "fb489cad-a6ba-5ada-885c-2a22dd46c920",
+        "requestID": "b158-parallel-initial-wake"
+      }
+    },
+    {
+      "session": {
+        "id": "ses_-zUPTrFJJzzb3xsyaOSM",
+        "project_id": "prj_hWGIAbLLXviBpvp5OFxM",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "title": "One first Mission invocation in parallel.",
+        "missionID": "33c4e4dc039aebab"
+      },
+      "userMessage": {
+        "id": "msg_h82FimsuZ1zgbzgEnMgU",
+        "provider": "b158-loopback",
+        "model": "offline",
+        "requestID": "b158-parallel-initial-wake",
+        "openedEventID": "pev_h8wn3EWXBqtyaIbQ7n63"
+      },
+      "opened": {
+        "id": "pev_h8wn3EWXBqtyaIbQ7n63",
+        "type": "mission.execution.opened",
+        "source": "mission.wake",
+        "correlation_id": "82e2f1df-4e1b-555c-b433-5c935c29f1de",
+        "requestID": "b158-parallel-initial-wake"
+      }
+    }
+  ]
+}

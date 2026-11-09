@@ -1,0 +1,122 @@
+{
+  "desktop": [
+    {
+      "time": "2026-11-09T22:35:49.677Z",
+      "receipt": 1,
+      "method": "POST",
+      "route": "/mission/wake",
+      "upstreamStatus": 200,
+      "upstreamRequestID": "c31aa468-ff7c-4d3d-826e-4f411c963a74",
+      "sent": {
+        "requestID": "2c587f0b-ae76-4df2-8589-4a38b75fd5d5",
+        "text": "One desktop Mission start after a lost response",
+        "productPillar": "work",
+        "expertSquadIDs": [
+          "dynamic"
+        ]
+      },
+      "accepted": {
+        "missionID": "wake-f8bd721461d9635ecd732174d68dc256",
+        "sessionID": "ses_-zUPToA1WzzK037I5XgX",
+        "created": true,
+        "productPillar": "work"
+      },
+      "responseBytes": 130,
+      "browserResponse": "truncated after 16 bytes"
+    },
+    {
+      "time": "2026-11-09T22:35:57.996Z",
+      "receipt": 2,
+      "method": "POST",
+      "route": "/mission/wake",
+      "upstreamStatus": 200,
+      "upstreamRequestID": "ccf2f52f-cdfd-4c35-a862-bf267007c847",
+      "sent": {
+        "requestID": "2c587f0b-ae76-4df2-8589-4a38b75fd5d5",
+        "text": "One desktop Mission start after a lost response",
+        "productPillar": "work",
+        "expertSquadIDs": [
+          "dynamic"
+        ]
+      },
+      "accepted": {
+        "missionID": "wake-f8bd721461d9635ecd732174d68dc256",
+        "sessionID": "ses_-zUPToA1WzzK037I5XgX",
+        "created": true,
+        "productPillar": "work"
+      },
+      "responseBytes": 130,
+      "browserResponse": "complete"
+    }
+  ],
+  "list": {
+    "status": 200,
+    "requestID": "b198085b-9e94-412d-9a30-0a27e3021834",
+    "data": [
+      {
+        "missionID": "wake-f8bd721461d9635ecd732174d68dc256",
+        "sessionID": "ses_-zUPToA1WzzK037I5XgX",
+        "title": "One desktop Mission start after a lost response",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "created": 1794263749210,
+        "updated": 1794263750837,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  },
+  "user": {
+    "info": {
+      "author": "user",
+      "role": "user",
+      "time": {
+        "created": 1794263749244
+      },
+      "agent": "mission",
+      "model": {
+        "providerID": "b158-loopback",
+        "modelID": "offline"
+      },
+      "extra": {
+        "wake_reason": {
+          "source": "mission.operator",
+          "missionID": "wake-f8bd721461d9635ecd732174d68dc256",
+          "requestID": "2c587f0b-ae76-4df2-8589-4a38b75fd5d5",
+          "requestFingerprint": "c1f1f8da6b8a5979184ec245c5cf4cf1374809ff4ce2156c9794fc052e406a34",
+          "openedEventID": "pev_huTciBKKflCFMYDu2tab"
+        },
+        "surface": "panel",
+        "project_memory_user_input": {
+          "version": 1,
+          "surface": "mission.operator",
+          "literalText": "One desktop Mission start after a lost response"
+        }
+      },
+      "orderKey": "v1:0001794263749244:0000000000000030:0000000000000000:message:msg_hFME58qdg5ZuOhfVSm9k",
+      "id": "msg_hFME58qdg5ZuOhfVSm9k",
+      "sessionID": "ses_-zUPToA1WzzK037I5XgX"
+    },
+    "parts": [
+      {
+        "id": "prt_hWi8xvHJ2BRtgITnqEQq",
+        "sessionID": "ses_-zUPToA1WzzK037I5XgX",
+        "messageID": "msg_hFME58qdg5ZuOhfVSm9k",
+        "orderKey": "v1:0001794263749251:0000000000000031:0000000000000000:part:prt_hWi8xvHJ2BRtgITnqEQq",
+        "type": "text",
+        "text": "One desktop Mission start after a lost response",
+        "metadata": {
+          "catalog_snapshot_ref": "/attachment/prj_hWGIAbLLXviBpvp5OFxM/da476ed5e887b442a4d60fa81f36b3130a6b2b5bfd8281f7633d88b88981c9b2.json",
+          "catalog_snapshot_hash": "da476ed5e887b442a4d60fa81f36b3130a6b2b5bfd8281f7633d88b88981c9b2"
+        }
+      }
+    ]
+  }
+}

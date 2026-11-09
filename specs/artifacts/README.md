@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [Mission 首次启动重发的项目作用域和执行目标证据](2026-11-10-mission-first-wake-request-identity/README.md)
 - [保留删除的 Project 执行所有权与列表可见性证据](2026-11-10-retained-execution-owner-and-readers/README.md)
 - [Mission 手动草稿创建的请求身份与原子提交证据](2026-11-10-mission-draft-creation-replay/README.md)
 - [无项目 Chat 与 Work 创建的持久分配与数据库升级证据](2026-11-10-global-conversation-creation-allocation/README.md)

@@ -91710,7 +91710,7 @@
     },
     "/mission/wake": {
       "post": {
-        "description": "Start (or resume) a Mission agent session and inject a user prompt. Omit `missionID` to start a new mission; supply it to resume an existing one. The route is idempotent for (project, directory, missionID) — exactly one mission session is keyed per mission. Supply requestID to join one exact accepted prompt, model, attachment and config input; reusing it with drift returns a conflict.",
+        "description": "Start (or resume) a Mission agent session and inject a user prompt. Omit `missionID` to start a new mission; supply it to resume an existing one. On a first start, reuse requestID to join the same Mission in the same Project and directory. Supply requestID to join one exact accepted prompt, model, attachment and config input; reusing it with drift returns a conflict.",
         "operationId": "mission.wake",
         "parameters": [
           {
@@ -91895,6 +91895,57 @@
               }
             },
             "description": "Mission wake request or immutable Expert Squad snapshot rejected"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "NotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "LogFileNotFoundError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Not found"
           },
           "409": {
             "content": {

@@ -25511,6 +25511,22 @@ export type MissionWakeErrors = {
         name: "MissionExpertSquadSnapshotMismatchError"
       }
   /**
+   * Not found
+   */
+  404:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "NotFoundError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "LogFileNotFoundError"
+      }
+  /**
    * Mission execution is still completing its durable close operation
    */
   409:

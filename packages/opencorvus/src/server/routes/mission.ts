@@ -3,7 +3,7 @@ import { HTTPException } from "hono/http-exception"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
 import z from "zod"
-import { randomBytes } from "node:crypto"
+import { randomUUID } from "node:crypto"
 import { conversationMessageHasDisplay } from "@/conversation/view"
 import { Instance } from "@/project/instance"
 import {
@@ -12,6 +12,7 @@ import {
   assertMissionExpertSquadSnapshot,
   MissionExpertSquadSnapshotMismatchError,
   findExistingMissionSession,
+  firstMissionWakeID,
   getMissionSessionByDirectory,
   listGlobalMissionSessions,
   missionPendingPrompt,
@@ -73,10 +74,6 @@ import {
   requireCompletedMissionDeleteRetention,
   resumeMissionDeleteRetention,
 } from "@/mission/retention"
-
-function newMissionID(): string {
-  return randomBytes(8).toString("hex")
-}
 
 const MissionWakeInput = z
   .object({
@@ -662,8 +659,8 @@ export function MissionRoutes() {
         description:
           "Start (or resume) a Mission agent session and inject a user prompt. " +
           "Omit `missionID` to start a new mission; supply it to resume an existing one. " +
-          "The route is idempotent for (project, directory, missionID) — exactly one mission " +
-          "session is keyed per mission. Supply requestID to join one exact accepted prompt, model, attachment and config input; " +
+          "On a first start, reuse requestID to join the same Mission in the same Project and directory. " +
+          "Supply requestID to join one exact accepted prompt, model, attachment and config input; " +
           "reusing it with drift returns a conflict.",
         operationId: "mission.wake",
         responses: {
@@ -675,6 +672,7 @@ export function MissionRoutes() {
             "Mission wake request or immutable Expert Squad snapshot rejected",
             "MissionExpertSquadSnapshotMismatchError",
           ),
+          ...errors(404),
           409: namedErrorResponse(
             "Mission execution is still completing its durable close operation",
             "MissionExecutionClosingError",
@@ -687,7 +685,9 @@ export function MissionRoutes() {
       validator("json", MissionWakeInput),
       async (c) => {
         const input = c.req.valid("json")
-        const missionID = input.missionID ?? newMissionID()
+        const requestID = input.requestID ?? randomUUID()
+        const firstLaunch = input.missionID === undefined
+        const missionID = input.missionID ?? firstMissionWakeID(requestID)
         const existingSessionID = findExistingMissionSession({ missionID, directory: Instance.directory })
         const existingSession = existingSessionID ? await Session.get(existingSessionID) : undefined
         const storedOverlay = Config.Overlay.parse(
@@ -757,7 +757,7 @@ export function MissionRoutes() {
           missionID,
           sessionID: session.id,
           source: "mission.wake",
-          requestID: input.requestID ?? resolveRequestID(c),
+          requestID,
           acceptedInput: {
             text: input.text,
             model: input.model ?? null,
@@ -794,7 +794,7 @@ export function MissionRoutes() {
           MissionWakeResult.parse({
             missionID,
             sessionID: session.id,
-            created: !existingSessionID,
+            created: firstLaunch || !existingSessionID,
             productPillar: session.productPillar,
           }),
         )

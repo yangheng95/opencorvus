@@ -378,12 +378,14 @@ curl -L "http://127.0.0.1:7878/mission/mission-1/project-archive?directory=D%3A%
 
 ## 启动 Mission
 
-不传 `missionID` 就是新建：
+首次启动时不传 `missionID`，并为本次启动提供一个 `requestID`。响应丢失时，
+在同一项目和目录重送相同标识可找回原 Mission。另一次独立启动使用新标识。
 
 ```typescript
 const result = await client.mission.wake({
-  title: "销售线索工作台",
   text: "把当前 CRM 系统改造成可上线的销售线索工作台。先梳理需求，再分批派发任务。",
+  productPillar: "work",
+  requestID: "launch-sales-lead-workspace",
 })
 
 if (result.error) throw result.error
@@ -396,9 +398,10 @@ console.log(result.data)
 
 ```json
 {
-  "missionID": "a1b2c3d4",
-  "sessionID": "session_...",
-  "created": true
+  "missionID": "wake-a1b2c3d4",
+  "sessionID": "ses_...",
+  "created": true,
+  "productPillar": "work"
 }
 ```
 
@@ -408,6 +411,8 @@ console.log(result.data)
 await client.mission.wake({
   missionID,
   text: "第一批只做线索列表、筛选和详情页，导出功能放到第二批。",
+  productPillar: "work",
+  requestID: "sales-lead-workspace-priorities",
 })
 ```
 
@@ -417,10 +422,12 @@ curl：
 curl -X POST "http://127.0.0.1:7878/mission/wake" \
   -H "content-type: application/json" \
   -H "x-opencorvus-directory: D:\repo\my-project" \
-  -d "{\"title\":\"销售线索工作台\",\"text\":\"把当前 CRM 系统改造成可上线的销售线索工作台。\"}"
+  -d '{"productPillar":"work","requestID":"launch-sales-lead-workspace","text":"把当前 CRM 系统改造成可上线的销售线索工作台。"}'
 ```
 
-`missionID` 只能包含小写字母、数字和连字符，长度 1 到 64。服务端保证同一个项目里的同一个 `missionID` 只对应一个 Mission。
+`missionID` 只能包含小写字母、数字和连字符，长度 1 到 64。同一个项目和目录的同一个 `missionID` 对应一个会话。
+`created: true` 表示首次启动请求，重发该请求仍返回相同的启动回执；显式继续已存在的 Mission 返回 `false`。
+同一请求的执行已关闭时，重发返回既有冲突；新动作使用新请求标识。
 
 ## 查询 Mission
 

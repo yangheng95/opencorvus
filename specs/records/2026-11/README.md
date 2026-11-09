@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [Mission 首次启动重发的项目作用域和执行目标](2026-11-10-mission-first-wake-request-identity.md)
 - [保留删除的 Project 执行所有权与列表可见性](2026-11-10-retained-execution-owner-and-readers.md)
 - [Mission 手动草稿创建的请求身份与原子提交](2026-11-10-mission-draft-creation-replay.md)
 - [无项目 Chat 与 Work 创建的持久分配与数据库升级](2026-11-10-global-conversation-creation-allocation.md)

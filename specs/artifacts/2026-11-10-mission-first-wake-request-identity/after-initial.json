@@ -1,0 +1,274 @@
+{
+  "first": {
+    "status": 200,
+    "requestID": "b4faccc8-0fe2-4a77-9c82-b86064935632",
+    "data": {
+      "missionID": "wake-a18430feb37a9a1f8e8e57c0eae3fd08",
+      "sessionID": "ses_-zUPTp5XJzzvwacL0F61",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "replay": {
+    "status": 200,
+    "requestID": "93936025-e21f-4035-aaf9-8cce0c1b8664",
+    "data": {
+      "missionID": "wake-a18430feb37a9a1f8e8e57c0eae3fd08",
+      "sessionID": "ses_-zUPTp5XJzzvwacL0F61",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "parallel": [
+    {
+      "status": 200,
+      "requestID": "79a2571f-cd61-4d44-a2da-a0ca4800c2e5",
+      "data": {
+        "missionID": "wake-76c66ef8fb1b911d286b838dbc3e9f89",
+        "sessionID": "ses_-zUPTp5P4zz0SrdSDxzP",
+        "created": true,
+        "productPillar": "work"
+      }
+    },
+    {
+      "status": 200,
+      "requestID": "47c0d058-17e6-4ed0-98fd-443d7f9cd286",
+      "data": {
+        "missionID": "wake-76c66ef8fb1b911d286b838dbc3e9f89",
+        "sessionID": "ses_-zUPTp5P4zz0SrdSDxzP",
+        "created": true,
+        "productPillar": "work"
+      }
+    }
+  ],
+  "other": {
+    "status": 200,
+    "requestID": "42fd0014-9464-4137-bde8-1b93696e2353",
+    "data": {
+      "missionID": "wake-dd76136fa8f29d76783c5f7c95eb7aee",
+      "sessionID": "ses_-zUPTp57CzzFEjkDVTa6",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "explicit": {
+    "status": 200,
+    "requestID": "2f7a9942-04e1-4a54-8ce7-912390cf1c71",
+    "data": {
+      "missionID": "wake-a18430feb37a9a1f8e8e57c0eae3fd08",
+      "sessionID": "ses_-zUPTp5XJzzvwacL0F61",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "conflict": {
+    "status": 409,
+    "requestID": "f48feeda-cea0-4a9a-a335-40a96d69117c",
+    "data": {
+      "name": "MissionExecutionWakeInputConflictError",
+      "data": {
+        "message": "Mission wake-a18430feb37a9a1f8e8e57c0eae3fd08 operator request one-b158-first-launch was already accepted with different input.",
+        "missionID": "wake-a18430feb37a9a1f8e8e57c0eae3fd08",
+        "sessionID": "ses_-zUPTp5XJzzvwacL0F61",
+        "requestID": "one-b158-first-launch",
+        "acceptedFingerprint": "51b2d920bc040213c131aaa11593774ac56fa909e8dd5414ca7ee8963337a689",
+        "receivedFingerprint": "9c87ace65c956c9a97ab3d2d36a85f3a6a604dc53c3bd7a22cad6c57a5faadbd",
+        "closureEventID": "pev_h3XRNR4sa3tR6UUgb4wK"
+      }
+    }
+  },
+  "messages": [
+    {
+      "requestID": "538d0db1-ed38-4262-bcbc-c0da96559a7a",
+      "user": {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1794263528177
+          },
+          "agent": "mission",
+          "model": {
+            "providerID": "b158-loopback",
+            "modelID": "offline"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "mission.operator",
+              "missionID": "wake-a18430feb37a9a1f8e8e57c0eae3fd08",
+              "requestID": "one-b158-first-launch",
+              "requestFingerprint": "51b2d920bc040213c131aaa11593774ac56fa909e8dd5414ca7ee8963337a689",
+              "openedEventID": "pev_h3XRNR4sa3tR6UUgb4wK"
+            },
+            "surface": "panel",
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "mission.operator",
+              "literalText": "Scoped first Mission launch acceptance"
+            }
+          },
+          "orderKey": "v1:0001794263528177:0000000000000030:0000000000000000:message:msg_hrkXpJlhkyzpPoym1gjw",
+          "id": "msg_hrkXpJlhkyzpPoym1gjw",
+          "sessionID": "ses_-zUPTp5XJzzvwacL0F61"
+        },
+        "parts": [
+          {
+            "id": "prt_hxrO1e3R9W5Afn2ijBAP",
+            "sessionID": "ses_-zUPTp5XJzzvwacL0F61",
+            "messageID": "msg_hrkXpJlhkyzpPoym1gjw",
+            "orderKey": "v1:0001794263528188:0000000000000031:0000000000000000:part:prt_hxrO1e3R9W5Afn2ijBAP",
+            "type": "text",
+            "text": "Scoped first Mission launch acceptance",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hWGIAbLLXviBpvp5OFxM/8349eefdd3c9e1d29e11518139c6cdfb426dc961ef81d620351504766e1e4a9a.json",
+              "catalog_snapshot_hash": "8349eefdd3c9e1d29e11518139c6cdfb426dc961ef81d620351504766e1e4a9a"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "requestID": "db1a45bb-9d3d-4df8-9da0-b08d01e1dd7d",
+      "user": {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1794263528663
+          },
+          "agent": "mission",
+          "model": {
+            "providerID": "b158-loopback",
+            "modelID": "offline"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "mission.operator",
+              "missionID": "wake-76c66ef8fb1b911d286b838dbc3e9f89",
+              "requestID": "one-b158-parallel-launch",
+              "requestFingerprint": "ed5f8eb01202af35729fc8f8193d0a153c9372349528f9826ca2dc29e0301f2a",
+              "openedEventID": "pev_h61wK1lKlHXP1Ir2juKL"
+            },
+            "surface": "panel",
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "mission.operator",
+              "literalText": "Parallel first Mission launch acceptance"
+            }
+          },
+          "orderKey": "v1:0001794263528663:0000000000000030:0000000000000000:message:msg_h1zyug5vufg8sXlWu4G5",
+          "id": "msg_h1zyug5vufg8sXlWu4G5",
+          "sessionID": "ses_-zUPTp5P4zz0SrdSDxzP"
+        },
+        "parts": [
+          {
+            "id": "prt_hSedsiBk04t698Yp4Z9M",
+            "sessionID": "ses_-zUPTp5P4zz0SrdSDxzP",
+            "messageID": "msg_h1zyug5vufg8sXlWu4G5",
+            "orderKey": "v1:0001794263528668:0000000000000031:0000000000000000:part:prt_hSedsiBk04t698Yp4Z9M",
+            "type": "text",
+            "text": "Parallel first Mission launch acceptance",
+            "metadata": {
+              "catalog_snapshot_ref": "/attachment/prj_hWGIAbLLXviBpvp5OFxM/af444f2c3a2ddff3d67e5241d8a88b74b59738f5674926373914fc14a7b55eaa.json",
+              "catalog_snapshot_hash": "af444f2c3a2ddff3d67e5241d8a88b74b59738f5674926373914fc14a7b55eaa"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "requestID": "fda14e41-282f-4d91-a4ec-463717109d08",
+      "user": {
+        "info": {
+          "author": "user",
+          "role": "user",
+          "time": {
+            "created": 1794263529768
+          },
+          "agent": "mission",
+          "model": {
+            "providerID": "b158-loopback",
+            "modelID": "offline"
+          },
+          "extra": {
+            "wake_reason": {
+              "source": "mission.operator",
+              "missionID": "wake-dd76136fa8f29d76783c5f7c95eb7aee",
+              "requestID": "one-b158-first-launch",
+              "requestFingerprint": "51b2d920bc040213c131aaa11593774ac56fa909e8dd5414ca7ee8963337a689",
+              "openedEventID": "pev_hZwbRqI5iGy1Wwr1dbbh"
+            },
+            "surface": "panel",
+            "project_memory_user_input": {
+              "version": 1,
+              "surface": "mission.operator",
+              "literalText": "Scoped first Mission launch acceptance"
+            }
+          },
+          "orderKey": "v1:0001794263529768:0000000000000030:0000000000000000:message:msg_h4bmew7zMHPY0a6hZ3Zk",
+          "id": "msg_h4bmew7zMHPY0a6hZ3Zk",
+          "sessionID": "ses_-zUPTp57CzzFEjkDVTa6"
+        },
+        "parts": [
+          {
+            "id": "prt_hAnKNLTAdCpRs1pTJYMt",
+            "sessionID": "ses_-zUPTp57CzzFEjkDVTa6",
+            "messageID": "msg_h4bmew7zMHPY0a6hZ3Zk",
+            "orderKey": "v1:0001794263529775:0000000000000031:0000000000000000:part:prt_hAnKNLTAdCpRs1pTJYMt",
+            "type": "text",
+            "text": "Scoped first Mission launch acceptance"
+          }
+        ]
+      }
+    }
+  ],
+  "close": {
+    "status": 200,
+    "requestID": "8f963f95-30d8-4202-8d43-bf6804cf0058",
+    "data": true
+  },
+  "closed": {
+    "status": 409,
+    "requestID": "da7d19a2-59b1-4ed7-8e06-cad81ccbe2cc",
+    "data": {
+      "name": "MissionExecutionWakeClosedError",
+      "data": {
+        "message": "Mission wake-a18430feb37a9a1f8e8e57c0eae3fd08 operator request one-b158-first-launch already belongs to closed occurrence d4431c88-e31e-433d-832d-56eaec45383f.",
+        "missionID": "wake-a18430feb37a9a1f8e8e57c0eae3fd08",
+        "sessionID": "ses_-zUPTp5XJzzvwacL0F61",
+        "state": "closed",
+        "operationID": "d4431c88-e31e-433d-832d-56eaec45383f",
+        "closureEventID": "pev_g0VaWAvFm00ltr6MU6Kb"
+      }
+    }
+  },
+  "separate": {
+    "status": 200,
+    "requestID": "efc90114-1df7-4b2f-8097-1e3bc6bda0d9",
+    "data": {
+      "missionID": "wake-1afaf90fb6c7d22555488d5dd7f42a0d",
+      "sessionID": "ses_-zUPTp4jjzzJ3GvER6Oo",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "deleted": {
+    "status": 200,
+    "requestID": "7bedabd2-3ba6-4feb-95ec-b8f9151f1641",
+    "data": true
+  },
+  "gone": {
+    "status": 404,
+    "requestID": "bc1b2aa6-86e9-4b43-9bca-fde7ec04e882",
+    "data": {
+      "name": "NotFoundError",
+      "data": {
+        "message": "Session not found: ses_-zUPTp4jjzzJ3GvER6Oo"
+      }
+    }
+  },
+  "selectedModels": {
+    "main": "b158-loopback/offline",
+    "sibling": "b158-loopback/offline"
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "config": {
+    "status": 200,
+    "requestID": "0e0fecfe-bfea-466a-9aef-75692886cec1",
+    "model": "b158-loopback/offline"
+  },
+  "sent": {
+    "body": {
+      "text": "One first Mission invocation in serial.",
+      "productPillar": "work",
+      "expertSquadIDs": [
+        "dynamic"
+      ],
+      "model": "b158-loopback/offline",
+      "requestID": "b158-same-initial-wake"
+    },
+    "parallelBody": {
+      "text": "One first Mission invocation in parallel.",
+      "productPillar": "work",
+      "expertSquadIDs": [
+        "dynamic"
+      ],
+      "model": "b158-loopback/offline",
+      "requestID": "b158-parallel-initial-wake"
+    }
+  },
+  "one": {
+    "status": 200,
+    "requestID": "f6329712-2ef2-4c71-88a7-1e77c65135d6",
+    "data": {
+      "missionID": "4dbda55dbf373c4a",
+      "sessionID": "ses_-zUPTrFZFzzdhYh0WkXU",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "replay": {
+    "status": 200,
+    "requestID": "2d5ee998-b0b6-4242-8d3e-b2594eb45764",
+    "data": {
+      "missionID": "eb956e93e0115da1",
+      "sessionID": "ses_-zUPTrFPGzz4wrdja24Q",
+      "created": true,
+      "productPillar": "work"
+    }
+  },
+  "parallel": [
+    {
+      "status": 200,
+      "requestID": "f6bb48c0-6b27-4e9d-bbcc-e91c1057a330",
+      "data": {
+        "missionID": "04c4d60f2967e348",
+        "sessionID": "ses_-zUPTrFJbzzmgIwdoHx3",
+        "created": true,
+        "productPillar": "work"
+      }
+    },
+    {
+      "status": 200,
+      "requestID": "8f308764-66c9-4006-a6cc-98c39f479cbc",
+      "data": {
+        "missionID": "33c4e4dc039aebab",
+        "sessionID": "ses_-zUPTrFJJzzb3xsyaOSM",
+        "created": true,
+        "productPillar": "work"
+      }
+    }
+  ],
+  "list": {
+    "status": 200,
+    "requestID": "92f323a4-d737-441e-ad6a-7d5d65733c94",
+    "data": [
+      {
+        "missionID": "33c4e4dc039aebab",
+        "sessionID": "ses_-zUPTrFJJzzb3xsyaOSM",
+        "title": "One first Mission invocation in parallel.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "created": 1794263013902,
+        "updated": 1794263014004,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "04c4d60f2967e348",
+        "sessionID": "ses_-zUPTrFJbzzmgIwdoHx3",
+        "title": "One first Mission invocation in parallel.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "created": 1794263013884,
+        "updated": 1794263013969,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "eb956e93e0115da1",
+        "sessionID": "ses_-zUPTrFPGzz4wrdja24Q",
+        "title": "One first Mission invocation in serial.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "created": 1794263013533,
+        "updated": 1794263013575,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      },
+      {
+        "missionID": "4dbda55dbf373c4a",
+        "sessionID": "ses_-zUPTrFZFzzdhYh0WkXU",
+        "title": "One first Mission invocation in serial.",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "created": 1794263012914,
+        "updated": 1794263013007,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  }
+}

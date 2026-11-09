@@ -218,12 +218,15 @@ The response is `application/zip`. The archive contains Git-included files from 
 
 ## Start Or Resume A Mission
 
-To start a new Mission, omit `missionID`:
+To start a new Mission, omit `missionID` and supply a request ID for this
+launch. Reuse that ID after a lost response to recover the same Mission in
+the same project and directory. A separate launch needs a new request ID.
 
 ```typescript
 const mission = await client.mission.wake({
   text: "Turn the current CRM into a production-ready sales lead workspace.",
-  title: "Sales lead workspace",
+  productPillar: "work",
+  requestID: "launch-sales-lead-workspace",
 })
 
 if (mission.error) throw mission.error
@@ -236,6 +239,8 @@ To resume the same Mission, pass the same `missionID`:
 await client.mission.wake({
   missionID,
   text: "Do list filters and the detail page first. Defer export to the next batch.",
+  productPillar: "work",
+  requestID: "sales-lead-workspace-priorities",
 })
 ```
 
@@ -245,9 +250,9 @@ Response fields:
 | ----------- | -------------------------------------------------------------------------------------- |
 | `missionID` | Mission identifier. The server generates it when omitted.                              |
 | `sessionID` | Session that carries the Mission agent conversation.                                   |
-| `created`   | `true` means a new Mission was created; `false` means an existing Mission was resumed. |
+| `created`   | `true` identifies a launch request, including a replay of that request; an explicit resume of an existing Mission returns `false`. |
 
-Mission IDs may only use lowercase letters, digits, and hyphens, with length 1 to 64. The server guarantees that one `(project, missionID)` maps to exactly one Mission session.
+Mission IDs may only use lowercase letters, digits, and hyphens, with length 1 to 64. One `(project, directory, missionID)` maps to exactly one Mission Session. Replaying a request whose execution already closed returns the existing conflict; use a new request ID for a new action.
 
 Equivalent HTTP request:
 

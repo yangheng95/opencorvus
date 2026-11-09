@@ -1,5 +1,6 @@
 import type { Argv } from "yargs"
 import { EOL } from "os"
+import { randomUUID } from "node:crypto"
 import { cmd } from "./cmd"
 import { UI } from "../ui"
 import { attach, printAttachedResult, withAttachOptions } from "./attach"
@@ -225,7 +226,7 @@ export const MissionSendCommand = cmd({
         missionID: args.missionId,
         expertSquadIDs: args.squad,
         model: args.model,
-        requestID: args.requestId,
+        requestID: args.requestId ?? randomUUID(),
       }),
     )
     const verb = result.created ? "Started" : "Resumed"

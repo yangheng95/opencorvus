@@ -1,0 +1,237 @@
+{
+  "version": 12,
+  "integrity": "ok",
+  "foreignKeyIssues": 0,
+  "counts": {
+    "session": 7,
+    "project": 2,
+    "engine_task": 0,
+    "automation_run": 0,
+    "provider_usage_event": 0
+  },
+  "isolatedGitNotesPreserved": true,
+  "launches": [
+    {
+      "session": {
+        "id": "ses_-zUPTp5XJzzvwacL0F61",
+        "project_id": "prj_hWGIAbLLXviBpvp5OFxM",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "title": "Scoped first Mission launch acceptance",
+        "missionID": "wake-a18430feb37a9a1f8e8e57c0eae3fd08"
+      },
+      "userMessage": {
+        "id": "msg_hrkXpJlhkyzpPoym1gjw",
+        "provider": "b158-loopback",
+        "model": "offline",
+        "requestID": "one-b158-first-launch",
+        "openedEventID": "pev_h3XRNR4sa3tR6UUgb4wK"
+      },
+      "events": [
+        {
+          "id": "pev_h3XRNR4sa3tR6UUgb4wK",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "3b4c5349-8819-53a6-844f-e07bf4b6440c",
+          "requestID": "one-b158-first-launch"
+        },
+        {
+          "id": "pev_g0VaWAvFf00tEE3cUw9H",
+          "type": "mission.execution.closing",
+          "source": "mission.abort",
+          "seq": 5,
+          "correlation_id": "d4431c88-e31e-433d-832d-56eaec45383f",
+          "requestID": "8f963f95-30d8-4202-8d43-bf6804cf0058"
+        },
+        {
+          "id": "pev_g0VaWAvFm00ltr6MU6Kb",
+          "type": "mission.execution.closed",
+          "source": "mission.abort",
+          "seq": 6,
+          "correlation_id": "d4431c88-e31e-433d-832d-56eaec45383f",
+          "requestID": "8f963f95-30d8-4202-8d43-bf6804cf0058"
+        }
+      ]
+    },
+    {
+      "session": {
+        "id": "ses_-zUPTp5P4zz0SrdSDxzP",
+        "project_id": "prj_hWGIAbLLXviBpvp5OFxM",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "title": "Parallel first Mission launch acceptance",
+        "missionID": "wake-76c66ef8fb1b911d286b838dbc3e9f89"
+      },
+      "userMessage": {
+        "id": "msg_h1zyug5vufg8sXlWu4G5",
+        "provider": "b158-loopback",
+        "model": "offline",
+        "requestID": "one-b158-parallel-launch",
+        "openedEventID": "pev_h61wK1lKlHXP1Ir2juKL"
+      },
+      "events": [
+        {
+          "id": "pev_h61wK1lKlHXP1Ir2juKL",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "2e38ddb1-67f7-547d-b26c-f052e8a06454",
+          "requestID": "one-b158-parallel-launch"
+        }
+      ]
+    },
+    {
+      "session": {
+        "id": "ses_-zUPTp57CzzFEjkDVTa6",
+        "project_id": "prj_hsjnz9HLhlS4LmaxrhpF",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-wake-sibling",
+        "title": "Scoped first Mission launch acceptance",
+        "missionID": "wake-dd76136fa8f29d76783c5f7c95eb7aee"
+      },
+      "userMessage": {
+        "id": "msg_h4bmew7zMHPY0a6hZ3Zk",
+        "provider": "b158-loopback",
+        "model": "offline",
+        "requestID": "one-b158-first-launch",
+        "openedEventID": "pev_hZwbRqI5iGy1Wwr1dbbh"
+      },
+      "events": [
+        {
+          "id": "pev_hZwbRqI5iGy1Wwr1dbbh",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "f87f9f94-64fb-547b-b383-0db1dd5483a9",
+          "requestID": "one-b158-first-launch"
+        }
+      ]
+    },
+    {
+      "session": {
+        "id": "ses_-zUPTp4jjzzJ3GvER6Oo",
+        "project_id": "prj_hWGIAbLLXviBpvp5OFxM",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "title": "A separate first Mission launch intent",
+        "missionID": "wake-1afaf90fb6c7d22555488d5dd7f42a0d"
+      },
+      "userMessage": {
+        "id": "msg_hdADCzoOIBjyy2Oc71MD",
+        "provider": "b158-loopback",
+        "model": "offline",
+        "requestID": "another-b158-first-launch",
+        "openedEventID": "pev_hS0O8SzhaniiGz5WNUCo"
+      },
+      "events": [
+        {
+          "id": "pev_hS0O8SzhaniiGz5WNUCo",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "f830e722-a587-5166-a92a-e1644ebc7165",
+          "requestID": "another-b158-first-launch"
+        },
+        {
+          "id": "pev_g0VaWAvKa00OkXdlISYk",
+          "type": "mission.execution.closing",
+          "source": "mission.delete",
+          "seq": 2,
+          "correlation_id": "e2411e47-a6dd-48b3-ab05-816ac40c1bac",
+          "requestID": "7bedabd2-3ba6-4feb-95ec-b8f9151f1641"
+        },
+        {
+          "id": "pev_g0VaWAvkM009r5fPMfvX",
+          "type": "mission.execution.closed",
+          "source": "mission.delete",
+          "seq": 6,
+          "correlation_id": "e2411e47-a6dd-48b3-ab05-816ac40c1bac",
+          "requestID": "7bedabd2-3ba6-4feb-95ec-b8f9151f1641"
+        },
+        {
+          "id": "pev_g0VaWAvlU00gGjT2Ox4k",
+          "type": "session.deleted",
+          "source": "session.delete",
+          "seq": 8,
+          "correlation_id": null,
+          "requestID": null
+        }
+      ]
+    },
+    {
+      "session": {
+        "id": "ses_-zUPToi0QzzmfDyE45UG",
+        "project_id": "prj_hsjnz9HLhlS4LmaxrhpF",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-wake-sibling",
+        "title": "Unkeyed independent launch check",
+        "missionID": "wake-5b3e0ca049843600457157b18042e896"
+      },
+      "userMessage": {
+        "id": "msg_hUxkZ2D1qk5tcurKgctq",
+        "provider": "b158-loopback",
+        "model": "offline",
+        "requestID": "2a530465-e9a7-46cf-bca4-fd979dd1c6a0",
+        "openedEventID": "pev_hb0uhtdtIY2Rb6n7y0wW"
+      },
+      "events": [
+        {
+          "id": "pev_hb0uhtdtIY2Rb6n7y0wW",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "6f42c72d-d7c3-508d-8b72-ec0eac543f0d",
+          "requestID": "2a530465-e9a7-46cf-bca4-fd979dd1c6a0"
+        }
+      ]
+    },
+    {
+      "session": {
+        "id": "ses_-zUPToi0BzznOUf227Rd",
+        "project_id": "prj_hsjnz9HLhlS4LmaxrhpF",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-wake-sibling",
+        "title": "Unkeyed independent launch check",
+        "missionID": "wake-66ae8757628949fb798008d0b29a87f7"
+      },
+      "userMessage": {
+        "id": "msg_h6a7n4asJ3PDvatDaThd",
+        "provider": "b158-loopback",
+        "model": "offline",
+        "requestID": "a4cd232a-1ecb-4796-a1de-e728e4ed7eb8",
+        "openedEventID": "pev_hBfbtuJK3M3S4JGZ1Vxd"
+      },
+      "events": [
+        {
+          "id": "pev_hBfbtuJK3M3S4JGZ1Vxd",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "8e78b056-a932-53d1-a170-2c03ff9b3892",
+          "requestID": "a4cd232a-1ecb-4796-a1de-e728e4ed7eb8"
+        }
+      ]
+    },
+    {
+      "session": {
+        "id": "ses_-zUPToA1WzzK037I5XgX",
+        "project_id": "prj_hWGIAbLLXviBpvp5OFxM",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b158\\project-mission-wake",
+        "title": "One desktop Mission start after a lost response",
+        "missionID": "wake-f8bd721461d9635ecd732174d68dc256"
+      },
+      "userMessage": {
+        "id": "msg_hFME58qdg5ZuOhfVSm9k",
+        "provider": "b158-loopback",
+        "model": "offline",
+        "requestID": "2c587f0b-ae76-4df2-8589-4a38b75fd5d5",
+        "openedEventID": "pev_huTciBKKflCFMYDu2tab"
+      },
+      "events": [
+        {
+          "id": "pev_huTciBKKflCFMYDu2tab",
+          "type": "mission.execution.opened",
+          "source": "mission.wake",
+          "seq": 1,
+          "correlation_id": "4c0e3eac-4061-529e-8040-a162779e4aea",
+          "requestID": "2c587f0b-ae76-4df2-8589-4a38b75fd5d5"
+        }
+      ]
+    }
+  ]
+}

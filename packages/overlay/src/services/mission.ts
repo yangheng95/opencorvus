@@ -34,6 +34,7 @@ import { composerSubmission } from "./composer-draft"
 import { downloadProjectArchive } from "./project-archive"
 import type { BoardSource } from "../store/board"
 import type { WorkLedgerStreamEvent } from "./sse"
+import { randomUUID } from "../utils/random-id"
 
 // ── Gateway statistics ──
 
@@ -273,8 +274,11 @@ export async function wakeMission(input: MissionWakeInput): Promise<MissionWakeR
         }
       : {}),
   } satisfies MissionWakeBody
-  if (input.composerDraftKey && input.requestID === undefined)
-    body.requestID = composerSubmission(input.composerDraftKey, JSON.stringify(body)).messageID
+  if (input.requestID === undefined) {
+    body.requestID = input.composerDraftKey
+      ? composerSubmission(input.composerDraftKey, JSON.stringify(body)).messageID
+      : randomUUID()
+  }
   const params = new URLSearchParams({ directory })
   input.onDispatch?.(body.requestID)
   const result = await apiJson<MissionWakeResponse>(

@@ -1,0 +1,58 @@
+{
+  "exact": {
+    "status": 200,
+    "requestID": "9927f4dc-bc51-4bd1-95a6-e25afac3f82f",
+    "data": {
+      "missionID": "4dbda55dbf373c4a",
+      "sessionID": "ses_-zUPTrFZFzzdhYh0WkXU",
+      "created": false,
+      "productPillar": "work"
+    }
+  },
+  "changed": {
+    "status": 409,
+    "requestID": "d0970ce2-3355-48d0-b2ed-8f360e8d66da",
+    "data": {
+      "name": "MissionExecutionWakeInputConflictError",
+      "data": {
+        "message": "Mission 4dbda55dbf373c4a operator request b158-same-initial-wake was already accepted with different input.",
+        "missionID": "4dbda55dbf373c4a",
+        "sessionID": "ses_-zUPTrFZFzzdhYh0WkXU",
+        "requestID": "b158-same-initial-wake",
+        "acceptedFingerprint": "c4fdd7648a43024f392aac0e0f2e3ebdf442d961026aa62f35e63e4006151926",
+        "receivedFingerprint": "ec81462453aa0e3a6fc851a025b44a2995c38cdd71bda345c4346dff04afa076",
+        "closureEventID": "pev_hG3shZqDBjYb7YhSpGnI"
+      }
+    }
+  },
+  "closed": {
+    "status": 200,
+    "requestID": "9b5e180c-ac1f-4357-8c76-4497e48100fd",
+    "data": true
+  },
+  "terminal": {
+    "status": 409,
+    "requestID": "821f7c52-abd3-4cdc-87f4-28a5894cffd3",
+    "data": {
+      "name": "MissionExecutionWakeClosedError",
+      "data": {
+        "message": "Mission 4dbda55dbf373c4a operator request b158-same-initial-wake already belongs to closed occurrence 9d6eff8c-1b45-47bb-9680-8324acd272a5.",
+        "missionID": "4dbda55dbf373c4a",
+        "sessionID": "ses_-zUPTrFZFzzdhYh0WkXU",
+        "state": "closed",
+        "operationID": "9d6eff8c-1b45-47bb-9680-8324acd272a5",
+        "closureEventID": "pev_g0VaW9EQC00n3zBt1HtP"
+      }
+    }
+  },
+  "unbound": {
+    "status": 200,
+    "requestID": "f09e8f28-8aca-4062-992c-786a1383abf1",
+    "data": {
+      "missionID": "bb58d30eee84694b",
+      "sessionID": "ses_-zUPTqlZNzzySEMD1YZB",
+      "created": true,
+      "productPillar": "work"
+    }
+  }
+}

@@ -354,6 +354,21 @@ function normalizeDirectory(directory: string) {
   return Filesystem.resolve(directory)
 }
 
+function missionAuthorRequestScope(directory: string, requestID: string) {
+  const { project, projectGeneration } = Instance
+  const worktree = normalizeDirectory(project.worktree)
+  const contained = Filesystem.contains(worktree, directory)
+  const relative = contained ? path.relative(worktree, directory) : directory
+  const directoryScope = [contained ? "worktree" : "directory", process.platform === "win32" ? relative.toLowerCase() : relative]
+  return [project.id, projectGeneration, directoryScope, requestID]
+}
+
+/** Resolve the target before a first wake enters Session-scoped admission. */
+export function firstMissionWakeID(requestID: string): MissionID {
+  const scope = missionAuthorRequestScope(normalizeDirectory(Instance.directory), requestID)
+  return MissionID.parse(`wake-${canonicalDigestSource("mission-first-wake-v1", scope).sha256.slice(0, 32)}`)
+}
+
 function findScopedMissionSessionID(db: Database.TxOrDb, input: { missionID: string; directory: string }) {
   return db
     .select({ id: SessionTable.id })
@@ -666,14 +681,10 @@ export async function createMissionDraft(input: {
   expertSquadIDs?: MissionRequestedExpertSquadIDs
   resolveExpertSquadIDs: () => Promise<MissionVisibleExpertSquadIDs>
 }): Promise<MissionSession> {
-  const { project, projectGeneration } = Instance
+  const { project } = Instance
   const directory = normalizeDirectory(Instance.directory)
-  const worktree = normalizeDirectory(project.worktree)
-  const contained = Filesystem.contains(worktree, directory)
-  const relative = contained ? path.relative(worktree, directory) : directory
-  const directoryScope = [contained ? "worktree" : "directory", process.platform === "win32" ? relative.toLowerCase() : relative]
   const requestID = input.requestID ?? randomUUID()
-  const intent = [project.id, projectGeneration, directoryScope, requestID]
+  const intent = missionAuthorRequestScope(directory, requestID)
   const missionID = MissionID.parse(`draft-${canonicalDigestSource("mission-draft-mission-v1", intent).sha256.slice(0, 32)}`)
   const sessionID = Identifier.deterministic("session", canonicalJSONValue(["mission-draft-session-v1", intent]))
   const pendingPrompt = MissionPendingPrompt.parse({ text: input.request })

@@ -1191,6 +1191,7 @@ async function createMissionBoardWithAI(input: MissionCreateRequest): Promise<vo
     text: input.request,
     productPillar: input.productPillar,
     expertSquadIDs: input.expertSquadIDs,
+    requestID: input.requestID,
   })
   setMissionSharedRefreshToken((value) => value + 1)
   assertUserNavigationCurrent(selectionEpoch)

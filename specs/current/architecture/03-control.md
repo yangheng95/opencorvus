@@ -248,6 +248,14 @@ Instance context 的 `git` 是所属 Project 主工作树 `project.worktree` 的
 
 ## Mission operator draft acceptance
 
+For `mission.wake` without an explicit Mission ID, the Project generation,
+canonical directory scope and author request ID resolve the Mission before
+Session-scoped admission. Exact first-launch replays use the same target and
+the existing durable Message/opened occurrence. A supplied Mission ID
+continues to select that explicit target. Reusing an accepted request after
+close receives the existing closed-occurrence contract; a new request can
+reopen only an explicitly selected Mission or start its own Mission.
+
 `mission.createDraft` resolves one manual author request in its Project
 generation and directory scope. Project-relative directory identity survives
 project relocation; outside worktrees have their own directory scope. The
