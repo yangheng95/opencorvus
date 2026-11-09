@@ -1,0 +1,4 @@
+{"listenPort":39331,"upstreamPort":39330,"pid":33028}
+{"time":"2026-11-09T20:21:38.875Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T20:21:45.878Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T20:22:24.982Z","receipt":1,"method":"PATCH","route":"/config","mediaTypes":["application/json"],"body":{"name":"Local environment review","variables":{"OPENCORVUS_REVIEW_KEEP":"keep-original","OPENCORVUS_REVIEW_RENAMED":"rename-original"},"setup_script":null},"status":200,"requestID":"ef86391b-2216-4076-b39d-63d29687cc96"}

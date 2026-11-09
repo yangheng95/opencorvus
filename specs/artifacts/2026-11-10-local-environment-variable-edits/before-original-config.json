@@ -1,0 +1,12 @@
+{
+  "requestID": "fc2ce4b0-a5b8-4694-8fd7-6551bec2f558",
+  "status": 200,
+  "environment": {
+    "name": "Local environment review",
+    "variables": {
+      "OPENCORVUS_REVIEW_KEEP": "keep-original",
+      "OPENCORVUS_REVIEW_REMOVE": "remove-original",
+      "OPENCORVUS_REVIEW_RENAME": "rename-original"
+    }
+  }
+}

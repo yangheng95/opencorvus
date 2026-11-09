@@ -1,0 +1,51 @@
+{
+  "config": {
+    "status": 200,
+    "requestID": "8a1b07d4-f9ab-40eb-a496-b59b9d4a52ed",
+    "environment": {
+      "name": "Local environment review",
+      "variables": {
+        "OPENCORVUS_REVIEW_KEEP": "concurrent-keep",
+        "OPENCORVUS_REVIEW_ADDED": "outside-draft",
+        "OPENCORVUS_REVIEW_RENAMED": "renamed-typed"
+      }
+    },
+    "locale": "en-US"
+  },
+  "file": {
+    "environment": {
+      "variables": {
+        "OPENCORVUS_REVIEW_KEEP": "concurrent-keep",
+        "OPENCORVUS_REVIEW_ADDED": "outside-draft",
+        "OPENCORVUS_REVIEW_RENAMED": "renamed-typed"
+      },
+      "name": "Local environment review"
+    },
+    "locale": "en-US"
+  },
+  "conversation": {
+    "status": 200,
+    "requestID": "607c5d33-358a-4776-962e-0661a0a5e2db",
+    "messages": 0
+  },
+  "browserConfigWrites": [
+    {
+      "time": "2026-11-09T20:28:21.374Z",
+      "receipt": 1,
+      "method": "PATCH",
+      "route": "/config",
+      "mediaTypes": [
+        "application/json"
+      ],
+      "body": {
+        "variables": {
+          "OPENCORVUS_REVIEW_REMOVE": null,
+          "OPENCORVUS_REVIEW_RENAME": null,
+          "OPENCORVUS_REVIEW_RENAMED": "renamed-typed"
+        }
+      },
+      "status": 200,
+      "requestID": "d8532240-fe20-4244-a11a-6ffc77ff2e99"
+    }
+  ]
+}

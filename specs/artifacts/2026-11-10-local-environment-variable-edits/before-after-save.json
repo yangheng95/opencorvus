@@ -1,0 +1,22 @@
+{
+  "status": 200,
+  "environment": {
+    "name": "Local environment review",
+    "variables": {
+      "OPENCORVUS_REVIEW_KEEP": "keep-original",
+      "OPENCORVUS_REVIEW_REMOVE": "remove-original",
+      "OPENCORVUS_REVIEW_RENAME": "rename-original",
+      "OPENCORVUS_REVIEW_RENAMED": "rename-original"
+    }
+  },
+  "requestID": "11021604-19f6-4bd8-84ea-cb56ac3720cc",
+  "file": {
+    "variables": {
+      "OPENCORVUS_REVIEW_KEEP": "keep-original",
+      "OPENCORVUS_REVIEW_REMOVE": "remove-original",
+      "OPENCORVUS_REVIEW_RENAME": "rename-original",
+      "OPENCORVUS_REVIEW_RENAMED": "rename-original"
+    },
+    "name": "Local environment review"
+  }
+}

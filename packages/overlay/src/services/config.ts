@@ -426,6 +426,15 @@ function mergePatchDiff(before: unknown, after: unknown): unknown {
   return Object.keys(patch).length > 0 ? patch : undefined
 }
 
+/** Derive the exact fields edited between two configuration snapshots. */
+export function configDraftMergePatch(
+  before: Record<string, unknown>,
+  after: Record<string, unknown>,
+): Record<string, unknown> | undefined {
+  const diff = mergePatchDiff(before, after)
+  return isRecord(diff) ? diff : undefined
+}
+
 /**
  * Fetch the current server config, apply `mutator` to a clone, then PATCH the
  * resulting JSON Merge Patch back. Returns the saved config.
@@ -457,7 +466,7 @@ async function updateConfigPath(
   assertApiAuthorityCurrent(authority)
   const next = structuredClone(current || {})
   mutator(next)
-  const diff = mergePatchDiff(current || {}, next)
+  const diff = configDraftMergePatch(current || {}, next)
   if (diff === undefined) {
     if (isApiAuthorityCurrent(authority) && ownsResponse()) setConfigSnapshot(current)
     return current

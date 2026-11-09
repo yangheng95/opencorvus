@@ -1,0 +1,14 @@
+{
+  "environment": {
+    "name": "Local environment review",
+    "variables": {
+      "OPENCORVUS_REVIEW_KEEP": "concurrent-keep",
+      "OPENCORVUS_REVIEW_REMOVE": "remove-original",
+      "OPENCORVUS_REVIEW_RENAME": "rename-original",
+      "OPENCORVUS_REVIEW_ADDED": "outside-draft"
+    }
+  },
+  "requestID": "9e008539-4d51-4268-81d3-9e125a8b55ea",
+  "status": 200,
+  "locale": "en-US"
+}

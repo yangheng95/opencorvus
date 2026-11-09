@@ -13,6 +13,7 @@ import {
   Show,
   untrack,
 } from "solid-js"
+import { createStore, reconcile } from "solid-js/store"
 import { activeSessionID, activeTaskID, boardStore, loadBoard } from "../store/board"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { appStore } from "../store/app"
@@ -60,7 +61,7 @@ import { AutoGrowTextarea } from "./ui/AutoGrowTextarea"
 import { Section } from "./ui/Section"
 import { Dialog } from "./ui/Dialog"
 import { TextField } from "./ui/TextField"
-import { currentProjectConfigRequestOptions, patchConfig } from "../services/config"
+import { configDraftMergePatch, currentProjectConfigRequestOptions, patchConfig } from "../services/config"
 import { conversationAgentRecordsForSource } from "../store/conversation-agents"
 import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { isAgentActivityTerminalStatus } from "../utils/agent-activity"
@@ -189,10 +190,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     () => props.anchorVisible && panelOpen() && !gitActionOpen() && !localEnvironmentOpen(),
   )
   const [localEnvironmentName, setLocalEnvironmentName] = createSignal("")
-  const [localEnvironmentVariables, setLocalEnvironmentVariables] = createSignal<LocalEnvironmentVariableDraft[]>([])
+  const [localEnvironmentVariables, setLocalEnvironmentVariables] = createStore<LocalEnvironmentVariableDraft[]>([])
   const [localEnvironmentSetupScript, setLocalEnvironmentSetupScript] = createSignal("")
   const [localEnvironmentBusy, setLocalEnvironmentBusy] = createSignal(false)
   const [localEnvironmentError, setLocalEnvironmentError] = createSignal("")
+  let localEnvironmentBaseline: LocalEnvironmentConfig | undefined
   let localEnvironmentVariableID = 0
   let gitOperationID = 0
   let commitMessageStream: ReturnType<typeof streamVcsCommitMessage> | undefined
@@ -440,15 +442,19 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
   function openLocalEnvironmentEditor(): void {
     const environment = configuredLocalEnvironment()
+    localEnvironmentBaseline = environment && {
+      ...environment,
+      ...(environment.variables ? { variables: { ...environment.variables } } : {}),
+    }
     setLocalEnvironmentName(environment?.name?.trim() || t("project_runtime.local_environment_default_name"))
     setLocalEnvironmentSetupScript(environment?.setup_script ?? "")
-    setLocalEnvironmentVariables(
+    setLocalEnvironmentVariables(reconcile(
       Object.entries(environment?.variables ?? {}).map(([key, value]) => ({
         id: ++localEnvironmentVariableID,
         key,
         value,
       })),
-    )
+    ))
     setLocalEnvironmentError("")
     closeRuntimePanel()
     setLocalEnvironmentOpen(true)
@@ -456,22 +462,23 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
 
   function closeLocalEnvironmentEditor(): void {
     if (localEnvironmentBusy()) return
+    localEnvironmentBaseline = undefined
     setLocalEnvironmentOpen(false)
     setLocalEnvironmentError("")
     closeRuntimePanel()
   }
 
   function addLocalEnvironmentVariable(): void {
-    setLocalEnvironmentVariables((items) => [...items, { id: ++localEnvironmentVariableID, key: "", value: "" }])
+    setLocalEnvironmentVariables(localEnvironmentVariables.length, { id: ++localEnvironmentVariableID, key: "", value: "" })
   }
 
   function updateLocalEnvironmentVariable(id: number, field: "key" | "value", value: string): void {
-    setLocalEnvironmentVariables((items) => items.map((item) => (item.id === id ? { ...item, [field]: value } : item)))
+    setLocalEnvironmentVariables((item) => item.id === id, field, value)
     setLocalEnvironmentError("")
   }
 
   function removeLocalEnvironmentVariable(id: number): void {
-    setLocalEnvironmentVariables((items) => items.filter((item) => item.id !== id))
+    setLocalEnvironmentVariables(reconcile(localEnvironmentVariables.filter((item) => item.id !== id)))
     setLocalEnvironmentError("")
   }
 
@@ -483,7 +490,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       return
     }
     const variables: Record<string, string> = {}
-    for (const item of localEnvironmentVariables()) {
+    for (const item of localEnvironmentVariables) {
       const key = item.key.trim()
       if (!key) {
         setLocalEnvironmentError(t("project_runtime.local_environment_key_required"))
@@ -496,6 +503,20 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       variables[key] = item.value
     }
 
+    const baseline = localEnvironmentBaseline
+    const setupScript = localEnvironmentSetupScript().trim()
+    const diff = configDraftMergePatch(baseline ? { local_environment: baseline } : {}, {
+      local_environment: {
+        name,
+        ...(Object.keys(variables).length || baseline?.variables ? { variables } : {}),
+        ...(setupScript ? { setup_script: setupScript } : {}),
+      },
+    })
+    if (!diff) {
+      closeLocalEnvironmentEditor()
+      return
+    }
+
     const authority = captureApiAuthority()
     const selectionEpoch = boardStore.selectEpoch
     const directory = dir().trim()
@@ -503,17 +524,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setLocalEnvironmentBusy(true)
     setLocalEnvironmentError("")
     try {
-      await patchConfig(
-        {
-          local_environment: {
-            name,
-            variables,
-            setup_script: localEnvironmentSetupScript().trim() || null,
-          },
-        },
-        { ...currentProjectConfigRequestOptions(), authority },
-      )
-      if (ownsSave()) setLocalEnvironmentOpen(false)
+      await patchConfig(diff, { ...currentProjectConfigRequestOptions(), authority })
+      if (ownsSave()) {
+        localEnvironmentBaseline = undefined
+        setLocalEnvironmentOpen(false)
+      }
     } catch (error) {
       if (!ownsSave()) return
       setLocalEnvironmentError(t("project_runtime.local_environment_save_failed", { error: errorMessage(error) }))
@@ -1184,6 +1199,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     gitOperationID += 1
     setGitBusy(false)
     setBranchSwitchBusy("")
+    localEnvironmentBaseline = undefined
     setLocalEnvironmentOpen(false)
     setLocalEnvironmentBusy(false)
     setLocalEnvironmentError("")
@@ -1851,7 +1867,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               </Button>
             </div>
             <Show
-              when={localEnvironmentVariables().length > 0}
+              when={localEnvironmentVariables.length > 0}
               fallback={
                 <div class="project-runtime-local-environment-empty">
                   {t("project_runtime.local_environment_variables_empty")}
@@ -1859,7 +1875,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               }
             >
               <div class="project-runtime-local-environment-variable-list">
-                <For each={localEnvironmentVariables()}>
+                <For each={localEnvironmentVariables}>
                   {(variable) => (
                     <div class="project-runtime-local-environment-variable-row">
                       <TextField.Root as="label">

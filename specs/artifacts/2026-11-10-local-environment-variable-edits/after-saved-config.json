@@ -1,0 +1,22 @@
+{
+  "locale": "en-US",
+  "status": 200,
+  "environment": {
+    "name": "Local environment review",
+    "variables": {
+      "OPENCORVUS_REVIEW_KEEP": "concurrent-keep",
+      "OPENCORVUS_REVIEW_ADDED": "outside-draft",
+      "OPENCORVUS_REVIEW_RENAMED": "renamed-typed"
+    }
+  },
+  "fileEnvironment": {
+    "variables": {
+      "OPENCORVUS_REVIEW_KEEP": "concurrent-keep",
+      "OPENCORVUS_REVIEW_ADDED": "outside-draft",
+      "OPENCORVUS_REVIEW_RENAMED": "renamed-typed"
+    },
+    "name": "Local environment review"
+  },
+  "fileLocale": "en-US",
+  "requestID": "bc800c23-057f-4352-a4f5-b252b18cd8a9"
+}

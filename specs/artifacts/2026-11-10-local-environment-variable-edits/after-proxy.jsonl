@@ -1,0 +1,4 @@
+{"listenPort":39333,"upstreamPort":39332,"pid":16956}
+{"time":"2026-11-09T20:27:30.561Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T20:27:37.343Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T20:28:21.374Z","receipt":1,"method":"PATCH","route":"/config","mediaTypes":["application/json"],"body":{"variables":{"OPENCORVUS_REVIEW_REMOVE":null,"OPENCORVUS_REVIEW_RENAME":null,"OPENCORVUS_REVIEW_RENAMED":"renamed-typed"}},"status":200,"requestID":"d8532240-fe20-4244-a11a-6ffc77ff2e99"}

@@ -89,6 +89,11 @@ the same `LocalEnvironment.projectShellCommand` projection and final
 existing order above the host environment; execution guard values remain last.
 Each layer reaches that merge separately, so JavaScript object insertion order
 cannot promote an older case alias over a later project or execution-guard value.
+
+The project environment editor generates its merge patch from the opened draft
+baseline and the edited values. Removing or renaming a variable explicitly
+removes the original key. Untouched fields, including variables added by another
+writer after the editor opened, are outside the submitted patch.
 Environment-name identity follows the native platform: case-insensitive on
 Windows and case-sensitive on POSIX. A later explicit spelling owns that name's
 single child-environment entry; input objects and host process variables stay intact.
