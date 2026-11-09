@@ -1,0 +1,26 @@
+{"listenPort":39217,"upstreamPort":39216,"pid":18828,"targetDirectory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b121\\project-after","holdMs":6000,"cutOrdinal":2}
+{"time":"2026-11-09T13:28:56.600Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T13:29:02.322Z","receipt":1,"stage":"arrival","route":"/panel/knowledge/memory","method":"GET","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b121\\project-after","hold":false,"cut":false}
+{"time":"2026-11-09T13:29:02.326Z","receipt":1,"stage":"origin","route":"/panel/knowledge/memory","status":200,"requestID":"b9c27be7-b37f-4875-aade-ca06cce2e482"}
+{"time":"2026-11-09T13:29:02.326Z","receipt":1,"stage":"original-complete","bytes":482,"items":[{"id":"mem_g0VaTwyfT0014iZpcrV2","title":"Project field notes"},{"id":"mem_g0VaTwyfN00XKc3IR2Uy","title":"Neighbor original note"}]}
+{"time":"2026-11-09T13:29:02.326Z","receipt":1,"stage":"released","bytes":482}
+{"time":"2026-11-09T13:29:02.557Z","receipt":2,"stage":"arrival","route":"/panel/knowledge/memory/search","method":"POST","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b121\\project-after","hold":true,"cut":false}
+{"time":"2026-11-09T13:29:02.559Z","receipt":2,"stage":"origin","route":"/panel/knowledge/memory/search","status":200,"requestID":"a84000a5-a946-43dd-b36a-1cd7308d6612"}
+{"time":"2026-11-09T13:29:02.559Z","receipt":2,"stage":"original-complete","bytes":509,"items":[{"id":"mem_g0VaTwyfT0014iZpcrV2","title":"Project field notes"}]}
+{"time":"2026-11-09T13:29:08.560Z","receipt":2,"stage":"released","bytes":509}
+{"time":"2026-11-09T13:29:14.682Z","receipt":3,"stage":"arrival","route":"/panel/knowledge/memory","method":"GET","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b121\\project-after","hold":true,"cut":false}
+{"time":"2026-11-09T13:29:14.684Z","receipt":3,"stage":"origin","route":"/panel/knowledge/memory","status":200,"requestID":"f038a391-56c3-4408-9043-cd40dc652188"}
+{"time":"2026-11-09T13:29:14.684Z","receipt":3,"stage":"original-complete","bytes":482,"items":[{"id":"mem_g0VaTwyfT0014iZpcrV2","title":"Project field notes"},{"id":"mem_g0VaTwyfN00XKc3IR2Uy","title":"Neighbor original note"}]}
+{"time":"2026-11-09T13:29:20.697Z","receipt":3,"stage":"released","bytes":482}
+{"time":"2026-11-09T13:29:31.819Z","receipt":4,"stage":"arrival","route":"/panel/knowledge/memory/search","method":"POST","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b121\\project-after","hold":true,"cut":false}
+{"time":"2026-11-09T13:29:31.821Z","receipt":4,"stage":"origin","route":"/panel/knowledge/memory/search","status":200,"requestID":"f2902597-3f86-4783-a984-6e3688d5c021"}
+{"time":"2026-11-09T13:29:31.821Z","receipt":4,"stage":"original-complete","bytes":325,"items":[{"id":"mem_g0VaTwyfN00XKc3IR2Uy","title":"Neighbor original note"}]}
+{"time":"2026-11-09T13:29:37.835Z","receipt":4,"stage":"released","bytes":325}
+{"time":"2026-11-09T13:29:46.810Z","receipt":5,"stage":"arrival","route":"/panel/knowledge/memory","method":"GET","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b121\\project-after","hold":true,"cut":true}
+{"time":"2026-11-09T13:29:46.812Z","receipt":5,"stage":"origin","route":"/panel/knowledge/memory","status":200,"requestID":"72c837cc-9163-4a88-92cb-ca6ab5264249"}
+{"time":"2026-11-09T13:29:46.812Z","receipt":5,"stage":"original-complete","bytes":482,"items":[{"id":"mem_g0VaTwyfT0014iZpcrV2","title":"Project field notes"},{"id":"mem_g0VaTwyfN00XKc3IR2Uy","title":"Neighbor original note"}]}
+{"time":"2026-11-09T13:29:52.817Z","receipt":5,"stage":"partial-body","bytes":32}
+{"time":"2026-11-09T13:30:03.637Z","receipt":6,"stage":"arrival","route":"/panel/knowledge/memory","method":"GET","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b121\\project-after","hold":false,"cut":false}
+{"time":"2026-11-09T13:30:03.640Z","receipt":6,"stage":"origin","route":"/panel/knowledge/memory","status":200,"requestID":"4af579bf-4812-44aa-b149-567e2ead4b5d"}
+{"time":"2026-11-09T13:30:03.640Z","receipt":6,"stage":"original-complete","bytes":482,"items":[{"id":"mem_g0VaTwyfT0014iZpcrV2","title":"Project field notes"},{"id":"mem_g0VaTwyfN00XKc3IR2Uy","title":"Neighbor original note"}]}
+{"time":"2026-11-09T13:30:03.640Z","receipt":6,"stage":"released","bytes":482}

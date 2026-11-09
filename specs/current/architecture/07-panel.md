@@ -2147,9 +2147,10 @@ the original diagnostic. Retry or reopening a failed row repeats that scoped rea
 successful originals retain their existing cache. A keyboard retry that still owns
 focus enters that row's recovered reading region without replacing the search.
 Submitting a Notes search retires the previous result and its file actions under
-the existing read owner. The current operation presents localized inline failure
-with the original diagnostic details. Search failure retains the query for the
-ordinary submit action; clearing it reads the ordinary list. Reconnecting does
+the existing read owner. Clearing a submitted query or submitting a blank query
+retires that search projection when starting the ordinary list read. The current
+operation presents localized inline failure with the original diagnostic details.
+Search failure retains the query for the ordinary submit action. Reconnecting does
 not publish a result for that query until its next actual read succeeds.
 The Notes list can retry its own failed read without submitting or clearing
 the search draft. A keyboard retry that still owns focus enters the first

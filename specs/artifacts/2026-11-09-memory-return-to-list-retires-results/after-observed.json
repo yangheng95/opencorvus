@@ -1,0 +1,65 @@
+{
+  "entryScripts": [
+    "http://127.0.0.1:39217/ui/assets/main-Ba13_cUL.js"
+  ],
+  "expanded": [
+    "\t\t\t\t\t\t\t\t\t77 search text field (settable) Description: Search context…, Value: northern trail marker, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t\t81 button (expanded) Secondary Actions: Collapse, Project field notes (Search result) user · Score 0.22 Project Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t82 text Project field notes",
+    "\t\t\t\t\t\t\t\t\t\t\t83 text  (Search result)",
+    "\t\t\t\t\t\t\t\t\t\t\t86 text Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t87 checkbox Description: Delete this context entry., Value: 0",
+    "\t\t\t\t\t\t\t\t\t\t\t90 container Original memory content: Project field notes",
+    "\t\t\t\t\t\t\t\t\t\t\t\t91 text Field note 1: the survey starts at the northern trail marker.",
+    "Field note 2: the water sample remains sealed in the blue case.",
+    "Field note 3: the signed record stays in the field notebook.",
+    "Field note 4: the complete original is kept with the project.",
+    "The focused UI element is 81 button (expanded) Secondary Actions: Collapse, Project field notes (Search result) user · Score 0.22 Project Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:"
+  ],
+  "listPending": [
+    "\t\t\t\t\t\t\t\t\t77 search text field Description: Search context…, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t80 text Loading…",
+    "The focused UI element is 77 search text field Description: Search context…, ID: memorySearch"
+  ],
+  "listReady": [
+    "\t\t\t\t\t\t\t\t\t77 search text field (settable) Description: Search context…, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t\t81 button (collapsed) Project field notes user · 11/9/2026 Project, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t82 text Project field notes",
+    "\t\t\t\t\t\t\t\t\t\t85 checkbox Description: Delete this context entry., Value: 0",
+    "\t\t\t\t\t\t\t\t\t\t86 button (collapsed) Neighbor original note user · 11/9/2026 Project, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t87 text Neighbor original note",
+    "\t\t\t\t\t\t\t\t\t\t90 checkbox Description: Delete this context entry., Value: 0",
+    "The focused UI element is 77 search text field (settable) Description: Search context…, ID: memorySearch"
+  ],
+  "zhExpanded": [
+    "\t\t\t\t\t\t\t\t\t77 search text field (settable) Description: 搜索上下文…, Value: orange telescope, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t\t86 button (expanded) Secondary Actions: Collapse, Neighbor original note (搜索结果) user · 相关度 0.22 项目 Neighbor note: the orange telescope remains in the south cabinet.",
+    "\t\t\t\t\t\t\t\t\t\t\t87 text Neighbor original note",
+    "\t\t\t\t\t\t\t\t\t\t\t88 text  (搜索结果)",
+    "\t\t\t\t\t\t\t\t\t\t\t95 container 记忆原文：Neighbor original note",
+    "The focused UI element is 86 button (expanded) Secondary Actions: Collapse, Neighbor original note (搜索结果) user · 相关度 0.22 项目 Neighbor note: the orange telescope remains in the south cabinet."
+  ],
+  "blankPending": [
+    "\t\t\t\t\t\t\t\t\t77 search text field Description: 搜索上下文…, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t84 text 加载中…",
+    "The focused UI element is 77 search text field Description: 搜索上下文…, ID: memorySearch"
+  ],
+  "listFailed": [
+    "\t\t\t\t\t\t\t\t\t77 search text field (settable) Description: 搜索上下文…, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t\t85 text 无法加载笔记与事实。",
+    "\t\t\t\t\t\t\t\t\t\t88 button 重试",
+    "The focused UI element is 77 search text field (settable) Description: 搜索上下文…, ID: memorySearch"
+  ],
+  "diagnostic": [
+    "\t\t\t\t\t\t\t\t\t\t85 text 无法加载笔记与事实。",
+    "\t\t\t\t\t\t\t\t\t\t89 text TypeError: Failed to fetch"
+  ],
+  "retried": [
+    "\t\t\t\t\t\t\t\t\t77 search text field (settable) Description: 搜索上下文…, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t\t85 button (collapsed) Project field notes user · 2026/11/9 项目, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t86 text Project field notes",
+    "\t\t\t\t\t\t\t\t\t\t90 button (collapsed) Neighbor original note user · 2026/11/9 项目, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t91 text Neighbor original note",
+    "The focused UI element is 85 button (collapsed) Project field notes user · 2026/11/9 项目, Secondary Actions: Expand"
+  ]
+}

@@ -150,6 +150,13 @@ export function MemoryPanel(props: MemoryPanelProps) {
 
   // ── Data loading ──
 
+  const retireVisibleFiles = () => {
+    setFiles([])
+    setFilesSource(null)
+    setExpandedFileId(null)
+    setDetailStates({})
+  }
+
   const loadMemory = async (source = captureSource(), retryTrigger?: HTMLButtonElement) => {
     if (!sourceMatches(source)) return
     const { directory, authority } = source
@@ -157,13 +164,12 @@ export function MemoryPanel(props: MemoryPanelProps) {
     memoryLoadOwner = token
     const ownsLoad = () => memoryLoadOwner === token && sourceMatches(source)
     if (!directory) {
-      setFiles([])
-      setFilesSource(null)
-      setSearchMode(false)
-      setExpandedFileId(null)
-      setDetailStates({})
-      setFailure(undefined)
-      setLoading(false)
+      batch(() => {
+        retireVisibleFiles()
+        setSearchMode(false)
+        setFailure(undefined)
+        setLoading(false)
+      })
       return
     }
     batch(() => {
@@ -185,12 +191,11 @@ export function MemoryPanel(props: MemoryPanelProps) {
       })
     } catch (err) {
       if (ownsLoad()) {
-        setFiles([])
-        setFilesSource(null)
-        setSearchMode(false)
-        setExpandedFileId(null)
-        setDetailStates({})
-        setFailure({ operation: "list", cause: err })
+        batch(() => {
+          retireVisibleFiles()
+          setSearchMode(false)
+          setFailure({ operation: "list", cause: err })
+        })
       }
     } finally {
       if (ownsLoad()) {
@@ -204,11 +209,22 @@ export function MemoryPanel(props: MemoryPanelProps) {
     }
   }
 
+  const returnToList = (source = captureSource()) => {
+    if (!sourceMatches(source)) return
+    return batch(() => {
+      if (searchMode()) {
+        retireVisibleFiles()
+        setSearchMode(false)
+      }
+      return loadMemory(source)
+    })
+  }
+
   const doSearch = async (q: string) => {
     const source = captureSource()
     if (!sourceMatches(source)) return
     if (!q || !q.trim()) {
-      return loadMemory()
+      return returnToList(source)
     }
     const directory = currentDirectory()
     if (!directory) {
@@ -219,11 +235,8 @@ export function MemoryPanel(props: MemoryPanelProps) {
     memoryLoadOwner = token
     const ownsSearch = () => memoryLoadOwner === token && sourceMatches(source) && searchQuery().trim() === query
     batch(() => {
-      setFiles([])
-      setFilesSource(null)
+      retireVisibleFiles()
       setSearchMode(true)
-      setExpandedFileId(null)
-      setDetailStates({})
       setFailure(undefined)
       setLoading(true)
     })
@@ -267,8 +280,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
   }
 
   const handleSearchClear = () => {
-    setSearchQuery("")
-    if (searchMode()) void loadMemory()
+    if (searchMode()) void returnToList()
   }
 
   const handleDeleteInline = async (fileId: string, source = filesSource()) => {
@@ -380,12 +392,9 @@ export function MemoryPanel(props: MemoryPanelProps) {
     captureApiAuthority()
     sourceGeneration += 1
     memoryLoadOwner = null
-    setFiles([])
-    setFilesSource(null)
+    retireVisibleFiles()
     setSearchMode(false)
     setSearchQuery("")
-    setExpandedFileId(null)
-    setDetailStates({})
     setDeletingKeys(new Set<string>())
     setLoading(false)
     setFailure(undefined)
