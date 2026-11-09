@@ -264,11 +264,20 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     return [...options.values()]
   })
   const selectedProjectKeys = createMemo(() => new Set(selectedProjectTargets().map(projectTargetKey)))
-  const visibleProjects = createMemo(() =>
-    projectChoices().filter((option) =>
+  const visibleProjects = createMemo(
+    () => projectChoices().filter((option) =>
       matchesSearchTerms(projectSearch(), [projectChoiceLabel(option), option.project?.name, projectChoiceDirectory(option),
         option.target.kind === "project" ? option.target.projectID : option.target.directory]),
     ),
+    undefined,
+    {
+      // A selection change alone must not replace the Listbox's focused option.
+      equals: (previous, current) => previous.length === current.length && previous.every((option, index) => {
+        const next = current[index]
+        return option.key === next.key && option.project === next.project &&
+          projectChoiceDirectory(option) === projectChoiceDirectory(next)
+      }),
+    },
   )
   const visibleSelectedProjects = createMemo(() =>
     visibleProjects()

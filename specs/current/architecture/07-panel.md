@@ -1814,7 +1814,10 @@ payload. Listbox identity deduplicates registered Project aliases by ID, retains
 unrepresented saved targets, and edits only its current visible subset. Localized result and
 selection counts, empty feedback and search keyboard handoff use the existing
 SearchField/Listbox primitives. Search Enter keeps authoring in place, and
-Escape clears its query. Read-only Project-scoped details display every saved
+Escape clears its query. An equivalent visible set retains its mounted options
+and focus when Space toggles the selected value; arrow keys continue from that
+option. Actual changes to visible identity or metadata still update the list.
+Read-only Project-scoped details display every saved
 target ID through its discovered name/directory, retaining the original ID when
 discovery cannot name it. Search and presentation do not alter target identity,
 revision admission, recurrence, execution mode or scheduling.

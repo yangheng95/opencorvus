@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [定时项目选择的键盘焦点](records/2026-11/2026-11-09-scheduled-project-selection-focus.md)
 - [表单内搜索的回车归属](records/2026-11/2026-11-09-form-search-enter-ownership.md)
 - [多步任务市场安装与草稿选择](records/2026-11/2026-11-09-mission-market-install-draft-selection.md)
 - [撰写器市场安装后的搜索与焦点](records/2026-11/2026-11-09-composer-market-install-continuity.md)

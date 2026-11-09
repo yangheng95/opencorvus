@@ -1,0 +1,34 @@
+{
+  "before": {
+    "project": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\project-before",
+      "head": "bcd86787b87317327cbdacd07874d95a40d86441",
+      "files": {
+        "fixture-note.txt": "Isolated scheduled target keyboard check for project-before.\n"
+      }
+    },
+    "second": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\second-before",
+      "head": "12f1d816507fa510dc9de0e369c5dc0dd8e0f010",
+      "files": {
+        "fixture-note.txt": "Isolated scheduled target keyboard check for second-before.\n"
+      }
+    }
+  },
+  "after": {
+    "project": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\project-after",
+      "head": "747469d8e382d2a2ff53d7d098e6bf67f72f6361",
+      "files": {
+        "fixture-note.txt": "Isolated scheduled target keyboard check for project-after.\n"
+      }
+    },
+    "second": {
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\second-after",
+      "head": "586b179838f8b21af9f5d1ab960eda61ca22ee0b",
+      "files": {
+        "fixture-note.txt": "Isolated scheduled target keyboard check for second-after.\n"
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "phase": "after",
+  "discovery": {
+    "status": 200,
+    "requestID": "f240f266-56df-4139-96a9-dd3ca959c981",
+    "body": {
+      "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\project-after",
+      "defaultDirectory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\project-after",
+      "projects": [
+        {
+          "id": "prj_hYnZgFDaKO2gxWTLhN5l",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\second-after",
+          "name": "second-after",
+          "marker": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\second-after\\.opencorvus"
+        },
+        {
+          "id": "prj_hvVno0UPZ77Dew4A8xmA",
+          "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\project-after",
+          "name": "project-after",
+          "marker": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\project-after\\.opencorvus"
+        }
+      ]
+    }
+  },
+  "schedule": {
+    "status": 200,
+    "requestID": "90b4f866-90f9-4fc8-9482-bd763aa97a96",
+    "body": []
+  },
+  "projects": [
+    {
+      "status": 200,
+      "requestID": "e553ff64-f5e3-4f3a-9010-223a8af681f8",
+      "body": {
+        "id": "prj_hvVno0UPZ77Dew4A8xmA",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\project-after",
+        "time": {
+          "created": 1794199069159,
+          "updated": 1794199069159
+        },
+        "sandboxes": []
+      }
+    },
+    {
+      "status": 200,
+      "requestID": "7a528e2a-eebc-43e1-9a9c-62bff25d8e4d",
+      "body": {
+        "id": "prj_hYnZgFDaKO2gxWTLhN5l",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b76\\second-after",
+        "time": {
+          "created": 1794199068692,
+          "updated": 1794199068692
+        },
+        "sandboxes": []
+      }
+    }
+  ]
+}
