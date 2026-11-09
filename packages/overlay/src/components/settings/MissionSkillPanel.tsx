@@ -62,9 +62,14 @@ export default function MissionSkillPanel() {
   const [noticeTone, setNoticeTone] = createSignal<"active" | "error">("active")
   let loadSequence = 0
   let operationGeneration = 0
+  let focusGeneration = 0
+  let panel: HTMLDivElement | undefined
+  let detailHeading: HTMLHeadingElement | undefined
+  let searchInput: HTMLInputElement | undefined
   onCleanup(() => {
     loadSequence++
     operationGeneration++
+    focusGeneration++
   })
 
   const scopedCatalog = createMemo(() => (catalogIdentity() === currentScopeIdentity() ? catalog() : null))
@@ -94,6 +99,39 @@ export default function MissionSkillPanel() {
     const list = filteredSkills()
     return list.find((skill) => skill.name === selectedName()) ?? list[0]
   })
+
+  function changeCatalogView(change: () => void, target: () => HTMLElement | null | undefined) {
+    const scope = currentScopeIdentity()
+    const origin = document.activeElement
+    const generation = ++focusGeneration
+    change()
+    queueMicrotask(() => {
+      if (generation !== focusGeneration || currentScopeIdentity() !== scope || !panel?.isConnected) return
+      if (document.activeElement !== origin && document.activeElement !== document.body) return
+      const element = target()
+      if (element?.isConnected) element.focus()
+    })
+  }
+
+  function openDetail(name: string) {
+    changeCatalogView(
+      () => {
+        setSelectedName(name)
+        setDetailOpen(true)
+      },
+      () => detailOpen() && selectedSkill()?.name === name ? detailHeading : undefined,
+    )
+  }
+
+  function returnToCatalog() {
+    const name = selectedName()
+    changeCatalogView(
+      () => setDetailOpen(false),
+      () => !detailOpen()
+        ? panel?.querySelector<HTMLButtonElement>(`[data-skill-name="${CSS.escape(name)}"]`) ?? searchInput
+        : undefined,
+    )
+  }
 
   function operationIdentity(skillName: string): string {
     return `${currentScopeIdentity()}\u0000${skillName}`
@@ -153,6 +191,7 @@ export default function MissionSkillPanel() {
     if (identity === previousIdentity) return previousIdentity
     setDetailOpen(false)
     operationGeneration += 1
+    focusGeneration += 1
     setNotice("")
     untrack(() => void refresh(currentScope(), identity))
     return identity
@@ -227,7 +266,7 @@ export default function MissionSkillPanel() {
   })
 
   return (
-    <SettingsPanel class="general-panel mission-skill-panel" id="missionSkillBody" data-ui="mission-skill-settings">
+    <SettingsPanel ref={panel} class="general-panel mission-skill-panel" id="missionSkillBody" data-ui="mission-skill-settings">
       <Show when={!detailOpen()}>
         <SettingsToolbar>
           <p class="mission-skill-intro">{t("mission_skill.intro")}</p>
@@ -281,6 +320,7 @@ export default function MissionSkillPanel() {
                 class="mission-skill-search"
                 dataUI="mission-skill-search"
                 clearDataUI="mission-skill-search-clear"
+                inputRef={(element) => (searchInput = element)}
                 value={query()}
                 placeholder={t("mission_skill.search_placeholder")}
                 onValueChange={setQuery}
@@ -348,10 +388,7 @@ export default function MissionSkillPanel() {
                                 </>
                               }
                               actions={<Icon name="chevron" />}
-                              onClick={() => {
-                                setSelectedName(skill.name)
-                                setDetailOpen(true)
-                              }}
+                              onClick={() => openDetail(skill.name)}
                             />
                           )}
                         </For>
@@ -367,7 +404,7 @@ export default function MissionSkillPanel() {
                             variant="ghost"
                             size="sm"
                             tone="neutral"
-                            onClick={() => setDetailOpen(false)}
+                            onClick={returnToCatalog}
                           >
                             <Icon name="nav-back" />
                             {t("settings.back_to_list")}
@@ -375,7 +412,7 @@ export default function MissionSkillPanel() {
                           <header class="mission-skill-detail-head">
                             <div>
                               <span>{t("mission_skill.detail_eyebrow")}</span>
-                              <h3>{skill().name}</h3>
+                              <h3 ref={detailHeading} tabIndex={-1}>{skill().name}</h3>
                             </div>
                             <Badge tone="muted">{sourceLabel(skill().source)}</Badge>
                           </header>

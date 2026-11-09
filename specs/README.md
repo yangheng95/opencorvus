@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [Mission Skill 详情焦点](records/2026-11/2026-11-09-mission-skill-detail-focus.md)
 - [通道编辑返回焦点](records/2026-11/2026-11-09-channel-editor-return-focus.md)
 - [通道目录操作名称](records/2026-11/2026-11-09-channel-catalog-action-identity.md)
 - [日志来源语言与搜索](records/2026-11/2026-11-09-log-source-language-and-search.md)

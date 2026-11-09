@@ -5181,7 +5181,9 @@ SettingsRow owns a distinct read-only value slot with a bounded label column and
 a wrapping value column. Long paths never compete with labels as unshrinkable
 button clusters. Settings content has a single reading column: Mission Skills
 and installed Expert Squads show a list, then open the selected resource in the
-same column with a Back to list action. Browsing details never activates a Squad.
+same column with a Back to list action. Mission Skill navigation focuses the
+opened heading and returns to the exact visible row or the current catalog search.
+Browsing details never activates a Squad.
 Independent capability groups, usage sections and settings forms flow vertically;
 the settings navigation rail and ordinary label/value rows retain their roles. Skill
 library rows show the name and two-line preview; the canonical Disclosure exposes
