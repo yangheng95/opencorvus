@@ -5187,6 +5187,9 @@ Mission Skill reads retain original transport errors for localized inline feedba
 with expandable diagnostics. A failed read keeps only the current scope's accepted
 catalog and filters; the count describes accepted data. An unavailable scope
 distinguishes disconnection from a missing project.
+The Mission Skill Refresh control stays focusable while the active read is busy
+and ignores another activation until the read settles. An unavailable scope
+still disables Refresh.
 An accepted Mission Skill catalog lists localized issue kinds and sources with
 the original paths and expandable original diagnostics. The warning belongs to
 the list; an unrelated issue does not occupy the selected skill's detail view.

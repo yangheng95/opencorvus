@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [多步任务技能刷新焦点](records/2026-11/2026-11-09-mission-skill-refresh-focus.md)
 - [多步任务技能局部问题诊断](records/2026-11/2026-11-09-mission-skill-catalog-issue-details.md)
 - [多步任务技能目录读取诊断](records/2026-11/2026-11-09-mission-skill-read-diagnostics.md)
 - [Mission Skill 详情焦点](records/2026-11/2026-11-09-mission-skill-detail-focus.md)

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [多步任务技能刷新焦点证据](2026-11-09-mission-skill-refresh-focus/README.md)
 - [多步任务技能局部问题诊断证据](2026-11-09-mission-skill-catalog-issue-details/README.md)
 - [多步任务技能目录读取诊断证据](2026-11-09-mission-skill-read-diagnostics/README.md)
 - [Mission Skill 详情焦点证据](2026-11-09-mission-skill-detail-focus/README.md)

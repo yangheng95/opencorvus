@@ -257,8 +257,10 @@ export default function MissionSkillPanel() {
     }
   }
 
+  const scopeUnavailable = () => currentScope().kind === "unavailable"
+  const refreshBusy = () => !scopeUnavailable() && loading()
   const scopeStatus = createMemo(() => {
-    if (currentScope().kind !== "unavailable") return ""
+    if (!scopeUnavailable()) return ""
     return t(appStore.connected ? "mission_skill.scope_unavailable" : "mission_skill.scope_disconnected")
   })
 
@@ -273,8 +275,12 @@ export default function MissionSkillPanel() {
             size="sm"
             tone="neutral"
             data-ui="mission-skill-refresh"
-            disabled={loading() || !!scopeStatus()}
-            onClick={() => void refresh()}
+            disabled={scopeUnavailable()}
+            aria-disabled={refreshBusy() || undefined}
+            aria-busy={refreshBusy() || undefined}
+            onClick={() => {
+              if (!scopeUnavailable() && !loading()) void refresh()
+            }}
           >
             <Icon name={loading() ? "loading" : "refresh"} />
             {t("common.refresh")}

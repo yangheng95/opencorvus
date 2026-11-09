@@ -1,0 +1,50 @@
+[
+  {
+    "time": "2026-11-09T02:13:02.766Z",
+    "requestID": "7a197ea3-58ae-4253-863a-eb365f0c56d7",
+    "method": "GET",
+    "path": "/mission-skill/settings",
+    "status": "started"
+  },
+  {
+    "time": "2026-11-09T02:13:02.873Z",
+    "requestID": "7a197ea3-58ae-4253-863a-eb365f0c56d7",
+    "method": "GET",
+    "path": "/mission-skill/settings",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 107
+  },
+  {
+    "time": "2026-11-09T02:13:09.564Z",
+    "requestID": "c2d4ed2e-7d0b-4d57-9475-cecec09d861a",
+    "method": "GET",
+    "path": "/mission-skill/settings",
+    "status": "started"
+  },
+  {
+    "time": "2026-11-09T02:13:09.667Z",
+    "requestID": "c2d4ed2e-7d0b-4d57-9475-cecec09d861a",
+    "method": "GET",
+    "path": "/mission-skill/settings",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 103
+  },
+  {
+    "time": "2026-11-09T02:13:52.993Z",
+    "requestID": "9e709061-cec4-44f4-850f-c1b1b74cb03b",
+    "method": "GET",
+    "path": "/mission-skill/settings",
+    "status": "started"
+  },
+  {
+    "time": "2026-11-09T02:13:53.071Z",
+    "requestID": "9e709061-cec4-44f4-850f-c1b1b74cb03b",
+    "method": "GET",
+    "path": "/mission-skill/settings",
+    "status": "completed",
+    "statusCode": 200,
+    "duration": 78
+  }
+]

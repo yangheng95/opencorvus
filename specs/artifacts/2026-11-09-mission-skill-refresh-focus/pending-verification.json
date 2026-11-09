@@ -1,0 +1,97 @@
+{
+  "repeat": {
+    "request": {
+      "time": "2026-11-09T02:19:29.496Z",
+      "requestID": "277d08e6-9e41-45cd-ab5e-58c4185149d4",
+      "method": "GET",
+      "path": "/mission-skill/settings",
+      "status": "started"
+    },
+    "completion": {
+      "time": "2026-11-09T02:19:29.975Z",
+      "requestID": "277d08e6-9e41-45cd-ab5e-58c4185149d4",
+      "method": "GET",
+      "path": "/mission-skill/settings",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 479
+    },
+    "observed": {
+      "before": {
+        "ariaDisabled": "true",
+        "at": "2026-11-09T02:19:29.520Z",
+        "busy": "true",
+        "focusLabel": "Refresh",
+        "focusTag": "BUTTON",
+        "focusUi": "mission-skill-refresh",
+        "nativeDisabled": false
+      },
+      "key": "delivered",
+      "after": {
+        "ariaDisabled": "true",
+        "at": "2026-11-09T02:19:29.544Z",
+        "busy": "true",
+        "focusLabel": "Refresh",
+        "focusTag": "BUTTON",
+        "focusUi": "mission-skill-refresh",
+        "nativeDisabled": false
+      },
+      "settled": {
+        "ariaDisabled": null,
+        "at": "2026-11-09T02:19:40.499Z",
+        "busy": null,
+        "focusLabel": "Refresh",
+        "focusTag": "BUTTON",
+        "focusUi": "mission-skill-refresh",
+        "nativeDisabled": false
+      }
+    }
+  },
+  "move": {
+    "request": {
+      "time": "2026-11-09T02:19:40.517Z",
+      "requestID": "a84e1631-3c32-4f30-89a6-dac08b32993a",
+      "method": "GET",
+      "path": "/mission-skill/settings",
+      "status": "started"
+    },
+    "completion": {
+      "time": "2026-11-09T02:19:40.971Z",
+      "requestID": "a84e1631-3c32-4f30-89a6-dac08b32993a",
+      "method": "GET",
+      "path": "/mission-skill/settings",
+      "status": "completed",
+      "statusCode": 200,
+      "duration": 454
+    },
+    "observed": {
+      "before": {
+        "ariaDisabled": "true",
+        "at": "2026-11-09T02:19:40.543Z",
+        "busy": "true",
+        "focusLabel": "Refresh",
+        "focusTag": "BUTTON",
+        "focusUi": "mission-skill-refresh",
+        "nativeDisabled": false
+      },
+      "afterTab": {
+        "ariaDisabled": "true",
+        "at": "2026-11-09T02:19:40.576Z",
+        "busy": "true",
+        "focusLabel": "Search Mission Skills",
+        "focusTag": "INPUT",
+        "focusUi": null,
+        "nativeDisabled": false
+      },
+      "settled": {
+        "ariaDisabled": null,
+        "at": "2026-11-09T02:19:47.738Z",
+        "busy": null,
+        "focusLabel": "Search Mission Skills",
+        "focusTag": "INPUT",
+        "focusUi": null,
+        "nativeDisabled": false
+      }
+    }
+  }
+}
