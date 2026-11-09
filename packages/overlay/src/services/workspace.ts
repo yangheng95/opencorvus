@@ -271,7 +271,7 @@ export function clearProjectScopeData(): void {
     providerAuth: null,
     providerLoadIssues: [],
     providerTest: null,
-    channels: [],
+    channelCatalog: null,
     skills: [],
     skillMounts: null,
     mcp: {},

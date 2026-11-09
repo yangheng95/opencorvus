@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [通道目录区分等待、读取失败与实际为空](records/2026-11/2026-11-10-channel-catalog-read-retry.md)
 - [重新加载授权模式保留焦点与诊断](records/2026-11/2026-11-10-permission-mode-reload-focus.md)
 - [审批与历史刷新保留已确认读取](records/2026-11/2026-11-10-permission-ledger-refresh.md)
 - [已安装专家团续页保留可用目录](records/2026-11/2026-11-10-installed-expert-squad-catalog-continuation.md)

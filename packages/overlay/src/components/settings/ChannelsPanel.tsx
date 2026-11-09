@@ -1,7 +1,7 @@
 import { Feedback } from "../ui/Feedback"
 import type { ChannelListResponse } from "@opencorvus-ai/sdk"
 // Solid.js component for channel configuration.
-// Data source: appStore.channels + appStore.config (populated by loadConfigInfo).
+// Data source: the scoped channel catalog and configuration accepted by loadConfigInfo.
 // Save: channel config via PATCH /config (same as pre-Solid original).
 //        public URL via PATCH /config (updateConfig pattern).
 
@@ -11,6 +11,7 @@ import { appStore } from "../../store/app"
 import { boardStore } from "../../store/board"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { committedConfigFromError, currentProjectConfigRequestOptions, updateConfig } from "../../services/config"
+import { loadConfigInfo } from "../../services/config-load"
 import { formatErrorDetails } from "../../utils/error-details"
 import { activeProjectDirectory } from "../../services/project-directory"
 import { getHostTransport } from "../../services/host-transport-runtime"
@@ -86,11 +87,40 @@ export default function ChannelsPanel(props: { directory: string }) {
   let noticeGeneration = 0
   let noticeTimer: ReturnType<typeof setTimeout> | undefined
 
-  // Reactive data from appStore (populated by loadConfigInfo after connect)
-  const channels = createMemo((): ChannelEntry[] => {
-    const raw = appStore.channels
-    return Array.isArray(raw) ? (raw as ChannelEntry[]) : []
+  const catalog = createMemo(() => {
+    const current = appStore.channelCatalog
+    return current?.directory === props.directory.trim() && current.authorityRevision === captureApiAuthority().revision
+      ? current
+      : undefined
   })
+  const channels = createMemo(() => (catalog()?.entries ?? []) as ChannelEntry[])
+  const catalogFailure = () => catalog()?.failure
+  const [catalogRetry, setCatalogRetry] = createSignal<{
+    scope: string
+    button: HTMLButtonElement
+    focused: boolean
+  }>()
+  const catalogRetryBusy = () => catalogRetry()?.scope === currentScopeIdentity()
+  let catalogHeading: HTMLSpanElement | undefined
+  let catalogMounted = true
+
+  async function retryCatalog(button: HTMLButtonElement): Promise<void> {
+    if (!props.directory.trim() || !appStore.connected || !catalogFailure() || catalogRetryBusy()) return
+    const options = currentProjectConfigRequestOptions()
+    if (options.directory !== props.directory.trim()) return
+    const retry = { scope: currentScopeIdentity(), button, focused: document.activeElement === button }
+    const owns = () => catalogMounted && catalogRetry() === retry && currentScopeIdentity() === retry.scope
+    setCatalogRetry(retry)
+    try {
+      await loadConfigInfo(undefined, options)
+      if (!owns() || !retry.focused || catalogFailure() || !catalog()?.entries || !catalogHeading?.isConnected) return
+      if (document.activeElement === button || document.activeElement === document.body) catalogHeading.focus()
+    } catch (error) {
+      if (owns()) showNotice({ key: "channel.catalog_load_failed", details: formatErrorDetails(error) }, "error", "catalog")
+    } finally {
+      if (catalogRetry() === retry) setCatalogRetry(undefined)
+    }
+  }
 
   const publicUrl = createMemo((): string => {
     return (appStore.config as any)?.server?.publicUrl || ""
@@ -125,6 +155,7 @@ export default function ChannelsPanel(props: { directory: string }) {
   })
 
   onCleanup(() => {
+    catalogMounted = false
     saveGeneration++
     tutorialGeneration++
     returnToEditTrigger = undefined
@@ -393,13 +424,6 @@ export default function ChannelsPanel(props: { directory: string }) {
   return (
     <>
       <SettingsPanel class="channel-panel">
-        <For each={appStore.configLoadIssues.filter((issue) => issue.resource === "channel")}>
-          {(issue) => (
-            <Feedback tone="error" details={issue.message}>
-              {t("channel.catalog_load_failed")}
-            </Feedback>
-          )}
-        </For>
         <Show when={notice() && noticeFormIdentity() === "catalog"}>{noticeState()}</Show>
 
         <Show when={props.directory.trim()} fallback={<SettingsEmpty>{t("workspace.no_directory")}</SettingsEmpty>}>
@@ -443,8 +467,43 @@ export default function ChannelsPanel(props: { directory: string }) {
             </div>
           </SettingsGroup>
 
-          <SettingsGroup title={t("channel.available_channels")}>
-            <Show when={channels().length > 0} fallback={<SettingsEmpty>{t("channel.none")}</SettingsEmpty>}>
+          <SettingsGroup
+            title={<span ref={catalogHeading} tabIndex={-1}>{t("channel.available_channels")}</span>}
+            actions={
+              <Show when={catalogFailure()}>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  tone="neutral"
+                  disabled={!appStore.connected}
+                  aria-disabled={catalogRetryBusy() || undefined}
+                  aria-busy={catalogRetryBusy() || undefined}
+                  onBlur={(event) => {
+                    const retry = catalogRetry()
+                    if (catalogFailure() && retry?.button === event.currentTarget) retry.focused = false
+                  }}
+                  onClick={(event) => void retryCatalog(event.currentTarget)}
+                >
+                  {t(catalogRetryBusy() ? "common.retrying" : "common.retry")}
+                </Button>
+              </Show>
+            }
+          >
+            <Show when={catalogFailure()}>
+              {(failure) => (
+                <Feedback tone="error" details={formatErrorDetails(failure().cause)}>
+                  {t(catalog()?.entries ? "channel.catalog_refresh_failed" : "channel.catalog_load_failed")}
+                </Feedback>
+              )}
+            </Show>
+            <Show when={!catalog()?.entries && !catalogFailure()}>
+              <Feedback>{t(appStore.connected ? "channel.catalog_loading" : "channel.catalog_disconnected")}</Feedback>
+            </Show>
+            <Show when={catalog()?.entries && channels().length === 0}>
+              <SettingsEmpty>{t("channel.none")}</SettingsEmpty>
+            </Show>
+            <Show when={channels().length > 0}>
               <div id="channelList">
                 <For each={channels()}>
                   {(item) => (

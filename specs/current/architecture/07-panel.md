@@ -5312,7 +5312,10 @@ unchanged; this editor does not introduce a second URL parser or migrate old dat
 
 Channel save and tutorial feedback stores message keys, variables and original
 details, translating summaries in the current interface locale. Catalog failures
-retain their original service diagnostic under the same native Details disclosure.
+retain their original service diagnostic under the catalog's native Details
+disclosure. A catalog read belongs to one project and connection; only a confirmed
+empty response renders the empty state. A failed read keeps any accepted catalog
+in that scope and offers an in-place retry through the same configuration reader.
 Successful saves retain the existing 2600 ms dismissal; errors remain readable
 until explicit feedback retirement or scope change. An accepted committed-config
 receipt reports saved settings with reconciliation issues. Public-URL hydration

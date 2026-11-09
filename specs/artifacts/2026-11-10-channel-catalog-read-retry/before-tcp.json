@@ -1,0 +1,195 @@
+{
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "a698abe8-957e-492f-ac72-f9eeae482c4b",
+      "schemaValid": true
+    },
+    {
+      "route": "/config",
+      "operationId": "config.get",
+      "status": 200,
+      "requestID": "ee793e7e-b1d5-45f2-b2e5-dfd1964ce237",
+      "schemaValid": true
+    },
+    {
+      "route": "/channel",
+      "operationId": "channel.list",
+      "status": 200,
+      "requestID": "903e24a9-80af-4fac-a37a-8ef60241cd89",
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_hyyOvW924w6U20rPakqg",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b138\\project-before"
+  },
+  "confirmedMode": "full_access",
+  "channelCount": 27,
+  "channels": [
+    {
+      "id": "slack",
+      "name": "Slack",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "telegram",
+      "name": "Telegram",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "discord",
+      "name": "Discord",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "feishu",
+      "name": "Feishu / Lark",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "whatsapp",
+      "name": "WhatsApp",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "googlechat",
+      "name": "Google Chat",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "msteams",
+      "name": "Microsoft Teams",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "line",
+      "name": "LINE",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "matrix",
+      "name": "Matrix",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "mattermost",
+      "name": "Mattermost",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "signal",
+      "name": "Signal",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "wecom",
+      "name": "WeCom",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "dingtalk",
+      "name": "DingTalk",
+      "status": "missing",
+      "runtime_status": "disabled"
+    },
+    {
+      "id": "clickclack",
+      "name": "ClickClack",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "imessage",
+      "name": "iMessage",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "irc",
+      "name": "IRC",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "nextcloud-talk",
+      "name": "Nextcloud Talk",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "nostr",
+      "name": "Nostr",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "qqbot",
+      "name": "QQ Bot",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "raft",
+      "name": "Raft",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "reef",
+      "name": "Reef",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "sms",
+      "name": "SMS",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "synology-chat",
+      "name": "Synology Chat",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "tlon",
+      "name": "Tlon",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "twitch",
+      "name": "Twitch",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "zalo",
+      "name": "Zalo",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    },
+    {
+      "id": "zalouser",
+      "name": "Zalo Personal",
+      "status": "missing",
+      "runtime_status": "unavailable"
+    }
+  ]
+}

@@ -49,6 +49,13 @@ export interface ConfigLoadIssue {
   cause: unknown
 }
 
+export interface ChannelCatalogRead {
+  directory: string
+  authorityRevision: number
+  entries: unknown[] | null
+  failure?: ConfigLoadIssue
+}
+
 export interface ProjectLoadIssue {
   resource: "locale" | "tasks" | "meta" | "extensions" | "config"
   message: string
@@ -117,9 +124,9 @@ export interface AppState {
   providerAuthDismissed: Record<string, boolean>
   /** In-progress provider connectivity test state */
   providerTest: any
-  // ── Extensions (mirrors state.channels / state.skills / state.mcp) ──
-  /** Configured channel list */
-  channels: any[]
+  // ── Extensions ──
+  /** Channel catalog and read diagnostic for one project and connection. */
+  channelCatalog: ChannelCatalogRead | null
   /** Installed skills list */
   skills: any[]
   /** Agent skill mount matrix returned by /skill/mounts */
@@ -175,7 +182,7 @@ const DEFAULT_APP_STATE: AppState = {
   providerAuthRefreshRevision: 0,
   providerAuthDismissed: {},
   providerTest: null,
-  channels: [],
+  channelCatalog: null,
   skills: [],
   skillMounts: null,
   mcp: {},
@@ -284,10 +291,6 @@ export function setProviderTest(test: any): void {
 }
 
 // ── Extensions helpers ──
-
-export function setChannels(list: any[]): void {
-  setAppStore("channels", Array.isArray(list) ? list : [])
-}
 
 export function setSkills(list: any[]): void {
   setAppStore("skills", Array.isArray(list) ? list : [])

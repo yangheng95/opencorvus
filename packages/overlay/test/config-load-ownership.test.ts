@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, test } from "bun:test"
-import { ApiError, configure } from "../src/services/api"
+import { ApiError, captureApiAuthority, configure } from "../src/services/api"
 import { loadConfigInfo, loadProviderInfo } from "../src/services/config-load"
 import { reloadProjectScope } from "../src/services/config"
 import { __setHostTransportForTest } from "../src/services/host-transport-runtime"
@@ -20,7 +20,7 @@ beforeEach(() => {
   setBoardStore({ board: null, selectedSource: null })
   setSettingsStore({ ...DEFAULT_SETTINGS, directory: "C:/Project-A" })
   configure({ directory: "C:/Project-A" })
-  setAppStore({ config: { permission_mode: "ask" }, providerCatalog: null })
+  setAppStore({ config: { permission_mode: "ask" }, providerCatalog: null, channelCatalog: null })
 })
 afterEach(() => __setHostTransportForTest(undefined))
 
@@ -30,8 +30,10 @@ test("project load publishes its complete configuration and settled channel reso
   setConfigSnapshot({ server: { hostname: "127.0.0.1", publicUrl: "http://127.0.0.1:2" }, model: "owned/previous" })
   transport((request) => request.path === "config" ? accepted : channels)
   expect(await loadConfigInfo()).toEqual([])
-  expect({ config: appStore.config, channels: appStore.channels, issues: appStore.configLoadIssues }).toEqual({
-    config: accepted, channels, issues: [],
+  expect({ config: appStore.config, catalog: appStore.channelCatalog, issues: appStore.configLoadIssues }).toEqual({
+    config: accepted,
+    catalog: { directory: "C:/Project-A", authorityRevision: captureApiAuthority().revision, entries: channels },
+    issues: [],
   })
 })
 
@@ -55,13 +57,56 @@ test("a rejected configuration read retains its original diagnostic and accepts 
   const issues = await loadConfigInfo()
   expect(issues).toEqual([{ resource: "config", message: "Read the canonical configuration file.", cause: error }])
   expect(appStore.configLoadIssues[0]?.cause).toBe(error)
-  expect({ config: appStore.config, channels: appStore.channels }).toEqual({ config: accepted, channels })
+  expect({ config: appStore.config, entries: appStore.channelCatalog?.entries }).toEqual({ config: accepted, entries: channels })
+})
+
+test("the channel catalog distinguishes a read failure from an accepted empty result", async () => {
+  const acceptedConfig = { permission_mode: "ask", locale: "zh-CN" }
+  const error = new ApiError(503, "channel?directory=C%3A%2FProject-A", "Catalog reader unavailable", {}, "GET")
+  const scope = { directory: "C:/Project-A", authorityRevision: captureApiAuthority().revision }
+  transport((request) => {
+    if (request.path === "channel") throw error
+    return acceptedConfig
+  })
+  const issues = await loadConfigInfo()
+  expect(issues).toEqual([{ resource: "channel", message: error.message, cause: error }])
+  expect(appStore.channelCatalog).toEqual({ ...scope, entries: null, failure: issues[0] })
+  expect(appStore.config).toEqual(acceptedConfig)
+
+  transport((request) => request.path === "channel" ? [] : acceptedConfig)
+  await loadConfigInfo()
+  expect(appStore.channelCatalog).toEqual({ ...scope, entries: [] })
+})
+
+test("channel read failure keeps only the accepted catalog for its own project and connection", async () => {
+  const acceptedEntries = [{ id: "owned-channel", status: "missing" }]
+  const acceptedConfig = { permission_mode: "ask" }
+  const error = new ApiError(503, "channel", "Catalog reader unavailable", {}, "GET")
+  transport((request) => request.path === "channel" ? acceptedEntries : acceptedConfig)
+  await loadConfigInfo()
+  transport((request) => {
+    if (request.path === "channel") throw error
+    return acceptedConfig
+  })
+  const issues = await loadConfigInfo()
+  expect(appStore.channelCatalog).toEqual({
+    directory: "C:/Project-A", authorityRevision: captureApiAuthority().revision, entries: acceptedEntries, failure: issues[0],
+  })
+
+  setSettingsStore("directory", "C:/Project-B")
+  configure({ directory: "C:/Project-B" })
+  const newIssues = await loadConfigInfo()
+  expect(appStore.channelCatalog).toEqual({
+    directory: "C:/Project-B", authorityRevision: captureApiAuthority().revision, entries: null, failure: newIssues[0],
+  })
 })
 
 test("directory-free workspace refresh publishes global configuration and its empty project inventory", async () => {
+  setAppStore("channelCatalog", {
+    directory: "C:/Project-A", authorityRevision: captureApiAuthority().revision, entries: [{ id: "prior-project" }],
+  })
   setSettingsStore("directory", "")
   configure({ directory: "" })
-  setAppStore("channels", [{ id: "prior-project" }])
   const accepted = { permission_mode: "ask", locale: "zh-CN" }
   const requests: TransportRequest[] = []
   transport((request) => {
@@ -69,8 +114,8 @@ test("directory-free workspace refresh publishes global configuration and its em
     return accepted
   })
   expect(await reloadProjectScope()).toEqual([])
-  expect({ config: appStore.config, channels: appStore.channels, configIssues: appStore.configLoadIssues, issues: appStore.projectLoadIssues }).toEqual({
-    config: accepted, channels: [], configIssues: [], issues: [],
+  expect({ config: appStore.config, channelCatalog: appStore.channelCatalog, configIssues: appStore.configLoadIssues, issues: appStore.projectLoadIssues }).toEqual({
+    config: accepted, channelCatalog: null, configIssues: [], issues: [],
   })
   expect(requests.map(({ method, path }) => ({ method, path }))).toEqual([{ method: "GET", path: "global/config" }])
 })

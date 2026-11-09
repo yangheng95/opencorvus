@@ -131,18 +131,18 @@ export async function loadConfigInfo(
   timeoutMilliseconds = CONFIG_INFO_LOAD_TIMEOUT_MILLISECONDS,
   options: LoadConfigInfoOptions = {},
 ): Promise<ConfigLoadIssue[]> {
-  options = captureDirectoryLoad(options)
-  assertApiAuthorityCurrent(options.authority)
+  const scope = captureDirectoryLoad(options)
+  assertApiAuthorityCurrent(scope.authority)
   const loadSequence = ++configInfoLoadSequence
-  const configPath = options.directory ? directoryOwnedPath("config", options) : "global/config"
+  const configPath = scope.directory ? directoryOwnedPath("config", scope) : "global/config"
   const [configResult, channelResult] = await Promise.allSettled([
-    apiJsonWithTimeout(configPath, timeoutMilliseconds, { authority: options.authority }),
-    ...(options.directory
-      ? [apiJsonWithTimeout(directoryOwnedPath("channel", options), timeoutMilliseconds, { authority: options.authority })]
+    apiJsonWithTimeout(configPath, timeoutMilliseconds, { authority: scope.authority }),
+    ...(scope.directory
+      ? [apiJsonWithTimeout(directoryOwnedPath("channel", scope), timeoutMilliseconds, { authority: scope.authority })]
       : []),
   ])
 
-  if (loadSequence !== configInfoLoadSequence || !ownsDirectoryLoad(options))
+  if (loadSequence !== configInfoLoadSequence || !ownsDirectoryLoad(scope))
     return []
 
   const issues: ConfigLoadIssue[] = []
@@ -167,11 +167,21 @@ export async function loadConfigInfo(
     issues.push(configLoadIssue("channel", channelResult.reason))
   }
 
+  const previous = appStore.channelCatalog
+  const previousEntries = previous?.directory === scope.directory && previous.authorityRevision === scope.authority.revision
+    ? previous.entries
+    : null
+  const channelCatalog = scope.directory ? {
+    directory: scope.directory,
+    authorityRevision: scope.authority.revision,
+    entries: channels ?? previousEntries,
+    failure: issues.find((issue) => issue.resource === "channel"),
+  } : null
   batch(() => {
     if (config) setConfigSnapshot(config)
     setAppStore({
-      ...(!options.directory ? { channels: [] } : channels ? { channels } : {}),
-      configLoadIssues: issues,
+      channelCatalog,
+      configLoadIssues: issues.filter((issue) => issue.resource === "config"),
     })
   })
 
