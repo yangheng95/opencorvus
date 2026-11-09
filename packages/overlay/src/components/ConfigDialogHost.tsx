@@ -239,8 +239,7 @@ function configPanelID(tab: ConfigDialogTab): string {
 
 function runtimeTypeLabel(): string {
   const hostKind = getHostTransport().kind
-  if (hostKind === "tauri") return "Tauri Desktop"
-  return "Browser"
+  return t(hostKind === "tauri" ? "about.runtime_tauri" : "about.runtime_browser")
 }
 
 interface ResizableOptions {

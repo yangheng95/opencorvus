@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [关于页运行宿主语言](2026-11-09-about-runtime-language.md)
 - [设置搜索方向键入口](2026-11-09-settings-search-keyboard-entry.md)
 - [用量自然周期日期](2026-11-09-usage-natural-period-date-range.md)
 - [用量失败和重试焦点](2026-11-09-usage-retry-focus-and-diagnostic.md)

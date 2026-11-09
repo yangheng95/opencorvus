@@ -5190,7 +5190,9 @@ when the canonical call count is positive. Configured official usage sources kee
 their independent presentation even when local call count is zero.
 About presents product identity, a concise runtime status summary and desktop
 updates first; exact server and workspace facts plus keyboard shortcuts remain
-available in disclosures. Usage gives the measured Token total and selected
+available in disclosures. The runtime summary names the current host transport
+in the interface language while retaining its technical identity. Usage gives
+the measured Token total and selected
 calendar period one dominant summary, keeps supporting metrics compact, and
 preserves official Provider reconciliation as a separate compare-only section.
 Its server identity uses compact inline chrome above the existing overview;
