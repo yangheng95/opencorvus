@@ -26,28 +26,53 @@ export function ConnectionBanner() {
   })
 
   const banner = useDisclosure()
-  let timer: any = null
+  let timer: ReturnType<typeof setTimeout> | undefined
   let problemKind: ConnectionProblemKind | undefined
+  let notice: HTMLDivElement | undefined
+  let focusReturnTarget: HTMLElement | undefined
+
+  function rememberFocusOrigin(event: FocusEvent & { currentTarget: HTMLDivElement }): void {
+    const { currentTarget: panel, relatedTarget: previous } = event
+    if (previous instanceof Node && panel.contains(previous)) return
+    focusReturnTarget = previous instanceof HTMLElement && previous !== panel.ownerDocument.body ? previous : undefined
+  }
+
+  function closeNotice(): void {
+    const panel = notice
+    const document = panel?.ownerDocument
+    const hadFocus = panel?.contains(document?.activeElement ?? null)
+    const target = focusReturnTarget
+    focusReturnTarget = undefined
+    banner.close()
+    if (!document || !hadFocus || !target?.isConnected) return
+    if (document.activeElement !== document.body && !panel?.contains(document.activeElement)) return
+    if (
+      target.closest('[hidden], [inert], [aria-hidden="true"]') ||
+      target.matches(':disabled, [aria-disabled="true"]') ||
+      !target.getClientRects().length
+    ) return
+    target.focus({ preventScroll: true })
+  }
 
   createEffect(() => {
     const current = problem()
     if (!current) {
       if (timer) clearTimeout(timer)
-      timer = null
+      timer = undefined
       problemKind = undefined
-      banner.close()
+      closeNotice()
       return
     }
     if (current.kind !== problemKind) {
       if (timer) clearTimeout(timer)
-      timer = null
+      timer = undefined
       problemKind = current.kind
       // An already visible notice follows recovery without disappearing and
       // starting another grace period for the same connection interruption.
     }
     if (banner.open() || timer) return
     timer = setTimeout(() => {
-      timer = null
+      timer = undefined
       banner.openIt()
     }, OFFLINE_GRACE_MS)
   })
@@ -63,9 +88,11 @@ export function ConnectionBanner() {
   return (
     <Show when={banner.open()}>
       <div
+        ref={notice}
         class="conn-banner"
         role="status"
         aria-live="polite"
+        onFocusIn={rememberFocusOrigin}
         data-status={presentation().status}
         data-problem={problem()?.kind}
       >

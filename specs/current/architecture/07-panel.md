@@ -3100,6 +3100,9 @@ already visible notice changes text and tone as recovery progresses without
 closing and starting another grace period. Initial grace and complete recovery
 cleanup retain their original owners. This presentation changes no health signal,
 stream state, workspace recovery, send admission or configuration-write condition.
+When the connection banner clears while one of its actions still holds focus,
+it returns focus to the visible control that last led into the banner. Focus
+already moved elsewhere stays there.
 
 The banner's configuration action opens the canonical Network settings section,
 where the existing server URL and authentication form are immediately available.

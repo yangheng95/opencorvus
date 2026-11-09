@@ -1,0 +1,40 @@
+{
+  "phase": "after",
+  "mode": "cut",
+  "checks": [
+    {
+      "route": "/global/health",
+      "operationId": "global.health",
+      "status": 200,
+      "requestID": "09bbb833-ef41-461f-af28-cd52ef145f26",
+      "schemaValid": true
+    },
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "09538a0f-2dbc-4583-a521-39b84646645a",
+      "schemaValid": true
+    },
+    {
+      "route": "/export/session/{sessionID}",
+      "operationId": "export.session",
+      "status": 200,
+      "requestID": "f7271f1d-3e28-48c7-87f5-d5a635773ea3",
+      "schemaValid": true
+    }
+  ],
+  "health": {
+    "healthy": true,
+    "version": "local"
+  },
+  "project": {
+    "id": "prj_hRDlyPRIrqSkvkr3xZp4",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b144\\project-after"
+  },
+  "session": {
+    "id": "ses_-zUPUj3lezzBL7uFkySm",
+    "title": "Chat",
+    "messages": 0
+  }
+}
