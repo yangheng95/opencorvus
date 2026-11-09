@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [对话导出状态与标题](records/2026-11/2026-11-10-conversation-export-feedback.md)
 - [对话查找读取状态](records/2026-11/2026-11-10-conversation-search-read-status.md)
 - [项目记忆通知动作归属](records/2026-11/2026-11-10-project-memory-notice-action-ownership.md)
 - [任务浏览器预览共用目标读取与原地重试](records/2026-11/2026-11-10-browser-preview-target-read.md)

@@ -26,6 +26,7 @@ import { WindowControls } from "./WindowControls"
 import { WorkspaceEditorLaunchers, workspaceEditorLaunchersAvailable } from "./WorkspaceEditorLaunchers"
 import { ProjectRuntimeToolbarActions } from "./TaskDirBar"
 import type { TaskBrowserPreviewRead } from "../services/browser-preview-target-read"
+import { Badge } from "./ui/Badge"
 import { Button } from "./ui/Button"
 import { Feedback } from "./ui/Feedback"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
@@ -35,6 +36,7 @@ import { activeDirectory } from "../services/workspace"
 import { directoryScopedPath } from "../services/task-path"
 import { downloadBlob } from "../services/file-download"
 import { DropdownMenu } from "./ui/DropdownMenu"
+import { Popover } from "./ui/Popover"
 import { Tooltip } from "./ui/Tooltip"
 import { getLocale, localeTag, t } from "../utils/i18n"
 import { conversationExport, type ConversationExportFormat } from "../services/conversation-export"
@@ -53,6 +55,11 @@ import type { AutomationRunSession } from "../services/automations"
 import type { WorkLedgerItemRow, WorkLedgerMissionRow } from "../services/work-ledger"
 
 const MAILBOX_HOVER_OPEN_DELAY_MILLISECONDS = 180
+
+type ChatExportState =
+  | { kind: "reading"; controller: AbortController }
+  | { kind: "downloaded" }
+  | { kind: "failed"; details: string }
 
 function workLedgerRenameLabel(row: WorkLedgerItemRow): string {
   if (row.kind === "mission") return t("work_ledger.action.rename_mission")
@@ -78,29 +85,51 @@ function ChatViewTitle(props: {
   const usageText = createMemo(() =>
     formatUsageStrip(cardTreeStore.usageAggregate, localeTag(), t("usage.table_tokens")),
   )
-  const [exporting, setExporting] = createSignal(false)
+  const [exportState, setExportState] = createSignal<ChatExportState>()
+  const exporting = () => exportState()?.kind === "reading"
+  const exportFailure = () => {
+    const state = exportState()
+    return state?.kind === "failed" ? state : undefined
+  }
+  const exportStatusText = () => {
+    switch (exportState()?.kind) {
+      case "reading": return t("chat.exporting")
+      case "downloaded": return t("chat.export_started")
+      case "failed": return t("chat.export_failed")
+    }
+  }
   const [searchOpen, setSearchOpen] = createSignal(false)
   const [itemActionBusy, setItemActionBusy] = createSignal(false)
   let disposed = false
   let searchReturnFocus: HTMLElement | null = null
   let searchMenuTrigger: HTMLElement | undefined
   const [actionFeedback, setActionFeedback] = createSignal<
-    { kind: "copied" | "exported" } | { kind: "failed"; message?: string } | null
+    { kind: "copied" } | { kind: "failed"; message?: string } | null
   >(null)
   const actionFeedbackText = createMemo(() => {
-    if (exporting()) return t("chat.exporting")
     const feedback = actionFeedback()
     if (feedback?.kind === "copied") return t("chat.debug_copy_success")
-    if (feedback?.kind === "exported") return t("chat.export_started")
     if (feedback?.kind === "failed") return feedback.message || t("markdown.copy_failed")
     return ""
   })
   let actionFeedbackTimer: number | undefined
-  let exportController: AbortController | undefined
-  const exportScope = createMemo(() => {
+  let exportFeedbackTimer: number | undefined
+  const conversationScope = createMemo(() => {
     const item = props.item()
     return `${boardStore.selectEpoch}:${captureApiAuthority().revision}:${item?.kind}:${item?.id}:${item?.directory}`
   })
+
+  function clearExportFeedbackTimer(): void {
+    if (exportFeedbackTimer !== undefined) window.clearTimeout(exportFeedbackTimer)
+    exportFeedbackTimer = undefined
+  }
+
+  function retireExport(): void {
+    const current = exportState()
+    if (current?.kind === "reading") current.controller.abort()
+    clearExportFeedbackTimer()
+    setExportState(undefined)
+  }
 
   function clearFeedbackAfterDelay(): void {
     if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
@@ -111,11 +140,9 @@ function ChatViewTitle(props: {
   }
 
   createEffect(on(
-    exportScope,
+    conversationScope,
     () => {
-      exportController?.abort()
-      exportController = undefined
-      setExporting(false)
+      retireExport()
       setItemActionBusy(false)
       setSearchOpen(false)
       searchReturnFocus = null
@@ -127,7 +154,7 @@ function ChatViewTitle(props: {
 
   onCleanup(() => {
     disposed = true
-    exportController?.abort()
+    retireExport()
     if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
   })
 
@@ -159,8 +186,8 @@ function ChatViewTitle(props: {
     const row = props.item()
     if (!row || itemActionBusy()) return
     const authority = captureApiAuthority()
-    const scope = exportScope()
-    const ownsAction = () => !disposed && exportScope() === scope && isApiAuthorityCurrent(authority)
+    const scope = conversationScope()
+    const ownsAction = () => !disposed && conversationScope() === scope && isApiAuthorityCurrent(authority)
     setItemActionBusy(true)
     try {
       await action(row)
@@ -201,21 +228,19 @@ function ChatViewTitle(props: {
     if (row?.kind !== "chat" || exporting()) return
     const authority = captureApiAuthority()
     const epoch = boardStore.selectEpoch
-    const requestController = new AbortController()
-    exportController = requestController
+    const request = { kind: "reading", controller: new AbortController() } as const
     const ownsExport = () => {
       const current = props.item()
-      return !requestController.signal.aborted && isApiAuthorityCurrent(authority) &&
+      return !disposed && exportState() === request && !request.controller.signal.aborted && isApiAuthorityCurrent(authority) &&
         boardStore.selectEpoch === epoch && current?.kind === "chat" &&
         current.sessionID === row.sessionID && current.directory === row.directory
     }
-    if (actionFeedbackTimer !== undefined) window.clearTimeout(actionFeedbackTimer)
-    setActionFeedback(null)
-    setExporting(true)
+    clearExportFeedbackTimer()
+    setExportState(request)
     try {
       const exported = await apiJson<ExportSessionResponse>(directoryScopedPath(
         `export/session/${encodeURIComponent(row.sessionID)}`, row.directory, "exportConversation",
-      ), { authority, signal: requestController.signal })
+      ), { authority, signal: request.controller.signal })
       if (!ownsExport()) return
       const file = conversationExport(exported, {
         sessionID: row.sessionID, format, locale: getLocale(), labels: {
@@ -228,22 +253,23 @@ function ChatViewTitle(props: {
       downloadBlob(
         new Blob([file.text], { type: file.mime }), file.filename,
       )
-      setActionFeedback({ kind: "exported" })
-      clearFeedbackAfterDelay()
+      const downloaded = { kind: "downloaded" } as const
+      setExportState(downloaded)
+      exportFeedbackTimer = window.setTimeout(() => {
+        exportFeedbackTimer = undefined
+        if (exportState() === downloaded) setExportState(undefined)
+      }, 4000)
     } catch (error) {
       if (!ownsExport()) return
-      setActionFeedback({ kind: "failed", message: t("chat.export_failed") })
-      clearFeedbackAfterDelay()
+      const details = formatErrorDetails(error)
+      setExportState({ kind: "failed", details })
       reportError({
         id: `chat-export:${row.sessionID}`,
         title: t("chat.export_failed"),
-        details: formatErrorDetails(error),
+        details,
       })
     } finally {
-      if (exportController === requestController) {
-        exportController = undefined
-        setExporting(false)
-      }
+      if (exportState() === request) setExportState(undefined)
     }
   }
 
@@ -272,8 +298,8 @@ function ChatViewTitle(props: {
           </Tooltip.Content>
         </Tooltip.Portal>
       </Tooltip.Root>
-      <span class="chat-title-copy-feedback-a11y" role="status" aria-live="polite" aria-atomic="true">
-        {actionFeedbackText()}
+      <span class="chat-title-feedback-a11y" role="status" aria-live="polite" aria-atomic="true">
+        {[actionFeedbackText(), exportStatusText()].filter(Boolean).join(" ")}
       </span>
       <Show when={props.item()}>
         {(item) => (
@@ -359,6 +385,28 @@ function ChatViewTitle(props: {
           </DropdownMenu.Root>
         )}
       </Show>
+      <Show when={!exportFailure() && exportStatusText()}>{(status) => (
+        <Badge class="chat-export-indicator" size="sm" tone={exporting() ? "neutral" : "ok"} title={status()} aria-hidden="true">
+          <Icon name={exporting() ? "download" : "check"} size="compact" />
+          <span class="chat-export-indicator__label">{status()}</span>
+        </Badge>
+      )}</Show>
+      <Show when={exportFailure()}>{(failure) => (
+        <Popover.Root placement="bottom-start" gutter={6} fitViewport>
+          <Popover.Trigger as={Button} type="button" class="chat-export-indicator" variant="ghost" size="sm" tone="danger"
+            title={t("chat.export_failed_short")} aria-label={t("chat.export_failed_short")}>
+            <span class="chat-export-indicator__label">{t("chat.export_failed_short")}</span>
+            <Icon name="chevron-down" size="compact" />
+          </Popover.Trigger>
+          <Popover.Portal>
+            <Popover.Content class="chat-export-diagnostic" aria-label={t("chat.export_failed_short")}>
+              <Feedback tone="error" title={t("chat.export_failed")} details={failure().details}>
+                {t("chat.export_retry_hint")}
+              </Feedback>
+            </Popover.Content>
+          </Popover.Portal>
+        </Popover.Root>
+      )}</Show>
       <ConversationSearchDialog open={searchOpen()} onClose={() => setSearchOpen(false)} returnFocusTarget={() => searchReturnFocus} target={() => {
         const row = props.item()
         return row ? {

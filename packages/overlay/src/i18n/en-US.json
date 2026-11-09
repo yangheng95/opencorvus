@@ -524,6 +524,8 @@
   "chat.exporting": "Exporting conversation…",
   "chat.export_started": "Conversation download started",
   "chat.export_failed": "Could not export this conversation.",
+  "chat.export_failed_short": "Export failed",
+  "chat.export_retry_hint": "Choose an export format from the conversation menu to try again.",
   "chat.debug_copy_project_directory_unavailable": "Debug information is unavailable because this conversation has no persisted project directory.",
   "chat.debug_copy_success": "Copied — paste into AI to analyze",
   "chat.turn_usage_aria": "View model usage for this turn: {{value}}",

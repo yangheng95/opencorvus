@@ -1,0 +1,32 @@
+{"listenPort":39305,"upstreamPort":39303,"pid":31156}
+{"time":"2026-11-09T18:36:37.531Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:36:44.830Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:37:01.828Z","receipt":1,"stage":"arrival","path":"/export/session/ses_-zUPUmPE3zz6OnOanROe","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b143\\project-after","delay":9500,"cut":true}
+{"time":"2026-11-09T18:37:01.834Z","receipt":1,"stage":"origin","status":200,"requestID":"5732e704-8432-469d-b702-54de8ecbc2de","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:37:11.337Z","receipt":1,"stage":"cut","forwardedBytes":1,"target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:39:16.680Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:39:22.119Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:39:27.838Z","receipt":2,"stage":"arrival","path":"/export/session/ses_-zUPUmPE3zz6OnOanROe","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b143\\project-after","delay":10500,"cut":true}
+{"time":"2026-11-09T18:39:27.842Z","receipt":2,"stage":"origin","status":200,"requestID":"e6acd27a-5af9-4f3a-9243-0332a858e1f5","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:39:38.358Z","receipt":2,"stage":"cut","forwardedBytes":1,"target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:40:09.644Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:40:25.991Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:40:31.667Z","receipt":3,"stage":"arrival","path":"/export/session/ses_-zUPUmPE3zz6OnOanROe","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b143\\project-after","delay":0,"cut":true}
+{"time":"2026-11-09T18:40:31.671Z","receipt":3,"stage":"origin","status":200,"requestID":"468f516a-82da-4d9b-8086-9104215c13ef","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:40:31.671Z","receipt":3,"stage":"cut","forwardedBytes":1,"target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:40:45.351Z","receipt":4,"stage":"arrival","path":"/export/session/ses_-zUPUmPE3zz6OnOanROe","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b143\\project-after","delay":0,"cut":false}
+{"time":"2026-11-09T18:40:45.354Z","receipt":4,"stage":"origin","status":200,"requestID":"0ef833b0-d71e-4d8e-8c81-4ac0f3fb2a6e","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:40:45.354Z","receipt":4,"stage":"released","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:40:51.558Z","receipt":5,"stage":"arrival","path":"/export/session/ses_-zUPUmPE3zz6OnOanROe","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b143\\project-after","delay":0,"cut":false}
+{"time":"2026-11-09T18:40:51.560Z","receipt":5,"stage":"origin","status":200,"requestID":"d04601d1-2099-4a37-b0c8-92776cd2c119","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:40:51.561Z","receipt":5,"stage":"released","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:41:30.860Z","receipt":6,"stage":"arrival","path":"/export/session/ses_-zUPUmPE3zz6OnOanROe","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b143\\project-after","delay":750,"cut":false}
+{"time":"2026-11-09T18:41:30.862Z","receipt":6,"stage":"origin","status":200,"requestID":"44ba477e-e217-4b0d-8295-90e29cbc4f01","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:41:31.621Z","receipt":6,"stage":"released","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:41:42.462Z","receipt":7,"stage":"arrival","path":"/export/session/ses_-zUPUmPE3zz6OnOanROe","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b143\\project-after","delay":750,"cut":false}
+{"time":"2026-11-09T18:41:42.464Z","receipt":7,"stage":"origin","status":200,"requestID":"a4816861-f9d0-4116-b095-a21a6d137a6f","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:41:43.216Z","receipt":7,"stage":"released","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:41:59.409Z","receipt":8,"stage":"arrival","path":"/export/session/ses_-zUPUmPE3zz6OnOanROe","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b143\\project-after","delay":13000,"cut":false}
+{"time":"2026-11-09T18:41:59.411Z","receipt":8,"stage":"origin","status":200,"requestID":"7963ad47-b8c1-4b4e-905d-a4ca6a9cf427","target":{"id":"ses_-zUPUmPE3zz6OnOanROe","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:42:02.639Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:42:12.420Z","receipt":8,"stage":"client-closed"}

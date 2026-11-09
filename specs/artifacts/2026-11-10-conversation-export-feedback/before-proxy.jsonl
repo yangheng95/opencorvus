@@ -1,0 +1,6 @@
+{"listenPort":39304,"upstreamPort":39302,"pid":5504}
+{"time":"2026-11-09T18:30:58.567Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:31:06.840Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T18:31:30.011Z","receipt":1,"stage":"arrival","path":"/export/session/ses_-zUPUnsNXzzsfm4x48s7","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b143\\project-before","delay":11000,"cut":true}
+{"time":"2026-11-09T18:31:30.020Z","receipt":1,"stage":"origin","status":200,"requestID":"dd6355f6-e280-4ef5-b9fa-bad76c5cd01b","target":{"id":"ses_-zUPUnsNXzzsfm4x48s7","title":"Quarterly review conversation","messageCount":0}}
+{"time":"2026-11-09T18:31:41.031Z","receipt":1,"stage":"cut","forwardedBytes":1,"target":{"id":"ses_-zUPUnsNXzzsfm4x48s7","title":"Quarterly review conversation","messageCount":0}}

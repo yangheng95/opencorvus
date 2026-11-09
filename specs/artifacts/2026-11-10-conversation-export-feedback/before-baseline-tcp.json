@@ -1,0 +1,35 @@
+{
+  "phase": "before",
+  "mode": "baseline",
+  "checks": [
+    {
+      "route": "/project/current",
+      "method": "get",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "410c3c7e-8270-420d-92dd-3694715bcd49",
+      "schemaValid": true
+    },
+    {
+      "route": "/export/session/{sessionID}",
+      "method": "get",
+      "operationId": "export.session",
+      "status": 200,
+      "requestID": "9255ca9c-158c-4ed4-88a7-c060a4997e09",
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_hSXnPQeV4ewFfiOrOnR9",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b143\\project-before"
+  },
+  "chats": [
+    {
+      "id": "ses_-zUPUnsNXzzsfm4x48s7",
+      "title": "Quarterly review conversation",
+      "created": 1794249040700,
+      "updated": 1794249080331,
+      "messageCount": 0
+    }
+  ]
+}

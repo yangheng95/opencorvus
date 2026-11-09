@@ -69,6 +69,33 @@
   min-width: calc(190px * var(--ui-scale));
 }
 
+.chat-title-group .chat-export-indicator {
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  max-inline-size: 45%;
+}
+
+.chat-export-indicator__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-export-indicator > .oc-icon {
+  flex-shrink: 0;
+}
+
+.chat-export-diagnostic {
+  max-inline-size: min(calc(420px * var(--ui-scale)), calc(100vw - 24px));
+  padding: var(--ui-gap-sm);
+}
+
+.chat-export-diagnostic .oc-feedback__diagnostic {
+  max-block-size: calc(160px * var(--ui-scale));
+  overflow: auto;
+  overflow-wrap: anywhere;
+}
+
 /* min-width: 0, not --oc-radius-none. The radius token is 0 today, so this
  * worked, but it made a length depend on the corner scale. */
 .oc-surface-header__main,

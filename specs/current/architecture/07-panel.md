@@ -3641,6 +3641,9 @@ Conversation search reads the selected Task transcript or Chat session export.
 Only a successfully validated snapshot supplies result counts and empty states.
 A read failure keeps the typed query and shows a localized Retry action with
 the original diagnostic; locating a result can fail independently of that read.
+Chat export keeps the conversation title visible. A separate status announces
+the read and browser download handoff; an export failure remains inspectable
+with its original diagnostic until the next export or conversation change.
 Transcript actor avatars use neutral chrome with the role glyph; elapsed times
 are caption metadata and activity disclosures use the shared compact row height.
 The existing pane layout effect observes settings hydration and zoom so resolved

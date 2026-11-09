@@ -1,0 +1,66 @@
+{
+  "phase": "after",
+  "mode": "create",
+  "checks": [
+    {
+      "route": "/project/current",
+      "method": "get",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "695e0e4f-5288-4be4-a6ce-98e9caba9eb7",
+      "schemaValid": true
+    },
+    {
+      "route": "/coding/chat/session",
+      "method": "post",
+      "operationId": "coding.chat.session.create",
+      "status": 201,
+      "requestID": "514448dd-99ea-40ea-a80a-174f8bb1f14a",
+      "schemaValid": true
+    },
+    {
+      "route": "/export/session/{sessionID}",
+      "method": "get",
+      "operationId": "export.session",
+      "status": 200,
+      "requestID": "f9e0b6c7-ed5a-498a-b09e-26a11113d94a",
+      "schemaValid": true
+    },
+    {
+      "route": "/coding/chat/session",
+      "method": "post",
+      "operationId": "coding.chat.session.create",
+      "status": 201,
+      "requestID": "0657d250-f03a-4d9f-9d44-69220f9d0e71",
+      "schemaValid": true
+    },
+    {
+      "route": "/export/session/{sessionID}",
+      "method": "get",
+      "operationId": "export.session",
+      "status": 200,
+      "requestID": "14c4256c-c926-4831-b205-336de067f043",
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_hzqZiAteW8KWJf5Um8La",
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b143\\project-after"
+  },
+  "chats": [
+    {
+      "id": "ses_-zUPUmPE3zz6OnOanROe",
+      "title": "Chat",
+      "created": 1794249391092,
+      "updated": 1794249391092,
+      "messageCount": 0
+    },
+    {
+      "id": "ses_-zUPUmPClzzRjHcNA2N1",
+      "title": "Chat",
+      "created": 1794249391172,
+      "updated": 1794249391172,
+      "messageCount": 0
+    }
+  ]
+}
