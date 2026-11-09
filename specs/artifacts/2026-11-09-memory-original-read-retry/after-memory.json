@@ -1,0 +1,38 @@
+{
+  "phase": "after",
+  "project": {
+    "id": "prj_hWebZymDYcg1C7EDJFAi",
+    "name": "Notes Recovery",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b117\\project-after"
+  },
+  "files": [
+    {
+      "id": "mem_g0VaTmoQ500nLM3xpId0",
+      "projectId": "prj_hWebZymDYcg1C7EDJFAi",
+      "scope": "project",
+      "title": "Neighbor original note",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794228232361,
+      "timeUpdated": 1794228232362,
+      "role": "neighbor",
+      "content": "Neighbor note: the orange telescope remains in the south cabinet."
+    },
+    {
+      "id": "mem_g0VaTmoQ900nqUpD3sQL",
+      "projectId": "prj_hWebZymDYcg1C7EDJFAi",
+      "scope": "project",
+      "title": "Project field notes",
+      "source": "user",
+      "kind": "note",
+      "importance": 60,
+      "confidence": 72,
+      "timeCreated": 1794228232365,
+      "timeUpdated": 1794228232366,
+      "role": "target",
+      "content": "Field note 1: the survey starts at the northern trail marker.\nField note 2: the water sample remains sealed in the blue case.\nField note 3: the signed record stays in the field notebook.\nField note 4: the complete original is kept with the project."
+    }
+  ]
+}

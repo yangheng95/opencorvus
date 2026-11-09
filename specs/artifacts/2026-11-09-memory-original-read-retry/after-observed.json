@@ -1,0 +1,67 @@
+{
+  "entryScripts": [
+    "http://127.0.0.1:39198/ui/assets/main-DruPd-co.js"
+  ],
+  "search": [
+    "\t\t\t\t\t\t\t\t\t73 search text field (settable) Description: Search context…, Value: northern trail marker, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t\t77 button (collapsed) Secondary Actions: Expand, Project field notes (Search result) user · Score 0.22 Project Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t78 text Project field notes",
+    "\t\t\t\t\t\t\t\t\t\t\t79 text  (Search result)",
+    "\t\t\t\t\t\t\t\t\t\t\t82 text Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:"
+  ],
+  "firstFailure": [
+    "\t\t\t\t\t\t\t\t\t\t77 button (expanded) Secondary Actions: Collapse, Project field notes (Search result) user · Score 0.22 Project Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t78 text Project field notes",
+    "\t\t\t\t\t\t\t\t\t\t\t82 text Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t86 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t\t87 text Details",
+    "\t\t\t\t\t\t\t\t\t\t\t88 button Retry",
+    "The focused UI element is 77 button (expanded) Secondary Actions: Collapse, Project field notes (Search result) user · Score 0.22 Project Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:"
+  ],
+  "diagnostic": [
+    "\t\t\t\t\t\t\t\t\t\t77 button (expanded) Secondary Actions: Collapse, Project field notes (Search result) user · Score 0.22 Project Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t78 text Project field notes",
+    "\t\t\t\t\t\t\t\t\t\t\t82 text Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t86 button (expanded) Details, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t\t87 text Details",
+    "\t\t\t\t\t\t\t\t\t\t\t89 text TypeError: Failed to fetch",
+    "\t\t\t\t\t\t\t\t\t\t\t88 button Retry",
+    "The focused UI element is 86 button (expanded) Details, Secondary Actions: Collapse"
+  ],
+  "failedZh": [
+    "\t\t\t\t\t\t\t\t\t73 search text field (settable) Description: 搜索上下文…, Value: northern trail marker, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t\t77 button (expanded) Secondary Actions: Collapse, Project field notes (搜索结果) user · 相关度 0.22 项目 Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t79 text  (搜索结果)",
+    "\t\t\t\t\t\t\t\t\t\t\t82 text Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t85 text 无法加载笔记原文。",
+    "\t\t\t\t\t\t\t\t\t\t\t86 button (collapsed) 详细信息, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t\t\t87 text 详细信息",
+    "\t\t\t\t\t\t\t\t\t\t\t88 button 重试"
+  ],
+  "pending": [
+    "\t\t\t\t\t\t\t\t\t73 search text field (settable) Description: 搜索上下文…, Value: northern trail marker, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t\t77 button (expanded) Secondary Actions: Collapse, Project field notes (搜索结果) user · 相关度 0.22 项目 Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t82 text Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t88 button (disabled) 加载中…",
+    "The focused UI element is 88 button (disabled) 加载中…"
+  ],
+  "secondFailure": [
+    "\t\t\t\t\t\t\t\t\t73 search text field (settable) Description: 搜索上下文…, Value: northern trail marker, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t\t77 button (expanded) Secondary Actions: Collapse, Project field notes (搜索结果) user · 相关度 0.22 项目 Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t82 text Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t85 text 无法加载笔记原文。",
+    "\t\t\t\t\t\t\t\t\t\t\t88 button 重试",
+    "The focused UI element is 88 button 重试"
+  ],
+  "recovered": [
+    "\t\t\t\t\t\t\t\t\t73 search text field (settable) Description: 搜索上下文…, Value: northern trail marker, ID: memorySearch",
+    "\t\t\t\t\t\t\t\t\t\t77 button (expanded) Secondary Actions: Collapse, Project field notes (搜索结果) user · 相关度 0.22 项目 Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t82 text Field note 1: the survey starts at the northern trail marker. Field note 2: the water sample remains sealed in the blue case. Field note 3: the signed record stays in the field notebook. Field note 4:",
+    "\t\t\t\t\t\t\t\t\t\t\t95 container 记忆原文：Project field notes",
+    "\t\t\t\t\t\t\t\t\t\t\t\t96 text Field note 1: the survey starts at the northern trail marker.",
+    "Field note 2: the water sample remains sealed in the blue case.",
+    "Field note 3: the signed record stays in the field notebook.",
+    "Field note 4: the complete original is kept with the project.",
+    "The focused UI element is 95 container 记忆原文：Project field notes"
+  ]
+}

@@ -5,7 +5,7 @@ import { Feedback } from "./ui/Feedback"
 
 import { batch, createSignal, createMemo, createEffect, onCleanup, untrack, For, Show } from "solid-js"
 import { localeTag, t } from "../utils/i18n"
-import type { PanelKnowledgeMemoryListResponse, PanelKnowledgeMemorySearchResponse } from "@opencorvus-ai/sdk"
+import type { PanelKnowledgeMemoryGetResponse, PanelKnowledgeMemoryListResponse, PanelKnowledgeMemorySearchResponse } from "@opencorvus-ai/sdk"
 import { apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import { nativeMessage } from "../services/app-dialog"
 import { formatErrorDetails, reportError } from "../services/diagnostics"
@@ -34,11 +34,10 @@ interface MemoryDetail {
   content: string
 }
 
-interface MemoryDetailState {
-  loading: boolean
-  error: string
-  detail: MemoryDetail | null
-}
+type MemoryDetailState =
+  | { status: "loading" }
+  | { status: "error" | "retrying"; cause: unknown }
+  | { status: "ready"; detail: MemoryDetail }
 
 interface MemoryFilesSource {
   directory: string
@@ -307,46 +306,51 @@ export function MemoryPanel(props: MemoryPanelProps) {
     }
   }
 
-  const loadMemoryDetail = async (fileId: string) => {
+  const loadMemoryDetail = async (
+    fileId: string,
+    retry?: { trigger: HTMLButtonElement; focusContent: () => void },
+  ) => {
+    if (!filesSourceActive() || expandedFileId() !== fileId) return
+    const current = detailStates()[fileId]
+    if (current && current.status !== "error") return
     const source = captureSource()
-    if (!sourceMatches(source)) return
     const { directory, authority } = source
-    const pending: MemoryDetailState = { loading: true, error: "", detail: detailStates()[fileId]?.detail ?? null }
+    const pending: MemoryDetailState = retry && current?.status === "error"
+      ? { status: "retrying", cause: current.cause }
+      : { status: "loading" }
     const ownsDetail = () => sourceMatches(source) && detailStates()[fileId] === pending
     setDetailStates((current) => ({
       ...current,
       [fileId]: pending,
     }))
     try {
-      const data = await apiJson(memoryPath(`panel/knowledge/memory/${encodeURIComponent(fileId)}`, directory), {
-        authority,
-      })
+      const data = await apiJson<PanelKnowledgeMemoryGetResponse>(
+        memoryPath(`panel/knowledge/memory/${encodeURIComponent(fileId)}`, directory),
+        { authority },
+      )
       if (!ownsDetail()) return
       const f = data.file
+      const restoreFocus = retry && expandedFileId() === fileId && retry.trigger.ownerDocument.activeElement === retry.trigger
       setDetailStates((current) => ({
         ...current,
         [fileId]: {
-          loading: false,
-          error: "",
+          status: "ready",
           detail: {
             title: f.title,
             scope: f.scope,
             source: f.source,
             timeCreated: f.timeCreated,
             timeUpdated: f.timeUpdated,
-            content: data.content || "",
+            content: data.content,
           },
         },
       }))
-    } catch (e: any) {
+      if (restoreFocus) retry.focusContent()
+    } catch (cause) {
       if (!ownsDetail()) return
       setDetailStates((current) => ({
         ...current,
-        [fileId]: {
-          loading: false,
-          error: e?.message || t("memory.load_failed"),
-          detail: null,
-        },
+        [fileId]: { status: "error", cause },
       }))
     }
   }
@@ -355,7 +359,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
     if (!filesSourceActive()) return
     const next = expandedFileId() === fileId ? null : fileId
     setExpandedFileId(next)
-    if (next && !detailStates()[next]) void loadMemoryDetail(next)
+    if (next) void loadMemoryDetail(next)
   }
 
   // The retained panel retires its source even while inactive.
@@ -453,9 +457,17 @@ export function MemoryPanel(props: MemoryPanelProps) {
                 return `${f.source}${scoreHint}${time ? ` · ${time}` : ""}`
               }
               const detailState = () => detailStates()[f.id]
-              const detail = () => detailState()?.detail ?? null
+              const detail = () => {
+                const state = detailState()
+                return state?.status === "ready" ? state.detail : undefined
+              }
+              const detailFailure = () => {
+                const state = detailState()
+                return state?.status === "error" || state?.status === "retrying" ? state : undefined
+              }
               const expanded = () => expandedFileId() === f.id
               const detailElementId = () => `memory-detail-${f.id.replace(/[^A-Za-z0-9_-]/g, "-")}`
+              let originalContent: HTMLPreElement | undefined
 
               return (
                 <div
@@ -513,15 +525,37 @@ export function MemoryPanel(props: MemoryPanelProps) {
                   </div>
                   <Show when={expanded()}>
                     <div id={detailElementId()} class="memory-inline-detail">
-                      <Show when={detailState()?.loading}>
+                      <Show when={detailState()?.status === "loading"}>
                         <div class="loading-hint">{t("common.loading")}</div>
                       </Show>
-                      <Show when={!detailState()?.loading && !!detailState()?.error}>
-                        <Feedback tone="error" data-ui="memory-detail-error">
-                          {detailState()?.error}
-                        </Feedback>
+                      <Show when={detailFailure()}>
+                        {(failure) => (
+                          <Feedback
+                            tone="error"
+                            data-ui="memory-detail-error"
+                            details={formatErrorDetails(failure().cause)}
+                            actions={(
+                              <Button
+                                type="button"
+                                variant="outline"
+                                size="sm"
+                                tone="neutral"
+                                aria-disabled={failure().status === "retrying" || undefined}
+                                onClick={(event) => void loadMemoryDetail(f.id, {
+                                  trigger: event.currentTarget,
+                                  focusContent: () => originalContent?.focus(),
+                                })}
+                              >
+                                <Icon name="refresh" />
+                                {t(failure().status === "retrying" ? "common.loading" : "common.retry")}
+                              </Button>
+                            )}
+                          >
+                            {t("memory.original_load_failed")}
+                          </Feedback>
+                        )}
                       </Show>
-                      <Show when={!detailState()?.loading && !detailState()?.error && detail()}>
+                      <Show when={detail()}>
                         {(d) => (
                           <>
                             <div class="memory-detail-meta">
@@ -534,6 +568,7 @@ export function MemoryPanel(props: MemoryPanelProps) {
                               role="region"
                               aria-label={t("memory.original_content_label", { title: d().title })}
                               tabIndex={0}
+                              ref={(element) => { originalContent = element }}
                             >
                               {d().content || t("memory.empty_value")}
                             </pre>

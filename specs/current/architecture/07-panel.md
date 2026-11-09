@@ -2142,6 +2142,10 @@ The expanded original content is a named, focusable reading region. Its current
 language names the region with the original file title; native keyboard scrolling
 and text selection remain available inside the existing content boundary. Local
 selection and focus styling do not change the application chrome or clipboard.
+An original-note read failure stays on its own row with a localized summary and
+the original diagnostic. Retry or reopening a failed row repeats that scoped read;
+successful originals retain their existing cache. A keyboard retry that still owns
+focus enters that row's recovered reading region without replacing the search.
 Submitting a Notes search retires the previous result and its file actions under
 the existing read owner. The current operation presents localized inline failure
 with the original diagnostic details. Search failure retains the query for the
