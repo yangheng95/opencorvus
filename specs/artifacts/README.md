@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [专家团物理安装身份证据](2026-11-09-expert-squad-installation-scope-labels/README.md)
 - [已安装专家团详情焦点证据](2026-11-09-installed-expert-squad-detail-focus/README.md)
 - [多步任务技能刷新焦点证据](2026-11-09-mission-skill-refresh-focus/README.md)
 - [多步任务技能局部问题诊断证据](2026-11-09-mission-skill-catalog-issue-details/README.md)

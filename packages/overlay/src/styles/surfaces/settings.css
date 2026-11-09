@@ -2109,6 +2109,10 @@ button.s-row:focus-visible {
   font-weight: var(--ui-font-weight-medium);
 }
 
+#configDialog .expert-squad-installed-row.s-row .s-row-meta > code {
+  overflow-wrap: anywhere;
+}
+
 .expert-squad-detail {
   min-width: 0;
   display: flex;

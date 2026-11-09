@@ -1,0 +1,120 @@
+{
+  "before": {
+    "head": "b293b803941998baaf8d5ef41dd5c673d95f66ca",
+    "originalTrackedBytes": 68,
+    "status": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "physicalInstallations": {
+      "project": {
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b66\\project-before\\.opencorvus\\expert-squads\\builtin\\data-analysis",
+        "files": [
+          "README.md",
+          "agents/data-analysis-data-steward/system.md",
+          "agents/data-analysis-fact-checker/system.md",
+          "agents/data-analysis-insight-synthesizer/system.md",
+          "agents/data-analysis-performance-analyst/system.md",
+          "agents/data-analysis-planner/system.md",
+          "agents/data-analysis-report-writer/system.md",
+          "agents/data-analysis-segment-analyst/system.md",
+          "agents/orchestrator/system.md",
+          "expert-squad.jsonc",
+          "lib/data-analysis/artifacts.ts",
+          "selector.md",
+          "skills/method/SKILL.md",
+          "skills/workflow/SKILL.md",
+          "tools/publish-data-analysis-artifact.ts"
+        ]
+      },
+      "global": {
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b66\\profile-before\\config\\expert-squads\\builtin\\data-analysis",
+        "files": [
+          "README.md",
+          "agents/data-analysis-data-steward/system.md",
+          "agents/data-analysis-fact-checker/system.md",
+          "agents/data-analysis-insight-synthesizer/system.md",
+          "agents/data-analysis-performance-analyst/system.md",
+          "agents/data-analysis-planner/system.md",
+          "agents/data-analysis-report-writer/system.md",
+          "agents/data-analysis-segment-analyst/system.md",
+          "agents/orchestrator/system.md",
+          "expert-squad.jsonc",
+          "lib/data-analysis/artifacts.ts",
+          "selector.md",
+          "skills/method/SKILL.md",
+          "skills/workflow/SKILL.md",
+          "tools/publish-data-analysis-artifact.ts"
+        ]
+      }
+    }
+  },
+  "after": {
+    "head": "ec891c4960949b56092d0ddf486f1cb153d4d307",
+    "originalTrackedBytes": 68,
+    "status": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "physicalInstallations": {
+      "project": {
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b66\\project-after\\.opencorvus\\expert-squads\\builtin\\data-analysis",
+        "files": [
+          "README.md",
+          "agents/data-analysis-data-steward/system.md",
+          "agents/data-analysis-fact-checker/system.md",
+          "agents/data-analysis-insight-synthesizer/system.md",
+          "agents/data-analysis-performance-analyst/system.md",
+          "agents/data-analysis-planner/system.md",
+          "agents/data-analysis-report-writer/system.md",
+          "agents/data-analysis-segment-analyst/system.md",
+          "agents/orchestrator/system.md",
+          "expert-squad.jsonc",
+          "lib/data-analysis/artifacts.ts",
+          "selector.md",
+          "skills/method/SKILL.md",
+          "skills/workflow/SKILL.md",
+          "tools/publish-data-analysis-artifact.ts"
+        ]
+      },
+      "global": {
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b66\\profile-after\\config\\expert-squads\\builtin\\data-analysis",
+        "files": [
+          "README.md",
+          "agents/data-analysis-data-steward/system.md",
+          "agents/data-analysis-fact-checker/system.md",
+          "agents/data-analysis-insight-synthesizer/system.md",
+          "agents/data-analysis-performance-analyst/system.md",
+          "agents/data-analysis-planner/system.md",
+          "agents/data-analysis-report-writer/system.md",
+          "agents/data-analysis-segment-analyst/system.md",
+          "agents/orchestrator/system.md",
+          "expert-squad.jsonc",
+          "lib/data-analysis/artifacts.ts",
+          "selector.md",
+          "skills/method/SKILL.md",
+          "skills/workflow/SKILL.md",
+          "tools/publish-data-analysis-artifact.ts"
+        ]
+      }
+    }
+  }
+}

@@ -1531,6 +1531,12 @@ export default function ExpertSquadPanel() {
                                 />
                               }
                               title={squad.name}
+                              meta={squad.source.kind === "installed_package" ? (
+                                <>
+                                  <span>{sourceLabel(squad)}</span>
+                                  <code>{squad.source.namespace}/{squad.id}</code>
+                                </>
+                              ) : undefined}
                               actions={
                                 <>
                                   <Show when={squad.system_role === "expert_squad_generator"}>
