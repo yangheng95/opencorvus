@@ -142,6 +142,23 @@ export function committedConfigFromError(error: unknown): Record<string, any> | 
   return readConfigMutationReceipt(error.body)?.data.config
 }
 
+export type ProjectConfigWriteEvidence =
+  | { kind: "committed"; config: Record<string, unknown> }
+  | { kind: "rejected" | "unconfirmed" }
+
+/** Interpret only the explicit receipts of the project configuration writer. */
+export function projectConfigWriteEvidence(error: unknown): ProjectConfigWriteEvidence {
+  if (error instanceof ApiError) {
+    const receipt = readConfigMutationReceipt(error.body)
+    if (receipt?.name === "ProjectConfigCommittedReconcileError") return { kind: "committed", config: receipt.data.config }
+    const body = error.body
+    if (isRecord(body) && isRecord(body.data) && typeof body.data.message === "string") {
+      if (error.status === 400 && body.success === false && Array.isArray(body.error)) return { kind: "rejected" }
+    }
+  }
+  return { kind: "unconfirmed" }
+}
+
 /**
  * Send a partial config diff to the server (JSON Merge Patch).
  * Updates appStore.config with the server response.
@@ -433,6 +450,20 @@ export function configDraftMergePatch(
 ): Record<string, unknown> | undefined {
   const diff = mergePatchDiff(before, after)
   return isRecord(diff) ? diff : undefined
+}
+
+function configMergePatchIsReflected(current: unknown, patch: Record<string, unknown>): boolean {
+  if (!isRecord(current)) return false
+  return Object.entries(patch).every(([key, value]) => {
+    if (value === null) return !Object.hasOwn(current, key)
+    if (!Object.hasOwn(current, key)) return false
+    return isRecord(value) ? configMergePatchIsReflected(current[key], value) : sameJsonValue(current[key], value)
+  })
+}
+
+/** Compare only fields owned by the submitted merge patch against a current read. */
+export function compareConfigMergePatch(current: unknown, patch: Record<string, unknown>): "matches" | "different" {
+  return configMergePatchIsReflected(current, patch) ? "matches" : "different"
 }
 
 /**

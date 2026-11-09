@@ -1,0 +1,8 @@
+{"time":"2026-11-09T20:56:58.701Z","listenPort":39339,"upstreamPort":39338,"pid":28636}
+{"time":"2026-11-09T20:57:26.333Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T20:57:26.344Z","method":"GET","route":"/config","status":200,"requestID":"440922f2-df4b-4e91-8568-3795343e8b1d"}
+{"time":"2026-11-09T20:57:27.227Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T20:57:28.081Z","method":"GET","route":"/config","status":200,"requestID":"75760a01-2272-4259-98e3-702e4146f2f3"}
+{"time":"2026-11-09T20:57:41.285Z","receipt":1,"method":"PATCH","route":"/config","upstreamStatus":200,"upstreamRequestID":"96fdb7f1-828f-4979-931e-f0c6fb7794df","upstreamBodyBytes":1580,"sentReviewValue":"candidate-saved-receipt","acceptedReviewValue":"candidate-saved-receipt","browserResponse":"upstream HTTP 200 headers and only 16 body bytes sent downstream"}
+{"time":"2026-11-09T20:57:55.174Z","method":"GET","route":"/config","status":200,"requestID":"e6bfd29a-668a-488a-8da6-244654916fc8"}
+{"time":"2026-11-09T20:58:10.752Z","receipt":2,"method":"PATCH","route":"/config","mediaTypes":["application/json"],"body":{"name":"Save acknowledgement review","variables":{"OPENCORVUS_REVIEW_RECEIPT":"candidate-saved-receipt","OPENCORVUS_REVIEW_UNTOUCHED":"externally-updated","OPENCORVUS_REVIEW_EXTERNAL":"added-outside"}},"status":200,"requestID":"904273ed-73b3-48d4-843b-720840a8d3f3"}

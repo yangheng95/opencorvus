@@ -1,0 +1,32 @@
+{
+  "before": {
+    "seedHeadPreserved": true,
+    "notesPreserved": true,
+    "projectStatus": [
+      " M .opencorvus/opencorvus.jsonc",
+      "?? .gitattributes",
+      "?? .gitignore"
+    ],
+    "databaseRows": {
+      "session": 1,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0
+    }
+  },
+  "after": {
+    "seedHeadPreserved": true,
+    "notesPreserved": true,
+    "projectStatus": [
+      " M .opencorvus/opencorvus.jsonc",
+      "?? .gitattributes",
+      "?? .gitignore"
+    ],
+    "databaseRows": {
+      "session": 1,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0
+    }
+  }
+}

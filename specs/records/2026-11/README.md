@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [项目本地环境变量编辑与保存](2026-11-10-local-environment-save-acknowledgement.md)
 - [项目本地环境变量编辑与保存](2026-11-10-local-environment-dialog-reachability.md)
 - [项目本地环境变量编辑与保存](2026-11-10-local-environment-variable-edits.md)
 - [宿主请求体媒体类型](2026-11-10-transport-request-content-type.md)

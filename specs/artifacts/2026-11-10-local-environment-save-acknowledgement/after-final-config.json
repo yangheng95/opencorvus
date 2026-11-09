@@ -1,0 +1,111 @@
+{
+  "config": {
+    "status": 200,
+    "requestID": "62271117-0f96-4e2e-9d82-aeee9dba40d5",
+    "local_environment": {
+      "name": "Save acknowledgement review",
+      "variables": {
+        "OPENCORVUS_REVIEW_RECEIPT": "newer-writer-wins",
+        "OPENCORVUS_REVIEW_UNTOUCHED": "externally-updated-final",
+        "OPENCORVUS_REVIEW_EXTERNAL": "added-outside",
+        "OPENCORVUS_REVIEW_EXTERNAL_FINAL": "added-outside-final"
+      }
+    },
+    "locale": "en-US"
+  },
+  "file": {
+    "local_environment": {
+      "name": "Save acknowledgement review",
+      "variables": {
+        "OPENCORVUS_REVIEW_RECEIPT": "newer-writer-wins",
+        "OPENCORVUS_REVIEW_UNTOUCHED": "externally-updated-final",
+        "OPENCORVUS_REVIEW_EXTERNAL": "added-outside",
+        "OPENCORVUS_REVIEW_EXTERNAL_FINAL": "added-outside-final"
+      }
+    },
+    "locale": "en-US"
+  },
+  "traces": {
+    "match": {
+      "browserWrite": {
+        "time": "2026-11-09T21:01:57.175Z",
+        "receipt": 1,
+        "method": "PATCH",
+        "route": "/config",
+        "upstreamStatus": 200,
+        "upstreamRequestID": "0dd0c986-cc4d-4ffa-8174-a3a33ec4af82",
+        "upstreamBodyBytes": 1638,
+        "sentReviewValue": "final-candidate-saved-receipt",
+        "acceptedReviewValue": "final-candidate-saved-receipt",
+        "browserResponse": "upstream HTTP 200 headers and only 16 body bytes sent downstream"
+      },
+      "browserRead": {
+        "time": "2026-11-09T21:02:15.474Z",
+        "method": "GET",
+        "route": "/config",
+        "status": 200,
+        "requestID": "1d5a8fda-cdad-4cbd-b24f-ed9430006aa2"
+      },
+      "competingWrite": {
+        "patch": {
+          "OPENCORVUS_REVIEW_EXTERNAL_FINAL": "added-outside-final",
+          "OPENCORVUS_REVIEW_UNTOUCHED": "externally-updated-final"
+        },
+        "requestID": "cb5af7c2-60d6-427a-9c08-a65b794112bf",
+        "status": 200,
+        "environment": {
+          "name": "Save acknowledgement review",
+          "variables": {
+            "OPENCORVUS_REVIEW_RECEIPT": "final-candidate-saved-receipt",
+            "OPENCORVUS_REVIEW_UNTOUCHED": "externally-updated-final",
+            "OPENCORVUS_REVIEW_EXTERNAL": "added-outside",
+            "OPENCORVUS_REVIEW_EXTERNAL_FINAL": "added-outside-final"
+          }
+        },
+        "receiptBefore": "final-candidate-saved-receipt"
+      }
+    },
+    "different": {
+      "browserWrite": {
+        "time": "2026-11-09T21:03:07.708Z",
+        "receipt": 1,
+        "method": "PATCH",
+        "route": "/config",
+        "upstreamStatus": 200,
+        "upstreamRequestID": "f8f52425-2829-40e5-abdd-376c56da6600",
+        "upstreamBodyBytes": 1696,
+        "sentReviewValue": "candidate-draft-diverges",
+        "acceptedReviewValue": "candidate-draft-diverges",
+        "browserResponse": "upstream HTTP 200 headers and only 16 body bytes sent downstream"
+      },
+      "browserRead": {
+        "time": "2026-11-09T21:03:15.236Z",
+        "method": "GET",
+        "route": "/config",
+        "status": 200,
+        "requestID": "c03c7f96-7180-4595-8cd8-8c213626f572"
+      },
+      "competingWrite": {
+        "patch": {
+          "OPENCORVUS_REVIEW_RECEIPT": "newer-writer-wins"
+        },
+        "receiptBefore": "candidate-draft-diverges",
+        "status": 200,
+        "requestID": "5126fd2f-ca4c-4ec1-8adc-f02302a29a21",
+        "environment": {
+          "name": "Save acknowledgement review",
+          "variables": {
+            "OPENCORVUS_REVIEW_RECEIPT": "newer-writer-wins",
+            "OPENCORVUS_REVIEW_UNTOUCHED": "externally-updated-final",
+            "OPENCORVUS_REVIEW_EXTERNAL": "added-outside",
+            "OPENCORVUS_REVIEW_EXTERNAL_FINAL": "added-outside-final"
+          }
+        }
+      }
+    }
+  },
+  "conversation": {
+    "status": 200,
+    "messages": 0
+  }
+}

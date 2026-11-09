@@ -1,0 +1,6 @@
+{"listenPort":39340,"upstreamPort":39336,"pid":4388}
+{"time":"2026-11-09T20:48:23.544Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T20:48:23.553Z","method":"GET","route":"/config","status":200,"requestID":"19311ed5-e079-4106-adfc-e2e897dba4e1"}
+{"time":"2026-11-09T20:48:24.397Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T20:48:25.148Z","method":"GET","route":"/config","status":200,"requestID":"da9aa383-1d03-40dd-b9e1-b67ef92057ab"}
+{"time":"2026-11-09T20:48:38.417Z","receipt":1,"method":"PATCH","route":"/config","upstreamStatus":200,"upstreamRequestID":"ff8d4068-0083-4d19-8d6e-a519e7ad902d","upstreamBodyBytes":1585,"sentReviewValue":"before-partial-receipt-saved","acceptedReviewValue":"before-partial-receipt-saved","browserResponse":"upstream HTTP 200 headers and only 16 body bytes sent downstream"}

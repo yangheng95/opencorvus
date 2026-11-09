@@ -63,7 +63,14 @@ import { Section } from "./ui/Section"
 import { Dialog } from "./ui/Dialog"
 import { Feedback } from "./ui/Feedback"
 import { TextField } from "./ui/TextField"
-import { configDraftMergePatch, currentProjectConfigRequestOptions, patchConfig } from "../services/config"
+import {
+  compareConfigMergePatch,
+  configDraftMergePatch,
+  currentProjectConfigRequestOptions,
+  patchConfig,
+  projectConfigWriteEvidence,
+} from "../services/config"
+import { loadConfigInfo } from "../services/config-load"
 import { conversationAgentRecordsForSource } from "../store/conversation-agents"
 import { isSubagentActivityRecord } from "../utils/subagent-presentation"
 import { isAgentActivityTerminalStatus } from "../utils/agent-activity"
@@ -131,6 +138,31 @@ interface LocalEnvironmentConfig {
   setup_script?: string
 }
 
+type LocalEnvironmentFeedback =
+  | { kind: "nameRequired" | "keyRequired" | "verified" }
+  | { kind: "duplicate"; key: string }
+  | { kind: "rejected" | "committed"; diagnostic: string }
+  | { kind: "unconfirmed" | "different" | "checkFailed"; patch: Record<string, unknown>; diagnostic?: string }
+
+function localEnvironmentFeedbackMessage(feedback: LocalEnvironmentFeedback): string {
+  switch (feedback.kind) {
+    case "nameRequired": return t("project_runtime.local_environment_name_required")
+    case "keyRequired": return t("project_runtime.local_environment_key_required")
+    case "duplicate": return t("project_runtime.local_environment_duplicate_key", { key: feedback.key })
+    case "rejected": return t("project_runtime.local_environment_save_failed")
+    case "committed": return t("project_runtime.local_environment_saved_apply_failed")
+    case "unconfirmed": return t("project_runtime.local_environment_save_unconfirmed")
+    case "different": return t("project_runtime.local_environment_saved_values_different")
+    case "checkFailed": return t("project_runtime.local_environment_saved_values_check_failed")
+    case "verified": return t("project_runtime.local_environment_saved_values_verified")
+  }
+}
+
+function localEnvironmentFeedbackTone(feedback: LocalEnvironmentFeedback): "success" | "warning" | "error" {
+  if (feedback.kind === "verified") return "success"
+  return feedback.kind === "committed" || "patch" in feedback ? "warning" : "error"
+}
+
 function projectVcsInfo(): ProjectVcsInfo | null {
   return appStore.connected && boardStore.vcsDirectory === directoryMemo()
     ? (boardStore.vcs as ProjectVcsInfo | null)
@@ -191,14 +223,21 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const [localEnvironmentOpen, setLocalEnvironmentOpen] = createSignal(false)
   const localEnvironmentFormID = `project-runtime-local-environment-${createUniqueId()}`
   let localEnvironmentNameInput: HTMLInputElement | undefined
+  let localEnvironmentCheckControl: HTMLButtonElement | undefined
+  let localEnvironmentPrimaryControl: HTMLButtonElement | undefined
   const runtimePanelOpen = createMemo(
     () => props.anchorVisible && panelOpen() && !gitActionOpen() && !localEnvironmentOpen(),
   )
   const [localEnvironmentName, setLocalEnvironmentName] = createSignal("")
   const [localEnvironmentVariables, setLocalEnvironmentVariables] = createStore<LocalEnvironmentVariableDraft[]>([])
   const [localEnvironmentSetupScript, setLocalEnvironmentSetupScript] = createSignal("")
-  const [localEnvironmentBusy, setLocalEnvironmentBusy] = createSignal(false)
-  const [localEnvironmentError, setLocalEnvironmentError] = createSignal("")
+  const [localEnvironmentPending, setLocalEnvironmentPending] = createSignal<"saving" | "checking">()
+  const localEnvironmentBusy = () => localEnvironmentPending() !== undefined
+  const [localEnvironmentFeedback, setLocalEnvironmentFeedback] = createSignal<LocalEnvironmentFeedback>()
+  const localEnvironmentFinished = () => {
+    const kind = localEnvironmentFeedback()?.kind
+    return kind === "verified" || kind === "committed"
+  }
   let localEnvironmentBaseline: LocalEnvironmentConfig | undefined
   let localEnvironmentVariableID = 0
   let gitOperationID = 0
@@ -440,9 +479,9 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     closeRuntimePanel()
   }
 
-  function configuredLocalEnvironment(): LocalEnvironmentConfig | undefined {
-    const value = (appStore.config as any)?.local_environment
-    return value && typeof value === "object" && !Array.isArray(value) ? value : undefined
+  function configuredLocalEnvironment(config = appStore.config): LocalEnvironmentConfig | undefined {
+    const value = config?.local_environment
+    return value && typeof value === "object" && !Array.isArray(value) ? value as LocalEnvironmentConfig : undefined
   }
 
   const editingLocalEnvironment = () =>
@@ -450,8 +489,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
   const localEnvironmentActionLabel = () =>
     t(editingLocalEnvironment() ? "project_runtime.local_environment_edit" : "project_runtime.local_environment_create")
 
-  function openLocalEnvironmentEditor(): void {
-    const environment = configuredLocalEnvironment()
+  function setLocalEnvironmentDraft(environment: LocalEnvironmentConfig | undefined): void {
     localEnvironmentBaseline = environment && {
       ...environment,
       ...(environment.variables ? { variables: { ...environment.variables } } : {}),
@@ -465,7 +503,11 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         value,
       })),
     ))
-    setLocalEnvironmentError("")
+  }
+
+  function openLocalEnvironmentEditor(): void {
+    setLocalEnvironmentDraft(configuredLocalEnvironment())
+    setLocalEnvironmentFeedback(undefined)
     closeRuntimePanel()
     setLocalEnvironmentOpen(true)
   }
@@ -474,40 +516,52 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     if (localEnvironmentBusy()) return
     localEnvironmentBaseline = undefined
     setLocalEnvironmentOpen(false)
-    setLocalEnvironmentError("")
+    setLocalEnvironmentFeedback(undefined)
     closeRuntimePanel()
   }
 
   function addLocalEnvironmentVariable(): void {
     setLocalEnvironmentVariables(localEnvironmentVariables.length, { id: ++localEnvironmentVariableID, key: "", value: "" })
+    setLocalEnvironmentFeedback(undefined)
   }
 
   function updateLocalEnvironmentVariable(id: number, field: "key" | "value", value: string): void {
     setLocalEnvironmentVariables((item) => item.id === id, field, value)
-    setLocalEnvironmentError("")
+    setLocalEnvironmentFeedback(undefined)
   }
 
   function removeLocalEnvironmentVariable(id: number): void {
     setLocalEnvironmentVariables(reconcile(localEnvironmentVariables.filter((item) => item.id !== id)))
-    setLocalEnvironmentError("")
+    setLocalEnvironmentFeedback(undefined)
+  }
+
+  function restoreLocalEnvironmentActionFocus(owns: () => boolean): void {
+    queueMicrotask(() => {
+      if (!localEnvironmentOpen() || !owns() || localEnvironmentBusy()) return
+      const active = document.activeElement
+      if (active !== document.body && active !== document.documentElement) return
+      const feedback = localEnvironmentFeedback()
+      const target = feedback && "patch" in feedback ? localEnvironmentCheckControl : localEnvironmentPrimaryControl
+      if (target?.isConnected) target.focus({ preventScroll: true })
+    })
   }
 
   async function saveLocalEnvironment(): Promise<void> {
-    if (localEnvironmentBusy()) return
+    if (!localEnvironmentOpen() || localEnvironmentBusy()) return
     const name = localEnvironmentName().trim()
     if (!name) {
-      setLocalEnvironmentError(t("project_runtime.local_environment_name_required"))
+      setLocalEnvironmentFeedback({ kind: "nameRequired" })
       return
     }
     const variables: Record<string, string> = {}
     for (const item of localEnvironmentVariables) {
       const key = item.key.trim()
       if (!key) {
-        setLocalEnvironmentError(t("project_runtime.local_environment_key_required"))
+        setLocalEnvironmentFeedback({ kind: "keyRequired" })
         return
       }
       if (Object.hasOwn(variables, key)) {
-        setLocalEnvironmentError(t("project_runtime.local_environment_duplicate_key", { key }))
+        setLocalEnvironmentFeedback({ kind: "duplicate", key })
         return
       }
       variables[key] = item.value
@@ -531,8 +585,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     const selectionEpoch = boardStore.selectEpoch
     const directory = dir().trim()
     const ownsSave = () => ownsProject(authority, directory, selectionEpoch)
-    setLocalEnvironmentBusy(true)
-    setLocalEnvironmentError("")
+    setLocalEnvironmentPending("saving")
+    setLocalEnvironmentFeedback(undefined)
     try {
       await patchConfig(diff, { ...currentProjectConfigRequestOptions(), authority })
       if (ownsSave()) {
@@ -541,9 +595,55 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
       }
     } catch (error) {
       if (!ownsSave()) return
-      setLocalEnvironmentError(t("project_runtime.local_environment_save_failed", { error: errorMessage(error) }))
+      const result = projectConfigWriteEvidence(error)
+      const diagnostic = errorMessage(error)
+      if (result.kind === "committed") {
+        setLocalEnvironmentDraft(configuredLocalEnvironment(result.config))
+        setLocalEnvironmentFeedback({ kind: "committed", diagnostic })
+      } else if (result.kind === "rejected") {
+        setLocalEnvironmentFeedback({ kind: "rejected", diagnostic })
+      } else {
+        setLocalEnvironmentFeedback({ kind: "unconfirmed", patch: diff, diagnostic })
+      }
     } finally {
-      if (ownsSave()) setLocalEnvironmentBusy(false)
+      if (ownsSave()) {
+        setLocalEnvironmentPending(undefined)
+        restoreLocalEnvironmentActionFocus(ownsSave)
+      }
+    }
+  }
+
+  async function checkSavedLocalEnvironment(): Promise<void> {
+    const feedback = localEnvironmentFeedback()
+    if (!feedback || !("patch" in feedback) || localEnvironmentBusy()) return
+    const authority = captureApiAuthority()
+    const selectionEpoch = boardStore.selectEpoch
+    const directory = dir().trim()
+    const ownsCheck = () => localEnvironmentOpen() && ownsProject(authority, directory, selectionEpoch)
+    setLocalEnvironmentPending("checking")
+    try {
+      let saved: Record<string, unknown> | undefined
+      const issues = await loadConfigInfo(undefined, {
+        ...currentProjectConfigRequestOptions(),
+        authority,
+        onAcceptedConfig: (config) => { saved = config },
+      })
+      if (!ownsCheck()) return
+      if (!saved) {
+        setLocalEnvironmentFeedback({ kind: "checkFailed", patch: feedback.patch, diagnostic: issues.find((issue) => issue.resource === "config")?.message })
+      } else if (compareConfigMergePatch(saved, feedback.patch) === "matches") {
+        setLocalEnvironmentDraft(configuredLocalEnvironment(saved))
+        setLocalEnvironmentFeedback({ kind: "verified" })
+      } else {
+        setLocalEnvironmentFeedback({ kind: "different", patch: feedback.patch })
+      }
+    } catch (error) {
+      if (ownsCheck()) setLocalEnvironmentFeedback({ kind: "checkFailed", patch: feedback.patch, diagnostic: errorMessage(error) })
+    } finally {
+      if (ownsCheck()) {
+        setLocalEnvironmentPending(undefined)
+        restoreLocalEnvironmentActionFocus(ownsCheck)
+      }
     }
   }
 
@@ -1211,8 +1311,8 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
     setBranchSwitchBusy("")
     localEnvironmentBaseline = undefined
     setLocalEnvironmentOpen(false)
-    setLocalEnvironmentBusy(false)
-    setLocalEnvironmentError("")
+    setLocalEnvironmentPending(undefined)
+    setLocalEnvironmentFeedback(undefined)
     setDeletingWorktrees(new Set<string>())
     setBulkDeleteOperationDirectory("")
     setRefreshingWorktreeDirectory("")
@@ -1839,31 +1939,54 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
         onClose={() => closeLocalEnvironmentEditor()}
         footer={
           <>
-            <Show when={localEnvironmentError()}>
-              <Feedback tone="error" data-ui="project-runtime-local-environment-error">
-                {localEnvironmentError()}
-              </Feedback>
+            <Show when={localEnvironmentFeedback()} keyed>
+              {(feedback) => (
+                <Feedback
+                  tone={localEnvironmentFeedbackTone(feedback)}
+                  data-ui="project-runtime-local-environment-feedback"
+                  details={"diagnostic" in feedback ? feedback.diagnostic : undefined}
+                  actions={"patch" in feedback ? (
+                    <Button type="button" variant="outline" size="sm" tone="neutral" disabled={localEnvironmentBusy()}
+                      ref={(element) => { localEnvironmentCheckControl = element }}
+                      onClick={() => void checkSavedLocalEnvironment()}>
+                      {t(localEnvironmentPending() === "checking"
+                        ? "project_runtime.local_environment_checking_saved_values"
+                        : "project_runtime.local_environment_check_saved_values")}
+                    </Button>
+                  ) : undefined}
+                >
+                  {localEnvironmentFeedbackMessage(feedback)}
+                </Feedback>
+              )}
+            </Show>
+            <Show when={!localEnvironmentFinished()}>
+              <Button
+                type="button"
+                variant="outline"
+                size="md"
+                tone="neutral"
+                disabled={localEnvironmentBusy()}
+                onClick={closeLocalEnvironmentEditor}
+              >
+                {t("common.cancel")}
+              </Button>
             </Show>
             <Button
-              type="button"
-              variant="outline"
-              size="md"
-              tone="neutral"
-              disabled={localEnvironmentBusy()}
-              onClick={closeLocalEnvironmentEditor}
-            >
-              {t("common.cancel")}
-            </Button>
-            <Button
-              type="submit"
+              type={localEnvironmentFinished() ? "button" : "submit"}
               form={localEnvironmentFormID}
               variant="solid"
               size="md"
               tone="accent"
               data-ui="project-runtime-local-environment-save"
+              ref={(element) => { localEnvironmentPrimaryControl = element }}
               disabled={localEnvironmentBusy()}
+              onClick={(event) => {
+                if (!localEnvironmentFinished()) return
+                event.preventDefault()
+                closeLocalEnvironmentEditor()
+              }}
             >
-              {localEnvironmentBusy() ? t("common.saving") : t("common.save")}
+              {t(localEnvironmentFinished() ? "common.close" : localEnvironmentPending() === "saving" ? "common.saving" : "common.save")}
             </Button>
           </>
         }
@@ -1890,7 +2013,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               disabled={localEnvironmentBusy()}
               onInput={(event) => {
                 setLocalEnvironmentName(event.currentTarget.value)
-                setLocalEnvironmentError("")
+                setLocalEnvironmentFeedback(undefined)
               }}
             />
           </TextField.Root>
@@ -1972,7 +2095,7 @@ export function ProjectRuntimeStatusPanel(props: ProjectRuntimeStatusPanelProps)
               disabled={localEnvironmentBusy()}
               onInput={(event) => {
                 setLocalEnvironmentSetupScript(event.currentTarget.value)
-                setLocalEnvironmentError("")
+                setLocalEnvironmentFeedback(undefined)
               }}
             />
             <TextField.Description>{t("project_runtime.local_environment_setup_script_hint")}</TextField.Description>

@@ -1,0 +1,17 @@
+{
+  "patch": {
+    "OPENCORVUS_REVIEW_RECEIPT": "newer-writer-wins"
+  },
+  "receiptBefore": "candidate-draft-diverges",
+  "status": 200,
+  "requestID": "5126fd2f-ca4c-4ec1-8adc-f02302a29a21",
+  "environment": {
+    "name": "Save acknowledgement review",
+    "variables": {
+      "OPENCORVUS_REVIEW_RECEIPT": "newer-writer-wins",
+      "OPENCORVUS_REVIEW_UNTOUCHED": "externally-updated-final",
+      "OPENCORVUS_REVIEW_EXTERNAL": "added-outside",
+      "OPENCORVUS_REVIEW_EXTERNAL_FINAL": "added-outside-final"
+    }
+  }
+}

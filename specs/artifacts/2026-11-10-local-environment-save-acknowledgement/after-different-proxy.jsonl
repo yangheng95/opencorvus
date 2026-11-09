@@ -1,0 +1,7 @@
+{"time":"2026-11-09T21:01:19.249Z","listenPort":39341,"upstreamPort":39338,"pid":17292}
+{"time":"2026-11-09T21:02:47.847Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T21:02:47.855Z","method":"GET","route":"/config","status":200,"requestID":"dcdceefd-08e2-4ed2-83e6-d907f8b79692"}
+{"time":"2026-11-09T21:02:48.669Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T21:02:49.515Z","method":"GET","route":"/config","status":200,"requestID":"2945585c-a329-4f4b-83ee-9fda416857dc"}
+{"time":"2026-11-09T21:03:07.708Z","receipt":1,"method":"PATCH","route":"/config","upstreamStatus":200,"upstreamRequestID":"f8f52425-2829-40e5-abdd-376c56da6600","upstreamBodyBytes":1696,"sentReviewValue":"candidate-draft-diverges","acceptedReviewValue":"candidate-draft-diverges","browserResponse":"upstream HTTP 200 headers and only 16 body bytes sent downstream"}
+{"time":"2026-11-09T21:03:15.236Z","method":"GET","route":"/config","status":200,"requestID":"c03c7f96-7180-4595-8cd8-8c213626f572"}

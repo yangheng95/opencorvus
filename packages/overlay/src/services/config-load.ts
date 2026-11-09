@@ -15,7 +15,9 @@ export interface DirectoryOwnedLoadOptions {
   isCurrentDirectory?: (directory: string) => boolean
 }
 
-export type LoadConfigInfoOptions = DirectoryOwnedLoadOptions
+export interface LoadConfigInfoOptions extends DirectoryOwnedLoadOptions {
+  onAcceptedConfig?: (config: Record<string, unknown>) => void
+}
 
 function directoryOwnedPath(path: string, options: DirectoryOwnedLoadOptions): string {
   const directory = String(options.directory || "").trim()
@@ -185,6 +187,7 @@ export async function loadConfigInfo(
     })
   })
 
+  if (config) options.onAcceptedConfig?.(config)
   return issues
 }
 

@@ -29,7 +29,9 @@ test("project load publishes its complete configuration and settled channel reso
   const channels = [{ id: "owned-channel", status: "missing" }]
   setConfigSnapshot({ server: { hostname: "127.0.0.1", publicUrl: "http://127.0.0.1:2" }, model: "owned/previous" })
   transport((request) => request.path === "config" ? accepted : channels)
-  expect(await loadConfigInfo()).toEqual([])
+  const observed: Record<string, unknown>[] = []
+  expect(await loadConfigInfo(undefined, { onAcceptedConfig: (config) => { observed.push(config) } })).toEqual([])
+  expect(observed).toEqual([accepted])
   expect({ config: appStore.config, catalog: appStore.channelCatalog, issues: appStore.configLoadIssues }).toEqual({
     config: accepted,
     catalog: { directory: "C:/Project-A", authorityRevision: captureApiAuthority().revision, entries: channels },
