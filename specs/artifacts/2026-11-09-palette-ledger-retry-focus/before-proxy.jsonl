@@ -1,0 +1,14 @@
+{"listenPort":39236,"upstreamPort":39234,"pid":28028,"holdMs":11000,"search":"project-","holdReceipts":[2],"cutReceipts":[1,2]}
+{"time":"2026-11-09T14:22:16.024Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T14:22:26.556Z","receipt":1,"stage":"arrival","route":"/work-ledger","query":{"search":"project-","limit":"12"},"hold":false,"cut":true}
+{"time":"2026-11-09T14:22:26.561Z","receipt":1,"stage":"origin","route":"/work-ledger","status":200,"requestID":"e8a5e7bb-8e10-4383-ac15-7c8debfcc0b7"}
+{"time":"2026-11-09T14:22:26.562Z","receipt":1,"stage":"original-complete","bytes":258,"itemCount":1,"projectCount":1,"nextCursor":null}
+{"time":"2026-11-09T14:22:26.562Z","receipt":1,"stage":"partial-body","bytes":32}
+{"time":"2026-11-09T14:22:31.942Z","receipt":2,"stage":"arrival","route":"/work-ledger","query":{"search":"project-","limit":"12"},"hold":true,"cut":true}
+{"time":"2026-11-09T14:22:31.946Z","receipt":2,"stage":"origin","route":"/work-ledger","status":200,"requestID":"a162c503-8975-4330-a21c-96a84b13930b"}
+{"time":"2026-11-09T14:22:31.946Z","receipt":2,"stage":"original-complete","bytes":258,"itemCount":1,"projectCount":1,"nextCursor":null}
+{"time":"2026-11-09T14:22:42.948Z","receipt":2,"stage":"partial-body","bytes":32}
+{"time":"2026-11-09T14:22:51.788Z","receipt":3,"stage":"arrival","route":"/work-ledger","query":{"search":"project-","limit":"12"},"hold":false,"cut":false}
+{"time":"2026-11-09T14:22:51.793Z","receipt":3,"stage":"origin","route":"/work-ledger","status":200,"requestID":"0b3dae7d-c295-4cc1-a308-01fe3aa1d4f3"}
+{"time":"2026-11-09T14:22:51.794Z","receipt":3,"stage":"original-complete","bytes":258,"itemCount":1,"projectCount":1,"nextCursor":null}
+{"time":"2026-11-09T14:22:51.794Z","receipt":3,"stage":"released","bytes":258}

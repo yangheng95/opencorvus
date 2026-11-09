@@ -2244,6 +2244,9 @@ The directory wraps within the result so identical short project names remain
 distinguishable. Group headings, recent-result counts, shortcuts and exact
 selection identities retain their existing owners; local commands keep their
 compact single-row layout.
+Retrying a command palette work read in the same query keeps its original
+diagnostic and the focusable Retry action. A successful read hands focus back
+to the current query when the retiring action still needs a landing point.
 Global New chat actions from the rail, palette and titlebar all enter main's
 single global Composer lifecycle: close Settings, open the directory-free
 workspace, apply the default chat intent and reset the primary center surface.

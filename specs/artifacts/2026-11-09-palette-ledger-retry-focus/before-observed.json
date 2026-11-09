@@ -1,0 +1,41 @@
+{
+  "failure": [
+    "\t\t3 container Command palette, ID: commandPaletteDialog",
+    "\t\t\t\t5 heading Command palette, Value: 2, ID: dialog-cl-100-title",
+    "\t\t\t\t\t6 text Command palette",
+    "\t\t\t\t\t8 combo box (expanded, settable) Description: Search projects, chats, work, or commands, Value: project-, ID: commandPaletteInput, Secondary Actions: Collapse",
+    "\t\t\t\t10 text Could not load matching work",
+    "\t\t\t\t13 button Retry",
+    "The focused UI element is 8 combo box (expanded, settable) Description: Search projects, chats, work, or commands, Value: project-, ID: commandPaletteInput, Secondary Actions: Collapse"
+  ],
+  "pending": [
+    "\t\t3 container Command palette, ID: commandPaletteDialog",
+    "\t\t\t\t5 heading Command palette, Value: 2, ID: dialog-cl-100-title",
+    "\t\t\t\t\t6 text Command palette",
+    "\t\t\t\t\t8 combo box (expanded, settable) Description: Search projects, chats, work, or commands, Value: project-, ID: commandPaletteInput, Secondary Actions: Collapse",
+    "\t\t\t\t10 text Loading…",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39236/ui/"
+  ],
+  "failedAgain": [
+    "\t\t3 container Command palette, ID: commandPaletteDialog",
+    "\t\t\t\t5 heading Command palette, Value: 2, ID: dialog-cl-100-title",
+    "\t\t\t\t\t6 text Command palette",
+    "\t\t\t\t\t8 combo box (expanded, settable) Description: Search projects, chats, work, or commands, Value: project-, ID: commandPaletteInput, Secondary Actions: Collapse",
+    "\t\t\t\t10 text Could not load matching work",
+    "\t\t\t\t13 button Retry",
+    "The focused UI element is 8 combo box (expanded, settable) Description: Search projects, chats, work, or commands, Value: project-, ID: commandPaletteInput, Secondary Actions: Collapse"
+  ],
+  "recovered": [
+    "\t\t3 container Command palette, ID: commandPaletteDialog",
+    "\t\t\t\t5 heading Command palette, Value: 2, ID: dialog-cl-100-title",
+    "\t\t\t\t\t6 text Command palette",
+    "\t\t\t\t\t8 combo box (expanded, settable) Description: Search projects, chats, work, or commands, Value: project-, ID: commandPaletteInput, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t11 Value: project-before, ID: combobox-cl-194-option-ledger%3Aproject%3Aprj_hTiwZMLZN2NJxrstupFO",
+    "\t\t\t\t\t\t\t13 text project-before",
+    "\t\t\t\t\t\t\t\t15 text Project · C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b126\\project-before Ctrl+1",
+    "The focused UI element is 8 combo box (expanded, settable) Description: Search projects, chats, work, or commands, Value: project-, ID: commandPaletteInput, Secondary Actions: Collapse"
+  ],
+  "closed": [
+    "The focused UI element is 25 button Search projects, chats, work, or commands"
+  ]
+}

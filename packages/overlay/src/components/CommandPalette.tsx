@@ -17,7 +17,7 @@
 // case-insensitive terms across their metadata. The shared Combobox owns active descendant,
 // listbox option semantics, and keyboard navigation.
 
-import { Show, createEffect, createMemo, createSignal, on, onCleanup, onMount } from "solid-js"
+import { batch, Show, createEffect, createMemo, createSignal, on, onCleanup, onMount } from "solid-js"
 import { applyLocalePreference } from "../services/locale-preference"
 import { applyThemePreference } from "../services/theme-preference"
 import { themeOptionsForCurrentHost } from "../services/theme-registry"
@@ -322,7 +322,6 @@ export function CommandPalette(props: {
   async function loadLedger(search: LedgerSearch, append = false): Promise<void> {
     if (!ownsSearch(search)) return
     setLedgerLoading(true)
-    setLedgerError(undefined)
     const rows = new Map((append ? ledgerRows() : []).map((row) => [`${row.kind}:${row.id}`, row]))
     let cursor = append ? ledgerCursor() : null
     const priorCount = rows.size
@@ -341,8 +340,11 @@ export function CommandPalette(props: {
         }
         cursor = result.nextCursor
       } while (cursor && (search.query ? rows.size === priorCount : rows.size < RECENT_COMMAND_LIMIT))
-      setLedgerRows(search.query ? [...rows.values()] : [...rows.values()].slice(0, RECENT_COMMAND_LIMIT))
-      setLedgerCursor(search.query ? cursor : null)
+      batch(() => {
+        setLedgerRows(search.query ? [...rows.values()] : [...rows.values()].slice(0, RECENT_COMMAND_LIMIT))
+        setLedgerCursor(search.query ? cursor : null)
+        setLedgerError(undefined)
+      })
     } catch (error) {
       if (!ownsSearch(search) || error instanceof ApiAuthorityChangedError) return
       if (error instanceof DOMException && error.name === "AbortError") return
@@ -564,12 +566,22 @@ export function CommandPalette(props: {
       />
       <Show when={ledgerLoading() || ledgerError() || ledgerCursor()}>
         <div class="cmdk-footer">
-          <Show when={ledgerLoading()}>
+          <Show when={ledgerLoading() && !ledgerError()}>
             <div role="status" aria-live="polite">{t("common.loading")}</div>
           </Show>
           <Show when={ledgerError()}>
             {(details) => <Feedback tone="error" details={details()} actions={
-              <Button type="button" variant="ghost" size="md" tone="neutral" onClick={loadMore}>{t("common.retry")}</Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="md"
+                tone="neutral"
+                aria-disabled={ledgerLoading() || undefined}
+                aria-busy={ledgerLoading() || undefined}
+                onClick={loadMore}
+              >
+                {t(ledgerLoading() ? "common.retrying" : "common.retry")}
+              </Button>
             }>{t("cmdk.search_failed")}</Feedback>}
           </Show>
           <Show when={ledgerCursor() && !ledgerError()}>

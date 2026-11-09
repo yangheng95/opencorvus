@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [全局搜索的工作结果重试保持焦点](2026-11-09-palette-ledger-retry-focus.md)
 - [定时列表重试保持原焦点](2026-11-09-scheduled-list-retry-focus.md)
 - [收件箱重试期间保留焦点和原诊断](2026-11-09-mailbox-retry-focus.md)
 - [日志刷新尊重当前阅读位置](2026-11-09-log-reading-position-on-refresh.md)

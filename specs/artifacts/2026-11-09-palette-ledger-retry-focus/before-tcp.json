@@ -1,0 +1,45 @@
+{
+  "phase": "before",
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "9def1d88-ffb8-4ef6-8e4f-b6c9968c9128",
+      "schemaValid": true
+    },
+    {
+      "route": "/project",
+      "operationId": "project.list",
+      "status": 200,
+      "requestID": "c4d339a7-c2f7-4f28-9232-9a144fb697ab",
+      "schemaValid": true
+    },
+    {
+      "route": "/work-ledger",
+      "operationId": "workLedger.list",
+      "status": 200,
+      "requestID": "bd107644-d545-420d-b97f-06f16b4ca09a",
+      "schemaValid": true
+    }
+  ],
+  "resultPage": {
+    "rows": [
+      {
+        "kind": "project",
+        "id": "prj_hTiwZMLZN2NJxrstupFO",
+        "title": "",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b126\\project-before",
+        "created": 1794234016661,
+        "updated": 1794234016661,
+        "pinned": false
+      }
+    ],
+    "nextCursor": null
+  },
+  "project": {
+    "id": "prj_hTiwZMLZN2NJxrstupFO",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b126\\project-before"
+  },
+  "listedProjectCount": 1
+}
