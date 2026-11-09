@@ -1,0 +1,55 @@
+{
+  "version": 10,
+  "integrity": "ok",
+  "counts": {
+    "session": 3,
+    "global_creation_allocation": 2,
+    "message": 0,
+    "engine_task": 0,
+    "provider_usage_event": 0
+  },
+  "allocations": [
+    {
+      "physicalRowID": 2,
+      "id": "gca_16c488e703130fef19069727f6c0089e72deca61e52c5fcb73f9974fe76283ea",
+      "kind": "automation_run",
+      "request_id": "migration-v10-reserved-automation",
+      "materialized_project_id": null,
+      "accepted_target_id": null,
+      "time_accepted": null
+    },
+    {
+      "physicalRowID": 1,
+      "id": "gca_f9828c5a9713c0e5c7cb0fdb766f7abcde7acb1d392396690f1bca20a56fd30b",
+      "kind": "global_chat_start",
+      "request_id": "migration-v10-existing-global-chat-start",
+      "materialized_project_id": "prj_hBViDXXBUndFyHs67HhF",
+      "accepted_target_id": "ses_hxMnZFd0vxdzMO7G90B2",
+      "time_accepted": 1794259467004
+    }
+  ],
+  "sessions": [
+    {
+      "physicalRowID": 2,
+      "id": "ses_-zUPU6I3czzc5dXX2BAr",
+      "project_id": "prj_hp9Eb4tYthUW9kzP9PhQ",
+      "title": "Version 10 preserved work",
+      "time_created": 1794259428423
+    },
+    {
+      "physicalRowID": 1,
+      "id": "ses_-zUPU6IiIzzy7Nh56pmN",
+      "project_id": "prj_hOTeic7Qw3W1AESCdFme",
+      "title": "Version 10 preserved chat",
+      "time_created": 1794259425901
+    },
+    {
+      "physicalRowID": 3,
+      "id": "ses_hxMnZFd0vxdzMO7G90B2",
+      "project_id": "prj_hBViDXXBUndFyHs67HhF",
+      "title": "Chat",
+      "time_created": 1794259467004
+    }
+  ],
+  "projectRows": 3
+}

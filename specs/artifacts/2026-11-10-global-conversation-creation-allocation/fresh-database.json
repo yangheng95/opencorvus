@@ -1,0 +1,22 @@
+{
+  "version": 11,
+  "integrity": "ok",
+  "foreignKeyIssues": 0,
+  "counts": {
+    "session": 1,
+    "project": 1,
+    "global_creation_allocation": 1,
+    "message": 0,
+    "engine_task": 0,
+    "provider_usage_event": 0
+  },
+  "accepted": {
+    "kind": "global_chat_create",
+    "requestID": "3ca64b1f-d6bb-40fd-942f-6e7b9c19e9fc",
+    "allocationID": "gca_056a38c5a82fc6c912f575d522a18b28d966e2ead41a7edbb8fcf01b2c930c8d",
+    "sessionID": "ses_hMypiCkUq5U9HXp5GATU",
+    "projectID": "prj_hEtG8HhioWaKMEln2Aw3",
+    "projectGeneration": "87f5007c-17dd-41d3-a377-978f14360d9f",
+    "projectRemoved": false
+  }
+}

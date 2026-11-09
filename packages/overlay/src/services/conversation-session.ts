@@ -330,6 +330,19 @@ async function createConversationSessionFromPath(options: {
   }
 }
 
+function conversationCreationRequestBody(scope: readonly string[], options: {
+  experience: ConversationExperience
+  composerDraftKey?: string
+  model?: string
+}): Record<string, unknown> {
+  const model = options.model?.trim() || undefined
+  const draftKey = options.composerDraftKey
+  const requestID = draftKey && captureComposerDraftRevision(draftKey)
+    ? composerSubmission(draftKey, JSON.stringify([...scope, options.experience, model ?? null])).messageID
+    : randomUUID()
+  return { requestID, ...(model ? { model } : {}) }
+}
+
 export async function createConversationSession(options: {
   authority?: ApiAuthority
   selectionEpoch: number
@@ -343,20 +356,13 @@ export async function createConversationSession(options: {
   const directory = options.directory.trim()
   if (!directory) throw new Error("createConversationSession: directory is required")
   const params = new URLSearchParams({ directory })
-  const model = options.model?.trim() || undefined
   return createConversationSessionFromPath({
     authority: options.authority,
     selectionEpoch: options.selectionEpoch,
     path: `coding/${options.experience}/session?${params.toString()}`,
     experience: options.experience,
     signal: options.signal,
-    body: () => {
-      const draftKey = options.composerDraftKey
-      const requestID = draftKey && captureComposerDraftRevision(draftKey)
-        ? composerSubmission(draftKey, JSON.stringify(["project-conversation-creation-v1", directory, options.experience, model ?? null])).messageID
-        : randomUUID()
-      return { requestID, ...(model ? { model } : {}) }
-    },
+    body: () => conversationCreationRequestBody(["project-conversation-creation-v1", directory], options),
     composerDraftKey: options.composerDraftKey,
     onSessionCreated: options.onSessionCreated,
   })
@@ -371,14 +377,13 @@ export async function createGlobalConversationSession(options: {
   onSessionCreated?: (sessionID: string) => void
   signal?: AbortSignal
 }): Promise<string> {
-  const model = options.model?.trim()
   return createConversationSessionFromPath({
     authority: options.authority,
     selectionEpoch: options.selectionEpoch,
     path: `global/${options.experience}`,
     experience: options.experience,
     signal: options.signal,
-    body: () => model ? { model } : {},
+    body: () => conversationCreationRequestBody(["global-conversation-creation-v1"], options),
     composerDraftKey: options.composerDraftKey,
     onSessionCreated: options.onSessionCreated,
   })

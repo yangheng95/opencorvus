@@ -1,0 +1,209 @@
+{
+  "preserved_chat": {
+    "status": 200,
+    "requestID": "492c1a9d-8e89-4d15-ad79-fb54336660c4",
+    "body": {
+      "id": "ses_-zUPU6IiIzzy7Nh56pmN",
+      "slug": "mighty-squid",
+      "projectID": "prj_hOTeic7Qw3W1AESCdFme",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b155\\profile-before-ready\\data\\projects\\2026\\11\\10\\e2604673-d1c9-4764-b42d-e65d37666888",
+      "title": "Version 10 preserved chat",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "prompt_profile": {
+            "active": "dynamic"
+          }
+        }
+      },
+      "time": {
+        "created": 1794259425901,
+        "updated": 1794259426138
+      }
+    }
+  },
+  "preserved_work": {
+    "status": 200,
+    "requestID": "7a13cf8e-2b9b-4940-920e-1a58e08230c4",
+    "body": {
+      "id": "ses_-zUPU6I3czzc5dXX2BAr",
+      "slug": "neon-engine",
+      "projectID": "prj_hp9Eb4tYthUW9kzP9PhQ",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b155\\profile-before-ready\\data\\projects\\2026\\11\\10\\3f6983a5-4fca-4dcf-b9d4-e37cfdbea81c",
+      "title": "Version 10 preserved work",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {
+        "conversation": {
+          "experience": "work",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "prompt_profile": {
+            "active": "dynamic"
+          }
+        }
+      },
+      "time": {
+        "created": 1794259428423,
+        "updated": 1794259428499
+      }
+    }
+  },
+  "chat": {
+    "status": 201,
+    "requestID": "63dac079-ea7c-481e-aae7-7f7f4e6d9c05",
+    "body": {
+      "session": {
+        "id": "ses_hRuW2l6CINyrbPyBprF8",
+        "slug": "misty-squid",
+        "projectID": "prj_h1erfVQbf9BQfwnAeU22",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b155\\profile-before-ready\\data\\projects\\2026\\11\\10\\815b0fb7-4755-47b6-a198-d6b77b0a1cef",
+        "title": "One global Chat after retry",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "globalConversationCreation": {
+            "version": 1,
+            "requestID": "isolated-global-conversation-shared"
+          },
+          "conversation": {
+            "experience": "chat",
+            "surface": "right-sidebar"
+          },
+          "configOverlay": {
+            "prompt_profile": {
+              "active": "dynamic"
+            }
+          }
+        },
+        "time": {
+          "created": 1794260015876,
+          "updated": 1794260018918
+        }
+      }
+    }
+  },
+  "work": {
+    "status": 201,
+    "requestID": "a1121953-c86c-420b-a039-c2bd4d0b8449",
+    "body": {
+      "session": {
+        "id": "ses_hmwMrRv6WtUMHg3BANEj",
+        "slug": "playful-squid",
+        "projectID": "prj_hSyUCPeMUxoD0DOpbd6g",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b155\\profile-before-ready\\data\\projects\\2026\\11\\10\\b7b5bcbf-45db-4759-9d82-4b784c22f9db",
+        "title": "One global Work after retry",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "globalConversationCreation": {
+            "version": 1,
+            "requestID": "isolated-global-conversation-shared"
+          },
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          },
+          "configOverlay": {
+            "prompt_profile": {
+              "active": "dynamic"
+            }
+          }
+        },
+        "time": {
+          "created": 1794260017374,
+          "updated": 1794260018970
+        }
+      }
+    }
+  },
+  "prepared": {
+    "status": 201,
+    "requestID": "802af22a-9b7e-4844-b6d6-eb69d59acf52",
+    "body": {
+      "session": {
+        "id": "ses_hLYkvrZDktgdey3hdj23",
+        "slug": "nimble-island",
+        "version": "local",
+        "projectID": "prj_hch5ezAniYcd2cbY9HW7",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b155\\profile-before-ready\\data\\projects\\2026\\11\\10\\a4396476-12bb-4b56-ab15-85ad7ef0c979",
+        "title": "Work",
+        "kind": "assistant",
+        "metadata": {
+          "globalConversationCreation": {
+            "version": 1,
+            "requestID": "isolated-materialized-before-restart"
+          },
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          },
+          "configOverlay": {
+            "prompt_profile": {
+              "active": "dynamic"
+            }
+          }
+        },
+        "time": {
+          "created": 1794260200678,
+          "updated": 1794260200678
+        }
+      }
+    }
+  },
+  "preparedReplay": {
+    "status": 201,
+    "requestID": "b4305338-283a-43d6-b789-f9c974c8c64f",
+    "body": {
+      "session": {
+        "id": "ses_hLYkvrZDktgdey3hdj23",
+        "slug": "nimble-island",
+        "projectID": "prj_hch5ezAniYcd2cbY9HW7",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b155\\profile-before-ready\\data\\projects\\2026\\11\\10\\a4396476-12bb-4b56-ab15-85ad7ef0c979",
+        "title": "Work",
+        "version": "local",
+        "kind": "assistant",
+        "metadata": {
+          "globalConversationCreation": {
+            "version": 1,
+            "requestID": "isolated-materialized-before-restart"
+          },
+          "conversation": {
+            "experience": "work",
+            "surface": "right-sidebar"
+          },
+          "configOverlay": {
+            "prompt_profile": {
+              "active": "dynamic"
+            }
+          }
+        },
+        "time": {
+          "created": 1794260200678,
+          "updated": 1794260200678
+        }
+      }
+    }
+  },
+  "gone": {
+    "status": 410,
+    "requestID": "76348035-1fe3-4bf9-8e5f-a11982b49362",
+    "body": {
+      "name": "GlobalCreationAcceptedTargetUnavailableError",
+      "data": {
+        "message": "The accepted global conversation is no longer retained.",
+        "kind": "global_work_create",
+        "requestID": "isolated-deleted-global-work",
+        "projectID": "prj_huZmKkJCCqBVkgVV0A3b",
+        "targetID": "ses_hfPsxoz7MRtiuW6mtwr7",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b155\\profile-before-ready\\data\\projects\\2026\\11\\10\\ccb9d6dc-a2bd-42c5-8fd9-ad6f105d4444"
+      }
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "backup": {
+    "version": 10,
+    "integrity": "ok",
+    "foreignKeyIssues": 0,
+    "rowsEqualIncludingAllFieldsAndRowIDs": {
+      "session": 3,
+      "project": 3,
+      "global_creation_allocation": 2
+    }
+  },
+  "migrated": {
+    "version": 11,
+    "integrity": "ok",
+    "foreignKeyIssues": 0,
+    "rowsEqualIncludingAllFieldsAndRowIDs": {
+      "session": 3,
+      "project": 3,
+      "global_creation_allocation": 2
+    }
+  },
+  "backupName": "opencorvus.db.v10-to-v11.1794260594639.68eadd12-5d3f-45a9-918e-6da97de8b69e.sqlite"
+}

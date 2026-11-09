@@ -221,8 +221,8 @@ export type AutomationFireHistoryView = {
 export type GlobalConversationCreator = (input: {
   experience: ConversationExperience
   model?: string
-  sessionID?: string
-  creationAllocation?: Parameters<typeof GlobalCreationAllocation.materializeProject>[0]
+  sessionID: string
+  creationAllocation: Parameters<typeof GlobalCreationAllocation.materializeProject>[0]
 }) => Promise<{ session: Session.Info }>
 
 export const AutomationRunningConflictError = NamedError.create(
@@ -2657,6 +2657,7 @@ export namespace AutomationService {
         throw error
       })
       if (!globalSession) {
+        if (!target.allocation) throw new Error(`Global Automation Run ${runID} has no allocated Project`)
         try {
           const created = await requireGlobalConversationCreator()({
             experience: "chat",

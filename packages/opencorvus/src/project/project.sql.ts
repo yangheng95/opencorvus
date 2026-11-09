@@ -78,6 +78,8 @@ export const ProjectDirectoryAdmissionTable = sqliteTable(
   ],
 )
 
+export const GLOBAL_CREATION_KINDS = ["global_task", "global_chat_start", "automation_run", "global_chat_create", "global_work_create"] as const
+
 /** Global one-call request identity reserved before anonymous Project
  * filesystem allocation. The directory is frozen once; the Project row and
  * target aggregate are deterministic continuations of this occurrence. */
@@ -85,7 +87,7 @@ export const GlobalCreationAllocationTable = sqliteTable(
   "global_creation_allocation",
   {
     id: text().primaryKey(),
-    kind: text({ enum: ["global_task", "global_chat_start", "automation_run"] }).notNull(),
+    kind: text({ enum: GLOBAL_CREATION_KINDS }).notNull(),
     request_id: text().notNull(),
     request_fingerprint: text().notNull(),
     request_contract: text({ mode: "json" }).notNull().$type<Record<string, unknown>>(),
@@ -124,11 +126,16 @@ export const GlobalCreationAllocationTable = sqliteTable(
             (${table.kind} = 'global_task' AND json_extract(${table.request_contract}, '$.protocol') = 'global-task-project-allocation-v2')
             OR (${table.kind} = 'global_chat_start' AND json_extract(${table.request_contract}, '$.protocol') = 'global-chat-start-request-v2')
             OR (${table.kind} = 'automation_run' AND json_extract(${table.request_contract}, '$.protocol') = 'automation-run-project-v1')
+            OR (${table.kind} IN ('global_chat_create','global_work_create')
+              AND json_extract(${table.request_contract}, '$.protocol') IS 'global-conversation-create-v1'
+              AND json_extract(${table.request_contract}, '$.experience') IS CASE ${table.kind} WHEN 'global_chat_create' THEN 'chat' ELSE 'work' END
+              AND COALESCE(json_type(${table.request_contract}, '$.model') IN ('text','null'), 0)
+              AND json_type(${table.resolution_seed}, '$.initialConfigOverlay') IS 'object')
           )
           AND json_type(${table.resolution_seed}) = 'object'
           AND (
             (${table.kind} = 'global_task' AND json_type(${table.task_resolution}) = 'object')
-            OR (${table.kind} IN ('global_chat_start','automation_run') AND ${table.task_resolution} IS NULL)
+            OR (${table.kind} IN ('global_chat_start','automation_run','global_chat_create','global_work_create') AND ${table.task_resolution} IS NULL)
           )
           AND (
             (${table.materialized_project_id} IS NULL AND ${table.materialized_project_generation} IS NULL AND ${table.time_materialized} IS NULL)

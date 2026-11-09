@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [无项目 Chat 与 Work 创建的持久分配与数据库升级证据](2026-11-10-global-conversation-creation-allocation/README.md)
 - [项目本地环境变量编辑与保存证据](2026-11-10-project-conversation-creation-replay/README.md)
 - [项目本地环境变量编辑与保存证据](2026-11-10-local-environment-save-acknowledgement/README.md)
 - [项目本地环境变量编辑与保存证据](2026-11-10-local-environment-dialog-reachability/README.md)

@@ -1,0 +1,46 @@
+{
+  "accepted": {
+    "allocationID": "gca_f9828c5a9713c0e5c7cb0fdb766f7abcde7acb1d392396690f1bca20a56fd30b",
+    "requestID": "migration-v10-existing-global-chat-start",
+    "session": {
+      "id": "ses_hxMnZFd0vxdzMO7G90B2",
+      "slug": "brave-rocket",
+      "version": "local",
+      "projectID": "prj_hBViDXXBUndFyHs67HhF",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b155\\profile-before-ready\\data\\projects\\2026\\11\\10\\538d53c6-c99d-4d9b-9fa8-626e7f22ae37",
+      "title": "Chat",
+      "kind": "assistant",
+      "metadata": {
+        "globalChatStart": {
+          "version": 2,
+          "requestID": "migration-v10-existing-global-chat-start",
+          "requestFingerprint": "6d55732a1aa76f077a69d043006b290e5c9c782e1e65b48fd623166414f99af4",
+          "messageID": "msg_hQJp0AX4drqlctJHBGEO"
+        },
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "prompt_profile": {
+            "active": "dynamic"
+          }
+        }
+      },
+      "time": {
+        "created": 1794259467004,
+        "updated": 1794259467004
+      }
+    },
+    "receipt": {
+      "projectID": "prj_hBViDXXBUndFyHs67HhF",
+      "targetID": "ses_hxMnZFd0vxdzMO7G90B2",
+      "acceptedAt": 1794259467004
+    }
+  },
+  "reserved": {
+    "allocationID": "gca_16c488e703130fef19069727f6c0089e72deca61e52c5fcb73f9974fe76283ea",
+    "requestID": "migration-v10-reserved-automation",
+    "kind": "automation_run"
+  }
+}

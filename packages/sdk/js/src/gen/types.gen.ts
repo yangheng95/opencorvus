@@ -21932,6 +21932,7 @@ export type GlobalAutomationsRunsResponse = GlobalAutomationsRunsResponses[keyof
 export type GlobalChatCreateData = {
   body?: {
     model?: string
+    requestID?: string
   }
   path?: never
   query?: never
@@ -21949,6 +21950,38 @@ export type GlobalChatCreateErrors = {
           [key: string]: unknown
         }
         name: "ProviderModelNotFoundError"
+      }
+  /**
+   * Chat creation identity conflicts with its accepted input or target
+   */
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAllocationConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAcceptedTargetConflictError"
+      }
+  /**
+   * The accepted Chat or its carrying project is unavailable
+   */
+  410:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAcceptedTargetUnavailableError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAllocatedProjectUnavailableError"
       }
 }
 
@@ -23713,6 +23746,7 @@ export type GlobalUsageResponse = GlobalUsageResponses[keyof GlobalUsageResponse
 export type GlobalWorkCreateData = {
   body?: {
     model?: string
+    requestID?: string
   }
   path?: never
   query?: never
@@ -23730,6 +23764,38 @@ export type GlobalWorkCreateErrors = {
           [key: string]: unknown
         }
         name: "ProviderModelNotFoundError"
+      }
+  /**
+   * Work creation identity conflicts with its accepted input or target
+   */
+  409:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAllocationConflictError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAcceptedTargetConflictError"
+      }
+  /**
+   * The accepted Work or its carrying project is unavailable
+   */
+  410:
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAcceptedTargetUnavailableError"
+      }
+    | {
+        data: {
+          [key: string]: unknown
+        }
+        name: "GlobalCreationAllocatedProjectUnavailableError"
       }
 }
 

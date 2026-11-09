@@ -7,7 +7,7 @@ import { eq, and } from "drizzle-orm"
 import { Database } from "@/storage/db"
 import { Global } from "@/global"
 import { CROSS_PROCESS_LOCK_RETRY, withProcessLock } from "@/util/process-lock"
-import { GlobalCreationAllocationTable, ProjectTable } from "./project.sql"
+import { GLOBAL_CREATION_KINDS, GlobalCreationAllocationTable, ProjectTable } from "./project.sql"
 import { ImplicitProject } from "./implicit-project"
 import { Project } from "./project"
 import { EngineChannelBindingTable, EngineTaskCreationContractTable, EngineTaskTable } from "@/engine/engine.sql"
@@ -20,15 +20,20 @@ import {
   TaskChannelBindingGlobalCreationConflictError,
   TaskChannelBindingProjectConflictError,
 } from "@/engine/task-project-error"
-import { assertGlobalChatAcceptedSession, assertGlobalTaskAcceptedResolution } from "@/engine/global-creation-target"
+import {
+  assertGlobalChatAcceptedSession,
+  assertGlobalConversationCreationSession,
+  assertGlobalTaskAcceptedResolution,
+} from "@/engine/global-creation-target"
 
-export type GlobalCreationKind = "global_task" | "global_chat_start" | "automation_run"
+export type GlobalCreationKind = (typeof GLOBAL_CREATION_KINDS)[number]
+const GlobalCreationKindSchema = z.enum(GLOBAL_CREATION_KINDS)
 
 export const GlobalCreationAllocationConflictError = NamedError.create(
   "GlobalCreationAllocationConflictError",
   z.object({
     message: z.string(),
-    kind: z.enum(["global_task", "global_chat_start", "automation_run"]),
+    kind: GlobalCreationKindSchema,
     requestID: z.string(),
     expectedFingerprint: z.string().regex(/^[a-f0-9]{64}$/),
     actualFingerprint: z.string().regex(/^[a-f0-9]{64}$/),
@@ -39,7 +44,7 @@ export const GlobalCreationAcceptedTargetUnavailableError = NamedError.create(
   "GlobalCreationAcceptedTargetUnavailableError",
   z.object({
     message: z.string(),
-    kind: z.enum(["global_task", "global_chat_start", "automation_run"]),
+    kind: GlobalCreationKindSchema,
     requestID: z.string(),
     projectID: z.string(),
     targetID: z.string(),
@@ -51,7 +56,7 @@ export const GlobalCreationAllocatedProjectUnavailableError = NamedError.create(
   "GlobalCreationAllocatedProjectUnavailableError",
   z.object({
     message: z.string(),
-    kind: z.enum(["global_task", "global_chat_start", "automation_run"]),
+    kind: GlobalCreationKindSchema,
     requestID: z.string(),
     projectID: z.string(),
     projectGeneration: z.string(),
@@ -63,7 +68,7 @@ export const GlobalCreationAcceptedTargetConflictError = NamedError.create(
   "GlobalCreationAcceptedTargetConflictError",
   z.object({
     message: z.string(),
-    kind: z.enum(["global_task", "global_chat_start", "automation_run"]),
+    kind: GlobalCreationKindSchema,
     requestID: z.string(),
     targetID: z.string(),
   }),
@@ -353,26 +358,28 @@ export namespace GlobalCreationAllocation {
         .get()
       if (target?.projectID !== input.projectID) {
         throw new Error(
-          `Global Chat allocation ${input.allocationID} acceptance does not match its persisted Session aggregate`,
+          `Global ${input.kind} allocation ${input.allocationID} acceptance does not match its persisted Session aggregate`,
         )
       }
       try {
         initialConfigOverlay = canonicalTaskCreationContract(
           (target.metadata as Record<string, unknown> | null)?.configOverlay ?? {},
         )
-        assertGlobalChatAcceptedSession({
+        const acceptance = {
           requestID: allocation.request_id,
           requestFingerprint: allocation.request_fingerprint,
           requestContract: allocation.request_contract,
           resolutionSeed: allocation.resolution_seed,
           initialConfigOverlay,
           session: target,
-        })
+        }
+        if (input.kind === "global_chat_start") assertGlobalChatAcceptedSession(acceptance)
+        else assertGlobalConversationCreationSession({ ...acceptance, kind: input.kind })
       } catch (cause) {
         throw new GlobalCreationAcceptedTargetConflictError(
           {
-            message: `Global Chat allocation ${input.allocationID} target ${input.targetID} has another frozen identity`,
-            kind: "global_chat_start",
+            message: `Global ${input.kind} allocation ${input.allocationID} target ${input.targetID} has another frozen identity`,
+            kind: input.kind,
             requestID: allocation.request_id,
             targetID: input.targetID,
           },

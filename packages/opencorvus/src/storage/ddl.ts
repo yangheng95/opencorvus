@@ -381,6 +381,26 @@ function generatedSchemaDdl() {
 
 // FTS is Full-Text Search. Drizzle table declarations do not model SQLite FTS5
 // virtual tables, so this remains an explicit storage extension.
+function sameJsonFacts(left: string, right: string): string {
+  const fields = "fullkey,type,atom"
+  return `NOT EXISTS (SELECT ${fields} FROM json_tree(${left}) EXCEPT SELECT ${fields} FROM json_tree(${right}))
+    AND NOT EXISTS (SELECT ${fields} FROM json_tree(${right}) EXCEPT SELECT ${fields} FROM json_tree(${left}))`
+}
+
+const globalConversationCreationTargetSQL = /* sql */ `NEW.kind IN ('global_chat_create','global_work_create') AND EXISTS (
+    SELECT 1 FROM session AS target_session
+    WHERE target_session.id=NEW.accepted_target_id
+      AND target_session.project_id=NEW.accepted_project_id
+      AND target_session.kind='assistant'
+      AND target_session.parent_id IS NULL
+      AND json_extract(target_session.metadata,'$.conversation.surface')='right-sidebar'
+      AND json_extract(target_session.metadata,'$.conversation.experience')=json_extract(NEW.request_contract,'$.experience')
+      AND json_extract(target_session.metadata,'$.globalConversationCreation.requestID')=NEW.request_id
+      AND json_extract(target_session.metadata,'$.globalConversationCreation.version')=1
+      AND ${sameJsonFacts("json_extract(NEW.resolution_seed,'$.initialConfigOverlay')", "NEW.accepted_initial_config_overlay")}
+      AND ${sameJsonFacts("json_extract(target_session.metadata,'$.configOverlay')", "NEW.accepted_initial_config_overlay")}
+  )`
+
 const STORAGE_EXTENSION_DDL = /* sql */ `
 CREATE TRIGGER IF NOT EXISTS expert_squad_mutation_receipt_no_update
 BEFORE UPDATE ON expert_squad_mutation_receipt FOR EACH ROW
@@ -568,7 +588,7 @@ WHEN NEW.accepted_project_id IS NOT NULL AND NOT (
         AND json_extract(target_session.metadata,'$.globalChatStart.version')=2
         AND json_extract(target_session.metadata,'$.globalChatStart.requestFingerprint')=NEW.request_fingerprint
     )
-  ) OR (
+  ) OR (${globalConversationCreationTargetSQL}) OR (
     NEW.kind='automation_run' AND EXISTS (
       SELECT 1 FROM automation_run AS run
       WHERE run.id=NEW.accepted_target_id AND run.target_project_id=NEW.accepted_project_id
@@ -601,7 +621,7 @@ WHEN NEW.accepted_project_id IS NOT NULL AND NOT (
       AND json_extract(target_session.metadata,'$.globalChatStart.requestID')=NEW.request_id
       AND json_extract(target_session.metadata,'$.globalChatStart.version')=2
       AND json_extract(target_session.metadata,'$.globalChatStart.requestFingerprint')=NEW.request_fingerprint
-  )) OR (NEW.kind='automation_run' AND EXISTS (
+  )) OR (${globalConversationCreationTargetSQL}) OR (NEW.kind='automation_run' AND EXISTS (
     SELECT 1 FROM automation_run AS run
     WHERE run.id=NEW.accepted_target_id AND run.target_project_id=NEW.accepted_project_id
       AND run.target_project_generation=NEW.materialized_project_generation

@@ -1,0 +1,58 @@
+{
+  "chat": {
+    "status": 201,
+    "requestID": "443b976e-6dee-410a-95ed-de9cbb1fc3bd",
+    "session": {
+      "id": "ses_-zUPU6IiIzzy7Nh56pmN",
+      "slug": "mighty-squid",
+      "projectID": "prj_hOTeic7Qw3W1AESCdFme",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b155\\profile-before-ready\\data\\projects\\2026\\11\\10\\e2604673-d1c9-4764-b42d-e65d37666888",
+      "title": "Version 10 preserved chat",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {
+        "conversation": {
+          "experience": "chat",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "prompt_profile": {
+            "active": "dynamic"
+          }
+        }
+      },
+      "time": {
+        "created": 1794259425901,
+        "updated": 1794259426138
+      }
+    }
+  },
+  "work": {
+    "status": 201,
+    "requestID": "b9edc409-88cc-427f-adff-717eb17cc3af",
+    "session": {
+      "id": "ses_-zUPU6I3czzc5dXX2BAr",
+      "slug": "neon-engine",
+      "projectID": "prj_hp9Eb4tYthUW9kzP9PhQ",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b155\\profile-before-ready\\data\\projects\\2026\\11\\10\\3f6983a5-4fca-4dcf-b9d4-e37cfdbea81c",
+      "title": "Version 10 preserved work",
+      "version": "local",
+      "kind": "assistant",
+      "metadata": {
+        "conversation": {
+          "experience": "work",
+          "surface": "right-sidebar"
+        },
+        "configOverlay": {
+          "prompt_profile": {
+            "active": "dynamic"
+          }
+        }
+      },
+      "time": {
+        "created": 1794259428423,
+        "updated": 1794259428499
+      }
+    }
+  }
+}

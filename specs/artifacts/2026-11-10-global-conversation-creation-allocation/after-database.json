@@ -1,0 +1,67 @@
+{
+  "version": 11,
+  "integrity": "ok",
+  "foreignKeyIssues": 0,
+  "counts": {
+    "session": 7,
+    "project": 7,
+    "global_creation_allocation": 7,
+    "message": 0,
+    "engine_task": 0,
+    "provider_usage_event": 0
+  },
+  "preservedLegacyRows": {
+    "session": 3,
+    "project": 3,
+    "global_creation_allocation": 2
+  },
+  "accepted": [
+    {
+      "kind": "global_chat_create",
+      "requestID": "isolated-global-conversation-shared",
+      "allocationID": "gca_2adb3dff4fad54c4b59a1ea7685cf40c6d4c1126de54348efa9d2a38716a2a3b",
+      "sessionID": "ses_hRuW2l6CINyrbPyBprF8",
+      "projectID": "prj_h1erfVQbf9BQfwnAeU22",
+      "projectGeneration": "5f402c33-5e02-4fc9-80e4-5d0ddb72eecc",
+      "projectRemoved": false
+    },
+    {
+      "kind": "global_work_create",
+      "requestID": "isolated-global-conversation-shared",
+      "allocationID": "gca_393acf6c1d5fd911da2e99e09b60668ec2fc07c538d2e8390d62f120799d478a",
+      "sessionID": "ses_hmwMrRv6WtUMHg3BANEj",
+      "projectID": "prj_hSyUCPeMUxoD0DOpbd6g",
+      "projectGeneration": "e9f35341-cfab-48ff-ae95-ffcece4c228e",
+      "projectRemoved": false
+    },
+    {
+      "kind": "global_chat_create",
+      "requestID": "isolated-independent-global-chat",
+      "allocationID": "gca_fcc6248ee92fae035fbae62065bca7e55c4ac6cb233f7985fbdb755dc8b1eecd",
+      "sessionID": "ses_hJmfH0MidQj5oEdE7KHP",
+      "projectID": "prj_hAOgfjdulGhuunEN4aTo",
+      "projectGeneration": "48832f1e-493c-4c99-8fbf-e90474d3ad4d",
+      "projectRemoved": false
+    },
+    {
+      "kind": "global_work_create",
+      "requestID": "isolated-deleted-global-work",
+      "allocationID": "gca_4d7455c2ff9b20ad3d14689df461dcbcb983f17e9ef1171f969ae79aa451b553",
+      "sessionID": "ses_hfPsxoz7MRtiuW6mtwr7",
+      "projectID": "prj_huZmKkJCCqBVkgVV0A3b",
+      "projectGeneration": "63c973b4-ab7a-48d7-84c9-d6e98338f240",
+      "projectRemoved": true
+    },
+    {
+      "kind": "global_work_create",
+      "requestID": "isolated-materialized-before-restart",
+      "allocationID": "gca_10c6f921a6a36ac3febb58a717620335fd37ca7f40360c571fce571ce3ed079d",
+      "sessionID": "ses_hLYkvrZDktgdey3hdj23",
+      "projectID": "prj_hch5ezAniYcd2cbY9HW7",
+      "projectGeneration": "7e7e4e38-e6bf-4e20-8269-6e1bc4e56603",
+      "projectRemoved": false
+    }
+  ],
+  "isolatedProjectGitHead": "4a61c95cb47bf5b7e98ee3e9868f9acfe921d826",
+  "isolatedProjectNotePreserved": true
+}

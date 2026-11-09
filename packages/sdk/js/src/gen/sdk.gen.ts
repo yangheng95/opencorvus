@@ -6602,15 +6602,26 @@ export class Chat3 extends HeyApiClient {
   /**
    * Create Chat in a temporary project
    *
-   * Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Chat session owned by it.
+   * Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Chat session owned by it. Reuse requestID to recover the same project and session after a lost response.
    */
   public create<ThrowOnError extends boolean = false>(
     parameters?: {
       model?: string
+      requestID?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "body", key: "model" }] }])
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "body", key: "model" },
+            { in: "body", key: "requestID" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).post<GlobalChatCreateResponses, GlobalChatCreateErrors, ThrowOnError>({
       url: "/global/chat",
       ...options,
@@ -7418,15 +7429,26 @@ export class Work2 extends HeyApiClient {
   /**
    * Create Work in a temporary project
    *
-   * Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Work session owned by it.
+   * Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Work session owned by it. Reuse requestID to recover the same project and session after a lost response.
    */
   public create<ThrowOnError extends boolean = false>(
     parameters?: {
       model?: string
+      requestID?: string
     },
     options?: Options<never, ThrowOnError>,
   ) {
-    const params = buildClientParams([parameters], [{ args: [{ in: "body", key: "model" }] }])
+    const params = buildClientParams(
+      [parameters],
+      [
+        {
+          args: [
+            { in: "body", key: "model" },
+            { in: "body", key: "requestID" },
+          ],
+        },
+      ],
+    )
     return (options?.client ?? this.client).post<GlobalWorkCreateResponses, GlobalWorkCreateErrors, ThrowOnError>({
       url: "/global/work",
       ...options,

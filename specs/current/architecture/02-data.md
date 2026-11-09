@@ -97,7 +97,7 @@ PASSIVE的busy/部分进度在下次周期继续；非暂态回写错误进入�
 
 ## 数据库版本化迁移
 
-当前版本为10，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
+当前版本为11，从新建的不可改写版本1基线开始支持自动迁移。唯一 registry 位于
 `src/storage/migrations/index.ts`，每版保存完整、不可改写的目标 SQL；后续结构或持久
 payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一已完成版本，当前
 `SCHEMA_DDL` 与 typed schema 继续定义唯一业务 reader/writer。`check:database-migrations`
@@ -120,6 +120,10 @@ payload 语义变更必须追加连续版本。`PRAGMA user_version` 是唯一�
 原Message、Tool输出、复制证据与源记录保持。压缩覆盖先验证原Part的精确摘要，
 只重绑定确实覆盖修复内容的条目，并按依赖顺序更新后续覆盖；历史已变化的绑定保留。
 原payload已丢失或跨Project的引用不能据猜测补造，保持明确读取错误。
+
+版本 11 允许现有全局创建分配接受无项目 Chat 或 Work，复用项目预留和 Session 接受事实。
+旧 Global Task、Global Chat Start 和 Automation 分配的所有列及行号由现有事务重建保留；
+升级前自动备份，保留原分配、项目和会话身份。新约束绑定请求体验、所属项目及初始配置事实。
 
 所有 CLI、服务及子执行进程经 `Database.Client` 在业务访问/恢复前进入同一个迁移器。
 旧版文件升级要求实际 Write-Ahead Logging（WAL，预写日志）模式，在原连接上取得

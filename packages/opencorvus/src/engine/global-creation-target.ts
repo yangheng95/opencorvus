@@ -10,6 +10,15 @@ import {
 } from "./task-creation-request"
 
 type RecordValue = Record<string, unknown>
+export type GlobalConversationCreationKind = "global_chat_create" | "global_work_create"
+
+export function globalConversationCreationKind(experience: "chat" | "work"): GlobalConversationCreationKind {
+  return experience === "chat" ? "global_chat_create" : "global_work_create"
+}
+
+export function globalConversationCreationSessionID(kind: GlobalConversationCreationKind, requestID: string): string {
+  return Identifier.deterministic("session", JSON.stringify(["global-conversation-create-v1", kind, requestID]))
+}
 
 function record(value: unknown, label: string): RecordValue {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error(`${label} must be an object`)
@@ -20,6 +29,30 @@ function equal(actual: unknown, expected: unknown, label: string): void {
   if (canonicalJSONValue(actual, label) !== canonicalJSONValue(expected, `${label} expected`)) {
     throw new Error(`${label} diverges from its frozen Global creation occurrence`)
   }
+}
+
+export function assertGlobalConversationCreationSession(input: {
+  kind: GlobalConversationCreationKind
+  requestID: string
+  requestContract: unknown
+  resolutionSeed: unknown
+  initialConfigOverlay: unknown
+  session: { id: unknown; kind: unknown; metadata?: unknown }
+}): void {
+  const experience = input.kind === "global_chat_create" ? "chat" : "work"
+  const request = record(input.requestContract, "Global conversation request")
+  const seed = record(input.resolutionSeed, "Global conversation resolution")
+  const metadata = record(input.session.metadata, "Global conversation Session metadata")
+  const conversation = record(metadata.conversation, "Global conversation experience")
+  if (
+    request.protocol !== "global-conversation-create-v1" || request.experience !== experience ||
+    input.session.id !== globalConversationCreationSessionID(input.kind, input.requestID) ||
+    input.session.kind !== "assistant" || conversation.surface !== "right-sidebar" || conversation.experience !== experience
+  ) {
+    throw new Error("Global conversation Session diverges from its allocated request identity")
+  }
+  equal(metadata.globalConversationCreation, { version: 1, requestID: input.requestID }, "Global conversation identity")
+  equal(input.initialConfigOverlay, record(seed.initialConfigOverlay, "Global conversation frozen overlay"), "Global conversation initial overlay")
 }
 
 export function expectedTaskRootOverlay(request: RecordValue, seed: ReturnType<typeof Config.Info.parse>) {

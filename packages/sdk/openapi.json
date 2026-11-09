@@ -81691,7 +81691,7 @@
     },
     "/global/chat": {
       "post": {
-        "description": "Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Chat session owned by it.",
+        "description": "Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Chat session owned by it. Reuse requestID to recover the same project and session after a lost response.",
         "operationId": "global.chat.create",
         "requestBody": {
           "content": {
@@ -81700,6 +81700,11 @@
                 "additionalProperties": false,
                 "properties": {
                   "model": {
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
+                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -81760,6 +81765,108 @@
               }
             },
             "description": "Chat creation rejected"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAllocationConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAcceptedTargetConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Chat creation identity conflicts with its accepted input or target"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAcceptedTargetUnavailableError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAllocatedProjectUnavailableError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "The accepted Chat or its carrying project is unavailable"
           }
         },
         "summary": "Create Chat in a temporary project",
@@ -86780,7 +86887,7 @@
     },
     "/global/work": {
       "post": {
-        "description": "Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Work session owned by it.",
+        "description": "Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Work session owned by it. Reuse requestID to recover the same project and session after a lost response.",
         "operationId": "global.work.create",
         "requestBody": {
           "content": {
@@ -86789,6 +86896,11 @@
                 "additionalProperties": false,
                 "properties": {
                   "model": {
+                    "type": "string"
+                  },
+                  "requestID": {
+                    "maxLength": 200,
+                    "minLength": 1,
                     "type": "string"
                   }
                 },
@@ -86849,6 +86961,108 @@
               }
             },
             "description": "Work creation rejected"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAllocationConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAcceptedTargetConflictError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "Work creation identity conflicts with its accepted input or target"
+          },
+          "410": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "anyOf": [
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAcceptedTargetUnavailableError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "properties": {
+                        "data": {
+                          "additionalProperties": {},
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "type": "object"
+                        },
+                        "name": {
+                          "const": "GlobalCreationAllocatedProjectUnavailableError",
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "name",
+                        "data"
+                      ],
+                      "type": "object"
+                    }
+                  ]
+                }
+              }
+            },
+            "description": "The accepted Work or its carrying project is unavailable"
           }
         },
         "summary": "Create Work in a temporary project",

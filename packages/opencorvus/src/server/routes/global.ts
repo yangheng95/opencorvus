@@ -67,6 +67,7 @@ const GlobalProviderAuthMutationResponse = z
 
 const GlobalConversationCreateRequest = z
   .object({
+    requestID: z.string().trim().min(1).max(200).optional(),
     model: Config.ModelId.optional(),
   })
   .strict()
@@ -398,7 +399,7 @@ export const GlobalRoutes = lazy(() =>
       describeRoute({
         summary: "Create Chat in a temporary project",
         description:
-          "Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Chat session owned by it.",
+          "Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Chat session owned by it. Reuse requestID to recover the same project and session after a lost response.",
         operationId: "global.chat.create",
         responses: {
           201: {
@@ -406,13 +407,16 @@ export const GlobalRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(RightSidebarConversationSessionResponse) } },
           },
           400: badRequestOrNamedErrorResponse("Chat creation rejected", "ProviderModelNotFoundError"),
+          409: namedErrorResponse("Chat creation identity conflicts with its accepted input or target", "GlobalCreationAllocationConflictError", "GlobalCreationAcceptedTargetConflictError"),
+          410: namedErrorResponse("The accepted Chat or its carrying project is unavailable", "GlobalCreationAcceptedTargetUnavailableError", "GlobalCreationAllocatedProjectUnavailableError"),
         },
       }),
       validator("json", GlobalConversationCreateRequest.optional()),
       async (c) =>
         c.json(
-          await GlobalConversationService.create({
+          await GlobalConversationService.createEmpty({
             experience: "chat",
+            requestID: c.req.valid("json")?.requestID,
             model: c.req.valid("json")?.model,
           }),
           201,
@@ -450,7 +454,7 @@ export const GlobalRoutes = lazy(() =>
       describeRoute({
         summary: "Create Work in a temporary project",
         description:
-          "Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Work session owned by it.",
+          "Create one dated UUID project under the OpenCorvus data directory and one right-sidebar Work session owned by it. Reuse requestID to recover the same project and session after a lost response.",
         operationId: "global.work.create",
         responses: {
           201: {
@@ -458,13 +462,16 @@ export const GlobalRoutes = lazy(() =>
             content: { "application/json": { schema: resolver(RightSidebarConversationSessionResponse) } },
           },
           400: badRequestOrNamedErrorResponse("Work creation rejected", "ProviderModelNotFoundError"),
+          409: namedErrorResponse("Work creation identity conflicts with its accepted input or target", "GlobalCreationAllocationConflictError", "GlobalCreationAcceptedTargetConflictError"),
+          410: namedErrorResponse("The accepted Work or its carrying project is unavailable", "GlobalCreationAcceptedTargetUnavailableError", "GlobalCreationAllocatedProjectUnavailableError"),
         },
       }),
       validator("json", GlobalConversationCreateRequest.optional()),
       async (c) =>
         c.json(
-          await GlobalConversationService.create({
+          await GlobalConversationService.createEmpty({
             experience: "work",
+            requestID: c.req.valid("json")?.requestID,
             model: c.req.valid("json")?.model,
           }),
           201,
