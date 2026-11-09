@@ -6,7 +6,9 @@ import {
   testCommandDeadlineAt,
 } from "@opencorvus-ai/util/test-runtime-environment"
 import { prepareTestProcessSupervisor } from "./prepare-test-process-supervisor"
+import { prepareProjectIndex } from "./prepare-project-index"
 
+prepareProjectIndex()
 const testProcessSupervisor = prepareTestProcessSupervisor()
 const runnerRuntime = await bootstrapIsolatedTestRuntime("runner")
 if (testProcessSupervisor) process.env.OPENCORVUS_PROCESS_SUPERVISOR = testProcessSupervisor

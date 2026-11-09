@@ -1414,8 +1414,11 @@ identity, including the directory suffix. Windows native and portable separators
 therefore match the same file; POSIX literal backslashes retain their identity.
 Hidden-directory preference consumes that same matching projection. The index,
 API result paths and file-opening authority remain the original sources.
-The completed shared file index orders its original file and directory paths
-before publication. Combined file/directory candidates use the same path order.
+Ordinary project searches publish actual file and directory paths from one native
+walk. The walk retains project ignore rules and does not recurse through links.
+Empty directories participate in the same index, with their original directory
+suffix. The completed index orders both kinds before publication. Combined
+file/directory candidates use the same path order.
 Its fuzzy candidates therefore have deterministic input order for equal-score
 bounded windows, independent of parallel scan arrival. Returned fuzzy results
 keep higher matching scores first and use original path order to resolve equal

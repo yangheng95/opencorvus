@@ -1,0 +1,32 @@
+{
+  "platform": "win32",
+  "files": 2049,
+  "directories": 512,
+  "emptyDirectories": 256,
+  "samples": [
+    {
+      "ripgrepMS": 68.8,
+      "indexMS": 128
+    },
+    {
+      "ripgrepMS": 56.3,
+      "indexMS": 126.3
+    },
+    {
+      "ripgrepMS": 56.7,
+      "indexMS": 122.8
+    },
+    {
+      "ripgrepMS": 60.7,
+      "indexMS": 125.1
+    },
+    {
+      "ripgrepMS": 58.4,
+      "indexMS": 167.2
+    }
+  ],
+  "medianMS": {
+    "ripgrep": 58.4,
+    "index": 126.3
+  }
+}

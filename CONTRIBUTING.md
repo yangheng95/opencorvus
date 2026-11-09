@@ -45,12 +45,16 @@ First check the [provider configuration guide](./packages/web/src/content/docs/p
 
 ## Developing OpenCorvus
 
-- Requirements: Bun 1.3.14 or newer
+- Requirements: Bun 1.3.14 or newer and [Rust through rustup](https://rust-lang.org/tools/install/) for source runtime builds
 - Install dependencies from the repo root:
 
   ```bash
   bun install
   ```
+
+The development and core test commands build the native project index from its
+locked dependencies. When invoking the source entry point directly, prepare the
+index first with `bun run --cwd packages/opencorvus prepare:project-index`.
 
 ### Windows runtime tests and binary builds
 

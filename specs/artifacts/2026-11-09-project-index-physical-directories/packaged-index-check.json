@@ -1,0 +1,18 @@
+{
+  "compileMode": "Windows compiled smoke entrypoint with production definitions",
+  "stage": "bin\\opencorvus-project-index.exe",
+  "executable": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b101\\package-proof\\bin\\opencorvus-project-index.exe",
+  "directories": [
+    "opal-empty",
+    "opal-nested",
+    "opal-nested\\opal-empty-child",
+    "opal-occupied"
+  ],
+  "files": [
+    "opal-occupied\\opal-note.txt"
+  ],
+  "missingRuntime": {
+    "exitCode": 1,
+    "expectedLocation": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b101\\package-missing-proof\\bin\\opencorvus-project-index.exe"
+  }
+}

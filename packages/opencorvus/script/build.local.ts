@@ -30,7 +30,7 @@ import {
 } from "./build-artifact"
 import { detectArtifactNodeRuntimeHost } from "./build-host-runtime"
 import { copyRuntimeNodeModules, writePackagedRuntimePackageJson } from "./build-runtime-node-modules"
-import { copyOfficeCliRuntime, copyRipgrepRuntime, WORK_ARTIFACT_RUNTIME_LOCK } from "./build-runtime-binaries"
+import { copyOfficeCliRuntime, copyProjectIndexRuntime, copyRipgrepRuntime, WORK_ARTIFACT_RUNTIME_LOCK } from "./build-runtime-binaries"
 import { normalizeArtifactExecutablePermissions } from "./runtime-executable-contract"
 import { writeWorkArtifactTargetPackageManifest } from "../src/work-artifact/runtime/package-manifest"
 import { cleanBuildDist } from "./build-clean"
@@ -399,12 +399,14 @@ for (const item of targets) {
     target: item,
     version: Script.version,
   })
+  const runtimeHost = await detectArtifactNodeRuntimeHost()
   await copyRipgrepRuntime({
     target: item,
-    host: await detectArtifactNodeRuntimeHost(),
+    host: runtimeHost,
     outdir: path.join(dir, "dist", name),
     env: process.env,
   })
+  await copyProjectIndexRuntime({ target: item, host: runtimeHost, outdir: path.join(dir, "dist", name) })
   await copyOfficeCliRuntime({
     target: item,
     outdir: path.join(dir, "dist", name),

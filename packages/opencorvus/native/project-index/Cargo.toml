@@ -1,0 +1,11 @@
+[package]
+name = "opencorvus-project-index"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+ignore = "=0.4.34"
+
+[profile.release]
+strip = true

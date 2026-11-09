@@ -8,7 +8,8 @@
   "scripts": {
     "typecheck": "node --max-old-space-size=8192 node_modules/typescript/bin/tsc --noEmit",
     "test": "bun script/run-tests.ts",
-    "prepare:test-runtime": "bun script/prepare-test-process-supervisor.ts",
+    "prepare:project-index": "bun script/prepare-project-index.ts",
+    "prepare:test-runtime": "bun run prepare:project-index && bun script/prepare-test-process-supervisor.ts",
     "build": "bun run script/build.ts",
     "precheck:permission-modes": "bun script/prepare-test-process-supervisor.ts",
     "check:permission-modes": "bun run script/run-with-inactivity.ts --inactivity-ms 120000 -- bun run script/permission-modes-check-worker.ts",
@@ -20,6 +21,7 @@
     "check:control-state-redundancy": "bun run script/control-state-redundancy-check.ts",
     "check:compaction-stress": "bun run script/compaction-stress.ts",
     "check:compaction-crash": "bun run script/compaction-crash-check.ts",
+    "predev": "bun run prepare:project-index",
     "dev": "bun ./src/index.ts",
     "check:control-lease-owners": "bun run script/check/control-lease-owners.ts"
   },

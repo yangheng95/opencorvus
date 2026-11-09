@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [项目搜索索引包含物理空目录](records/2026-11/2026-11-09-project-index-physical-directories.md)
 - [官方用量文档链接名称](records/2026-11/2026-11-09-usage-official-docs-accessible-name.md)
 - [用量对账的展开选择](records/2026-11/2026-11-09-usage-reconciliation-disclosure-intent.md)
 - [用量图表随有效数据展示](records/2026-11/2026-11-09-usage-chart-only-with-accepted-data.md)

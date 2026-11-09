@@ -1,6 +1,7 @@
 import { createRequire } from "node:module"
 import path from "node:path"
 import { nodeBinaryPackageName, nodeExecutableName } from "@opencorvus-ai/util/node-runtime"
+import { projectIndexExecutableName } from "../src/runtime/project-index"
 
 export type BuildFlavor = "cli" | "overlay-server"
 
@@ -110,6 +111,7 @@ export function artifactEmbeddedExecutableRelativePaths(os: string = process.pla
   const executables = [
     artifactExecutableName(os),
     path.join("bin", artifactRipgrepExecutableName(os)),
+    path.join("bin", projectIndexExecutableName(os)),
     path.join("bin", artifactOfficeCliExecutableName(os)),
     path.join("browser-mcp-node", artifactBrowserMcpNodeExecutableName(os)),
   ]

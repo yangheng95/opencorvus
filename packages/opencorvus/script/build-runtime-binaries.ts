@@ -17,6 +17,8 @@ import {
   officeCliRuntimeAsset,
 } from "./work-artifact-runtime-lock"
 import { officeCliRuntime } from "../src/work-artifact/runtime/runtime-lock"
+import { projectIndexExecutableName } from "../src/runtime/project-index"
+import { prepareProjectIndex } from "./prepare-project-index"
 
 export { OFFICECLI_RUNTIME_VERSION, officeCliRuntimeAsset } from "./work-artifact-runtime-lock"
 export { WORK_ARTIFACT_RUNTIME_LOCK } from "./work-artifact-runtime-lock"
@@ -181,6 +183,22 @@ export async function copyRipgrepRuntime(input: {
   if (input.target.os !== "win32") {
     await fs.promises.chmod(destination, 0o755)
   }
+  return destination
+}
+
+export async function copyProjectIndexRuntime(input: {
+  host: ArtifactNodeRuntimeHost
+  outdir: string
+  target: ArtifactNodeRuntimeTarget
+}): Promise<string> {
+  if (!artifactHostCanProvideNodeRuntime(input.target, input.host)) {
+    throw new Error(`Cannot build the project index for ${targetName(input.target)} from ${hostName(input.host)}.`)
+  }
+  const executable = prepareProjectIndex()
+  const destination = path.join(input.outdir, "bin", projectIndexExecutableName(input.target.os))
+  await fs.promises.mkdir(path.dirname(destination), { recursive: true })
+  await fs.promises.copyFile(executable, destination)
+  if (input.target.os !== "win32") await fs.promises.chmod(destination, 0o755)
   return destination
 }
 

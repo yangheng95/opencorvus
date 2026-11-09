@@ -1,0 +1,23 @@
+{
+  "empty": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in opal-empty, ID: dropdownmenu-cl-210-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t91 button (expanded) Description: opal-empty · Selected for file actions, ID: contextmenu-cl-219-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t92 button (collapsed) opal-ignored, ID: contextmenu-cl-223-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t93 button (collapsed) opal-nested, ID: contextmenu-cl-227-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t94 button (collapsed) opal-occupied, ID: contextmenu-cl-231-trigger, Secondary Actions: Expand",
+    "The focused UI element is 91 button (expanded) Description: opal-empty · Selected for file actions, ID: contextmenu-cl-219-trigger, Secondary Actions: Collapse"
+  ],
+  "nested": [
+    "\t\t\t\t\t\t\t\t\t\t83 search text field (settable) Search files",
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in opal-nested, ID: dropdownmenu-cl-210-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t93 button (expanded) Description: opal-nested · Selected for file actions, ID: contextmenu-cl-227-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t97 button (collapsed) opal-empty-child, Help: opal-nested/opal-empty-child, ID: contextmenu-cl-241-trigger, Secondary Actions: Expand",
+    "The focused UI element is 93 button (expanded) Description: opal-nested · Selected for file actions, ID: contextmenu-cl-227-trigger, Secondary Actions: Collapse"
+  ],
+  "file": [
+    "\t\t\t\t\t\t\t\t\t\t83 search text field (settable) Description: Search files, Value: opal-note",
+    "\t\t\t\t\t\t\t\t\t92 button opal-note.txt opal-occupied, Help: opal-occupied\\opal-note.txt, ID: contextmenu-cl-247-trigger",
+    "\t\t\t\t\t\t\t\t\t\t93 text opal-note.txt",
+    "The focused UI element is 83 search text field (settable) Description: Search files, Value: opal-note"
+  ]
+}

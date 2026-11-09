@@ -14,7 +14,7 @@ import { Instance } from "../project/instance"
 import { createInstanceState } from "../project/instance-state"
 import { Project } from "../project/project"
 import { PromotionJournal } from "../project/promotion-journal"
-import { Ripgrep } from "./ripgrep"
+import { readProjectIndex, type ProjectIndex } from "./project-index"
 import fuzzysort from "fuzzysort"
 import { Global } from "../global"
 import { NamedError } from "@opencorvus-ai/util/error"
@@ -739,13 +739,12 @@ export namespace File {
 
   const state = createInstanceState(
     async () => {
-      type Entry = { files: string[]; dirs: string[] }
-      let cache: Entry = { files: [], dirs: [] }
-      let fetching: Promise<Entry> | undefined
+      let cache: ProjectIndex = { files: [], dirs: [] }
+      let fetching: Promise<ProjectIndex> | undefined
 
       const isHomeDirectory = Filesystem.resolve(Instance.directory) === Filesystem.resolve(Global.Path.home)
 
-      const scan = async (result: Entry): Promise<Entry> => {
+      const scan = async (): Promise<ProjectIndex> => {
         // Disable scanning if in root of file system
         if (Instance.directory === path.parse(Instance.directory).root) return cache
 
@@ -786,34 +785,20 @@ export namespace File {
             }
           }
 
-          result.dirs = Array.from(dirs).toSorted()
-          cache = result
+          cache = { files: [], dirs: Array.from(dirs).toSorted() }
           return cache
         }
 
-        const set = new Set<string>()
-        for await (const file of Ripgrep.filesForHost({ cwd: Instance.directory })) {
-          result.files.push(file)
-          let current = file
-          while (true) {
-            const dir = path.dirname(current)
-            if (dir === ".") break
-            if (dir === current) break
-            current = dir
-            if (set.has(dir)) continue
-            set.add(dir)
-            result.dirs.push(dir + "/")
-          }
-        }
-        // Parallel enumeration order must not decide equal-score search windows.
+        const result = await readProjectIndex(Instance.directory)
+        // Enumeration order must not decide equal-score search windows.
         result.files.sort()
         result.dirs.sort()
         cache = result
         return cache
       }
       const refresh = () => {
-        const request = scan({ files: [], dirs: [] })
-        let tracked: Promise<Entry>
+        const request = scan()
+        let tracked: Promise<ProjectIndex>
         tracked = request.finally(() => {
           if (fetching === tracked) {
             fetching = undefined

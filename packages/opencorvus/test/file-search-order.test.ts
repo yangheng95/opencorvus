@@ -94,6 +94,36 @@ test("serves each project's exact original file paths through the public search 
   expect(await Promise.all([leftAPI.search("left/entry.txt"), rightAPI.search("right/entry.txt")])).toEqual(expected)
 })
 
+test("finds physical empty directories and eligible files in their own projects", async () => {
+  await using project = await memoryProject("project-directory-identities")
+  await using sibling = await memoryProject("sibling-directory-identities")
+  const directories = [
+    "scope-empty",
+    "scope-parent",
+    path.join("scope-parent", "scope-empty-child"),
+    "scope-occupied",
+    "scope-文件夹",
+  ]
+  for (const directory of [...directories, "scope-git-ignored", "scope-ignored", "scope-rg-ignored"]) {
+    await fs.mkdir(path.join(project.path, directory), { recursive: true })
+  }
+  await fs.writeFile(path.join(project.path, ".gitignore"), "scope-git-ignored/\n")
+  await fs.writeFile(path.join(project.path, ".ignore"), "scope-ignored/\n")
+  await fs.writeFile(path.join(project.path, ".rgignore"), "scope-rg-ignored/\n")
+  await fs.writeFile(path.join(project.path, "scope-occupied", "scope-note.txt"), "visible file\n")
+  await fs.mkdir(path.join(sibling.path, "scope-sibling-empty"))
+
+  await using projectAPI = await api(project.path)
+  await using siblingAPI = await api(sibling.path)
+  const [fromProject, fromSibling] = await Promise.all([
+    projectAPI.search("scope-", "directory", 20),
+    siblingAPI.search("scope-", "directory", 20),
+  ])
+  expect(fromProject.sort()).toEqual(directories.map((directory) => directory + "/").sort())
+  expect(fromSibling).toEqual(["scope-sibling-empty/"])
+  expect(await projectAPI.search("scope-note.txt")).toEqual([path.join("scope-occupied", "scope-note.txt")])
+})
+
 test("ranks visible directory matches before hidden matches within every result window", async () => {
   await using project = await memoryProject("directory-search-visible-priority")
   for (let index = 0; index < 25; index++) {

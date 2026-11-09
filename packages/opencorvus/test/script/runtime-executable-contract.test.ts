@@ -65,8 +65,8 @@ test("runtime executable discovery reads native binaries below a namespaced long
 })
 
 test("embedded executable paths project host and package OS aliases", () => {
-  const windows = ["opencorvus.exe", "bin/rg.exe", "bin/officecli.exe", "browser-mcp-node/node.exe", "opencorvus-process-supervisor.exe"]
-  const posix = ["opencorvus", "bin/rg", "bin/officecli", "browser-mcp-node/node"]
+  const windows = ["opencorvus.exe", "bin/rg.exe", "bin/opencorvus-project-index.exe", "bin/officecli.exe", "browser-mcp-node/node.exe", "opencorvus-process-supervisor.exe"]
+  const posix = ["opencorvus", "bin/rg", "bin/opencorvus-project-index", "bin/officecli", "browser-mcp-node/node"]
   const root = path.resolve(os.tmpdir(), "artifact-path-contract")
   for (const platform of ["win32", "windows", "windows-x64", "linux", "darwin"]) {
     const expected = platform === "linux" || platform === "darwin" ? posix : windows
@@ -114,6 +114,7 @@ test.each(["win32", "windows", "windows-x64"])("Windows permission normalization
     const closure = await inspectArtifactExecutableClosure({ root, os: platform })
     expect(closure.map((entry) => ({ path: path.relative(root, entry.path).replaceAll("\\", "/"), kind: entry.kind }))).toEqual([
       { path: "bin/officecli.exe", kind: "executable" },
+      { path: "bin/opencorvus-project-index.exe", kind: "executable" },
       { path: "bin/rg.exe", kind: "executable" },
       { path: "browser-mcp-node/node.exe", kind: "executable" },
       { path: "opencorvus-process-supervisor.exe", kind: "executable" },

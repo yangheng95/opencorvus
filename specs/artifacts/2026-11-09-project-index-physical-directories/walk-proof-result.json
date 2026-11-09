@@ -1,0 +1,58 @@
+{
+  "sample": {
+    "prior": [
+      ".gitattributes",
+      ".gitignore",
+      ".opencorvus\\opencorvus.jsonc",
+      "opal-occupied\\opal-note.txt"
+    ],
+    "files": [
+      ".gitattributes",
+      ".gitignore",
+      ".opencorvus\\opencorvus.jsonc",
+      "opal-occupied\\opal-note.txt"
+    ],
+    "dirs": [
+      ".opencorvus",
+      "opal-empty",
+      "opal-nested",
+      "opal-nested\\opal-empty-child",
+      "opal-occupied"
+    ],
+    "ripgrepMS": 43,
+    "candidateMS": 97
+  },
+  "matrix": {
+    "prior": [
+      ".gitignore",
+      ".hidden\\inner\\visible.txt",
+      ".ignore",
+      ".rgignore",
+      "admitted.txt",
+      "regular\\.rgignore",
+      "regular\\inner\\visible.txt",
+      "unicode-文件\\inner\\visible.txt"
+    ],
+    "files": [
+      ".gitignore",
+      ".hidden\\inner\\visible.txt",
+      ".ignore",
+      ".rgignore",
+      "admitted.txt",
+      "regular\\.rgignore",
+      "regular\\inner\\visible.txt",
+      "unicode-文件\\inner\\visible.txt"
+    ],
+    "dirs": [
+      ".hidden",
+      ".hidden\\inner",
+      "regular",
+      "regular\\inner",
+      "unicode-文件",
+      "unicode-文件\\inner",
+      "visible-empty"
+    ],
+    "ripgrepMS": 62,
+    "candidateMS": 31
+  }
+}

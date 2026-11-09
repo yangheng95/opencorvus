@@ -1,0 +1,94 @@
+{
+  "projects": {
+    "before": {
+      "head": "4e62634372920fc9152f00f725e9c1a9593efdcb",
+      "input": "opal-occupied/opal-note.txt",
+      "inputBytes": 36,
+      "bootstrapFiles": [
+        " M .gitignore",
+        "?? .gitattributes",
+        "?? .opencorvus/"
+      ]
+    },
+    "after": {
+      "head": "73988a00570bfa1b5f205f035acc46df6af03945",
+      "input": "opal-occupied/opal-note.txt",
+      "inputBytes": 36,
+      "bootstrapFiles": [
+        " M .gitignore",
+        "?? .gitattributes",
+        "?? .opencorvus/"
+      ]
+    },
+    "sibling": {
+      "head": "2b38bd5e85335b1396c90d2f40400422f9577a0f",
+      "input": "control.txt",
+      "inputBytes": 26,
+      "bootstrapFiles": []
+    }
+  },
+  "profiles": {
+    "before": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "after": {
+      "project": 2,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "tool-check": {
+      "project": 1,
+      "session": 1,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    }
+  },
+  "shutdown": [
+    {
+      "phase": "before",
+      "pid": 5972,
+      "port": 39137,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "httpShutdown": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSzURq00r0E9NfS54"
+      }
+    },
+    {
+      "phase": "after",
+      "pid": 18884,
+      "port": 39138,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "httpShutdown": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaT2mr0001wv5DgFbG"
+      }
+    },
+    {
+      "phase": "after-final",
+      "pid": 3544,
+      "port": 39138,
+      "processPresent": false,
+      "listenerPresent": false,
+      "shellExitCode": 0,
+      "httpShutdown": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaT406m00O4ZfdiYos"
+      }
+    }
+  ]
+}

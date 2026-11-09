@@ -255,15 +255,15 @@ jobs:
         shell: pwsh
         run: ./script/install-windows-ripgrep.ps1
 
-      - name: Setup Rust for the Windows process supervisor
-        if: runner.os == 'Windows'
+      - name: Set up Rust for the native runtime helpers
         uses: dtolnay/rust-toolchain@stable
 
-      - name: Cache the Windows process supervisor build
-        if: runner.os == 'Windows'
+      - name: Cache native runtime helper builds
         uses: Swatinem/rust-cache@v2
         with:
-          workspaces: packages/opencorvus/native/process-supervisor -> target
+          workspaces: |
+            packages/opencorvus/native/project-index -> target
+            packages/opencorvus/native/process-supervisor -> target
 
       - name: Install Office preview renderer browser
         working-directory: packages/opencorvus

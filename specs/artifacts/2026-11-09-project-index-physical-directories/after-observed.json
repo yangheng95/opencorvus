@@ -1,0 +1,35 @@
+{
+  "root": [
+    "\t\t\t\t\t\t\t\t\t\t83 search text field (settable) Search files",
+    "\t\t\t\t\t\t\t\t\t\t87 button (collapsed) opal-empty, ID: contextmenu-cl-215-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t88 button (collapsed) opal-ignored, ID: contextmenu-cl-219-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t89 button (collapsed) opal-nested, ID: contextmenu-cl-223-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t90 button (collapsed) opal-occupied, ID: contextmenu-cl-227-trigger, Secondary Actions: Expand",
+    "The focused UI element is 52 button Browse files"
+  ],
+  "folder": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in opal-empty, ID: dropdownmenu-cl-206-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t87 button (expanded) Description: opal-empty · Selected for file actions, ID: contextmenu-cl-215-trigger, Secondary Actions: Collapse",
+    "The focused UI element is 87 button (expanded) Description: opal-empty · Selected for file actions, ID: contextmenu-cl-215-trigger, Secondary Actions: Collapse"
+  ],
+  "file": [
+    "\t\t\t\t\t\t\t\t\t\t83 search text field (settable) Description: Search files, Value: opal-note",
+    "\t\t\t\t\t\t\t\t\t99 button opal-note.txt opal-occupied, Help: opal-occupied\\opal-note.txt, ID: contextmenu-cl-239-trigger",
+    "\t\t\t\t\t\t\t\t\t\t100 text opal-note.txt",
+    "The focused UI element is 83 search text field (settable) Description: Search files, Value: opal-note"
+  ],
+  "opened": [
+    "\t\t\t\t\t\t\t\t\t\t83 text opal-note.txt",
+    "\t\t\t\t\t\t\t\t\t\t86 button (disabled) Close file opal-note.txt",
+    "\t\t\t\t\t\t\t\t\t\t87 text opal-occupied/opal-note.txt",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39138/ui/"
+  ],
+  "loaded": [
+    "\t\t\t\t\t\t\t\t\t\t83 text opal-note.txt",
+    "\t\t\t\t\t\t\t\t\t\t89 button Close file opal-note.txt",
+    "\t\t\t\t\t\t\t\t\t\t90 text opal-occupied/opal-note.txt",
+    "\t\t\t\t\t\t\t\t\t\t92 text entry area (settable) Description: opal-note.txt, Value: Owned positive file search control.",
+    "\t\t\t\t\t\t\t\t\t\t\t93 text Owned positive file search control.",
+    "The focused UI element is 92 text entry area (settable) Description: opal-note.txt, Value: Owned positive file search control."
+  ]
+}

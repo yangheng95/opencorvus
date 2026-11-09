@@ -1,0 +1,179 @@
+{
+  "base": "http://127.0.0.1:39137",
+  "read": [
+    {
+      "route": "/file",
+      "query": {
+        "path": ""
+      },
+      "status": 200,
+      "body": [
+        {
+          "name": ".opencorvus",
+          "path": ".opencorvus",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b101\\project-before\\.opencorvus",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        },
+        {
+          "name": "opal-empty",
+          "path": "opal-empty",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b101\\project-before\\opal-empty",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        },
+        {
+          "name": "opal-ignored",
+          "path": "opal-ignored",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b101\\project-before\\opal-ignored",
+          "type": "directory",
+          "ignored": true,
+          "directoryTarget": true
+        },
+        {
+          "name": "opal-nested",
+          "path": "opal-nested",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b101\\project-before\\opal-nested",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        },
+        {
+          "name": "opal-occupied",
+          "path": "opal-occupied",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b101\\project-before\\opal-occupied",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        },
+        {
+          "name": ".gitattributes",
+          "path": ".gitattributes",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b101\\project-before\\.gitattributes",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        },
+        {
+          "name": ".gitignore",
+          "path": ".gitignore",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b101\\project-before\\.gitignore",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    {
+      "route": "/file",
+      "query": {
+        "path": "opal-empty"
+      },
+      "status": 200,
+      "body": []
+    },
+    {
+      "route": "/file",
+      "query": {
+        "path": "opal-nested"
+      },
+      "status": 200,
+      "body": [
+        {
+          "name": "opal-empty-child",
+          "path": "opal-nested\\opal-empty-child",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b101\\project-before\\opal-nested\\opal-empty-child",
+          "type": "directory",
+          "ignored": false,
+          "directoryTarget": true
+        }
+      ]
+    },
+    {
+      "route": "/file",
+      "query": {
+        "path": "opal-occupied"
+      },
+      "status": 200,
+      "body": [
+        {
+          "name": "opal-note.txt",
+          "path": "opal-occupied\\opal-note.txt",
+          "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b101\\project-before\\opal-occupied\\opal-note.txt",
+          "type": "file",
+          "ignored": false,
+          "directoryTarget": false
+        }
+      ]
+    },
+    {
+      "route": "/find/file",
+      "query": {
+        "query": "opal-empty",
+        "type": "directory",
+        "limit": "25"
+      },
+      "status": 200,
+      "body": []
+    },
+    {
+      "route": "/find/file",
+      "query": {
+        "query": "opal-empty-child",
+        "type": "directory",
+        "limit": "25"
+      },
+      "status": 200,
+      "body": []
+    },
+    {
+      "route": "/find/file",
+      "query": {
+        "query": "opal-occupied",
+        "type": "directory",
+        "limit": "25"
+      },
+      "status": 200,
+      "body": [
+        "opal-occupied/"
+      ]
+    },
+    {
+      "route": "/find/file",
+      "query": {
+        "query": "opal-note",
+        "type": "file",
+        "limit": "25"
+      },
+      "status": 200,
+      "body": [
+        "opal-occupied\\opal-note.txt"
+      ]
+    },
+    {
+      "route": "/find/file",
+      "query": {
+        "query": "opal-ignored",
+        "type": "directory",
+        "limit": "25"
+      },
+      "status": 200,
+      "body": []
+    },
+    {
+      "route": "/find/file",
+      "query": {
+        "query": "",
+        "type": "directory",
+        "limit": "25"
+      },
+      "status": 200,
+      "body": [
+        "opal-occupied/",
+        ".opencorvus/"
+      ]
+    }
+  ]
+}
