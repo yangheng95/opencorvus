@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test"
-import { normalizeProjectFilePath, pathWithForwardSeparators, resolveDocumentFilePath } from "../src/utils/server-path"
+import { classifyProjectPathInput, normalizeProjectFilePath, pathWithForwardSeparators, resolveDocumentFilePath } from "../src/utils/server-path"
 import { projectDirectoryKey } from "../src/utils/project-directory"
 
 test.each([
@@ -35,6 +35,23 @@ test.each([
 test("absolute path presentation retains roots, case and filename whitespace", () => {
   expect(pathWithForwardSeparators("C:\\Folder\\ File.md", "C:\\repo")).toBe("C:/Folder/ File.md")
   expect(pathWithForwardSeparators("/Folder/file\\name.md ", "/repo")).toBe("/Folder/file\\name.md ")
+})
+
+test.each([
+  ["C:/repo", "/dest/file.md", "rooted"],
+  ["C:/repo", "\\dest\\file.md", "rooted"],
+  ["C:/repo", "D:\\dest\\file.md", "rooted"],
+  ["C:/repo", "D:dest\\file.md", "rooted"],
+  ["C:/repo", "\\\\host\\share\\file.md", "rooted"],
+  ["\\\\host\\share\\repo", "\\dest\\file.md", "rooted"],
+  ["C:/repo", ".\\dest\\ file.md", "relative"],
+  ["C:/repo", ".", "relative"],
+  ["/repo", "/dest/file.md", "rooted"],
+  ["/repo", "\\dest\\file.md", "relative"],
+  ["/repo", "D:/dest/file.md", "relative"],
+  ["/repo", " /dest/ File.md ", "relative"],
+])("raw project path syntax for %s / %s is %s", (directory, input, expected) => {
+  expect(classifyProjectPathInput(input, directory)).toBe(expected)
 })
 
 test.each([

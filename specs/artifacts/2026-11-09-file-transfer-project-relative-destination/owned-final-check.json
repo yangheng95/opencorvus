@@ -1,0 +1,120 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b87\\project-before",
+    "head": "1d37b3bd36e93dccb30536ebd5f078603162569e",
+    "fileLengths": {
+      "single.txt": 33,
+      "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/move-a.txt": 18,
+      "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/move-b.txt": 19,
+      "dest/anchor.txt": 21,
+      "move-dest/anchor.txt": 21,
+      "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/anchor.txt": 33
+    },
+    "copy": "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/wrong-place.txt",
+    "moves": {
+      "move-a.txt": "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/move-a.txt",
+      "move-b.txt": "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/move-b.txt"
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "requests": [
+      {
+        "requestID": "5c66d462-1a23-4e77-a22d-1fc22bc356ea",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 400,
+        "duration": 406
+      },
+      {
+        "requestID": "a3ee1ecf-a1d9-44cb-b054-561fdb8121fa",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 106
+      },
+      {
+        "requestID": "077efd7d-85ca-4bd7-9b3c-dafd2048adbf",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 81
+      },
+      {
+        "requestID": "6dfce9fc-4ad2-4b16-914f-df91447cccbb",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 70
+      }
+    ],
+    "trackedDiff": [
+      "D\tmove-a.txt",
+      "D\tmove-b.txt"
+    ]
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b87\\project-after",
+    "head": "078e398e6637cab073f59611d3a7d0b9c3e1e1dc",
+    "fileLengths": {
+      "single.txt": 33,
+      "move-dest/move-a.txt": 18,
+      "move-dest/move-b.txt": 19,
+      "dest/anchor.txt": 21,
+      "move-dest/anchor.txt": 21,
+      "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-after/anchor.txt": 33
+    },
+    "copy": "dest/checked-copy.txt",
+    "moves": {
+      "move-a.txt": "move-dest/move-a.txt",
+      "move-b.txt": "move-dest/move-b.txt"
+    },
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "requests": [
+      {
+        "requestID": "365da5bc-42e9-49f4-b803-17fb54d2afbf",
+        "method": "POST",
+        "path": "/file/item/copy",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 95
+      },
+      {
+        "requestID": "b897bbee-a49c-402e-9f9f-ad18ed2a6026",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 78
+      },
+      {
+        "requestID": "57d53fe7-64a4-4600-8e0d-c987f0f5514e",
+        "method": "PATCH",
+        "path": "/file/item",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 63
+      }
+    ],
+    "trackedDiff": [
+      "D\tmove-a.txt",
+      "D\tmove-b.txt"
+    ]
+  }
+}

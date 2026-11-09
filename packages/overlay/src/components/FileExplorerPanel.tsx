@@ -42,7 +42,7 @@ import {
   type FileRefreshTarget,
   type FileUploadResult,
 } from "../services/file-workbench"
-import { normalizeProjectFilePath } from "../utils/server-path"
+import { classifyProjectPathInput, normalizeProjectFilePath } from "../utils/server-path"
 import { projectDisplayName } from "../utils/project-directory"
 import { currentUIScale } from "../utils/layout-tokens"
 import { localeTag, t, tc } from "../utils/i18n"
@@ -584,6 +584,10 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
 
   function normalizeExplorerPath(path: string): string {
     return normalizeProjectFilePath(path, directory())
+  }
+
+  function validateTransferDestination(path: string, scope: FileOperationScope): string | undefined {
+    if (classifyProjectPathInput(path, scope.directory) === "rooted") return t("explorer.destination_relative_required")
   }
 
   function joinExplorerPath(parent: string, child: string): string {
@@ -1626,6 +1630,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputValue: item.path,
       inputRequired: true,
       inputRequiredMessage: t("explorer.name_required"),
+      validateInput: (value) => validateTransferDestination(value, scope),
       okLabel: t("explorer.move"),
       cancel: true,
       returnFocusTarget: focus.returnFocusTarget,
@@ -1677,6 +1682,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputPlaceholder: "src",
       inputRequired: true,
       inputRequiredMessage: t("explorer.name_required"),
+      validateInput: (value) => validateTransferDestination(value, scope),
       okLabel: t("explorer.move"),
       cancel: true,
       returnFocusTarget: focus.returnFocusTarget,
@@ -1744,6 +1750,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputValue: joinExplorerPath(parentPath(item.path), copyNameSuggestion(item.path)),
       inputRequired: true,
       inputRequiredMessage: t("explorer.name_required"),
+      validateInput: (value) => validateTransferDestination(value, scope),
       okLabel: t("explorer.copy"),
       cancel: true,
       returnFocusTarget: focus.returnFocusTarget,
@@ -1798,6 +1805,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
       inputPlaceholder: "src",
       inputRequired: true,
       inputRequiredMessage: t("explorer.name_required"),
+      validateInput: (value) => validateTransferDestination(value, scope),
       okLabel: t("explorer.copy"),
       cancel: true,
       returnFocusTarget: focus.returnFocusTarget,

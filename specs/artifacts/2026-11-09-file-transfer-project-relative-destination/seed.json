@@ -1,0 +1,30 @@
+{
+  "before": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b87\\project-before",
+    "head": "1d37b3bd36e93dccb30536ebd5f078603162569e",
+    "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b87\\absolute-before",
+    "mirror": "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before",
+    "files": {
+      "single.txt": "one absolute destination source\r\n",
+      "move-a.txt": "first move source\n",
+      "move-b.txt": "second move source\n",
+      "dest/anchor.txt": "relative copy target\n",
+      "move-dest/anchor.txt": "relative move target\n",
+      "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/anchor.txt": "intent marker for project mirror\n"
+    }
+  },
+  "after": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b87\\project-after",
+    "head": "078e398e6637cab073f59611d3a7d0b9c3e1e1dc",
+    "absolute": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b87\\absolute-after",
+    "mirror": "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-after",
+    "files": {
+      "single.txt": "one absolute destination source\r\n",
+      "move-a.txt": "first move source\n",
+      "move-b.txt": "second move source\n",
+      "dest/anchor.txt": "relative copy target\n",
+      "move-dest/anchor.txt": "relative move target\n",
+      "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-after/anchor.txt": "intent marker for project mirror\n"
+    }
+  }
+}

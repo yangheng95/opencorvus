@@ -1,3 +1,5 @@
+const WINDOWS_DRIVE_PREFIX = /^([a-z]):(\/)?/i
+
 /** Absolute server paths determine syntax; the browser's platform does not. */
 export function isAbsoluteServerPath(path: string): boolean {
   return /^(?:[A-Za-z]:[\\/]|[\\/]{2}|\/)/.test(path)
@@ -11,10 +13,18 @@ export function pathWithForwardSeparators(path: string, serverPath: string): str
   return isWindowsPath(serverPath) ? path.replaceAll("\\", "/") : path
 }
 
+/** Classify raw input before resolving it against a project directory. */
+export function classifyProjectPathInput(path: string, directory: string): "relative" | "rooted" {
+  const normalized = pathWithForwardSeparators(path, directory)
+  return normalized.startsWith("/") || (isWindowsPath(directory) && WINDOWS_DRIVE_PREFIX.test(normalized))
+    ? "rooted"
+    : "relative"
+}
+
 /** Lexical normalization retains filename case and never resolves filesystem aliases. */
 export function normalizeServerPath(path: string, windows: boolean): string {
   const normalized = windows ? path.replaceAll("\\", "/") : path
-  const drive = windows ? /^([a-z]):(\/)?(.*)$/i.exec(normalized) : null
+  const drive = windows ? WINDOWS_DRIVE_PREFIX.exec(normalized) : null
   const unc = windows && !drive ? /^\/{2,}([^/]+)\/+([^/]+)(?:\/+|$)(.*)$/.exec(normalized) : null
   const absolute = Boolean(drive?.[2] || unc || normalized.startsWith("/"))
   const root = drive
@@ -24,7 +34,7 @@ export function normalizeServerPath(path: string, windows: boolean): string {
       : normalized.startsWith("/")
         ? "/"
         : ""
-  const remainder = drive ? drive[3]! : unc ? unc[3]! : normalized.replace(/^\/+/, "")
+  const remainder = drive ? normalized.slice(drive[0].length) : unc ? unc[3]! : normalized.replace(/^\/+/, "")
   const segments: string[] = []
   for (const segment of remainder.split(/\/+/)) {
     if (!segment || segment === ".") continue

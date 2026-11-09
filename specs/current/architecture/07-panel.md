@@ -1608,6 +1608,13 @@ Batch Move and Copy confirmation and execution share the same ordered list of
 top-level source paths. Selected descendants are covered by their selected
 folder. A single effective path is named directly; the details of a batch with
 multiple effective paths list them in execution order.
+Move and Copy text inputs accept destinations relative to the current Project.
+The dialog validates the raw input using that Project's server path syntax
+before normalizing a relative key. A rooted destination leaves its original
+text and focus in the field with a localized correction. The file service
+continues to own containment, parent checks and the write itself.
+Shared dialog text fields keep their visible label as the accessible name and
+expose validation feedback separately as the error description.
 File creation continues through its editor admission and post-open result rather
 than handing focus back to an Explorer row.
 Successful token/scope-owned directory listings reconcile the existing selection

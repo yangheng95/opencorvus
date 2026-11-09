@@ -1,0 +1,15 @@
+{
+  "status": 400,
+  "requestID": "5c66d462-1a23-4e77-a22d-1fc22bc356ea",
+  "input": {
+    "newPath": "/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/direct-rejection.txt",
+    "path": "single.txt"
+  },
+  "body": {
+    "name": "FileInvalidPathError",
+    "data": {
+      "path": "/Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/direct-rejection.txt",
+      "message": "File path must be project-relative: /Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/direct-rejection.txt"
+    }
+  }
+}

@@ -40,6 +40,7 @@ export type AppDialogOptions = {
 
 export type AppDialogOpenOptions = AppDialogOptions & {
   openingGuard?: () => boolean
+  validateInput?: (value: string) => string | undefined
   onConfirm?: (value: string | null) => Promise<void>
 }
 
@@ -51,6 +52,7 @@ type AppDialogCompletion = {
   occlusionOwner: string
   resolve: (value: AppDialogResult) => void
   reject: (reason: unknown) => void
+  validateInput?: AppDialogOpenOptions["validateInput"]
   onConfirm?: AppDialogOpenOptions["onConfirm"]
 }
 let activeDialog: AppDialogCompletion | null = null
@@ -134,7 +136,7 @@ export function showAppDialog(options: AppDialogOpenOptions = {}): Promise<AppDi
           resolve({ confirmed: false, value: null })
           return
         }
-        const completion = { epoch, occlusionOwner, resolve, reject, onConfirm: options.onConfirm }
+        const completion = { epoch, occlusionOwner, resolve, reject, validateInput: options.validateInput, onConfirm: options.onConfirm }
         setDialogStore("app", {
           open: true,
           epoch,
@@ -225,7 +227,8 @@ async function finishAppDialog(confirmed: boolean, epoch: number): Promise<boole
         ? dialogStore.app.selectValue
         : null
     if (confirmed && dialogStore.app.input) {
-      const trimmed = String(value ?? "").trim()
+      const raw = String(value ?? "")
+      const trimmed = raw.trim()
       if (dialogStore.app.inputRequired && !trimmed) {
         setDialogStore("app", "inputError", dialogStore.app.inputRequiredMessage || t("dialog.input_required"))
         return { kind: "invalid" } as const
@@ -233,6 +236,11 @@ async function finishAppDialog(confirmed: boolean, epoch: number): Promise<boole
       const maximum = dialogStore.app.inputMaxLength
       if (maximum !== undefined && trimmed.length > maximum) {
         setDialogStore("app", "inputError", t("dialog.input_too_long", { max: maximum }))
+        return { kind: "invalid" } as const
+      }
+      const validationError = completion.validateInput?.(raw)
+      if (validationError) {
+        setDialogStore("app", "inputError", validationError)
         return { kind: "invalid" } as const
       }
     }

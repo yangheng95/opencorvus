@@ -178,6 +178,7 @@ export function AppDialogHost() {
         <TextField.Input
           class="app-dialog-input"
           id="appDialogInput"
+          aria-labelledby="appDialogInputLabel"
           type={dialogStore.app.inputType === "password" ? "password" : "text"}
           placeholder={dialogStore.app.inputPlaceholder || ""}
           value={dialogStore.app.inputValue || ""}

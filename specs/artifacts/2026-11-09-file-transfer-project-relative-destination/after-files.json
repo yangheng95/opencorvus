@@ -1,0 +1,82 @@
+{
+  "phase": "after",
+  "listing": {
+    "": {
+      "requestID": "bd442378-8def-480c-9a41-9adb5e318771",
+      "names": [
+        ".opencorvus",
+        "dest",
+        "move-dest",
+        "Users",
+        ".gitattributes",
+        ".gitignore",
+        "single.txt"
+      ]
+    },
+    "dest": {
+      "requestID": "90077195-7a48-4759-a5cd-592bc09f0143",
+      "names": [
+        "anchor.txt",
+        "checked-copy.txt"
+      ]
+    },
+    "move-dest": {
+      "requestID": "637c430c-b2dc-455d-a210-1cdeaa5cd765",
+      "names": [
+        "anchor.txt",
+        "move-a.txt",
+        "move-b.txt"
+      ]
+    },
+    "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-after": {
+      "requestID": "08083459-efae-4700-b0f6-72942dd0ef3d",
+      "names": [
+        "anchor.txt"
+      ]
+    }
+  },
+  "files": {
+    "single.txt": {
+      "requestID": "80e82f9a-b9d8-4232-83ab-a187b9ffe074",
+      "length": 33,
+      "content": "one absolute destination source\r\n"
+    },
+    "move-dest/move-a.txt": {
+      "requestID": "951c0b28-4a7f-486c-99a8-b15f4b9ff418",
+      "length": 18,
+      "content": "first move source\n"
+    },
+    "move-dest/move-b.txt": {
+      "requestID": "7fa3ac1e-5fa3-4f1c-93fb-2c9c710a5d92",
+      "length": 19,
+      "content": "second move source\n"
+    },
+    "dest/anchor.txt": {
+      "requestID": "b8eff576-2ae9-4114-87a6-493a356d8978",
+      "length": 21,
+      "content": "relative copy target\n"
+    },
+    "move-dest/anchor.txt": {
+      "requestID": "7af149b0-d6d1-499c-a7f0-a2b8e0912fea",
+      "length": 21,
+      "content": "relative move target\n"
+    },
+    "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-after/anchor.txt": {
+      "requestID": "5c1aebd9-ed2d-458c-8f1d-cb085b25048a",
+      "length": 33,
+      "content": "intent marker for project mirror\n"
+    },
+    "dest/checked-copy.txt": {
+      "requestID": "f56e99dc-8786-4c2d-80e0-cd0a52ff6a6b",
+      "length": 33,
+      "content": "one absolute destination source\r\n"
+    }
+  },
+  "outside": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b87\\absolute-after",
+    "entries": [
+      "outside-anchor.txt"
+    ],
+    "anchor": "isolated volume-root destination\n"
+  }
+}

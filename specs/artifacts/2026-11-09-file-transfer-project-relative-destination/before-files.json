@@ -1,0 +1,82 @@
+{
+  "phase": "before",
+  "listing": {
+    "": {
+      "requestID": "50a50a85-e4b5-4cd2-937f-160d92f2313c",
+      "names": [
+        ".opencorvus",
+        "dest",
+        "move-dest",
+        "Users",
+        ".gitattributes",
+        ".gitignore",
+        "single.txt"
+      ]
+    },
+    "dest": {
+      "requestID": "4a8be920-f2e8-487b-be04-bbdef76f38d3",
+      "names": [
+        "anchor.txt"
+      ]
+    },
+    "move-dest": {
+      "requestID": "97e9680b-0455-4ebe-b227-c39d47f08c11",
+      "names": [
+        "anchor.txt"
+      ]
+    },
+    "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before": {
+      "requestID": "1e756cc9-af54-4bf2-94bf-7d5ead47499d",
+      "names": [
+        "anchor.txt",
+        "move-a.txt",
+        "move-b.txt",
+        "wrong-place.txt"
+      ]
+    }
+  },
+  "files": {
+    "single.txt": {
+      "requestID": "0a82df8b-6537-4279-85b8-074e0b0df438",
+      "length": 33,
+      "content": "one absolute destination source\r\n"
+    },
+    "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/move-a.txt": {
+      "requestID": "96e2dc9d-2aef-4afc-8956-ef6a2690b3ed",
+      "length": 18,
+      "content": "first move source\n"
+    },
+    "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/move-b.txt": {
+      "requestID": "7d6c3e21-b4d6-418d-8d8a-a75f8fef0796",
+      "length": 19,
+      "content": "second move source\n"
+    },
+    "dest/anchor.txt": {
+      "requestID": "8041dcbb-b0be-4e41-892b-25f8a5281e97",
+      "length": 21,
+      "content": "relative copy target\n"
+    },
+    "move-dest/anchor.txt": {
+      "requestID": "5c09806d-3629-435c-ba9f-3519d81aa219",
+      "length": 21,
+      "content": "relative move target\n"
+    },
+    "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/anchor.txt": {
+      "requestID": "298242f6-0dec-406a-9033-82b4532e74ad",
+      "length": 33,
+      "content": "intent marker for project mirror\n"
+    },
+    "Users/hengu/AppData/Local/Temp/opencorvus-iteration-20261109-b87/absolute-before/wrong-place.txt": {
+      "requestID": "672c7e1b-8f54-40e4-9cfa-44cc99d17321",
+      "length": 33,
+      "content": "one absolute destination source\r\n"
+    }
+  },
+  "outside": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b87\\absolute-before",
+    "entries": [
+      "outside-anchor.txt"
+    ],
+    "anchor": "isolated volume-root destination\n"
+  }
+}
