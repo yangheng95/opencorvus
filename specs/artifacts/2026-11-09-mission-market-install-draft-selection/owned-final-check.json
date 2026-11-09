@@ -1,0 +1,145 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b74\\project-before",
+    "head": "e11e2baf6e247ef430f7530c6ad71f9c82e2409e",
+    "originalTrackedFiles": 1,
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "mission_sessions": 0
+    },
+    "installations": {
+      "deep-research": {
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b74\\project-before\\.opencorvus\\expert-squads\\builtin\\deep-research",
+        "files": [
+          "README.md",
+          "agents/deep-research-citation-reviewer/system.md",
+          "agents/deep-research-draft-writer/system.md",
+          "agents/deep-research-knowledge-curator/system.md",
+          "agents/deep-research-outline-editor/system.md",
+          "agents/deep-research-planner/system.md",
+          "agents/deep-research-report-writer/system.md",
+          "agents/orchestrator/system.md",
+          "expert-squad.jsonc",
+          "selector.md",
+          "skills/method/SKILL.md",
+          "skills/workflow/SKILL.md"
+        ]
+      }
+    },
+    "installRequests": [
+      {
+        "time": "2026-11-09T04:11:12.769Z",
+        "requestID": "ec9e592d-ea5b-448b-a571-330d5bebc8d3",
+        "method": "POST",
+        "path": "/expert-squad/install-payload",
+        "status": "started"
+      },
+      {
+        "time": "2026-11-09T04:11:13.064Z",
+        "requestID": "ec9e592d-ea5b-448b-a571-330d5bebc8d3",
+        "method": "POST",
+        "path": "/expert-squad/install-payload",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 295
+      }
+    ]
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b74\\project-after",
+    "head": "41eb0403e66169baa055f161417f1d431801cf75",
+    "originalTrackedFiles": 1,
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "mission_sessions": 0
+    },
+    "installations": {
+      "deep-research": {
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b74\\project-after\\.opencorvus\\expert-squads\\builtin\\deep-research",
+        "files": [
+          "README.md",
+          "agents/deep-research-citation-reviewer/system.md",
+          "agents/deep-research-draft-writer/system.md",
+          "agents/deep-research-knowledge-curator/system.md",
+          "agents/deep-research-outline-editor/system.md",
+          "agents/deep-research-planner/system.md",
+          "agents/deep-research-report-writer/system.md",
+          "agents/orchestrator/system.md",
+          "expert-squad.jsonc",
+          "selector.md",
+          "skills/method/SKILL.md",
+          "skills/workflow/SKILL.md"
+        ]
+      },
+      "academic-paper-review": {
+        "root": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b74\\project-after\\.opencorvus\\expert-squads\\builtin\\academic-paper-review",
+        "files": [
+          "README.md",
+          "agents/orchestrator/system.md",
+          "agents/paper-citation-hallucination-auditor/system.md",
+          "agents/paper-literature-landscape-reviewer/system.md",
+          "agents/paper-logic-argument-reviewer/system.md",
+          "agents/paper-methods-facts-reviewer/system.md",
+          "agents/paper-novelty-contribution-reviewer/system.md",
+          "agents/paper-presentation-reviewer/system.md",
+          "agents/paper-review-charter-planner/system.md",
+          "agents/paper-review-integration-editor/system.md",
+          "expert-squad.jsonc",
+          "selector.md",
+          "skills/academic-paper-review-method/SKILL.md",
+          "skills/academic-paper-review-method/assets/argument-logic-map.md",
+          "skills/academic-paper-review-method/assets/claim-citation-hallucination-ledger.md",
+          "skills/academic-paper-review-method/assets/literature-search-protocol.md",
+          "skills/academic-paper-review-method/assets/methods-fact-recalculation-register.md",
+          "skills/academic-paper-review-method/assets/novelty-prior-art-matrix.md",
+          "skills/academic-paper-review-method/assets/presentation-quality-checklist.md",
+          "skills/academic-paper-review-method/assets/review-evidence-register.md",
+          "skills/academic-paper-review-method/references/upstream-license.txt",
+          "skills/academic-paper-review-method/references/upstream.md"
+        ]
+      }
+    },
+    "installRequests": [
+      {
+        "time": "2026-11-09T04:17:50.528Z",
+        "requestID": "3a5de16b-0354-4d6d-bdc3-aafb91c3ac89",
+        "method": "POST",
+        "path": "/expert-squad/install-payload",
+        "status": "started"
+      },
+      {
+        "time": "2026-11-09T04:17:50.755Z",
+        "requestID": "3a5de16b-0354-4d6d-bdc3-aafb91c3ac89",
+        "method": "POST",
+        "path": "/expert-squad/install-payload",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 227
+      },
+      {
+        "time": "2026-11-09T04:18:42.627Z",
+        "requestID": "8b53a85d-2741-4f91-95ca-c0381162a0f8",
+        "method": "POST",
+        "path": "/expert-squad/install-payload",
+        "status": "started"
+      },
+      {
+        "time": "2026-11-09T04:18:43.044Z",
+        "requestID": "8b53a85d-2741-4f91-95ca-c0381162a0f8",
+        "method": "POST",
+        "path": "/expert-squad/install-payload",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 417
+      }
+    ]
+  }
+}

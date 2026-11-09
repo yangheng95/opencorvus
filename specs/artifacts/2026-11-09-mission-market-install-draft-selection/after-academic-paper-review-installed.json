@@ -1,0 +1,52 @@
+{
+  "phase": "after",
+  "step": "installed",
+  "available": {
+    "requestID": "9126240a-af22-4990-8b9b-d3c04dfb4e75",
+    "ids": [
+      "student-financial-aid-administration",
+      "procurement-vendor",
+      "water-wastewater-operations"
+    ]
+  },
+  "marketDetail": {
+    "requestID": "f6ea8e62-25ae-4475-8cc6-b189c7b293a6",
+    "installations": [
+      {
+        "scope": "project",
+        "version": "2026.10.14.1"
+      }
+    ]
+  },
+  "active": {
+    "requestID": "49cf1122-663f-46b7-9fdb-32e7ec00a5c2",
+    "effective": "dynamic"
+  },
+  "installed": {
+    "requestID": "49ceb1a3-ec45-448a-9ef9-2ad7d003d626",
+    "ids": [
+      "academic-paper-review",
+      "deep-research"
+    ]
+  },
+  "reference": {
+    "requestID": "c2796f27-8034-42af-b004-417deac597d6",
+    "id": "academic-paper-review",
+    "name": "Academic Paper Review",
+    "source": {
+      "kind": "installed_package",
+      "installation_scope": "project",
+      "namespace": "builtin"
+    }
+  },
+  "exactInspection": {
+    "requestID": "645df286-e1f1-4f58-b119-64ff19cfb755",
+    "id": "academic-paper-review",
+    "source": {
+      "kind": "installed_package",
+      "installation_scope": "project",
+      "namespace": "builtin"
+    },
+    "version": "2026.10.14.1"
+  }
+}

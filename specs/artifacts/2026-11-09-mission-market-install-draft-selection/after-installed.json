@@ -1,0 +1,52 @@
+{
+  "phase": "after",
+  "step": "installed",
+  "available": {
+    "requestID": "8a5c8db1-ff68-4fe5-8b1b-84c8c79ef87f",
+    "ids": [
+      "data-analysis",
+      "commercial-legal",
+      "scientific-research-design"
+    ]
+  },
+  "marketDetail": {
+    "requestID": "b9a20e7d-d4bd-479e-a077-187691b054e9",
+    "installations": [
+      {
+        "scope": "project",
+        "version": "2026.10.14.1"
+      }
+    ]
+  },
+  "active": {
+    "requestID": "f13bff68-d810-427a-ad41-da29b4bae98d",
+    "effective": "dynamic"
+  },
+  "installed": {
+    "requestID": "6f1ddf73-12b8-4cfe-bbc0-1bcfbaaf8535",
+    "ids": [
+      "deep-research",
+      "academic-paper-review"
+    ]
+  },
+  "reference": {
+    "requestID": "d6e1c353-e992-4117-b510-8188811ef08c",
+    "id": "deep-research",
+    "name": "Deep Research",
+    "source": {
+      "kind": "installed_package",
+      "installation_scope": "project",
+      "namespace": "builtin"
+    }
+  },
+  "exactInspection": {
+    "requestID": "f124f950-25f0-4e47-acf2-8790fc6b64db",
+    "id": "deep-research",
+    "source": {
+      "kind": "installed_package",
+      "installation_scope": "project",
+      "namespace": "builtin"
+    },
+    "version": "2026.10.14.1"
+  }
+}

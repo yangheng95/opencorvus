@@ -1,6 +1,8 @@
 import { createEffect, createMemo, createSignal, createUniqueId, For, on, onCleanup, Show } from "solid-js"
 import type { ProductPillar } from "@opencorvus-ai/transport-protocol"
+import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../services/api"
 import {
+  inspectExpertSquad,
   loadExpertSquadCatalog,
   searchExpertSquads,
   type ExpertSquadMarketIndexItem,
@@ -101,6 +103,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   const [leaving, setLeaving] = createSignal(false)
   let requestRef: HTMLTextAreaElement | undefined
   let titleRef: HTMLInputElement | undefined
+  let expertSquadSearchRef: HTMLInputElement | undefined
   let submitFeedback: HTMLDivElement | undefined
   let leaveFeedback: HTMLDivElement | undefined
   let leaveAction: (() => void) | undefined
@@ -292,37 +295,38 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     }
   }
 
-  // A freshly installed Squad has to become selectable in the same breath as the install. The catalog
-  // ranks names and descriptions only, so the market request that surfaced this Squad is not guaranteed
-  // to find it again; the exact identity lookup is what closes that seam.
+  // Market can match package-owned evidence outside the installed search projection.
+  // Keep the actual project installation visible for the query that offered it.
   async function refreshSquadsAfterInstall(
     directory: string,
     pillar: ProductPillar,
     query: string,
-    installedID: string,
+    offered: ExpertSquadMarketIndexItem | undefined,
+    authority: ApiAuthority,
   ): Promise<void> {
     const generation = dialogGeneration
     const sequence = ++expertSquadRequestSequence
+    const owns = () => isApiAuthorityCurrent(authority) && ownsSquadRequest(generation, sequence, directory, pillar)
     setExpertSquadLoading(true)
     setExpertSquadError("")
     try {
       const [page, exact] = await Promise.all([
-        searchExpertSquads({ directory, productPillar: pillar, query, limit: 20 }),
-        searchExpertSquads({ directory, productPillar: pillar, query: installedID, limit: 20 }),
+        searchExpertSquads({ directory, productPillar: pillar, query, limit: 20, authority }),
+        offered && inspectExpertSquad({
+          directory, id: offered.id, namespace: offered.namespace, installationScope: "project", authority,
+        }),
       ])
-      if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
-      const installed = exact.entries.find((entry) => entry.id === installedID)
-      const selectedIDs = installed ? [...new Set([...expertSquadIDs(), installed.id])] : expertSquadIDs()
+      if (!owns()) return
+      const installed = exact?.product_pillars.includes(pillar) ? exact : undefined
       const entries = installed
         ? [installed, ...page.entries.filter((entry) => entry.id !== installed.id)]
         : page.entries
       setExpertSquadResult({
-        options: mergeSquadOptions(entries, expertSquads(), selectedIDs),
-        matchingIDs: page.entries.map((squad) => squad.id),
+        options: mergeSquadOptions(entries, expertSquads(), expertSquadIDs()),
+        matchingIDs: entries.map((squad) => squad.id),
       })
-      setExpertSquadIDs(selectedIDs)
     } catch (nextError) {
-      if (!ownsSquadRequest(generation, sequence, directory, pillar)) return
+      if (!owns()) return
       setExpertSquadError(nextError instanceof Error ? nextError.message : String(nextError))
     } finally {
       if (ownsSquadRequest(generation, sequence, directory, pillar)) setExpertSquadLoading(false)
@@ -340,8 +344,6 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     setMarketRecommendations([])
     setMarketLoading(false)
     setMarketError("")
-    setMarketInstallingID("")
-    setMarketInstalledID("")
     const pillar = productPillar()
     if (directory && pillar) void loadExpertSquadsForContext(directory, pillar)
   }
@@ -394,8 +396,6 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
         setMarketRecommendations([])
         setMarketLoading(false)
         setMarketError("")
-        setMarketInstallingID("")
-        setMarketInstalledID("")
         setSubmitting(false)
         setError(undefined)
         setSubmitAttempted(false)
@@ -455,23 +455,32 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
   })
 
   let installLifecycleSequence = 0
-  createEffect(() => {
-    const open = props.open
-    projectDirectory()
-    installLifecycleSequence += 1
-    if (!open) {
+  createEffect(on(
+    [() => props.open, projectDirectory, productPillar],
+    () => {
+      installLifecycleSequence += 1
       setMarketInstallingID("")
-      setMarketLoading(false)
-    }
-  })
+      setMarketInstalledID("")
+    },
+  ))
 
-  async function installMarketExpertSquad(item: ExpertSquadMarketIndexItem): Promise<void> {
+  async function installMarketExpertSquad(item: ExpertSquadMarketIndexItem, trigger: HTMLButtonElement): Promise<void> {
     const install = props.onInstallMarketExpertSquad
     const directory = projectDirectory().trim()
     const pillar = productPillar()
     const loadMarket = props.onMarketExpertSquadQuery
-    if (!install || !loadMarket || !directory || !pillar || marketInstallingID()) return
+    if (!install || !loadMarket || !directory || !pillar || submitting() || marketInstallingID()) return
     const lifecycle = ++installLifecycleSequence
+    const authority = captureApiAuthority()
+    const origin = document.activeElement === trigger ? trigger : undefined
+    const offeredQuery = expertSquadQuery().trim().slice(0, 500)
+    const owns = () =>
+      lifecycle === installLifecycleSequence &&
+      props.open &&
+      projectDirectory().trim() === directory &&
+      productPillar() === pillar &&
+      isApiAuthorityCurrent(authority)
+    let refreshSequence: number | undefined
     marketSearchSequence += 1
     setMarketLoading(false)
     setMarketInstallingID(item.id)
@@ -479,22 +488,24 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
     setMarketError("")
     try {
       await install(directory, item)
-      if (lifecycle !== installLifecycleSequence || !props.open || projectDirectory().trim() !== directory) return
+      if (!owns()) return
+      if (origin && document.activeElement === origin && expertSquadSearchRef?.isConnected) expertSquadSearchRef.focus()
+      setMarketInstalledID(item.id)
       const query = expertSquadQuery().trim().slice(0, 500)
-      const marketSequence = ++marketSearchSequence
+      refreshSequence = ++marketSearchSequence
+      setMarketRecommendations([])
+      setMarketLoading(query.length >= 2)
       const [, market] = await Promise.all([
-        refreshSquadsAfterInstall(directory, pillar, query, item.id),
+        refreshSquadsAfterInstall(directory, pillar, query, query === offeredQuery ? item : undefined, authority),
         query.length >= 2 ? loadMarket(directory, query, pillar) : Promise.resolve([]),
       ])
-      if (lifecycle !== installLifecycleSequence || !props.open || projectDirectory().trim() !== directory) return
-      if (marketSequence === marketSearchSequence) {
+      if (owns() && refreshSequence === marketSearchSequence) {
         setMarketRecommendations(market)
         setMarketLoading(false)
       }
-      setMarketInstalledID(item.id)
     } catch (nextError) {
-      if (lifecycle === installLifecycleSequence) {
-        setMarketLoading(false)
+      if (owns() && (refreshSequence === undefined || refreshSequence === marketSearchSequence)) {
+        if (refreshSequence !== undefined) setMarketLoading(false)
         setMarketError(nextError instanceof Error ? nextError.message : String(nextError))
       }
     } finally {
@@ -766,6 +777,7 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
             </TextField.Label>
             <SearchField
               clearable
+              inputRef={(element) => { expertSquadSearchRef = element }}
               value={expertSquadQuery()}
               disabled={!projectDirectory() || !productPillar()}
               onValueChange={(value) => {
@@ -914,8 +926,10 @@ export function MissionCreateDialog(props: MissionCreateDialogProps) {
                         variant="outline"
                         size="sm"
                         tone="accent"
-                        disabled={submitting() || Boolean(marketInstallingID())}
-                        onClick={() => void installMarketExpertSquad(item)}
+                        disabled={submitting()}
+                        aria-disabled={Boolean(marketInstallingID()) || undefined}
+                        aria-busy={marketInstallingID() === item.id || undefined}
+                        onClick={(event) => void installMarketExpertSquad(item, event.currentTarget)}
                       >
                         <Icon
                           name={marketInstallingID() === item.id ? "loading" : "config-expert-squad-install"}
