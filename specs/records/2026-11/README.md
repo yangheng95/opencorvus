@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [项目记忆通知动作归属](2026-11-10-project-memory-notice-action-ownership.md)
 - [任务浏览器预览共用目标读取与原地重试](2026-11-10-browser-preview-target-read.md)
 - [通道公网地址保留保存期间继续输入的草稿](2026-11-10-channel-public-url-draft.md)
 - [0.1.50 发布](2026-11-10-release-0.1.50.md)

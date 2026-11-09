@@ -461,6 +461,6 @@ lease, or discard pending evidence.
 
 The unavailable proof is bound to the exact FIFO-head occurrence, its canonical Task/Session owner, the closed reason, and the configured model. One proof may remove at most that head after the second matching attempt; it cannot delete or advance the retry count for later evidence owned by another Task or Session.
 
-The protected notice is available in Project reads and through the Project-memory Server-Sent Events stream. Overlay startup/project switching hydrates it and renders an actionable banner until the user acknowledges it or an Organizer commit clears it.
+The protected notice is available in Project reads and through the Project-memory Server-Sent Events stream. Overlay startup/project switching hydrates it and renders an actionable banner until the user acknowledges it or an Organizer commit clears it. The banner consumes only the confirmed Project-memory projection for the current directory, directory generation, and connection. Pending actions and diagnostics belong to that same scope and notice generation, so a result from a prior notice cannot alter the active notice's controls or feedback.
 
 Generic semantic-memory search, full-text search, write, update, and delete exclude both protected `user_message` and `project_context` kinds. Project `MEMORY.MD` is exposed through `memory.project_read` and `GET /experimental/project-memory`.

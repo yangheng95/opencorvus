@@ -5,6 +5,7 @@
 import { createStore, reconcile } from "solid-js/store"
 import { batch } from "solid-js"
 import type { ApiAuthority } from "../services/api"
+import type { ProjectMemoryProjection } from "../services/project-memory"
 import type { SkillMountsResponse } from "@opencorvus-ai/sdk"
 import type { OverlayThemeID } from "@opencorvus-ai/transport-protocol"
 
@@ -144,12 +145,7 @@ export interface AppState {
   memoryFiles: any[]
   /** Whether the memory panel is in search mode */
   memorySearchMode: boolean
-  projectMemory: {
-    status: string
-    pendingCount: number
-    tokenCount: number
-    notice?: { status: string; message: string; generation: string; acknowledged: boolean }
-  } | null
+  projectMemory: ProjectMemoryProjection | null
   // ── Criteria ──
   criteriaSpecs: any[]
 }

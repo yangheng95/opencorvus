@@ -1,0 +1,64 @@
+[
+  {
+    "project": {
+      "id": "prj_hrFKFnQJfuwBKXvV6oTQ",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b141\\project-after-a"
+    },
+    "checks": [
+      {
+        "route": "/project/current",
+        "operationId": "project.current",
+        "status": 200,
+        "requestID": "5c645dca-24da-43b6-9467-58efcf41449f",
+        "schemaValid": true
+      },
+      {
+        "route": "/experimental/project-memory",
+        "operationId": "experimental.projectMemory.get",
+        "status": 200,
+        "requestID": "75264af0-e7c7-4328-b700-a436a87b9fd8",
+        "schemaValid": true
+      }
+    ],
+    "notice": {
+      "status": "capacity_reached",
+      "message": "Alpha review: the protected project memory reached capacity.",
+      "generation": "owned-review-after-a",
+      "acknowledged": false
+    },
+    "revision": 0,
+    "pendingCount": 0,
+    "content": ""
+  },
+  {
+    "project": {
+      "id": "prj_hoElZVUGvh9ihR9ouB6g",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b141\\project-after-b"
+    },
+    "checks": [
+      {
+        "route": "/project/current",
+        "operationId": "project.current",
+        "status": 200,
+        "requestID": "8cd6a52a-1527-4d17-9b42-81c9971f1146",
+        "schemaValid": true
+      },
+      {
+        "route": "/experimental/project-memory",
+        "operationId": "experimental.projectMemory.get",
+        "status": 200,
+        "requestID": "6a5383a5-4619-4ad8-b376-4acb6a542944",
+        "schemaValid": true
+      }
+    ],
+    "notice": {
+      "status": "evidence_too_large",
+      "message": "Bravo review: one pending memory item exceeds the size limit.",
+      "generation": "owned-review-after-b",
+      "acknowledged": false
+    },
+    "revision": 0,
+    "pendingCount": 0,
+    "content": ""
+  }
+]

@@ -9,18 +9,40 @@ function memoryScope(options: ProjectMemoryOptions) {
   const authority = options.authority ?? captureApiAuthority()
   assertApiAuthorityCurrent(authority)
   const directory = options.directory ?? activeProjectDirectory()
-  const epoch = settingsStore.directoryEpoch
-  return { authority, directory, owns: () => isApiAuthorityCurrent(authority) && epoch === settingsStore.directoryEpoch && directory === activeProjectDirectory() }
+  const directoryEpoch = settingsStore.directoryEpoch
+  return {
+    authority,
+    directory,
+    directoryEpoch,
+    owns: () => isApiAuthorityCurrent(authority) && directoryEpoch === settingsStore.directoryEpoch && directory === activeProjectDirectory(),
+  }
 }
 
 export type ProjectMemoryDocument = Omit<ExperimentalProjectMemoryGetResponse, "notice"> & {
   notice?: { status: string; message: string; generation: string; acknowledged: boolean }
 }
 
+export interface ProjectMemoryProjection {
+  directory: string
+  directoryEpoch: number
+  authorityRevision: number
+  document: ProjectMemoryDocument
+}
+
+function publishProjectMemory(scope: ReturnType<typeof memoryScope>, document: ProjectMemoryDocument) {
+  if (!scope.owns()) return
+  setAppStore("projectMemory", {
+    directory: scope.directory,
+    directoryEpoch: scope.directoryEpoch,
+    authorityRevision: scope.authority.revision,
+    document,
+  })
+}
+
 export async function refreshProjectMemory(options: ProjectMemoryOptions = {}): Promise<ProjectMemoryDocument> {
   const scope = memoryScope(options)
   const document = await apiJson<ProjectMemoryDocument>(projectScopedPath("experimental/project-memory", scope.directory), { authority: scope.authority })
-  if (scope.owns()) setAppStore("projectMemory", document)
+  publishProjectMemory(scope, document)
   return document
 }
 
@@ -30,7 +52,7 @@ export async function organizeProjectMemory(options: ProjectMemoryOptions = {}):
     authority: scope.authority,
     method: "POST",
   })
-  if (scope.owns()) setAppStore("projectMemory", response.document)
+  publishProjectMemory(scope, response.document)
   return response.document
 }
 

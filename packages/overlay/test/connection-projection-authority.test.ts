@@ -269,6 +269,7 @@ test("project memory refresh and acknowledgement follow one directory and author
   transport(async (request) => {
     requests.push({ path: request.path, authority: request.authority!.revision, directory: request.query?.directory })
     if (request.authority?.revision === a.revision) await old.promise
+    if (request.path === "experimental/project-memory/notice/acknowledge") return ok({ acknowledged: true })
     return ok({ status: request.authority?.revision === a.revision ? "A" : "B", pendingCount: 0, tokenCount: 5 })
   })
   const oldLoad = refreshProjectMemory({ authority: a, directory }).catch((error) => error)
@@ -277,12 +278,50 @@ test("project memory refresh and acknowledgement follow one directory and author
   await acknowledgeProjectMemoryNotice("owned-generation", { authority: b, directory })
   old.resolve()
   expect(await oldLoad).toBeInstanceOf(ApiAuthorityChangedError)
-  expect(appStore.projectMemory).toEqual({ status: "B", pendingCount: 0, tokenCount: 5 })
+  expect(appStore.projectMemory).toEqual({
+    directory,
+    directoryEpoch: 0,
+    authorityRevision: b.revision,
+    document: { status: "B", pendingCount: 0, tokenCount: 5 },
+  })
   expect(requests).toEqual([
     { path: "experimental/project-memory", authority: a.revision, directory },
     { path: "experimental/project-memory/notice/acknowledge", authority: b.revision, directory },
     { path: "experimental/project-memory", authority: b.revision, directory },
   ])
+})
+
+test("project memory keeps the active directory's accepted notice when a prior project read settles", async () => {
+  const authority = captureApiAuthority()
+  const nextDirectory = "D:/owned/other"
+  const old = deferred<void>()
+  const oldDocument = {
+    status: "capacity_reached",
+    notice: { status: "capacity_reached", message: "Capacity reached", generation: "old-notice", acknowledged: false },
+  }
+  const nextDocument = {
+    status: "evidence_too_large",
+    notice: { status: "evidence_too_large", message: "Evidence too large", generation: "current-notice", acknowledged: false },
+  }
+  transport(async (request) => {
+    if (request.query?.directory === directory) {
+      await old.promise
+      return ok(oldDocument)
+    }
+    return ok(nextDocument)
+  })
+  const earlier = refreshProjectMemory({ authority, directory })
+  setSettingsStore({ directory: nextDirectory, directoryEpoch: 1 })
+  configure({ directory: nextDirectory })
+  expect(await refreshProjectMemory()).toEqual(nextDocument)
+  old.resolve()
+  expect(await earlier).toEqual(oldDocument)
+  expect(appStore.projectMemory).toEqual({
+    directory: nextDirectory,
+    directoryEpoch: 1,
+    authorityRevision: authority.revision,
+    document: nextDocument,
+  })
 })
 
 test("global and scoped reference pending owners return B's current catalog after A retires", async () => {

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [项目记忆通知动作归属证据](2026-11-10-project-memory-notice-action-ownership/README.md)
 - [任务浏览器预览共用目标读取与原地重试证据](2026-11-10-browser-preview-target-read/README.md)
 - [通道公网地址保留保存期间继续输入的草稿证据](2026-11-10-channel-public-url-draft/README.md)
 - [0.1.50 发布证据](2026-11-10-release-0.1.50/README.md) · 原生、官网和正式包日志

@@ -1,0 +1,166 @@
+{
+  "before": {
+    "projects": [
+      {
+        "projectID": "prj_hU8RCcoz5KY0JGM8Gi90",
+        "notice": {
+          "generation": "owned-review-before-a",
+          "status": "capacity_reached",
+          "message": "Alpha review: the protected project memory reached capacity.",
+          "acknowledged": true
+        },
+        "originalTrackedBytes": 37,
+        "gitHead": "d3f7c0381bd964a3d1cd6c1b74ebff8e22838e4f",
+        "protectedDocument": {
+          "revision": 0,
+          "content": ""
+        }
+      },
+      {
+        "projectID": "prj_hjivNY8zPWJVGi4TUM79",
+        "notice": {
+          "generation": "owned-review-before-b",
+          "status": "evidence_too_large",
+          "message": "Bravo review: one pending memory item exceeds the size limit.",
+          "acknowledged": false
+        },
+        "originalTrackedBytes": 37,
+        "gitHead": "857f354dabe61f34f76414e18f108daefd6f3df1",
+        "protectedDocument": {
+          "revision": 0,
+          "content": ""
+        }
+      }
+    ],
+    "counts": {
+      "project": 2,
+      "session": 0,
+      "engine_task": 0,
+      "message": 0,
+      "provider_activity_request": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0,
+      "memory_file": 2,
+      "memory_chunk": 2
+    },
+    "originalAcknowledgements": [
+      {
+        "time": "2026-11-09T17:57:03.819Z",
+        "receipt": 1,
+        "stage": "origin",
+        "status": 200,
+        "requestID": "35aff873-3d6f-4a1d-a307-a0f1cbb1ca3d",
+        "result": {
+          "acknowledged": true
+        }
+      }
+    ],
+    "browserOutcomes": [
+      {
+        "time": "2026-11-09T17:57:19.820Z",
+        "receipt": 1,
+        "stage": "client-closed"
+      }
+    ]
+  },
+  "after": {
+    "projects": [
+      {
+        "projectID": "prj_hrFKFnQJfuwBKXvV6oTQ",
+        "notice": {
+          "generation": "owned-review-after-a",
+          "status": "capacity_reached",
+          "message": "Alpha review: the protected project memory reached capacity.",
+          "acknowledged": true
+        },
+        "originalTrackedBytes": 36,
+        "gitHead": "9d3caebf0513b2f19bf4e2bb469d0b0df295f7be",
+        "protectedDocument": {
+          "revision": 0,
+          "content": ""
+        }
+      },
+      {
+        "projectID": "prj_hoElZVUGvh9ihR9ouB6g",
+        "notice": {
+          "generation": "owned-review-after-b",
+          "status": "evidence_too_large",
+          "message": "Bravo review: one pending memory item exceeds the size limit.",
+          "acknowledged": true
+        },
+        "originalTrackedBytes": 36,
+        "gitHead": "cc7974b78f9d2a53b5b65fa36bb954610e511453",
+        "protectedDocument": {
+          "revision": 0,
+          "content": ""
+        }
+      }
+    ],
+    "counts": {
+      "project": 2,
+      "session": 0,
+      "engine_task": 0,
+      "message": 0,
+      "provider_activity_request": 0,
+      "provider_usage_event": 0,
+      "permission_ledger": 0,
+      "memory_file": 2,
+      "memory_chunk": 2
+    },
+    "originalAcknowledgements": [
+      {
+        "time": "2026-11-09T18:05:04.725Z",
+        "receipt": 1,
+        "stage": "origin",
+        "status": 200,
+        "requestID": "036d702a-b44c-478c-9160-7244099738f1",
+        "result": {
+          "acknowledged": true
+        }
+      },
+      {
+        "time": "2026-11-09T18:08:56.937Z",
+        "receipt": 5,
+        "stage": "origin",
+        "status": 200,
+        "requestID": "23e20054-ed40-4aed-bca4-1bd67149dda3",
+        "result": {
+          "acknowledged": true
+        }
+      }
+    ],
+    "browserOutcomes": [
+      {
+        "time": "2026-11-09T18:05:20.726Z",
+        "receipt": 1,
+        "stage": "client-closed"
+      },
+      {
+        "time": "2026-11-09T18:05:33.483Z",
+        "receipt": 2,
+        "stage": "before-origin-cut",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b141\\project-after-b"
+      },
+      {
+        "time": "2026-11-09T18:05:33.486Z",
+        "receipt": 3,
+        "stage": "before-origin-cut",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b141\\project-after-b"
+      },
+      {
+        "time": "2026-11-09T18:08:22.260Z",
+        "receipt": 4,
+        "stage": "before-origin-cut",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b141\\project-after-b"
+      },
+      {
+        "time": "2026-11-09T18:08:56.938Z",
+        "receipt": 5,
+        "stage": "released",
+        "result": {
+          "acknowledged": true
+        }
+      }
+    ]
+  }
+}

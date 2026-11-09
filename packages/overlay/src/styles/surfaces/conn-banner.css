@@ -91,9 +91,10 @@
   overflow-wrap: anywhere;
 }
 
-.memory-banner__error {
-  color: var(--bad) !important;
-  font-weight: var(--ui-font-weight-medium);
+.memory-banner__content .oc-feedback__diagnostic {
+  max-block-size: min(calc(96px * var(--ui-scale)), 20vh);
+  overflow: auto;
+  scrollbar-gutter: stable;
 }
 
 @media (prefers-reduced-motion: reduce) {

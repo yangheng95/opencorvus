@@ -1,0 +1,5 @@
+{"listenPort":39296,"upstreamPort":39294,"pid":34216}
+{"time":"2026-11-09T17:56:48.705Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T17:57:03.763Z","receipt":1,"stage":"arrival","path":"/experimental/project-memory/notice/acknowledge","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b141\\project-before-a","delay":16000,"cut":true}
+{"time":"2026-11-09T17:57:03.819Z","receipt":1,"stage":"origin","status":200,"requestID":"35aff873-3d6f-4a1d-a307-a0f1cbb1ca3d","result":{"acknowledged":true}}
+{"time":"2026-11-09T17:57:19.820Z","receipt":1,"stage":"client-closed"}
