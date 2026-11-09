@@ -1,0 +1,63 @@
+{
+  "healthy": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t88 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-224-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t89 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t\t90 text Empty",
+    "\t\t\t\t\t\t\t\t\t\t91 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-228-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t92 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-232-trigger",
+    "The focused UI element is 91 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-228-trigger, Secondary Actions: Collapse"
+  ],
+  "root": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t102 button Retry",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39147/ui/"
+  ],
+  "diagnostic": [
+    "\t\t\t\t\t\t\t\t\t\t99 text The requested file or folder is unavailable: missing-owned-root",
+    "\t\t\t\t\t\t\t\t\t\t100 button (expanded) Details, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t101 text Details",
+    "\t\t\t\t\t\t\t\t\t\t103 text HTTP GET 404 file?path=&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after",
+    "Request ID: 0d6d066c-71bd-47de-9c8e-0cc5b5f9e6c9",
+    "ApiError: API 404 file?path=&directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after: Directory entry not found: missing-owned-root",
+    "    \"path\": \"missing-owned-root\",",
+    "    \"message\": \"Directory entry not found: missing-owned-root\"",
+    "\t\t\t\t\t\t\t\t\t\t102 button Retry",
+    "The focused UI element is 100 button (expanded) Details, Secondary Actions: Collapse"
+  ],
+  "rootChinese": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: 新建, Help: 在 plans/reference 中新建, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t109 button 重试",
+    "The focused UI element is 100 (collapsed) Description: 视图, ID: menubar-cl-1-menubar-menu-cl-334-trigger, Secondary Actions: Expand"
+  ],
+  "rootRetry": "pressed Enter on visible root retry after switching to child-only failure",
+  "child": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: 新建, Help: 在 plans/reference 中新建, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t127 text 无法加载 plans/drafts 请求的文件或文件夹不可用：missing-owned-plans-drafts",
+    "\t\t\t\t\t\t\t\t\t\t130 button 重试",
+    "\t\t\t\t\t\t\t\t\t\t117 button (expanded) drafts 出错, Help: plans/drafts, ID: contextmenu-cl-379-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t118 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t120 button (expanded) Description: plans/reference · 已选作文件操作对象, Help: plans/reference, ID: contextmenu-cl-364-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t123 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-383-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39147/ui/"
+  ],
+  "childBeforeRefresh": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: 新建, Help: 在 plans/reference 中新建, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t117 button (expanded) drafts 出错, Help: plans/drafts, ID: contextmenu-cl-379-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t118 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t120 button (expanded) Description: plans/reference · 已选作文件操作对象 · 出错, Help: plans/reference, ID: contextmenu-cl-364-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t121 text reference",
+    "\t\t\t\t\t\t\t\t\t\t123 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-383-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39147/ui/"
+  ],
+  "childRetry": "pressed Enter on visible child retry after returning to direct reads",
+  "recovered": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: 新建, Help: 在 plans/reference 中新建, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t117 button (expanded) drafts 空目录, Help: plans/drafts, ID: contextmenu-cl-379-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t118 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t\t119 text 空目录",
+    "\t\t\t\t\t\t\t\t\t\t120 button (expanded) Description: plans/reference · 已选作文件操作对象, Help: plans/reference, ID: contextmenu-cl-364-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t123 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-383-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39147/ui/"
+  ]
+}

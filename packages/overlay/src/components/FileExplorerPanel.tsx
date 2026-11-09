@@ -972,7 +972,7 @@ export function FileExplorerPanel(props: FileExplorerPanelProps = {}) {
   const rootError = createMemo(() => (!deferredQuery() ? (directoryErrors().get("") ?? null) : null))
   const searchError = createMemo(() => (deferredQuery() ? currentSearchFailure() : null))
   const expandedDirectoryFailures = createMemo(() => {
-    if (deferredQuery()) return []
+    if (deferredQuery() || rootError()) return []
     const visibleDirectories = new Set(
       rows().flatMap((row) => (row.kind === "node" && row.expanded ? [row.node.path] : [])),
     )

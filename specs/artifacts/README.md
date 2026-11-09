@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [项目根读取错误的呈现优先级证据](2026-11-09-explorer-root-error-priority/README.md)
 - [已展开空目录的状态反馈证据](2026-11-09-explorer-expanded-empty-folder-feedback/README.md)
 - [调试树使用真实目录证据](2026-11-09-debug-tree-physical-directories/README.md)
 - [项目搜索索引包含物理空目录证据](2026-11-09-project-index-physical-directories/README.md)

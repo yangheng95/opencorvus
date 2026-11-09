@@ -4546,6 +4546,9 @@ error, row and search presentation through the same readers and mutation owner.
 An expanded folder with an accepted empty listing shows a localized status
 in its own row. Loading or failure takes priority over a previous empty result.
 The selected row's accessible name includes the same status.
+When the project root listing fails, its feedback owns the current tree
+surface. Individual expanded-folder failures remain available when the root
+listing returns and their folders are visible again.
 The launcher heading keeps its original localized text and complete Project
 identity; native balanced wrapping and emergency word wrapping contain it in
 the existing layout as the sidebar and tools change its available width.

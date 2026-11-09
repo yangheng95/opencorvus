@@ -1,0 +1,34 @@
+{
+  "beforeHealthy": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t88 button (expanded) drafts Empty, Help: plans/drafts, ID: contextmenu-cl-224-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t89 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t\t90 text Empty",
+    "\t\t\t\t\t\t\t\t\t\t91 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-228-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t92 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-232-trigger",
+    "The focused UI element is 91 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-228-trigger, Secondary Actions: Collapse"
+  ],
+  "beforeFailure": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t99 text Unable to load plans",
+    "\t\t\t\t\t\t\t\t\t\t103 button Retry",
+    "\t\t\t\t\t\t\t\t\t\t104 text Unable to load plans/drafts",
+    "\t\t\t\t\t\t\t\t\t\t105 text The requested file or folder is unavailable: missing-owned-plans-drafts",
+    "\t\t\t\t\t\t\t\t\t\t108 button Retry",
+    "\t\t\t\t\t\t\t\t\t\t109 text Unable to load plans/reference",
+    "\t\t\t\t\t\t\t\t\t\t110 text The requested file or folder is unavailable: missing-owned-plans-reference",
+    "\t\t\t\t\t\t\t\t\t\t113 button Retry",
+    "\t\t\t\t\t\t\t\t\t\t118 button Retry",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39146/ui/"
+  ],
+  "beforeChildOnly": [
+    "\t\t\t\t\t\t\t\t\t\t84 pop up button (collapsed) Description: New, Help: Create in plans/reference, ID: dropdownmenu-cl-205-trigger, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t99 text Unable to load plans/drafts The requested file or folder is unavailable: missing-owned-plans-drafts",
+    "\t\t\t\t\t\t\t\t\t\t102 button Retry",
+    "\t\t\t\t\t\t\t\t\t\t106 button (expanded) drafts Error, Help: plans/drafts, ID: contextmenu-cl-275-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t\t107 text drafts",
+    "\t\t\t\t\t\t\t\t\t\t109 button (expanded) Description: plans/reference · Selected for file actions, Help: plans/reference, ID: contextmenu-cl-251-trigger, Secondary Actions: Collapse",
+    "\t\t\t\t\t\t\t\t\t\t110 button note.txt, Help: plans/reference/note.txt, ID: contextmenu-cl-279-trigger",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39146/ui/"
+  ]
+}

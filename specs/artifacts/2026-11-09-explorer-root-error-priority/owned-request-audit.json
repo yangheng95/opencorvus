@@ -1,0 +1,542 @@
+{
+  "before": {
+    "gitHead": "ae8b1debe28a19e0c2dc401c513f9ca8c111043d",
+    "emptyDrafts": true,
+    "referenceText": "Owned folder outage reference.\n",
+    "tables": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "matched": [
+      {
+        "time": "2026-11-09T10:18:26.707Z",
+        "mode": "direct",
+        "folder": "",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=",
+        "status": 200,
+        "requestID": "28ab75d5-d1dd-473e-9b31-9e93e85b0c1f",
+        "service": {
+          "requestID": "28ab75d5-d1dd-473e-9b31-9e93e85b0c1f",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 3
+        }
+      },
+      {
+        "time": "2026-11-09T10:18:26.789Z",
+        "mode": "direct",
+        "folder": "plans",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans",
+        "status": 200,
+        "requestID": "c4d62e85-3aef-49d8-bdd5-f5d84951e07a",
+        "service": {
+          "requestID": "c4d62e85-3aef-49d8-bdd5-f5d84951e07a",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 1
+        }
+      },
+      {
+        "time": "2026-11-09T10:18:26.825Z",
+        "mode": "direct",
+        "folder": "plans/drafts",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans%2Fdrafts",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans%2Fdrafts",
+        "status": 200,
+        "requestID": "abcf04eb-a7a5-4f60-bfd8-b568f5309bf2",
+        "service": {
+          "requestID": "abcf04eb-a7a5-4f60-bfd8-b568f5309bf2",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:18:26.858Z",
+        "mode": "direct",
+        "folder": "plans/reference",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans%2Freference",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans%2Freference",
+        "status": 200,
+        "requestID": "e73edd43-e7f3-44ec-9e58-c1f35db7eb1f",
+        "service": {
+          "requestID": "e73edd43-e7f3-44ec-9e58-c1f35db7eb1f",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:18:41.463Z",
+        "mode": "both",
+        "folder": "",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=missing-owned-root",
+        "status": 404,
+        "requestID": "ab600395-c2ad-48f2-a3f3-cd1e4d6d07b0",
+        "service": {
+          "requestID": "ab600395-c2ad-48f2-a3f3-cd1e4d6d07b0",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 3
+        }
+      },
+      {
+        "time": "2026-11-09T10:18:41.466Z",
+        "mode": "both",
+        "folder": "plans",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=missing-owned-plans",
+        "status": 404,
+        "requestID": "511fb780-f4c3-4a21-9803-b9cbbae3a28c",
+        "service": {
+          "requestID": "511fb780-f4c3-4a21-9803-b9cbbae3a28c",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 3
+        }
+      },
+      {
+        "time": "2026-11-09T10:18:41.467Z",
+        "mode": "both",
+        "folder": "plans/drafts",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans%2Fdrafts",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=missing-owned-plans-drafts",
+        "status": 404,
+        "requestID": "3d937db9-07d6-4ff1-b03e-1cb334df07e3",
+        "service": {
+          "requestID": "3d937db9-07d6-4ff1-b03e-1cb334df07e3",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:18:41.471Z",
+        "mode": "both",
+        "folder": "plans/reference",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans%2Freference",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=missing-owned-plans-reference",
+        "status": 404,
+        "requestID": "2c8c0a0a-6bb3-403b-8727-5b1aa309e319",
+        "service": {
+          "requestID": "2c8c0a0a-6bb3-403b-8727-5b1aa309e319",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 1
+        }
+      },
+      {
+        "time": "2026-11-09T10:18:56.467Z",
+        "mode": "child",
+        "folder": "",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=",
+        "status": 200,
+        "requestID": "dcccf8f5-db7c-4800-88dc-b384d0d94120",
+        "service": {
+          "requestID": "dcccf8f5-db7c-4800-88dc-b384d0d94120",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:18:56.467Z",
+        "mode": "child",
+        "folder": "plans",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans",
+        "status": 200,
+        "requestID": "b095ca05-b7ba-457b-af62-3c177827f0ff",
+        "service": {
+          "requestID": "b095ca05-b7ba-457b-af62-3c177827f0ff",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:18:56.470Z",
+        "mode": "child",
+        "folder": "plans/drafts",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans%2Fdrafts",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=missing-owned-plans-drafts",
+        "status": 404,
+        "requestID": "7c77a8d7-f556-4e42-99c0-f15bf5adcd91",
+        "service": {
+          "requestID": "7c77a8d7-f556-4e42-99c0-f15bf5adcd91",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:18:56.471Z",
+        "mode": "child",
+        "folder": "plans/reference",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans%2Freference",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-before&path=plans%2Freference",
+        "status": 200,
+        "requestID": "be97eba2-23c9-4efa-ac88-0b01eebdb1c2",
+        "service": {
+          "requestID": "be97eba2-23c9-4efa-ac88-0b01eebdb1c2",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      }
+    ]
+  },
+  "after": {
+    "gitHead": "d30c93cedbf835abc5145ca47850e85aace7e82e",
+    "emptyDrafts": true,
+    "referenceText": "Owned folder outage reference.\n",
+    "tables": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "matched": [
+      {
+        "time": "2026-11-09T10:23:35.041Z",
+        "mode": "direct",
+        "folder": "",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=",
+        "status": 200,
+        "requestID": "64253595-b285-4aea-a64d-c24e4b88ba59",
+        "service": {
+          "requestID": "64253595-b285-4aea-a64d-c24e4b88ba59",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 3
+        }
+      },
+      {
+        "time": "2026-11-09T10:23:35.136Z",
+        "mode": "direct",
+        "folder": "plans",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans",
+        "status": 200,
+        "requestID": "9ff537b4-48ae-4812-9cfc-4197763018f4",
+        "service": {
+          "requestID": "9ff537b4-48ae-4812-9cfc-4197763018f4",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:23:35.173Z",
+        "mode": "direct",
+        "folder": "plans/drafts",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Fdrafts",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Fdrafts",
+        "status": 200,
+        "requestID": "63839a36-1623-4c09-88d1-ac6dbef84c5e",
+        "service": {
+          "requestID": "63839a36-1623-4c09-88d1-ac6dbef84c5e",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:23:35.206Z",
+        "mode": "direct",
+        "folder": "plans/reference",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Freference",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Freference",
+        "status": 200,
+        "requestID": "b8860f09-972f-4f9e-ab5c-a8ca08a04081",
+        "service": {
+          "requestID": "b8860f09-972f-4f9e-ab5c-a8ca08a04081",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:23:49.796Z",
+        "mode": "both",
+        "folder": "",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=missing-owned-root",
+        "status": 404,
+        "requestID": "0d6d066c-71bd-47de-9c8e-0cc5b5f9e6c9",
+        "service": {
+          "requestID": "0d6d066c-71bd-47de-9c8e-0cc5b5f9e6c9",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 3
+        }
+      },
+      {
+        "time": "2026-11-09T10:23:49.801Z",
+        "mode": "both",
+        "folder": "plans",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=missing-owned-plans",
+        "status": 404,
+        "requestID": "f54b57b8-76b3-4697-b819-1e379d1f2271",
+        "service": {
+          "requestID": "f54b57b8-76b3-4697-b819-1e379d1f2271",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:23:49.805Z",
+        "mode": "both",
+        "folder": "plans/drafts",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Fdrafts",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=missing-owned-plans-drafts",
+        "status": 404,
+        "requestID": "7905b3ff-c216-45b0-bad6-4a8632ab0968",
+        "service": {
+          "requestID": "7905b3ff-c216-45b0-bad6-4a8632ab0968",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 1
+        }
+      },
+      {
+        "time": "2026-11-09T10:23:49.810Z",
+        "mode": "both",
+        "folder": "plans/reference",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Freference",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=missing-owned-plans-reference",
+        "status": 404,
+        "requestID": "b45af4cb-ef25-4389-81fa-21e8038d4199",
+        "service": {
+          "requestID": "b45af4cb-ef25-4389-81fa-21e8038d4199",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:24:04.794Z",
+        "mode": "both",
+        "folder": "",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=missing-owned-root",
+        "status": 404,
+        "requestID": "410c1486-42dc-4f70-a95d-70f6b580814d",
+        "service": {
+          "requestID": "410c1486-42dc-4f70-a95d-70f6b580814d",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 1
+        }
+      },
+      {
+        "time": "2026-11-09T10:24:04.798Z",
+        "mode": "both",
+        "folder": "plans",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=missing-owned-plans",
+        "status": 404,
+        "requestID": "98aa9a37-7e31-41fb-9bfa-a2cd75a8b523",
+        "service": {
+          "requestID": "98aa9a37-7e31-41fb-9bfa-a2cd75a8b523",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:24:04.801Z",
+        "mode": "both",
+        "folder": "plans/drafts",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Fdrafts",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=missing-owned-plans-drafts",
+        "status": 404,
+        "requestID": "c8a008f3-09a7-4433-b965-3aba04eeabc0",
+        "service": {
+          "requestID": "c8a008f3-09a7-4433-b965-3aba04eeabc0",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:24:04.801Z",
+        "mode": "both",
+        "folder": "plans/reference",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Freference",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=missing-owned-plans-reference",
+        "status": 404,
+        "requestID": "e14f6140-c035-4dce-8a8d-fbfdbe33dd99",
+        "service": {
+          "requestID": "e14f6140-c035-4dce-8a8d-fbfdbe33dd99",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 1
+        }
+      },
+      {
+        "time": "2026-11-09T10:24:15.970Z",
+        "mode": "child",
+        "folder": "",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=",
+        "status": 200,
+        "requestID": "b3b36480-475d-4d78-a77b-5319a5f0fc90",
+        "service": {
+          "requestID": "b3b36480-475d-4d78-a77b-5319a5f0fc90",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:24:19.796Z",
+        "mode": "child",
+        "folder": "",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=",
+        "status": 200,
+        "requestID": "de8017d4-d55f-44a9-aa0d-c3567dde0217",
+        "service": {
+          "requestID": "de8017d4-d55f-44a9-aa0d-c3567dde0217",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:24:19.801Z",
+        "mode": "child",
+        "folder": "plans",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans",
+        "status": 200,
+        "requestID": "850f1628-edff-4659-b7f4-c8a912308f58",
+        "service": {
+          "requestID": "850f1628-edff-4659-b7f4-c8a912308f58",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 1
+        }
+      },
+      {
+        "time": "2026-11-09T10:24:19.805Z",
+        "mode": "child",
+        "folder": "plans/drafts",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Fdrafts",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=missing-owned-plans-drafts",
+        "status": 404,
+        "requestID": "4174e390-ef76-44d8-966d-496dd2150ed3",
+        "service": {
+          "requestID": "4174e390-ef76-44d8-966d-496dd2150ed3",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 404,
+          "duration": 1
+        }
+      },
+      {
+        "time": "2026-11-09T10:24:19.810Z",
+        "mode": "child",
+        "folder": "plans/reference",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Freference",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Freference",
+        "status": 200,
+        "requestID": "1cb0a0f6-b792-43e3-9109-d1585e8758e8",
+        "service": {
+          "requestID": "1cb0a0f6-b792-43e3-9109-d1585e8758e8",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      },
+      {
+        "time": "2026-11-09T10:24:31.050Z",
+        "mode": "direct",
+        "folder": "plans/drafts",
+        "source": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Fdrafts",
+        "target": "/file?directory=C%3A%5CUsers%5Chengu%5CAppData%5CLocal%5CTemp%5Copencorvus-iteration-20261109-b104%5Cproject-after&path=plans%2Fdrafts",
+        "status": 200,
+        "requestID": "b034bb29-271c-409e-93d8-5ac49901ff08",
+        "service": {
+          "requestID": "b034bb29-271c-409e-93d8-5ac49901ff08",
+          "method": "GET",
+          "path": "/file",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 2
+        }
+      }
+    ]
+  }
+}
