@@ -101,6 +101,7 @@ function sameFileResourceTarget(left: FileEditorTarget | null, right: FileEditor
 }
 
 type FileEditorFailure = { messageKey: string; cause?: unknown }
+type AcceptedFileContent = { value: FileContent; target: FileEditorTarget; readerAuthority: ApiAuthority }
 type ComparisonMode = "disk-draft" | "base-disk" | "base-draft"
 type FileComparison = {
   target: FileEditorTarget
@@ -162,7 +163,8 @@ export function FileEditorPane() {
     { equals: sameFileResourceTarget },
   )
 
-  const [content, setContent] = createSignal<FileContent | null>(null)
+  const [acceptedContent, setAcceptedContent] = createSignal<AcceptedFileContent | null>(null)
+  const content = createMemo(() => acceptedContent()?.value ?? null)
   const [loadedObservationKey, setLoadedObservationKey] = createSignal<string | null>(null)
   const observationKey = createMemo(() => {
     const file = contentTarget()
@@ -202,10 +204,9 @@ export function FileEditorPane() {
   const markdownFile = () => textContent() && extToLang(path()) === "markdown"
   const previewVisible = () => markdownFile() && textView() === "preview"
   const previewImages = createMemo<MarkdownImageReader | undefined>(() => {
-    const document = contentTarget()
-    const loaded = content()
-    const authority = captureApiAuthority()
-    if (!document || !loaded) return
+    const loaded = acceptedContent()
+    if (!loaded) return
+    const { target: document, readerAuthority } = loaded
     return {
       read: async (reference, signal) => {
         const path = resolveDocumentFilePath(decodeURIComponent(reference), document)
@@ -213,7 +214,7 @@ export function FileEditorPane() {
           directory: document.directory,
           path,
           ...(document.sourceAbsolutePath ? { sourceAbsolutePath: path } : {}),
-        }, authority, signal)
+        }, readerAuthority, signal)
         if (image?.encoding === "base64" && image.mimeType?.startsWith("image/")) {
           return `data:${image.mimeType};base64,${image.content}`
         }
@@ -328,13 +329,14 @@ export function FileEditorPane() {
     return disk
   }
   const adoptComparedDiskBase = () => {
+    const read = comparison()
     const disk = comparedDiskForBase()
     const revision = disk?.revision
-    if (!disk || !revision) return
+    if (!read || !disk || !revision) return
     batch(() => {
-      setContent(disk)
+      setAcceptedContent({ value: disk, target: read.target, readerAuthority: read.authority })
       setSavedBaseline({ content: disk.content, revision })
-      setLoadedObservationKey(comparison()!.observationKey)
+      setLoadedObservationKey(read.observationKey)
       // The adopted snapshot replaces the base that produced this conflict.
       if (error()?.messageKey === "file_editor.save_conflict") setError(null)
       adoptedComparisonGeneration = loadGeneration
@@ -410,7 +412,8 @@ export function FileEditorPane() {
     }
   }
 
-  const applyContent = (next: FileContent | null, observed: string | null) => batch(() => {
+  const applyContent = (loaded: AcceptedFileContent | null, observed: string | null) => batch(() => {
+    const next = loaded?.value ?? null
     if (next && textView() === null) {
       setTextView(
         canEdit(next) && next.content.length > 0 && extToLang(path()) === "markdown" && !target()?.range
@@ -418,7 +421,7 @@ export function FileEditorPane() {
           : "source",
       )
     }
-    setContent(next)
+    setAcceptedContent(loaded)
     setLoadedObservationKey(next ? observed : null)
     setError(null)
     draftRevision += 1
@@ -452,14 +455,17 @@ export function FileEditorPane() {
       setReloading(false)
       setLoading(false)
       finishLeaveDecision(false)
-      if (retainDraft) return
+      if (retainDraft) {
+        setAcceptedContent((previous) => previous && { ...previous, readerAuthority: authority })
+        return
+      }
       applyContent(null, null)
       setLoadFailure(null)
       if (!file) return
       setLoading(true)
       const current = () => generation === loadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)
       void readFileContent(file, authority).then((next) => {
-        if (current()) applyContent(next, observed)
+        if (current()) applyContent(next && { value: next, target: file, readerAuthority: authority }, observed)
       }, (cause) => {
         if (current()) setLoadFailure({ error: cause })
       }).finally(() => {
@@ -574,7 +580,7 @@ export function FileEditorPane() {
         return
       }
       setLoadFailure(null)
-      applyContent(next, observed)
+      applyContent(next && { value: next, target: file, readerAuthority: authority }, observed)
     } catch (cause) {
       if (generation === reloadGeneration && ownsFileTarget(file) && isApiAuthorityCurrent(authority)) {
         if (loadFailure()) setLoadFailure({ error: cause })

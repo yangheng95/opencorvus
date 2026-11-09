@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [Markdown 本地图重试保留正在读取的请求证据](2026-11-09-markdown-local-image-retry/README.md)
 - [附件原件下载重试的诊断和键盘焦点证据](2026-11-09-original-download-retry-focus/README.md)
 - [文本附件区分读取失败与编码错误证据](2026-11-09-text-preview-failure-recovery/README.md)
 - [更新日志按发布日期查找证据](2026-11-09-release-history-date-search/README.md)

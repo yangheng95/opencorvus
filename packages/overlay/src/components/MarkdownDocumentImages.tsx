@@ -10,6 +10,9 @@ export interface MarkdownImageReader {
   read: (path: string, signal: AbortSignal) => Promise<string>
 }
 
+type DocumentImageSource = { path: string; reader: MarkdownImageReader }
+type DocumentImageContent = { src: string; focusOrigin?: HTMLButtonElement }
+
 /** Only document-relative images become file-reader slots; other Markdown stays intact. */
 function documentImageMarkup(html: string): string {
   const template = document.createElement("template")
@@ -31,14 +34,16 @@ function DocumentImage(props: { path: string; alt: string; reader?: MarkdownImag
   let host!: HTMLSpanElement
   let controller: AbortController | undefined
   const [visible, setVisible] = createSignal(false)
-  const [image, { refetch }] = createResource(
+  const [image, { refetch }] = createResource<DocumentImageContent, DocumentImageSource, HTMLButtonElement>(
     () => visible() && props.reader ? { path: props.path, reader: props.reader } : false,
-    async (source) => {
+    async (source, { refetching }) => {
       controller?.abort()
       const current = new AbortController()
       controller = current
       try {
-        return await source.reader.read(source.path, current.signal)
+        const src = await source.reader.read(source.path, current.signal)
+        const focusOrigin = refetching instanceof HTMLButtonElement && refetching === document.activeElement ? refetching : undefined
+        return { src, focusOrigin }
       } finally {
         if (controller === current) controller = undefined
       }
@@ -58,14 +63,22 @@ function DocumentImage(props: { path: string; alt: string; reader?: MarkdownImag
   return <span ref={host} class="md-document-image">
     <Show when={!image.error} fallback={
       <Feedback tone="error" details={formatErrorDetails(image.error)} actions={
-        <Button type="button" variant="outline" size="sm" tone="neutral" onClick={() => void refetch()}>
-          {t("file.retry_preview")}
+        <Button
+          type="button" variant="outline" size="sm" tone="neutral"
+          aria-label={`${t("file.retry_preview")}: ${name()}`}
+          aria-disabled={image.loading || undefined}
+          aria-busy={image.loading || undefined}
+          onClick={(event) => {
+            if (!image.loading) void refetch(event.currentTarget)
+          }}
+        >
+          {t(image.loading ? "common.retrying" : "file.retry_preview")}
         </Button>
       }>{t("file.load_failed", { name: name() })}</Feedback>
     }>
       <Show when={image.state === "ready" && image()} fallback={
         <span class="md-document-image-loading" role="status">{name()} · {t("common.loading")}</span>
-      }>{(src) => <PreviewableImage src={src()} alt={props.alt} />}</Show>
+      }>{(content) => <PreviewableImage src={content().src} alt={props.alt} focusOrigin={content().focusOrigin} />}</Show>
     </Show>
   </span>
 }

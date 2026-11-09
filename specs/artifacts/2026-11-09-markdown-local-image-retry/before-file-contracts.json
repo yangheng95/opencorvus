@@ -1,0 +1,136 @@
+{
+  "phase": "before",
+  "project": "prj_h68bmMXD5CGC2eZELsuJ",
+  "checks": [
+    {
+      "status": 200,
+      "operationId": "project.current",
+      "query": {},
+      "requestID": "d7630860-a61d-43f4-8b9a-0566b538009f"
+    },
+    {
+      "status": 200,
+      "operationId": "project.list",
+      "query": {},
+      "requestID": "a4dd9a3e-e1f8-47b4-b893-596380aea8ca"
+    },
+    {
+      "status": 200,
+      "operationId": "file.read",
+      "query": {
+        "path": "guide.md",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before"
+      },
+      "requestID": "2af2f643-d7dd-49e3-8988-6cb82f63c4d4"
+    },
+    {
+      "status": 200,
+      "operationId": "file.readSource",
+      "query": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before\\guide.md",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before"
+      },
+      "requestID": "e9428418-7e1f-4896-9cc8-d27598fe7e1a"
+    },
+    {
+      "status": 200,
+      "operationId": "file.read",
+      "query": {
+        "path": "other.md",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before"
+      },
+      "requestID": "50070b1e-0244-472b-b8c8-87ffcb64cfc5"
+    },
+    {
+      "status": 200,
+      "operationId": "file.readSource",
+      "query": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before\\other.md",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before"
+      },
+      "requestID": "b840caa0-7c72-469e-bff0-8d0cceaa2ff6"
+    },
+    {
+      "status": 200,
+      "operationId": "file.read",
+      "query": {
+        "path": "media/retry-diagram.svg",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before"
+      },
+      "requestID": "664ebdbf-b2e2-4c46-ac13-14e37943d9ac"
+    },
+    {
+      "status": 200,
+      "operationId": "file.readSource",
+      "query": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before\\media\\retry-diagram.svg",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before"
+      },
+      "requestID": "3a1f49d3-f0b9-4080-95b0-24fd9c86f266"
+    },
+    {
+      "status": 200,
+      "operationId": "file.read",
+      "query": {
+        "path": "media/sibling.svg",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before"
+      },
+      "requestID": "fd6e10b4-cad9-4330-abad-36efff2191b0"
+    },
+    {
+      "status": 200,
+      "operationId": "file.readSource",
+      "query": {
+        "path": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before\\media\\sibling.svg",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b131\\project-before"
+      },
+      "requestID": "20e33746-6d62-4526-80df-62bc6a21a1b8"
+    }
+  ],
+  "facts": [
+    {
+      "file": "guide.md",
+      "operationId": "file.read",
+      "bytes": 266
+    },
+    {
+      "file": "guide.md",
+      "operationId": "file.readSource",
+      "bytes": 266
+    },
+    {
+      "file": "other.md",
+      "operationId": "file.read",
+      "bytes": 115
+    },
+    {
+      "file": "other.md",
+      "operationId": "file.readSource",
+      "bytes": 115
+    },
+    {
+      "file": "media/retry-diagram.svg",
+      "operationId": "file.read",
+      "bytes": 396,
+      "mime": "image/svg+xml"
+    },
+    {
+      "file": "media/retry-diagram.svg",
+      "operationId": "file.readSource",
+      "bytes": 396,
+      "mime": "image/svg+xml"
+    },
+    {
+      "file": "media/sibling.svg",
+      "operationId": "file.read",
+      "bytes": 323,
+      "mime": "image/svg+xml"
+    },
+    {
+      "file": "media/sibling.svg",
+      "operationId": "file.readSource",
+      "bytes": 323,
+      "mime": "image/svg+xml"
+    }
+  ]
+}

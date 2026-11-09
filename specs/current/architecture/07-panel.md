@@ -1125,10 +1125,17 @@ the existing scoped file-content reader. Renderer-produced local image markup
 becomes a lazy presentation slot before insertion; it mounts the existing
 PreviewableImage through a Portal. Each visible image read belongs to the
 current document/load/API authority and is aborted on replacement or unmount.
+The accepted content publishes its reader target and authority with the file
+bytes. Pending navigation cannot bind an old slot to a new document; an
+explicitly retained draft keeps its identity when its reader authority changes.
 Loaded image MIME/base64 supplies the existing image viewer; mutable file paths
 do not enter the immutable attachment Blob cache. Loading, failure and retry
-remain in the current language. Other Markdown consumers and external/rooted
-image URLs retain their existing resource semantics.
+remain in the current language. An explicit retry keeps its action and original
+diagnostic while that slot is loading and guards repeated activation. Success
+returns still-owned retry focus to the rendered image's preview button. Long
+read diagnostics scroll within the slot so the rest of the document remains
+available. Other Markdown consumers and external/rooted image URLs retain
+their existing resource semantics.
 New unranged Markdown identities default to Preview as defined above; other
 text resources default to Source. The existing editor stays
 mounted while hidden, retaining its selection and undo history; Preview uses the

@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createResource, createSignal, onCleanup, Show } from "solid-js"
+import { createEffect, createMemo, createResource, createSignal, onCleanup, onMount, Show } from "solid-js"
 import type { JSX } from "solid-js"
 import {
   closeImagePreview,
@@ -80,7 +80,9 @@ export function PreviewableImage(props: {
   imageDataUI?: string
   imageAttributes?: PreviewableImageAttributes
   resourceUrl?: string
+  focusOrigin?: HTMLButtonElement
 }) {
+  let triggerButton: HTMLButtonElement | undefined
   const alt = () => props.alt || ""
   // Display annotations name the trigger; alt retains preview/download identity.
   const trigger = createMemo(() => imagePreviewTriggerContract({ src: props.src, alt: props.displayLabel ?? alt() }))
@@ -91,6 +93,13 @@ export function PreviewableImage(props: {
   const failed = () => failedSource() === props.src
   const delegatedPreview = () => !props.resourceUrl
 
+  onMount(() => {
+    const origin = props.focusOrigin
+    if (!origin || !triggerButton?.isConnected || triggerButton.closest("[inert], [hidden]")) return
+    const active = document.activeElement
+    if (active === origin || (!origin.isConnected && active === document.body)) triggerButton.focus({ preventScroll: true })
+  })
+
   function handlePreviewOpen(event: MouseEvent): void {
     event.preventDefault()
     event.stopPropagation()
@@ -100,6 +109,7 @@ export function PreviewableImage(props: {
 
   return (
     <Button
+      ref={triggerButton}
       type="button"
       variant={trigger().variant}
       size={trigger().size}

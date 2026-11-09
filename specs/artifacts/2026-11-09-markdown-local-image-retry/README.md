@@ -1,0 +1,11 @@
+# Markdown 本地图重试桌面证据
+
+对应[Recall、根因与验收](../../records/2026-11/2026-11-09-markdown-local-image-retry.md)。截图均为本人复核的真实 1280×720 开发桌面原图。
+
+- 基线：[01 缺失图与正常邻图](01-before-relative-image-failure-and-healthy-neighbor.jpg)、[02 诊断展开占满窄阅读区](02-before-markdown-image-real-read-diagnostic.jpg)、[03 重试待定仍可重复按](03-before-retry-stays-enabled-during-the-read.jpg)、[04 恢复后焦点丢失](04-before-restored-image-appears-with-focus-on-page-root.jpg)。
+- 第一候选英文：[05 诊断和邻图同屏](05-after-bounded-diagnostic-keeps-neighbor-visible.jpg)、[06 内部滚动保留完整响应](06-after-scroll-inside-diagnostic-reaches-original-body.jpg)、[07 真实再次失败焦点保留](07-after-real-repeat-failure-retains-retry-focus.jpg)、[08 重复键只保留一次读](08-after-three-enters-keep-one-active-retry.jpg)、[09 原图得到焦点](09-after-recovered-image-trigger-receives-keyboard-focus.jpg)、[10 原图查看器](10-after-enter-opens-the-original-image-viewer.jpg)、[11 关闭回原图](11-after-escape-restores-recovered-image-trigger.jpg)。
+- 第一候选中文：[12 中文故障和邻图](12-after-chinese-relative-image-error-retains-neighbor.jpg)、[13 待定时主动移到邻图](13-after-chinese-user-moves-focus-to-neighbor-while-waiting.jpg)、[14 恢复后邻图保留焦点](14-after-chinese-recovered-image-keeps-neighbor-focus.jpg)、[15 切文档前旧图待定](15-after-current-document-retry-pending-before-switch.jpg)、[16 真实切换](16-after-switch-opens-independent-document-while-old-read-retires.jpg)、[17 切换后新文档稳定](17-first-build-other-document-remains-visible-after-retirement.jpg)。第一候选代理记录仍显示换文档时旧图额外短暂到达，后续专门修复并复验。
+- 最终：[18 单次读取和邻图](18-final-single-retry-keeps-focus-and-neighbor.jpg)、[19 原图实际焦点](19-final-recovered-image-receives-its-own-focus.jpg)、[20 键盘大图](20-final-keyboard-opens-the-original-diagram.jpg)、[21 中文切换前旧图待定](21-final-chinese-read-pending-before-document-switch.jpg)、[22 只显示新文档和新图](22-final-switch-shows-new-document-and-its-own-image.jpg)、[23 当前文档源码](23-final-source-mode-shows-original-markdown.jpg)、[24 显式重载后预览](24-final-preview-after-explicit-disk-reload.jpg)。
+- [基线实际请求](before-proxy.jsonl)、[第一候选实际请求](first-candidate-proxy.jsonl)、[基线项目和文件](before-file-contracts.json)、[第一候选项目和文件](first-candidate-file-contracts.json)、[双路由检查器](check-file-contracts.mjs)、[延迟代理](file-content-delay.mjs)、[数据核对](owned-final-check.json)。
+- [最终实际请求](final-proxy.jsonl)、[最终项目和文件](after-file-contracts.json)。
+- 隔离样本：[主文档](fixtures/guide.md)、[另一篇](fixtures/other.md)、[重试图](fixtures/media/retry-diagram.svg)、[邻图](fixtures/media/sibling.svg)。

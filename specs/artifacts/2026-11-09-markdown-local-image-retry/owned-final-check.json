@@ -1,0 +1,46 @@
+{
+  "before": {
+    "originalFileBytes": {
+      "guide.md": 266,
+      "other.md": 115,
+      "media/retry-diagram.svg": 396,
+      "media/sibling.svg": 323
+    },
+    "head": "ae7588b75a9a4a492734da0dd924a5626fe1fb59",
+    "status": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    }
+  },
+  "after": {
+    "originalFileBytes": {
+      "guide.md": 266,
+      "other.md": 115,
+      "media/retry-diagram.svg": 396,
+      "media/sibling.svg": 323
+    },
+    "head": "32f65fcae03e7af92280592adfc70999335f5a1c",
+    "status": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    }
+  }
+}

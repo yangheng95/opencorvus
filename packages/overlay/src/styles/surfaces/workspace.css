@@ -381,6 +381,12 @@ code .file-link:focus-visible {
   color: var(--text-soft);
 }
 
+.md-document-image .oc-feedback__diagnostic {
+  max-block-size: min(30vh, calc(200px * var(--ui-scale)));
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
 .file-editor-load-feedback {
   margin: var(--ui-gap-lg);
   min-width: 0;
