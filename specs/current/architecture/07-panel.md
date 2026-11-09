@@ -5367,6 +5367,9 @@ unavailable message. Navigation focuses the opened heading and returns to the
 exact visible row or the current catalog search.
 Installed Expert Squad navigation focuses Back to list while the exact detail
 loads, then returns to the original physical installation row or selected filter.
+Retrying a failed detail read keeps the current installation's original diagnostic
+and the focusable Retry action. A successful retry moves still-owned focus from
+that retiring action to the recovered installation heading.
 Installed package rows identify each physical installation by its localized scope
 and canonical namespace/ID, including when several rows share a display name.
 Expert Squad discovery issues and precedence notices belong to the catalog list.

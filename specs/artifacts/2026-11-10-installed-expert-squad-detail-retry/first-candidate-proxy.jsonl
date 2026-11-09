@@ -1,0 +1,8 @@
+{"listenPort":39269,"upstreamPort":39267,"pid":20436}
+{"time":"2026-11-09T16:09:38.849Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T16:09:45.773Z","receipt":1,"stage":"arrival","path":"/expert-squad/settings/detail","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b134\\project-after","delay":17000}
+{"time":"2026-11-09T16:09:45.777Z","receipt":1,"stage":"origin","status":200,"requestID":"a9970840-1824-4c94-9a9b-ec486d949a78","selected":{"id":"research-studio","name":"Research Studio","source":{"kind":"built_in"},"version":"2026.11.07.1"}}
+{"time":"2026-11-09T16:10:02.791Z","receipt":1,"stage":"client-closed"}
+{"time":"2026-11-09T16:10:06.471Z","receipt":2,"stage":"arrival","path":"/expert-squad/settings/detail","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b134\\project-after","delay":5500}
+{"time":"2026-11-09T16:10:06.474Z","receipt":2,"stage":"origin","status":200,"requestID":"06367361-3347-4477-8acf-abb792111a11","selected":{"id":"research-studio","name":"Research Studio","source":{"kind":"built_in"},"version":"2026.11.07.1"}}
+{"time":"2026-11-09T16:10:11.987Z","receipt":2,"stage":"released","selected":{"id":"research-studio","name":"Research Studio","source":{"kind":"built_in"},"version":"2026.11.07.1"}}

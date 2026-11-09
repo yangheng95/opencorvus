@@ -254,6 +254,11 @@ type InstalledSquadSection = "overview" | "agents" | "configuration" | "evolutio
 type CatalogDiscoveryIssue = Extract<ExpertSquadDiagnosticsPage["entries"][number], { kind: "issue" }>["issue"]
 type CatalogDiagnosticsSnapshot = Pick<ExpertSquadDiagnosticsPage, "entries" | "next_cursor" | "total_count">
 type DiagnosticContinuation = { kind: "loading" } | { kind: "failed"; error: unknown }
+type InstalledDetailRead = { identity: string } & (
+  | { kind: "loading" }
+  | { kind: "failed" | "retrying"; error: unknown }
+  | { kind: "ready"; surface: ExpertSquadSettingsSurface }
+)
 
 const catalogIssueLabels = {
   "location.scan": "expert_squad.catalog_issue.location",
@@ -302,10 +307,7 @@ export default function ExpertSquadPanel() {
   const [catalogDiagnostics, setCatalogDiagnostics] = createSignal<CatalogDiagnosticsSnapshot | null>(null)
   const [catalogDiagnosticsOpen, setCatalogDiagnosticsOpen] = createSignal(false)
   const [diagnosticContinuation, setDiagnosticContinuation] = createSignal<DiagnosticContinuation | null>(null)
-  const [selectedDetail, setSelectedDetail] = createSignal<ExpertSquadSettingsSurface | null>(null)
-  const [selectedDetailIdentity, setSelectedDetailIdentity] = createSignal("")
-  const [selectedDetailLoading, setSelectedDetailLoading] = createSignal(false)
-  const [selectedDetailError, setSelectedDetailError] = createSignal<{ error: unknown } | null>(null)
+  const [installedDetailRead, setInstalledDetailRead] = createSignal<InstalledDetailRead>()
   const [notice, setNotice] = createSignal("")
   const [noticeTone, setNoticeTone] = createSignal("")
   const [busy, setBusy] = createSignal<BusyAction | null>(null)
@@ -343,6 +345,7 @@ export default function ExpertSquadPanel() {
   let installedOpenerKey = ""
   let installedLayout: HTMLDivElement | undefined
   let installedBackButton: HTMLButtonElement | undefined
+  let installedDetailHeading: HTMLHeadingElement | undefined
   let diagnosticDisclosure: HTMLDetailsElement | undefined
   let diagnosticsMoreButton: HTMLButtonElement | undefined
 
@@ -475,7 +478,19 @@ export default function ExpertSquadPanel() {
     const squad = currentSquadIndex()
     return squad ? `${currentScopeIdentity()}\n${squadSelectionKey(squad)}` : ""
   })
-  const currentSelectedSurface = createMemo(() => (selectedDetailIdentity() === selectedDetailKey() ? selectedDetail() : null))
+  const currentDetailRead = createMemo(() => {
+    const read = installedDetailRead()
+    return read?.identity === selectedDetailKey() ? read : undefined
+  })
+  const selectedDetailFailure = createMemo(() => {
+    const read = currentDetailRead()
+    return read?.kind === "failed" || read?.kind === "retrying" ? read : undefined
+  })
+  const selectedDetailRetrying = () => currentDetailRead()?.kind === "retrying"
+  const currentSelectedSurface = createMemo(() => {
+    const read = currentDetailRead()
+    return read?.kind === "ready" ? read.surface : null
+  })
   const currentSquad = createMemo(() => currentSelectedSurface()?.selected ?? null)
   const isSelectableInstallation = (squad: ExpertSquadSelectionIdentity) => {
     const surface = currentSelectedSurface()
@@ -515,36 +530,41 @@ export default function ExpertSquadPanel() {
     return selectionIdentity
   }, "")
 
-  function loadSelectedDetail(): void {
+  function loadSelectedDetail(retryButton?: HTMLButtonElement): void {
+    const failure = retryButton ? selectedDetailFailure() : undefined
+    if (retryButton && failure?.kind !== "failed") return
     const squad = currentSquadIndex()
     const scope = currentScope()
     const identity = selectedDetailKey()
     const sequence = ++detailLoadSequence
-    setSelectedDetail(null)
-    setSelectedDetailIdentity("")
-    setSelectedDetailError(null)
     if (!squad || (scope.kind !== "project" && scope.kind !== "session")) {
-      setSelectedDetailLoading(false)
+      setInstalledDetailRead(undefined)
       return
     }
-    setSelectedDetailLoading(true)
+    setInstalledDetailRead(failure ? { kind: "retrying", identity, error: failure.error } : { kind: "loading", identity })
+    const authority = captureApiAuthority()
+    const navigation = installedFocusSequence
+    const owns = () => sequence === detailLoadSequence && selectedDetailKey() === identity
     const installationScope = squad.source.kind === "built_in" ? "built_in" : squad.source.installation_scope
     const namespace = squad.source.kind === "installed_package" ? squad.source.namespace : undefined
-    void loadExpertSquadSettings(scope.directory, squad.id, installationScope, namespace)
+    void loadExpertSquadSettings(scope.directory, squad.id, installationScope, namespace, authority)
       .then((surface) => {
-        if (sequence !== detailLoadSequence || selectedDetailKey() !== identity) return
-        setSelectedDetail(surface)
-        setSelectedDetailIdentity(identity)
+        if (!owns()) return
+        const restoreFocus = retryButton && document.activeElement === retryButton
+        setInstalledDetailRead({ kind: "ready", identity, surface })
+        if (!restoreFocus) return
+        queueMicrotask(() => {
+          if (!owns() || !isApiAuthorityCurrent(authority) || navigation !== installedFocusSequence || !detailOpen()) return
+          if (!installedLayout?.isConnected || !installedDetailHeading?.isConnected || document.activeElement !== document.body) return
+          installedDetailHeading.focus()
+        })
       })
       .catch((error) => {
-        if (sequence !== detailLoadSequence || selectedDetailKey() !== identity) return
-        if (!(error instanceof ApiAuthorityChangedError)) setSelectedDetailError({ error })
-      })
-      .finally(() => {
-        if (sequence === detailLoadSequence && selectedDetailKey() === identity) setSelectedDetailLoading(false)
+        if (!owns()) return
+        setInstalledDetailRead(error instanceof ApiAuthorityChangedError ? undefined : { kind: "failed", identity, error })
       })
   }
-  createEffect(loadSelectedDetail)
+  createEffect(() => loadSelectedDetail())
 
   function setAgentExpanded(agentID: string, open: boolean): void {
     setExpandedAgentIDs((current) => {
@@ -1677,16 +1697,24 @@ export default function ExpertSquadPanel() {
                     <Icon name="nav-back" />
                     {t("settings.back_to_list")}
                   </Button>
-                  <Show when={selectedDetailLoading()}>
+                  <Show when={currentDetailRead()?.kind === "loading"}>
                     <div class="loading-hint">{t("expert_squad.loading")}</div>
                   </Show>
-                  <Show when={selectedDetailError()}>
+                  <Show when={selectedDetailFailure()}>
                     <Feedback
                       tone="error"
-                      details={formatErrorDetails(selectedDetailError()?.error)}
+                      details={formatErrorDetails(selectedDetailFailure()?.error)}
                       actions={
-                        <Button type="button" variant="outline" size="sm" tone="neutral" disabled={selectedDetailLoading()} onClick={loadSelectedDetail}>
-                          {t("common.retry")}
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          tone="neutral"
+                          aria-disabled={selectedDetailRetrying() || undefined}
+                          aria-busy={selectedDetailRetrying() || undefined}
+                          onClick={(event) => loadSelectedDetail(event.currentTarget)}
+                        >
+                          {t(selectedDetailRetrying() ? "common.retrying" : "common.retry")}
                         </Button>
                       }
                     >
@@ -1698,7 +1726,7 @@ export default function ExpertSquadPanel() {
                       <div class="expert-squad-detail" data-ui="expert-squad-detail">
                         <header class="expert-squad-identity-head expert-squad-installed-identity">
                           <div class="expert-squad-identity-copy">
-                            <h2>{squad.name}</h2>
+                            <h2 ref={installedDetailHeading} tabIndex={-1}>{squad.name}</h2>
                             <div class="expert-squad-identity-meta">
                               <code>{squad.id}</code>
                               <span>{sourceLabel(squad)}</span>

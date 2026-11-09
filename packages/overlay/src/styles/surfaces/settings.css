@@ -2144,6 +2144,8 @@ button.s-row:focus-visible {
 }
 
 .expert-squad-identity-copy h2 {
+  justify-self: start;
+  max-inline-size: 100%;
   min-width: 0;
   margin: 0;
   color: var(--text-strong);

@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [已安装专家团详情重试保留诊断与焦点证据](2026-11-10-installed-expert-squad-detail-retry/README.md)
 - [多步任务技能详情保持打开的身份证据](2026-11-09-mission-skill-detail-identity/README.md)
 - [多步任务技能支持跨字段组合搜索证据](2026-11-09-mission-skill-search-terms/README.md)
 - [Markdown 本地图重试保留正在读取的请求证据](2026-11-09-markdown-local-image-retry/README.md)
