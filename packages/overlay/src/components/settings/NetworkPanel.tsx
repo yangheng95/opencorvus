@@ -1,4 +1,4 @@
-import { createEffect, createMemo, createSignal, onCleanup } from "solid-js"
+import { createEffect, createMemo, createSignal, onCleanup, Show } from "solid-js"
 import { appStore } from "../../store/app"
 import { captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { boardStore, activeTaskID } from "../../store/board"
@@ -12,12 +12,15 @@ import {
 import { t } from "../../utils/i18n"
 import { formatErrorDetails } from "../../utils/error-details"
 import { activeProjectDirectory } from "../../services/project-directory"
+import { workLedgerProject } from "../../services/work-ledger"
+import { projectLedgerDisplayName } from "../../utils/project-directory"
 import { Icon } from "../ui/Icon"
 import { Button } from "../ui/Button"
 import { TextField } from "../ui/TextField"
 import { Switch } from "../ui/Switch"
 import { Feedback } from "../ui/Feedback"
-import { SettingsGroup, SettingsPanel, SettingsRow } from "./layout"
+import { Disclosure } from "../ui/Disclosure"
+import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsReferenceList, SettingsRow } from "./layout"
 import { ServerConnectionSettingsGroup } from "./ServerConnectionSettingsGroup"
 
 function configuredProxy(): {
@@ -87,6 +90,13 @@ export default function NetworkPanel() {
   const [deleted, setDeleted] = createSignal(false)
   const [testResult, setTestResult] = createSignal<NetworkProxyTestResult | null>(null)
   const proxyConfigured = createMemo(() => !!(appStore.config as any)?.network?.proxy)
+  const directory = createMemo(() => activeProjectDirectory().trim())
+  const projectLabel = () => projectLedgerDisplayName({
+    directory: directory(),
+    customName: workLedgerProject(directory())?.title,
+    unknownName: t("task.project.unknown"),
+    implicitProjectName: t("work_ledger.implicit_project"),
+  })
   let operationGeneration = 0
   let draftGeneration = 0
   let scopeIdentity = ""
@@ -94,8 +104,7 @@ export default function NetworkPanel() {
 
   createEffect(() => {
     const taskID = String(activeTaskID() || "").trim()
-    const directory = activeProjectDirectory().trim()
-    const nextScopeIdentity = `${captureApiAuthority().revision}\u0000${boardStore.selectEpoch}\u0000${taskID}\u0000${directory}`
+    const nextScopeIdentity = `${captureApiAuthority().revision}\u0000${boardStore.selectEpoch}\u0000${taskID}\u0000${directory()}`
     const scopeChanged = nextScopeIdentity !== scopeIdentity
     if (scopeChanged) {
       scopeIdentity = nextScopeIdentity
@@ -125,7 +134,7 @@ export default function NetworkPanel() {
       authority: captureApiAuthority(),
       selectionEpoch: boardStore.selectEpoch,
       taskID: String(activeTaskID() || "").trim(),
-      directory: activeProjectDirectory().trim(),
+      directory: directory(),
       draftGeneration,
     }
   }
@@ -136,7 +145,7 @@ export default function NetworkPanel() {
       owner.selectionEpoch === boardStore.selectEpoch &&
       owner.generation === operationGeneration &&
       owner.taskID === String(activeTaskID() || "").trim() &&
-      owner.directory === activeProjectDirectory().trim()
+      owner.directory === directory()
     )
   }
 
@@ -303,138 +312,150 @@ export default function NetworkPanel() {
   return (
     <SettingsPanel class="general-panel network-panel">
       <ServerConnectionSettingsGroup />
-      <SettingsGroup title={t("network.proxy.title")}>
-        <SettingsRow
-          title={<label for="network-proxy-llm-provider">{t("network.proxy.llm_provider_label")}</label>}
-          desc={t("network.proxy.llm_provider_hint")}
-          align="center"
-          interactive
-          actions={
-            <Switch
-              inputID="network-proxy-llm-provider"
-              checked={llmProvider()}
-              onChange={(checked) => {
-                setLlmProvider(checked)
-                clearFeedback()
-              }}
-            />
-          }
-        />
+      <SettingsGroup
+        title={t("network.proxy.title")}
+        description={directory() ? (
+          <Disclosure.Root>
+            <Disclosure.Trigger>{t("network.proxy.project_scope", { project: projectLabel() })}</Disclosure.Trigger>
+            <Disclosure.Content>
+              <SettingsReferenceList values={[directory()]} />
+            </Disclosure.Content>
+          </Disclosure.Root>
+        ) : undefined}
+      >
+        <Show when={directory()} fallback={<SettingsEmpty>{t("network.proxy.project_required")}</SettingsEmpty>}>
+          <SettingsRow
+            title={<label for="network-proxy-llm-provider">{t("network.proxy.llm_provider_label")}</label>}
+            desc={t("network.proxy.llm_provider_hint")}
+            align="center"
+            interactive
+            actions={
+              <Switch
+                inputID="network-proxy-llm-provider"
+                checked={llmProvider()}
+                onChange={(checked) => {
+                  setLlmProvider(checked)
+                  clearFeedback()
+                }}
+              />
+            }
+          />
 
-        <SettingsRow
-          title={<label for="network-proxy-web-research">{t("network.proxy.web_research_label")}</label>}
-          desc={t("network.proxy.web_research_hint")}
-          align="center"
-          interactive
-          actions={
-            <Switch
-              inputID="network-proxy-web-research"
-              checked={webResearch()}
-              onChange={(checked) => {
-                setWebResearch(checked)
-                clearFeedback()
-              }}
-            />
-          }
-        />
+          <SettingsRow
+            title={<label for="network-proxy-web-research">{t("network.proxy.web_research_label")}</label>}
+            desc={t("network.proxy.web_research_hint")}
+            align="center"
+            interactive
+            actions={
+              <Switch
+                inputID="network-proxy-web-research"
+                checked={webResearch()}
+                onChange={(checked) => {
+                  setWebResearch(checked)
+                  clearFeedback()
+                }}
+              />
+            }
+          />
 
-        <SettingsRow>
-          <TextField.Root as="label">
-            <TextField.Label>{t("network.proxy.url_label")}</TextField.Label>
-            <TextField.Input
-              type="url"
-              value={url()}
-              placeholder="http://127.0.0.1:7890"
-              onInput={(e) => {
-                setUrl(e.currentTarget.value)
-                clearFeedback()
-              }}
-            />
-          </TextField.Root>
-        </SettingsRow>
+          <SettingsRow>
+            <TextField.Root as="label">
+              <TextField.Label>{t("network.proxy.url_label")}</TextField.Label>
+              <TextField.Input
+                type="url"
+                value={url()}
+                placeholder="http://127.0.0.1:7890"
+                onInput={(e) => {
+                  setUrl(e.currentTarget.value)
+                  clearFeedback()
+                }}
+              />
+            </TextField.Root>
+          </SettingsRow>
 
-        <SettingsRow>
-          <TextField.Root as="label">
-            <TextField.Label>{t("network.proxy.username_label")}</TextField.Label>
-            <TextField.Input
-              type="text"
-              value={username()}
-              autocomplete="username"
-              onInput={(e) => {
-                setUsername(e.currentTarget.value)
-                clearFeedback()
-              }}
-            />
-          </TextField.Root>
-        </SettingsRow>
+          <SettingsRow>
+            <TextField.Root as="label">
+              <TextField.Label>{t("network.proxy.username_label")}</TextField.Label>
+              <TextField.Input
+                type="text"
+                value={username()}
+                autocomplete="username"
+                onInput={(e) => {
+                  setUsername(e.currentTarget.value)
+                  clearFeedback()
+                }}
+              />
+            </TextField.Root>
+          </SettingsRow>
 
-        <SettingsRow>
-          <TextField.Root as="label">
-            <TextField.Label>{t("network.proxy.password_label")}</TextField.Label>
-            <TextField.Input
-              type="password"
-              value={password()}
-              autocomplete="current-password"
-              onInput={(e) => {
-                setPassword(e.currentTarget.value)
-                clearFeedback()
-              }}
-            />
-          </TextField.Root>
-        </SettingsRow>
+          <SettingsRow>
+            <TextField.Root as="label">
+              <TextField.Label>{t("network.proxy.password_label")}</TextField.Label>
+              <TextField.Input
+                type="password"
+                value={password()}
+                autocomplete="current-password"
+                onInput={(e) => {
+                  setPassword(e.currentTarget.value)
+                  clearFeedback()
+                }}
+              />
+            </TextField.Root>
+          </SettingsRow>
 
-        {error() ? <Feedback tone="error" details={error()?.details}>{t(error()!.key)}</Feedback> : null}
+          {error() ? <Feedback tone="error" details={error()?.details}>{t(error()!.key)}</Feedback> : null}
 
-        {deleted() ? <Feedback tone="success">{t("network.proxy.deleted")}</Feedback> : null}
+          {deleted() ? <Feedback tone="success">{t("network.proxy.deleted")}</Feedback> : null}
 
-        {testResult() ? (
-          <Feedback tone={testResult()!.ok ? "success" : "error"} details={testResult()!.targetUrl}>
-            {proxyTestMessage(testResult()!)}
-          </Feedback>
-        ) : null}
+          {testResult() ? (
+            <Feedback tone={testResult()!.ok ? "success" : "error"} details={testResult()!.targetUrl}>
+              {proxyTestMessage(testResult()!)}
+            </Feedback>
+          ) : null}
 
-        <SettingsRow
-          align="center"
-          actions={
-            <>
-              <Button
-                type="button"
-                variant="outline"
-                size="md"
-                tone="neutral"
-                onClick={() => void testProxy()}
-                disabled={testing() || saving() || deleting()}
-                title={t("network.proxy.test_button_title")}
-              >
-                {testing() ? t("network.proxy.test_testing") : t("network.proxy.test_button")}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="md"
-                tone="danger"
-                onClick={() => void deleteProxy()}
-                disabled={deleting() || saving() || testing() || !proxyConfigured()}
-                title={t("network.proxy.delete_button_title")}
-                aria-label={t("network.proxy.delete_button_title")}
-                data-ui="network-proxy-delete"
-              >
-                <Icon name="delete" decorative />
-                {deleting() ? t("network.proxy.deleting") : t("common.delete")}
-              </Button>
-              <Button
-                type="button"
-                variant="solid"
-                size="md"
-                tone="accent"
-                onClick={() => void saveProxy()}
-                disabled={saving() || testing() || deleting()}
-              >
-                {saving() ? t("common.saving") : saved() ? t("common.saved") : t("common.save")}
-              </Button>
-            </>
-          }
-        />
+          <SettingsRow
+            align="center"
+            actions={
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="md"
+                  tone="neutral"
+                  onClick={() => void testProxy()}
+                  disabled={testing() || saving() || deleting()}
+                  title={t("network.proxy.test_button_title")}
+                >
+                  {testing() ? t("network.proxy.test_testing") : t("network.proxy.test_button")}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="md"
+                  tone="danger"
+                  onClick={() => void deleteProxy()}
+                  disabled={deleting() || saving() || testing() || !proxyConfigured()}
+                  title={t("network.proxy.delete_button_title")}
+                  aria-label={t("network.proxy.delete_button_title")}
+                  data-ui="network-proxy-delete"
+                >
+                  <Icon name="delete" decorative />
+                  {deleting() ? t("network.proxy.deleting") : t("common.delete")}
+                </Button>
+                <Button
+                  type="button"
+                  variant="solid"
+                  size="md"
+                  tone="accent"
+                  onClick={() => void saveProxy()}
+                  disabled={saving() || testing() || deleting()}
+                >
+                  {saving() ? t("common.saving") : saved() ? t("common.saved") : t("common.save")}
+                </Button>
+              </>
+            }
+          />
+        </Show>
       </SettingsGroup>
     </SettingsPanel>
   )

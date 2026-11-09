@@ -1,0 +1,72 @@
+{
+  "phase": "after",
+  "checks": [
+    {
+      "path": "/project/current",
+      "operationId": "project.current",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\project-after",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "10bb2427-3662-451e-9b24-c14249156c85",
+      "facts": {
+        "id": "prj_hsDIugeAYPfybM3UAIRv",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\project-after"
+      }
+    },
+    {
+      "path": "/config",
+      "operationId": "config.get",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\project-after",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "85096993-1ac1-4f2c-b1e0-84948fd16c4a",
+      "facts": {
+        "proxy": {
+          "llmProvider": false,
+          "webResearch": false,
+          "url": "http://127.0.0.1:31296"
+        },
+        "scope": "project"
+      }
+    },
+    {
+      "path": "/project/current",
+      "operationId": "project.current",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\sibling-after",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "b50c2d30-3ab1-407a-8f81-e49ed62b0b15",
+      "facts": {
+        "id": "prj_hKNIJFMAEtx6sJtOPcUl",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\sibling-after"
+      }
+    },
+    {
+      "path": "/config",
+      "operationId": "config.get",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\sibling-after",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "b3dfa55a-2796-449e-bae1-01c875a4722d",
+      "facts": {
+        "proxy": {
+          "llmProvider": false,
+          "webResearch": false,
+          "url": "http://127.0.0.1:31297"
+        },
+        "scope": "sibling"
+      }
+    },
+    {
+      "path": "/global/config",
+      "operationId": "global.config.get",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "f307c13b-7d79-4c18-8f54-ee3f23eb38a7",
+      "facts": {
+        "proxy": null,
+        "scope": "global"
+      }
+    }
+  ]
+}

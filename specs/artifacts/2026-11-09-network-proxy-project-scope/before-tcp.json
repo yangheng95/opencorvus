@@ -1,0 +1,68 @@
+{
+  "phase": "before",
+  "checks": [
+    {
+      "path": "/project/current",
+      "operationId": "project.current",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\project-before",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "194fec7e-86cc-448b-bc28-fe1a840283ac",
+      "facts": {
+        "id": "prj_haa9Ng4DNFTM4NV2oNN7",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\project-before"
+      }
+    },
+    {
+      "path": "/config",
+      "operationId": "config.get",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\project-before",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "f4c7e558-1284-4f5f-a478-80540fdd2e6d",
+      "facts": {
+        "proxy": {
+          "llmProvider": false,
+          "webResearch": false,
+          "url": "http://127.0.0.1:31294"
+        },
+        "scope": "project"
+      }
+    },
+    {
+      "path": "/project/current",
+      "operationId": "project.current",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\sibling-before",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "f5473cb6-7d17-49dc-a061-28ca2c17b03b",
+      "facts": {
+        "id": "prj_h4f5tWEeGAuSr0hJv2ce",
+        "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\sibling-before"
+      }
+    },
+    {
+      "path": "/config",
+      "operationId": "config.get",
+      "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b94\\sibling-before",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "af5973e9-de1d-4095-b729-d155adec2326",
+      "facts": {
+        "proxy": null,
+        "scope": "sibling"
+      }
+    },
+    {
+      "path": "/global/config",
+      "operationId": "global.config.get",
+      "status": 200,
+      "schemaValid": true,
+      "requestID": "c9722841-1504-495f-9001-68cde06eb2d0",
+      "facts": {
+        "proxy": null,
+        "scope": "global"
+      }
+    }
+  ]
+}

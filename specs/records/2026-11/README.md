@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [代理设置的项目范围](2026-11-09-network-proxy-project-scope.md)
 - [连接健康响应辨别](2026-11-09-health-response-qualification.md)
 - [连接保存与健康检查回执](2026-11-09-connection-save-health-feedback.md)
 - [归档恢复时的焦点归属](2026-11-09-archive-restore-focus-ownership.md)

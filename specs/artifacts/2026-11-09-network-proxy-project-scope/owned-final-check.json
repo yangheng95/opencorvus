@@ -1,0 +1,105 @@
+{
+  "projects": {
+    "sibling-after": {
+      "head": "5bb28f7ea0da06b88e050e6a60c60ab6eb00447a",
+      "originalBytes": 41,
+      "proxy": {
+        "url": "http://127.0.0.1:31297",
+        "llmProvider": false,
+        "webResearch": false
+      }
+    },
+    "project-before": {
+      "head": "666551c6f7eef296452e6a379b26b45036781d3e",
+      "originalBytes": 42,
+      "proxy": {
+        "url": "http://127.0.0.1:31294",
+        "llmProvider": false,
+        "webResearch": false
+      }
+    },
+    "project-after": {
+      "head": "56bfbf2c62691ae581d62d3729b61d0bd011effa",
+      "originalBytes": 41,
+      "proxy": {
+        "url": "http://127.0.0.1:31296",
+        "llmProvider": false,
+        "webResearch": false
+      }
+    },
+    "sibling-before": {
+      "head": "91e5852a5e477798302275000f4939d64ee3053e",
+      "originalBytes": 42,
+      "proxy": null
+    }
+  },
+  "runtime": {
+    "before": {
+      "counts": {
+        "project": 2,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      },
+      "projectConfigPatchReceipts": [
+        {
+          "time": "2026-11-09T08:12:26.679Z",
+          "requestID": "be69e890-f166-4f03-b4f7-70b45590e7fb",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 59
+        }
+      ]
+    },
+    "after": {
+      "counts": {
+        "project": 2,
+        "session": 0,
+        "message": 0,
+        "engine_task": 0,
+        "provider_activity_request": 0
+      },
+      "projectConfigPatchReceipts": [
+        {
+          "time": "2026-11-09T08:17:49.927Z",
+          "requestID": "e20b084b-ec69-4deb-bd74-feffa7e3aee0",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 62
+        },
+        {
+          "time": "2026-11-09T08:18:08.730Z",
+          "requestID": "5f073739-1ea9-4a31-a27a-5a54b5f2daf5",
+          "method": "PATCH",
+          "path": "/config",
+          "status": "completed",
+          "statusCode": 200,
+          "duration": 52
+        }
+      ]
+    }
+  },
+  "shutdown": [
+    {
+      "port": 39121,
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSiE6D00mUYYoivy7"
+      }
+    },
+    {
+      "port": 39122,
+      "status": 200,
+      "body": {
+        "ok": true,
+        "occurrenceID": "cal_g0VaSiE7G00dIHyI6PEI"
+      }
+    }
+  ]
+}

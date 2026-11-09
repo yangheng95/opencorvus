@@ -3110,6 +3110,12 @@ probe still leads to the existing workspace refresh and ordinary Saved result.
 The Save button stays focusable while busy, with the existing submission guard
 admitting one Save at a time.
 
+The separate Proxy section uses the current project directory that owns the
+existing config writes. It names that project before the operator edits any
+field and exposes the full directory in its scope disclosure. When no project
+is active, the section explains how to open an editable scope; client connection
+settings remain available.
+
 ## Current Surface Ownership
 
 Work Ledger Mission rows project their current canonical `missionRecord.outcome`

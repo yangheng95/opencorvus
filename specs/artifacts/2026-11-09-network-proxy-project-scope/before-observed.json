@@ -1,0 +1,28 @@
+{
+  "projectSave": [
+    "\t\t\t\t\t\t\t\t\t67 heading Proxy, Value: 2",
+    "\t\t\t\t\t\t\t\t\t\t68 text Proxy",
+    "\t\t\t\t\t\t\t\t\t75 text Proxy URL",
+    "\t\t\t\t\t\t\t\t\t76 text field (settable) Proxy URL, Value: http://127.0.0.1:31294",
+    "\t\t\t\t\t\t\t\t\t83 button Saved",
+    "The focused UI element is 0 AXWebArea OpenCorvus, URL: 127.0.0.1:39121/ui/"
+  ],
+  "noProject": [
+    "\t\t\t\t\t\t\t\t\t\t38 button Open project: sibling-before",
+    "\t\t\t\t\t\t\t\t\t\t41 button Open project: project-before",
+    "\t\t\t\t\t\t\t50 heading What shall we work on?, Value: 1",
+    "\t\t\t\t\t\t\t\t51 text What shall we work on?"
+  ],
+  "failed": [
+    "\t\t\t\t\t\t\t\t\t76 text field (settable) Proxy URL, Value: http://127.0.0.1:31295",
+    "\t\t\t\t\t\t\t\t\t81 text Proxy settings could not be saved.",
+    "\t\t\t\t\t\t\t\t\t82 button (collapsed) Details, Secondary Actions: Expand",
+    "\t\t\t\t\t\t\t\t\t\t83 text Details",
+    "The focused UI element is 86 button Save"
+  ],
+  "details": [
+    "\t\t\t\t\t\t\t\t\t81 text Proxy settings could not be saved.",
+    "\t\t\t\t\t\t\t\t\t\t90 text Error: Project config update requires an active directory",
+    "The focused UI element is 88 button (expanded) Details, Secondary Actions: Collapse"
+  ]
+}
