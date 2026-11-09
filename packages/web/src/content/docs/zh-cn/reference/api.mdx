@@ -30,7 +30,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/global/automations/{id}/runs` | List scheduled automation target executions 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.runs` |
 | POST | `/global/chat` | Create Chat in a temporary project 请求体: `model`; 错误: `BadRequestError`, `ProviderModelNotFoundError`. | `global.chat.create` |
 | POST | `/global/chat/start` | Start a global Chat 请求体: `attachments`, `model`, `requestID`, `text`; 错误: `AuthReadError`, `BadRequestError`, `GlobalChatStartIdentityConflictError`, `GlobalCreationAcceptedTargetUnavailableError`, `ProviderModelNotFoundError`. | `global.chat.start` |
-| GET | `/global/composer-expert-squads` | Search global Composer expert squads 错误: `BadRequestError`, `UnknownError`. | `global.composerExpertSquads` |
+| GET | `/global/composer-expert-squads` | Search global Composer expert squads 错误: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `UnknownError`. | `global.composerExpertSquads` |
 | GET | `/global/composer-references` | List global Composer references 错误: `UnknownError`. | `global.composerReferences` |
 | GET | `/global/config` | Get global configuration 错误: `NonCanonicalConfigFileError`. | `global.config.get` |
 | PATCH | `/global/config` | Update global configuration 错误: `AuthReadError`, `BadRequestError`, `NonCanonicalConfigFileError`. | `global.config.update` |
@@ -308,7 +308,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/expert-squad/catalog` | Resolve the active expert-squad capability projection 错误: `AuthReadError`, `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.catalog` |
 | GET | `/expert-squad/configuration` | Get expert squad configuration 错误: `ExpertSquadPackageError`. | `expertSquad.configuration.get` |
 | PUT | `/expert-squad/configuration` | Update expert squad configuration 请求体: `id`, `installationScope`, `updates`; 错误: `ExpertSquadPackageError`. | `expertSquad.configuration.update` |
-| GET | `/expert-squad/diagnostics` | Page Expert Squad discovery diagnostics 错误: `BadRequestError`, `UnknownError`. | `expertSquad.diagnostics` |
+| GET | `/expert-squad/diagnostics` | Page Expert Squad discovery diagnostics 错误: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `UnknownError`. | `expertSquad.diagnostics` |
 | POST | `/expert-squad/evolution-authorization` | Authorize an expert squad evolution mutation 请求体: `confirmationText`, `intent`, `sessionID`, `taskID`; 错误: `ExpertSquadPackageError`. | `expertSquad.evolutionAuthorization` |
 | GET | `/expert-squad/evolution-history` | Read expert squad evolution history 错误: `ExpertSquadPackageError`. | `expertSquad.evolutionHistory` |
 | POST | `/expert-squad/evolution-history/detail` | Read one exact expert squad evolution campaign 请求体: `campaignLocator`, `campaignTaskID`, `candidateLocator`, `catalogRevisionUpper`, `comparisonLocator`, `id`, `installationScope`, `namespace`; 错误: `EvolutionHistoryAuthorityError`, `ExpertSquadPackageError`. | `expertSquad.evolutionHistoryDetail` |
@@ -317,7 +317,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | POST | `/expert-squad/import-exact-file` | Import an exact hosted expert squad ZIP revision 请求体: `archiveBase64`, `expectedCurrentPackageDigest`, `expectedID`, `expectedNamespace`, `expectedPackageDigest`, `expectedVersion`, `filename`, `installationScope`; 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importExactFile` |
 | POST | `/expert-squad/import-file` | Import an expert squad ZIP archive 请求体: `archiveBase64`, `expectedCurrentPackageDigest`, `filename`, `installationScope`; 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importFile` |
 | POST | `/expert-squad/import-folder` | Import an expert squad folder 请求体: `expectedCurrentPackageDigest`, `installationScope`, `sourceDirectory`; 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importFolder` |
-| GET | `/expert-squad/inspect` | Inspect one expert-squad declaration 错误: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.inspect` |
+| GET | `/expert-squad/inspect` | Inspect one expert-squad declaration 错误: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `NotFoundError`, `UnknownError`. | `expertSquad.inspect` |
 | POST | `/expert-squad/install-payload` | Install one bundled expert squad 请求体: `id`, `installationScope`; 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.installPayload` |
 | GET | `/expert-squad/inventory-status` | Get expert-squad inventory status 错误: `BadRequestError`, `UnknownError`. | `expertSquad.inventoryStatus` |
 | GET | `/expert-squad/market` | Browse bundled expert squads 错误: `ExpertSquadPackageError`. | `expertSquad.market` |
@@ -327,7 +327,7 @@ OpenAPI 只会给项目作用域操作标注 `directory` query 参数。单个 T
 | GET | `/expert-squad/mutation-recovery` | Read preserved package mutation evidence 错误: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `expertSquad.mutationRecovery` |
 | POST | `/expert-squad/release-payload` | Release bundled expert-squad packages 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.releasePayload` |
 | POST | `/expert-squad/repair-bundled` | Replace obsolete bundled Expert Squad installations 错误: `ExpertSquadPackageError`. | `expertSquad.repairBundled` |
-| GET | `/expert-squad/search` | Search expert-squad declarations 错误: `BadRequestError`, `UnknownError`. | `expertSquad.search` |
+| GET | `/expert-squad/search` | Search expert-squad declarations 错误: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `UnknownError`. | `expertSquad.search` |
 | GET | `/expert-squad/settings/detail` | Load one full expert-squad settings declaration 错误: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.settingsDetail` |
 | POST | `/expert-squad/uninstall` | Uninstall an expert squad package 请求体: `id`, `installationScope`, `replacementID`; 错误: `AuthReadError`, `ExpertSquadPackageError`. | `expertSquad.uninstall` |
 | POST | `/expert-squad/update` | Update an installed expert squad 请求体: `expectedCurrentPackageDigest`, `id`, `installationScope`, `source`; 错误: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.update` |

@@ -28,7 +28,7 @@ import { Hono } from "hono"
 import { describeRoute, resolver } from "hono-openapi"
 import { validator } from "@/server/validator"
 import z from "zod"
-import { AuthReadUnavailableResponse, errors, namedErrorResponse } from "../error"
+import { AuthReadUnavailableResponse, ExpertSquadCatalogCursorErrorResponses, errors, namedErrorResponse } from "../error"
 import { Auth } from "@/auth"
 import {
   ExpertSquadCatalogInspectionQuerySchema,
@@ -534,7 +534,8 @@ export function ExpertSquadRoutes() {
             description: "Bounded expert-squad search page",
             content: { "application/json": { schema: resolver(ExpertSquadCatalogPageSchema) } },
           },
-          ...errors(400, 500),
+          ...ExpertSquadCatalogCursorErrorResponses,
+          ...errors(500),
         },
       }),
       validator("query", ExpertSquadCatalogSearchQuerySchema),
@@ -580,7 +581,8 @@ export function ExpertSquadRoutes() {
             description: "Expert-squad declaration inspection",
             content: { "application/json": { schema: resolver(ExpertSquadCatalogInspectionSchema) } },
           },
-          ...errors(400, 500),
+          ...ExpertSquadCatalogCursorErrorResponses,
+          ...errors(500),
           404: namedErrorResponse("Expert Squad not found", "NotFoundError"),
         },
       }),
@@ -610,7 +612,8 @@ export function ExpertSquadRoutes() {
             description: "Bounded Expert Squad diagnostics",
             content: { "application/json": { schema: resolver(ExpertSquadDiagnosticPageSchema) } },
           },
-          ...errors(400, 500),
+          ...ExpertSquadCatalogCursorErrorResponses,
+          ...errors(500),
         },
       }),
       validator(

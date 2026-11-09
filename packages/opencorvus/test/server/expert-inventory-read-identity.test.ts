@@ -132,3 +132,74 @@ test("cold inventory and diagnostics retain real project catalogue facts without
     })
   }
 })
+
+test("catalog continuation distinguishes a wrong query from a changed revision and accepts a fresh page", async () => {
+  await using project = await memoryProject("inventory-cursor-contract")
+  const root = ExpertSquadPackageLocations.project(project.path).packagesRoot
+  const writePackage = (id: string) =>
+    writeExpertSquadPackage({ directory: path.join(root, "scale", id), definition: ownedPackageDefinition(id) })
+  await writePackage("cursor-route-a")
+  await writePackage("cursor-route-b")
+  for (const id of ["broken-cursor-a", "broken-cursor-b"]) {
+    const directory = path.join(root, "scale", id)
+    await fs.mkdir(directory, { recursive: true })
+    await fs.writeFile(path.join(directory, "expert-squad.jsonc"), "{}")
+  }
+  await ExpertSquadRegistry.invalidateAvailable()
+
+  await runOutsideInstanceContext(async () => {
+    const get = async (endpoint: string, params: Record<string, string>) => {
+      const response = await Server.App().request(`/expert-squad/${endpoint}?${new URLSearchParams(params)}`, {
+        headers: { "x-opencorvus-directory": project.path },
+      })
+      return { status: response.status, body: await response.json() }
+    }
+    const query = { limit: "1" }
+    const first = await get("diagnostics", query)
+    expect(first).toMatchObject({
+      status: 200,
+      body: { total_count: 2, entries: [{ kind: "issue", issue: { id: "broken-cursor-a" } }] },
+    })
+    const cursor = first.body.next_cursor as string
+    expect(typeof cursor).toBe("string")
+    const search = await get("search", { ...query, view: "installations" })
+    const wrongQuery = { ...query, cursor: search.body.next_cursor as string }
+    expect(search.status).toBe(200)
+    expect(typeof wrongQuery.cursor).toBe("string")
+    expect(await get("diagnostics", { ...query, cursor: "malformed-cursor" })).toEqual({
+      status: 400,
+      body: {
+        name: "ExpertSquadCatalogCursorInvalidError",
+        data: { message: "The Expert Squad catalog cursor is invalid. Request the first page for this query." },
+      },
+    })
+    const wrongQueryResult = {
+      status: 400,
+      body: {
+        name: "ExpertSquadCatalogCursorInvalidError",
+        data: { message: "The Expert Squad catalog cursor belongs to a different query. Request the first page for this query." },
+      },
+    }
+    expect(await get("diagnostics", wrongQuery)).toEqual(wrongQueryResult)
+    const expectedTail = {
+      status: 200,
+      body: { entries: [{ kind: "issue", issue: { id: "broken-cursor-b" } }], total_count: 2, next_cursor: null },
+    }
+    expect(await get("diagnostics", { ...query, cursor })).toMatchObject(expectedTail)
+
+    await writePackage("cursor-route-c")
+    await ExpertSquadRegistry.invalidateAvailable()
+    expect(await get("diagnostics", wrongQuery)).toEqual(wrongQueryResult)
+    expect(await get("diagnostics", { ...query, cursor })).toEqual({
+      status: 409,
+      body: {
+        name: "ExpertSquadCatalogRevisionConflictError",
+        data: { message: "The Expert Squad catalog changed. Request the first page and use its next cursor." },
+      },
+    })
+    const refreshed = await get("diagnostics", query)
+    expect(refreshed).toMatchObject({ status: 200, body: { total_count: 2 } })
+    expect(typeof refreshed.body.next_cursor).toBe("string")
+    expect(await get("diagnostics", { ...query, cursor: refreshed.body.next_cursor })).toMatchObject(expectedTail)
+  })
+})

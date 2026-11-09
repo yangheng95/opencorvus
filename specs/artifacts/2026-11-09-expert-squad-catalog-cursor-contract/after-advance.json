@@ -1,0 +1,220 @@
+{
+  "phase": "after",
+  "step": "advance",
+  "cases": {
+    "projectSearch": {
+      "route": "/expert-squad/search",
+      "first": {
+        "status": 200,
+        "requestID": "cc3589f6-6de9-4f0a-8454-ff624253028b",
+        "cursor": "eyJyZXZpc2lvbiI6IjYxNmUyNzIwNTY1MzQyMDQzZjRkYzM0ZjkxZDk3ODBmN2Y2NTgyMTdkZDk3MzMxZDhlNTdhNGQ5ZTMxOTEzODciLCJxdWVyeV9maW5nZXJwcmludCI6ImVkOGVhZWM4MmFhODk1NGU2ODBkZmQ0ZmQ1OTM1MmFjMWQ4ZGUzOTU5YWQyYThjYzQzMzVmZTc5YzM2MTczNTEiLCJvZmZzZXQiOjF9",
+        "ids": [
+          "advanced"
+        ]
+      },
+      "next": {
+        "status": 200,
+        "requestID": "196d9edc-4033-45c7-8166-40210119097d",
+        "ids": [
+          "base"
+        ]
+      },
+      "stale": {
+        "status": 409,
+        "requestID": "4a03a1b8-681d-400b-b092-8b6a763f439a",
+        "body": {
+          "name": "ExpertSquadCatalogRevisionConflictError",
+          "data": {
+            "message": "The Expert Squad catalog changed. Request the first page and use its next cursor."
+          }
+        }
+      },
+      "newInstallation": {
+        "status": 200,
+        "requestID": "5af5930a-b8ca-4e7b-9f57-3d97d2c93707",
+        "id": "deep-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "global",
+          "namespace": "builtin"
+        }
+      }
+    },
+    "globalSearch": {
+      "route": "/global/composer-expert-squads",
+      "first": {
+        "status": 200,
+        "requestID": "335ddba4-9e8c-48c1-9610-9984b0dbd551",
+        "cursor": "eyJyZXZpc2lvbiI6IjM4Mzk5NWM2ZjFmZWM5YjcyZDdiZDBhMjQ0ODRlMDVjNzI3Mzc3YTcyYTczOTdmMzY5N2M5NTc5YzI3MTE3ZTQiLCJxdWVyeV9maW5nZXJwcmludCI6ImVkOGVhZWM4MmFhODk1NGU2ODBkZmQ0ZmQ1OTM1MmFjMWQ4ZGUzOTU5YWQyYThjYzQzMzVmZTc5YzM2MTczNTEiLCJvZmZzZXQiOjF9",
+        "ids": [
+          "advanced"
+        ]
+      },
+      "next": {
+        "status": 200,
+        "requestID": "3343253b-546d-40b5-b94d-8ed6377b3f47",
+        "ids": [
+          "base"
+        ]
+      },
+      "stale": {
+        "status": 409,
+        "requestID": "e5072e80-5050-473f-9e3c-1deac8aaab75",
+        "body": {
+          "name": "ExpertSquadCatalogRevisionConflictError",
+          "data": {
+            "message": "The Expert Squad catalog changed. Request the first page and use its next cursor."
+          }
+        }
+      },
+      "newInstallation": {
+        "status": 200,
+        "requestID": "06774a0f-d2aa-433c-abf2-9699e552a9c3",
+        "id": "deep-research",
+        "source": {
+          "kind": "installed_package",
+          "installation_scope": "global",
+          "namespace": "builtin"
+        }
+      }
+    },
+    "diagnostics": {
+      "route": "/expert-squad/diagnostics",
+      "first": {
+        "status": 200,
+        "requestID": "106fa448-e27a-42b0-8ebb-d20f9fe4bf5b",
+        "cursor": "eyJyZXZpc2lvbiI6IjYxNmUyNzIwNTY1MzQyMDQzZjRkYzM0ZjkxZDk3ODBmN2Y2NTgyMTdkZDk3MzMxZDhlNTdhNGQ5ZTMxOTEzODciLCJxdWVyeV9maW5nZXJwcmludCI6ImVmZGE4NDE4ZGEzZTMzYzEwMGM5MzZkZjEwMjhjNGY2NTNjMGJjMzk4MjVkMWVhOTU1MzcxYWI2ZjBjZWY0Y2EiLCJvZmZzZXQiOjIwfQ",
+        "ids": [
+          "incomplete-000",
+          "incomplete-001",
+          "incomplete-002",
+          "incomplete-003",
+          "incomplete-004",
+          "incomplete-005",
+          "incomplete-006",
+          "incomplete-007",
+          "incomplete-008",
+          "incomplete-009",
+          "incomplete-010",
+          "incomplete-011",
+          "incomplete-012",
+          "incomplete-013",
+          "incomplete-014",
+          "incomplete-015",
+          "incomplete-016",
+          "incomplete-017",
+          "incomplete-018",
+          "incomplete-019"
+        ]
+      },
+      "next": {
+        "status": 200,
+        "requestID": "8d9c8326-eb00-4fcb-b8cd-18b04ab41d77",
+        "ids": [
+          "incomplete-020",
+          "data-analysis"
+        ]
+      },
+      "stale": {
+        "status": 409,
+        "requestID": "22f63d5d-1244-4f62-a749-dbd4a911d965",
+        "body": {
+          "name": "ExpertSquadCatalogRevisionConflictError",
+          "data": {
+            "message": "The Expert Squad catalog changed. Request the first page and use its next cursor."
+          }
+        }
+      }
+    },
+    "workflow": {
+      "route": "/expert-squad/inspect",
+      "first": {
+        "status": 200,
+        "requestID": "27fff00e-4080-4bea-9607-4509839cbec8",
+        "cursor": "eyJyZXZpc2lvbiI6IjYxNmUyNzIwNTY1MzQyMDQzZjRkYzM0ZjkxZDk3ODBmN2Y2NTgyMTdkZDk3MzMxZDhlNTdhNGQ5ZTMxOTEzODciLCJxdWVyeV9maW5nZXJwcmludCI6IjEyZjNjYmU3MmFmZWM3MzM1NzM4OWI1NjUzMjYyZjIzYjQ2NzhjMDhiMWIyMTY5MTY5OTVlYTQ1Y2I1ZGI2MjEiLCJvZmZzZXQiOjIwfQ",
+        "ids": [
+          "flow-00",
+          "flow-01",
+          "flow-02",
+          "flow-03",
+          "flow-04",
+          "flow-05",
+          "flow-06",
+          "flow-07",
+          "flow-08",
+          "flow-09",
+          "flow-10",
+          "flow-11",
+          "flow-12",
+          "flow-13",
+          "flow-14",
+          "flow-15",
+          "flow-16",
+          "flow-17",
+          "flow-18",
+          "flow-19"
+        ]
+      },
+      "next": {
+        "status": 200,
+        "requestID": "21093af4-8f89-4be8-8d59-b13d267c08ba",
+        "ids": [
+          "flow-20",
+          "flow-21"
+        ]
+      },
+      "stale": {
+        "status": 409,
+        "requestID": "5dd6f8d6-3910-4686-86b2-fa8b41a04f2d",
+        "body": {
+          "name": "ExpertSquadCatalogRevisionConflictError",
+          "data": {
+            "message": "The Expert Squad catalog changed. Request the first page and use its next cursor."
+          }
+        }
+      }
+    },
+    "agent": {
+      "route": "/expert-squad/inspect",
+      "first": {
+        "status": 200,
+        "requestID": "db3a5421-9b72-473f-888d-17c01584c9ce",
+        "cursor": "eyJyZXZpc2lvbiI6IjYxNmUyNzIwNTY1MzQyMDQzZjRkYzM0ZjkxZDk3ODBmN2Y2NTgyMTdkZDk3MzMxZDhlNTdhNGQ5ZTMxOTEzODciLCJxdWVyeV9maW5nZXJwcmludCI6IjVjZGRiYzU5Y2QyNWRhNjRkY2ZhNjU3NGJhN2M5ZmMxMWNiMzA0YzFlOTRmYjExMjRlZDYyZWYyNjA3ZTFmNDUiLCJvZmZzZXQiOjEwfQ",
+        "ids": [
+          "worker-00",
+          "worker-01",
+          "worker-02",
+          "worker-03",
+          "worker-04",
+          "worker-05",
+          "worker-06",
+          "worker-07",
+          "worker-08",
+          "worker-09"
+        ]
+      },
+      "next": {
+        "status": 200,
+        "requestID": "36fbeb75-2edc-4fb5-a146-96f1fe06a198",
+        "ids": [
+          "worker-10",
+          "worker-11"
+        ]
+      },
+      "stale": {
+        "status": 409,
+        "requestID": "ae82cda6-ed76-4164-9b7a-a72b630478fa",
+        "body": {
+          "name": "ExpertSquadCatalogRevisionConflictError",
+          "data": {
+            "message": "The Expert Squad catalog changed. Request the first page and use its next cursor."
+          }
+        }
+      }
+    }
+  },
+  "active": {
+    "requestID": "0a7a1a76-5eb3-4103-8b69-92bd41973a33",
+    "effective": "dynamic"
+  }
+}

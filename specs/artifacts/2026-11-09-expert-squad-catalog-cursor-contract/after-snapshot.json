@@ -1,0 +1,250 @@
+{
+  "phase": "after",
+  "step": "snapshot",
+  "cases": {
+    "projectSearch": {
+      "route": "/expert-squad/search",
+      "first": {
+        "status": 200,
+        "requestID": "f7ed5cd1-d8ae-4afe-8469-e9dae7b60337",
+        "cursor": "eyJyZXZpc2lvbiI6IjRhOGQ2NmFlMjcxNTUwODZjOGQ3ZDYxZjc3YWFmOTBkYjI3NjE5MjVmNmJiNWM0NTNlZjAxOTY4ZDllYzg1OGUiLCJxdWVyeV9maW5nZXJwcmludCI6ImVkOGVhZWM4MmFhODk1NGU2ODBkZmQ0ZmQ1OTM1MmFjMWQ4ZGUzOTU5YWQyYThjYzQzMzVmZTc5YzM2MTczNTEiLCJvZmZzZXQiOjF9",
+        "ids": [
+          "advanced"
+        ]
+      },
+      "next": {
+        "status": 200,
+        "requestID": "f6a003e6-2e5c-4a3d-bd75-6f3c53d3f057",
+        "ids": [
+          "base"
+        ]
+      },
+      "invalid": {
+        "status": 400,
+        "requestID": "1a07b7bc-cb17-43ec-91b3-709b8a89de58",
+        "body": {
+          "name": "ExpertSquadCatalogCursorInvalidError",
+          "data": {
+            "message": "The Expert Squad catalog cursor is invalid. Request the first page for this query."
+          }
+        }
+      },
+      "wrongQuery": {
+        "status": 400,
+        "requestID": "8b718e8c-9b1f-41fe-9a16-0e316ee5eb2e",
+        "body": {
+          "name": "ExpertSquadCatalogCursorInvalidError",
+          "data": {
+            "message": "The Expert Squad catalog cursor belongs to a different query. Request the first page for this query."
+          }
+        }
+      }
+    },
+    "globalSearch": {
+      "route": "/global/composer-expert-squads",
+      "first": {
+        "status": 200,
+        "requestID": "364ba255-f11e-4272-a64d-a11ca0374104",
+        "cursor": "eyJyZXZpc2lvbiI6ImE4NDJhNzg0NDA0YTc3MmVjYTBiOWMwNzE2OTA2ODBjODZkNmIxODgxZjJhNDAwNTU0OGMwOTc3YWJiMmE3ZDYiLCJxdWVyeV9maW5nZXJwcmludCI6ImVkOGVhZWM4MmFhODk1NGU2ODBkZmQ0ZmQ1OTM1MmFjMWQ4ZGUzOTU5YWQyYThjYzQzMzVmZTc5YzM2MTczNTEiLCJvZmZzZXQiOjF9",
+        "ids": [
+          "advanced"
+        ]
+      },
+      "next": {
+        "status": 200,
+        "requestID": "ce1ca165-bcae-42d7-9f8a-097f2611691f",
+        "ids": [
+          "base"
+        ]
+      },
+      "invalid": {
+        "status": 400,
+        "requestID": "18f1a874-0f55-4512-abec-ccd23d19d2ed",
+        "body": {
+          "name": "ExpertSquadCatalogCursorInvalidError",
+          "data": {
+            "message": "The Expert Squad catalog cursor is invalid. Request the first page for this query."
+          }
+        }
+      },
+      "wrongQuery": {
+        "status": 400,
+        "requestID": "c8ae1195-46a5-4c86-ab90-e62c69e590d4",
+        "body": {
+          "name": "ExpertSquadCatalogCursorInvalidError",
+          "data": {
+            "message": "The Expert Squad catalog cursor belongs to a different query. Request the first page for this query."
+          }
+        }
+      }
+    },
+    "diagnostics": {
+      "route": "/expert-squad/diagnostics",
+      "first": {
+        "status": 200,
+        "requestID": "d6b85f2e-314a-4951-8daf-df186f5b6b9f",
+        "cursor": "eyJyZXZpc2lvbiI6IjRhOGQ2NmFlMjcxNTUwODZjOGQ3ZDYxZjc3YWFmOTBkYjI3NjE5MjVmNmJiNWM0NTNlZjAxOTY4ZDllYzg1OGUiLCJxdWVyeV9maW5nZXJwcmludCI6ImVmZGE4NDE4ZGEzZTMzYzEwMGM5MzZkZjEwMjhjNGY2NTNjMGJjMzk4MjVkMWVhOTU1MzcxYWI2ZjBjZWY0Y2EiLCJvZmZzZXQiOjIwfQ",
+        "ids": [
+          "incomplete-000",
+          "incomplete-001",
+          "incomplete-002",
+          "incomplete-003",
+          "incomplete-004",
+          "incomplete-005",
+          "incomplete-006",
+          "incomplete-007",
+          "incomplete-008",
+          "incomplete-009",
+          "incomplete-010",
+          "incomplete-011",
+          "incomplete-012",
+          "incomplete-013",
+          "incomplete-014",
+          "incomplete-015",
+          "incomplete-016",
+          "incomplete-017",
+          "incomplete-018",
+          "incomplete-019"
+        ]
+      },
+      "next": {
+        "status": 200,
+        "requestID": "0d329983-b9c8-4d07-8bea-a6ac96aad45a",
+        "ids": [
+          "incomplete-020",
+          "data-analysis"
+        ]
+      },
+      "invalid": {
+        "status": 400,
+        "requestID": "ddf87952-bb00-4290-99ff-0a545a27e671",
+        "body": {
+          "name": "ExpertSquadCatalogCursorInvalidError",
+          "data": {
+            "message": "The Expert Squad catalog cursor is invalid. Request the first page for this query."
+          }
+        }
+      },
+      "wrongQuery": {
+        "status": 400,
+        "requestID": "61a4a4f6-5ded-411f-baf4-2df4d5b2cf0a",
+        "body": {
+          "name": "ExpertSquadCatalogCursorInvalidError",
+          "data": {
+            "message": "The Expert Squad catalog cursor belongs to a different query. Request the first page for this query."
+          }
+        }
+      }
+    },
+    "workflow": {
+      "route": "/expert-squad/inspect",
+      "first": {
+        "status": 200,
+        "requestID": "c2ebbc22-0cfe-4df8-b1b9-474845843233",
+        "cursor": "eyJyZXZpc2lvbiI6IjRhOGQ2NmFlMjcxNTUwODZjOGQ3ZDYxZjc3YWFmOTBkYjI3NjE5MjVmNmJiNWM0NTNlZjAxOTY4ZDllYzg1OGUiLCJxdWVyeV9maW5nZXJwcmludCI6IjEyZjNjYmU3MmFmZWM3MzM1NzM4OWI1NjUzMjYyZjIzYjQ2NzhjMDhiMWIyMTY5MTY5OTVlYTQ1Y2I1ZGI2MjEiLCJvZmZzZXQiOjIwfQ",
+        "ids": [
+          "flow-00",
+          "flow-01",
+          "flow-02",
+          "flow-03",
+          "flow-04",
+          "flow-05",
+          "flow-06",
+          "flow-07",
+          "flow-08",
+          "flow-09",
+          "flow-10",
+          "flow-11",
+          "flow-12",
+          "flow-13",
+          "flow-14",
+          "flow-15",
+          "flow-16",
+          "flow-17",
+          "flow-18",
+          "flow-19"
+        ]
+      },
+      "next": {
+        "status": 200,
+        "requestID": "d7fcfe30-974a-48af-9a48-d9672a0dfe5c",
+        "ids": [
+          "flow-20",
+          "flow-21"
+        ]
+      },
+      "invalid": {
+        "status": 400,
+        "requestID": "97568908-ba49-40ef-a40a-8bb1d710dcb2",
+        "body": {
+          "name": "ExpertSquadCatalogCursorInvalidError",
+          "data": {
+            "message": "The Expert Squad catalog cursor is invalid. Request the first page for this query."
+          }
+        }
+      },
+      "wrongQuery": {
+        "status": 400,
+        "requestID": "eb544bc8-37fb-47be-bd54-6f574417bb08",
+        "body": {
+          "name": "ExpertSquadCatalogCursorInvalidError",
+          "data": {
+            "message": "The Expert Squad catalog cursor belongs to a different query. Request the first page for this query."
+          }
+        }
+      }
+    },
+    "agent": {
+      "route": "/expert-squad/inspect",
+      "first": {
+        "status": 200,
+        "requestID": "00ea53ce-bbbb-4c87-8acc-452eb5165b4a",
+        "cursor": "eyJyZXZpc2lvbiI6IjRhOGQ2NmFlMjcxNTUwODZjOGQ3ZDYxZjc3YWFmOTBkYjI3NjE5MjVmNmJiNWM0NTNlZjAxOTY4ZDllYzg1OGUiLCJxdWVyeV9maW5nZXJwcmludCI6IjVjZGRiYzU5Y2QyNWRhNjRkY2ZhNjU3NGJhN2M5ZmMxMWNiMzA0YzFlOTRmYjExMjRlZDYyZWYyNjA3ZTFmNDUiLCJvZmZzZXQiOjEwfQ",
+        "ids": [
+          "worker-00",
+          "worker-01",
+          "worker-02",
+          "worker-03",
+          "worker-04",
+          "worker-05",
+          "worker-06",
+          "worker-07",
+          "worker-08",
+          "worker-09"
+        ]
+      },
+      "next": {
+        "status": 200,
+        "requestID": "f8139bbc-9e93-445b-bdeb-a86016646ce3",
+        "ids": [
+          "worker-10",
+          "worker-11"
+        ]
+      },
+      "invalid": {
+        "status": 400,
+        "requestID": "cc526dcf-7a96-4c7e-95c2-554cf2fc68e0",
+        "body": {
+          "name": "ExpertSquadCatalogCursorInvalidError",
+          "data": {
+            "message": "The Expert Squad catalog cursor is invalid. Request the first page for this query."
+          }
+        }
+      },
+      "wrongQuery": {
+        "status": 400,
+        "requestID": "8e05b864-e58e-4564-9c4d-18eeb2fd9ab2",
+        "body": {
+          "name": "ExpertSquadCatalogCursorInvalidError",
+          "data": {
+            "message": "The Expert Squad catalog cursor belongs to a different query. Request the first page for this query."
+          }
+        }
+      }
+    }
+  },
+  "active": {
+    "requestID": "1bbfcc3b-b578-4dac-87e1-1e9eafbe4f71",
+    "effective": "dynamic"
+  }
+}

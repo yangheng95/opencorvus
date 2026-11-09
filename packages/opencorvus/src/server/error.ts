@@ -2,6 +2,7 @@ import { resolver } from "hono-openapi"
 import z from "zod"
 import { NotFoundError } from "../storage/db"
 import { SkillMarket } from "../skill/market"
+import { ExpertSquadCatalogCursorInvalidError, ExpertSquadCatalogRevisionConflictError } from "../expert-squad/catalog-cursor-error"
 
 function namedErrorSchema(name: string) {
   return resolver(
@@ -40,6 +41,19 @@ export const BAD_REQUEST_SCHEMA = z
   })
   .strict()
   .meta({ ref: "BadRequestError" })
+
+export const ExpertSquadCatalogCursorErrorResponses = {
+  400: {
+    description: "Invalid Expert Squad catalog request or cursor",
+    content: {
+      "application/json": { schema: resolver(z.union([BAD_REQUEST_SCHEMA, ExpertSquadCatalogCursorInvalidError.Schema])) },
+    },
+  },
+  409: {
+    description: "The Expert Squad catalog changed; request the first page again",
+    content: { "application/json": { schema: resolver(ExpertSquadCatalogRevisionConflictError.Schema) } },
+  },
+}
 
 export const SkillMarketInputErrorResponse = {
   description: "Invalid Skill Market input or unavailable source",

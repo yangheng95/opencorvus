@@ -6577,6 +6577,31 @@
         },
         "type": "object"
       },
+      "ExpertSquadCatalogCursorInvalidError": {
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "ExpertSquadCatalogCursorInvalidError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
+        ],
+        "type": "object"
+      },
       "ExpertSquadCatalogIndexEntry": {
         "additionalProperties": false,
         "properties": {
@@ -6956,6 +6981,31 @@
           "entries",
           "next_cursor",
           "total_count"
+        ],
+        "type": "object"
+      },
+      "ExpertSquadCatalogRevisionConflictError": {
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "properties": {
+              "message": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "message"
+            ],
+            "type": "object"
+          },
+          "name": {
+            "const": "ExpertSquadCatalogRevisionConflictError",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "data"
         ],
         "type": "object"
       },
@@ -31605,11 +31655,28 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ExpertSquadCatalogCursorInvalidError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid Expert Squad catalog request or cursor"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertSquadCatalogRevisionConflictError"
+                }
+              }
+            },
+            "description": "The Expert Squad catalog changed; request the first page again"
           },
           "500": {
             "content": {
@@ -68056,11 +68123,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ExpertSquadCatalogCursorInvalidError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid Expert Squad catalog request or cursor"
           },
           "404": {
             "content": {
@@ -68088,6 +68162,16 @@
               }
             },
             "description": "Expert Squad not found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertSquadCatalogRevisionConflictError"
+                }
+              }
+            },
+            "description": "The Expert Squad catalog changed; request the first page again"
           },
           "500": {
             "content": {
@@ -71676,11 +71760,28 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ExpertSquadCatalogCursorInvalidError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid Expert Squad catalog request or cursor"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertSquadCatalogRevisionConflictError"
+                }
+              }
+            },
+            "description": "The Expert Squad catalog changed; request the first page again"
           },
           "500": {
             "content": {
@@ -81792,11 +81893,28 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/BadRequestError"
+                  "anyOf": [
+                    {
+                      "$ref": "#/components/schemas/BadRequestError"
+                    },
+                    {
+                      "$ref": "#/components/schemas/ExpertSquadCatalogCursorInvalidError"
+                    }
+                  ]
                 }
               }
             },
-            "description": "Bad request"
+            "description": "Invalid Expert Squad catalog request or cursor"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpertSquadCatalogRevisionConflictError"
+                }
+              }
+            },
+            "description": "The Expert Squad catalog changed; request the first page again"
           },
           "500": {
             "content": {

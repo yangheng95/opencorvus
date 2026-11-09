@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [专家团目录游标错误契约](2026-11-09-expert-squad-catalog-cursor-contract.md)
 - [专家团诊断续页与目录恢复](2026-11-09-expert-squad-diagnostics-continuation-recovery.md)
 - [专家团诊断披露与续页焦点](2026-11-09-expert-squad-diagnostic-disclosure.md)
 - [专家团目录诊断视图](2026-11-09-expert-squad-catalog-diagnostics-view.md)

@@ -397,6 +397,9 @@ Base 的原始请求、真实修订、权限与适用来源定义交付义务。
   active runtime、collision proof 才读取一个精确 package tree。Catalog revision 覆盖每个物理
   identity 的完整 manifest declaration revision，package version/workflow/selector 变化会使 cursor 与
   inspection cache 一起失效；project/global scope 顺序 canonical，consumer 禁止原地修改 Registry cache；
+  项目搜索、全局撰写器搜索、诊断和精确检查共享不透明目录游标契约。无法解析或不属于当前查询的游标
+  返回 400 `ExpertSquadCatalogCursorInvalidError`；同查询的旧修订返回 409
+  `ExpertSquadCatalogRevisionConflictError`，客户端从当前第一页重新读取。分页游标不作为执行绑定；
 - `active_agent_projection`、scheduler、各 active agent 和 `active_skill_projection` 的 `projection_hash` 才表示有效运行投影。Scheduler hash 覆盖 `virtual_workflows`，worker hash 覆盖其完整 projected resources；声明 hash 与运行 hash 字段不同，禁止用声明摘要冒充运行身份或缓存键；
 - 每次被选中的 built-in/project/global package 都按 manifest identity 与完整内容 digest 物化到
   `Global.Path.data/expert-squad-package-revisions` 的持久化 content-addressed revision。Task binding、

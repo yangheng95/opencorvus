@@ -30,7 +30,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/global/automations/{id}/runs` | List scheduled automation target executions Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `global.automations.runs` |
 | POST | `/global/chat` | Create Chat in a temporary project Body: `model`; Errors: `BadRequestError`, `ProviderModelNotFoundError`. | `global.chat.create` |
 | POST | `/global/chat/start` | Start a global Chat Body: `attachments`, `model`, `requestID`, `text`; Errors: `AuthReadError`, `BadRequestError`, `GlobalChatStartIdentityConflictError`, `GlobalCreationAcceptedTargetUnavailableError`, `ProviderModelNotFoundError`. | `global.chat.start` |
-| GET | `/global/composer-expert-squads` | Search global Composer expert squads Errors: `BadRequestError`, `UnknownError`. | `global.composerExpertSquads` |
+| GET | `/global/composer-expert-squads` | Search global Composer expert squads Errors: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `UnknownError`. | `global.composerExpertSquads` |
 | GET | `/global/composer-references` | List global Composer references Errors: `UnknownError`. | `global.composerReferences` |
 | GET | `/global/config` | Get global configuration Errors: `NonCanonicalConfigFileError`. | `global.config.get` |
 | PATCH | `/global/config` | Update global configuration Errors: `AuthReadError`, `BadRequestError`, `NonCanonicalConfigFileError`. | `global.config.update` |
@@ -308,7 +308,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/expert-squad/catalog` | Resolve the active expert-squad capability projection Errors: `AuthReadError`, `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.catalog` |
 | GET | `/expert-squad/configuration` | Get expert squad configuration Errors: `ExpertSquadPackageError`. | `expertSquad.configuration.get` |
 | PUT | `/expert-squad/configuration` | Update expert squad configuration Body: `id`, `installationScope`, `updates`; Errors: `ExpertSquadPackageError`. | `expertSquad.configuration.update` |
-| GET | `/expert-squad/diagnostics` | Page Expert Squad discovery diagnostics Errors: `BadRequestError`, `UnknownError`. | `expertSquad.diagnostics` |
+| GET | `/expert-squad/diagnostics` | Page Expert Squad discovery diagnostics Errors: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `UnknownError`. | `expertSquad.diagnostics` |
 | POST | `/expert-squad/evolution-authorization` | Authorize an expert squad evolution mutation Body: `confirmationText`, `intent`, `sessionID`, `taskID`; Errors: `ExpertSquadPackageError`. | `expertSquad.evolutionAuthorization` |
 | GET | `/expert-squad/evolution-history` | Read expert squad evolution history Errors: `ExpertSquadPackageError`. | `expertSquad.evolutionHistory` |
 | POST | `/expert-squad/evolution-history/detail` | Read one exact expert squad evolution campaign Body: `campaignLocator`, `campaignTaskID`, `candidateLocator`, `catalogRevisionUpper`, `comparisonLocator`, `id`, `installationScope`, `namespace`; Errors: `EvolutionHistoryAuthorityError`, `ExpertSquadPackageError`. | `expertSquad.evolutionHistoryDetail` |
@@ -317,7 +317,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | POST | `/expert-squad/import-exact-file` | Import an exact hosted expert squad ZIP revision Body: `archiveBase64`, `expectedCurrentPackageDigest`, `expectedID`, `expectedNamespace`, `expectedPackageDigest`, `expectedVersion`, `filename`, `installationScope`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importExactFile` |
 | POST | `/expert-squad/import-file` | Import an expert squad ZIP archive Body: `archiveBase64`, `expectedCurrentPackageDigest`, `filename`, `installationScope`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importFile` |
 | POST | `/expert-squad/import-folder` | Import an expert squad folder Body: `expectedCurrentPackageDigest`, `installationScope`, `sourceDirectory`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.importFolder` |
-| GET | `/expert-squad/inspect` | Inspect one expert-squad declaration Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.inspect` |
+| GET | `/expert-squad/inspect` | Inspect one expert-squad declaration Errors: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `NotFoundError`, `UnknownError`. | `expertSquad.inspect` |
 | POST | `/expert-squad/install-payload` | Install one bundled expert squad Body: `id`, `installationScope`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.installPayload` |
 | GET | `/expert-squad/inventory-status` | Get expert-squad inventory status Errors: `BadRequestError`, `UnknownError`. | `expertSquad.inventoryStatus` |
 | GET | `/expert-squad/market` | Browse bundled expert squads Errors: `ExpertSquadPackageError`. | `expertSquad.market` |
@@ -327,7 +327,7 @@ OpenAPI marks project-scoped operations with a `directory` query parameter. Thes
 | GET | `/expert-squad/mutation-recovery` | Read preserved package mutation evidence Errors: `BadRequestError`, `LogFileNotFoundError`, `NotFoundError`. | `expertSquad.mutationRecovery` |
 | POST | `/expert-squad/release-payload` | Release bundled expert-squad packages Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.releasePayload` |
 | POST | `/expert-squad/repair-bundled` | Replace obsolete bundled Expert Squad installations Errors: `ExpertSquadPackageError`. | `expertSquad.repairBundled` |
-| GET | `/expert-squad/search` | Search expert-squad declarations Errors: `BadRequestError`, `UnknownError`. | `expertSquad.search` |
+| GET | `/expert-squad/search` | Search expert-squad declarations Errors: `BadRequestError`, `ExpertSquadCatalogCursorInvalidError`, `ExpertSquadCatalogRevisionConflictError`, `UnknownError`. | `expertSquad.search` |
 | GET | `/expert-squad/settings/detail` | Load one full expert-squad settings declaration Errors: `BadRequestError`, `NotFoundError`, `UnknownError`. | `expertSquad.settingsDetail` |
 | POST | `/expert-squad/uninstall` | Uninstall an expert squad package Body: `id`, `installationScope`, `replacementID`; Errors: `AuthReadError`, `ExpertSquadPackageError`. | `expertSquad.uninstall` |
 | POST | `/expert-squad/update` | Update an installed expert squad Body: `expectedCurrentPackageDigest`, `id`, `installationScope`, `source`; Errors: `ExpertSquadPackageError`, `ExpertSquadPackageMutationConflictError`. | `expertSquad.update` |

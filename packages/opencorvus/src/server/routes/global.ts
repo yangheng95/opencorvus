@@ -27,6 +27,7 @@ import { Database } from "../../storage/db"
 import {
   AuthReadUnavailableResponse,
   BAD_REQUEST_SCHEMA,
+  ExpertSquadCatalogCursorErrorResponses,
   SkillMarketInputErrorResponse,
   OwnedPromptControllersResponse,
   badRequestBody,
@@ -511,7 +512,8 @@ export const GlobalRoutes = lazy(() =>
             description: "Bounded global Composer Expert Squad page",
             content: { "application/json": { schema: resolver(ExpertSquadCatalogPageSchema) } },
           },
-          ...errors(400, 500),
+          ...ExpertSquadCatalogCursorErrorResponses,
+          ...errors(500),
         },
       }),
       validator("query", ExpertSquadCatalogSearchQuerySchema),

@@ -45,6 +45,7 @@ import {
 import { builtInToolProviderState } from "@/tool/global-tools"
 import { builtInPackageSources, getLoadedBuiltInPackages } from "./builtin"
 import { executePackageToolInCapsule, introspectPackageToolInCapsule } from "./package-tool-capsule"
+import { ExpertSquadCatalogCursorInvalidError, ExpertSquadCatalogRevisionConflictError } from "./catalog-cursor-error"
 import {
   ExpertSquadCatalogSchema,
   ExpertSquadCatalogIndexEntrySchema,
@@ -3000,13 +3001,19 @@ export namespace PromptProfileResolver {
     try {
       parsed = CatalogCursorSchema.parse(JSON.parse(Buffer.from(cursor, "base64url").toString("utf8")))
     } catch {
-      throw new Error("Expert Squad catalog cursor is invalid.")
-    }
-    if (parsed.revision !== revision) {
-      throw new Error(`Expert Squad catalog cursor is stale: expected ${revision}, received ${parsed.revision}.`)
+      throw new ExpertSquadCatalogCursorInvalidError({
+        message: "The Expert Squad catalog cursor is invalid. Request the first page for this query.",
+      })
     }
     if (parsed.query_fingerprint !== queryFingerprint) {
-      throw new Error("Expert Squad catalog cursor belongs to a different bounded query.")
+      throw new ExpertSquadCatalogCursorInvalidError({
+        message: "The Expert Squad catalog cursor belongs to a different query. Request the first page for this query.",
+      })
+    }
+    if (parsed.revision !== revision) {
+      throw new ExpertSquadCatalogRevisionConflictError({
+        message: "The Expert Squad catalog changed. Request the first page and use its next cursor.",
+      })
     }
     return parsed.offset
   }

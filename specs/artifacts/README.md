@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [专家团目录游标错误契约证据](2026-11-09-expert-squad-catalog-cursor-contract/README.md)
 - [专家团诊断续页与目录恢复证据](2026-11-09-expert-squad-diagnostics-continuation-recovery/README.md)
 - [专家团诊断披露与续页焦点证据](2026-11-09-expert-squad-diagnostic-disclosure/README.md)
 - [专家团目录诊断视图证据](2026-11-09-expert-squad-catalog-diagnostics-view/README.md)

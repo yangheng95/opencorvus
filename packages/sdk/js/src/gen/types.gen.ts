@@ -1963,6 +1963,13 @@ export type ExecutionCapacityConfig = {
   scheduler_message?: number
 }
 
+export type ExpertSquadCatalogCursorInvalidError = {
+  data: {
+    message: string
+  }
+  name: "ExpertSquadCatalogCursorInvalidError"
+}
+
 export type ExpertSquadCatalogIndexEntry = {
   built_in: boolean
   description?: string
@@ -2030,6 +2037,13 @@ export type ExpertSquadCatalogPage = {
   entries: Array<ExpertSquadCatalogIndexEntry>
   next_cursor: string | null
   total_count: number
+}
+
+export type ExpertSquadCatalogRevisionConflictError = {
+  data: {
+    message: string
+  }
+  name: "ExpertSquadCatalogRevisionConflictError"
 }
 
 export type ExpertSquadCatalogSummary = {
@@ -9954,9 +9968,13 @@ export type ExpertSquadDiagnosticsData = {
 
 export type ExpertSquadDiagnosticsErrors = {
   /**
-   * Bad request
+   * Invalid Expert Squad catalog request or cursor
    */
-  400: BadRequestError
+  400: BadRequestError | ExpertSquadCatalogCursorInvalidError
+  /**
+   * The Expert Squad catalog changed; request the first page again
+   */
+  409: ExpertSquadCatalogRevisionConflictError
   /**
    * Internal server error
    */
@@ -17602,9 +17620,9 @@ export type ExpertSquadInspectData = {
 
 export type ExpertSquadInspectErrors = {
   /**
-   * Bad request
+   * Invalid Expert Squad catalog request or cursor
    */
-  400: BadRequestError
+  400: BadRequestError | ExpertSquadCatalogCursorInvalidError
   /**
    * Expert Squad not found
    */
@@ -17614,6 +17632,10 @@ export type ExpertSquadInspectErrors = {
     }
     name: "NotFoundError"
   }
+  /**
+   * The Expert Squad catalog changed; request the first page again
+   */
+  409: ExpertSquadCatalogRevisionConflictError
   /**
    * Internal server error
    */
@@ -18695,9 +18717,13 @@ export type ExpertSquadSearchData = {
 
 export type ExpertSquadSearchErrors = {
   /**
-   * Bad request
+   * Invalid Expert Squad catalog request or cursor
    */
-  400: BadRequestError
+  400: BadRequestError | ExpertSquadCatalogCursorInvalidError
+  /**
+   * The Expert Squad catalog changed; request the first page again
+   */
+  409: ExpertSquadCatalogRevisionConflictError
   /**
    * Internal server error
    */
@@ -21980,9 +22006,13 @@ export type GlobalComposerExpertSquadsData = {
 
 export type GlobalComposerExpertSquadsErrors = {
   /**
-   * Bad request
+   * Invalid Expert Squad catalog request or cursor
    */
-  400: BadRequestError
+  400: BadRequestError | ExpertSquadCatalogCursorInvalidError
+  /**
+   * The Expert Squad catalog changed; request the first page again
+   */
+  409: ExpertSquadCatalogRevisionConflictError
   /**
    * Internal server error
    */
