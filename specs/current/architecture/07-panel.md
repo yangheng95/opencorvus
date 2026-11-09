@@ -1828,6 +1828,13 @@ display names and directories under its current authority/request owner. A
 metadata read failure reports that saving succeeded and offers a read-only
 retry, retaining any primary load error and all original diagnostics. It does
 not repeat the writer or reinterpret an ID through an obsolete directory.
+
+Standard schedule authoring displays the start date, clock and date chooser in
+the current application language. Keyboard segments and the calendar project
+the same civil date or wall-clock minute held by the form. Only a complete edit
+can be submitted, using the existing date, minute, time zone and recurrence
+contract. A language change does not convert the date or clock to another time
+zone. The advanced rule editor still preserves the authored rule text.
 Explicit return to the list starts its existing foreground read; row selection
 and deletion stay unavailable while that read is in progress. The form's list
 back button consumes the same owner, so reopening follows the latest definition.

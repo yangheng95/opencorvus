@@ -54,6 +54,7 @@ import { SegmentedControl } from "../ui/SegmentedControl"
 import { SelectControl } from "../ui/SelectControl"
 import { TextField } from "../ui/TextField"
 import { SettingsEmpty, SettingsGroup, SettingsPanel, SettingsRow, SettingsSurface } from "./layout"
+import { ScheduledCalendarField } from "./ScheduledCalendarField"
 
 type SelectOption<T extends string> = { value: T; label: string }
 type AutomationError = { messageKey: string; details?: string; retry?: () => void; source?: "list-load" }
@@ -307,6 +308,8 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
   let detailBackButton: HTMLButtonElement | undefined
   let formNameInput: HTMLInputElement | undefined
   let projectListElement: HTMLUListElement | undefined
+  let isStartDateComplete: (() => boolean) | undefined
+  let isTimeComplete: (() => boolean) | undefined
   let projectLoadSequence = 0
   let disposed = false
   let errorFeedbackElement: HTMLDivElement | undefined
@@ -626,6 +629,10 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
     }
     if (!current && !creating()) {
       showFormError({ messageKey: "automations.error.edit_target_missing" })
+      return
+    }
+    if (preset() !== "custom" && (!isStartDateComplete?.() || !isTimeComplete?.())) {
+      showFormError({ messageKey: "automations.error.calendar_fields_required" })
       return
     }
     const form = {
@@ -1538,19 +1545,14 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
 
                   <Show when={preset() !== "custom"}>
                     <div class="automation-calendar-fields automation-field-wide">
-                      <TextField.Root as="label">
-                        <TextField.Label>{t("automations.start_date")}</TextField.Label>
-                        <TextField.Input
-                          type="date"
-                          value={startDate()}
-                          required
-                          onInput={(event) => {
-                            setError(null)
-                            setStartDate(event.currentTarget.value)
-                          }}
-                        />
-                        <TextField.Description>{t("automations.start_date_help")}</TextField.Description>
-                      </TextField.Root>
+                      <ScheduledCalendarField
+                        kind="date"
+                        value={startDate()}
+                        timeZone={timeZone()}
+                        disabled={Boolean(busyAction())}
+                        onChange={(value) => { setError(null); setStartDate(value) }}
+                        registerValidation={(check) => { isStartDateComplete = check }}
+                      />
                       <Show when={preset() === "weekly"}>
                         <TextField.Root>
                           <TextField.Label>{t("automations.weekday")}</TextField.Label>
@@ -1574,19 +1576,14 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                           />
                         </TextField.Root>
                       </Show>
-                      <TextField.Root as="label">
-                        <TextField.Label>{t("automations.time")}</TextField.Label>
-                        <TextField.Input
-                          type="time"
-                          data-ui="automation-time"
-                          value={time()}
-                          required
-                          onInput={(event) => {
-                            setError(null)
-                            setTime(event.currentTarget.value)
-                          }}
-                        />
-                      </TextField.Root>
+                      <ScheduledCalendarField
+                        kind="time"
+                        value={time()}
+                        timeZone={timeZone()}
+                        disabled={Boolean(busyAction())}
+                        onChange={(value) => { setError(null); setTime(value) }}
+                        registerValidation={(check) => { isTimeComplete = check }}
+                      />
                       <TextField.Root class={preset() === "weekly" ? undefined : "automation-field-wide"}>
                         <TextField.Label>{t("automations.time_zone")}</TextField.Label>
                         <ComboboxControl

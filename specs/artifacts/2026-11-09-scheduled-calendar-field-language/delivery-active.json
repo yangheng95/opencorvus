@@ -1,0 +1,33 @@
+{
+  "phase": "delivery",
+  "step": "active",
+  "plans": {
+    "status": 200,
+    "requestID": "c3bf03bf-1695-4ffa-98fa-9a6a74b4fd62",
+    "body": [
+      {
+        "id": "atm_g0VaRxrMd00hMi5PSAw1",
+        "revisionId": "atm_g0VaRxrMd00hMi5PSAw1",
+        "name": "日历语言验收 78",
+        "target": {
+          "scope": "global"
+        },
+        "recurrence": "DTSTART;TZID=Asia/Shanghai:20990105T143700\nRRULE:FREQ=DAILY",
+        "executionMode": "local",
+        "model": null,
+        "reasoningEffort": null,
+        "prompt": "仅验证日期时间和语言，禁止运行。",
+        "status": "active",
+        "lastRun": null,
+        "nextRun": 4071278220000,
+        "failureCount": 0,
+        "lastError": null
+      }
+    ]
+  },
+  "runs": {
+    "status": 200,
+    "requestID": "df50ead4-ee89-4ccb-9eac-48744b2360c7",
+    "body": []
+  }
+}

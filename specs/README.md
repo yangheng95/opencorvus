@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [定时编辑器的应用语言日期与时间](records/2026-11/2026-11-09-scheduled-calendar-field-language.md)
 - [定时项目筛选保留既有目标顺序](records/2026-11/2026-11-09-scheduled-project-selection-order.md)
 - [定时项目选择的键盘焦点](records/2026-11/2026-11-09-scheduled-project-selection-focus.md)
 - [表单内搜索的回车归属](records/2026-11/2026-11-09-form-search-enter-ownership.md)

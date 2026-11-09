@@ -1,0 +1,37 @@
+{
+  "before": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b78\\project-before",
+    "head": "b08e8adb1e6a48582f0cc7c8db7ef0a2b7b7fc1c",
+    "files": {
+      "fixture-note.txt": "Local isolated schedule locale check.\n"
+    }
+  },
+  "after": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b78\\project-after",
+    "head": "b08e8adb1e6a48582f0cc7c8db7ef0a2b7b7fc1c",
+    "files": {
+      "fixture-note.txt": "Local isolated schedule locale check.\n"
+    }
+  },
+  "final": {
+    "head": "9c7807883fecc66de728c8acabbced2ff73ab75e",
+    "files": {
+      "fixture-note.txt": "Local isolated schedule locale final check.\n"
+    },
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b78\\project-final"
+  },
+  "accepted": {
+    "files": {
+      "fixture-note.txt": "Local isolated schedule locale acceptance.\n"
+    },
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b78\\project-accepted",
+    "head": "3623c5b4c51b7c41c35bb007d853f13025fcf3e2"
+  },
+  "delivery": {
+    "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b78\\project-delivery",
+    "files": {
+      "fixture-note.txt": "Local isolated schedule locale delivery.\n"
+    },
+    "head": "28a151a1b0fd80e21c8d42eb5b5e824e5c97eb2c"
+  }
+}

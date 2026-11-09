@@ -470,6 +470,98 @@
   min-width: 0;
 }
 
+.automation-temporal-control {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-variant-numeric: tabular-nums;
+}
+
+.automation-temporal-control:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 calc(2px * var(--ui-scale)) var(--oc-control-focus-ring);
+}
+
+.automation-temporal-segments {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.automation-temporal-segments [role="spinbutton"] {
+  padding-inline: var(--ui-gap-xs);
+  border-radius: var(--oc-radius-soft);
+}
+
+.automation-temporal-segments [role="spinbutton"]:focus-visible {
+  outline: none;
+  background: var(--accent-dim);
+}
+
+.automation-temporal-segments [data-placeholder-shown] {
+  color: var(--text-muted);
+}
+
+.automation-calendar-positioner {
+  z-index: calc(var(--ui-z-dialog) + 1);
+}
+
+.automation-calendar-popover {
+  padding: var(--ui-gap-md);
+}
+
+.automation-calendar-navigation {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--ui-gap-xs);
+  margin-bottom: var(--ui-gap-sm);
+}
+
+.automation-calendar-navigation select {
+  min-width: 0;
+  height: var(--oc-density-control-height);
+  border: var(--oc-border-width) solid var(--border);
+  border-radius: var(--oc-radius-soft);
+  background: var(--surface-strong);
+  color: var(--text-strong);
+  font: inherit;
+}
+
+.automation-calendar-popover table {
+  border-spacing: var(--ui-gap-xs);
+  text-align: center;
+  font-size: var(--ui-font-body);
+}
+
+.automation-calendar-popover th {
+  color: var(--text-muted);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+.automation-calendar-popover [data-part="table-cell-trigger"] {
+  display: grid;
+  width: var(--oc-density-control-height);
+  height: var(--oc-density-control-height);
+  place-items: center;
+  border-radius: var(--oc-radius-soft);
+  cursor: pointer;
+}
+
+.automation-calendar-popover [data-part="table-cell-trigger"]:is(:hover, [data-selected]) {
+  background: var(--accent-dim);
+}
+
+.automation-calendar-popover [data-part="table-cell-trigger"]:focus-visible {
+  outline: var(--oc-border-width) solid var(--accent);
+  outline-offset: calc(-1 * var(--oc-border-width));
+}
+
+.automation-calendar-popover [data-part="table-cell-trigger"]:is([data-disabled], [data-outside-range]) {
+  color: var(--text-muted);
+  cursor: default;
+}
+
 @container settings-content (max-width: 640px) {
   .automation-form-grid {
     grid-template-columns: minmax(0, 1fr);

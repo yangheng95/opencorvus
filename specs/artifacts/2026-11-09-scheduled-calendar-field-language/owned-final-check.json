@@ -1,0 +1,134 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b78\\project-before",
+    "head": "b08e8adb1e6a48582f0cc7c8db7ef0a2b7b7fc1c",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "definitions": [],
+    "futureFires": [],
+    "scheduleWrites": []
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b78\\project-after",
+    "head": "b08e8adb1e6a48582f0cc7c8db7ef0a2b7b7fc1c",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "definitions": [],
+    "futureFires": [],
+    "scheduleWrites": []
+  },
+  "final": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b78\\project-final",
+    "head": "9c7807883fecc66de728c8acabbced2ff73ab75e",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "definitions": [],
+    "futureFires": [],
+    "scheduleWrites": []
+  },
+  "accepted": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b78\\project-accepted",
+    "head": "3623c5b4c51b7c41c35bb007d853f13025fcf3e2",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "definitions": [],
+    "futureFires": [],
+    "scheduleWrites": []
+  },
+  "delivery": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b78\\project-delivery",
+    "head": "28a151a1b0fd80e21c8d42eb5b5e824e5c97eb2c",
+    "counts": {
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "automation_fire_frontier": 0,
+      "automation_fire_attempt": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0
+    },
+    "definitions": [
+      [
+        "atm_g0VaRxrMd00hMi5PSAw1",
+        "atm_g0VaRxrMd00hMi5PSAw1",
+        1,
+        "active",
+        "DTSTART;TZID=Asia/Shanghai:20990105T143700\nRRULE:FREQ=DAILY",
+        "global",
+        "日历语言验收 78",
+        "仅验证日期时间和语言，禁止运行。"
+      ],
+      [
+        "atm_g0VaRxrMd00hMi5PSAw1",
+        "atm_g0VaRxuv100KbvuV6Ugv",
+        2,
+        "paused",
+        "DTSTART;TZID=Asia/Shanghai:20990105T143700\nRRULE:FREQ=DAILY",
+        "global",
+        "日历语言验收 78",
+        "仅验证日期时间和语言，禁止运行。"
+      ]
+    ],
+    "futureFires": [
+      [
+        "cal_automation_af94ea672723c148a161e10b32d4dd78",
+        "atm_g0VaRxrMd00hMi5PSAw1",
+        "scheduled",
+        4071278220000
+      ]
+    ],
+    "scheduleWrites": [
+      {
+        "time": "2026-11-09T05:15:12.626Z",
+        "requestID": "851718e4-c4db-444b-8e0f-fb29cf3278b1",
+        "method": "POST",
+        "path": "/global/automations",
+        "status": "completed",
+        "statusCode": 201,
+        "duration": 17
+      },
+      {
+        "time": "2026-11-09T05:15:26.285Z",
+        "requestID": "a85acb6b-a987-4d03-884a-041bb3a51c99",
+        "method": "PATCH",
+        "path": "/global/automations/atm_g0VaRxrMd00hMi5PSAw1",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 14
+      }
+    ]
+  }
+}
