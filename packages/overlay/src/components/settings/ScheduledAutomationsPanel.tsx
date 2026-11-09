@@ -1433,10 +1433,6 @@ export default function ScheduledAutomationsPanel(props: ScheduledAutomationsPan
                         onValueChange={setProjectSearch}
                         disabled={Boolean(busyAction())}
                         onKeyDown={(event) => {
-                          if (event.key === "Enter") {
-                            event.preventDefault()
-                            return
-                          }
                           if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return
                           const options = projectListElement?.isConnected
                             ? projectListElement.querySelectorAll<HTMLElement>('[role="option"]:not([aria-disabled="true"])')

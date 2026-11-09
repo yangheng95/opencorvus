@@ -1,0 +1,86 @@
+{
+  "before": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b75\\project-before",
+    "head": "8814019419dd28e40eb9b0a9ab739b59d050f91e",
+    "originalTrackedFiles": 1,
+    "counts": {
+      "message": 0,
+      "engine_task": 0,
+      "automation": 0,
+      "automation_fire": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "session": 0
+    },
+    "draft": null,
+    "requests": []
+  },
+  "after": {
+    "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b75\\project-after",
+    "head": "6992c726beea169d8b37b0f33a888737ff293f65",
+    "originalTrackedFiles": 1,
+    "counts": {
+      "message": 0,
+      "engine_task": 0,
+      "automation": 0,
+      "automation_fire": 0,
+      "automation_run": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "session": 1
+    },
+    "draft": {
+      "sessionID": "ses_-zUPYDbd7zzbGpndXpSI",
+      "projectID": "prj_hzU0uUTiUX7S47i13FZJ",
+      "title": "键盘验收草稿 75",
+      "kind": "mission",
+      "mission": {
+        "id": "3ec551184173af95",
+        "channelKey": "mission:3ec551184173af95",
+        "cwd": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b75\\project-after",
+        "productPillar": "work",
+        "visibleExpertSquadIDs": [
+          "dynamic"
+        ],
+        "pendingPrompt": {
+          "text": "只核对搜索回车后能明确保存原请求，不启动任务。"
+        }
+      }
+    },
+    "requests": [
+      {
+        "time": "2026-11-09T04:29:39.543Z",
+        "requestID": "30d9586d-4530-4634-ae1c-ec25250be0e1",
+        "method": "POST",
+        "path": "/mission/draft",
+        "status": "started"
+      },
+      {
+        "time": "2026-11-09T04:29:39.678Z",
+        "requestID": "30d9586d-4530-4634-ae1c-ec25250be0e1",
+        "method": "POST",
+        "path": "/mission/draft",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 134
+      },
+      {
+        "time": "2026-11-09T04:30:09.810Z",
+        "requestID": "f9333cca-5385-44ba-9b3e-526a511a2d3b",
+        "method": "POST",
+        "path": "/panel/knowledge/memory/search",
+        "status": "started"
+      },
+      {
+        "time": "2026-11-09T04:30:09.812Z",
+        "requestID": "f9333cca-5385-44ba-9b3e-526a511a2d3b",
+        "method": "POST",
+        "path": "/panel/knowledge/memory/search",
+        "status": "completed",
+        "statusCode": 200,
+        "duration": 2
+      }
+    ]
+  }
+}

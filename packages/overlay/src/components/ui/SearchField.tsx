@@ -53,7 +53,8 @@ export function SearchField(props: SearchFieldProps): JSX.Element {
       clear()
       return
     }
-    if (event.key === "Enter" && props.onSubmit) {
+    if (event.key === "Enter" && !event.isComposing && (props.onSubmit || event.currentTarget.form)) {
+      // The search input owns Enter even when its enclosing form has a default submit button.
       event.preventDefault()
       submit()
     }

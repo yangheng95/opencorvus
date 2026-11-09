@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [表单内搜索的回车归属](records/2026-11/2026-11-09-form-search-enter-ownership.md)
 - [多步任务市场安装与草稿选择](records/2026-11/2026-11-09-mission-market-install-draft-selection.md)
 - [撰写器市场安装后的搜索与焦点](records/2026-11/2026-11-09-composer-market-install-continuity.md)
 - [专家团市场安装身份](records/2026-11/2026-11-09-expert-squad-market-installation-identity.md)

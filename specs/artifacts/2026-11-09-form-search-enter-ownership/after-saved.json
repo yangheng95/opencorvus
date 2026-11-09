@@ -1,0 +1,36 @@
+{
+  "phase": "after",
+  "stage": "saved",
+  "missions": {
+    "status": 200,
+    "requestID": "bad608c2-34d7-4a07-858e-ae21682fb6e6",
+    "body": [
+      {
+        "missionID": "3ec551184173af95",
+        "sessionID": "ses_-zUPYDbd7zzbGpndXpSI",
+        "title": "键盘验收草稿 75",
+        "directory": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b75\\project-after",
+        "created": 1794198579547,
+        "updated": 1794198579570,
+        "interruptible": false,
+        "productPillar": "work",
+        "boardLane": "backlog",
+        "pendingInteractions": 0,
+        "pendingPrompt": {
+          "text": "只核对搜索回车后能明确保存原请求，不启动任务。"
+        },
+        "tasks": [],
+        "taskStats": {
+          "total": 0,
+          "running": 0,
+          "inactive": 0
+        }
+      }
+    ]
+  },
+  "automations": {
+    "status": 200,
+    "requestID": "53b4f2ea-f2b8-4f8f-abfa-d2696a3182f8",
+    "body": []
+  }
+}

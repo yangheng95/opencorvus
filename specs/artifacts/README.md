@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [表单内搜索的回车归属证据](2026-11-09-form-search-enter-ownership/README.md)
 - [多步任务市场安装与草稿选择证据](2026-11-09-mission-market-install-draft-selection/README.md)
 - [撰写器市场安装后的搜索与焦点证据](2026-11-09-composer-market-install-continuity/README.md)
 - [专家团市场安装身份证据](2026-11-09-expert-squad-market-installation-identity/README.md)
