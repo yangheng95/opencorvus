@@ -253,6 +253,7 @@ type CatalogFilter = "all" | "active" | "package" | "built_in"
 type InstalledSquadSection = "overview" | "agents" | "configuration" | "evolution" | "package"
 type CatalogDiscoveryIssue = Extract<ExpertSquadDiagnosticsPage["entries"][number], { kind: "issue" }>["issue"]
 type CatalogDiagnosticsSnapshot = Pick<ExpertSquadDiagnosticsPage, "entries" | "next_cursor" | "total_count">
+type DiagnosticContinuation = { kind: "loading" } | { kind: "failed"; error: unknown }
 
 const catalogIssueLabels = {
   "location.scan": "expert_squad.catalog_issue.location",
@@ -300,6 +301,7 @@ export default function ExpertSquadPanel() {
   const [inventoryStatus, setInventoryStatus] = createSignal<ExpertSquadInventoryStatus | null>(null)
   const [catalogDiagnostics, setCatalogDiagnostics] = createSignal<CatalogDiagnosticsSnapshot | null>(null)
   const [catalogDiagnosticsOpen, setCatalogDiagnosticsOpen] = createSignal(false)
+  const [diagnosticContinuation, setDiagnosticContinuation] = createSignal<DiagnosticContinuation | null>(null)
   const [selectedDetail, setSelectedDetail] = createSignal<ExpertSquadSettingsSurface | null>(null)
   const [selectedDetailIdentity, setSelectedDetailIdentity] = createSignal("")
   const [selectedDetailLoading, setSelectedDetailLoading] = createSignal(false)
@@ -309,6 +311,11 @@ export default function ExpertSquadPanel() {
   const [busy, setBusy] = createSignal<BusyAction | null>(null)
   const [marketBusy, setMarketBusy] = createSignal<BusyAction[]>([])
   const [loading, setLoading] = createSignal(false)
+  const diagnosticActionBusy = () => loading() || diagnosticContinuation()?.kind === "loading"
+  const diagnosticContinuationFailure = () => {
+    const state = diagnosticContinuation()
+    return state?.kind === "failed" ? state : undefined
+  }
   const [market, setMarket] = createSignal<ExpertSquadMarketItem[]>([])
   const [marketIdentity, setMarketIdentity] = createSignal("")
   const [marketLoading, setMarketLoading] = createSignal(false)
@@ -573,6 +580,7 @@ export default function ExpertSquadPanel() {
   ): Promise<void> {
     if (scope.kind === "unavailable" || scope.kind === "pending") {
       loadSequence++
+      setDiagnosticContinuation(null)
       setCatalog(null)
       setCatalogEntries([])
       setCatalogNextCursor(null)
@@ -585,6 +593,7 @@ export default function ExpertSquadPanel() {
     }
     const selectionAtEntry = selectedSquadID()
     setLoading(true)
+    setDiagnosticContinuation(null)
     if (currentScopeIdentity() === expectedScopeIdentity) setCatalogError(null)
     const sequence = ++loadSequence
     try {
@@ -743,15 +752,15 @@ export default function ExpertSquadPanel() {
   async function loadMoreDiagnostics(): Promise<void> {
     const scope = currentScope()
     const diagnostics = catalogDiagnostics()
-    if (!diagnostics?.next_cursor || (scope.kind !== "project" && scope.kind !== "session") || loading()) return
+    if (!diagnostics?.next_cursor || (scope.kind !== "project" && scope.kind !== "session")) return
     const sequence = loadSequence
     const expectedScopeIdentity = currentScopeIdentity()
     const authority = captureApiAuthority()
     const firstNewIndex = diagnostics.entries.length
     const origin = document.activeElement === diagnosticsMoreButton ? diagnosticsMoreButton : undefined
-    setLoading(true)
+    setDiagnosticContinuation({ kind: "loading" })
     try {
-      const page = await loadExpertSquadDiagnostics(scope.directory, { cursor: diagnostics.next_cursor, limit: 20 })
+      const page = await loadExpertSquadDiagnostics(scope.directory, { cursor: diagnostics.next_cursor, limit: 20, authority })
       if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity) return
       const ownsFocus = origin && document.activeElement === origin
       setCatalogDiagnostics({
@@ -770,10 +779,36 @@ export default function ExpertSquadPanel() {
         })
       }
     } catch (error) {
-      if (!(error instanceof ApiAuthorityChangedError) && sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setCatalogError({ error })
+      if (!(error instanceof ApiAuthorityChangedError) && sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) {
+        setDiagnosticContinuation({ kind: "failed", error })
+      }
     } finally {
-      if (sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) setLoading(false)
+      if (sequence === loadSequence && currentScopeIdentity() === expectedScopeIdentity) {
+        setDiagnosticContinuation((state) => state?.kind === "loading" ? null : state)
+      }
     }
+  }
+
+  async function runDiagnosticAction(): Promise<void> {
+    if (diagnosticActionBusy()) return
+    if (!diagnosticContinuationFailure()) return loadMoreDiagnostics()
+
+    const origin = document.activeElement === diagnosticsMoreButton ? diagnosticsMoreButton : undefined
+    const expectedScopeIdentity = currentScopeIdentity()
+    const authority = captureApiAuthority()
+    const refresh = refreshCatalog()
+    const sequence = loadSequence
+    try {
+      await refresh
+    } catch {
+      return // The full refresh owns its error feedback.
+    }
+    if (!origin || origin.isConnected || document.activeElement !== document.body) return
+    if (sequence !== loadSequence || currentScopeIdentity() !== expectedScopeIdentity || !isApiAuthorityCurrent(authority)) return
+    const target = diagnosticDisclosure?.isConnected
+      ? diagnosticDisclosure.querySelector<HTMLElement>("summary")
+      : installedLayout?.querySelector<HTMLElement>('[data-ui="expert-squad-catalog-filter"][aria-pressed="true"]')
+    target?.focus()
   }
 
   createEffect<string>((previousKey) => {
@@ -785,6 +820,7 @@ export default function ExpertSquadPanel() {
     if (scope.kind === "unavailable" || scope.kind === "pending") {
       loadSequence++
       marketLoadSequence++
+      setDiagnosticContinuation(null)
       setCatalog(null)
       setCatalogEntries([])
       setCatalogNextCursor(null)
@@ -1442,6 +1478,13 @@ export default function ExpertSquadPanel() {
                     </Feedback>
                   )}
                 </For>
+                <Show when={diagnosticContinuationFailure()}>
+                  {(failure) => (
+                    <Feedback tone="error" title={t("expert_squad.diagnostics_continuation_failed")} details={formatErrorDetails(failure().error)}>
+                      {t("expert_squad.diagnostics_continuation_hint")}
+                    </Feedback>
+                  )}
+                </Show>
                 <Show when={catalogDiagnostics()?.next_cursor}>
                   <Button
                     ref={diagnosticsMoreButton}
@@ -1450,11 +1493,11 @@ export default function ExpertSquadPanel() {
                     size="sm"
                     tone="neutral"
                     data-ui="expert-squad-diagnostics-more"
-                    aria-disabled={loading() || undefined}
-                    aria-busy={loading() || undefined}
-                    onClick={() => void loadMoreDiagnostics()}
+                    aria-disabled={diagnosticActionBusy() || undefined}
+                    aria-busy={diagnosticActionBusy() || undefined}
+                    onClick={() => void runDiagnosticAction()}
                   >
-                    {t("expert_squad.load_more_diagnostics")}
+                    {t(diagnosticContinuationFailure() ? "expert_squad.refresh_catalog" : "expert_squad.load_more_diagnostics")}
                   </Button>
                 </Show>
               </Disclosure.Content>

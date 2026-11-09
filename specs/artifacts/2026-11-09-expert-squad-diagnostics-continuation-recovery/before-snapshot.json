@@ -1,0 +1,89 @@
+{
+  "phase": "before",
+  "mode": "snapshot",
+  "project": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261109-b69\\project-before",
+  "first": {
+    "status": 200,
+    "requestID": "54262ec8-0e52-4218-b45e-5c842654103f",
+    "cursor": "eyJyZXZpc2lvbiI6Ijk1MTg1YTdkODMyNzMyNDRiNWNiNTRlNTU0YjkzMmJlZGZiMzg2OWMwMzI5Y2NjMzZkNjNiNDU2MDk0ZTcxMTgiLCJxdWVyeV9maW5nZXJwcmludCI6ImVmZGE4NDE4ZGEzZTMzYzEwMGM5MzZkZjEwMjhjNGY2NTNjMGJjMzk4MjVkMWVhOTU1MzcxYWI2ZjBjZWY0Y2EiLCJvZmZzZXQiOjIwfQ",
+    "count": 22,
+    "ids": [
+      "incomplete-000",
+      "incomplete-001",
+      "incomplete-002",
+      "incomplete-003",
+      "incomplete-004",
+      "incomplete-005",
+      "incomplete-006",
+      "incomplete-007",
+      "incomplete-008",
+      "incomplete-009",
+      "incomplete-010",
+      "incomplete-011",
+      "incomplete-012",
+      "incomplete-013",
+      "incomplete-014",
+      "incomplete-015",
+      "incomplete-016",
+      "incomplete-017",
+      "incomplete-018",
+      "incomplete-019"
+    ]
+  },
+  "entries": [
+    {
+      "id": "advanced",
+      "name": "Advanced",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "base",
+      "name": "Base",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "dynamic",
+      "name": "Dynamic",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "research-studio",
+      "name": "Research Studio",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "squad-sdk",
+      "name": "Generate Expert Squads",
+      "source": {
+        "kind": "built_in"
+      }
+    },
+    {
+      "id": "data-analysis",
+      "name": "Data Analysis & Business Insights",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "global",
+        "namespace": "builtin"
+      }
+    },
+    {
+      "id": "data-analysis",
+      "name": "Data Analysis & Business Insights",
+      "source": {
+        "kind": "installed_package",
+        "installation_scope": "project",
+        "namespace": "builtin"
+      }
+    }
+  ],
+  "active": "dynamic"
+}

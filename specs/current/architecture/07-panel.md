@@ -5193,6 +5193,9 @@ original diagnostics. The selected installation retains its own precedence feedb
 The catalog summarizes diagnostics in a collapsed disclosure; opening it shows
 the accepted records in source order. Diagnostic continuation uses its own action
 label and hands keyboard focus to the first appended record on success.
+A failed diagnostic continuation preserves the current scope's accepted directory,
+filters and diagnostic records. The disclosure shows the original request details
+and offers a catalog refresh through the same full read path to obtain a fresh cursor.
 Mission Skill reads retain original transport errors for localized inline feedback
 with expandable diagnostics. A failed read keeps only the current scope's accepted
 catalog and filters; the count describes accepted data. An unavailable scope
