@@ -1,0 +1,5 @@
+{"listenPort":39288,"upstreamPort":39286,"pid":9820}
+{"time":"2026-11-09T17:16:40.747Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T17:17:11.216Z","receipt":1,"stage":"arrival","path":"/config","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b139\\project-before","delay":12000}
+{"time":"2026-11-09T17:17:11.295Z","receipt":1,"stage":"origin","status":200,"requestID":"af8ca6a4-4e25-4a5a-b65d-4a56f7fa043d","publicUrl":"https://channel-draft-first.example.invalid/preview"}
+{"time":"2026-11-09T17:17:23.307Z","receipt":1,"stage":"released","publicUrl":"https://channel-draft-first.example.invalid/preview"}

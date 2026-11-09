@@ -1638,6 +1638,15 @@ button.s-row:focus-visible {
   min-width: 0;
 }
 
+.channel-public-url-group > .s-group-body {
+  display: grid;
+  gap: var(--ui-gap-sm);
+}
+
+.channel-public-url-save {
+  min-inline-size: calc(72px * var(--ui-scale));
+}
+
 .config-tab-panel[data-config-panel="mcp"] .extension-settings-group > .s-group-body {
   overflow: visible;
   border: 0;

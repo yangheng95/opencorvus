@@ -710,6 +710,8 @@
   "channel.public_url_invalid": "Enter a valid public URL starting with http:// or https://.",
   "channel.save_failed": "Could not save {{name}} settings.",
   "channel.public_url_save_failed": "Could not save the public base URL.",
+  "channel.public_url_earlier_saved": "The public base URL you submitted was saved. Your later edits are still unsaved.",
+  "channel.public_url_earlier_saved_with_issues": "The public base URL you submitted was saved, but runtime reconciliation failed. Your later edits are still unsaved.",
   "channel.config_saved_with_issues": "Settings were saved, but runtime reconciliation failed. Review the details.",
   "channel.tutorial_open_failed": "Could not open the setup tutorial.",
   "channel.catalog_load_failed": "Could not load the channel catalog.",

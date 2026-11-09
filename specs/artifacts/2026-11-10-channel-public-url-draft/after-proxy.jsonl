@@ -1,0 +1,13 @@
+{"listenPort":39289,"upstreamPort":39287,"pid":14796}
+{"time":"2026-11-09T17:22:49.655Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T17:23:08.064Z","receipt":1,"stage":"arrival","path":"/config","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b139\\project-after","delay":12000}
+{"time":"2026-11-09T17:23:08.121Z","receipt":1,"stage":"origin","status":200,"requestID":"ee76b957-6b13-4424-9473-6b0840efc185","publicUrl":"https://channel-draft-first.example.invalid/preview"}
+{"time":"2026-11-09T17:23:20.133Z","receipt":1,"stage":"released","publicUrl":"https://channel-draft-first.example.invalid/preview"}
+{"time":"2026-11-09T17:26:12.265Z","stage":"upgrade","route":"/global/transport/stream","status":101}
+{"time":"2026-11-09T17:26:25.617Z","receipt":2,"stage":"arrival","path":"/config","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b139\\project-after","delay":12000}
+{"time":"2026-11-09T17:26:25.685Z","receipt":2,"stage":"origin","status":200,"requestID":"617efea7-4964-4a27-82aa-1ff3f29434fd","publicUrl":"https://channel-draft-review.example.invalid/preview"}
+{"time":"2026-11-09T17:26:37.688Z","receipt":2,"stage":"released","publicUrl":"https://channel-draft-review.example.invalid/preview"}
+{"time":"2026-11-09T17:26:56.239Z","receipt":3,"stage":"arrival","path":"/config","directory":"C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b139\\project-after","delay":1800}
+{"time":"2026-11-09T17:26:56.323Z","receipt":3,"stage":"origin","status":200,"requestID":"6da39388-60f9-4e3f-b6b9-5796bd593976","publicUrl":"https://channel-draft-next.example.invalid/preview"}
+{"time":"2026-11-09T17:26:58.129Z","receipt":3,"stage":"released","publicUrl":"https://channel-draft-next.example.invalid/preview"}
+{"time":"2026-11-09T17:27:03.871Z","stage":"upgrade","route":"/global/transport/stream","status":101}

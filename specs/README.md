@@ -1,5 +1,6 @@
 # Specs Storage Index
 
+- [通道公网地址保留保存期间继续输入的草稿](records/2026-11/2026-11-10-channel-public-url-draft.md)
 - [0.1.50 发布](records/2026-11/2026-11-10-release-0.1.50.md) · 版本准入与公开交付
 - [通道目录区分等待、读取失败与实际为空](records/2026-11/2026-11-10-channel-catalog-read-retry.md)
 - [重新加载授权模式保留焦点与诊断](records/2026-11/2026-11-10-permission-mode-reload-focus.md)

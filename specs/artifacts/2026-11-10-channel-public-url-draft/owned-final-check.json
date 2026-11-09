@@ -1,0 +1,56 @@
+{
+  "before": {
+    "head": "5042ef79a89622feae9510d5bbafe4ca393dd0ea",
+    "originalTrackedBytes": 29,
+    "status": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0,
+      "permission_policy": 0,
+      "permission_execution_result": 0
+    },
+    "profileConfigFiles": [],
+    "savedPublicUrl": "https://channel-draft-first.example.invalid/preview",
+    "patchRequestIDs": [
+      "af8ca6a4-4e25-4a5a-b65d-4a56f7fa043d"
+    ],
+    "writesInFinalProcessLog": 1
+  },
+  "after": {
+    "head": "022b6e4448126acfd5e240a572a8f30f97a6d8f5",
+    "originalTrackedBytes": 28,
+    "status": [
+      "?? .gitattributes",
+      "?? .gitignore",
+      "?? .opencorvus/"
+    ],
+    "counts": {
+      "project": 1,
+      "session": 0,
+      "message": 0,
+      "engine_task": 0,
+      "provider_usage_event": 0,
+      "provider_activity_request": 0,
+      "permission_ledger": 0,
+      "permission_policy": 0,
+      "permission_execution_result": 0
+    },
+    "profileConfigFiles": [],
+    "savedPublicUrl": "https://channel-draft-next.example.invalid/preview",
+    "patchRequestIDs": [
+      "ee76b957-6b13-4424-9473-6b0840efc185",
+      "617efea7-4964-4a27-82aa-1ff3f29434fd",
+      "6da39388-60f9-4e3f-b6b9-5796bd593976"
+    ],
+    "writesInFinalProcessLog": 2
+  }
+}

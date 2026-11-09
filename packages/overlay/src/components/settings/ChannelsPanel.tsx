@@ -39,6 +39,12 @@ const CHANNEL_RUNTIME_TONES: Record<ChannelEntry["runtime_status"], SettingsStat
 }
 
 type ChannelSaveKind = "channel" | "public-url"
+type ChannelNoticeTone = "success" | "warning" | "error"
+
+function configuredPublicUrl(config: typeof appStore.config): string {
+  const server = config?.server as { publicUrl?: string } | undefined
+  return server?.publicUrl ?? ""
+}
 
 interface ChannelNotice {
   key: string
@@ -74,7 +80,7 @@ export default function ChannelsPanel(props: { directory: string }) {
   )
   const [fieldValues, setFieldValues] = createSignal<Record<string, any>>({})
   const [notice, setNotice] = createSignal<ChannelNotice | null>(null)
-  const [noticeTone, setNoticeTone] = createSignal("")
+  const [noticeTone, setNoticeTone] = createSignal<ChannelNoticeTone>("success")
   const [noticeFormIdentity, setNoticeFormIdentity] = createSignal("catalog")
   const [savingOwner, setSavingOwner] = createSignal<ChannelSaveOwner | null>(null)
   const [tutorialOwner, setTutorialOwner] = createSignal<TutorialOpenOwner | null>(null)
@@ -122,21 +128,12 @@ export default function ChannelsPanel(props: { directory: string }) {
     }
   }
 
-  const publicUrl = createMemo((): string => {
-    return (appStore.config as any)?.server?.publicUrl || ""
-  })
-
-  const [localPublicUrl, setLocalPublicUrl] = createSignal("")
+  const publicUrl = createMemo(() => configuredPublicUrl(appStore.config))
+  const [publicUrlDraft, setPublicUrlDraft] = createSignal<string>()
+  const localPublicUrl = () => publicUrlDraft() ?? publicUrl()
   const [publicUrlInvalid, setPublicUrlInvalid] = createSignal(false)
+  let publicUrlEditRevision = 0
   let publicUrlInput: HTMLInputElement | undefined
-  // Hydrate from accepted configuration or a new scope, independently of save settlement.
-  createEffect(() => {
-    captureApiAuthority().revision
-    boardStore.selectEpoch
-    props.directory.trim()
-    setLocalPublicUrl(publicUrl())
-    setPublicUrlInvalid(false)
-  })
 
   const editingEntry = createMemo(() =>
     editingOwner()?.directory === props.directory.trim()
@@ -147,6 +144,8 @@ export default function ChannelsPanel(props: { directory: string }) {
     const identity = currentScopeIdentity()
     if (identity === scopeIdentity) return
     scopeIdentity = identity
+    setPublicUrlDraft(undefined)
+    setPublicUrlInvalid(false)
     returnToEditTrigger = undefined
     invalidateSaveOwner()
     invalidateTutorialOwner()
@@ -275,7 +274,7 @@ export default function ChannelsPanel(props: { directory: string }) {
         config.channel[entry.id] = structuredClone(values)
       }, requestOptions)
       if (!ownsSave(owner)) return
-      showNotice({ key: "common.saved" }, "active", "catalog")
+      showNotice({ key: "common.saved" }, "success", "catalog")
       closeEditWithoutInvalidation()
     } catch (e) {
       if (ownsSave(owner)) {
@@ -300,52 +299,71 @@ export default function ChannelsPanel(props: { directory: string }) {
     return valid
   }
 
+  function adoptPublicUrlSave(editRevision: number, confirmed: string): boolean {
+    if (publicUrlEditRevision !== editRevision && localPublicUrl().trim() !== confirmed) return false
+    setPublicUrlDraft(undefined)
+    setPublicUrlInvalid(false)
+    return true
+  }
+
   async function handleSavePublicUrl() {
     const input = publicUrlInput
-    if (!input) return
+    if (!input || savePending("public-url")) return
     if (!validatePublicUrl(input)) {
-      if (noticeFormIdentity() === "catalog") clearNotice()
+      if (noticeFormIdentity() === "public-url") clearNotice()
       input.focus({ preventScroll: true })
       return
     }
+    if (noticeFormIdentity() === "public-url") clearNotice()
     const configOwner = currentProjectConfigRequestOptions()
     const publicUrlSnapshot = localPublicUrl().trim()
+    const editRevision = publicUrlEditRevision
     const owner = beginSave("public-url", configOwner.directory, "", configOwner.authority)
     const requestOptions = {
       ...configOwner,
       ownsResponse: () => ownsSave(owner),
     }
     try {
-      await updateConfig((current: any) => {
+      const saved = await updateConfig((current) => {
         current.server = current.server || {}
         current.server.publicUrl = publicUrlSnapshot || undefined
         if (current.server.publicUrl === undefined) delete current.server.publicUrl
         if (Object.keys(current.server).length === 0) delete current.server
       }, requestOptions)
-      if (ownsSave(owner)) showNotice({ key: "common.saved" }, "active", "catalog")
-    } catch (e) {
-      if (ownsSave(owner))
+      if (ownsSave(owner)) {
+        const adopted = adoptPublicUrlSave(editRevision, configuredPublicUrl(saved))
         showNotice(
-          {
-            key: committedConfigFromError(e) ? "channel.config_saved_with_issues" : "channel.public_url_save_failed",
-            details: formatErrorDetails(e),
-          },
-          "error",
-          "catalog",
+          { key: adopted ? "common.saved" : "channel.public_url_earlier_saved" },
+          adopted ? "success" : "warning",
+          "public-url",
         )
+      }
+    } catch (e) {
+      if (ownsSave(owner)) {
+        const committed = committedConfigFromError(e)
+        const newerDraft = committed && !adoptPublicUrlSave(editRevision, configuredPublicUrl(committed))
+        const key = newerDraft
+          ? "channel.public_url_earlier_saved_with_issues"
+          : committed ? "channel.config_saved_with_issues" : "channel.public_url_save_failed"
+        showNotice(
+          { key, details: formatErrorDetails(e) },
+          "error",
+          "public-url",
+        )
+      }
     } finally {
       if (ownsSave(owner)) setSavingOwner(null)
     }
   }
 
-  function showNotice(value: ChannelNotice, tone = "", ownerFormIdentity = formIdentity()) {
+  function showNotice(value: ChannelNotice, tone: ChannelNoticeTone = "success", ownerFormIdentity = formIdentity()) {
     if (noticeTimer) clearTimeout(noticeTimer)
     noticeTimer = undefined
     const generation = ++noticeGeneration
     setNotice(value)
     setNoticeTone(tone)
     setNoticeFormIdentity(ownerFormIdentity)
-    if (tone !== "error") {
+    if (tone === "success") {
       noticeTimer = setTimeout(() => {
         if (generation !== noticeGeneration) return
         setNotice(null)
@@ -359,7 +377,7 @@ export default function ChannelsPanel(props: { directory: string }) {
     if (noticeTimer) clearTimeout(noticeTimer)
     noticeTimer = undefined
     setNotice(null)
-    setNoticeTone("")
+    setNoticeTone("success")
     setNoticeFormIdentity("catalog")
   }
 
@@ -410,7 +428,7 @@ export default function ChannelsPanel(props: { directory: string }) {
   function noticeState() {
     return (
       <Feedback
-        tone={noticeTone() === "error" ? "error" : "success"}
+        tone={noticeTone()}
         data-ui="channel-settings-notice"
         role={noticeTone() === "error" ? "alert" : "status"}
         aria-live={noticeTone() === "error" ? "assertive" : "polite"}
@@ -427,7 +445,12 @@ export default function ChannelsPanel(props: { directory: string }) {
         <Show when={notice() && noticeFormIdentity() === "catalog"}>{noticeState()}</Show>
 
         <Show when={props.directory.trim()} fallback={<SettingsEmpty>{t("workspace.no_directory")}</SettingsEmpty>}>
-          <SettingsGroup title={t("channel.external_access")} description={t("channel.public_url_hint")} contentInset>
+          <SettingsGroup
+            class="channel-public-url-group"
+            title={t("channel.external_access")}
+            description={t("channel.public_url_hint")}
+            contentInset
+          >
             <div class="extension-head">
               <TextField.Root as="label" class="channel-public-url-field" invalid={publicUrlInvalid()}>
                 <TextField.Label>{t("channel.public_url")}</TextField.Label>
@@ -442,9 +465,11 @@ export default function ChannelsPanel(props: { directory: string }) {
                   placeholder="https://opencorvus.example.com"
                   value={localPublicUrl()}
                   onInput={(e) => {
+                    const value = e.currentTarget.value
+                    publicUrlEditRevision++
                     setPublicUrlInvalid(false)
-                    if (noticeFormIdentity() === "catalog") clearNotice()
-                    setLocalPublicUrl(e.currentTarget.value)
+                    if (noticeFormIdentity() === "public-url") clearNotice()
+                    setPublicUrlDraft(value === publicUrl() && !savePending("public-url") ? undefined : value)
                   }}
                   onBlur={(e) => validatePublicUrl(e.currentTarget)}
                 />
@@ -455,16 +480,19 @@ export default function ChannelsPanel(props: { directory: string }) {
               <div class="dialog-actions compact">
                 <Button
                   type="button"
+                  class="channel-public-url-save"
                   variant="solid"
                   size="md"
                   tone="accent"
                   onClick={handleSavePublicUrl}
-                  disabled={savePending("public-url")}
+                  aria-disabled={savePending("public-url") || undefined}
+                  aria-busy={savePending("public-url") || undefined}
                 >
-                  {t("common.save")}
+                  {t(savePending("public-url") ? "common.saving" : "common.save")}
                 </Button>
               </div>
             </div>
+            <Show when={notice() && noticeFormIdentity() === "public-url"}>{noticeState()}</Show>
           </SettingsGroup>
 
           <SettingsGroup

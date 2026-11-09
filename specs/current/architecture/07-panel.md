@@ -5305,8 +5305,8 @@ The Channel public-URL editor validates its native URL input and HTTP(S) pattern
 before acquiring a save owner or calling the configuration writer. Blur and save
 share that same field validity, including case-insensitive schemes and empty-value
 clearing. The existing TextField renders a localized inline error and accessible
-field state; edits and accepted config hydration retire that field error. Catalog
-feedback retires on public-URL edits without clearing a channel editor's own slot.
+field state; edits and confirmation of that draft retire that field error. Address
+feedback sits with the address field and retires on another edit or save.
 The lower-level configuration string and explicit environment contracts remain
 unchanged; this editor does not introduce a second URL parser or migrate old data.
 
@@ -5318,9 +5318,12 @@ empty response renders the empty state. A failed read keeps any accepted catalog
 in that scope and offers an in-place retry through the same configuration reader.
 Successful saves retain the existing 2600 ms dismissal; errors remain readable
 until explicit feedback retirement or scope change. An accepted committed-config
-receipt reports saved settings with reconciliation issues. Public-URL hydration
-subscribes only to accepted configuration and the existing authority, selection
-and directory scope; ordinary save settlement preserves the authored draft.
+receipt reports saved settings with reconciliation issues. The public-URL editor
+shows the confirmed project configuration until the user edits it. A save keeps
+its submitted revision separate from any later draft; an earlier confirmation
+keeps newer input and explains that it is still unsaved. The address save button
+stays keyboard-focusable while busy and rejects repeat activation. Scope changes
+retire the draft and address feedback along with the current save owner.
 
 The desktop updater checks the compiled signed release channel at app startup,
 on visibility return, and hourly while visible, independently of backend
