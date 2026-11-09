@@ -1,7 +1,7 @@
-import { createEffect, createMemo, createResource, createSignal, For, Show } from "solid-js"
+import { createEffect, createMemo, createSignal, For, on, onCleanup, Show } from "solid-js"
 import { localeTag, t } from "../../utils/i18n"
 import { activeProjectDirectory } from "../../services/project-directory"
-import { apiJson, captureApiAuthority, isApiAuthorityCurrent } from "../../services/api"
+import { apiJson, captureApiAuthority, isApiAuthorityCurrent, type ApiAuthority } from "../../services/api"
 import { loadConfigInfo } from "../../services/config-load"
 import { formatErrorDetails, reportError } from "../../services/diagnostics"
 import { appStore } from "../../store/app"
@@ -117,21 +117,21 @@ function PermissionScope(props: { scope: Record<string, unknown> | null | undefi
     </>
   )
 }
-async function permissionRecords(directory: string) {
-  try {
-    const [grants, history] = await Promise.all([
-      apiJson<PermissionLedgerEvent[]>(directoryScopedPath("permission/grants", directory, "permission grants")),
-      apiJson<PermissionLedgerEvent[]>(directoryScopedPath("permission/history", directory, "permission history")),
-    ])
-    return { directory, grants, history, error: "" }
-  } catch (error) {
-    return {
-      directory,
-      grants: [] as PermissionLedgerEvent[],
-      history: [] as PermissionLedgerEvent[],
-      error: errorMessage(error),
-    }
-  }
+type PermissionRecordScope = { directory: string; authority: ApiAuthority }
+type PermissionRecords = { grants: PermissionLedgerEvent[]; history: PermissionLedgerEvent[] }
+type PermissionRecordFailure = { error: unknown }
+type PermissionRecordRead = { scope: PermissionRecordScope } & (
+  | { kind: "loading"; accepted?: PermissionRecords; failure?: PermissionRecordFailure }
+  | { kind: "failed"; accepted?: PermissionRecords; failure: PermissionRecordFailure }
+  | { kind: "ready"; accepted: PermissionRecords }
+)
+
+async function permissionRecords({ directory, authority }: PermissionRecordScope): Promise<PermissionRecords> {
+  const [grants, history] = await Promise.all([
+    apiJson<PermissionLedgerEvent[]>(directoryScopedPath("permission/grants", directory, "permission grants"), { authority }),
+    apiJson<PermissionLedgerEvent[]>(directoryScopedPath("permission/history", directory, "permission history"), { authority }),
+  ])
+  return { grants, history }
 }
 function operationStatus(events: PermissionLedgerEvent[]): { label: string; tone: BadgeTone } {
   // History is newest first. Retirement closes the request, not its execution outcome.
@@ -184,13 +184,49 @@ export function PermissionsSettingsGroup() {
   const [visibleCount, setVisibleCount] = createSignal(6)
   const [revoking, setRevoking] = createSignal("")
   const [revokeError, setRevokeError] = createSignal("")
-  const [records, { refetch }] = createResource(() => (recordsOpen() && directory()) || false, permissionRecords)
+  const recordsScope = createMemo<PermissionRecordScope | undefined>(() => {
+    const path = directory()
+    return path && appStore.connected ? { directory: path, authority: captureApiAuthority() } : undefined
+  })
+  const [recordRead, setRecordRead] = createSignal<PermissionRecordRead>()
+  let readSequence = 0
+  onCleanup(() => readSequence++)
+
+  const currentRecordRead = () => {
+    const read = recordRead()
+    return read?.scope === recordsScope() ? read : undefined
+  }
+  const currentRecords = () => currentRecordRead()?.accepted
+  const recordsBusy = () => currentRecordRead()?.kind === "loading"
+  const recordFailure = () => {
+    const read = currentRecordRead()
+    return read?.kind === "failed" || read?.kind === "loading" ? read.failure : undefined
+  }
+
+  async function refreshRecords(scope = recordsScope(), retireAccepted = false): Promise<void> {
+    if (!scope || scope !== recordsScope() || (recordsBusy() && !retireAccepted)) return
+    const sequence = ++readSequence
+    const owns = () =>
+      sequence === readSequence && recordsScope() === scope && isApiAuthorityCurrent(scope.authority)
+    const accepted = retireAccepted ? undefined : currentRecords()
+    const failure = retireAccepted ? undefined : recordFailure()
+    setRecordRead({ kind: "loading", scope, accepted, failure })
+    try {
+      const records = await permissionRecords(scope)
+      if (owns()) setRecordRead({ kind: "ready", scope, accepted: records })
+    } catch (error) {
+      if (owns()) setRecordRead({ kind: "failed", scope, accepted, failure: { error } })
+    }
+  }
+
+  createEffect(on(() => recordsOpen() ? recordsScope() : undefined, (scope) => {
+    if (scope) void refreshRecords(scope)
+  }))
   createEffect(() => {
-    directory()
+    recordsScope()
     setVisibleCount(6)
     setRevokeError("")
   })
-  const currentRecords = () => (records()?.directory === directory() ? records() : undefined)
   const operations = createMemo(() => {
     const grouped = new Map<string, PermissionLedgerEvent[]>()
     for (const event of currentRecords()?.history ?? []) {
@@ -208,17 +244,18 @@ export function PermissionsSettingsGroup() {
   const title = (owner: PermissionLedgerEvent | undefined) =>
     owner?.tool_name || owner?.summary || t("permissions.unknown_operation")
   const revoke = async (grantID: string) => {
-    const grantDirectory = directory()
-    if (!grantDirectory || revoking()) return
+    const scope = recordsScope()
+    if (!scope || revoking() || currentRecordRead()?.kind !== "ready") return
     setRevoking(grantID)
     setRevokeError("")
     try {
-      await apiJson(directoryScopedPath(`permission/grants/${encodeURIComponent(grantID)}/revoke`, grantDirectory), {
+      await apiJson(directoryScopedPath(`permission/grants/${encodeURIComponent(grantID)}/revoke`, scope.directory), {
         method: "POST",
+        authority: scope.authority,
       })
-      if (directory() === grantDirectory) await refetch()
+      if (recordsScope() === scope) await refreshRecords(scope, true)
     } catch (error) {
-      if (directory() === grantDirectory) setRevokeError(errorMessage(error))
+      if (recordsScope() === scope) setRevokeError(errorMessage(error))
     } finally {
       setRevoking("")
     }
@@ -283,21 +320,27 @@ export function PermissionsSettingsGroup() {
                 size="sm"
                 variant="ghost"
                 tone="neutral"
-                disabled={records.loading}
-                onClick={() => void refetch()}
+                disabled={!recordsScope()}
+                aria-disabled={recordsBusy() || undefined}
+                aria-busy={recordsBusy() || undefined}
+                onClick={() => void refreshRecords()}
               >
-                {t("common.refresh")}
+                {t(recordsBusy()
+                  ? recordFailure() ? "common.retrying" : "common.loading"
+                  : recordFailure() ? "common.retry" : "common.refresh")}
               </Button>
             </div>
-            <Show when={records.loading}>
-              <Feedback>{t("permissions.loading")}</Feedback>
+            <Show when={recordsBusy() && !recordFailure()}>
+              <Feedback>{t(currentRecords() ? "permissions.refreshing_records" : "permissions.loading")}</Feedback>
             </Show>
-            <Show when={currentRecords()?.error}>
-              <Feedback tone="error" details={currentRecords()?.error}>
-                {t("permissions.load_failed")}
-              </Feedback>
+            <Show when={recordFailure()}>
+              {(failure) => (
+                <Feedback tone="error" details={formatErrorDetails(failure().error)}>
+                  {t(currentRecords() ? "permissions.refresh_records_failed" : "permissions.load_failed")}
+                </Feedback>
+              )}
             </Show>
-            <Show when={!records.loading && !currentRecords()?.error && currentRecords()}>
+            <Show when={currentRecords()}>
               <Disclosure.Root class="permission-grants">
                 <Disclosure.Trigger indicatorPosition="end">
                   <span>{t("permissions.active_grants")}</span>
@@ -325,7 +368,7 @@ export function PermissionsSettingsGroup() {
                               variant="ghost"
                               size="sm"
                               tone="danger"
-                              disabled={!!revoking()}
+                              disabled={!!revoking() || currentRecordRead()?.kind !== "ready"}
                               onClick={() => void revoke(grant.id)}
                             >
                               {revoking() === grant.id ? t("permissions.revoking") : t("permissions.revoke")}

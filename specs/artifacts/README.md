@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [审批与历史刷新保留已确认读取证据](2026-11-10-permission-ledger-refresh/README.md)
 - [已安装专家团续页保留可用目录证据](2026-11-10-installed-expert-squad-catalog-continuation/README.md)
 - [已安装专家团详情重试保留诊断与焦点证据](2026-11-10-installed-expert-squad-detail-retry/README.md)
 - [多步任务技能详情保持打开的身份证据](2026-11-09-mission-skill-detail-identity/README.md)

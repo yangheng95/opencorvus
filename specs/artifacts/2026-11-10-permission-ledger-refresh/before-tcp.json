@@ -1,0 +1,41 @@
+{
+  "checks": [
+    {
+      "route": "/project/current",
+      "operationId": "project.current",
+      "status": 200,
+      "requestID": "b3bff4b3-dd3a-4510-bcc4-ec945c1be1a7",
+      "schemaValid": true
+    },
+    {
+      "route": "/permission/grants",
+      "operationId": "permission.grants",
+      "status": 200,
+      "requestID": "d601973d-0a04-46c0-b6e1-77eb437f0a6e",
+      "schemaValid": true
+    },
+    {
+      "route": "/permission/history",
+      "operationId": "permission.history",
+      "status": 200,
+      "requestID": "690f2c92-68cf-4369-a240-235163b78ac2",
+      "schemaValid": true
+    },
+    {
+      "route": "/permission",
+      "operationId": "permission.list",
+      "status": 200,
+      "requestID": "453d811b-1ebe-4821-9f28-317d3fb32c6d",
+      "schemaValid": true
+    }
+  ],
+  "project": {
+    "id": "prj_hndkPIb8hVIJ2vEkfXUp",
+    "worktree": "C:\\Users\\hengu\\AppData\\Local\\Temp\\opencorvus-iteration-20261110-b136\\project-before"
+  },
+  "accepted": {
+    "grants": 0,
+    "history": 0,
+    "pending": 0
+  }
+}

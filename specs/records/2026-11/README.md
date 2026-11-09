@@ -1,5 +1,6 @@
 # 2026-11 Records
 
+- [审批与历史刷新保留已确认读取](2026-11-10-permission-ledger-refresh.md)
 - [已安装专家团续页保留可用目录](2026-11-10-installed-expert-squad-catalog-continuation.md)
 - [已安装专家团详情重试保留诊断与焦点](2026-11-10-installed-expert-squad-detail-retry.md)
 - [多步任务技能详情保持打开的身份](2026-11-09-mission-skill-detail-identity.md)
