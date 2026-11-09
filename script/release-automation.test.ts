@@ -89,6 +89,23 @@ describe("automatic release lifecycle", () => {
     })
   })
 
+  test("a temporary website read error still resolves the exact successful deployment", async () => {
+    let now = started + 30 * 60_000
+    let reads = 0
+    await withAPI((_request, route) => {
+      if (route === "actions/runs/41") return Response.json(parent)
+      if (++reads === 1) return new Response(null, { status: 503 })
+      return Response.json({ ...website, status: "completed", conclusion: "success" })
+    }, async (client) => {
+      const result = await waitForReleaseWebsite(client, { releaseRunID: 41, websiteRunID: 72 }, {
+        now: () => now, sleep: async (milliseconds) => { now += milliseconds },
+      })
+      expect({ id: result.id, conclusion: result.conclusion, elapsed: now - started }).toEqual({
+        id: 72, conclusion: "success", elapsed: 30 * 60_000 + 10_000,
+      })
+    })
+  })
+
   test("a missing dispatch receipt produces an explicit ambiguous-outcome error", async () => {
     await withAPI((_request, route) => Response.json(route === "actions/runs/41" ? parent : {}), async (client) => {
       await expect(dispatchReleaseWebsite(client, { releaseRunID: 41, sourceSHA: source, version: "0.1.10" }, started))
@@ -96,7 +113,7 @@ describe("automatic release lifecycle", () => {
     })
   })
 
-  test("the deadline owner cancels its current run when a job read crosses the shared limit", async () => {
+  test.each([200, 500])("the deadline owner cancels its exact run when an HTTP %i read crosses the limit", async (status) => {
     const requests: string[] = []
     let now = started + RELEASE_BUDGET_MS - 1
     await withAPI((request, route) => {
@@ -104,7 +121,7 @@ describe("automatic release lifecycle", () => {
       if (route === "actions/runs/41") return Response.json(parent)
       if (request.method === "POST") return new Response(null, { status: 202 })
       now += 2
-      return Response.json({ jobs: [{ name: WEBSITE_RESULT_JOB, status: "queued", conclusion: null }] })
+      return Response.json({ jobs: [{ name: WEBSITE_RESULT_JOB, status: "completed", conclusion: "success" }] }, { status })
     }, async (client) => {
       await expect(watchReleaseDeadline(client, { releaseRunID: 41, currentRunID: 72, attempt: 2, resultJob: WEBSITE_RESULT_JOB }, {
         now: () => now, sleep: async (milliseconds) => { now += milliseconds },
@@ -171,6 +188,28 @@ describe("automatic release lifecycle", () => {
           releaseRunID: 41, currentRunID, elapsedMs: 52 * 60_000 + 10_000, budgetMs: 60 * 60_000,
         })
       })
+    }
+  })
+
+  test("both deadline owners settle the same attempt after a temporary job read error", async () => {
+    for (const [currentRunID, resultJob] of [[41, RELEASE_RESULT_JOB], [72, WEBSITE_RESULT_JOB]] as const) {
+      let now = started + 52 * 60_000
+      const observedRoutes: string[] = []
+      const jobRoute = `actions/runs/${currentRunID}/attempts/2/jobs?per_page=100&page=1`
+      await withAPI((_request, route) => {
+        if (route === "actions/runs/41") return Response.json(parent)
+        observedRoutes.push(route)
+        if (observedRoutes.length === 1) return new Response(null, { status: 500 })
+        return Response.json({ jobs: [{ name: resultJob, status: "completed", conclusion: "success" }] })
+      }, async (client) => {
+        const result = await watchReleaseDeadline(client, { releaseRunID: 41, currentRunID, attempt: 2, resultJob }, {
+          now: () => now, sleep: async (milliseconds) => { now += milliseconds },
+        })
+        expect(result).toEqual({
+          releaseRunID: 41, currentRunID, elapsedMs: 52 * 60_000 + 10_000, budgetMs: RELEASE_BUDGET_MS,
+        })
+      })
+      expect(observedRoutes).toEqual([jobRoute, jobRoute])
     }
   })
 

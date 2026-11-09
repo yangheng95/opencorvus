@@ -78,6 +78,8 @@ Native publication, the desktop update channel and website deployment are one au
 
 `script/release-automation.ts` owns a 60-minute deadline measured from the original native workflow `created_at`. Queue time, retries and delegated website time share that budget; reruns do not reset it. Both workflows have deadline watchers and explicit final-result jobs, and publication/deployment boundaries recheck remaining time. Deadline watchers and long native compile/package jobs have 61-minute infrastructure ceilings so the shared policy can cancel an expired run itself. An expired run is cancelled and remains failed, with completed artifacts retained where their jobs already uploaded them. Deadline enforcement is not proof of performance: an actual successful native-plus-website run must record its elapsed time below the limit.
 
+Once an observer has read the original deadline, GitHub HTTP 500, 502, 503 and 504 responses to status reads defer observation until the next poll within that deadline. Dispatch and cancellation writes retain their single-attempt behavior.
+
 ### Unattended handoff
 
 Preparation ends with reviewed fixes, aligned versions/changelog and a pushed immutable source. After `script/release` returns the GitHub workflow run URL, GitHub Actions owns the complete release; Codex and the initiating computer can be closed. Native first-run checks, installer/signature validation, Release publication, desktop update settlement, website dispatch, public readback and the final result run automatically with the existing configured credentials and production environment policy. An agent's later polling, downloaded-package checks or screenshots are supplemental review, not required release steps.

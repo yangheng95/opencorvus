@@ -1,5 +1,6 @@
 # Artifact entry points
 
+- [0.1.49 发布证据](2026-11-09-release-0.1.49/README.md) · 原生、官网和正式包日志
 - [项目行操作显示目标身份证据](2026-11-09-project-row-action-identity/README.md)
 - [工作侧栏事件验收代理证据](2026-11-09-work-ledger-event-proxy/README.md)
 - [读取重试后的 Explorer 键盘焦点证据](2026-11-09-explorer-read-retry-focus/README.md)

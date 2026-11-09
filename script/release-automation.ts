@@ -14,6 +14,17 @@ export class ReleaseAutomationError extends Error {
   }
 }
 
+class ReleaseApiResponseError extends ReleaseAutomationError {
+  constructor(readonly status: number, method: string, route: string) {
+    super("RELEASE_API_ERROR", `${method} ${route} returned HTTP ${status}`)
+  }
+}
+
+function observePollReadError(error: unknown): void {
+  if (!(error instanceof ReleaseApiResponseError) || ![500, 502, 503, 504].includes(error.status)) throw error
+  console.warn(`${error.message}. Waiting for the next release observation.`)
+}
+
 export type ActionsRun = {
   id: number
   created_at: string
@@ -46,7 +57,7 @@ export function githubActionsClient(repository: string, token: string, transport
         signal: AbortSignal.timeout(15_000),
       })
       if (!response.ok) {
-        throw new ReleaseAutomationError("RELEASE_API_ERROR", `${method} ${route} returned HTTP ${response.status}`)
+        throw new ReleaseApiResponseError(response.status, method, route)
       }
       return (response.status === 204 || response.status === 202 ? undefined : await response.json()) as T
     },
@@ -122,16 +133,20 @@ export async function waitForReleaseWebsite(
   const deadline = releaseDeadline(await readReleaseRun(client, input.releaseRunID))
   for (;;) {
     assertReleaseBudget(deadline, clock.now())
-    const run = await readReleaseRun(client, input.websiteRunID)
-    if (run.path.split("@")[0] !== ".github/workflows/deploy-opencorvus-com.yml") {
-      throw new ReleaseAutomationError("WEBSITE_RUN_MISMATCH", "Dispatched run does not execute the website workflow")
-    }
-    if (run.status === "completed") {
+    try {
+      const run = await readReleaseRun(client, input.websiteRunID)
       assertReleaseBudget(deadline, clock.now())
-      if (run.conclusion !== "success") {
-        throw new ReleaseAutomationError("WEBSITE_DEPLOYMENT_FAILED", `Website run ${run.id} concluded ${run.conclusion ?? "unknown"}`)
+      if (run.path.split("@")[0] !== ".github/workflows/deploy-opencorvus-com.yml") {
+        throw new ReleaseAutomationError("WEBSITE_RUN_MISMATCH", "Dispatched run does not execute the website workflow")
       }
-      return run
+      if (run.status === "completed") {
+        if (run.conclusion !== "success") {
+          throw new ReleaseAutomationError("WEBSITE_DEPLOYMENT_FAILED", `Website run ${run.id} concluded ${run.conclusion ?? "unknown"}`)
+        }
+        return run
+      }
+    } catch (error) {
+      observePollReadError(error)
     }
     await clock.sleep(Math.min(10_000, assertReleaseBudget(deadline, clock.now())))
   }
@@ -148,23 +163,29 @@ export async function watchReleaseDeadline(
       await client.request("POST", `actions/runs/${input.currentRunID}/cancel`)
       throw new ReleaseAutomationError("RELEASE_BUDGET_EXHAUSTED", `Cancelled workflow ${input.currentRunID} at the original release deadline`)
     }
-    if (input.currentRunID !== input.releaseRunID) {
-      const parent = await readReleaseRun(client, input.releaseRunID)
-      if (parent.status === "completed" && parent.conclusion !== "success") {
-        await client.request("POST", `actions/runs/${input.currentRunID}/cancel`)
-        throw new ReleaseAutomationError("RELEASE_PARENT_TERMINATED", `Parent release concluded ${parent.conclusion ?? "unknown"}`)
-      }
-    }
+    let failedParent: ActionsRun | undefined
     let terminal: { name: string; status: string; conclusion: string | null } | undefined
-    for (let page = 1; ; page += 1) {
-      const result = await client.request<{ jobs: Array<{ name: string; status: string; conclusion: string | null }> }>(
-        "GET", `actions/runs/${input.currentRunID}/attempts/${input.attempt}/jobs?per_page=100&page=${page}`,
-      )
-      terminal = result.jobs.find((job) => job.name === input.resultJob)
-      if (terminal || result.jobs.length < 100) break
+    try {
+      if (input.currentRunID !== input.releaseRunID) {
+        const parent = await readReleaseRun(client, input.releaseRunID)
+        if (parent.status === "completed" && parent.conclusion !== "success") failedParent = parent
+      }
+      for (let page = 1; !failedParent && clock.now() < deadline; page += 1) {
+        const result = await client.request<{ jobs: Array<{ name: string; status: string; conclusion: string | null }> }>(
+          "GET", `actions/runs/${input.currentRunID}/attempts/${input.attempt}/jobs?per_page=100&page=${page}`,
+        )
+        terminal = result.jobs.find((job) => job.name === input.resultJob)
+        if (terminal || result.jobs.length < 100) break
+      }
+    } catch (error) {
+      observePollReadError(error)
+    }
+    if (clock.now() >= deadline) continue
+    if (failedParent) {
+      await client.request("POST", `actions/runs/${input.currentRunID}/cancel`)
+      throw new ReleaseAutomationError("RELEASE_PARENT_TERMINATED", `Parent release concluded ${failedParent.conclusion ?? "unknown"}`)
     }
     if (terminal?.status === "completed") {
-      assertReleaseBudget(deadline, clock.now())
       if (terminal.conclusion !== "success") {
         throw new ReleaseAutomationError("RELEASE_RESULT_FAILED", `${input.resultJob} concluded ${terminal.conclusion ?? "unknown"}`)
       }

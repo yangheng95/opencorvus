@@ -60,11 +60,13 @@ function installTransport(reply?: (request: TransportRequest) => Promise<unknown
     capabilities: HOST_CAPABILITIES.browser,
     async request<T>(request: TransportRequest) {
       if (request.path === "global/projects/anonymous") creations.push(request.method)
-      const body = reply
-        ? await reply(request)
-        : request.path === "global/projects/anonymous"
-          ? { directory: DIRECTORY }
-          : {}
+      const body = request.path === "global/health"
+        ? { healthy: true, version: "fixture" }
+        : reply
+          ? await reply(request)
+          : request.path === "global/projects/anonymous"
+            ? { directory: DIRECTORY }
+            : {}
       return { status: 200, ok: true, headers: {}, body: body as T }
     },
     openStream() {

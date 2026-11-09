@@ -4,6 +4,60 @@
 
 ## 未发布
 
+## 0.1.49 - 2026-11-09
+
+### zh-CN
+
+#### 新增
+
+- 可以用方向键进入文件和设置的搜索结果，也可以在长 Markdown 内容中按章节跳转。
+- 项目文件树显示实际磁盘目录和已展开的空文件夹，重试读取后可继续用键盘浏览。
+
+#### 调整
+
+- 批量复制和移动前展示实际来源与目标，区分搜索结果之外的选中项。完成后展开实际目标目录，并将键盘焦点留在操作结果附近。
+- 计划任务的日历、时间和日期范围跟随界面语言。专家团市场采用统一的翻页方式，并显示安装范围及可重试的目录诊断。
+- 连接设置显示真实健康状态、当前核心版本和代理所属项目。用量统计按所选时段显示数据，错误提示可展开查看原始原因。
+
+#### 修复
+
+- 修复切换项目、读取重试、归档恢复和关闭菜单时的键盘焦点丢失。文件树的根目录重试同步重新读取已展开的子目录。
+- 项目菜单和开始工作按钮明确标出目标项目，同名项目会补充父目录以便区分。
+- 文件读取、图像预览、项目提升和传输失败提供更准确的错误。项目归档包含当前文件，正确处理已删除的跟踪文件。
+- 计划修改绑定当前会话，记忆内容更新校验项目归属。技能市场保留具备明确来源能力的候选。
+- 发布监控在同一截止时间内重试 GitHub 的临时只读错误，并按当前健康响应合同修正并发项目接纳测试。
+
+#### 升级影响与已知限制
+
+- 数据库保持版本 10。接入文件读取、附件下载或匿名项目提升接口的自定义客户端可同步升级软件开发工具包，以读取更具体的错误类型。
+- macOS 使用临时签名，尚未经过 Apple 公证。
+
+### en-US
+
+#### Added
+
+- Use the arrow keys to enter file and settings search results, and jump between sections in long Markdown documents.
+- The project file tree shows directories on disk and expanded empty folders. Keyboard navigation remains available after retrying a read.
+
+#### Changed
+
+- Review the effective sources and destinations before a batch copy or move, including selections outside the search results. Completed transfers reveal the destination and keep keyboard focus near the result.
+- Scheduled task calendars, times, and date ranges follow the interface language. The Expert Squad market uses shared pagination and shows installation scope and retryable catalog diagnostics.
+- Connection settings report actual health, the current Core version, and the project that owns the proxy settings. Usage charts follow the selected period and diagnostics expose the original error.
+
+#### Fixed
+
+- Restore keyboard focus after project changes, read retries, archive restores, and menu dismissal. Retrying the root of the file tree also rereads expanded child directories.
+- Project menus and start-work buttons identify the target project and include the parent folder when names match.
+- Report more precise errors for file reads, image previews, project promotion, and transfers. Project archives include the files currently present and handle deleted tracked files.
+- Bind plan edits to the calling session, validate project ownership before updating memory, and retain Skill Market candidates with explicit source capabilities.
+- Keep release monitoring active within the original deadline after temporary GitHub read errors, and align the concurrent project admission tests with the current health response contract.
+
+#### Upgrade impact and known limitations
+
+- Database version remains 10. Custom clients using file reads, attachment downloads, or anonymous project promotion can upgrade the software development kit to receive the more specific error types.
+- macOS builds ship with ad hoc signatures only.
+
 ## 0.1.48 - 2026-11-07
 
 ### zh-CN
